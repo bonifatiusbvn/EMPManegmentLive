@@ -30,8 +30,9 @@ public partial class BonifatiusEmployeesContext : DbContext
     public virtual DbSet<TblUser> TblUsers { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
 
-        => optionsBuilder.UseSqlServer("Server=BONI002\\SQLEXPRESS;Database=BonifatiusEmployees;Trusted_Connection=True;TrustServerCertificate=True;uid=BoniEmp;password=Admin123;MultipleActiveResultSets=True");
+    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
