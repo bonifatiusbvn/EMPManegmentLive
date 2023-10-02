@@ -55,8 +55,6 @@ namespace EMPManegment.Web.Controllers
                         else
                         {
                             TempData["ErrorMessage"] = response.message;
-                            return Ok(new { Message = string.Format(response.message), Code = response.code });
-
                         }
                     }
                     var user = response.data;
@@ -71,8 +69,6 @@ namespace EMPManegment.Web.Controllers
                 return BadRequest(new { Message = "InternalServer" });
 
             }
-
-            return View();
         }
 
     }
