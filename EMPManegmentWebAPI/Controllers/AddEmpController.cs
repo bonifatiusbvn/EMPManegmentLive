@@ -66,16 +66,6 @@ namespace EMPManagment.API.Controllers
             return StatusCode(response.Code, response);
         }
 
-        [HttpPost]
-        [Route("AddLogins")]
-        public async Task<IActionResult> AddLogins(EmpDetailsView emp)
-        {
-            EmpDetails.AddLogin(emp);
-            return Ok(new ApiResponseModel
-            {
-                code = 200,
-                data = emp,
-            });
-        } 
+       
     }
 }

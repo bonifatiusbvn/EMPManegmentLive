@@ -1,4 +1,5 @@
 ﻿using EMPManegment.EntityModels.ViewModels;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -12,7 +13,7 @@ namespace EMPManegment.EntityModels.View_Model
     {
         public int Id { get; set; }
 
-        public string? EmpId { get; set; }
+        public string? UserName { get; set; }
 
         public string? FirstName { get; set; }
 
@@ -28,7 +29,7 @@ namespace EMPManegment.EntityModels.View_Model
 
         public string? Address { get; set; }
 
-        public int? City { get; set; }
+        public int? CityId { get; set; }
 
         public string? Pincode { get; set; }
 
@@ -50,17 +51,19 @@ namespace EMPManegment.EntityModels.View_Model
 
         public string? Answer { get; set; }
 
-        public string? Image { get; set; }
 
-        public int? Department { get; set; }
+        public int? DepartmentId { get; set; }
 
         public DateTime? CreatedOn { get; set; }
 
         public string? CreatedBy { get; set; }
 
-        public int? State { get; set; }
+        public int? StateId { get; set; }
 
-        public int? Country { get; set; }
+        public int? CountryId { get; set; }
+
+        public string Image { get; set; }
+
     }
     public class EmpDetailsResponseModel
     {

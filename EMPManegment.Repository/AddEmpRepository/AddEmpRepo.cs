@@ -12,6 +12,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 
 namespace EMPManegment.Repository.AddEmpRepository
@@ -43,21 +44,29 @@ namespace EMPManegment.Repository.AddEmpRepository
                     var model = new TblUser()
                     {
                         Id = Guid.NewGuid(),
-                        UserName = emp.EmpId,
-                        DepartmentId = emp.Department,
+                        UserName = emp.UserName,
+                        DepartmentId = emp.DepartmentId,
                         FirstName = emp.FirstName,
                         LastName = emp.LastName,
                         Address = emp.Address,
-                        CityId = emp.City,
-                        StateId = emp.State,
-                        CountryId = emp.Country,
+                        CityId = emp.CityId,
+                        StateId = emp.StateId,
+                        CountryId = emp.CountryId,
                         DateOfBirth = emp.DateOfBirth,
                         Email = emp.Email,
                         Gender = emp.Gender,
                         PhoneNumber = emp.PhoneNumber,
                         CreatedOn = DateTime.Now,
+                        PasswordHash = emp.PasswordHash,
+                        PasswordSalt = emp.PasswordSalt,   
+                        Image = emp.Image,
+                        IsActive = true,
+                        JoiningDate = DateTime.Now,
+                        IsAdmin = false,
+                        EmailConfirmed = true,
+                        PhoneNumberConfirmed = true,
 
-                };
+                    };
                     response.Data = emp;
                     response.Code = (int)HttpStatusCode.OK;
                     Context.TblUsers.Add(model);
@@ -72,30 +81,6 @@ namespace EMPManegment.Repository.AddEmpRepository
             return response;
         }
 
-        public async Task<EmpDetailsView> AddLogin(EmpDetailsView log)
-        {
-            try
-            {
-                var data = Context.TblUsers.FirstOrDefault(a => a.UserName == log.EmpId);
-                if (data != null)
-                {
-                    data.PasswordHash = log.PasswordHash;
-                    data.PasswordSalt = log.PasswordSalt;
-                    data.QuestionId = log.QuestionId;
-                    data.Answer = log.Answer;
-                    data.Image = log.Image;
-                    data.IsActive = true;
-
-                    Context.TblUsers.Update(data);
-                    Context.SaveChanges();
-                }
-                return log;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
 
         public string CheckEmloyess()
         {
@@ -138,38 +123,8 @@ namespace EMPManegment.Repository.AddEmpRepository
         {
             throw new NotImplementedException();
         }
-        public void UploadFile(IFormFile file, string path)
-        {
-            throw new NotImplementedException();
-        }
-        
-
-        //public EmpDetailsView AddLogin(EmpDetailsView log)
-        //{
-        //    try
-        //    {
-        //        var data = Context.TblUsers.FirstOrDefault(a => a.Id == log.Id);
-        //        if (data != null)
-        //        {
-        //            data.Id = log.Id;
-        //            data.EmpId = log.EmpId;
-        //            data.PasswordHash = log.PasswordHash;
-        //            data.PasswordSalt = log.PasswordSalt;
-        //            data.Question = log.Question;
-        //            data.Answer = log.Answer;
-        //            data.Image = log.Image;
-        //            data.IsActive = true;
-        //            Context.TblUsers.Update(data);
-        //            Context.SaveChanges();
-        //        }
-        //        return log;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw ex;
-        //    }
-
-        //}
+       
+       
 
     }   
 }

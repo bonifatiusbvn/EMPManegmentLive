@@ -35,16 +35,9 @@ namespace EMPManegment.Services.AddEmployee
             return await EmpDetails.EmpDepartment();
         }
 
-        public void UploadFile(IFormFile file, string path)
-        {
-            throw new NotImplementedException();
-        }
+        
 
-        public async Task<EmpDetailsView> AddLogin(EmpDetailsView emp)
-        {
-            return await EmpDetails.AddLogin(emp);
-        }
-
+       
         public Task<EmpDetailsView> GetById(string EId)
         {
             throw new NotImplementedException();

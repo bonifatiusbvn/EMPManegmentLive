@@ -56,25 +56,50 @@ namespace EMPManegment.WebApplication.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddEmpDetails(EmpDetailsView emp)
+        public async Task<IActionResult> AddEmpDetails(LoginDetailsView emp)
         {
             try
             {
-                ApiResponseModel postuser = await APIServices.PostAsync(emp,"AddEmp/AddEmployees");
-                ViewBag.Name = HttpContext.Session.GetString("EmpID");
-                emp.EmpId = ViewBag.Name = HttpContext.Session.GetString("EmpID");
+                var path = Environment.WebRootPath;
+                var filepath = "Content/Image/" + emp.Image.FileName;
+                var fullpath = Path.Combine(path, filepath);
+                UploadFile(emp.Image, fullpath);
+                Crypto.Hash(emp.Password,
+                    out byte[] passwordHash,
+                    out byte[] passwordSalt);
+                var data = new EmpDetailsView()
+                {
+                    UserName = emp.UserName,
+                    DepartmentId = emp.DepartmentId,
+                    FirstName = emp.FirstName,
+                    LastName = emp.LastName,
+                    Address = emp.Address,
+                    CityId = emp.CityId,
+                    StateId = emp.StateId,
+                    CountryId = emp.CountryId,
+                    DateOfBirth = emp.DateOfBirth,
+                    Email = emp.Email,
+                    Gender = emp.Gender,
+                    PhoneNumber = emp.PhoneNumber,
+                    CreatedOn = DateTime.Now,
+                    PasswordHash = passwordHash,
+                    PasswordSalt = passwordSalt,
+                    Image = filepath,
+                    IsActive = emp.IsActive,
+                };
+                ApiResponseModel postuser = await APIServices.PostAsync(data,"AddEmp/AddEmployees");
+                ViewBag.Name = HttpContext.Session.GetString("UserName");
                 if (postuser.code == 200)
                 {
-                    var identity = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, emp.EmpId) }, CookieAuthenticationDefaults.AuthenticationScheme);
+                    var identity = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, emp.UserName) }, CookieAuthenticationDefaults.AuthenticationScheme);
                     var principal = new ClaimsPrincipal(identity);
                     HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
-                    HttpContext.Session.SetString("EmpID",emp.EmpId);
-                    return RedirectToAction("EmpSingUP");
+                    return View();
                 }
                 else
                 {
                     TempData["ErrorMessage"] = postuser.message;
-                    return View(emp);
+                    return View();
                 }
             }
             catch (Exception ex)
@@ -83,81 +108,9 @@ namespace EMPManegment.WebApplication.Controllers
             }
 
         }
-        public async Task<IActionResult> EmpSingUP()
-        {
+       
 
-            try
-            {
-                LoginDetailsView login = new LoginDetailsView();
-                ViewBag.Name = HttpContext.Session.GetString("EmpID");
-                login.EmpId = ViewBag.Name = HttpContext.Session.GetString("EmpID");
-                HttpClient client = WebAPI.Initil();
-                HttpResponseMessage res = await client.GetAsync("AddEmp/GetById?EId=" + login.EmpId);
-
-                if (res.IsSuccessStatusCode)
-                {
-                    var result = res.Content.ReadAsStringAsync().Result;
-                    login = JsonConvert.DeserializeObject<LoginDetailsView>(result);
-                }
-                return View(login);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> EmpSingUP(LoginDetailsView Emplogin)
-        {
-            try
-            {
-                ViewBag.Name = HttpContext.Session.GetString("EmpID");
-                Emplogin.EmpId = ViewBag.Name = HttpContext.Session.GetString("EmpID");
-                if (ModelState.IsValid)
-                {
-                    var path = Environment.WebRootPath;
-                    var filepath = "Content/Image/" + Emplogin.Image.FileName;
-                    var fullpath = Path.Combine(path, filepath);
-                    UploadFile(Emplogin.Image, fullpath);
-                    Crypto.Hash(Emplogin.Password,
-                        out byte[] passwordHash,
-                        out byte[] passwordSalt);
-                    var data = new EmpDetailsView()
-                    {
-
-                        EmpId = Emplogin.EmpId,
-                        PasswordHash = passwordHash,
-                        PasswordSalt = passwordSalt,
-                        QuestionId = Emplogin.QuestionId,
-                        Answer = Emplogin.Answer,
-                        Image = filepath,
-                        IsActive = Emplogin.IsActive,
-                    };
-
-                    ApiResponseModel postuser = await APIServices.PostAsync(data, "AddEmp/AddLogins");
-                    if (postuser.code == 200)
-                    {
-                        var identity = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name,Emplogin.EmpId) }, CookieAuthenticationDefaults.AuthenticationScheme);
-                        var principal = new ClaimsPrincipal(identity);
-                        HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
-                        HttpContext.Session.SetString("EmpID", Emplogin.EmpId);
-                        TempData["SuccesMessage"] = "You Can Now LOgin.!!";
-                        return RedirectToAction("Login","UserLogin");
-                    }
-                }
-                else
-                {
-                    TempData["ErrorMessage"] = "Empty form Can't be submitted";
-                    return View(Emplogin);
-                }
-                return View(Emplogin);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
+        
 
         public async Task<JsonResult> GetDepartment()
         {

@@ -12,12 +12,11 @@ namespace EMPManegment.Inretface.Services.AddEmployeeServies
 {
     public interface IAddEmpDetailsServices
     {
-        Task<EmpDetailsView> AddLogin(EmpDetailsView emp);
+
         Task<EmpDetailsView> GetById(string EId);
         string CheckEmloyess();
         Task<EmpDetailsResponseModel> AddEmployee(EmpDetailsView emp);
-        void UploadFile(IFormFile file, string path);
-
+     
         Task<IEnumerable<Department>> EmpDepartment();
     }
 }
