@@ -57,9 +57,15 @@ namespace EMPManegment.Web.Controllers
                             TempData["ErrorMessage"] = response.message;
                         }
                     }
-                    var user = response.data;
+
+                    else
+                    {
+                        var user = response.data;
+                        return RedirectToAction("UserHome", "Home");
+                    }
+                    
                 }
-                
+
                 return View();
 
             }

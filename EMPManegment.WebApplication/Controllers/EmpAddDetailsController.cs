@@ -156,7 +156,6 @@ namespace EMPManegment.WebApplication.Controllers
             }
             catch (Exception ex)
             {
-
                 throw ex;
             }
         }
