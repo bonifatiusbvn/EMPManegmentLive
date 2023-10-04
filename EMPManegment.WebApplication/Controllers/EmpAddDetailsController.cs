@@ -94,7 +94,7 @@ namespace EMPManegment.WebApplication.Controllers
                     var identity = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, emp.UserName) }, CookieAuthenticationDefaults.AuthenticationScheme);
                     var principal = new ClaimsPrincipal(identity);
                     HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
-                    return View();
+                    return RedirectToAction("Login", "UserLogin");
                 }
                 else
                 {
