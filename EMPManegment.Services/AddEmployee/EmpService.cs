@@ -20,9 +20,7 @@ namespace EMPManegment.Services.AddEmployee
             EmpDetails = _empDetails;
         }
 
-       
-
-        public async Task<EmpDetailsView> AddEmployee(EmpDetailsView emp)
+        public async Task<EmpDetailsResponseModel> AddEmployee(EmpDetailsView emp)
         {
             return await EmpDetails.AddEmployee(emp);
         }
@@ -37,16 +35,9 @@ namespace EMPManegment.Services.AddEmployee
             return await EmpDetails.EmpDepartment();
         }
 
-        public void UploadFile(IFormFile file, string path)
-        {
-            throw new NotImplementedException();
-        }
+        
 
-        public async Task<EmpDetailsView> AddLogin(EmpDetailsView emp)
-        {
-            return await EmpDetails.AddLogin(emp);
-        }
-
+       
         public Task<EmpDetailsView> GetById(string EId)
         {
             throw new NotImplementedException();

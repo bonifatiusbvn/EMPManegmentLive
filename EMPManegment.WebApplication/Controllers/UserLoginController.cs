@@ -48,20 +48,24 @@ namespace EMPManegment.Web.Controllers
                     if (response.code != (int)HttpStatusCode.OK)
                     {
                         if (response.code == (int)HttpStatusCode.Forbidden)
-                        {
+                        { 
                             TempData["ErrorMessage"] = response.message;
                             return Ok(new { Message = string.Format(response.message), Code = response.code });
                         }
                         else
                         {
                             TempData["ErrorMessage"] = response.message;
-                            return Ok(new { Message = string.Format(response.message), Code = response.code });
-
                         }
                     }
-                    var user = response.data;
+
+                    else
+                    {
+                        var user = response.data;
+                        return RedirectToAction("UserHome", "Home");
+                    }
+                    
                 }
-                
+
                 return View();
 
             }
@@ -71,8 +75,6 @@ namespace EMPManegment.Web.Controllers
                 return BadRequest(new { Message = "InternalServer" });
 
             }
-
-            return View();
         }
 
     }

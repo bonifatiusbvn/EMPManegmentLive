@@ -38,20 +38,14 @@ namespace EMPManegment.Repository.UserLoginRepository
             LoginResponseModel response = new LoginResponseModel();
             try
             {
-              
-                  var tblUser = Context.TblUsers.Where(p => p.EmpId == request.EmpId).SingleOrDefault();
-
-               
+                  var tblUser = Context.TblUsers.Where(p => p.UserName == request.EmpId).SingleOrDefault();
                 if (tblUser != null)
                 {
-
                     if (tblUser.IsActive == true)
                     {
-                        if (tblUser.EmpId == request.EmpId && Crypto.VarifyHash(request.Password, tblUser.PasswordHash, tblUser.PasswordSalt))
-                            
+                        if (tblUser.UserName == request.EmpId && Crypto.VarifyHash(request.Password, tblUser.PasswordHash, tblUser.PasswordSalt))   
                         {
                             LoginView userModel = new LoginView();
-                            userModel.Id = tblUser.Id;
                             userModel.EmpId = request.EmpId;    
                             userModel.FirstName = tblUser.FirstName;
                             userModel.LastName = tblUser.LastName;
@@ -59,31 +53,24 @@ namespace EMPManegment.Repository.UserLoginRepository
                             response.Data = userModel;
                             response.Code = (int)HttpStatusCode.OK;
                         }
-
                         else
                         {
                             response.Message = "Your Password Is Wrong";
-                        }
-                        
+                        } 
                     }
                     else
                     {
-                      
                         response.Code = (int)HttpStatusCode.Forbidden;
                         response.Message = "Your Deactive Contact Your Admin";
                         return response;
                     }
-
                 }
                 else
                 {
-                    
                     response.Message = "User Not Exist";
                     response.Code = (int)HttpStatusCode.NotFound;
                     response.Data = null;
                 }
-
-
             }
             catch (Exception ex)
             {
@@ -92,5 +79,4 @@ namespace EMPManegment.Repository.UserLoginRepository
             return response;
         }
     }
-    
 }
