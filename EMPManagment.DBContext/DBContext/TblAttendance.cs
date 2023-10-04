@@ -7,7 +7,7 @@ public partial class TblAttendance
 {
     public int Id { get; set; }
 
-    public int EmpId { get; set; }
+    public Guid UserId { get; set; }
 
     public DateTime Date { get; set; }
 
@@ -21,5 +21,5 @@ public partial class TblAttendance
 
     public DateTime? CreatedOn { get; set; }
 
-    public virtual TblUser Emp { get; set; } = null!;
+    public virtual TblUser User { get; set; } = null!;
 }

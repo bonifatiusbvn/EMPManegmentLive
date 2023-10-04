@@ -20,7 +20,6 @@ namespace EMPManegment.Repository.CSCRepository
 
         public async Task<IEnumerable<CityView>> GetCities(int id)
         {
-
             try
             {
                 IEnumerable<CityView> cities = Context.TblCities.Where(e => e.State.Id == id).ToList().Select(a => new CityView
@@ -32,7 +31,6 @@ namespace EMPManegment.Repository.CSCRepository
             }
             catch (Exception ex)
             {
-
                 throw ex;
             }
         }
@@ -50,7 +48,6 @@ namespace EMPManegment.Repository.CSCRepository
             }
             catch (Exception ex)
             {
-
                 throw ex;
             }
         }
@@ -68,7 +65,6 @@ namespace EMPManegment.Repository.CSCRepository
             }
             catch (Exception ex)
             {
-
                 throw ex;
             }
         }
@@ -86,7 +82,6 @@ namespace EMPManegment.Repository.CSCRepository
             }
             catch (Exception ex)
             {
-
                 throw ex;
             }
         }

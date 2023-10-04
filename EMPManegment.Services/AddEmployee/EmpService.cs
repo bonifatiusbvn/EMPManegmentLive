@@ -20,9 +20,7 @@ namespace EMPManegment.Services.AddEmployee
             EmpDetails = _empDetails;
         }
 
-       
-
-        public async Task<EmpDetailsView> AddEmployee(EmpDetailsView emp)
+        public async Task<EmpDetailsResponseModel> AddEmployee(EmpDetailsView emp)
         {
             return await EmpDetails.AddEmployee(emp);
         }

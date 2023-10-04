@@ -44,17 +44,26 @@ namespace EMPManagment.API.Controllers
         [Route("AddEmployees")]
         public async Task<IActionResult> AddEmployees(EmpDetailsView emp)
         {
+            EmpDetailsResponseModel response = new EmpDetailsResponseModel();
             try
             {
-                EmpDetails.AddEmployee(emp);
-                return Ok(new ApiResponseModel { code = 200, data = emp });
+                var result = EmpDetails.AddEmployee(emp);
+                if (result.Result.Code == 200)
+                {
+                    response.Code = (int)HttpStatusCode.OK;
+                    response.Data = result.Result.Data;
+                }
+                else
+                {
+                    response.Message = result.Result.Message;
+                    response.Code = (int)HttpStatusCode.NotFound;
+                }
             }
             catch (Exception ex)
             {
-
                 throw ex;
             }
-
+            return StatusCode(response.Code, response);
         }
 
         [HttpPost]
@@ -66,9 +75,7 @@ namespace EMPManagment.API.Controllers
             {
                 code = 200,
                 data = emp,
-
             });
-        }
-
+        } 
     }
 }
