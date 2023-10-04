@@ -37,8 +37,7 @@ namespace EMPManegment.WebApplication.Controllers
         public async Task<IActionResult> AddEmpDetails()
         {
             try
-            {
-               
+            { 
                 HttpClient client = WebAPI.Initil();
                 ApiResponseModel res = await APIServices.GetAsync("","AddEmp/CheckUser");
                 if (res.code == 200)
@@ -62,6 +61,8 @@ namespace EMPManegment.WebApplication.Controllers
             try
             {
                 ApiResponseModel postuser = await APIServices.PostAsync(emp,"AddEmp/AddEmployees");
+                ViewBag.Name = HttpContext.Session.GetString("EmpID");
+                emp.EmpId = ViewBag.Name = HttpContext.Session.GetString("EmpID");
                 if (postuser.code == 200)
                 {
                     var identity = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, emp.EmpId) }, CookieAuthenticationDefaults.AuthenticationScheme);
@@ -72,13 +73,12 @@ namespace EMPManegment.WebApplication.Controllers
                 }
                 else
                 {
+                    TempData["ErrorMessage"] = postuser.message;
                     return View(emp);
-
                 }
             }
             catch (Exception ex)
             {
-
                 throw ex;
             }
 
@@ -110,7 +110,6 @@ namespace EMPManegment.WebApplication.Controllers
         [HttpPost]
         public async Task<IActionResult> EmpSingUP(LoginDetailsView Emplogin)
         {
-
             try
             {
                 ViewBag.Name = HttpContext.Session.GetString("EmpID");

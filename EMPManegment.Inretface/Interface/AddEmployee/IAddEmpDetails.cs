@@ -15,7 +15,7 @@ namespace EMPManegment.Inretface.EmployeesInterface.AddEmployee
         Task <EmpDetailsView> AddLogin(EmpDetailsView emp);
         Task <EmpDetailsView> GetById(string EId);
         string CheckEmloyess();
-        Task <EmpDetailsView> AddEmployee(EmpDetailsView emp);
+        Task <EmpDetailsResponseModel> AddEmployee(EmpDetailsView emp);
         void UploadFile(IFormFile file, string path);
 
         Task<IEnumerable<Department>> EmpDepartment();

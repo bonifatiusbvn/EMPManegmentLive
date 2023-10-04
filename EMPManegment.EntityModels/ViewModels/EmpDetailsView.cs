@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EMPManegment.EntityModels.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -61,7 +62,14 @@ namespace EMPManegment.EntityModels.View_Model
 
         public int? Country { get; set; }
     }
+    public class EmpDetailsResponseModel
+    {
+        public string Message { get; set; }
+
+        public int Code { get; set; }
+        public EmpDetailsView Data { get; set; }
+
+    }
 
 
-    
 }

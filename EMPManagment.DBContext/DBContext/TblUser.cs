@@ -5,9 +5,9 @@ namespace EMPManagment.API;
 
 public partial class TblUser
 {
-    public int Id { get; set; }
+    public Guid Id { get; set; }
 
-    public string? EmpId { get; set; }
+    public string? UserName { get; set; }
 
     public string? FirstName { get; set; }
 
@@ -20,6 +20,8 @@ public partial class TblUser
     public string? Email { get; set; }
 
     public bool? EmailConfirmed { get; set; }
+
+    public DateTime? JoiningDate { get; set; }
 
     public string? Address { get; set; }
 
@@ -68,4 +70,6 @@ public partial class TblUser
     public virtual TblState? State { get; set; }
 
     public virtual ICollection<TblAttendance> TblAttendances { get; set; } = new List<TblAttendance>();
+
+    public virtual ICollection<TblUserDocument> TblUserDocuments { get; set; } = new List<TblUserDocument>();
 }
