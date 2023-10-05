@@ -109,9 +109,6 @@ namespace EMPManegment.WebApplication.Controllers
 
         }
        
-
-        
-
         public async Task<JsonResult> GetDepartment()
         {
 
