@@ -87,7 +87,7 @@ namespace EMPManegment.Repository.AddEmpRepository
         {
             try
             {
-                var LastEmp = Context.TblUsers.OrderByDescending(e => e.Id).FirstOrDefault();
+                var LastEmp = Context.TblUsers.OrderByDescending(e => e.CreatedOn).FirstOrDefault();
                 string UserEmpId;
                 if (LastEmp == null)
                 {

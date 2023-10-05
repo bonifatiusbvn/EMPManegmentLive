@@ -9,10 +9,10 @@ using System.Threading.Tasks;
 
 namespace EMPManegment.Services.UserList
 {
-    public class UserListService : IUserListServices
+    public class UserDetailsService : IUserDetailsServices
     {
-        public IUserList UserList { get; }
-        public UserListService(IUserList userList)
+        public IUserDetails UserList { get; }
+        public UserDetailsService(IUserDetails userList)
         {
             UserList = userList;
         }

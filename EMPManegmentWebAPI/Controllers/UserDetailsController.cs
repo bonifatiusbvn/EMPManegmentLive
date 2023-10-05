@@ -10,8 +10,8 @@ namespace EMPManagment.API.Controllers
     [ApiController]
     public class UserDetailsController : ControllerBase
     {
-        public IUserListServices UserListServices { get; }
-        public UserDetailsController(IUserListServices userListServices)
+        public IUserDetailsServices UserListServices { get; }
+        public UserDetailsController(IUserDetailsServices userListServices)
         {
             UserListServices = userListServices;
         }

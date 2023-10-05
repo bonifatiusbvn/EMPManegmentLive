@@ -7,7 +7,7 @@ using EMPManegment.EntityModels.View_Model;
 
 namespace EMPManegment.Inretface.Interface.UserList
 {
-    public interface IUserList
+    public interface IUserDetails
     {
         Task<IEnumerable<EmpDetailsView>> GetUsersList();
     }
