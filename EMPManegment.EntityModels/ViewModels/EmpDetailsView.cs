@@ -62,7 +62,7 @@ namespace EMPManegment.EntityModels.View_Model
 
         public int? CountryId { get; set; }
 
-        public string Image { get; set; }
+        public string? Image { get; set; }
 
     }
     public class EmpDetailsResponseModel
