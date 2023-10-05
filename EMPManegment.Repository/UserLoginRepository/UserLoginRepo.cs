@@ -38,15 +38,14 @@ namespace EMPManegment.Repository.UserLoginRepository
             LoginResponseModel response = new LoginResponseModel();
             try
             {
-                  var tblUser = Context.TblUsers.Where(p => p.UserName == request.EmpId).SingleOrDefault();
+                  var tblUser = Context.TblUsers.Where(p => p.UserName == request.UserName).SingleOrDefault();
                 if (tblUser != null)
                 {
                     if (tblUser.IsActive == true)
                     {
-                        if (tblUser.UserName == request.EmpId && Crypto.VarifyHash(request.Password, tblUser.PasswordHash, tblUser.PasswordSalt))   
+                        if (tblUser.UserName == request.UserName && Crypto.VarifyHash(request.Password, tblUser.PasswordHash, tblUser.PasswordSalt))   
                         {
                             LoginView userModel = new LoginView();
-                            userModel.EmpId = request.EmpId;    
                             userModel.FirstName = tblUser.FirstName;
                             userModel.LastName = tblUser.LastName;
                             userModel.ProfileImage = tblUser.Image;
