@@ -35,6 +35,7 @@ namespace EMPManegment.Web.Controllers
         {
                 return View();
         }
+        
 
         [HttpPost]
         public async Task<IActionResult> Login(LoginRequest login)
@@ -47,6 +48,8 @@ namespace EMPManegment.Web.Controllers
 
                     if (response.code != (int)HttpStatusCode.OK)
                     {
+                       
+
                         if (response.code == (int)HttpStatusCode.Forbidden)
                         { 
                             TempData["ErrorMessage"] = response.message;
@@ -60,10 +63,15 @@ namespace EMPManegment.Web.Controllers
 
                     else
                     {
+                        var identity = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, login.EmpId) },
+                        CookieAuthenticationDefaults.AuthenticationScheme);
+                        var principal = new ClaimsPrincipal(new[] { identity });
+                        HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+                        HttpContext.Session.SetString("Emilid", login.EmpId);
                         var user = response.data;
                         return RedirectToAction("UserHome", "Home");
                     }
-                    
+                   
                 }
 
                 return View();
@@ -73,8 +81,17 @@ namespace EMPManegment.Web.Controllers
             catch (Exception ex)
             {
                 return BadRequest(new { Message = "InternalServer" });
-
             }
+        }
+        public IActionResult Logout() 
+        { 
+            HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            var StoredCookies = Request.Cookies.Keys;
+            foreach (var Cookie in StoredCookies)
+            {
+                Response.Cookies.Delete(Cookie);
+            }
+            return RedirectToAction("Login", "UserLogin");
         }
 
         
