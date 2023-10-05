@@ -179,7 +179,7 @@ License: For each use you must have a valid license purchased only from above li
                                         <div class="row">
                                             <div class="col-6">
                                                 <div class="fv-row mb-6">
-                                                    <input type="date" asp-for="DateOfBirth" placeholder="DOB" itemid="DOB" autocomplete="off" class="form-control bg-transparent" />
+                                                    <input type="date" asp-for="DateOfBirth" placeholder="DOB" itemid="DOB" max="" autocomplete="off" class="form-control bg-transparent" />
                                                     <span asp-validation-for="DateOfBirth" class="text-danger"></span>
                                                 </div>
                                             </div>
@@ -293,7 +293,11 @@ License: For each use you must have a valid license purchased only from above li
     </div>
 
     <script>
-        var hostUrl = "~/demo/assets/index.html";</script>
+        var hostUrl = "~/demo/assets/index.html";  
+        
+        var today=new Date().toISOString().split('T')[0];
+        document.getElementById("DateOfBirth").setAttribute("max", today);
+    </script>
 
 
     <script src="~/demo/assets/plugins/global/plugins.bundle.js"></script>
