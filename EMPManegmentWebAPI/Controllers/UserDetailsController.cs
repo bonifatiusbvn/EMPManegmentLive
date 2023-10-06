@@ -1,4 +1,5 @@
 ﻿using EMPManegment.EntityModels.View_Model;
+using EMPManegment.EntityModels.ViewModels;
 using EMPManegment.Inretface.Interface.UserList;
 using EMPManegment.Inretface.Services.UserListServices;
 using Microsoft.AspNetCore.Http;
@@ -24,6 +25,16 @@ namespace EMPManagment.API.Controllers
         {
             IEnumerable<EmpDetailsView> userList = await UserListServices.GetUsersList();
             return Ok(new { code = 200, data = userList.ToList() });
+        }
+
+
+        [HttpPost]
+        [Route("ActiveDeactiveUsers")]
+
+        public async Task<IActionResult> ActiveDeactiveUsers(string UserName)
+        {
+             var user = await UserListServices.ActiveDeactiveUsers(UserName);
+             return Ok(new { code = 200, data = user });
         }
 
     }

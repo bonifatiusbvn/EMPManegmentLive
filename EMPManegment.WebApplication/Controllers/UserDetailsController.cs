@@ -1,8 +1,12 @@
 ﻿using EMPManagment.Web.Helper;
 using EMPManagment.Web.Models.API;
 using EMPManegment.EntityModels.View_Model;
+using EMPManegment.EntityModels.ViewModels;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Security.Claims;
 
 namespace EMPManegment.Web.Controllers
 {
@@ -65,9 +69,29 @@ namespace EMPManegment.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> UserActiveDecative(string Id)
+        public async Task<IActionResult> UserActiveDecative(string UserName)
         {
-                return View();
+            try
+            {
+
+                ApiResponseModel postuser = await APIServices.PostAsync(null, "UserDetails/ActiveDeactiveUsers?UserName=" + UserName);
+                if (postuser.code == 200)
+                {
+                    var identity = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, UserName) }, CookieAuthenticationDefaults.AuthenticationScheme);
+                    var principal = new ClaimsPrincipal(identity);
+                    HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+                    HttpContext.Session.SetString("EmpID", UserName);
+                    return new JsonResult(UserName);
+                }
+                else
+                {
+                    return new JsonResult(UserName);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }

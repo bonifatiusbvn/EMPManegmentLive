@@ -26,12 +26,12 @@
                             <form asp-action="" asp-controller="" method="post">
                             @if(d.IsActive == true)
                             {
-                                <a href="javascript:void(0)" class="btn btn-success btn-sm">Active</a>
+                                    <a href="javascript:void(0)" class="btn btn-success btn-sm" onclick="ActiveDeactive('@d.UserName')">Active</a>
                                 
                             }
                             @if (d.IsActive == false)
                             {
-                                <a href="javascript:void(0)" class="btn btn-danger btn-sm">Deactive</a>
+                                    <a href="javascript:void(0)" class="btn btn-danger btn-sm" onclick="ActiveDeactive('@d.UserName')">Deactive</a>
                             }
                             </form>
                         </div>
@@ -42,3 +42,6 @@
     }
 
 }
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/moduls/userdetailsscript.js"></script>
+

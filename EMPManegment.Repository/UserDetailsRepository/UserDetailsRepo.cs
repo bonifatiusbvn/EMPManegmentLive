@@ -42,5 +42,31 @@ namespace EMPManegment.Repository.UserListRepository
             });
             return data;
         }
+
+        public async Task<string> ActiveDeactiveUsers(string UserName)
+        {
+            var data = Context.TblUsers.Where(a => a.UserName == UserName).FirstOrDefault();
+
+            if (data != null)
+            {
+
+                if(data.IsActive == true)
+                {
+                    data.IsActive = false;
+                    Context.TblUsers.Update(data);
+                    Context.SaveChanges();
+                }
+
+                else
+                {
+                    data.IsActive = true;
+                    Context.TblUsers.Update(data);
+                    Context.SaveChanges();
+                }
+
+
+            }
+            return UserName;   
+        }
     }
 }

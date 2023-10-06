@@ -63,11 +63,11 @@ namespace EMPManegment.Web.Controllers
 
                     else
                     {
-                        var identity = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, login.EmpId) },
+                        var identity = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, login.UserName) },
                         CookieAuthenticationDefaults.AuthenticationScheme);
                         var principal = new ClaimsPrincipal(new[] { identity });
                         HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
-                        HttpContext.Session.SetString("Emilid", login.EmpId);
+                        HttpContext.Session.SetString("Emilid", login.UserName);
                         var user = response.data;
                         return RedirectToAction("UserHome", "Home");
                     }

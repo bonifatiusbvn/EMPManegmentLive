@@ -1,4 +1,5 @@
 ﻿using EMPManegment.EntityModels.View_Model;
+using EMPManegment.EntityModels.ViewModels;
 using EMPManegment.Inretface.Interface.UserList;
 using EMPManegment.Inretface.Services.UserListServices;
 using System;
@@ -20,6 +21,11 @@ namespace EMPManegment.Services.UserList
         public async Task<IEnumerable<EmpDetailsView>> GetUsersList()
         {
             return await UserList.GetUsersList();
+        }
+
+        public Task<string> ActiveDeactiveUsers(string UserName)
+        {
+            return UserList.ActiveDeactiveUsers(UserName);    
         }
     }
 }
