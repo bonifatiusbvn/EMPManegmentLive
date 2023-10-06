@@ -16,11 +16,11 @@ using System.Threading.Tasks;
 
 namespace EMPManegment.Repository.UserListRepository
 {
-    public class UserListRepo : IUserList
+    public class UserDetailsRepo : IUserDetails
     {
         public BonifatiusEmployeesContext Context { get; }
         public IWebHostEnvironment Environment { get; }
-        public UserListRepo(BonifatiusEmployeesContext context, IWebHostEnvironment environment)
+        public UserDetailsRepo(BonifatiusEmployeesContext context, IWebHostEnvironment environment)
         {
             Context = context;
             Environment = environment;

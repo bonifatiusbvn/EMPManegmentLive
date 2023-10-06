@@ -3,9 +3,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace EMPManegment.Web.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
-       
+        
         public IActionResult UserHome()
         {
             return View();
