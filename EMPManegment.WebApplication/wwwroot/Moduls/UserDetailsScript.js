@@ -26,10 +26,11 @@ function ActiveDeactive(UserName) {
                 contentType: 'application/json;charset=utf-8;',
                 dataType: 'json',
             
-                success: function () {
+                success: function (Result) {
+                    
                     swalWithBootstrapButtons.fire(
                         'Done!',
-                        'Your opration is successfull.',
+                         Result.message,
                         'success'
                     ).then(function () {
                         window.location = '/UserDetails/UserActiveDecative';

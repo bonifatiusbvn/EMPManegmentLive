@@ -2,6 +2,7 @@
 using EMPManagment.API;
 using EMPManegment.EntityModels.View_Model;
 using EMPManegment.EntityModels.ViewModels;
+using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.Inretface.Interface.UserList;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -54,8 +55,9 @@ namespace EMPManegment.Repository.UserListRepository
                                                      return result;
         }
 
-        public async Task<string> ActiveDeactiveUsers(string UserName)
+        public async Task<UserResponceModel> ActiveDeactiveUsers(string UserName)
         {
+            UserResponceModel response = new UserResponceModel();
             var data = Context.TblUsers.Where(a => a.UserName == UserName).FirstOrDefault();
 
             if (data != null)
@@ -66,6 +68,9 @@ namespace EMPManegment.Repository.UserListRepository
                     data.IsActive = false;
                     Context.TblUsers.Update(data);
                     Context.SaveChanges();
+                    response.Code = 200;
+                    response.Data = data;
+                    response.Message = "User Deactive Succesfully";
                 }
 
                 else
@@ -73,11 +78,14 @@ namespace EMPManegment.Repository.UserListRepository
                     data.IsActive = true;
                     Context.TblUsers.Update(data);
                     Context.SaveChanges();
+                    response.Code = 200;
+                    response.Data = data;
+                    response.Message = "User Active Succesfully";
                 }
 
 
             }
-            return UserName;   
+            return response;   
         }
     }
 }
