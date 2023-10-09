@@ -13,5 +13,6 @@ namespace EMPManegment.Inretface.Services.UserListServices
     {
        Task<IEnumerable<EmpDetailsView>> GetUsersList();
         Task<UserResponceModel> ActiveDeactiveUsers(string UserName);
+        Task<UserResponceModel> EnterInOutTime(UserAttendanceModel userAttendance);
     }
 }

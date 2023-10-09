@@ -29,5 +29,11 @@ namespace EMPManegment.Services.UserList
         {
             return UserList.ActiveDeactiveUsers(UserName);    
         }
+
+        public Task<UserResponceModel> EnterInOutTime(UserAttendanceModel userAttendance)
+        {
+            return UserList.EnterInOutTime(userAttendance);
+        }
     }
 }
+

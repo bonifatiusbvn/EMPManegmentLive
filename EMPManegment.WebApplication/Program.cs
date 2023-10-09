@@ -7,6 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<WebAPI, WebAPI>();
 builder.Services.AddScoped<APIServices, APIServices>();
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)

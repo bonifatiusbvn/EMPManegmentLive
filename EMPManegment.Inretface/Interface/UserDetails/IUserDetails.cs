@@ -14,5 +14,7 @@ namespace EMPManegment.Inretface.Interface.UserList
         Task<IEnumerable<EmpDetailsView>> GetUsersList();
          
         Task<UserResponceModel> ActiveDeactiveUsers(string UserName);
+
+        Task<UserResponceModel> EnterInOutTime(UserAttendanceModel userAttendance);
     }
 }
