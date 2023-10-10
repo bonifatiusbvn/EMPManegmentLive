@@ -27,7 +27,7 @@ namespace EMPManagment.Web.Helper
                 var url = $"{clients.BaseAddress}{endpoint}";
 
                 if (id != null)
-                    url = $"{url}?id={id}";
+                    url = $"{url}{id}";
 
                 var response = await clients.GetAsync(url);
 

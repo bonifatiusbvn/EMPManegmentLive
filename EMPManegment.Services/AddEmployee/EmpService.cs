@@ -1,4 +1,5 @@
-﻿using EMPManegment.EntityModels.View_Model;
+﻿using EMPManagment.API;
+using EMPManegment.EntityModels.View_Model;
 using EMPManegment.EntityModels.ViewModels;
 using EMPManegment.Inretface.EmployeesInterface.AddEmployee;
 using EMPManegment.Inretface.Services.AddEmployeeServies;
@@ -38,9 +39,14 @@ namespace EMPManegment.Services.AddEmployee
         
 
        
-        public Task<EmpDetailsView> GetById(string EId)
+        public async Task<EmpDetailsView> GetById(string UserName)
         {
-            throw new NotImplementedException();
+            return await EmpDetails.GetById(UserName);
+        }
+
+        public async Task<IEnumerable<EmpDocumentView>> EmpDocument()
+        {
+            return await EmpDetails.EmpDocument();
         }
     }
 }
