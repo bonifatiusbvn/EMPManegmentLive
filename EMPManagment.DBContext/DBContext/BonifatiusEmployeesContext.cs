@@ -35,10 +35,8 @@ public partial class BonifatiusEmployeesContext : DbContext
 
     public virtual DbSet<TblUserDocument> TblUserDocuments { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
 
-    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -97,9 +95,9 @@ public partial class BonifatiusEmployeesContext : DbContext
 
         modelBuilder.Entity<TblDocumentMaster>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("tblDocumentMaster");
+            entity.ToTable("tblDocumentMaster");
+
+            entity.Property(e => e.DocumentType).HasMaxLength(20);
         });
 
         modelBuilder.Entity<TblQuestion>(entity =>
@@ -190,6 +188,10 @@ public partial class BonifatiusEmployeesContext : DbContext
         modelBuilder.Entity<TblUserDocument>(entity =>
         {
             entity.ToTable("tblUserDocuments");
+
+            entity.HasOne(d => d.DocumentType).WithMany(p => p.TblUserDocuments)
+                .HasForeignKey(d => d.DocumentTypeId)
+                .HasConstraintName("FK_tblUserDocuments_tblDocumentMaster");
 
             entity.HasOne(d => d.User).WithMany(p => p.TblUserDocuments)
                 .HasForeignKey(d => d.UserId)

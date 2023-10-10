@@ -22,6 +22,7 @@ namespace EMPManegment.EntityModels.View_Model
         public string? Gender { get; set; }
 
         public DateTime? DateOfBirth { get; set; }
+        public DateTime? JoiningDate { get; set; }
 
         public string? Email { get; set; }
 
@@ -51,7 +52,7 @@ namespace EMPManegment.EntityModels.View_Model
 
         public string? Answer { get; set; }
 
-
+        public string DocumentType { get; set; } 
         public int? DepartmentId { get; set; }
 
         public DateTime? CreatedOn { get; set; }

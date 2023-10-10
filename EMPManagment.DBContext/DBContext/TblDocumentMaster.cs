@@ -5,9 +5,9 @@ namespace EMPManagment.API;
 
 public partial class TblDocumentMaster
 {
-    public int? AadharCard { get; set; }
+    public int Id { get; set; }
 
-    public int? PanCard { get; set; }
+    public string DocumentType { get; set; } = null!;
 
-    public int? OfferLetter { get; set; }
+    public virtual ICollection<TblUserDocument> TblUserDocuments { get; set; } = new List<TblUserDocument>();
 }

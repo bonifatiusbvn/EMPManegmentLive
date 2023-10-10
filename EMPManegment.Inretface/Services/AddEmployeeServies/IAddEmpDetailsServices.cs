@@ -1,4 +1,5 @@
 ﻿
+using EMPManagment.API;
 using EMPManegment.EntityModels.View_Model;
 using EMPManegment.EntityModels.ViewModels;
 using Microsoft.AspNetCore.Http;
@@ -12,11 +13,10 @@ namespace EMPManegment.Inretface.Services.AddEmployeeServies
 {
     public interface IAddEmpDetailsServices
     {
-
         Task<EmpDetailsView> GetById(string EId);
         string CheckEmloyess();
         Task<EmpDetailsResponseModel> AddEmployee(EmpDetailsView emp);
-     
         Task<IEnumerable<Department>> EmpDepartment();
+        Task<IEnumerable<EmpDocumentView>> EmpDocument();
     }
 }

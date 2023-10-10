@@ -120,12 +120,46 @@ namespace EMPManegment.Repository.AddEmpRepository
                 throw ex;
             }
         }
-        public Task<EmpDetailsView> GetById(string EId)
-        {
-            throw new NotImplementedException();
-        }
-       
-       
 
+        public async Task<IEnumerable<EmpDocumentView>> EmpDocument()
+        {
+            try
+            {
+                IEnumerable<EmpDocumentView> document = Context.TblDocumentMasters.ToList().Select(a => new EmpDocumentView
+                {
+                    Id = a.Id,
+                    DocumentType = a.DocumentType,
+                });
+                return document;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<EmpDetailsView> GetById(string UserName)
+        {
+            var employee = await Context.TblUsers.SingleOrDefaultAsync(x => x.UserName == UserName);
+            EmpDetailsView model = new EmpDetailsView
+            {
+                UserName = employee.UserName,
+                FirstName = employee.FirstName,
+                LastName = employee.LastName,
+                Image = employee.Image,
+                Gender = employee.Gender,
+                DateOfBirth = employee.DateOfBirth,
+                Email = employee.Email,
+                PhoneNumber = employee.PhoneNumber,
+                Address = employee.Address,
+                CityId = employee.CityId,
+                DepartmentId = employee.DepartmentId,
+                StateId = employee.StateId,
+                CountryId = employee.CountryId,
+                IsActive = employee.IsActive,
+                JoiningDate= employee.JoiningDate,
+            };
+            return model; 
+        }
     }   
 }

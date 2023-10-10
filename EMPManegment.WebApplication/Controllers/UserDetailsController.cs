@@ -6,8 +6,6 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using System.Security.Claims;
-using Azure;
 
 namespace EMPManegment.Web.Controllers
 {
@@ -41,51 +39,6 @@ namespace EMPManegment.Web.Controllers
                     userList = JsonConvert.DeserializeObject<List<EmpDetailsView>>(res.data.ToString());
                 }
                 return View(userList);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        public async Task<IActionResult> UserActiveDecative() 
-        {
-
-            try
-            {
-                List<EmpDetailsView> userList = new List<EmpDetailsView>();
-                HttpClient client = WebAPI.Initil();
-                ApiResponseModel res = await APIServices.GetAsync("", "UserDetails/GetAllUserList");
-                if (res.code == 200)
-                {
-                    userList = JsonConvert.DeserializeObject<List<EmpDetailsView>>(res.data.ToString());
-                }
-                return View(userList);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> UserActiveDecative(string UserName)
-        {
-            try
-            {
-
-                ApiResponseModel postuser = await APIServices.PostAsync(null, "UserDetails/ActiveDeactiveUsers?UserName=" + UserName);
-                if (postuser.code == 200)
-                {
-                  
-                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
-                  
-                }
-                else
-                {
-                    return new JsonResult(new { Message = string.Format(postuser.message), Code = postuser.code });
-                }
             }
             catch (Exception ex)
             {

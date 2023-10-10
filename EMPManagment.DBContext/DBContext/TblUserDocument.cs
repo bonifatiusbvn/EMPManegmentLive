@@ -9,9 +9,11 @@ public partial class TblUserDocument
 
     public Guid? UserId { get; set; }
 
-    public int? DocumentType { get; set; }
+    public int? DocumentTypeId { get; set; }
 
     public string? DocumentName { get; set; }
+
+    public virtual TblDocumentMaster? DocumentType { get; set; }
 
     public virtual TblUser? User { get; set; }
 }
