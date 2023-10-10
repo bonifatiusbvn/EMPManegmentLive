@@ -1,9 +1,16 @@
-﻿using EMPManegment.EntityModels.View_Model;
+﻿using Azure;
+using Azure.Core;
+using EMPManagment.Web.Models.API;
+using EMPManegment.EntityModels.View_Model;
 using EMPManegment.EntityModels.ViewModels;
+using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.Inretface.Interface.UserList;
+using EMPManegment.Inretface.Interface.UsersLogin;
 using EMPManegment.Inretface.Services.UserListServices;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace EMPManagment.API.Controllers
 {
@@ -33,8 +40,30 @@ namespace EMPManagment.API.Controllers
 
         public async Task<IActionResult> ActiveDeactiveUsers(string UserName)
         {
+             UserResponceModel responseModel = new UserResponceModel();
+
              var user = await UserListServices.ActiveDeactiveUsers(UserName);
-             return Ok(new { code = 200, data = user });
+            try
+            {
+
+                if (user != null)
+                {
+
+                    responseModel.Code = (int)HttpStatusCode.OK;
+                    responseModel.Message = user.Message;
+                    responseModel.Data = user.Data;
+                }
+                else
+                {
+                    responseModel.Message = user.Message;
+                    responseModel.Code = (int)HttpStatusCode.NotFound;
+                }
+            }
+            catch (Exception ex)
+            {
+                responseModel.Code = (int)HttpStatusCode.InternalServerError;
+            }
+            return StatusCode(responseModel.Code, responseModel);
         }
 
     }

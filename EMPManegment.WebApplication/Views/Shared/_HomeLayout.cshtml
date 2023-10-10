@@ -1,4 +1,6 @@
-﻿<!doctype html>
+﻿
+@inject IHttpContextAccessor Accessor
+<!doctype html>
 <html lang="en" data-layout="vertical" data-topbar="light" data-sidebar="light" data-sidebar-size="lg" data-sidebar-image="none" data-preloader="disable">
 
 
@@ -687,17 +689,17 @@
                         <div class="dropdown ms-sm-3 header-item topbar-user">
                             <button type="button" class="btn" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="d-flex align-items-center">
-                                    <img class="rounded-circle header-profile-user" src="~/UserHome/minimal/assets/images/users/avatar-1.jpg" alt="Header Avatar">
+                                    <img class="rounded-circle header-profile-user" src="~/@Accessor.HttpContext.Session.GetString("ProfileImage")" alt="Header Avatar">
                                     
                                     <span class="text-start ms-xl-2">
-                                        <span class="d-none d-xl-inline-block ms-1 fw-medium user-name-text">Anna Adame</span>
-                                        <span class="d-none d-xl-block ms-1 fs-12 user-name-sub-text">Founder</span>
+                                        <span class="d-none d-xl-inline-block ms-1 fw-medium user-name-text">@Accessor.HttpContext.Session.GetString("FullName")</span>
+                                        <span class="d-none d-xl-block ms-1 fs-12 user-name-sub-text">@Accessor.HttpContext.Session.GetString("UserName")</span>
                                     </span>
                                 </span>
                             </button>
                             <div class="dropdown-menu dropdown-menu-end">
                                 <!-- item-->
-                                <h6 class="dropdown-header">Welcome Anna!</h6>
+                                <h6 class="dropdown-header">Welcome @Accessor.HttpContext.Session.GetString("FirstName")!</h6>
                                 <a class="dropdown-item" href="pages-profile.html"><i class="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Profile</span></a>
                                 <a class="dropdown-item" href="apps-chat.html"><i class="mdi mdi-message-text-outline text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Messages</span></a>
                                 <a class="dropdown-item" href="apps-tasks-kanban.html"><i class="mdi mdi-calendar-check-outline text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Taskboard</span></a>
@@ -1784,7 +1786,8 @@
                                     <div class="col-12">
                                         <div class="d-flex align-items-lg-center flex-lg-row flex-column">
                                             <div class="flex-grow-1">
-                                                <h4 class="fs-16 mb-1">Good Morning, Anna!</h4>
+                                                <h4 class="fs-16 mb-1">Good Morning, @Accessor.HttpContext.Session.GetString("FirstName")!</h4>
+                                                <input type="text" value="@Accessor.HttpContext.Session.GetString("UserID")" hidden id="txtuserid"/>
                                                 <p class="text-muted mb-0">
                                                     Here's what's happening with your store
                                                     today.
@@ -1831,25 +1834,18 @@
                                                 <div class="d-flex align-items-center">
                                                     <div class="flex-grow-1 overflow-hidden">
                                                         <p class="text-uppercase fw-medium text-muted text-truncate mb-0">
-                                                            Total Earnings
+                                                            In-Time
                                                         </p>
                                                     </div>
-                                                    <div class="flex-shrink-0">
-                                                        <h5 class="text-success fs-14 mb-0">
-                                                            <i class="ri-arrow-right-up-line fs-13 align-middle"></i>
-                                                            +16.24 %
-                                                        </h5>
-                                                    </div>
+                                                    
                                                 </div>
                                                 <div class="d-flex align-items-end justify-content-between mt-4">
                                                     <div>
                                                         <h4 class="fs-22 fw-semibold ff-secondary mb-4">
                                                             $<span class="counter-value" data-target="559.25">0</span>k
                                                         </h4>
-                                                        <a href="#" class="link-secondary text-decoration-underline">
-                                                            View net
-                                                            earnings
-                                                        </a>
+                                                        <button type="button" class="btn btn-success btn-label" onclick="EnterInOutTime()"><i class="ri-check-double-line label-icon align-middle fs-16 me-2"></i>Enter IN-TIME</button>
+                                                     
                                                     </div>
                                                     <div class="avatar-sm flex-shrink-0">
                                                         <span class="avatar-title bg-primary-subtle rounded fs-3">
@@ -1868,22 +1864,22 @@
                                                 <div class="d-flex align-items-center">
                                                     <div class="flex-grow-1 overflow-hidden">
                                                         <p class="text-uppercase fw-medium text-muted text-truncate mb-0">
-                                                            Orders
+                                                           Out-Time
                                                         </p>
-                                                    </div>
-                                                    <div class="flex-shrink-0">
-                                                        <h5 class="text-danger fs-14 mb-0">
-                                                            <i class="ri-arrow-right-down-line fs-13 align-middle"></i>
-                                                            -3.57 %
-                                                        </h5>
                                                     </div>
                                                 </div>
                                                 <div class="d-flex align-items-end justify-content-between mt-4">
                                                     <div>
                                                         <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value" data-target="36894">0</span></h4>
-                                                        <a href="#" class="link-secondary text-decoration-underline">
-                                                            View all
-                                                            orders
+                                                        <a href="javascript:void(0);" class="btn btn-primary btn-label" onclick="EnterInOutTime()">
+                                                            <div class="d-flex">
+                                                                <div class="flex-shrink-0">
+                                                                    <i class="ri-user-smile-line label-icon align-middle fs-16 me-2"></i>
+                                                                </div>
+                                                                <div class="flex-grow-1">
+                                                                    Enter OUT-TIME
+                                                                </div>
+                                                            </div>
                                                         </a>
                                                     </div>
                                                     <div class="avatar-sm flex-shrink-0">
@@ -1906,22 +1902,16 @@
                                                             Customers
                                                         </p>
                                                     </div>
-                                                    <div class="flex-shrink-0">
-                                                        <h5 class="text-success fs-14 mb-0">
-                                                            <i class="ri-arrow-right-up-line fs-13 align-middle"></i>
-                                                            +29.08 %
-                                                        </h5>
-                                                    </div>
                                                 </div>
                                                 <div class="d-flex align-items-end justify-content-between mt-4">
                                                     <div>
                                                         <h4 class="fs-22 fw-semibold ff-secondary mb-4">
                                                             <span class="counter-value" data-target="183.35">0</span>M
                                                         </h4>
-                                                        <a href="#" class="link-secondary text-decoration-underline">
-                                                            See
-                                                            details
-                                                        </a>
+                                                        <button type="button" class="btn btn-success custom-toggle" data-bs-toggle="button" aria-pressed="false">
+                                                            <span class="icon-on"><i class="ri-thumb-up-line align-bottom me-1"></i> Yes</span>
+                                                            <span class="icon-off"><i class="ri-thumb-down-line align-bottom me-1"></i> No</span>
+                                                        </button>
                                                     </div>
                                                     <div class="avatar-sm flex-shrink-0">
                                                         <span class="avatar-title bg-primary-subtle rounded fs-3">
@@ -1943,21 +1933,17 @@
                                                             My Balance
                                                         </p>
                                                     </div>
-                                                    <div class="flex-shrink-0">
-                                                        <h5 class="text-muted fs-14 mb-0">
-                                                            +0.00 %
-                                                        </h5>
-                                                    </div>
+                                                   
                                                 </div>
                                                 <div class="d-flex align-items-end justify-content-between mt-4">
                                                     <div>
                                                         <h4 class="fs-22 fw-semibold ff-secondary mb-4">
                                                             $<span class="counter-value" data-target="165.89">0</span>k
                                                         </h4>
-                                                        <a href="#" class="link-secondary text-decoration-underline">
-                                                            Withdraw
-                                                            money
-                                                        </a>
+                                                        <button type="button" class="btn btn-warning custom-toggle active" data-bs-toggle="button" aria-pressed="true">
+                                                            <span class="icon-on"><i class="ri-add-line align-bottom me-1"></i> Follow</span>
+                                                            <span class="icon-off"><i class="ri-user-unfollow-line align-bottom me-1"></i> Unfollow</span>
+                                                        </button>
                                                     </div>
                                                     <div class="avatar-sm flex-shrink-0">
                                                         <span class="avatar-title bg-primary-subtle rounded fs-3">
@@ -2051,6 +2037,8 @@
 
         <!-- App js -->
         <script src="~/UserHome/minimal/assets/js/app.js"></script>
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script src="~/moduls/userdetailsscript.js"></script>
         @await RenderSectionAsync("Scripts", required: false)
 </body>
 

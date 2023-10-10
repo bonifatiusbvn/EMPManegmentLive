@@ -44,8 +44,9 @@ namespace EMPManegment.Web.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    ApiResponseModel response = await APIServices.PostAsync(login, "UserLogin/Login");
 
+                    ApiResponseModel response = await APIServices.PostAsync(login, "UserLogin/Login");
+                    LoginResponseModel usermodel = new LoginResponseModel();
                     if (response.code != (int)HttpStatusCode.OK)
                     {
                        
@@ -63,12 +64,24 @@ namespace EMPManegment.Web.Controllers
 
                     else
                     {
-                        var identity = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, login.UserName) },
-                        CookieAuthenticationDefaults.AuthenticationScheme);
-                        var principal = new ClaimsPrincipal(new[] { identity });
-                        HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
-                        HttpContext.Session.SetString("Emilid", login.UserName);
-                        var user = response.data;
+                        var data = JsonConvert.SerializeObject(response.data);
+                        usermodel.Data = JsonConvert.DeserializeObject<LoginView>(data);
+                        var claims = new List<Claim>()
+                        {
+                            new Claim("UserID", usermodel.Data.Id.ToString()),
+                            new Claim("FirstName", usermodel.Data.FirstName),
+                            new Claim("Fullname", usermodel.Data.FullName),
+                            new Claim("UserName", usermodel.Data.UserName),
+                            new Claim("ProfileImage", usermodel.Data.ProfileImage),
+                        };
+
+                        var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                        var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
+                        HttpContext.Session.SetString("UserID", usermodel.Data.Id.ToString());
+                        HttpContext.Session.SetString("FirstName", usermodel.Data.FirstName);
+                        HttpContext.Session.SetString("FullName", usermodel.Data.FullName);
+                        HttpContext.Session.SetString("UserName", usermodel.Data.UserName);
+                        HttpContext.Session.SetString("ProfileImage", usermodel.Data.ProfileImage);
                         return RedirectToAction("UserHome", "Home");
                     }
                    

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Security.Claims;
+using Azure;
 
 namespace EMPManegment.Web.Controllers
 {
@@ -77,15 +78,13 @@ namespace EMPManegment.Web.Controllers
                 ApiResponseModel postuser = await APIServices.PostAsync(null, "UserDetails/ActiveDeactiveUsers?UserName=" + UserName);
                 if (postuser.code == 200)
                 {
-                    var identity = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, UserName) }, CookieAuthenticationDefaults.AuthenticationScheme);
-                    var principal = new ClaimsPrincipal(identity);
-                    HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
-                    HttpContext.Session.SetString("EmpID", UserName);
-                    return new JsonResult(UserName);
+                  
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
+                  
                 }
                 else
                 {
-                    return new JsonResult(UserName);
+                    return new JsonResult(new { Message = string.Format(postuser.message), Code = postuser.code });
                 }
             }
             catch (Exception ex)

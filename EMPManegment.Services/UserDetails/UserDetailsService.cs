@@ -1,5 +1,6 @@
 ﻿using EMPManegment.EntityModels.View_Model;
 using EMPManegment.EntityModels.ViewModels;
+using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.Inretface.Interface.UserList;
 using EMPManegment.Inretface.Services.UserListServices;
 using Microsoft.AspNetCore.Mvc;
@@ -24,9 +25,15 @@ namespace EMPManegment.Services.UserList
             return await UserList.GetUsersList();
         }
 
-        public Task<string> ActiveDeactiveUsers(string UserName)
+        public Task<UserResponceModel> ActiveDeactiveUsers(string UserName)
         {
             return UserList.ActiveDeactiveUsers(UserName);    
         }
+
+        public Task<UserResponceModel> EnterInOutTime(UserAttendanceModel userAttendance)
+        {
+            return UserList.EnterInOutTime(userAttendance);
+        }
     }
 }
+

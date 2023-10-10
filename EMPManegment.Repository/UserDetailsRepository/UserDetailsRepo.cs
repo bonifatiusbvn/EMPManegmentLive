@@ -2,6 +2,7 @@
 using EMPManagment.API;
 using EMPManegment.EntityModels.View_Model;
 using EMPManegment.EntityModels.ViewModels;
+using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.Inretface.Interface.UserList;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -54,8 +55,9 @@ namespace EMPManegment.Repository.UserListRepository
                                                      return result;
         }
 
-        public async Task<string> ActiveDeactiveUsers(string UserName)
+        public async Task<UserResponceModel> ActiveDeactiveUsers(string UserName)
         {
+            UserResponceModel response = new UserResponceModel();
             var data = Context.TblUsers.Where(a => a.UserName == UserName).FirstOrDefault();
 
             if (data != null)
@@ -66,6 +68,9 @@ namespace EMPManegment.Repository.UserListRepository
                     data.IsActive = false;
                     Context.TblUsers.Update(data);
                     Context.SaveChanges();
+                    response.Code = 200;
+                    response.Data = data;
+                    response.Message = "User Deactive Succesfully";
                 }
 
                 else
@@ -73,11 +78,58 @@ namespace EMPManegment.Repository.UserListRepository
                     data.IsActive = true;
                     Context.TblUsers.Update(data);
                     Context.SaveChanges();
+                    response.Code = 200;
+                    response.Data = data;
+                    response.Message = "User Active Succesfully";
                 }
 
 
             }
-            return UserName;   
+            return response;   
+        }
+
+        public async Task<UserResponceModel> EnterInOutTime(UserAttendanceModel userAttendance)
+        {
+            UserResponceModel response = new UserResponceModel();
+            var data = Context.TblAttendances.Where(a => a.UserId == userAttendance.UserId && a.OutTime != null).OrderByDescending(a=>a.Id).FirstOrDefault();
+            if (data.OutTime != null)
+            {
+                if(data.UserId == userAttendance.UserId && data.Intime == null)
+                {
+                    data.Intime = userAttendance.InTime;
+                    data.Date = DateTime.Today;
+                    Context.TblAttendances.Add(data);
+                    Context.SaveChanges();
+                    response.Code = 200;
+                    response.Message = "In-Time Enter Successfully";
+                    response.Data = data;
+                        
+                }
+                
+
+                else if(data.OutTime == null)
+                {
+                    data.OutTime = userAttendance.OutTime;
+                    Context.TblAttendances.Update(data);
+                    Context.SaveChanges();
+                    response.Code = 200;
+                    response.Message = "Out-Time Enter Successfully";
+                    response.Data = data;
+
+                }
+                else
+                {
+                    response.Message = "Your Already Enter IN-Time";
+                };
+
+            }
+
+            else
+            {
+                response.Code = 400;
+                response.Message = "You Miss Out-Time Contact Your Admin";
+            }
+            return response;
         }
     }
 }
