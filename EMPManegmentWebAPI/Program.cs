@@ -33,12 +33,12 @@ option.UseSqlServer(builder.Configuration.GetConnectionString("EMPDbconn")));
 builder.Services.AddScoped<IAddEmpDetails, AddEmpRepo>();
 builder.Services.AddScoped<ICSC, CSCRepo>();
 builder.Services.AddScoped<IUserLogin, UserLoginRepo> ();
-builder.Services.AddScoped<IUserList, UserListRepo>();
+builder.Services.AddScoped<IUserDetails, UserDetailsRepo>();
 
 builder.Services.AddScoped<IAddEmpDetailsServices, EmpService>();
 builder.Services.AddScoped<ICSCServices, CSCService>();
 builder.Services.AddScoped<IUserLoginServices, UserLoginService>();
-builder.Services.AddScoped<IUserListServices, UserListService>();
+builder.Services.AddScoped<IUserDetailsServices, UserDetailsService>();
 
 
 

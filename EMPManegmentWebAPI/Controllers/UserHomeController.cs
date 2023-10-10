@@ -1,0 +1,53 @@
+﻿using EMPManegment.EntityModels.View_Model;
+using EMPManegment.EntityModels.ViewModels.Models;
+using EMPManegment.Inretface.Services.UserListServices;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using System.Net;
+
+namespace EMPManagment.API.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class UserHomeController : ControllerBase
+    {
+        public UserHomeController(IUserDetailsServices userDetails) 
+        {
+            UserDetails = userDetails;
+        }
+
+        public IUserDetailsServices UserDetails { get; }
+
+
+        [HttpPost]
+        [Route("InsertINOutTime")]
+
+        public async Task<IActionResult> InsertINOutTime(UserAttendanceModel userAttendance)
+        {
+            UserResponceModel responseModel = new UserResponceModel();
+
+            var user = await UserDetails.EnterInOutTime(userAttendance);
+            try
+            {
+
+                if (user != null)
+                {
+
+                    responseModel.Code = (int)HttpStatusCode.OK;
+                    responseModel.Message = user.Message;
+                    responseModel.Data = user.Data;
+                }
+                else
+                {
+                    responseModel.Message = user.Message;
+                    responseModel.Code = (int)HttpStatusCode.NotFound;
+                }
+            }
+            catch (Exception ex)
+            {
+                responseModel.Code = (int)HttpStatusCode.InternalServerError;
+            }
+            return StatusCode(responseModel.Code, responseModel);
+        }
+    }
+}

@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using static Azure.Core.HttpHeader;
 using System.Net;
 using System.Reflection;
+using EMPManagment.Web.Models.API;
 
 namespace EMPManagment.API.Controllers
 {
@@ -27,29 +28,30 @@ namespace EMPManagment.API.Controllers
         [HttpPost("Login")]
         public async Task<IActionResult> Login(LoginRequest request)
         {
-            LoginResponseModel response = new LoginResponseModel();
+            LoginResponseModel apiResponseModel = new LoginResponseModel();
             try
             {
                
                 var result = await UserLogin.LoginUser(request);
-
+               
                 if (result != null && result.Data != null)
                 {
-                    
-                    response.Code = (int)HttpStatusCode.OK;
-                    response.Data = result.Data;
+                   
+                    apiResponseModel.Code = (int)HttpStatusCode.OK;
+                    apiResponseModel.Data = result.Data;
+                    apiResponseModel.Message = result.Message;
                 }
                 else
                 {
-                    response.Message = result.Message;
-                    response.Code = (int)HttpStatusCode.NotFound;
+                    apiResponseModel.Message = result.Message;
+                    apiResponseModel.Code = (int)HttpStatusCode.NotFound;
                 }
             }
             catch (Exception ex)
             {
-                response.Code = (int)HttpStatusCode.InternalServerError;
+                apiResponseModel.Code = (int)HttpStatusCode.InternalServerError;
             }
-            return StatusCode(response.Code, response);
+            return StatusCode(apiResponseModel.Code, apiResponseModel);
         }
     }
 }
