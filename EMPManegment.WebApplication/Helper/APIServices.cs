@@ -45,7 +45,34 @@ namespace EMPManagment.Web.Helper
                 throw ex;
             }
         }
+        public async Task<ApiResponseModel> GetAsyncId(dynamic id, string endpoint)
+        {
+            var model = new ApiResponseModel();
 
+            try
+            {
+                HttpClient clients = WebAPI.Initil();
+                var url = $"{clients.BaseAddress}{endpoint}";
+
+                if (id != null)
+                    url = $"{url}?id={id}";
+
+                var response = await clients.GetAsync(url);
+
+                var responseContent = await response.Content.ReadAsStringAsync();
+                var obj = JsonConvert.DeserializeObject<object>(responseContent);
+
+                model = JsonConvert.DeserializeObject<ApiResponseModel>(responseContent);
+                model.code = (int)response.StatusCode;
+
+                return model;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
         public async Task<ApiResponseModel> PostAsync(dynamic input, string endpoint)
         {
             var model = new ApiResponseModel();

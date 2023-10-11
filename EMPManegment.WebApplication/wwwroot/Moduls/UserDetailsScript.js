@@ -57,12 +57,12 @@ function ActiveDeactive(UserName) {
 }
 
 
-function EnterInOutTime() {
+function EnterInTime() {
     debugger
     var fromData = new FormData();
     fromData.append("UserId", $("#txtuserid").val());
     $.ajax({
-        url: '/Home/EnterUserInOutTime',
+        url: '/Home/EnterUserInTime',
         type: 'Post',
         data: fromData,
         dataType: 'json',
@@ -71,6 +71,32 @@ function EnterInOutTime() {
         success: function (Result) {
             Swal.fire({
                 title: Result.message, 
+                icon: 'warning',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'OK'
+            })
+
+        },
+        error: function () {
+            toastr.error('There is some problem in your request.');
+        }
+    })
+}
+
+function EnterOutTime() {
+    debugger
+    var fromData = new FormData();
+    fromData.append("UserId", $("#txtuserid").val());
+    $.ajax({
+        url: '/Home/EnterUserOutTime',
+        type: 'Post',
+        data: fromData,
+        dataType: 'json',
+        processData: false,
+        contentType: false,
+        success: function (Result) {
+            Swal.fire({
+                title: Result.message,
                 icon: 'warning',
                 confirmButtonColor: '#3085d6',
                 confirmButtonText: 'OK'

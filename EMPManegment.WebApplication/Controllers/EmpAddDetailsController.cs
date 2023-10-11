@@ -137,7 +137,7 @@ namespace EMPManegment.WebApplication.Controllers
             {
                 List<CountryView> countries = new List<CountryView>();
                 HttpClient client = WebAPI.Initil();
-                ApiResponseModel res = await APIServices.GetAsync(null,"CSC/GetCountries");
+                ApiResponseModel res = await APIServices.GetAsyncId(null,"CSC/GetCountries");
                 if (res.code == 200)
                 {
                     countries = JsonConvert.DeserializeObject<List<CountryView>>(res.data.ToString());
@@ -157,7 +157,7 @@ namespace EMPManegment.WebApplication.Controllers
             {
                 List<StateView> states = new List<StateView>();
                 HttpClient client = WebAPI.Initil();
-                ApiResponseModel res = await APIServices.GetAsync(id,"CSC/GetState");
+                ApiResponseModel res = await APIServices.GetAsyncId(id,"CSC/GetState");
                 if (res.code == 200)
                 {
                     states = JsonConvert.DeserializeObject<List<StateView>>(res.data.ToString());
@@ -177,7 +177,7 @@ namespace EMPManegment.WebApplication.Controllers
             {
                 List<CityView> cities = new List<CityView>();
                 HttpClient client = WebAPI.Initil();
-                ApiResponseModel res = await APIServices.GetAsync(id,"CSC/GetCities");
+                ApiResponseModel res = await APIServices.GetAsyncId(id,"CSC/GetCities");
                 if (res.code == 200)
                 {
                     cities = JsonConvert.DeserializeObject<List<CityView>>(res.data.ToString());
