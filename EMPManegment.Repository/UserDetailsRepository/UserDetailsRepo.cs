@@ -100,8 +100,6 @@ namespace EMPManegment.Repository.UserListRepository
             {
                 if (data.OutTime != null)
                 {
-                    if (data.Date != DateTime.Today && data.Intime != null)
-                    {
                         TblAttendance tblAttendance = new TblAttendance();
                         tblAttendance.UserId = userAttendance.UserId;
                         tblAttendance.Intime = DateTime.Now;
@@ -113,17 +111,16 @@ namespace EMPManegment.Repository.UserListRepository
                         response.Code = 200;
                         response.Message = "In-Time Enter Successfully";
 
-                    }
-                    else
-                    {
-                        response.Message = "Your Already Enter IN-Time";
-                    }
-
                 } 
-                    else
-                    {
+                else if (data.Date == DateTime.Today && data.Intime != null)
+                {
+                     response.Message = "Your Already Enter IN-Time";
+                }
+
+               else 
+                  {
                       response.Message = "You Missed Out-Time of " + data.Date.ToShortDateString() + " " + "Kindly Contact Your Admin";
-                    }
+                  }
             }
 
             else
@@ -147,15 +144,16 @@ namespace EMPManegment.Repository.UserListRepository
         public async Task<UserResponceModel> EnterOutTime(UserAttendanceModel userAttendance)
         {
             UserResponceModel response = new UserResponceModel();
-            var data = Context.TblAttendances.Where(a => a.UserId == userAttendance.UserId).OrderByDescending(a => a.CreatedOn).FirstOrDefault();
+            var data = Context.TblAttendances.Where(a => a.UserId == userAttendance.UserId).OrderByDescending(a => a.CreatedOn).Skip(1).Take(1).FirstOrDefault();
+
             if (data.OutTime != null)
             {
-                if(data.Date == DateTime.Today && data.Intime == null)
+                if(data.Date == DateTime.Today)
                 {
                     response.Message = "Please Enter In-Time First";
                 }
 
-               else if (data.Date == DateTime.Today && data.OutTime == null)
+               else if (data.Date != DateTime.Today && data.OutTime == null)
                 {
                     var outtime = Context.TblAttendances.Where(a => a.UserId == userAttendance.UserId && a.Date == DateTime.Today).FirstOrDefault();
                     outtime.OutTime = DateTime.Now;

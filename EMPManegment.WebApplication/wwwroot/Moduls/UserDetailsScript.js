@@ -61,6 +61,7 @@ function EnterInTime() {
     debugger
     var fromData = new FormData();
     fromData.append("UserId", $("#txtuserid").val());
+    fromData.append("Date", $("#txttodayDate").val());
     $.ajax({
         url: '/Home/EnterUserInTime',
         type: 'Post',
