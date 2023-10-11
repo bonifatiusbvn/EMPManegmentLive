@@ -109,3 +109,35 @@ function EnterOutTime() {
         }
     })
 }
+
+function ResetPassword()
+{
+    debugger
+    var fromData = new FormData();
+    fromData.append("UserName", $("#txtUserName").val());
+    fromData.append("Password", $("#password-input").val());
+
+    $.ajax({
+        url: '/UserDetails/ResetUserPassword',
+        type: 'Post',
+        data: fromData,
+        dataType: 'json',
+        processData: false,
+        contentType: false,
+        success: function (Result) {
+            debugger
+            Swal.fire({
+                title: Result.message,
+                icon: 'success',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'OK'
+            }).then(function () {
+                window.location = '/UserDetails/ResetUserPassword';
+            }); 
+
+        },
+        error: function () {
+            alert('There is some problem in your request.');
+        }
+    })
+}
