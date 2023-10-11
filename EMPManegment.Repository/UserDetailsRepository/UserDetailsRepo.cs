@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,7 @@ using System.Net;
 using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace EMPManegment.Repository.UserListRepository
 {
@@ -53,7 +55,7 @@ namespace EMPManegment.Repository.UserListRepository
                                                      CountryName = c.Country,
                                                      DepartmentName = d.Department
                                                  };
-                                                     return result;
+            return result;
         }
 
         public async Task<UserResponceModel> ActiveDeactiveUsers(string UserName)
@@ -64,7 +66,7 @@ namespace EMPManegment.Repository.UserListRepository
             if (data != null)
             {
 
-                if(data.IsActive == true)
+                if (data.IsActive == true)
                 {
                     data.IsActive = false;
                     Context.TblUsers.Update(data);
@@ -86,50 +88,96 @@ namespace EMPManegment.Repository.UserListRepository
 
 
             }
-            return response;   
+            return response;
         }
 
-        public async Task<UserResponceModel> EnterInOutTime(UserAttendanceModel userAttendance)
+        public async Task<UserResponceModel> EnterInTime(UserAttendanceModel userAttendance)
         {
             UserResponceModel response = new UserResponceModel();
-            var data = Context.TblAttendances.Where(a => a.UserId == userAttendance.UserId && a.OutTime != null).OrderByDescending(a=>a.Id).FirstOrDefault();
-            if (data.OutTime != null)
+            var data = Context.TblAttendances.Where(a => a.UserId == userAttendance.UserId).OrderByDescending(a => a.CreatedOn).FirstOrDefault();
+
+            if (data != null)
             {
-                if(data.UserId == userAttendance.UserId && data.Intime == null)
+                if (data.OutTime != null)
                 {
-                    data.Intime = userAttendance.InTime;
-                    data.Date = DateTime.Today;
-                    Context.TblAttendances.Add(data);
-                    Context.SaveChanges();
-                    response.Code = 200;
-                    response.Message = "In-Time Enter Successfully";
-                    response.Data = data;
-                        
-                }
-                
+                    if (data.Date != DateTime.Today && data.Intime != null)
+                    {
+                        TblAttendance tblAttendance = new TblAttendance();
+                        tblAttendance.UserId = userAttendance.UserId;
+                        tblAttendance.Intime = DateTime.Now;
+                        tblAttendance.Date = DateTime.Today;
+                        tblAttendance.CreatedOn = DateTime.Now;
+                        tblAttendance.OutTime = null;
+                        Context.TblAttendances.Add(tblAttendance);
+                        Context.SaveChanges();
+                        response.Code = 200;
+                        response.Message = "In-Time Enter Successfully";
 
-                else if(data.OutTime == null)
-                {
-                    data.OutTime = userAttendance.OutTime;
-                    Context.TblAttendances.Update(data);
-                    Context.SaveChanges();
-                    response.Code = 200;
-                    response.Message = "Out-Time Enter Successfully";
-                    response.Data = data;
+                    }
+                    else
+                    {
+                        response.Message = "Your Already Enter IN-Time";
+                    }
 
-                }
-                else
-                {
-                    response.Message = "Your Already Enter IN-Time";
-                };
-
+                } 
+                    else
+                    {
+                      response.Message = "You Missed Out-Time of " + data.Date.ToShortDateString() + " " + "Kindly Contact Your Admin";
+                    }
             }
 
             else
             {
-                response.Code = 400;
-                response.Message = "You Miss Out-Time Contact Your Admin";
+                TblAttendance tblAttendance = new TblAttendance();
+                tblAttendance.UserId = userAttendance.UserId;
+                tblAttendance.Intime = DateTime.Now;
+                tblAttendance.Date = DateTime.Today;
+                tblAttendance.CreatedOn = DateTime.Now;
+                tblAttendance.OutTime = null;
+                Context.TblAttendances.Add(tblAttendance);
+                Context.SaveChanges();
+                response.Code = 200;
+                response.Message = "In-Time Enter Successfully";
+
             }
+
+            return response;
+        }
+
+        public async Task<UserResponceModel> EnterOutTime(UserAttendanceModel userAttendance)
+        {
+            UserResponceModel response = new UserResponceModel();
+            var data = Context.TblAttendances.Where(a => a.UserId == userAttendance.UserId).OrderByDescending(a => a.CreatedOn).FirstOrDefault();
+            if (data.OutTime != null)
+            {
+                if(data.Date == DateTime.Today && data.Intime == null)
+                {
+                    response.Message = "Please Enter In-Time First";
+                }
+
+               else if (data.Date == DateTime.Today && data.OutTime == null)
+                {
+                    var outtime = Context.TblAttendances.Where(a => a.UserId == userAttendance.UserId && a.Date == DateTime.Today).FirstOrDefault();
+                    outtime.OutTime = DateTime.Now;
+                    outtime.CreatedOn = DateTime.Now;
+                    Context.TblAttendances.Update(outtime);
+                    Context.SaveChanges();
+                    response.Code = 200;
+                    response.Message = "Out-Time Enter Successfully";
+                    response.Data = data;
+                }
+
+                else
+                {
+                    response.Message = "Your Already Enter Out-Time";
+                }
+            }
+            else
+            {
+                response.Message = "You Missed Out-Time of " + data.Date.ToShortDateString() + " " + "Kindly Contact Your Admin";
+            }
+
+
             return response;
         }
 

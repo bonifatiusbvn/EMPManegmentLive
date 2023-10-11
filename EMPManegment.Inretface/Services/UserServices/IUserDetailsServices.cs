@@ -13,7 +13,9 @@ namespace EMPManegment.Inretface.Services.UserListServices
     {
        Task<IEnumerable<EmpDetailsView>> GetUsersList();
         Task<UserResponceModel> ActiveDeactiveUsers(string UserName);
-        Task<UserResponceModel> EnterInOutTime(UserAttendanceModel userAttendance);
-       Task<PasswordResetResponseModel> ResetPassword(PasswordResetView emp);
+        Task<UserResponceModel> EnterInTime(UserAttendanceModel userAttendance);
+        Task<UserResponceModel> EnterOutTime(UserAttendanceModel userAttendance);
+     
+        Task<PasswordResetResponseModel> ResetPassword(PasswordResetView emp);
     }
 }

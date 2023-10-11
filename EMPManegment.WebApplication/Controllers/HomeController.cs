@@ -28,12 +28,36 @@ namespace EMPManegment.Web.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> EnterUserInOutTime(UserAttendanceModel userAttendance)
+        public async Task<IActionResult> EnterUserInTime(UserAttendanceModel userAttendance)
         {
             try
             {
 
-                ApiResponseModel postuser = await APIServices.PostAsync(userAttendance, "UserHome/InsertINOutTime");
+                ApiResponseModel postuser = await APIServices.PostAsync(userAttendance, "UserHome/InsertINTime");
+                if (postuser.code == 200)
+                {
+
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
+
+                }
+                else
+                {
+                    return new JsonResult(new { Message = string.Format(postuser.message), Code = postuser.code });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EnterUserOutTime(UserAttendanceModel userAttendance)
+        {
+            try
+            {
+
+                ApiResponseModel postuser = await APIServices.PostAsync(userAttendance, "UserHome/InsertOutTime");
                 if (postuser.code == 200)
                 {
 

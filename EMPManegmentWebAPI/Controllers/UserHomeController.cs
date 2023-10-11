@@ -20,13 +20,44 @@ namespace EMPManagment.API.Controllers
 
 
         [HttpPost]
-        [Route("InsertINOutTime")]
+        [Route("InsertINTime")]
 
-        public async Task<IActionResult> InsertINOutTime(UserAttendanceModel userAttendance)
+        public async Task<IActionResult> InsertINTime(UserAttendanceModel userAttendance)
         {
             UserResponceModel responseModel = new UserResponceModel();
 
-            var user = await UserDetails.EnterInOutTime(userAttendance);
+            var user = await UserDetails.EnterInTime(userAttendance);
+            try
+            {
+
+                if (user != null)
+                {
+
+                    responseModel.Code = (int)HttpStatusCode.OK;
+                    responseModel.Message = user.Message;
+                    responseModel.Data = user.Data;
+                }
+                else
+                {
+                    responseModel.Message = user.Message;
+                    responseModel.Code = (int)HttpStatusCode.NotFound;
+                }
+            }
+            catch (Exception ex)
+            {
+                responseModel.Code = (int)HttpStatusCode.InternalServerError;
+            }
+            return StatusCode(responseModel.Code, responseModel);
+        }
+
+        [HttpPost]
+        [Route("InsertOutTime")]
+
+        public async Task<IActionResult> InsertOutTime(UserAttendanceModel userAttendance)
+        {
+            UserResponceModel responseModel = new UserResponceModel();
+
+            var user = await UserDetails.EnterOutTime(userAttendance);
             try
             {
 

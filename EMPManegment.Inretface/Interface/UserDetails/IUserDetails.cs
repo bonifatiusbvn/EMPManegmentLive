@@ -15,8 +15,10 @@ namespace EMPManegment.Inretface.Interface.UserList
          
         Task<UserResponceModel> ActiveDeactiveUsers(string UserName);
 
-        Task<UserResponceModel> EnterInOutTime(UserAttendanceModel userAttendance);
+        Task<UserResponceModel> EnterInTime(UserAttendanceModel userAttendance);
+        Task<UserResponceModel> EnterOutTime(UserAttendanceModel userAttendance);
 
         Task<PasswordResetResponseModel> ResetPassword(PasswordResetView emp);
+
     }
 }
