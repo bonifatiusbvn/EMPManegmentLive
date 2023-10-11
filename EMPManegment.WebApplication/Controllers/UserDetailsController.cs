@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using EMPManegment.Web.Helper;
+using System.Security.Claims;
 
 namespace EMPManegment.Web.Controllers
 {
@@ -42,6 +44,34 @@ namespace EMPManegment.Web.Controllers
             }
             catch (Exception ex)
             {
+                throw ex;
+            }
+        }
+
+        public async Task<IActionResult> ResetUserPassword(PasswordResetView emp)
+        {
+            try
+            {
+                Crypto.Hash(emp.Password,
+                   out byte[] passwordHash,
+                   out byte[] passwordSalt);
+                var data = new EmpDetailsView
+                {
+                    UserName = emp.UserName,
+                    PasswordHash = emp.PasswordHash,
+                    PasswordSalt = emp.PasswordSalt
+                };
+                ApiResponseModel postuser = await APIServices.PostAsync(data, "UserDetails/ResetUserPassword");
+                if (postuser.code == 200)
+                {
+                    return RedirectToAction("Login", "UserLogin");
+                }
+                else
+                {
+                    return View(emp);
+                }
+            }catch (Exception ex)  
+            { 
                 throw ex;
             }
         }

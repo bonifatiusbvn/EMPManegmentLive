@@ -66,5 +66,12 @@ namespace EMPManagment.API.Controllers
             return StatusCode(responseModel.Code, responseModel);
         }
 
+        [HttpPost]
+        [Route("ResetUserPassword")]
+        public async Task<IActionResult> ResetUserPassword(PasswordResetView emp)
+        {
+            var userNewPassword = await UserListServices.ResetPassword(emp);
+            return Ok(new { code = 200, data = userNewPassword });
+        }
     }
 }

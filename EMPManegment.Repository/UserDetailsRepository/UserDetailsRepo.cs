@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
@@ -128,6 +129,31 @@ namespace EMPManegment.Repository.UserListRepository
             {
                 response.Code = 400;
                 response.Message = "You Miss Out-Time Contact Your Admin";
+            }
+            return response;
+        }
+
+        public async Task<PasswordResetResponseModel> ResetPassword(PasswordResetView emp)
+        {
+            PasswordResetResponseModel response = new PasswordResetResponseModel();
+            try
+            {
+                var data = Context.TblUsers.FirstOrDefault(x => x.UserName == emp.UserName);
+                    if(data !=null) 
+                {
+                   
+                    data.PasswordHash = emp.PasswordHash;
+                    data.PasswordSalt = emp.PasswordSalt;
+                }
+                Context.TblUsers.Update(data);
+                Context.SaveChanges();
+                response.Code=200;
+                response.Data = emp;
+                response.Message = "Password Updated!";
+            }
+            catch (Exception ex) 
+            {
+                throw ex;
             }
             return response;
         }

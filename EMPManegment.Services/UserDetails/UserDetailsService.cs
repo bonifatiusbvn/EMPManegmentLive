@@ -34,6 +34,11 @@ namespace EMPManegment.Services.UserList
         {
             return UserList.EnterInOutTime(userAttendance);
         }
+
+        public async Task<PasswordResetResponseModel> ResetPassword(PasswordResetView emp)
+        {
+            return await UserList.ResetPassword(emp);
+        }
     }
 }
 
