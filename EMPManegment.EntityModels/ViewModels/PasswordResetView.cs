@@ -10,18 +10,17 @@ namespace EMPManegment.EntityModels.ViewModels
     public  class PasswordResetView
     {
         public string? UserName { get; set; }
-        public string? Password { get; set; }
-        public string? ConfirmPassword { get; set; }
         public byte[]? PasswordHash { get; set; }
 
         public byte[]? PasswordSalt { get; set; }
+
     }
     public class PasswordResetResponseModel
     {
-        public string Message { get; set; }
-
-        public int Code { get; set; }
-        public PasswordResetView Data { get; set; }
+        public string? UserName { get; set; }
+        public string? Password { get; set; }
+        public string? ConfirmPassword { get; set; }
+        
 
     }
 }

@@ -40,9 +40,9 @@ namespace EMPManagment.API.Controllers
 
         public async Task<IActionResult> ActiveDeactiveUsers(string UserName)
         {
-             UserResponceModel responseModel = new UserResponceModel();
+            UserResponceModel responseModel = new UserResponceModel();
 
-             var user = await UserListServices.ActiveDeactiveUsers(UserName);
+            var user = await UserListServices.ActiveDeactiveUsers(UserName);
             try
             {
 
@@ -70,8 +70,29 @@ namespace EMPManagment.API.Controllers
         [Route("ResetUserPassword")]
         public async Task<IActionResult> ResetUserPassword(PasswordResetView emp)
         {
-            var userNewPassword = await UserListServices.ResetPassword(emp);
-            return Ok(new { code = 200, data = userNewPassword });
+            ApiResponseModel responseModel = new ApiResponseModel();
+
+            var user = await UserListServices.ResetPassword(emp);
+            try
+            {
+
+                if (user != null)
+                {
+
+                    responseModel.code = (int)HttpStatusCode.OK;
+                    responseModel.message = user.Message;
+                }
+                else
+                {
+                    responseModel.message = user.Message;
+                    responseModel.code = (int)HttpStatusCode.NotFound;
+                }
+            }
+            catch (Exception ex)
+            {
+                responseModel.code = (int)HttpStatusCode.InternalServerError;
+            }
+            return StatusCode(responseModel.code, responseModel);
         }
     }
 }

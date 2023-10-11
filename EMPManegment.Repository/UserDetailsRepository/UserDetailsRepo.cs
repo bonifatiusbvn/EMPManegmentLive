@@ -181,9 +181,9 @@ namespace EMPManegment.Repository.UserListRepository
             return response;
         }
 
-        public async Task<PasswordResetResponseModel> ResetPassword(PasswordResetView emp)
+        public async Task<UserResponceModel> ResetPassword(PasswordResetView emp)
         {
-            PasswordResetResponseModel response = new PasswordResetResponseModel();
+            UserResponceModel response = new UserResponceModel();
             try
             {
                 var data = Context.TblUsers.FirstOrDefault(x => x.UserName == emp.UserName);
@@ -196,7 +196,6 @@ namespace EMPManegment.Repository.UserListRepository
                 Context.TblUsers.Update(data);
                 Context.SaveChanges();
                 response.Code=200;
-                response.Data = emp;
                 response.Message = "Password Updated!";
             }
             catch (Exception ex) 

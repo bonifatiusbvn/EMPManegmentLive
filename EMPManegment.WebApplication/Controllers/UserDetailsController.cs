@@ -48,27 +48,77 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
-        public async Task<IActionResult> ResetUserPassword(PasswordResetView emp)
+        public async Task<IActionResult> UserActiveDecative()
+        {
+
+            try
+            {
+                List<EmpDetailsView> userList = new List<EmpDetailsView>();
+                HttpClient client = WebAPI.Initil();
+                ApiResponseModel res = await APIServices.GetAsync("", "UserDetails/GetAllUserList");
+                if (res.code == 200)
+                {
+                    userList = JsonConvert.DeserializeObject<List<EmpDetailsView>>(res.data.ToString());
+                }
+                return View(userList);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UserActiveDecative(string UserName)
+        {
+            try
+            {
+
+                ApiResponseModel postuser = await APIServices.PostAsync(null, "UserDetails/ActiveDeactiveUsers?UserName=" + UserName);
+                if (postuser.code == 200)
+                {
+
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
+
+                }
+                else
+                {
+                    return new JsonResult(new { Message = string.Format(postuser.message), Code = postuser.code });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public async Task<IActionResult> ResetUserPassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ResetUserPassword(PasswordResetResponseModel emp)
         {
             try
             {
                 Crypto.Hash(emp.Password,
                    out byte[] passwordHash,
                    out byte[] passwordSalt);
-                var data = new EmpDetailsView
+                var data = new PasswordResetView
                 {
                     UserName = emp.UserName,
-                    PasswordHash = emp.PasswordHash,
-                    PasswordSalt = emp.PasswordSalt
+                    PasswordHash = passwordHash,
+                    PasswordSalt = passwordSalt
                 };
                 ApiResponseModel postuser = await APIServices.PostAsync(data, "UserDetails/ResetUserPassword");
                 if (postuser.code == 200)
                 {
-                    return RedirectToAction("Login", "UserLogin");
+                    return Ok(new { Message = postuser.message, Code = postuser.code });
                 }
                 else
                 {
-                    return View(emp);
+                    return new JsonResult(new { Message = string.Format(postuser.message), Code = postuser.code });
                 }
             }catch (Exception ex)  
             { 
