@@ -18,6 +18,100 @@ License: For each use you must have a valid license purchased only from above li
 <!-- Mirrored from preview.keenthemes.com/metronic8/demo2/authentication/layouts/creative/sign-up.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 04 Sep 2023 14:25:11 GMT -->
 <!-- Added by HTTrack -->
 <meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<style>
+    input[type=text] {
+        width: 100%;
+        padding: 10px 20px;
+        margin: 2px 0;
+        box-sizing: border-box;
+        border: 3px solid #ccc;
+        -webkit-transition: 0.5s;
+        transition: 0.5s;
+        outline: none;
+    }
+
+        input[type=text]:focus {
+            border: 3px solid #80bfff;
+        }
+
+    input[type=file] {
+        width: 100%;
+        padding: 10px 20px;
+        margin: 2px 0;
+        box-sizing: border-box;
+        border: 3px solid #ccc;
+        -webkit-transition: 0.5s;
+        transition: 0.5s;
+        outline: none;
+    }
+
+        input[type=file]:focus {
+            border: 3px solid #80bfff;
+        }
+
+    input[type=date] {
+        width: 100%;
+        padding: 10px 20px;
+        margin: 2px 0;
+        box-sizing: border-box;
+        border: 3px solid #ccc;
+        -webkit-transition: 0.5s;
+        transition: 0.5s;
+        outline: none;
+    }
+
+        input[type=date]:focus {
+            border: 3px solid #80bfff;
+        }
+
+    #ddlDepartmenrnt, #Gender, #ddlCountry, #ddlState, #ddlCity {
+        width: 100%;
+        padding: 10px 20px;
+        margin: 2px 0;
+        box-sizing: border-box;
+        border: 3px solid #ccc;
+        -webkit-transition: 0.5s;
+        transition: 0.5s;
+        outline: none;
+    }
+
+        #ddlDepartmenrnt:focus {
+            border: 3px solid #80bfff;
+        }
+
+        #Gender:focus {
+            border: 3px solid #80bfff;
+        }
+
+        #ddlCountry:focus {
+            border: 3px solid #80bfff;
+        }
+
+        #ddlState:focus {
+            border: 3px solid #80bfff;
+        }
+
+        #ddlCity:focus {
+            border: 3px solid #80bfff;
+        }
+
+
+    input[type=password] {
+        width: 100%;
+        padding: 10px 20px;
+        margin: -5px 0;
+        box-sizing: border-box;
+        border: 3px solid #ccc;
+        -webkit-transition: 0.5s;
+        transition: 0.5s;
+        outline: none;
+    }
+
+        input[type=password]:focus {
+            border: 3px solid #80bfff;
+        }
+
+</style>
 <head>
     <title>Bonifatius</title>
     <meta charset="utf-8" />
@@ -116,17 +210,17 @@ License: For each use you must have a valid license purchased only from above li
         <!--begin::Authentication - Sign-up -->
         <div class="d-flex flex-column flex-column-fluid flex-lg-row">
             <!--begin::Aside-->
-            <div class="d-flex flex-center w-lg-50 pt-15 pt-lg-0 px-10">
+            <div class="d-flex flex-center w-lg-30 pt-15 pt-lg-0 px-10">
                 <!--begin::Aside-->
                 <div class="d-flex flex-center flex-lg-start flex-column">
                     <!--begin::Logo-->
                     <a href="~/demo/index.html" class="mb-7">
-                        <img alt="Logo" src="~/demo/assets/media/logos/custom-3.svg" />
+                        <img alt="Logo" src="~/demo/assets/media/logos/1.png" />
                     </a>
                     <!--end::Logo-->
                     <!--begin::Title-->
                     <h2 class="text-white fw-normal m-0">
-                        Branding tools designed for your business
+                        Bonifatius SingUp Form
                     </h2>
                     <!--end::Title-->
                 </div>
@@ -134,58 +228,57 @@ License: For each use you must have a valid license purchased only from above li
             </div>
             <!--begin::Aside-->
             <!--begin::Body-->
-            <div class="d-flex flex-column-fluid flex-lg-row-auto justify-content-center justify-content-lg-end p-12 p-lg-20">
+            <div class="d-flex flex-column-fluid flex-lg-row-auto justify-content-center justify-content-lg-end p-10 p-lg-10">
                 <!--begin::Card-->
-                <div class="bg-body d-flex flex-column align-items-stretch flex-center rounded-4 w-md-600px p-20">
+                <div class="bg-body d-flex flex-column align-items-stretch flex-center rounded-4 p-20" style="width:1300px; height:890px;">
                     <!--begin::Wrapper-->
-                    <div class="d-flex flex-center flex-column flex-column-fluid px-lg-10 pb-15 pb-lg-20">
+                    <div class="d-flex flex-center flex-column flex-column-fluid px-lg-5 pb-7 pb-lg-10">
 
                         <!--begin::Form-->
-                        <form class="form w-100" id="empaddDetails" asp-action="AddEmpDetails" method="post" enctype="multipart/form-data">
+                        <form class="form w-100 h-150" id="empaddDetails" asp-action="AddEmpDetails" method="post" enctype="multipart/form-data">
 
-                            <div class="text-center mb-11">
-                                <h1 class="text-dark fw-bolder mb-3">
-                                    Sign Up
-                                </h1>
-                            </div>
                             <div class="fv-row mb-6">
-                                <select asp-for=DepartmentId id="ddlDepartmenrnt" class="form-control bg-transparent">
+                                
+                            </div>
+                            <div class="fv-row mb-4">
+                                <select asp-for=DepartmentId id="ddlDepartmenrnt" class="form-control" >
                                     <option>--Select Department--</option>
                                 </select>
                                 <input type="hidden" asp-for="DepartmentId" id="txtdeptid" value="" />
                                 <span asp-validation-for="DepartmentId" class="text-danger"></span>
                             </div>
-                            <div class="fv-row mb-6">
-                                <input type="text" asp-for="UserName" readonly id="EmpId" autocomplete="off" class="form-control bg-transparent" value="@ViewBag.EmpId" />
+                            <div class="fv-row mb-4">
+                                <input type="text" asp-for="UserName" readonly id="EmpId" autocomplete="off" class="form-control"  value="@ViewBag.EmpId" />
                             </div>
                             <div class="row">
 
                                 <div class="col-6">
-                                    <div class="fv-row mb-6">
-                                        <input type="text" asp-for="FirstName" placeholder="First Name" name="FirstName" class="form-control bg-transparent" />
+                                    <div class="fv-row mb-4">
+                                        <input type="text" asp-for="FirstName" placeholder="First Name" name="FirstName" class="form-control" />
                                         <span asp-validation-for="FirstName" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="col-6">
-                                    <div class="fv-row mb-6">
-                                        <input type="text" asp-for="LastName" placeholder="Last Name" name="LastName"  class="form-control bg-transparent" />
+                                    <div class="fv-row mb-4">
+                                        <input type="text" asp-for="LastName" placeholder="Last Name" name="LastName" class="form-control" />
                                         <span asp-validation-for="LastName" class="text-danger"></span>
                                     </div>
                                 </div>
                             </div>
-                            <div class="fv-row mb-8" data-kt-password-meter="true">
+                            <div class="fv-row mb-6" data-kt-password-meter="true">
                                 <div class="mb-1">
                                     <div class="position-relative mb-3">
                                         <div class="row">
                                             <div class="col-6">
-                                                <div class="fv-row mb-6">
-                                                    <input type="date" asp-for="DateOfBirth" placeholder="DOB" itemid="DOB" max="" autocomplete="off" class="form-control bg-transparent" />
+                                                <div class="fv-row mb-4">
+                                                    <input type="date" asp-for="DateOfBirth" placeholder="DOB" itemid="DOB" max="" autocomplete="off" class="form-control bg-transparent"  />
                                                     <span asp-validation-for="DateOfBirth" class="text-danger"></span>
                                                 </div>
                                             </div>
                                             <div class="col-6">
-                                                <div class="fv-row mb-6">
-                                                    <select asp-for="Gender" id="Gender" class="form-control bg-transparent">
+                                                <div class="fv-row mb-4">
+                                                    <select asp-for="Gender" id="Gender" class="form-control" >
+                                                        <option>--Select Gender--</option>
                                                          <option value="Male">Male</option>
                                                         <option value="Female">Female</option>
                                                         <option value="Other">Other</option>
@@ -194,8 +287,8 @@ License: For each use you must have a valid license purchased only from above li
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="fv-row mb-6">
-                                            <input type="text"  asp-for="Email" placeholder="Email" id="email" autocomplete="off" class="form-control bg-transparent" />
+                                        <div class="fv-row mb-4">
+                                            <input type="text" asp-for="Email" placeholder="Email" id="email" autocomplete="off" class="form-control bg-transparent"  />
                                             <span asp-validation-for="Email" class="text-danger"></span>
                                             <span class="text-danger">@TempData["ErrorMessage"]</span>
                                         </div>
@@ -204,8 +297,8 @@ License: For each use you must have a valid license purchased only from above li
                             </div>
                             <div class="row">
                                 <div class="col-6">
-                                    <div class="fv-row mb-6">
-                                        <select asp-for=CountryId id="ddlCountry" class="form-control bg-transparent">
+                                    <div class="fv-row mb-4">
+                                        <select asp-for=CountryId id="ddlCountry" class="form-control bg-transparent" >
                                             <option>--Select Country--</option>
                                         </select>
                                         <input type="hidden" asp-for="CountryId" id="txtcountry" value="" />
@@ -213,8 +306,8 @@ License: For each use you must have a valid license purchased only from above li
                                     </div>
                                 </div>
                                 <div class="col-6">
-                                    <div class="fv-row mb-6">
-                                        <select asp-for=StateId id="ddlState" class="form-control bg-transparent">
+                                    <div class="fv-row mb-4">
+                                        <select asp-for=StateId id="ddlState" class="form-control bg-transparent" >
                                             <option>--Select State--</option>
                                         </select>
                                         <input type="hidden" asp-for="StateId" id="txtstate" value="" />
@@ -222,11 +315,11 @@ License: For each use you must have a valid license purchased only from above li
                                     </div>
                                 </div>
                             </div>
-                            <div class="fv-row mb-8">
+                            <div class="fv-row mb-4">
                                 <div class="row">
                                     <div class="col-6">
-                                        <div class="fv-row mb-6">
-                                            <select asp-for=CityId id="ddlCity" class="form-control bg-transparent">
+                                        <div class="fv-row mb-4">
+                                            <select asp-for=CityId id="ddlCity" class="form-control bg-transparent" >
                                                 <option>--Select City--</option>
                                             </select>
                                             <input type="hidden" asp-for="CityId" id="txtcity" value="" />
@@ -235,7 +328,7 @@ License: For each use you must have a valid license purchased only from above li
                                         </div>
                                     </div>
                                     <div class="col-6">
-                                        <div class="fv-row mb-6">
+                                        <div class="fv-row mb-4">
                                             <input type="text" asp-for="PhoneNumber" placeholder="Mobile.NO" id="PhoneNumber" autocomplete="off" class="form-control bg-transparent" />
                                             <span asp-validation-for="PhoneNumber" class="text-danger"></span>
                                         </div>
@@ -245,44 +338,50 @@ License: For each use you must have a valid license purchased only from above li
                                         <span asp-validation-for="Address" class="text-danger"></span>
                                     </div>
                                 </div>
-                                <div class="fv-row mb-4" data-kt-password-meter="true">
-                                    <div class="mb-1">
-                                        <div class="position-relative mb-3">
-                                            <input class="form-control bg-transparent" type="password" placeholder="Password" name="password" autocomplete="off" asp-for="Password" />
-                                            <span class="btn btn-sm btn-icon position-absolute translate-middle top-50 end-0 me-n2" data-kt-password-meter-control="visibility">
-                                                <i class="ki-duotone ki-eye-slash fs-2"></i>                    <i class="ki-duotone ki-eye fs-2 d-none"></i>
-                                            </span>
-                                        </div>
-                                        <div class="d-flex align-items-center mb-3" data-kt-password-meter-control="highlight">
-                                            <div class="flex-grow-1 bg-secondary bg-active-success rounded h-5px me-2"></div>
-                                            <div class="flex-grow-1 bg-secondary bg-active-success rounded h-5px me-2"></div>
-                                            <div class="flex-grow-1 bg-secondary bg-active-success rounded h-5px me-2"></div>
-                                            <div class="flex-grow-1 bg-secondary bg-active-success rounded h-5px"></div>
+                                <div class="row">
+                                    <div class="col-6">
+                                         <div class="fv-row mb-2" data-kt-password-meter="true">
+                                            <div class="mb-1">
+                                                <div class="position-relative mb-2">
+                                                    <input class="form-control bg-transparent" type="password" placeholder="Password" name="password" autocomplete="off" asp-for="Password"  />
+                                                    <span class="btn btn-sm btn-icon position-absolute translate-middle top-50 end-0 me-n2" data-kt-password-meter-control="visibility">
+                                                     <i class="ki-duotone ki-eye-slash fs-2"></i>                    <i class="ki-duotone ki-eye fs-2 d-none"></i>
+                                                    </span>
+                                                </div>
+                                                 <div class="d-flex align-items-center mb-3" data-kt-password-meter-control="highlight">
+                                                     <div class="flex-grow-1 bg-secondary bg-active-success rounded h-5px me-2"></div>
+                                                     <div class="flex-grow-1 bg-secondary bg-active-success rounded h-5px me-2"></div>
+                                                      <div class="flex-grow-1 bg-secondary bg-active-success rounded h-5px me-2"></div>
+                                                     <div class="flex-grow-1 bg-secondary bg-active-success rounded h-5px"></div>
+                                                 </div>  
+                                            </div>
+                                             <div class="text-bold">
+                                                Use 8 or more characters with a mix of letters, numbers & symbols.
+                                             </div>
                                         </div>
                                     </div>
-                                    <div class="text-muted">
-                                        Use 8 or more characters with a mix of letters, numbers & symbols.
+                                    <div class="col-6">
+                                        <div class="fv-row mb-2">
+                                            <input type="password" placeholder="Confirm Password" asp-for="ConfirmPassword" autocomplete="off" class="form-control" />
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="fv-row mb-4">
-                                    <input type="password" placeholder="Confirm Password" asp-for="ConfirmPassword" autocomplete="off" class="form-control bg-transparent" />
-                                </div>
-                                <div class="fv-row mb-4">
-                                    <label class="fs-8 fw-semibold form-label mt-3">Upload Image</label>
+                                <div class="fv-row mb-2">
+                                    <label class="fs-6 fw-semibold form-label mt-1">Upload Image</label>
                                     <input type="file" asp-for="Image" autocomplete="off" class="form-control bg-transparent" />
                                 </div>
                             </div>
-                            <div class="d-grid mb-10">
+                            <div class="d-grid mb-8">
                                 <button type="submit" id="empdetails" class="btn btn-primary">
                                     <span class="indicator-label">
                                         Sign up
                                     </span>
                                 </button>
                             </div>
-                            <div class="text-gray-500 text-center fw-semibold fs-6">
+                            <div class="text-center fw-semibold fs-6 mb-1">
                                 Already have an Account?
                                 <a class="link-primary fw-semibold">
-                                    @Html.ActionLink("Loing","EmpSingUP","EmpAddDetails")
+                                    @Html.ActionLink("Login","Login","UserLogin")
                                 </a>
                             </div>
                         </form>

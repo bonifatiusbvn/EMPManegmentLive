@@ -30,9 +30,20 @@ namespace EMPManegment.Services.UserList
             return UserList.ActiveDeactiveUsers(UserName);    
         }
 
-        public Task<UserResponceModel> EnterInOutTime(UserAttendanceModel userAttendance)
+
+        public Task<UserResponceModel> EnterInTime(UserAttendanceModel userAttendance)
         {
-            return UserList.EnterInOutTime(userAttendance);
+            return UserList.EnterInTime(userAttendance);
+        }
+
+        public Task<UserResponceModel> EnterOutTime(UserAttendanceModel userAttendance)
+        {
+            return UserList.EnterOutTime(userAttendance);
+        }
+
+        public async Task<UserResponceModel> ResetPassword(PasswordResetView emp)
+        {
+            return await UserList.ResetPassword(emp);
         }
         public async Task<IEnumerable<EmpDocumentView>> GetDocumentType()
         {

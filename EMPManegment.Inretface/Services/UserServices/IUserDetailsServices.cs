@@ -13,7 +13,11 @@ namespace EMPManegment.Inretface.Services.UserListServices
     {
        Task<IEnumerable<EmpDetailsView>> GetUsersList();
         Task<UserResponceModel> ActiveDeactiveUsers(string UserName);
-        Task<UserResponceModel> EnterInOutTime(UserAttendanceModel userAttendance);
+        Task<UserResponceModel> EnterInTime(UserAttendanceModel userAttendance);
+        Task<UserResponceModel> EnterOutTime(UserAttendanceModel userAttendance);
+     
+        Task<UserResponceModel> ResetPassword(PasswordResetView emp);
+        
         Task<IEnumerable<EmpDocumentView>> GetDocumentType();
         Task<IEnumerable<DocumentInfoView>> GetDocumentList();
         Task<DocumentInfoView> UploadDocument(DocumentInfoView doc);

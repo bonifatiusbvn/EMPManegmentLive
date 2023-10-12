@@ -1170,10 +1170,10 @@
                                     </li>
 
                                     <li class="nav-item">
-                                        <a href="#sidebarResetPass" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarResetPass" data-key="t-password-reset">
+                                        <a class="nav-link" asp-action="ResetUserPassword" asp-controller="UserDetails" data-key="t-password-reset">
                                             Password Reset
                                         </a>
-                                        <div class="collapse menu-dropdown" id="sidebarResetPass">
+                                        @*<div class="collapse menu-dropdown" id="sidebarResetPass">
                                             <ul class="nav nav-sm flex-column">
                                                 <li class="nav-item">
                                                     <a href="auth-pass-reset-basic.html" class="nav-link" data-key="t-basic"> Basic </a>
@@ -1182,7 +1182,7 @@
                                                     <a href="auth-pass-reset-cover.html" class="nav-link" data-key="t-cover"> Cover </a>
                                                 </li>
                                             </ul>
-                                        </div>
+                                        </div>*@
                                     </li>
 
                                     <li class="nav-item">
@@ -1799,7 +1799,7 @@
                                                     <div class="row g-3 mb-0 align-items-center">
                                                         <div class="col-sm-auto">
                                                             <div class="input-group">
-                                                                <input type="text" class="form-control border dash-filter-picker" data-provider="flatpickr" data-range-date="true" data-date-format="d M, Y" data-deafult-date="01 Jan 2022 to 31 Jan 2022">
+                                                                <input type="text" class="form-control border dash-filter-picker" id="txttodayDate" data-provider="flatpickr" value="@DateTime.Today.ToShortDateString()">
                                                                 <div class="input-group-text bg-primary border-primary text-white">
                                                                     <i class="ri-calendar-2-line"></i>
                                                                 </div>
@@ -1845,7 +1845,7 @@
                                                         <h4 class="fs-22 fw-semibold ff-secondary mb-4">
                                                             $<span class="counter-value" data-target="559.25">0</span>k
                                                         </h4>
-                                                        <button type="button" class="btn btn-success btn-label" onclick="EnterInOutTime()"><i class="ri-check-double-line label-icon align-middle fs-16 me-2"></i>Enter IN-TIME</button>
+                                                        <button type="button" class="btn btn-success btn-label" onclick="EnterInTime()"><i class="ri-check-double-line label-icon align-middle fs-16 me-2"></i>Enter IN-TIME</button>
                                                      
                                                     </div>
                                                     <div class="avatar-sm flex-shrink-0">
@@ -1872,7 +1872,7 @@
                                                 <div class="d-flex align-items-end justify-content-between mt-4">
                                                     <div>
                                                         <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value" data-target="36894">0</span></h4>
-                                                        <a href="javascript:void(0);" class="btn btn-primary btn-label" onclick="EnterInOutTime()">
+                                                        <a href="javascript:void(0);" class="btn btn-primary btn-label" onclick="EnterOutTime()">
                                                             <div class="d-flex">
                                                                 <div class="flex-shrink-0">
                                                                     <i class="ri-user-smile-line label-icon align-middle fs-16 me-2"></i>
