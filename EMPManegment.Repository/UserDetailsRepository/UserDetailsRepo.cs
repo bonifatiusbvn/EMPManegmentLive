@@ -4,6 +4,7 @@ using EMPManegment.EntityModels.View_Model;
 using EMPManegment.EntityModels.ViewModels;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.Inretface.Interface.UserList;
+using EMPManegment.Web.Helper;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
@@ -72,8 +73,8 @@ namespace EMPManegment.Repository.UserListRepository
                     Context.TblUsers.Update(data);
                     Context.SaveChanges();
                     response.Code = 200;
-                    response.Data = data;
-                    response.Message = "User Deactive Succesfully";
+                    response.Data = data; 
+                    response.Message = "User" + " "+ data.UserName +" " +"Is Deactive Succesfully";
                 }
 
                 else
@@ -83,7 +84,7 @@ namespace EMPManegment.Repository.UserListRepository
                     Context.SaveChanges();
                     response.Code = 200;
                     response.Data = data;
-                    response.Message = "User Active Succesfully";
+                    response.Message = "User" + " "+ data.UserName + " "+ "Is Active Succesfully";
                 }
 
 
@@ -98,8 +99,16 @@ namespace EMPManegment.Repository.UserListRepository
 
             if (data != null)
             {
-                if (data.OutTime != null)
+                if (data.OutTime != null && data.Date != DateTime.Today)
                 {
+                    if(data.Date == DateTime.Today && data.Intime != null)
+                    {
+                        response.Message = "Your Already Enter IN-Time";
+                        response.Icone = "warning";
+                    }
+
+                    else
+                    {
                         TblAttendance tblAttendance = new TblAttendance();
                         tblAttendance.UserId = userAttendance.UserId;
                         tblAttendance.Intime = DateTime.Now;
@@ -110,17 +119,17 @@ namespace EMPManegment.Repository.UserListRepository
                         Context.SaveChanges();
                         response.Code = 200;
                         response.Message = "In-Time Enter Successfully";
+                        response.Icone = "success";
 
+                    }
                 } 
-                else if (data.Date == DateTime.Today && data.Intime != null)
-                {
-                     response.Message = "Your Already Enter IN-Time";
-                }
+                
 
                else 
                   {
                       response.Message = "You Missed Out-Time of " + data.Date.ToShortDateString() + " " + "Kindly Contact Your Admin";
-                  }
+                      response.Icone = "warning";
+                }
             }
 
             else
@@ -135,6 +144,7 @@ namespace EMPManegment.Repository.UserListRepository
                 Context.SaveChanges();
                 response.Code = 200;
                 response.Message = "In-Time Enter Successfully";
+                response.Icone = "success";
 
             }
 
@@ -144,35 +154,42 @@ namespace EMPManegment.Repository.UserListRepository
         public async Task<UserResponceModel> EnterOutTime(UserAttendanceModel userAttendance)
         {
             UserResponceModel response = new UserResponceModel();
-            var data = Context.TblAttendances.Where(a => a.UserId == userAttendance.UserId).OrderByDescending(a => a.CreatedOn).Skip(1).Take(1).FirstOrDefault();
+            var lastdata = Context.TblAttendances.Where(a => a.UserId == userAttendance.UserId).OrderByDescending(a => a.CreatedOn).Skip(1).Take(1).FirstOrDefault();
 
-            if (data.OutTime != null)
+            if (lastdata.OutTime != null)
             {
-                if(data.Date == DateTime.Today)
-                {
-                    response.Message = "Please Enter In-Time First";
-                }
+                var data = Context.TblAttendances.Where(a => a.UserId == userAttendance.UserId).OrderByDescending(a => a.CreatedOn).FirstOrDefault();
 
-               else if (data.Date != DateTime.Today && data.OutTime == null)
+                if (data.Date == DateTime.Today && data.OutTime == null)
                 {
-                    var outtime = Context.TblAttendances.Where(a => a.UserId == userAttendance.UserId && a.Date == DateTime.Today).FirstOrDefault();
-                    outtime.OutTime = DateTime.Now;
-                    outtime.CreatedOn = DateTime.Now;
-                    Context.TblAttendances.Update(outtime);
-                    Context.SaveChanges();
-                    response.Code = 200;
-                    response.Message = "Out-Time Enter Successfully";
-                    response.Data = data;
-                }
+                    if (data.Date == DateTime.Today && data.Intime == null)
+                    {
+                        response.Message = "Please Enter In-Time First";
+                        response.Icone = "warning";
+                    }
 
+                    else  
+                    {
+                        var outtime = Context.TblAttendances.Where(a => a.UserId == userAttendance.UserId && a.Date == DateTime.Today).FirstOrDefault();
+                        outtime.OutTime = DateTime.Now;
+                        outtime.CreatedOn = DateTime.Now;
+                        Context.TblAttendances.Update(outtime);
+                        Context.SaveChanges();
+                        response.Code = 200;
+                        response.Message = "Out-Time Enter Successfully";
+                        response.Icone = "success";
+                    }
+                }
                 else
                 {
                     response.Message = "Your Already Enter Out-Time";
+                    response.Icone = "warning";
                 }
             }
             else
             {
-                response.Message = "You Missed Out-Time of " + data.Date.ToShortDateString() + " " + "Kindly Contact Your Admin";
+                response.Message = "You Missed Out-Time of " + lastdata.Date.ToShortDateString() + " " + "Kindly Contact Your Admin";
+                response.Icone = "warning";
             }
 
 
@@ -260,6 +277,32 @@ namespace EMPManegment.Repository.UserListRepository
             Context.TblUserDocuments.Add(model);
             Context.SaveChanges();
             return doc;
+        }
+
+        public async Task<UserResponceModel> UserLockScreen(LoginRequest request)
+        {
+            UserResponceModel response = new UserResponceModel();
+            try
+            {
+                var tblUser = Context.TblUsers.Where(p => p.UserName == request.UserName).SingleOrDefault();
+                if(tblUser != null)
+                {
+                    if (tblUser.UserName == request.UserName && Crypto.VarifyHash(request.Password, tblUser.PasswordHash, tblUser.PasswordSalt))
+                    {
+                        LoginView userModel = new LoginView();
+                        userModel.UserName = tblUser.UserName;
+                        response.Code = (int)HttpStatusCode.OK;
+                    }
+                    else
+                    {
+                        response.Message = "Your Password is Wrong";
+                    }
+                }
+            }catch (Exception ex)
+            { 
+                throw ex;
+            }
+        return response;
         }
     }
 }

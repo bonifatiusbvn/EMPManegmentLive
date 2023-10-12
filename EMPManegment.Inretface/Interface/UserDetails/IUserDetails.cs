@@ -24,5 +24,7 @@ namespace EMPManegment.Inretface.Interface.UserList
         Task<IEnumerable<EmpDocumentView>> GetDocumentType();
         Task<IEnumerable<DocumentInfoView>> GetDocumentList();
         Task<DocumentInfoView> UploadDocument(DocumentInfoView doc);
+        Task<UserResponceModel> UserLockScreen(LoginRequest request);
+
     }
 }

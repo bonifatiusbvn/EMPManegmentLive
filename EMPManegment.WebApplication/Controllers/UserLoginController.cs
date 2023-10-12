@@ -83,7 +83,7 @@ namespace EMPManegment.Web.Controllers
                         HttpContext.Session.SetString("UserName", usermodel.Data.UserName);
                         HttpContext.Session.SetString("ProfileImage", usermodel.Data.ProfileImage);
                         return RedirectToAction("UserHome", "Home");
-                    }
+                    }  
                    
                 }
 

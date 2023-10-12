@@ -58,7 +58,7 @@ function ActiveDeactive(UserName) {
 
 
 function EnterInTime() {
-    debugger
+    
     var fromData = new FormData();
     fromData.append("UserId", $("#txtuserid").val());
     fromData.append("Date", $("#txttodayDate").val());
@@ -72,7 +72,7 @@ function EnterInTime() {
         success: function (Result) {
             Swal.fire({
                 title: Result.message, 
-                icon: 'warning',
+                icon: Result.icone,
                 confirmButtonColor: '#3085d6',
                 confirmButtonText: 'OK'
             })
@@ -85,7 +85,7 @@ function EnterInTime() {
 }
 
 function EnterOutTime() {
-    debugger
+    
     var fromData = new FormData();
     fromData.append("UserId", $("#txtuserid").val());
     $.ajax({

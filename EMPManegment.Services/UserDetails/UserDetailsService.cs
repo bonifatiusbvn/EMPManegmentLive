@@ -59,6 +59,11 @@ namespace EMPManegment.Services.UserList
         {
             return await UserList.UploadDocument(doc);
         }
+
+        public async Task<UserResponceModel> UserLockScreen(LoginRequest request)
+        {
+            return await UserList.UserLockScreen(request);
+        }
     }
 }
 
