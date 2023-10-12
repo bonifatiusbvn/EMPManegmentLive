@@ -20,5 +20,7 @@ namespace EMPManegment.Inretface.Interface.UserList
 
         Task<UserResponceModel> ResetPassword(PasswordResetView emp);
 
+        Task<UserResponceModel> UserLockScreen(LoginRequest request);
+
     }
 }

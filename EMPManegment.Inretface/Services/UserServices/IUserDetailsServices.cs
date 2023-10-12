@@ -17,5 +17,6 @@ namespace EMPManegment.Inretface.Services.UserListServices
         Task<UserResponceModel> EnterOutTime(UserAttendanceModel userAttendance);
      
         Task<UserResponceModel> ResetPassword(PasswordResetView emp);
+        Task<UserResponceModel> UserLockScreen(LoginRequest request);
     }
 }

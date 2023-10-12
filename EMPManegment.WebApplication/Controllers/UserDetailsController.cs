@@ -8,6 +8,9 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using EMPManegment.Web.Helper;
 using System.Security.Claims;
+using NuGet.Protocol.Plugins;
+using System.Net;
+using EMPManegment.EntityModels.ViewModels.Models;
 
 namespace EMPManegment.Web.Controllers
 {
@@ -123,6 +126,37 @@ namespace EMPManegment.Web.Controllers
             }catch (Exception ex)  
             { 
                 throw ex;
+            }
+        }
+        public async Task<IActionResult> LockScreen()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> LockScreen(LoginRequest login)
+        {
+            try
+            {
+                    ApiResponseModel response = await APIServices.PostAsync(login, "UserDetails/UnLockScreen");
+                    if (response.code != (int)HttpStatusCode.OK)
+                    {
+                    TempData["ErrorMessage"] = response.message;
+                    }
+                    else
+                    {
+                        var data = JsonConvert.SerializeObject(response.data);
+                         response.data = JsonConvert.DeserializeObject<LoginView>(data);
+                        return RedirectToAction("UserHome", "Home");
+                    }
+
+                return View();
+
+            }
+
+            catch (Exception ex)
+            {
+                return BadRequest(new { Message = "InternalServer" });
             }
         }
     }

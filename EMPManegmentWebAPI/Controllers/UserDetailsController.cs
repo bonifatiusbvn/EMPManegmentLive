@@ -7,6 +7,7 @@ using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.Inretface.Interface.UserList;
 using EMPManegment.Inretface.Interface.UsersLogin;
 using EMPManegment.Inretface.Services.UserListServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
@@ -93,6 +94,35 @@ namespace EMPManagment.API.Controllers
                 responseModel.code = (int)HttpStatusCode.InternalServerError;
             }
             return StatusCode(responseModel.code, responseModel);
+        }
+
+        [HttpPost]
+        [Route("UnLockScreen")]
+        public async Task<IActionResult> UnLockScreen(LoginRequest request)
+        {
+            LoginResponseModel apiResponseModel = new LoginResponseModel();
+            try
+            {
+
+                var result = await UserListServices.UserLockScreen(request);
+
+                if (result != null)
+                {
+
+                    apiResponseModel.Code = (int)HttpStatusCode.OK;
+                    apiResponseModel.Message = result.Message;
+                }
+                else
+                {
+                    apiResponseModel.Message = result.Message;
+                    apiResponseModel.Code = (int)HttpStatusCode.NotFound;
+                }
+            }
+            catch (Exception ex)
+            {
+                apiResponseModel.Code = (int)HttpStatusCode.InternalServerError;
+            }
+            return StatusCode(apiResponseModel.Code, apiResponseModel);
         }
     }
 }

@@ -4,6 +4,7 @@ using EMPManegment.EntityModels.View_Model;
 using EMPManegment.EntityModels.ViewModels;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.Inretface.Interface.UserList;
+using EMPManegment.Web.Helper;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
@@ -201,6 +202,33 @@ namespace EMPManegment.Repository.UserListRepository
                 throw ex;
             }
             return response;
+        }
+
+        public async Task<UserResponceModel> UserLockScreen(LoginRequest request)
+        {
+            UserResponceModel response = new UserResponceModel();
+            try
+            {
+                var tblUser = Context.TblUsers.Where(p => p.UserName == request.UserName).SingleOrDefault();
+                if(tblUser != null)
+                {
+                    if (tblUser.UserName == request.UserName && Crypto.VarifyHash(request.Password, tblUser.PasswordHash, tblUser.PasswordSalt))
+                    {
+                        LoginView userModel = new LoginView();
+                        userModel.UserName = tblUser.UserName;
+                        response.Data = userModel;
+                        response.Code = (int)HttpStatusCode.OK;
+                    }
+                    else
+                    {
+                        response.Message = "Your Password is Wrong";
+                    }
+                }
+            }catch (Exception ex)
+            { 
+                throw ex;
+            }
+        return response;
         }
     }
 }

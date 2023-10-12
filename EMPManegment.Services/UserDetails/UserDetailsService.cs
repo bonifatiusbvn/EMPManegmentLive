@@ -45,6 +45,11 @@ namespace EMPManegment.Services.UserList
         {
             return await UserList.ResetPassword(emp);
         }
+
+        public async Task<UserResponceModel> UserLockScreen(LoginRequest request)
+        {
+            return await UserList.UserLockScreen(request);
+        }
     }
 }
 
