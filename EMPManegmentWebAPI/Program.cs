@@ -5,18 +5,22 @@ using EMPManegment.Inretface.EmployeesInterface.AddEmployee;
 using EMPManegment.Inretface.Interface.CSC;
 using EMPManegment.Inretface.Interface.UserList;
 using EMPManegment.Inretface.Interface.UsersLogin;
+using EMPManegment.Inretface.Interface.VendorDetails;
 using EMPManegment.Inretface.Services.AddEmployeeServies;
 using EMPManegment.Inretface.Services.CSC;
 using EMPManegment.Inretface.Services.UserListServices;
 using EMPManegment.Inretface.Services.UserLoginServices;
+using EMPManegment.Inretface.Services.VendorDetailsServices;
 using EMPManegment.Repository.AddEmpRepository;
 using EMPManegment.Repository.CSCRepository;
 using EMPManegment.Repository.UserListRepository;
 using EMPManegment.Repository.UserLoginRepository;
+using EMPManegment.Repository.VendorDetailsRepository;
 using EMPManegment.Services.AddEmployee;
 using EMPManegment.Services.CSC;
 using EMPManegment.Services.UserList;
 using EMPManegment.Services.UserLogin;
+using EMPManegment.Services.VendorDetails;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.EntityFrameworkCore;
 
@@ -34,11 +38,13 @@ builder.Services.AddScoped<IAddEmpDetails, AddEmpRepo>();
 builder.Services.AddScoped<ICSC, CSCRepo>();
 builder.Services.AddScoped<IUserLogin, UserLoginRepo> ();
 builder.Services.AddScoped<IUserDetails, UserDetailsRepo>();
+builder.Services.AddScoped<IAddVendorDetails, AddVendorRepo>();
 
 builder.Services.AddScoped<IAddEmpDetailsServices, EmpService>();
 builder.Services.AddScoped<ICSCServices, CSCService>();
 builder.Services.AddScoped<IUserLoginServices, UserLoginService>();
 builder.Services.AddScoped<IUserDetailsServices, UserDetailsService>();
+builder.Services.AddScoped<IAddVendorDetailsServices, VendorServices>();
 
 
 
