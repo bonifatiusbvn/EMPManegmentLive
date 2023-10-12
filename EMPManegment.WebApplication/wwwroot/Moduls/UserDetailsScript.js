@@ -98,7 +98,7 @@ function EnterOutTime() {
         success: function (Result) {
             Swal.fire({
                 title: Result.message,
-                icon: 'warning',
+                icon: Result.icone,
                 confirmButtonColor: '#3085d6',
                 confirmButtonText: 'OK'
             })
