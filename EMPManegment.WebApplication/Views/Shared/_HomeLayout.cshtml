@@ -700,9 +700,8 @@
                             <div class="dropdown-menu dropdown-menu-end">
                                 <!-- item-->
                                 <h6 class="dropdown-header">Welcome @Accessor.HttpContext.Session.GetString("FirstName")!</h6>
-                                <a class="dropdown-item" href="pages-profile.html"><i class="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Profile</span></a>
-                                <h6 class="dropdown-header">Welcome Anna!</h6>
-                                <a class="dropdown-item" asp-controller="UserDetails" asp-action="UserProfile" onclick="Details()" ><i class="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Profile</span></a>
+                                <a class="dropdown-item" asp-action="UserProfile" asp-controller="UserDetails"><i class="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Profile</span></a>
+                        
                                 <a class="dropdown-item" href="apps-chat.html"><i class="mdi mdi-message-text-outline text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Messages</span></a>
                                 <a class="dropdown-item" href="apps-tasks-kanban.html"><i class="mdi mdi-calendar-check-outline text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Taskboard</span></a>
                                 <a class="dropdown-item" href="pages-faqs.html"><i class="mdi mdi-lifebuoy text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Help</span></a>
@@ -2038,9 +2037,9 @@
         <script src="~/UserHome/minimal/assets/js/pages/dashboard-ecommerce.init.js"></script>
 
         <!-- User Profile-->
-        @*<script src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="~/lib/jquery/dist/jquery.js"></script>
         <script src="~/lib/jquery/dist/jquery.min.js"></script>
-        <script src="~/js/userprofile.js"></script>*@
+        <script src="~/js/userprofile.js"></script>
 
         <!-- App js -->
         <script src="~/UserHome/minimal/assets/js/app.js"></script>
@@ -2052,3 +2051,6 @@
 
 <!-- Mirrored from themesbrand.com/velzon/html/minimal/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 04 Oct 2023 11:01:39 GMT -->
 </html>
+<script>
+    var UserId = '@Accessor.HttpContext.Session.GetString("UserID")';
+</script>

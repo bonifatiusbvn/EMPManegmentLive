@@ -13,10 +13,10 @@ namespace EMPManegment.Inretface.Services.AddEmployeeServies
 {
     public interface IAddEmpDetailsServices
     {
-        Task<EmpDetailsView> GetById(string EId);
+        Task<EmpDetailsView> GetById(Guid Id);
         string CheckEmloyess();
         Task<EmpDetailsResponseModel> AddEmployee(EmpDetailsView emp);
         Task<IEnumerable<Department>> EmpDepartment();
-        Task<IEnumerable<EmpDocumentView>> EmpDocument();
+       
     }
 }

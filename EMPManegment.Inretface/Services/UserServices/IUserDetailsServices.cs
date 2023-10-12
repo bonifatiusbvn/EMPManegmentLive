@@ -17,5 +17,9 @@ namespace EMPManegment.Inretface.Services.UserListServices
         Task<UserResponceModel> EnterOutTime(UserAttendanceModel userAttendance);
      
         Task<UserResponceModel> ResetPassword(PasswordResetView emp);
+        
+        Task<IEnumerable<EmpDocumentView>> GetDocumentType();
+        Task<IEnumerable<DocumentInfoView>> GetDocumentList();
+        Task<DocumentInfoView> UploadDocument(DocumentInfoView doc);
     }
 }

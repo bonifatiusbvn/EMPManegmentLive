@@ -121,28 +121,12 @@ namespace EMPManegment.Repository.AddEmpRepository
             }
         }
 
-        public async Task<IEnumerable<EmpDocumentView>> EmpDocument()
+        public async Task<EmpDetailsView> GetById(Guid Id)
         {
-            try
-            {
-                IEnumerable<EmpDocumentView> document = Context.TblDocumentMasters.ToList().Select(a => new EmpDocumentView
-                {
-                    Id = a.Id,
-                    DocumentType = a.DocumentType,
-                });
-                return document;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        public async Task<EmpDetailsView> GetById(string UserName)
-        {
-            var employee = await Context.TblUsers.SingleOrDefaultAsync(x => x.UserName == UserName);
+            var employee = await Context.TblUsers.SingleOrDefaultAsync(x => x.Id == Id);
             EmpDetailsView model = new EmpDetailsView
             {
+                Id=employee.Id,
                 UserName = employee.UserName,
                 FirstName = employee.FirstName,
                 LastName = employee.LastName,
