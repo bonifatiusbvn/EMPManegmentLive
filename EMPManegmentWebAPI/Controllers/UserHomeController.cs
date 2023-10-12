@@ -35,7 +35,7 @@ namespace EMPManagment.API.Controllers
 
                     responseModel.Code = (int)HttpStatusCode.OK;
                     responseModel.Message = user.Message;
-                    responseModel.Data = user.Data;
+                    responseModel.Icone = user.Icone;
                 }
                 else
                 {
@@ -66,6 +66,7 @@ namespace EMPManagment.API.Controllers
 
                     responseModel.Code = (int)HttpStatusCode.OK;
                     responseModel.Message = user.Message;
+                    responseModel.Icone = user.Icone;
                     responseModel.Data = user.Data;
                 }
                 else
