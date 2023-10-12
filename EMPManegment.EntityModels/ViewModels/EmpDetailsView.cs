@@ -11,7 +11,7 @@ namespace EMPManegment.EntityModels.View_Model
 {
     public class EmpDetailsView
     {
-        public int Id { get; set; }
+        public Guid? Id { get; set; }
 
         public string? UserName { get; set; }
 
@@ -51,8 +51,8 @@ namespace EMPManegment.EntityModels.View_Model
         public int QuestionId { get; set; }
 
         public string? Answer { get; set; }
-
-        public string DocumentType { get; set; } 
+        [Required(ErrorMessage ="Please Select Document")]
+        public string DocumentType { get; set; } = "";
         public int? DepartmentId { get; set; }
 
         public DateTime? CreatedOn { get; set; }

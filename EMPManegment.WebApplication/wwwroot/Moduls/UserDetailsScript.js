@@ -58,7 +58,7 @@ function ActiveDeactive(UserName) {
 
 
 function EnterInOutTime() {
-    debugger
+    
     var fromData = new FormData();
     fromData.append("UserId", $("#txtuserid").val());
     $.ajax({

@@ -131,5 +131,64 @@ namespace EMPManegment.Repository.UserListRepository
             }
             return response;
         }
+        public async Task<IEnumerable<EmpDocumentView>> GetDocumentType()
+        {
+            try
+            {
+                IEnumerable<EmpDocumentView> document = Context.TblDocumentMasters.ToList().Select(a => new EmpDocumentView
+                {
+                    Id = a.Id,
+                    DocumentType = a.DocumentType,
+                });
+                return document;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public async Task<IEnumerable<DocumentInfoView>> GetDocumentList()
+        {
+            //var document = await Context.TblUserDocuments.ToListAsync();
+            //List<DocumentInfoView> model = document.Select(a => new DocumentInfoView
+            //{
+            //    Id = a.Id,
+            //    UserId = a.UserId,
+            //    DocumentTypeId = a.DocumentTypeId,
+            //    DocumentName = a.DocumentName,
+            //    CreatedOn = DateTime.Now,
+            //    CreatedBy=a.CreatedBy,
+            //}).ToList();
+            //return model;
+
+            IEnumerable<DocumentInfoView> result = from a in Context.TblUserDocuments
+                                                   join b in Context.TblDocumentMasters on a.DocumentTypeId equals b.Id
+                                                   select new DocumentInfoView
+                                                   {
+                                                       Id = a.Id,
+                                                       UserId = a.UserId,
+                                                       DocumentType = b.DocumentType,
+                                                       DocumentName = a.DocumentName,
+                                                       CreatedOn = DateTime.Now,
+                                                       CreatedBy = a.CreatedBy,
+                                                   };
+            return result;
+        }
+
+        public async Task<DocumentInfoView> UploadDocument(DocumentInfoView doc)
+        {
+            var model = new TblUserDocument()
+            {
+                Id = doc.Id,
+                UserId = doc.UserId,
+                DocumentTypeId = doc.DocumentTypeId,
+                DocumentName = doc.DocumentName,
+                CreatedOn = DateTime.Now,
+                CreatedBy= doc.CreatedBy,
+            };
+            Context.TblUserDocuments.Add(model);
+            Context.SaveChanges();
+            return doc;
+        }
     }
 }

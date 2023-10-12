@@ -40,18 +40,10 @@ namespace EMPManagment.API.Controllers
         }
 
         [HttpGet]
-        [Route("GetDocument")]
-        public async Task<IActionResult> GetDocument()
-        {
-            IEnumerable<EmpDocumentView> dept = await EmpDetails.EmpDocument();
-            return Ok(new { code = 200, data = dept.ToList() });
-        }
-
-        [HttpGet]
         [Route("GetById")]
-        public async Task<IActionResult> GetById(string UserName)
+        public async Task<IActionResult> GetById(Guid Id)
         {
-            var userProfile = await EmpDetails.GetById(UserName);
+            var userProfile = await EmpDetails.GetById(Id);
             return Ok(new { code = 200, data = userProfile });
         }
 

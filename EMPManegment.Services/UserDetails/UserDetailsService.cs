@@ -34,6 +34,20 @@ namespace EMPManegment.Services.UserList
         {
             return UserList.EnterInOutTime(userAttendance);
         }
+        public async Task<IEnumerable<EmpDocumentView>> GetDocumentType()
+        {
+            return await UserList.GetDocumentType();
+        }
+
+        public async Task<IEnumerable<DocumentInfoView>> GetDocumentList()
+        {
+            return await UserList.GetDocumentList();
+        }
+
+        public async Task<DocumentInfoView> UploadDocument(DocumentInfoView doc)
+        {
+            return await UserList.UploadDocument(doc);
+        }
     }
 }
 
