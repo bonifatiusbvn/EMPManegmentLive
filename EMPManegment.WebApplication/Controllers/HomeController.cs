@@ -33,11 +33,12 @@ namespace EMPManegment.Web.Controllers
             try
             {
 
-                ApiResponseModel postuser = await APIServices.PostAsync(userAttendance, "UserHome/InsertINTime");
+                var postuser = await APIServices.PostAsync(userAttendance, "UserHome/InsertINTime");
+                UserResponceModel result = new UserResponceModel();
                 if (postuser.code == 200)
                 {
 
-                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
+                    return Ok(new UserResponceModel { Message = string.Format(postuser.message), Icone = string.Format(postuser.Icone),Code = postuser.code });
 
                 }
                 else

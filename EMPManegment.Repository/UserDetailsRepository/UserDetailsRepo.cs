@@ -73,8 +73,8 @@ namespace EMPManegment.Repository.UserListRepository
                     Context.TblUsers.Update(data);
                     Context.SaveChanges();
                     response.Code = 200;
-                    response.Data = data;
-                    response.Message = "User Deactive Succesfully";
+                    response.Data = data; 
+                    response.Message = "User" + " "+ data.UserName +" " +"Is Deactive Succesfully";
                 }
 
                 else
@@ -84,7 +84,7 @@ namespace EMPManegment.Repository.UserListRepository
                     Context.SaveChanges();
                     response.Code = 200;
                     response.Data = data;
-                    response.Message = "User Active Succesfully";
+                    response.Message = "User" + " "+ data.UserName + " "+ "Is Active Succesfully";
                 }
 
 
@@ -99,8 +99,16 @@ namespace EMPManegment.Repository.UserListRepository
 
             if (data != null)
             {
-                if (data.OutTime != null)
+                if (data.OutTime != null && data.Date != DateTime.Today)
                 {
+                    if(data.Date == DateTime.Today && data.Intime != null)
+                    {
+                        response.Message = "Your Already Enter IN-Time";
+                        response.Icone = "warning";
+                    }
+
+                    else
+                    {
                         TblAttendance tblAttendance = new TblAttendance();
                         tblAttendance.UserId = userAttendance.UserId;
                         tblAttendance.Intime = DateTime.Now;
@@ -111,17 +119,17 @@ namespace EMPManegment.Repository.UserListRepository
                         Context.SaveChanges();
                         response.Code = 200;
                         response.Message = "In-Time Enter Successfully";
+                        response.Icone = "success";
 
+                    }
                 } 
-                else if (data.Date == DateTime.Today && data.Intime != null)
-                {
-                     response.Message = "Your Already Enter IN-Time";
-                }
+                
 
                else 
                   {
                       response.Message = "You Missed Out-Time of " + data.Date.ToShortDateString() + " " + "Kindly Contact Your Admin";
-                  }
+                      response.Icone = "warning";
+                }
             }
 
             else
@@ -136,6 +144,7 @@ namespace EMPManegment.Repository.UserListRepository
                 Context.SaveChanges();
                 response.Code = 200;
                 response.Message = "In-Time Enter Successfully";
+                response.Icone = "success";
 
             }
 
@@ -145,35 +154,42 @@ namespace EMPManegment.Repository.UserListRepository
         public async Task<UserResponceModel> EnterOutTime(UserAttendanceModel userAttendance)
         {
             UserResponceModel response = new UserResponceModel();
-            var data = Context.TblAttendances.Where(a => a.UserId == userAttendance.UserId).OrderByDescending(a => a.CreatedOn).Skip(1).Take(1).FirstOrDefault();
+            var lastdata = Context.TblAttendances.Where(a => a.UserId == userAttendance.UserId).OrderByDescending(a => a.CreatedOn).Skip(1).Take(1).FirstOrDefault();
 
-            if (data.OutTime != null)
+            if (lastdata.OutTime != null)
             {
-                if(data.Date == DateTime.Today)
-                {
-                    response.Message = "Please Enter In-Time First";
-                }
+                var data = Context.TblAttendances.Where(a => a.UserId == userAttendance.UserId).OrderByDescending(a => a.CreatedOn).FirstOrDefault();
 
-               else if (data.Date != DateTime.Today && data.OutTime == null)
+                if (data.Date == DateTime.Today && data.OutTime == null)
                 {
-                    var outtime = Context.TblAttendances.Where(a => a.UserId == userAttendance.UserId && a.Date == DateTime.Today).FirstOrDefault();
-                    outtime.OutTime = DateTime.Now;
-                    outtime.CreatedOn = DateTime.Now;
-                    Context.TblAttendances.Update(outtime);
-                    Context.SaveChanges();
-                    response.Code = 200;
-                    response.Message = "Out-Time Enter Successfully";
-                    response.Data = data;
-                }
+                    if (data.Date == DateTime.Today && data.Intime == null)
+                    {
+                        response.Message = "Please Enter In-Time First";
+                        response.Icone = "warning";
+                    }
 
+                    else  
+                    {
+                        var outtime = Context.TblAttendances.Where(a => a.UserId == userAttendance.UserId && a.Date == DateTime.Today).FirstOrDefault();
+                        outtime.OutTime = DateTime.Now;
+                        outtime.CreatedOn = DateTime.Now;
+                        Context.TblAttendances.Update(outtime);
+                        Context.SaveChanges();
+                        response.Code = 200;
+                        response.Message = "Out-Time Enter Successfully";
+                        response.Icone = "success";
+                    }
+                }
                 else
                 {
                     response.Message = "Your Already Enter Out-Time";
+                    response.Icone = "warning";
                 }
             }
             else
             {
-                response.Message = "You Missed Out-Time of " + data.Date.ToShortDateString() + " " + "Kindly Contact Your Admin";
+                response.Message = "You Missed Out-Time of " + lastdata.Date.ToShortDateString() + " " + "Kindly Contact Your Admin";
+                response.Icone = "warning";
             }
 
 
@@ -202,6 +218,65 @@ namespace EMPManegment.Repository.UserListRepository
                 throw ex;
             }
             return response;
+        }
+        public async Task<IEnumerable<EmpDocumentView>> GetDocumentType()
+        {
+            try
+            {
+                IEnumerable<EmpDocumentView> document = Context.TblDocumentMasters.ToList().Select(a => new EmpDocumentView
+                {
+                    Id = a.Id,
+                    DocumentType = a.DocumentType,
+                });
+                return document;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public async Task<IEnumerable<DocumentInfoView>> GetDocumentList()
+        {
+            //var document = await Context.TblUserDocuments.ToListAsync();
+            //List<DocumentInfoView> model = document.Select(a => new DocumentInfoView
+            //{
+            //    Id = a.Id,
+            //    UserId = a.UserId,
+            //    DocumentTypeId = a.DocumentTypeId,
+            //    DocumentName = a.DocumentName,
+            //    CreatedOn = DateTime.Now,
+            //    CreatedBy=a.CreatedBy,
+            //}).ToList();
+            //return model;
+
+            IEnumerable<DocumentInfoView> result = from a in Context.TblUserDocuments
+                                                   join b in Context.TblDocumentMasters on a.DocumentTypeId equals b.Id
+                                                   select new DocumentInfoView
+                                                   {
+                                                       Id = a.Id,
+                                                       UserId = a.UserId,
+                                                       DocumentType = b.DocumentType,
+                                                       DocumentName = a.DocumentName,
+                                                       CreatedOn = DateTime.Now,
+                                                       CreatedBy = a.CreatedBy,
+                                                   };
+            return result;
+        }
+
+        public async Task<DocumentInfoView> UploadDocument(DocumentInfoView doc)
+        {
+            var model = new TblUserDocument()
+            {
+                Id = doc.Id,
+                UserId = doc.UserId,
+                DocumentTypeId = doc.DocumentTypeId,
+                DocumentName = doc.DocumentName,
+                CreatedOn = DateTime.Now,
+                CreatedBy= doc.CreatedBy,
+            };
+            Context.TblUserDocuments.Add(model);
+            Context.SaveChanges();
+            return doc;
         }
 
         public async Task<UserResponceModel> UserLockScreen(LoginRequest request)

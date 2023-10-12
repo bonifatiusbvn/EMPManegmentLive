@@ -67,6 +67,30 @@ namespace EMPManagment.API.Controllers
             return StatusCode(responseModel.Code, responseModel);
         }
 
+        [HttpGet]
+        [Route("GetDocumentType")]
+        public async Task<IActionResult> GetDocumentType()
+        {
+            IEnumerable<EmpDocumentView> dept = await UserListServices.GetDocumentType();
+            return Ok(new { code = 200, data = dept.ToList() });
+        }
+
+        [HttpGet]
+        [Route("GetDocumentList")]
+
+        public async Task<IActionResult> GetDocumentList()
+        {
+            IEnumerable<DocumentInfoView> userList = await UserListServices.GetDocumentList();
+            return Ok(new { code = 200, data = userList.ToList() });
+        }
+
+        [HttpPost]
+        [Route("UploadDocument")]
+        public async Task<IActionResult> UploadDocument(DocumentInfoView doc)
+        {
+            var document = await UserListServices.UploadDocument(doc);
+            return Ok(new { code = 200, data = document });
+        }
         [HttpPost]
         [Route("ResetUserPassword")]
         public async Task<IActionResult> ResetUserPassword(PasswordResetView emp)

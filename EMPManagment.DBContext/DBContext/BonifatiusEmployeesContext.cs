@@ -189,6 +189,9 @@ public partial class BonifatiusEmployeesContext : DbContext
         {
             entity.ToTable("tblUserDocuments");
 
+            entity.Property(e => e.CreatedBy).HasMaxLength(20);
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+
             entity.HasOne(d => d.DocumentType).WithMany(p => p.TblUserDocuments)
                 .HasForeignKey(d => d.DocumentTypeId)
                 .HasConstraintName("FK_tblUserDocuments_tblDocumentMaster");
