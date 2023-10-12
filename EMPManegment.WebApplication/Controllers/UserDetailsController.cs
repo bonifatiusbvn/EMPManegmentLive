@@ -246,16 +246,16 @@ namespace EMPManegment.Web.Controllers
             try
             {
                     ApiResponseModel response = await APIServices.PostAsync(login, "UserDetails/UnLockScreen");
-                    if (response.code != (int)HttpStatusCode.OK)
+                    if (response.code == (int)HttpStatusCode.OK)
                     {
-                    TempData["ErrorMessage"] = response.message;
+                       var data = JsonConvert.SerializeObject(response.data);
+                       response.data = JsonConvert.DeserializeObject<LoginView>(data);
+                       return RedirectToAction("UserHome", "Home");
                     }
                     else
                     {
-                        var data = JsonConvert.SerializeObject(response.data);
-                         response.data = JsonConvert.DeserializeObject<LoginView>(data);
-                        return RedirectToAction("UserHome", "Home");
-                    }
+                    TempData["ErrorMessage"] = response.message;
+                }
 
                 return View();
 

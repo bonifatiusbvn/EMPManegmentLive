@@ -291,7 +291,6 @@ namespace EMPManegment.Repository.UserListRepository
                     {
                         LoginView userModel = new LoginView();
                         userModel.UserName = tblUser.UserName;
-                        response.Data = userModel;
                         response.Code = (int)HttpStatusCode.OK;
                     }
                     else

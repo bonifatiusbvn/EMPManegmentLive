@@ -130,9 +130,8 @@ namespace EMPManagment.API.Controllers
 
                 var result = await UserListServices.UserLockScreen(request);
 
-                if (result != null)
+                if (result.Code == 200)
                 {
-
                     apiResponseModel.Code = (int)HttpStatusCode.OK;
                     apiResponseModel.Message = result.Message;
                 }
