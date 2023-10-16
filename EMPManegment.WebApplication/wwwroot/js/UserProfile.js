@@ -23,7 +23,7 @@ $(document).ready(function () {
     GetDocumentType();
 });
 
-function GetDocumentType() {debugger
+function GetDocumentType() {
 
     $.ajax({
         url: '/UserDetails/GetDocumentType',
@@ -37,14 +37,14 @@ function GetDocumentType() {debugger
 
 
 function GetDocumentList() {
-    debugger
+    
     $.ajax({
         url: '/UserDetails/DisplayDocumentList',
         type: 'Get',
         dataType: 'json',
         contentType: 'application/json;charset=utf-8;',
         success: function (result) {
-            debugger
+            
             var object = '';
             $.each(result, function (index, item) {
                 object += '<tr>';
@@ -56,7 +56,7 @@ function GetDocumentList() {
             });
             $('#TableData').html(object);
         },
-        error: function () {debugger
+        error: function () {
             alert("data can't get");
         }
     });
@@ -64,7 +64,7 @@ function GetDocumentList() {
 
 
 function UploadDocument() {
-    debugger
+    
     var fromData = new FormData();
     fromData.append("documentType", $("#Documents").val());
     fromData.append("documentTypeId", $("#Documents").val());
@@ -85,7 +85,7 @@ function UploadDocument() {
     });
 }
 
-$(function () {debugger
+$(function () {
     $("#SubmitButton").click(function () {
         var documents = $("#Documents");
         if (documents.val() == "") {
