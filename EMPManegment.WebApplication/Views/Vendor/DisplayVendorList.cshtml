@@ -1,35 +1,53 @@
-﻿
+﻿@model IEnumerable<EMPManegment.EntityModels.ViewModels.VendorModels.VendorDetailsView>
 @{
     ViewData["Title"] = "DisplayVendorList";
     Layout = "~/Views/Shared/_HomeLayout.cshtml";
 }
-<link href="~/css/datatablecss/jquery.datatables.css" rel="stylesheet" />
-<link href="~/css/datatablecss/jquery.datatables.min.css" rel="stylesheet" />
-<div class="container">
-    <div class="row">
-        <div class="col-10 offset-1">
-            <table class="table table-bordered table-hover table-striped" id="tableData">
-                <thead class="bg-dark text-light">
-                    <tr class="text-center">
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Phone</th>
-                        <th>BankAccountNo</th>
-                        <th>BankName</th>
-                        <th>BankIfsc</th>
-                        <th>Gstnumber</th>
-                        <th>Address</th>
+
+<div class="table-responsive">
+    <table class="table align-middle mb-0">
+        <thead class="table-light">
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>BankAccountNo</th>
+                <th>BankName</th>
+                <th>BankIfsc</th>
+                <th>Gstnumber</th>
+                <th>Address</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Count() > 0)
+            {
+                @foreach (var d in Model)
+                {
+                    <tr>
+                        <td>@d.VendorName</td>
+                        <td>@d.VendorEmail</td>
+                        <td>@d.VendorPhone</td>
+                        <td>@d.VendorBankAccountNo</td>
+                        <td>@d.VendorBankName</td>
+                        <td>@d.VendorBankIfsc</td>
+                        <td>@d.VendorGstnumber</td>
+                        <td>@d.VendorAddress</td>
                     </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
-        </div>
-    </div>
+                }
+            }
+            else
+            {
+                <tr class="text-center">
+                    <td colspan="5"><h2 class="text-warning bg-info">No Records</h2></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <!-- end table -->
 </div>
+<!-- end table responsive -->
 
-
-
-
+@*<script src="~/lib/jquery/dist/jquery.js"></script>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script src="~/moduls/vendordetailsscript.js"></script>
+<script src="~/moduls/vendordetailsscript.js"></script>*@
 

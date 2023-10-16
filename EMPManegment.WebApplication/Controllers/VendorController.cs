@@ -37,17 +37,25 @@ namespace EMPManegment.Web.Controllers
         {
             try
             {
-                ApiResponseModel postuser = await APIServices.PostAsync(vendor, "AddVendor/AddVendors");
-                if (postuser.code == 200)
+                if(ModelState.IsValid)
                 {
+                    ApiResponseModel postuser = await APIServices.PostAsync(vendor, "AddVendor/AddVendors");
+                    if (postuser.code == 200)
+                    {
 
-                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
+                        return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
 
+                    }
+                    else
+                    {
+                        return new JsonResult(new { Message = string.Format(postuser.message), Code = postuser.code });
+                    }
                 }
                 else
                 {
-                    return new JsonResult(new { Message = string.Format(postuser.message), Code = postuser.code });
+                    return View(vendor);
                 }
+                
             }
             catch (Exception ex)
             {

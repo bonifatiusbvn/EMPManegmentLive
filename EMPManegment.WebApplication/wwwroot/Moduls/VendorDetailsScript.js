@@ -1,7 +1,4 @@
-﻿$(document).ready(function () {
-    $('#tableData').DataTable();
-})
-alert();
+﻿
 function AddVendorDetails() {
     debugger
     var objData = {
