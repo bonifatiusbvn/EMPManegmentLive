@@ -35,8 +35,9 @@ public partial class BonifatiusEmployeesContext : DbContext
 
     public virtual DbSet<TblUserDocument> TblUserDocuments { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
+    public virtual DbSet<TblVendorMaster> TblVendorMasters { get; set; }
 
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -199,6 +200,26 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.HasOne(d => d.User).WithMany(p => p.TblUserDocuments)
                 .HasForeignKey(d => d.UserId)
                 .HasConstraintName("FK_tblUserDocuments_tblUsers");
+        });
+
+        modelBuilder.Entity<TblVendorMaster>(entity =>
+        {
+            entity.ToTable("tblVendor_Master");
+
+            entity.Property(e => e.CreatedBy).HasMaxLength(10);
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.VendorAddress).HasMaxLength(100);
+            entity.Property(e => e.VendorBankAccountNo).HasMaxLength(50);
+            entity.Property(e => e.VendorBankIfsc)
+                .HasMaxLength(50)
+                .HasColumnName("VendorBankIFSC");
+            entity.Property(e => e.VendorBankName).HasMaxLength(50);
+            entity.Property(e => e.VendorEmail).HasMaxLength(50);
+            entity.Property(e => e.VendorGstnumber)
+                .HasMaxLength(50)
+                .HasColumnName("VendorGSTNumber");
+            entity.Property(e => e.VendorName).HasMaxLength(50);
+            entity.Property(e => e.VendorPhone).HasMaxLength(50);
         });
 
         OnModelCreatingPartial(modelBuilder);

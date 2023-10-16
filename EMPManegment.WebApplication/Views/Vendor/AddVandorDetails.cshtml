@@ -21,7 +21,8 @@
                         <div class="col-xxl-3 col-md-6">
                             <div>
                                 <label for="basiInput" class="form-label">Vendor Name</label>
-                                <input type="password" class="form-control" id="basiInput">
+                                <input type="text" class="form-control" id="VendorName">
+                                <span class="errorMsg" style="color: #cc0000;" id="name">Please Enter Vendor Name</span>
                             </div>
                         </div>
                       
@@ -30,23 +31,18 @@
                             <div>
                                 <label for="iconInput" class="form-label">Vendor Email</label>
                                 <div class="form-icon">
-                                    <input type="email" class="form-control form-control-icon" id="iconInput" placeholder="example@gmail.com">
+                                    <input type="email" class="form-control form-control-icon" id="VendorEmail" placeholder="example@gmail.com">
                                     <i class="ri-mail-unread-line"></i>
+                                    <span class="errorMsg" style="color: #cc0000;" id="email">Please Enter Vendor Email</span>
                                 </div>
                             </div>
                         </div>
                        
-                        <!--end col-->
-                        <div class="col-xxl-3 col-md-6">
-                            <div>
-                                <label for="exampleInputdate" class="form-label">Input Date</label>
-                                <input type="date" class="form-control" id="exampleInputdate">
-                            </div>
-                        </div>
                         <div class="col-xxl-3 col-md-6">
                             <div>
                                 <label for="basiInput" class="form-label">Vendor Phone</label>
-                                <input type="password" class="form-control" id="basiInput">
+                                <input type="number" class="form-control" id="VendorPhone">
+                                <span class="errorMsg" style="color: #cc0000;" id="phone">Please Enter Vendor PhoneNumber</span>
                             </div>
                         </div>
                         <div class="col-xxl-3 col-md-6">
@@ -54,25 +50,29 @@
                                 <label for="exampleFormControlTextarea5" class="form-label">
                                     Vendor Address
                                 </label>
-                                <textarea class="form-control" id="exampleFormControlTextarea5" rows="3"></textarea>
+                                <textarea class="form-control" id="VendorAddress" rows="3"></textarea>
+                                <span class="errorMsg" style="color: #cc0000;" id="address">Please Enter Vendor Address</span>
                             </div>
                         </div>
                         <div class="col-xxl-3 col-md-6">
                             <div>
                                 <label for="basiInput" class="form-label">Vendor Bank-AccountNo</label>
-                                <input type="password" class="form-control" id="basiInput">
+                                <input type="number" class="form-control" id="VendorBankAccountNo">
+                                <span class="errorMsg" style="color: #cc0000;" id="accountNo">Please Enter AccountNo</span>
                             </div>
                         </div>
                          <div class="col-xxl-3 col-md-6">
                             <div>
                                 <label for="basiInput" class="form-label">Vendor BankName</label>
-                                <input type="password" class="form-control" id="basiInput">
+                                <input type="text" class="form-control" id="VendorBankName">
+                                <span class="errorMsg" style="color: #cc0000;" id="bankName">Please Enter BankName</span>
                             </div>
                         </div>
                         <div class="col-xxl-3 col-md-6">
                             <div>
                                 <label for="basiInput" class="form-label">Vendor BankIFSC</label>
-                                <input type="password" class="form-control" id="basiInput">
+                                <input type="text" class="form-control" id="VendorBankIfsc">
+                                <span class="errorMsg" style="color: #cc0000;" id="bankIFSC">Please Enter IFSC code</span>
                             </div>
                         </div>
                         
@@ -80,15 +80,33 @@
                         <div class="col-xxl-3 col-md-6">
                             <div>
                                 <label for="basiInput" class="form-label">Vendor GSTNumber</label>
-                                <input type="password" class="form-control" id="basiInput">
+                                <input type="number" class="form-control" id="VendorGstnumber">
+                                <span class="errorMsg" style="color: #cc0000;" id="GSTnumber">Please Enter GST No</span>
                             </div>
                         </div>
+
+                        <div class="col-xxl-3 col-md-6">
+                             <div>
+                                 <label for="exampleInputdate" class="form-label">Created On</label>
+                                <input type="date" class="form-control" id="CreatedOn">
+                                <span class="errorMsg" style="color: #cc0000;" id="createdOn">Please Enter Date</span>
+                             </div>
+                        </div>
+
+                        <di v class="col-xxl-3 col-md-6">
+                            <div>
+                                <label for="basiInput" class="form-label">Created By</label>
+                                <input type="text" class="form-control" id="CreatedBy">
+                                <span class="errorMsg" style="color: #cc0000;" id="createdBy">Please Enter Your Name</span>
+                            </div>
+                        </di>
+
                         <div class="d-flex align-items-start gap-3 mt-4">
                            
                         </div>
                     </div>
                     <!-- Large Button -->
-                    <button type="button" class="btn btn-primary btn-lg btn-label right ms-auto nexttab nexttab" data-nexttab="pills-info-desc-tab"><i class="ri-arrow-right-line label-icon align-middle fs-16 ms-2"></i>Submit Details</button>
+                    <button type="submit" class="btn btn-primary btn-lg btn-label right ms-auto nexttab nexttab" onclick="AddVendorDetails()" id="SubmitButton" data-nexttab="pills-info-desc-tab"><i class="ri-arrow-right-line label-icon align-middle fs-16 ms-2"></i>Submit Details</button>
                     </div>
                    
                   
@@ -229,3 +247,14 @@
     <!--end col-->
 </div>
 
+
+<!-- Calender -->
+<script>
+    var today = new Date().toISOString().split('T')[0];
+    document.getElementById("CreatedOn").setAttribute("max", today);
+</script>
+
+<!--Vendor Details Script-->
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/moduls/vendordetailsscript.js"></script>
