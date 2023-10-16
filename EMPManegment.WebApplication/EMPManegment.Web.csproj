@@ -18,7 +18,6 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\Content\Image\" />
-    <Folder Include="wwwroot\Content\UserDocuments\" />
   </ItemGroup>
 
 </Project>

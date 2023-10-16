@@ -37,14 +37,12 @@ function GetDocumentType() {
 
 
 function GetDocumentList() {
-    
     $.ajax({
         url: '/UserDetails/DisplayDocumentList',
         type: 'Get',
         dataType: 'json',
         contentType: 'application/json;charset=utf-8;',
         success: function (result) {
-            
             var object = '';
             $.each(result, function (index, item) {
                 object += '<tr>';
@@ -64,7 +62,6 @@ function GetDocumentList() {
 
 
 function UploadDocument() {
-    
     var fromData = new FormData();
     fromData.append("documentType", $("#Documents").val());
     fromData.append("documentTypeId", $("#Documents").val());
