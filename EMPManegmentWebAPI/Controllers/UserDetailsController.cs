@@ -4,9 +4,12 @@ using EMPManagment.Web.Models.API;
 using EMPManegment.EntityModels.View_Model;
 using EMPManegment.EntityModels.ViewModels;
 using EMPManegment.EntityModels.ViewModels.Models;
+using EMPManegment.Inretface.Interface.UserAttendance;
 using EMPManegment.Inretface.Interface.UserList;
 using EMPManegment.Inretface.Interface.UsersLogin;
+using EMPManegment.Inretface.Services.UserAttendanceServices;
 using EMPManegment.Inretface.Services.UserListServices;
+using Kendo.Mvc.UI;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -20,9 +23,12 @@ namespace EMPManagment.API.Controllers
     public class UserDetailsController : ControllerBase
     {
         public IUserDetailsServices UserListServices { get; }
-        public UserDetailsController(IUserDetailsServices userListServices)
+        public IUserAttendanceServices UserAttendance { get; }
+
+        public UserDetailsController(IUserDetailsServices userListServices,IUserAttendanceServices userAttendance)
         {
             UserListServices = userListServices;
+            UserAttendance = userAttendance;
         }
 
 
@@ -146,6 +152,17 @@ namespace EMPManagment.API.Controllers
                 apiResponseModel.Code = (int)HttpStatusCode.InternalServerError;
             }
             return StatusCode(apiResponseModel.Code, apiResponseModel);
+        }
+
+
+
+        [HttpGet]
+        [Route("GetUserAttendanceById")]
+
+        public async Task<IActionResult> GetUserAttendanceById()
+        {
+            IEnumerable<UserAttendanceModel> userList = await UserAttendance.GetUserAttendanceById();
+            return Ok(new { code = 200, data = userList.ToList() });
         }
     }
 }

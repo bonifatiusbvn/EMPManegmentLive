@@ -112,7 +112,6 @@ function EnterOutTime() {
 
 function ResetPassword()
 {
-    debugger
     var fromData = new FormData();
     fromData.append("UserName", $("#txtUserName").val());
     fromData.append("Password", $("#password-input").val());
@@ -125,7 +124,6 @@ function ResetPassword()
         processData: false,
         contentType: false,
         success: function (Result) {
-            debugger
             Swal.fire({
                 title: Result.message,
                 icon: 'success',
