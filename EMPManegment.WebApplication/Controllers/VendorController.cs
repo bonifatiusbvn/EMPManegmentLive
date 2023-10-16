@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using EMPManegment.EntityModels.ViewModels.VendorModels;
+using Newtonsoft.Json;
 
 namespace EMPManegment.Web.Controllers
 {
@@ -27,7 +28,11 @@ namespace EMPManegment.Web.Controllers
             return View();
         }
 
-        
+        public async Task<IActionResult> AddVandorDetails()
+        {
+            return View();
+        }
+        [HttpPost]
         public async Task<IActionResult> AddVandorDetails(VendorDetailsView vendor)
         {
             try
@@ -35,16 +40,33 @@ namespace EMPManegment.Web.Controllers
                 ApiResponseModel postuser = await APIServices.PostAsync(vendor, "AddVendor/AddVendors");
                 if (postuser.code == 200)
                 {
-                    var identity = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, vendor.VendorName) }, CookieAuthenticationDefaults.AuthenticationScheme);
-                    var principal = new ClaimsPrincipal(identity);
-                    HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
-                    return View();
+
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
+
                 }
                 else
                 {
-                    TempData["ErrorMessage"] = postuser.message;
-                    return View();
+                    return new JsonResult(new { Message = string.Format(postuser.message), Code = postuser.code });
                 }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        [HttpGet]
+        public async Task<IActionResult> DisplayVendorList()
+        {
+            try
+            {
+                List<VendorDetailsView> vendorList = new List<VendorDetailsView>();
+                HttpClient client = WebAPI.Initil();
+                ApiResponseModel res = await APIServices.GetAsync("", "AddVendor/GetVendorList");
+                if (res.code == 200)
+                {
+                    vendorList = JsonConvert.DeserializeObject<List<VendorDetailsView>>(res.data.ToString());
+                }
+                return View(vendorList);
             }
             catch (Exception ex)
             {

@@ -1,0 +1,35 @@
+﻿
+@{
+    ViewData["Title"] = "DisplayVendorList";
+    Layout = "~/Views/Shared/_HomeLayout.cshtml";
+}
+<link href="~/css/datatablecss/jquery.datatables.css" rel="stylesheet" />
+<link href="~/css/datatablecss/jquery.datatables.min.css" rel="stylesheet" />
+<div class="container">
+    <div class="row">
+        <div class="col-10 offset-1">
+            <table class="table table-bordered table-hover table-striped" id="tableData">
+                <thead class="bg-dark text-light">
+                    <tr class="text-center">
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>BankAccountNo</th>
+                        <th>BankName</th>
+                        <th>BankIfsc</th>
+                        <th>Gstnumber</th>
+                        <th>Address</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/moduls/vendordetailsscript.js"></script>
+

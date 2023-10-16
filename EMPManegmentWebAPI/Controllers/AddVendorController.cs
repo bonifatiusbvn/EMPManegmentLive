@@ -1,4 +1,5 @@
 ﻿using EMPManegment.EntityModels.View_Model;
+using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.VendorModels;
 using EMPManegment.Inretface.Interface.VendorDetails;
 using EMPManegment.Inretface.Services.VendorDetailsServices;
@@ -22,14 +23,14 @@ namespace EMPManagment.API.Controllers
         [Route("AddVendors")]
         public async Task<IActionResult> AddVendors(VendorDetailsView vendor)
         {
-            VendorDetailsResponseModel response = new VendorDetailsResponseModel();
+            UserResponceModel response = new UserResponceModel();
             try
             {
                 var result = VendorDetails.AddVendor(vendor);
                 if (result.Result.Code == 200)
                 {
                     response.Code = (int)HttpStatusCode.OK;
-                    response.Data = result.Result.Data;
+                    response.Message =result.Result.Message;
                 }
                 else
                 {
@@ -42,6 +43,14 @@ namespace EMPManagment.API.Controllers
                 throw ex;
             }
             return StatusCode(response.Code, response);
+        }
+
+        [HttpGet]
+        [Route("GetVendorList")]
+        public async Task<IActionResult> GetVendorList()
+        {
+            IEnumerable<VendorDetailsView> vendorList = await VendorDetails.GetVendorsList();
+            return Ok(new { code = 200, data = vendorList.ToList() });
         }
     }
 }

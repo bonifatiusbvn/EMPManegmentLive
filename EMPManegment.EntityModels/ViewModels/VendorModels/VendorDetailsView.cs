@@ -31,12 +31,4 @@ namespace EMPManegment.EntityModels.ViewModels.VendorModels
 
         public string? CreatedBy { get; set; }
     }
-    public class VendorDetailsResponseModel
-    {
-        public string Message { get; set; }
-
-        public int Code { get; set; }
-        public VendorDetailsView Data { get; set; }
-
-    }
 }

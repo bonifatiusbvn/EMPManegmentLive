@@ -1,4 +1,8 @@
-﻿function AddVendorDetails() {
+﻿$(document).ready(function () {
+    $('#tableData').DataTable();
+})
+alert();
+function AddVendorDetails() {
     debugger
     var objData = {
         VendorName: $("#VendorName").val(),
@@ -18,223 +22,362 @@
         type: 'Post',
         data: objData,
         dataType: 'json',
+        success: function (Result) {
+            Swal.fire({
+                title: Result.message,
+                icon: 'success',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'OK'
+            }).then(function () {
+                window.location = '/Vendor/AddVandorDetails';
+            }); 
+
+        },
+        error: function () {
+            toastr.error('There is some problem in your request.');
+        }
     })
 }
-
-
-
 
 
 //-------------------Validation--------------------//
 
 /* Validate VendorName*/
 
-$("#fname").hide();
-let usernameError = true;
-$("#FirstName").keyup(function () {
-    validateFirstname();
+$("#name").hide();
+let vendornameError = true;
+$("#VendorName").keyup(function () {
+    validateVendorname();
 });
 
-function validateFirstname() {
-    let usernameValue = $("#FirstName").val();
-    if (usernameValue.length == "") {
-        $("#fname").show();
-        usernameError = false;
+function validateVendorname() {
+    let nameValue = $("#VendorName").val();
+    if (nameValue.length == "") {
+        $("#name").show();
+        vendornameError = false;
         return false;
-    } else if (usernameValue.length < 3 || usernameValue.length > 10) {
-        $("#fname").show();
-        $("#fname").html("*");
-        usernameError = false;
-        return false;
-    } else {
-        $("#fname").hide();
+    }
+    else {
+        $("#name").hide();
     }
 }
-//Last Name
+/* Validate Email */
 
-$("#lname").hide();
-let lastnameError = true;
-$("#LastName").keyup(function () {
-    validateLastname();
-});
-function validateLastname() {
-    let lastnameValue = $("#LastName").val();
-    if (lastnameValue.length == "") {
-        $("#lname").show();
-        lastnameError = false;
-        return false;
-    } else if (lastnameValue.length < 3 || lastnameValue.length > 10) {
-        $("#lname").show();
-        $("#lname").html("*");
-        lastnameError = false;
-        return false;
-    } else {
-        $("#lname").hide();
-    }
-}
-
-//contect no
-$("#contect").hide();
-let companynumberError = true;
-$("#ContectNo").keyup(function () {
-    validateCompanyNumber();
-});
-function validateCompanyNumber() {
-    let CnumberValue = $("#ContectNo").val();
-    if (CnumberValue.length == "") {
-        $("#contect").show();
-        companynumberError = false;
-        return false;
-    } else if (CnumberValue.length == 11) {
-        $("#contect").show();
-        $("#contect").html("**length of number is 10");
-        companynumberError = false;
-        return false;
-    } else {
-        $("#contect").hide();
-    }
-}
-
-// email
 $("#email").hide();
-let personalemailError = true;
-$("#Email").keyup(function () {
-    validatePersonalEmail();
+let emailError = true;
+$("#VendorEmail").keyup(function () {
+    validateEmail();
 });
-function validatePersonalEmail() {
-    let pemailValue = $("#Email").val();
-    if (pemailValue.length == "") {
+function validateEmail() {
+    let emailValue = $("#VendorEmail").val();
+    if (emailValue.length == "") {
         $("#email").show();
-        personalemailError = false;
+        emailError = false;
         return false;
-    } else if (pemailValue.length < 3 || pemailValue.length > 20) {
-        $("#email").show();
-        $("#email").html("*");
-        personalemailError = false;
-        return false;
-    } else {
+    } 
+     else {
         $("#email").hide();
     }
 }
 
-//address
+//const email = document.getElementById("email");
+//email.addEventListener("blur", () => {
+//    let regex =
+//        /^([_\-\.0-9a-zA-Z]+)@([_\-\.0-9a-zA-Z]+)\.([a-zA-Z]){2,7}$/;
+//    let s = email.value;
+//    if (regex.test(s)) {
+//        email.classList.remove("is-invalid");
+//        emailError = true;
+//    } else {
+//        email.classList.add("is-invalid");
+//        emailError = false;
+//    }
+//});
 
+/* Validate VendorAddress */
 $("#address").hide();
 let addressError = true;
-$("#Address").keyup(function () {
+$("#VendorAddress").keyup(function () {
     validateAddress();
 });
 function validateAddress() {
-    let usernameValue = $("#Address").val();
-    if (usernameValue.length == "") {
+    let addressValue = $("#VendorAddress").val();
+    if (addressValue.length == "") {
         $("#address").show();
-        usernameError = false;
+        addressError = false;
         return false;
-    } else if (usernameValue.length < 3 || usernameValue.length > 10) {
-        $("#address").show();
-        $("#address").html("*");
-        usernameError = false;
-        return false;
-    } else {
+    }
+    else {
         $("#address").hide();
     }
 }
 
-//City
-
-$("#city").hide();
-let cityError = true;
-$("#City").keyup(function () {
-    validatecity();
+/* Validate PhoneNo */
+$("#phone").hide();
+let phoneError = true;
+$("#VendorPhone").keyup(function () {
+    validatephone();
 });
-function validatecity() {
-    let cityValue = $("#City").val();
-    if (cityValue.length == "") {
-        $("#city").show();
-        cityError = false;
+function validatephone() {
+    let phoneValue = $("#VendorPhone").val();
+    if (phoneValue.length == "") {
+        $("#phone").show();
+        phoneError = false;
         return false;
-    } else if (cityValue.length < 3 || cityValue.length > 10) {
-        $("#city").show();
-        $("#city").html("*");
-        cityError = false;
-        return false;
-    } else {
-        $("#city").hide();
+    }
+    else {
+        $("#phone").hide();
     }
 }
 
-//Gender
+/* Validate VendorBankAccountNo */
 
-$("#gender").hide();
-let genderError = true;
-$("#Gender").keyup(function () {
-    validateGender();
+$("#accountNo").hide();
+let bankaccountError = true;
+$("#VendorBankAccountNo").keyup(function () {
+    validateBankAccountNo();
 });
-function validateGender() {
-    let genderValue = $("#Gender").val();
-    if (genderValue.length == "") {
-        $("#gender").show();
-        genderError = false;
+function validateBankAccountNo() {
+    let bankaccountValue = $("#VendorBankAccountNo").val();
+    if (bankaccountValue.length == "") {
+        $("#accountNo").show();
+        bankaccountError = false;
         return false;
+    }
+    else {
+        $("#accountNo").hide();
     }
 }
 
-//Pincode
+/* Validate VendorBankName */
 
-$("#pincode").hide();
-let pincodeError = true;
-$("#Pincode").keyup(function () {
-    validatePincode();
+$("#bankName").hide();
+let BankNameError = true;
+$("#VendorBankName").keyup(function () {
+    validateBankName();
 });
-function validatePincode() {
-    let pincodeValue = $("#Pincode").val();
-    if (pincodeValue.length == "") {
-        $("#pincode").show();
-        pincodeError = false;
+function validateBankName() {
+    let BankNameValue = $("#VendorBankName").val();
+    if (BankNameValue.length == "") {
+        $("#bankName").show();
+        BankNameError = false;
         return false;
+    }
+    else {
+        $("#bankName").hide();
     }
 }
 
-////Dob
+/* Validate VendorBankIfsc */
 
-$("#dob").hide();
-let dobError = true;
-$("#Dob").keyup(function () {
-    validateDob();
+$("#bankIFSC").hide();
+let BankIfscError = true;
+$("#VendorBankIfsc").keyup(function () {
+    validateBankIfsc();
 });
-function validateDob() {
-    let dobValue = $("#Dob").val();
-    if (dobValue.length == "") {
-        $("#dob").show();
-        dobError = false;
+function validateBankIfsc() {
+    let BankIfscValue = $("#VendorBankIfsc").val();
+    if (BankIfscValue.length == "") {
+        $("#bankIFSC").show();
+        BankIfscError = false;
         return false;
+    }
+    else {
+        $("#bankIFSC").hide();
     }
 }
 
-// Submit button
-$("#AddEmployee").click(function () {
-    validateFirstname();
-    validateLastname();
-    validateCompanyNumber();
-    validatePersonalEmail();
+/* Validate VendorGstnumber */
+
+$("#GSTnumber").hide();
+let GstnumberError = true;
+$("#VendorGstnumber").keyup(function () {
+    validateGstnumber();
+});
+function validateGstnumber() {
+    let GstnumberValue = $("#VendorGstnumber").val();
+    if (GstnumberValue.length == "") {
+        $("#GSTnumber").show();
+        GstnumberError = false;
+        return false;
+    }
+    else {
+        $("#GSTnumber").hide();
+    }
+}
+
+/* Validate CreatedOn */
+
+$("#createdOn").hide();
+let CreatedOnError = true;
+$("#CreatedOn").keyup(function () {
+    validateCreatedOn();
+});
+function validateCreatedOn() {
+    let CreatedOnValue = $("#CreatedOn").val();
+    if (CreatedOnValue.length == "") {
+        $("#createdOn").show();
+        CreatedOnError = false;
+        return false;
+    }
+    else {
+        $("#createdOn").hide();
+    }
+}
+
+/* Validate CreatedBy */
+
+$("#createdBy").hide();
+let CreatedByError = true;
+$("#CreatedBy").keyup(function () {
+    validateCreatedBy();
+});
+function validateCreatedBy() {
+    let CreatedByValue = $("#CreatedBy").val();
+    if (CreatedByValue.length == "") {
+        $("#createdBy").show();
+        CreatedByError = false;
+        return false;
+    }
+    else {
+        $("#createdBy").hide();
+    }
+}
+
+/* Validate Submit Button */
+$("#SubmitButton").click(function () {
+    validateVendorname();
+    validateEmail();
     validateAddress();
-    validatecity();
-    validateGender();
-    validatePincode();
-    validateDob();
+    validatephone();
+    validateBankAccountNo();
+    validateBankName();
+    validateBankIfsc();
+    validateGstnumber();
+    validateCreatedOn();
+    validateCreatedBy();
     if (
-        usernameError == true &&
-        lastnameError == true &&
-        companynumberError == true &&
-        personalemailError == true &&
+        vendornameError == true &&
+        emailError == true &&
         addressError == true &&
-        cityError == true &&
-        genderError == true &&
-        pincodeError == true &&
-        dobError == true
+        phoneError == true &&
+        bankaccountError == true &&
+        BankNameError == true &&
+        BankIfscError == true &&
+        GstnumberError == true &&
+        CreatedOnError == true &&
+        CreatedByError==true
     ) {
         return true;
     } else {
         return false;
     }
 });
+
+
+//----------------Validation-------------------//
+
+
+//$(document).ready(function () {
+//    $("#SubmitButton").on("click", function () {
+
+//        var VendorName = $('#VendorName').val();
+//        var VendorEmail = $('#VendorEmail').val();
+//        var VendorPhone = $('#VendorPhone').val();
+//        var VendorAddress = $('#VendorAddress').val();
+//        var VendorBankAccountNo = $('#VendorBankAccountNo').val();
+//        var VendorBankName = $('#VendorBankName').val();
+//        var VendorBankIfsc = $('#VendorBankIfsc').val();
+//        var VendorGstnumber = $('#VendorGstnumber').val();
+//        var CreatedOn = $('#CreatedOn').val();
+//        var CreatedBy = $('#CreatedBy').val();
+//        // Hiding error messages
+//        $('.errorMsg').hide();
+
+//        if (checkVendorname(VendorName) == false) {
+//            $('#name').show();
+//            return false;
+//        } else if (checkEmail(VendorEmail) == false) {
+//            $('#email').show();
+//            return false;
+//        } else if (checkMobileNumber(VendorPhone) == false) {
+//            $('#phone').show();
+//            return false;
+//        } else if (checkAddress(VendorAddress) == false) {
+//            $('#address').show();
+//            return false;
+//        } else if (checkAccountNo(VendorBankAccountNo) == false) {
+//            $('#accountNo').show();
+//            return false;
+//        } else if (checkBankName(VendorBankName) == false) {
+//            $('#bankName').show();
+//            return false;
+//        } else if (checkIFSC(VendorBankIfsc) == false) {
+//            $('#bankIFSC').show();
+//            return false;
+//        } else if (checkGSTnumber(VendorGstnumber) == false) {
+//            $('#GSTnumber').show();
+//            return false;
+//        } else if (checkCreatedOn(CreatedOn) == false) {
+//            $('#createdOn').show();
+//            return false;
+//        } else if (checkCreatedBy(CreatedBy) == false) {
+//            $('#createdBy').show();
+//            return false;
+//        }
+
+//    });
+//});
+
+////function used to check valid email
+//function checkEmail(email) {
+//    //regular expression for email
+//    var pattern = new RegExp(/^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i);
+//    if (pattern.test(email)) {
+//        return true;
+//    } else {
+//        return false;
+//    }
+//}
+
+//function checkGSTnumber(url) {
+//    //regular expression for GSTnumber
+//    var pattern = new RegExp("^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$");
+
+//    if (pattern.test(url)) {
+//        return true;
+//    } else {
+//        return false;
+//    }
+//}
+////function used to validate mobile number
+//function checkMobileNumber(mobile) {
+//    //regular expression for mobile number
+//    var pattern = /^[0-9]{10}$/;
+//    if (pattern.test(mobile)) {
+//        return true;
+//    } else {
+//        return false;
+//    }
+//}
+//function checkVendorname() {
+
+//}
+//function checkAddress() {
+
+//}
+//function checkAccountNo() {
+
+//}
+//function checkBankName() {
+
+//}
+//function checkIFSC() {
+
+//}
+//function checkCreatedOn() {
+
+//}
+//function checkCreatedBy() {
+
+//}
