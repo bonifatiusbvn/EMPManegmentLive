@@ -9,7 +9,6 @@ using EMPManegment.Inretface.Interface.UserList;
 using EMPManegment.Inretface.Interface.UsersLogin;
 using EMPManegment.Inretface.Services.UserAttendanceServices;
 using EMPManegment.Inretface.Services.UserListServices;
-using Kendo.Mvc.UI;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;

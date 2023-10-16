@@ -22,5 +22,10 @@ namespace EMPManegment.EntityModels.ViewModels.Models
         public DateTime? CreatedOn { get; set; }
     }
 
+    public class UserAttendanceRequestModel
+    {
+        public Guid UserId { get; set; }
+        public DateTime Date { get; set; }
+    }
     
 }

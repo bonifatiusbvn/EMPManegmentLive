@@ -1,6 +1,5 @@
 ﻿using EMPManegment.EntityModels.ViewModels.Models;
-using Kendo.Mvc.UI;
-using Microsoft.AspNetCore.Mvc;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +11,7 @@ namespace EMPManegment.Inretface.Services.UserAttendanceServices
     public interface IUserAttendanceServices
     {
         Task<IEnumerable<UserAttendanceModel>> GetUserAttendanceById();
+        Task<UserResponceModel> GetUserAttendanceInTime(UserAttendanceRequestModel userAttendance);
         //Task<IEnumerable<UserAttendanceModel>> EditUserOutTime(UserAttendanceModel userAttendance);
     }
 }

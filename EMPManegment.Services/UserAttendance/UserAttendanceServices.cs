@@ -1,7 +1,7 @@
 ﻿using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.Inretface.Interface.UserAttendance;
 using EMPManegment.Inretface.Services.UserAttendanceServices;
-using Kendo.Mvc.UI;
+
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -26,6 +26,9 @@ namespace EMPManegment.Services.UserAttendance
             return UserAttendance.GetUserAttendanceById();
         }
 
-      
+        public Task<UserResponceModel> GetUserAttendanceInTime(UserAttendanceRequestModel userAttendance)
+        {
+            return UserAttendance.GetUserAttendanceInTime(userAttendance);
+        }
     }
 }

@@ -19,7 +19,7 @@
     <link href="~/UserHome/minimal/assets/libs/jsvectormap/css/jsvectormap.min.css" rel="stylesheet" type="text/css" />
 
     <!--Swiper slider css-->
-    <link href="~/UserHome/minimal/libs/swiper/swiper-bundle.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/UserHome/minimal/assets/libs/swiper/swiper-bundle.min.css" rel="stylesheet" type="text/css" />
     <!--datatable css-->
     <link rel="stylesheet" href="~/cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" />
     <!--datatable responsive css-->
@@ -1805,7 +1805,7 @@
                                                     <div class="row g-3 mb-0 align-items-center">
                                                         <div class="col-sm-auto">
                                                             <div class="input-group">
-                                                                <input type="text" class="form-control border dash-filter-picker" id="txttodayDate" data-provider="flatpickr" value="@DateTime.Today.ToShortDateString()">
+                                                                <input type="text" class="form-control border dash-filter-picker" id="txttodayDate"  value="@DateTime.Today.ToShortDateString()">
                                                                 <div class="input-group-text bg-primary border-primary text-white">
                                                                     <i class="ri-calendar-2-line"></i>
                                                                 </div>
@@ -2027,7 +2027,7 @@
         <script src="~/UserHome/minimal/assets/libs/node-waves/waves.min.js"></script>
         <script src="~/UserHome/minimal/assets/libs/feather-icons/feather.min.js"></script>
         <script src="~/UserHome/minimal/assets/js/pages/plugins/lord-icon-2.1.0.js"></script>
-        <script src="~/UserHome/minimal/assets/js/plugins.js"></script>
+        @* <script src="~/UserHome/minimal/assets/js/plugins.js"></script> *@
 
         <!-- apexcharts -->
         <script src="~/UserHome/minimal/assets/libs/apexcharts/apexcharts.min.js"></script>
@@ -2046,7 +2046,11 @@
         <script src="~/lib/jquery/dist/jquery.js"></script>
         <script src="~/lib/jquery/dist/jquery.min.js"></script>
         <script src="~/js/userprofile.js"></script>
+        <!-- listjs init -->
+       @*  <script src="~/UserHome/minimal/assets/js/pages/listjs.init.js"></script> *@
 
+        <!-- Sweet Alerts js -->
+        <script src="~/UserHome/minimal/assets/libs/sweetalert2/sweetalert2.min.js"></script>
 
 
         <!--datatable js-->
@@ -2065,7 +2069,7 @@
 
         <!-- App js -->
         <script src="~/UserHome/minimal/assets/js/app.js"></script>
-        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
         <script src="~/moduls/userdetailsscript.js"></script>
         @await RenderSectionAsync("Scripts", required: false)
 </body>
