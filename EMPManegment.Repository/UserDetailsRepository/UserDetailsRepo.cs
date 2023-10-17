@@ -131,7 +131,7 @@ namespace EMPManegment.Repository.UserListRepository
 
                     }
 
-                }
+               }
             }
 
             else
@@ -185,7 +185,7 @@ namespace EMPManegment.Repository.UserListRepository
                         response.Code = 200;
                         response.Message = "Out-Time Enter Successfully";
                         response.Icone = "success";
-                      
+
                     }
                     else
                     {
@@ -195,9 +195,9 @@ namespace EMPManegment.Repository.UserListRepository
                     }
 
                 }
-                
-               
-            }
+
+
+                }
 
             return response;
         }

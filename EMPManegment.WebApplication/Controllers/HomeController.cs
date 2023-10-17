@@ -22,7 +22,7 @@ namespace EMPManegment.Web.Controllers
         public IActionResult UserHome()
         {
 
-
+           
             return View();
         }
 

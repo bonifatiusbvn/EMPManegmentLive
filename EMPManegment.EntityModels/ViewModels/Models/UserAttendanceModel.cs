@@ -19,5 +19,5 @@ namespace EMPManegment.EntityModels.ViewModels.Models
         public decimal? TotalHours { get; set;}
     }
 
-    
+
 }
