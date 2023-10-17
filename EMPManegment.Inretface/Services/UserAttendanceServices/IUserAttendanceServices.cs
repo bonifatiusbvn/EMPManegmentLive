@@ -11,7 +11,7 @@ namespace EMPManegment.Inretface.Services.UserAttendanceServices
     public interface IUserAttendanceServices
     {
         Task<IEnumerable<UserAttendanceModel>> GetUserAttendanceById();
-        Task<UserResponceModel> GetUserAttendanceInTime(UserAttendanceRequestModel userAttendance);
+        Task<UserAttendanceResponseModel> GetUserAttendanceInTime(UserAttendanceRequestModel userAttendance);
         //Task<IEnumerable<UserAttendanceModel>> EditUserOutTime(UserAttendanceModel userAttendance);
     }
 }

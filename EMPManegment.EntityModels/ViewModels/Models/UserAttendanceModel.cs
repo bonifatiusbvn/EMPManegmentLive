@@ -28,4 +28,14 @@ namespace EMPManegment.EntityModels.ViewModels.Models
         public DateTime Date { get; set; }
     }
     
+
+    public class UserAttendanceResponseModel
+    {
+        public string Message { get; set; }
+
+        public int Code { get; set; }
+
+        public UserAttendanceModel Data { get; set; }
+
+    }
 }

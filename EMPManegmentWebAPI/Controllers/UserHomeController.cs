@@ -89,35 +89,34 @@ namespace EMPManagment.API.Controllers
 
 
 
-        //[HttpGet]
-        //[Route("GetUserAttendanceInTime")]
+        [HttpPost]
+        [Route("GetUserAttendanceInTime")]
 
-        //public  Task<IActionResult> GetUserAttendanceInTime(UserAttendanceRequestModel userAttendance)
-        //{
-        //    UserResponceModel responseModel = new UserResponceModel();
+        public async Task<IActionResult> GetUserAttendanceInTime(UserAttendanceRequestModel userAttendance)
+        {
+            UserAttendanceResponseModel responseModel = new UserAttendanceResponseModel();
 
-        //    ApiResponseModel user =  AttendanceServices.GetUserAttendanceInTime(userAttendance);
-        //    try
-        //    {
+            var user = await AttendanceServices.GetUserAttendanceInTime(userAttendance);
+            try
+            {
 
-        //        if (user != null)
-        //        {
-
-        //            responseModel.Code = (int)HttpStatusCode.OK;
-        //            responseModel.Message = user.message;
-        //            responseModel.Icone = user.Icone;
-        //        }
-        //        else
-        //        {
-        //            responseModel.Message = user.message;
-        //            responseModel.Code = (int)HttpStatusCode.NotFound;
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        responseModel.Code = (int)HttpStatusCode.InternalServerError;
-        //    }
-        //    return StatusCode(responseModel.Code, responseModel);
-        //}
+                if (user.Data != null)
+                {
+                    responseModel.Data = user.Data;
+                    responseModel.Code = (int)HttpStatusCode.OK;
+                   
+                }
+                else
+                {
+                    responseModel.Message = user.Message;
+                   
+                }
+            }
+            catch (Exception ex)
+            {
+                responseModel.Code = (int)HttpStatusCode.InternalServerError;
+            }
+            return StatusCode(responseModel.Code, responseModel);
+        }
     }
 }

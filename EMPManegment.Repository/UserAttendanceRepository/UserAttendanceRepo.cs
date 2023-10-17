@@ -46,9 +46,9 @@ namespace EMPManegment.Repository.UserAttendanceRepository
             return users;
         }
 
-        public async Task<UserResponceModel> GetUserAttendanceInTime(UserAttendanceRequestModel userAttendance)
+        public async Task<UserAttendanceResponseModel> GetUserAttendanceInTime(UserAttendanceRequestModel userAttendance)
         {
-            UserResponceModel response = new UserResponceModel();
+            UserAttendanceResponseModel response = new UserAttendanceResponseModel();
             var data = Context.TblAttendances.Where(e => e.UserId == userAttendance.UserId && e.Date == DateTime.Today).FirstOrDefault();
             
 
@@ -57,23 +57,23 @@ namespace EMPManegment.Repository.UserAttendanceRepository
             {
                 if (data != null)
                 {
-
-                    if (data.Date == DateTime.Today && data.Intime != null)
+                    UserAttendanceModel attendanceModel = new UserAttendanceModel()
                     {
+                        UserId = data.UserId,
+                        Date = data.Date,
+                        Intime = data.Intime,
+                        TotalHours = data.TotalHours,
+                        CreatedBy = data.CreatedBy,
+                        CreatedOn = data.CreatedOn,
+                        OutTime = data.OutTime,
+                        AttendanceId= data.Id,
+                    };
                         response.Code = 200;
-                        response.Data = data.Intime;
-                        
-                    }
-
-                    else
-                    {
-                       
-                        response.Code = 200;
-                        response.Data = data;
-                        response.Message = "Kindly Enter In-Time First";
-                    }
-
-
+                        response.Data = attendanceModel;
+                }
+                else
+                {
+                    response.Message = "Kindly Enter In-Time First";
                 }
                 return response;
 
