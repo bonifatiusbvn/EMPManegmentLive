@@ -1,4 +1,7 @@
 ﻿
+
+GetUserAttendanceInTime();
+
 function ActiveDeactive(UserName) {
     
     const swalWithBootstrapButtons = Swal.mixin({
@@ -76,11 +79,9 @@ function EnterInTime() {
                 confirmButtonColor: '#3085d6',
                 confirmButtonText: 'OK'
             })
-
+            GetUserAttendanceInTime();
         },
-        error: function () {
-            toastr.error('There is some problem in your request.');
-        }
+        
     })
 }
 
@@ -102,11 +103,9 @@ function EnterOutTime() {
                 confirmButtonColor: '#3085d6',
                 confirmButtonText: 'OK'
             })
-
+           
         },
-        error: function () {
-            toastr.error('There is some problem in your request.');
-        }
+       
     })
 }
 
@@ -140,3 +139,19 @@ function ResetPassword()
     })
 }
 
+function GetUserAttendanceInTime() {
+    
+    $.ajax({
+        url: '/Home/GetUserAttendanceInTime',
+        type: 'Post',
+        dataType: 'json',
+        processData: false,
+        contentType: false,
+        success: function (Result) {
+
+            $("#todayintime").text(Result.data);
+
+        },
+       
+    })
+}

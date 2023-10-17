@@ -103,7 +103,6 @@ namespace EMPManegment.Repository.UserListRepository
                 {
                     response.Message = "You Missed Out-Time of " + data.Date.ToShortDateString() + " " + "Kindly Contact Your Admin";
                     response.Icone = "warning";
-                    
                 } 
                 
 

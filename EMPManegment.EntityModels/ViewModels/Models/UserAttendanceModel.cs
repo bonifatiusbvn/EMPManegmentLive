@@ -10,14 +10,32 @@ namespace EMPManegment.EntityModels.ViewModels.Models
     {
         public Guid UserId { get; set; }
      
+        public string? UserName { get; set; }
         public DateTime Date { get; set; }
-        public int AttendanceId { get; set;}
+        public int? AttendanceId { get; set;}
 
-        public DateTime InTime { get; set;}
+        public DateTime Intime { get; set;}
         public DateTime? OutTime { get; set;}
 
         public decimal? TotalHours { get; set;}
+        public string? CreatedBy { get; set; }
+        public DateTime? CreatedOn { get; set; }
     }
 
+    public class UserAttendanceRequestModel
+    {
+        public Guid UserId { get; set; }
+        public DateTime Date { get; set; }
+    }
+    
 
+    public class UserAttendanceResponseModel
+    {
+        public string Message { get; set; }
+
+        public int Code { get; set; }
+
+        public UserAttendanceModel Data { get; set; }
+
+    }
 }

@@ -1,8 +1,13 @@
-﻿using EMPManagment.Web.Helper;
+﻿using Azure;
+using EMPManagment.Web.Helper;
 using EMPManagment.Web.Models.API;
 using EMPManegment.EntityModels.ViewModels.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using NuGet.Common;
+using NuGet.Protocol.Plugins;
+using System;
 
 namespace EMPManegment.Web.Controllers
 {
@@ -22,7 +27,6 @@ namespace EMPManegment.Web.Controllers
         public IActionResult UserHome()
         {
 
-           
             return View();
         }
 
@@ -63,6 +67,39 @@ namespace EMPManegment.Web.Controllers
                 {
 
                     return Ok(new UserResponceModel { Message = string.Format(postuser.message), Icone = string.Format(postuser.Icone), Code = postuser.code });
+
+                }
+                else
+                {
+                    return new JsonResult(new { Message = string.Format(postuser.message), Code = postuser.code });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> GetUserAttendanceInTime()
+        {
+            try
+            {
+                string Userid = HttpContext.Session.GetString("UserID");
+                UserAttendanceRequestModel userAttendance = new UserAttendanceRequestModel
+                {
+                    UserId = Guid.Parse(Userid),
+                    Date = DateTime.Now,
+                    
+                };
+                ApiResponseModel postuser = await APIServices.PostAsync(userAttendance, "UserHome/GetUserAttendanceInTime");
+                UserAttendanceResponseModel responseModel = new UserAttendanceResponseModel();
+                if (postuser.code == 200)
+                {
+                    var data = JsonConvert.SerializeObject(postuser.data);
+                    responseModel.Data = JsonConvert.DeserializeObject<UserAttendanceModel>(data);
+                    return Ok(new { Data = responseModel.Data.Intime.ToShortTimeString() });
 
                 }
                 else

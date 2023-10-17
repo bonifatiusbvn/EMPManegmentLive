@@ -266,5 +266,31 @@ namespace EMPManegment.Web.Controllers
                 return BadRequest(new { Message = "InternalServer" });
             }
         }
+
+
+        public IActionResult GetUsersListById()
+        {
+            return View();
+        }
+        public async Task<IActionResult> GetUserAttendanceById()
+        {
+            try
+            {
+                List<UserAttendanceModel> UserAttendance = new List<UserAttendanceModel>();
+                HttpClient client = WebAPI.Initil();
+                ApiResponseModel res = await APIServices.GetAsync(null, "UserDetails/GetUserAttendanceById");
+                if (res.code == 200)
+                {
+                    UserAttendance = JsonConvert.DeserializeObject<List<UserAttendanceModel>>(res.data);
+                }
+                
+                return Json(UserAttendance);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
     }
 }
