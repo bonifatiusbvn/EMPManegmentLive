@@ -45,7 +45,7 @@ namespace EMPManegment.Repository.UserAttendanceRepository
                                                          CreatedBy = a.CreatedBy,
                                                          TotalHours = a.OutTime - a.Intime,
                                                          CreatedOn = a.CreatedOn,
-                                                         CreatedBy= a.CreatedBy,
+                                                        
                                                      };
 
             return users;
