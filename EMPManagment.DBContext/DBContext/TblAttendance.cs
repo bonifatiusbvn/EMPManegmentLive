@@ -15,7 +15,7 @@ public partial class TblAttendance
 
     public DateTime? OutTime { get; set; }
 
-    public decimal? TotalHours { get; set; }
+    public TimeSpan? TotalHours { get; set; }
 
     public string? CreatedBy { get; set; }
 

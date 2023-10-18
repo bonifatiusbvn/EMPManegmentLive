@@ -37,7 +37,9 @@ public partial class BonifatiusEmployeesContext : DbContext
 
     public virtual DbSet<TblVendorMaster> TblVendorMasters { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    { 
+    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -54,7 +56,6 @@ public partial class BonifatiusEmployeesContext : DbContext
                 .HasColumnType("datetime")
                 .HasColumnName("INTime");
             entity.Property(e => e.OutTime).HasColumnType("datetime");
-            entity.Property(e => e.TotalHours).HasColumnType("decimal(18, 2)");
 
             entity.HasOne(d => d.User).WithMany(p => p.TblAttendances)
                 .HasForeignKey(d => d.UserId)

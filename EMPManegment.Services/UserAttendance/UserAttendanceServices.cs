@@ -21,14 +21,24 @@ namespace EMPManegment.Services.UserAttendance
 
         public IUserAttendance UserAttendance { get; }
 
-        public Task<IEnumerable<UserAttendanceModel>> GetUserAttendanceById()
+        public Task<IEnumerable<UserAttendanceModel>> GetUserAttendanceList()
         {
-            return UserAttendance.GetUserAttendanceById();
+            return UserAttendance.GetUserAttendanceList();
         }
 
         public Task<UserResponceModel> GetUserAttendanceInTime(UserAttendanceRequestModel userAttendance)
         {
             return UserAttendance.GetUserAttendanceInTime(userAttendance);
+        }
+
+        public Task<UserAttendanceModel> UpdateUserOutTime(UserAttendanceModel userAttendance)
+        {
+            return UserAttendance.UpdateUserOutTime(userAttendance);
+        }
+
+        public Task<IEnumerable<UserAttendanceModel>> GetUserAttendanceById(int attendanceId)
+        {
+            return UserAttendance.GetUserAttendanceById(attendanceId);
         }
     }
 }

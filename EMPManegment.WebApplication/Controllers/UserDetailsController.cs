@@ -15,6 +15,7 @@ using EMPManegment.Web.Helper;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
 using static System.Net.Mime.MediaTypeNames;
+using EMPManagment.API;
 
 namespace EMPManegment.Web.Controllers
 {
@@ -268,23 +269,23 @@ namespace EMPManegment.Web.Controllers
         }
 
 
-        public IActionResult GetUsersListById()
+        public async Task<IActionResult> GetUsersListById()
         {
             return View();
         }
-        public async Task<IActionResult> GetUserAttendanceById()
+
+        public async Task<JsonResult> GetUserAttendanceList()
         {
             try
             {
-                List<UserAttendanceModel> UserAttendance = new List<UserAttendanceModel>();
+                List<UserAttendanceModel> userList = new List<UserAttendanceModel>();
                 HttpClient client = WebAPI.Initil();
-                ApiResponseModel res = await APIServices.GetAsync(null, "UserDetails/GetUserAttendanceById");
+                ApiResponseModel res = await APIServices.GetAsync("", "UserDetails/GetUserAttendanceList");
                 if (res.code == 200)
                 {
-                    UserAttendance = JsonConvert.DeserializeObject<List<UserAttendanceModel>>(res.data);
+                    userList = JsonConvert.DeserializeObject<List<UserAttendanceModel>>(res.data.ToString());
                 }
-                
-                return Json(UserAttendance);
+                return new JsonResult(userList);
             }
             catch (Exception ex)
             {
@@ -292,5 +293,45 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
+        [HttpGet]
+        public async Task<JsonResult> EditUserAttendanceOutTime(int attendanceId)
+        {
+            try
+            {
+                List<UserAttendanceModel> attend = new List<UserAttendanceModel>();
+                HttpClient client = WebAPI.Initil();
+                ApiResponseModel res = await APIServices.GetAsync("","UserDetails/GetUserAttendanceById?attendanceId=" + attendanceId);
+
+                if (res.code==200)
+                {
+                    attend = JsonConvert.DeserializeObject<List<UserAttendanceModel>>(res.data.ToString());
+                }
+                return new JsonResult(attend);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        [HttpPost]
+        public async Task<JsonResult> UpdateUserAttendanceOutTime(UserAttendanceModel userAttendance)
+        {
+            UserAttendanceModel attend = new UserAttendanceModel();
+            try
+            {
+                ApiResponseModel postuser = await APIServices.PostAsync(userAttendance, "UserDetails/UpdateUserOutTime");
+                if (postuser.code == 200)
+                {
+                    var identity = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, userAttendance.UserId.ToString()) }, CookieAuthenticationDefaults.AuthenticationScheme);
+                    var principal = new ClaimsPrincipal(identity);
+                    HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+                }
+                return new JsonResult(attend);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

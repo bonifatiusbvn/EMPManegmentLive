@@ -29,45 +29,16 @@
                     <div class="table-responsive table-card mt-3 mb-1">
                         <table class="table align-middle table-nowrap" id="customerTable">
                             <thead class="table-light">
-                                <tr>
-                                    <th scope="col" style="width: 50px;">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="checkAll" value="option">
-                                        </div>
-                                    </th>
+                                <tr class="text-center">
                                     <th class="sort" data-sort="customer_name">UserName</th>
                                     <th class="sort" data-sort="email">Date</th>
                                     <th class="sort" data-sort="phone">Intime</th>
                                     <th class="sort" data-sort="date">OutTime</th>
                                     <th class="sort" data-sort="status">TotalHours</th>
-                                    <th class="sort" data-sort="action">CreatedOn</th>
+                                    <th class="sort" data-sort="status">Action</th>
                                 </tr>
                             </thead>
-                            <tbody class="list form-check-all">
-                                <tr>
-                                    <th scope="row">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" name="chk_child" value="option1">
-                                        </div>
-                                    </th>
-                                    <td class="id" style="display:none;"><a href="javascript:void(0);" class="fw-medium link-primary">#VZ2101</a></td>
-                                    <td class="customer_name">Mary Cousar</td>
-                                    <td class="email">marycousar@velzon.com</td>
-                                    <td class="phone">580-464-4694</td>
-                                    <td class="date">06 Apr, 2021</td>
-                                    <td class="status"><span class="badge bg-success-subtle text-success text-uppercase">Active</span></td>
-                                    <td>
-                                        <div class="d-flex gap-2">
-                                            <div class="edit">
-                                                <button class="btn btn-sm btn-primary edit-item-btn" data-bs-toggle="modal" data-bs-target="#showModal">EditTime</button>
-                                            </div>
-                                            <div class="remove">
-                                                
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
+                            <tbody class="text-center" id="TableDataAttendance"></tbody>
                         </table>
                         <div class="noresult" style="display: none">
                             <div class="text-center">
@@ -81,7 +52,51 @@
                             </div>
                         </div>
                     </div>
+                    <div class="modal fade" id="EditTimeModel" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header bg-light p-3">
+                                    <h5 class="modal-title" id="exampleModalLabel"></h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"></button>
+                                </div>
 
+                                <div class="modal-body">
+                                    <div class="mb-3">
+                                        <label for="customername-field" class="form-label">AttandanceId</label>
+                                        <input id="AttandanceId" class="form-control" disabled />
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="customername-field" class="form-label">UserName</label>
+                                        <input id="UserName" class="form-control" disabled />
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="email-field" class="form-label">Date</label>
+                                        <input id="Date" class="form-control" disabled />
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="phone-field" class="form-label">Intime</label>
+                                        <input id="Intime" class="form-control" disabled />
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="date-field" class="form-label">OutTime</label>
+                                        <input type="datetime" id="OutTime" class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <div class="hstack gap-2 justify-content-end">
+                                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-success" onclick="UpdateUserAttendance();" id="add-btn">Update Time</button>
+                                        <!-- <button type="button" class="btn btn-success" id="edit-btn">Update</button> -->
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
                     <div class="d-flex justify-content-end">
                         <div class="pagination-wrap hstack gap-2">
                             <a class="page-item pagination-prev disabled" href="javascrpit:void(0)">
@@ -102,3 +117,7 @@
 </div>
 
 
+
+<script src="~/lib/jquery/dist/jquery.js"></script>
+
+<script src="~/moduls/userattendancescript.js"></script>

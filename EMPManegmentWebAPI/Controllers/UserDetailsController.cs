@@ -156,12 +156,30 @@ namespace EMPManagment.API.Controllers
 
 
         [HttpGet]
+        [Route("GetUserAttendanceList")]
+
+        public async Task<IActionResult> GetUserAttendanceList()
+        {
+            IEnumerable<UserAttendanceModel> userList = await UserAttendance.GetUserAttendanceList();
+            return Ok(new { code = 200, data = userList.ToList() });
+        }
+
+        [HttpPost]
+        [Route("UpdateUserOutTime")]
+
+        public async Task<IActionResult> UpdateUserOutTime(UserAttendanceModel userAttendance)
+        {
+            UserAttendanceModel updateTime = await UserAttendance.UpdateUserOutTime(userAttendance);
+            return Ok(new { code = 200, data = updateTime});
+        }
+
+        [HttpGet]
         [Route("GetUserAttendanceById")]
 
-        public async Task<IActionResult> GetUserAttendanceById()
+        public async Task<IActionResult> GetUserAttendanceById(int attendanceId)
         {
-            IEnumerable<UserAttendanceModel> userList = await UserAttendance.GetUserAttendanceById();
-            return Ok(new { code = 200, data = userList.ToList() });
+            IEnumerable<UserAttendanceModel> attendance = await UserAttendance.GetUserAttendanceById(attendanceId);
+            return Ok(new { code = 200, data = attendance });
         }
     }
 }

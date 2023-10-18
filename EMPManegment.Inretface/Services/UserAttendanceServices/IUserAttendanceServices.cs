@@ -10,8 +10,9 @@ namespace EMPManegment.Inretface.Services.UserAttendanceServices
 {
     public interface IUserAttendanceServices
     {
-        Task<IEnumerable<UserAttendanceModel>> GetUserAttendanceById();
+        Task<IEnumerable<UserAttendanceModel>> GetUserAttendanceList();
         Task<UserResponceModel> GetUserAttendanceInTime(UserAttendanceRequestModel userAttendance);
-        //Task<IEnumerable<UserAttendanceModel>> EditUserOutTime(UserAttendanceModel userAttendance);
+        Task<UserAttendanceModel> UpdateUserOutTime(UserAttendanceModel userAttendance);
+        Task<IEnumerable<UserAttendanceModel>> GetUserAttendanceById(int attendanceId);
     }
 }
