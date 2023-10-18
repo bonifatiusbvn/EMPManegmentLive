@@ -3,11 +3,13 @@ using EMPManagment.API;
 using EMPManegment.EntityModels.View_Model;
 using EMPManegment.EntityModels.ViewModels;
 using EMPManegment.EntityModels.ViewModels.Models;
+using EMPManegment.Inretface.Interface.UserAttendance;
 using EMPManegment.Inretface.Interface.UserList;
 using EMPManegment.Web.Helper;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.Elfie.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Linq;
 using System;
@@ -17,6 +19,7 @@ using System.Net;
 using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace EMPManegment.Repository.UserListRepository
@@ -130,7 +133,7 @@ namespace EMPManegment.Repository.UserListRepository
 
                     }
 
-                }
+               }
             }
 
             else
@@ -184,7 +187,7 @@ namespace EMPManegment.Repository.UserListRepository
                         response.Code = 200;
                         response.Message = "Out-Time Enter Successfully";
                         response.Icone = "success";
-                      
+
                     }
                     else
                     {
@@ -194,9 +197,9 @@ namespace EMPManegment.Repository.UserListRepository
                     }
 
                 }
-                
-               
-            }
+
+
+                }
 
             return response;
         }
@@ -308,6 +311,37 @@ namespace EMPManegment.Repository.UserListRepository
                 throw ex;
             }
         return response;
+        }
+
+        public async Task<UserResponceModel> UserBirsthDayWish(Guid UserId)
+        {
+            UserResponceModel response = new UserResponceModel();
+            var data = Context.TblUsers.Where(e => e.Id == UserId).FirstOrDefault();
+
+            try
+            {
+                if (data != null)
+                {
+
+                    string today = DateTime.Now.ToString("dd/MM");
+                    DateTime birthday = data.DateOfBirth;
+                    string checkdate = birthday.ToString("dd/MM");
+                    if (today == checkdate)
+                    {
+                        response.Message = "Bonifatius Wish You a Very Happy Birthday.." +" " + data.FirstName + " " + data.LastName +" "+ "Enjoy Your Day";
+                        response.Code = (int)HttpStatusCode.OK; 
+                    }
+                   
+                }
+                
+                return response;
+
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
         }
     }
 }

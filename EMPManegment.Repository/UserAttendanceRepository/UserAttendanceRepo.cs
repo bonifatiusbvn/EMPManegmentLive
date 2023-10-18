@@ -2,6 +2,7 @@
 using EMPManegment.EntityModels.View_Model;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.Inretface.Interface.UserAttendance;
+using Microsoft.VisualBasic;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections;
@@ -25,7 +26,7 @@ namespace EMPManegment.Repository.UserAttendanceRepository
 
         public BonifatiusEmployeesContext Context { get; }
 
-  
+
 
         public async Task<IEnumerable<UserAttendanceModel>> GetUserAttendanceList()
         {
@@ -40,6 +41,8 @@ namespace EMPManegment.Repository.UserAttendanceRepository
                                                          Date = a.Date,
                                                          Intime = a.Intime,
                                                          OutTime = a.OutTime,
+                                                         //TotalHours = a.TotalHours,
+                                                         CreatedBy = a.CreatedBy,
                                                          TotalHours = a.OutTime - a.Intime,
                                                          CreatedOn = a.CreatedOn,
                                                          CreatedBy= a.CreatedBy,
@@ -48,35 +51,29 @@ namespace EMPManegment.Repository.UserAttendanceRepository
             return users;
         }
 
-        public async Task<UserResponceModel> GetUserAttendanceInTime(UserAttendanceRequestModel userAttendance)
+        public async Task<UserAttendanceResponseModel> GetUserAttendanceInTime(UserAttendanceRequestModel userAttendance)
         {
-            UserResponceModel response = new UserResponceModel();
+            UserAttendanceResponseModel response = new UserAttendanceResponseModel();
             var data = Context.TblAttendances.Where(e => e.UserId == userAttendance.UserId && e.Date == DateTime.Today).FirstOrDefault();
-            
-
-
             try
             {
                 if (data != null)
                 {
-
-                    if (data.Date == DateTime.Today && data.Intime != null)
+                    UserAttendanceModel attendanceModel = new UserAttendanceModel()
                     {
-                        response.Code = 200;
-                        response.Data = data.Intime;
-                        
-                    }
-
-                    else
-                    {
-                       
-                        response.Code = 200;
-                        response.Data = data;
-                        response.Message = "Kindly Enter In-Time First";
-                    }
-
-
+                        UserId = data.UserId,
+                        Date = data.Date,
+                        Intime = data.Intime,
+                        TotalHours = data.OutTime - data.Intime,
+                        CreatedBy = data.CreatedBy,
+                        CreatedOn = data.CreatedOn,
+                        OutTime = data.OutTime,
+                        AttendanceId = data.Id,
+                    };
+                    response.Code = 200;
+                    response.Data = attendanceModel;
                 }
+                
                 return response;
 
             }
@@ -131,3 +128,5 @@ namespace EMPManegment.Repository.UserAttendanceRepository
         }
     }
 }
+
+       

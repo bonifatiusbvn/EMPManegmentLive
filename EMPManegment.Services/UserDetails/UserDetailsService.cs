@@ -64,6 +64,11 @@ namespace EMPManegment.Services.UserList
         {
             return await UserList.UserLockScreen(request);
         }
+
+        public async Task<UserResponceModel> UserBirsthDayWish(Guid UserId)
+        {
+            return await UserList.UserBirsthDayWish(UserId);
+        }
     }
 }
 

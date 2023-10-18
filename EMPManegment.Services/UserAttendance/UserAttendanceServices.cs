@@ -26,7 +26,7 @@ namespace EMPManegment.Services.UserAttendance
             return UserAttendance.GetUserAttendanceList();
         }
 
-        public Task<UserResponceModel> GetUserAttendanceInTime(UserAttendanceRequestModel userAttendance)
+        public Task<UserAttendanceResponseModel> GetUserAttendanceInTime(UserAttendanceRequestModel userAttendance)
         {
             return UserAttendance.GetUserAttendanceInTime(userAttendance);
         }
