@@ -118,5 +118,31 @@ namespace EMPManagment.API.Controllers
             }
             return StatusCode(responseModel.Code, responseModel);
         }
+
+        [HttpGet]
+        [Route("UserBirsthDayWish")]
+
+        public async Task<IActionResult> UserBirsthDayWish(Guid id)
+        {
+            UserResponceModel response = new UserResponceModel();
+
+            var user = await UserDetails.UserBirsthDayWish(id);
+            try
+            {
+
+                if (user.Code == 200)
+                {
+                    response.Message = user.Message;
+                    response.Code = (int)HttpStatusCode.OK;
+
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                response.Code = (int)HttpStatusCode.InternalServerError;
+            }
+            return StatusCode(response.Code, response);
+        }
     }
 }
