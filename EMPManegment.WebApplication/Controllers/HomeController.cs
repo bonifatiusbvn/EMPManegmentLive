@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using NuGet.Common;
 using NuGet.Protocol.Plugins;
 using System;
+using static Microsoft.AspNetCore.Razor.Language.TagHelperMetadata;
 
 namespace EMPManegment.Web.Controllers
 {
@@ -91,7 +92,6 @@ namespace EMPManegment.Web.Controllers
                 {
                     UserId = Guid.Parse(Userid),
                     Date = DateTime.Now,
-                    
                 };
                 ApiResponseModel postuser = await APIServices.PostAsync(userAttendance, "UserHome/GetUserAttendanceInTime");
                 UserAttendanceResponseModel responseModel = new UserAttendanceResponseModel();
@@ -99,8 +99,69 @@ namespace EMPManegment.Web.Controllers
                 {
                     var data = JsonConvert.SerializeObject(postuser.data);
                     responseModel.Data = JsonConvert.DeserializeObject<UserAttendanceModel>(data);
-                    return Ok(new { Data = responseModel.Data.Intime.ToShortTimeString() });
+                    return Ok(new { Data = responseModel.Data.Intime.ToShortTimeString()});
+                }
+                else
+                {
+                    return new JsonResult(new { Message = string.Format(postuser.message), Code = postuser.code });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
 
+        [HttpPost]
+        public async Task<IActionResult> GetUserAttendanceOutTime()
+        {
+            try
+            {
+                string Userid = HttpContext.Session.GetString("UserID");
+                UserAttendanceRequestModel userAttendance = new UserAttendanceRequestModel
+                {
+                    UserId = Guid.Parse(Userid),
+                    Date = DateTime.Now,
+                };
+                ApiResponseModel postuser = await APIServices.PostAsync(userAttendance, "UserHome/GetUserAttendanceInTime");
+                UserAttendanceResponseModel responseModel = new UserAttendanceResponseModel();
+                if (postuser.code == 200)
+                {
+                    var data = JsonConvert.SerializeObject(postuser.data);
+                    responseModel.Data = JsonConvert.DeserializeObject<UserAttendanceModel>(data);
+
+                    return Ok(new { Data = responseModel.Data.OutTime});
+                }
+                else
+                {
+                    return new JsonResult(new { Message = string.Format(postuser.message), Code = postuser.code });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> GetUserTotalHour()
+        {
+            try
+            {
+                string Userid = HttpContext.Session.GetString("UserID");
+                UserAttendanceRequestModel userAttendance = new UserAttendanceRequestModel
+                {
+                    UserId = Guid.Parse(Userid),
+                    Date = DateTime.Now,
+                };
+                ApiResponseModel postuser = await APIServices.PostAsync(userAttendance, "UserHome/GetUserAttendanceInTime");
+                UserAttendanceResponseModel responseModel = new UserAttendanceResponseModel();
+                if (postuser.code == 200)
+                {
+                    var data = JsonConvert.SerializeObject(postuser.data);
+                    responseModel.Data = JsonConvert.DeserializeObject<UserAttendanceModel>(data);
+
+                    return Ok(new { Data = responseModel.Data.TotalHours});
                 }
                 else
                 {

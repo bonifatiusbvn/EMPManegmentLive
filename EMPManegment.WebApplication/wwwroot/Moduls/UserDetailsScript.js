@@ -1,6 +1,6 @@
-﻿
-
+﻿GetUserAttendanceOutTime();
 GetUserAttendanceInTime();
+GetUserTotalHour();
 
 function ActiveDeactive(UserName) {
     
@@ -103,7 +103,8 @@ function EnterOutTime() {
                 confirmButtonColor: '#3085d6',
                 confirmButtonText: 'OK'
             })
-           
+            GetUserAttendanceOutTime();
+            GetUserTotalHour();
         },
        
     })
@@ -148,10 +149,53 @@ function GetUserAttendanceInTime() {
         processData: false,
         contentType: false,
         success: function (Result) {
-
-            $("#todayintime").text(Result.data);
+            var datetime = Result.data;
+            var InTime = datetime.substr(0, 2);
+            let newformat = InTime >= 12 ? 'PM' : 'AM';
+            InTime = InTime % 12;
+            InTime = InTime ? InTime : 12;
+            var minutes = datetime.substr(2, 5);
+            $("#todayintime").text(InTime + minutes + ' ' + newformat);
 
         },
        
+    })
+}
+
+function GetUserAttendanceOutTime() {
+    debugger
+    $.ajax({
+        url: '/Home/GetUserAttendanceOutTime',
+        type: 'Post',
+        dataType: 'json',
+        processData: false,
+        contentType: false,
+        success: function (Result) {
+            debugger
+            var datetime = Result.data;
+            var Outtime = datetime.substr(11,2);
+            let newformat = Outtime >= 12 ? 'PM' : 'AM';
+            Outtime = Outtime % 12;
+            Outtime = Outtime ? Outtime : 12;
+            var minutes = datetime.substr(13, 3);
+            $("#todayouttime").text(Outtime + minutes  + ' ' + newformat);
+        },
+
+    })
+}
+
+function GetUserTotalHour()
+{
+    $.ajax({
+        url: '/Home/GetUserTotalHour',
+        type: 'Post',
+        dataType: 'json',
+        processData: false,
+        contentType: false,
+        success: function (Result) {
+            var datetime = Result.data;
+            var TotalHour = datetime.substr(0,5);
+            $("#txttotalhours").text(TotalHour);
+        },
     })
 }
