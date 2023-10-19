@@ -169,6 +169,7 @@ function GetUserAttendanceInTime() {
 }
 
 function GetUserAttendanceOutTime() {
+    
     $.ajax({
         url: '/Home/GetUserAttendanceOutTime',
         type: 'Post',
@@ -176,6 +177,7 @@ function GetUserAttendanceOutTime() {
         processData: false,
         contentType: false,
         success: function (Result) {
+            
             var datetime = Result.data;
             if (datetime != null) {
                 var Outtime = datetime.substr(11, 2);
@@ -215,7 +217,7 @@ function GetUserTotalHour()
 }
 
 function UserBirsthDayWish() {
-    debugger
+    
     $.ajax({
         url: '/Home/UserBirsthDayWish',
         type: 'Get',
@@ -223,7 +225,7 @@ function UserBirsthDayWish() {
         processData: false,
         contentType: false,
         success: function (Result) {
-            debugger
+            
             Swal.fire(
                 {
                     html: '<div class="mt-3"><lord-icon src="https://cdn.lordicon.com/lupuorrc.json" trigger="loop" colors="primary:#0ab39c,secondary:#405189" style="width:120px;height:120px"></lord-icon><div class="mt-4 pt-2 fs-15"><h4>' + Result.message + '</h4></div></div>',

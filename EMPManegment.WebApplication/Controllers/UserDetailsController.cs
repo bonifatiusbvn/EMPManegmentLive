@@ -314,19 +314,19 @@ namespace EMPManegment.Web.Controllers
             }
         }
         [HttpPost]
-        public async Task<JsonResult> UpdateUserAttendanceOutTime(UserAttendanceModel userAttendance)
+        public async Task<IActionResult> UpdateUserAttendanceOutTime(UserAttendanceModel userAttendance)
         {
-            UserAttendanceModel attend = new UserAttendanceModel();
             try
             {
                 ApiResponseModel postuser = await APIServices.PostAsync(userAttendance, "UserDetails/UpdateUserOutTime");
                 if (postuser.code == 200)
                 {
-                    var identity = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, userAttendance.UserId.ToString()) }, CookieAuthenticationDefaults.AuthenticationScheme);
-                    var principal = new ClaimsPrincipal(identity);
-                    HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
                 }
-                return new JsonResult(attend);
+                else
+                {
+                    return new JsonResult(new { Message = string.Format(postuser.message), Code = postuser.code });
+                }
             }
             catch (Exception ex)
             {

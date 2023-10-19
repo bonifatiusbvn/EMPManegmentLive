@@ -31,7 +31,7 @@ namespace EMPManegment.Services.UserAttendance
             return UserAttendance.GetUserAttendanceInTime(userAttendance);
         }
 
-        public Task<UserAttendanceModel> UpdateUserOutTime(UserAttendanceModel userAttendance)
+        public Task<UserResponceModel> UpdateUserOutTime(UserAttendanceModel userAttendance)
         {
             return UserAttendance.UpdateUserOutTime(userAttendance);
         }

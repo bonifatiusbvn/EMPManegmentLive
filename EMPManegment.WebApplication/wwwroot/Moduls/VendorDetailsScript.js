@@ -1,6 +1,6 @@
 ﻿
 function AddVendorDetails() {
-    debugger
+    
     var objData = {
         VendorName: $("#VendorName").val(),
         VendorEmail: $("#VendorEmail").val(),

@@ -31,6 +31,10 @@ public partial class BonifatiusEmployeesContext : DbContext
 
     public virtual DbSet<TblState> TblStates { get; set; }
 
+    public virtual DbSet<TblTaskDetail> TblTaskDetails { get; set; }
+
+    public virtual DbSet<TblTaskMaster> TblTaskMasters { get; set; }
+
     public virtual DbSet<TblUser> TblUsers { get; set; }
 
     public virtual DbSet<TblUserDocument> TblUserDocuments { get; set; }
@@ -38,8 +42,7 @@ public partial class BonifatiusEmployeesContext : DbContext
     public virtual DbSet<TblVendorMaster> TblVendorMasters { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    { 
-    }
+    { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -134,6 +137,35 @@ public partial class BonifatiusEmployeesContext : DbContext
                 .HasForeignKey(d => d.CountryId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_tblState_tblCountry1");
+        });
+
+        modelBuilder.Entity<TblTaskDetail>(entity =>
+        {
+            entity.ToTable("tblTaskDetails");
+
+            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.CreatedBy).HasMaxLength(50);
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.TaskDate).HasColumnType("datetime");
+            entity.Property(e => e.TaskDetails).HasMaxLength(150);
+            entity.Property(e => e.TaskEndDate).HasColumnType("datetime");
+            entity.Property(e => e.TaskTitle).HasMaxLength(50);
+            entity.Property(e => e.UserName).HasMaxLength(20);
+
+            entity.HasOne(d => d.TaskTypeNavigation).WithMany(p => p.TblTaskDetails)
+                .HasForeignKey(d => d.TaskType)
+                .HasConstraintName("FK_tblTaskDetails_tblTaskMaster");
+
+            entity.HasOne(d => d.User).WithMany(p => p.TblTaskDetails)
+                .HasForeignKey(d => d.UserId)
+                .HasConstraintName("FK_tblTaskDetails_tblUsers");
+        });
+
+        modelBuilder.Entity<TblTaskMaster>(entity =>
+        {
+            entity.ToTable("tblTaskMaster");
+
+            entity.Property(e => e.TaskType).HasMaxLength(20);
         });
 
         modelBuilder.Entity<TblUser>(entity =>
