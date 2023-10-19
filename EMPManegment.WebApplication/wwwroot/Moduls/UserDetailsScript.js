@@ -169,7 +169,6 @@ function GetUserAttendanceInTime() {
 }
 
 function GetUserAttendanceOutTime() {
-    debugger
     $.ajax({
         url: '/Home/GetUserAttendanceOutTime',
         type: 'Post',
@@ -177,7 +176,6 @@ function GetUserAttendanceOutTime() {
         processData: false,
         contentType: false,
         success: function (Result) {
-            debugger
             var datetime = Result.data;
             if (datetime != null) {
                 var Outtime = datetime.substr(11, 2);
