@@ -182,6 +182,7 @@ namespace EMPManegment.Repository.UserListRepository
                         var outtime = Context.TblAttendances.Where(a => a.UserId == userAttendance.UserId && a.Date == DateTime.Today).FirstOrDefault();
                         outtime.OutTime = DateTime.Now;
                         outtime.CreatedOn = DateTime.Now;
+                        outtime.TotalHours = outtime.OutTime - outtime.Intime;
                         Context.TblAttendances.Update(outtime);
                         Context.SaveChanges();
                         response.Code = 200;
@@ -324,7 +325,7 @@ namespace EMPManegment.Repository.UserListRepository
                 {
 
                     string today = DateTime.Now.ToString("dd/MM");
-                    DateTime birthday = data.DateOfBirth;
+                    DateTime birthday = (DateTime)data.DateOfBirth;
                     string checkdate = birthday.ToString("dd/MM");
                     if (today == checkdate)
                     {
