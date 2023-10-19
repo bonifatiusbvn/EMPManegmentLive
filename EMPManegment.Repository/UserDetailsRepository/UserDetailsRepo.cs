@@ -158,7 +158,7 @@ namespace EMPManegment.Repository.UserListRepository
         public async Task<UserResponceModel> EnterOutTime(UserAttendanceModel userAttendance)
         {
             UserResponceModel response = new UserResponceModel();
-            var data = Context.TblAttendances.Where(a => a.UserId == userAttendance.UserId).OrderByDescending(a => a.CreatedOn).FirstOrDefault();;
+            var data = Context.TblAttendances.Where(a => a.UserId == userAttendance.UserId).OrderByDescending(a => a.Date).FirstOrDefault();;
             if (data.OutTime == null && data.Date != DateTime.Today)
             {
                 response.Message = "You Missed Out-Time of " + data.Date.ToShortDateString() + " " + "Kindly Contact Your Admin";
@@ -182,6 +182,7 @@ namespace EMPManegment.Repository.UserListRepository
                         var outtime = Context.TblAttendances.Where(a => a.UserId == userAttendance.UserId && a.Date == DateTime.Today).FirstOrDefault();
                         outtime.OutTime = DateTime.Now;
                         outtime.CreatedOn = DateTime.Now;
+                        outtime.TotalHours = outtime.OutTime - outtime.Intime;
                         Context.TblAttendances.Update(outtime);
                         Context.SaveChanges();
                         response.Code = 200;
@@ -324,8 +325,7 @@ namespace EMPManegment.Repository.UserListRepository
                 {
 
                     string today = DateTime.Now.ToString("dd/MM");
-                    DateTime birthday = data.DateOfBirth;
-                    string checkdate = birthday.ToString("dd/MM");
+                    string checkdate = data.DateOfBirth.ToString("dd/MM");
                     if (today == checkdate)
                     {
                         response.Message = "Bonifatius Wish You a Very Happy Birthday.." +" " + data.FirstName + " " + data.LastName +" "+ "Enjoy Your Day";

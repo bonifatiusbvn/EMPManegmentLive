@@ -151,12 +151,17 @@ function GetUserAttendanceInTime() {
         contentType: false,
         success: function (Result) {
             var datetime = Result.data;
-            var InTime = datetime.substr(0, 2);
-            let newformat = InTime >= 12 ? 'PM' : 'AM';
-            InTime = InTime % 12;
-            InTime = InTime ? InTime : 12;
-            var minutes = datetime.substr(2, 5);
-            $("#todayintime").text(InTime + minutes + ' ' + newformat);
+            if (datetime != null) {
+                var InTime = datetime.substr(0, 2);
+                let newformat = InTime >= 12 ? 'PM' : 'AM';
+                InTime = InTime % 12;
+                InTime = InTime ? InTime : 12;
+                var minutes = datetime.substr(2, 5);
+                $("#todayintime").text(InTime + minutes + ' ' + newformat);
+            }
+            else {
+                $("#todayintime").text("undefined");
+            }
 
         },
        
@@ -174,12 +179,17 @@ function GetUserAttendanceOutTime() {
         success: function (Result) {
             
             var datetime = Result.data;
-            var Outtime = datetime.substr(11,2);
-            let newformat = Outtime >= 12 ? 'PM' : 'AM';
-            Outtime = Outtime % 12;
-            Outtime = Outtime ? Outtime : 12;
-            var minutes = datetime.substr(13, 3);
-            $("#todayouttime").text(Outtime + minutes  + ' ' + newformat);
+            if (datetime != null) {
+                var Outtime = datetime.substr(11, 2);
+                let newformat = Outtime >= 12 ? 'PM' : 'AM';
+                Outtime = Outtime % 12;
+                Outtime = Outtime ? Outtime : 12;
+                var minutes = datetime.substr(13, 3);
+                $("#todayouttime").text(Outtime + minutes + ' ' + newformat);
+            }
+            else {
+                $("#todayouttime").text("Pending");
+            }
         },
 
     })
@@ -195,8 +205,13 @@ function GetUserTotalHour()
         contentType: false,
         success: function (Result) {
             var datetime = Result.data;
-            var TotalHour = datetime.substr(0,5);
-            $("#txttotalhours").text(TotalHour);
+            if (datetime != null) {
+                var TotalHour = datetime.substr(0, 5);
+                $("#txttotalhours").text(TotalHour);
+            }
+            else {
+                $("#txttotalhours").text("OutTime Pending" + " ");
+            }
         },
     })
 }

@@ -64,7 +64,7 @@ namespace EMPManegment.Repository.UserAttendanceRepository
                         UserId = data.UserId,
                         Date = data.Date,
                         Intime = data.Intime,
-                        TotalHours = data.OutTime - data.Intime,
+                        TotalHours = data.TotalHours,
                         CreatedBy = data.CreatedBy,
                         CreatedOn = data.CreatedOn,
                         OutTime = data.OutTime,
