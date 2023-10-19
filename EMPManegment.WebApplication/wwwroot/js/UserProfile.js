@@ -82,33 +82,33 @@ function UploadDocument() {
     });
 }
 
-$(function () {
-    $("#SubmitButton").click(function () {
-        var documents = $("#Documents");
-        if (documents.val() == "") {
-            //If the "Please Select" option is selected display error.
-            alert("Please select document!");
-            return false;
-        }
-        return true;
-    });
-});
+//$(function () {
+//    $("#SubmitButton").click(function () {
+//        var documents = $("#Documents");
+//        if (documents.val() == "") {
+//            //If the "Please Select" option is selected display error.
+//            alert("Please select document!");
+//            return false;
+//        }
+//        return true;
+//    });
+//});
 
-$("#formFile").validate({
-    onfocusout: function (e) {
-        this.element(e);
-    },
-    rules: {
-        resume: {
-            required: true,
-            extension: "pdf"
-        }
-    },
-    resume: {
-        required: "input type is required",
-        extension: "select valied input file format"
-    }
-});
+//$("#formFile").validate({
+//    onfocusout: function (e) {
+//        this.element(e);
+//    },
+//    rules: {
+//        resume: {
+//            required: true,
+//            extension: "pdf"
+//        }
+//    },
+//    resume: {
+//        required: "input type is required",
+//        extension: "select valied input file format"
+//    }
+//});
 
 
 //$(document).ready(function () {

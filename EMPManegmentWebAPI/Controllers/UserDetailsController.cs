@@ -169,8 +169,26 @@ namespace EMPManagment.API.Controllers
 
         public async Task<IActionResult> UpdateUserOutTime(UserAttendanceModel userAttendance)
         {
-            UserAttendanceModel updateTime = await UserAttendance.UpdateUserOutTime(userAttendance);
-            return Ok(new { code = 200, data = updateTime});
+            UserResponceModel response = new UserResponceModel();
+            try
+            {
+                var result = UserAttendance.UpdateUserOutTime(userAttendance);
+                if (result.Result.Code == 200)
+                {
+                    response.Code = (int)HttpStatusCode.OK;
+                    response.Message = result.Result.Message;
+                }
+                else
+                {
+                    response.Message = result.Result.Message;
+                    response.Code = (int)HttpStatusCode.NotFound;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return StatusCode(response.Code, response);
         }
 
         [HttpGet]

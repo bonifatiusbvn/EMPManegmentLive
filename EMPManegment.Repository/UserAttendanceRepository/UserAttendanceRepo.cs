@@ -13,7 +13,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static Microsoft.AspNetCore.Razor.Language.TagHelperMetadata;
 using static System.Runtime.InteropServices.JavaScript.JSType;
-
+using System.Net;
 
 namespace EMPManegment.Repository.UserAttendanceRepository
 {
@@ -86,24 +86,31 @@ namespace EMPManegment.Repository.UserAttendanceRepository
 
         }
 
-        public async Task<UserAttendanceModel> UpdateUserOutTime(UserAttendanceModel userAttendance)
+        public async Task<UserResponceModel> UpdateUserOutTime(UserAttendanceModel userAttendance)
         {
+            UserResponceModel response = new UserResponceModel();
             try
             {
-                var data = Context.TblAttendances.FirstOrDefault(a => a.UserId == userAttendance.UserId);
+                var data = Context.TblAttendances.FirstOrDefault(a => a.Id == userAttendance.AttendanceId);
                 if (data != null)
                 {
                     data.OutTime = userAttendance.OutTime;
-
+                    response.Code = (int)HttpStatusCode.OK;
+                    response.Message = "User OutTime Successfully Updated";
                     Context.TblAttendances.Update(data);
                     Context.SaveChanges();
                 }
-                return userAttendance;
+                else
+                {
+                    response.Code = (int)HttpStatusCode.NotFound;
+                    response.Message = "There is some problem in your Request!!";
+                }
             }
             catch (Exception ex)
             {
                 throw ex;
             }
+            return response;
         }
 
         public async Task<IEnumerable<UserAttendanceModel>> GetUserAttendanceById(int attendanceId)
