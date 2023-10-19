@@ -151,12 +151,17 @@ function GetUserAttendanceInTime() {
         contentType: false,
         success: function (Result) {
             var datetime = Result.data;
-            var InTime = datetime.substr(0, 2);
-            let newformat = InTime >= 12 ? 'PM' : 'AM';
-            InTime = InTime % 12;
-            InTime = InTime ? InTime : 12;
-            var minutes = datetime.substr(2, 5);
-            $("#todayintime").text(InTime + minutes + ' ' + newformat);
+            if (datetime != null) {
+                var InTime = datetime.substr(0, 2);
+                let newformat = InTime >= 12 ? 'PM' : 'AM';
+                InTime = InTime % 12;
+                InTime = InTime ? InTime : 12;
+                var minutes = datetime.substr(2, 5);
+                $("#todayintime").text(InTime + minutes + ' ' + newformat);
+            }
+            else {
+                $("#todayintime").text("undefined");
+            }
 
         },
        
@@ -164,7 +169,7 @@ function GetUserAttendanceInTime() {
 }
 
 function GetUserAttendanceOutTime() {
-    debugger
+    
     $.ajax({
         url: '/Home/GetUserAttendanceOutTime',
         type: 'Post',
@@ -172,14 +177,19 @@ function GetUserAttendanceOutTime() {
         processData: false,
         contentType: false,
         success: function (Result) {
-            debugger
+            
             var datetime = Result.data;
-            var Outtime = datetime.substr(11,2);
-            let newformat = Outtime >= 12 ? 'PM' : 'AM';
-            Outtime = Outtime % 12;
-            Outtime = Outtime ? Outtime : 12;
-            var minutes = datetime.substr(13, 3);
-            $("#todayouttime").text(Outtime + minutes  + ' ' + newformat);
+            if (datetime != null) {
+                var Outtime = datetime.substr(11, 2);
+                let newformat = Outtime >= 12 ? 'PM' : 'AM';
+                Outtime = Outtime % 12;
+                Outtime = Outtime ? Outtime : 12;
+                var minutes = datetime.substr(13, 3);
+                $("#todayouttime").text(Outtime + minutes + ' ' + newformat);
+            }
+            else {
+                $("#todayouttime").text("Pending");
+            }
         },
 
     })
@@ -195,14 +205,19 @@ function GetUserTotalHour()
         contentType: false,
         success: function (Result) {
             var datetime = Result.data;
-            var TotalHour = datetime.substr(0,5);
-            $("#txttotalhours").text(TotalHour);
+            if (datetime != null) {
+                var TotalHour = datetime.substr(0, 5);
+                $("#txttotalhours").text(TotalHour);
+            }
+            else {
+                $("#txttotalhours").text("OutTime Pending" + " ");
+            }
         },
     })
 }
 
 function UserBirsthDayWish() {
-    debugger
+    
     $.ajax({
         url: '/Home/UserBirsthDayWish',
         type: 'Get',
@@ -210,7 +225,7 @@ function UserBirsthDayWish() {
         processData: false,
         contentType: false,
         success: function (Result) {
-            debugger
+            
             Swal.fire(
                 {
                     html: '<div class="mt-3"><lord-icon src="https://cdn.lordicon.com/lupuorrc.json" trigger="loop" colors="primary:#0ab39c,secondary:#405189" style="width:120px;height:120px"></lord-icon><div class="mt-4 pt-2 fs-15"><h4>' + Result.message + '</h4></div></div>',
