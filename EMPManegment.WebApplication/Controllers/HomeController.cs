@@ -1,7 +1,9 @@
 ﻿using Azure;
 using EMPManagment.Web.Helper;
 using EMPManagment.Web.Models.API;
+using EMPManegment.EntityModels.ViewModels;
 using EMPManegment.EntityModels.ViewModels.Models;
+using EMPManegment.EntityModels.ViewModels.TaskModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -193,6 +195,27 @@ namespace EMPManegment.Web.Controllers
                 {
                     return new JsonResult("");
                 }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<JsonResult> GetTaskType()
+        {
+
+            try
+            {
+                List<TaskTypeView> taskDeals = new List<TaskTypeView>();
+                HttpClient client = WebAPI.Initil();
+                ApiResponseModel res = await APIServices.GetAsync(null, "UserHome/GetTaskType");
+                if (res.code == 200)
+                {
+                    taskDeals = JsonConvert.DeserializeObject<List<TaskTypeView>>(res.data.ToString());
+                }
+                return new JsonResult(taskDeals);
+
             }
             catch (Exception ex)
             {

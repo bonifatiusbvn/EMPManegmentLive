@@ -460,15 +460,11 @@
                 <form class="needs-validation" novalidate="" id="deals-form" onsubmit="return false">
                     <div class="modal-body">
                         <div class="mb-3">
-                            <label for="deatType" class="form-label">Task Type</label>
-                            <select class="form-select" id="deatType" data-choices="" aria-label="Default select example" required="">
-                                <option value="" data-custom-properties="[object Object]">Select deals type</option>
-                                <option value="Lead Disovered">Lead Disovered</option>
-                                <option value="Contact Initiated">Contact Initiated</option>
-                                <option value="Need Identified">Need Identified</option>
-                                <option value="Meeting Arranged">Meeting Arranged</option>
-                                <option value="Offer Accepted">Offer Accepted</option>
+                            <label for="dealType" class="form-label">Task Type</label>
+                            <select class="form-control" id="dealType">
+                                <option>--Select deals type--</option>
                             </select>
+                            <input type="hidden" id="txtDealType" class="form-control" value="" />
                             <div class="invalid-feedback">
                                 Please write an deals owner name.
                             </div>
@@ -523,6 +519,8 @@
 
 </div>
 
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/moduls/taskscript.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script>
     config = {

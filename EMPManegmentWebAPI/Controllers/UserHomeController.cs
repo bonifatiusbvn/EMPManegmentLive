@@ -1,6 +1,9 @@
 ﻿using EMPManagment.Web.Models.API;
 using EMPManegment.EntityModels.View_Model;
+using EMPManegment.EntityModels.ViewModels;
 using EMPManegment.EntityModels.ViewModels.Models;
+using EMPManegment.EntityModels.ViewModels.TaskModels;
+using EMPManegment.Inretface.Services.TaskServices;
 using EMPManegment.Inretface.Services.UserAttendanceServices;
 using EMPManegment.Inretface.Services.UserListServices;
 using EMPManegment.Repository.UserAttendanceRepository;
@@ -15,14 +18,16 @@ namespace EMPManagment.API.Controllers
     [ApiController]
     public class UserHomeController : ControllerBase
     {
-        public UserHomeController(IUserDetailsServices userDetails,IUserAttendanceServices attendanceServices) 
+        public UserHomeController(IUserDetailsServices userDetails,IUserAttendanceServices attendanceServices,ITaskServices taskServices) 
         {
             UserDetails = userDetails;
             AttendanceServices = attendanceServices;
+            TaskServices = taskServices;
         }
 
         public IUserDetailsServices UserDetails { get; }
         public IUserAttendanceServices AttendanceServices { get; }
+        public ITaskServices TaskServices { get; }
 
         [HttpPost]
         [Route("InsertINTime")]
@@ -143,6 +148,14 @@ namespace EMPManagment.API.Controllers
                 response.Code = (int)HttpStatusCode.InternalServerError;
             }
             return StatusCode(response.Code, response);
+        }
+
+        [HttpGet]
+        [Route("GetTaskType")]
+        public async Task<IActionResult> GetTaskType()
+        {
+            IEnumerable<TaskTypeView> taskDeals = await TaskServices.GetTaskType();
+            return Ok(new { code = 200, data = taskDeals.ToList() });
         }
     }
 }
