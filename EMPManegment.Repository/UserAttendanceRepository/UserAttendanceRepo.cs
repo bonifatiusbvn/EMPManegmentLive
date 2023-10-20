@@ -91,18 +91,34 @@ namespace EMPManegment.Repository.UserAttendanceRepository
             try
             {
                 var data = Context.TblAttendances.FirstOrDefault(a => a.Id == userAttendance.AttendanceId);
-                if (data != null)
+                if (data != null )
                 {
-                    data.OutTime = userAttendance.OutTime;
-                    response.Code = (int)HttpStatusCode.OK;
-                    response.Message = "User OutTime Successfully Updated";
-                    Context.TblAttendances.Update(data);
-                    Context.SaveChanges();
+                    string today = data.Date.ToString("dd/MM/yyyy");
+                    string checkdate = userAttendance.OutTime?.ToString("dd/MM/yyyy");
+
+                    if (today == checkdate)
+                    {
+                        data.OutTime = userAttendance.OutTime;
+                        data.TotalHours = data.OutTime - data.Intime;
+                        data.CreatedOn = DateTime.Today;
+                        response.Code = (int)HttpStatusCode.OK;
+                        response.Message = "User OutTime Successfully Updated";
+                        response.Icone = "success";
+                        Context.TblAttendances.Update(data);
+                        Context.SaveChanges();
+                    }
+                    else
+                    {
+                        response.Code = (int)HttpStatusCode.OK;
+                        response.Message = "Pleas Select Valid Date!!";
+                        response.Icone = "warning";
+                    }
+
                 }
                 else
                 {
-                    response.Code = (int)HttpStatusCode.NotFound;
-                    response.Message = "There is some problem in your Request!!";
+                    response.Message = "Pleas Select Valid Date!!";
+                    response.Icone = "warning";
                 }
             }
             catch (Exception ex)
