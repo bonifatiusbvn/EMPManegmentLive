@@ -41,9 +41,8 @@ namespace EMPManegment.Repository.UserAttendanceRepository
                                                          Date = a.Date,
                                                          Intime = a.Intime,
                                                          OutTime = a.OutTime,
-                                                         //TotalHours = a.TotalHours,
+                                                         TotalHours = a.TotalHours,
                                                          CreatedBy = a.CreatedBy,
-                                                         TotalHours = a.OutTime - a.Intime,
                                                          CreatedOn = a.CreatedOn,
                                                         
                                                      };

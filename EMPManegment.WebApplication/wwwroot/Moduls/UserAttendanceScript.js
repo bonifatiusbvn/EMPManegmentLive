@@ -13,27 +13,47 @@ function GetUserAttendance() {
             
             var object = '';
             $.each(result, function (index, item) {
+                
+                var userdate = new Date(item.date).toLocaleDateString('en-US');
+                var todate = new Date().toLocaleDateString('en-US');
                 object += '<tr>';
                 object += '<td>' + item.userName + '</td>';
                 object += '<td>' + (new Date(item.date)).toLocaleDateString('en-US') + '</td>';
                 object += '<td>' + (new Date(item.intime)).toLocaleTimeString('en-US') + '</td>';
                 //---------OutTime---------//
+                
                 if (item.outTime != null) {
                     object += '<td>' +
                         (new Date(item.outTime)).toLocaleTimeString('en-US') + '</td>';
                 }
+                
+                else if (item.outTime == null && userdate == todate)
+                {
+                    object += '<td>' +
+                        ("Pending") + '</td>';
+
+                }
+
+
                 else {
                     object += '<td>' +
-                        item.outTime + '</td>';
+                        ("Missing") + '</td>';
                 }
                 //---------TotalHours--------//
+                debugger
                 if (item.totalHours != null) {
                     object += '<td>' +
                         (item.totalHours?.substr(0, 8)) + ('hr') + '</td>';
                 }
+
+                else if (item.totalHours == null && userdate == today) {
+                    object += '<td>' +
+                        ("Pending") + '</td>';
+
+                }
                 else {
                     object += '<td>' +
-                        item.totalHours + '</td>';
+                        ("Missing") + '</td>';
                 }
                 object += '<td><a class="btn btn-sm btn-primary edit-item-btn" onclick="EditUserAttendance(\'' + item.attendanceId + '\')">EditTime</a></td>';
                 object += '</tr>';
