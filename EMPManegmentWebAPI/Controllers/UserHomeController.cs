@@ -113,8 +113,9 @@ namespace EMPManagment.API.Controllers
                 }
                 else
                 {
-                    responseModel.Message = user.Message;
-
+                    responseModel.Code = user.Code;
+                    
+                   
                 }
             }
             catch (Exception ex)
@@ -138,6 +139,11 @@ namespace EMPManagment.API.Controllers
                 if (user.Code == 200)
                 {
                     response.Message = user.Message;
+                    response.Code = (int)HttpStatusCode.OK;
+
+                }
+                else
+                {
                     response.Code = (int)HttpStatusCode.OK;
 
                 }

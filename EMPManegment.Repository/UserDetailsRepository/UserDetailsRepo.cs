@@ -331,8 +331,13 @@ namespace EMPManegment.Repository.UserListRepository
                         response.Message = "Bonifatius Wish You a Very Happy Birthday.." +" " + data.FirstName + " " + data.LastName +" "+ "Enjoy Your Day";
                         response.Code = (int)HttpStatusCode.OK; 
                     }
+                    else
+                    {
+                        response.Code = (int)HttpStatusCode.OK;
 
                     }
+
+                }
                 
                 return response;
 
