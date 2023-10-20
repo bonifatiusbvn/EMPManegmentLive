@@ -5,9 +5,7 @@
 }
 
 
-<!-- One of the following themes -->
-<link rel="stylesheet" type="text/css" href="https://npmcdn.com/flatpickr/dist/themes/dark.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
 
 <div class="container-fluid">
 
@@ -486,7 +484,9 @@
                         </div>
                         <div class="mb-3">
                             <label for="dueDate" class="form-label">Task Start-Date</label>
-                            <input type="datetime-local" class="form-control">
+                            <el-date-picker v-model="value1"
+                                            type="datetime"
+                                            placeholder="Select date and time" />
                             <div class="invalid-feedback">
                                 Please select a due date.
                             </div>
@@ -519,15 +519,3 @@
 
 </div>
 
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script src="~/moduls/taskscript.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-<script>
-    config = {
-        enableTime: true,
-        altFormat: "F j, Y",
-        dateFormat: "Y-m-d H:m:s",
-    }
-
-    flatpickr("input[type=datetime-local]", config);
-</script>
