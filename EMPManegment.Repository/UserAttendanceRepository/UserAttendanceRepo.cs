@@ -72,7 +72,10 @@ namespace EMPManegment.Repository.UserAttendanceRepository
                     response.Code = 200;
                     response.Data = attendanceModel;
                 }
-                
+                else
+                {
+                    response.Code = 200;
+                }  
                 return response;
 
             }

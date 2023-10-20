@@ -97,15 +97,15 @@ namespace EMPManegment.Web.Controllers
                 };
                 ApiResponseModel postuser = await APIServices.PostAsync(userAttendance, "UserHome/GetUserAttendanceInTime");
                 UserAttendanceResponseModel responseModel = new UserAttendanceResponseModel();
-                if (postuser.code == 200)
+                if (postuser.data != null)
                 {
                     var data = JsonConvert.SerializeObject(postuser.data);
                     responseModel.Data = JsonConvert.DeserializeObject<UserAttendanceModel>(data);
-                    return Ok(new { Data = responseModel.Data.Intime.ToShortTimeString()});
+                    return Ok(new {responseModel.Data});
                 }
                 else
                 {
-                    return new JsonResult(new { Message = string.Format(postuser.message), Code = postuser.code });
+                    return Ok(new { responseModel.Code }); ;
                 }
             }
             catch (Exception ex)
@@ -114,68 +114,7 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
-        [HttpPost]
-        public async Task<IActionResult> GetUserAttendanceOutTime()
-        {
-            try
-            {
-                string Userid = HttpContext.Session.GetString("UserID");
-                UserAttendanceRequestModel userAttendance = new UserAttendanceRequestModel
-                {
-                    UserId = Guid.Parse(Userid),
-                    Date = DateTime.Now,
-                };
-                ApiResponseModel postuser = await APIServices.PostAsync(userAttendance, "UserHome/GetUserAttendanceInTime");
-                UserAttendanceResponseModel responseModel = new UserAttendanceResponseModel();
-                if (postuser.code == 200)
-                {
-                    var data = JsonConvert.SerializeObject(postuser.data);
-                    responseModel.Data = JsonConvert.DeserializeObject<UserAttendanceModel>(data);
-
-                    return Ok(new { Data = responseModel.Data.OutTime});
-                }
-                else
-                {
-                    return new JsonResult(new { Message = string.Format(postuser.message), Code = postuser.code });
-                }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> GetUserTotalHour()
-        {
-            try
-            {
-                string Userid = HttpContext.Session.GetString("UserID");
-                UserAttendanceRequestModel userAttendance = new UserAttendanceRequestModel
-                {
-                    UserId = Guid.Parse(Userid),
-                    Date = DateTime.Now,
-                };
-                ApiResponseModel postuser = await APIServices.PostAsync(userAttendance, "UserHome/GetUserAttendanceInTime");
-                UserAttendanceResponseModel responseModel = new UserAttendanceResponseModel();
-                if (postuser.code == 200)
-                {
-                    var data = JsonConvert.SerializeObject(postuser.data);
-                    responseModel.Data = JsonConvert.DeserializeObject<UserAttendanceModel>(data);
-
-                    return Ok(new { Data = responseModel.Data.TotalHours});
-                }
-                else
-                {
-                    return new JsonResult(new { Message = string.Format(postuser.message), Code = postuser.code });
-                }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
+        
 
         [HttpGet]
         public async Task<IActionResult> UserBirsthDayWish()
