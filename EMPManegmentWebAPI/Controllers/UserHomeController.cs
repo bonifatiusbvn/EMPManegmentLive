@@ -114,7 +114,7 @@ namespace EMPManagment.API.Controllers
                 else
                 {
                     responseModel.Message = user.Message;
-                   
+
                 }
             }
             catch (Exception ex)
@@ -141,7 +141,7 @@ namespace EMPManagment.API.Controllers
                     response.Code = (int)HttpStatusCode.OK;
 
                 }
-                
+
             }
             catch (Exception ex)
             {

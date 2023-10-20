@@ -226,16 +226,16 @@ function UserBirsthDayWish() {
         contentType: false,
         success: function (Result) {
             
-            Swal.fire(
-                {
-                    html: '<div class="mt-3"><lord-icon src="https://cdn.lordicon.com/lupuorrc.json" trigger="loop" colors="primary:#0ab39c,secondary:#405189" style="width:120px;height:120px"></lord-icon><div class="mt-4 pt-2 fs-15"><h4>' + Result.message + '</h4></div></div>',
-                    showCancelButton: !0,
-                    showConfirmButton: !1,
-                    cancelButtonClass: "btn btn-primary w-xs mb-1",
-                    cancelButtonText: "Thank You",
-                    buttonsStyling: !1,
-                    showCloseButton: !0
-                })
+                Swal.fire(
+                    {
+                        html: '<div class="mt-3"><lord-icon src="https://cdn.lordicon.com/lupuorrc.json" trigger="loop" colors="primary:#0ab39c,secondary:#405189" style="width:120px;height:120px"></lord-icon><div class="mt-4 pt-2 fs-15"><h4>' + Result.message + '</h4></div></div>',
+                        showCancelButton: !0,
+                        showConfirmButton: !1,
+                        cancelButtonClass: "btn btn-primary w-xs mb-1",
+                        cancelButtonText: "Thank You",
+                        buttonsStyling: !1,
+                        showCloseButton: !0
+                    })
         },
 
     })

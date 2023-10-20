@@ -73,6 +73,8 @@ namespace EMPManegment.Web.Controllers
                             new Claim("Fullname", usermodel.Data.FullName),
                             new Claim("UserName", usermodel.Data.UserName),
                             new Claim("ProfileImage", usermodel.Data.ProfileImage),
+                            new Claim("IsAdmin", usermodel.Data.IsAdmin.ToString()),
+
                         };
 
                         var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
@@ -82,6 +84,7 @@ namespace EMPManegment.Web.Controllers
                         HttpContext.Session.SetString("FullName", usermodel.Data.FullName);
                         HttpContext.Session.SetString("UserName", usermodel.Data.UserName);
                         HttpContext.Session.SetString("ProfileImage", usermodel.Data.ProfileImage);
+                        HttpContext.Session.SetString("IsAdmin", usermodel.Data.IsAdmin.ToString());
                         return RedirectToAction("UserHome", "Home");
                     }  
                    
