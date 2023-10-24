@@ -1,4 +1,5 @@
-﻿using EMPManegment.EntityModels.ViewModels.TaskModels;
+﻿using EMPManegment.EntityModels.ViewModels.Models;
+using EMPManegment.EntityModels.ViewModels.TaskModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,6 @@ namespace EMPManegment.Inretface.Services.TaskServices
     public interface ITaskServices
     {
         Task<IEnumerable<TaskTypeView>> GetTaskType();
-        Task<TaskDetailsResponseModel> AddTaskDetails(TaskDetailsView task);
+        Task<UserResponceModel> AddTaskDetails(TaskDetailsView task);
     }
 }

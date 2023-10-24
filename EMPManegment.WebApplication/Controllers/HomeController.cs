@@ -194,7 +194,7 @@ namespace EMPManegment.Web.Controllers
                         TaskEndDate = task.TaskEndDate,
                     };
                     ApiResponseModel postuser = await APIServices.PostAsync(data, "UserHome/AddTaskDetails");
-                    TaskDetailsResponseModel responseModel = new TaskDetailsResponseModel();
+                    UserResponceModel responseModel = new UserResponceModel();
                     if (postuser.code == 200)
                     {
                         return Ok(new { postuser.message });
