@@ -1,6 +1,7 @@
 ﻿using EMPManagment.API;
 using EMPManegment.EntityModels.View_Model;
 using EMPManegment.EntityModels.ViewModels;
+using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.TaskModels;
 using EMPManegment.Inretface.Interface.TaskDetails;
 using System;
@@ -38,9 +39,9 @@ namespace EMPManegment.Repository.TaskRepository
             }
         }
 
-        public async Task<TaskDetailsResponseModel> AddTaskDetails(TaskDetailsView task)
+        public async Task<UserResponceModel> AddTaskDetails(TaskDetailsView task)
         {
-            TaskDetailsResponseModel response = new TaskDetailsResponseModel();
+            UserResponceModel response = new UserResponceModel();
             try
             {
                 if(task!= null)

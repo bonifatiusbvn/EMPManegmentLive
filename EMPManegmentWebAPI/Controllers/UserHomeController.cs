@@ -168,7 +168,7 @@ namespace EMPManagment.API.Controllers
         [Route("AddTaskDetails")]
         public async Task<IActionResult> AddTaskDetails(TaskDetailsView task)
         {
-            TaskDetailsResponseModel response = new TaskDetailsResponseModel();
+            UserResponceModel response = new UserResponceModel();
             try
             {
                 var result = TaskServices.AddTaskDetails(task);

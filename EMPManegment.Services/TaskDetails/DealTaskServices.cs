@@ -1,4 +1,5 @@
-﻿using EMPManegment.EntityModels.ViewModels.TaskModels;
+﻿using EMPManegment.EntityModels.ViewModels.Models;
+using EMPManegment.EntityModels.ViewModels.TaskModels;
 using EMPManegment.Inretface.Interface.TaskDetails;
 using EMPManegment.Inretface.Services.TaskServices;
 using System;
@@ -30,7 +31,7 @@ namespace EMPManegment.Services.TaskDetails
                 throw ex;
             }
         }
-        public async Task<TaskDetailsResponseModel> AddTaskDetails(TaskDetailsView task)
+        public async Task<UserResponceModel> AddTaskDetails(TaskDetailsView task)
         {
             return await TaskDetails.AddTaskDetails(task);
         }
