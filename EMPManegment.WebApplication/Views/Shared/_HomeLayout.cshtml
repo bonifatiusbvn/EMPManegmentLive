@@ -1081,33 +1081,41 @@
                                 </ul>
                             </div>
                         </li>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            if (User.IsInRole("Admin"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link menu-link" href="#sidebarPages" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarPages">
+                                        <i data-feather="command" class="icon-dual"></i> <span data-key="t-pages">Pages</span>
+                                    </a>
+                                    <div class="collapse menu-dropdown" id="sidebarPages">
+                                        <ul class="nav nav-sm flex-column">
 
-                        <li class="nav-item">
-                            <a class="nav-link menu-link" href="#sidebarPages" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarPages">
-                                <i data-feather="command" class="icon-dual"></i> <span data-key="t-pages">Pages</span>
-                            </a>
-                            <div class="collapse menu-dropdown" id="sidebarPages">
-                                <ul class="nav nav-sm flex-column">
-                                    <li class="nav-item">
-                                        <a class="nav-link" data-key="t-user-list" asp-action="DisplayUserList" asp-controller="UserDetails">User List </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" data-key="t-user-list" asp-action="DisplayVendorList" asp-controller="Vendor">Vendor List </a>
-                                    </li>
-                                   
-                                    <li class="nav-item">
-                                        <a asp-action="UserActiveDecative" asp-controller="UserDetails" class="nav-link" data-key="t-team">ActiveDeactive</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a asp-action="GetUsersListById" asp-controller="UserDetails" class="nav-link" data-key="t-timeline">GetUserAttendance</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a asp-action="AddVandorDetails" asp-controller="Vendor" class="nav-link" data-key="t-faqs">Add-Vendors</a>
-                                    </li>
-                                   
-                                </ul>
-                            </div>
-                        </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" data-key="t-user-list" asp-action="DisplayUserList" asp-controller="UserDetails">User List </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" data-key="t-user-list" asp-action="DisplayVendorList" asp-controller="Vendor">Vendor List </a>
+                                            </li>
+
+                                            <li class="nav-item">
+                                                <a asp-action="UserActiveDecative" asp-controller="UserDetails" class="nav-link" data-key="t-team">ActiveDeactive</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a asp-action="GetUsersListById" asp-controller="UserDetails" class="nav-link" data-key="t-timeline">GetUserAttendance</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a asp-action="AddVandorDetails" asp-controller="Vendor" class="nav-link" data-key="t-faqs">Add-Vendors</a>
+                                            </li>
+
+                                        </ul>
+                                    </div>
+                                </li>
+
+                            }
+                        }
+                       
 
                         @* <li class="nav-item">
                             <a class="nav-link menu-link" href="#sidebarLanding" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarLanding">

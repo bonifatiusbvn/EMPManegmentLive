@@ -105,7 +105,7 @@ namespace EMPManegment.Web.Controllers
                 }
                 else
                 {
-                    return Ok(new { responseModel.Code }); ;
+                    return Ok(new { postuser.code }); ;
                 }
             }
             catch (Exception ex)
@@ -125,14 +125,14 @@ namespace EMPManegment.Web.Controllers
                 Guid UserId = Guid.Parse(Userid);
                 ApiResponseModel postuser = await APIServices.GetAsyncId(UserId,"UserHome/UserBirsthDayWish");
                 UserAttendanceResponseModel responseModel = new UserAttendanceResponseModel();
-                if (postuser.code == 200)
+                if (postuser.message != null)
                 {
                     return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
                 }
 
                 else
                 {
-                    return new JsonResult("");
+                    return Ok(new { postuser.code }); ;
                 }
             }
             catch (Exception ex)

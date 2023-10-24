@@ -34,7 +34,7 @@ namespace EMPManegment.WebApplication.Controllers
         {
             return View();
         }
-        public async Task<IActionResult> AddEmpDetails()
+        public async Task<IActionResult> AddEmpDetail()
         {
             try
             { 
@@ -56,51 +56,61 @@ namespace EMPManegment.WebApplication.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddEmpDetails(LoginDetailsView emp)
+        public async Task<IActionResult> AddEmpDetail(LoginDetailsView emp)
         {
             try
             {
-                var path = Environment.WebRootPath;
-                var filepath = "Content/Image/" + emp.Image.FileName;
-                var fullpath = Path.Combine(path, filepath);
-                UploadFile(emp.Image, fullpath);
-                Crypto.Hash(emp.Password,
-                    out byte[] passwordHash,
-                    out byte[] passwordSalt);
-                var data = new EmpDetailsView()
+                if (ModelState.IsValid)
                 {
-                    UserName = emp.UserName,
-                    DepartmentId = emp.DepartmentId,
-                    FirstName = emp.FirstName,
-                    LastName = emp.LastName,
-                    Address = emp.Address,
-                    CityId = emp.CityId,
-                    StateId = emp.StateId,
-                    CountryId = emp.CountryId,
-                    DateOfBirth = emp.DateOfBirth,
-                    Email = emp.Email,
-                    Gender = emp.Gender,
-                    PhoneNumber = emp.PhoneNumber,
-                    CreatedOn = DateTime.Now,
-                    PasswordHash = passwordHash,
-                    PasswordSalt = passwordSalt,
-                    Image = filepath,
-                    IsActive = emp.IsActive,
-                };
-                ApiResponseModel postuser = await APIServices.PostAsync(data,"AddEmp/AddEmployees");
-                ViewBag.Name = HttpContext.Session.GetString("UserName");
-                if (postuser.code == 200)
-                {
-                    var identity = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, emp.UserName) }, CookieAuthenticationDefaults.AuthenticationScheme);
-                    var principal = new ClaimsPrincipal(identity);
-                    HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
-                    return RedirectToAction("Login", "UserLogin");
+                    var path = Environment.WebRootPath;
+                    var filepath = "Content/Image/" + emp.Image.FileName;
+                    var fullpath = Path.Combine(path, filepath);
+                    UploadFile(emp.Image, fullpath);
+                    Crypto.Hash(emp.Password,
+                        out byte[] passwordHash,
+                        out byte[] passwordSalt);
+                    var data = new EmpDetailsView()
+                    {
+                        UserName = emp.UserName,
+                        DepartmentId = emp.DepartmentId,
+                        FirstName = emp.FirstName,
+                        LastName = emp.LastName,
+                        Address = emp.Address,
+                        CityId = emp.CityId,
+                        StateId = emp.StateId,
+                        CountryId = emp.CountryId,
+                        DateOfBirth = emp.DateOfBirth,
+                        Email = emp.Email,
+                        Gender = emp.Gender,
+                        PhoneNumber = emp.PhoneNumber,
+                        CreatedOn = DateTime.Now,
+                        PasswordHash = passwordHash,
+                        PasswordSalt = passwordSalt,
+                        Image = filepath,
+                        IsActive = emp.IsActive,
+                    };
+                    ApiResponseModel postuser = await APIServices.PostAsync(data, "AddEmp/AddEmployees");
+                    ViewBag.Name = HttpContext.Session.GetString("UserName");
+                    if (postuser.code == 200)
+                    {
+                        var identity = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, emp.UserName) }, CookieAuthenticationDefaults.AuthenticationScheme);
+                        var principal = new ClaimsPrincipal(identity);
+                        HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+                        return RedirectToAction("Login", "UserLogin");
+                    }
+                    else
+                    {
+                        TempData["ErrorMessage"] = postuser.message;
+                        return View();
+                    }
                 }
-                else
+                HttpClient client = WebAPI.Initil();
+                ApiResponseModel res = await APIServices.GetAsync("", "AddEmp/CheckUser");
+                if (res.code == 200)
                 {
-                    TempData["ErrorMessage"] = postuser.message;
-                    return View();
+                    ViewBag.EmpId = res.data;
                 }
+                return View();  
             }
             catch (Exception ex)
             {

@@ -69,14 +69,7 @@ namespace EMPManegment.EntityModels.View_Model
 
 
     }
-    public class EmpDetailsResponseModel
-    {
-        public string Message { get; set; }
 
-        public int Code { get; set; }
-        public EmpDetailsView Data { get; set; }
-
-    }
 
 
 }

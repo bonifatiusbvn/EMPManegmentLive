@@ -238,6 +238,12 @@ namespace EMPManegment.Web.Controllers
         }
         public async Task<IActionResult> LockScreen()
         {
+            HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            var StoredCookies = Request.Cookies.Keys;
+            foreach (var Cookie in StoredCookies)
+            {
+                Response.Cookies.Delete(Cookie);
+            }
             return View();
         }
 
