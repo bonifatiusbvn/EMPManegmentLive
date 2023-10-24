@@ -44,6 +44,7 @@ namespace EMPManegment.Repository.UserListRepository
                                                  join ct in Context.TblCities on e.CityId equals ct.Id
                                                  select new EmpDetailsView
                                                  {
+                                                     Id = e.Id,
                                                      IsActive = e.IsActive,
                                                      UserName = e.UserName,
                                                      FirstName = e.FirstName,

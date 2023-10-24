@@ -1,10 +1,12 @@
 ﻿using EMPManagment.API;
+using EMPManegment.EntityModels.View_Model;
 using EMPManegment.EntityModels.ViewModels;
 using EMPManegment.EntityModels.ViewModels.TaskModels;
 using EMPManegment.Inretface.Interface.TaskDetails;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -34,6 +36,42 @@ namespace EMPManegment.Repository.TaskRepository
             {
                 throw ex;
             }
+        }
+
+        public async Task<TaskDetailsResponseModel> AddTaskDetails(TaskDetailsView task)
+        {
+            TaskDetailsResponseModel response = new TaskDetailsResponseModel();
+            try
+            {
+                if(task!= null)
+                {
+                    var model = new TblTaskDetail()
+                    {
+                        Id = Guid.NewGuid(),
+                        TaskType = task.TaskType,
+                        TaskTitle = task.TaskTitle,
+                        TaskDetails = task.TaskDetails,
+                        TaskDate = task.TaskDate,
+                        UserId = task.UserId,
+                        CreatedOn = DateTime.Now,
+                        TaskEndDate = task.TaskEndDate,
+                    };
+                    response.Code = 200;
+                    response.Message = "Task add successfully!";
+                    Context.TblTaskDetails.Add(model);
+                    Context.SaveChanges();
+                }
+                else
+                {
+                    response.Code = 200;
+                }
+                
+            }
+            catch (Exception ex) 
+            {
+                throw ex;
+            }
+            return response;
         }
     }
 }

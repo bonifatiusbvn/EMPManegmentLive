@@ -163,5 +163,31 @@ namespace EMPManagment.API.Controllers
             IEnumerable<TaskTypeView> taskDeals = await TaskServices.GetTaskType();
             return Ok(new { code = 200, data = taskDeals.ToList() });
         }
+
+        [HttpPost]
+        [Route("AddTaskDetails")]
+        public async Task<IActionResult> AddTaskDetails(TaskDetailsView task)
+        {
+            TaskDetailsResponseModel response = new TaskDetailsResponseModel();
+            try
+            {
+                var result = TaskServices.AddTaskDetails(task);
+                if (result.Result.Code == 200)
+                {
+                    response.Code = (int)HttpStatusCode.OK;
+                    response.Message = result.Result.Message;
+                }
+                else
+                {
+                    response.Message = result.Result.Message;
+                    response.Code = (int)HttpStatusCode.NotFound;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return StatusCode(response.Code, response);
+        }
     }
 }

@@ -10,5 +10,6 @@ namespace EMPManegment.Inretface.Services.TaskServices
     public interface ITaskServices
     {
         Task<IEnumerable<TaskTypeView>> GetTaskType();
+        Task<TaskDetailsResponseModel> AddTaskDetails(TaskDetailsView task);
     }
 }

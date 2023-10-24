@@ -4,13 +4,18 @@ using EMPManagment.Web.Models.API;
 using EMPManegment.EntityModels.ViewModels;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.TaskModels;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using NuGet.Common;
 using NuGet.Protocol.Plugins;
 using System;
+using System.Security.Claims;
 using static Microsoft.AspNetCore.Razor.Language.TagHelperMetadata;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using EMPManegment.EntityModels.View_Model;
 
 namespace EMPManegment.Web.Controllers
 {
@@ -105,7 +110,7 @@ namespace EMPManegment.Web.Controllers
                 }
                 else
                 {
-                    return Ok(new { responseModel.Code }); ;
+                    return Ok(new {postuser.code});
                 }
             }
             catch (Exception ex)
@@ -141,6 +146,7 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
+        [HttpGet]
         public async Task<JsonResult> GetTaskType()
         {
 
@@ -155,6 +161,71 @@ namespace EMPManegment.Web.Controllers
                 }
                 return new JsonResult(taskDeals);
 
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddTaskDetails()
+        {
+            try
+            {
+                var memberobj = HttpContext.Request.Form["MEMBERREQUEST"];
+
+                var task = JsonConvert.DeserializeObject<TaskDetailsView>(memberobj);
+
+
+
+                if (ModelState.IsValid)
+                {
+                    var data = new TaskDetailsView()
+                    {
+                        Id = task.Id,
+                        TaskType = task.TaskType,
+                        TaskTitle = task.TaskTitle,
+                        TaskDetails = task.TaskDetails,
+                        TaskDate = task.TaskDate,
+                        UserId = task.UserId,
+                        CreatedOn = task.CreatedOn,
+                        //CreatedBy = task.CreatedBy,
+                        TaskEndDate = task.TaskEndDate,
+                    };
+                    ApiResponseModel postuser = await APIServices.PostAsync(data, "UserHome/AddTaskDetails");
+                    TaskDetailsResponseModel responseModel = new TaskDetailsResponseModel();
+                    if (postuser.code == 200)
+                    {
+                        return Ok(new { postuser.message });
+                    }
+                    else
+                    {
+                        TempData["ErrorMessage"] = postuser.message;
+                        return Ok(new { postuser.code });
+                    }
+                }
+                return View(task);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpGet]
+        public async Task<JsonResult> GetUserName()
+        {
+            try
+            {
+                List<EmpDetailsView> userList = new List<EmpDetailsView>();
+                HttpClient client = WebAPI.Initil();
+                ApiResponseModel res = await APIServices.GetAsync("", "UserDetails/GetAllUserList");
+                if (res.code == 200)
+                {
+                    userList = JsonConvert.DeserializeObject<List<EmpDetailsView>>(res.data.ToString());
+                }
+                return new JsonResult(userList);
             }
             catch (Exception ex)
             {
