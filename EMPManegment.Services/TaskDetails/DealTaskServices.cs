@@ -30,5 +30,9 @@ namespace EMPManegment.Services.TaskDetails
                 throw ex;
             }
         }
+        public async Task<TaskDetailsResponseModel> AddTaskDetails(TaskDetailsView task)
+        {
+            return await TaskDetails.AddTaskDetails(task);
+        }
     }
 }

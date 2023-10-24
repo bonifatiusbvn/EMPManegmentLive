@@ -150,7 +150,6 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.Property(e => e.TaskDetails).HasMaxLength(150);
             entity.Property(e => e.TaskEndDate).HasColumnType("datetime");
             entity.Property(e => e.TaskTitle).HasMaxLength(50);
-            entity.Property(e => e.UserName).HasMaxLength(20);
 
             entity.HasOne(d => d.TaskTypeNavigation).WithMany(p => p.TblTaskDetails)
                 .HasForeignKey(d => d.TaskType)
