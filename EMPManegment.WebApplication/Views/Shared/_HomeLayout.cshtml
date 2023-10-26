@@ -1319,7 +1319,7 @@
                                         <a asp-action="UserActiveDecative" asp-controller="UserDetails" class="nav-link" data-key="t-team">ActiveDeactive</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="pages-timeline.html" class="nav-link" data-key="t-timeline"> Timeline </a>
+                                        <a asp-action="UserEditList" asp-controller="UserDetails" class="nav-link" data-key="t-timeline"> User Edit </a>
                                     </li>
                                     <li class="nav-item">
                                         <a href="pages-faqs.html" class="nav-link" data-key="t-faqs"> FAQs </a>
@@ -2029,6 +2029,7 @@
      
 
         <!-- JAVASCRIPT -->
+        <script src="~/js/useredit.js" asp-append-version="true"></script>
         <script src="~/UserHome/minimal/assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
         <script src="~/UserHome/minimal/assets/libs/simplebar/simplebar.min.js"></script>
         <script src="~/UserHome/minimal/assets/libs/node-waves/waves.min.js"></script>

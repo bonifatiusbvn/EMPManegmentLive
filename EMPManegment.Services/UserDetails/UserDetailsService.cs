@@ -1,4 +1,5 @@
 ﻿using EMPManegment.EntityModels.View_Model;
+using EMPManegment.EntityModels.ViewModels;
 using EMPManegment.Inretface.Interface.UserList;
 using EMPManegment.Inretface.Services.UserListServices;
 using System;
@@ -20,6 +21,21 @@ namespace EMPManegment.Services.UserList
         public async Task<IEnumerable<EmpDetailsView>> GetUsersList()
         {
             return await UserList.GetUsersList();
+        }
+
+        public async Task<IEnumerable<EmpDetailsView>> UserEdit()
+        {
+            return await UserList.UserEdit();
+        }
+
+        public async Task<EmpDetailsView> GetById(Guid id)
+        {
+            return await UserList.GetById(id);
+        }
+
+        public async Task<Guid> UpdateUser(UserEditViewModel employee)
+        {
+            return await UserList.UpdateUser(employee);
         }
     }
 }
