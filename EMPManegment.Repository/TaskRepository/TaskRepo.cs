@@ -62,10 +62,7 @@ namespace EMPManegment.Repository.TaskRepository
                     Context.TblTaskDetails.Add(model);
                     Context.SaveChanges();
                 }
-                else
-                {
-                    response.Code = 200;
-                }
+                
                 
             }
             catch (Exception ex) 

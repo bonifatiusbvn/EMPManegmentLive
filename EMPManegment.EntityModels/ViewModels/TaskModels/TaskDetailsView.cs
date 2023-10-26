@@ -14,6 +14,8 @@ namespace EMPManegment.EntityModels.ViewModels.TaskModels
 
         public int? TaskType { get; set; }
 
+
+        [Required]
         public string? TaskTitle { get; set; }
 
         public string? TaskDetails { get; set; }

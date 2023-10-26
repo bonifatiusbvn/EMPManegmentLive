@@ -1,4 +1,8 @@
-﻿
+﻿$(document).ready(function () {
+    GetTaskType();
+    GetUsername();
+    ClearTextBox();
+});
 function ClearTextBox() {
     $("#dealType").val(null);
     $("#dealTitle").val('');
@@ -30,27 +34,28 @@ function btnSaveTaskDetail() {
     debugger
     var formData = {};
     debugger
+    if ($('#frmtaskdetails').valid()) {
 
-    debugger
-    $('#frmtaskdetails').valid()
-    { 
-    formData = {
-        TaskType: $("#dealType").val(),
-        TaskTitle: $("#dealTitle").val(),
-        UserId: $("#ddlusername").val(),
-        TaskDate: $("#txtdatetime").val(),
-        TaskEndDate: $("#txtenddatetime").val(),
-        TaskDetails: $("#contactDescription").val()
-    };
-    AddTaskDetail(formData)
-    }
+        formData = {
+            TaskType: $("#dealType").val(),
+            TaskTitle: $("#dealTitle").val(),
+            UserId: $("#ddlusername").val(),
+            TaskDate: $("#txtdatetime").val(),
+            TaskEndDate: $("#txtenddatetime").val(),
+            TaskDetails: $("#contactDescription").val()
+        };
+
+        AddTaskDetail(formData)
+}
+        
+    
 }
 
 
 function AddTaskDetail(formData) {
     debugger
     var form_data = new FormData();
-    form_data.append("MEMBERREQUEST", JSON.stringify(formData));
+    form_data.append("ADDTASK", JSON.stringify(formData));
     debugger
     $.ajax({
         url: '/Home/AddTaskDetails',
@@ -92,9 +97,3 @@ function Usernametext(sel) {
     $("#txtguserid").val((sel.options[sel.selectedIndex].text));
 }
 
-$(document).ready(function () {
-    debugger
-    GetTaskType();
-    GetUsername();
-    ClearTextBox();
-});

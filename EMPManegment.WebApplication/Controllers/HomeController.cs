@@ -173,39 +173,22 @@ namespace EMPManegment.Web.Controllers
         {
             try
             {
-                var memberobj = HttpContext.Request.Form["MEMBERREQUEST"];
+                var usertask = HttpContext.Request.Form["ADDTASK"];
 
-                var task = JsonConvert.DeserializeObject<TaskDetailsView>(memberobj);
-
-
-
-                if (ModelState.IsValid)
-                {
-                    var data = new TaskDetailsView()
-                    {
-                        Id = task.Id,
-                        TaskType = task.TaskType,
-                        TaskTitle = task.TaskTitle,
-                        TaskDetails = task.TaskDetails,
-                        TaskDate = task.TaskDate,
-                        UserId = task.UserId,
-                        CreatedOn = task.CreatedOn,
-                        //CreatedBy = task.CreatedBy,
-                        TaskEndDate = task.TaskEndDate,
-                    };
-                    ApiResponseModel postuser = await APIServices.PostAsync(data, "UserHome/AddTaskDetails");
-                    UserResponceModel responseModel = new UserResponceModel();
+                var task = JsonConvert.DeserializeObject<TaskDetailsView>(usertask);
+                    
+                    ApiResponseModel postuser = await APIServices.PostAsync(task, "UserHome/AddTaskDetails");
                     if (postuser.code == 200)
                     {
                         return Ok(new { postuser.message });
                     }
                     else
                     {
-                        TempData["ErrorMessage"] = postuser.message;
+                       
                         return Ok(new { postuser.code });
                     }
-                }
-                return View(task);
+                
+            
             }
             catch (Exception ex)
             {
