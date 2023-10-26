@@ -165,6 +165,7 @@ namespace EMPManagment.API.Controllers
             IEnumerable<UserAttendanceModel> userList = await UserAttendance.GetUserAttendanceList();
             return Ok(new { code = 200, data = userList.ToList() });
         }
+
         [HttpGet]
         [Route("UserEdit")]
         public async Task<IActionResult> UserEdit()

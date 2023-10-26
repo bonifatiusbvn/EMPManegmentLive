@@ -69,10 +69,6 @@ namespace EMPManegment.Services.UserList
         {
             return await UserList.UserBirsthDayWish(UserId);
         }
-    }
-}
-
-
         public async Task<IEnumerable<EmpDetailsView>> UserEdit()
         {
             return await UserList.UserEdit();
@@ -89,3 +85,4 @@ namespace EMPManegment.Services.UserList
         }
     }
 }
+

@@ -348,28 +348,8 @@ namespace EMPManegment.Repository.UserListRepository
 
                 throw ex;
             }
-            IEnumerable<EmpDetailsView> data = Context.TblUsers.ToList().Select(a => new EmpDetailsView
-            {
-                Id = a.Id,
-                UserName = a.UserName,
-                FirstName = a.FirstName,
-                LastName = a.LastName,
-                Image = a.Image,
-                Gender = a.Gender,
-                DateOfBirth = a.DateOfBirth,
-                Email = a.Email,
-                PhoneNumber = a.PhoneNumber,
-                Address = a.Address,
-                CityId = a.CityId,
-                DepartmentId = a.DepartmentId,
-                StateId = a.StateId,
-                CountryId = a.CountryId,
-                IsActive = a.IsActive,
-            });
-            return data;
+            
         }
-    }
-}
 
         public async Task<IEnumerable<EmpDetailsView>> UserEdit()
         {
@@ -447,6 +427,7 @@ namespace EMPManegment.Repository.UserListRepository
             }
         }
     }
-    
 }
+
+      
 

@@ -19,7 +19,7 @@ namespace EMPManegment.EntityModels.ViewModels
         [Required]
         public string? Gender { get; set; }
         [Required]
-        public DateTime? DateOfBirth { get; set; }
+        public DateTime DateOfBirth { get; set; }
         [Required]
         public string? Email { get; set; }
         [Required]
