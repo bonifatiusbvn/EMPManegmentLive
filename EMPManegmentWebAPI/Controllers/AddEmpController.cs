@@ -1,6 +1,7 @@
 ﻿using EMPManagment.Web.Models.API;
 using EMPManegment.EntityModels.View_Model;
 using EMPManegment.EntityModels.ViewModels;
+using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.Inretface.EmployeesInterface.AddEmployee;
 using EMPManegment.Inretface.Services.AddEmployeeServies;
 using Microsoft.AspNetCore.Http;
@@ -39,24 +40,31 @@ namespace EMPManagment.API.Controllers
             return Ok(new { code = 200, data = dept.ToList() });
         }
 
+        [HttpGet]
+        [Route("GetById")]
+        public async Task<IActionResult> GetById(Guid Id)
+        {
+            var userProfile = await EmpDetails.GetById(Id);
+            return Ok(new { code = 200, data = userProfile });
+        }
+
 
         [HttpPost]
         [Route("AddEmployees")]
         public async Task<IActionResult> AddEmployees(EmpDetailsView emp)
         {
-            EmpDetailsResponseModel response = new EmpDetailsResponseModel();
+            UserResponceModel response = new UserResponceModel();
             try
             {
                 var result = EmpDetails.AddEmployee(emp);
                 if (result.Result.Code == 200)
                 {
                     response.Code = (int)HttpStatusCode.OK;
-                    response.Data = result.Result.Data;
+                  
                 }
                 else
                 {
                     response.Message = result.Result.Message;
-                    response.Code = (int)HttpStatusCode.NotFound;
                 }
             }
             catch (Exception ex)

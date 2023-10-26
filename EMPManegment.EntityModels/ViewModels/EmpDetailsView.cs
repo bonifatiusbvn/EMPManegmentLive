@@ -11,7 +11,7 @@ namespace EMPManegment.EntityModels.View_Model
 {
     public class EmpDetailsView
     {
-        public int Id { get; set; }
+        public Guid? Id { get; set; }
 
         public string? UserName { get; set; }
 
@@ -21,7 +21,8 @@ namespace EMPManegment.EntityModels.View_Model
 
         public string? Gender { get; set; }
 
-        public DateTime? DateOfBirth { get; set; }
+        public DateTime DateOfBirth { get; set; }
+        public DateTime? JoiningDate { get; set; }
 
         public string? Email { get; set; }
 
@@ -47,11 +48,6 @@ namespace EMPManegment.EntityModels.View_Model
 
         public bool? IsAdmin { get; set; }
 
-        public int QuestionId { get; set; }
-
-        public string? Answer { get; set; }
-
-
         public int? DepartmentId { get; set; }
 
         public DateTime? CreatedOn { get; set; }
@@ -63,16 +59,17 @@ namespace EMPManegment.EntityModels.View_Model
         public int? CountryId { get; set; }
 
         public string? Image { get; set; }
+        public string? CountryName { get; set; }
+        public string? StateName { get; set; }
+        public string? CityName { get; set; }
+        public string? DepartmentName { get; set; }
+
+        public string? DocumentType { get; set; }
+
+
 
     }
-    public class EmpDetailsResponseModel
-    {
-        public string Message { get; set; }
 
-        public int Code { get; set; }
-        public EmpDetailsView Data { get; set; }
-
-    }
 
 
 }

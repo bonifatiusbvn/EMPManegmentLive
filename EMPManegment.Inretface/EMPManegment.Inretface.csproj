@@ -15,4 +15,8 @@
     <ProjectReference Include="..\EMPManegment.EntityModels\EMPManegment.EntityModels.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Interface\TaskDetails\" />
+  </ItemGroup>
+
 </Project>
