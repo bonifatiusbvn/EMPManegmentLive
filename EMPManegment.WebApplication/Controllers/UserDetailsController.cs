@@ -22,6 +22,7 @@ using EMPManagment.API;
 using System.Security.Claims;
 using System.Text.Json;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 
 namespace EMPManegment.Web.Controllers
 {
@@ -45,16 +46,28 @@ namespace EMPManegment.Web.Controllers
         }
         public async Task<IActionResult> DisplayUserList()
         {
+            return View();
+        }
+        [HttpGet]
+        public async Task<JsonResult> GetUserList(DataTableParametersModel dataTable)
+        {
             try
             {
+                dataTable.sSearch = dataTable.sSearch == null ? "" : dataTable.sSearch;
                 List<EmpDetailsView> userList = new List<EmpDetailsView>();
                 HttpClient client = WebAPI.Initil();
-                ApiResponseModel res = await APIServices.GetAsync("", "UserDetails/GetAllUserList");
+                ApiResponseModel res = await APIServices.PostAsync(dataTable, "UserDetails/GetAllUserList");
                 if (res.code == 200)
                 {
                     userList = JsonConvert.DeserializeObject<List<EmpDetailsView>>(res.data.ToString());
                 }
-                return View(userList);
+                return Json(new
+                {
+                    aaData = userList,
+                    sEcho = dataTable.sEcho,
+                    iDisplayRecords=userList.Count(),
+                    iTotalRecords=userList.Count(),
+                });
             }
             catch (Exception ex)
             {

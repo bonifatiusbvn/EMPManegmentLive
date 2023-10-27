@@ -1,5 +1,6 @@
 ﻿using EMPManegment.EntityModels.View_Model;
 using EMPManegment.EntityModels.ViewModels;
+using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.Inretface.Interface.UserList;
 using EMPManegment.Inretface.Services.UserListServices;
@@ -20,9 +21,9 @@ namespace EMPManegment.Services.UserList
             UserList = userList;
         }
 
-        public async Task<IEnumerable<EmpDetailsView>> GetUsersList()
+        public async Task<IEnumerable<EmpDetailsView>> GetUsersList(DataTableParametersModel dataTable)
         {
-            return await UserList.GetUsersList();
+            return await UserList.GetUsersList(dataTable);
         }
 
         public Task<UserResponceModel> ActiveDeactiveUsers(string UserName)

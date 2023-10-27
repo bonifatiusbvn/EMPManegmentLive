@@ -2,6 +2,86 @@
 UserBirsthDayWish();
 
 
+
+$(document).ready(function () {debugger
+    BindDataTable();
+});
+
+
+var BindDataTable = function (response) {debugger
+    $('#UserTableData').DataTable({
+        "bServerSide": true,
+        "bProcessing": true,
+        "bPaginate": true,
+        ordering: true,
+        "bInfo": true,
+        "bLengthChange": false,
+        "bDestroy": true,
+        "sAjaxSource":"/UserDetails/GetUserList",
+        "fnServerData": function (sSource, aoData, fnCallback) {
+            debugger
+            $.ajax({
+                type: "Get",
+                data: aoData,
+                url: sSource,
+                dataType: 'json', 
+                success:fnCallback
+            })
+        },
+        "aoColumns": [
+            {
+                "mData": "departmentName",
+                //"render": function (DepartmentName, type, full, data) {
+                //    debugger
+                //}
+            },
+            { "mData": "userName" },
+            { "mData": "firstName" },
+            { "mData": "gender" },
+            { "mData": "dateOfBirth" },
+            { "mData": "email" },
+            { "mData": "phoneNumber" },
+            { "mData": "countryName" },
+            { "mData": "stateName" },
+            { "mData": "cityName" },
+            { "mData": "address" },
+        ]
+    });
+}
+
+function GetAllUserData() {
+    debugger
+    $('#UserTableData').DataTable({
+        processing: true,
+        serverSide: true,
+        filter: true,
+        ajax: {
+            type: "Post",
+            url: '/UserDetails/GetUserList',
+            dataType: 'json'
+        },
+        columns: [
+            { "data": "departmentName", "name": "DepartmentName", "autowidth": true },
+            { "data": "userName", "name": "UserName", "autowidth": true },
+            { "data": "firstName", "name": "FirstName", "autowidth": true },
+            { "data": "gender", "name": "Gender", "autowidth": true },
+            { "data": "dateOfBirth", "name": "DateOfBirth", "autowidth": true },
+            { "data": "email", "name": "Email", "autowidth": true },
+            { "data": "phoneNumber", "name": "PhoneNumber", "autowidth": true },
+            { "data": "countryName", "name": "CountryName", "autowidth": true },
+            { "data": "stateName", "name": "StateName", "autowidth": true },
+            { "data": "cityName", "name": "CityName", "autowidth": true },
+            { "data": "address", "name": "Address", "autowidth": true },
+        ],
+        columnDefs: [
+            {
+                targets: [0],
+                searchable: false,
+            }
+        ]
+    });
+}
+
 function ActiveDeactive(UserName) {
     
     const swalWithBootstrapButtons = Swal.mixin({
@@ -225,3 +305,4 @@ function UserBirsthDayWish() {
 
     })
 }
+

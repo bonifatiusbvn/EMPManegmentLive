@@ -5,14 +5,14 @@ using System.Text;
 using System.Threading.Tasks;
 using EMPManegment.EntityModels.View_Model;
 using EMPManegment.EntityModels.ViewModels;
+using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 using EMPManegment.EntityModels.ViewModels.Models;
 
 namespace EMPManegment.Inretface.Services.UserListServices
 {
     public interface IUserDetailsServices
     {
-        Task<IEnumerable<EmpDetailsView>> GetUsersList();
-
+       Task<IEnumerable<EmpDetailsView>> GetUsersList(DataTableParametersModel dataTable);
         Task<UserResponceModel> ActiveDeactiveUsers(string UserName);
 
         Task<UserResponceModel> EnterInTime(UserAttendanceModel userAttendance);
