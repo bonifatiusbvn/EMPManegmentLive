@@ -36,7 +36,7 @@ namespace EMPManagment.API.Controllers
         }
 
 
-        [HttpPost]
+        [HttpGet]
         [Route("GetAllUserList")]
 
         public async Task<IActionResult> GetAllUserList(DataTableParametersModel dataTable)
@@ -172,7 +172,7 @@ namespace EMPManagment.API.Controllers
         [Route("UserEdit")]
         public async Task<IActionResult> UserEdit()
         {
-            IEnumerable<EmpDetailsView> userList = await UserListServices.GetUsersList();
+            IEnumerable<EmpDetailsView> userList = await UserListServices.UserEdit();
             return Ok(new { code = 200, data = userList.ToList() });
         }
 
