@@ -366,7 +366,7 @@ namespace EMPManegment.Web.Controllers
             }
         }
         [HttpGet]
-        public async Task<JsonResult> Edit(Guid id)
+        public async Task<JsonResult> EditUserDetails(Guid id)
         {
             try
             {
@@ -387,10 +387,12 @@ namespace EMPManegment.Web.Controllers
             }
         }
         [HttpPost]
-        public async Task<JsonResult>Update(UserEditViewModel employee)
+        public async Task<IActionResult> UpdateUserDetails(UserEditViewModel employee)
         {
-            var emp = new UserEditViewModel()
+            try
             {
+                var emp = new UserEditViewModel()
+                {
                 Id = employee.Id,
                 DepartmentId = employee.DepartmentId,
                 FirstName = employee.FirstName,
@@ -404,19 +406,16 @@ namespace EMPManegment.Web.Controllers
                 DateOfBirth = employee.DateOfBirth,
                 Gender = employee.Gender,
 
-        };
-            try
-            {
+                 };
+            
                 ApiResponseModel postUser = await APIServices.PostAsync(emp, "UserDetails/Update");
-                if(postUser.code == 200)
+                if (postUser.code == 200)
                 {
-                    TempData["SuccesMessage"] = "Data Successfully Updated!!";
-                    return new JsonResult(emp);
+                    return Ok(new { Message = postUser.message, Code = postUser.code });
                 }
                 else
                 {
-                    TempData["ErrorMessage"] = "Opps!! There is some Problem in your request";
-                    return new JsonResult(employee);
+                    return new JsonResult(new { Message = string.Format(postUser.message), Code = postUser.code });
                 }
             }
             catch (Exception ex)

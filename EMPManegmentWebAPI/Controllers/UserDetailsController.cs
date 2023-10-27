@@ -225,8 +225,15 @@ namespace EMPManagment.API.Controllers
         [Route("Update")]
         public async Task<IActionResult>UpdateUser(UserEditViewModel employee)
         {
+            UserResponceModel response = new UserResponceModel();
             var data = await UserListServices.UpdateUser(employee);
-            return Ok(data);
+            if (data.Code == 200)
+            {
+                response.Code = (int)HttpStatusCode.OK;
+                response.Message = data.Message;
+                response.Icone = data.Icone;
+            }
+            return StatusCode(response.Code, response);
         }
     }
 }

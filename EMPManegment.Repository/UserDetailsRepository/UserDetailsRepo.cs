@@ -353,25 +353,30 @@ namespace EMPManegment.Repository.UserListRepository
 
         public async Task<IEnumerable<EmpDetailsView>> UserEdit()
         {
-            IEnumerable<EmpDetailsView> data = Context.TblUsers.ToList().Select(a => new EmpDetailsView
-            {
-                Id = a.Id,
-                UserName = a.UserName,
-                FirstName = a.FirstName,
-                LastName = a.LastName,
-                Image = a.Image,
-                Gender = a.Gender,
-                DateOfBirth = a.DateOfBirth,
-                Email = a.Email,
-                PhoneNumber = a.PhoneNumber,
-                Address = a.Address,
-                CityId = a.CityId,
-                DepartmentId = a.DepartmentId,
-                StateId = a.StateId,
-                CountryId = a.CountryId,
-                IsActive = a.IsActive,
-            });
-            return data;
+            IEnumerable<EmpDetailsView> result = from e in Context.TblUsers
+                                                 join d in Context.TblDepartments on e.DepartmentId equals d.Id
+                                                 join c in Context.TblCountries on e.CountryId equals c.Id
+                                                 join s in Context.TblStates on e.StateId equals s.Id
+                                                 join ct in Context.TblCities on e.CityId equals ct.Id
+                                                 select new EmpDetailsView
+                                                 {
+                                                     Id = e.Id,
+                                                     IsActive = e.IsActive,
+                                                     UserName = e.UserName,
+                                                     FirstName = e.FirstName,
+                                                     LastName = e.LastName,
+                                                     Image = e.Image,
+                                                     Gender = e.Gender,
+                                                     DateOfBirth = e.DateOfBirth,
+                                                     Email = e.Email,
+                                                     PhoneNumber = e.PhoneNumber,
+                                                     Address = e.Address,
+                                                     CityName = ct.City,
+                                                     StateName = s.State,
+                                                     CountryName = c.Country,
+                                                     DepartmentName = d.Department
+                                                 };
+            return result;
         }
 
         public async Task<EmpDetailsView> GetById(Guid id)
@@ -395,10 +400,11 @@ namespace EMPManegment.Repository.UserListRepository
             return model;
         }
 
-        public async Task<Guid> UpdateUser(UserEditViewModel employee)
+        public async Task<UserResponceModel> UpdateUser(UserEditViewModel employee)
         {
             try
             {
+                UserResponceModel response = new UserResponceModel();
                 var data = await Context.TblUsers.FirstOrDefaultAsync(a => a.Id == employee.Id);
                 if (data != null)
                 {
@@ -419,7 +425,10 @@ namespace EMPManegment.Repository.UserListRepository
                     Context.TblUsers.Update(data);
                     await Context.SaveChangesAsync();
                 }
-                return employee.Id;
+                response.Code = (int)HttpStatusCode.OK;
+                response.Message = "User Data Updated Successfully";
+                return response;
+                
             }
             catch (Exception ex)
             {
