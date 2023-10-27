@@ -70,6 +70,20 @@ namespace EMPManegment.Services.UserList
         {
             return await UserList.UserBirsthDayWish(UserId);
         }
+        public async Task<IEnumerable<EmpDetailsView>> UserEdit()
+        {
+            return await UserList.UserEdit();
+        }
+
+        public async Task<EmpDetailsView> GetById(Guid id)
+        {
+            return await UserList.GetById(id);
+        }
+
+        public async Task<Guid> UpdateUser(UserEditViewModel employee)
+        {
+            return await UserList.UpdateUser(employee);
+        }
     }
 }
 

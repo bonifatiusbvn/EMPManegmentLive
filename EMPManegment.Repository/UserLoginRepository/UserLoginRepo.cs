@@ -45,14 +45,17 @@ namespace EMPManegment.Repository.UserLoginRepository
                     {
                         if (tblUser.UserName == request.UserName && Crypto.VarifyHash(request.Password, tblUser.PasswordHash, tblUser.PasswordSalt))   
                         {
+
                             LoginView userModel = new LoginView();
                             userModel.UserName = tblUser.UserName;
                             userModel.Id = tblUser.Id;
                             userModel.FullName = tblUser.FirstName +" "+ tblUser.LastName;
                             userModel.FirstName = tblUser.FirstName;
                             userModel.ProfileImage = tblUser.Image;
+                            userModel.IsAdmin = tblUser.IsAdmin == null ? false : (bool)tblUser.IsAdmin;
                             response.Data = userModel;
                             response.Code = (int)HttpStatusCode.OK;
+                            
                         }
                         else
                         {

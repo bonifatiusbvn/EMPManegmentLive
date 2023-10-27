@@ -28,5 +28,9 @@ namespace EMPManegment.Inretface.Interface.UserList
         Task<UserResponceModel> UserLockScreen(LoginRequest request);
         Task<UserResponceModel> UserBirsthDayWish(Guid UserId);
 
+        Task<IEnumerable<EmpDetailsView>> UserEdit();
+        Task<EmpDetailsView> GetById(Guid id);
+        Task<Guid> UpdateUser(UserEditViewModel employee);
+
     }
 }

@@ -5,7 +5,7 @@
 
 <!-- Mirrored from themesbrand.com/velzon/html/minimal/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 04 Oct 2023 11:01:35 GMT -->
 <head>
-
+   
     <meta charset="utf-8" />
     <title>@ViewData["Title"] - EMPManegment.WebApplication</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,6 +14,8 @@
     <!-- App favicon -->
     <link rel="shortcut icon" href="~/UserHome/minimal/assets/images/favicon.ico">
 
+    <!--Datetime-->
+    
     <!-- jsvectormap css -->
     <link href="~/UserHome/minimal/assets/libs/jsvectormap/css/jsvectormap.min.css" rel="stylesheet" type="text/css" />
 
@@ -182,74 +184,6 @@
                                 </form>
                             </div>
                         </div>
-
-
-
-                        <div class="dropdown topbar-head-dropdown ms-1 header-item">
-                            <button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class='bx bx-category-alt fs-22'></i>
-                            </button>
-                            <div class="dropdown-menu dropdown-menu-lg p-0 dropdown-menu-end">
-                                <div class="p-3 border-top-0 border-start-0 border-end-0 border-dashed border">
-                                    <div class="row align-items-center">
-                                        <div class="col">
-                                            <h6 class="m-0 fw-semibold fs-15"> Web Apps </h6>
-                                        </div>
-                                        <div class="col-auto">
-                                            <a href="#!" class="btn btn-sm btn-soft-info">
-                                                View All Apps
-                                                <i class="ri-arrow-right-s-line align-middle"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="p-2">
-                                    <div class="row g-0">
-                                        <div class="col">
-                                            <a class="dropdown-icon-item" href="#!">
-                                                <img src="~/UserHome/minimal/assets/images/brands/github.png" alt="Github">
-                                                <span>GitHub</span>
-                                            </a>
-                                        </div>
-                                        <div class="col">
-                                            <a class="dropdown-icon-item" href="#!">
-                                                <img src="~/UserHome/minimal/assets/images/brands/bitbucket.png" alt="bitbucket">
-                                                <span>Bitbucket</span>
-                                            </a>
-                                        </div>
-                                        <div class="col">
-                                            <a class="dropdown-icon-item" href="#!">
-                                                <img src="~/UserHome/minimal/assets/images/brands/dribbble.png" alt="dribbble">
-                                                <span>Dribbble</span>
-                                            </a>
-                                        </div>
-                                    </div>
-
-                                    <div class="row g-0">
-                                        <div class="col">
-                                            <a class="dropdown-icon-item" href="#!">
-                                                <img src="~/UserHome/minimal/assets/images/brands/dropbox.png" alt="dropbox">
-                                                <span>Dropbox</span>
-                                            </a>
-                                        </div>
-                                        <div class="col">
-                                            <a class="dropdown-icon-item" href="#!">
-                                                <img src="~/UserHome/minimal/assets/images/brands/mail_chimp.png" alt="mail_chimp">
-                                                <span>Mail Chimp</span>
-                                            </a>
-                                        </div>
-                                        <div class="col">
-                                            <a class="dropdown-icon-item" href="#!">
-                                                <img src="~/UserHome/minimal/assets/images/brands/slack.png" alt="slack">
-                                                <span>Slack</span>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
                         <div class="dropdown topbar-head-dropdown ms-1 header-item">
                             <button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle" id="page-header-cart-dropdown" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-haspopup="true" aria-expanded="false">
                                 <i class='bx bx-shopping-bag fs-22'></i>
@@ -404,11 +338,6 @@
                             </div>
                         </div>
 
-                        <div class="ms-1 header-item d-none d-sm-flex">
-                            <button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle" data-toggle="fullscreen">
-                                <i class='bx bx-fullscreen fs-22'></i>
-                            </button>
-                        </div>
 
                         <div class="ms-1 header-item d-none d-sm-flex">
                             <button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle light-dark-mode">
@@ -1144,226 +1073,46 @@
                             <div class="collapse menu-dropdown" id="sidebarAuth">
                                 <ul class="nav nav-sm flex-column">
                                     <li class="nav-item">
-                                        <a href="#sidebarSignIn" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarSignIn" data-key="t-signin">
-                                            Sign In
-                                        </a>
-                                        <div class="collapse menu-dropdown" id="sidebarSignIn">
-                                            <ul class="nav nav-sm flex-column">
-                                                <li class="nav-item">
-                                                    <a href="auth-signin-basic.html" class="nav-link" data-key="t-basic"> Basic </a>
-                                                </li>
-                                                <li class="nav-item">
-                                                    <a href="auth-signin-cover.html" class="nav-link" data-key="t-cover"> Cover </a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="#sidebarSignUp" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarSignUp" data-key="t-signup">
-                                            Sign Up
-                                        </a>
-                                        <div class="collapse menu-dropdown" id="sidebarSignUp">
-                                            <ul class="nav nav-sm flex-column">
-                                                <li class="nav-item">
-                                                    <a href="auth-signup-basic.html" class="nav-link" data-key="t-basic"> Basic </a>
-                                                </li>
-                                                <li class="nav-item">
-                                                    <a href="auth-signup-cover.html" class="nav-link" data-key="t-cover"> Cover </a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </li>
-
-                                    <li class="nav-item">
                                         <a class="nav-link" asp-action="ResetUserPassword" asp-controller="UserDetails" data-key="t-password-reset">
                                             Password Reset
                                         </a>
-                                        @*<div class="collapse menu-dropdown" id="sidebarResetPass">
-                                            <ul class="nav nav-sm flex-column">
-                                                <li class="nav-item">
-                                                    <a href="auth-pass-reset-basic.html" class="nav-link" data-key="t-basic"> Basic </a>
-                                                </li>
-                                                <li class="nav-item">
-                                                    <a href="auth-pass-reset-cover.html" class="nav-link" data-key="t-cover"> Cover </a>
-                                                </li>
-                                            </ul>
-                                        </div>*@
-                                    </li>
-
-                                    <li class="nav-item">
-                                        <a href="#sidebarchangePass" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarchangePass" data-key="t-password-create">
-                                            Password Create
-                                        </a>
-                                        <div class="collapse menu-dropdown" id="sidebarchangePass">
-                                            <ul class="nav nav-sm flex-column">
-                                                <li class="nav-item">
-                                                    <a href="auth-pass-change-basic.html" class="nav-link" data-key="t-basic">
-                                                        Basic
-                                                    </a>
-                                                </li>
-                                                <li class="nav-item">
-                                                    <a href="auth-pass-change-cover.html" class="nav-link" data-key="t-cover">
-                                                        Cover
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </li>
-
-                                    <li class="nav-item">
-                                        <a href="#sidebarLockScreen" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarLockScreen" data-key="t-lock-screen">
-                                            Lock Screen
-                                        </a>
-                                        <div class="collapse menu-dropdown" id="sidebarLockScreen">
-                                            <ul class="nav nav-sm flex-column">
-                                                <li class="nav-item">
-                                                    <a href="auth-lockscreen-basic.html" class="nav-link" data-key="t-basic"> Basic </a>
-                                                </li>
-                                                <li class="nav-item">
-                                                    <a href="auth-lockscreen-cover.html" class="nav-link" data-key="t-cover"> Cover </a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </li>
-
-                                    <li class="nav-item">
-                                        <a href="#sidebarLogout" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarLogout" data-key="t-logout">
-                                            Logout
-                                        </a>
-                                        <div class="collapse menu-dropdown" id="sidebarLogout">
-                                            <ul class="nav nav-sm flex-column">
-                                                <li class="nav-item">
-                                                    <a href="auth-logout-basic.html" class="nav-link" data-key="t-basic"> Basic </a>
-                                                </li>
-                                                <li class="nav-item">
-                                                    <a href="auth-logout-cover.html" class="nav-link" data-key="t-cover"> Cover </a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="#sidebarSuccessMsg" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarSuccessMsg" data-key="t-success-message">
-                                            Success Message
-                                        </a>
-                                        <div class="collapse menu-dropdown" id="sidebarSuccessMsg">
-                                            <ul class="nav nav-sm flex-column">
-                                                <li class="nav-item">
-                                                    <a href="auth-success-msg-basic.html" class="nav-link" data-key="t-basic"> Basic </a>
-                                                </li>
-                                                <li class="nav-item">
-                                                    <a href="auth-success-msg-cover.html" class="nav-link" data-key="t-cover"> Cover </a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="#sidebarTwoStep" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarTwoStep" data-key="t-two-step-verification">
-                                            Two Step Verification
-                                        </a>
-                                        <div class="collapse menu-dropdown" id="sidebarTwoStep">
-                                            <ul class="nav nav-sm flex-column">
-                                                <li class="nav-item">
-                                                    <a href="auth-twostep-basic.html" class="nav-link" data-key="t-basic"> Basic </a>
-                                                </li>
-                                                <li class="nav-item">
-                                                    <a href="auth-twostep-cover.html" class="nav-link" data-key="t-cover"> Cover </a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="#sidebarErrors" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarErrors" data-key="t-errors">
-                                            Errors
-                                        </a>
-                                        <div class="collapse menu-dropdown" id="sidebarErrors">
-                                            <ul class="nav nav-sm flex-column">
-                                                <li class="nav-item">
-                                                    <a href="auth-404-basic.html" class="nav-link" data-key="t-404-basic"> 404 Basic </a>
-                                                </li>
-                                                <li class="nav-item">
-                                                    <a href="auth-404-cover.html" class="nav-link" data-key="t-404-cover"> 404 Cover </a>
-                                                </li>
-                                                <li class="nav-item">
-                                                    <a href="auth-404-alt.html" class="nav-link" data-key="t-404-alt"> 404 Alt </a>
-                                                </li>
-                                                <li class="nav-item">
-                                                    <a href="auth-500.html" class="nav-link" data-key="t-500"> 500 </a>
-                                                </li>
-                                                <li class="nav-item">
-                                                    <a href="auth-offline.html" class="nav-link" data-key="t-offline-page"> Offline Page </a>
-                                                </li>
-                                            </ul>
-                                        </div>
+                                        
                                     </li>
                                 </ul>
                             </div>
                         </li>
+                     
+                                <li class="nav-item">
+                                    <a class="nav-link menu-link" href="#sidebarPages" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarPages">
+                                        <i data-feather="command" class="icon-dual"></i> <span data-key="t-pages">Pages</span>
+                                    </a>
+                                    <div class="collapse menu-dropdown" id="sidebarPages">
+                                        <ul class="nav nav-sm flex-column">
 
-                        <li class="nav-item">
-                            <a class="nav-link menu-link" href="#sidebarPages" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarPages">
-                                <i data-feather="command" class="icon-dual"></i> <span data-key="t-pages">Pages</span>
-                            </a>
-                            <div class="collapse menu-dropdown" id="sidebarPages">
-                                <ul class="nav nav-sm flex-column">
-                                    <li class="nav-item">
-                                        <a class="nav-link" data-key="t-user-list" asp-action="DisplayUserList" asp-controller="UserDetails"> User List </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" data-key="t-user-list" asp-action="DisplayVendorList" asp-controller="Vendor"> Vendor List </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="#sidebarProfile" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarProfile" data-key="t-profile">
-                                            Profile
-                                        </a>
-                                        <div class="collapse menu-dropdown" id="sidebarProfile">
-                                            <ul class="nav nav-sm flex-column">
-                                                <li class="nav-item">
-                                                    <a href="pages-profile.html" class="nav-link" data-key="t-simple-page"> Simple Page </a>
-                                                </li>
-                                                <li class="nav-item">
-                                                    <a href="pages-profile-settings.html" class="nav-link" data-key="t-settings"> Settings </a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a asp-action="UserActiveDecative" asp-controller="UserDetails" class="nav-link" data-key="t-team">ActiveDeactive</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a asp-action="GetUsersListById" asp-controller="UserDetails" class="nav-link" data-key="t-timeline">GetUserAttendance</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a asp-action="AddVandorDetails" asp-controller="Vendor" class="nav-link" data-key="t-faqs">Vendors</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="pages-pricing.html" class="nav-link" data-key="t-pricing"> Pricing </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="pages-gallery.html" class="nav-link" data-key="t-gallery"> Gallery </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="pages-maintenance.html" class="nav-link" data-key="t-maintenance"> Maintenance </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="pages-coming-soon.html" class="nav-link" data-key="t-coming-soon"> Coming Soon </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="pages-sitemap.html" class="nav-link" data-key="t-sitemap"> Sitemap </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="pages-search-results.html" class="nav-link" data-key="t-search-results"> Search Results </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="pages-privacy-policy.html" class="nav-link" data-key="t-privacy-policy">Privacy Policy</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="pages-term-conditions.html" class="nav-link" data-key="t-term-conditions">Term & Conditions</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" data-key="t-user-list" asp-action="DisplayUserList" asp-controller="UserDetails">User List </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" data-key="t-user-list" asp-action="DisplayVendorList" asp-controller="Vendor">Vendor List </a>
+                                            </li>
 
-                        <li class="nav-item">
+                                            <li class="nav-item">
+                                                <a asp-action="UserActiveDecative" asp-controller="UserDetails" class="nav-link" data-key="t-team">ActiveDeactive</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a asp-action="GetUsersListById" asp-controller="UserDetails" class="nav-link" data-key="t-timeline">GetUserAttendance</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a asp-action="AddVandorDetails" asp-controller="Vendor" class="nav-link" data-key="t-faqs">Add-Vendors</a>
+                                            </li>
+
+                                        </ul>
+                                    </div>
+                                </li>
+
+                      
+
+                        @* <li class="nav-item">
                             <a class="nav-link menu-link" href="#sidebarLanding" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarLanding">
                                 <i class="ri-rocket-line"></i> <span data-key="t-landing">Landing</span>
                             </a>
@@ -1380,9 +1129,9 @@
                                     </li>
                                 </ul>
                             </div>
-                        </li>
+                        </li> *@
 
-                        <li class="menu-title"><i class="ri-more-fill"></i> <span data-key="t-components">Components</span></li>
+@*                         <li class="menu-title"><i class="ri-more-fill"></i> <span data-key="t-components">Components</span></li>
 
                         <li class="nav-item">
                             <a class="nav-link menu-link" href="#sidebarUI" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarUI">
@@ -1476,9 +1225,9 @@
                                     </div>
                                 </div>
                             </div>
-                        </li>
+                        </li> *@
 
-                        <li class="nav-item">
+                        @* <li class="nav-item">
                             <a class="nav-link menu-link" href="#sidebarAdvanceUI" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarAdvanceUI">
                                 <i data-feather="layers" class="icon-dual"></i> <span data-key="t-advance-ui">Advance UI</span>
                             </a>
@@ -1513,9 +1262,9 @@
                                     </li>
                                 </ul>
                             </div>
-                        </li>
+                        </li> *@
 
-                        <li class="nav-item">
+@*                         <li class="nav-item">
                             <a class="nav-link menu-link" href="widgets.html">
                                 <i data-feather="copy" class="icon-dual"></i> <span data-key="t-widgets">Widgets</span>
                             </a>
@@ -1766,7 +1515,7 @@
                                     </li>
                                 </ul>
                             </div>
-                        </li>
+                        </li> *@
 
                     </ul>
                 </div>
@@ -1921,7 +1670,6 @@
                                                         Your Total Hours
                                                         <h4 class="fs-22 fw-semibold ff-secondary mb-4">
                                                             <span class="counter-value" id="txttotalhours"></span> 
-                                                            <span> hr</span>
                                                         </h4>
                                                         <button type="button" class="btn btn-success custom-toggle" data-bs-toggle="button" aria-pressed="false">
                                                             <span class="icon-on"><i class="ri-thumb-up-line align-bottom me-1"></i> Yes</span>
@@ -2031,6 +1779,7 @@
      
 
         <!-- JAVASCRIPT -->
+        <script src="~/js/useredit.js" asp-append-version="true"></script>
         <script src="~/UserHome/minimal/assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
         <script src="~/UserHome/minimal/assets/libs/simplebar/simplebar.min.js"></script>
         <script src="~/UserHome/minimal/assets/libs/node-waves/waves.min.js"></script>
@@ -2056,8 +1805,7 @@
         <script src="~/lib/jquery/dist/jquery.min.js"></script>
         <script src="~/js/userprofile.js"></script>
         <!-- listjs init -->
-     
-
+      
         <!-- Sweet Alerts js -->
         <script src="~/UserHome/minimal/assets/libs/sweetalert2/sweetalert2.min.js"></script>
 
@@ -2077,7 +1825,7 @@
         <!-- init js -->
 
         <!-- App js -->
-        <script src="~/UserHome/minimal/assets/js/app.js"></script>
+       @* <script src="~/UserHome/minimal/assets/js/app.js"></script>*@
 
         <script src="~/moduls/userdetailsscript.js"></script>
         @await RenderSectionAsync("Scripts", required: false)
@@ -2086,63 +1834,10 @@
 
 <!-- Mirrored from themesbrand.com/velzon/html/minimal/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 04 Oct 2023 11:01:39 GMT -->
 </html>
-<script>
+
+<script lang="ts" setup>
+   
     var UserId = '@Accessor.HttpContext.Session.GetString("UserID")';
     var TodayDate = '@DateTime.Today';
-
-    import { ref } from 'vue'
-
-    const value1 = ref('')
-    const value2 = ref('')
-    const value3 = ref('')
-    const defaultTime = new Date(2000, 1, 1, 12, 0, 0)
-
-    const shortcuts = [
-        {
-            text: 'Today',
-            value: new Date(),
-        },
-        {
-            text: 'Yesterday',
-            value: () => {
-                const date = new Date()
-                date.setTime(date.getTime() - 3600 * 1000 * 24)
-                return date
-            },
-        },
-        {
-            text: 'A week ago',
-            value: () => {
-                const date = new Date()
-                date.setTime(date.getTime() - 3600 * 1000 * 24 * 7)
-                return date
-            },
-        },
-    ]
+       
 </script>
-<style scoped>
-    .demo-datetime-picker {
-        display: flex;
-        width: 100%;
-        padding: 0;
-        flex-wrap: wrap;
-    }
-
-        .demo-datetime-picker .block {
-            padding: 30px 0;
-            text-align: center;
-            border-right: solid 1px var(--el-border-color);
-            flex: 1;
-        }
-
-            .demo-datetime-picker .block:last-child {
-                border-right: none;
-            }
-
-        .demo-datetime-picker .demonstration {
-            display: block;
-            color: var(--el-text-color-secondary);
-            font-size: 14px;
-            margin-bottom: 20px;
-        }
-</style>

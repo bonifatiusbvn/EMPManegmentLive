@@ -14,15 +14,21 @@ namespace EMPManegment.Inretface.Services.UserListServices
     {
        Task<IEnumerable<EmpDetailsView>> GetUsersList(DataTableParametersModel dataTable);
         Task<UserResponceModel> ActiveDeactiveUsers(string UserName);
+
         Task<UserResponceModel> EnterInTime(UserAttendanceModel userAttendance);
         Task<UserResponceModel> EnterOutTime(UserAttendanceModel userAttendance);
 
         Task<UserResponceModel> ResetPassword(PasswordResetView emp);
-        
+
+
         Task<IEnumerable<EmpDocumentView>> GetDocumentType();
         Task<IEnumerable<DocumentInfoView>> GetDocumentList();
         Task<DocumentInfoView> UploadDocument(DocumentInfoView doc);
         Task<UserResponceModel> UserLockScreen(LoginRequest request);
         Task<UserResponceModel> UserBirsthDayWish(Guid UserId);
+
+        Task<IEnumerable<EmpDetailsView>> UserEdit();
+        Task<EmpDetailsView> GetById(Guid id);
+        Task<Guid> UpdateUser(UserEditViewModel employee);
     }
 }

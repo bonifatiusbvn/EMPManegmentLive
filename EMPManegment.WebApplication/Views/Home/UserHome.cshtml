@@ -1,9 +1,7 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "UserHome";
     Layout = "~/Views/Shared/_HomeLayout.cshtml";
 }
-
 
 
 
@@ -455,71 +453,60 @@
                     <h5 class="modal-title" id="exampleModalLabel">Create Deals</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form class="needs-validation" novalidate="" id="deals-form" onsubmit="return false">
                     <div class="modal-body">
+                       <form id="frmtaskdetails">
                         <div class="mb-3">
-                            <label for="deatType" class="form-label">Task Type</label>
-                            <select class="form-select" id="deatType" data-choices="" aria-label="Default select example" required="">
-                                <option value="" data-custom-properties="[object Object]">Select deals type</option>
-                                <option value="Lead Disovered">Lead Disovered</option>
-                                <option value="Contact Initiated">Contact Initiated</option>
-                                <option value="Need Identified">Need Identified</option>
-                                <option value="Meeting Arranged">Meeting Arranged</option>
-                                <option value="Offer Accepted">Offer Accepted</option>
+                            <label for="dealType" class="form-label">Task Type</label>
+                            <select class="form-control" id="dealType">
+                            <option selected disabled value="">--Select deals type--</option>
                             </select>
-                            <div class="invalid-feedback">
-                                Please write an deals owner name.
-                            </div>
+                        <input type="hidden" id="txtDealType" class="form-control" value=""/>
+                        
                         </div>
                         <div class="mb-3">
-                            <label for="dealTitle" class="form-label">Task Title</label>
-                            <input type="text" class="form-control" id="dealTitle" placeholder="Enter title" required="">
-                            <div class="invalid-feedback">
-                                Please write a title.
-                            </div>
+                            <label class="form-label">Task Title</label>
+                            @* <input type="text" class="form-control" id="dealTitle" placeholder="Enter title" required=""> *@
+                            <input type="text" id="dealTitle" class="form-control" required name="TaskTitle" placeholder="Enter title" />
+                            <span class="text-danger error field-validation-valid" data-valmsg-for="TaskTitle" data-valmsg-replace="true"></span>
                         </div>
-                       
                         <div class="mb-3">
                             <label for="dealOwner" class="form-label">Task ProvideTo</label>
-                            <input type="text" class="form-control" id="dealOwner" required="" placeholder="Enter owner name">
-                            <div class="invalid-feedback">
-                                Please write an deals owner name.
-                            </div>
+                            <select class="form-control" id="ddlusername">
+                            <option selected disabled value="">--Select Username--</option>
+                            </select>
+                            <input type="hidden" class="form-control" id="txtguserid" required="" placeholder="Enter owner name">
+                    
                         </div>
                         <div class="mb-3">
                             <label for="dueDate" class="form-label">Task Start-Date</label>
-                            <el-date-picker v-model="value1"
-                                            type="datetime"
-                                            placeholder="Select date and time" />
-                            <div class="invalid-feedback">
-                                Please select a due date.
-                            </div>
+                            <input type="datetime-local" class="form-control material_blue" id="txtdatetime" />
+                     
                         </div>
-
                         <div class="mb-3">
                             <label for="dealEmail" class="form-label">Task End-Date</label>
-                            <input type="datetime-local" class="form-control material_blue">
-                            <div class="invalid-feedback">
-                                Please write a email.
-                            </div>
+                            <input type="datetime-local" class="form-control material_blue" id="txtenddatetime">
+                        
                         </div>
                         <div class="mb-3">
                             <label for="contactDescription" class="form-label">Task Description</label>
-                            <textarea class="form-control " id="contactDescription" rows="3" placeholder="Enter description" required=""></textarea>
-                            <div class="invalid-feedback">
-                                Please add a description.
-                            </div>
+                        <textarea class="form-control " id="contactDescription" rows="3" placeholder="Enter description" data-val-required="*" name="contactDescription"></textarea>
+                        <span class="text-danger error field-validation-valid" data-valmsg-for="contactDescription" data-valmsg-replace="true"></span>
                         </div>
+                    </form>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-light" id="close-modal" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-success"><i class="ri-save-line align-bottom me-1"></i> Save</button>
+                    <button type="button" class="btn btn-success" onclick="btnSaveTaskDetail()" id="taskDetails">Save</button>
                     </div>
-                </form>
+
+                
             </div>
         </div>
     </div>
     <!--end modal-->
 
 </div>
-
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/moduls/taskscript.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="~/Scripts/jquery.validate.js"></script>

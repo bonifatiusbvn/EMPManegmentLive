@@ -3,6 +3,7 @@ using EMPManagment.API;
 using EMPManagment.Web.Models.API;
 using EMPManegment.EntityModels.View_Model;
 using EMPManegment.EntityModels.ViewModels;
+using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.Inretface.EmployeesInterface.AddEmployee;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -28,16 +29,15 @@ namespace EMPManegment.Repository.AddEmpRepository
 
         public BonifatiusEmployeesContext Context { get; }
 
-        public async Task<EmpDetailsResponseModel> AddEmployee(EmpDetailsView emp)
+        public async Task<UserResponceModel> AddEmployee(EmpDetailsView emp)
         {
-            EmpDetailsResponseModel response = new EmpDetailsResponseModel();
+            UserResponceModel response = new UserResponceModel();
             try
             {
                 bool isEmailAlredyExists = Context.TblUsers.Any(x => x.Email == emp.Email);
                 if (isEmailAlredyExists == true)
                 {
                     response.Message = "User with this email already exists";
-                    response.Data = emp;
                     response.Code = (int)HttpStatusCode.NotFound;
                 }
                 else
@@ -68,7 +68,6 @@ namespace EMPManegment.Repository.AddEmpRepository
                         PhoneNumberConfirmed = true,
 
                     };
-                    response.Data = emp;
                     response.Code = (int)HttpStatusCode.OK;
                     Context.TblUsers.Add(model);
                     Context.SaveChanges();

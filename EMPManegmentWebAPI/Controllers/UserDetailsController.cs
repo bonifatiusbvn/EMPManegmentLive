@@ -6,6 +6,7 @@ using EMPManegment.EntityModels.ViewModels;
 using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.Inretface.Interface.UserAttendance;
+using EMPManegment.EntityModels.ViewModels;
 using EMPManegment.Inretface.Interface.UserList;
 using EMPManegment.Inretface.Interface.UsersLogin;
 using EMPManegment.Inretface.Services.UserAttendanceServices;
@@ -16,6 +17,8 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using System.Data;
 using System.Net;
+using Microsoft.EntityFrameworkCore.Metadata;
+using NuGet.Protocol.Core.Types;
 
 namespace EMPManagment.API.Controllers
 {
@@ -59,7 +62,6 @@ namespace EMPManagment.API.Controllers
 
                     responseModel.Code = (int)HttpStatusCode.OK;
                     responseModel.Message = user.Message;
-                    responseModel.Data = user.Data;
                 }
                 else
                 {
@@ -166,6 +168,14 @@ namespace EMPManagment.API.Controllers
             return Ok(new { code = 200, data = userList.ToList() });
         }
 
+        [HttpGet]
+        [Route("UserEdit")]
+        public async Task<IActionResult> UserEdit()
+        {
+            IEnumerable<EmpDetailsView> userList = await UserListServices.GetUsersList();
+            return Ok(new { code = 200, data = userList.ToList() });
+        }
+
         [HttpPost]
         [Route("UpdateUserOutTime")]
 
@@ -198,6 +208,27 @@ namespace EMPManagment.API.Controllers
         {
             IEnumerable<UserAttendanceModel> attendance = await UserAttendance.GetUserAttendanceById(attendanceId);
             return Ok(new { code = 200, data = attendance });
+        }
+        [HttpGet]
+        [Route("GetEmployee")]
+        public async Task<IActionResult>GetEmployee(Guid id)
+        {
+            var data  = await UserListServices.GetById(id);
+            if (data == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return Ok(data);
+            }
+        }
+        [HttpPost]
+        [Route("Update")]
+        public async Task<IActionResult>UpdateUser(UserEditViewModel employee)
+        {
+            var data = await UserListServices.UpdateUser(employee);
+            return Ok(data);
         }
     }
 }

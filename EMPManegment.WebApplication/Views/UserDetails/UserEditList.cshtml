@@ -1,0 +1,228 @@
+﻿@model IEnumerable<EMPManegment.EntityModels.View_Model.EmpDetailsView>
+@{
+    ViewData["Title"] = "UserEditList";
+    Layout = "~/Views/Shared/_HomeLayout.cshtml";
+}
+
+<h1>Update Employee Record</h1>
+<!-- Modal HTML -->
+<div id="empmodal" class="modal fade" tabindex="-1">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+
+            <div class="modal-header text-center">
+                <h2 class="modal-title text-primary text-center">Edit User</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"> <span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <div class="fv-row mb-8">
+                    <div class="row">
+                        <div class="fv-row mb-6">
+                            <label class="from-label">Department</label>
+                            <select id="ddlDepartmenrnt" class="form-control bg-transparent">
+                                <option>--Select Department--</option>
+                            </select>
+                            <input type="hidden" id="deptid" value="" />
+                        </div>
+                    </div>
+                </div>
+                <div class="fv-row mb-6">
+                    <input type="hidden" readonly id="Userid"  class="form-control bg-transparent" />
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <div class="mb-3">
+                            <label class="form-label">First Name</label>
+                            <input type="text" class="form-control" id="FirstName">
+                            <span id="txtFirstName" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="mb-3">
+                            <label class="form-label">Last Name</label>
+                            <input type="text" class="form-control" id="LastName">
+                            <span id="txtLastName" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <div class="fv-row mb-3">
+                            <label class="form-label">DateOfBirth</label>
+                            <input type="date" class="form-control" id="Dob">
+                            <span id="txtDob" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-6">
+                        <div class="fv-row mb-3">
+                            <label class="from-label">Gender</label>
+                            <select id="Gender" class="form-control bg-transparent">
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Other">Other</option>
+                            </select>
+                            <input type="hidden" id="Gender" value="" />
+                            <span class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-6">
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" id="Email">
+                            <span id="txtEmail" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="mb-3">
+                            <label class="form-label">PhoneNumber</label>
+                            <input type="number" class="form-control" id="PhoneNo">
+                            <span id="txtphno" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <div class="mb-3">
+                            <label class="form-label">Address</label>
+                            <input type="text" class="form-control" id="Address">
+                            <span id="txtAddress" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="fv-row mb-6">
+                            <label class="from-label">Country</label>
+                            <select id="ddlCountry" class="form-control bg-transparent">
+                                <option>--Select Country--</option>
+                            </select>
+                            <input type="hidden" id="Contry" value="" />
+                            <span id="txtCountry" class="text-danger"></span>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="fv-row mb-6">
+                                <label class="from-label">State</label>
+                                <select id="ddlState" class="form-control bg-transparent">
+                                    <option>--Select State--</option>
+                                </select>
+                                <input type="hidden" id="state" value="" />
+                                <span id="txtState" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="fv-row mb-6">
+                                <label class="from-label">City</label>
+                                <select id="ddlCity" class="form-control bg-transparent">
+                                    <option>--Select City--</option>
+                                </select>
+                                <input type="hidden" id="City" value="" />
+                                <span id="txtCity" class="text-danger"></span>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-info" onclick="Update()" style="display:none" id="btnUpdate">Update</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="table-responsive">
+    <table class="table align-middle mb-0">
+        <thead class="table-light">
+            <tr>
+                <th scope="col">UserName</th>
+                <th scope="col">Name</th>
+                <th scope="col">Gender</th>
+                <th scope="col">DateOfBirth</th>
+                <th scope="col">Email</th>
+                <th scope="col">PhoneNumber</th>
+                <th scope="col">Address</th>
+                <th scope="col">CityId</th>
+                <th scope="col">DepartmentId</th>
+                <th scope="col">StateId</th>
+                <th scope="col">CountryId</th>
+                <th scope="col">Edit</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Count() > 0)
+            {
+                @foreach (var d in Model)
+                {
+                    <tr>
+                        <td>@d.UserName</td>
+                        <td>
+                            <div class="d-flex gap-2 align-items-center">
+                                <div class="flex-shrink-0">
+                                    <img src="~/@d.Image" alt="" class="avatar-xs rounded-circle" />
+                                </div>
+                                <div class="flex-grow-1">
+                                    @d.FirstName  @d.LastName
+                                </div>
+                            </div>
+                        </td>
+                        <td>@d.Gender</td>
+                        <td>@d.DateOfBirth</td>
+                        <td>@d.Email</td>
+                        <td>@d.PhoneNumber</td>
+                        <td>@d.Address</td>
+                        <td>@d.CityId</td>
+                        <td>@d.DepartmentId</td>
+                        <td>@d.StateId</td>
+                        <td>@d.CountryId</td>
+                        <td>
+                            <a class="btn btn-sm btn-warning" id="btnedit" onclick="EditUserDetails('@d.Id')">
+                                Edit
+                            </a>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr class="text-center">
+                    <td colspan="5"><h2 class="text-warning bg-info">No Records</h2></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <!-- end table -->
+</div>
+
+
+    <!-- Button HTML (to Trigger Modal) -->
+   
+
+
+    
+ 
+
+  
+
+   
+   
+
+
+
+
+
+<!-- end table responsive -->
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/js/useredit.js" asp-append-version="true"></script>
+<script src="~/demo/assets/plugins/global/plugins.bundle.js"></script>
+<script src="~/demo/assets/js/scripts.bundle.js"></script>
+
+<script src="~/demo/assets/js/custom/authentication/sign-up/general.js"></script>
+
+<script src="~/js/employeescript.js"></script>

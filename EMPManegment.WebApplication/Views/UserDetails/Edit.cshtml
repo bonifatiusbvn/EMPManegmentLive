@@ -1,0 +1,143 @@
+﻿@model EMPManegment.EntityModels.View_Model.EmpDetailsView
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_HomeLayout.cshtml";
+}
+
+<div class="madal fade modal" id="EmployeeMadal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="text-info modal-title" id="employeeHeading">Update Employee</h1>
+                <button class="close text-danger" data-bs-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form method="get" id="addemp" asp-action="Edit" asp-controller="UserDetails" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <input type="text" class="form-control " id="EmployeeId" hidden />
+                    </div>
+                    <div class="fv-row mb-6">
+                        <input type="text" asp-for="UserName" readonly id="EmpId" autocomplete="off" class="form-control bg-transparent" value="@ViewBag.EmpId" />
+                    </div>
+                    <div class="row">
+
+                        <div class="col-6">
+                            <div class="fv-row mb-6">
+                                <input type="text" asp-for="FirstName" placeholder="First Name" name="FirstName" id="txtFirstName" class="form-control bg-transparent" />
+                                <span asp-validation-for="FirstName" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="fv-row mb-6">
+                                <input type="text" asp-for="LastName" placeholder="Last Name" name="LastName" id="txtLasttName" class="form-control bg-transparent" />
+                                <span asp-validation-for="LastName" class="text-danger"></span>
+                            </div>
+                        </div>
+                      </div>
+                    <div class="fv-row mb-8" data-kt-password-meter="true">
+                        <div class="mb-1">
+                            <div class="position-relative mb-3">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="fv-row mb-6">
+                                            <input type="date" asp-for="DateOfBirth" placeholder="DOB" itemid="DOB" id="txtDob" max="" autocomplete="off" class="form-control bg-transparent" />
+                                            <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="fv-row mb-6">
+                                            <select asp-for="Gender" id="Gender" class="form-control bg-transparent">
+                                                <option value="Male">Male</option>
+                                                <option value="Female">Female</option>
+                                                <option value="Other">Other</option>
+                                            </select>
+                                            <span asp-validation-for="Gender" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="fv-row mb-6">
+                                    <input type="text" asp-for="Email" placeholder="Email" id="email" autocomplete="off" class="form-control bg-transparent" />
+                                    <span asp-validation-for="Email" class="text-danger"></span>
+                                    <span class="text-danger">@TempData["ErrorMessage"]</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="fv-row mb-6">
+                                <select asp-for=CountryId id="ddlCountry" class="form-control bg-transparent">
+                                    <option>--Select Country--</option>
+                                </select>
+                                <input type="hidden" asp-for="CountryId" id="txtcountry" value="" />
+                                <span asp-validation-for="CountryId" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="fv-row mb-6">
+                                <select asp-for=StateId id="ddlState" class="form-control bg-transparent">
+                                    <option>--Select State--</option>
+                                </select>
+                                <input type="hidden" asp-for="StateId" id="txtstate" value="" />
+                                <span asp-validation-for="StateId" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="fv-row mb-8">
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="fv-row mb-6">
+                                    <select asp-for=CityId id="ddlCity" class="form-control bg-transparent">
+                                        <option>--Select City--</option>
+                                    </select>
+                                    <input type="hidden" asp-for="CityId" id="txtcity" value="" />
+                                    <span asp-validation-for="CityId" class="text-danger"></span>
+
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="fv-row mb-6">
+                                    <select asp-for=DepartmentId id="ddldept" class="form-control bg-transparent">
+                                        <option>--Select Department--</option>
+                                    </select>
+                                    <input type="hidden" asp-for="DepartmentId" id="txtdept" value="" />
+                                    <span asp-validation-for="DepartmentId" class="text-danger"></span>
+
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="fv-row mb-6">
+                                    <input type="text" asp-for="PhoneNumber" placeholder="Mobile.NO" id="PhoneNumber" autocomplete="off" class="form-control bg-transparent" />
+                                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="fv-row mb-6">
+                                <input type="text" asp-for="Address" class="form-control bg-transparent" placeholder="Address" id="Address" style="height: 75px;" />
+                                <span asp-validation-for="Address" class="text-danger"></span>
+                            </div>
+                        </div>
+                        </div>
+                    <div class="fv-row mb-4">
+                        <label class="fs-8 fw-semibold form-label mt-3">Upload Image</label>
+                        <input type="file" asp-for="Image" id="Imagepath" autocomplete="off" class="form-control bg-transparent" />
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-info" onclick="Update();" style="display:none" id="btnUpdate">Update</button>
+                <button class="btn btn-danger" data-bs-dismiss="modal">Back To List</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/js/useredit.js" asp-append-version="true"></script>

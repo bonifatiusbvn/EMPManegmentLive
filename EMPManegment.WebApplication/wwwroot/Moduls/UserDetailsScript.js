@@ -1,7 +1,6 @@
-﻿GetUserAttendanceOutTime();
-GetUserAttendanceInTime();
+﻿GetUserAttendanceInTime();
 UserBirsthDayWish();
-GetUserTotalHour();
+
 
 
 $(document).ready(function () {debugger
@@ -184,8 +183,7 @@ function EnterOutTime() {
                 confirmButtonColor: '#3085d6',
                 confirmButtonText: 'OK'
             })
-            GetUserAttendanceOutTime();
-            GetUserTotalHour();
+            GetUserAttendanceInTime();
         },
        
     })
@@ -230,69 +228,51 @@ function GetUserAttendanceInTime() {
         processData: false,
         contentType: false,
         success: function (Result) {
+            
             var datetime = Result.data;
             if (datetime != null) {
-                var InTime = datetime.substr(0, 2);
-                let newformat = InTime >= 12 ? 'PM' : 'AM';
-                InTime = InTime % 12;
-                InTime = InTime ? InTime : 12;
-                var minutes = datetime.substr(2, 5);
-                $("#todayintime").text(InTime + minutes + ' ' + newformat);
+                var userInTime = datetime.intime;
+                var inTime = userInTime.substr(11, 2);
+                let newformat = inTime >= 12 ? 'PM' : 'AM';
+                inTime = inTime % 12;
+                inTime = inTime ? inTime : 12;
+                var minutes = userInTime.substr(13, 3);
+                $("#todayintime").text(inTime + minutes + ' ' + newformat);
+                var userOutTime = datetime.outTime;
+                if (userOutTime != null) {
+                    var outtime = userOutTime.substr(11, 2);
+                    let newtimeformat = outtime >= 12 ? 'PM' : 'AM';
+                    outtime = outtime % 12;
+                    outtime = outtime ? outtime : 12;
+                    var minutes = userOutTime.substr(13, 3);
+                    $("#todayouttime").text(outtime + minutes + ' ' + newtimeformat);
+
+                    var userTotalHour = datetime.totalHours;
+                    if (userTotalHour != null) {
+                        var TotalHour = userTotalHour.substr(0,2);
+                        let Hours = TotalHour > 01 ? 'hrs' : 'hr';
+                        var minutes = userTotalHour.substr(2,3);
+                        $("#txttotalhours").text(TotalHour + minutes + ' ' + Hours);
+                    }
+                    else
+                    {
+                        $("#txttotalhours").text("Pending");
+                    }
+                }
+                else
+                {
+                    $("#todayouttime").text("Pending");
+                    $("#txttotalhours").text("Pending");
+                }
             }
             else {
-                $("#todayintime").text("undefined");
+                $("#todayintime").text("Pending");
+                $("#todayouttime").text("Pending");
+                $("#txttotalhours").text("Pending");
             }
 
         },
        
-    })
-}
-
-function GetUserAttendanceOutTime() {
-    
-    $.ajax({
-        url: '/Home/GetUserAttendanceOutTime',
-        type: 'Post',
-        dataType: 'json',
-        processData: false,
-        contentType: false,
-        success: function (Result) {
-            
-            var datetime = Result.data;
-            if (datetime != null) {
-                var Outtime = datetime.substr(11, 2);
-                let newformat = Outtime >= 12 ? 'PM' : 'AM';
-                Outtime = Outtime % 12;
-                Outtime = Outtime ? Outtime : 12;
-                var minutes = datetime.substr(13, 3);
-                $("#todayouttime").text(Outtime + minutes + ' ' + newformat);
-            }
-            else {
-                $("#todayouttime").text("Pending");
-            }
-        },
-
-    })
-}
-
-function GetUserTotalHour()
-{
-    $.ajax({
-        url: '/Home/GetUserTotalHour',
-        type: 'Post',
-        dataType: 'json',
-        processData: false,
-        contentType: false,
-        success: function (Result) {
-            var datetime = Result.data;
-            if (datetime != null) {
-                var TotalHour = datetime.substr(0, 5);
-                $("#txttotalhours").text(TotalHour);
-            }
-            else {
-                $("#txttotalhours").text("OutTime Pending" + " ");
-            }
-        },
     })
 }
 
@@ -305,17 +285,22 @@ function UserBirsthDayWish() {
         processData: false,
         contentType: false,
         success: function (Result) {
-            
-            Swal.fire(
-                {
-                    html: '<div class="mt-3"><lord-icon src="https://cdn.lordicon.com/lupuorrc.json" trigger="loop" colors="primary:#0ab39c,secondary:#405189" style="width:120px;height:120px"></lord-icon><div class="mt-4 pt-2 fs-15"><h4>' + Result.message + '</h4></div></div>',
-                    showCancelButton: !0,
-                    showConfirmButton: !1,
-                    cancelButtonClass: "btn btn-primary w-xs mb-1",
-                    cancelButtonText: "Thank You",
-                    buttonsStyling: !1,
-                    showCloseButton: !0
-                })
+            var Userdata = Result.data;
+            if (Userdata != null) {
+                Swal.fire(
+                    {
+                        html: '<div class="mt-3"><lord-icon src="https://cdn.lordicon.com/lupuorrc.json" trigger="loop" colors="primary:#0ab39c,secondary:#405189" style="width:120px;height:120px"></lord-icon><div class="mt-4 pt-2 fs-15"><h4>' + Result.message + '</h4></div></div>',
+                        showCancelButton: !0,
+                        showConfirmButton: !1,
+                        cancelButtonClass: "btn btn-primary w-xs mb-1",
+                        cancelButtonText: "Thank You",
+                        buttonsStyling: !1,
+                        showCloseButton: !0
+                    })
+            }
+            else {
+
+            }
         },
 
     })

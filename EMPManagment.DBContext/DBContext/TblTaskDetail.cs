@@ -15,8 +15,6 @@ public partial class TblTaskDetail
 
     public DateTime? TaskDate { get; set; }
 
-    public DateTime? TaskEndDate { get; set; }
-
     public Guid? UserId { get; set; }
 
     public DateTime? CreatedOn { get; set; }
