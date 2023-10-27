@@ -15,7 +15,7 @@ public partial class TblTaskDetail
 
     public DateTime? TaskDate { get; set; }
 
-    public string? UserName { get; set; }
+    public DateTime? TaskEndDate { get; set; }
 
     public Guid? UserId { get; set; }
 
@@ -23,7 +23,7 @@ public partial class TblTaskDetail
 
     public string? CreatedBy { get; set; }
 
-    public DateTime? TaskEndDate { get; set; }
+    public string? TaskStatus { get; set; }
 
     public virtual TblTaskMaster? TaskTypeNavigation { get; set; }
 
