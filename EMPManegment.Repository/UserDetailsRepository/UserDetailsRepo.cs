@@ -1,7 +1,9 @@
 ﻿using Azure;
+using Azure.Core;
 using EMPManagment.API;
 using EMPManegment.EntityModels.View_Model;
 using EMPManegment.EntityModels.ViewModels;
+using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.Inretface.Interface.UserAttendance;
 using EMPManegment.Inretface.Interface.UserList;
@@ -35,7 +37,7 @@ namespace EMPManegment.Repository.UserListRepository
         }
 
 
-        public async Task<IEnumerable<EmpDetailsView>> GetUsersList()
+        public async Task<IEnumerable<EmpDetailsView>> GetUsersList(DataTableParametersModel dataTable)
         {
             IEnumerable<EmpDetailsView> result = from e in Context.TblUsers
                                                  join d in Context.TblDepartments on e.DepartmentId equals d.Id
@@ -62,7 +64,20 @@ namespace EMPManegment.Repository.UserListRepository
                                                  };
             return result;
         }
+        //try
+        //{
+        //    var draw = Request.Form["draw"].FirstOrDefault();
+        //    var start = Request.Form["start"].FirstOrDefault();
+        //    var length = Request.Form["length"].FirstOrDefault();
+        //    var sortColumn = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
+        //    var sortColumnDir = Request.Form["order[0][dir]"].FirstOrDefault();
+        //    var searchValue = Request.Form["Search[value]"].FirstOrDefault();
+        //}
+        //catch (Exception)
+        //{
 
+        //    throw;
+        //}
         public async Task<UserResponceModel> ActiveDeactiveUsers(string UserName)
         {
             UserResponceModel response = new UserResponceModel();

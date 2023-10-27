@@ -3,6 +3,7 @@ using Azure.Core;
 using EMPManagment.Web.Models.API;
 using EMPManegment.EntityModels.View_Model;
 using EMPManegment.EntityModels.ViewModels;
+using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.Inretface.Interface.UserAttendance;
 using EMPManegment.EntityModels.ViewModels;
@@ -14,6 +15,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 using System.Net;
 using Microsoft.EntityFrameworkCore.Metadata;
 using NuGet.Protocol.Core.Types;
@@ -34,12 +36,12 @@ namespace EMPManagment.API.Controllers
         }
 
 
-        [HttpGet]
+        [HttpPost]
         [Route("GetAllUserList")]
 
-        public async Task<IActionResult> GetAllUserList()
+        public async Task<IActionResult> GetAllUserList(DataTableParametersModel dataTable)
         {
-            IEnumerable<EmpDetailsView> userList = await UserListServices.GetUsersList();
+            IEnumerable<EmpDetailsView> userList = await UserListServices.GetUsersList(dataTable);
             return Ok(new { code = 200, data = userList.ToList() });
         }
 

@@ -7,7 +7,9 @@ public partial class TblVendorMaster
 {
     public int Id { get; set; }
 
-    public string VendorName { get; set; } = null!;
+    public int? VendorTypeId { get; set; }
+
+    public string? VendorName { get; set; }
 
     public string? VendorEmail { get; set; }
 
@@ -26,4 +28,6 @@ public partial class TblVendorMaster
     public DateTime? CreatedOn { get; set; }
 
     public string? CreatedBy { get; set; }
+
+    public virtual TblVendorType? VendorType { get; set; }
 }
