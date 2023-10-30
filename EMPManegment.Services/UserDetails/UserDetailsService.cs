@@ -21,7 +21,7 @@ namespace EMPManegment.Services.UserList
             UserList = userList;
         }
 
-        public async Task<IEnumerable<EmpDetailsView>> GetUsersList(DataTableParametersModel dataTable)
+        public async Task<jsonData> GetUsersList(DataTableRequstModel dataTable)
         {
             return await UserList.GetUsersList(dataTable);
         }

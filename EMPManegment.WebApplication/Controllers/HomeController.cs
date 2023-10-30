@@ -196,24 +196,24 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
-        [HttpGet]
-        public async Task<JsonResult> GetUserName()
-        {
-            try
-            {
-                List<EmpDetailsView> userList = new List<EmpDetailsView>();
-                HttpClient client = WebAPI.Initil();
-                ApiResponseModel res = await APIServices.GetAsync("", "UserDetails/GetAllUserList");
-                if (res.code == 200)
-                {
-                    userList = JsonConvert.DeserializeObject<List<EmpDetailsView>>(res.data.ToString());
-                }
-                return new JsonResult(userList);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
+        //[HttpGet]
+        //public async Task<JsonResult> GetUserName()
+        //{
+        //    try
+        //    {
+        //        List<EmpDetailsView> userList = new List<EmpDetailsView>();
+        //        HttpClient client = WebAPI.Initil();
+        //        ApiResponseModel res = await APIServices.GetAsync("", "UserDetails/GetAllUserList");
+        //        if (res.code == 200)
+        //        {
+        //            userList = JsonConvert.DeserializeObject<List<EmpDetailsView>>(res.data.ToString());
+        //        }
+        //        return new JsonResult(userList);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw ex;
+        //    }
+        //}
     }
 }
