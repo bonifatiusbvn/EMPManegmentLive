@@ -36,13 +36,13 @@ namespace EMPManagment.API.Controllers
         }
 
 
-        [HttpGet]
+        [HttpPost]
         [Route("GetAllUserList")]
 
-        public async Task<IActionResult> GetAllUserList(DataTableParametersModel dataTable)
+        public async Task<IActionResult> GetAllUserList(DataTableRequstModel dataTable)
         {
-            IEnumerable<EmpDetailsView> userList = await UserListServices.GetUsersList(dataTable);
-            return Ok(new { code = 200, data = userList.ToList() });
+            var userList = await UserListServices.GetUsersList(dataTable);
+            return Ok(new { code = 200, data = userList });
         }
 
 

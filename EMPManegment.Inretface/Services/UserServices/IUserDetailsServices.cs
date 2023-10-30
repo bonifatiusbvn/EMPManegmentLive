@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,7 +13,7 @@ namespace EMPManegment.Inretface.Services.UserListServices
 {
     public interface IUserDetailsServices
     {
-       Task<IEnumerable<EmpDetailsView>> GetUsersList(DataTableParametersModel dataTable);
+       Task<jsonData> GetUsersList(DataTableRequstModel dataTable);
         Task<UserResponceModel> ActiveDeactiveUsers(string UserName);
 
         Task<UserResponceModel> EnterInTime(UserAttendanceModel userAttendance);
