@@ -80,7 +80,7 @@ namespace EMPManegment.Services.UserList
             return await UserList.GetById(id);
         }
 
-        public async Task<Guid> UpdateUser(UserEditViewModel employee)
+        public async Task<UserResponceModel> UpdateUser(UserEditViewModel employee)
         {
             return await UserList.UpdateUser(employee);
         }

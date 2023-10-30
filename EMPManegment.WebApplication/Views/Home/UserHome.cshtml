@@ -466,8 +466,10 @@
                         <div class="mb-3">
                             <label class="form-label">Task Title</label>
                             @* <input type="text" class="form-control" id="dealTitle" placeholder="Enter title" required=""> *@
-                            <input type="text" id="dealTitle" class="form-control" required name="TaskTitle" placeholder="Enter title" />
-                            <span class="text-danger error field-validation-valid" data-valmsg-for="TaskTitle" data-valmsg-replace="true"></span>
+                            <input type="text" id="dealTitle" class="form-control" name="TaskTitle" placeholder="Enter title" required/>
+                             <div class="invalid-feedback">
+                             Please enter username
+                           </div>
                         </div>
                         <div class="mb-3">
                             <label for="dealOwner" class="form-label">Task ProvideTo</label>
@@ -508,5 +510,3 @@
 </div>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/moduls/taskscript.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-<script src="~/Scripts/jquery.validate.js"></script>
