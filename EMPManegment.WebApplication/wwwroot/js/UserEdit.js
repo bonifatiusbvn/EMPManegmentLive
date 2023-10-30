@@ -1,36 +1,40 @@
 ﻿
 
 function EditUserDetails(EmpId) {
-    debugger
+   
     
     $.ajax({
        
-        url: '/UserDetails/Edit?Id=' + EmpId,
+        url: '/UserDetails/EditUserDetails?Id=' + EmpId,
         type: 'Get',
         contentType: 'application/json;charset=utf-8 ',
         datatype: 'json',
         success: function (response) {debugger
-            
-            $('#empmodal').modal('show');
+            $('.empmodal').modal('show');
             $('#Userid').val(response.id);
             $('#FirstName').val(response.firstName);
             $('#LastName').val(response.lastName);
             $('#Dob').val(response.dateOfBirth);
             $('#Gender').val(response.gender);
             $('#Email').val(response.email);
+
             $('#Contry').val(response.countryId);
+            $('#ddlCountry').val(response.countryId);
+
             $('#state').val(response.stateId);
+            $('#ddlState').val(response.stateId);
+
             $('#City').val(response.cityId);
+            $('#ddlCity').val(response.cityId);
+
             $('#deptid').val(response.departmentId);
+            $('#ddlDepartmenrnt').val(response.departmentId);
+
             $('#PhoneNo').val(response.phoneNumber);
             $('#Address').val(response.address);
-          
-            $('#empmodal').modal('show');
-            $('#btnUpdate').modal('show');
+
+       
         },
-        error: function () {
-            alert('Data not found');
-        }
     })
 }
 
@@ -50,20 +54,23 @@ function Update() {debugger
         DepartmentId: $('#deptid').val(),
         PhoneNumber: $('#PhoneNo').val(),
         Address: $('#Address').val(),
-        
     }
     $.ajax({
-        url: '/UserDetails/Update',
+        url: '/UserDetails/UpdateUserDetails',
         type: 'post',
         data: objData,
         datatype: 'json',
-        success: function () {
-            alert('Data Saved');
-        },
-        error: function () {
-            alert('Data cannot  Saved!');
-        }
+        success: function (Result) {
 
+            Swal.fire({
+                title: Result.message,
+                icon: 'success',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'OK'
+            }).then(function () {
+                window.location = '/UserDetails/UserEditList';
+            });
+        },
     })
 
 }
@@ -170,5 +177,21 @@ function CheckValidation() {debugger
     }
     return isValid;
 }
+//serchbar
+$('#txtserch').keyup(function () {
+    debugger
+    var typevalue = $(this).val();
+    $('tbody tr').each(function () {
+        if ($(this).text().search(new RegExp(typevalue, "i")) < 0) {
+            $(this).hide();
+        }
+        else {
+            $(this).show();
+        }
+    })
+});
+
+  
+
 
 
