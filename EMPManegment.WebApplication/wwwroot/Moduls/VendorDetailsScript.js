@@ -1,4 +1,34 @@
-﻿
+﻿$(document).ready(function () {
+    GetAllVendorData();
+});
+function GetAllVendorData() {
+    
+    $('#VendorTableData').DataTable({
+        processing: true,
+        serverSide: true,
+        filter: true,
+        "bDestroy": true,
+        ajax: {
+            type: "Post",
+            url: '/Vendor/GetVendorList',
+            dataType: 'json'
+        },
+        columns: [
+            { "data": "vendorName", "name": "VendorName", "autowidth": true },
+            { "data": "vendorEmail", "name": "VendorEmail", "autowidth": true },
+            { "data": "vendorPhone", "name": "VendorPhone", "autowidth": true },
+            { "data": "vendorBankAccountNo", "name": "VendorBankAccountNo", "autowidth": true },
+            { "data": "vendorBankName", "name": "VendorBankName", "autowidth": true },
+            { "data": "vendorBankIfsc", "name": "VendorBankIfsc", "autowidth": true },
+            { "data": "vendorGstnumber", "name": "VendorGstnumber", "autowidth": true },
+            { "data": "vendorAddress", "name": "VendorAddress", "autowidth": true },
+        ],
+        columnDefs: [{
+            "defaultContent": "",
+            "targets": "_all"
+        }]
+    });
+}
 function AddVendorDetails() {
     
     var objData = {

@@ -1,4 +1,5 @@
 ﻿using EMPManegment.EntityModels.View_Model;
+using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.VendorModels;
 using EMPManegment.Inretface.Interface.VendorDetails;
@@ -45,12 +46,12 @@ namespace EMPManagment.API.Controllers
             return StatusCode(response.Code, response);
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("GetVendorList")]
-        public async Task<IActionResult> GetVendorList()
+        public async Task<IActionResult> GetVendorList(DataTableRequstModel dataTable)
         {
-            IEnumerable<VendorDetailsView> vendorList = await VendorDetails.GetVendorsList();
-            return Ok(new { code = 200, data = vendorList.ToList() });
+            var vendorList = await VendorDetails.GetVendorsList(dataTable);
+            return Ok(new { code = 200, data = vendorList });
         }
     }
 }

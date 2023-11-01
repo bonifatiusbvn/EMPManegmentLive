@@ -1,4 +1,5 @@
-﻿using EMPManegment.EntityModels.ViewModels.Models;
+﻿using EMPManegment.EntityModels.ViewModels.DataTableParameters;
+using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.VendorModels;
 using EMPManegment.Inretface.Interface.VendorDetails;
 using EMPManegment.Inretface.Services.VendorDetailsServices;
@@ -21,10 +22,9 @@ namespace EMPManegment.Services.VendorDetails
         {
             return await details.AddVendor(vendor);
         }
-
-        public async Task<IEnumerable<VendorDetailsView>> GetVendorsList()
+        public async Task<jsonData> GetVendorsList(DataTableRequstModel dataTable)
         {
-            return await details.GetVendorsList();
+            return await details.GetVendorsList(dataTable);
         }
     }
 }

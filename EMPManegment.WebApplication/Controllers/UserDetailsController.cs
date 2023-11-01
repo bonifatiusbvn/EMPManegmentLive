@@ -24,6 +24,7 @@ using System.Text.Json;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 using Microsoft.IdentityModel.Tokens;
+using EMPManegment.EntityModels.ViewModels.UserModels;
 
 namespace EMPManegment.Web.Controllers
 {
@@ -77,16 +78,26 @@ namespace EMPManegment.Web.Controllers
                     sortColumn =  sortColumn,
                     sortColumnDir = sortColumnDir
                 };
-
+                List<UserDataTblModel> userDataTblModels = new List<UserDataTblModel>();
                 var data = new jsonData();
                 HttpClient client = WebAPI.Initil();
                 ApiResponseModel res = await APIServices.PostAsync(dataTable,"UserDetails/GetAllUserList");
                 if (res.code == 200)
                 {
                     data = JsonConvert.DeserializeObject<jsonData>(res.data.ToString());
+                    userDataTblModels = JsonConvert.DeserializeObject<List<UserDataTblModel>>(data.data.ToString());
                 }
+                var jsonData = new
+                {
+                    draw = data.draw,
+                    recordsFiltered = data.recordsFiltered,
+                    recordsTotal = data.recordsTotal,
+                    data = userDataTblModels,
+                };
 
-                return new JsonResult(data);  
+
+
+                return new JsonResult(jsonData);  
             }
             catch (Exception ex)
             {
