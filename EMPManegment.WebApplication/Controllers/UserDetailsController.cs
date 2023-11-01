@@ -56,7 +56,7 @@ namespace EMPManegment.Web.Controllers
         {
             try
             {
-               
+
 
                 var draw = Request.Form["draw"].FirstOrDefault();
                 var start = Request.Form["start"].FirstOrDefault();
