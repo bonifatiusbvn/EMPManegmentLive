@@ -27,7 +27,6 @@ namespace EMPManegment.EntityModels.ViewModels.TaskModels
         public string? CreatedBy { get; set; }
 
         public DateTime? TaskEndDate { get; set; }
+        public string? TaskStatus { get; set; }
     }
-
-
 }

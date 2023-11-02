@@ -4,6 +4,8 @@ using EMPManegment.EntityModels.ViewModels;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.TaskModels;
 using EMPManegment.Inretface.Interface.TaskDetails;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -44,9 +46,7 @@ namespace EMPManegment.Repository.TaskRepository
             UserResponceModel response = new UserResponceModel();
             try
             {
-                if(task!= null)
-                {
-                    var model = new TblTaskDetail()
+                     var model = new TblTaskDetail()
                     {
                         Id = Guid.NewGuid(),
                         TaskType = task.TaskType,
@@ -60,19 +60,58 @@ namespace EMPManegment.Repository.TaskRepository
                     response.Code = 200;
                     response.Message = "Task add successfully!";
                     Context.TblTaskDetails.Add(model);
-                    Context.SaveChanges();
-                }
-                else
-                {
-                    response.Code = 200;
-                }
-                
+                    Context.SaveChanges();                
             }
             catch (Exception ex) 
             {
                 throw ex;
             }
             return response;
+        }
+
+        public async Task<UserResponceModel> UpdateDealStatus(TaskDetailsView task)
+        {
+            UserResponceModel model = new UserResponceModel();
+            var data = Context.TblTaskDetails.Where(e => e.Id == task.Id).FirstOrDefault();
+            try
+            {
+                if (data != null)
+                {
+                    data.TaskStatus = task.TaskStatus;
+                }
+                Context.TblTaskDetails.Update(data);
+                Context.SaveChanges();
+                model.Code = 200;
+                model.Message = "Task Status Updated Successfully!";
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return model;
+        }
+
+        public async Task<List<TaskDetailsView>> GetUserTaskDetails(TaskDetailsView task)
+        {
+            var UserId = new List<TaskDetailsView>();
+            var data = await Context.TblTaskDetails.Where(x=>x.UserId == task.UserId).ToListAsync();
+            if(data != null)
+            {
+                foreach(var item in data)
+                {
+                    
+                    UserId.Add(new TaskDetailsView()
+                    {
+                        Id = item.Id,
+                        TaskStatus = item.TaskStatus,
+                        TaskDate  = item.TaskDate,
+                        TaskDetails = item.TaskDetails,
+                        TaskEndDate = item.TaskEndDate,
+                        TaskTitle = item.TaskTitle,
+                    });
+                }
+            }
+            return UserId;
         }
     }
 }

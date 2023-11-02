@@ -12,5 +12,7 @@ namespace EMPManegment.Inretface.Services.TaskServices
     {
         Task<IEnumerable<TaskTypeView>> GetTaskType();
         Task<UserResponceModel> AddTaskDetails(TaskDetailsView task);
+        Task<List<TaskDetailsView>> GetUserTaskDetails(TaskDetailsView task);
+        Task<UserResponceModel> UpdateDealStatus(TaskDetailsView task);
     }
 }
