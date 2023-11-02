@@ -1,0 +1,247 @@
+﻿@model IEnumerable<EMPManegment.EntityModels.View_Model.EmpDetailsView>
+@{
+    ViewData["Title"] = "UserEditList";
+    Layout = "~/Views/Shared/_HomeLayout.cshtml";
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title mb-0">User Edit</h4>
+            </div><!-- end card header -->
+
+            <div class="card-body">
+                <div class="listjs-table" id="customerList">
+                    <div class="row g-4 mb-3">
+                        <div class="col-sm-auto">
+                            <div>
+                                <button type="button" class="btn btn-primary add-btn" data-bs-toggle="modal" id="create-btn" data-bs-target="#showModal"><i class="ri-add-line align-bottom me-1"></i> Add</button>
+                                <button class="btn btn-soft-danger" onclick="deleteMultiple()"><i class="ri-delete-bin-2-line"></i></button>
+                            </div>
+                        </div>
+                        <div class="col-sm">
+                            <div class="d-flex justify-content-sm-end">
+                                <div class="search-box ms-2">
+                                    <input type="text" class="form-control search" id="txtserch" placeholder="Search...">
+                                    <i class="ri-search-line search-icon"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="table-responsive table-card mt-3 mb-1">
+                        <table class="table align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th scope="col">UserName</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Gender</th>
+                                    <th scope="col">DateOfBirth</th>
+                                    <th scope="col">Email</th>
+                                    <th scope="col">PhoneNumber</th>
+                                    <th scope="col">Address</th>
+                                    <th scope="col">CityId</th>
+                                    <th scope="col">DepartmentId</th>
+                                    <th scope="col">StateId</th>
+                                    <th scope="col">CountryId</th>
+                                    <th scope="col">Edit</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @if (Model.Count() > 0)
+                                {
+                                    @foreach (var d in Model)
+                                    {
+                                        <tr>
+                                            <td>@d.UserName</td>
+                                            <td>
+                                                <div class="d-flex gap-2 align-items-center">
+                                                    <div class="flex-shrink-0">
+                                                        <img src="~/@d.Image" alt="" class="avatar-xs rounded-circle" />
+                                                    </div>
+                                                    <div class="flex-grow-1">
+                                                        @d.FirstName  @d.LastName
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>@d.Gender</td>
+                                            <td>@d.DateOfBirth.ToShortDateString()</td>
+                                            <td>@d.Email</td>
+                                            <td>@d.PhoneNumber</td>
+                                            <td>@d.Address</td>
+                                            <td>@d.CityName</td>
+                                            <td>@d.DepartmentName</td>
+                                            <td>@d.StateName</td>
+                                            <td>@d.CountryName</td>
+                                            <td>
+                                                <a class="btn btn-sm btn-warning" id="btnedit" onclick="EditUserDetails('@d.Id')">
+                                                    Edit
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr class="text-center">
+                                        <td colspan="5"><h2 class="text-warning bg-info">No Records</h2></td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                        <div class="modal fade empmodal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h3 class="text-info modal-title" id="myLargeModalLabel">User Edit</h3>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="fv-row mb-8">
+                                            <div class="row">
+                                                <div class="fv-row mb-6">
+                                                    <label class="from-label">Department</label>
+                                                    <select id="ddlDepartmenrnt" class="form-control bg-transparent">
+                                                        <option>--Select Department--</option>
+                                                    </select>
+                                                    <input type="hidden" id="deptid" value="" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="fv-row mb-6">
+                                            <input type="hidden" readonly id="Userid" class="form-control bg-transparent" />
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">First Name</label>
+                                                    <input type="text" class="form-control" id="FirstName">
+                                                    <span id="txtFirstName" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Last Name</label>
+                                                    <input type="text" class="form-control" id="LastName">
+                                                    <span id="txtLastName" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <div class="fv-row mb-3">
+                                                    <label class="form-label">DateOfBirth</label>
+                                                    <input type="datetime-local" class="form-control"  id="Dob">
+                                                    <span id="txtDob" class="text-danger"></span>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-6">
+                                                <div class="fv-row mb-3">
+                                                    <label class="from-label">Gender</label>
+                                                    <select id="Gender" class="form-control bg-transparent">
+                                                        <option value="Male">Male</option>
+                                                        <option value="Female">Female</option>
+                                                        <option value="Other">Other</option>
+                                                    </select>
+                                                    <input type="hidden" id="Gender" value="" />
+                                                    <span class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Email</label>
+                                                    <input type="email" class="form-control" id="Email">
+                                                    <span id="txtEmail" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">PhoneNumber</label>
+                                                    <input type="number" class="form-control" id="PhoneNo">
+                                                    <span id="txtphno" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Address</label>
+                                                    <input type="text" class="form-control" id="Address">
+                                                    <span id="txtAddress" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                           
+
+                                        </div>
+                                        <div class="modal-footer">
+                                            <div class="hstack gap-2 justify-content-end">
+                                                <button type="submit" class="btn btn-info" onclick="Update()"  id="btnUpdate">Update</button>
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div><!-- /.modal-content -->
+                            </div><!-- /.modal-dialog -->
+                        </div><!-- /.modal -->
+                        <div class="noresult" style="display: none">
+                            <div class="text-center">
+                                <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#25a0e2,secondary:#00bd9d" style="width:75px;height:75px">
+                                </lord-icon>
+                                <h5 class="mt-2">Sorry! No Result Found</h5>
+                                <p class="text-muted mb-0">
+                                    We've searched more than 150+ Orders We did not find any
+                                    orders for you search.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-end">
+                        <div class="pagination-wrap hstack gap-2">
+                            <a class="page-item pagination-prev disabled" href="javascrpit:void(0)">
+                                Previous
+                            </a>
+                            <ul class="pagination listjs-pagination mb-0"><li class="active"><a class="page" href="#" data-i="1" data-page="8">1</a></li></ul>
+                            <a class="page-item pagination-next" href="javascript:void(0);">
+                                Next
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div><!-- end card -->
+        </div>
+        <!-- end col -->
+    </div>
+    <!-- end col -->
+</div>
+
+
+
+
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/Moduls/employeescript.js"></script>
+
+
+   
+
+
+    
+ 
+
+  
+
+   
+   
+
+
+
+
+

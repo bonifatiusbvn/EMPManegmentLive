@@ -1,6 +1,7 @@
 ﻿using EMPManagment.API;
 using EMPManegment.EntityModels.View_Model;
 using EMPManegment.EntityModels.ViewModels;
+using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.Inretface.EmployeesInterface.AddEmployee;
 using EMPManegment.Inretface.Services.AddEmployeeServies;
 using EMPManegment.Repository.AddEmpRepository;
@@ -21,7 +22,7 @@ namespace EMPManegment.Services.AddEmployee
             EmpDetails = _empDetails;
         }
 
-        public async Task<EmpDetailsResponseModel> AddEmployee(EmpDetailsView emp)
+        public async Task<UserResponceModel> AddEmployee(EmpDetailsView emp)
         {
             return await EmpDetails.AddEmployee(emp);
         }

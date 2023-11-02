@@ -25,6 +25,8 @@ public partial class BonifatiusEmployeesContext : DbContext
 
     public virtual DbSet<TblDocumentMaster> TblDocumentMasters { get; set; }
 
+    public virtual DbSet<TblPageMaster> TblPageMasters { get; set; }
+
     public virtual DbSet<TblQuestion> TblQuestions { get; set; }
 
     public virtual DbSet<TblSalarySlip> TblSalarySlips { get; set; }
@@ -40,6 +42,8 @@ public partial class BonifatiusEmployeesContext : DbContext
     public virtual DbSet<TblUserDocument> TblUserDocuments { get; set; }
 
     public virtual DbSet<TblVendorMaster> TblVendorMasters { get; set; }
+
+    public virtual DbSet<TblVendorType> TblVendorTypes { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     { }
@@ -105,6 +109,17 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.Property(e => e.DocumentType).HasMaxLength(20);
         });
 
+        modelBuilder.Entity<TblPageMaster>(entity =>
+        {
+            entity.ToTable("tblPageMaster");
+
+            entity.Property(e => e.PageName).HasMaxLength(50);
+
+            entity.HasOne(d => d.User).WithMany(p => p.TblPageMasters)
+                .HasForeignKey(d => d.UserId)
+                .HasConstraintName("FK_tblPageMaster_tblUsers");
+        });
+
         modelBuilder.Entity<TblQuestion>(entity =>
         {
             entity.ToTable("tblQuestion");
@@ -149,6 +164,7 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.Property(e => e.TaskDate).HasColumnType("datetime");
             entity.Property(e => e.TaskDetails).HasMaxLength(150);
             entity.Property(e => e.TaskEndDate).HasColumnType("datetime");
+            entity.Property(e => e.TaskStatus).HasMaxLength(50);
             entity.Property(e => e.TaskTitle).HasMaxLength(50);
             entity.Property(e => e.TaskDetails).HasMaxLength(50);
 
@@ -253,6 +269,17 @@ public partial class BonifatiusEmployeesContext : DbContext
                 .HasColumnName("VendorGSTNumber");
             entity.Property(e => e.VendorName).HasMaxLength(50);
             entity.Property(e => e.VendorPhone).HasMaxLength(50);
+
+            entity.HasOne(d => d.VendorType).WithMany(p => p.TblVendorMasters)
+                .HasForeignKey(d => d.VendorTypeId)
+                .HasConstraintName("FK_tblVendor_Master_tblVendorType");
+        });
+
+        modelBuilder.Entity<TblVendorType>(entity =>
+        {
+            entity.ToTable("tblVendorType");
+
+            entity.Property(e => e.VendorType).HasMaxLength(50);
         });
 
         OnModelCreatingPartial(modelBuilder);

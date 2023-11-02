@@ -1,5 +1,6 @@
 ﻿using EMPManegment.EntityModels.View_Model;
 using EMPManegment.EntityModels.ViewModels;
+using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.Inretface.Interface.UserList;
 using EMPManegment.Inretface.Services.UserListServices;
@@ -20,9 +21,9 @@ namespace EMPManegment.Services.UserList
             UserList = userList;
         }
 
-        public async Task<IEnumerable<EmpDetailsView>> GetUsersList()
+        public async Task<jsonData> GetUsersList(DataTableRequstModel dataTable)
         {
-            return await UserList.GetUsersList();
+            return await UserList.GetUsersList(dataTable);
         }
 
         public Task<UserResponceModel> ActiveDeactiveUsers(string UserName)
@@ -68,6 +69,20 @@ namespace EMPManegment.Services.UserList
         public async Task<UserResponceModel> UserBirsthDayWish(Guid UserId)
         {
             return await UserList.UserBirsthDayWish(UserId);
+        }
+        public async Task<IEnumerable<EmpDetailsView>> UserEdit()
+        {
+            return await UserList.UserEdit();
+        }
+
+        public async Task<EmpDetailsView> GetById(Guid id)
+        {
+            return await UserList.GetById(id);
+        }
+
+        public async Task<UserResponceModel> UpdateUser(UserEditViewModel employee)
+        {
+            return await UserList.UpdateUser(employee);
         }
     }
 }

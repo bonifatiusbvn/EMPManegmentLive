@@ -46,7 +46,7 @@ function GetUserAttendance() {
                         (item.totalHours?.substr(0, 8)) + ('hr') + '</td>';
                 }
 
-                else if (item.totalHours == null && userdate == today) {
+                else if (item.totalHours == null && userdate == todate) {
                     object += '<td>' +
                         ("Pending") + '</td>';
 

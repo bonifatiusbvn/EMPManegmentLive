@@ -1,7 +1,9 @@
 ﻿using Azure;
+using Azure.Core;
 using EMPManagment.API;
 using EMPManegment.EntityModels.View_Model;
 using EMPManegment.EntityModels.ViewModels;
+using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.Inretface.Interface.UserAttendance;
 using EMPManegment.Inretface.Interface.UserList;
@@ -11,16 +13,19 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.Elfie.Extensions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Linq.Dynamic.Core;
 using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 using static System.Net.Mime.MediaTypeNames;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using EMPManegment.EntityModels.ViewModels.UserModels;
 
 namespace EMPManegment.Repository.UserListRepository
 {
@@ -35,14 +40,15 @@ namespace EMPManegment.Repository.UserListRepository
         }
 
 
-        public async Task<IEnumerable<EmpDetailsView>> GetUsersList()
+        public async Task<jsonData> GetUsersList(DataTableRequstModel dataTable)
         {
-            IEnumerable<EmpDetailsView> result = from e in Context.TblUsers
+
+            var result = from e in Context.TblUsers
                                                  join d in Context.TblDepartments on e.DepartmentId equals d.Id
                                                  join c in Context.TblCountries on e.CountryId equals c.Id
                                                  join s in Context.TblStates on e.StateId equals s.Id
                                                  join ct in Context.TblCities on e.CityId equals ct.Id
-                                                 select new EmpDetailsView
+                                                 select new UserDataTblModel
                                                  {
                                                      Id = e.Id,
                                                      IsActive = e.IsActive,
@@ -60,9 +66,35 @@ namespace EMPManegment.Repository.UserListRepository
                                                      CountryName = c.Country,
                                                      DepartmentName = d.Department
                                                  };
-            return result;
-        }
 
+            if(!string.IsNullOrEmpty(dataTable.sortColumn) && !string.IsNullOrEmpty(dataTable.sortColumnDir))
+            {
+                result = result.OrderBy(dataTable.sortColumn + " " + dataTable.sortColumnDir);
+            }
+
+            if (!string.IsNullOrEmpty(dataTable.searchValue))
+            {
+                result = result.Where(e=>e.UserName.Contains(dataTable.searchValue) || e.DepartmentName.Contains(dataTable.searchValue) || e.Gender.Contains(dataTable.searchValue));
+            }
+
+            int totalRecord = result.Count();
+
+            var cData = result.Skip(dataTable.skip).Take(dataTable.pageSize).ToList();
+
+            jsonData jsonData = new jsonData
+            {
+                draw = dataTable.draw,
+                recordsFiltered = totalRecord,
+                recordsTotal = totalRecord,
+                data = cData
+            };
+
+
+            return jsonData;
+
+
+        }
+        
         public async Task<UserResponceModel> ActiveDeactiveUsers(string UserName)
         {
             UserResponceModel response = new UserResponceModel();
@@ -348,6 +380,92 @@ namespace EMPManegment.Repository.UserListRepository
 
                 throw ex;
             }
+            
+        }
+
+        public async Task<IEnumerable<EmpDetailsView>> UserEdit()
+        {
+            IEnumerable<EmpDetailsView> result = from e in Context.TblUsers
+                                                 join d in Context.TblDepartments on e.DepartmentId equals d.Id
+                                                 join c in Context.TblCountries on e.CountryId equals c.Id
+                                                 join s in Context.TblStates on e.StateId equals s.Id
+                                                 join ct in Context.TblCities on e.CityId equals ct.Id
+                                                 select new EmpDetailsView
+                                                 {
+                                                     Id = e.Id,
+                                                     IsActive = e.IsActive,
+                                                     UserName = e.UserName,
+                                                     FirstName = e.FirstName,
+                                                     LastName = e.LastName,
+                                                     Image = e.Image,
+                                                     Gender = e.Gender,
+                                                     DateOfBirth = e.DateOfBirth,
+                                                     Email = e.Email,
+                                                     PhoneNumber = e.PhoneNumber,
+                                                     Address = e.Address,
+                                                     CityName = ct.City,
+                                                     StateName = s.State,
+                                                     CountryName = c.Country,
+                                                     DepartmentName = d.Department
+                                                 };
+            return result;
+        }
+
+        public async Task<EmpDetailsView> GetById(Guid id)
+        {
+            var employee = await Context.TblUsers.SingleOrDefaultAsync(x => x.Id == id);
+            EmpDetailsView model = new EmpDetailsView
+            {
+                Id = employee.Id,
+                FirstName = employee.FirstName,
+                LastName = employee.LastName,
+                Gender = employee.Gender,
+                DateOfBirth = employee.DateOfBirth,
+                Email = employee.Email,
+                PhoneNumber = employee.PhoneNumber,
+                Address = employee.Address,
+                CityId = employee.CityId,
+                DepartmentId = employee.DepartmentId,
+                StateId = employee.StateId,
+                CountryId = employee.CountryId,
+            };
+            return model;
+        }
+
+        public async Task<UserResponceModel> UpdateUser(UserEditViewModel employee)
+        {
+            try
+            {
+                UserResponceModel response = new UserResponceModel();
+                var data = await Context.TblUsers.FirstOrDefaultAsync(a => a.Id == employee.Id);
+                if (data != null)
+                {
+                    data.Id = employee.Id;
+                    data.FirstName = employee.FirstName;
+                    data.LastName = employee.LastName;
+                    data.Gender = employee.Gender;
+                    data.DateOfBirth = employee.DateOfBirth;
+                    data.Email = employee.Email;
+                    data.PhoneNumber = employee.PhoneNumber;
+                    data.Address = employee.Address;
+                    data.DepartmentId = employee.DepartmentId;
+                    data.CreatedOn = DateTime.Now;
+
+                    Context.TblUsers.Update(data);
+                    await Context.SaveChangesAsync();
+                }
+                response.Code = (int)HttpStatusCode.OK;
+                response.Message = "User Data Updated Successfully";
+                return response;
+                
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }
+
+      
+

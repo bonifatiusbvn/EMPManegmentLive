@@ -5,13 +5,14 @@ using System.Text;
 using System.Threading.Tasks;
 using EMPManegment.EntityModels.View_Model;
 using EMPManegment.EntityModels.ViewModels;
+using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 using EMPManegment.EntityModels.ViewModels.Models;
 
 namespace EMPManegment.Inretface.Interface.UserList
 {
     public interface IUserDetails
     {
-        Task<IEnumerable<EmpDetailsView>> GetUsersList();
+        Task<jsonData> GetUsersList(DataTableRequstModel dataTable);
          
         Task<UserResponceModel> ActiveDeactiveUsers(string UserName);
 
@@ -26,6 +27,10 @@ namespace EMPManegment.Inretface.Interface.UserList
         Task<DocumentInfoView> UploadDocument(DocumentInfoView doc);
         Task<UserResponceModel> UserLockScreen(LoginRequest request);
         Task<UserResponceModel> UserBirsthDayWish(Guid UserId);
+
+        Task<IEnumerable<EmpDetailsView>> UserEdit();
+        Task<EmpDetailsView> GetById(Guid id);
+        Task<UserResponceModel> UpdateUser(UserEditViewModel employee);
 
     }
 }

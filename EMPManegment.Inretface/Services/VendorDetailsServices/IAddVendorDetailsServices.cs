@@ -1,4 +1,5 @@
-﻿using EMPManegment.EntityModels.ViewModels.Models;
+﻿using EMPManegment.EntityModels.ViewModels.DataTableParameters;
+using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.VendorModels;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ namespace EMPManegment.Inretface.Services.VendorDetailsServices
     public interface IAddVendorDetailsServices
     {
         Task<UserResponceModel> AddVendor(VendorDetailsView vendor);
-        Task<IEnumerable<VendorDetailsView>> GetVendorsList();
+        Task<jsonData> GetVendorsList(DataTableRequstModel dataTable);
     }
 }
     

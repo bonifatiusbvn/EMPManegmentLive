@@ -1,6 +1,57 @@
-﻿GetUserAttendanceInTime();
-UserBirsthDayWish();
+﻿
 
+
+$(document).ready(function () {
+    GetUserAttendanceInTime();
+    UserBirsthDayWish();
+    GetAllUserData();
+});
+function GetAllUserData() {
+    
+    $('#UserTableData').DataTable({
+        processing: true,
+        serverSide: true,
+        filter: true,
+        "bDestroy": true,
+        ajax: {
+            type: "Post",
+            url: '/UserDetails/GetUserList',
+            dataType: 'json'
+        },
+        columns: [
+            { "data": "departmentName", "name": "DepartmentName" },
+            { "data": "userName", "name": "UserName" },
+            {
+                "data": "firstName",
+                "render": function (data, type, full) {
+                    return '<div class="d-flex align-items-center fw-medium"><img src="/' + full.image + '" style="height: 40px; width: 40px; border-radius: 50%;">' + full['firstName'] + ' ' + full['lastName'] + '</div >';
+                }
+            },
+            { "data": "gender", "name": "Gender" },
+            {
+                "data": "dateOfBirth", "name": "DateOfBirth", "type": "date",
+                "render": function (data) {
+                    var date = new Date(data);
+                    var month = date.getMonth() + 1;
+                    var day = date.getDate();
+                    return ("0" + day).slice(-2) + "/"
+                        + (month.length > 1 ? month : month) + "/"
+                        + date.getFullYear();
+                }
+            },
+            { "data": "email", "name": "Email" },
+            { "data": "phoneNumber", "name": "PhoneNumber" },
+            { "data": "countryName", "name": "CountryName" },
+            { "data": "stateName", "name": "StateName"},
+            { "data": "cityName", "name": "CityName" },
+           
+        ],
+        columnDefs: [{
+            "defaultContent": "",
+            "targets": "_all",
+        }]
+    });
+}
 
 function ActiveDeactive(UserName) {
     
@@ -225,3 +276,4 @@ function UserBirsthDayWish() {
 
     })
 }
+

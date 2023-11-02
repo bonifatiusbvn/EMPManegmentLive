@@ -3,8 +3,10 @@ using Azure.Core;
 using EMPManagment.Web.Models.API;
 using EMPManegment.EntityModels.View_Model;
 using EMPManegment.EntityModels.ViewModels;
+using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.Inretface.Interface.UserAttendance;
+using EMPManegment.EntityModels.ViewModels;
 using EMPManegment.Inretface.Interface.UserList;
 using EMPManegment.Inretface.Interface.UsersLogin;
 using EMPManegment.Inretface.Services.UserAttendanceServices;
@@ -13,7 +15,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 using System.Net;
+using Microsoft.EntityFrameworkCore.Metadata;
+using NuGet.Protocol.Core.Types;
 
 namespace EMPManagment.API.Controllers
 {
@@ -31,13 +36,13 @@ namespace EMPManagment.API.Controllers
         }
 
 
-        [HttpGet]
+        [HttpPost]
         [Route("GetAllUserList")]
 
-        public async Task<IActionResult> GetAllUserList()
+        public async Task<IActionResult> GetAllUserList(DataTableRequstModel dataTable)
         {
-            IEnumerable<EmpDetailsView> userList = await UserListServices.GetUsersList();
-            return Ok(new { code = 200, data = userList.ToList() });
+            var userList = await UserListServices.GetUsersList(dataTable);
+            return Ok(new { code = 200, data = userList });
         }
 
 
@@ -57,7 +62,6 @@ namespace EMPManagment.API.Controllers
 
                     responseModel.Code = (int)HttpStatusCode.OK;
                     responseModel.Message = user.Message;
-                    responseModel.Data = user.Data;
                 }
                 else
                 {
@@ -164,6 +168,14 @@ namespace EMPManagment.API.Controllers
             return Ok(new { code = 200, data = userList.ToList() });
         }
 
+        [HttpGet]
+        [Route("UserEdit")]
+        public async Task<IActionResult> UserEdit()
+        {
+            IEnumerable<EmpDetailsView> userList = await UserListServices.UserEdit();
+            return Ok(new { code = 200, data = userList.ToList() });
+        }
+
         [HttpPost]
         [Route("UpdateUserOutTime")]
 
@@ -196,6 +208,34 @@ namespace EMPManagment.API.Controllers
         {
             IEnumerable<UserAttendanceModel> attendance = await UserAttendance.GetUserAttendanceById(attendanceId);
             return Ok(new { code = 200, data = attendance });
+        }
+        [HttpGet]
+        [Route("GetEmployee")]
+        public async Task<IActionResult>GetEmployee(Guid id)
+        {
+            var data  = await UserListServices.GetById(id);
+            if (data == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return Ok(data);
+            }
+        }
+        [HttpPost]
+        [Route("Update")]
+        public async Task<IActionResult>UpdateUser(UserEditViewModel employee)
+        {
+            UserResponceModel response = new UserResponceModel();
+            var data = await UserListServices.UpdateUser(employee);
+            if (data.Code == 200)
+            {
+                response.Code = (int)HttpStatusCode.OK;
+                response.Message = data.Message;
+                response.Icone = data.Icone;
+            }
+            return StatusCode(response.Code, response);
         }
     }
 }

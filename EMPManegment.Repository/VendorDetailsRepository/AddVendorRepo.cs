@@ -1,5 +1,6 @@
 ﻿using EMPManagment.API;
 using EMPManegment.EntityModels.View_Model;
+using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.VendorModels;
 using EMPManegment.Inretface.Interface.VendorDetails;
@@ -7,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Dynamic.Core;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
@@ -61,25 +63,44 @@ namespace EMPManegment.Repository.VendorDetailsRepository
             }
             return response;
         }
-
-        public async Task<IEnumerable<VendorDetailsView>> GetVendorsList()
+        public async Task<jsonData> GetVendorsList(DataTableRequstModel dataTable)
         {
-            var vendorlist = await Context.TblVendorMasters.ToListAsync();
-            List<VendorDetailsView> model = vendorlist.Select(a => new VendorDetailsView
+            var vendorlist = Context.TblVendorMasters.Select(a => new VendorDetailsView
             {
                 Id = a.Id,
-                VendorName=a.VendorName,
-                VendorEmail=a.VendorEmail,
-                VendorPhone=a.VendorPhone,
-                VendorAddress=a.VendorAddress,
-                VendorBankAccountNo=a.VendorBankAccountNo,
-                VendorBankName=a.VendorBankName,
-                VendorBankIfsc=a.VendorBankIfsc,
-                VendorGstnumber=a.VendorGstnumber,
+                VendorName = a.VendorName,
+                VendorEmail = a.VendorEmail,
+                VendorPhone = a.VendorPhone,
+                VendorAddress = a.VendorAddress,
+                VendorBankAccountNo = a.VendorBankAccountNo,
+                VendorBankName = a.VendorBankName,
+                VendorBankIfsc = a.VendorBankIfsc,
+                VendorGstnumber = a.VendorGstnumber,
                 CreatedOn = DateTime.Now,
                 CreatedBy = a.CreatedBy,
-            }).ToList();
-            return model;
+            });
+            if (!string.IsNullOrEmpty(dataTable.sortColumn) && !string.IsNullOrEmpty(dataTable.sortColumnDir))
+            {
+                vendorlist = vendorlist.OrderBy(dataTable.sortColumn + " " + dataTable.sortColumnDir);
+            }
+
+            if (!string.IsNullOrEmpty(dataTable.searchValue))
+            {
+                vendorlist = vendorlist.Where(e => e.VendorName.Contains(dataTable.searchValue) || e.VendorPhone.Contains(dataTable.searchValue) || e.VendorEmail.Contains(dataTable.searchValue));
+            }
+
+            int totalRecord = vendorlist.Count();
+
+            var cData = vendorlist.Skip(dataTable.skip).Take(dataTable.pageSize).ToList();
+
+            jsonData jsonData = new jsonData
+            {
+                draw = dataTable.draw,
+                recordsFiltered = totalRecord,
+                recordsTotal = totalRecord,
+                data = cData
+            };
+            return jsonData;
         }
     }
-}
+    }

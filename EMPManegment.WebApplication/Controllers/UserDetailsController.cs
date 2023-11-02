@@ -1,10 +1,13 @@
-﻿using EMPManagment.Web.Helper;
+﻿using Azure;
+using EMPManagment.API;
+using EMPManagment.Web.Helper;
 using EMPManagment.Web.Models.API;
 using EMPManegment.EntityModels.View_Model;
 using EMPManegment.EntityModels.ViewModels;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Newtonsoft.Json;
 using EMPManegment.Web.Helper;
 using System.Security.Claims;
@@ -16,6 +19,12 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
 using static System.Net.Mime.MediaTypeNames;
 using EMPManagment.API;
+using System.Security.Claims;
+using System.Text.Json;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using EMPManegment.EntityModels.ViewModels.DataTableParameters;
+using Microsoft.IdentityModel.Tokens;
+using EMPManegment.EntityModels.ViewModels.UserModels;
 
 namespace EMPManegment.Web.Controllers
 {
@@ -39,11 +48,69 @@ namespace EMPManegment.Web.Controllers
         }
         public async Task<IActionResult> DisplayUserList()
         {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> GetUserList()
+        {
+            try
+            {
+
+
+                var draw = Request.Form["draw"].FirstOrDefault();
+                var start = Request.Form["start"].FirstOrDefault();
+                var length = Request.Form["length"].FirstOrDefault();
+                var sortColumn = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault()+"][name]"].FirstOrDefault();
+                var sortColumnDir = Request.Form["order[0][dir]"].FirstOrDefault();
+                var searchValue = Request.Form["search[value]"].FirstOrDefault();
+                int pageSize = length != null ? Convert.ToInt32(length) : 0;
+                int skip = start != null ? Convert.ToInt32(start) : 0;
+
+                var dataTable = new DataTableRequstModel
+                {
+                    draw = draw,
+                    start = start,
+                    pageSize = pageSize,
+                    skip = skip,
+                    lenght = length,
+                    searchValue = searchValue,
+                    sortColumn =  sortColumn,
+                    sortColumnDir = sortColumnDir
+                };
+                List<UserDataTblModel> userDataTblModels = new List<UserDataTblModel>();
+                var data = new jsonData();
+                HttpClient client = WebAPI.Initil();
+                ApiResponseModel res = await APIServices.PostAsync(dataTable,"UserDetails/GetAllUserList");
+                if (res.code == 200)
+                {
+                    data = JsonConvert.DeserializeObject<jsonData>(res.data.ToString());
+                    userDataTblModels = JsonConvert.DeserializeObject<List<UserDataTblModel>>(data.data.ToString());
+                }
+                var jsonData = new
+                {
+                    draw = data.draw,
+                    recordsFiltered = data.recordsFiltered,
+                    recordsTotal = data.recordsTotal,
+                    data = userDataTblModels,
+                };
+
+
+
+                return new JsonResult(jsonData);  
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public async Task<IActionResult> UserEditList()
+        {
             try
             {
                 List<EmpDetailsView> userList = new List<EmpDetailsView>();
                 HttpClient client = WebAPI.Initil();
-                ApiResponseModel res = await APIServices.GetAsync("", "UserDetails/GetAllUserList");
+                ApiResponseModel res = await APIServices.GetAsync("", "UserDetails/UserEdit");
                 if (res.code == 200)
                 {
                     userList = JsonConvert.DeserializeObject<List<EmpDetailsView>>(res.data.ToString());
@@ -58,7 +125,6 @@ namespace EMPManegment.Web.Controllers
 
         public async Task<IActionResult> UserActiveDecative()
         {
-
             try
             {
                 List<EmpDetailsView> userList = new List<EmpDetailsView>();
@@ -238,6 +304,12 @@ namespace EMPManegment.Web.Controllers
         }
         public async Task<IActionResult> LockScreen()
         {
+            HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            var StoredCookies = Request.Cookies.Keys;
+            foreach (var Cookie in StoredCookies)
+            {
+                Response.Cookies.Delete(Cookie);
+            }
             return View();
         }
 
@@ -336,5 +408,64 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
+        [HttpGet]
+        public async Task<JsonResult> EditUserDetails(Guid id)
+        {
+            try
+            {
+                EmpDetailsView emp = new EmpDetailsView();
+                HttpClient client = WebAPI.Initil();
+                HttpResponseMessage res = await client.GetAsync("UserDetails/GetEmployee?id=" + id);
+                if (res.IsSuccessStatusCode)
+                {
+                    var result = res.Content.ReadAsStringAsync().Result;
+                    emp = JsonConvert.DeserializeObject<EmpDetailsView>(result);
+                }
+                return new JsonResult(emp);
+            }
+
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        [HttpPost]
+        public async Task<IActionResult> UpdateUserDetails(UserEditViewModel employee)
+        {
+            try
+            {
+                var emp = new UserEditViewModel()
+                {
+                Id = employee.Id,
+                DepartmentId = employee.DepartmentId,
+                FirstName = employee.FirstName,
+                LastName = employee.LastName,
+                Email = employee.Email,
+                Address = employee.Address,
+                CityId = employee.CityId,
+                StateId = employee.StateId,
+                CountryId = employee.CountryId,
+                PhoneNumber = employee.PhoneNumber,
+                DateOfBirth = employee.DateOfBirth,
+                Gender = employee.Gender,
+
+                 };
+            
+                ApiResponseModel postUser = await APIServices.PostAsync(emp, "UserDetails/Update");
+                if (postUser.code == 200)
+                {
+                    return Ok(new { Message = postUser.message, Code = postUser.code });
+                }
+                else
+                {
+                    return new JsonResult(new { Message = string.Format(postUser.message), Code = postUser.code });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
     }
 }
