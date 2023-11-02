@@ -3,6 +3,7 @@ using EMPManegment.EntityModels.View_Model;
 using EMPManegment.EntityModels.ViewModels;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.TaskModels;
+using EMPManegment.Inretface.Interface.UserAttendance;
 using EMPManegment.Inretface.Services.TaskServices;
 using EMPManegment.Inretface.Services.UserAttendanceServices;
 using EMPManegment.Inretface.Services.UserListServices;
@@ -10,6 +11,7 @@ using EMPManegment.Repository.UserAttendanceRepository;
 using EMPManegment.Services.UserAttendance;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Net;
 
 namespace EMPManagment.API.Controllers
@@ -172,6 +174,40 @@ namespace EMPManagment.API.Controllers
             try
             {
                 var result = TaskServices.AddTaskDetails(task);
+                if (result.Result.Code == 200)
+                {
+                    response.Code = (int)HttpStatusCode.OK;
+                    response.Message = result.Result.Message;
+                }
+                else
+                {
+                    response.Message = result.Result.Message;
+                    response.Code = (int)HttpStatusCode.NotFound;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return StatusCode(response.Code, response);
+        }
+
+        [HttpPost]
+        [Route("GetUserTaskDetails")]
+        public async Task<IActionResult> GetUserTaskDetails(TaskDetailsView task)
+        {
+            List<TaskDetailsView> taskList = await TaskServices.GetUserTaskDetails(task);
+            return Ok(new { code = 200, data = taskList.ToList() });
+        }
+
+        [HttpPost]
+        [Route("UpdateDealStatus")]
+        public async Task<IActionResult> UpdateDealStatus(TaskDetailsView task)
+        {
+            UserResponceModel response = new UserResponceModel();
+            try
+            {
+                var result = TaskServices.UpdateDealStatus(task);
                 if (result.Result.Code == 200)
                 {
                     response.Code = (int)HttpStatusCode.OK;
