@@ -2,67 +2,81 @@
     GetUserAttendance();
     GetAttendance();
 });
+
 function GetUserAttendance() {
-    
-    $.ajax({
-        url: '/UserDetails/GetUserAttendanceList',
-        type: 'Get',
-        dataType: 'json',
-        processData: false,
-        contentType: false,
-        success: function (result, status, xhr) {
-            
-            var object = '';
-            $.each(result, function (index, item) {
-                
-                var userdate = new Date(item.date).toLocaleDateString('en-US');
-                var todate = new Date().toLocaleDateString('en-US');
-                object += '<tr>';
-                object += '<td>' + item.userName + '</td>';
-                object += '<td>' + (new Date(item.date)).toLocaleDateString('en-US') + '</td>';
-                object += '<td>' + (new Date(item.intime)).toLocaleTimeString('en-US') + '</td>';
-                //---------OutTime---------//
-                
-                if (item.outTime != null) {
-                    object += '<td>' +
-                        (new Date(item.outTime)).toLocaleTimeString('en-US') + '</td>';
-                }
-                
-                else if (item.outTime == null && userdate == todate)
-                {
-                    object += '<td>' +
-                        ("Pending") + '</td>';
 
-                }
-
-
-                else {
-                    object += '<td>' +
-                        ("Missing") + '</td>';
-                }
-                //---------TotalHours--------//
-                debugger
-                if (item.totalHours != null) {
-                    object += '<td>' +
-                        (item.totalHours?.substr(0, 8)) + ('hr') + '</td>';
-                }
-
-                else if (item.totalHours == null && userdate == today) {
-                    object += '<td>' +
-                        ("Pending") + '</td>';
-
-                }
-                else {
-                    object += '<td>' +
-                        ("Missing") + '</td>';
-                }
-                object += '<td><a class="btn btn-sm btn-primary edit-item-btn" onclick="EditUserAttendance(\'' + item.attendanceId + '\')">EditTime</a></td>';
-                object += '</tr>';
-            });
-            $('#TableDataAttendance').html(object);
+    $('#AttendanceTableData').DataTable({
+        processing: true,
+        serverSide: true,
+        filter: true,
+        "bDestroy": true,
+        ajax: {
+            type: "Post",
+            url: '/UserDetails/GetUserAttendanceList',
+            dataType: 'json'
         },
+        columns: [
+            { "data": "userName", "name": "UserName" },
+            {
+                "data": "date", "name": "Date",
+                "render": function (data, type, full) {
+                    return (new Date(full.date)).toLocaleDateString('en-US');
+                }
+            },
+            {
+                "data": "intime", "name": "intime",
+                "render": function (data, type, full) {
+                    return (new Date(full.intime)).toLocaleTimeString('en-US');
+                }
+            },
+            {
+                "data": "outTime", "name": "OutTime",
+                "render": function (data, type, full) {
+                    var userdate = new Date(full.date).toLocaleDateString('en-US');
+                    var todate = new Date().toLocaleDateString('en-US');
+                    if (full.outTime != null) {
+                        return (new Date(full.outTime)).toLocaleTimeString('en-US');
+                    }
+                    else if (full.outTime == null && userdate == todate)
+                    {
+                       return ("Pending..");
+                    }
+                    else {
+                        return ("Missing");
+                    }
+                }
+            },
+            {
+                "data": "totalHours", "name": "totalHours",
+                "render": function (data, type, full) {
+                    var userdate = new Date(full.date).toLocaleDateString('en-US');
+                    var todate = new Date().toLocaleDateString('en-US');
+                    if (full.totalHours != null) {
+                        return (full.totalHours?.substr(0, 8)) + ('hr');
+                    }
+                    else if (full.totalHours == null && userdate == todate) {
+                        return ("Pending...");
+                    }
+                    else {
+                        return ("Missing");
+                    }
+                }
+            },
+            {
+                "render": function (data, type, full) {
+                    return '<a class="btn btn-sm btn-primary edit-item-btn" onclick="EditUserAttendance(\'' + full.attendanceId + '\')">EditTime</a>';
+                }
+            },
+
+        ],
+        columnDefs: [{
+            "defaultContent": "",
+            "targets": "_all",
+
+        }]
     });
-};
+}
+
 
 function EditUserAttendance(attandenceId) {
     $('#EditTimeModel').modal('show');

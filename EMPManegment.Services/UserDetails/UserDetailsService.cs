@@ -21,7 +21,7 @@ namespace EMPManegment.Services.UserList
             UserList = userList;
         }
 
-        public async Task<IEnumerable<EmpDetailsView>> GetUsersList(DataTableParametersModel dataTable)
+        public async Task<jsonData> GetUsersList(DataTableRequstModel dataTable)
         {
             return await UserList.GetUsersList(dataTable);
         }
@@ -83,6 +83,11 @@ namespace EMPManegment.Services.UserList
         public async Task<UserResponceModel> UpdateUser(UserEditViewModel employee)
         {
             return await UserList.UpdateUser(employee);
+        }
+
+        public async Task<IEnumerable<EmpDetailsView>> GetUsersNameList()
+        {
+            return await UserList.GetUsersNameList();
         }
     }
 }

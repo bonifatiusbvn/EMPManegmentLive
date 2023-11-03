@@ -45,8 +45,7 @@ public partial class BonifatiusEmployeesContext : DbContext
 
     public virtual DbSet<TblVendorType> TblVendorTypes { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    { }
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -166,6 +165,7 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.Property(e => e.TaskEndDate).HasColumnType("datetime");
             entity.Property(e => e.TaskStatus).HasMaxLength(50);
             entity.Property(e => e.TaskTitle).HasMaxLength(50);
+            entity.Property(e => e.TaskDetails).HasMaxLength(50);
 
             entity.HasOne(d => d.TaskTypeNavigation).WithMany(p => p.TblTaskDetails)
                 .HasForeignKey(d => d.TaskType)

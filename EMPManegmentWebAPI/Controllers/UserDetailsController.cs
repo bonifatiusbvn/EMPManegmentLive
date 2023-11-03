@@ -36,14 +36,25 @@ namespace EMPManagment.API.Controllers
         }
 
 
-        [HttpGet]
+        [HttpPost]
         [Route("GetAllUserList")]
 
-        public async Task<IActionResult> GetAllUserList(DataTableParametersModel dataTable)
+        public async Task<IActionResult> GetAllUserList(DataTableRequstModel dataTable)
         {
-            IEnumerable<EmpDetailsView> userList = await UserListServices.GetUsersList(dataTable);
-            return Ok(new { code = 200, data = userList.ToList() });
+            var userList = await UserListServices.GetUsersList(dataTable);
+            return Ok(new { code = 200, data = userList });
         }
+
+        [HttpGet]
+        [Route("GetUsersNameList")]
+
+        public async Task<IActionResult> GetUsersNameList()
+        {
+            var userNameList = await UserListServices.GetUsersNameList();
+            return Ok(new { code = 200, data = userNameList.ToList() });
+        }
+
+
 
 
         [HttpPost]
@@ -159,13 +170,13 @@ namespace EMPManagment.API.Controllers
 
 
 
-        [HttpGet]
+        [HttpPost]
         [Route("GetUserAttendanceList")]
 
-        public async Task<IActionResult> GetUserAttendanceList()
+        public async Task<IActionResult> GetUserAttendanceList(DataTableRequstModel dataTable)
         {
-            IEnumerable<UserAttendanceModel> userList = await UserAttendance.GetUserAttendanceList();
-            return Ok(new { code = 200, data = userList.ToList() });
+            var userList = await UserAttendance.GetUserAttendanceList(dataTable);
+            return Ok(new { code = 200, data = userList });
         }
 
         [HttpGet]

@@ -13,16 +13,19 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.Elfie.Extensions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Linq.Dynamic.Core;
 using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 using static System.Net.Mime.MediaTypeNames;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using EMPManegment.EntityModels.ViewModels.UserModels;
 
 namespace EMPManegment.Repository.UserListRepository
 {
@@ -37,14 +40,15 @@ namespace EMPManegment.Repository.UserListRepository
         }
 
 
-        public async Task<IEnumerable<EmpDetailsView>> GetUsersList(DataTableParametersModel dataTable)
+        public async Task<jsonData> GetUsersList(DataTableRequstModel dataTable)
         {
-            IEnumerable<EmpDetailsView> result = from e in Context.TblUsers
+
+            var result = from e in Context.TblUsers
                                                  join d in Context.TblDepartments on e.DepartmentId equals d.Id
                                                  join c in Context.TblCountries on e.CountryId equals c.Id
                                                  join s in Context.TblStates on e.StateId equals s.Id
                                                  join ct in Context.TblCities on e.CityId equals ct.Id
-                                                 select new EmpDetailsView
+                                                 select new UserDataTblModel
                                                  {
                                                      Id = e.Id,
                                                      IsActive = e.IsActive,
@@ -62,22 +66,35 @@ namespace EMPManegment.Repository.UserListRepository
                                                      CountryName = c.Country,
                                                      DepartmentName = d.Department
                                                  };
-            return result;
-        }
-        //try
-        //{
-        //    var draw = Request.Form["draw"].FirstOrDefault();
-        //    var start = Request.Form["start"].FirstOrDefault();
-        //    var length = Request.Form["length"].FirstOrDefault();
-        //    var sortColumn = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
-        //    var sortColumnDir = Request.Form["order[0][dir]"].FirstOrDefault();
-        //    var searchValue = Request.Form["Search[value]"].FirstOrDefault();
-        //}
-        //catch (Exception)
-        //{
 
-        //    throw;
-        //}
+            if(!string.IsNullOrEmpty(dataTable.sortColumn) && !string.IsNullOrEmpty(dataTable.sortColumnDir))
+            {
+                result = result.OrderBy(dataTable.sortColumn + " " + dataTable.sortColumnDir);
+            }
+
+            if (!string.IsNullOrEmpty(dataTable.searchValue))
+            {
+                result = result.Where(e=>e.UserName.Contains(dataTable.searchValue) || e.DepartmentName.Contains(dataTable.searchValue) || e.Gender.Contains(dataTable.searchValue));
+            }
+
+            int totalRecord = result.Count();
+
+            var cData = result.Skip(dataTable.skip).Take(dataTable.pageSize).ToList();
+
+            jsonData jsonData = new jsonData
+            {
+                draw = dataTable.draw,
+                recordsFiltered = totalRecord,
+                recordsTotal = totalRecord,
+                data = cData
+            };
+
+
+            return jsonData;
+
+
+        }
+        
         public async Task<UserResponceModel> ActiveDeactiveUsers(string UserName)
         {
             UserResponceModel response = new UserResponceModel();
@@ -446,6 +463,20 @@ namespace EMPManegment.Repository.UserListRepository
             {
                 throw ex;
             }
+        }
+
+        public async Task<IEnumerable<EmpDetailsView>> GetUsersNameList()
+        {
+            IEnumerable<EmpDetailsView> GetUserNameList = Context.TblUsers.ToList().Select(a => new EmpDetailsView
+            {
+                Id = a.Id,
+                UserName = a.UserName,
+
+            }).ToList();
+
+            return GetUserNameList;
+
+        
         }
     }
 }

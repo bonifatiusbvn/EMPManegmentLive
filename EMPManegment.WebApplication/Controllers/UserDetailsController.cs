@@ -23,6 +23,8 @@ using System.Security.Claims;
 using System.Text.Json;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using EMPManegment.EntityModels.ViewModels.DataTableParameters;
+using Microsoft.IdentityModel.Tokens;
+using EMPManegment.EntityModels.ViewModels.UserModels;
 
 namespace EMPManegment.Web.Controllers
 {
@@ -48,26 +50,54 @@ namespace EMPManegment.Web.Controllers
         {
             return View();
         }
-        [HttpGet]
-        public async Task<JsonResult> GetUserList(DataTableParametersModel dataTable)
+
+        [HttpPost]
+        public async Task<IActionResult> GetUserList()
         {
             try
             {
-                dataTable.sSearch = dataTable.sSearch == null ? "" : dataTable.sSearch;
-                List<EmpDetailsView> userList = new List<EmpDetailsView>();
+
+
+                var draw = Request.Form["draw"].FirstOrDefault();
+                var start = Request.Form["start"].FirstOrDefault();
+                var length = Request.Form["length"].FirstOrDefault();
+                var sortColumn = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault()+"][name]"].FirstOrDefault();
+                var sortColumnDir = Request.Form["order[0][dir]"].FirstOrDefault();
+                var searchValue = Request.Form["search[value]"].FirstOrDefault();
+                int pageSize = length != null ? Convert.ToInt32(length) : 0;
+                int skip = start != null ? Convert.ToInt32(start) : 0;
+
+                var dataTable = new DataTableRequstModel
+                {
+                    draw = draw,
+                    start = start,
+                    pageSize = pageSize,
+                    skip = skip,
+                    lenght = length,
+                    searchValue = searchValue,
+                    sortColumn =  sortColumn,
+                    sortColumnDir = sortColumnDir
+                };
+                List<UserDataTblModel> userDataTblModels = new List<UserDataTblModel>();
+                var data = new jsonData();
                 HttpClient client = WebAPI.Initil();
-                ApiResponseModel res = await APIServices.PostAsync(dataTable, "UserDetails/GetAllUserList");
+                ApiResponseModel res = await APIServices.PostAsync(dataTable,"UserDetails/GetAllUserList");
                 if (res.code == 200)
                 {
-                    userList = JsonConvert.DeserializeObject<List<EmpDetailsView>>(res.data.ToString());
+                    data = JsonConvert.DeserializeObject<jsonData>(res.data.ToString());
+                    userDataTblModels = JsonConvert.DeserializeObject<List<UserDataTblModel>>(data.data.ToString());
                 }
-                return Json(new
+                var jsonData = new
                 {
-                    aaData = userList,
-                    sEcho = dataTable.sEcho,
-                    iDisplayRecords=userList.Count(),
-                    iTotalRecords=userList.Count(),
-                });
+                    draw = data.draw,
+                    recordsFiltered = data.recordsFiltered,
+                    recordsTotal = data.recordsTotal,
+                    data = userDataTblModels,
+                };
+
+
+
+                return new JsonResult(jsonData);  
             }
             catch (Exception ex)
             {
@@ -310,24 +340,54 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
-
+        [HttpGet]
         public async Task<IActionResult> GetUsersListById()
         {
             return View();
         }
 
-        public async Task<JsonResult> GetUserAttendanceList()
+        [HttpPost]
+        public async Task<IActionResult> GetUserAttendanceList()
         {
             try
             {
-                List<UserAttendanceModel> userList = new List<UserAttendanceModel>();
+                var draw = Request.Form["draw"].FirstOrDefault();
+                var start = Request.Form["start"].FirstOrDefault();
+                var length = Request.Form["length"].FirstOrDefault();
+                var sortColumn = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
+                var sortColumnDir = Request.Form["order[0][dir]"].FirstOrDefault();
+                var searchValue = Request.Form["search[value]"].FirstOrDefault();
+                int pageSize = length != null ? Convert.ToInt32(length) : 0;
+                int skip = start != null ? Convert.ToInt32(start) : 0;
+
+                var dataTable = new DataTableRequstModel
+                {
+                    draw = draw,
+                    start = start,
+                    pageSize = pageSize,
+                    skip = skip,
+                    lenght = length,
+                    searchValue = searchValue,
+                    sortColumn = sortColumn,
+                    sortColumnDir = sortColumnDir
+                };
+                List<UserAttendanceModel> UserAttendance = new List<UserAttendanceModel>();
+                var data = new jsonData();
                 HttpClient client = WebAPI.Initil();
-                ApiResponseModel res = await APIServices.GetAsync("", "UserDetails/GetUserAttendanceList");
+                ApiResponseModel res = await APIServices.PostAsync(dataTable, "UserDetails/GetUserAttendanceList");
                 if (res.code == 200)
                 {
-                    userList = JsonConvert.DeserializeObject<List<UserAttendanceModel>>(res.data.ToString());
+                    data = JsonConvert.DeserializeObject<jsonData>(res.data.ToString());
+                    UserAttendance = JsonConvert.DeserializeObject<List<UserAttendanceModel>>(data.data.ToString());
                 }
-                return new JsonResult(userList);
+                var jsonData = new
+                {
+                    draw = data.draw,
+                    recordsFiltered = data.recordsFiltered,
+                    recordsTotal = data.recordsTotal,
+                    data = UserAttendance,
+                };
+                return new JsonResult(jsonData);
             }
             catch (Exception ex)
             {

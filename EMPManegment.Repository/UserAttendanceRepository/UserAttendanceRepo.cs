@@ -14,6 +14,8 @@ using System.Threading.Tasks;
 using static Microsoft.AspNetCore.Razor.Language.TagHelperMetadata;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using System.Net;
+using System.Linq.Dynamic.Core;
+using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 using Microsoft.AspNetCore.Http.HttpResults;
 using System.Drawing;
 using System.Globalization;
@@ -30,16 +32,15 @@ namespace EMPManegment.Repository.UserAttendanceRepository
         public BonifatiusEmployeesContext Context { get; }
 
 
-
-        public async Task<IEnumerable<UserAttendanceModel>> GetUserAttendanceList()
+        public async Task<jsonData> GetUserAttendanceList(DataTableRequstModel dataTable)
         {
-            IEnumerable<UserAttendanceModel> users = from a in Context.TblAttendances
+            var users = from a in Context.TblAttendances
                                                      join
                                                      b in Context.TblUsers on a.User.Id equals b.Id
-                                                     select new UserAttendanceModel 
+                                                     select new UserAttendanceModel
                                                      {
                                                          UserName = b.FirstName + ' ' + b.LastName,
-                                                         UserId =a.UserId,
+                                                         UserId = a.UserId,
                                                          AttendanceId = a.Id,
                                                          Date = a.Date,
                                                          Intime = a.Intime,
@@ -47,10 +48,32 @@ namespace EMPManegment.Repository.UserAttendanceRepository
                                                          TotalHours = a.TotalHours,
                                                          CreatedBy = a.CreatedBy,
                                                          CreatedOn = a.CreatedOn,
-                                                        
+
                                                      };
-            
-            return users;
+            if (!string.IsNullOrEmpty(dataTable.sortColumn) && !string.IsNullOrEmpty(dataTable.sortColumnDir))
+            {
+                users = users.OrderBy(dataTable.sortColumn + " " + dataTable.sortColumnDir);
+            }
+
+            if (!string.IsNullOrEmpty(dataTable.searchValue))
+            {
+                users = users.Where(e => e.UserName.Contains(dataTable.searchValue));
+            }
+
+            int totalRecord = users.Count();
+
+            var cData = users.Skip(dataTable.skip).Take(dataTable.pageSize).ToList();
+
+            jsonData jsonData = new jsonData
+            {
+                draw = dataTable.draw,
+                recordsFiltered = totalRecord,
+                recordsTotal = totalRecord,
+                data = cData
+            };
+
+
+            return jsonData;
         }
 
         public async Task<UserAttendanceResponseModel> GetUserAttendanceInTime(UserAttendanceRequestModel userAttendance)

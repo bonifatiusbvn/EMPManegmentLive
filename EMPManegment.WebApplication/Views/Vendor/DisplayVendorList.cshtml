@@ -1,53 +1,33 @@
-﻿@model IEnumerable<EMPManegment.EntityModels.ViewModels.VendorModels.VendorDetailsView>
+﻿
 @{
     ViewData["Title"] = "DisplayVendorList";
     Layout = "~/Views/Shared/_HomeLayout.cshtml";
 }
 
 <div class="table-responsive">
-    <table class="table align-middle mb-0">
+    <table class="table align-middle mb-0" id="VendorTableData">
         <thead class="table-light">
-            <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Phone</th>
-                <th>BankAccountNo</th>
-                <th>BankName</th>
-                <th>BankIfsc</th>
-                <th>Gstnumber</th>
-                <th>Address</th>
+            <tr class="text-center">
+                <th scope="col">VendorName</th>
+                <th scope="col">Email</th>
+                <th scope="col">Phone</th>
+                <th scope="col">BankAccountNo</th>
+                <th scope="col">BankName</th>
+                <th scope="col">Bank Ifsc</th>
+                <th scope="col">Gstnumber</th>
+                <th scope="col">Address</th>
             </tr>
         </thead>
         <tbody>
-            @if (Model.Count() > 0)
-            {
-                @foreach (var d in Model)
-                {
-                    <tr>
-                        <td>@d.VendorName</td>
-                        <td>@d.VendorEmail</td>
-                        <td>@d.VendorPhone</td>
-                        <td>@d.VendorBankAccountNo</td>
-                        <td>@d.VendorBankName</td>
-                        <td>@d.VendorBankIfsc</td>
-                        <td>@d.VendorGstnumber</td>
-                        <td>@d.VendorAddress</td>
-                    </tr>
-                }
-            }
-            else
-            {
-                <tr class="text-center">
-                    <td colspan="5"><h2 class="text-warning bg-info">No Records</h2></td>
-                </tr>
-            }
         </tbody>
     </table>
     <!-- end table -->
 </div>
 <!-- end table responsive -->
 
-@*<script src="~/lib/jquery/dist/jquery.js"></script>
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script src="~/moduls/vendordetailsscript.js"></script>*@
+<script src="~/moduls/taskscript.js"></script>
+<!-- end table responsive -->
 
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/moduls/vendordetailsscript.js"></script>

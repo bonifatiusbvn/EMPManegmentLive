@@ -169,15 +169,15 @@ namespace EMPManegment.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddTaskDetails()
+        public async Task<IActionResult> AddTaskDetails(TaskDetailsView task)
         {
             try
             {
-                var usertask = HttpContext.Request.Form["ADDTASK"];
-
-                var task = JsonConvert.DeserializeObject<TaskDetailsView>(usertask);
-                    
+                
+                if (ModelState.IsValid) 
+                {
                     ApiResponseModel postuser = await APIServices.PostAsync(task, "UserHome/AddTaskDetails");
+                    UserResponceModel responseModel = new UserResponceModel();
                     if (postuser.code == 200)
                     {
                         return Ok(new { postuser.message });
@@ -187,8 +187,9 @@ namespace EMPManegment.Web.Controllers
                        
                         return Ok(new { postuser.code });
                     }
-                
-            
+                }
+                return View(task);
+                    
             }
             catch (Exception ex)
             {
@@ -203,7 +204,7 @@ namespace EMPManegment.Web.Controllers
             {
                 List<EmpDetailsView> userList = new List<EmpDetailsView>();
                 HttpClient client = WebAPI.Initil();
-                ApiResponseModel res = await APIServices.GetAsync("", "UserDetails/GetAllUserList");
+                ApiResponseModel res = await APIServices.GetAsync("", "UserDetails/GetUsersNameList");
                 if (res.code == 200)
                 {
                     userList = JsonConvert.DeserializeObject<List<EmpDetailsView>>(res.data.ToString());
@@ -214,6 +215,64 @@ namespace EMPManegment.Web.Controllers
             {
                 throw ex;
             }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> GetUserTaskDetail()
+        {
+            try
+            {
+                string Userid = HttpContext.Session.GetString("UserID");
+                TaskDetailsView responceModel = new TaskDetailsView
+                {
+                    UserId = Guid.Parse(Userid),
+                };
+                List<TaskDetailsView> userList = new List<TaskDetailsView>();
+                HttpClient client = WebAPI.Initil();
+                ApiResponseModel postuser = await APIServices.PostAsync(responceModel, "UserHome/GetUserTaskDetails");
+                if(postuser.data != null)
+                {
+                    userList = JsonConvert.DeserializeObject<List<TaskDetailsView>>(postuser.data.ToString());
+                    
+                }
+                else
+                {
+                    userList = new List<TaskDetailsView>();
+                    ViewBag.Error = "note found";
+                }
+                return PartialView("~/Views/Home/_UserTaskList.cshtml", userList);
+            }
+            catch(Exception ex) 
+            { 
+                throw ex;
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateUserDealStatus()
+        {
+            try
+            {
+                var userstausres = HttpContext.Request.Form["STATUSUPDATE"];
+
+                var statusRequest = JsonConvert.DeserializeObject<TaskDetailsView>(userstausres);
+
+                ApiResponseModel postuser = await APIServices.PostAsync(statusRequest, "UserHome/UpdateDealStatus");
+                UserResponceModel userResponceModel = new UserResponceModel();
+                if (postuser.code == 200)
+                {
+                    return Ok(new { postuser.message });
+                }
+                else
+                {
+                    return Ok(new { postuser.code });
+                }
+            }
+            catch(Exception ex) 
+            {
+                throw ex;
+            }
+            
         }
     }
 }
