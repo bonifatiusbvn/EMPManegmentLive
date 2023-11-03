@@ -35,5 +35,14 @@ namespace EMPManegment.Services.TaskDetails
         {
             return await TaskDetails.AddTaskDetails(task);
         }
+
+        public async Task<List<TaskDetailsView>> GetUserTaskDetails(TaskDetailsView task)
+        {
+            return await TaskDetails.GetUserTaskDetails(task);
+        }
+        public async Task<UserResponceModel> UpdateDealStatus(TaskDetailsView task)
+        {
+            return await TaskDetails.UpdateDealStatus(task);
+        }
     }
 }

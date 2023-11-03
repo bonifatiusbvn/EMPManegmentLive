@@ -44,6 +44,7 @@ function GetAllUserData() {
             { "data": "countryName", "name": "CountryName" },
             { "data": "stateName", "name": "StateName"},
             { "data": "cityName", "name": "CityName" },
+            { "data": "address", "name": "Address" },
            
         ],
         columnDefs: [{

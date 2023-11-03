@@ -45,6 +45,17 @@ namespace EMPManagment.API.Controllers
             return Ok(new { code = 200, data = userList });
         }
 
+        [HttpGet]
+        [Route("GetUsersNameList")]
+
+        public async Task<IActionResult> GetUsersNameList()
+        {
+            var userNameList = await UserListServices.GetUsersNameList();
+            return Ok(new { code = 200, data = userNameList.ToList() });
+        }
+
+
+
 
         [HttpPost]
         [Route("ActiveDeactiveUsers")]

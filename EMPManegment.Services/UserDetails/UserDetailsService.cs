@@ -84,6 +84,11 @@ namespace EMPManegment.Services.UserList
         {
             return await UserList.UpdateUser(employee);
         }
+
+        public async Task<IEnumerable<EmpDetailsView>> GetUsersNameList()
+        {
+            return await UserList.GetUsersNameList();
+        }
     }
 }
 
