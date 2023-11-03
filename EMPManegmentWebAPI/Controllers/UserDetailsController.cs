@@ -159,13 +159,13 @@ namespace EMPManagment.API.Controllers
 
 
 
-        [HttpGet]
+        [HttpPost]
         [Route("GetUserAttendanceList")]
 
-        public async Task<IActionResult> GetUserAttendanceList()
+        public async Task<IActionResult> GetUserAttendanceList(DataTableRequstModel dataTable)
         {
-            IEnumerable<UserAttendanceModel> userList = await UserAttendance.GetUserAttendanceList();
-            return Ok(new { code = 200, data = userList.ToList() });
+            var userList = await UserAttendance.GetUserAttendanceList(dataTable);
+            return Ok(new { code = 200, data = userList });
         }
 
         [HttpGet]
