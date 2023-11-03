@@ -173,11 +173,7 @@ namespace EMPManegment.Web.Controllers
         {
             try
             {
-                var usertask = HttpContext.Request.Form["ADDTASK"];
-
-                var task = JsonConvert.DeserializeObject<TaskDetailsView>(usertask);
-                    
-                    ApiResponseModel postuser = await APIServices.PostAsync(task, "UserHome/AddTaskDetails");
+                
                 if (ModelState.IsValid) 
                 {
                     ApiResponseModel postuser = await APIServices.PostAsync(task, "UserHome/AddTaskDetails");
@@ -208,7 +204,7 @@ namespace EMPManegment.Web.Controllers
             {
                 List<EmpDetailsView> userList = new List<EmpDetailsView>();
                 HttpClient client = WebAPI.Initil();
-                ApiResponseModel res = await APIServices.GetAsync("", "UserDetails/GetAllUserList");
+                ApiResponseModel res = await APIServices.GetAsync("", "UserDetails/GetUsersNameList");
                 if (res.code == 200)
                 {
                     userList = JsonConvert.DeserializeObject<List<EmpDetailsView>>(res.data.ToString());
@@ -271,7 +267,8 @@ namespace EMPManegment.Web.Controllers
                 {
                     return Ok(new { postuser.code });
                 }
-            }catch(Exception ex) 
+            }
+            catch(Exception ex) 
             {
                 throw ex;
             }

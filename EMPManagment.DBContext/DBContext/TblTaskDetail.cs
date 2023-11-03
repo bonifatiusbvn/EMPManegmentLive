@@ -24,8 +24,6 @@ public partial class TblTaskDetail
     public string? CreatedBy { get; set; }
 
     public string? TaskStatus { get; set; }
-    public DateTime? TaskEndDate { get; set; }
-    
 
     public virtual TblTaskMaster? TaskTypeNavigation { get; set; }
 

@@ -464,6 +464,20 @@ namespace EMPManegment.Repository.UserListRepository
                 throw ex;
             }
         }
+
+        public async Task<IEnumerable<EmpDetailsView>> GetUsersNameList()
+        {
+            IEnumerable<EmpDetailsView> GetUserNameList = Context.TblUsers.ToList().Select(a => new EmpDetailsView
+            {
+                Id = a.Id,
+                UserName = a.UserName,
+
+            }).ToList();
+
+            return GetUserNameList;
+
+        
+        }
     }
 }
 

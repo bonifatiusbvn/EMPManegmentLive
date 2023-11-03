@@ -13,6 +13,7 @@ namespace EMPManegment.Inretface.Interface.UserList
     public interface IUserDetails
     {
         Task<jsonData> GetUsersList(DataTableRequstModel dataTable);
+        Task<IEnumerable<EmpDetailsView>> GetUsersNameList();
          
         Task<UserResponceModel> ActiveDeactiveUsers(string UserName);
 

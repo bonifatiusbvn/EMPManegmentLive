@@ -14,6 +14,7 @@ namespace EMPManegment.Inretface.Services.UserListServices
     public interface IUserDetailsServices
     {
        Task<jsonData> GetUsersList(DataTableRequstModel dataTable);
+        Task<IEnumerable<EmpDetailsView>> GetUsersNameList();
         Task<UserResponceModel> ActiveDeactiveUsers(string UserName);
 
         Task<UserResponceModel> EnterInTime(UserAttendanceModel userAttendance);

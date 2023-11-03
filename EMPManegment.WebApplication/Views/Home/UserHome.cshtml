@@ -39,7 +39,7 @@
                                 <option value="Date">Date</option>
                             </select>
                         </div>
-                        <button data-bs-toggle="modal" data-bs-target="#adddeals" class="btn btn-primary">
+                        <button data-bs-toggle="modal" class="btn btn-primary" onclick="showadddetails()">
                             <i class="ri-add-fill align-bottom me-1"></i> Add
                             Deals
                         </button>
@@ -122,7 +122,7 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-light" id="close-modal" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-light" id="close-modal" data-bs-dismiss="modal" onclick="ClearTextBox()">Close</button>
                     <button type="submit" class="btn btn-success" onclick="btnSaveTaskDetail()" id="taskDetails" value="Validate">Save</button>
                 </div>
 

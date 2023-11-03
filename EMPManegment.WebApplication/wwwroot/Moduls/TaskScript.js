@@ -1,17 +1,27 @@
 ﻿$(document).ready(function () {
-    GetTaskType();
-    GetUsername();
-    ClearTextBox();
-    GetUserTaskDetails();  
+
+    //GetUserTaskDetails();  
 });
 
+
+function showadddetails() {
+    debugger
+    ClearTextBox();
+    GetTaskType();
+    GetUsername();
+    $('#adddeals').modal('show');
+}
+
+
 function ClearTextBox() {
-    $("#dealType").val(null);
+
+    $("#dealType option").remove();
+    $("#dealType")[0];
     $("#dealTitle").val('');
-    $("#ddlusername").val(null);
+    $("#ddlusername").val("");
     $("#txtdatetime").val('');
     $("#txtenddatetime").val('');
-    $("contactDescription").val('');
+    $("#contactDescription").val('');
 }
 
 function ClearTaskDetails()
