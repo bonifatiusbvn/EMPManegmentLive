@@ -33,17 +33,17 @@ namespace EMPManegment.Repository.UserLoginRepository
             throw new NotImplementedException();
         }
 
-        public async Task<LoginResponseModel> LoginUser(LoginRequest request)
+        public async Task<LoginResponseModel> LoginUser(LoginRequest Loginrequest)
         {
             LoginResponseModel response = new LoginResponseModel();
             try
             {
-                  var tblUser = Context.TblUsers.Where(p => p.UserName == request.UserName).SingleOrDefault();
+                  var tblUser = Context.TblUsers.Where(p => p.UserName == Loginrequest.UserName).SingleOrDefault();
                 if (tblUser != null)
                 {
                     if (tblUser.IsActive == true)
                     {
-                        if (tblUser.UserName == request.UserName && Crypto.VarifyHash(request.Password, tblUser.PasswordHash, tblUser.PasswordSalt))   
+                        if (tblUser.UserName == Loginrequest.UserName && Crypto.VarifyHash(Loginrequest.Password, tblUser.PasswordHash, tblUser.PasswordSalt))   
                         {
 
                             LoginView userModel = new LoginView();

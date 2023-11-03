@@ -34,7 +34,7 @@ namespace EMPManegment.Repository.UserAttendanceRepository
 
         public async Task<jsonData> GetUserAttendanceList(DataTableRequstModel dataTable)
         {
-            var users = from a in Context.TblAttendances
+            var AttendanceDataTable = from a in Context.TblAttendances
                                                      join
                                                      b in Context.TblUsers on a.User.Id equals b.Id
                                                      select new UserAttendanceModel
@@ -52,17 +52,17 @@ namespace EMPManegment.Repository.UserAttendanceRepository
                                                      };
             if (!string.IsNullOrEmpty(dataTable.sortColumn) && !string.IsNullOrEmpty(dataTable.sortColumnDir))
             {
-                users = users.OrderBy(dataTable.sortColumn + " " + dataTable.sortColumnDir);
+                AttendanceDataTable = AttendanceDataTable.OrderBy(dataTable.sortColumn + " " + dataTable.sortColumnDir);
             }
 
             if (!string.IsNullOrEmpty(dataTable.searchValue))
             {
-                users = users.Where(e => e.UserName.Contains(dataTable.searchValue));
+                AttendanceDataTable = AttendanceDataTable.Where(e => e.UserName.Contains(dataTable.searchValue));
             }
 
-            int totalRecord = users.Count();
+            int totalRecord = AttendanceDataTable.Count();
 
-            var cData = users.Skip(dataTable.skip).Take(dataTable.pageSize).ToList();
+            var cData = AttendanceDataTable.Skip(dataTable.skip).Take(dataTable.pageSize).ToList();
 
             jsonData jsonData = new jsonData
             {
@@ -79,21 +79,21 @@ namespace EMPManegment.Repository.UserAttendanceRepository
         public async Task<UserAttendanceResponseModel> GetUserAttendanceInTime(UserAttendanceRequestModel userAttendance)
         {
             UserAttendanceResponseModel response = new UserAttendanceResponseModel();
-            var data = Context.TblAttendances.Where(e => e.UserId == userAttendance.UserId && e.Date == DateTime.Today).FirstOrDefault();
+            var UserAttendance = Context.TblAttendances.Where(e => e.UserId == userAttendance.UserId && e.Date == DateTime.Today).FirstOrDefault();
             try
             {
-                if (data != null)
+                if (UserAttendance != null)
                 {
                     UserAttendanceModel attendanceModel = new UserAttendanceModel()
                     {
-                        UserId = data.UserId,
-                        Date = data.Date,
-                        Intime = data.Intime,
-                        TotalHours = data.TotalHours,
-                        CreatedBy = data.CreatedBy,
-                        CreatedOn = data.CreatedOn,
-                        OutTime = data.OutTime,
-                        AttendanceId = data.Id,
+                        UserId = UserAttendance.UserId,
+                        Date = UserAttendance.Date,
+                        Intime = UserAttendance.Intime,
+                        TotalHours = UserAttendance.TotalHours,
+                        CreatedBy = UserAttendance.CreatedBy,
+                        CreatedOn = UserAttendance.CreatedOn,
+                        OutTime = UserAttendance.OutTime,
+                        AttendanceId = UserAttendance.Id,
                     };
                     response.Code = 200;
                     response.Data = attendanceModel;
@@ -119,21 +119,21 @@ namespace EMPManegment.Repository.UserAttendanceRepository
             UserResponceModel response = new UserResponceModel();
             try
             {
-                var data = Context.TblAttendances.FirstOrDefault(a => a.Id == userAttendance.AttendanceId);
-                if (data != null )
+                var UserAttendance = Context.TblAttendances.FirstOrDefault(a => a.Id == userAttendance.AttendanceId);
+                if (UserAttendance != null )
                 {
-                    string today = data.Date.ToString("dd/MM/yyyy");
+                    string today = UserAttendance.Date.ToString("dd/MM/yyyy");
                     string checkdate = userAttendance.OutTime?.ToString("dd/MM/yyyy");
 
                     if (today == checkdate)
                     {
-                        data.OutTime = userAttendance.OutTime;
-                        data.TotalHours = data.OutTime - data.Intime;
-                        data.CreatedOn = DateTime.Today;
+                        UserAttendance.OutTime = userAttendance.OutTime;
+                        UserAttendance.TotalHours = UserAttendance.OutTime - UserAttendance.Intime;
+                        UserAttendance.CreatedOn = DateTime.Today;
                         response.Code = (int)HttpStatusCode.OK;
                         response.Message = "User OutTime Successfully Updated";
                         response.Icone = "success";
-                        Context.TblAttendances.Update(data);
+                        Context.TblAttendances.Update(UserAttendance);
                         Context.SaveChanges();
                     }
                     else
@@ -159,7 +159,7 @@ namespace EMPManegment.Repository.UserAttendanceRepository
 
         public async Task<IEnumerable<UserAttendanceModel>> GetUserAttendanceById(int attendanceId)
         {
-            IEnumerable<UserAttendanceModel> attendance = from a in Context.TblAttendances
+            IEnumerable<UserAttendanceModel> attendanceById = from a in Context.TblAttendances
                              join
                              b in Context.TblUsers on a.User.Id equals b.Id where a.Id == attendanceId
                              select new UserAttendanceModel
@@ -175,7 +175,7 @@ namespace EMPManegment.Repository.UserAttendanceRepository
                                  CreatedBy = a.CreatedBy,
                              };
             
-            return attendance;
+            return attendanceById;
         }
 
         public async Task<IEnumerable<UserAttendanceModel>> GetAttendanceList(Guid Id, DateTime Cmonth )
@@ -184,7 +184,7 @@ namespace EMPManegment.Repository.UserAttendanceRepository
             DateTime.TryParseExact(Cmonth.ToString(),"MM",
                           CultureInfo.InvariantCulture,
                           DateTimeStyles.None, out dt);
-            IEnumerable<UserAttendanceModel> users = from a in Context.TblAttendances
+            IEnumerable<UserAttendanceModel> GetAttendanceList = from a in Context.TblAttendances
                                                      join
                                                      b in Context.TblUsers on a.User.Id equals b.Id where(b.Id == Id &&(Cmonth == null || a.Date.ToString() == Cmonth.ToString("MMMM-yyyy")))
                                                      select new UserAttendanceModel
@@ -200,7 +200,7 @@ namespace EMPManegment.Repository.UserAttendanceRepository
                                                          CreatedOn = a.CreatedOn,
 
                                                      };
-            return users;
+            return GetAttendanceList;
         }
     }
 }
