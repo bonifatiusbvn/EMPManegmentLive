@@ -132,7 +132,7 @@ namespace EMPManegment.Repository.AddEmpRepository
                 Image = employee.Image,
                 Gender = employee.Gender,
                 DateOfBirth = employee.DateOfBirth,
-                Email = employee.Email,
+                Email = employee.Email, 
                 PhoneNumber = employee.PhoneNumber,
                 Address = employee.Address,
                 CityId = employee.CityId,
