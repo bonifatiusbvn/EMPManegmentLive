@@ -14,6 +14,9 @@ using System.Threading.Tasks;
 using static Microsoft.AspNetCore.Razor.Language.TagHelperMetadata;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using System.Net;
+using Microsoft.AspNetCore.Http.HttpResults;
+using System.Drawing;
+using System.Globalization;
 
 namespace EMPManegment.Repository.UserAttendanceRepository
 {
@@ -46,7 +49,7 @@ namespace EMPManegment.Repository.UserAttendanceRepository
                                                          CreatedOn = a.CreatedOn,
                                                         
                                                      };
-
+            
             return users;
         }
 
@@ -151,7 +154,32 @@ namespace EMPManegment.Repository.UserAttendanceRepository
             
             return attendance;
         }
+
+        public async Task<IEnumerable<UserAttendanceModel>> GetAttendanceList(Guid Id, DateTime Cmonth )
+        {
+            DateTime dt;
+            DateTime.TryParseExact(Cmonth.ToString(),"MM",
+                          CultureInfo.InvariantCulture,
+                          DateTimeStyles.None, out dt);
+            IEnumerable<UserAttendanceModel> users = from a in Context.TblAttendances
+                                                     join
+                                                     b in Context.TblUsers on a.User.Id equals b.Id where(b.Id == Id &&(Cmonth == null || a.Date.ToString() == Cmonth.ToString("MMMM-yyyy")))
+                                                     select new UserAttendanceModel
+                                                     {
+                                                         UserName = b.FirstName + ' ' + b.LastName,
+                                                         UserId = a.UserId,
+                                                         AttendanceId = a.Id,
+                                                         Date = a.Date,
+                                                         Intime = a.Intime,
+                                                         OutTime = a.OutTime,
+                                                         TotalHours = a.TotalHours,
+                                                         CreatedBy = a.CreatedBy,
+                                                         CreatedOn = a.CreatedOn,
+
+                                                     };
+            return users;
+        }
     }
 }
 
-       
+        

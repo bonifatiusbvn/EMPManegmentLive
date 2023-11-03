@@ -24,7 +24,7 @@ namespace EMPManegment.EntityModels.ViewModels
         public string? Email { get; set; }
         [Required]
         public string? Address { get; set; }
-        [Required]
+        
         public int? CityId { get; set; }
 
         [Required]
@@ -34,9 +34,9 @@ namespace EMPManegment.EntityModels.ViewModels
 
         public DateTime? CreatedOn { get; set; }
 
-        [Required]
+        
         public int? StateId { get; set; }
-        [Required]
+        
         public int? CountryId { get; set; }
 
     }

@@ -431,10 +431,7 @@ namespace EMPManegment.Repository.UserListRepository
                     data.Email = employee.Email;
                     data.PhoneNumber = employee.PhoneNumber;
                     data.Address = employee.Address;
-                    data.CityId = employee.CityId;
                     data.DepartmentId = employee.DepartmentId;
-                    data.StateId = employee.StateId;
-                    data.CountryId = employee.CountryId;
                     data.CreatedOn = DateTime.Now;
 
                     Context.TblUsers.Update(data);

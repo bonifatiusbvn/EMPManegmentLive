@@ -406,21 +406,16 @@ namespace EMPManegment.Web.Controllers
             {
                 var emp = new UserEditViewModel()
                 {
-                Id = employee.Id,
-                DepartmentId = employee.DepartmentId,
-                FirstName = employee.FirstName,
-                LastName = employee.LastName,
-                Email = employee.Email,
-                Address = employee.Address,
-                CityId = employee.CityId,
-                StateId = employee.StateId,
-                CountryId = employee.CountryId,
-                PhoneNumber = employee.PhoneNumber,
-                DateOfBirth = employee.DateOfBirth,
-                Gender = employee.Gender,
-
-                 };
-            
+                    Id = employee.Id,
+                    DepartmentId = employee.DepartmentId,
+                    FirstName = employee.FirstName,
+                    LastName = employee.LastName,
+                    Email = employee.Email,
+                    Address = employee.Address,
+                    PhoneNumber = employee.PhoneNumber,
+                    DateOfBirth = employee.DateOfBirth,
+                    Gender = employee.Gender,
+                };
                 ApiResponseModel postUser = await APIServices.PostAsync(emp, "UserDetails/Update");
                 if (postUser.code == 200)
                 {
@@ -437,5 +432,38 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
+
+        
+        public async Task<IActionResult> GetAttendance()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> GetAttendanceList()
+        {
+            try
+            {
+                var adloginobj = HttpContext.Request.Form["FINDBYMONTH"];
+                var month = JsonConvert.DeserializeObject<string>(adloginobj);
+                List<UserAttendanceModel> attend = new List<UserAttendanceModel>();
+                string Userid = HttpContext.Session.GetString("UserID");
+                Guid UserId = Guid.Parse(Userid);
+          
+                HttpClient client = WebAPI.Initil();
+                ApiResponseModel res = await APIServices.GetAsync("", "UserDetails/GetAttendanceList?id=" + UserId+ "&Cmonth=" + month);
+                if (res.code == 200)
+                {
+                    attend = JsonConvert.DeserializeObject<List<UserAttendanceModel>>(res.data.ToString());
+                }
+                return new JsonResult(attend);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
+        
 }
+
