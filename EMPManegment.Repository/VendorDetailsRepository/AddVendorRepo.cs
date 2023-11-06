@@ -37,7 +37,7 @@ namespace EMPManegment.Repository.VendorDetailsRepository
                 }
                 else
                 {
-                    var model = new TblVendorMaster()
+                    var vendormodel = new TblVendorMaster()
                     {
                         VendorName = vendor.VendorName,
                         VendorEmail = vendor.VendorEmail,
@@ -53,7 +53,7 @@ namespace EMPManegment.Repository.VendorDetailsRepository
                     };
                     response.Code = (int)HttpStatusCode.OK;
                     response.Message= "Vendor Data Successfully Inserted";
-                    Context.TblVendorMasters.Add(model);
+                    Context.TblVendorMasters.Add(vendormodel);
                     Context.SaveChanges();
                 }
             }

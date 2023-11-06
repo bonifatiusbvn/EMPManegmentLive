@@ -152,14 +152,14 @@ namespace EMPManegment.Web.Controllers
 
             try
             {
-                List<TaskTypeView> taskDeals = new List<TaskTypeView>();
+                List<TaskTypeView> getTask = new List<TaskTypeView>();
                 HttpClient client = WebAPI.Initil();
                 ApiResponseModel res = await APIServices.GetAsync(null, "UserHome/GetTaskType");
                 if (res.code == 200)
                 {
-                    taskDeals = JsonConvert.DeserializeObject<List<TaskTypeView>>(res.data.ToString());
+                    getTask = JsonConvert.DeserializeObject<List<TaskTypeView>>(res.data.ToString());
                 }
-                return new JsonResult(taskDeals);
+                return new JsonResult(getTask);
 
             }
             catch (Exception ex)
@@ -221,20 +221,20 @@ namespace EMPManegment.Web.Controllers
                 {
                     UserId = Guid.Parse(Userid),
                 };
-                List<TaskDetailsView> userList = new List<TaskDetailsView>();
+                List<TaskDetailsView> TaskList = new List<TaskDetailsView>();
                 HttpClient client = WebAPI.Initil();
                 ApiResponseModel postuser = await APIServices.PostAsync(responceModel, "UserHome/GetUserTaskDetails");
                 if(postuser.data != null)
                 {
-                    userList = JsonConvert.DeserializeObject<List<TaskDetailsView>>(postuser.data.ToString());
+                    TaskList = JsonConvert.DeserializeObject<List<TaskDetailsView>>(postuser.data.ToString());
                     
                 }
                 else
                 {
-                    userList = new List<TaskDetailsView>();
+                    TaskList = new List<TaskDetailsView>();
                     ViewBag.Error = "note found";
                 }
-                return PartialView("~/Views/Home/_UserTaskList.cshtml", userList);
+                return PartialView("~/Views/Home/_UserTaskList.cshtml", TaskList);
             }
             catch(Exception ex) 
             { 

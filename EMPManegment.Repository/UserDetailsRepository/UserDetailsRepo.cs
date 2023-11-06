@@ -43,7 +43,7 @@ namespace EMPManegment.Repository.UserListRepository
         public async Task<jsonData> GetUsersList(DataTableRequstModel dataTable)
         {
 
-            var result = from e in Context.TblUsers
+            var GetUsersList = from e in Context.TblUsers
                                                  join d in Context.TblDepartments on e.DepartmentId equals d.Id
                                                  join c in Context.TblCountries on e.CountryId equals c.Id
                                                  join s in Context.TblStates on e.StateId equals s.Id
@@ -69,17 +69,17 @@ namespace EMPManegment.Repository.UserListRepository
 
             if(!string.IsNullOrEmpty(dataTable.sortColumn) && !string.IsNullOrEmpty(dataTable.sortColumnDir))
             {
-                result = result.OrderBy(dataTable.sortColumn + " " + dataTable.sortColumnDir);
+                GetUsersList = GetUsersList.OrderBy(dataTable.sortColumn + " " + dataTable.sortColumnDir);
             }
 
             if (!string.IsNullOrEmpty(dataTable.searchValue))
             {
-                result = result.Where(e=>e.UserName.Contains(dataTable.searchValue) || e.DepartmentName.Contains(dataTable.searchValue) || e.Gender.Contains(dataTable.searchValue));
+                GetUsersList = GetUsersList.Where(e=>e.UserName.Contains(dataTable.searchValue) || e.DepartmentName.Contains(dataTable.searchValue) || e.Gender.Contains(dataTable.searchValue));
             }
 
-            int totalRecord = result.Count();
+            int totalRecord = GetUsersList.Count();
 
-            var cData = result.Skip(dataTable.skip).Take(dataTable.pageSize).ToList();
+            var cData = GetUsersList.Skip(dataTable.skip).Take(dataTable.pageSize).ToList();
 
             jsonData jsonData = new jsonData
             {
@@ -98,29 +98,29 @@ namespace EMPManegment.Repository.UserListRepository
         public async Task<UserResponceModel> ActiveDeactiveUsers(string UserName)
         {
             UserResponceModel response = new UserResponceModel();
-            var data = Context.TblUsers.Where(a => a.UserName == UserName).FirstOrDefault();
+            var GetUserdta = Context.TblUsers.Where(a => a.UserName == UserName).FirstOrDefault();
 
-            if (data != null)
+            if (GetUserdta != null)
             {
 
-                if (data.IsActive == true)
+                if (GetUserdta.IsActive == true)
                 {
-                    data.IsActive = false;
-                    Context.TblUsers.Update(data);
+                    GetUserdta.IsActive = false;
+                    Context.TblUsers.Update(GetUserdta);
                     Context.SaveChanges();
                     response.Code = 200;
-                    response.Data = data; 
-                    response.Message = "User" + " "+ data.UserName +" " +"Is Deactive Succesfully";
+                    response.Data = GetUserdta; 
+                    response.Message = "User" + " "+ GetUserdta.UserName +" " +"Is Deactive Succesfully";
                 }
 
                 else
                 {
-                    data.IsActive = true;
-                    Context.TblUsers.Update(data);
+                    GetUserdta.IsActive = true;
+                    Context.TblUsers.Update(GetUserdta);
                     Context.SaveChanges();
                     response.Code = 200;
-                    response.Data = data;
-                    response.Message = "User" + " "+ data.UserName + " "+ "Is Active Succesfully";
+                    response.Data = GetUserdta;
+                    response.Message = "User" + " "+ GetUserdta.UserName + " "+ "Is Active Succesfully";
                 }
 
 
@@ -131,20 +131,20 @@ namespace EMPManegment.Repository.UserListRepository
         public async Task<UserResponceModel> EnterInTime(UserAttendanceModel userAttendance)
         {
             UserResponceModel response = new UserResponceModel();
-            var data = Context.TblAttendances.Where(a => a.UserId == userAttendance.UserId).OrderByDescending(a => a.Date).FirstOrDefault();
+            var Intimedata = Context.TblAttendances.Where(a => a.UserId == userAttendance.UserId).OrderByDescending(a => a.Date).FirstOrDefault();
 
-            if (data != null)
+            if (Intimedata != null)
             {
-                if (data.OutTime == null && data.Date != DateTime.Today)
+                if (Intimedata.OutTime == null && Intimedata.Date != DateTime.Today)
                 {
-                    response.Message = "You Missed Out-Time of " + data.Date.ToShortDateString() + " " + "Kindly Contact Your Admin";
+                    response.Message = "You Missed Out-Time of " + Intimedata.Date.ToShortDateString() + " " + "Kindly Contact Your Admin";
                     response.Icone = "warning";
                 } 
                 
 
                else 
                 {
-                    if (data.Date == DateTime.Today && data.Intime != null)
+                    if (Intimedata.Date == DateTime.Today && Intimedata.Intime != null)
                     {
                         response.Message = "Your Already Enter IN-Time";
                         response.Icone = "warning";
@@ -191,17 +191,17 @@ namespace EMPManegment.Repository.UserListRepository
         public async Task<UserResponceModel> EnterOutTime(UserAttendanceModel userAttendance)
         {
             UserResponceModel response = new UserResponceModel();
-            var data = Context.TblAttendances.Where(a => a.UserId == userAttendance.UserId).OrderByDescending(a => a.Date).FirstOrDefault();;
-            if (data.OutTime == null && data.Date != DateTime.Today)
+            var Outtimedata = Context.TblAttendances.Where(a => a.UserId == userAttendance.UserId).OrderByDescending(a => a.Date).FirstOrDefault();;
+            if (Outtimedata.OutTime == null && Outtimedata.Date != DateTime.Today)
             {
-                response.Message = "You Missed Out-Time of " + data.Date.ToShortDateString() + " " + "Kindly Contact Your Admin";
+                response.Message = "You Missed Out-Time of " + Outtimedata.Date.ToShortDateString() + " " + "Kindly Contact Your Admin";
                 response.Icone = "warning";
 
             }
 
            else
             {
-               if(data.Date != DateTime.Today)
+               if(Outtimedata.Date != DateTime.Today)
                 {
                     response.Message = "Please Enter In-Time First";
                     response.Icone = "warning";
@@ -210,7 +210,7 @@ namespace EMPManegment.Repository.UserListRepository
                else 
                 {
 
-                    if (data.Date == DateTime.Today && data.OutTime == null)
+                    if (Outtimedata.Date == DateTime.Today && Outtimedata.OutTime == null)
                     {
                         var outtime = Context.TblAttendances.Where(a => a.UserId == userAttendance.UserId && a.Date == DateTime.Today).FirstOrDefault();
                         outtime.OutTime = DateTime.Now;
@@ -238,19 +238,19 @@ namespace EMPManegment.Repository.UserListRepository
             return response;
         }
 
-        public async Task<UserResponceModel> ResetPassword(PasswordResetView emp)
+        public async Task<UserResponceModel> ResetPassword(PasswordResetView resetemppass)
         {
             UserResponceModel response = new UserResponceModel();
             try
             {
-                var data = Context.TblUsers.FirstOrDefault(x => x.UserName == emp.UserName);
-                    if(data !=null) 
+                var userdata = Context.TblUsers.FirstOrDefault(x => x.UserName == resetemppass.UserName);
+                    if(userdata != null) 
                 {
-                   
-                    data.PasswordHash = emp.PasswordHash;
-                    data.PasswordSalt = emp.PasswordSalt;
+
+                    userdata.PasswordHash = resetemppass.PasswordHash;
+                    userdata.PasswordSalt = resetemppass.PasswordSalt;
                 }
-                Context.TblUsers.Update(data);
+                Context.TblUsers.Update(userdata);
                 Context.SaveChanges();
                 response.Code=200;
                 response.Message = "Password Updated!";
@@ -265,12 +265,12 @@ namespace EMPManegment.Repository.UserListRepository
         {
             try
             {
-                IEnumerable<EmpDocumentView> document = Context.TblDocumentMasters.ToList().Select(a => new EmpDocumentView
+                IEnumerable<EmpDocumentView> documentList = Context.TblDocumentMasters.ToList().Select(a => new EmpDocumentView
                 {
                     Id = a.Id,
                     DocumentType = a.DocumentType,
                 });
-                return document;
+                return documentList;
             }
             catch (Exception ex)
             {
@@ -291,7 +291,7 @@ namespace EMPManegment.Repository.UserListRepository
             //}).ToList();
             //return model;
 
-            IEnumerable<DocumentInfoView> result = from a in Context.TblUserDocuments
+            IEnumerable<DocumentInfoView> DocumentList = from a in Context.TblUserDocuments
                                                    join b in Context.TblDocumentMasters on a.DocumentTypeId equals b.Id
                                                    select new DocumentInfoView
                                                    {
@@ -302,34 +302,34 @@ namespace EMPManegment.Repository.UserListRepository
                                                        CreatedOn = DateTime.Now,
                                                        CreatedBy = a.CreatedBy,
                                                    };
-            return result;
+            return DocumentList;
         }
 
-        public async Task<DocumentInfoView> UploadDocument(DocumentInfoView doc)
+        public async Task<DocumentInfoView> UploadDocument(DocumentInfoView docview)
         {
-            var model = new TblUserDocument()
+            var UploadDocument = new TblUserDocument()
             {
-                Id = doc.Id,
-                UserId = doc.UserId,
-                DocumentTypeId = doc.DocumentTypeId,
-                DocumentName = doc.DocumentName,
+                Id = docview.Id,
+                UserId = docview.UserId,
+                DocumentTypeId = docview.DocumentTypeId,
+                DocumentName = docview.DocumentName,
                 CreatedOn = DateTime.Now,
-                CreatedBy= doc.CreatedBy,
+                CreatedBy= docview.CreatedBy,
             };
-            Context.TblUserDocuments.Add(model);
+            Context.TblUserDocuments.Add(UploadDocument);
             Context.SaveChanges();
-            return doc;
+            return docview;
         }
 
-        public async Task<UserResponceModel> UserLockScreen(LoginRequest request)
+        public async Task<UserResponceModel> UserLockScreen(LoginRequest loginrequest)
         {
             UserResponceModel response = new UserResponceModel();
             try
             {
-                var tblUser = Context.TblUsers.Where(p => p.UserName == request.UserName).SingleOrDefault();
+                var tblUser = Context.TblUsers.Where(p => p.UserName == loginrequest.UserName).SingleOrDefault();
                 if(tblUser != null)
                 {
-                    if (tblUser.UserName == request.UserName && Crypto.VarifyHash(request.Password, tblUser.PasswordHash, tblUser.PasswordSalt))
+                    if (tblUser.UserName == loginrequest.UserName && Crypto.VarifyHash(loginrequest.Password, tblUser.PasswordHash, tblUser.PasswordSalt))
                     {
                         LoginView userModel = new LoginView();
                         userModel.UserName = tblUser.UserName;
@@ -350,18 +350,18 @@ namespace EMPManegment.Repository.UserListRepository
         public async Task<UserResponceModel> UserBirsthDayWish(Guid UserId)
         {
             UserResponceModel response = new UserResponceModel();
-            var data = Context.TblUsers.Where(e => e.Id == UserId).FirstOrDefault();
+            var userdata = Context.TblUsers.Where(e => e.Id == UserId).FirstOrDefault();
 
             try
             {
-                if (data != null)
+                if (userdata != null)
                 {
 
                     string today = DateTime.Now.ToString("dd/MM");
-                    string checkdate = data.DateOfBirth.ToString("dd/MM");
+                    string checkdate = userdata.DateOfBirth.ToString("dd/MM");
                     if (today == checkdate)
                     {
-                        response.Message = "Bonifatius Wish You a Very Happy Birthday.." +" " + data.FirstName + " " + data.LastName +" "+ "Enjoy Your Day";
+                        response.Message = "Bonifatius Wish You a Very Happy Birthday.." +" " + userdata.FirstName + " " + userdata.LastName +" "+ "Enjoy Your Day";
                         response.Code = (int)HttpStatusCode.OK; 
                     }
                     else
@@ -385,7 +385,7 @@ namespace EMPManegment.Repository.UserListRepository
 
         public async Task<IEnumerable<EmpDetailsView>> UserEdit()
         {
-            IEnumerable<EmpDetailsView> result = from e in Context.TblUsers
+            IEnumerable<EmpDetailsView> UserEdit = from e in Context.TblUsers
                                                  join d in Context.TblDepartments on e.DepartmentId equals d.Id
                                                  join c in Context.TblCountries on e.CountryId equals c.Id
                                                  join s in Context.TblStates on e.StateId equals s.Id
@@ -408,26 +408,26 @@ namespace EMPManegment.Repository.UserListRepository
                                                      CountryName = c.Country,
                                                      DepartmentName = d.Department
                                                  };
-            return result;
+            return UserEdit;
         }
 
-        public async Task<EmpDetailsView> GetById(Guid id)
+        public async Task<EmpDetailsView> GetById(Guid Userid)
         {
-            var employee = await Context.TblUsers.SingleOrDefaultAsync(x => x.Id == id);
+            var Userdata = await Context.TblUsers.SingleOrDefaultAsync(x => x.Id == Userid);
             EmpDetailsView model = new EmpDetailsView
             {
-                Id = employee.Id,
-                FirstName = employee.FirstName,
-                LastName = employee.LastName,
-                Gender = employee.Gender,
-                DateOfBirth = employee.DateOfBirth,
-                Email = employee.Email,
-                PhoneNumber = employee.PhoneNumber,
-                Address = employee.Address,
-                CityId = employee.CityId,
-                DepartmentId = employee.DepartmentId,
-                StateId = employee.StateId,
-                CountryId = employee.CountryId,
+                Id = Userdata.Id,
+                FirstName = Userdata.FirstName,
+                LastName = Userdata.LastName,
+                Gender = Userdata.Gender,
+                DateOfBirth = Userdata.DateOfBirth,
+                Email = Userdata.Email,
+                PhoneNumber = Userdata.PhoneNumber,
+                Address = Userdata.Address,
+                CityId = Userdata.CityId,
+                DepartmentId = Userdata.DepartmentId,
+                StateId = Userdata.StateId,
+                CountryId = Userdata.CountryId,
             };
             return model;
         }
@@ -437,21 +437,21 @@ namespace EMPManegment.Repository.UserListRepository
             try
             {
                 UserResponceModel response = new UserResponceModel();
-                var data = await Context.TblUsers.FirstOrDefaultAsync(a => a.Id == employee.Id);
-                if (data != null)
+                var Userdata = await Context.TblUsers.FirstOrDefaultAsync(a => a.Id == employee.Id);
+                if (Userdata != null)
                 {
-                    data.Id = employee.Id;
-                    data.FirstName = employee.FirstName;
-                    data.LastName = employee.LastName;
-                    data.Gender = employee.Gender;
-                    data.DateOfBirth = employee.DateOfBirth;
-                    data.Email = employee.Email;
-                    data.PhoneNumber = employee.PhoneNumber;
-                    data.Address = employee.Address;
-                    data.DepartmentId = employee.DepartmentId;
-                    data.CreatedOn = DateTime.Now;
+                    Userdata.Id = employee.Id;
+                    Userdata.FirstName = employee.FirstName;
+                    Userdata.LastName = employee.LastName;
+                    Userdata.Gender = employee.Gender;
+                    Userdata.DateOfBirth = employee.DateOfBirth;
+                    Userdata.Email = employee.Email;
+                    Userdata.PhoneNumber = employee.PhoneNumber;
+                    Userdata.Address = employee.Address;
+                    Userdata.DepartmentId = employee.DepartmentId;
+                    Userdata.CreatedOn = DateTime.Now;
 
-                    Context.TblUsers.Update(data);
+                    Context.TblUsers.Update(Userdata);
                     await Context.SaveChangesAsync();
                 }
                 response.Code = (int)HttpStatusCode.OK;
