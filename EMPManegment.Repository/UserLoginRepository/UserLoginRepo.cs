@@ -55,7 +55,10 @@ namespace EMPManegment.Repository.UserLoginRepository
                             userModel.IsAdmin = tblUser.IsAdmin == null ? false : (bool)tblUser.IsAdmin;
                             response.Data = userModel;
                             response.Code = (int)HttpStatusCode.OK;
-                            
+
+                            tblUser.LastLoginDate = DateTime.Now;
+                            Context.TblUsers.Update(tblUser);
+                            Context.SaveChanges();
                         }
                         else
                         {

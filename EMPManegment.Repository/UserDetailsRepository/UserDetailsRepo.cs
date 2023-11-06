@@ -244,7 +244,7 @@ namespace EMPManegment.Repository.UserListRepository
             try
             {
                 var userdata = Context.TblUsers.FirstOrDefault(x => x.UserName == resetemppass.UserName);
-                    if(userdata != null) 
+                if(userdata != null) 
                 {
 
                     userdata.PasswordHash = resetemppass.PasswordHash;
