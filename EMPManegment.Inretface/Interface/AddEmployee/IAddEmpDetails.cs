@@ -13,9 +13,9 @@ namespace EMPManegment.Inretface.EmployeesInterface.AddEmployee
 {
     public interface IAddEmpDetails
     {
-        Task <EmpDetailsView> GetById(Guid Id);
+        Task <EmpDetailsView> GetById(Guid UserId);
         string CheckEmloyess();
-        Task <UserResponceModel> AddEmployee(EmpDetailsView emp);
+        Task <UserResponceModel> AddEmployee(EmpDetailsView AddEmployee);
         Task<IEnumerable<Department>> EmpDepartment();
        
     }
