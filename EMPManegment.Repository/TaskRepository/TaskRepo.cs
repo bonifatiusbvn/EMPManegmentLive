@@ -103,6 +103,7 @@ namespace EMPManegment.Repository.TaskRepository
                     UserId.Add(new TaskDetailsView()
                     {
                         Id = item.Id,
+                        TaskType = item.TaskType,
                         TaskStatus = item.TaskStatus,
                         TaskDate  = item.TaskDate,
                         TaskDetails = item.TaskDetails,

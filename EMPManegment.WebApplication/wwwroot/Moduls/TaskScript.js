@@ -81,7 +81,7 @@ function btnSaveTaskDetail() {
     else {
         Swal.fire({
             title: "Kindly Fill All Datafield",
-            icon: 'warnig',
+            icon: 'warning',
             confirmButtonColor: '#3085d6',
             confirmButtonText: 'OK',
         })
