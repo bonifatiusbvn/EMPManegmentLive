@@ -46,21 +46,21 @@ namespace EMPManegment.Repository.TaskRepository
             UserResponceModel response = new UserResponceModel();
             try
             {
-                     var model = new TblTaskDetail()
-                    {
-                        Id = Guid.NewGuid(),
-                        TaskType = task.TaskType,
-                        TaskTitle = task.TaskTitle,
-                        TaskDetails = task.TaskDetails,
-                        TaskDate = task.TaskDate,
-                        UserId = task.UserId,
-                        CreatedOn = DateTime.Now,
-                        TaskEndDate = task.TaskEndDate,
-                    };
-                    response.Code = 200;
-                    response.Message = "Task add successfully!";
-                    Context.TblTaskDetails.Add(model);
-                    Context.SaveChanges();                
+                var model = new TblTaskDetail()
+                {
+                    Id = Guid.NewGuid(),
+                    TaskType = task.TaskType,
+                    TaskTitle = task.TaskTitle,
+                    TaskDetails = task.TaskDetails,
+                    TaskDate = task.TaskDate,
+                    UserId = task.UserId,
+                    CreatedOn = DateTime.Now,
+                    TaskEndDate = task.TaskEndDate,
+                };
+                response.Code = 200;
+                response.Message = "Task add successfully!";
+                Context.TblTaskDetails.Add(model);
+                Context.SaveChanges();
             }
             catch (Exception ex) 
             {

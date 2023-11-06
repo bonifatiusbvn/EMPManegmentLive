@@ -10,8 +10,8 @@ namespace EMPManegment.Inretface.Interface.UsersLogin
 {
     public interface IUserLogin
     {
-        Task<LoginResponseModel> LoginUser(LoginRequest request);
+        Task<LoginResponseModel> LoginUser(LoginRequest LoginUserRequest);
 
-        public bool GetUserName(string username);
+        public bool GetUserName(string Username);
     }
 }

@@ -12,7 +12,7 @@ namespace EMPManegment.Inretface.Interface.VendorDetails
 {
     public interface IAddVendorDetails
     {
-        Task<UserResponceModel> AddVendor(VendorDetailsView vendor);
-        Task<jsonData> GetVendorsList(DataTableRequstModel dataTable);
+        Task<UserResponceModel> AddVendor(VendorDetailsView AddVendor);
+        Task<jsonData> GetVendorsList(DataTableRequstModel VendordataTable);
     }
 }
