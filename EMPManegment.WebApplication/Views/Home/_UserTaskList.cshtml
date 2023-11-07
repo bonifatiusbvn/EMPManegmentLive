@@ -1,23 +1,25 @@
 ﻿@model List<EMPManegment.EntityModels.ViewModels.TaskModels.TaskDetailsView>
 @inject IHttpContextAccessor Accessor
 
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+</head>
 <div class="container-fluid">
     <div class="row row-cols-xxl-5 row-cols-lg-3 row-cols-md-2 row-cols-1">
         <div class="col">
             <div class="card border-0 overflow-hidden">
                 <a class="card-body bg-primary-subtle" data-bs-toggle="collapse" href="#lowPriority" role="button" aria-expanded="false" aria-controls="lowPriority">
-                    <h5 class="card-title text-uppercase fw-semibold mb-1 fs-15 text-success">Low Priority</h5>
+                    <h5 class="card-title text-uppercase fw-semibold mb-1 fs-15 text-success">Low Priority Task</h5>
                     <p class="text-muted mb-0" id="txttodayDate">@DateTime.Today.ToShortDateString() <span class="fw-medium m-2">@Model.Count(t => t.TaskType == 1) Tasks</span></p>
                 </a>
             </div>
             <!--end card-->
               @if (Model.Count > 0)
-            {
+             {
                 foreach (var item in Model)
                 {
-                   @if(item.TaskType == 1)
+                   @if(item.TaskType == 1 && item.TaskStatus != "Completed")
                    {
-                        
                         <div class="collapse show" id="lowPriority">
                             <div class="card mb-1">
                                 <div class="card-body">
@@ -33,7 +35,7 @@
                                 </div>
                                 <div class="collapse border-top border-top-dashed" id="lowPriority1(@item.Id)">
                                     <div class="card-body">
-                                        <h6 class="fs-14 mb-1">Description <small class="badge bg-primary-subtle text-primary">4 Days</small></h6>
+                                        <h6 class="fs-14 mb-1">Description</h6>
                                         <p class="text-muted">
                                             @item.TaskDetails
                                         </p>
@@ -45,7 +47,7 @@
                                                     </div>
                                                     <div class="flex-grow-1">
                                                         <h6 class="mb-0">Task End Date</h6>
-                                                        <small class="text-muted">@item.TaskEndDate</small>
+                                                        <small class="text-muted">@item.TaskEndDate.</small>
                                                     </div>
                                                 </div>
                                             </li>
@@ -80,10 +82,10 @@
                                         </ul>
                                     </div>
                                     <div class="card-footer hstack gap-2">
-                                        <button class="btn btn-success btn-sm w-100" onclick="btnStatusUpdate('@item.Id')">Status Update</button>
-                                        <button class="btn btn-primary btn-sm w-100">
-                                            <i class="ri-question-answer-line align-bottom me-1"></i>
-                                            Message
+                                        <button class="btn btn-success btn-sm w-100" onclick="btnStatusUpdate('@item.Id')"><i class="bi bi-pencil-fill m-1"></i>Status Update</button>
+                                        <button class="btn btn-primary btn-sm w-100" data-bs-toggle="modal" onclick="btnTaskDetails('@item.Id')">
+                                            <i class="bi bi-chat-right-dots m-1"></i>
+                                            Details
                                         </button>
                                     </div>
                                 </div>
@@ -98,7 +100,7 @@
         <div class="col">
             <div class="card border-0 overflow-hidden">
                 <a class="card-body bg-primary-subtle" data-bs-toggle="collapse" href="#mediumPriority" role="button" aria-expanded="false" aria-controls="mediumPriority">
-                    <h5 class="card-title text-uppercase fw-semibold mb-1 fs-15" style="color:darkorange">Medium Priority</h5>
+                    <h5 class="card-title text-uppercase fw-semibold mb-1 fs-15" style="color:darkorange">Medium Priority Task</h5>
                     <p class="text-muted mb-0" id="txttodayDate">@DateTime.Today.ToShortDateString() <span class="fw-medium m-2">@Model.Count(t => t.TaskType == 2) Tasks</span></p>
                 </a>
             </div>
@@ -107,7 +109,7 @@
             {
                 foreach (var item in Model)
                 {
-                    @if(item.TaskType == 2)
+                    @if (item.TaskType == 2 && item.TaskStatus != "Completed")
                     {
                         <div class="collapse show" id="mediumPriority">
                             <div class="card mb-1 ribbon-box ribbon-fill ribbon-sm">
@@ -124,7 +126,7 @@
                                 </div>
                                 <div class="collapse border-top border-top-dashed" id="mediumPriority1(@item.Id)">
                                     <div class="card-body">
-                                        <h6 class="fs-14 mb-1">Description <small class="badge bg-primary-subtle text-primary">2 Days</small></h6>
+                                        <h6 class="fs-14 mb-1">Description</h6>
                                         <p class="text-muted">
                                             @item.TaskDetails
                                         </p>
@@ -171,10 +173,10 @@
                                         </ul>
                                     </div>
                                     <div class="card-footer hstack gap-2">
-                                        <button class="btn btn-success btn-sm w-100" onclick="btnStatusUpdate('@item.Id')">Status Update</button>
-                                        <button class="btn btn-primary btn-sm w-100">
-                                            <i class="ri-question-answer-line align-bottom me-1"></i>
-                                            Message
+                                        <button class="btn btn-success btn-sm w-100" onclick="btnStatusUpdate('@item.Id')"><i class="bi bi-pencil-fill m-1"></i>Status Update</button>
+                                        <button class="btn btn-primary btn-sm w-100" data-bs-toggle="modal" onclick="btnTaskDetails('@item.Id')">
+                                            <i class="bi bi-chat-right-dots"></i>
+                                            Details
                                         </button>
                                     </div>
                                 </div>
@@ -189,7 +191,7 @@
         <div class="col">
             <div class="card border-0 overflow-hidden">
                 <a class="card-body bg-primary-subtle" data-bs-toggle="collapse" href="#highPriority" role="button" aria-expanded="false" aria-controls="highPriority">
-                    <h5 class="card-title text-uppercase fw-semibold mb-1 fs-15 text-danger">High Priority</h5>
+                    <h5 class="card-title text-uppercase fw-semibold mb-1 fs-15 text-danger">High Priority Task</h5>
                     <p class="text-muted mb-0" id="txttodayDate">@DateTime.Today.ToShortDateString() <span class="fw-medium m-2">@Model.Count(t => t.TaskType == 3) Tasks</span></p>
                 </a>
             </div>
@@ -198,7 +200,7 @@
             {
                 foreach (var item in Model)
                 {
-                   @if(item.TaskType == 3)
+                    @if (item.TaskType == 3 && item.TaskStatus != "Completed")
                    {
                         <div class="collapse show" id="highPriority">
                             <div class="card mb-1">
@@ -215,7 +217,7 @@
                                 </div>
                                 <div class="collapse border-top border-top-dashed" id="highPriority1(@item.Id)">
                                     <div class="card-body">
-                                        <h6 class="fs-14 mb-1">Description <small class="badge bg-primary-subtle text-primary">4 Days</small></h6>
+                                        <h6 class="fs-14 mb-1">Description</h6>
                                         <p class="text-muted">
                                             @item.TaskDetails
                                         </p>
@@ -262,10 +264,10 @@
                                         </ul>
                                     </div>
                                     <div class="card-footer hstack gap-2">
-                                        <button class="btn btn-success btn-sm w-100" onclick="btnStatusUpdate('@item.Id')">Status Update</button>
-                                        <button class="btn btn-primary btn-sm w-100">
-                                            <i class="ri-question-answer-line align-bottom me-1"></i>
-                                            Message
+                                        <button class="btn btn-success btn-sm w-100" onclick="btnStatusUpdate('@item.Id')"><i class="bi bi-pencil-fill m-1"></i>Status Update</button>
+                                        <button class="btn btn-primary btn-sm w-100" data-bs-toggle="modal" onclick="btnTaskDetails('@item.Id')">
+                                            <i class="bi bi-chat-right-dots m-1"></i>
+                                            Details
                                         </button>
                                     </div>
                                 </div>
@@ -286,6 +288,7 @@
                 </a>
             </div>
             <!--end card-->
+
             <div class="collapse show" id="meetingArranged">
                 <div class="card mb-1">
                     <div class="card-body">
@@ -360,79 +363,76 @@
 
         <div class="col">
             <div class="card border-0 overflow-hidden">
-                <a class="card-body bg-primary-subtle" data-bs-toggle="collapse" href="#offerAccepted" role="button" aria-expanded="false" aria-controls="offerAccepted">
-                    <h5 class="card-title text-uppercase fw-semibold mb-1 fs-15">Offer Accepted</h5>
-                    <p class="text-muted mb-0">$819,300 <span class="fw-medium">8 Deals</span></p>
+                <a class="card-body bg-primary-subtle" data-bs-toggle="collapse" href="#taskCompleted" role="button" aria-expanded="false" aria-controls="taskCompleted">
+                    <h5 class="card-title text-uppercase fw-semibold mb-1 fs-15">Completed Task </h5>
+                    <p class="text-muted mb-0" id="txttodayDate">@DateTime.Today.ToShortDateString() <span class="fw-medium m-2">@Model.Count(t => t.TaskStatus == "Completed") Tasks</span></p>
                 </a>
             </div>
             <!--end card-->
-            <div class="collapse show" id="offerAccepted">
-                <div class="card mb-1">
-                    <div class="card-body">
-                        <a class="d-flex align-items-center" data-bs-toggle="collapse" href="#offerAccepted1" role="button" aria-expanded="false" aria-controls="offerAccepted1">
-                            <div class="flex-shrink-0">
-                                <img src="~/UserHome/minimal/assets/images/users/avatar-10.jpg" alt="" class="avatar-xs rounded-circle">
+
+            @if (Model.Count > 0)
+            {
+                foreach (var item in Model)
+                {
+                    @if (item.TaskStatus == "Completed")
+                    {
+                        <div class="collapse show" id="taskCompleted">
+                            <div class="card mb-1">
+                                 <div class="card-body">
+                                    <a class="d-flex align-items-center" data-bs-toggle="collapse" href="#taskCompleted1(@item.Id)" role="button" aria-expanded="false" aria-controls="taskCompleted1(@item.Id)">
+                                        <div class="flex-shrink-0">
+                                            <img src="~/@Accessor.HttpContext.Session.GetString("ProfileImage")" alt="" class="avatar-xs rounded-circle">
+                                        </div>
+                                        <div class="flex-grow-1 ms-3">
+                                            <h6 class="fs-14 mb-1">@item.TaskTitle</h6>
+                                            <p class="text-muted mb-0">@item.TaskDate</p>
+                                        </div>
+                                    </a>
+                                 </div>
+                                <div class="collapse border-top border-top-dashed" id="taskCompleted1(@item.Id)">
+                                    <div class="card-body">
+                                        <h6 class="fs-14 mb-1">Description</h6>
+                                        <p class="text-muted">
+                                            @item.TaskDetails
+                                        </p>
+                                        <ul class="list-unstyled vstack gap-2 mb-0">
+                                            <li>
+                                                <div class="d-flex">
+                                                    <div class="flex-shrink-0 avatar-xxs text-muted">
+                                                        <i class="ri-question-answer-line"></i>
+                                                    </div>
+                                                    <div class="flex-grow-1">
+                                                        <h6 class="mb-0">Task End Date</h6>
+                                                        <small class="text-muted">@item.TaskEndDate</small>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="d-flex">
+                                                    <div class="flex-shrink-0 avatar-xxs text-muted">
+                                                        <i class="ri-earth-line"></i>
+                                                    </div>
+                                                    <div class="flex-grow-1">
+                                                        <span class="text"> TaskStatus : @item.TaskStatus</span>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="card-footer hstack gap-2">
+                                        <button class="btn btn-primary btn-sm w-100" data-bs-toggle="modal" onclick="btnTaskDetails('@item.Id')">
+                                            <i class="bi bi-chat-right-dots m-1"></i>
+                                            Details
+                                        </button>
+                                    </div>
+                                 </div>
                             </div>
-                            <div class="flex-grow-1 ms-3">
-                                <h6 class="fs-14 mb-1">Coupon Website</h6>
-                                <p class="text-muted mb-0">$27.4k - 07 Jan, 2021</p>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="collapse border-top border-top-dashed" id="offerAccepted1">
-                        <div class="card-body">
-                            <h6 class="fs-14 mb-1">Nesta Technologies <small class="badge bg-primary-subtle text-primary">4 Days</small></h6>
-                            <p class="text-muted">
-                                As a company grows however, you find it's not as easy
-                                to shout across
-                            </p>
-                            <ul class="list-unstyled vstack gap-2 mb-0">
-                                <li>
-                                    <div class="d-flex">
-                                        <div class="flex-shrink-0 avatar-xxs text-muted">
-                                            <i class="ri-question-answer-line"></i>
-                                        </div>
-                                        <div class="flex-grow-1">
-                                            <h6 class="mb-0">Meeting with Thomas</h6>
-                                            <small class="text-muted">Yesterday at 9:12AM</small>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="d-flex">
-                                        <div class="flex-shrink-0 avatar-xxs text-muted">
-                                            <i class="ri-mac-line"></i>
-                                        </div>
-                                        <div class="flex-grow-1">
-                                            <h6 class="mb-0">Product Demo</h6>
-                                            <small class="text-muted">Monday at 04:41PM</small>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="d-flex">
-                                        <div class="flex-shrink-0 avatar-xxs text-muted">
-                                            <i class="ri-earth-line"></i>
-                                        </div>
-                                        <div class="flex-grow-1">
-                                            <h6 class="mb-0">Marketing Team Meeting</h6>
-                                            <small class="text-muted">Monday at 04:41PM</small>
-                                        </div>
-                                    </div>
-                                </li>
-                            </ul>
+                            <!--end card-->
                         </div>
-                        <div class="card-footer hstack gap-2">
-                            <button class="btn btn-success btn-sm w-100"><i class="ri-phone-line align-bottom me-1"></i> Call</button>
-                            <button class="btn btn-primary btn-sm w-100">
-                                <i class="ri-question-answer-line align-bottom me-1"></i>
-                                Message
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <!--end card-->
-            </div>
+                    }
+                }
+            }
+
         </div>
         <!--end col-->
     </div>
@@ -442,6 +442,72 @@
 
 
 
-
+<div class="modal fade zoomIn" id="showDetailsModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0">
+            <div class="modal-header p-3 bg-primary-subtle">
+                <h5 class="modal-title" id="exampleModalLabel">Task Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"></button>
+            </div>
+            <form class="tablelist-form" autocomplete="off">
+                <div class="modal-body">
+                    <div class="row g-3">
+                        <div class="col-lg-12">
+                            <label for="projectName-field" class="form-label">Project Name</label>
+                            <input type="text" id="projectName-field" class="form-control" placeholder="Project name" required />
+                        </div>
+                        <!--end col-->
+                        <div class="col-lg-12">
+                            <div>
+                                <label for="TaskTitle" class="form-label">Title</label>
+                                <span id="taskTitle-field" class="form-control"></span>
+                            </div>
+                        </div>
+                        <!--end col-->
+                        <div class="col-lg-12">
+                            <label for="clientName-field" class="form-label">Client Name</label>
+                            <input type="text" id="clientName-field" class="form-control" placeholder="Client name" required />
+                        </div>
+                        <!--end col-->
+                        <div class="col-lg-12">
+                            <label for="TaskDescription" class="form-label">Description</label>
+                            <textarea class="form-control " id="taskDescription-field" rows="3" readonly></textarea>
+                        </div>
+                        <!--end col-->
+                        <div class="col-lg-6">
+                            <label for="TaskDate" class="form-label">Start Date</label>
+                            <span id="taskstartdate-field" class="form-control"> </span>
+                        </div>
+                        <!--end col-->
+                        <div class="col-lg-6">
+                            <label for="TaskEndDate" class="form-label">Due Date</label>
+                            <span id="taskenddate-field" class="form-control"></span>
+                        </div>
+                        <!--end col-->
+                        <div class="col-lg-6">
+                            <label for="TaskPriority" class="form-label">Priority</label>
+                            <span id="taskpriority-field" class="form-control"></span>
+                        </div>
+                        <!--end col-->
+                        <div class="col-lg-6">
+                            <label for="TaskStatus" class="form-label">Status</label>
+                            <span id="taskstatus-field" class="form-control"></span>
+                        </div>
+                        <!--end col-->
+                    </div>
+                    <!--end row-->
+                </div>
+                <div class="modal-footer">
+                    <div class="hstack gap-2 justify-content-end">
+                        <button type="button" class="btn btn-light" id="close-modal" data-bs-dismiss="modal">Close</button>
+                        <!-- <button type="submit" class="btn btn-success" id="add-btn">Add Task</button> -->
+                        <!-- <button type="button" class="btn btn-success" id="edit-btn">Update Task</button> -->
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!--end modal-->
 
 

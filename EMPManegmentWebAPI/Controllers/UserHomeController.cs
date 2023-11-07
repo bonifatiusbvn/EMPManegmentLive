@@ -201,7 +201,7 @@ namespace EMPManagment.API.Controllers
         }
 
         [HttpPost]
-        [Route("UpdateDealStatus")]
+        [Route("UpdateTaskStatus")]
         public async Task<IActionResult> UpdateTaskStatus(TaskDetailsView task)
         {
             UserResponceModel response = new UserResponceModel();
@@ -224,6 +224,13 @@ namespace EMPManagment.API.Controllers
                 throw ex;
             }
             return StatusCode(response.Code, response);
+        }
+        [HttpGet]
+        [Route("GetTaskDetailsById")]
+       public async Task<IActionResult> GetTaskDetailsById(Guid Taskid)
+        {
+            var userTaskDetails = await TaskServices.GetTaskDetailsById(Taskid);
+            return Ok(new { code = 200, data = userTaskDetails });
         }
     }
 }

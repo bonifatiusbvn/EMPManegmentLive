@@ -44,5 +44,9 @@ namespace EMPManegment.Services.TaskDetails
         {
             return await TaskDetails.UpdateTaskStatus(task);
         }
+        public async Task<TaskDetailsView> GetTaskDetailsById(Guid Taskid)
+        {
+            return await TaskDetails.GetTaskDetailsById(Taskid);
+        }
     }
 }

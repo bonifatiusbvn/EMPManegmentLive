@@ -114,5 +114,32 @@ namespace EMPManegment.Repository.TaskRepository
             }
             return UserId;
         }
+
+        public async Task<TaskDetailsView> GetTaskDetailsById(Guid Taskid)
+        {
+            TaskDetailsView taskdata = new TaskDetailsView();
+            try
+            {
+                    taskdata = (from d in Context.TblTaskDetails.here(d=>d.Id == Taskid)
+                                join m in Context.TblTaskMasters
+                                on d.TaskType equals m.Id
+                                select new TaskDetailsView
+                                {
+                                    Id = d.Id,
+                                    UserId = d.UserId,
+                                    TaskTypeName = m.TaskType,
+                                    TaskDate = d.TaskDate,
+                                    TaskTitle = d.TaskTitle,
+                                    TaskEndDate = d.TaskEndDate,
+                                    TaskDetails = d.TaskDetails,
+                                    TaskStatus = d.TaskStatus,
+                                }).First();
+            }
+            catch(Exception ex) 
+            {
+                throw ex;
+            }
+            return taskdata;
+        }
     }
 }
