@@ -18,11 +18,11 @@ namespace EMPManegment.Repository.CSCRepository
 
         public BonifatiusEmployeesContext Context { get; }
 
-        public async Task<IEnumerable<CityView>> GetCities(int id)
+        public async Task<IEnumerable<CityView>> GetCities(int cityid)
         {
             try
             {
-                IEnumerable<CityView> cities = Context.TblCities.Where(e => e.State.Id == id).ToList().Select(a => new CityView
+                IEnumerable<CityView> cities = Context.TblCities.Where(e => e.State.Id == cityid).ToList().Select(a => new CityView
                 {
                     Id = a.Id,
                     CityName = a.City,
@@ -69,11 +69,11 @@ namespace EMPManegment.Repository.CSCRepository
             }
         }
 
-        public async Task<IEnumerable<StateView>> GetStates(int id)
+        public async Task<IEnumerable<StateView>> GetStates(int stateid)
         {
             try
             {
-                IEnumerable<StateView> states = Context.TblStates.Where(e => e.Country.Id == id).ToList().Select(a => new StateView
+                IEnumerable<StateView> states = Context.TblStates.Where(e => e.Country.Id == stateid).ToList().Select(a => new StateView
                 {
                     Id = a.Id,
                     StateName = a.State

@@ -29,12 +29,12 @@ namespace EMPManegment.Repository.AddEmpRepository
 
         public BonifatiusEmployeesContext Context { get; }
 
-        public async Task<UserResponceModel> AddEmployee(EmpDetailsView emp)
+        public async Task<UserResponceModel> AddEmployee(EmpDetailsView addemp)
         {
             UserResponceModel response = new UserResponceModel();
             try
             {
-                bool isEmailAlredyExists = Context.TblUsers.Any(x => x.Email == emp.Email);
+                bool isEmailAlredyExists = Context.TblUsers.Any(x => x.Email == addemp.Email);
                 if (isEmailAlredyExists == true)
                 {
                     response.Message = "User with this email already exists";
@@ -45,22 +45,22 @@ namespace EMPManegment.Repository.AddEmpRepository
                     var model = new TblUser()
                     {
                         Id = Guid.NewGuid(),
-                        UserName = emp.UserName,
-                        DepartmentId = emp.DepartmentId,
-                        FirstName = emp.FirstName,
-                        LastName = emp.LastName,
-                        Address = emp.Address,
-                        CityId = emp.CityId,
-                        StateId = emp.StateId,
-                        CountryId = emp.CountryId,
-                        DateOfBirth = emp.DateOfBirth,
-                        Email = emp.Email,
-                        Gender = emp.Gender,
-                        PhoneNumber = emp.PhoneNumber,
+                        UserName = addemp.UserName,
+                        DepartmentId = addemp.DepartmentId,
+                        FirstName = addemp.FirstName,
+                        LastName = addemp.LastName,
+                        Address = addemp.Address,
+                        CityId = addemp.CityId,
+                        StateId = addemp.StateId,
+                        CountryId = addemp.CountryId,
+                        DateOfBirth = addemp.DateOfBirth,
+                        Email = addemp.Email,
+                        Gender = addemp.Gender,
+                        PhoneNumber = addemp.PhoneNumber,
                         CreatedOn = DateTime.Now,
-                        PasswordHash = emp.PasswordHash,
-                        PasswordSalt = emp.PasswordSalt,   
-                        Image = emp.Image,
+                        PasswordHash = addemp.PasswordHash,
+                        PasswordSalt = addemp.PasswordSalt,   
+                        Image = addemp.Image,
                         IsActive = true,
                         JoiningDate = DateTime.Now,
                         IsAdmin = false,

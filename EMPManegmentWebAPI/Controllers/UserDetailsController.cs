@@ -50,11 +50,9 @@ namespace EMPManagment.API.Controllers
 
         public async Task<IActionResult> GetUsersNameList()
         {
-            var userNameList = await UserListServices.GetUsersNameList();
-            return Ok(new { code = 200, data = userNameList.ToList() });
+            var getUsersNameList = await UserListServices.GetUsersNameList();
+            return Ok(new { code = 200, data = getUsersNameList.ToList() });
         }
-
-
 
 
         [HttpPost]
@@ -64,19 +62,19 @@ namespace EMPManagment.API.Controllers
         {
             UserResponceModel responseModel = new UserResponceModel();
 
-            var user = await UserListServices.ActiveDeactiveUsers(UserName);
+            var userName = await UserListServices.ActiveDeactiveUsers(UserName);
             try
             {
 
-                if (user != null)
+                if (userName != null)
                 {
 
                     responseModel.Code = (int)HttpStatusCode.OK;
-                    responseModel.Message = user.Message;
+                    responseModel.Message = userName.Message;
                 }
                 else
                 {
-                    responseModel.Message = user.Message;
+                    responseModel.Message = userName.Message;
                     responseModel.Code = (int)HttpStatusCode.NotFound;
                 }
             }
@@ -91,8 +89,8 @@ namespace EMPManagment.API.Controllers
         [Route("GetDocumentType")]
         public async Task<IActionResult> GetDocumentType()
         {
-            IEnumerable<EmpDocumentView> dept = await UserListServices.GetDocumentType();
-            return Ok(new { code = 200, data = dept.ToList() });
+            IEnumerable<EmpDocumentView> getDocumentType = await UserListServices.GetDocumentType();
+            return Ok(new { code = 200, data = getDocumentType.ToList() });
         }
 
         [HttpGet]
@@ -100,36 +98,36 @@ namespace EMPManagment.API.Controllers
 
         public async Task<IActionResult> GetDocumentList()
         {
-            IEnumerable<DocumentInfoView> userList = await UserListServices.GetDocumentList();
-            return Ok(new { code = 200, data = userList.ToList() });
+            IEnumerable<DocumentInfoView> getDocumentList = await UserListServices.GetDocumentList();
+            return Ok(new { code = 200, data = getDocumentList.ToList() });
         }
 
         [HttpPost]
         [Route("UploadDocument")]
-        public async Task<IActionResult> UploadDocument(DocumentInfoView doc)
+        public async Task<IActionResult> UploadDocument(DocumentInfoView UploadDocument)
         {
-            var document = await UserListServices.UploadDocument(doc);
-            return Ok(new { code = 200, data = document });
+            var uploadDocument = await UserListServices.UploadDocument(UploadDocument);
+            return Ok(new { code = 200, data = uploadDocument });
         }
         [HttpPost]
         [Route("ResetUserPassword")]
-        public async Task<IActionResult> ResetUserPassword(PasswordResetView emp)
+        public async Task<IActionResult> ResetUserPassword(PasswordResetView ResetPassword)
         {
             ApiResponseModel responseModel = new ApiResponseModel();
 
-            var user = await UserListServices.ResetPassword(emp);
+            var resetPassword = await UserListServices.ResetPassword(ResetPassword);
             try
             {
 
-                if (user != null)
+                if (resetPassword != null)
                 {
 
                     responseModel.code = (int)HttpStatusCode.OK;
-                    responseModel.message = user.Message;
+                    responseModel.message = resetPassword.Message;
                 }
                 else
                 {
-                    responseModel.message = user.Message;
+                    responseModel.message = resetPassword.Message;
                     responseModel.code = (int)HttpStatusCode.NotFound;
                 }
             }
@@ -142,22 +140,22 @@ namespace EMPManagment.API.Controllers
 
         [HttpPost]
         [Route("UnLockScreen")]
-        public async Task<IActionResult> UnLockScreen(LoginRequest request)
+        public async Task<IActionResult> UnLockScreen(LoginRequest UnlockScreen)
         {
             LoginResponseModel apiResponseModel = new LoginResponseModel();
             try
             {
 
-                var result = await UserListServices.UserLockScreen(request);
+                var unlockScreen = await UserListServices.UserLockScreen(UnlockScreen);
 
-                if (result.Code == 200)
+                if (unlockScreen.Code == 200)
                 {
                     apiResponseModel.Code = (int)HttpStatusCode.OK;
-                    apiResponseModel.Message = result.Message;
+                    apiResponseModel.Message = unlockScreen.Message;
                 }
                 else
                 {
-                    apiResponseModel.Message = result.Message;
+                    apiResponseModel.Message = unlockScreen.Message;
                     apiResponseModel.Code = (int)HttpStatusCode.NotFound;
                 }
             }
@@ -175,35 +173,33 @@ namespace EMPManagment.API.Controllers
 
         public async Task<IActionResult> GetUserAttendanceList(DataTableRequstModel dataTable)
         {
-            var userList = await UserAttendance.GetUserAttendanceList(dataTable);
-            return Ok(new { code = 200, data = userList });
+            var UserAttendanceList = await UserAttendance.GetUserAttendanceList(dataTable);
+            return Ok(new { code = 200, data = UserAttendanceList });
         }
 
         [HttpGet]
         [Route("UserEdit")]
         public async Task<IActionResult> UserEdit()
         {
-            IEnumerable<EmpDetailsView> userList = await UserListServices.UserEdit();
-            return Ok(new { code = 200, data = userList.ToList() });
+            IEnumerable<EmpDetailsView> userEdit = await UserListServices.UserEdit();
+            return Ok(new { code = 200, data = userEdit.ToList() });
         }
 
         [HttpPost]
         [Route("UpdateUserOutTime")]
 
-        public async Task<IActionResult> UpdateUserOutTime(UserAttendanceModel userAttendance)
+        public async Task<IActionResult> UpdateUserOutTime(UserAttendanceModel UpdateOutTime)
         {
             UserResponceModel response = new UserResponceModel();
             try
             {
-                var result = UserAttendance.UpdateUserOutTime(userAttendance);
-                if (result.Result.Code == 200)
+                var updateUserOutTime = UserAttendance.UpdateUserOutTime(UpdateOutTime);
+                if (updateUserOutTime.Result.Code == 200)
                 {
                     response.Code = (int)HttpStatusCode.OK;
-                    response.Message = result.Result.Message;
-                    response.Icone = result.Result.Icone;   
-                }
-                
-                
+                    response.Message = updateUserOutTime.Result.Message;
+                    response.Icone = updateUserOutTime.Result.Icone;   
+                }  
             }
             catch (Exception ex)
             {
@@ -217,8 +213,8 @@ namespace EMPManagment.API.Controllers
 
         public async Task<IActionResult> GetUserAttendanceById(int attendanceId)
         {
-            IEnumerable<UserAttendanceModel> attendance = await UserAttendance.GetUserAttendanceById(attendanceId);
-            return Ok(new { code = 200, data = attendance });
+            IEnumerable<UserAttendanceModel> getUserAttendance = await UserAttendance.GetUserAttendanceById(attendanceId);
+            return Ok(new { code = 200, data = getUserAttendance });
         }
         [HttpGet]
         [Route("GetEmployeeById")]
@@ -229,25 +225,25 @@ namespace EMPManagment.API.Controllers
         }
         [HttpPost]
         [Route("Update")]
-        public async Task<IActionResult>UpdateUser(UserEditViewModel employee)
+        public async Task<IActionResult> UpdateUser(UserEditViewModel UpdateUser)
         {
             UserResponceModel response = new UserResponceModel();
-            var data = await UserListServices.UpdateUser(employee);
-            if (data.Code == 200)
+            var updateUser = await UserListServices.UpdateUser(UpdateUser);
+            if (updateUser.Code == 200)
             {
                 response.Code = (int)HttpStatusCode.OK;
-                response.Message = data.Message;
-                response.Icone = data.Icone;
+                response.Message = updateUser.Message;
+                response.Icone = updateUser.Icone;
             }
             return StatusCode(response.Code, response);
         }
 
         [HttpGet]
         [Route("GetAttendanceList")]
-        public async Task<IActionResult> GetAttendanceList(Guid id, DateTime Cmonth)
+        public async Task<IActionResult> GetAttendanceList(Guid AttendanceId, DateTime Cmonth)
         {
-            IEnumerable<UserAttendanceModel> userList = await UserAttendance.GetAttendanceList(id, Cmonth);
-            return Ok(new { code = 200, data = userList.ToList() });
+            IEnumerable<UserAttendanceModel> getAttendanceList = await UserAttendance.GetAttendanceList(AttendanceId, Cmonth);
+            return Ok(new { code = 200, data = getAttendanceList.ToList() });
         }
     }
 }

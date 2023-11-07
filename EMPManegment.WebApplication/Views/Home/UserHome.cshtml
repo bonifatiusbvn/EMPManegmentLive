@@ -4,9 +4,12 @@
 }
 
 <style>
-    #dealType-error, #dealTitle-error, #ddlusername-error,
+    #taskType-error.error, #dealTitle-error, #ddlusername-error.error,
     #txtdatetime-error, #txtenddatetime-error, #contactDescription-error {
         color: red;
+    }
+    label.failed {
+	border: red thin solid;
     }
 </style>
 
@@ -41,7 +44,7 @@
                         </div>
                         <button data-bs-toggle="modal" class="btn btn-primary" onclick="showadddetails()">
                             <i class="ri-add-fill align-bottom me-1"></i> Add
-                            Deals
+                           Task
                         </button>
                         <div class="dropdown">
                             <button class="btn btn-soft-secondary btn-icon fs-14" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
@@ -77,32 +80,31 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header bg-light p-3">
-                    <h5 class="modal-title" id="exampleModalLabel">Create Deals</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Create Task</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <form id="frmtaskdetails">
                         <div class="mb-3">
-                            <label for="dealType" class="form-label">Task Type</label>
-                        <select class="form-control" id="dealType" name="dealType">
-                                <option selected disabled value="">--Select deals type--</option>
+                            <label for="taskType" class="form-label">Task Type</label>
+                            <select class="form-control" id="taskType" name="taskType">
+                                <option selected disabled  value=""></option>
                             </select>
-                            <input type="hidden" id="txtDealType" class="form-control" value="" />
+                            <input type="hidden" class="form-control" id="txtTaskType">
 
                         </div>
+
                         <div class="mb-3">
                             <label class="form-label">Task Title</label>
                         <input type="text" id="dealTitle" class="form-control" name="dealTitle" placeholder="Enter title"/>
-                            <div class="invalid-feedback">
-                                Please enter username
-                            </div>
                         </div>
+
                         <div class="mb-3">
-                            <label for="dealOwner" class="form-label">Task ProvideTo</label>
+                            <label for="ddlusername" class="form-label">Task ProvideTo</label>
                         <select class="form-control" id="ddlusername" name="ddlusername">
-                                <option selected disabled value="">--Select Username--</option>
+                                <option selected disabled value=""></option>
                             </select>
-                            <input type="hidden" class="form-control" id="txtguserid" required="" placeholder="Enter owner name">
+                            <input type="hidden" class="form-control" id="txtguserid">
 
                         </div>
                         <div class="mb-3">
@@ -132,5 +134,10 @@
     </div>
     <!--end modal-->
 </div>
+
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
 <script src="~/moduls/taskscript.js"></script>
+

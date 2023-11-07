@@ -163,38 +163,6 @@ function UpdateUserAttendance() {
    
 }
 
-
-///* Validate OutTime*/
-
-//$("#outtime").hide();
-//let outTimeError = true;
-//$("#OutTime").keyup(function () {
-//    validateOutTime();
-//});
-
-//function validateOutTime() {debugger
-//    let outTimeValue = $("#OutTime").val();
-//    if (outTimeValue.date!=today.date) {
-//            $("#outtime").show();
-//        outTimeError = false;
-//            return false;
-//    } else {
-//            $("#outtime").hide();
-//        }
-//    }
-///* Validate Submit Button */
-//$("#SubmitButton").click(function () {
-//    validateOutTime();
-//    if (
-//        outTimeError == true
-//    ) {
-//        return true;
-//    } else {
-//        return false;
-//    }
-//});
-
-
 function GetAttendance() {
     debugger
     var month = $('#txtmonth').val();
