@@ -15,9 +15,10 @@
     <link rel="shortcut icon" href="~/UserHome/minimal/assets/images/favicon.ico">
 
     <!--Datetime-->
-    
+    <link href="~/css/site.css" rel="stylesheet" />
     <!-- jsvectormap css -->
     <link href="~/UserHome/minimal/assets/libs/jsvectormap/css/jsvectormap.min.css" rel="stylesheet" type="text/css" />
+
 
     <!--Swiper slider css-->
     <link href="~/UserHome/minimal/assets/libs/swiper/swiper-bundle.min.css" rel="stylesheet" type="text/css" />
@@ -837,7 +838,7 @@
                                                     <a href="apps-projects-overview.html" class="nav-link" data-key="t-overview"> Overview </a>
                                                 </li>
                                                 <li class="nav-item">
-                                                    <a href="apps-projects-create.html" class="nav-link" data-key="t-create-project"> Create Project </a>
+                                                    <a asp-action="CreateProject" asp-controller="Project" class="nav-link" data-key="t-create-project"> Create Project </a>
                                                 </li>
                                             </ul>
                                         </div>
@@ -1736,7 +1737,7 @@
                                 <div class="row">
 
 
-
+                    
                                     @RenderBody()
 
 
@@ -1836,7 +1837,7 @@
 
         <!-- App js -->
        <script src="~/UserHome/minimal/assets/js/app.js"></script>
-
+        <script src="~/js/site.js"></script>
         <script src="~/moduls/userdetailsscript.js"></script>
         @await RenderSectionAsync("Scripts", required: false)
 </body>
