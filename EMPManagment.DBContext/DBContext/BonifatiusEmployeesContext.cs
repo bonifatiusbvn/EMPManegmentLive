@@ -27,6 +27,8 @@ public partial class BonifatiusEmployeesContext : DbContext
 
     public virtual DbSet<TblPageMaster> TblPageMasters { get; set; }
 
+    public virtual DbSet<TblProjectMaster> TblProjectMasters { get; set; }
+
     public virtual DbSet<TblQuestion> TblQuestions { get; set; }
 
     public virtual DbSet<TblSalarySlip> TblSalarySlips { get; set; }
@@ -119,6 +121,26 @@ public partial class BonifatiusEmployeesContext : DbContext
                 .HasConstraintName("FK_tblPageMaster_tblUsers");
         });
 
+        modelBuilder.Entity<TblProjectMaster>(entity =>
+        {
+            entity.HasKey(e => e.ProjectId);
+
+            entity.ToTable("tblProjectMaster");
+
+            entity.Property(e => e.ProjectId).ValueGeneratedNever();
+            entity.Property(e => e.CreatedBy).HasMaxLength(50);
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.ProjectDeadline).HasColumnType("date");
+            entity.Property(e => e.ProjectEndDate).HasColumnType("date");
+            entity.Property(e => e.ProjectHead).HasMaxLength(50);
+            entity.Property(e => e.ProjectLocation).HasMaxLength(50);
+            entity.Property(e => e.ProjectPriority).HasMaxLength(10);
+            entity.Property(e => e.ProjectStartDate).HasColumnType("date");
+            entity.Property(e => e.ProjectStatus).HasMaxLength(10);
+            entity.Property(e => e.ProjectTitle).HasMaxLength(50);
+            entity.Property(e => e.ProjectType).HasMaxLength(20);
+        });
+
         modelBuilder.Entity<TblQuestion>(entity =>
         {
             entity.ToTable("tblQuestion");
@@ -165,7 +187,6 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.Property(e => e.TaskEndDate).HasColumnType("datetime");
             entity.Property(e => e.TaskStatus).HasMaxLength(50);
             entity.Property(e => e.TaskTitle).HasMaxLength(50);
-            entity.Property(e => e.TaskDetails).HasMaxLength(50);
 
             entity.HasOne(d => d.TaskTypeNavigation).WithMany(p => p.TblTaskDetails)
                 .HasForeignKey(d => d.TaskType)

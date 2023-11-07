@@ -39,7 +39,9 @@
     <link href="~/UserHome/minimal/assets/css/app.min.css" rel="stylesheet" type="text/css" />
     <!-- custom Css-->
     <link href="~/UserHome/minimal/assets/css/custom.min.css" rel="stylesheet" type="text/css" />
-   
+    <!-- Loader -->
+    <link href="~/css/site.css" rel="stylesheet" />
+    <link href="~/css/loader.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script src="~/lib/jquery/dist/jquery.js"></script>
@@ -1736,8 +1738,8 @@
 
                                 <div class="row">
 
+                                    <partial name="_Loader" />
 
-                    
                                     @RenderBody()
 
 
@@ -1834,6 +1836,9 @@
 
 
         <!-- init js -->
+
+
+        <script src="~/js/site.js"></script>
 
         <!-- App js -->
        <script src="~/UserHome/minimal/assets/js/app.js"></script>
