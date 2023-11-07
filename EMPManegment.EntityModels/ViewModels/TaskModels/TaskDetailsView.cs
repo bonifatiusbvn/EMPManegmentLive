@@ -13,6 +13,7 @@ namespace EMPManegment.EntityModels.ViewModels.TaskModels
         public Guid Id { get; set; }
 
         public int? TaskType { get; set; }
+        public string? TaskTypeName { get; set; }
         public string? TaskTitle { get; set; }
 
         public string? TaskDetails { get; set; }

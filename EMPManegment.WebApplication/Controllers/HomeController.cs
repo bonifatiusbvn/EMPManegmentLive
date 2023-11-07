@@ -268,5 +268,26 @@ namespace EMPManegment.Web.Controllers
             }
             
         }
+
+        [HttpGet]
+        public async Task<JsonResult> GetTaskDetailsById(Guid Id)
+        {
+            try
+            {
+                TaskDetailsView usertaskdetails = new TaskDetailsView();
+                HttpClient client = WebAPI.Initil();
+                ApiResponseModel response = await APIServices.GetAsync("", "UserHome/GetTaskDetailsById?Taskid=" + Id);
+                if (response.code == 200)
+                {
+                    usertaskdetails = JsonConvert.DeserializeObject<TaskDetailsView>(response.data.ToString());
+                }
+                return new JsonResult(usertaskdetails);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
     }
 }

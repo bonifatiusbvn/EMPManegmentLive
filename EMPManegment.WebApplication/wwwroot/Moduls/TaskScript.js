@@ -153,8 +153,8 @@ function GetUserTaskDetails() {
     })
 }
 
-function btnStatusUpdate(Id)
-{
+function btnStatusUpdate(Id) { 
+
     var StausChange = {
         TaskStatus: $('#ddlStatus' + Id).val(),
         Id : Id
@@ -182,4 +182,31 @@ function btnStatusUpdate(Id)
             alert(error);
         }
     })
+}
+
+function btnTaskDetails(Id)
+{
+    $.ajax({
+        url: '/Home/GetTaskDetailsById?Id=' + Id,
+        type: "Get",
+        contentType: 'application/json;charset=utf-8;',
+        dataType: 'json',
+        success: function (response) {
+
+            $('#showDetailsModal').modal('show');
+            $('#taskTitle-field').text(response.taskTitle);
+            $('#taskDescription-field').text(response.taskDetails);
+            var startdate = response.taskDate;
+            var StartDate = startdate.substr(0, 10);
+            $('#taskstartdate-field').text(StartDate);
+            var enddate = response.taskEndDate;
+            var EndDate = enddate.substr(0, 10);
+            $('#taskenddate-field').text(EndDate);
+            $('#taskpriority-field').text(response.taskTypeName);
+            $('#taskstatus-field').text(response.taskStatus); 
+        },
+        error: function () {
+            alert('Data not found');
+        }
+    });
 }
