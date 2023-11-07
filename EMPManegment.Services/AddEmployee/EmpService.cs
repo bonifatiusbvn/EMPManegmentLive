@@ -36,13 +36,5 @@ namespace EMPManegment.Services.AddEmployee
         {
             return await EmpDetails.EmpDepartment();
         }
-
-        
-
-       
-        public async Task<EmpDetailsView> GetById(Guid Id)
-        {
-            return await EmpDetails.GetById(Id);
-        }
     }
 }

@@ -10,6 +10,6 @@ namespace EMPManegment.Inretface.Services.UserLoginServices
 {
     public interface IUserLoginServices
     {
-        Task<LoginResponseModel> LoginUser(LoginRequest request);
+        Task<LoginResponseModel> LoginUser(LoginRequest loginUser);
     }
 }

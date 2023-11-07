@@ -202,12 +202,12 @@ namespace EMPManagment.API.Controllers
 
         [HttpPost]
         [Route("UpdateDealStatus")]
-        public async Task<IActionResult> UpdateDealStatus(TaskDetailsView task)
+        public async Task<IActionResult> UpdateTaskStatus(TaskDetailsView task)
         {
             UserResponceModel response = new UserResponceModel();
             try
             {
-                var result = TaskServices.UpdateDealStatus(task);
+                var result = TaskServices.UpdateTaskStatus(task);
                 if (result.Result.Code == 200)
                 {
                     response.Code = (int)HttpStatusCode.OK;

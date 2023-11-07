@@ -151,7 +151,7 @@ function btnStatusUpdate(Id)
     form_data.append("STATUSUPDATE", JSON.stringify(StausChange));
 
     $.ajax({
-        url: '/Home/UpdateUserDealStatus',
+        url: '/Home/UpdateUserTaskStatus',
         type: 'Post',
         data: form_data,
         dataType: 'json',

@@ -25,6 +25,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 using Microsoft.IdentityModel.Tokens;
 using EMPManegment.EntityModels.ViewModels.UserModels;
+using Azure.Core;
 
 namespace EMPManegment.Web.Controllers
 {
@@ -175,7 +176,7 @@ namespace EMPManegment.Web.Controllers
                 string id = HttpContext.Session.GetString("UserID");
                 EmpDetailsView empList = new EmpDetailsView();
                 HttpClient client = WebAPI.Initil();
-                ApiResponseModel response = await APIServices.GetAsync("", "AddEmp/GetById?Id=" + id);
+                ApiResponseModel response = await APIServices.GetAsync("", "UserDetails/GetEmployeeById?id=" + id);
                 if (response.code == 200)
                 {
                     empList = JsonConvert.DeserializeObject<EmpDetailsView>(response.data.ToString());
@@ -350,7 +351,7 @@ namespace EMPManegment.Web.Controllers
         public async Task<IActionResult> GetUserAttendanceList()
         {
             try
-            {
+             {
                 var draw = Request.Form["draw"].FirstOrDefault();
                 var start = Request.Form["start"].FirstOrDefault();
                 var length = Request.Form["length"].FirstOrDefault();
@@ -445,11 +446,10 @@ namespace EMPManegment.Web.Controllers
             {
                 EmpDetailsView emp = new EmpDetailsView();
                 HttpClient client = WebAPI.Initil();
-                HttpResponseMessage res = await client.GetAsync("UserDetails/GetEmployee?id=" + id);
-                if (res.IsSuccessStatusCode)
+                ApiResponseModel res = await APIServices.GetAsync("", "UserDetails/GetEmployeeById?id=" + id);
+                if (res.code == 200)
                 {
-                    var result = res.Content.ReadAsStringAsync().Result;
-                    emp = JsonConvert.DeserializeObject<EmpDetailsView>(result);
+                    emp = JsonConvert.DeserializeObject<EmpDetailsView>(res.data.ToString());
                 }
                 return new JsonResult(emp);
             }

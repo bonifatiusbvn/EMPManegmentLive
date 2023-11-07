@@ -119,30 +119,5 @@ namespace EMPManegment.Repository.AddEmpRepository
                 throw ex;
             }
         }
-
-        public async Task<EmpDetailsView> GetById(Guid Id)
-        {
-            var employee = await Context.TblUsers.SingleOrDefaultAsync(x => x.Id == Id);
-            EmpDetailsView model = new EmpDetailsView
-            {
-                Id=employee.Id,
-                UserName = employee.UserName,
-                FirstName = employee.FirstName,
-                LastName = employee.LastName,
-                Image = employee.Image,
-                Gender = employee.Gender,
-                DateOfBirth = employee.DateOfBirth,
-                Email = employee.Email, 
-                PhoneNumber = employee.PhoneNumber,
-                Address = employee.Address,
-                CityId = employee.CityId,
-                DepartmentId = employee.DepartmentId,
-                StateId = employee.StateId,
-                CountryId = employee.CountryId,
-                IsActive = employee.IsActive,
-                JoiningDate= employee.JoiningDate,
-            };
-            return model; 
-        }
     }   
 }

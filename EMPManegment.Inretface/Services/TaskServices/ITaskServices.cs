@@ -11,8 +11,8 @@ namespace EMPManegment.Inretface.Services.TaskServices
     public interface ITaskServices
     {
         Task<IEnumerable<TaskTypeView>> GetTaskType();
-        Task<UserResponceModel> AddTaskDetails(TaskDetailsView task);
-        Task<List<TaskDetailsView>> GetUserTaskDetails(TaskDetailsView task);
-        Task<UserResponceModel> UpdateDealStatus(TaskDetailsView task);
+        Task<UserResponceModel> AddTaskDetails(TaskDetailsView AddTaskDetails);
+        Task<List<TaskDetailsView>> GetUserTaskDetails(TaskDetailsView GetTaskDetails);
+        Task<UserResponceModel> UpdateTaskStatus(TaskDetailsView UpdateTaskStatus);
     }
 }

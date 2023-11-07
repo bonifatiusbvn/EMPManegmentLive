@@ -221,18 +221,11 @@ namespace EMPManagment.API.Controllers
             return Ok(new { code = 200, data = attendance });
         }
         [HttpGet]
-        [Route("GetEmployee")]
-        public async Task<IActionResult>GetEmployee(Guid id)
+        [Route("GetEmployeeById")]
+        public async Task<IActionResult>GetEmployeeById(Guid id)
         {
-            var data  = await UserListServices.GetById(id);
-            if (data == null)
-            {
-                return NotFound();
-            }
-            else
-            {
-                return Ok(data);
-            }
+            var userProfile = await UserListServices.GetById(id);
+            return Ok(new { code = 200, data = userProfile });
         }
         [HttpPost]
         [Route("Update")]

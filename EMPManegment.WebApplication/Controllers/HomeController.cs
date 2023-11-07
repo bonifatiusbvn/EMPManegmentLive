@@ -249,7 +249,7 @@ namespace EMPManegment.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateUserDealStatus()
+        public async Task<IActionResult> UpdateUserTaskStatus()
         {
             try
             {
@@ -257,7 +257,7 @@ namespace EMPManegment.Web.Controllers
 
                 var statusRequest = JsonConvert.DeserializeObject<TaskDetailsView>(userstausres);
 
-                ApiResponseModel postuser = await APIServices.PostAsync(statusRequest, "UserHome/UpdateDealStatus");
+                ApiResponseModel postuser = await APIServices.PostAsync(statusRequest, "UserHome/UpdateTaskStatus");
                 UserResponceModel userResponceModel = new UserResponceModel();
                 if (postuser.code == 200)
                 {

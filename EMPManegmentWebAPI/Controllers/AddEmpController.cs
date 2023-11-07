@@ -27,8 +27,8 @@ namespace EMPManagment.API.Controllers
         [Route("CheckUser")]
         public IActionResult CheckUser()
         {
-            var newuser = EmpDetails.CheckEmloyess();
-            return Ok(new { code = 200, data = newuser });
+            var checkUser = EmpDetails.CheckEmloyess();
+            return Ok(new { code = 200, data = checkUser });
         }
 
 
@@ -36,35 +36,26 @@ namespace EMPManagment.API.Controllers
         [Route("GetDepartment")]
         public async Task<IActionResult> GetDepartment()
         {
-            IEnumerable<Department> dept = await EmpDetails.EmpDepartment();
-            return Ok(new { code = 200, data = dept.ToList() });
+            IEnumerable<Department> getDepartment = await EmpDetails.EmpDepartment();
+            return Ok(new { code = 200, data = getDepartment.ToList() });
         }
-
-        [HttpGet]
-        [Route("GetById")]
-        public async Task<IActionResult> GetById(Guid Id)
-        {
-            var userProfile = await EmpDetails.GetById(Id);
-            return Ok(new { code = 200, data = userProfile });
-        }
-
 
         [HttpPost]
         [Route("AddEmployees")]
-        public async Task<IActionResult> AddEmployees(EmpDetailsView emp)
+        public async Task<IActionResult> AddEmployees(EmpDetailsView AddEmployee)
         {
             UserResponceModel response = new UserResponceModel();
             try
             {
-                var result = EmpDetails.AddEmployee(emp);
-                if (result.Result.Code == 200)
+                var addEmployee = EmpDetails.AddEmployee(AddEmployee);
+                if (addEmployee.Result.Code == 200)
                 {
                     response.Code = (int)HttpStatusCode.OK;
                   
                 }
                 else
                 {
-                    response.Message = result.Result.Message;
+                    response.Message = addEmployee.Result.Message;
                 }
             }
             catch (Exception ex)

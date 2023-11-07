@@ -417,8 +417,10 @@ namespace EMPManegment.Repository.UserListRepository
             EmpDetailsView model = new EmpDetailsView
             {
                 Id = employee.Id,
+                UserName = employee.UserName,
                 FirstName = employee.FirstName,
                 LastName = employee.LastName,
+                Image = employee.Image,
                 Gender = employee.Gender,
                 DateOfBirth = employee.DateOfBirth,
                 Email = employee.Email,
@@ -428,6 +430,8 @@ namespace EMPManegment.Repository.UserListRepository
                 DepartmentId = employee.DepartmentId,
                 StateId = employee.StateId,
                 CountryId = employee.CountryId,
+                IsActive = employee.IsActive,
+                JoiningDate = employee.JoiningDate,
             };
             return model;
         }
