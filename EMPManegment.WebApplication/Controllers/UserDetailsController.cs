@@ -449,7 +449,7 @@ namespace EMPManegment.Web.Controllers
                 ApiResponseModel res = await APIServices.GetAsync("", "UserDetails/GetEmployeeById?id=" + id);
                 if (res.code == 200)
                 {
-                    emp = JsonConvert.DeserializeObject<EmpDetailsView>(res.data.ToString());
+                    editDetails = JsonConvert.DeserializeObject<EmpDetailsView>(res.data.ToString());
                 }
                 return new JsonResult(editDetails);
             }

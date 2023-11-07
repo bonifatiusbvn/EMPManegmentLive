@@ -69,7 +69,7 @@ namespace EMPManegment.Repository.TaskRepository
             return response;
         }
 
-        public async Task<UserResponceModel> UpdateDealStatus(TaskDetailsView updatetask)
+        public async Task<UserResponceModel> UpdateTaskStatus(TaskDetailsView updatetask)
         {
             UserResponceModel model = new UserResponceModel();
             var gettask = Context.TblTaskDetails.Where(e => e.Id == updatetask.Id).FirstOrDefault();

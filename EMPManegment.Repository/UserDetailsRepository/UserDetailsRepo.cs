@@ -416,22 +416,22 @@ namespace EMPManegment.Repository.UserListRepository
             var Userdata = await Context.TblUsers.SingleOrDefaultAsync(x => x.Id == Userid);
             EmpDetailsView model = new EmpDetailsView
             {
-                Id = employee.Id,
-                UserName = employee.UserName,
-                FirstName = employee.FirstName,
-                LastName = employee.LastName,
-                Image = employee.Image,
-                Gender = employee.Gender,
-                DateOfBirth = employee.DateOfBirth,
-                Email = employee.Email,
-                PhoneNumber = employee.PhoneNumber,
-                Address = employee.Address,
-                CityId = employee.CityId,
-                DepartmentId = employee.DepartmentId,
-                StateId = employee.StateId,
-                CountryId = employee.CountryId,
-                IsActive = employee.IsActive,
-                JoiningDate = employee.JoiningDate,
+                Id = Userdata.Id,
+                UserName = Userdata.UserName,
+                FirstName = Userdata.FirstName,
+                LastName = Userdata.LastName,
+                Image = Userdata.Image,
+                Gender = Userdata.Gender,
+                DateOfBirth = Userdata.DateOfBirth,
+                Email = Userdata.Email,
+                PhoneNumber = Userdata.PhoneNumber,
+                Address = Userdata.Address,
+                CityId = Userdata.CityId,
+                DepartmentId = Userdata.DepartmentId,
+                StateId = Userdata.StateId,
+                CountryId = Userdata.CountryId,
+                IsActive = Userdata.IsActive,
+                JoiningDate = Userdata.JoiningDate,
             };
             return model;
         }

@@ -57,7 +57,7 @@ namespace EMPManegment.Repository.UserAttendanceRepository
 
             if (!string.IsNullOrEmpty(dataTable.searchValue))
             {
-                users = users.Where(e => e.UserName.Contains(dataTable.searchValue) || e.Date.ToString().ToLower().Contains(dataTable.searchValue.ToLower()));
+                AttendanceDataTable = AttendanceDataTable.Where(e => e.UserName.Contains(dataTable.searchValue) || e.Date.ToString().ToLower().Contains(dataTable.searchValue.ToLower()));
             }
 
             int totalRecord = AttendanceDataTable.Count();
