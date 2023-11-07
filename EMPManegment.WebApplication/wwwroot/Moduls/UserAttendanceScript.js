@@ -4,7 +4,8 @@
 });
 
 function GetUserAttendance() {
-
+    
+    siteloadershow();
     $('#AttendanceTableData').DataTable({
         processing: true,
         serverSide: true,
