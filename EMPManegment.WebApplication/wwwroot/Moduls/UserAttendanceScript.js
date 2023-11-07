@@ -2,9 +2,8 @@
     GetUserAttendance();
     GetAttendance();
 });
-
 function GetUserAttendance() {
-
+    
     $('#AttendanceTableData').DataTable({
         processing: true,
         serverSide: true,
@@ -15,6 +14,10 @@ function GetUserAttendance() {
             url: '/UserDetails/GetUserAttendanceList',
             dataType: 'json'
         },
+        'language': {
+            'loadingRecords': '&nbsp;',
+            'processing': siteloadershow()
+        },                
         columns: [
             { "data": "userName", "name": "UserName" },
             {
@@ -72,7 +75,6 @@ function GetUserAttendance() {
         columnDefs: [{
             "defaultContent": "",
             "targets": "_all",
-
         }]
     });
 }
