@@ -127,7 +127,7 @@ namespace EMPManegment.Repository.TaskRepository
                                 {
                                     Id = d.Id,
                                     UserId = d.UserId,
-                                    TaskTypeName = m.TaskType,
+                                    TaskType = d.TaskType,
                                     TaskDate = d.TaskDate,
                                     TaskTitle = d.TaskTitle,
                                     TaskEndDate = d.TaskEndDate,

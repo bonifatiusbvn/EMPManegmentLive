@@ -21,30 +21,30 @@ namespace EMPManegment.Services.UserList
             UserList = userList;
         }
 
-        public async Task<jsonData> GetUsersList(DataTableRequstModel dataTable)
+        public async Task<jsonData> GetUsersList(DataTableRequstModel GetUserlist)
         {
-            return await UserList.GetUsersList(dataTable);
+            return await UserList.GetUsersList(GetUserlist);
         }
 
-        public Task<UserResponceModel> ActiveDeactiveUsers(string UserName)
+        public Task<UserResponceModel> ActiveDeactiveUsers(string activedeavtiveuser)
         {
-            return UserList.ActiveDeactiveUsers(UserName);    
+            return UserList.ActiveDeactiveUsers(activedeavtiveuser);    
         }
 
 
-        public Task<UserResponceModel> EnterInTime(UserAttendanceModel userAttendance)
+        public Task<UserResponceModel> EnterInTime(UserAttendanceModel enterinTime)
         {
-            return UserList.EnterInTime(userAttendance);
+            return UserList.EnterInTime(enterinTime);
         }
 
-        public Task<UserResponceModel> EnterOutTime(UserAttendanceModel userAttendance)
+        public Task<UserResponceModel> EnterOutTime(UserAttendanceModel enteroutTime)
         {
-            return UserList.EnterOutTime(userAttendance);
+            return UserList.EnterOutTime(enteroutTime);
         }
 
-        public async Task<UserResponceModel> ResetPassword(PasswordResetView emp)
+        public async Task<UserResponceModel> ResetPassword(PasswordResetView PasswordReset)
         {
-            return await UserList.ResetPassword(emp);
+            return await UserList.ResetPassword(PasswordReset);
         }
         public async Task<IEnumerable<EmpDocumentView>> GetDocumentType()
         {
@@ -56,14 +56,14 @@ namespace EMPManegment.Services.UserList
             return await UserList.GetDocumentList();
         }
 
-        public async Task<DocumentInfoView> UploadDocument(DocumentInfoView doc)
+        public async Task<DocumentInfoView> UploadDocument(DocumentInfoView UploadDocument)
         {
-            return await UserList.UploadDocument(doc);
+            return await UserList.UploadDocument(UploadDocument);
         }
 
-        public async Task<UserResponceModel> UserLockScreen(LoginRequest request)
+        public async Task<UserResponceModel> UserLockScreen(LoginRequest UserLockScreen)
         {
-            return await UserList.UserLockScreen(request);
+            return await UserList.UserLockScreen(UserLockScreen);
         }
 
         public async Task<UserResponceModel> UserBirsthDayWish(Guid UserId)
@@ -75,14 +75,14 @@ namespace EMPManegment.Services.UserList
             return await UserList.UserEdit();
         }
 
-        public async Task<EmpDetailsView> GetById(Guid id)
+        public async Task<EmpDetailsView> GetById(Guid userId)
         {
-            return await UserList.GetById(id);
+            return await UserList.GetById(userId);
         }
 
-        public async Task<UserResponceModel> UpdateUser(UserEditViewModel employee)
+        public async Task<UserResponceModel> UpdateUser(UserEditViewModel UpdateUser)
         {
-            return await UserList.UpdateUser(employee);
+            return await UserList.UpdateUser(UpdateUser);
         }
 
         public async Task<IEnumerable<EmpDetailsView>> GetUsersNameList()

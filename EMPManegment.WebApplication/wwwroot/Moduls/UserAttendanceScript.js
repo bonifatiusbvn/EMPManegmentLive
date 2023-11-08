@@ -3,7 +3,7 @@
     GetAttendance();
 });
 function GetUserAttendance() {
-    
+    siteloadershow();
     $('#AttendanceTableData').DataTable({
         processing: true,
         serverSide: true,
@@ -14,10 +14,7 @@ function GetUserAttendance() {
             url: '/UserDetails/GetUserAttendanceList',
             dataType: 'json'
         },
-        'language': {
-            'loadingRecords': '&nbsp;',
-            'processing': siteloadershow()
-        },                
+                      
         columns: [
             { "data": "userName", "name": "UserName" },
             {
@@ -166,11 +163,10 @@ function UpdateUserAttendance() {
 }
 
 function GetAttendance() {
-    debugger
+    
     var month = $('#txtmonth').val();
     var form_data = new FormData();
     form_data.append("FINDBYMONTH", JSON.stringify(month));
-    debugger
     $.ajax({
         url: '/UserDetails/GetAttendanceList',
         type: 'Post',
@@ -178,45 +174,61 @@ function GetAttendance() {
         data: form_data,
         processData: false,
         contentType: false,
-        success: function (result, status, xhr) {debugger
-            var object = '';
-            $.each(result, function (index, item) {
-                var userdate = new Date(item.date).toLocaleDateString('en-US');
-                var todate = new Date().toLocaleDateString('en-US');
-                object += '<tr>';
-                object += '<td>' + item.userName + '</td>';
-                object += '<td>' + (new Date(item.date)).toLocaleDateString('en-US') + '</td>';
-                object += '<td>' + (new Date(item.intime)).toLocaleTimeString('en-US') + '</td>';
-                //---------OutTime---------//
+        success: function (Result, status, xhr) {
+            
+                var object = '';
+                $.each(Result, function (index, item) {
+                    var userdate = new Date(item.date).toLocaleDateString('en-US');
+                    var todate = new Date().toLocaleDateString('en-US');
+                    object += '<tr>';
+                    object += '<td>' + item.userName + '</td>';
+                    object += '<td>' + (new Date(item.date)).toLocaleDateString('en-US') + '</td>';
+                    object += '<td>' + (new Date(item.intime)).toLocaleTimeString('en-US') + '</td>';
+                    //---------OutTime---------//
+                    if (item.outTime != null) {
+                        object += '<td>' +
+                            (new Date(item.outTime)).toLocaleTimeString('en-US') + '</td>';
+                    }
+                    else if (item.outTime == null && userdate == todate) {
 
-                if (item.outTime != null) {
-                    object += '<td>' +
-                        (new Date(item.outTime)).toLocaleTimeString('en-US') + '</td>';
-                }
-                else if (item.outTime == null && userdate == todate) {
-                    
-                    object += '<td>' +
-                        ("Pending") + '</td>';
-                }
-                else {
-                    object += '<td>' +
-                        ("Missing") + '</td>';
-                }
-                //---------TotalHours--------//
-                if (item.totalHours != null) {
-                    object += '<td>' +
-                        (item.totalHours?.substr(0, 8)) + ('hr') + '</td>';
-                }
-                else if (item.totalHours == null && userdate == todate) {
-                    object += '<td>' +
-                        ("Pending") + '</td>';
-                }
-                else {
-                    object += '<td>' +
-                        ("Missing") + '</td>';
-                     }
-            });
-            $('#TableDataAttendanceList').html(object);
-        },
+                        object += '<td>' +
+                            ("Pending") + '</td>';
+                    }
+                    else {
+                        object += '<td>' +
+                            ("Missing") + '</td>';
+                    }
+                    //---------TotalHours--------//
+                    if (item.totalHours != null) {
+                        object += '<td>' +
+                            (item.totalHours?.substr(0, 8)) + ('hr') + '</td>';
+                    }
+                    else if (item.totalHours == null && userdate == todate) {
+                        object += '<td>' +
+                            ("Pending") + '</td>';
+                    }
+                    else {
+                        object += '<td>' +
+                            ("Missing") + '</td>';
+                    }
+                });
+            if (Result.message != null) {
+                var msg = '';
+                msg += '<td>' +
+                    (Result.message) + '</td>'; msg += '<td>' +
+                    (Result.message) + '</td>'; msg += '<td>' +
+                    (Result.message) + '</td>'; msg += '<td>' +
+                        (Result.message) + '</td>';
+                msg += '<td>' +
+                    (Result.message) + '</td>';
+                $('#TableDataAttendanceList').html(msg);
+                return
+             
+            }
+            else {
+                $('#TableDataAttendanceList').html(object);
+            }      
+        }
+
     });
 };

@@ -26,32 +26,32 @@ namespace EMPManagment.API.Controllers
 
         [AllowAnonymous]
         [HttpPost("Login")]
-        public async Task<IActionResult> Login(LoginRequest request)
+        public async Task<IActionResult> Login(LoginRequest login)
         {
-            LoginResponseModel apiResponseModel = new LoginResponseModel();
+            LoginResponseModel loginresponsemodel = new LoginResponseModel();
             try
             {
                
-                var result = await UserLogin.LoginUser(request);
+                var result = await UserLogin.LoginUser(login);
                
                 if (result != null && result.Data != null)
                 {
-                   
-                    apiResponseModel.Code = (int)HttpStatusCode.OK;
-                    apiResponseModel.Data = result.Data;
-                    apiResponseModel.Message = result.Message;
+
+                    loginresponsemodel.Code = (int)HttpStatusCode.OK;
+                    loginresponsemodel.Data = result.Data;
+                    loginresponsemodel.Message = result.Message;
                 }
                 else
                 {
-                    apiResponseModel.Message = result.Message;
-                    apiResponseModel.Code = (int)HttpStatusCode.NotFound;
+                    loginresponsemodel.Message = result.Message;
+                    loginresponsemodel.Code = (int)HttpStatusCode.NotFound;
                 }
             }
             catch (Exception ex)
             {
-                apiResponseModel.Code = (int)HttpStatusCode.InternalServerError;
+                loginresponsemodel.Code = (int)HttpStatusCode.InternalServerError;
             }
-            return StatusCode(apiResponseModel.Code, apiResponseModel);
+            return StatusCode(loginresponsemodel.Code, loginresponsemodel);
         }
     }
 }

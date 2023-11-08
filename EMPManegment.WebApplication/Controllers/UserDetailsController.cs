@@ -26,6 +26,7 @@ using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 using Microsoft.IdentityModel.Tokens;
 using EMPManegment.EntityModels.ViewModels.UserModels;
 using Azure.Core;
+using EMPManegment.EntityModels.ViewModels.TaskModels;
 
 namespace EMPManegment.Web.Controllers
 {
@@ -329,7 +330,7 @@ namespace EMPManegment.Web.Controllers
                     else
                     {
                     TempData["ErrorMessage"] = response.message;
-                }
+                    }
 
                 return View();
 
@@ -509,21 +510,24 @@ namespace EMPManegment.Web.Controllers
                 List<UserAttendanceModel> getAttendanceList = new List<UserAttendanceModel>();
                 string Userid = HttpContext.Session.GetString("UserID");
                 Guid UserId = Guid.Parse(Userid);
-          
                 HttpClient client = WebAPI.Initil();
-                ApiResponseModel res = await APIServices.GetAsync("", "UserDetails/GetAttendanceList?id=" + UserId+ "&Cmonth=" + month);
-                if (res.code == 200)
+                ApiResponseModel response = await APIServices.GetAsync("", "UserDetails/GetAttendanceList?id=" + UserId+ "&Cmonth=" + month);
+                if (response.data.Count != 0)
                 {
-                    getAttendanceList = JsonConvert.DeserializeObject<List<UserAttendanceModel>>(res.data.ToString());
+                    getAttendanceList = JsonConvert.DeserializeObject<List<UserAttendanceModel>>(response.data.ToString());
+                }
+                else
+                {
+                    return new JsonResult(new { Message = "No Data Found On Selected Month !!"});
+
                 }
                 return new JsonResult(getAttendanceList);
-            }
+            }  
             catch (Exception ex)
             {
                 throw ex;
             }
         }
-    }
-        
+    }   
 }
 
