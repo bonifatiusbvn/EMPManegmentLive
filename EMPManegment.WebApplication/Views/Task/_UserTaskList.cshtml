@@ -14,18 +14,18 @@
                 </a>
             </div>
             <!--end card-->
-              @if (Model.Count > 0)
-             {
+            @if (Model.Count > 0)
+            {
                 foreach (var item in Model)
                 {
-                   @if(item.TaskType == 1 && item.TaskStatus != "Completed")
-                   {
+                    @if (item.TaskType == 1 && item.TaskStatus != "Completed")
+                    {
                         <div class="collapse show" id="lowPriority">
                             <div class="card mb-1">
                                 <div class="card-body">
                                     <a class="d-flex align-items-center" data-bs-toggle="collapse" href="#lowPriority1(@item.Id)" role="button" aria-expanded="false" aria-controls="lowPriority1(@item.Id)">
                                         <div class="flex-shrink-0">
-                                            <img src="~/@Accessor.HttpContext.Session.GetString("ProfileImage")" alt="" class="avatar-xs rounded-circle">
+                                            <img src="~/@item.UserProfile" alt="" class="avatar-xs rounded-circle">
                                         </div>
                                         <div class="flex-grow-1 ms-3">
                                             <h6 class="fs-14 mb-1 text-success">@item.TaskTitle</h6>
@@ -91,11 +91,11 @@
                                 </div>
                             </div>
                         </div>
-                   }
+                    }
                 }
-             } 
+            }
         </div>
-            <!--end col-->
+        <!--end col-->
 
         <div class="col">
             <div class="card border-0 overflow-hidden">
@@ -116,7 +116,7 @@
                                 <div class="card-body">
                                     <a class="d-flex align-items-center" data-bs-toggle="collapse" href="#mediumPriority1(@item.Id)" role="button" aria-expanded="false" aria-controls="mediumPriority1(@item.Id)">
                                         <div class="flex-shrink-0">
-                                            <img src="~/@Accessor.HttpContext.Session.GetString("ProfileImage")" alt="" class="avatar-xs rounded-circle">
+                                            <img src="~/@item.UserProfile" alt="" class="avatar-xs rounded-circle">
                                         </div>
                                         <div class="flex-grow-1 ms-3">
                                             <h6 class="fs-14 mb-1" style="color:darkorange">@item.TaskTitle</h6>
@@ -196,18 +196,18 @@
                 </a>
             </div>
             <!--end card-->
-           @if (Model.Count > 0)
+            @if (Model.Count > 0)
             {
                 foreach (var item in Model)
                 {
                     @if (item.TaskType == 3 && item.TaskStatus != "Completed")
-                   {
+                    {
                         <div class="collapse show" id="highPriority">
                             <div class="card mb-1">
                                 <div class="card-body">
                                     <a class="d-flex align-items-center" data-bs-toggle="collapse" href="#highPriority1(@item.Id)" role="button" aria-expanded="false" aria-controls="highPriority1(@item.Id)">
                                         <div class="flex-shrink-0">
-                                            <img src="~/@Accessor.HttpContext.Session.GetString("ProfileImage")" alt="" class="avatar-xs rounded-circle">
+                                            <img src="~/@item.UserProfile" alt="" class="avatar-xs rounded-circle">
                                         </div>
                                         <div class="flex-grow-1 ms-3">
                                             <h6 class="fs-14 mb-1 text-danger">@item.TaskTitle</h6>
@@ -273,8 +273,8 @@
                                 </div>
                             </div>
                         </div>
-            
-                   }
+
+                    }
                 }
             }
         </div>
@@ -369,7 +369,6 @@
                 </a>
             </div>
             <!--end card-->
-
             @if (Model.Count > 0)
             {
                 foreach (var item in Model)
@@ -378,17 +377,17 @@
                     {
                         <div class="collapse show" id="taskCompleted">
                             <div class="card mb-1">
-                                 <div class="card-body">
+                                <div class="card-body">
                                     <a class="d-flex align-items-center" data-bs-toggle="collapse" href="#taskCompleted1(@item.Id)" role="button" aria-expanded="false" aria-controls="taskCompleted1(@item.Id)">
                                         <div class="flex-shrink-0">
-                                            <img src="~/@Accessor.HttpContext.Session.GetString("ProfileImage")" alt="" class="avatar-xs rounded-circle">
+                                            <img src="~/@item.UserProfile" alt="" class="avatar-xs rounded-circle">
                                         </div>
                                         <div class="flex-grow-1 ms-3">
                                             <h6 class="fs-14 mb-1">@item.TaskTitle</h6>
                                             <p class="text-muted mb-0">@item.TaskDate</p>
                                         </div>
                                     </a>
-                                 </div>
+                                </div>
                                 <div class="collapse border-top border-top-dashed" id="taskCompleted1(@item.Id)">
                                     <div class="card-body">
                                         <h6 class="fs-14 mb-1">Description</h6>
@@ -425,7 +424,7 @@
                                             Details
                                         </button>
                                     </div>
-                                 </div>
+                                </div>
                             </div>
                             <!--end card-->
                         </div>
@@ -509,5 +508,3 @@
     </div>
 </div>
 <!--end modal-->
-
-

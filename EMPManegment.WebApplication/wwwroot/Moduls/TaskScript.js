@@ -32,7 +32,7 @@ function ClearTaskDetails()
 function GetTaskType() {
 
     $.ajax({
-        url: '/Home/GetTaskType',
+        url: '/Task/GetTaskType',
         success: function (result) {
 
             $.each(result, function (i, data) {
@@ -57,7 +57,7 @@ function btnSaveTaskDetail() {
         formData.append("TaskEndDate", $("#txtenddatetime").val());
         formData.append("TaskDetails", $("#contactDescription").val());
         $.ajax({
-            url: '/Home/AddTaskDetails',
+            url: '/Task/AddTaskDetails',
             type: 'Post',
             data: formData,
             dataType: 'json',
@@ -72,7 +72,7 @@ function btnSaveTaskDetail() {
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'OK',
                     }).then(function () {
-                        window.location = '/Home/UserHome';
+                        window.location = '/Task/UserTasks';
                     });
                 }
             }
@@ -91,7 +91,7 @@ function btnSaveTaskDetail() {
 function GetUsername() {
     
     $.ajax({
-        url: '/Home/GetUserName',
+        url: '/Task/GetUserName',
         success: function (result) {
             $.each(result, function (i, data) {
                 $('#ddlusername').append('<Option value=' + data.id + '>' + data.userName + '</Option>')
@@ -141,8 +141,8 @@ $(document).ready(function () {
 
 function GetUserTaskDetails() {
     $.ajax({
-        url: '/Home/GetUserTaskDetail',
-        type: 'Post',
+        url: '/Task/GetAllUserTaskDetail',
+        type: 'Get',
         dataType: 'json',
         processData: false,
         contentType: false,
@@ -163,7 +163,7 @@ function btnStatusUpdate(Id) {
     form_data.append("STATUSUPDATE", JSON.stringify(StausChange));
 
     $.ajax({
-        url: '/Home/UpdateUserTaskStatus',
+        url: '/Task/UpdateUserTaskStatus',
         type: 'Post',
         data: form_data,
         dataType: 'json',
@@ -187,7 +187,7 @@ function btnStatusUpdate(Id) {
 function btnTaskDetails(Id)
 {
     $.ajax({
-        url: '/Home/GetTaskDetailsById?Id=' + Id,
+        url: '/Task/GetTaskDetailsById?Id=' + Id,
         type: "Get",
         contentType: 'application/json;charset=utf-8;',
         dataType: 'json',

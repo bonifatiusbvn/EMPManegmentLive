@@ -232,5 +232,13 @@ namespace EMPManagment.API.Controllers
             var userTaskDetails = await TaskServices.GetTaskDetailsById(Taskid);
             return Ok(new { code = 200, data = userTaskDetails });
         }
+
+        [HttpGet]
+        [Route("GetAllUserTaskDetails")]
+        public async Task<IActionResult> GetAllUserTaskDetails()
+        {
+            IEnumerable<TaskDetailsView> AllTaskList = await TaskServices.GetAllUserTaskDetails();
+            return Ok(new { code = 200, data = AllTaskList.ToList() });
+        }
     }
 }
