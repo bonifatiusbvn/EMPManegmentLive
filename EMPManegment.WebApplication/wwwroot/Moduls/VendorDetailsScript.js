@@ -2,7 +2,6 @@
     GetAllVendorData();
 });
 function GetAllVendorData() {
-    
     $('#VendorTableData').DataTable({
         processing: true,
         serverSide: true,

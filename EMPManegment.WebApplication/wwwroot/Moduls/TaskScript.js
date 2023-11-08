@@ -1,11 +1,10 @@
 ﻿$(document).ready(function () {
-
-    //GetUserTaskDetails();  
+    GetUserTaskDetails();  
 });
 
 
 function showadddetails() {
-    debugger
+ 
     ClearTextBox();
     GetTaskType();
     GetUsername();
@@ -15,10 +14,11 @@ function showadddetails() {
 
 function ClearTextBox() {
 
-    $("#dealType option").remove();
-    $("#dealType")[0];
+    $("#taskType").find("option").remove().end().append(
+        '<option selected disabled value = "">--Select Task Type--</option>');
     $("#dealTitle").val('');
-    $("#ddlusername").val("");
+    $("#ddlusername").find("option").remove().end().append(
+        '<option selected disabled value = "">--Select Username--</option>');
     $("#txtdatetime").val('');
     $("#txtenddatetime").val('');
     $("#contactDescription").val('');
@@ -34,55 +34,58 @@ function GetTaskType() {
     $.ajax({
         url: '/Home/GetTaskType',
         success: function (result) {
+
             $.each(result, function (i, data) {
-                $('#dealType').append('<Option value=' + data.taskId + '>' + data.taskType + '</Option>')
+                $('#taskType').append('<Option value=' + data.taskId + '>' + data.taskType + '</Option>')
             });
         }
     });
 }
 
 function TaskTypetext(sel) {
-    $("#txtDealType").val((sel.options[sel.selectedIndex].text));
+    $("#txtTaskType").val((sel.options[sel.selectedIndex].text));
 }
 
 function btnSaveTaskDetail() {
 
-    var formData = new FormData();
-    formData.append("TaskType", $("#dealType").val());
-    formData.append("TaskTitle", $("#dealTitle").val());
-    formData.append("UserId", $("#ddlusername").val());
-    formData.append("TaskDate", $("#txtdatetime").val());
-    formData.append("TaskEndDate", $("#txtenddatetime").val());
-    formData.append("TaskDetails", $("#contactDescription").val());
+    if ($('#frmtaskdetails').valid()) {
+        var formData = new FormData();
+        formData.append("TaskType", $("#taskType").val());
+        formData.append("TaskTitle", $("#dealTitle").val());
+        formData.append("UserId", $("#ddlusername").val());
+        formData.append("TaskDate", $("#txtdatetime").val());
+        formData.append("TaskEndDate", $("#txtenddatetime").val());
+        formData.append("TaskDetails", $("#contactDescription").val());
+        $.ajax({
+            url: '/Home/AddTaskDetails',
+            type: 'Post',
+            data: formData,
+            dataType: 'json',
+            contentType: false,
+            processData: false,
+            success: function (Result) {
 
-    $.ajax({
-        url: '/Home/AddTaskDetails',
-        type: 'Post',
-        data: formData,
-        dataType: 'json',
-        contentType: false,
-        processData: false,
-        success: function (Result) {
-  
-            if (Result.message != null) {
-                Swal.fire({
-                    title: Result.message,
-                    icon: 'success',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK',
-                }).then(function () {
-                    window.location = '/Home/UserHome';
-                });
-            } else {
-                Swal.fire({
-                    title: "Kindly Fill All Datafield",
-                    icon: 'error',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK',
-                })
+                if (Result.message != null) {
+                    Swal.fire({
+                        title: Result.message,
+                        icon: 'success',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK',
+                    }).then(function () {
+                        window.location = '/Home/UserHome';
+                    });
+                }
             }
-        }
-    })
+        })
+    }
+    else {
+        Swal.fire({
+            title: "Kindly Fill All Datafield",
+            icon: 'warning',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'OK',
+        })
+    }
 }
 
 function GetUsername() {
@@ -105,7 +108,7 @@ function Usernametext(sel) {
 $(document).ready(function () {
     $("#frmtaskdetails").validate({
         rules: {
-            dealType: "required",
+            taskType: "required",
             dealTitle: "required",
             ddlusername: "required",
             txtdatetime: "required",
@@ -113,7 +116,7 @@ $(document).ready(function () {
             contactDescription: "required",
         },
         messages: {
-            dealType: "Please Enter Deal Type",
+            taskType: "Please Enter Deal Type",
             dealTitle: "Please Enter Deal Title",
             ddlusername: "Please Select UserName",
             txtdatetime: "Please Enter Start Date",
@@ -122,7 +125,16 @@ $(document).ready(function () {
         }
     })
     $('#taskDetails').on('click', function () {
-        $("#frmtaskdetails").valid();
+        TaskType1 = $('#taskType').val();
+        if (TaskType1 == "") { 
+            $('#taskType').attr("aria-invalid", "true");
+            $("label[for='taskType']").addClass('failed');
+        }
+        UserId1 = $('#ddlusername').val();
+        if (UserId1 == "") {
+            $('#ddlusername').attr("aria-invalid", "true");
+            $("label[for='ddlusername']").addClass('failed');
+        }
     });
 });
 
@@ -141,8 +153,8 @@ function GetUserTaskDetails() {
     })
 }
 
-function btnStatusUpdate(Id)
-{
+function btnStatusUpdate(Id) { 
+
     var StausChange = {
         TaskStatus: $('#ddlStatus' + Id).val(),
         Id : Id
@@ -151,7 +163,7 @@ function btnStatusUpdate(Id)
     form_data.append("STATUSUPDATE", JSON.stringify(StausChange));
 
     $.ajax({
-        url: '/Home/UpdateUserDealStatus',
+        url: '/Home/UpdateUserTaskStatus',
         type: 'Post',
         data: form_data,
         dataType: 'json',
@@ -170,4 +182,31 @@ function btnStatusUpdate(Id)
             alert(error);
         }
     })
+}
+
+function btnTaskDetails(Id)
+{
+    $.ajax({
+        url: '/Home/GetTaskDetailsById?Id=' + Id,
+        type: "Get",
+        contentType: 'application/json;charset=utf-8;',
+        dataType: 'json',
+        success: function (response) {
+
+            $('#showDetailsModal').modal('show');
+            $('#taskTitle-field').text(response.taskTitle);
+            $('#taskDescription-field').text(response.taskDetails);
+            var startdate = response.taskDate;
+            var StartDate = startdate.substr(0, 10);
+            $('#taskstartdate-field').text(StartDate);
+            var enddate = response.taskEndDate;
+            var EndDate = enddate.substr(0, 10);
+            $('#taskenddate-field').text(EndDate);
+            $('#taskpriority-field').text(response.taskTypeName);
+            $('#taskstatus-field').text(response.taskStatus); 
+        },
+        error: function () {
+            alert('Data not found');
+        }
+    });
 }

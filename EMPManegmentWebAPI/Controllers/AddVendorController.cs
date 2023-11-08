@@ -22,20 +22,20 @@ namespace EMPManagment.API.Controllers
 
         [HttpPost]
         [Route("AddVendors")]
-        public async Task<IActionResult> AddVendors(VendorDetailsView vendor)
+        public async Task<IActionResult> AddVendors(VendorDetailsView AddVendor)
         {
             UserResponceModel response = new UserResponceModel();
             try
             {
-                var result = VendorDetails.AddVendor(vendor);
-                if (result.Result.Code == 200)
+                var addVendor = VendorDetails.AddVendor(AddVendor);
+                if (addVendor.Result.Code == 200)
                 {
                     response.Code = (int)HttpStatusCode.OK;
-                    response.Message =result.Result.Message;
+                    response.Message = addVendor.Result.Message;
                 }
                 else
                 {
-                    response.Message = result.Result.Message;
+                    response.Message = addVendor.Result.Message;
                     response.Code = (int)HttpStatusCode.NotFound;
                 }
             }
@@ -48,10 +48,10 @@ namespace EMPManagment.API.Controllers
 
         [HttpPost]
         [Route("GetVendorList")]
-        public async Task<IActionResult> GetVendorList(DataTableRequstModel dataTable)
+        public async Task<IActionResult> GetVendorList(DataTableRequstModel VendorList)
         {
-            var vendorList = await VendorDetails.GetVendorsList(dataTable);
-            return Ok(new { code = 200, data = vendorList });
+            var GetvendorList = await VendorDetails.GetVendorsList(VendorList);
+            return Ok(new { code = 200, data = GetvendorList });
         }
     }
 }

@@ -152,14 +152,14 @@ namespace EMPManegment.Web.Controllers
 
             try
             {
-                List<TaskTypeView> taskDeals = new List<TaskTypeView>();
+                List<TaskTypeView> getTask = new List<TaskTypeView>();
                 HttpClient client = WebAPI.Initil();
                 ApiResponseModel res = await APIServices.GetAsync(null, "UserHome/GetTaskType");
                 if (res.code == 200)
                 {
-                    taskDeals = JsonConvert.DeserializeObject<List<TaskTypeView>>(res.data.ToString());
+                    getTask = JsonConvert.DeserializeObject<List<TaskTypeView>>(res.data.ToString());
                 }
-                return new JsonResult(taskDeals);
+                return new JsonResult(getTask);
 
             }
             catch (Exception ex)
@@ -173,23 +173,17 @@ namespace EMPManegment.Web.Controllers
         {
             try
             {
-                
-                if (ModelState.IsValid) 
+                ApiResponseModel postuser = await APIServices.PostAsync(task, "UserHome/AddTaskDetails");
+                UserResponceModel responseModel = new UserResponceModel();
+                if (postuser.code == 200)
                 {
-                    ApiResponseModel postuser = await APIServices.PostAsync(task, "UserHome/AddTaskDetails");
-                    UserResponceModel responseModel = new UserResponceModel();
-                    if (postuser.code == 200)
-                    {
-                        return Ok(new { postuser.message });
-                    }
-                    else
-                    {
-                       
-                        return Ok(new { postuser.code });
-                    }
+                    return Ok(new { postuser.message });
                 }
-                return View(task);
-                    
+                else
+                {
+
+                    return Ok(new { postuser.code });
+                }
             }
             catch (Exception ex)
             {
@@ -227,20 +221,20 @@ namespace EMPManegment.Web.Controllers
                 {
                     UserId = Guid.Parse(Userid),
                 };
-                List<TaskDetailsView> userList = new List<TaskDetailsView>();
+                List<TaskDetailsView> TaskList = new List<TaskDetailsView>();
                 HttpClient client = WebAPI.Initil();
                 ApiResponseModel postuser = await APIServices.PostAsync(responceModel, "UserHome/GetUserTaskDetails");
                 if(postuser.data != null)
                 {
-                    userList = JsonConvert.DeserializeObject<List<TaskDetailsView>>(postuser.data.ToString());
+                    TaskList = JsonConvert.DeserializeObject<List<TaskDetailsView>>(postuser.data.ToString());
                     
                 }
                 else
                 {
-                    userList = new List<TaskDetailsView>();
+                    TaskList = new List<TaskDetailsView>();
                     ViewBag.Error = "note found";
                 }
-                return PartialView("~/Views/Home/_UserTaskList.cshtml", userList);
+                return PartialView("~/Views/Home/_UserTaskList.cshtml", TaskList);
             }
             catch(Exception ex) 
             { 
@@ -249,7 +243,7 @@ namespace EMPManegment.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateUserDealStatus()
+        public async Task<IActionResult> UpdateUserTaskStatus()
         {
             try
             {
@@ -257,7 +251,7 @@ namespace EMPManegment.Web.Controllers
 
                 var statusRequest = JsonConvert.DeserializeObject<TaskDetailsView>(userstausres);
 
-                ApiResponseModel postuser = await APIServices.PostAsync(statusRequest, "UserHome/UpdateDealStatus");
+                ApiResponseModel postuser = await APIServices.PostAsync(statusRequest, "UserHome/UpdateTaskStatus");
                 UserResponceModel userResponceModel = new UserResponceModel();
                 if (postuser.code == 200)
                 {
@@ -274,5 +268,26 @@ namespace EMPManegment.Web.Controllers
             }
             
         }
+
+        [HttpGet]
+        public async Task<JsonResult> GetTaskDetailsById(Guid Id)
+        {
+            try
+            {
+                TaskDetailsView usertaskdetails = new TaskDetailsView();
+                HttpClient client = WebAPI.Initil();
+                ApiResponseModel response = await APIServices.GetAsync("", "UserHome/GetTaskDetailsById?Taskid=" + Id);
+                if (response.code == 200)
+                {
+                    usertaskdetails = JsonConvert.DeserializeObject<TaskDetailsView>(response.data.ToString());
+                }
+                return new JsonResult(usertaskdetails);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
     }
 }

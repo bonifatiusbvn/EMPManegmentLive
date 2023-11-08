@@ -41,25 +41,25 @@ namespace EMPManegment.Repository.TaskRepository
             }
         }
 
-        public async Task<UserResponceModel> AddTaskDetails(TaskDetailsView task)
+        public async Task<UserResponceModel> AddTaskDetails(TaskDetailsView addtask)
         {
             UserResponceModel response = new UserResponceModel();
             try
             {
-                     var model = new TblTaskDetail()
+                     var taskmodel = new TblTaskDetail()
                     {
                         Id = Guid.NewGuid(),
-                        TaskType = task.TaskType,
-                        TaskTitle = task.TaskTitle,
-                        TaskDetails = task.TaskDetails,
-                        TaskDate = task.TaskDate,
-                        UserId = task.UserId,
+                        TaskType = addtask.TaskType,
+                        TaskTitle = addtask.TaskTitle,
+                        TaskDetails = addtask.TaskDetails,
+                        TaskDate = addtask.TaskDate,
+                        UserId = addtask.UserId,
                         CreatedOn = DateTime.Now,
-                        TaskEndDate = task.TaskEndDate,
+                        TaskEndDate = addtask.TaskEndDate,
                     };
                     response.Code = 200;
                     response.Message = "Task add successfully!";
-                    Context.TblTaskDetails.Add(model);
+                    Context.TblTaskDetails.Add(taskmodel);
                     Context.SaveChanges();                
             }
             catch (Exception ex) 
@@ -69,17 +69,17 @@ namespace EMPManegment.Repository.TaskRepository
             return response;
         }
 
-        public async Task<UserResponceModel> UpdateDealStatus(TaskDetailsView task)
+        public async Task<UserResponceModel> UpdateTaskStatus(TaskDetailsView updatetask)
         {
             UserResponceModel model = new UserResponceModel();
-            var data = Context.TblTaskDetails.Where(e => e.Id == task.Id).FirstOrDefault();
+            var gettask = Context.TblTaskDetails.Where(e => e.Id == updatetask.Id).FirstOrDefault();
             try
             {
-                if (data != null)
+                if (gettask != null)
                 {
-                    data.TaskStatus = task.TaskStatus;
+                    gettask.TaskStatus = updatetask.TaskStatus;
                 }
-                Context.TblTaskDetails.Update(data);
+                Context.TblTaskDetails.Update(gettask);
                 Context.SaveChanges();
                 model.Code = 200;
                 model.Message = "Task Status Updated Successfully!";
@@ -91,10 +91,10 @@ namespace EMPManegment.Repository.TaskRepository
             return model;
         }
 
-        public async Task<List<TaskDetailsView>> GetUserTaskDetails(TaskDetailsView task)
+        public async Task<List<TaskDetailsView>> GetUserTaskDetails(TaskDetailsView GetUserTaskDetails)
         {
             var UserId = new List<TaskDetailsView>();
-            var data = await Context.TblTaskDetails.Where(x=>x.UserId == task.UserId).ToListAsync();
+            var data = await Context.TblTaskDetails.Where(x=>x.UserId == GetUserTaskDetails.UserId).ToListAsync();
             if(data != null)
             {
                 foreach(var item in data)
@@ -103,6 +103,7 @@ namespace EMPManegment.Repository.TaskRepository
                     UserId.Add(new TaskDetailsView()
                     {
                         Id = item.Id,
+                        TaskType = item.TaskType,
                         TaskStatus = item.TaskStatus,
                         TaskDate  = item.TaskDate,
                         TaskDetails = item.TaskDetails,
@@ -112,6 +113,33 @@ namespace EMPManegment.Repository.TaskRepository
                 }
             }
             return UserId;
+        }
+
+        public async Task<TaskDetailsView> GetTaskDetailsById(Guid Taskid)
+        {
+            TaskDetailsView taskdata = new TaskDetailsView();
+            try
+            {
+                    taskdata = (from d in Context.TblTaskDetails.here(d=>d.Id == Taskid)
+                                join m in Context.TblTaskMasters
+                                on d.TaskType equals m.Id
+                                select new TaskDetailsView
+                                {
+                                    Id = d.Id,
+                                    UserId = d.UserId,
+                                    TaskTypeName = m.TaskType,
+                                    TaskDate = d.TaskDate,
+                                    TaskTitle = d.TaskTitle,
+                                    TaskEndDate = d.TaskEndDate,
+                                    TaskDetails = d.TaskDetails,
+                                    TaskStatus = d.TaskStatus,
+                                }).First();
+            }
+            catch(Exception ex) 
+            {
+                throw ex;
+            }
+            return taskdata;
         }
     }
 }

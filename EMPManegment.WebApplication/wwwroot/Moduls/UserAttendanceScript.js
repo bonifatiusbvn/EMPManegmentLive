@@ -2,9 +2,8 @@
     GetUserAttendance();
     GetAttendance();
 });
-
 function GetUserAttendance() {
-
+    siteloadershow();
     $('#AttendanceTableData').DataTable({
         processing: true,
         serverSide: true,
@@ -15,6 +14,7 @@ function GetUserAttendance() {
             url: '/UserDetails/GetUserAttendanceList',
             dataType: 'json'
         },
+                      
         columns: [
             { "data": "userName", "name": "UserName" },
             {
@@ -72,7 +72,6 @@ function GetUserAttendance() {
         columnDefs: [{
             "defaultContent": "",
             "targets": "_all",
-
         }]
     });
 }
@@ -162,38 +161,6 @@ function UpdateUserAttendance() {
 
    
 }
-
-
-///* Validate OutTime*/
-
-//$("#outtime").hide();
-//let outTimeError = true;
-//$("#OutTime").keyup(function () {
-//    validateOutTime();
-//});
-
-//function validateOutTime() {debugger
-//    let outTimeValue = $("#OutTime").val();
-//    if (outTimeValue.date!=today.date) {
-//            $("#outtime").show();
-//        outTimeError = false;
-//            return false;
-//    } else {
-//            $("#outtime").hide();
-//        }
-//    }
-///* Validate Submit Button */
-//$("#SubmitButton").click(function () {
-//    validateOutTime();
-//    if (
-//        outTimeError == true
-//    ) {
-//        return true;
-//    } else {
-//        return false;
-//    }
-//});
-
 
 function GetAttendance() {
     

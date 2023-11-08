@@ -10,8 +10,8 @@ namespace EMPManegment.Inretface.Services.CSC
     public interface ICSCServices
     {
         Task<IEnumerable<CountryView>> GetCountries();
-        Task<IEnumerable<StateView>> GetStates(int id);
-        Task<IEnumerable<CityView>> GetCities(int id);
+        Task<IEnumerable<StateView>> GetStates(int StateId);
+        Task<IEnumerable<CityView>> GetCities(int CityId);
         Task<IEnumerable<QuestionView>> GetQuestion();
     }
 }

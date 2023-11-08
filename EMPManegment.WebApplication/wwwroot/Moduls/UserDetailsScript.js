@@ -7,7 +7,6 @@ $(document).ready(function () {
     GetAllUserData();
 });
 function GetAllUserData() {
-    
     $('#UserTableData').DataTable({
         processing: true,
         serverSide: true,

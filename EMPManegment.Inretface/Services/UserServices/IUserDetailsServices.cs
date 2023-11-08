@@ -13,24 +13,24 @@ namespace EMPManegment.Inretface.Services.UserListServices
 {
     public interface IUserDetailsServices
     {
-       Task<jsonData> GetUsersList(DataTableRequstModel Userlist);
+       Task<jsonData> GetUsersList(DataTableRequstModel userList);
         Task<IEnumerable<EmpDetailsView>> GetUsersNameList();
         Task<UserResponceModel> ActiveDeactiveUsers(string UserName);
 
-        Task<UserResponceModel> EnterInTime(UserAttendanceModel userAttendance);
-        Task<UserResponceModel> EnterOutTime(UserAttendanceModel userAttendance);
+        Task<UserResponceModel> EnterInTime(UserAttendanceModel EnterInTime);
+        Task<UserResponceModel> EnterOutTime(UserAttendanceModel EnterOutTime);
 
-        Task<UserResponceModel> ResetPassword(PasswordResetView emp);
+        Task<UserResponceModel> ResetPassword(PasswordResetView ResetPassword);
 
 
         Task<IEnumerable<EmpDocumentView>> GetDocumentType();
         Task<IEnumerable<DocumentInfoView>> GetDocumentList();
-        Task<DocumentInfoView> UploadDocument(DocumentInfoView doc);
-        Task<UserResponceModel> UserLockScreen(LoginRequest request);
+        Task<DocumentInfoView> UploadDocument(DocumentInfoView UploadDocument);
+        Task<UserResponceModel> UserLockScreen(LoginRequest UserLockScreen);
         Task<UserResponceModel> UserBirsthDayWish(Guid UserId);
 
         Task<IEnumerable<EmpDetailsView>> UserEdit();
-        Task<EmpDetailsView> GetById(Guid id);
-        Task<UserResponceModel> UpdateUser(UserEditViewModel employee);
+        Task<EmpDetailsView> GetById(Guid UserId);
+        Task<UserResponceModel> UpdateUser(UserEditViewModel UpdateUser);
     }
 }

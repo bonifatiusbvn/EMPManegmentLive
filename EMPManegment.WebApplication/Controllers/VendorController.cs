@@ -35,13 +35,13 @@ namespace EMPManegment.Web.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> AddVandorDetails(VendorDetailsView vendor)
+        public async Task<IActionResult> AddVandorDetails(VendorDetailsView addVandorDetails)
         {
             try
             {
                 if(ModelState.IsValid)
                 {
-                    ApiResponseModel postuser = await APIServices.PostAsync(vendor, "AddVendor/AddVendors");
+                    ApiResponseModel postuser = await APIServices.PostAsync(addVandorDetails, "AddVendor/AddVendors");
                     if (postuser.code == 200)
                     {
 
@@ -55,7 +55,7 @@ namespace EMPManegment.Web.Controllers
                 }
                 else
                 {
-                    return View(vendor);
+                    return View(addVandorDetails);
                 }
                 
             }
