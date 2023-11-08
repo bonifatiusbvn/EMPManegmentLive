@@ -48,5 +48,10 @@ namespace EMPManegment.Services.TaskDetails
         {
             return await TaskDetails.GetTaskDetailsById(Taskid);
         }
+
+        public async Task<IEnumerable<TaskDetailsView>> GetAllUserTaskDetails()
+        {
+            return await TaskDetails.GetAllUserTaskDetails();
+        }
     }
 }

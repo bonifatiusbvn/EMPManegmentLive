@@ -17,5 +17,6 @@ namespace EMPManegment.Inretface.Interface.TaskDetails
         Task<List<TaskDetailsView>> GetUserTaskDetails(TaskDetailsView GetTaskDetails);
         Task<UserResponceModel> UpdateTaskStatus(TaskDetailsView updateTaskStatus);
         Task<TaskDetailsView> GetTaskDetailsById(Guid Taskid);
+        Task<IEnumerable<TaskDetailsView>> GetAllUserTaskDetails();
     }
 }
