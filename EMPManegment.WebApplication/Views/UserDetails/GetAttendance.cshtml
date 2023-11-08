@@ -3,7 +3,7 @@
     ViewData["Title"] = "GetAttendance";
     Layout = "~/Views/Shared/_HomeLayout.cshtml";
 }
-<h1 class="text-info modal-title" >GetAttendance</h1>
+@* <h1 class="text-info modal-title" >GetAttendance</h1> *@
 
 <div class="row">
     <div class="col-lg-12">
@@ -19,13 +19,13 @@
                             <div class="d-flex justify-content-sm-end">
                                 <div class="mb-3">
                                     <label for="date-field" class="form-label">Calendar</label>
-                                    <input type="month" id="txtmonth" class="form-control"/>
-                                    <button class="btn btn-success mt-2 " onclick="GetAttendance()">Get</button>
+                                    <input type="month" id="txtmonth" class="form-control" />
+                                
+                                    <button class="btn btn-success mt-2" onclick="GetAttendance()">Get</button>
                                 </div>
                             </div>
                         </div>
                     </div>
-                   
                     <div class="table-responsive table-card mt-3 mb-1">
                         <table class="table align-middle table-nowrap" id="customerTable">
                             <thead class="table-light">
@@ -37,7 +37,9 @@
                                     <th class="sort" data-sort="status">TotalHours</th>
                                 </tr>
                             </thead>
-                            <tbody class="text-center" id="TableDataAttendanceList"></tbody>
+                            <tbody class="text-center" id="TableDataAttendanceList">
+                              
+                            </tbody>
                         </table>
                         <div class="noresult" style="display: none">
                             <div class="text-center">

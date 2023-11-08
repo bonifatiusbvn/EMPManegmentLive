@@ -22,26 +22,26 @@ namespace EMPManegment.Services.UserAttendance
 
         public IUserAttendance UserAttendance { get; }
 
-        public Task<jsonData> GetUserAttendanceList(DataTableRequstModel dataTable)
+        public Task<jsonData> GetUserAttendanceList(DataTableRequstModel AttendancedataTable)
         {
-            return UserAttendance.GetUserAttendanceList(dataTable);
+            return UserAttendance.GetUserAttendanceList(AttendancedataTable);
         }
-        public Task<UserAttendanceResponseModel> GetUserAttendanceInTime(UserAttendanceRequestModel userAttendance)
+        public Task<UserAttendanceResponseModel> GetUserAttendanceInTime(UserAttendanceRequestModel GetuserAttendance)
         {
-            return UserAttendance.GetUserAttendanceInTime(userAttendance);
-        }
-
-        public Task<UserResponceModel> UpdateUserOutTime(UserAttendanceModel userAttendance)
-        {
-            return UserAttendance.UpdateUserOutTime(userAttendance);
+            return UserAttendance.GetUserAttendanceInTime(GetuserAttendance);
         }
 
-        public Task<IEnumerable<UserAttendanceModel>> GetUserAttendanceById(int attendanceId)
+        public Task<UserResponceModel> UpdateUserOutTime(UserAttendanceModel Updateouttime)
         {
-            return UserAttendance.GetUserAttendanceById(attendanceId);
+            return UserAttendance.UpdateUserOutTime(Updateouttime);
         }
 
-        public Task<IEnumerable<UserAttendanceModel>> GetAttendanceList(Guid Id, DateTime Cmonth)
+        public Task<IEnumerable<UserAttendanceModel>> GetUserAttendanceById(int GetattendanceId)
+        {
+            return UserAttendance.GetUserAttendanceById(GetattendanceId);
+        }
+
+        public Task<IEnumerable<UserAttendanceModel>> GetAttendanceList(Guid Id, DateTime?Cmonth)
         {
             return UserAttendance.GetAttendanceList(Id,Cmonth);
         }

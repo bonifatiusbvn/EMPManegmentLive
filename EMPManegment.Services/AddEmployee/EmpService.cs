@@ -3,6 +3,7 @@ using EMPManegment.EntityModels.View_Model;
 using EMPManegment.EntityModels.ViewModels;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.Inretface.EmployeesInterface.AddEmployee;
+using EMPManegment.Inretface.Interface.UserList;
 using EMPManegment.Inretface.Services.AddEmployeeServies;
 using EMPManegment.Repository.AddEmpRepository;
 using Microsoft.AspNetCore.Http;
@@ -17,14 +18,17 @@ namespace EMPManegment.Services.AddEmployee
     public class EmpService : IAddEmpDetailsServices
     {
         public IAddEmpDetails EmpDetails { get; }
-        public EmpService(IAddEmpDetails _empDetails)
+        public IUserDetails UserDetails { get; }
+
+        public EmpService(IAddEmpDetails _empDetails, IUserDetails userDetails)
         {
             EmpDetails = _empDetails;
+            UserDetails = userDetails;
         }
 
-        public async Task<UserResponceModel> AddEmployee(EmpDetailsView emp)
+        public async Task<UserResponceModel> AddEmployee(EmpDetailsView addemployee)
         {
-            return await EmpDetails.AddEmployee(emp);
+            return await EmpDetails.AddEmployee(addemployee);
         }
 
         public string CheckEmloyess()
@@ -35,6 +39,10 @@ namespace EMPManegment.Services.AddEmployee
         public async Task<IEnumerable<Department>> EmpDepartment()
         {
             return await EmpDetails.EmpDepartment();
+        }
+        public async Task<EmpDetailsView> GetById(Guid userId)
+        {
+            return await UserDetails.GetById(userId);
         }
     }
 }

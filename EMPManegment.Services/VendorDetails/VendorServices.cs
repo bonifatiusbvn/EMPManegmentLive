@@ -18,13 +18,13 @@ namespace EMPManegment.Services.VendorDetails
         {
             this.details = details;
         }
-        public async Task<UserResponceModel> AddVendor(VendorDetailsView vendor)
+        public async Task<UserResponceModel> AddVendor(VendorDetailsView Addvendor)
         {
-            return await details.AddVendor(vendor);
+            return await details.AddVendor(Addvendor);
         }
-        public async Task<jsonData> GetVendorsList(DataTableRequstModel dataTable)
+        public async Task<jsonData> GetVendorsList(DataTableRequstModel GetVenderList)
         {
-            return await details.GetVendorsList(dataTable);
+            return await details.GetVendorsList(GetVenderList);
         }
     }
 }

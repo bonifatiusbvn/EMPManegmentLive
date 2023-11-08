@@ -45,55 +45,51 @@ namespace EMPManegment.Web.Controllers
                 if (ModelState.IsValid)
                 {
 
-                    ApiResponseModel response = await APIServices.PostAsync(login, "UserLogin/Login");
-                    LoginResponseModel usermodel = new LoginResponseModel();
-                    if (response.code != (int)HttpStatusCode.OK)
+                    ApiResponseModel responsemodel = await APIServices.PostAsync(login, "UserLogin/Login");
+                    LoginResponseModel userlogin = new LoginResponseModel();
+                    if (responsemodel.code != (int)HttpStatusCode.OK)
                     {
                        
 
-                        if (response.code == (int)HttpStatusCode.Forbidden)
+                        if (responsemodel.code == (int)HttpStatusCode.Forbidden)
                         { 
-                            TempData["ErrorMessage"] = response.message;
-                            return Ok(new { Message = string.Format(response.message), Code = response.code });
+                            TempData["ErrorMessage"] = responsemodel.message;
+                            return Ok(new { Message = string.Format(responsemodel.message), Code = responsemodel.code });
                         }
                         else
                         {
-                            TempData["ErrorMessage"] = response.message;
+                            TempData["ErrorMessage"] = responsemodel.message;
                         }
                     }
 
                     else
                     {
-                        var data = JsonConvert.SerializeObject(response.data);
-                        usermodel.Data = JsonConvert.DeserializeObject<LoginView>(data);
+                        var data = JsonConvert.SerializeObject(responsemodel.data);
+                        userlogin.Data = JsonConvert.DeserializeObject<LoginView>(data);
                         var claims = new List<Claim>()
                         {
-                            new Claim("UserID", usermodel.Data.Id.ToString()),
-                            new Claim("FirstName", usermodel.Data.FirstName),
-                            new Claim("Fullname", usermodel.Data.FullName),
-                            new Claim("UserName", usermodel.Data.UserName),
-                            new Claim("ProfileImage", usermodel.Data.ProfileImage),
-                            new Claim("IsAdmin", usermodel.Data.IsAdmin.ToString()),
+                            new Claim("UserID", userlogin.Data.Id.ToString()),
+                            new Claim("FirstName", userlogin.Data.FirstName),
+                            new Claim("Fullname", userlogin.Data.FullName),
+                            new Claim("UserName", userlogin.Data.UserName),
+                            new Claim("ProfileImage", userlogin.Data.ProfileImage),
+                            new Claim("IsAdmin", userlogin.Data.IsAdmin.ToString()),
 
                         };
 
                         var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                         var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
-                        HttpContext.Session.SetString("UserID", usermodel.Data.Id.ToString());
-                        HttpContext.Session.SetString("FirstName", usermodel.Data.FirstName);
-                        HttpContext.Session.SetString("FullName", usermodel.Data.FullName);
-                        HttpContext.Session.SetString("UserName", usermodel.Data.UserName);
-                        HttpContext.Session.SetString("ProfileImage", usermodel.Data.ProfileImage);
-                        HttpContext.Session.SetString("IsAdmin", usermodel.Data.IsAdmin.ToString());
+                        HttpContext.Session.SetString("UserID", userlogin.Data.Id.ToString());
+                        HttpContext.Session.SetString("FirstName", userlogin.Data.FirstName);
+                        HttpContext.Session.SetString("FullName", userlogin.Data.FullName);
+                        HttpContext.Session.SetString("UserName", userlogin.Data.UserName);
+                        HttpContext.Session.SetString("ProfileImage", userlogin.Data.ProfileImage);
+                        HttpContext.Session.SetString("IsAdmin", userlogin.Data.IsAdmin.ToString());
                         return RedirectToAction("UserHome", "Home");
                     }  
-                   
                 }
-
                 return View();
-
             }
-             
             catch (Exception ex)
             {
                 return BadRequest(new { Message = "InternalServer" });

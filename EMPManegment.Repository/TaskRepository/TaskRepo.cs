@@ -120,14 +120,14 @@ namespace EMPManegment.Repository.TaskRepository
             TaskDetailsView taskdata = new TaskDetailsView();
             try
             {
-                    taskdata = (from d in Context.TblTaskDetails.here(d=>d.Id == Taskid)
+                    taskdata = (from d in Context.TblTaskDetails.Where(d=>d.Id == Taskid)
                                 join m in Context.TblTaskMasters
                                 on d.TaskType equals m.Id
                                 select new TaskDetailsView
                                 {
                                     Id = d.Id,
                                     UserId = d.UserId,
-                                    TaskTypeName = m.TaskType,
+                                    TaskType = d.TaskType,
                                     TaskDate = d.TaskDate,
                                     TaskTitle = d.TaskTitle,
                                     TaskEndDate = d.TaskEndDate,
