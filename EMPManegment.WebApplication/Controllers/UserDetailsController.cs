@@ -514,14 +514,14 @@ namespace EMPManegment.Web.Controllers
                 ApiResponseModel response = await APIServices.GetAsync("", "UserDetails/GetAttendanceList?id=" + UserId+ "&Cmonth=" + month);
                 if (response.data.Count != 0)
                 {
-                    attend = JsonConvert.DeserializeObject<List<UserAttendanceModel>>(response.data.ToString());
+                    getAttendanceList = JsonConvert.DeserializeObject<List<UserAttendanceModel>>(response.data.ToString());
                 }
                 else
                 {
                     return new JsonResult(new { Message = "No Data Found On Selected Month !!"});
 
                 }
-                return new JsonResult(attend);
+                return new JsonResult(getAttendanceList);
             }  
             catch (Exception ex)
             {

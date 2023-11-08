@@ -207,8 +207,8 @@ namespace EMPManagment.API.Controllers
             UserResponceModel updateresponsemodel = new UserResponceModel();
             try
             {
-                var result = TaskServices.UpdateTaskStatus(task);
-                if (result.Result.Code == 200)
+                var UpdateTask = TaskServices.UpdateTaskStatus(task);
+                if (UpdateTask.Result.Code == 200)
                 {
                     updateresponsemodel.Code = (int)HttpStatusCode.OK;
                     updateresponsemodel.Message = UpdateTask.Result.Message;
