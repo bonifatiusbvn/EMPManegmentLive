@@ -19,6 +19,7 @@ using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 using Microsoft.AspNetCore.Http.HttpResults;
 using System.Drawing;
 using System.Globalization;
+using Azure;
 
 namespace EMPManegment.Repository.UserAttendanceRepository
 {
@@ -71,8 +72,6 @@ namespace EMPManegment.Repository.UserAttendanceRepository
                 recordsTotal = totalRecord,
                 data = cData
             };
-
-
             return jsonData;
         }
 
@@ -178,31 +177,60 @@ namespace EMPManegment.Repository.UserAttendanceRepository
             return attendance;
         }
 
-        public async Task<IEnumerable<UserAttendanceModel>> GetAttendanceList(Guid Id, DateTime Cmonth )
+        public async Task<IEnumerable <UserAttendanceModel>> GetAttendanceList(Guid Id, DateTime? Cmonth)
         {
-            DateTime dt;
-            DateTime.TryParseExact(Cmonth.ToString(),"MM",
-                          CultureInfo.InvariantCulture,
-                          DateTimeStyles.None, out dt);
-            IEnumerable<UserAttendanceModel> users = from a in Context.TblAttendances
-                                                     join
-                                                     b in Context.TblUsers on a.User.Id equals b.Id where(b.Id == Id &&(Cmonth == null || a.Date.ToString() == Cmonth.ToString("MMMM-yyyy")))
-                                                     select new UserAttendanceModel
-                                                     {
-                                                         UserName = b.FirstName + ' ' + b.LastName,
-                                                         UserId = a.UserId,
-                                                         AttendanceId = a.Id,
-                                                         Date = a.Date,
-                                                         Intime = a.Intime,
-                                                         OutTime = a.OutTime,
-                                                         TotalHours = a.TotalHours,
-                                                         CreatedBy = a.CreatedBy,
-                                                         CreatedOn = a.CreatedOn,
+            try
+            {
+                IEnumerable<UserAttendanceModel> users = null;
+                if (Cmonth == null)
+                {
+                    DateTime date = DateTime.Today;
+                    users = from a in Context.TblAttendances
+                            join
+                            b in Context.TblUsers on a.User.Id equals b.Id
+                            where (b.Id == Id && (a.Date.Month == Convert.ToDateTime(date).Month && a.Date.Year == Convert.ToDateTime(date).Year))
+                            select new UserAttendanceModel
+                            {
+                                UserName = b.FirstName + ' ' + b.LastName,
+                                UserId = a.UserId,
+                                AttendanceId = a.Id,
+                                Date = a.Date,
+                                Intime = a.Intime,
+                                OutTime = a.OutTime,
+                                TotalHours = a.TotalHours,
+                                CreatedBy = a.CreatedBy,
+                                CreatedOn = a.CreatedOn,
+                            };
 
-                                                     };
-            return users;
+                    return users;
+                }
+                else
+                {
+                    IEnumerable<UserAttendanceModel> users1 = from a in Context.TblAttendances
+                                                              join
+                                                              b in Context.TblUsers on a.User.Id equals b.Id
+                                                              where (b.Id == Id && (a.Date.Month == Convert.ToDateTime(Cmonth).Month && a.Date.Year == Convert.ToDateTime(Cmonth).Year))
+                                                              select new UserAttendanceModel
+                                                              {
+                                                                  UserName = b.FirstName + ' ' + b.LastName,
+                                                                  UserId = a.UserId,
+                                                                  AttendanceId = a.Id,
+                                                                  Date = a.Date,
+                                                                  Intime = a.Intime,
+                                                                  OutTime = a.OutTime,
+                                                                  TotalHours = a.TotalHours,
+                                                                  CreatedBy = a.CreatedBy,
+                                                                  CreatedOn = a.CreatedOn,
+                                                              };
+                    return users1;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }
-
+ 
         

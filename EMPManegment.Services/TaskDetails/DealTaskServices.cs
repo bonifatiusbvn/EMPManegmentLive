@@ -31,18 +31,18 @@ namespace EMPManegment.Services.TaskDetails
                 throw ex;
             }
         }
-        public async Task<UserResponceModel> AddTaskDetails(TaskDetailsView task)
+        public async Task<UserResponceModel> AddTaskDetails(TaskDetailsView addTask)
         {
-            return await TaskDetails.AddTaskDetails(task);
+            return await TaskDetails.AddTaskDetails(addTask);
         }
 
-        public async Task<List<TaskDetailsView>> GetUserTaskDetails(TaskDetailsView task)
+        public async Task<List<TaskDetailsView>> GetUserTaskDetails(TaskDetailsView Gettaskdetails)
         {
-            return await TaskDetails.GetUserTaskDetails(task);
+            return await TaskDetails.GetUserTaskDetails(Gettaskdetails);
         }
-        public async Task<UserResponceModel> UpdateDealStatus(TaskDetailsView task)
+        public async Task<UserResponceModel> UpdateDealStatus(TaskDetailsView updateTask)
         {
-            return await TaskDetails.UpdateDealStatus(task);
+            return await TaskDetails.UpdateDealStatus(updateTask);
         }
     }
 }

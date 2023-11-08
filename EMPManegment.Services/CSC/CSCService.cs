@@ -18,11 +18,11 @@ namespace EMPManegment.Services.CSC
 
         public ICSC CSC { get; }
 
-        public async Task<IEnumerable<CityView>> GetCities(int id)
+        public async Task<IEnumerable<CityView>> GetCities(int cityId)
         {
             try
             {
-               return await CSC.GetCities(id);
+               return await CSC.GetCities(cityId);
             }
             catch (Exception ex)
             {
@@ -58,11 +58,11 @@ namespace EMPManegment.Services.CSC
             }
         }
 
-        public Task<IEnumerable<StateView>> GetStates(int id)
+        public Task<IEnumerable<StateView>> GetStates(int stateId)
         {
             try
             {
-                return CSC.GetStates(id);
+                return CSC.GetStates(stateId);
             }
             catch (Exception ex)
             {

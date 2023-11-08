@@ -22,9 +22,9 @@ namespace EMPManegment.Services.AddEmployee
             EmpDetails = _empDetails;
         }
 
-        public async Task<UserResponceModel> AddEmployee(EmpDetailsView emp)
+        public async Task<UserResponceModel> AddEmployee(EmpDetailsView addemployee)
         {
-            return await EmpDetails.AddEmployee(emp);
+            return await EmpDetails.AddEmployee(addemployee);
         }
 
         public string CheckEmloyess()
@@ -40,9 +40,9 @@ namespace EMPManegment.Services.AddEmployee
         
 
        
-        public async Task<EmpDetailsView> GetById(Guid Id)
+        public async Task<EmpDetailsView> GetById(Guid userId)
         {
-            return await EmpDetails.GetById(Id);
+            return await EmpDetails.GetById(userId);
         }
     }
 }

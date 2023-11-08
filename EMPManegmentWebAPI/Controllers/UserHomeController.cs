@@ -34,64 +34,64 @@ namespace EMPManagment.API.Controllers
         [HttpPost]
         [Route("InsertINTime")]
 
-        public async Task<IActionResult> InsertINTime(UserAttendanceModel userAttendance)
+        public async Task<IActionResult> InsertINTime(UserAttendanceModel InsertInTime)
         {
-            UserResponceModel responseModel = new UserResponceModel();
+            UserResponceModel userresponseModel = new UserResponceModel();
 
-            var user = await UserDetails.EnterInTime(userAttendance);
+            var user = await UserDetails.EnterInTime(InsertInTime);
             try
             {
 
                 if (user != null)
                 {
 
-                    responseModel.Code = (int)HttpStatusCode.OK;
-                    responseModel.Message = user.Message;
-                    responseModel.Icone = user.Icone;
+                    userresponseModel.Code = (int)HttpStatusCode.OK;
+                    userresponseModel.Message = user.Message;
+                    userresponseModel.Icone = user.Icone;
                 }
                 else
                 {
-                    responseModel.Message = user.Message;
-                    responseModel.Code = (int)HttpStatusCode.NotFound;
+                    userresponseModel.Message = user.Message;
+                    userresponseModel.Code = (int)HttpStatusCode.NotFound;
                 }
             }
             catch (Exception ex)
             {
-                responseModel.Code = (int)HttpStatusCode.InternalServerError;
+                userresponseModel.Code = (int)HttpStatusCode.InternalServerError;
             }
-            return StatusCode(responseModel.Code, responseModel);
+            return StatusCode(userresponseModel.Code, userresponseModel);
         }
 
         [HttpPost]
         [Route("InsertOutTime")]
 
-        public async Task<IActionResult> InsertOutTime(UserAttendanceModel userAttendance)
+        public async Task<IActionResult> InsertOutTime(UserAttendanceModel InsertOutTime)
         {
-            UserResponceModel responseModel = new UserResponceModel();
+            UserResponceModel userresponseModel = new UserResponceModel();
 
-            var user = await UserDetails.EnterOutTime(userAttendance);
+            var user = await UserDetails.EnterOutTime(InsertOutTime);
             try
             {
 
                 if (user != null)
                 {
 
-                    responseModel.Code = (int)HttpStatusCode.OK;
-                    responseModel.Message = user.Message;
-                    responseModel.Icone = user.Icone;
+                    userresponseModel.Code = (int)HttpStatusCode.OK;
+                    userresponseModel.Message = user.Message;
+                    userresponseModel.Icone = user.Icone;
 
                 }
                 else
                 {
-                    responseModel.Message = user.Message;
-                    responseModel.Code = (int)HttpStatusCode.NotFound;
+                    userresponseModel.Message = user.Message;
+                    userresponseModel.Code = (int)HttpStatusCode.NotFound;
                 }
             }
             catch (Exception ex)
             {
-                responseModel.Code = (int)HttpStatusCode.InternalServerError;
+                userresponseModel.Code = (int)HttpStatusCode.InternalServerError;
             }
-            return StatusCode(responseModel.Code, responseModel);
+            return StatusCode(userresponseModel.Code, userresponseModel);
         }
 
 
@@ -99,131 +99,131 @@ namespace EMPManagment.API.Controllers
         [HttpPost]
         [Route("GetUserAttendanceInTime")]
 
-        public async Task<IActionResult> GetUserAttendanceInTime(UserAttendanceRequestModel userAttendance)
+        public async Task<IActionResult> GetUserAttendanceInTime(UserAttendanceRequestModel GetAttendance)
         {
-            UserAttendanceResponseModel responseModel = new UserAttendanceResponseModel();
+            UserAttendanceResponseModel userresponseModel = new UserAttendanceResponseModel();
 
-            var user = await AttendanceServices.GetUserAttendanceInTime(userAttendance);
+            var user = await AttendanceServices.GetUserAttendanceInTime(GetAttendance);
             try
             {
 
                 if (user.Data != null)
                 {
-                    responseModel.Data = user.Data;
-                    responseModel.Code = (int)HttpStatusCode.OK;
+                    userresponseModel.Data = user.Data;
+                    userresponseModel.Code = (int)HttpStatusCode.OK;
                    
                 }
                 else
                 {
-                    responseModel.Code = user.Code;
+                    userresponseModel.Code = user.Code;
                     
                    
                 }
             }
             catch (Exception ex)
             {
-                responseModel.Code = (int)HttpStatusCode.InternalServerError;
+                userresponseModel.Code = (int)HttpStatusCode.InternalServerError;
             }
-            return StatusCode(responseModel.Code, responseModel);
+            return StatusCode(userresponseModel.Code, userresponseModel);
         }
 
         [HttpGet]
         [Route("UserBirsthDayWish")]
 
-        public async Task<IActionResult> UserBirsthDayWish(Guid id)
+        public async Task<IActionResult> UserBirsthDayWish(Guid Userid)
         {
-            UserResponceModel response = new UserResponceModel();
+            UserResponceModel responsemodel = new UserResponceModel();
 
-            var user = await UserDetails.UserBirsthDayWish(id);
+            var user = await UserDetails.UserBirsthDayWish(Userid);
             try
             {
 
                 if (user.Code == 200)
                 {
-                    response.Message = user.Message;
-                    response.Code = (int)HttpStatusCode.OK;
+                    responsemodel.Message = user.Message;
+                    responsemodel.Code = (int)HttpStatusCode.OK;
 
                 }
                 else
                 {
-                    response.Code = (int)HttpStatusCode.OK;
+                    responsemodel.Code = (int)HttpStatusCode.OK;
 
                 }
 
             }
             catch (Exception ex)
             {
-                response.Code = (int)HttpStatusCode.InternalServerError;
+                responsemodel.Code = (int)HttpStatusCode.InternalServerError;
             }
-            return StatusCode(response.Code, response);
+            return StatusCode(responsemodel.Code, responsemodel);
         }
 
         [HttpGet]
         [Route("GetTaskType")]
         public async Task<IActionResult> GetTaskType()
         {
-            IEnumerable<TaskTypeView> taskDeals = await TaskServices.GetTaskType();
-            return Ok(new { code = 200, data = taskDeals.ToList() });
+            IEnumerable<TaskTypeView> getTask = await TaskServices.GetTaskType();
+            return Ok(new { code = 200, data = getTask.ToList() });
         }
 
         [HttpPost]
         [Route("AddTaskDetails")]
-        public async Task<IActionResult> AddTaskDetails(TaskDetailsView task)
+        public async Task<IActionResult> AddTaskDetails(TaskDetailsView AddtaskDetails)
         {
-            UserResponceModel response = new UserResponceModel();
+            UserResponceModel userresponsemodel = new UserResponceModel();
             try
             {
-                var result = TaskServices.AddTaskDetails(task);
-                if (result.Result.Code == 200)
+                var AddTask = TaskServices.AddTaskDetails(AddtaskDetails);
+                if (AddTask.Result.Code == 200)
                 {
-                    response.Code = (int)HttpStatusCode.OK;
-                    response.Message = result.Result.Message;
+                    userresponsemodel.Code = (int)HttpStatusCode.OK;
+                    userresponsemodel.Message = AddTask.Result.Message;
                 }
                 else
                 {
-                    response.Message = result.Result.Message;
-                    response.Code = (int)HttpStatusCode.NotFound;
+                    userresponsemodel.Message = AddTask.Result.Message;
+                    userresponsemodel.Code = (int)HttpStatusCode.NotFound;
                 }
             }
             catch (Exception ex)
             {
                 throw ex;
             }
-            return StatusCode(response.Code, response);
+            return StatusCode(userresponsemodel.Code, userresponsemodel);
         }
 
         [HttpPost]
         [Route("GetUserTaskDetails")]
-        public async Task<IActionResult> GetUserTaskDetails(TaskDetailsView task)
+        public async Task<IActionResult> GetUserTaskDetails(TaskDetailsView GetTask)
         {
-            List<TaskDetailsView> taskList = await TaskServices.GetUserTaskDetails(task);
-            return Ok(new { code = 200, data = taskList.ToList() });
+            List<TaskDetailsView> usertaskList = await TaskServices.GetUserTaskDetails(GetTask);
+            return Ok(new { code = 200, data = usertaskList.ToList() });
         }
 
         [HttpPost]
         [Route("UpdateDealStatus")]
-        public async Task<IActionResult> UpdateDealStatus(TaskDetailsView task)
+        public async Task<IActionResult> UpdateDealStatus(TaskDetailsView Updatetask)
         {
-            UserResponceModel response = new UserResponceModel();
+            UserResponceModel updateresponsemodel = new UserResponceModel();
             try
             {
-                var result = TaskServices.UpdateDealStatus(task);
-                if (result.Result.Code == 200)
+                var UpdateTask = TaskServices.UpdateDealStatus(Updatetask);
+                if (UpdateTask.Result.Code == 200)
                 {
-                    response.Code = (int)HttpStatusCode.OK;
-                    response.Message = result.Result.Message;
+                    updateresponsemodel.Code = (int)HttpStatusCode.OK;
+                    updateresponsemodel.Message = UpdateTask.Result.Message;
                 }
                 else
                 {
-                    response.Message = result.Result.Message;
-                    response.Code = (int)HttpStatusCode.NotFound;
+                    updateresponsemodel.Message = UpdateTask.Result.Message;
+                    updateresponsemodel.Code = (int)HttpStatusCode.NotFound;
                 }
             }
             catch (Exception ex)
             {
                 throw ex;
             }
-            return StatusCode(response.Code, response);
+            return StatusCode(updateresponsemodel.Code, updateresponsemodel);
         }
     }
 }

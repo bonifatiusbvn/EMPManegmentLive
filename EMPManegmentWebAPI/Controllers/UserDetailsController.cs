@@ -251,7 +251,7 @@ namespace EMPManagment.API.Controllers
 
         [HttpGet]
         [Route("GetAttendanceList")]
-        public async Task<IActionResult> GetAttendanceList(Guid id, DateTime Cmonth)
+        public async Task<IActionResult> GetAttendanceList(Guid id, DateTime?Cmonth)
         {
             IEnumerable<UserAttendanceModel> userList = await UserAttendance.GetAttendanceList(id, Cmonth);
             return Ok(new { code = 200, data = userList.ToList() });
