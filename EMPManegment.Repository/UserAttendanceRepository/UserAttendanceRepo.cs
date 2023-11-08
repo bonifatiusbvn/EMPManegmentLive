@@ -181,11 +181,11 @@ namespace EMPManegment.Repository.UserAttendanceRepository
         {
             try
             {
-                IEnumerable<UserAttendanceModel> users = null;
+                IEnumerable<UserAttendanceModel> userAttendance = null;
                 if (Cmonth == null)
                 {
                     DateTime date = DateTime.Today;
-                    users = from a in Context.TblAttendances
+                    userAttendance = from a in Context.TblAttendances
                             join
                             b in Context.TblUsers on a.User.Id equals b.Id
                             where (b.Id == Id && (a.Date.Month == Convert.ToDateTime(date).Month && a.Date.Year == Convert.ToDateTime(date).Year))
@@ -202,11 +202,11 @@ namespace EMPManegment.Repository.UserAttendanceRepository
                                 CreatedOn = a.CreatedOn,
                             };
 
-                    return users;
+                    return userAttendance;
                 }
                 else
                 {
-                    IEnumerable<UserAttendanceModel> users1 = from a in Context.TblAttendances
+                    IEnumerable<UserAttendanceModel> userAttendance1 = from a in Context.TblAttendances
                                                               join
                                                               b in Context.TblUsers on a.User.Id equals b.Id
                                                               where (b.Id == Id && (a.Date.Month == Convert.ToDateTime(Cmonth).Month && a.Date.Year == Convert.ToDateTime(Cmonth).Year))
@@ -222,7 +222,7 @@ namespace EMPManegment.Repository.UserAttendanceRepository
                                                                   CreatedBy = a.CreatedBy,
                                                                   CreatedOn = a.CreatedOn,
                                                               };
-                    return users1;
+                    return userAttendance1;
                 }
             }
             catch (Exception ex)
