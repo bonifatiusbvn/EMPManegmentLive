@@ -273,25 +273,44 @@ public partial class BonifatiusEmployeesContext : DbContext
 
         modelBuilder.Entity<TblVendorMaster>(entity =>
         {
+            entity.HasKey(e => e.Vid).HasName("PK_tblVendor_Master_1");
+
             entity.ToTable("tblVendor_Master");
 
+            entity.Property(e => e.Vid)
+                .ValueGeneratedNever()
+                .HasColumnName("VId");
             entity.Property(e => e.CreatedBy).HasMaxLength(10);
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.VendorAccountHolderName).HasMaxLength(20);
             entity.Property(e => e.VendorAddress).HasMaxLength(100);
             entity.Property(e => e.VendorBankAccountNo).HasMaxLength(50);
+            entity.Property(e => e.VendorBankBranch).HasMaxLength(50);
             entity.Property(e => e.VendorBankIfsc)
                 .HasMaxLength(50)
                 .HasColumnName("VendorBankIFSC");
             entity.Property(e => e.VendorBankName).HasMaxLength(50);
+            entity.Property(e => e.VendorCity).HasMaxLength(20);
+            entity.Property(e => e.VendorCompany).HasMaxLength(50);
+            entity.Property(e => e.VendorCompanyEmail).HasMaxLength(50);
+            entity.Property(e => e.VendorCompanyLogo).HasMaxLength(15);
+            entity.Property(e => e.VendorCompanyNumber).HasMaxLength(15);
+            entity.Property(e => e.VendorCompanyType).HasMaxLength(20);
+            entity.Property(e => e.VendorContact).HasMaxLength(12);
+            entity.Property(e => e.VendorCountry).HasMaxLength(20);
             entity.Property(e => e.VendorEmail).HasMaxLength(50);
+            entity.Property(e => e.VendorFirstName).HasMaxLength(20);
             entity.Property(e => e.VendorGstnumber)
                 .HasMaxLength(50)
                 .HasColumnName("VendorGSTNumber");
-            entity.Property(e => e.VendorName).HasMaxLength(50);
-            entity.Property(e => e.VendorPhone).HasMaxLength(50);
+            entity.Property(e => e.VendorLastName).HasMaxLength(20);
+            entity.Property(e => e.VendorPhone).HasMaxLength(15);
+            entity.Property(e => e.VendorPinCode).HasMaxLength(10);
+            entity.Property(e => e.VendorState).HasMaxLength(20);
 
             entity.HasOne(d => d.VendorType).WithMany(p => p.TblVendorMasters)
                 .HasForeignKey(d => d.VendorTypeId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_tblVendor_Master_tblVendorType");
         });
 

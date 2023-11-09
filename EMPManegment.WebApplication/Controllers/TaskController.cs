@@ -196,5 +196,12 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
+
+        [HttpGet]
+        public IActionResult AllTaskDetails()
+        {
+            return View();
+        }
+
     }
 }
