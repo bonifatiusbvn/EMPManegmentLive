@@ -39,7 +39,7 @@ namespace EMPManegment.Repository.VendorDetailsRepository
                 {
                     var vendormodel = new TblVendorMaster()
                     {
-                        VendorName = vendor.VendorName,
+                        //VendorName = vendor.VendorName,
                         VendorEmail = vendor.VendorEmail,
                         VendorPhone = vendor.VendorPhone,
                         VendorAddress = vendor.VendorAddress,
@@ -67,8 +67,8 @@ namespace EMPManegment.Repository.VendorDetailsRepository
         {
             var vendorlist = Context.TblVendorMasters.Select(a => new VendorDetailsView
             {
-                Id = a.Id,
-                VendorName = a.VendorName,
+                //Id = a.VId,
+                //VendorName = a.VendorName,
                 VendorEmail = a.VendorEmail,
                 VendorPhone = a.VendorPhone,
                 VendorAddress = a.VendorAddress,
