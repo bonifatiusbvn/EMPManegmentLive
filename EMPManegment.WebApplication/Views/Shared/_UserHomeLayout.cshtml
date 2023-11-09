@@ -855,7 +855,7 @@
                                                     <a asp-action="UserTasks" asp-controller="Task" class="nav-link" data-key="t-kanbanboard">Task Board </a>
                                                 </li>
                                                 <li class="nav-item">
-                                                    <a href="apps-tasks-list-view.html" class="nav-link" data-key="t-list-view"> List View </a>
+                                                    <a asp-action="AllTaskDetails" asp-controller="Task" class="nav-link" data-key="t-list-view"> List View </a>
                                                 </li>
                                                 <li class="nav-item">
                                                     <a href="apps-tasks-details.html" class="nav-link" data-key="t-task-details"> Task Details </a>
@@ -1706,6 +1706,9 @@
 
 
 
+
+        <!-- Loader -->
+        <script src="~/js/loader.js"></script>
 
         <!-- App js -->
        <script src="~/UserHome/minimal/assets/js/app.js"></script>

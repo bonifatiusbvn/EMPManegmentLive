@@ -141,5 +141,23 @@ namespace EMPManegment.Repository.TaskRepository
             }
             return taskdata;
         }
+
+        public async Task<IEnumerable<TaskDetailsView>> GetAllUserTaskDetails()
+        {
+            IEnumerable<TaskDetailsView> AllTaskDetails = from a in Context.TblTaskDetails
+                                                          join b in Context.TblUsers on a.UserId equals b.Id
+                                                         select new TaskDetailsView
+                                                         {
+                                                             Id = a.Id,
+                                                             TaskType = a.TaskType,
+                                                             TaskStatus = a.TaskStatus,
+                                                             TaskDate = a.TaskDate,
+                                                             TaskDetails = a.TaskDetails,
+                                                             TaskEndDate = a.TaskEndDate,
+                                                             TaskTitle = a.TaskTitle,
+                                                             UserProfile=b.Image
+                                                         };
+            return AllTaskDetails;
+        }
     }
 }
