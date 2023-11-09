@@ -240,9 +240,9 @@ namespace EMPManagment.API.Controllers
 
         [HttpGet]
         [Route("GetAttendanceList")]
-        public async Task<IActionResult> GetAttendanceList(Guid AttendanceId, DateTime? Cmonth)
+        public async Task<IActionResult> GetAttendanceList(Guid Id, DateTime? Cmonth)
         {
-            IEnumerable<UserAttendanceModel> getAttendanceList = await UserAttendance.GetAttendanceList(AttendanceId, Cmonth);
+            IEnumerable<UserAttendanceModel> getAttendanceList = await UserAttendance.GetAttendanceList(Id, Cmonth);
             return Ok(new { code = 200, data = getAttendanceList.ToList() });
         }
     }

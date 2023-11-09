@@ -15,7 +15,7 @@
     <link rel="shortcut icon" href="~/UserHome/minimal/assets/images/favicon.ico">
 
     <!--Datetime-->
-    <link href="~/css/site.css" rel="stylesheet" />
+
     <!-- jsvectormap css -->
     <link href="~/UserHome/minimal/assets/libs/jsvectormap/css/jsvectormap.min.css" rel="stylesheet" type="text/css" />
 
@@ -40,7 +40,7 @@
     <!-- custom Css-->
     <link href="~/UserHome/minimal/assets/css/custom.min.css" rel="stylesheet" type="text/css" />
     <!-- Loader -->
-    <link href="~/css/site.css" rel="stylesheet" />
+
     <link href="~/css/loader.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
@@ -1604,7 +1604,7 @@
 
                                 <div class="row">
 
-                                    <partial name="_Loader" />
+                                
 
                                     @RenderBody()
 
@@ -1684,11 +1684,12 @@
        <script src="~/moduls/userprofile.js"></script>
 
         <!-- listjs init -->
-      
+  
         <!-- Sweet Alerts js -->
         <script src="~/UserHome/minimal/assets/libs/sweetalert2/sweetalert2.min.js"></script>
 
-
+        <!-- Loader -->
+        <script src="~/js/loader.js"></script>
         <!--datatable js-->
         <script src="~/cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
         <script src="~/cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
@@ -1704,14 +1705,14 @@
         <!-- init js -->
 
 
-        <script src="~/js/site.js"></script>
+
 
         <!-- Loader -->
         <script src="~/js/loader.js"></script>
 
         <!-- App js -->
        <script src="~/UserHome/minimal/assets/js/app.js"></script>
-        <script src="~/js/site.js"></script>
+
         <script src="~/moduls/userdetailsscript.js"></script>
         @await RenderSectionAsync("Scripts", required: false)
 </body>
