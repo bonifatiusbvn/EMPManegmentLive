@@ -44,5 +44,13 @@ namespace EMPManagment.API.Controllers
             }
             return StatusCode(response.Code, response);
         }
+
+        [HttpGet]
+        [Route("GetProjectList")]
+        public async Task<IActionResult> GetProjectList()
+        {
+                IEnumerable<ProjectDetailView> projectlist = await ProjectDetail.GetProjectList();
+                return Ok(new { code = 200, data = projectlist.ToList() });
+        }
     }
 }

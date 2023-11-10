@@ -50,5 +50,24 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
             }
             return response;
         }
+        public async Task<IEnumerable<ProjectDetailView>> GetProjectList()
+        {
+            IEnumerable<ProjectDetailView> data = Context.TblProjectMasters.ToList().Select(a => new ProjectDetailView
+            {
+                ProjectId = a.ProjectId,
+                ProjectType = a.ProjectType,
+                ProjectTitle = a.ProjectTitle,
+                ProjectHead = a.ProjectHead,
+                ProjectDescription = a.ProjectDescription,
+                ProjectLocation = a.ProjectLocation,
+                ProjectPriority = a.ProjectPriority,
+                ProjectStatus = a.ProjectStatus,
+                ProjectStartDate = a.ProjectStartDate,
+                ProjectEndDate = a.ProjectEndDate,
+                ProjectDeadline = a.ProjectDeadline,
+                CreatedOn= a.CreatedOn
+            });
+            return data;
+        }
     }
 }
