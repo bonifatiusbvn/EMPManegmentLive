@@ -202,6 +202,28 @@ namespace EMPManegment.Web.Controllers
         {
             return View();
         }
-
+        public async Task<JsonResult> GetAllTaskDetailList()
+        {
+            try
+            {
+                List<TaskDetailsView> TaskList = new List<TaskDetailsView>();
+                HttpClient client = WebAPI.Initil();
+                ApiResponseModel postuser = await APIServices.GetAsync("", "UserHome/GetAllUserTaskDetails");
+                if (postuser.data != null)
+                {
+                    TaskList = JsonConvert.DeserializeObject<List<TaskDetailsView>>(postuser.data.ToString());
+                }
+                else
+                {
+                    TaskList = new List<TaskDetailsView>();
+                    ViewBag.Error = "not found";
+                }
+                return new JsonResult(TaskList);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }
