@@ -123,6 +123,7 @@ namespace EMPManegment.Repository.TaskRepository
                     taskdata = (from d in Context.TblTaskDetails.Where(d=>d.Id == Taskid)
                                 join m in Context.TblTaskMasters
                                 on d.TaskType equals m.Id
+                                join b in Context.TblUsers on d.UserId equals b.Id
                                 select new TaskDetailsView
                                 {
                                     Id = d.Id,
@@ -133,6 +134,8 @@ namespace EMPManegment.Repository.TaskRepository
                                     TaskEndDate = d.TaskEndDate,
                                     TaskDetails = d.TaskDetails,
                                     TaskStatus = d.TaskStatus,
+                                    UserName=b.UserName,
+                                    TaskTypeName=m.TaskType
                                 }).First();
             }
             catch(Exception ex) 
@@ -146,6 +149,7 @@ namespace EMPManegment.Repository.TaskRepository
         {
             IEnumerable<TaskDetailsView> AllTaskDetails = from a in Context.TblTaskDetails
                                                           join b in Context.TblUsers on a.UserId equals b.Id
+                                                          join c in Context.TblTaskMasters on a.TaskType equals c.Id
                                                          select new TaskDetailsView
                                                          {
                                                              Id = a.Id,
@@ -155,7 +159,9 @@ namespace EMPManegment.Repository.TaskRepository
                                                              TaskDetails = a.TaskDetails,
                                                              TaskEndDate = a.TaskEndDate,
                                                              TaskTitle = a.TaskTitle,
-                                                             UserProfile=b.Image
+                                                             UserProfile=b.Image,
+                                                             UserName=b.UserName,
+                                                             TaskTypeName=c.TaskType
                                                          };
             return AllTaskDetails;
         }

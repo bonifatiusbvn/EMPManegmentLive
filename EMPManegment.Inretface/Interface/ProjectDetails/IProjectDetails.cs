@@ -12,5 +12,7 @@ namespace EMPManegment.Inretface.Interface.ProjectDetails
     public interface IProjectDetails
     {
         Task<UserResponceModel> CreateProject(ProjectDetailView CreateProject);
+
+        Task<IEnumerable<ProjectDetailView>> GetProjectList();
     }
 }
