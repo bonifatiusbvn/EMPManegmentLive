@@ -5,29 +5,55 @@ namespace EMPManagment.API;
 
 public partial class TblVendorMaster
 {
-    public int Id { get; set; }
+    public Guid Vid { get; set; }
 
-    public int? VendorTypeId { get; set; }
+    public int VendorTypeId { get; set; }
 
-    public string? VendorName { get; set; }
+    public string VendorFirstName { get; set; } = null!;
 
-    public string? VendorEmail { get; set; }
+    public string VendorLastName { get; set; } = null!;
 
-    public string? VendorPhone { get; set; }
+    public string VendorEmail { get; set; } = null!;
 
-    public string? VendorAddress { get; set; }
+    public string? VendorContact { get; set; }
 
-    public string? VendorBankAccountNo { get; set; }
+    public string VendorPhone { get; set; } = null!;
 
-    public string? VendorBankName { get; set; }
+    public string VendorCountry { get; set; } = null!;
 
-    public string? VendorBankIfsc { get; set; }
+    public string VendorState { get; set; } = null!;
 
-    public string? VendorGstnumber { get; set; }
+    public string VendorCity { get; set; } = null!;
+
+    public string VendorPinCode { get; set; } = null!;
+
+    public string VendorAddress { get; set; } = null!;
+
+    public string? VendorCompanyType { get; set; }
+
+    public string? VendorCompany { get; set; }
+
+    public string? VendorCompanyEmail { get; set; }
+
+    public string? VendorCompanyNumber { get; set; }
+
+    public string? VendorCompanyLogo { get; set; }
+
+    public string VendorBankName { get; set; } = null!;
+
+    public string VendorBankBranch { get; set; } = null!;
+
+    public string VendorAccountHolderName { get; set; } = null!;
+
+    public string VendorBankAccountNo { get; set; } = null!;
+
+    public string VendorBankIfsc { get; set; } = null!;
+
+    public string VendorGstnumber { get; set; } = null!;
 
     public DateTime? CreatedOn { get; set; }
 
     public string? CreatedBy { get; set; }
 
-    public virtual TblVendorType? VendorType { get; set; }
+    public virtual TblVendorType VendorType { get; set; } = null!;
 }

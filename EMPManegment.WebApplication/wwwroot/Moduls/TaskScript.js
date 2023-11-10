@@ -1,5 +1,6 @@
 ﻿$(document).ready(function () {
     GetUserTaskDetails();  
+    AllTaskDetailsList();
 });
 
 
@@ -32,7 +33,7 @@ function ClearTaskDetails()
 function GetTaskType() {
 
     $.ajax({
-        url: '/Home/GetTaskType',
+        url: '/Task/GetTaskType',
         success: function (result) {
 
             $.each(result, function (i, data) {
@@ -57,7 +58,7 @@ function btnSaveTaskDetail() {
         formData.append("TaskEndDate", $("#txtenddatetime").val());
         formData.append("TaskDetails", $("#contactDescription").val());
         $.ajax({
-            url: '/Home/AddTaskDetails',
+            url: '/Task/AddTaskDetails',
             type: 'Post',
             data: formData,
             dataType: 'json',
@@ -72,7 +73,7 @@ function btnSaveTaskDetail() {
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'OK',
                     }).then(function () {
-                        window.location = '/Home/UserHome';
+                        window.location = '/Task/UserTasks';
                     });
                 }
             }
@@ -91,7 +92,7 @@ function btnSaveTaskDetail() {
 function GetUsername() {
     
     $.ajax({
-        url: '/Home/GetUserName',
+        url: '/Task/GetUserName',
         success: function (result) {
             $.each(result, function (i, data) {
                 $('#ddlusername').append('<Option value=' + data.id + '>' + data.userName + '</Option>')
@@ -141,8 +142,8 @@ $(document).ready(function () {
 
 function GetUserTaskDetails() {
     $.ajax({
-        url: '/Home/GetUserTaskDetail',
-        type: 'Post',
+        url: '/Task/GetAllUserTaskDetail',
+        type: 'Get',
         dataType: 'json',
         processData: false,
         contentType: false,
@@ -163,7 +164,7 @@ function btnStatusUpdate(Id) {
     form_data.append("STATUSUPDATE", JSON.stringify(StausChange));
 
     $.ajax({
-        url: '/Home/UpdateUserTaskStatus',
+        url: '/Task/UpdateUserTaskStatus',
         type: 'Post',
         data: form_data,
         dataType: 'json',
@@ -187,13 +188,14 @@ function btnStatusUpdate(Id) {
 function btnTaskDetails(Id)
 {
     $.ajax({
-        url: '/Home/GetTaskDetailsById?Id=' + Id,
+        url: '/Task/GetTaskDetailsById?Id=' + Id,
         type: "Get",
         contentType: 'application/json;charset=utf-8;',
         dataType: 'json',
         success: function (response) {
 
             $('#showDetailsModal').modal('show');
+            $('#UserName').text(response.userName);
             $('#taskTitle-field').text(response.taskTitle);
             $('#taskDescription-field').text(response.taskDetails);
             var startdate = response.taskDate;
@@ -210,3 +212,55 @@ function btnTaskDetails(Id)
         }
     });
 }
+
+function AllTaskDetailsList() {debugger
+    $.ajax({
+        url: '/Task/GetAllTaskDetailList',
+        type: 'Get',
+        dataType: 'json',
+        contentType: 'application/json;charset=utf-8;',
+        success: function (result) {
+            var object = '';
+            $.each(result, function (index, item) {debugger
+                object += '<tr>';
+                object += '<td><div class="avatar-group flex-nowrap"><a href="javascript: void(0);" class="avatar-group-item" data-img="/' + item.userProfile + '" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="John Robles"><img src="/' + item.userProfile + '" alt="" class="rounded-circle avatar-xxs"> </a><div class="flex-shrink-0 me-3">' + item.userName + '</div></div></td>';
+                /*object += '<td> <a class="fw-medium link-primary">' + item.taskTitle + '</a> </td>';*/
+                object += '<td><div class="d-flex"><div class="flex-grow-1 tasks_name">' + item.taskTitle + '</div><div class="flex-shrink-0 ms-4"><ul class="list-inline tasks-list-menu mb-0"><li class="list-inline-item"><a onclick="btnTaskDetails(\'' + item.id + '\')"><i class="ri-eye-fill align-bottom me-2 text-muted"></i></a></li><li class="list-inline-item"><a class="edit-item-btn" href="#showModal" data-bs-toggle="modal"><i class="ri-pencil-fill align-bottom me-2 text-muted"></i></a></li><li class="list-inline-item"><a class="remove-item-btn" data-bs-toggle="modal" href="#deleteOrder"><i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i></a></li></ul></div></div></td>';
+                object += '<td>' + item.taskDetails + '</td>';
+
+                //------- Task Type ---------//
+                if (item.taskTypeName == "HighPriority") {debugger
+                    object += '<td><span class="badge bg-danger-subtle text-danger text-uppercase">' + item.taskTypeName + '</span></td>';
+                }
+                else if (item.taskTypeName == "MediumPriority") {
+                    object += '<td><span class="badge bg-warning-subtle text-warning text-uppercase">' + item.taskTypeName + '</span></td>';
+                }
+                else {
+                    object += '<td><span class="badge bg-success-subtle text-success text-uppercase">' + item.taskTypeName + '</span></td>';
+                }
+
+                object += '<td>' + (new Date(item.taskDate)).toLocaleDateString('en-US') + '</td>';
+                object += '<td>' + (new Date(item.taskEndDate)).toLocaleDateString('en-US') + '</td>';
+
+                //--------- Task Status ----------//
+                if (item.taskStatus == "Working") {
+                    object += '<td><a class="badge bg-warning text-uppercase">' + item.taskStatus + '</a></td>';
+                }
+                else if (item.taskStatus == "Completed") {
+                    object += '<td><a class="badge bg-success text-uppercase">' + item.taskStatus + '</a></td>';
+                }
+                else if (item.taskStatus == "Pending") {
+                    object += '<td><a class="badge bg-primary text-uppercase">' + item.taskStatus + '</a></td>';
+                }
+                else {
+                    object += '<td><a class="badge bg-secondary text-uppercase">' + item.taskStatus + '</a></td>';
+                }
+                object += '</tr>';
+            });
+            $('#AllTaskDetails').html(object);
+        },
+        error: function () {
+            alert("data can't get");
+        }
+    });
+};

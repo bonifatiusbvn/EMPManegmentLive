@@ -14,17 +14,26 @@
             <div class="card-body">
                 <div class="listjs-table" id="customerList">
                     <div class="row g-4 mb-3">
-
-                        <div class="col-sm">
-                            <div class="d-flex justify-content-sm-end">
-                                <div class="mb-3">
-                                    <label for="date-field" class="form-label">Calendar</label>
-                                    <input type="month" id="txtmonth" class="form-control" />
-                                
-                                    <button class="btn btn-success mt-2" onclick="GetAttendance()">Get</button>
+                        <div class="row g-2">
+                            <div class="col-lg-auto">
+                                <div class="choices" data-type="select-one" tabindex="0" role="listbox" aria-haspopup="true" aria-expanded="false"><div class="choices__inner"><select class="form-control choices__input" data-choices="" data-choices-search-false="" name="choices-select-sortlist" id="choices-select-sortlist" hidden="" tabindex="-1" data-choice="active"><option value="" data-custom-properties="[object Object]">Sort</option></select><div class="choices__list choices__list--single"><div class="choices__item choices__placeholder choices__item--selectable" data-item="" data-id="1" data-value="" data-custom-properties="[object Object]" aria-selected="true">Sort</div></div></div><div class="choices__list choices__list--dropdown" aria-expanded="false"><div class="choices__list" role="listbox"><div id="choices--choices-select-sortlist-item-choice-3" class="choices__item choices__item--choice is-selected choices__placeholder choices__item--selectable is-highlighted" role="option" data-choice="" data-id="3" data-value="" data-select-text="Press to select" data-choice-selectable="" aria-selected="true">Sort</div><div id="choices--choices-select-sortlist-item-choice-1" class="choices__item choices__item--choice choices__item--selectable" role="option" data-choice="" data-id="1" data-value="By ID" data-select-text="Press to select" data-choice-selectable="">By ID</div><div id="choices--choices-select-sortlist-item-choice-2" class="choices__item choices__item--choice choices__item--selectable" role="option" data-choice="" data-id="2" data-value="By Name" data-select-text="Press to select" data-choice-selectable="">By Name</div></div></div></div>
+                            </div>
+                            <div class="col-lg-auto">
+                                <div class="choices" data-type="select-one" tabindex="0" role="listbox" aria-haspopup="true" aria-expanded="false"><div class="choices__inner"><select class="form-control choices__input" data-choices="" data-choices-search-false="" name="choices-select-status" id="choices-select-status" hidden="" tabindex="-1" data-choice="active"><option value="" data-custom-properties="[object Object]">All Tasks</option></select><div class="choices__list choices__list--single"><div class="choices__item choices__placeholder choices__item--selectable" data-item="" data-id="1" data-value="" data-custom-properties="[object Object]" aria-selected="true">All Tasks</div></div></div><div class="choices__list choices__list--dropdown" aria-expanded="false"><div class="choices__list" role="listbox"><div id="choices--choices-select-status-item-choice-1" class="choices__item choices__item--choice is-selected choices__placeholder choices__item--selectable is-highlighted" role="option" data-choice="" data-id="1" data-value="" data-select-text="Press to select" data-choice-selectable="" aria-selected="true">All Tasks</div><div id="choices--choices-select-status-item-choice-2" class="choices__item choices__item--choice choices__item--selectable" role="option" data-choice="" data-id="2" data-value="Completed" data-select-text="Press to select" data-choice-selectable="">Completed</div><div id="choices--choices-select-status-item-choice-3" class="choices__item choices__item--choice choices__item--selectable" role="option" data-choice="" data-id="3" data-value="Inprogress" data-select-text="Press to select" data-choice-selectable="">Inprogress</div><div id="choices--choices-select-status-item-choice-4" class="choices__item choices__item--choice choices__item--selectable" role="option" data-choice="" data-id="4" data-value="New" data-select-text="Press to select" data-choice-selectable="">New</div><div id="choices--choices-select-status-item-choice-5" class="choices__item choices__item--choice choices__item--selectable" role="option" data-choice="" data-id="5" data-value="Pending" data-select-text="Press to select" data-choice-selectable="">Pending</div></div></div></div>
+                            </div>
+                            <div class="col-sm">
+                                <div class="search-box">
+                                    <input type="month" id="txtmonth" class="form-control search" placeholder="Search By Month">
+                                    <i class="ri-search-line search-icon"></i>
                                 </div>
                             </div>
+                            <div class="col-lg-auto">
+                                <button class="btn btn-primary createTask" type="button" onclick="GetAttendance()">
+                                    Search By Month
+                                </button>
+                            </div>
                         </div>
+
                     </div>
                     <div class="table-responsive table-card mt-3 mb-1">
                         <table class="table align-middle table-nowrap" id="customerTable">
