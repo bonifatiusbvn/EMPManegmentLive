@@ -33,7 +33,6 @@ namespace EMPManagment.API.Controllers
 
         [HttpPost]
         [Route("InsertINTime")]
-
         public async Task<IActionResult> InsertINTime(UserAttendanceModel InsertInTime)
         {
             UserResponceModel userresponseModel = new UserResponceModel();
@@ -64,7 +63,6 @@ namespace EMPManagment.API.Controllers
 
         [HttpPost]
         [Route("InsertOutTime")]
-
         public async Task<IActionResult> InsertOutTime(UserAttendanceModel InsertOutTime)
         {
             UserResponceModel userresponseModel = new UserResponceModel();
@@ -94,11 +92,8 @@ namespace EMPManagment.API.Controllers
             return StatusCode(userresponseModel.Code, userresponseModel);
         }
 
-
-
         [HttpPost]
         [Route("GetUserAttendanceInTime")]
-
         public async Task<IActionResult> GetUserAttendanceInTime(UserAttendanceRequestModel GetAttendance)
         {
             UserAttendanceResponseModel userresponseModel = new UserAttendanceResponseModel();
@@ -129,7 +124,6 @@ namespace EMPManagment.API.Controllers
 
         [HttpGet]
         [Route("UserBirsthDayWish")]
-
         public async Task<IActionResult> UserBirsthDayWish(Guid Userid)
         {
             UserResponceModel responsemodel = new UserResponceModel();
@@ -227,7 +221,7 @@ namespace EMPManagment.API.Controllers
         }
         [HttpGet]
         [Route("GetTaskDetailsById")]
-       public async Task<IActionResult> GetTaskDetailsById(Guid Taskid)
+        public async Task<IActionResult> GetTaskDetailsById(Guid Taskid)
         {
             var userTaskDetails = await TaskServices.GetTaskDetailsById(Taskid);
             return Ok(new { code = 200, data = userTaskDetails });

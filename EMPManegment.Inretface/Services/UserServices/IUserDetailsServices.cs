@@ -32,5 +32,7 @@ namespace EMPManegment.Inretface.Services.UserListServices
         Task<IEnumerable<EmpDetailsView>> UserEdit();
         Task<EmpDetailsView> GetById(Guid UserId);
         Task<UserResponceModel> UpdateUser(UserEditViewModel UpdateUser);
+
+        Task<IEnumerable<EmpDetailsView>> GetUsersDetails();
     }
 }

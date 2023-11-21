@@ -36,9 +36,17 @@ namespace EMPManagment.API.Controllers
         }
 
 
+        [HttpGet]
+        [Route("GetAllUsersDetails")]
+        public async Task<IActionResult> GetAllUsersDetails()
+        {
+            var userList = await UserListServices.GetUsersDetails();
+            return Ok(new { code = 200, data = userList });
+        }
+
+
         [HttpPost]
         [Route("GetAllUserList")]
-
         public async Task<IActionResult> GetAllUserList(DataTableRequstModel dataTable)
         {
             var userList = await UserListServices.GetUsersList(dataTable);
@@ -47,7 +55,6 @@ namespace EMPManagment.API.Controllers
 
         [HttpGet]
         [Route("GetUsersNameList")]
-
         public async Task<IActionResult> GetUsersNameList()
         {
             var getUsersNameList = await UserListServices.GetUsersNameList();
@@ -57,7 +64,6 @@ namespace EMPManagment.API.Controllers
 
         [HttpPost]
         [Route("ActiveDeactiveUsers")]
-
         public async Task<IActionResult> ActiveDeactiveUsers(string UserName)
         {
             UserResponceModel responseModel = new UserResponceModel();
@@ -95,7 +101,6 @@ namespace EMPManagment.API.Controllers
 
         [HttpGet]
         [Route("GetDocumentList")]
-
         public async Task<IActionResult> GetDocumentList()
         {
             IEnumerable<DocumentInfoView> getDocumentList = await UserListServices.GetDocumentList();
@@ -109,6 +114,7 @@ namespace EMPManagment.API.Controllers
             var uploadDocument = await UserListServices.UploadDocument(UploadDocument);
             return Ok(new { code = 200, data = uploadDocument });
         }
+
         [HttpPost]
         [Route("ResetUserPassword")]
         public async Task<IActionResult> ResetUserPassword(PasswordResetView ResetPassword)
@@ -166,11 +172,8 @@ namespace EMPManagment.API.Controllers
             return StatusCode(apiResponseModel.Code, apiResponseModel);
         }
 
-
-
         [HttpPost]
         [Route("GetUserAttendanceList")]
-
         public async Task<IActionResult> GetUserAttendanceList(DataTableRequstModel dataTable)
         {
             var UserAttendanceList = await UserAttendance.GetUserAttendanceList(dataTable);
@@ -187,7 +190,6 @@ namespace EMPManagment.API.Controllers
 
         [HttpPost]
         [Route("UpdateUserOutTime")]
-
         public async Task<IActionResult> UpdateUserOutTime(UserAttendanceModel UpdateOutTime)
         {
             UserResponceModel response = new UserResponceModel();
@@ -210,7 +212,6 @@ namespace EMPManagment.API.Controllers
 
         [HttpGet]
         [Route("GetUserAttendanceById")]
-
         public async Task<IActionResult> GetUserAttendanceById(int attendanceId)
         {
             IEnumerable<UserAttendanceModel> getUserAttendance = await UserAttendance.GetUserAttendanceById(attendanceId);

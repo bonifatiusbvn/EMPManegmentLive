@@ -43,7 +43,6 @@ namespace EMPManegment.Web.Controllers
             Environment = environment;
         }
 
-
         public IActionResult Index()
         {
             return View();
@@ -131,7 +130,7 @@ namespace EMPManegment.Web.Controllers
             {
                 List<EmpDetailsView> ActiveDecative = new List<EmpDetailsView>();
                 HttpClient client = WebAPI.Initil();
-                ApiResponseModel res = await APIServices.GetAsync("", "UserDetails/GetAllUserList");
+                ApiResponseModel res = await APIServices.GetAsync("", "UserDetails/GetAllUsersDetails");
                 if (res.code == 200)
                 {
                     ActiveDecative = JsonConvert.DeserializeObject<List<EmpDetailsView>>(res.data.ToString());
@@ -233,7 +232,6 @@ namespace EMPManegment.Web.Controllers
             } 
         }
         [HttpPost]
-
         public async Task<JsonResult> UploadDocument(EmpDocumentView doc)
         {
             try
@@ -493,8 +491,6 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
-
-        
         public async Task<IActionResult> GetAttendance()
         {
             return View();

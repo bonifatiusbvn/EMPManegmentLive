@@ -89,6 +89,11 @@ namespace EMPManegment.Services.UserList
         {
             return await UserList.GetUsersNameList();
         }
+
+        public async Task<IEnumerable<EmpDetailsView>> GetUsersDetails()
+        {
+            return await UserList.GetUsersDetails();
+        }
     }
 }
 
