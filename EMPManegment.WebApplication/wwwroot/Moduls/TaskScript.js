@@ -213,7 +213,7 @@ function btnTaskDetails(Id)
     });
 }
 
-function AllTaskDetailsList() {debugger
+function AllTaskDetailsList() {
     $.ajax({
         url: '/Task/GetAllTaskDetailList',
         type: 'Get',
@@ -221,15 +221,15 @@ function AllTaskDetailsList() {debugger
         contentType: 'application/json;charset=utf-8;',
         success: function (result) {
             var object = '';
-            $.each(result, function (index, item) {debugger
+            $.each(result, function (index, item) {
                 object += '<tr>';
                 object += '<td><div class="avatar-group flex-nowrap"><a href="javascript: void(0);" class="avatar-group-item" data-img="/' + item.userProfile + '" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="John Robles"><img src="/' + item.userProfile + '" alt="" class="rounded-circle avatar-xxs"> </a><div class="flex-shrink-0 me-3">' + item.userName + '</div></div></td>';
                 /*object += '<td> <a class="fw-medium link-primary">' + item.taskTitle + '</a> </td>';*/
-                object += '<td><div class="d-flex"><div class="flex-grow-1 tasks_name">' + item.taskTitle + '</div><div class="flex-shrink-0 ms-4"><ul class="list-inline tasks-list-menu mb-0"><li class="list-inline-item"><a onclick="btnTaskDetails(\'' + item.id + '\')"><i class="ri-eye-fill align-bottom me-2 text-muted"></i></a></li><li class="list-inline-item"><a class="edit-item-btn" href="#showModal" data-bs-toggle="modal"><i class="ri-pencil-fill align-bottom me-2 text-muted"></i></a></li><li class="list-inline-item"><a class="remove-item-btn" data-bs-toggle="modal" href="#deleteOrder"><i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i></a></li></ul></div></div></td>';
+                object += '<td><div class="d-flex"><div class="flex-grow-1 tasks_name">' + item.taskTitle + '</div><div class="flex-shrink-0 ms-4"><ul class="list-inline tasks-list-menu mb-0"><li class="list-inline-item"><a onclick="btnTaskDetails(\'' + item.id + '\')"><i class="ri-eye-fill align-bottom me-2 text-muted"></i></a></li><li class="list-inline-item"><a onclick="EditTaskDetails(\'' + item.id + '\')"><i class="ri-pencil-fill align-bottom me-2 text-muted"></i></a></li><li class="list-inline-item"><a class="remove-item-btn" data-bs-toggle="modal" href="#deleteOrder"><i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i></a></li></ul></div></div></td>';
                 object += '<td>' + item.taskDetails + '</td>';
 
                 //------- Task Type ---------//
-                if (item.taskTypeName == "HighPriority") {debugger
+                if (item.taskTypeName == "HighPriority") {
                     object += '<td><span class="badge bg-danger-subtle text-danger text-uppercase">' + item.taskTypeName + '</span></td>';
                 }
                 else if (item.taskTypeName == "MediumPriority") {
@@ -264,3 +264,134 @@ function AllTaskDetailsList() {debugger
         }
     });
 };
+
+
+function EditTaskDetails(Id) {
+    $.ajax({
+        url: '/Task/GetTaskDetailsById?Id=' + Id,
+        type: "Get",
+        contentType: 'application/json;charset=utf-8;',
+        dataType: 'json',
+        success: function (response) {
+
+            $('#UpdateTaskDetails').modal('show');
+            $('#EditId').val(response.id);
+            $('#EditUserName').val(response.userName);
+            $('#EditTaskTitle').val(response.taskTitle);
+            $('#EditDescription').val(response.taskDetails);
+            var startdate = response.taskDate;
+            var StartDate = startdate.substr(0, 10);
+            $('#EditStartDate').val(StartDate);
+            var enddate = response.taskEndDate;
+            var EndDate = enddate.substr(0, 10);
+            $('#EditEndDate').val(EndDate);
+            $('#EditTaskType').val(response.taskTypeName);
+            $('#EditTaskTypeId').val(response.taskType);
+            $('#EditStatus').val(response.taskStatus);
+            CheckValidation();
+        },
+        error: function () {
+            alert('Data not found');
+        }
+    });
+}
+
+function UpdateTaskDetails() {
+    
+    var objData = {
+        Id: $("#EditId").val(),
+        UserName: $("#EditUserName").val(),
+        TaskTitle: $("#EditTaskTitle").val(),
+        TaskDetails: $("#EditDescription").val(),
+        TaskDate: $("#EditStartDate").val(),
+        TaskEndDate: $("#EditEndDate").val(),
+        TaskTypeName: $("#EditTaskType").val(),
+        TaskType: $("#EditTaskTypeId").val(),
+        TaskStatus: $("#EditStatus").val(),
+    }
+    $.ajax({
+        url: '/Task/UpdateUserTaskDetails',
+        type: 'Post',
+        data: objData,
+        dataType: 'json',
+        success: function (Result) {
+            Swal.fire({
+                title: Result.message,
+                icon: 'success',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'OK',
+            }).then(function () {
+                window.location = '/Task/AllTaskDetails';
+            })
+        },
+    })
+}
+
+$('#UpdateDetailsForm').on('change', function () {
+    CheckValidation();
+}); 
+
+//-----------------Validation-----------------//
+
+function CheckValidation() {
+
+    var isValid = true;
+    taskTitle = $("#EditTaskTitle").val();
+    taskDetails = $("#EditDescription").val();
+    taskDate = $("#EditStartDate").val();
+    taskEndDate = $("#EditEndDate").val();
+
+
+    //taskTitle
+    if (taskTitle == "") {
+        $('#ValidateTaskTitle').text('Please Enter Task Tittle');
+        $('#EditTaskTitle').css('border-color', 'red');
+        $('#EditTaskTitle').focus();
+        isValid = false;
+    }
+    else {
+        $('#ValidateTaskTitle').text('');
+        $('#EditTaskTitle').css('border-color', 'lightgray');
+
+    }
+
+    //taskDetails
+    if (taskDetails == "") {
+        $('#ValidateDescription').text('Please Enter Task Details');
+        $('#EditDescription').css('border-color', 'red');
+        $('#EditDescription').focus();
+        isValid = false;
+    }
+
+    else {
+        $('#ValidateDescription').text('');
+        $('#EditDescription').css('border-color', 'lightgray');
+
+    }
+
+    //taskDate
+    if (taskDate == "") {
+        $('#ValidateStartDate').text('Please Enter Task Start Date');
+        $('#EditStartDate').css('border-color', 'red');
+        $('#EditStartDate').focus();
+        isValid = false;
+    }
+
+    else {
+        $('#ValidateStartDate').text('');
+        $('#EditStartDate').css('border-color', 'lightgray');
+    }
+
+    //taskEndDate
+    if (taskEndDate == "") {
+        $('#ValidateEndDate').text('Please Enter Task End Date');
+        $('#EditEndDate').css('border-color', 'red');
+        $('#EditEndDate').focus();
+        isValid = false;
+    }
+
+    else {
+        $('#ValidateEndDate').text('');
+        $('#EditEndDate').css('border-color', 'lightgray');
+    }
+}
