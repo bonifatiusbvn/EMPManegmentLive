@@ -1,11 +1,39 @@
-﻿@model PagedList<EMPManegment.EntityModels.ViewModels.ProjectModels.ProjectDetailView>
-@using PagedList.Mvc;
-@using PagedList;
+﻿@model IEnumerable<EMPManegment.EntityModels.ViewModels.ProjectModels.ProjectDetailView>
+@using X.PagedList;
+@using X.PagedList.Mvc.Core;
 @inject IHttpContextAccessor Accessor
 @{
     ViewData["Title"] = "ProjectList";
     Layout = "~/Views/Shared/_UserHomeLayout.cshtml";
 }
+
+<style>
+        span.deleteicon {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        }
+
+        span.deleteicon span {
+            position: absolute;
+            display: block;
+            right: 3px;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            color: red;
+            background-color: #ccc;
+            font: 13px monospace;
+            text-align: center;
+            line-height: 1em;
+            cursor: pointer;
+        }
+
+        span.deleteicon input {
+            padding-right: 18px;
+            box-sizing: border-box;
+        }
+</style>
 
 <div class="page-content">
     <div class="container-fluid">
@@ -22,35 +50,31 @@
                             <li class="breadcrumb-item active">Project List</li>
                         </ol>
                     </div>
-
                 </div>
             </div>
         </div>
         <!-- end page title -->
 
         <div class="row g-4 mb-3">
-            <div class="col-sm-auto">
-                <div>
-                    <a href="apps-projects-create.html" class="btn btn-soft-secondary"><i class="ri-add-line align-bottom me-1"></i> Add New</a>
-                </div>
+            <div class="col-sm-auto">          
+                <a type="button" class="btn btn-outline-success rounded" href="~/Project/ProjectList"><i class="ri-arrow-left-line m-2"></i>Back</a>
             </div>
-            <div class="col-sm">
-                <div class="d-flex justify-content-sm-end gap-2">
-                    <div class="search-box ms-2">
-                        <input type="text" class="form-control" placeholder="Search...">
-                        <i class="ri-search-line search-icon"></i>
-                    </div>
 
-                    <select class="form-control w-md" data-choices data-choices-search-false>
-                        <option value="All">All</option>
-                        <option value="Today">Today</option>
-                        <option value="Yesterday" selected>Yesterday</option>
-                        <option value="Last 7 Days">Last 7 Days</option>
-                        <option value="Last 30 Days">Last 30 Days</option>
-                        <option value="This Month">This Month</option>
-                        <option value="Last Year">Last Year</option>
-                    </select>
-                </div>
+            <div class="col-sm offset-6">
+                <form asp-action="ProjectList" asp-controller="Project" method="get" class="mx-2 my-2">
+                    <div class ="input-group">
+                        <select class="form-select" id="inputSearch" name="searchby">
+                            <option selected disabled value="">SearchBy...</option>
+                            <option value="ProjectTitle">ProjectTitle</option>
+                            <option value="ProjectStatus">ProjectStatus</option>
+                        </select>
+                        <span class="deleteicon col-sm offset-6">
+                            <input name="searchfor" class="form-control" id="inputsearch" area-describedby="inputSearchProjectTitle" aria-label="Search" autocomplete="off" />
+                            <span onclick="var input = this.previousElementSibling; input.value = ''; input.focus();">x</span>
+                        </span>
+                        <button type="submit" class="btn btn-outline-secondary rounded" id="inputsearch">Search</button>
+                    </div>
+                </form>
             </div>
         </div><!-- end row -->
         <div class="row">
@@ -236,7 +260,10 @@
             }
         </div>
     </div>
-@*    @Html.PagedListPager(Model,pageNo =>Url.Action("ProjectList",new{pageNo,pageSize = Model.PageSize}))*@
 </div>
-@*@Html.PagedListPager(Model,i=>Url.Action("ProjectList","Project",new{i,search=Request.QueryString["search"]}))*@
-    
+@Html.PagedListPager((IPagedList)Model,page => Url.Action("ProjectList",new{page = page,
+searchfor = @Context.Request.Query["searchfor"],searchby =@Context.Request.Query["searchby"]}),
+new X.PagedList.Web.Common.PagedListRenderOptions {
+    LiElementClasses = new string[]{"page-item"},
+    PageClasses = new string[] {"page-link"}
+})

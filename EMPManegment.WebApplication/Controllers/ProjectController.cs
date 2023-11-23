@@ -6,8 +6,8 @@ using EMPManegment.EntityModels.ViewModels.TaskModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Build.ObjectModelRemoting;
 using Newtonsoft.Json;
-using PagedList.Mvc;
-using PagedList;
+using X.PagedList;
+using X.PagedList.Mvc;
 
 namespace EMPManegment.Web.Controllers
 {
@@ -23,7 +23,6 @@ namespace EMPManegment.Web.Controllers
             Environment = environment;
             APIServices = aPIServices;
         }
-        int pageSize = 3;
         public IActionResult Index()
         {
             return View();
@@ -34,18 +33,19 @@ namespace EMPManegment.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> ProjectList(int pageNo=1)
+        public async Task<IActionResult> ProjectList(string? searchby, string? searchfor,int? page) 
+        
         {
             try
             {
                 List<ProjectDetailView> projectlist = new List<ProjectDetailView>();
                 HttpClient client = WebAPI.Initil();
-                ApiResponseModel response = await APIServices.GetAsync("","ProjectDetails/GetProjectList");
+                ApiResponseModel response = await APIServices.GetAsync("", "ProjectDetails/GetProjectList?searchby="+ searchby + "&searchfor=" + searchfor);
                 if (response.code == 200)
                 {
                     projectlist = JsonConvert.DeserializeObject<List<ProjectDetailView>>(response.data.ToString());
                 }
-                var pageProject = new PagedList<ProjectDetailView>(projectlist,pageNo,pageSize);
+                var pageProject = projectlist.ToPagedList(page ?? 1, 4);
                 return View(pageProject);
             }
             catch (Exception ex)

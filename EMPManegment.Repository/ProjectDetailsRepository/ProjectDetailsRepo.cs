@@ -50,7 +50,7 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
             }
             return response;
         }
-        public async Task<IEnumerable<ProjectDetailView>> GetProjectList()
+        public async Task<IEnumerable<ProjectDetailView>> GetProjectList(string? searchby, string? searchfor)
         {
             IEnumerable<ProjectDetailView> data = Context.TblProjectMasters.ToList().Select(a => new ProjectDetailView
             {
@@ -67,6 +67,14 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
                 ProjectDeadline = a.ProjectDeadline,
                 CreatedOn= a.CreatedOn
             });
+            if(searchby == "ProjectTitle" && searchfor != null)
+            {
+                data = data.Where(ser => ser.ProjectTitle.ToLower().Contains(searchfor.ToLower())).ToList();
+            }
+            if (searchby == "ProjectStatus" && searchfor != null)
+            {
+                data = data.Where(ser => ser.ProjectStatus.ToLower().Contains(searchfor.ToLower())).ToList();
+            }
             return data;
         }
     }

@@ -47,9 +47,9 @@ namespace EMPManagment.API.Controllers
 
         [HttpGet]
         [Route("GetProjectList")]
-        public async Task<IActionResult> GetProjectList()
+        public async Task<IActionResult> GetProjectList(string? searchby, string? searchfor)
         {
-                IEnumerable<ProjectDetailView> projectlist = await ProjectDetail.GetProjectList();
+                IEnumerable<ProjectDetailView> projectlist = await ProjectDetail.GetProjectList(searchby,searchfor);
                 return Ok(new { code = 200, data = projectlist.ToList() });
         }
     }
