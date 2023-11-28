@@ -10,19 +10,19 @@ namespace EMPManegment.EntityModels.ViewModels.ProjectModels
     {
         public Guid ProjectId { get; set; }
 
-        public string ProjectType { get; set; } = null!;
+        public string? ProjectType { get; set; } = null!;
 
-        public string ProjectTitle { get; set; } = null!;
+        public string? ProjectTitle { get; set; } = null!;
 
-        public string ProjectHead { get; set; } = null!;
+        public string? ProjectHead { get; set; } = null!;
 
-        public string ProjectDescription { get; set; } = null!;
+        public string? ProjectDescription { get; set; } = null!;
 
-        public string ProjectLocation { get; set; } = null!;
+        public string? ProjectLocation { get; set; } = null!;
 
-        public string ProjectPriority { get; set; } = null!;
+        public string? ProjectPriority { get; set; } = null!;
 
-        public string ProjectStatus { get; set; } = null!;
+        public string? ProjectStatus { get; set; } = null!;
 
         public DateTime ProjectStartDate { get; set; }
 
@@ -33,5 +33,6 @@ namespace EMPManegment.EntityModels.ViewModels.ProjectModels
         public DateTime? CreatedOn { get; set; }
 
         public string? CreatedBy { get; set; }
+        public Guid UserId { get; set; }
     }
 }

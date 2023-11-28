@@ -74,5 +74,67 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
+        [HttpPost]
+        public async Task<IActionResult> GetUserProjectList()
+        {
+            try
+            {
+                string Userid = HttpContext.Session.GetString("UserID");
+                 ProjectDetailView responceModel = new ProjectDetailView
+                 {
+                    UserId = Guid.Parse(Userid),
+                };
+                List<ProjectDetailView> ProjectList = new List<ProjectDetailView>();
+                HttpClient client = WebAPI.Initil();
+                ApiResponseModel postuser = await APIServices.PostAsync(responceModel, "ProjectDetails/GetUserProjectList");
+                if (postuser.data != null)
+                {
+                    ProjectList = JsonConvert.DeserializeObject<List<ProjectDetailView>>(postuser.data.ToString());
+
+                }
+                else
+                {
+                    ProjectList = new List<ProjectDetailView>();
+                    ViewBag.Error = "note found";
+                }
+                return PartialView("~/Views/Project/_UserProjectList.cshtml", ProjectList);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> GetProjectList()
+        {
+            try
+            {
+                string Userid = HttpContext.Session.GetString("UserID");
+                ProjectDetailView responceModel = new ProjectDetailView
+                {
+                    UserId = Guid.Parse(Userid),
+                };
+                List<ProjectDetailView> ProjectList = new List<ProjectDetailView>();
+                HttpClient client = WebAPI.Initil();
+                ApiResponseModel postuser = await APIServices.PostAsync(responceModel, "ProjectDetails/GetUserProjectList");
+                if (postuser.data != null)
+                {
+                    ProjectList = JsonConvert.DeserializeObject<List<ProjectDetailView>>(postuser.data.ToString());
+
+                }
+                else
+                {
+                    ProjectList = new List<ProjectDetailView>();
+                    ViewBag.Error = "note found";
+                }
+                return PartialView("~/Views/Project/_GetProjectsDetails.cshtml", ProjectList);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
     }
 }
