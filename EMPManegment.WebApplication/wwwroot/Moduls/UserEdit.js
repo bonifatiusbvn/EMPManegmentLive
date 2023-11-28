@@ -7,7 +7,7 @@ function EditUserDetails(EmpId) {
         type: 'Get',
         contentType: 'application/json;charset=utf-8 ',
         datatype: 'json',
-        success: function (response) {debugger
+        success: function (response) {
             $('.empmodal').modal('show');
             $('#Userid').val(response.id);
             $('#FirstName').val(response.firstName);

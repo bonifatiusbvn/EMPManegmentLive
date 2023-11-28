@@ -84,7 +84,7 @@ function UploadDocument() {
 }
 
 function GetUserProjectList() {
-    debugger
+
     $.ajax({
         url: '/Project/GetUserProjectList',
         type: 'Post',
@@ -92,7 +92,7 @@ function GetUserProjectList() {
         processData: false,
         contentType: false,
         complete: function (Result) {
-            debugger
+
             $('#dvprojectdetail').html(Result.responseText);
         },
         Error: function () {
@@ -107,7 +107,7 @@ function GetUserProjectList() {
 }
 
 function GetProjectList() {
-    debugger
+
     $.ajax({
         url: '/Project/GetProjectList',
         type: 'Post',
@@ -115,7 +115,6 @@ function GetProjectList() {
         processData: false,
         contentType: false,
         complete: function (Result) {
-            debugger
             $('#dvuserprojectlist').html(Result.responseText);
         },
         Error: function () {

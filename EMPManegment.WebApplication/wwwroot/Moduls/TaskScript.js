@@ -4,12 +4,11 @@
 });
 
 
-function showadddetails() {
- 
+function showadddetails() { 
     ClearTextBox();
     GetTaskType();
     GetUsername();
-    $('#adddeals').modal('show');
+    $('#addtasks').modal('show');
 }
 
 
@@ -48,7 +47,6 @@ function TaskTypetext(sel) {
 }
 
 function btnSaveTaskDetail() {
-
     if ($('#frmtaskdetails').valid()) {
         var formData = new FormData();
         formData.append("TaskType", $("#taskType").val());
@@ -73,7 +71,7 @@ function btnSaveTaskDetail() {
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'OK',
                     }).then(function () {
-                        window.location = '/Task/UserTasks';
+                        window.location = '/Task/AllTaskDetails';
                     });
                 }
             }

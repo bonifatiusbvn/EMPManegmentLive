@@ -4,6 +4,18 @@
     Layout = "~/Views/Shared/_UserHomeLayout.cshtml";
 }
 
+<style>
+    #taskType-error.error, #dealTitle-error, #ddlusername-error.error,
+    #txtdatetime-error, #txtenddatetime-error, #contactDescription-error {
+        color: red;
+    }
+
+    label.failed {
+        border: red thin solid;
+    }
+</style>
+
+
     <div class="page-content">
         <div class="container-fluid">
             <!-- start page title -->
@@ -136,7 +148,7 @@
                                 <h5 class="card-title mb-0 flex-grow-1">All Tasks</h5>
                                 <div class="flex-shrink-0">
                                     <div class="d-flex flex-wrap gap-2">
-                                        <button class="btn btn-soft-primary add-btn" data-bs-toggle="modal" data-bs-target="#showModal"><i class="ri-add-line align-bottom me-1"></i> Create Task</button>
+                                    <button class="btn btn-soft-primary" data-bs-toggle="modal" onclick="showadddetails()"><i class="ri-add-line align-bottom me-1"></i> Create Task</button>
                                         <button class="btn btn-soft-secondary" id="remove-actions" onClick="deleteMultiple()"><i class="ri-delete-bin-2-line"></i></button>
                                     </div>
                                 </div>
@@ -437,8 +449,68 @@
         </div>
         </div>
         <!-- container-fluid -->
+    <!-- Modal -->
+    <div class="modal fade" id="addtasks" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-light p-3">
+                    <h5 class="modal-title" id="exampleModalLabel">Create Deals</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="frmtaskdetails">
+                        <div class="mb-3">
+                            <label for="taskType" class="form-label">Task Type</label>
+                            <select class="form-control" id="taskType" name="taskType">
+                                <option selected disabled value=""></option>
+                            </select>
+                            <input type="hidden" class="form-control" id="txtTaskType">
+
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Task Title</label>
+                            <input type="text" id="dealTitle" class="form-control" name="dealTitle" placeholder="Enter title" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="ddlusername" class="form-label">Task ProvideTo</label>
+                            <select class="form-control" id="ddlusername" name="ddlusername">
+                                <option selected disabled value=""></option>
+                            </select>
+                            <input type="hidden" class="form-control" id="txtguserid">
+
+                        </div>
+                        <div class="mb-3">
+                            <label for="dueDate" class="form-label">Task Start-Date</label>
+                            <input type="datetime-local" class="form-control material_blue" id="txtdatetime" name="txtdatetime" />
+
+                        </div>
+                        <div class="mb-3">
+                            <label for="dealEmail" class="form-label">Task End-Date</label>
+                            <input type="datetime-local" class="form-control material_blue" id="txtenddatetime" name="txtenddatetime">
+
+                        </div>
+                        <div class="mb-3">
+                            <label for="contactDescription" class="form-label">Task Description</label>
+                            <textarea class="form-control " id="contactDescription" rows="3" placeholder="Enter description" name="contactDescription"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" id="close-modal" data-bs-dismiss="modal" onclick="ClearTextBox()">Close</button>
+                    <button type="submit" class="btn btn-success" onclick="btnSaveTaskDetail();" id="taskDetails" value="Validate">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--end modal-->
+</div>
     </div>
 
 <script src="~/lib/jquery/dist/jquery.js"></script>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
 <script src="~/moduls/taskscript.js"></script>
