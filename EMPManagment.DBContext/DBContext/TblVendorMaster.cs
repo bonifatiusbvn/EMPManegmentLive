@@ -19,11 +19,11 @@ public partial class TblVendorMaster
 
     public string VendorPhone { get; set; } = null!;
 
-    public string VendorCountry { get; set; } = null!;
+    public int VendorCountry { get; set; }
 
-    public string VendorState { get; set; } = null!;
+    public int VendorState { get; set; }
 
-    public string VendorCity { get; set; } = null!;
+    public int VendorCity { get; set; }
 
     public string VendorPinCode { get; set; } = null!;
 
@@ -54,6 +54,12 @@ public partial class TblVendorMaster
     public DateTime? CreatedOn { get; set; }
 
     public string? CreatedBy { get; set; }
+
+    public virtual TblCity VendorCityNavigation { get; set; } = null!;
+
+    public virtual TblCountry VendorCountryNavigation { get; set; } = null!;
+
+    public virtual TblState VendorStateNavigation { get; set; } = null!;
 
     public virtual TblVendorType VendorType { get; set; } = null!;
 }

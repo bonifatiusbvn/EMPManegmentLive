@@ -1,4 +1,5 @@
 ﻿using EMPManegment.EntityModels.View_Model;
+using EMPManegment.EntityModels.ViewModels;
 using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.VendorModels;
@@ -14,5 +15,6 @@ namespace EMPManegment.Inretface.Interface.VendorDetails
     {
         Task<UserResponceModel> AddVendor(VendorDetailsView AddVendor);
         Task<jsonData> GetVendorsList(DataTableRequstModel VendordataTable);
+        Task<IEnumerable<VendorTypeView>> GetVendorType();
     }
 }
