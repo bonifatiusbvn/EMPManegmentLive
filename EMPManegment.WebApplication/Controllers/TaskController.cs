@@ -154,7 +154,6 @@ namespace EMPManegment.Web.Controllers
             try
             {
                 var userstausres = HttpContext.Request.Form["STATUSUPDATE"];
-
                 var statusRequest = JsonConvert.DeserializeObject<TaskDetailsView>(userstausres);
 
                 ApiResponseModel postuser = await APIServices.PostAsync(statusRequest, "UserHome/UpdateTaskStatus");

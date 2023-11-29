@@ -30,4 +30,6 @@ public partial class TblProjectMaster
     public DateTime? CreatedOn { get; set; }
 
     public string? CreatedBy { get; set; }
+    
+    public Guid UserId { get; set; }    
 }

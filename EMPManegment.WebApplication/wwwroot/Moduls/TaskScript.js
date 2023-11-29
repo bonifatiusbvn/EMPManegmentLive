@@ -152,7 +152,7 @@ function GetUserTaskDetails() {
     })
 }
 
-function btnStatusUpdate(Id) { 
+function btnStatusUpdate(Id) {debugger 
 
     var StausChange = {
         TaskStatus: $('#ddlStatus' + Id).val(),
@@ -160,7 +160,7 @@ function btnStatusUpdate(Id) {
     }
     var form_data = new FormData();
     form_data.append("STATUSUPDATE", JSON.stringify(StausChange));
-    
+    debugger
     $.ajax({
         url: '/Task/UpdateUserTaskStatus',
         type: 'Post',
@@ -168,7 +168,7 @@ function btnStatusUpdate(Id) {
         dataType: 'json',
         contentType: false,
         processData: false,
-        success: function (Result) {
+        success: function (Result) {debugger
             GetUserTaskDetails();
             Swal.fire({
                 title: Result.message,
