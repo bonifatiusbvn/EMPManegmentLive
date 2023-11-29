@@ -36,17 +36,18 @@ namespace EMPManegment.Web.Controllers
         {
             return View();
         }
+
         [HttpPost]
-        public async Task<IActionResult> AddVandorDetail()
+        public async Task<IActionResult> AddVandorDetail(IFormFile ProfilePhoto)
         {
             try
             {
                 var VendorObj = HttpContext.Request.Form["ADDVENDOR"];
                 var addVandorDetails = JsonConvert.DeserializeObject<AddVendorDetailsView>(VendorObj);
-                var path = Environment.WebRootPath;
-                    var filepath = "Content/Image/" + addVandorDetails.VendorCompanyLogo.FileName;
-                    var fullpath = Path.Combine(path, filepath);
-                    UploadFile(addVandorDetails.VendorCompanyLogo, fullpath);
+                //var path = Environment.WebRootPath;
+                //    var filepath = "Content/Image/" + ProfilePhoto.FileName;
+                //    var fullpath = Path.Combine(path, filepath);
+                //    UploadFile(ProfilePhoto, fullpath);
                     var addVandor = new VendorDetailsView()
                     {
                         VendorFirstName = addVandorDetails.VendorFirstName,
@@ -63,7 +64,7 @@ namespace EMPManegment.Web.Controllers
                         VendorCompanyType = addVandorDetails.VendorCompanyType,
                         VendorCompanyEmail = addVandorDetails.VendorCompanyEmail,
                         VendorCompanyNumber = addVandorDetails.VendorCompanyNumber,
-                        VendorCompanyLogo = addVandorDetails.VendorCompanyLogo.FileName,
+                        
                         VendorBankName = addVandorDetails.VendorBankName,
                         VendorBankBranch = addVandorDetails.VendorBankBranch,
                         VendorAccountHolderName = addVandorDetails.VendorAccountHolderName,

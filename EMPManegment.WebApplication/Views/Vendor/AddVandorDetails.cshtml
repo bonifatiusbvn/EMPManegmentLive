@@ -130,7 +130,7 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" data-bs-toggle="tab" href="#bankDetails" role="tab" aria-selected="false">
+                                <a class="nav-link" data-bs-toggle="tab" id="BankDetailsModel" href="#bankDetails" role="tab" aria-selected="false">
                                         Bank Details
                                     </a>
                                 </li>
@@ -140,7 +140,7 @@
 
                             <div class="tab-content">
                                 <div class="tab-pane active" id="personalDetails" role="tabpanel">
-                                                            <form id="VendorFormId">
+                                     <form id="VendorFormId">
                                     <div class="row">
                                         <div class="col-lg-6">
                                             <div class="mb-3">
@@ -231,6 +231,12 @@
                                             </div>
                                         </div>
                                         <!--end col-->
+                                        <div class="col-lg-12">
+                                            <div class="hstack gap-2 justify-content-end">
+                                                <button class="btn btn-link link-success text-decoration-none fw-medium" data-bs-dismiss="modal"><i class="ri-close-line me-1 align-middle"></i> Close</button>
+                                                <button type="button" class="btn btn-primary" id="nextbusinessDetails" onclick="nexttoBuisnessDetails()" value="Validate"><i class="ri-speed-fill align-bottom me-1"></i> Next</button>
+                                            </div>
+                                        </div>
                                     </div>
                                     <!--end row-->
                                 </form>
@@ -282,13 +288,19 @@
                                             </div>
                                         </div>
                                         <!--end col-->
+                                        <div class="col-lg-12">
+                                            <div class="hstack gap-2 justify-content-end">
+                                                <button class="btn btn-link link-success text-decoration-none fw-medium" data-bs-dismiss="modal"><i class="ri-close-line me-1 align-middle"></i> Close</button>
+                                                <button type="button" class="btn btn-primary" id="nextbankDetails" onclick="nexttoBankDetails()" value="Validate"><i class="ri-speed-fill align-bottom me-1"></i> Next</button>
+                                            </div>
+                                        </div>
                                     </div>
                                     <!--end row-->
                             </form>
                                 </div>
 
 
-                                <div class="tab-pane" id="bankDetails" role="tabpanel">
+                            <div class="tab-pane" id="bankDetails" role="tabpanel">
                                     <form id="VendorbankDetails">
                                     <div class="row">
                                         <div class="col-lg-6">
