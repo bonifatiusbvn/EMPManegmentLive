@@ -44,14 +44,20 @@ namespace EMPManegment.Services.TaskDetails
         {
             return await TaskDetails.UpdateTaskStatus(updatetask);
         }
-        public async Task<TaskDetailsView> GetTaskDetailsById(Guid Taskid)
-        {
-            return await TaskDetails.GetTaskDetailsById(Taskid);
-        }
-
+        
         public async Task<IEnumerable<TaskDetailsView>> GetAllUserTaskDetails()
         {
             return await TaskDetails.GetAllUserTaskDetails();
+        }
+
+        public async Task<TaskDetailsView> GetTaskDetailsById(Guid Taskid)
+        {
+            return await TaskDetails. GetTaskDetailsById(Taskid);
+        }
+
+        public async Task<IEnumerable<TaskDetailsView>> GetTaskDetails(Guid Taskid)
+        {
+            return await TaskDetails.GetTaskDetails(Taskid);
         }
     }
 }

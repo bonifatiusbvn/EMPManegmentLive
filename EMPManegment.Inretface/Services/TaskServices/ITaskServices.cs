@@ -1,4 +1,5 @@
-﻿using EMPManegment.EntityModels.ViewModels.Models;
+﻿using EMPManegment.EntityModels.View_Model;
+using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.TaskModels;
 using System;
 using System.Collections.Generic;
@@ -16,5 +17,6 @@ namespace EMPManegment.Inretface.Services.TaskServices
         Task<UserResponceModel> UpdateTaskStatus(TaskDetailsView updatetask);
         Task<TaskDetailsView> GetTaskDetailsById(Guid Taskid);
         Task<IEnumerable<TaskDetailsView>> GetAllUserTaskDetails();
+        Task<IEnumerable<TaskDetailsView>> GetTaskDetails(Guid Taskid);
     }
 }

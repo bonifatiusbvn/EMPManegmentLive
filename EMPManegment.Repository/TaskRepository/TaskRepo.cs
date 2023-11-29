@@ -7,6 +7,7 @@ using EMPManegment.Inretface.Interface.TaskDetails;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -46,23 +47,23 @@ namespace EMPManegment.Repository.TaskRepository
             UserResponceModel response = new UserResponceModel();
             try
             {
-                     var taskmodel = new TblTaskDetail()
-                    {
-                        Id = Guid.NewGuid(),
-                        TaskType = addtask.TaskType,
-                        TaskTitle = addtask.TaskTitle,
-                        TaskDetails = addtask.TaskDetails,
-                        TaskDate = addtask.TaskDate,
-                        UserId = addtask.UserId,
-                        CreatedOn = DateTime.Now,
-                        TaskEndDate = addtask.TaskEndDate,
-                    };
-                    response.Code = 200;
-                    response.Message = "Task add successfully!";
-                    Context.TblTaskDetails.Add(taskmodel);
-                    Context.SaveChanges();                
+                var taskmodel = new TblTaskDetail()
+                {
+                    Id = Guid.NewGuid(),
+                    TaskType = addtask.TaskType,
+                    TaskTitle = addtask.TaskTitle,
+                    TaskDetails = addtask.TaskDetails,
+                    TaskDate = addtask.TaskDate,
+                    UserId = addtask.UserId,
+                    CreatedOn = DateTime.Now,
+                    TaskEndDate = addtask.TaskEndDate,
+                };
+                response.Code = 200;
+                response.Message = "Task add successfully!";
+                Context.TblTaskDetails.Add(taskmodel);
+                Context.SaveChanges();
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 throw ex;
             }
@@ -94,18 +95,17 @@ namespace EMPManegment.Repository.TaskRepository
         public async Task<List<TaskDetailsView>> GetUserTaskDetails(TaskDetailsView GetUserTaskDetails)
         {
             var UserId = new List<TaskDetailsView>();
-            var data = await Context.TblTaskDetails.Where(x=>x.UserId == GetUserTaskDetails.UserId).ToListAsync();
-            if(data != null)
+            var data = await Context.TblTaskDetails.Where(x => x.UserId == GetUserTaskDetails.UserId).ToListAsync();
+            if (data != null)
             {
-                foreach(var item in data)
+                foreach (var item in data)
                 {
-                    
                     UserId.Add(new TaskDetailsView()
                     {
                         Id = item.Id,
                         TaskType = item.TaskType,
                         TaskStatus = item.TaskStatus,
-                        TaskDate  = item.TaskDate,
+                        TaskDate = item.TaskDate,
                         TaskDetails = item.TaskDetails,
                         TaskEndDate = item.TaskEndDate,
                         TaskTitle = item.TaskTitle,
@@ -115,55 +115,89 @@ namespace EMPManegment.Repository.TaskRepository
             return UserId;
         }
 
-        public async Task<TaskDetailsView> GetTaskDetailsById(Guid Taskid)
-        {
-            TaskDetailsView taskdata = new TaskDetailsView();
-            try
-            {
-                    taskdata = (from d in Context.TblTaskDetails.Where(d=>d.Id == Taskid)
-                                join m in Context.TblTaskMasters
-                                on d.TaskType equals m.Id
-                                join b in Context.TblUsers on d.UserId equals b.Id
-                                select new TaskDetailsView
-                                {
-                                    Id = d.Id,
-                                    UserId = d.UserId,
-                                    TaskType = d.TaskType,
-                                    TaskDate = d.TaskDate,
-                                    TaskTitle = d.TaskTitle,
-                                    TaskEndDate = d.TaskEndDate,
-                                    TaskDetails = d.TaskDetails,
-                                    TaskStatus = d.TaskStatus,
-                                    UserName=b.UserName,
-                                    TaskTypeName=m.TaskType
-                                }).First();
-            }
-            catch(Exception ex) 
-            {
-                throw ex;
-            }
-            return taskdata;
-        }
+        
+
 
         public async Task<IEnumerable<TaskDetailsView>> GetAllUserTaskDetails()
         {
             IEnumerable<TaskDetailsView> AllTaskDetails = from a in Context.TblTaskDetails
                                                           join b in Context.TblUsers on a.UserId equals b.Id
                                                           join c in Context.TblTaskMasters on a.TaskType equals c.Id
-                                                         select new TaskDetailsView
-                                                         {
-                                                             Id = a.Id,
-                                                             TaskType = a.TaskType,
-                                                             TaskStatus = a.TaskStatus,
-                                                             TaskDate = a.TaskDate,
-                                                             TaskDetails = a.TaskDetails,
-                                                             TaskEndDate = a.TaskEndDate,
-                                                             TaskTitle = a.TaskTitle,
-                                                             UserProfile=b.Image,
-                                                             UserName=b.UserName,
-                                                             TaskTypeName=c.TaskType
-                                                         };
+                                                          select new TaskDetailsView
+                                                          {
+                                                              Id = a.Id,
+                                                              TaskType = a.TaskType,
+                                                              TaskStatus = a.TaskStatus,
+                                                              TaskDate = a.TaskDate,
+                                                              TaskDetails = a.TaskDetails,
+                                                              TaskEndDate = a.TaskEndDate,
+                                                              TaskTitle = a.TaskTitle,
+                                                              UserProfile = b.Image,
+                                                              UserName = b.UserName,
+                                                              TaskTypeName = c.TaskType
+                                                          };
             return AllTaskDetails;
+        }
+
+        public async Task<TaskDetailsView> GetTaskDetailsById(Guid Taskid)
+        {
+            TaskDetailsView taskdata = new TaskDetailsView();
+            try
+            {
+                taskdata = (from d in Context.TblTaskDetails.Where(d => d.Id == Taskid)
+                            join m in Context.TblTaskMasters
+                            on d.TaskType equals m.Id
+                            join b in Context.TblUsers on d.UserId equals b.Id
+                            select new TaskDetailsView
+                            {
+                                Id = d.Id,
+                                UserId = d.UserId,
+                                TaskType = d.TaskType,
+                                TaskDate = d.TaskDate,
+                                TaskTitle = d.TaskTitle,
+                                TaskEndDate = d.TaskEndDate,
+                                TaskDetails = d.TaskDetails,
+                                TaskStatus = d.TaskStatus,
+                                UserName = b.UserName,
+                                TaskTypeName = m.TaskType
+                            }).First();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return taskdata;
+        }
+
+        public async Task<IEnumerable<TaskDetailsView>> GetTaskDetails(Guid Taskid)
+        {
+            try
+            {
+                IEnumerable<TaskDetailsView>
+                AllTaskDetails = from a in Context.TblTaskDetails
+                                 join b in Context.TblUsers on a.User.Id equals b.Id
+                                 join c in Context.TblTaskMasters on a.TaskType equals c.Id
+                                 where b.Id == Taskid
+                                 select new TaskDetailsView
+                                 {
+                                     Id = a.Id,
+                                     UserId = b.Id,
+                                     TaskType = a.TaskType,
+                                     TaskStatus = a.TaskStatus,
+                                     TaskDate = a.TaskDate,
+                                     TaskDetails = a.TaskDetails,
+                                     TaskEndDate = a.TaskEndDate,
+                                     TaskTitle = a.TaskTitle,
+                                     UserProfile = b.Image,
+                                     UserName = b.UserName,
+                                     TaskTypeName = c.TaskType
+                                 };
+                return AllTaskDetails;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }

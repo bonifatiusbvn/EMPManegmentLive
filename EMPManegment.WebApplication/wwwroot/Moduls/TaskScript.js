@@ -162,7 +162,7 @@ function btnStatusUpdate(Id) {
     }
     var form_data = new FormData();
     form_data.append("STATUSUPDATE", JSON.stringify(StausChange));
-
+    
     $.ajax({
         url: '/Task/UpdateUserTaskStatus',
         type: 'Post',
@@ -177,7 +177,9 @@ function btnStatusUpdate(Id) {
                 icon: 'success',
                 confirmButtonColor: '#3085d6',
                 confirmButtonText: 'OK',
-            })
+            }).then(function () {
+                window.location = '/Task/UserTasks';
+            });
         },
         error: function (error, status) {
             alert(error);
@@ -185,15 +187,13 @@ function btnStatusUpdate(Id) {
     })
 }
 
-function btnTaskDetails(Id)
-{
+function btnTaskDetails(Id){
     $.ajax({
         url: '/Task/GetTaskDetailsById?Id=' + Id,
-        type: "Get",
+        type: "get",
         contentType: 'application/json;charset=utf-8;',
         dataType: 'json',
         success: function (response) {
-
             $('#showDetailsModal').modal('show');
             $('#UserName').text(response.userName);
             $('#taskTitle-field').text(response.taskTitle);
@@ -212,8 +212,15 @@ function btnTaskDetails(Id)
         }
     });
 }
+//$('#ddlStatus').on('change', function () {debugger
+//    $(this).find('option').prop('disabled', false);
+//    var val = $(this).val();
+//    var prof = val.split("Completed");
+//    alert(prof[0]);
+//    $(this).find('option[value="' + prof[0] + '"]').prop('disabled', true);
+//});
 
-function AllTaskDetailsList() {debugger
+function AllTaskDetailsList() {
     $.ajax({
         url: '/Task/GetAllTaskDetailList',
         type: 'Get',
@@ -221,7 +228,7 @@ function AllTaskDetailsList() {debugger
         contentType: 'application/json;charset=utf-8;',
         success: function (result) {
             var object = '';
-            $.each(result, function (index, item) {debugger
+            $.each(result, function (index, item) {
                 object += '<tr>';
                 object += '<td><div class="avatar-group flex-nowrap"><a href="javascript: void(0);" class="avatar-group-item" data-img="/' + item.userProfile + '" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="John Robles"><img src="/' + item.userProfile + '" alt="" class="rounded-circle avatar-xxs"> </a><div class="flex-shrink-0 me-3">' + item.userName + '</div></div></td>';
                 /*object += '<td> <a class="fw-medium link-primary">' + item.taskTitle + '</a> </td>';*/
@@ -229,7 +236,7 @@ function AllTaskDetailsList() {debugger
                 object += '<td>' + item.taskDetails + '</td>';
 
                 //------- Task Type ---------//
-                if (item.taskTypeName == "HighPriority") {debugger
+                if (item.taskTypeName == "HighPriority") {
                     object += '<td><span class="badge bg-danger-subtle text-danger text-uppercase">' + item.taskTypeName + '</span></td>';
                 }
                 else if (item.taskTypeName == "MediumPriority") {

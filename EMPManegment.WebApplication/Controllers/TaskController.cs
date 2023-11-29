@@ -5,6 +5,7 @@ using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.TaskModels;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Threading.Tasks;
 
 namespace EMPManegment.Web.Controllers
 {
@@ -25,10 +26,32 @@ namespace EMPManegment.Web.Controllers
             return View();
         }
 
-        public IActionResult UserTasks()
+        public async Task<IActionResult> UserTasks()
         {
-            return View();
+            try
+            {
+                string Userid = HttpContext.Session.GetString("UserID");
+                TaskDetailsView usertaskdetails = new TaskDetailsView
+                {
+                    UserId = Guid.Parse(Userid),
+                };
+                HttpClient client = WebAPI.Initil();
+                List<TaskDetailsView> TaskList = new List<TaskDetailsView>();
+                ApiResponseModel response = await APIServices.PostAsync("", "UserHome/GetTaskDetails?Taskid=" + Userid);
+                if (response.code == 200)
+                {
+                    TaskList = JsonConvert.DeserializeObject<List<TaskDetailsView>>(response.data.ToString());
+
+                }
+                return View(TaskList);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
         }
+        
 
         [HttpGet]
         public async Task<JsonResult> GetTaskType()

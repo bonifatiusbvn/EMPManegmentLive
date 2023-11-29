@@ -87,190 +87,131 @@
                 </div>
             </div>
         </div>
-        <!--end card-->
-           
+        
+       <!--end card-->
         <div data-simplebar class="tasks-wrapper px-3 mx-n3">
-            <div id="unassigned-task" class="tasks">
-                    @foreach (var item in Model)
-                    {
+          <div id="unassigned-task" class="tasks">
+                
+               @foreach (var item in Model)
+               {
+                    @if (item.TaskType == 1 && item.TaskStatus != "Completed" )
+                   {
                         <div class="card tasks-box">
                             <div class="card-body">
-                                <div class="d-flex mb-2">
-                                    <div class="flex-grow-1 ms-3">
-                                        <h6 class="fs-14 mb-1 text-success">@item.TaskTitle</h6>
-                                        @*  <p class="text-muted mb-0">TaskDate</p> *@
-                                    </div>
-                                    <div class="dropdown">
-                                        <a href="javascript:void(0);" class="text-muted" id="dropdownMenuLink1" data-bs-toggle="dropdown" aria-expanded="false"><i class="ri-more-fill"></i></a>
-                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink1">
-                                            <li>
-                                                <a class="dropdown-item" href="apps-tasks-details.html">
-                                                    <i class="ri-eye-fill align-bottom me-2 text-muted"></i>
-                                                    View
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a class="dropdown-item" href="#">
-                                                    <i class="ri-edit-2-line align-bottom me-2 text-muted"></i>
-                                                    Edit
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a class="dropdown-item" data-bs-toggle="modal" href="#deleteRecordModal">
-                                                    <i class="ri-delete-bin-5-line align-bottom me-2 text-muted"></i>
-                                                    Delete
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="flex-shrink-0 mt-4">
-                                    <div class="avatar-group">
-                                        <a href="javascript: void(0);" class="avatar-group-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Alexis">
-                                            <img src="~/UserHome/minimal/assets/images/users/avatar-6.jpg" alt="" class="rounded-circle avatar-xxs mb-4">
-                                        </a>
-                                        <a href="javascript: void(0);" class="avatar-group-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Nancy">
-                                            <img src="~/UserHome/minimal/assets/images/users/avatar-5.jpg" alt="" class="rounded-circle avatar-xxs ">
-                                        </a>
-                                    </div>
-                                </div>
-                                <h6 class="fs-14 mb-1">Description</h6>
-                                <p class="text-muted">
-                                    @item.TaskDetails
-                                </p>
-                                <div class="mb-3">
-                                    <div class="d-flex mb-1">
-
-                                        <div class="flex-grow-1">
-                                            <h6 class="mb-0">Task Start Date</h6>
-                                            <small class="text-muted">@item.TaskDate</small>
+                                
+                                 <div class="d-flex mb-2">
+                                      <div class="flex-grow-1">
+                                            <h6 class="fs-15 mb-0 text-truncate task-title">
+                                                <a href="apps-tasks-details.html" class="link-secondary"> @item.TaskTitle</a>
+                                            </h6>
+                                      </div>
+                                        <div class="dropdown">
+                                            <a href="javascript:void(0);" class="text-muted" id="dropdownMenuLink1" data-bs-toggle="dropdown" aria-expanded="false"><i class="ri-more-fill"></i></a>
+                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink1">
+                                                <li>
+                                                    <a class="dropdown-item" href="apps-tasks-details.html">
+                                                        <i class="ri-eye-fill align-bottom me-2 text-muted"></i>
+                                                        View
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item" href="#">
+                                                        <i class="ri-edit-2-line align-bottom me-2 text-muted"></i>
+                                                        Edit
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item" data-bs-toggle="modal" href="#deleteRecordModal">
+                                                        <i class="ri-delete-bin-5-line align-bottom me-2 text-muted"></i>
+                                                        Delete
+                                                    </a>
+                                                </li>
+                                            </ul>
                                         </div>
-                                        <div class="flex-grow-1">
-                                            <h6 class="mb-0">Task End Date</h6>
-                                            <small class="text-muted">@item.TaskEndDate</small>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="d-flex align-items-center">
-
+                                 </div>
+                                    <h6 class="fs-14 mb-1" style="color:darkgreen"></h6>
+                                    <p class="text-muted">
+                                        @item.TaskDetails
+                                    </p>
+                                    <div class="d-flex align-items-center">
+                                    @if (item.TaskStatus == "Working")
+                                    {
+                                        <a class="badge bg-warning text-uppercase">  @item.TaskStatus  </a>
+                                    }
+                                    else if (item.TaskStatus == "Completed")
+                                    {
+                                        <a class="badge bg-success text-uppercase">  @item.TaskStatus  </a>
+                                    }
+                                    else if (item.TaskStatus == "Pending")
+                                    {
+                                        <a class="badge bg-primary text-uppercase">  @item.TaskStatus  </a>
+                                    }
+                                    else
+                                    {
+                                        <a class="badge bg-secondary text-uppercase">  @item.TaskStatus  </a>
+                                    }
                                     <div class="flex-grow-1">
-                                        <span class="text"> TaskStatus :</span>
-                                        <select id="ddlStatus@(item.Id)" class="form-control">
-                                            <option selected disabled value="">---Select Status---</option>
-                                            <option value="Pending">Pending</option>
-                                            <option value="Working">Working</option>
-                                            <option value="Completed">Completed</option>
-                                        </select>
+                                          
+                                        </div>
+                                        <div class="flex-shrink-0">
+                                            <div class="avatar-group">
+                                                <img src="~/@item.UserProfile" alt="" class="avatar-xs rounded-circle">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-items-center">
+                                        <div class="flex-grow-1">
+                                            <span class="text"> TaskStatus :</span>
+                                            <select id="ddlStatus@(item.Id)" class="form-control">
+                                                <option selected disabled value="">---Select Status---</option>
+                                                <option value="Pending">Pending</option>
+                                                <option value="Working">Working</option>
+                                            @if (item.TaskStatus == "Completed")
+                                            {
+                                                <option disabled value="Completed">Completed</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="Completed">Completed</option>
+                                            }
+                                                @* <option value="Completed">Completed</option> *@
+                                            </select>
+                                        </div>
+                                    </div>
+                                  <div>
+                                    <button type="submit" class="btn btn-success btn-sm m-2" onclick="btnStatusUpdate('@item.Id')"><i class="bi bi-pencil-fill"></i>Status Update</button>
+
+                                    <button class="btn btn-primary btn-sm" data-bs-toggle="modal" onclick="btnTaskDetails('@item.Id')"> <i class="bi bi-chat-right-dots"></i> Details</button>
+                                  </div>
+                                
+                            </div>
+                                <!--end card-body-->
+                                <div class="card-footer border-top-dashed">
+                                    <div class="d-flex mb-1">
+                                        <div class="flex-grow-1">
+                                            <span class="text-muted">
+                                                <i class="ri-time-line align-bottom"></i>
+                                                @item.TaskDate.Value.ToShortDateString()
+                                            </span>
+                                        </div>
+                                        <div class="flex-grow-1">
+                                            <span class="text-muted">
+                                                <i class="ri-time-line align-bottom"></i>
+                                                @item.TaskEndDate.Value.ToShortDateString()
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="card-footer hstack gap-2">
-                                <button type="submit" class="btn btn-success btn-sm w-80" onclick="btnStatusUpdate('@item.Id')"><i class="bi bi-pencil-fill m-1"></i>Status Update</button>
-                                <button class="btn btn-primary btn-sm w-90" data-bs-toggle="modal" onclick="btnTaskDetails('@item.Id')">
-                                    <i class="bi bi-chat-right-dots m-1"></i>
-                                    Details
-                                </button>
-                            </div>
-                            <!--end card-body-->
-                        </div>
-                    }
-
-                <!--end card-->
-                <div class="card tasks-box">
-                    <div class="card-body">
-                        <div class="d-flex mb-2">
-                            <div class="flex-grow-1">
-                                <h6 class="fs-15 mb-0 text-truncate task-title">
-                                    <a href="apps-tasks-details.html" class="link-secondary">
-                                        Velzon
-                                        - Admin Layout Design
-                                    </a>
-                                </h6>
-                            </div>
-                            <div class="flex-shrink-0">
-                                <a href="javascript:void(0);" class="text-muted" id="dropdownMenuLink12" data-bs-toggle="dropdown" aria-expanded="false"><i class="ri-more-fill"></i></a>
-                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink12">
-                                    <li>
-                                        <a class="dropdown-item" href="apps-tasks-details.html">
-                                            <i class="ri-eye-fill align-bottom me-2 text-muted"></i>
-                                            View
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" href="#">
-                                            <i class="ri-edit-2-line align-bottom me-2 text-muted"></i>
-                                            Edit
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" data-bs-toggle="modal" href="#deleteRecordModal">
-                                            <i class="ri-delete-bin-5-line align-bottom me-2 text-muted"></i>
-                                            Delete
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <p class="text-muted">
-                            The dashboard is the front page of the Administration
-                            UI.
-                        </p>
-                        <div class="d-flex align-items-center">
-                            <div class="flex-grow-1">
-                                <span class="badge bg-primary-subtle text-primary">Layout</span>
-                                <span class="badge bg-primary-subtle text-primary">Admin</span>
-                                <span class="badge bg-primary-subtle text-primary">Dashboard</span>
-                            </div>
-                            <div class="flex-shrink-0">
-                                <div class="avatar-group">
-                                    <a href="javascript: void(0);" class="avatar-group-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Michael">
-                                        <img src="~/UserHome/minimal/assets/images/users/avatar-7.jpg" alt="" class="rounded-circle avatar-xxs">
-                                    </a>
-                                    <a href="javascript: void(0);" class="avatar-group-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Alexis">
-                                        <img src="~/UserHome/minimal/assets/images/users/avatar-6.jpg" alt="" class="rounded-circle avatar-xxs">
-                                    </a>
-                                    <a href="javascript: void(0);" class="avatar-group-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Anna">
-                                        <img src="~/UserHome/minimal/assets/images/users/avatar-1.jpg" alt="" class="rounded-circle avatar-xxs">
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!--end card-body-->
-                    <div class="card-footer border-top-dashed">
-                        <div class="d-flex">
-                            <div class="flex-grow-1">
-                                <span class="text-muted">
-                                    <i class="ri-time-line align-bottom"></i>
-                                    07 Jan, 2022
-                                </span>
-                            </div>
-                            <div class="flex-shrink-0">
-                                <ul class="link-inline mb-0">
-                                    <li class="list-inline-item">
-                                        <a href="javascript:void(0)" class="text-muted"><i class="ri-eye-line align-bottom"></i> 14</a>
-                                    </li>
-                                    <li class="list-inline-item">
-                                        <a href="javascript:void(0)" class="text-muted">
-                                            <i class="ri-question-answer-line align-bottom"></i>
-                                            32
-                                        </a>
-                                    </li>
-                                    <li class="list-inline-item">
-                                        <a href="javascript:void(0)" class="text-muted"><i class="ri-attachment-2 align-bottom"></i> 05</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!--end card-->
-            </div>
+                       </div>
+                   }
+               }
+             
+             
+          </div>
+                <!--end card-->  
+ 
             <!--end tasks-->
-        </div>
-        <div class="my-3">
-            <button class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#creatertaskModal">Add More</button>
-        </div>
+         </div>
     </div>
     <!--end tasks-list-->
     <div class="tasks-list">
@@ -291,8 +232,8 @@
             </div>
         </div>
         <div data-simplebar class="tasks-wrapper px-3 mx-n3">
-            <div id="todo-task" class="tasks">
-                <div class="card tasks-box">
+          <div id="todo-task" class="tasks">
+                @* div class="card tasks-box"> 
                     <div class="card-body">
                         <div class="d-flex mb-2">
                             <div class="flex-grow-1">
@@ -327,10 +268,10 @@
                                 </ul>
                             </div>
                         </div>
-                        <p class="text-muted">
+                           <p class="text-muted">
                             Landing page template with clean, minimal and modern
                             design.
-                        </p>
+                           </p>
                         <div class="d-flex align-items-center">
                             <div class="flex-grow-1">
                                 <span class="badge bg-primary-subtle text-primary">Design</span>
@@ -350,7 +291,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> 
                     <!--end card-body-->
                     <div class="card-footer border-top-dashed">
                         <div class="d-flex">
@@ -378,13 +319,23 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                 </div> *@
                 <!--end card-->
-                <div class="card tasks-box">
+           @foreach (var item in Model)
+           {
+                    @if (item.TaskType == 2 && item.TaskStatus != "Completed" )
+             {
+                 <div class="card tasks-box">
                     <div class="card-body">
+                              
                         <div class="d-flex mb-2">
                             <div class="flex-grow-1">
-                                <h6 class="fs-15 mb-0 text-truncate task-title"><a href="apps-tasks-details.html" class="link-secondary">Marketing & Sales</a></h6>
+                                <h6 class="fs-15 mb-0 text-truncate task-title">
+                                   
+                                    <a href="apps-tasks-details.html" class="link-secondary" style="color:darkblue">
+                                        @item.TaskTitle
+                                    </a>
+                                </h6>
                             </div>
                             <div class="flex-shrink-0">
                                 <a href="javascript:void(0);" class="text-muted" id="dropdownMenuLink4" data-bs-toggle="dropdown" aria-expanded="false"><i class="ri-more-fill"></i></a>
@@ -410,60 +361,87 @@
                                 </ul>
                             </div>
                         </div>
-                        <p class="text-muted">
-                            Sales and marketing are two business functions within
-                            an organization.
-                        </p>
+                               <h6 class="fs-14 mb-1"></h6>
+                               <p class="text-muted">
+                                @item.TaskDetails
+                               </p>
                         <div class="d-flex align-items-center">
-                            <div class="flex-grow-1">
-                                <span class="badge bg-primary-subtle text-primary">Marketing</span>
-                                <span class="badge bg-primary-subtle text-primary">Business</span>
-                            </div>
+                                    @if (item.TaskStatus == "Working")
+                                    {
+                                        <a class="badge bg-warning text-uppercase">  @item.TaskStatus  </a>
+                                    }
+                                    else if (item.TaskStatus == "Completed")
+                                    {
+                                        <a class="badge bg-success text-uppercase">  @item.TaskStatus  </a>
+                                    }
+                                    else if (item.TaskStatus == "Pending")
+                                    {
+                                        <a class="badge bg-primary text-uppercase">  @item.TaskStatus  </a>
+                                    }
+                                    else
+                                    {
+                                        <a class="badge bg-secondary text-uppercase">  @item.TaskStatus  </a>
+                                    }
+                                        <div class="flex-grow-1">
+                                            @* <span class="badge bg-primary-subtle  text-uppercase">@item.TaskStatus</span> *@
+                                        </div>
+                                    
                             <div class="flex-shrink-0">
-                                <div class="avatar-group">
-                                    <a href="javascript: void(0);" class="avatar-group-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Donald">
-                                        <img src="~/UserHome/minimal/assets/images/users/avatar-9.jpg" alt="" class="rounded-circle avatar-xxs">
-                                    </a>
-                                    <a href="javascript: void(0);" class="avatar-group-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Thomas">
-                                        <img src="~/UserHome/minimal/assets/images/users/avatar-8.jpg" alt="" class="rounded-circle avatar-xxs">
-                                    </a>
+                                    <div class="avatar-group">
+                                        <img src="~/@item.UserProfile" alt="" class="avatar-xs rounded-circle">
+                                    </div>
+                            </div>
+                        </div>
+                            <div class="d-flex align-items-center">
+                                <div class="flex-grow-1">
+                                    <span class="text"> TaskStatus :</span>
+                                    <select id="ddlStatus@(item.Id)" class="form-control">
+                                        <option selected disabled value="">---Select Status---</option>
+                                        <option value="Pending">Pending</option>
+                                        <option value="Working">Working</option>
+                                            @if (item.TaskStatus == "Completed")
+                                            {
+                                                <option disabled value="Completed">Completed</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="Completed">Completed</option>
+                                            }
+                                        @* <option value="Completed">Completed</option> *@
+                                    </select>
+                                </div>
+                            </div>
+                                <div>
+                                    <button type="submit" class="btn btn-success btn-sm m-2" onclick="btnStatusUpdate('@item.Id')"><i class="bi bi-pencil-fill"></i>Status Update</button>
+
+                                    <button class="btn btn-primary btn-sm" data-bs-toggle="modal" onclick="btnTaskDetails('@item.Id')"> <i class="bi bi-chat-right-dots"></i> Details</button>
+                                </div>
+                           
+                    </div>
+                    
+                    <!--end card-body-->
+                        <div class="card-footer border-top-dashed">
+                            <div class="d-flex mb-1">
+                                <div class="flex-grow-1">
+                                    <span class="text-muted">
+                                        <i class="ri-time-line align-bottom"></i>
+                                        @item.TaskDate.Value.ToShortDateString()
+                                    </span>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <span class="text-muted">
+                                        <i class="ri-time-line align-bottom"></i>
+                                        @item.TaskEndDate.Value.ToShortDateString()
+                                    </span>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <!--end card-body-->
-                    <div class="card-footer border-top-dashed">
-                        <div class="d-flex">
-                            <div class="flex-grow-1">
-                                <span class="text-muted">
-                                    <i class="ri-time-line align-bottom"></i>
-                                    27 Dec, 2021
-                                </span>
-                            </div>
-                            <div class="flex-shrink-0">
-                                <ul class="link-inline mb-0">
-                                    <li class="list-inline-item">
-                                        <a href="javascript:void(0)" class="text-muted"><i class="ri-eye-line align-bottom"></i> 24</a>
-                                    </li>
-                                    <li class="list-inline-item">
-                                        <a href="javascript:void(0)" class="text-muted">
-                                            <i class="ri-question-answer-line align-bottom"></i>
-                                            10
-                                        </a>
-                                    </li>
-                                    <li class="list-inline-item">
-                                        <a href="javascript:void(0)" class="text-muted"><i class="ri-attachment-2 align-bottom"></i> 10</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
                 </div>
+             }
+                 }
+            
                 <!--end card-->
-            </div>
-        </div>
-        <div class="my-3">
-            <button class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#creatertaskModal">Add More</button>
+         </div>
         </div>
     </div>
     <!--end tasks-list-->
@@ -486,7 +464,7 @@
         </div>
         <div data-simplebar class="tasks-wrapper px-3 mx-n3">
             <div id="inprogress-task" class="tasks">
-                <div class="card tasks-box">
+               @*  <div class="card tasks-box">
                     <div class="card-body">
                         <div class="d-flex mb-2">
                             <a href="javascript:void(0)" class="text-muted fw-medium fs-14 flex-grow-1">#VL2457</a>
@@ -570,42 +548,112 @@
                     <div class="progress progress-sm">
                         <div class="progress-bar bg-primary" role="progressbar" style="width: 55%" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
-                </div>
+                </div> *@
+                <!--end col-->
+          
                 <!--end card-->
-                <div class="card tasks-box">
-                    <div class="card-body">
-                        <div class="d-flex mb-2">
-                            <a href="javascript:void(0)" class="text-muted fw-medium fs-14 flex-grow-1">#VL2743</a>
-                            <div class="dropdown">
-                                <a href="javascript:void(0);" class="text-muted" id="dropdownMenuLink6" data-bs-toggle="dropdown" aria-expanded="false"><i class="ri-more-fill"></i></a>
-                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink6">
-                                    <li>
-                                        <a class="dropdown-item" href="apps-tasks-details.html">
-                                            <i class="ri-eye-fill align-bottom me-2 text-muted"></i>
-                                            View
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" href="#">
-                                            <i class="ri-edit-2-line align-bottom me-2 text-muted"></i>
-                                            Edit
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" data-bs-toggle="modal" href="#deleteRecordModal">
-                                            <i class="ri-delete-bin-5-line align-bottom me-2 text-muted"></i>
-                                            Delete
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <h6 class="fs-15 text-truncate task-title"><a href="apps-tasks-details.html" class="link-secondary">Change Old App Icon</a></h6>
-                        <p class="text-muted">
-                            Change app icons on Android: How do you change the
-                            look of your apps.
-                        </p>
-                        <div class="d-flex align-items-center">
+              @foreach (var item in Model)
+              {
+                    @if (item.TaskType == 3  && item.TaskStatus != "Completed")
+               {
+                       @*  @if (item.TaskStatus != "Completed" @* && item.TaskStatus == "Pending" *@
+                   
+                        <div class="card tasks-box">
+                            <div class="card-body">
+                                        @*  <a class="d-flex align-items-center" data-bs-toggle="collapse" href="#highPriority1(@item.Id)" role="button" aria-expanded="false" aria-controls="highPriority1(@item.Id)"> *@
+                                        <div class="d-flex mb-2">
+                                            <div class="flex-grow-1">
+                                                <h6 class="fs-15 mb-0 text-truncate task-title" >
+                                                    <a href="apps-tasks-details.html" class="link-secondary" style="color:darkblue">
+                                                        @item.TaskTitle
+                                                    </a>
+                                                </h6>
+                                            </div>
+
+                                            <div class="dropdown">
+                                                <a href="javascript:void(0);" class="text-muted" id="dropdownMenuLink6" data-bs-toggle="dropdown" aria-expanded="false"><i class="ri-more-fill"></i></a>
+                                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink6">
+                                                    <li>
+                                                        <a class="dropdown-item" href="apps-tasks-details.html">
+                                                            <i class="ri-eye-fill align-bottom me-2 text-muted"></i>
+                                                            View
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a class="dropdown-item" href="#">
+                                                            <i class="ri-edit-2-line align-bottom me-2 text-muted"></i>
+                                                            Edit
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a class="dropdown-item" data-bs-toggle="modal" href="#deleteRecordModal">
+                                                            <i class="ri-delete-bin-5-line align-bottom me-2 text-muted"></i>
+                                                            Delete
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>   
+                                        </div>
+                                        <h6 class="fs-14 mb-1"></h6>
+                                        <p class="text-muted">
+                                            @item.TaskDetails
+                                        </p>
+                                        <div class="d-flex align-items-center">
+                                            @if (item.TaskStatus == "Working")
+                                            {
+                                                <a class="badge bg-warning text-uppercase">  @item.TaskStatus  </a>
+                                            }
+                                            else if (item.TaskStatus == "Completed")
+                                            {
+                                                <a class="badge bg-success text-uppercase">  @item.TaskStatus  </a>
+                                            }
+                                            else if (item.TaskStatus == "Pending")
+                                            {
+                                                <a class="badge bg-primary text-uppercase">  @item.TaskStatus  </a>
+                                            }
+                                            else
+                                            {
+                                                <a class="badge bg-secondary text-uppercase">  @item.TaskStatus  </a>
+                                            }
+                                            <div class="flex-shrink-0">
+                                                <div class="avatar-group">
+                                                    <img src="~/@item.UserProfile" alt="" class="avatar-xs rounded-circle">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex align-items-center">
+                                            <div class="flex-grow-1">
+                                                <span class="text"> TaskStatus :</span>
+                                                @if (item.TaskStatus == "Completed")
+                                                {
+                                                    <select id="ddlStatus@(item.Id)" name="Status" class="form-control" disabled>
+                                                        @* <select id="ddlStatus@(item.Id)" name="Status" class="form-control"> *@
+                                                        <option selected disabled value="">---Select Status---</option>
+                                                        <option value="Pending">Pending</option>
+                                                        <option value="Working">Working</option>
+                                                        <option value="Completed">Completed</option>
+                                                    </select>
+                                                }
+                                                else
+                                                {
+                                                    <select id="ddlStatus@(item.Id)" name="Status" class="form-control" >
+                                                        @* <select id="ddlStatus@(item.Id)" name="Status" class="form-control"> *@
+                                                        <option selected disabled value="">---Select Status---</option>
+                                                        <option value="Pending">Pending</option>
+                                                        <option value="Working">Working</option>
+                                                        <option value="Completed">Completed</option>
+                                                    </select>
+                                                }
+
+                                    </div>
+                                </div>
+                                <div>
+                                    <button type="submit" class="btn btn-success btn-sm m-2" onclick="btnStatusUpdate('@item.Id')"><i class="bi bi-pencil-fill"></i>Status Update</button>
+                                    <button class="btn btn-primary btn-sm" data-bs-toggle="modal" onclick="btnTaskDetails('@item.Id')"> <i class="bi bi-chat-right-dots"></i> Details</button>
+
+                                </div>
+                        
+                        @* <div class="d-flex align-items-center">
                             <div class="flex-grow-1">
                                 <span class="badge bg-primary-subtle text-primary">Design</span>
                                 <span class="badge bg-primary-subtle text-primary">Website</span>
@@ -623,45 +671,38 @@
                                     </a>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="card-footer border-top-dashed">
-                        <div class="d-flex">
-                            <div class="flex-grow-1">
-                                <span class="text-muted">
-                                    <i class="ri-time-line align-bottom"></i>
-                                    24 Oct, 2021
-                                </span>
+                        </div> *@
                             </div>
-                            <div class="flex-shrink-0">
-                                <ul class="link-inline mb-0">
-                                    <li class="list-inline-item">
-                                        <a href="javascript:void(0)" class="text-muted"><i class="ri-eye-line align-bottom"></i> 64</a>
-                                    </li>
-                                    <li class="list-inline-item">
-                                        <a href="javascript:void(0)" class="text-muted">
-                                            <i class="ri-question-answer-line align-bottom"></i>
-                                            35
-                                        </a>
-                                    </li>
-                                    <li class="list-inline-item">
-                                        <a href="javascript:void(0)" class="text-muted"><i class="ri-attachment-2 align-bottom"></i> 23</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
+                 
+                   
                     <!--end card-body-->
-                    <div class="progress progress-sm">
-                        <div class="progress-bar bg-primary" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                </div>
+                            <div class="card-footer border-top-dashed">
+                                <div class="d-flex mb-1">
+                                    <div class="flex-grow-1">
+                                        <span class="text-muted">
+                                            <i class="ri-time-line align-bottom"></i>
+                                            @item.TaskDate.Value.ToShortDateString()
+                                        </span>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <span class="text-muted">
+                                            <i class="ri-time-line align-bottom"></i>
+                                            @item.TaskEndDate.Value.ToShortDateString()
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                      
+                  
+                   
+                }
+             }
+          
                 <!--end card-->
-            </div>
+           </div>
         </div>
-        <div class="my-3">
-            <button class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#creatertaskModal">Add More</button>
-        </div>
+        
     </div>
     <!--end tasks-list-->
     <div class="tasks-list">
@@ -957,106 +998,132 @@
         </div>
         <div data-simplebar class="tasks-wrapper px-3 mx-n3">
             <div id="completed-task" class="tasks">
-                <div class="card tasks-box">
-                    <div class="card-body">
-                        <div class="d-flex mb-2">
-                            <h6 class="fs-15 mb-0 flex-grow-1 text-truncate task-title">
-                                <a href="apps-tasks-details.html" class="link-secondary">
-                                    Create a
-                                    Blog Template UI
-                                </a>
-                            </h6>
-                            <div class="dropdown">
-                                <a href="javascript:void(0);" class="text-muted" id="dropdownMenuLink10" data-bs-toggle="dropdown" aria-expanded="false"><i class="ri-more-fill"></i></a>
-                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink10">
-                                    <li>
-                                        <a class="dropdown-item" href="apps-tasks-details.html">
-                                            <i class="ri-eye-fill align-bottom me-2 text-muted"></i>
-                                            View
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" href="#">
-                                            <i class="ri-edit-2-line align-bottom me-2 text-muted"></i>
-                                            Edit
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" data-bs-toggle="modal" href="#deleteRecordModal">
-                                            <i class="ri-delete-bin-5-line align-bottom me-2 text-muted"></i>
-                                            Delete
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <p class="text-muted">
-                            Landing page template with clean, minimal and modern
-                            design.
-                        </p>
-                        <div class="mb-3">
-                            <div class="d-flex mb-1">
-                                <div class="flex-grow-1">
-                                    <h6 class="text-muted mb-0"><span class="text-secondary">35%</span> of 100%</h6>
+                @foreach (var item in Model)
+              {
+                   @if (item.TaskStatus == "Completed")
+                   {
+                        <div class="card tasks-box">
+                             <div class="card-body">
+                                  <div class="d-flex mb-2">
+                                        <h6 class="fs-15 mb-0 text-truncate task-title">
+                                            <a href="apps-tasks-details.html" class="link-secondary" style="color:darkblue">
+                                                @item.TaskTitle
+                                            </a>
+                                        </h6>
+                                        <div class="dropdown">
+                                            <a href="javascript:void(0);" class="text-muted" id="dropdownMenuLink10" data-bs-toggle="dropdown" aria-expanded="false"><i class="ri-more-fill"></i></a>
+                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink10">
+                                                <li>
+                                                    <a class="dropdown-item" href="apps-tasks-details.html">
+                                                        <i class="ri-eye-fill align-bottom me-2 text-muted"></i>
+                                                        View
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item" href="#">
+                                                        <i class="ri-edit-2-line align-bottom me-2 text-muted"></i>
+                                                        Edit
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item" data-bs-toggle="modal" href="#deleteRecordModal">
+                                                        <i class="ri-delete-bin-5-line align-bottom me-2 text-muted"></i>
+                                                        Delete
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <h6 class="fs-14 mb-1"></h6>
+                                    <p class="text-muted">
+                                        @item.TaskDetails
+                                    </p>
+                                    <div class="d-flex align-items-center">
+                                        @if (item.TaskStatus == "Working")
+                                        {
+                                            <a class="badge bg-warning text-uppercase">  @item.TaskStatus  </a>
+                                        }
+                                        else if (item.TaskStatus == "Completed")
+                                        {
+                                            <a class="badge bg-success text-uppercase">  @item.TaskStatus  </a>
+                                        }
+                                        else if (item.TaskStatus == "Pending")
+                                        {
+                                            <a class="badge bg-primary text-uppercase">  @item.TaskStatus  </a>
+                                        }
+                                        else
+                                        {
+                                            <a class="badge bg-secondary text-uppercase">  @item.TaskStatus  </a>
+                                        }
+                                        <div class="flex-shrink-0">
+                                            <div class="avatar-group">
+                                                <img src="~/@item.UserProfile" alt="" class="avatar-xs rounded-circle">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-items-center">
+                                        <div class="flex-grow-1">
+                                            <span class="text"> TaskStatus :</span>
+                                            @if (item.TaskStatus == "Completed")
+                                            {
+                                                <select id="ddlStatus@(item.Id)" name="Status" class="form-control" disabled>
+                                                    @* <select id="ddlStatus@(item.Id)" name="Status" class="form-control"> *@
+                                                    <option selected disabled value="">---Select Status---</option>
+                                                    <option value="Pending">Pending</option>
+                                                    <option value="Working">Working</option>
+                                                    <option value="Completed">Completed</option>
+                                                </select>
+                                            }
+                                            else
+                                            {
+                                                <select id="ddlStatus@(item.Id)" name="Status" class="form-control">
+                                                    @* <select id="ddlStatus@(item.Id)" name="Status" class="form-control"> *@
+                                                    <option selected disabled value="">---Select Status---</option>
+                                                    <option value="Pending">Pending</option>
+                                                    <option value="Working">Working</option>
+                                                    <option value="Completed">Completed</option>
+                                                </select>
+                                            }
+
+                                        </div>
+                                    </div>
+                                    <div>
+                                    @if (item.TaskStatus == "Completed")
+                                    {
+                                        <button type="submit" class="btn btn-success btn-sm m-2" onclick="btnStatusUpdate('@item.Id')" disabled><i class="bi bi-pencil-fill" ></i>Status Update</button>
+                                        <button class="btn btn-primary btn-sm" data-bs-toggle="modal" onclick="btnTaskDetails('@item.Id')"> <i class="bi bi-chat-right-dots"></i> Details</button>
+                                    }
+                                    else
+                                    {
+                                        <button type="submit" class="btn btn-success btn-sm m-2" onclick="btnStatusUpdate('@item.Id')"><i class="bi bi-pencil-fill"></i>Status Update</button>
+                                        <button class="btn btn-primary btn-sm" data-bs-toggle="modal" onclick="btnTaskDetails('@item.Id')"> <i class="bi bi-chat-right-dots"></i> Details</button>
+                                    }
+                                    </div>
                                 </div>
-                                <div class="flex-shrink-0">
-                                    <span class="text-muted fw-medium">3 Day</span>
+                                <!--end card-body-->
+                                <div class="card-footer border-top-dashed">
+                                    <div class="d-flex mb-1">
+                                        <div class="flex-grow-1">
+                                            <span class="text-muted">
+                                                <i class="ri-time-line align-bottom"></i>
+                                                @item.TaskDate.Value.ToShortDateString()
+                                            </span>
+                                        </div>
+                                        <div class="flex-grow-1">
+                                            <span class="text-muted">
+                                                <i class="ri-time-line align-bottom"></i>
+                                                @item.TaskEndDate.Value.ToShortDateString()
+                                            </span>
+                                        </div>
+                                    </div>
                                 </div>
+                                <!--end card-body-->
                             </div>
-                            <div class="progress rounded-3 progress-sm">
-                                <div class="progress-bar bg-primary" role="progressbar" style="width: 35%" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                        </div>
-                        <div class="d-flex align-items-center">
-                            <div class="flex-grow-1">
-                                <span class="badge bg-primary-subtle text-primary">Design</span>
-                                <span class="badge bg-primary-subtle text-primary">Website</span>
-                            </div>
-                            <div class="flex-shrink-0">
-                                <div class="avatar-group">
-                                    <a href="javascript: void(0);" class="avatar-group-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Nancy">
-                                        <img src="~/UserHome/minimal/assets/images/users/avatar-8.jpg" alt="" class="rounded-circle avatar-xxs">
-                                    </a>
-                                    <a href="javascript: void(0);" class="avatar-group-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Frank">
-                                        <img src="~/UserHome/minimal/assets/images/users/avatar-7.jpg" alt="" class="rounded-circle avatar-xxs">
-                                    </a>
-                                    <a href="javascript: void(0);" class="avatar-group-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Tonya">
-                                        <img src="~/UserHome/minimal/assets/images/users/avatar-6.jpg" alt="" class="rounded-circle avatar-xxs">
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-footer border-top-dashed">
-                        <div class="d-flex">
-                            <div class="flex-grow-1">
-                                <h6 class="text-muted mb-0">#VL2451</h6>
-                            </div>
-                            <div class="flex-shrink-0">
-                                <ul class="link-inline mb-0">
-                                    <li class="list-inline-item">
-                                        <a href="javascript:void(0)" class="text-muted"><i class="ri-eye-line align-bottom"></i> 24</a>
-                                    </li>
-                                    <li class="list-inline-item">
-                                        <a href="javascript:void(0)" class="text-muted">
-                                            <i class="ri-question-answer-line align-bottom"></i>
-                                            10
-                                        </a>
-                                    </li>
-                                    <li class="list-inline-item">
-                                        <a href="javascript:void(0)" class="text-muted"><i class="ri-attachment-2 align-bottom"></i> 10</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <!--end card-body-->
-                </div>
+                        }
+                  
+              }
                 <!--end card-->
             </div>
-        </div>
-        <div class="my-3">
-            <button class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#creatertaskModal">Add More</button>
         </div>
     </div>
     <!--end tasks-list-->
@@ -1165,10 +1232,77 @@
         </div>
     </div>
     <!--end tasks-list-->
+
+
+
+    
+ @* -------------modal start--------------------- *@
+   <div class="modal fade zoomIn" id="showDetailsModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0">
+            <div class="modal-header p-3 bg-primary-subtle">
+                <h5 class="modal-title" id="exampleModalLabel">Task Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"></button>
+            </div>
+            <form class="tablelist-form" autocomplete="off">
+                <div class="modal-body">
+                    <div class="row g-3">
+                        <div class="col-lg-12">
+                            <label for="projectName-field" class="form-label">UserName</label>
+                            <span id="UserName" class="form-control"></span>
+                        </div>
+                        <!--end col-->
+                        <div class="col-lg-12">
+                            <div>
+                                <label for="TaskTitle" class="form-label">TaskTitle</label>
+                                <span type="text" id="taskTitle-field" class="form-control"></span>
+                            </div>
+                        </div>
+                        <!--end col-->
+                        <div class="col-lg-12">
+                            <label for="TaskDescription" class="form-label">Description</label>
+                            <textarea class="form-control " id="taskDescription-field" rows="3" readonly></textarea>
+                        </div>
+                        <!--end col-->
+                        <div class="col-lg-6">
+                            <label for="TaskDate" class="form-label">Start Date</label>
+                            <span id="taskstartdate-field" class="form-control"> </span>
+                        </div>
+                        <!--end col-->
+                        <div class="col-lg-6">
+                            <label for="TaskEndDate" class="form-label">End Date</label>
+                            <span id="taskenddate-field" class="form-control"></span>
+                        </div>
+                        <!--end col-->
+                        <div class="col-lg-6">
+                            <label for="TaskPriority" class="form-label">TaskType</label>
+                            <span id="taskpriority-field" class="form-control"></span>
+                        </div>
+                        <!--end col-->
+                        <div class="col-lg-6">
+                            <label for="TaskStatus" class="form-label">Status</label>
+                            <span id="taskstatus-field" class="form-control"></span>
+                        </div>
+                        <!--end col-->
+                    </div>
+                    <!--end row-->
+                </div>
+                <div class="modal-footer">
+                    <div class="hstack gap-2 justify-content-end">
+                        <button type="button" class="btn btn-light" id="close-modal" data-bs-dismiss="modal">Close</button>
+           
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+  </div>
 </div>
+<!--end modal-->
+
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
 <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
-<script src="~/moduls/taskscript.js"></script>
+<script src="~/moduls/taskscript.js" asp-append-version="true"></script>
