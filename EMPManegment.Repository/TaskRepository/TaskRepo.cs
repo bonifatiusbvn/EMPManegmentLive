@@ -79,6 +79,11 @@ namespace EMPManegment.Repository.TaskRepository
                 if (gettask != null)
                 {
                     gettask.TaskStatus = updatetask.TaskStatus;
+                    gettask.TaskTitle = updatetask.TaskTitle;
+                    gettask.TaskDetails = updatetask.TaskDetails;
+                    gettask.TaskType = updatetask.TaskType;
+                    gettask.TaskDate = updatetask.TaskDate;
+                    gettask.TaskEndDate = updatetask.TaskEndDate;
                 }
                 Context.TblTaskDetails.Update(gettask);
                 Context.SaveChanges();

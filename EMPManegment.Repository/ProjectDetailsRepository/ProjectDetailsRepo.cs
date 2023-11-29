@@ -1,8 +1,13 @@
 ﻿using EMPManagment.API;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.ProjectModels;
+using EMPManegment.EntityModels.ViewModels.TaskModels;
 using EMPManegment.Inretface.Interface.ProjectDetails;
+using Microsoft.CodeAnalysis;
+using Microsoft.EntityFrameworkCore;
+using NuGet.ProjectModel;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -50,7 +55,7 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
             }
             return response;
         }
-        public async Task<IEnumerable<ProjectDetailView>> GetProjectList()
+        public async Task<IEnumerable<ProjectDetailView>> GetProjectList(string? searchby, string? searchfor)
         {
             IEnumerable<ProjectDetailView> data = Context.TblProjectMasters.ToList().Select(a => new ProjectDetailView
             {
@@ -67,7 +72,44 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
                 ProjectDeadline = a.ProjectDeadline,
                 CreatedOn= a.CreatedOn
             });
+            if(searchby == "ProjectTitle" && searchfor != null)
+            {
+                data = data.Where(ser => ser.ProjectTitle.ToLower().Contains(searchfor.ToLower())).ToList();
+            }
+            if (searchby == "ProjectStatus" && searchfor != null)
+            {
+                data = data.Where(ser => ser.ProjectStatus.ToLower().Contains(searchfor.ToLower())).ToList();
+            }
             return data;
+        }
+
+        public async Task<List<ProjectDetailView>> GetUserProjectList(ProjectDetailView GetUserProjectList)
+        {
+            var UserData = new List<ProjectDetailView>();
+            var data = await Context.TblProjectMasters.Where(x => x.UserId == GetUserProjectList.UserId).ToListAsync();
+            if (data != null)
+            {
+                foreach (var item in data)
+                {
+                    UserData.Add(new ProjectDetailView()
+                    {
+                        ProjectId = item.ProjectId,
+                        ProjectType = item.ProjectType,
+                        ProjectTitle = item.ProjectTitle,
+                        ProjectHead = item.ProjectHead,
+                        ProjectDescription = item.ProjectDescription,
+                        ProjectLocation = item.ProjectLocation,
+                        ProjectPriority = item.ProjectPriority,
+                        ProjectStatus = item.ProjectStatus,
+                        CreatedOn = item.CreatedOn,
+                        ProjectStartDate = item.ProjectStartDate,
+                        ProjectEndDate = item.ProjectEndDate,
+                        ProjectDeadline = item.ProjectDeadline,
+                        UserId = item.UserId,
+                    });
+                }
+            }
+            return UserData;
         }
     }
 }

@@ -1,9 +1,12 @@
 ﻿using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.ProjectModels;
+using EMPManegment.EntityModels.ViewModels.TaskModels;
 using EMPManegment.Inretface.Interface.ProjectDetails;
 using EMPManegment.Inretface.Services.ProjectDetailsServices;
+using EMPManegment.Inretface.Services.TaskServices;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Build.ObjectModelRemoting;
 using System.Net;
 
 namespace EMPManagment.API.Controllers
@@ -47,10 +50,18 @@ namespace EMPManagment.API.Controllers
 
         [HttpGet]
         [Route("GetProjectList")]
-        public async Task<IActionResult> GetProjectList()
+        public async Task<IActionResult> GetProjectList(string? searchby, string? searchfor)
         {
-                IEnumerable<ProjectDetailView> projectlist = await ProjectDetail.GetProjectList();
+                IEnumerable<ProjectDetailView> projectlist = await ProjectDetail.GetProjectList(searchby,searchfor);
                 return Ok(new { code = 200, data = projectlist.ToList() });
+        }
+
+        [HttpPost]
+        [Route("GetUserProjectList")]
+        public async Task<IActionResult> GetUserProjectList(ProjectDetailView GetProjects)
+        {
+            List<ProjectDetailView> userprojectList = await ProjectDetail.GetUserProjectList(GetProjects);
+            return Ok(new { code = 200, data = userprojectList.ToList() });
         }
     }
 }

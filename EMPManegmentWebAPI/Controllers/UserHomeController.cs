@@ -1,4 +1,5 @@
-﻿using EMPManagment.Web.Models.API;
+﻿using Azure;
+using EMPManagment.Web.Models.API;
 using EMPManegment.EntityModels.View_Model;
 using EMPManegment.EntityModels.ViewModels;
 using EMPManegment.EntityModels.ViewModels.Models;
@@ -206,6 +207,7 @@ namespace EMPManagment.API.Controllers
                 {
                     updateresponsemodel.Code = (int)HttpStatusCode.OK;
                     updateresponsemodel.Message = UpdateTask.Result.Message;
+                    updateresponsemodel.Icone = UpdateTask.Result.Icone;
                 }
                 else
                 {

@@ -21,6 +21,7 @@
 $(document).ready(function () {
     GetDocumentList();
     GetDocumentType();
+    GetProjectList();
 });
 
 function GetDocumentType() {
@@ -81,4 +82,50 @@ function UploadDocument() {
         }
     });
 }
+
+function GetUserProjectList() {
+
+    $.ajax({
+        url: '/Project/GetUserProjectList',
+        type: 'Post',
+        dataType: 'json',
+        processData: false,
+        contentType: false,
+        complete: function (Result) {
+
+            $('#dvprojectdetail').html(Result.responseText);
+        },
+        Error: function () {
+            Swal.fire({
+                title: "Can't get data!",
+                icon: 'warning',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'OK',
+            })
+        }
+    })
+}
+
+function GetProjectList() {
+
+    $.ajax({
+        url: '/Project/GetProjectList',
+        type: 'Post',
+        dataType: 'json',
+        processData: false,
+        contentType: false,
+        complete: function (Result) {
+            $('#dvuserprojectlist').html(Result.responseText);
+        },
+        Error: function () {
+            Swal.fire({
+                title: "Can't get data!",
+                icon: 'warning',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'OK',
+            })
+        }
+    })
+}
+
 
