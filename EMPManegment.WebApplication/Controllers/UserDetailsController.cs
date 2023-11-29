@@ -501,8 +501,8 @@ namespace EMPManegment.Web.Controllers
         {
             try
             {
-                var adloginobj = HttpContext.Request.Form["FINDBYMONTH"];
-                var month = JsonConvert.DeserializeObject<string>(adloginobj);
+                var addmonthobj = HttpContext.Request.Form["FINDBYMONTH"];
+                var month = JsonConvert.DeserializeObject<string>(addmonthobj);
                 List<UserAttendanceModel> getAttendanceList = new List<UserAttendanceModel>();
                 string Userid = HttpContext.Session.GetString("UserID");
                 Guid UserId = Guid.Parse(Userid);

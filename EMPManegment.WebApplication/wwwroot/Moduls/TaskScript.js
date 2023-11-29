@@ -4,12 +4,11 @@
 });
 
 
-function showadddetails() {
- 
+function showadddetails() { 
     ClearTextBox();
     GetTaskType();
     GetUsername();
-    $('#adddeals').modal('show');
+    $('#addtasks').modal('show');
 }
 
 
@@ -48,7 +47,6 @@ function TaskTypetext(sel) {
 }
 
 function btnSaveTaskDetail() {
-
     if ($('#frmtaskdetails').valid()) {
         var formData = new FormData();
         formData.append("TaskType", $("#taskType").val());
@@ -73,7 +71,7 @@ function btnSaveTaskDetail() {
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'OK',
                     }).then(function () {
-                        window.location = '/Task/UserTasks';
+                        window.location = '/Task/AllTaskDetails';
                     });
                 }
             }
@@ -154,7 +152,7 @@ function GetUserTaskDetails() {
     })
 }
 
-function btnStatusUpdate(Id) { 
+function btnStatusUpdate(Id) {debugger 
 
     var StausChange = {
         TaskStatus: $('#ddlStatus' + Id).val(),
@@ -162,7 +160,7 @@ function btnStatusUpdate(Id) {
     }
     var form_data = new FormData();
     form_data.append("STATUSUPDATE", JSON.stringify(StausChange));
-
+    debugger
     $.ajax({
         url: '/Task/UpdateUserTaskStatus',
         type: 'Post',
@@ -170,14 +168,16 @@ function btnStatusUpdate(Id) {
         dataType: 'json',
         contentType: false,
         processData: false,
-        success: function (Result) {
+        success: function (Result) {debugger
             GetUserTaskDetails();
             Swal.fire({
                 title: Result.message,
                 icon: 'success',
                 confirmButtonColor: '#3085d6',
                 confirmButtonText: 'OK',
-            })
+            }).then(function () {
+                window.location = '/Task/UserTasks';
+            });
         },
         error: function (error, status) {
             alert(error);
@@ -185,15 +185,13 @@ function btnStatusUpdate(Id) {
     })
 }
 
-function btnTaskDetails(Id)
-{
+function btnTaskDetails(Id){
     $.ajax({
         url: '/Task/GetTaskDetailsById?Id=' + Id,
-        type: "Get",
+        type: "get",
         contentType: 'application/json;charset=utf-8;',
         dataType: 'json',
         success: function (response) {
-
             $('#showDetailsModal').modal('show');
             $('#UserName').text(response.userName);
             $('#taskTitle-field').text(response.taskTitle);
@@ -212,6 +210,13 @@ function btnTaskDetails(Id)
         }
     });
 }
+//$('#ddlStatus').on('change', function () {debugger
+//    $(this).find('option').prop('disabled', false);
+//    var val = $(this).val();
+//    var prof = val.split("Completed");
+//    alert(prof[0]);
+//    $(this).find('option[value="' + prof[0] + '"]').prop('disabled', true);
+//});
 
 function AllTaskDetailsList() {
     $.ajax({

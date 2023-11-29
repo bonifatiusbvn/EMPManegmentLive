@@ -23,9 +23,13 @@ namespace EMPManegment.Services.ProjectDetails
         {
             return await ProjectDetails.CreateProject(createProject);
         }
-        public async Task<IEnumerable<ProjectDetailView>> GetProjectList()
+        public async Task<IEnumerable<ProjectDetailView>> GetProjectList(string? searchby, string? searchfor)
         {
-            return await ProjectDetails.GetProjectList();
+            return await ProjectDetails.GetProjectList(searchby,searchfor);
+        }
+        public async Task<List<ProjectDetailView>> GetUserProjectList(ProjectDetailView GetUserProjectList)
+        {
+            return await ProjectDetails.GetUserProjectList(GetUserProjectList);
         }
     }
 }
