@@ -1,4 +1,4 @@
-﻿using EMPManegment.EntityModels.View_Model;
+﻿using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -8,9 +8,10 @@ using System.Threading.Tasks;
 
 namespace EMPManegment.EntityModels.ViewModels.VendorModels
 {
-    public class VendorDetailsView
+    public class AddVendorDetailsView
     {
         public int Id { get; set; }
+
         public string VendorFirstName { get; set; } = null!;
         public string VendorLastName { get; set; } = null!;
         public string? VendorEmail { get; set; }
@@ -25,7 +26,7 @@ namespace EMPManegment.EntityModels.ViewModels.VendorModels
         public string? VendorCompany { get; set; }
         public string? VendorCompanyEmail { get; set; }
         public string? VendorCompanyNumber { get; set; }
-        public string? VendorCompanyLogo { get; set; }
+        //public IFormFile VendorCompanyLogo { get; set; }
         public string? VendorBankAccountNo { get; set; }
         public string? VendorBankName { get; set; }
         public string VendorBankBranch { get; set; } = null!;
