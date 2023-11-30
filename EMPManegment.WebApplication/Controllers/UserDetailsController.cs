@@ -57,8 +57,6 @@ namespace EMPManegment.Web.Controllers
         {
             try
             {
-
-
                 var draw = Request.Form["draw"].FirstOrDefault();
                 var start = Request.Form["start"].FirstOrDefault();
                 var length = Request.Form["length"].FirstOrDefault();
@@ -217,9 +215,14 @@ namespace EMPManegment.Web.Controllers
         {
             try
             {
-                List<DocumentInfoView> documentList = new List<DocumentInfoView>();
+                string userid = HttpContext.Session.GetString("UserID");
+                TaskDetailsView usertaskdetails = new TaskDetailsView
+                {
+                    UserId = Guid.Parse(userid),
+                };
                 HttpClient client = WebAPI.Initil();
-                ApiResponseModel res = await APIServices.GetAsync("", "UserDetails/GetDocumentList");
+                List<DocumentInfoView> documentList = new List<DocumentInfoView>();
+                ApiResponseModel res = await APIServices.GetAsync("", "UserDetails/GetDocumentList?Userid=" + userid);
                 if (res.code == 200)
                 {
                     documentList = JsonConvert.DeserializeObject<List<DocumentInfoView>>(res.data.ToString());
@@ -229,7 +232,28 @@ namespace EMPManegment.Web.Controllers
             catch (Exception ex)
             {
                 throw ex;
-            } 
+            }
+            //try
+            //{
+            //    string Userid = HttpContext.Session.GetString("UserID");
+            //    TaskDetailsView usertaskdetails = new TaskDetailsView
+            //    {
+            //        UserId = Guid.Parse(Userid),
+            //    };
+            //    HttpClient client = WebAPI.Initil();
+            //    List<TaskDetailsView> TaskList = new List<TaskDetailsView>();
+            //    ApiResponseModel response = await APIServices.PostAsync("", "UserHome/GetTaskDetails?Taskid=" + Userid);
+            //    if (response.code == 200)
+            //    {
+            //        TaskList = JsonConvert.DeserializeObject<List<TaskDetailsView>>(response.data.ToString());
+
+            //    }
+            //    return View(TaskList);
+            //}
+            //catch (Exception ex)
+            //{
+            //    throw ex;
+            //}
         }
         [HttpPost]
         public async Task<JsonResult> UploadDocument(EmpDocumentView doc)
