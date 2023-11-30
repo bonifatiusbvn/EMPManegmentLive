@@ -176,7 +176,7 @@
 
                         
 
-                        <div class="dropdown topbar-head-dropdown ms-1 header-item">
+                        @* <div class="dropdown topbar-head-dropdown ms-1 header-item">
                             <button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class='bx bx-category-alt fs-22'></i>
                             </button>
@@ -239,7 +239,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> *@
 
                         <div class="dropdown topbar-head-dropdown ms-1 header-item">
                             <button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle" id="page-header-cart-dropdown" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-haspopup="true" aria-expanded="false">
@@ -395,11 +395,11 @@
                             </div>
                         </div>
 
-                        <div class="ms-1 header-item d-none d-sm-flex">
+                        @* <div class="ms-1 header-item d-none d-sm-flex">
                             <button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle" data-toggle="fullscreen">
                                 <i class='bx bx-fullscreen fs-22'></i>
                             </button>
-                        </div>
+                        </div> *@
 
                         <div class="ms-1 header-item d-none d-sm-flex">
                             <button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle light-dark-mode">
@@ -697,13 +697,13 @@
                                 <h6 class="dropdown-header">Welcome @Accessor.HttpContext.Session.GetString("FirstName")!</h6>
                                 <a class="dropdown-item" href="pages-profile.html"><i class="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Profile</span></a>
                                 <a class="dropdown-item" href="apps-chat.html"><i class="mdi mdi-message-text-outline text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Messages</span></a>
-                                <a class="dropdown-item" href="apps-tasks-kanban.html"><i class="mdi mdi-calendar-check-outline text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Taskboard</span></a>
+                                <a class="dropdown-item" asp-action="UserTasks" asp-controller="Task"><i class="mdi mdi-calendar-check-outline text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Taskboard</span></a>
                                 <a class="dropdown-item" href="pages-faqs.html"><i class="mdi mdi-lifebuoy text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Help</span></a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="pages-profile.html"><i class="mdi mdi-wallet text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Balance : <b>$5971.67</b></span></a>
                                 <a class="dropdown-item" href="pages-profile-settings.html"><span class="badge bg-success-subtle text-success mt-1 float-end">New</span><i class="mdi mdi-cog-outline text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Settings</span></a>
-                                <a class="dropdown-item" href="auth-lockscreen-basic.html"><i class="mdi mdi-lock text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Lock screen</span></a>
-                                <a class="dropdown-item" href="auth-logout-basic.html"><i class="mdi mdi-logout text-muted fs-16 align-middle me-1"></i> <span class="align-middle" data-key="t-logout">Logout</span></a>
+                                <a class="dropdown-item" asp-action="LockScreen" asp-controller="UserDetails"><i class="mdi mdi-lock text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Lock screen</span></a>
+                                <a class="dropdown-item" asp-action="Logout" asp-controller="UserLogin"><i class="mdi mdi-logout text-muted fs-16 align-middle me-1"></i> <span class="align-middle" data-key="t-logout">Logout</span></a>
                             </div>
                         </div>
                     </div>
@@ -740,21 +740,21 @@
             <!-- LOGO -->
             <div class="navbar-brand-box">
                 <!-- Dark Logo-->
-                <a href="index.html" class="logo logo-dark">
+                <a asp-action="UserHome" asp-controller="Home" class="logo logo-dark">
                     <span class="logo-sm">
-                        <img src="~/UserHome/minimal/assets/images/logo-sm.png" alt="" height="22">
+                        <img src="~/UserHome/minimal/assets/images/logo - bonifatius.jpeg" alt="" height="22">
                     </span>
                     <span class="logo-lg">
-                        <img src="~/UserHome/minimal/assets/images/logo-dark.png" alt="" height="17">
+                        <img src="~/UserHome/minimal/assets/images/logo - bonifatius.jpeg" alt="" height="17">
                     </span>
                 </a>
                 <!-- Light Logo-->
-                <a href="index.html" class="logo logo-light">
+                <a asp-action="UserHome" asp-controller="Home" class="logo logo-light">
                     <span class="logo-sm">
-                        <img src="~/UserHome/minimal/assets/images/logo-sm.png" alt="" height="22">
+                        <img src="~/UserHome/minimal/assets/images/logo - bonifatius.jpeg" alt="" height="22">
                     </span>
                     <span class="logo-lg">
-                        <img src="~/UserHome/minimal/assets/images/logo-light.png" alt="" height="17">
+                        <img src="~/UserHome/minimal/assets/images/logo - bonifatius.jpeg" alt="" height="17">
                     </span>
                 </a>
                 <button type="button" class="btn btn-sm p-0 fs-20 header-item float-end btn-vertical-sm-hover" id="vertical-hover">
@@ -764,7 +764,6 @@
 
             <div id="scrollbar">
                 <div class="container-fluid">
-
                     <div id="two-column-menu">
                     </div>
                     <ul class="navbar-nav" id="navbar-nav">
@@ -782,7 +781,7 @@
                                         <a href="dashboard-crm.html" class="nav-link" data-key="t-crm"> CRM </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="index.html" class="nav-link" data-key="t-ecommerce"> Ecommerce </a>
+                                        <a asp-action="UserHome" asp-controller="Home" class="nav-link" data-key="t-ecommerce"> Ecommerce </a>
                                     </li>
                                     <li class="nav-item">
                                         <a href="dashboard-crypto.html" class="nav-link" data-key="t-crypto"> Crypto </a>
@@ -884,13 +883,13 @@
                                         <div class="collapse menu-dropdown" id="sidebarProjects">
                                             <ul class="nav nav-sm flex-column">
                                                 <li class="nav-item">
-                                                    <a href="apps-projects-list.html" class="nav-link" data-key="t-list"> List </a>
+                                                    <a asp-action="ProjectList" asp-controller="Project" class="nav-link" data-key="t-list"> List </a>
                                                 </li>
                                                 <li class="nav-item">
                                                     <a href="apps-projects-overview.html" class="nav-link" data-key="t-overview"> Overview </a>
                                                 </li>
                                                 <li class="nav-item">
-                                                    <a href="apps-projects-create.html" class="nav-link" data-key="t-create-project"> Create Project </a>
+                                                    <a asp-action="CreateProject" asp-controller="Project" class="nav-link" data-key="t-create-project"> Create Project </a>
                                                 </li>
                                             </ul>
                                         </div>
@@ -902,10 +901,10 @@
                                         <div class="collapse menu-dropdown" id="sidebarTasks">
                                             <ul class="nav nav-sm flex-column">
                                                 <li class="nav-item">
-                                                    <a href="apps-tasks-kanban.html" class="nav-link" data-key="t-kanbanboard"> Kanban Board </a>
+                                                    <a asp-action="UserTasks" asp-controller="Task" class="nav-link" data-key="t-kanbanboard">Task Board </a>
                                                 </li>
                                                 <li class="nav-item">
-                                                    <a href="apps-tasks-list-view.html" class="nav-link" data-key="t-list-view"> List View </a>
+                                                    <a asp-action="AllTaskDetails" asp-controller="Task" class="nav-link" data-key="t-list-view"> List View </a>
                                                 </li>
                                                 <li class="nav-item">
                                                     <a href="apps-tasks-details.html" class="nav-link" data-key="t-task-details"> Task Details </a>
@@ -974,7 +973,7 @@
                                                     <a href="apps-invoices-details.html" class="nav-link" data-key="t-details"> Details </a>
                                                 </li>
                                                 <li class="nav-item">
-                                                    <a href="apps-invoices-create.html" class="nav-link" data-key="t-create-invoice"> Create Invoice </a>
+                                                    <a asp-action="CreateInvoice" asp-controller="Sales" class="nav-link" data-key="t-create-invoice"> Create Invoice </a>
                                                 </li>
                                             </ul>
                                         </div>
@@ -1133,223 +1132,51 @@
                             <div class="collapse menu-dropdown" id="sidebarAuth">
                                 <ul class="nav nav-sm flex-column">
                                     <li class="nav-item">
-                                        <a href="#sidebarSignIn" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarSignIn" data-key="t-signin">
-                                            Sign In
-                                        </a>
-                                        <div class="collapse menu-dropdown" id="sidebarSignIn">
-                                            <ul class="nav nav-sm flex-column">
-                                                <li class="nav-item">
-                                                    <a href="auth-signin-basic.html" class="nav-link" data-key="t-basic"> Basic </a>
-                                                </li>
-                                                <li class="nav-item">
-                                                    <a href="auth-signin-cover.html" class="nav-link" data-key="t-cover"> Cover </a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="#sidebarSignUp" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarSignUp" data-key="t-signup">
-                                            Sign Up
-                                        </a>
-                                        <div class="collapse menu-dropdown" id="sidebarSignUp">
-                                            <ul class="nav nav-sm flex-column">
-                                                <li class="nav-item">
-                                                    <a href="auth-signup-basic.html" class="nav-link" data-key="t-basic"> Basic </a>
-                                                </li>
-                                                <li class="nav-item">
-                                                    <a href="auth-signup-cover.html" class="nav-link" data-key="t-cover"> Cover </a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </li>
-
-                                    <li class="nav-item">
-                                        <a href="#sidebarResetPass" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarResetPass" data-key="t-password-reset">
+                                        <a class="nav-link" asp-action="ResetUserPassword" asp-controller="UserDetails" data-key="t-password-reset">
                                             Password Reset
                                         </a>
-                                        <div class="collapse menu-dropdown" id="sidebarResetPass">
-                                            <ul class="nav nav-sm flex-column">
-                                                <li class="nav-item">
-                                                    <a href="auth-pass-reset-basic.html" class="nav-link" data-key="t-basic"> Basic </a>
-                                                </li>
-                                                <li class="nav-item">
-                                                    <a href="auth-pass-reset-cover.html" class="nav-link" data-key="t-cover"> Cover </a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </li>
 
-                                    <li class="nav-item">
-                                        <a href="#sidebarchangePass" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarchangePass" data-key="t-password-create">
-                                            Password Create
-                                        </a>
-                                        <div class="collapse menu-dropdown" id="sidebarchangePass">
-                                            <ul class="nav nav-sm flex-column">
-                                                <li class="nav-item">
-                                                    <a href="auth-pass-change-basic.html" class="nav-link" data-key="t-basic">
-                                                        Basic
-                                                    </a>
-                                                </li>
-                                                <li class="nav-item">
-                                                    <a href="auth-pass-change-cover.html" class="nav-link" data-key="t-cover">
-                                                        Cover
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </li>
-
-                                    <li class="nav-item">
-                                        <a href="#sidebarLockScreen" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarLockScreen" data-key="t-lock-screen">
-                                            Lock Screen
-                                        </a>
-                                        <div class="collapse menu-dropdown" id="sidebarLockScreen">
-                                            <ul class="nav nav-sm flex-column">
-                                                <li class="nav-item">
-                                                    <a href="auth-lockscreen-basic.html" class="nav-link" data-key="t-basic"> Basic </a>
-                                                </li>
-                                                <li class="nav-item">
-                                                    <a href="auth-lockscreen-cover.html" class="nav-link" data-key="t-cover"> Cover </a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </li>
-
-                                    <li class="nav-item">
-                                        <a href="#sidebarLogout" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarLogout" data-key="t-logout">
-                                            Logout
-                                        </a>
-                                        <div class="collapse menu-dropdown" id="sidebarLogout">
-                                            <ul class="nav nav-sm flex-column">
-                                                <li class="nav-item">
-                                                    <a href="auth-logout-basic.html" class="nav-link" data-key="t-basic"> Basic </a>
-                                                </li>
-                                                <li class="nav-item">
-                                                    <a href="auth-logout-cover.html" class="nav-link" data-key="t-cover"> Cover </a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="#sidebarSuccessMsg" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarSuccessMsg" data-key="t-success-message">
-                                            Success Message
-                                        </a>
-                                        <div class="collapse menu-dropdown" id="sidebarSuccessMsg">
-                                            <ul class="nav nav-sm flex-column">
-                                                <li class="nav-item">
-                                                    <a href="auth-success-msg-basic.html" class="nav-link" data-key="t-basic"> Basic </a>
-                                                </li>
-                                                <li class="nav-item">
-                                                    <a href="auth-success-msg-cover.html" class="nav-link" data-key="t-cover"> Cover </a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="#sidebarTwoStep" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarTwoStep" data-key="t-two-step-verification">
-                                            Two Step Verification
-                                        </a>
-                                        <div class="collapse menu-dropdown" id="sidebarTwoStep">
-                                            <ul class="nav nav-sm flex-column">
-                                                <li class="nav-item">
-                                                    <a href="auth-twostep-basic.html" class="nav-link" data-key="t-basic"> Basic </a>
-                                                </li>
-                                                <li class="nav-item">
-                                                    <a href="auth-twostep-cover.html" class="nav-link" data-key="t-cover"> Cover </a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="#sidebarErrors" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarErrors" data-key="t-errors">
-                                            Errors
-                                        </a>
-                                        <div class="collapse menu-dropdown" id="sidebarErrors">
-                                            <ul class="nav nav-sm flex-column">
-                                                <li class="nav-item">
-                                                    <a href="auth-404-basic.html" class="nav-link" data-key="t-404-basic"> 404 Basic </a>
-                                                </li>
-                                                <li class="nav-item">
-                                                    <a href="auth-404-cover.html" class="nav-link" data-key="t-404-cover"> 404 Cover </a>
-                                                </li>
-                                                <li class="nav-item">
-                                                    <a href="auth-404-alt.html" class="nav-link" data-key="t-404-alt"> 404 Alt </a>
-                                                </li>
-                                                <li class="nav-item">
-                                                    <a href="auth-500.html" class="nav-link" data-key="t-500"> 500 </a>
-                                                </li>
-                                                <li class="nav-item">
-                                                    <a href="auth-offline.html" class="nav-link" data-key="t-offline-page"> Offline Page </a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-
-                         <li class="nav-item">
-                            <a class="nav-link menu-link" href="#sidebarPages" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarPages">
-                                <i data-feather="command" class="icon-dual"></i> <span data-key="t-pages">Pages</span>
-                            </a>
-                            <div class="collapse menu-dropdown" id="sidebarPages">
-                                <ul class="nav nav-sm flex-column">
-                                    <li class="nav-item">
-                                        <a class="nav-link" data-key="t-user-list" asp-action="DisplayUserList" asp-controller="UserDetails"> User List </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="#sidebarProfile" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarProfile" data-key="t-profile">
-                                            Profile
-                                        </a>
-                                        <div class="collapse menu-dropdown" id="sidebarProfile">
-                                            <ul class="nav nav-sm flex-column">
-                                                <li class="nav-item">
-                                                    <a href="pages-profile.html" class="nav-link" data-key="t-simple-page"> Simple Page </a>
-                                                </li>
-                                                <li class="nav-item">
-                                                    <a href="pages-profile-settings.html" class="nav-link" data-key="t-settings"> Settings </a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a asp-action="UserActiveDecative" asp-controller="UserDetails" class="nav-link" data-key="t-team">ActiveDeactive</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="pages-timeline.html" class="nav-link" data-key="t-timeline"> Timeline </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="pages-faqs.html" class="nav-link" data-key="t-faqs"> FAQs </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="pages-pricing.html" class="nav-link" data-key="t-pricing"> Pricing </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="pages-gallery.html" class="nav-link" data-key="t-gallery"> Gallery </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="pages-maintenance.html" class="nav-link" data-key="t-maintenance"> Maintenance </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="pages-coming-soon.html" class="nav-link" data-key="t-coming-soon"> Coming Soon </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="pages-sitemap.html" class="nav-link" data-key="t-sitemap"> Sitemap </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="pages-search-results.html" class="nav-link" data-key="t-search-results"> Search Results </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="pages-privacy-policy.html" class="nav-link" data-key="t-privacy-policy">Privacy Policy</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="pages-term-conditions.html" class="nav-link" data-key="t-term-conditions">Term & Conditions</a>
                                     </li>
                                 </ul>
                             </div>
                         </li>
 
                         <li class="nav-item">
+                            <a class="nav-link menu-link" href="#sidebarPages" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarPages">
+                                <i data-feather="command" class="icon-dual"></i> <span data-key="t-pages">Pages</span>
+                            </a>
+                            <div class="collapse menu-dropdown" id="sidebarPages">
+                                <ul class="nav nav-sm flex-column">
+
+                                    <li class="nav-item">
+                                        <a class="nav-link" data-key="t-user-list" asp-action="DisplayUserList" asp-controller="UserDetails">User List </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" data-key="t-user-list" asp-action="UserEditList" asp-controller="UserDetails">User Edit </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" data-key="t-user-list" asp-action="DisplayVendorList" asp-controller="Vendor">Vendor List </a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a asp-action="UserActiveDecative" asp-controller="UserDetails" class="nav-link" data-key="t-team">ActiveDeactive</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a asp-action="GetUsersListById" asp-controller="UserDetails" class="nav-link" data-key="t-timeline">GetUserAttendance</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a asp-action="GetAttendance" asp-controller="UserDetails" class="nav-link" data-key="t-timeline">GetAttendance</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a asp-action="AddVandorDetails" asp-controller="Vendor" class="nav-link" data-key="t-faqs">Add-Vendors</a>
+                                    </li>
+
+                                </ul>
+                            </div>
+                        </li>
+
+
+                        @* <li class="nav-item">
                             <a class="nav-link menu-link" href="#sidebarLanding" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarLanding">
                                 <i class="ri-rocket-line"></i> <span data-key="t-landing">Landing</span>
                             </a>
@@ -1366,14 +1193,14 @@
                                     </li>
                                 </ul>
                             </div>
-                        </li>
+                        </li> *@
 
-                        <li class="menu-title"><i class="ri-more-fill"></i> <span data-key="t-components">Components</span></li>
+                        @* <li class="menu-title"><i class="ri-more-fill"></i> <span data-key="t-components">Components</span></li> *@
 
                         <li class="nav-item">
-                            <a class="nav-link menu-link" href="#sidebarUI" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarUI">
+                            @* <a class="nav-link menu-link" href="#sidebarUI" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarUI">
                                 <i data-feather="package" class="icon-dual"></i> <span data-key="t-base-ui">Base UI</span>
-                            </a>
+                            </a> *@
                             <div class="collapse menu-dropdown mega-dropdown-menu" id="sidebarUI">
                                 <div class="row">
                                     <div class="col-lg-4">
@@ -1465,9 +1292,9 @@
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link menu-link" href="#sidebarAdvanceUI" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarAdvanceUI">
+                            @* <a class="nav-link menu-link" href="#sidebarAdvanceUI" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarAdvanceUI">
                                 <i data-feather="layers" class="icon-dual"></i> <span data-key="t-advance-ui">Advance UI</span>
-                            </a>
+                            </a> *@
                             <div class="collapse menu-dropdown" id="sidebarAdvanceUI">
                                 <ul class="nav nav-sm flex-column">
                                     <li class="nav-item">
@@ -1502,15 +1329,15 @@
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link menu-link" href="widgets.html">
+                           @*  <a class="nav-link menu-link" href="widgets.html">
                                 <i data-feather="copy" class="icon-dual"></i> <span data-key="t-widgets">Widgets</span>
-                            </a>
+                            </a> *@
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link menu-link" href="#sidebarForms" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarForms">
+                           @*  <a class="nav-link menu-link" href="#sidebarForms" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarForms">
                                 <i data-feather="file-text" class="icon-dual"></i> <span data-key="t-forms">Forms</span>
-                            </a>
+                            </a> *@
                             <div class="collapse menu-dropdown" id="sidebarForms">
                                 <ul class="nav nav-sm flex-column">
                                     <li class="nav-item">
@@ -1557,9 +1384,9 @@
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link menu-link" href="#sidebarTables" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarTables">
+                            @* <a class="nav-link menu-link" href="#sidebarTables" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarTables">
                                 <i data-feather="database" class="icon-dual"></i> <span data-key="t-tables">Tables</span>
-                            </a>
+                            </a> *@
                             <div class="collapse menu-dropdown" id="sidebarTables">
                                 <ul class="nav nav-sm flex-column">
                                     <li class="nav-item">
@@ -1579,9 +1406,9 @@
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link menu-link" href="#sidebarCharts" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarCharts">
+                            @* <a class="nav-link menu-link" href="#sidebarCharts" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarCharts">
                                 <i data-feather="pie-chart" class="icon-dual"></i> <span data-key="t-charts">Charts</span>
-                            </a>
+                            </a> *@
                             <div class="collapse menu-dropdown" id="sidebarCharts">
                                 <ul class="nav nav-sm flex-column">
                                     <li class="nav-item">
@@ -1662,9 +1489,9 @@
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link menu-link" href="#sidebarIcons" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarIcons">
+                           @*  <a class="nav-link menu-link" href="#sidebarIcons" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarIcons">
                                 <i data-feather="archive" class="icon-dual"></i> <span data-key="t-icons">Icons</span>
-                            </a>
+                            </a> *@
                             <div class="collapse menu-dropdown" id="sidebarIcons">
                                 <ul class="nav nav-sm flex-column">
                                     <li class="nav-item">
@@ -1690,9 +1517,9 @@
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link menu-link" href="#sidebarMaps" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarMaps">
+                            @* <a class="nav-link menu-link" href="#sidebarMaps" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarMaps">
                                 <i data-feather="map-pin" class="icon-dual"></i> <span data-key="t-maps">Maps</span>
-                            </a>
+                            </a> *@
                             <div class="collapse menu-dropdown" id="sidebarMaps">
                                 <ul class="nav nav-sm flex-column">
                                     <li class="nav-item">
@@ -1715,9 +1542,9 @@
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link menu-link" href="#sidebarMultilevel" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarMultilevel">
+                            @* <a class="nav-link menu-link" href="#sidebarMultilevel" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarMultilevel">
                                 <i data-feather="share-2" class="icon-dual"></i> <span data-key="t-multi-level">Multi Level</span>
-                            </a>
+                            </a> *@
                             <div class="collapse menu-dropdown" id="sidebarMultilevel">
                                 <ul class="nav nav-sm flex-column">
                                     <li class="nav-item">
