@@ -1,8 +1,7 @@
 ﻿$(document).ready(function () {
     
     GetAllVendorData();
-/*    $("#BuisnessDetailsModel").attr('disabled', 'disabled');*/
-    $("#BankDetailsModel").attr('disabled', 'disabled');
+   
    
 });
 function GetAllVendorData() {
@@ -123,9 +122,9 @@ $('#CloseButton').click(function () {
 //-----------------Validation-----------------//
 
 function nexttoBuisnessDetails() {
-    debugger
+    
     if ($('#VendorFormId').valid()) {
-       
+        document.getElementById("BuisnessDetailsModel").click()
     }
     else {
         Swal.fire({
@@ -139,7 +138,7 @@ function nexttoBuisnessDetails() {
 function nexttoBankDetails() {
     debugger
     if ($('#Vendorbusiness').valid()) {
-       
+        document.getElementById("BankDetailsModel").click()
     }
     else {
         Swal.fire({
