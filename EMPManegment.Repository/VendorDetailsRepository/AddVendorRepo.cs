@@ -1,5 +1,6 @@
 ﻿using EMPManagment.API;
 using EMPManegment.EntityModels.View_Model;
+using EMPManegment.EntityModels.ViewModels;
 using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.VendorModels;
@@ -39,17 +40,29 @@ namespace EMPManegment.Repository.VendorDetailsRepository
                 {
                     var vendormodel = new TblVendorMaster()
                     {
-                        //VendorName = vendor.VendorName,
-                        VendorEmail = vendor.VendorEmail,
+                        Vid = Guid.NewGuid(),
+                        VendorFirstName =vendor.VendorFirstName,
+                        VendorLastName=vendor.VendorLastName,
+                        VendorContact = vendor.VendorContectNo,
                         VendorPhone = vendor.VendorPhone,
-                        VendorAddress = vendor.VendorAddress,
-                        VendorBankAccountNo = vendor.VendorBankAccountNo,
-                        VendorBankName = vendor.VendorBankName,
-                        VendorBankIfsc= vendor.VendorBankIfsc,
-                        VendorGstnumber = vendor.VendorGstnumber,
-                        CreatedOn = vendor.CreatedOn,
-                        CreatedBy = vendor.CreatedBy,
-
+                        VendorEmail = vendor.VendorEmail,
+                        VendorCountry=vendor.VendorCountry,
+                        VendorState=vendor.VendorState,
+                        VendorCity=vendor.VendorCity,
+                        VendorAddress=vendor.VendorAddress,
+                        VendorPinCode=vendor.VendorPinCode,
+                        VendorCompany=vendor.VendorCompany,
+                        VendorCompanyType=vendor.VendorCompanyType,
+                        VendorCompanyEmail=vendor.VendorCompanyEmail,
+                        VendorCompanyNumber=vendor.VendorCompanyNumber,
+                        VendorCompanyLogo=vendor.VendorCompanyLogo,
+                        VendorBankName=vendor.VendorBankName,
+                        VendorBankBranch=vendor.VendorBankBranch,
+                        VendorAccountHolderName=vendor.VendorAccountHolderName,
+                        VendorBankAccountNo=vendor.VendorBankAccountNo,
+                        VendorGstnumber=vendor.VendorGstnumber,
+                        VendorBankIfsc=vendor.VendorBankIfsc,
+                        VendorTypeId=vendor.VendorTypeId,
                     };
                     response.Code = (int)HttpStatusCode.OK;
                     response.Message= "Vendor Data Successfully Inserted";
@@ -86,7 +99,7 @@ namespace EMPManegment.Repository.VendorDetailsRepository
 
             if (!string.IsNullOrEmpty(dataTable.searchValue))
             {
-                vendorlist = vendorlist.Where(e => e.VendorName.Contains(dataTable.searchValue) || e.VendorPhone.Contains(dataTable.searchValue) || e.VendorEmail.Contains(dataTable.searchValue));
+                vendorlist = vendorlist.Where(e => e.VendorFirstName.Contains(dataTable.searchValue) || e.VendorPhone.Contains(dataTable.searchValue) || e.VendorEmail.Contains(dataTable.searchValue));
             }
 
             int totalRecord = vendorlist.Count();
@@ -102,5 +115,22 @@ namespace EMPManegment.Repository.VendorDetailsRepository
             };
             return jsonData;
         }
+
+        public async Task<IEnumerable<VendorTypeView>> GetVendorType()
+        {
+            try
+            {
+                IEnumerable<VendorTypeView> VendorType = Context.TblVendorTypes.ToList().Select(a => new VendorTypeView
+                {
+                    Id = a.Id,
+                    VendorType = a.VendorType
+                });
+                return VendorType;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
-    }
+}

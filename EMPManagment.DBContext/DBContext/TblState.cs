@@ -16,4 +16,6 @@ public partial class TblState
     public virtual ICollection<TblCity> TblCities { get; set; } = new List<TblCity>();
 
     public virtual ICollection<TblUser> TblUsers { get; set; } = new List<TblUser>();
+
+    public virtual ICollection<TblVendorMaster> TblVendorMasters { get; set; } = new List<TblVendorMaster>();
 }

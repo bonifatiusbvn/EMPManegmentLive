@@ -139,6 +139,11 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.Property(e => e.ProjectStatus).HasMaxLength(10);
             entity.Property(e => e.ProjectTitle).HasMaxLength(50);
             entity.Property(e => e.ProjectType).HasMaxLength(20);
+
+            entity.HasOne(d => d.User).WithMany(p => p.TblProjectMasters)
+                .HasForeignKey(d => d.UserId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_tblProjectMaster_tblUsers");
         });
 
         modelBuilder.Entity<TblQuestion>(entity =>
@@ -290,14 +295,12 @@ public partial class BonifatiusEmployeesContext : DbContext
                 .HasMaxLength(50)
                 .HasColumnName("VendorBankIFSC");
             entity.Property(e => e.VendorBankName).HasMaxLength(50);
-            entity.Property(e => e.VendorCity).HasMaxLength(20);
             entity.Property(e => e.VendorCompany).HasMaxLength(50);
             entity.Property(e => e.VendorCompanyEmail).HasMaxLength(50);
             entity.Property(e => e.VendorCompanyLogo).HasMaxLength(15);
             entity.Property(e => e.VendorCompanyNumber).HasMaxLength(15);
             entity.Property(e => e.VendorCompanyType).HasMaxLength(20);
             entity.Property(e => e.VendorContact).HasMaxLength(12);
-            entity.Property(e => e.VendorCountry).HasMaxLength(20);
             entity.Property(e => e.VendorEmail).HasMaxLength(50);
             entity.Property(e => e.VendorFirstName).HasMaxLength(20);
             entity.Property(e => e.VendorGstnumber)
@@ -306,7 +309,21 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.Property(e => e.VendorLastName).HasMaxLength(20);
             entity.Property(e => e.VendorPhone).HasMaxLength(15);
             entity.Property(e => e.VendorPinCode).HasMaxLength(10);
-            entity.Property(e => e.VendorState).HasMaxLength(20);
+
+            entity.HasOne(d => d.VendorCityNavigation).WithMany(p => p.TblVendorMasters)
+                .HasForeignKey(d => d.VendorCity)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_tblVendor_Master_tblCity");
+
+            entity.HasOne(d => d.VendorCountryNavigation).WithMany(p => p.TblVendorMasters)
+                .HasForeignKey(d => d.VendorCountry)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_tblVendor_Master_tblCountry");
+
+            entity.HasOne(d => d.VendorStateNavigation).WithMany(p => p.TblVendorMasters)
+                .HasForeignKey(d => d.VendorState)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_tblVendor_Master_tblState");
 
             entity.HasOne(d => d.VendorType).WithMany(p => p.TblVendorMasters)
                 .HasForeignKey(d => d.VendorTypeId)

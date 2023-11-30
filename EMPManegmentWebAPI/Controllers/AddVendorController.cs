@@ -1,4 +1,5 @@
 ﻿using EMPManegment.EntityModels.View_Model;
+using EMPManegment.EntityModels.ViewModels;
 using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.VendorModels;
@@ -52,6 +53,14 @@ namespace EMPManagment.API.Controllers
         {
             var GetvendorList = await VendorDetails.GetVendorsList(VendorList);
             return Ok(new { code = 200, data = GetvendorList });
+        }
+
+        [HttpGet]
+        [Route("GetVendorType")]
+        public async Task<IActionResult> GetVendorType()
+        {
+            IEnumerable<VendorTypeView> VendorType = await VendorDetails.GetVendorType();
+            return Ok(new { code = 200, data = VendorType.ToList() });
         }
     }
 }

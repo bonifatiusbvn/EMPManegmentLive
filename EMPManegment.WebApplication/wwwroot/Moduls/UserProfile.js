@@ -70,6 +70,7 @@ function UploadDocument() {
     fromData.append("CreatedBy", $("#CreatedBy").val());
     fromData.append("Id", $("#Id").val());
     fromData.append("UserId", $("#UserID").val());
+    
     $.ajax({
         url: '/UserDetails/UploadDocument',
         type: 'Post',

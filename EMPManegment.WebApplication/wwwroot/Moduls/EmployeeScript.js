@@ -6,13 +6,12 @@ $(document).ready(function () {
     GetQuestion();
     $('#ddlCountry').change(function () {
         var Text = $("#ddlCountry Option:Selected").text();
-        var id = $(this).val();
-        
+        var StateId = $(this).val();
         $("#txtcountry").val(Text);
         $('#ddlState').empty();
         $('#ddlState').append('<Option >--Select State--</Option>');
         $.ajax({
-            url: '/EmpAddDetails/GetState?id=' + id,
+            url: '/EmpAddDetails/GetState?StateId=' + StateId,
             success: function (result) {
                 
                 $.each(result, function (i, data) {
@@ -24,13 +23,14 @@ $(document).ready(function () {
 
 
     $('#ddlState').change(function () {
+        
         var Text = $("#ddlState Option:Selected").text();
-        var id = $(this).val();
+        var CityId = $(this).val();
         $("#txtstate").val(Text);
         $('#ddlCity').empty();
         $('#ddlCity').append('<Option >--Select City--</Option>');
         $.ajax({
-            url: '/EmpAddDetails/GetCity?id=' + id,
+            url: '/EmpAddDetails/GetCity?CityId=' + CityId,
             success: function (result) {
                 $.each(result, function (i, data) {
                     $('#ddlCity').append('<Option value=' + data.id + '>' + data.cityName + '</Option>');

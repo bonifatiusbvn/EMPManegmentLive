@@ -10,6 +10,8 @@ using EMPManegment.EntityModels.ViewModels.VendorModels;
 using Newtonsoft.Json;
 using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 using EMPManegment.EntityModels.ViewModels.UserModels;
+using EMPManegment.EntityModels.ViewModels;
+using Microsoft.AspNetCore.Identity;
 
 namespace EMPManegment.Web.Controllers
 {
@@ -34,30 +36,85 @@ namespace EMPManegment.Web.Controllers
         {
             return View();
         }
+
         [HttpPost]
-        public async Task<IActionResult> AddVandorDetails(VendorDetailsView addVandorDetails)
+        public async Task<IActionResult> AddVandorDetail(IFormFile ProfilePhoto)
         {
             try
             {
-                if(ModelState.IsValid)
-                {
-                    ApiResponseModel postuser = await APIServices.PostAsync(addVandorDetails, "AddVendor/AddVendors");
+                var VendorObj = HttpContext.Request.Form["ADDVENDOR"];
+                var addVandorDetails = JsonConvert.DeserializeObject<AddVendorDetailsView>(VendorObj);
+                //var path = Environment.WebRootPath;
+                //    var filepath = "Content/Image/" + ProfilePhoto.FileName;
+                //    var fullpath = Path.Combine(path, filepath);
+                //    UploadFile(ProfilePhoto, fullpath);
+                    var addVandor = new VendorDetailsView()
+                    {
+                        VendorFirstName = addVandorDetails.VendorFirstName,
+                        VendorLastName = addVandorDetails.VendorLastName,
+                        VendorContectNo = addVandorDetails.VendorContectNo,
+                        VendorPhone = addVandorDetails.VendorPhone,
+                        VendorEmail = addVandorDetails.VendorEmail,
+                        VendorCountry = addVandorDetails.VendorCountry,
+                        VendorState = addVandorDetails.VendorState,
+                        VendorCity = addVandorDetails.VendorCity,
+                        VendorAddress = addVandorDetails.VendorAddress,
+                        VendorPinCode = addVandorDetails.VendorPinCode,
+                        VendorCompany = addVandorDetails.VendorCompany,
+                        VendorCompanyType = addVandorDetails.VendorCompanyType,
+                        VendorCompanyEmail = addVandorDetails.VendorCompanyEmail,
+                        VendorCompanyNumber = addVandorDetails.VendorCompanyNumber,
+                        
+                        VendorBankName = addVandorDetails.VendorBankName,
+                        VendorBankBranch = addVandorDetails.VendorBankBranch,
+                        VendorAccountHolderName = addVandorDetails.VendorAccountHolderName,
+                        VendorBankAccountNo = addVandorDetails.VendorBankAccountNo,
+                        VendorGstnumber = addVandorDetails.VendorGstnumber,
+                        VendorBankIfsc = addVandorDetails.VendorBankIfsc,
+                        VendorTypeId = addVandorDetails.VendorTypeId,
+                    };
+                    ApiResponseModel postuser = await APIServices.PostAsync(addVandor, "AddVendor/AddVendors");
                     if (postuser.code == 200)
                     {
-
                         return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
-
                     }
                     else
                     {
                         return new JsonResult(new { Message = string.Format(postuser.message), Code = postuser.code });
                     }
-                }
-                else
-                {
-                    return View(addVandorDetails);
-                }
+                //}
+                //else
+                //{
+                //    return View();
+                //}
                 
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public void UploadFile(IFormFile ImageFile, string ImagePath)
+        {
+            FileStream stream = new FileStream(ImagePath, FileMode.Create);
+            ImageFile.CopyTo(stream);
+        }
+
+        [HttpGet]
+        public async Task<JsonResult> GetVendorType()
+        {
+
+            try
+            {
+                List<VendorTypeView> VendorType = new List<VendorTypeView>();
+                HttpClient client = WebAPI.Initil();
+                ApiResponseModel response = await APIServices.GetAsyncId(null, "AddVendor/GetVendorType");
+                if (response.code == 200)
+                {
+                    VendorType = JsonConvert.DeserializeObject<List<VendorTypeView>>(response.data.ToString());
+                }
+                return new JsonResult(VendorType);
+
             }
             catch (Exception ex)
             {

@@ -11,14 +11,14 @@ namespace EMPManegment.EntityModels.ViewModels.TaskModels
     public class TaskDetailsView
     {
         public Guid Id { get; set; }
-        [Required]
+       
         public int? TaskType { get; set; }
         public string? TaskTypeName { get; set; }
-        [Required]
+       
         public string? TaskTitle { get; set; }
-        [Required]
+        
         public string? TaskDetails { get; set; }
-        [Required]
+       
         public DateTime? TaskDate { get; set; }
         
         public Guid? UserId { get; set; }
@@ -26,7 +26,7 @@ namespace EMPManegment.EntityModels.ViewModels.TaskModels
         public DateTime? CreatedOn { get; set; }
 
         public string? CreatedBy { get; set; }
-        [Required]
+       
         public DateTime? TaskEndDate { get; set; }
         public string? TaskStatus { get; set; }
         public string? UserProfile { get; set; }

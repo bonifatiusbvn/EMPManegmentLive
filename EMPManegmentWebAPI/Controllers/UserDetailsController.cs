@@ -101,9 +101,9 @@ namespace EMPManagment.API.Controllers
 
         [HttpGet]
         [Route("GetDocumentList")]
-        public async Task<IActionResult> GetDocumentList()
+        public async Task<IActionResult> GetDocumentList(Guid Userid)
         {
-            IEnumerable<DocumentInfoView> getDocumentList = await UserListServices.GetDocumentList();
+            IEnumerable<DocumentInfoView> getDocumentList = await UserListServices.GetDocumentList(Userid);
             return Ok(new { code = 200, data = getDocumentList.ToList() });
         }
 
