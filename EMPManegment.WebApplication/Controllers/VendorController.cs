@@ -82,11 +82,7 @@ namespace EMPManegment.Web.Controllers
                     {
                         return new JsonResult(new { Message = string.Format(postuser.message), Code = postuser.code });
                     }
-                //}
-                //else
-                //{
-                //    return View();
-                //}
+                
                 
             }
             catch (Exception ex)

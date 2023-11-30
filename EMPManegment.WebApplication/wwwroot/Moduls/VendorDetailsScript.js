@@ -63,7 +63,7 @@ function AddVendorDetails() {
 
         };
 
-        debugger
+        
         var from_Data = new FormData();
         from_Data.append("ADDVENDOR", JSON.stringify(fromData));
 
@@ -119,11 +119,21 @@ $('#CloseButton').click(function () {
     window.location = '/Vendor/AddVandorDetails';
 });
 
+function openvendormodel() {
+    
+    $("#BuisnessDetailsModel").prop("disabled", true);
+    $("#BankDetailsModel").prop("disabled", true);
+    $("#addSeller").modal('show');
+  
+}
+
+
 //-----------------Validation-----------------//
 
 function nexttoBuisnessDetails() {
     
     if ($('#VendorFormId').valid()) {
+        $("#BuisnessDetailsModel").prop("disabled", false);
         document.getElementById("BuisnessDetailsModel").click()
     }
     else {
@@ -136,8 +146,9 @@ function nexttoBuisnessDetails() {
     }
 }
 function nexttoBankDetails() {
-    debugger
+    
     if ($('#Vendorbusiness').valid()) {
+        $("#BankDetailsModel").prop("disabled", false);
         document.getElementById("BankDetailsModel").click()
     }
     else {
@@ -151,7 +162,7 @@ function nexttoBankDetails() {
 }
 
 $(document).ready(function () {
-    debugger
+    
     $("#VendorFormId").validate({
         
         rules: {
