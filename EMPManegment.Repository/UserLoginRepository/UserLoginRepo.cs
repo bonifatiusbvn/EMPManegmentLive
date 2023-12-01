@@ -1,8 +1,8 @@
 ﻿using EMPManagment.API;
-
+using EMPManegment.EntityModels.Crypto;
 using EMPManegment.EntityModels.ViewModels;
 using EMPManegment.Inretface.Interface.UsersLogin;
-using EMPManegment.API;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;

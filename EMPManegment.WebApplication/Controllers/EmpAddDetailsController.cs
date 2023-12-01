@@ -10,8 +10,8 @@ using Newtonsoft.Json;
 using System.Diagnostics.Metrics;
 using System.Security.Claims;
 using System.Text;
-using EMPManegment.Web.Helper;
 using Microsoft.AspNetCore.Authorization;
+using EMPManegment.EntityModels.Crypto;
 
 namespace EMPManegment.WebApplication.Controllers
 {
