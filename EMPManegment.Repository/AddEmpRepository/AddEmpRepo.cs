@@ -1,8 +1,9 @@
 ﻿
 using EMPManagment.API;
-using EMPManagment.Web.Models.API;
+
 using EMPManegment.EntityModels.View_Model;
 using EMPManegment.EntityModels.ViewModels;
+using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.Inretface.EmployeesInterface.AddEmployee;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -28,16 +29,15 @@ namespace EMPManegment.Repository.AddEmpRepository
 
         public BonifatiusEmployeesContext Context { get; }
 
-        public async Task<EmpDetailsResponseModel> AddEmployee(EmpDetailsView emp)
+        public async Task<UserResponceModel> AddEmployee(EmpDetailsView addemp)
         {
-            EmpDetailsResponseModel response = new EmpDetailsResponseModel();
+            UserResponceModel response = new UserResponceModel();
             try
             {
-                bool isEmailAlredyExists = Context.TblUsers.Any(x => x.Email == emp.Email);
+                bool isEmailAlredyExists = Context.TblUsers.Any(x => x.Email == addemp.Email);
                 if (isEmailAlredyExists == true)
                 {
                     response.Message = "User with this email already exists";
-                    response.Data = emp;
                     response.Code = (int)HttpStatusCode.NotFound;
                 }
                 else
@@ -45,22 +45,22 @@ namespace EMPManegment.Repository.AddEmpRepository
                     var model = new TblUser()
                     {
                         Id = Guid.NewGuid(),
-                        UserName = emp.UserName,
-                        DepartmentId = emp.DepartmentId,
-                        FirstName = emp.FirstName,
-                        LastName = emp.LastName,
-                        Address = emp.Address,
-                        CityId = emp.CityId,
-                        StateId = emp.StateId,
-                        CountryId = emp.CountryId,
-                        DateOfBirth = emp.DateOfBirth,
-                        Email = emp.Email,
-                        Gender = emp.Gender,
-                        PhoneNumber = emp.PhoneNumber,
+                        UserName = addemp.UserName,
+                        DepartmentId = addemp.DepartmentId,
+                        FirstName = addemp.FirstName,
+                        LastName = addemp.LastName,
+                        Address = addemp.Address,
+                        CityId = addemp.CityId,
+                        StateId = addemp.StateId,
+                        CountryId = addemp.CountryId,
+                        DateOfBirth = addemp.DateOfBirth,
+                        Email = addemp.Email,
+                        Gender = addemp.Gender,
+                        PhoneNumber = addemp.PhoneNumber,
                         CreatedOn = DateTime.Now,
-                        PasswordHash = emp.PasswordHash,
-                        PasswordSalt = emp.PasswordSalt,   
-                        Image = emp.Image,
+                        PasswordHash = addemp.PasswordHash,
+                        PasswordSalt = addemp.PasswordSalt,   
+                        Image = addemp.Image,
                         IsActive = true,
                         JoiningDate = DateTime.Now,
                         IsAdmin = false,
@@ -68,7 +68,6 @@ namespace EMPManegment.Repository.AddEmpRepository
                         PhoneNumberConfirmed = true,
 
                     };
-                    response.Data = emp;
                     response.Code = (int)HttpStatusCode.OK;
                     Context.TblUsers.Add(model);
                     Context.SaveChanges();
@@ -87,7 +86,7 @@ namespace EMPManegment.Repository.AddEmpRepository
         {
             try
             {
-                var LastEmp = Context.TblUsers.OrderByDescending(e => e.Id).FirstOrDefault();
+                var LastEmp = Context.TblUsers.OrderByDescending(e => e.CreatedOn).FirstOrDefault();
                 string UserEmpId;
                 if (LastEmp == null)
                 {
@@ -120,12 +119,5 @@ namespace EMPManegment.Repository.AddEmpRepository
                 throw ex;
             }
         }
-        public Task<EmpDetailsView> GetById(string EId)
-        {
-            throw new NotImplementedException();
-        }
-       
-       
-
     }   
 }

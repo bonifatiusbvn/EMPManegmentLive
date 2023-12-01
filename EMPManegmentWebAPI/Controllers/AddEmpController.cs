@@ -1,6 +1,7 @@
 ﻿using EMPManagment.Web.Models.API;
 using EMPManegment.EntityModels.View_Model;
 using EMPManegment.EntityModels.ViewModels;
+using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.Inretface.EmployeesInterface.AddEmployee;
 using EMPManegment.Inretface.Services.AddEmployeeServies;
 using Microsoft.AspNetCore.Http;
@@ -26,8 +27,8 @@ namespace EMPManagment.API.Controllers
         [Route("CheckUser")]
         public IActionResult CheckUser()
         {
-            var newuser = EmpDetails.CheckEmloyess();
-            return Ok(new { code = 200, data = newuser });
+            var checkUser = EmpDetails.CheckEmloyess();
+            return Ok(new { code = 200, data = checkUser });
         }
 
 
@@ -35,28 +36,26 @@ namespace EMPManagment.API.Controllers
         [Route("GetDepartment")]
         public async Task<IActionResult> GetDepartment()
         {
-            IEnumerable<Department> dept = await EmpDetails.EmpDepartment();
-            return Ok(new { code = 200, data = dept.ToList() });
+            IEnumerable<Department> getDepartment = await EmpDetails.EmpDepartment();
+            return Ok(new { code = 200, data = getDepartment.ToList() });
         }
-
 
         [HttpPost]
         [Route("AddEmployees")]
-        public async Task<IActionResult> AddEmployees(EmpDetailsView emp)
+        public async Task<IActionResult> AddEmployees(EmpDetailsView AddEmployee)
         {
-            EmpDetailsResponseModel response = new EmpDetailsResponseModel();
+            UserResponceModel response = new UserResponceModel();
             try
             {
-                var result = EmpDetails.AddEmployee(emp);
-                if (result.Result.Code == 200)
+                var addEmployee = EmpDetails.AddEmployee(AddEmployee);
+                if (addEmployee.Result.Code == 200)
                 {
                     response.Code = (int)HttpStatusCode.OK;
-                    response.Data = result.Result.Data;
+                  
                 }
                 else
                 {
-                    response.Message = result.Result.Message;
-                    response.Code = (int)HttpStatusCode.NotFound;
+                    response.Message = addEmployee.Result.Message;
                 }
             }
             catch (Exception ex)

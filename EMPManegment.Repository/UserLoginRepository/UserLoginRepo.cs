@@ -2,8 +2,7 @@
 
 using EMPManegment.EntityModels.ViewModels;
 using EMPManegment.Inretface.Interface.UsersLogin;
-using EMPManegment.Web.Helper;
-using Microsoft.AspNetCore.Hosting;
+using EMPManegment.API;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -33,25 +32,32 @@ namespace EMPManegment.Repository.UserLoginRepository
             throw new NotImplementedException();
         }
 
-        public async Task<LoginResponseModel> LoginUser(LoginRequest request)
+        public async Task<LoginResponseModel> LoginUser(LoginRequest Loginrequest)
         {
             LoginResponseModel response = new LoginResponseModel();
             try
             {
-                  var tblUser = Context.TblUsers.Where(p => p.UserName == request.EmpId).SingleOrDefault();
+                  var tblUser = Context.TblUsers.Where(p => p.UserName == Loginrequest.UserName).SingleOrDefault();
                 if (tblUser != null)
                 {
                     if (tblUser.IsActive == true)
                     {
-                        if (tblUser.UserName == request.EmpId && Crypto.VarifyHash(request.Password, tblUser.PasswordHash, tblUser.PasswordSalt))   
+                        if (tblUser.UserName == Loginrequest.UserName && Crypto.VarifyHash(Loginrequest.Password, tblUser.PasswordHash, tblUser.PasswordSalt))   
                         {
+
                             LoginView userModel = new LoginView();
-                            userModel.EmpId = request.EmpId;    
+                            userModel.UserName = tblUser.UserName;
+                            userModel.Id = tblUser.Id;
+                            userModel.FullName = tblUser.FirstName +" "+ tblUser.LastName;
                             userModel.FirstName = tblUser.FirstName;
-                            userModel.LastName = tblUser.LastName;
                             userModel.ProfileImage = tblUser.Image;
+                            userModel.IsAdmin = tblUser.IsAdmin == null ? false : (bool)tblUser.IsAdmin;
                             response.Data = userModel;
                             response.Code = (int)HttpStatusCode.OK;
+
+                            tblUser.LastLoginDate = DateTime.Now;
+                            Context.TblUsers.Update(tblUser);
+                            Context.SaveChanges();
                         }
                         else
                         {

@@ -11,4 +11,8 @@
     <ProjectReference Include="..\EMPManegment.Repository\EMPManegment.Repository.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="TaskDetails\" />
+  </ItemGroup>
+
 </Project>

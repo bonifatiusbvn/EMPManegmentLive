@@ -34,15 +34,15 @@ namespace EMPManegment.WebApplication.Controllers
         {
             return View();
         }
-        public async Task<IActionResult> AddEmpDetails()
+        public async Task<IActionResult> AddEmpDetail()
         {
             try
             { 
                 HttpClient client = WebAPI.Initil();
-                ApiResponseModel res = await APIServices.GetAsync("","AddEmp/CheckUser");
-                if (res.code == 200)
+                ApiResponseModel AddUserResponse = await APIServices.GetAsync("","AddEmp/CheckUser");
+                if (AddUserResponse.code == 200)
                 {
-                    ViewBag.EmpId = res.data;
+                    ViewBag.EmpId = AddUserResponse.data;
                 }
                 
                 return View();
@@ -56,51 +56,61 @@ namespace EMPManegment.WebApplication.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddEmpDetails(LoginDetailsView emp)
+        public async Task<IActionResult> AddEmpDetail(LoginDetailsView AddEmployee)
         {
             try
             {
-                var path = Environment.WebRootPath;
-                var filepath = "Content/Image/" + emp.Image.FileName;
-                var fullpath = Path.Combine(path, filepath);
-                UploadFile(emp.Image, fullpath);
-                Crypto.Hash(emp.Password,
-                    out byte[] passwordHash,
-                    out byte[] passwordSalt);
-                var data = new EmpDetailsView()
+                if (ModelState.IsValid)
                 {
-                    UserName = emp.UserName,
-                    DepartmentId = emp.DepartmentId,
-                    FirstName = emp.FirstName,
-                    LastName = emp.LastName,
-                    Address = emp.Address,
-                    CityId = emp.CityId,
-                    StateId = emp.StateId,
-                    CountryId = emp.CountryId,
-                    DateOfBirth = emp.DateOfBirth,
-                    Email = emp.Email,
-                    Gender = emp.Gender,
-                    PhoneNumber = emp.PhoneNumber,
-                    CreatedOn = DateTime.Now,
-                    PasswordHash = passwordHash,
-                    PasswordSalt = passwordSalt,
-                    Image = filepath,
-                    IsActive = emp.IsActive,
-                };
-                ApiResponseModel postuser = await APIServices.PostAsync(data,"AddEmp/AddEmployees");
-                ViewBag.Name = HttpContext.Session.GetString("UserName");
-                if (postuser.code == 200)
-                {
-                    var identity = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, emp.UserName) }, CookieAuthenticationDefaults.AuthenticationScheme);
-                    var principal = new ClaimsPrincipal(identity);
-                    HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
-                    return RedirectToAction("Login", "UserLogin");
+                    var path = Environment.WebRootPath;
+                    var filepath = "Content/Image/" + AddEmployee.Image.FileName;
+                    var fullpath = Path.Combine(path, filepath);
+                    UploadFile(AddEmployee.Image, fullpath);
+                    Crypto.Hash(AddEmployee.Password,
+                        out byte[] passwordHash,
+                        out byte[] passwordSalt);
+                    var AddUser = new EmpDetailsView()
+                    {
+                        UserName = AddEmployee.UserName,
+                        DepartmentId = AddEmployee.DepartmentId,
+                        FirstName = AddEmployee.FirstName,
+                        LastName = AddEmployee.LastName,
+                        Address = AddEmployee.Address,
+                        CityId = AddEmployee.CityId,
+                        StateId = AddEmployee.StateId,
+                        CountryId = AddEmployee.CountryId,
+                        DateOfBirth = AddEmployee.DateOfBirth,
+                        Email = AddEmployee.Email,
+                        Gender = AddEmployee.Gender,
+                        PhoneNumber = AddEmployee.PhoneNumber,
+                        CreatedOn = DateTime.Now,
+                        PasswordHash = passwordHash,
+                        PasswordSalt = passwordSalt,
+                        Image = filepath,
+                        IsActive = AddEmployee.IsActive,
+                    };
+                    ApiResponseModel postuser = await APIServices.PostAsync(AddUser, "AddEmp/AddEmployees");
+                    ViewBag.Name = HttpContext.Session.GetString("UserName");
+                    if (postuser.code == 200)
+                    {
+                        var identity = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, AddEmployee.UserName) }, CookieAuthenticationDefaults.AuthenticationScheme);
+                        var principal = new ClaimsPrincipal(identity);
+                        HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+                        return RedirectToAction("Login", "UserLogin");
+                    }
+                    else
+                    {
+                        TempData["ErrorMessage"] = postuser.message;
+                        return View();
+                    }
                 }
-                else
+                HttpClient client = WebAPI.Initil();
+                ApiResponseModel addEmpResponse = await APIServices.GetAsync("", "AddEmp/CheckUser");
+                if (addEmpResponse.code == 200)
                 {
-                    TempData["ErrorMessage"] = postuser.message;
-                    return View();
+                    ViewBag.EmpId = addEmpResponse.data;
                 }
+                return View();  
             }
             catch (Exception ex)
             {
@@ -109,22 +119,19 @@ namespace EMPManegment.WebApplication.Controllers
 
         }
        
-
-        
-
         public async Task<JsonResult> GetDepartment()
         {
 
             try
             {
-                List<Department> departments = new List<Department>();
+                List<Department> getDepartment = new List<Department>();
                 HttpClient client = WebAPI.Initil();
-                ApiResponseModel res = await APIServices.GetAsync(null,"AddEmp/GetDepartment");
-                if (res.code == 200)
+                ApiResponseModel response = await APIServices.GetAsync(null,"AddEmp/GetDepartment");
+                if (response.code == 200)
                 {
-                    departments = JsonConvert.DeserializeObject<List<Department>>(res.data.ToString());
+                    getDepartment = JsonConvert.DeserializeObject<List<Department>>(response.data.ToString());
                 }
-                return new JsonResult(departments);
+                return new JsonResult(getDepartment);
 
             }
             catch (Exception ex)
@@ -140,10 +147,10 @@ namespace EMPManegment.WebApplication.Controllers
             {
                 List<CountryView> countries = new List<CountryView>();
                 HttpClient client = WebAPI.Initil();
-                ApiResponseModel res = await APIServices.GetAsync(null,"CSC/GetCountries");
-                if (res.code == 200)
+                ApiResponseModel response = await APIServices.GetAsyncId(null,"CSC/GetCountries");
+                if (response.code == 200)
                 {
-                    countries = JsonConvert.DeserializeObject<List<CountryView>>(res.data.ToString());
+                    countries = JsonConvert.DeserializeObject<List<CountryView>>(response.data.ToString());
                 }
                 return new JsonResult(countries);
 
@@ -153,17 +160,17 @@ namespace EMPManegment.WebApplication.Controllers
                 throw ex;
             }
         }
-        public async Task<JsonResult> GetState(int id)
+        public async Task<JsonResult> GetState(int StateId)
         {
 
             try
             {
                 List<StateView> states = new List<StateView>();
                 HttpClient client = WebAPI.Initil();
-                ApiResponseModel res = await APIServices.GetAsync(id,"CSC/GetState");
-                if (res.code == 200)
+                ApiResponseModel response = await APIServices.GetAsyncId(null, "CSC/GetState?StateId="+StateId);
+                if (response.code == 200)
                 {
-                    states = JsonConvert.DeserializeObject<List<StateView>>(res.data.ToString());
+                    states = JsonConvert.DeserializeObject<List<StateView>>(response.data.ToString());
                 }
                 return new JsonResult(states);
 
@@ -173,17 +180,17 @@ namespace EMPManegment.WebApplication.Controllers
                 throw ex;
             }
         }
-        public async Task<JsonResult> GetCity(int id)
+        public async Task<JsonResult> GetCity(int CityId)
         {
 
             try
             {
                 List<CityView> cities = new List<CityView>();
                 HttpClient client = WebAPI.Initil();
-                ApiResponseModel res = await APIServices.GetAsync(id,"CSC/GetCities");
-                if (res.code == 200)
+                ApiResponseModel response = await APIServices.GetAsyncId(null, "CSC/GetCities?CityId="+ CityId);
+                if (response.code == 200)
                 {
-                    cities = JsonConvert.DeserializeObject<List<CityView>>(res.data.ToString());
+                    cities = JsonConvert.DeserializeObject<List<CityView>>(response.data.ToString());
                 }
                 return new JsonResult(cities);
 
@@ -201,10 +208,10 @@ namespace EMPManegment.WebApplication.Controllers
             {
                 List<QuestionView> questions = new List<QuestionView>();
                 HttpClient client = WebAPI.Initil();
-                ApiResponseModel res = await APIServices.GetAsync(null, "CSC/GetQuestion");
-                if (res.code == 200)
+                ApiResponseModel response = await APIServices.GetAsync(null, "CSC/GetQuestion");
+                if (response.code == 200)
                 {
-                    questions = JsonConvert.DeserializeObject<List<QuestionView>>(res.data.ToString());
+                    questions = JsonConvert.DeserializeObject<List<QuestionView>>(response.data.ToString());
                 }
                 return new JsonResult(questions);
 
@@ -216,10 +223,10 @@ namespace EMPManegment.WebApplication.Controllers
         }
 
 
-        public void UploadFile(IFormFile file, string path)
+        public void UploadFile(IFormFile ImageFile, string ImagePath)
         {
-            FileStream stream = new FileStream(path, FileMode.Create);
-            file.CopyTo(stream);
+            FileStream stream = new FileStream(ImagePath, FileMode.Create);
+            ImageFile.CopyTo(stream);
         }
     }
 }
