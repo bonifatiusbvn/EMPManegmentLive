@@ -1,9 +1,11 @@
-﻿using EMPManagment.API;
+﻿
+using EMPManagment.API;
 using EMPManegment.EntityModels.View_Model;
 using EMPManegment.EntityModels.ViewModels;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.TaskModels;
 using EMPManegment.Inretface.Interface.TaskDetails;
+using EMPManegment.Inretface.Interface.UserAttendance;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
@@ -116,9 +118,6 @@ namespace EMPManegment.Repository.TaskRepository
             return UserId;
         }
 
-        
-
-
         public async Task<IEnumerable<TaskDetailsView>> GetAllUserTaskDetails()
         {
             IEnumerable<TaskDetailsView> AllTaskDetails = from a in Context.TblTaskDetails
@@ -139,7 +138,7 @@ namespace EMPManegment.Repository.TaskRepository
                                                           };
             return AllTaskDetails;
         }
-
+  
         public async Task<TaskDetailsView> GetTaskDetailsById(Guid Taskid)
         {
             TaskDetailsView taskdata = new TaskDetailsView();
@@ -199,6 +198,28 @@ namespace EMPManegment.Repository.TaskRepository
             {
                 throw ex;
             }
+        }
+
+
+        public async Task<TaskDetailsView> GetTaskofpendingTask(TaskDetailsView pendingtask)
+        {
+            try
+            {
+                var TaskList = Context.TblTaskDetails.Where(a => a.TaskStatus == pendingtask.TaskStatus).ToList();
+                TaskDetailsView Task = new TaskDetailsView();
+                {
+                    Task.Id = pendingtask.Id;
+                    Task.TaskType = pendingtask.TaskType;
+                    Task.TaskStatus = pendingtask.TaskStatus;
+                    Task.UserId = pendingtask.UserId;
+                }
+                return Task;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
         }
     }
 }

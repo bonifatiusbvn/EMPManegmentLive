@@ -11,12 +11,12 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
-using static Microsoft.AspNetCore.Razor.Language.TagHelperMetadata;
+
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using System.Net;
 using System.Linq.Dynamic.Core;
 using EMPManegment.EntityModels.ViewModels.DataTableParameters;
-using Microsoft.AspNetCore.Http.HttpResults;
+
 using System.Drawing;
 using System.Globalization;
 using Azure;

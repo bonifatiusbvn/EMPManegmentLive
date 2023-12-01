@@ -71,14 +71,11 @@ namespace EMPManagment.API.Controllers
             var user = await UserDetails.EnterOutTime(InsertOutTime);
             try
             {
-
                 if (user != null)
                 {
-
                     userresponseModel.Code = (int)HttpStatusCode.OK;
                     userresponseModel.Message = user.Message;
                     userresponseModel.Icone = user.Icone;
-
                 }
                 else
                 {
@@ -244,7 +241,13 @@ namespace EMPManagment.API.Controllers
             IEnumerable<TaskDetailsView> userTaskDetails = await TaskServices.GetTaskDetails(Taskid);
             return Ok(new { code = 200, data = userTaskDetails.ToList() });
         }
-
+        [HttpGet]
+        [Route("PendingTask")]
+        public async Task<IActionResult> GetTaskofpendingTask(TaskDetailsView taskDetailsView)
+        {
+            var pendingtask = await TaskServices.GetTaskofpendingTask(taskDetailsView);
+            return Ok(new { code = 200, message = pendingtask });
+        }
 
     }
 }

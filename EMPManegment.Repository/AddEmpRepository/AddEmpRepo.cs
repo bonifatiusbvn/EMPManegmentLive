@@ -1,6 +1,6 @@
 ﻿
 using EMPManagment.API;
-using EMPManagment.Web.Models.API;
+
 using EMPManegment.EntityModels.View_Model;
 using EMPManegment.EntityModels.ViewModels;
 using EMPManegment.EntityModels.ViewModels.Models;
