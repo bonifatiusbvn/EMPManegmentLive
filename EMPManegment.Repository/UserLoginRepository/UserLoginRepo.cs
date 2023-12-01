@@ -1,8 +1,6 @@
 ﻿using EMPManagment.API;
-
 using EMPManegment.EntityModels.ViewModels;
 using EMPManegment.Inretface.Interface.UsersLogin;
-using EMPManegment.API;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -13,6 +11,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using EMPManegment.EntityModels.Crypto;
+using Microsoft.AspNetCore.Hosting;
 
 namespace EMPManegment.Repository.UserLoginRepository
 {
