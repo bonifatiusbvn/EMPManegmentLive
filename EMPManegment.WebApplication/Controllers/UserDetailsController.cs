@@ -9,12 +9,10 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Newtonsoft.Json;
-using EMPManegment.Web.Helper;
 using System.Security.Claims;
 using NuGet.Protocol.Plugins;
 using System.Net;
 using EMPManegment.EntityModels.ViewModels.Models;
-using EMPManegment.Web.Helper;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
 using static System.Net.Mime.MediaTypeNames;
@@ -27,6 +25,7 @@ using Microsoft.IdentityModel.Tokens;
 using EMPManegment.EntityModels.ViewModels.UserModels;
 using Azure.Core;
 using EMPManegment.EntityModels.ViewModels.TaskModels;
+using EMPManegment.EntityModels.Crypto;
 
 namespace EMPManegment.Web.Controllers
 {

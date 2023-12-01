@@ -59,5 +59,11 @@ namespace EMPManegment.Services.TaskDetails
         {
             return await TaskDetails.GetTaskDetails(Taskid);
         }
+
+
+        public async Task<TaskDetailsView> GetTaskofpendingTask(TaskDetailsView pendingtask)
+        {
+            return await TaskDetails.GetTaskofpendingTask(pendingtask);
+        }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System.Security.Cryptography;
 
-namespace EMPManegment.Web.Helper
+namespace EMPManegment.EntityModels.Crypto
 {
     public static class Crypto
     {

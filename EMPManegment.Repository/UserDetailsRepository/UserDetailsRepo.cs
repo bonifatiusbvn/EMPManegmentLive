@@ -7,14 +7,10 @@ using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.Inretface.Interface.UserAttendance;
 using EMPManegment.Inretface.Interface.UserList;
-using EMPManegment.Web.Helper;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.Elfie.Extensions;
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Newtonsoft.Json.Linq;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,11 +28,11 @@ namespace EMPManegment.Repository.UserListRepository
     public class UserDetailsRepo : IUserDetails
     {
         public BonifatiusEmployeesContext Context { get; }
-        public IWebHostEnvironment Environment { get; }
-        public UserDetailsRepo(BonifatiusEmployeesContext context, IWebHostEnvironment environment)
+        
+        public UserDetailsRepo(BonifatiusEmployeesContext context)
         {
             Context = context;
-            Environment = environment;
+           
         }
 
 
@@ -326,7 +322,7 @@ namespace EMPManegment.Repository.UserListRepository
                 var tblUser = Context.TblUsers.Where(p => p.UserName == loginrequest.UserName).SingleOrDefault();
                 if(tblUser != null)
                 {
-                    if (tblUser.UserName == loginrequest.UserName && Crypto.VarifyHash(loginrequest.Password, tblUser.PasswordHash, tblUser.PasswordSalt))
+                    if (tblUser.UserName =="")// loginrequest.UserName && Crypto.VarifyHash(loginrequest.Password, tblUser.PasswordHash, tblUser.PasswordSalt))
                     {
                         LoginView userModel = new LoginView();
                         userModel.UserName = tblUser.UserName;

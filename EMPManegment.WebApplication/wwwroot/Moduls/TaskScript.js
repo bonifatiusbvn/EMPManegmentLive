@@ -243,7 +243,6 @@ function AllTaskDetailsList() {
                 else {
                     object += '<td><span class="badge bg-success-subtle text-success text-uppercase">' + item.taskTypeName + '</span></td>';
                 }
-
                 object += '<td>' + (new Date(item.taskDate)).toLocaleDateString('en-US') + '</td>';
                 object += '<td>' + (new Date(item.taskEndDate)).toLocaleDateString('en-US') + '</td>';
 
