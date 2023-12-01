@@ -1,8 +1,7 @@
 ﻿$(document).ready(function () {
     
     GetAllVendorData();
-/*    $("#BuisnessDetailsModel").attr('disabled', 'disabled');*/
-    $("#BankDetailsModel").attr('disabled', 'disabled');
+   
    
 });
 function GetAllVendorData() {
@@ -64,7 +63,7 @@ function AddVendorDetails() {
 
         };
 
-        debugger
+        
         var from_Data = new FormData();
         from_Data.append("ADDVENDOR", JSON.stringify(fromData));
 
@@ -120,12 +119,22 @@ $('#CloseButton').click(function () {
     window.location = '/Vendor/AddVandorDetails';
 });
 
+function openvendormodel() {
+    
+    $("#BuisnessDetailsModel").prop("disabled", true);
+    $("#BankDetailsModel").prop("disabled", true);
+    $("#addSeller").modal('show');
+  
+}
+
+
 //-----------------Validation-----------------//
 
 function nexttoBuisnessDetails() {
-    debugger
+    
     if ($('#VendorFormId').valid()) {
-       
+        $("#BuisnessDetailsModel").prop("disabled", false);
+        document.getElementById("BuisnessDetailsModel").click()
     }
     else {
         Swal.fire({
@@ -137,9 +146,10 @@ function nexttoBuisnessDetails() {
     }
 }
 function nexttoBankDetails() {
-    debugger
+    
     if ($('#Vendorbusiness').valid()) {
-       
+        $("#BankDetailsModel").prop("disabled", false);
+        document.getElementById("BankDetailsModel").click()
     }
     else {
         Swal.fire({
@@ -152,7 +162,7 @@ function nexttoBankDetails() {
 }
 
 $(document).ready(function () {
-    debugger
+    
     $("#VendorFormId").validate({
         
         rules: {
