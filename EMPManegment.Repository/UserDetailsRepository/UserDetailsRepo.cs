@@ -476,7 +476,7 @@ namespace EMPManegment.Repository.UserListRepository
         
         }
 
-        public async Task<IEnumerable<EmpDetailsView>> GetUsersDetails()
+        public async Task<IEnumerable<EmpDetailsView>> GetUsersDetails(string? searchby, string? searchfor)
         {
             IEnumerable<EmpDetailsView> GetUsersList = from e in Context.TblUsers
                                join d in Context.TblDepartments on e.DepartmentId equals d.Id
@@ -501,7 +501,22 @@ namespace EMPManegment.Repository.UserListRepository
                                    CountryName = c.Country,
                                    DepartmentName = d.Department
                                };
-
+            if (searchby == "FirstName" && searchfor != null)
+            {
+                GetUsersList = GetUsersList.Where(ser => ser.FirstName.ToLower().Contains(searchfor.ToLower())).ToList();
+            }
+            if (searchby == "LastName" && searchfor != null)
+            {
+                GetUsersList = GetUsersList.Where(ser => ser.LastName.ToLower().Contains(searchfor.ToLower())).ToList();
+            }
+            if (searchby == "DepartmentName" && searchfor != null)
+            {
+                GetUsersList = GetUsersList.Where(ser => ser.DepartmentName.ToLower().Contains(searchfor.ToLower())).ToList();
+            }
+            if (searchby == "UserName" && searchfor != null)
+            {
+                GetUsersList = GetUsersList.Where(ser => ser.UserName.ToLower().Contains(searchfor.ToLower())).ToList();
+            }
             return GetUsersList;
         }
     }

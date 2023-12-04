@@ -25,7 +25,10 @@ using Microsoft.IdentityModel.Tokens;
 using EMPManegment.EntityModels.ViewModels.UserModels;
 using Azure.Core;
 using EMPManegment.EntityModels.ViewModels.TaskModels;
+using X.PagedList;
+using X.PagedList.Mvc;
 using EMPManegment.EntityModels.Crypto;
+using Microsoft.Build.ObjectModelRemoting;
 
 namespace EMPManegment.Web.Controllers
 {
@@ -121,18 +124,19 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
-        public async Task<IActionResult> UserActiveDecative()
+        public async Task<IActionResult> UserActiveDecative(string? searchby, string? searchfor, int? page)
         {
             try
             {
                 List<EmpDetailsView> ActiveDecative = new List<EmpDetailsView>();
-                HttpClient client = WebAPI.Initil();
-                ApiResponseModel res = await APIServices.GetAsync("", "UserDetails/GetAllUsersDetails");
+                HttpClient client = WebAPI.Initil();                                
+                ApiResponseModel res = await APIServices.GetAsync("", "UserDetails/GetAllUsersDetails?searchby="+ searchby +"&searchfor=" + searchfor);
                 if (res.code == 200)
                 {
                     ActiveDecative = JsonConvert.DeserializeObject<List<EmpDetailsView>>(res.data.ToString());
                 }
-                return View(ActiveDecative);
+                var activeDeactivePage = ActiveDecative.ToPagedList(page ?? 1, 4);
+                return View(activeDeactivePage);
             }
             catch (Exception ex)
             {
