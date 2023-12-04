@@ -38,9 +38,9 @@ namespace EMPManagment.API.Controllers
 
         [HttpGet]
         [Route("GetAllUsersDetails")]
-        public async Task<IActionResult> GetAllUsersDetails()
+        public async Task<IActionResult> GetAllUsersDetails(string? searchby, string? searchfor)
         {
-            var userList = await UserListServices.GetUsersDetails();
+            var userList = await UserListServices.GetUsersDetails(searchby, searchfor);
             return Ok(new { code = 200, data = userList });
         }
 
