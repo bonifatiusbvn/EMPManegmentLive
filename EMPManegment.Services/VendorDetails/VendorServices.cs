@@ -22,6 +22,12 @@ namespace EMPManegment.Services.VendorDetails
         {
             return await details.AddVendor(Addvendor);
         }
+
+        public async Task<VendorDetailsView> GetVendorById(Guid VendorId)
+        {
+            return await details.GetVendorById(VendorId);
+        }
+
         public async Task<jsonData> GetVendorsList(DataTableRequstModel GetVenderList)
         {
             return await details.GetVendorsList(GetVenderList);
