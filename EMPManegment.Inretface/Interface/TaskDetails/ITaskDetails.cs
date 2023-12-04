@@ -19,5 +19,6 @@ namespace EMPManegment.Inretface.Interface.TaskDetails
         Task<TaskDetailsView> GetTaskDetailsById(Guid Taskid);
         Task<IEnumerable<TaskDetailsView>> GetAllUserTaskDetails();
         Task<IEnumerable<TaskDetailsView>> GetTaskDetails(Guid Taskid);
+        Task<TaskDetailsView> GetTaskofpendingTask (TaskDetailsView pendingtask);
     }
 }

@@ -5,7 +5,7 @@ using EMPManegment.EntityModels.ViewModels.TaskModels;
 using EMPManegment.Inretface.Interface.ProjectDetails;
 using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
-using NuGet.ProjectModel;
+
 using System;
 using System.Collections;
 using System.Collections.Generic;

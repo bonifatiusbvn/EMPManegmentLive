@@ -9,12 +9,10 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Newtonsoft.Json;
-using EMPManegment.Web.Helper;
 using System.Security.Claims;
 using NuGet.Protocol.Plugins;
 using System.Net;
 using EMPManegment.EntityModels.ViewModels.Models;
-using EMPManegment.Web.Helper;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
 using static System.Net.Mime.MediaTypeNames;
@@ -27,6 +25,7 @@ using Microsoft.IdentityModel.Tokens;
 using EMPManegment.EntityModels.ViewModels.UserModels;
 using Azure.Core;
 using EMPManegment.EntityModels.ViewModels.TaskModels;
+using EMPManegment.EntityModels.Crypto;
 
 namespace EMPManegment.Web.Controllers
 {
@@ -260,8 +259,9 @@ namespace EMPManegment.Web.Controllers
         {
             try
             {
+                var DocName = Guid.NewGuid() + "_" + doc.DocumentName.FileName;
                 var path = Environment.WebRootPath;
-                var filepath = "Content/UserDocuments/" + doc.DocumentName.FileName;
+                var filepath = "Content/UserDocuments/" + DocName;
                 var fullpath = Path.Combine(path, filepath);
                 UploadFile(doc.DocumentName, fullpath);
                 var uploadDocument = new DocumentInfoView()
@@ -269,8 +269,8 @@ namespace EMPManegment.Web.Controllers
                     Id = doc.Id,
                     UserId =doc.UserId,
                     DocumentTypeId = doc.DocumentTypeId,
-                    DocumentName = doc.DocumentName.FileName,
-                CreatedBy = doc.CreatedBy,
+                    DocumentName = DocName,
+                    CreatedBy = doc.CreatedBy,
                 };
                 ViewBag.Name = HttpContext.Session.GetString("UserID");
                 ApiResponseModel postuser = await APIServices.PostAsync(uploadDocument, "UserDetails/UploadDocument");
@@ -548,6 +548,22 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
-    }   
+
+        [HttpGet]
+        public async Task<FileResult> DownloadDocument(string documentName)
+        {
+            var filepath = "Content/UserDocuments/" + documentName;
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", filepath);
+            var memory = new MemoryStream();
+            using (var stream = new FileStream(path, FileMode.Open))
+            {
+                 await stream.CopyToAsync(memory);
+            }
+            memory.Position = 0;
+            var ContentType = "application/pdf"; 
+            var fileName = Path.GetFileName(path);
+            return File(memory, ContentType, fileName);
+        }
+    }
 }
 

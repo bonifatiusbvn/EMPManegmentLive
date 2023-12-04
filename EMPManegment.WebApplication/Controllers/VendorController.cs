@@ -1,7 +1,6 @@
 ﻿using EMPManagment.Web.Helper;
 using EMPManagment.Web.Models.API;
 using EMPManegment.EntityModels.View_Model;
-using EMPManegment.Web.Helper;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
@@ -83,11 +82,7 @@ namespace EMPManegment.Web.Controllers
                     {
                         return new JsonResult(new { Message = string.Format(postuser.message), Code = postuser.code });
                     }
-                //}
-                //else
-                //{
-                //    return View();
-                //}
+                
                 
             }
             catch (Exception ex)

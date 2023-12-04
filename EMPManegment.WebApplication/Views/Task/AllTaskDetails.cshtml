@@ -1,4 +1,4 @@
-﻿
+﻿@model List<EMPManegment.EntityModels.ViewModels.TaskModels.TaskDetailsView>
 @{
     ViewData["Title"] = "AllTaskDetails";
     Layout = "~/Views/Shared/_UserHomeLayout.cshtml";
@@ -35,15 +35,14 @@
                 </div>
             </div>
             <!-- end page title -->
-
             <div class="row">
                 <div class="col-xxl-3 col-sm-6">
                     <div class="card card-animate">
                         <div class="card-body">
                             <div class="d-flex justify-content-between">
                                 <div>
-                                    <p class="fw-medium text-muted mb-0">Total Tasks</p>
-                                    <h2 class="mt-4 ff-secondary fw-semibold"><span class="counter-value" data-target="234">0</span>k</h2>
+                                <p class="badge bg-dark  text-uppercase">Total Tasks</p>
+                                    <h2 class="mt-4 ff-secondary fw-semibold"><span class="counter-value" data-target="22"></span></h2>
                                     <p class="mb-0 text-muted">
                                         <span class="badge bg-light text-success mb-0">
                                             <i class="ri-arrow-up-line align-middle"></i> 17.32 %
@@ -67,8 +66,9 @@
                         <div class="card-body">
                             <div class="d-flex justify-content-between">
                                 <div>
-                                    <p class="fw-medium text-muted mb-0">Pending Tasks</p>
-                                    <h2 class="mt-4 ff-secondary fw-semibold"><span class="counter-value" data-target="64.5">0</span>k</h2>
+
+                                    <p class="badge bg-primary text-uppercase">Pending Tasks</p>
+                                    <h2 class="mt-4 ff-secondary fw-semibold"><span class="counter-value" data-target="05"></span></h2>
                                     <p class="mb-0 text-muted">
                                         <span class="badge bg-light text-danger mb-0">
                                             <i class="ri-arrow-down-line align-middle"></i> 0.87 %
@@ -83,8 +83,9 @@
                                     </div>
                                 </div>
                             </div>
-                        </div><!-- end card body -->
-                    </div>
+                        </div>
+                    <!-- end card body -->
+                   </div>
                 </div>
                 <!--end col-->
                 <div class="col-xxl-3 col-sm-6">
@@ -92,8 +93,8 @@
                         <div class="card-body">
                             <div class="d-flex justify-content-between">
                                 <div>
-                                    <p class="fw-medium text-muted mb-0">Completed Tasks</p>
-                                    <h2 class="mt-4 ff-secondary fw-semibold"><span class="counter-value" data-target="116.21">0</span>K</h2>
+                                <p class="badge bg-warning text-uppercase">Working Tasks</p>
+                                    <h2 class="mt-4 ff-secondary fw-semibold"><span class="counter-value" data-target="04"></span></h2>
                                     <p class="mb-0 text-muted">
                                         <span class="badge bg-light text-danger mb-0">
                                             <i class="ri-arrow-down-line align-middle"></i> 2.52 %
@@ -117,8 +118,8 @@
                         <div class="card-body">
                             <div class="d-flex justify-content-between">
                                 <div>
-                                    <p class="fw-medium text-muted mb-0">Deleted Tasks</p>
-                                    <h2 class="mt-4 ff-secondary fw-semibold"><span class="counter-value" data-target="14.84">0</span>%</h2>
+                                <p class="badge bg-success text-uppercase">Completed Tasks</p>
+                                    <h2 class="mt-4 ff-secondary fw-semibold"><span class="counter-value" data-target="07"></span></h2>
                                     <p class="mb-0 text-muted">
                                         <span class="badge bg-light text-success mb-0">
                                             <i class="ri-arrow-up-line align-middle"></i> 0.63 %
@@ -169,7 +170,6 @@
                                         <input type="text" class="form-control bg-light border-light" id="demo-datepicker" data-provider="flatpickr" data-date-format="d M, Y" data-range-date="true" placeholder="Select date range">
                                     </div>
                                     <!--end col-->
-
                                     <div class="col-xxl-3 col-sm-4">
                                         <div class="input-light">
                                             <select class="form-control" data-choices data-choices-search-false name="choices-single-default" id="idStatus">
@@ -198,19 +198,19 @@
                         <div class="card-body">
                             <div class="table-responsive table-card mb-4">
                                 <table class="table table-bordered table-striped align-middle" id="tasksTable">
-                                    <thead class="table-light text-muted text-center">
-                                        <tr>
-                                        <th class="sort" data-sort="UserName">UserName</th>
-                                        <th class="sort" data-sort="TaskTitle">TaskTitle</th>
-                                        <th class="sort" data-sort="TaskDetails">TaskDetails</th>
-                                        <th class="sort" data-sort="TaskType">TaskType</th>
-                                        <th class="sort" data-sort="TaskDate">TaskDate</th>
-                                        <th class="sort" data-sort="TaskEndDate">TaskEndDate</th>
-                                        <th class="sort" data-sort="TaskStatus">TaskStatus</th>
-                                        </tr>
-                                    </thead>
+                                      <thead class="table-light text-muted text-center">
+                                                <tr>
+                                                    <th class="sort" data-sort="UserName">UserName</th>
+                                                    <th class="sort" data-sort="TaskTitle">TaskTitle</th>
+                                                    <th class="sort" data-sort="TaskDetails">TaskDetails</th>
+                                                    <th class="sort" data-sort="TaskType">TaskType</th>
+                                                    <th class="sort" data-sort="TaskDate">TaskDate</th>
+                                                    <th class="sort" data-sort="TaskEndDate">TaskEndDate</th>
+                                                    <th class="sort" data-sort="TaskStatus">TaskStatus</th>
+                                                </tr>
+                                            </thead>
                                     <tbody class="list form-check-all" id="AllTaskDetails">
-                                     @*   <tr>
+                                        @*   <tr>
                                             <th scope="row">
                                                 <div class="form-check">
                                                     <input class="form-check-input" type="checkbox" name="chk_child" value="option1">
