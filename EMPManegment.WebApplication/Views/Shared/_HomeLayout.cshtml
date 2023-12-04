@@ -194,11 +194,11 @@
                             </div>
                         </div>
                         <div class="dropdown topbar-head-dropdown ms-1 header-item">
-                            <button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle" id="page-header-cart-dropdown" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-haspopup="true" aria-expanded="false">
+                            @* <button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle" id="page-header-cart-dropdown" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-haspopup="true" aria-expanded="false">
                                 <i class='bx bx-shopping-bag fs-22'></i>
                                 <span class="position-absolute topbar-badge cartitem-badge fs-10 translate-middle badge rounded-pill bg-info">5</span>
-                            </button>
-                            <div class="dropdown-menu dropdown-menu-xl dropdown-menu-end p-0 dropdown-menu-cart" aria-labelledby="page-header-cart-dropdown">
+                            </button> *@
+                           @*  <div class="dropdown-menu dropdown-menu-xl dropdown-menu-end p-0 dropdown-menu-cart" aria-labelledby="page-header-cart-dropdown">
                                 <div class="p-3 border-top-0 border-start-0 border-end-0 border-dashed border">
                                     <div class="row align-items-center">
                                         <div class="col">
@@ -345,7 +345,7 @@
                                     </a>
                                 </div>
                             </div>
-                        </div>
+                            </div>*@
 
 
                         <div class="ms-1 header-item d-none d-sm-flex">
@@ -647,9 +647,9 @@
                         
                                 <a class="dropdown-item" href="apps-chat.html"><i class="mdi mdi-message-text-outline text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Messages</span></a>
                                 <a class="dropdown-item" asp-action="UserTasks" asp-controller="Task"><i class="mdi mdi-calendar-check-outline text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Taskboard</span></a>
-                                <a class="dropdown-item" href="pages-faqs.html"><i class="mdi mdi-lifebuoy text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Help</span></a>
+                               @*  <a class="dropdown-item" href="pages-faqs.html"><i class="mdi mdi-lifebuoy text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Help</span></a> *@
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="pages-profile.html"><i class="mdi mdi-wallet text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Balance : <b>$5971.67</b></span></a>
+                              @*   <a class="dropdown-item" href="pages-profile.html"><i class="mdi mdi-wallet text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Balance : <b>$5971.67</b></span></a> *@
                                 <a class="dropdown-item" href="pages-profile-settings.html"><span class="badge bg-success-subtle text-success mt-1 float-end">New</span><i class="mdi mdi-cog-outline text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Settings</span></a>
                                 <a class="dropdown-item" asp-action="LockScreen" asp-controller="UserDetails"><i class="mdi mdi-lock text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Lock screen</span></a>
                                 <a class="dropdown-item" asp-action="Logout" asp-controller="UserLogin"><i class="mdi mdi-logout text-muted fs-16 align-middle me-1"></i> <span class="align-middle" data-key="t-logout">Logout</span></a>
@@ -719,21 +719,21 @@
                     <ul class="navbar-nav" id="navbar-nav">
                         <li class="menu-title"><span data-key="t-menu">Menu</span></li>
                         <li class="nav-item">
-                            <a class="nav-link menu-link" href="#sidebarDashboards" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarDashboards">
+                            <a class="nav-link menu-link" asp-action="UserHome" asp-controller="Home" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarDashboards">
                                 <i data-feather="home" class="icon-dual"></i> <span data-key="t-dashboards">Dashboards</span>
                             </a>
                             <div class="collapse menu-dropdown" id="sidebarDashboards">
                                 <ul class="nav nav-sm flex-column">
-                                    <li class="nav-item">
+                                    @* <li class="nav-item">
                                         <a href="dashboard-analytics.html" class="nav-link" data-key="t-analytics"> Analytics </a>
                                     </li>
                                     <li class="nav-item">
                                         <a href="dashboard-crm.html" class="nav-link" data-key="t-crm"> CRM </a>
-                                    </li>
+                                    </li> 
                                     <li class="nav-item">
                                         <a asp-action="UserHome" asp-controller="Home" class="nav-link" data-key="t-ecommerce"> Ecommerce </a>
                                     </li>
-                                    <li class="nav-item">
+                                   @*  <li class="nav-item">
                                         <a href="dashboard-crypto.html" class="nav-link" data-key="t-crypto"> Crypto </a>
                                     </li>
                                     <li class="nav-item">
@@ -744,7 +744,7 @@
                                     </li>
                                     <li class="nav-item">
                                         <a href="dashboard-job.html" class="nav-link" data-key="t-job">Job</a>
-                                    </li>
+                                    </li> *@
                                 </ul>
                             </div>
                         </li> <!-- end Dashboard Menu -->
@@ -755,12 +755,12 @@
                             <div class="collapse menu-dropdown" id="sidebarApps">
                                 <ul class="nav nav-sm flex-column">
                                     <li class="nav-item">
-                                        <a href="apps-calendar.html" class="nav-link" data-key="t-calendar"> Calendar </a>
+                                        <a href="#" class="nav-link" data-key="t-calendar"> Calendar </a>
                                     </li>
-                                    <li class="nav-item">
+                                   @*  <li class="nav-item">
                                         <a href="apps-chat.html" class="nav-link" data-key="t-chat"> Chat </a>
-                                    </li>
-                                    <li class="nav-item">
+                                    </li> *@
+                                   @*  <li class="nav-item">
                                         <a href="#sidebarEmail" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarEmail" data-key="t-email">
                                             Email
                                         </a>
@@ -786,14 +786,14 @@
                                                 </li>
                                             </ul>
                                         </div>
-                                    </li>
+                                    </li> *@
                                     <li class="nav-item">
                                         <a href="#sidebarEcommerce" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarEcommerce" data-key="t-ecommerce">
                                             Ecommerce
                                         </a>
                                         <div class="collapse menu-dropdown" id="sidebarEcommerce">
                                             <ul class="nav nav-sm flex-column">
-                                                <li class="nav-item">
+                                               @*  <li class="nav-item">
                                                     <a href="apps-ecommerce-products.html" class="nav-link" data-key="t-products"> Products </a>
                                                 </li>
                                                 <li class="nav-item">
@@ -801,11 +801,11 @@
                                                 </li>
                                                 <li class="nav-item">
                                                     <a href="apps-ecommerce-add-product.html" class="nav-link" data-key="t-create-product"> Create Product </a>
-                                                </li>
+                                                </li> *@
                                                 <li class="nav-item">
                                                     <a asp-action="CreateOrder" asp-controller="OrderMaster" class="nav-link" data-key="t-orders"> Orders </a>
                                                 </li>
-                                                <li class="nav-item">
+                                                @* <li class="nav-item">
                                                     <a href="apps-ecommerce-order-details.html" class="nav-link" data-key="t-order-details"> Order Details </a>
                                                 </li>
                                                 <li class="nav-item">
@@ -822,7 +822,7 @@
                                                 </li>
                                                 <li class="nav-item">
                                                     <a href="apps-ecommerce-seller-details.html" class="nav-link" data-key="t-sellers-details"> Seller Details </a>
-                                                </li>
+                                                </li> *@
                                             </ul>
                                         </div>
                                     </li>
@@ -836,7 +836,7 @@
                                                     <a asp-action="ProjectList" asp-controller="Project" class="nav-link" data-key="t-list"> List </a>
                                                 </li>
                                                 <li class="nav-item">
-                                                    <a href="apps-projects-overview.html" class="nav-link" data-key="t-overview"> Overview </a>
+                                                    <a href="#" class="nav-link" data-key="t-overview"> Overview </a>
                                                 </li>
                                                 <li class="nav-item">
                                                     <a asp-action="CreateProject" asp-controller="Project" class="nav-link" data-key="t-create-project"> Create Project </a>
@@ -857,16 +857,16 @@
                                                     <a asp-action="AllTaskDetails" asp-controller="Task" class="nav-link" data-key="t-list-view"> List View </a>
                                                 </li>
                                                 <li class="nav-item">
-                                                    <a href="apps-tasks-details.html" class="nav-link" data-key="t-task-details"> Task Details </a>
+                                                    <a href="#" class="nav-link" data-key="t-task-details"> Task Details </a>
                                                 </li>
                                             </ul>
                                         </div>
                                     </li>
-                                    <li class="nav-item">
+                                  @*   <li class="nav-item">
                                         <a href="#sidebarCRM" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarCRM" data-key="t-crm">
                                             CRM
                                         </a>
-                                        <div class="collapse menu-dropdown" id="sidebarCRM">
+                                    @*     <div class="collapse menu-dropdown" id="sidebarCRM">
                                             <ul class="nav nav-sm flex-column">
                                                 <li class="nav-item">
                                                     <a href="apps-crm-contacts.html" class="nav-link" data-key="t-contacts"> Contacts </a>
@@ -881,8 +881,8 @@
                                                     <a href="apps-crm-leads.html" class="nav-link" data-key="t-leads"> Leads </a>
                                                 </li>
                                             </ul>
-                                        </div>
-                                    </li>
+                                        </div> 
+                                    </li> 
                                     <li class="nav-item">
                                         <a href="#sidebarCrypto" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarCrypto" data-key="t-crypto">
                                             Crypto
@@ -909,7 +909,7 @@
                                                 </li>
                                             </ul>
                                         </div>
-                                    </li>
+                                    </li> *@
                                     <li class="nav-item">
                                         <a href="#sidebarInvoices" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarInvoices" data-key="t-invoices">
                                             Invoices
@@ -917,10 +917,10 @@
                                         <div class="collapse menu-dropdown" id="sidebarInvoices">
                                             <ul class="nav nav-sm flex-column">
                                                 <li class="nav-item">
-                                                    <a href="apps-invoices-list.html" class="nav-link" data-key="t-list-view"> List View </a>
+                                                    <a href="#" class="nav-link" data-key="t-list-view"> List View </a>
                                                 </li>
                                                 <li class="nav-item">
-                                                    <a href="apps-invoices-details.html" class="nav-link" data-key="t-details"> Details </a>
+                                                    <a href="#" class="nav-link" data-key="t-details"> Details </a>
                                                 </li>
                                                 <li class="nav-item">
                                                     <a asp-action="CreateInvoice" asp-controller="Sales" class="nav-link" data-key="t-create-invoice"> Create Invoice </a>
@@ -928,7 +928,7 @@
                                             </ul>
                                         </div>
                                     </li>
-                                    <li class="nav-item">
+                                    @* <li class="nav-item">
                                         <a href="#sidebarTickets" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarTickets" data-key="t-supprt-tickets">
                                             Support Tickets
                                         </a>
@@ -1046,12 +1046,12 @@
                                     </li>
                                     <li class="nav-item">
                                         <a href="apps-api-key.html" class="nav-link" data-key="t-api-key">API Key</a>
-                                    </li>
+                                    </li> *@
                                 </ul>
                             </div>
                         </li>
 
-                        <li class="nav-item">
+                       @*  <li class="nav-item">
                             <a class="nav-link menu-link" href="#sidebarLayouts" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarLayouts">
                                 <i data-feather="layout" class="icon-dual"></i> <span data-key="t-layouts">Layouts</span> <span class="badge badge-pill bg-danger" data-key="t-hot">Hot</span>
                             </a>
@@ -1071,7 +1071,7 @@
                                     </li>
                                 </ul>
                             </div>
-                        </li> <!-- end Dashboard Menu -->
+                        </li> <!-- end Dashboard Menu --> *@
 
                         <li class="menu-title"><i class="ri-more-fill"></i> <span data-key="t-pages">Pages</span></li>
 
@@ -1559,35 +1559,30 @@
                                     <div class="col-12">
                                         <div class="d-flex align-items-lg-center flex-lg-row flex-column">
                                             <div class="flex-grow-1">
-                                                <h4 class="fs-16 mb-1">Good Morning, @Accessor.HttpContext.Session.GetString("FirstName")!</h4>
+                                                <h4 class="fs-16 mb-1">Welcome..!! @Accessor.HttpContext.Session.GetString("FirstName")</h4>
                                                 <input type="text" value="@Accessor.HttpContext.Session.GetString("UserID")" hidden id="txtuserid"/>
                                                 <p class="text-muted mb-0">
                                                     Here's what's happening with your store
-                                                    today.
+                                                    @DateTime.Today.ToShortDateString() today.
                                                 </p>
                                             </div>
                                             <div class="mt-3 mt-lg-0">
                                                 <form action="javascript:void(0);">
                                                     <div class="row g-3 mb-0 align-items-center">
-                                                        <div class="col-sm-auto">
+                                                       @*  <div class="col-sm-auto">
                                                             <div class="input-group">
-                                                                <input type="text" class="form-control border dash-filter-picker" id="txttodayDate"  value="@DateTime.Today.ToShortDateString()">
+                                                                <input type="text" class="form-control border dash-filter-picker" id="txttodayDate"  value="">
                                                                 <div class="input-group-text bg-primary border-primary text-white">
                                                                     <i class="ri-calendar-2-line"></i>
                                                                 </div>
                                                             </div>
-                                                        </div>
+                                                        </div> *@
                                                         <!--end col-->
-                                                        <div class="col-auto">
-                                                            <button type="button" class="btn btn-soft-primary">
-                                                                <i class="ri-add-circle-line align-middle me-1"></i>
-                                                                Add Product
-                                                            </button>
-                                                        </div>
+                                                        
                                                         <!--end col-->
-                                                        <div class="col-auto">
+                                                       @*  <div class="col-auto">
                                                             <button type="button" class="btn btn-soft-secondary btn-icon waves-effect waves-light layout-rightside-btn"><i class="ri-pulse-line"></i></button>
-                                                        </div>
+                                                        </div> *@
                                                         <!--end col-->
                                                     </div>
                                                     <!--end row-->
