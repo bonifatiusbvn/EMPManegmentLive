@@ -62,5 +62,13 @@ namespace EMPManagment.API.Controllers
             IEnumerable<VendorTypeView> VendorType = await VendorDetails.GetVendorType();
             return Ok(new { code = 200, data = VendorType.ToList() });
         }
+
+        [HttpGet]
+        [Route("GetVendorDetailsById")]
+        public async Task<IActionResult> GetVendorDetailsById(Guid vendorId)
+        {
+            var vendor = await VendorDetails.GetVendorById(vendorId);
+            return Ok(new { code = 200, data = vendor });
+        }
     }
 }

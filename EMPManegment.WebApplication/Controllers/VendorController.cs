@@ -12,6 +12,7 @@ using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 using EMPManegment.EntityModels.ViewModels.UserModels;
 using EMPManegment.EntityModels.ViewModels;
 using Microsoft.AspNetCore.Identity;
+using EMPManegment.EntityModels.ViewModels.TaskModels;
 
 namespace EMPManegment.Web.Controllers
 {
@@ -169,6 +170,25 @@ namespace EMPManegment.Web.Controllers
                     data = vendorList,
                 };
                 return new JsonResult(jsonData);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        [HttpGet]
+        public async Task<JsonResult> GetVendorDetailsById(Guid VendorId)
+        {
+            try
+            {
+                VendorDetailsView vendordetails = new VendorDetailsView();
+                HttpClient client = WebAPI.Initil();
+                ApiResponseModel response = await APIServices.GetAsync("", "AddVendor/GetVendorDetailsById?vendorId=" + VendorId);
+                if (response.code == 200)
+                {
+                    vendordetails = JsonConvert.DeserializeObject<VendorDetailsView>(response.data.ToString());
+                }
+                return new JsonResult(vendordetails);
             }
             catch (Exception ex)
             {

@@ -16,22 +16,61 @@ function GetAllVendorData() {
             dataType: 'json'
         },
         columns: [
-            { "data": "vendorName", "name": "VendorName", "autowidth": true },
-            { "data": "vendorEmail", "name": "VendorEmail", "autowidth": true },
-            { "data": "vendorPhone", "name": "VendorPhone", "autowidth": true },
-            { "data": "vendorBankAccountNo", "name": "VendorBankAccountNo", "autowidth": true },
-            { "data": "vendorBankName", "name": "VendorBankName", "autowidth": true },
-            { "data": "vendorBankIfsc", "name": "VendorBankIfsc", "autowidth": true },
-            { "data": "vendorGstnumber", "name": "VendorGstnumber", "autowidth": true },
-            { "data": "vendorAddress", "name": "VendorAddress", "autowidth": true },
+            { "data": "vendorCompany", "name": "VendorCompany"},
+            { "data": "vendorFirstName", "name": "VendorFirstName" },
+            { "data": "vendorEmail", "name": "VendorEmail" },
+            { "data": "vendorPhone", "name": "VendorPhone"},
+            { "data": "vendorCompanyNumber", "name": "VendorCompanyNumber"},
+            { "data": "vendorCompanyEmail", "name": "VendorCompanyEmail"},
+            { "data": "vendorAddress", "name": "VendorAddress" },
+            {
+                "render": function (data, type, full) {debugger      
+                    return '<a class="btn btn-sm btn-secondary edit-item-btn" onclick="VendorDetails(\'' + full.id + '\')">Details</a>';
+                }
+            },
         ],
         columnDefs: [{
             "defaultContent": "",
-            "targets": "_all"
+            "targets": "_all",
         }]
     });
 }
 
+function VendorDetails(Id) {debugger
+    $.ajax({
+        url: '/Vendor/GetVendorDetailsById?VendorId=' + Id,
+        type: "get",
+        contentType: 'application/json;charset=utf-8;',
+        dataType: 'json',
+        success: function (response) {
+            $('#VendorDetailsModel').modal('show');
+            $('#VendorFirstName').text(response.vendorFirstName);
+            $('#VendorLastName').text(response.vendorLastName);
+            $('#VendorEmail').text(response.vendorEmail);
+            $('#VendorPhone').text(response.vendorPhone);
+            $('#VendorContectNo').text(response.vendorContectNo);
+            $('#VendorType').text(response.vendorTypeName);
+            $('#VendorCountry').text(response.vendorCountryName);
+            $('#VendorState').text(response.vendorStateName);
+            $('#VendorCity').text(response.vendorCityName);
+            $('#VendorPinCode').text(response.vendorPinCode);
+            $('#VendorAddress').text(response.vendorAddress);
+            $('#VendorCompany').text(response.vendorCompany);
+            $('#VendorCompanyType').text(response.vendorCompanyType);
+            $('#VendorCompanyEmail').text(response.vendorCompanyEmail);
+            $('#VendorCompanyNumber').text(response.vendorCompanyNumber);
+            $('#VendorBankAccountNo').text(response.vendorBankAccountNo);
+            $('#VendorBankName').text(response.vendorBankName);
+            $('#VendorBankBranch').text(response.vendorBankBranch);
+            $('#VendorAccountHolderName').text(response.vendorAccountHolderName);
+            $('#VendorBankIfsc').text(response.vendorBankIfsc);
+            $('#VendorGstnumber').text(response.vendorGstnumber);
+        },
+        error: function () {
+            alert('Data not found');
+        }
+    });
+}
 function AddVendorDetails() {
     
 
