@@ -24,12 +24,12 @@ namespace EMPManagment.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserDetailsController : ControllerBase
+    public class UserProfileController : ControllerBase
     {
         public IUserDetailsServices UserListServices { get; }
         public IUserAttendanceServices UserAttendance { get; }
 
-        public UserDetailsController(IUserDetailsServices userListServices,IUserAttendanceServices userAttendance)
+        public UserProfileController(IUserDetailsServices userListServices,IUserAttendanceServices userAttendance)
         {
             UserListServices = userListServices;
             UserAttendance = userAttendance;

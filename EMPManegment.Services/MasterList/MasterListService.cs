@@ -9,20 +9,22 @@ using System.Threading.Tasks;
 
 namespace EMPManegment.Services.CSC
 {
-    public class CSCService : ICSCServices
+    public class MasterListService : IMasterListServices
     {
-        public CSCService(ICSC cSC) 
+        public IMasterList MasterList { get; }
+
+        public MasterListService(IMasterList masterList) 
         {
-            CSC = cSC;
+            MasterList = masterList;
         }
 
-        public ICSC CSC { get; }
+      
 
         public async Task<IEnumerable<CityView>> GetCities(int cityId)
         {
             try
             {
-               return await CSC.GetCities(cityId);
+               return await MasterList.GetCities(cityId);
             }
             catch (Exception ex)
             {
@@ -35,7 +37,7 @@ namespace EMPManegment.Services.CSC
         {
             try
             {
-                return CSC.GetCountries();
+                return MasterList.GetCountries();
             }
             catch (Exception ex)
             {
@@ -48,7 +50,7 @@ namespace EMPManegment.Services.CSC
         {
             try
             {
-                return CSC.GetQuestion();
+                return MasterList.GetQuestion();
 
             }
             catch (Exception ex)
@@ -62,13 +64,17 @@ namespace EMPManegment.Services.CSC
         {
             try
             {
-                return CSC.GetStates(stateId);
+                return MasterList.GetStates(stateId);
             }
             catch (Exception ex)
             {
 
                 throw ex;
             }
+        }
+        public async Task<IEnumerable<Department>> GetDepartment()
+        {
+            return await MasterList.GetDepartment();
         }
     }
 }

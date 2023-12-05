@@ -133,7 +133,7 @@
                     <div class="col-lg-12">
                         <div class="card overflow-hidden border-0 m-0">
                             <div class="row justify-content-center g-0">
-                             
+
 
                                 <div class="col-lg-12">
                                     <div class="p-lg-5 p-4">
@@ -142,7 +142,7 @@
                                         </div>
 
                                         <div class="mt-4">
-                                            <form class="form w-150 h-100" id="empaddDetails" asp-action="AddEmpDetail" method="post" enctype="multipart/form-data">
+                                            <form class="form w-150 h-100" id="empaddDetails" asp-action="UserSingUp" method="post" enctype="multipart/form-data">
                                                 <div class="fv-row mb-4">
                                                     <select asp-for=DepartmentId id="ddlDepartmenrnt" class="form-control">
                                                         <option>--Select Department--</option>
@@ -242,47 +242,47 @@
                                                             <span asp-validation-for="Address" class="text-danger"></span>
                                                         </div>
                                                     </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-6">
-                                                            <div class="mb-3">
-                                                               
-                                                                <div class="position-relative auth-pass-inputgroup">
-                                                                    <input type="password" class="form-control pe-5 password-input" onpaste="return false" placeholder="Enter password" id="password-input" aria-describedby="passwordInput" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" asp-for="Password">
-                                                                    <button class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon" type="button" id="password-addon"><i class="ri-eye-fill align-middle"></i></button>
-                                                                </div>
-                                                            </div>
-                                                            <div id="password-contain" class="p-3 bg-light mb-2 rounded">
-                                                                <h5 class="fs-13 fw-semibold">Password must contain:</h5>
-                                                                <p id="pass-length" class="invalid fs-12 mb-2">Minimum <b>8 characters</b></p>
-                                                                <p id="pass-lower" class="invalid fs-12 mb-2">At <b>lowercase</b> letter (a-z)</p>
-                                                                <p id="pass-upper" class="invalid fs-12 mb-2">At least <b>uppercase</b> letter (A-Z)</p>
-                                                                <p id="pass-number" class="invalid fs-12 mb-0">A least <b>number</b> (0-9)</p>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-6">
+                                                        <div class="mb-3">
+
+                                                            <div class="position-relative auth-pass-inputgroup">
+                                                                <input type="password" class="form-control pe-5 password-input" onpaste="return false" placeholder="Enter password" id="password-input" aria-describedby="passwordInput" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" asp-for="Password">
+                                                                <button class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon" type="button" id="password-addon"><i class="ri-eye-fill align-middle"></i></button>
                                                             </div>
                                                         </div>
-                                                        <div class="col-6">
-                                                          
-                                                            <div class="fv-row mb-2">
-                                                                <input type="password" placeholder="Confirm Password" asp-for="ConfirmPassword" autocomplete="off" class="form-control" />
-                                                            </div>
+                                                        <div id="password-contain" class="p-3 bg-light mb-2 rounded">
+                                                            <h5 class="fs-13 fw-semibold">Password must contain:</h5>
+                                                            <p id="pass-length" class="invalid fs-12 mb-2">Minimum <b>8 characters</b></p>
+                                                            <p id="pass-lower" class="invalid fs-12 mb-2">At <b>lowercase</b> letter (a-z)</p>
+                                                            <p id="pass-upper" class="invalid fs-12 mb-2">At least <b>uppercase</b> letter (A-Z)</p>
+                                                            <p id="pass-number" class="invalid fs-12 mb-0">A least <b>number</b> (0-9)</p>
                                                         </div>
                                                     </div>
-                                                    <div class="fv-row mb-2">
-                                                        <label class="fs-6 fw-semibold form-label mt-1">Upload Image</label>
-                                                        <input type="file" asp-for="Image" autocomplete="off" class="form-control bg-transparent" />
+                                                    <div class="col-6">
+
+                                                        <div class="fv-row mb-2">
+                                                            <input type="password" placeholder="Confirm Password" asp-for="ConfirmPassword" autocomplete="off" class="form-control" />
+                                                        </div>
                                                     </div>
+                                                </div>
+                                                <div class="fv-row mb-2">
+                                                    <label class="fs-6 fw-semibold form-label mt-1">Upload Image</label>
+                                                    <input type="file" asp-for="Image" autocomplete="off" class="form-control bg-transparent" />
+                                                </div>
                                                 <div class="mt-4">
                                                     <button class="btn btn-success w-100" type="submit">Sign Up</button>
                                                 </div>
 
-                                               
+
                                             </form>
                                         </div>
 
                                         <div class="text-center fw-semibold fs-6 mb-1">
                                             Already have an Account?
                                             <a class="link-primary fw-semibold">
-                                                @Html.ActionLink("Login","Login","UserLogin")
+                                                @Html.ActionLink("Login", "Login", "Authentication")
                                             </a>
                                         </div>
                                     </div>
@@ -307,7 +307,7 @@
                         <div class="text-center">
                             <p class="mb-0">
                                 &copy;
-                                <script>document.write(new Date().getFullYear())</script>Bonifatius <i class="mdi mdi-heart text-danger"></i> 
+                                <script>document.write(new Date().getFullYear())</script>Bonifatius <i class="mdi mdi-heart text-danger"></i>
                             </p>
                         </div>
                     </div>
@@ -330,7 +330,7 @@
     <!-- password create init -->
     <script src="~/UserHome/minimal/assets/js/pages/passowrd-create.init.js"></script>
     <script src="~/lib/jquery/dist/jquery.js"></script>
-    <script src="~/Moduls/employeescript.js"></script>
+    <script src="~/Moduls/MasterListScript.js"></script>
 </body>
 
 

@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace EMPManegment.Inretface.Interface.CSC
 {
-    public interface ICSC
+    public interface IMasterList
     {
         Task<IEnumerable<CountryView>> GetCountries();
         Task<IEnumerable<QuestionView>> GetQuestion();
         Task<IEnumerable<StateView>> GetStates(int StateId);
         Task<IEnumerable<CityView>> GetCities(int CityId);
-     
+        Task<IEnumerable<Department>> GetDepartment();
     }
 }

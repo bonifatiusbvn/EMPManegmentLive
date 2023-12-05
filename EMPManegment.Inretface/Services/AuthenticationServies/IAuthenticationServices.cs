@@ -12,11 +12,11 @@ using System.Threading.Tasks;
 
 namespace EMPManegment.Inretface.Services.AddEmployeeServies
 {
-    public interface IAddEmpDetailsServices
+    public interface IAuthenticationServices
     {
         string CheckEmloyess();
-        Task<UserResponceModel> AddEmployee(EmpDetailsView AddEmployee);
-        Task<IEnumerable<Department>> EmpDepartment();
-       
+        Task<UserResponceModel> UserSingUp(EmpDetailsView AddEmployee);
+        Task<LoginResponseModel> LoginUser(LoginRequest loginUser);
+
     }
 }

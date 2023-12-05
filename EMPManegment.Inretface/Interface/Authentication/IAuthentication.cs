@@ -11,11 +11,13 @@ using System.Threading.Tasks;
 
 namespace EMPManegment.Inretface.EmployeesInterface.AddEmployee
 {
-    public interface IAddEmpDetails
+    public interface IAuthentication
     {
         string CheckEmloyess();
-        Task <UserResponceModel> AddEmployee(EmpDetailsView AddEmployee);
-        Task<IEnumerable<Department>> EmpDepartment();
-       
+        Task <UserResponceModel> UserSingUp(EmpDetailsView AddEmployee);
+        Task<LoginResponseModel> LoginUser(LoginRequest LoginUserRequest);
+
+        public bool GetUserName(string Username);
+
     }
 }

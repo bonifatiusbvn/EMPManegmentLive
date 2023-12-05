@@ -105,7 +105,7 @@ namespace EMPManegment.Web.Controllers
             {
                 List<EmpDetailsView> userList = new List<EmpDetailsView>();
                 HttpClient client = WebAPI.Initil();
-                ApiResponseModel res = await APIServices.GetAsync("", "UserDetails/GetUsersNameList");
+                ApiResponseModel res = await APIServices.GetAsync("", "UserProfile/GetUsersNameList");
                 if (res.code == 200)
                 {
                     userList = JsonConvert.DeserializeObject<List<EmpDetailsView>>(res.data.ToString());

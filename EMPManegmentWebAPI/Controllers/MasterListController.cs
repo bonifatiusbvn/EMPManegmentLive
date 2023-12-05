@@ -8,14 +8,14 @@ namespace EMPManagment.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CSCController : ControllerBase
+    public class MasterListController : ControllerBase
     {
-        public CSCController(ICSC cSC)
+        public MasterListController(IMasterList cSC)
         {
             CSC = cSC;
         }
 
-        public ICSC CSC { get; }
+        public IMasterList CSC { get; }
 
         [HttpGet]
         [Route("GetCountries")]
@@ -51,5 +51,14 @@ namespace EMPManagment.API.Controllers
             return Ok(new { code = 200, data = getQuestion.ToList() });
         }
 
+        [HttpGet]
+        [Route("GetDepartment")]
+        public async Task<IActionResult> GetDepartment()
+        {
+            IEnumerable<Department> getDepartment = await CSC.GetDepartment();
+            return Ok(new { code = 200, data = getDepartment.ToList() });
+        }
+
+        
     }
 }
