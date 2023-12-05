@@ -36,12 +36,107 @@
                                 </tbody>
                             </table>
                         </div>
+                    <div class="modal fade empmodal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h3 class="text-info modal-title" id="myLargeModalLabel">User Edit</h3>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="fv-row mb-8">
+                                        <div class="row">
+                                            <div class="fv-row mb-6">
+                                                <label class="from-label">Department</label>
+                                                <select id="ddlDepartmenrnt" class="form-control bg-transparent">
+                                                    <option>--Select Department--</option>
+                                                </select>
+                                                <input type="hidden" id="deptid" value="" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="fv-row mb-6">
+                                        <input type="hidden" readonly id="Userid" class="form-control bg-transparent" />
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">First Name</label>
+                                                <input type="text" class="form-control" id="FirstName">
+                                                <span id="txtFirstName" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Last Name</label>
+                                                <input type="text" class="form-control" id="LastName">
+                                                <span id="txtLastName" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <div class="fv-row mb-3">
+                                                <label class="form-label">DateOfBirth</label>
+                                                <input type="datetime-local" class="form-control" id="Dob">
+                                                <span id="txtDob" class="text-danger"></span>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-6">
+                                            <div class="fv-row mb-3">
+                                                <label class="from-label">Gender</label>
+                                                <select id="Gender" class="form-control bg-transparent">
+                                                    <option value="Male">Male</option>
+                                                    <option value="Female">Female</option>
+                                                    <option value="Other">Other</option>
+                                                </select>
+                                                <input type="hidden" id="Gender" value="" />
+                                                <span class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Email</label>
+                                                <input type="email" class="form-control" id="Email">
+                                                <span id="txtEmail" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">PhoneNumber</label>
+                                                <input type="number" class="form-control" id="PhoneNo">
+                                                <span id="txtphno" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="fv-row mb-6">
+                                        <label class="form-label">Address</label>
+                                        <input type="text" class="form-control" id="Address" style="height: 75px;">
+                                        <span id="txtAddress" class="text-danger"></span>
+                                    </div>
+
+                                    <div class="modal-footer m-3">
+                                        <button type="submit" class="btn btn-info" onclick="UpdateUserDetails()" id="btnUpdate">Update</button>
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+
+                            </div><!-- /.modal-content -->
+                        </div><!-- /.modal-dialog -->
+                    </div><!-- /.modal -->
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+
+
+
 
 
 <!-- end table responsive -->
@@ -51,4 +146,5 @@
 
 <script src="~/lib/jquery/dist/jquery.js"></script>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/moduls/employeescript.js"></script>
 <script src="~/moduls/userdetailsScript.js"></script>
