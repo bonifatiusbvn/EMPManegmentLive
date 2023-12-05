@@ -73,7 +73,7 @@ namespace EMPManegment.Web.Controllers
                             new Claim("Fullname", userlogin.Data.FullName),
                             new Claim("UserName", userlogin.Data.UserName),
                             new Claim("ProfileImage", userlogin.Data.ProfileImage),
-                            new Claim("IsAdmin", userlogin.Data.IsAdmin.ToString()),
+                            new Claim("IsAdmin", userlogin.Data.Role.ToString()),
 
                         };
 
@@ -84,7 +84,7 @@ namespace EMPManegment.Web.Controllers
                         HttpContext.Session.SetString("FullName", userlogin.Data.FullName);
                         HttpContext.Session.SetString("UserName", userlogin.Data.UserName);
                         HttpContext.Session.SetString("ProfileImage", userlogin.Data.ProfileImage);
-                        HttpContext.Session.SetString("IsAdmin", userlogin.Data.IsAdmin.ToString());
+                        HttpContext.Session.SetString("IsAdmin", userlogin.Data.Role.ToString());
                         return RedirectToAction("UserHome", "Home");
                     }  
                 }
