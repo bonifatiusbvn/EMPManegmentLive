@@ -1,4 +1,6 @@
-﻿@inject IHttpContextAccessor Accessor
+﻿ @using EMPManegment.Web.Models;
+ @inject IHttpContextAccessor Accessor;
+@inject UserSession _userSession
 <!doctype html>
 <html lang="en" data-layout="vertical" data-topbar="light" data-sidebar="light" data-sidebar-size="lg" data-sidebar-image="none" data-preloader="disable">
 
@@ -632,17 +634,17 @@
                         <div class="dropdown ms-sm-3 header-item topbar-user">
                             <button type="button" class="btn" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="d-flex align-items-center">
-                                    <img class="rounded-circle header-profile-user" src="~/@Accessor.HttpContext.Session.GetString("ProfileImage")" alt="Header Avatar">
+                                        <img class="rounded-circle header-profile-user" src="~/@UserSession.ProfilePhoto" alt="Header Avatar">
                                     
                                     <span class="text-start ms-xl-2">
-                                        <span class="d-none d-xl-inline-block ms-1 fw-medium user-name-text">@Accessor.HttpContext.Session.GetString("FullName")</span>
-                                        <span class="d-none d-xl-block ms-1 fs-12 user-name-sub-text">@Accessor.HttpContext.Session.GetString("UserName")</span>
+                                            <span class="d-none d-xl-inline-block ms-1 fw-medium user-name-text">@_userSession.FullName</span>
+                                            <span class="d-none d-xl-block ms-1 fs-12 user-name-sub-text">@_userSession.UserName</span>
                                     </span>
                                 </span>
                             </button>
                             <div class="dropdown-menu dropdown-menu-end">
                                 <!-- item-->
-                                <h6 class="dropdown-header">Welcome @Accessor.HttpContext.Session.GetString("FirstName")!</h6>
+                                    <h6 class="dropdown-header">Welcome @_userSession.FirstName !</h6>
                                 <a class="dropdown-item" asp-action="UserProfile" asp-controller="UserDetails"><i class="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Profile</span></a>
                         
                                 <a class="dropdown-item" href="apps-chat.html"><i class="mdi mdi-message-text-outline text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Messages</span></a>
@@ -1556,8 +1558,8 @@
                                     <div class="col-12">
                                         <div class="d-flex align-items-lg-center flex-lg-row flex-column">
                                             <div class="flex-grow-1">
-                                                <h4 class="fs-16 mb-1">Welcome..!! @Accessor.HttpContext.Session.GetString("FirstName")</h4>
-                                                <input type="text" value="@Accessor.HttpContext.Session.GetString("UserID")" hidden id="txtuserid"/>
+                                                <h4 class="fs-16 mb-1">Welcome..!! @_userSession.FirstName</h4>
+                                                <input type="text" value="@_userSession.UserId" hidden id="txtuserid" />
                                                 <p class="text-muted mb-0">
                                                     Here's what's happening with your store
                                                     @DateTime.Today.ToShortDateString() today.
@@ -1708,7 +1710,7 @@
 
 <script lang="ts" setup>
    
-    var UserId = '@Accessor.HttpContext.Session.GetString("UserID")';
+    var UserId = '@_userSession.UserId';
     var TodayDate = '@DateTime.Today';
        
 </script>

@@ -22,6 +22,7 @@ namespace EMPManegment.Web.Controllers
             WebAPI = webAPI;
             Environment = environment;
             APIServices = aPIServices;
+
         }
         public IActionResult Index()
         {

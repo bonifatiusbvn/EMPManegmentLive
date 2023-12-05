@@ -8,7 +8,7 @@ using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-namespace EMPManegment.Web.Models.UserSession
+namespace EMPManegment.Web.Models.LoginValidate
 {
     public class ValidateLogin : ActionFilterAttribute 
     {
