@@ -63,7 +63,7 @@ namespace EMPManegment.Repository.AddEmpRepository
                         Image = addemp.Image,
                         IsActive = true,
                         JoiningDate = DateTime.Now,
-                        IsAdmin = false,
+                        Role = 4,
                         EmailConfirmed = true,
                         PhoneNumberConfirmed = true,
 

@@ -33,6 +33,8 @@ public partial class BonifatiusEmployeesContext : DbContext
 
     public virtual DbSet<TblQuestion> TblQuestions { get; set; }
 
+    public virtual DbSet<TblRoleMaster> TblRoleMasters { get; set; }
+
     public virtual DbSet<TblSalarySlip> TblSalarySlips { get; set; }
 
     public virtual DbSet<TblState> TblStates { get; set; }
@@ -50,7 +52,6 @@ public partial class BonifatiusEmployeesContext : DbContext
     public virtual DbSet<TblVendorType> TblVendorTypes { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<OrderMaster>(entity =>
@@ -171,6 +172,13 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.ToTable("tblQuestion");
         });
 
+        modelBuilder.Entity<TblRoleMaster>(entity =>
+        {
+            entity.ToTable("tblRoleMaster");
+
+            entity.Property(e => e.Role).HasMaxLength(20);
+        });
+
         modelBuilder.Entity<TblSalarySlip>(entity =>
         {
             entity
@@ -274,6 +282,10 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.HasOne(d => d.Question).WithMany(p => p.TblUsers)
                 .HasForeignKey(d => d.QuestionId)
                 .HasConstraintName("FK_tblUsers_tblQuestion");
+
+            entity.HasOne(d => d.RoleNavigation).WithMany(p => p.TblUsers)
+                .HasForeignKey(d => d.Role)
+                .HasConstraintName("FK_tblUsers_tblRoleMaster");
 
             entity.HasOne(d => d.State).WithMany(p => p.TblUsers)
                 .HasForeignKey(d => d.StateId)

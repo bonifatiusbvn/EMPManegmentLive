@@ -51,7 +51,7 @@ namespace EMPManegment.Repository.UserLoginRepository
                             userModel.FullName = tblUser.FirstName +" "+ tblUser.LastName;
                             userModel.FirstName = tblUser.FirstName;
                             userModel.ProfileImage = tblUser.Image;
-                            userModel.IsAdmin = tblUser.IsAdmin == null ? false : (bool)tblUser.IsAdmin;
+                            userModel.Role = tblUser.Role;
                             response.Data = userModel;
                             response.Code = (int)HttpStatusCode.OK;
 
