@@ -9,6 +9,7 @@ using System.Net;
 using System.Security.Claims;
 using EMPManegment.EntityModels.Crypto;
 using EMPManegment.EntityModels.View_Model;
+using EMPManegment.Web.Models;
 
 namespace EMPManegment.Web.Controllers
 {
@@ -43,7 +44,7 @@ namespace EMPManegment.Web.Controllers
                 if (ModelState.IsValid)
                 {
 
-                    ApiResponseModel responsemodel = await APIServices.PostAsync(login, "User/Login");
+                    ApiResponseModel responsemodel = await APIServices.PostAsync(login, "UserLogin/Login");
                     LoginResponseModel userlogin = new LoginResponseModel();
                     if (responsemodel.code != (int)HttpStatusCode.OK)
                     {
@@ -68,21 +69,18 @@ namespace EMPManegment.Web.Controllers
                         {
                             new Claim("UserID", userlogin.Data.Id.ToString()),
                             new Claim("FirstName", userlogin.Data.FirstName),
-                            new Claim("Fullname", userlogin.Data.FullName),
+                            new Claim("FullName", userlogin.Data.FullName),
                             new Claim("UserName", userlogin.Data.UserName),
                             new Claim("ProfileImage", userlogin.Data.ProfileImage),
                             new Claim("IsAdmin", userlogin.Data.Role.ToString()),
 
                         };
+                        UserSession.ProfilePhoto = userlogin.Data.ProfileImage;
+
 
                         var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                         var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
-                        HttpContext.Session.SetString("UserID", userlogin.Data.Id.ToString());
-                        HttpContext.Session.SetString("FirstName", userlogin.Data.FirstName);
-                        HttpContext.Session.SetString("FullName", userlogin.Data.FullName);
-                        HttpContext.Session.SetString("UserName", userlogin.Data.UserName);
-                        HttpContext.Session.SetString("ProfileImage", userlogin.Data.ProfileImage);
-                        HttpContext.Session.SetString("IsAdmin", userlogin.Data.Role.ToString());
+                        await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
                         return RedirectToAction("UserHome", "Home");
                     }
                 }

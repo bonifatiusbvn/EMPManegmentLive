@@ -218,11 +218,9 @@ namespace EMPManegment.Web.Controllers
         {
             try
             {
-                
-                TaskDetailsView usertaskdetails = new TaskDetailsView
-                {
-                    UserId = _userSession.UserId,
-                };
+
+
+                Guid userid = _userSession.UserId;
                 HttpClient client = WebAPI.Initil();
                 List<DocumentInfoView> documentList = new List<DocumentInfoView>();
                 ApiResponseModel res = await APIServices.GetAsync("", "UserProfile/GetDocumentList?Userid=" + userid);
