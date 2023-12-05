@@ -1,50 +1,120 @@
-﻿
-using EMPManagment.Web.Helper;
+﻿using EMPManagment.Web.Helper;
 using EMPManagment.Web.Models.API;
-using EMPManegment.EntityModels.View_Model;
 using EMPManegment.EntityModels.ViewModels;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using System.Diagnostics.Metrics;
+using System.Net;
 using System.Security.Claims;
-using System.Text;
-using Microsoft.AspNetCore.Authorization;
 using EMPManegment.EntityModels.Crypto;
+using EMPManegment.EntityModels.View_Model;
 
-namespace EMPManegment.WebApplication.Controllers
+namespace EMPManegment.Web.Controllers
 {
-    [AllowAnonymous]
-    public class EmpAddDetailsController : Controller
+    public class AuthenticationController : Controller
     {
-
-        public EmpAddDetailsController(WebAPI webAPI, IWebHostEnvironment environment, APIServices aPIServices)
+        public AuthenticationController(WebAPI webAPI, APIServices aPIServices, IWebHostEnvironment environment)
         {
             WebAPI = webAPI;
-            Environment = environment;
             APIServices = aPIServices;
+            Environment = environment;
         }
 
         public WebAPI WebAPI { get; }
-        public IWebHostEnvironment Environment { get; }
         public APIServices APIServices { get; }
+        public IWebHostEnvironment Environment { get; }
 
         public IActionResult Index()
         {
             return View();
         }
-        public async Task<IActionResult> AddEmpDetail()
+        public async Task<IActionResult> Login()
+        {
+            return View();
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> Login(LoginRequest login)
         {
             try
-            { 
+            {
+                if (ModelState.IsValid)
+                {
+
+                    ApiResponseModel responsemodel = await APIServices.PostAsync(login, "User/Login");
+                    LoginResponseModel userlogin = new LoginResponseModel();
+                    if (responsemodel.code != (int)HttpStatusCode.OK)
+                    {
+
+
+                        if (responsemodel.code == (int)HttpStatusCode.Forbidden)
+                        {
+                            TempData["ErrorMessage"] = responsemodel.message;
+                            return Ok(new { Message = string.Format(responsemodel.message), Code = responsemodel.code });
+                        }
+                        else
+                        {
+                            TempData["ErrorMessage"] = responsemodel.message;
+                        }
+                    }
+
+                    else
+                    {
+                        var data = JsonConvert.SerializeObject(responsemodel.data);
+                        userlogin.Data = JsonConvert.DeserializeObject<LoginView>(data);
+                        var claims = new List<Claim>()
+                        {
+                            new Claim("UserID", userlogin.Data.Id.ToString()),
+                            new Claim("FirstName", userlogin.Data.FirstName),
+                            new Claim("Fullname", userlogin.Data.FullName),
+                            new Claim("UserName", userlogin.Data.UserName),
+                            new Claim("ProfileImage", userlogin.Data.ProfileImage),
+                            new Claim("IsAdmin", userlogin.Data.Role.ToString()),
+
+                        };
+
+                        var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                        var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
+                        HttpContext.Session.SetString("UserID", userlogin.Data.Id.ToString());
+                        HttpContext.Session.SetString("FirstName", userlogin.Data.FirstName);
+                        HttpContext.Session.SetString("FullName", userlogin.Data.FullName);
+                        HttpContext.Session.SetString("UserName", userlogin.Data.UserName);
+                        HttpContext.Session.SetString("ProfileImage", userlogin.Data.ProfileImage);
+                        HttpContext.Session.SetString("IsAdmin", userlogin.Data.Role.ToString());
+                        return RedirectToAction("UserHome", "Home");
+                    }
+                }
+                return View();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Message = "InternalServer" });
+            }
+        }
+        public IActionResult Logout()
+        {
+            HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            var StoredCookies = Request.Cookies.Keys;
+            foreach (var Cookie in StoredCookies)
+            {
+                Response.Cookies.Delete(Cookie);
+            }
+            return RedirectToAction("Login");
+        }
+
+        public async Task<IActionResult> UserSingUp()
+        {
+            try
+            {
                 HttpClient client = WebAPI.Initil();
-                ApiResponseModel AddUserResponse = await APIServices.GetAsync("","AddEmp/CheckUser");
+                ApiResponseModel AddUserResponse = await APIServices.GetAsync("", "User/CheckUser");
                 if (AddUserResponse.code == 200)
                 {
                     ViewBag.EmpId = AddUserResponse.data;
                 }
-                
+
                 return View();
 
             }
@@ -56,7 +126,7 @@ namespace EMPManegment.WebApplication.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddEmpDetail(LoginDetailsView AddEmployee)
+        public async Task<IActionResult> UserSingUp(LoginDetailsView AddEmployee)
         {
             try
             {
@@ -89,7 +159,7 @@ namespace EMPManegment.WebApplication.Controllers
                         Image = filepath,
                         IsActive = AddEmployee.IsActive,
                     };
-                    ApiResponseModel postuser = await APIServices.PostAsync(AddUser, "AddEmp/AddEmployees");
+                    ApiResponseModel postuser = await APIServices.PostAsync(AddUser, "User/AddEmployees");
                     ViewBag.Name = HttpContext.Session.GetString("UserName");
                     if (postuser.code == 200)
                     {
@@ -105,12 +175,12 @@ namespace EMPManegment.WebApplication.Controllers
                     }
                 }
                 HttpClient client = WebAPI.Initil();
-                ApiResponseModel addEmpResponse = await APIServices.GetAsync("", "AddEmp/CheckUser");
+                ApiResponseModel addEmpResponse = await APIServices.GetAsync("", "User/CheckUser");
                 if (addEmpResponse.code == 200)
                 {
                     ViewBag.EmpId = addEmpResponse.data;
                 }
-                return View();  
+                return View();
             }
             catch (Exception ex)
             {
@@ -118,7 +188,7 @@ namespace EMPManegment.WebApplication.Controllers
             }
 
         }
-       
+
         public async Task<JsonResult> GetDepartment()
         {
 
@@ -126,7 +196,7 @@ namespace EMPManegment.WebApplication.Controllers
             {
                 List<Department> getDepartment = new List<Department>();
                 HttpClient client = WebAPI.Initil();
-                ApiResponseModel response = await APIServices.GetAsync(null,"AddEmp/GetDepartment");
+                ApiResponseModel response = await APIServices.GetAsync(null, "MasterList/GetDepartment");
                 if (response.code == 200)
                 {
                     getDepartment = JsonConvert.DeserializeObject<List<Department>>(response.data.ToString());
@@ -147,7 +217,7 @@ namespace EMPManegment.WebApplication.Controllers
             {
                 List<CountryView> countries = new List<CountryView>();
                 HttpClient client = WebAPI.Initil();
-                ApiResponseModel response = await APIServices.GetAsyncId(null,"CSC/GetCountries");
+                ApiResponseModel response = await APIServices.GetAsyncId(null, "MasterList/GetCountries");
                 if (response.code == 200)
                 {
                     countries = JsonConvert.DeserializeObject<List<CountryView>>(response.data.ToString());
@@ -167,7 +237,7 @@ namespace EMPManegment.WebApplication.Controllers
             {
                 List<StateView> states = new List<StateView>();
                 HttpClient client = WebAPI.Initil();
-                ApiResponseModel response = await APIServices.GetAsyncId(null, "CSC/GetState?StateId="+StateId);
+                ApiResponseModel response = await APIServices.GetAsyncId(null, "MasterList/GetState?StateId=" + StateId);
                 if (response.code == 200)
                 {
                     states = JsonConvert.DeserializeObject<List<StateView>>(response.data.ToString());
@@ -187,7 +257,7 @@ namespace EMPManegment.WebApplication.Controllers
             {
                 List<CityView> cities = new List<CityView>();
                 HttpClient client = WebAPI.Initil();
-                ApiResponseModel response = await APIServices.GetAsyncId(null, "CSC/GetCities?CityId="+ CityId);
+                ApiResponseModel response = await APIServices.GetAsyncId(null, "MasterList/GetCities?CityId=" + CityId);
                 if (response.code == 200)
                 {
                     cities = JsonConvert.DeserializeObject<List<CityView>>(response.data.ToString());
@@ -208,7 +278,7 @@ namespace EMPManegment.WebApplication.Controllers
             {
                 List<QuestionView> questions = new List<QuestionView>();
                 HttpClient client = WebAPI.Initil();
-                ApiResponseModel response = await APIServices.GetAsync(null, "CSC/GetQuestion");
+                ApiResponseModel response = await APIServices.GetAsync(null, "MasterList/GetQuestion");
                 if (response.code == 200)
                 {
                     questions = JsonConvert.DeserializeObject<List<QuestionView>>(response.data.ToString());
@@ -228,5 +298,7 @@ namespace EMPManegment.WebApplication.Controllers
             FileStream stream = new FileStream(ImagePath, FileMode.Create);
             ImageFile.CopyTo(stream);
         }
+
     }
 }
+

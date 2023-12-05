@@ -46,8 +46,8 @@ builder.Services.AddDbContext<BonifatiusEmployeesContext>(option =>
 option.UseSqlServer(builder.Configuration.GetConnectionString("EMPDbconn")));
 
 
-builder.Services.AddScoped<IAddEmpDetails, AddEmpRepo>();
-builder.Services.AddScoped<ICSC, CSCRepo>();
+builder.Services.AddScoped<IAuthentication, AddEmpRepo>();
+builder.Services.AddScoped<IMasterList, MasterListRepo>();
 builder.Services.AddScoped<IUserLogin, UserLoginRepo> ();
 builder.Services.AddScoped<IUserDetails, UserDetailsRepo>();
 builder.Services.AddScoped<IUserAttendance, UserAttendanceRepo>();
@@ -55,8 +55,8 @@ builder.Services.AddScoped<IAddVendorDetails, AddVendorRepo>();
 builder.Services.AddScoped<ITaskDetails, TaskRepo>();
 builder.Services.AddScoped<IProjectDetails, ProjectDetailsRepo>();
 
-builder.Services.AddScoped<IAddEmpDetailsServices, EmpService>();
-builder.Services.AddScoped<ICSCServices, CSCService>();
+builder.Services.AddScoped<IAuthenticationServices, AuthenticationService>();
+builder.Services.AddScoped<IMasterListServices, MasterListService>();
 builder.Services.AddScoped<IUserLoginServices, UserLoginService>();
 builder.Services.AddScoped<IUserDetailsServices, UserDetailsService>();
 builder.Services.AddScoped<IUserAttendanceServices, UserAttendanceServices>();

@@ -212,75 +212,8 @@ function btnTaskDetails(Id){
 }
 
 
-//function AllTaskDetailsList() {
-//    $.ajax({
-//        url: '/Task/GetAllTaskDetailList',
-//        type: 'Get',
-//        dataType: 'json',
-//        contentType: 'application/json;charset=utf-8;',
-//        success: function (result) {
-//            var object = '';
-//            var pendingTask = result.filter(function (obj) {
-//                return (obj.taskStatus == "Pending");
-//            });
-//            $("#Pendingtask").text(pendingTask.length);
 
-//            var workingTask = result.filter(function (obj) {
-//                return (obj.taskStatus == "Working");
-//            });
-//            $("#Workingtask").text(workingTask.length);
-
-//            var completeTask = result.filter(function (obj) {
-//                return (obj.taskStatus == "Completed");
-//            });
-//            $("#Completetask").text(completeTask.length);
-
-//            $("#Totaltask").text(result.length);
-
-
-//            $.each(result, function (index, item) {
-//                object += '<tr>';
-//                object += '<td><div class="avatar-group flex-nowrap"><a href="javascript: void(0);" class="avatar-group-item" data-img="/' + item.userProfile + '" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="John Robles"><img src="/' + item.userProfile + '" alt="" class="rounded-circle avatar-xxs"> </a><div class="flex-shrink-0 me-3">' + item.userName + '</div></div></td>';
-//                /*object += '<td> <a class="fw-medium link-primary">' + item.taskTitle + '</a> </td>';*/
-//                object += '<td><div class="d-flex"><div class="flex-grow-1 tasks_name">' + item.taskTitle + '</div><div class="flex-shrink-0 ms-4"><ul class="list-inline tasks-list-menu mb-0"><li class="list-inline-item"><a onclick="btnTaskDetails(\'' + item.id + '\')"><i class="ri-eye-fill align-bottom me-2 text-muted"></i></a></li><li class="list-inline-item"><a onclick="EditTaskDetails(\'' + item.id + '\')"><i class="ri-pencil-fill align-bottom me-2 text-muted"></i></a></li><li class="list-inline-item"><a class="remove-item-btn" data-bs-toggle="modal" href="#deleteOrder"><i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i></a></li></ul></div></div></td>';
-//                object += '<td>' + item.taskDetails + '</td>';
-
-//                //------- Task Type ---------//
-//                if (item.taskTypeName == "HighPriority") {
-//                    object += '<td><span class="badge bg-danger-subtle text-danger text-uppercase">' + item.taskTypeName + '</span></td>';
-//                }
-//                else if (item.taskTypeName == "MediumPriority") {
-//                    object += '<td><span class="badge bg-warning-subtle text-warning text-uppercase">' + item.taskTypeName + '</span></td>';
-//                }
-//                else {
-//                    object += '<td><span class="badge bg-success-subtle text-success text-uppercase">' + item.taskTypeName + '</span></td>';
-//                }
-//                object += '<td>' + (new Date(item.taskDate)).toLocaleDateString('en-US') + '</td>';
-//                object += '<td>' + (new Date(item.taskEndDate)).toLocaleDateString('en-US') + '</td>';
-
-//                //--------- Task Status ----------//
-//                if (item.taskStatus == "Working") {
-//                    object += '<td><a class="badge bg-warning text-uppercase">' + item.taskStatus + '</a></td>';
-//                }
-//                else if (item.taskStatus == "Completed") {
-//                    object += '<td><a class="badge bg-success text-uppercase">' + item.taskStatus + '</a></td>';
-//                }
-//                else if (item.taskStatus == "Pending") {
-//                    object += '<td><a class="badge bg-primary text-uppercase">' + item.taskStatus + '</a></td>';
-//                }
-//                else {
-//                    object += '<td><a class="badge bg-secondary text-uppercase">' + item.taskStatus + '</a></td>';
-//                }
-//                object += '</tr>';
-//            });
-//            $('#AllTaskDetails').html(object);
-//        },
-//        error: function () {
-//            alert("data can't get");
-//        }
-//    });
-//};
-function AllTaskDetailsList() {debugger
+function AllTaskDetailsList() {
     $('#tasksTableData').DataTable({
 
         processing: true,

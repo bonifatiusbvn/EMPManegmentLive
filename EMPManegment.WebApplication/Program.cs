@@ -15,8 +15,8 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     .AddCookie(option =>
     {
         option.ExpireTimeSpan = TimeSpan.FromMinutes(60 * 5);
-        option.LoginPath = "/UserLogin/Login";
-        option.AccessDeniedPath = "/UserLogin/Login";
+        option.LoginPath = "/Authentication/Login";
+        option.AccessDeniedPath = "/Authentication/Login";
 
     });
 
@@ -50,6 +50,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=UserLogin}/{action=Login}/{id?}");
+    pattern: "{controller=Authentication}/{action=Login}/{id?}");
 
 app.Run();

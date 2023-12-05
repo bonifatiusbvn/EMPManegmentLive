@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace EMPManegment.Repository.CSCRepository
 {
-    public class CSCRepo : ICSC
+    public class MasterListRepo : IMasterList
     {
-        public CSCRepo (BonifatiusEmployeesContext context)
+        public MasterListRepo (BonifatiusEmployeesContext context)
         {
             Context = context;
         }
@@ -79,6 +79,22 @@ namespace EMPManegment.Repository.CSCRepository
                     StateName = a.State
                 });
                 return states;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public async Task<IEnumerable<Department>> GetDepartment()
+        {
+            try
+            {
+                IEnumerable<Department> dept = Context.TblDepartments.ToList().Select(a => new Department
+                {
+                    Id = a.Id,
+                    Departments = a.Department
+                });
+                return dept;
             }
             catch (Exception ex)
             {

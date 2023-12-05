@@ -11,7 +11,7 @@ $(document).ready(function () {
         $('#ddlState').empty();
         $('#ddlState').append('<Option >--Select State--</Option>');
         $.ajax({
-            url: '/EmpAddDetails/GetState?StateId=' + StateId,
+            url: '/Authentication/GetState?StateId=' + StateId,
             success: function (result) {
                 
                 $.each(result, function (i, data) {
@@ -30,7 +30,7 @@ $(document).ready(function () {
         $('#ddlCity').empty();
         $('#ddlCity').append('<Option >--Select City--</Option>');
         $.ajax({
-            url: '/EmpAddDetails/GetCity?CityId=' + CityId,
+            url: '/Authentication/GetCity?CityId=' + CityId,
             success: function (result) {
                 $.each(result, function (i, data) {
                     $('#ddlCity').append('<Option value=' + data.id + '>' + data.cityName + '</Option>');
@@ -46,7 +46,7 @@ $(document).ready(function () {
 function GetCountry() {
     
     $.ajax({
-        url: '/EmpAddDetails/GetCountrys',
+        url: '/Authentication/GetCountrys',
         success: function (result) {
             $.each(result, function (i, data) {
                 $('#ddlCountry').append('<Option value=' + data.id + '>' + data.countryName + '</Option>')
@@ -73,7 +73,7 @@ function Questiontext(sel) {
 function GetDepartment() {
     
     $.ajax({
-        url: '/EmpAddDetails/GetDepartment',
+        url: '/Authentication/GetDepartment',
         success: function (result) {
             $.each(result, function (i, data) {
                 $('#ddlDepartmenrnt').append('<Option value=' + data.id + '>' + data.departments + '</Option>')
@@ -86,7 +86,7 @@ function GetDepartment() {
 function GetQuestion() {
 
     $.ajax({
-        url: '/EmpAddDetails/GetQuestion',
+        url: '/Authentication/GetQuestion',
         success: function (result) {
             
             $.each(result, function (i, data) {

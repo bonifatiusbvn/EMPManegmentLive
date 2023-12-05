@@ -15,34 +15,35 @@ using System.Threading.Tasks;
 
 namespace EMPManegment.Services.AddEmployee
 {
-    public class EmpService : IAddEmpDetailsServices
+    public class AuthenticationService : IAuthenticationServices
     {
-        public IAddEmpDetails EmpDetails { get; }
+        public IAuthentication Authentication { get; }
         public IUserDetails UserDetails { get; }
 
-        public EmpService(IAddEmpDetails _empDetails, IUserDetails userDetails)
+        public AuthenticationService(IAuthentication authentication, IUserDetails userDetails)
         {
-            EmpDetails = _empDetails;
+            Authentication = authentication;
             UserDetails = userDetails;
         }
 
-        public async Task<UserResponceModel> AddEmployee(EmpDetailsView addemployee)
+        public async Task<UserResponceModel> UserSingUp(EmpDetailsView addemployee)
         {
-            return await EmpDetails.AddEmployee(addemployee);
+            return await Authentication.UserSingUp(addemployee);
         }
 
         public string CheckEmloyess()
         {
-            return EmpDetails.CheckEmloyess();
+            return Authentication.CheckEmloyess();
         }
 
-        public async Task<IEnumerable<Department>> EmpDepartment()
-        {
-            return await EmpDetails.EmpDepartment();
-        }
+        
         public async Task<EmpDetailsView> GetById(Guid userId)
         {
             return await UserDetails.GetById(userId);
+        }
+        public async Task<LoginResponseModel> LoginUser(LoginRequest LoginUser)
+        {
+            return await Authentication.LoginUser(LoginUser);
         }
     }
 }

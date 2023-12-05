@@ -14,30 +14,21 @@ namespace EMPManagment.API.Controllers
     [ApiController]
     public class AddEmpController : ControllerBase
     {
-        public AddEmpController(IAddEmpDetailsServices empDetails)
+        public IAuthenticationServices Authentication { get; }
+
+        public AddEmpController(IAuthenticationServices authentication)
         {
-            EmpDetails = empDetails;
+            Authentication = authentication;
         }
 
-        public IAddEmpDetailsServices EmpDetails { get; }
-
-        
+       
 
         [HttpGet]
         [Route("CheckUser")]
         public IActionResult CheckUser()
         {
-            var checkUser = EmpDetails.CheckEmloyess();
+            var checkUser = Authentication.CheckEmloyess();
             return Ok(new { code = 200, data = checkUser });
-        }
-
-
-        [HttpGet]
-        [Route("GetDepartment")]
-        public async Task<IActionResult> GetDepartment()
-        {
-            IEnumerable<Department> getDepartment = await EmpDetails.EmpDepartment();
-            return Ok(new { code = 200, data = getDepartment.ToList() });
         }
 
         [HttpPost]
@@ -47,7 +38,7 @@ namespace EMPManagment.API.Controllers
             UserResponceModel response = new UserResponceModel();
             try
             {
-                var addEmployee = EmpDetails.AddEmployee(AddEmployee);
+                var addEmployee = Authentication.UserSingUp(AddEmployee);
                 if (addEmployee.Result.Code == 200)
                 {
                     response.Code = (int)HttpStatusCode.OK;
