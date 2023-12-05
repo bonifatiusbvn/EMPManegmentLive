@@ -32,6 +32,18 @@ function GetAllUserData() {
                     return '<div class="d-flex align-items-center fw-medium"><img src="/' + full.image + '" style="height: 40px; width: 40px; border-radius: 50%;">' + full['firstName'] + ' ' + full['lastName'] + '</div >';
                 }
             },
+            {
+                "data": "isActive", "name": "IsActive",
+                "render": function (data, type, full) {
+
+                    if (full.isActive == true) {
+                        return '<a class="badge bg-success text-uppercase">' + full.isActive + '</a>';
+                    }
+                    else {
+                        return '<a class="badge bg-danger text-uppercase">' + full.isActive + '</a>';
+                    }
+                }
+            },
             { "data": "gender", "name": "Gender" },
             {
                 "data": "dateOfBirth", "name": "DateOfBirth", "type": "date",
@@ -46,8 +58,6 @@ function GetAllUserData() {
             },
             { "data": "email", "name": "Email" },
             { "data": "phoneNumber", "name": "PhoneNumber" },
-            { "data": "countryName", "name": "CountryName" },
-            { "data": "stateName", "name": "StateName"},
             { "data": "cityName", "name": "CityName" },
             { "data": "address", "name": "Address" },
            
@@ -395,7 +405,7 @@ function UpdateUserDetails() {
                 confirmButtonColor: '#3085d6',
                 confirmButtonText: 'OK'
             }).then(function () {
-                window.location = '/UserDetails/UserEditList';
+                window.location = '/UserDetails/DisplayUserList';
             });
         },
     })
