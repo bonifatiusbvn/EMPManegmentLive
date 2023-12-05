@@ -152,7 +152,7 @@ function GetUserTaskDetails() {
     })
 }
 
-function btnStatusUpdate(Id) {debugger 
+function btnStatusUpdate(Id) { 
 
     var StausChange = {
         TaskStatus: $('#ddlStatus' + Id).val(),
@@ -160,7 +160,7 @@ function btnStatusUpdate(Id) {debugger
     }
     var form_data = new FormData();
     form_data.append("STATUSUPDATE", JSON.stringify(StausChange));
-    debugger
+    
     $.ajax({
         url: '/Task/UpdateUserTaskStatus',
         type: 'Post',
@@ -168,7 +168,7 @@ function btnStatusUpdate(Id) {debugger
         dataType: 'json',
         contentType: false,
         processData: false,
-        success: function (Result) {debugger
+        success: function (Result) {
             GetUserTaskDetails();
             Swal.fire({
                 title: Result.message,
@@ -212,7 +212,7 @@ function btnTaskDetails(Id){
 }
 
 
-//function AllTaskDetailsList() {debugger
+//function AllTaskDetailsList() {
 //    $.ajax({
 //        url: '/Task/GetAllTaskDetailList',
 //        type: 'Get',
@@ -282,7 +282,7 @@ function btnTaskDetails(Id){
 //};
 function AllTaskDetailsList() {debugger
     $('#tasksTableData').DataTable({
-        
+
         processing: true,
         serverSide: true,
         filter: true,
@@ -293,29 +293,41 @@ function AllTaskDetailsList() {debugger
             dataType: 'json'
         },
         columns: [
-            
+
             { "data": "userName", "name": "UserName" },
-            { "data": "taskTitle", "name": "TaskTitle" },
+            //{
+            //    "data": "firstName",
+            //    "render": function (data, type, full) {
+            //        return '<div class="d-flex align-items-center fw-medium"><img src="/' + full.image + '" style="height: 40px; width: 40px; border-radius: 50%;">' + full['firstName'] + ' ' + full['lastName'] + '</div >';
+            //    }
+            //},
+
             {
-             "data": "taskDetails", "name": "TaskDetails"
+                "data": "taskTitle", "name": "TaskTitle"
+                //"render": function (data, type, full) {
+                //    object += '<div class="d-flex"><div class="flex-grow-1 tasks_name">' + full.taskTitle + '</div><div class="flex-shrink-0 ms-4"><ul class="list-inline tasks-list-menu mb-0"><li class="list-inline-item"><a onclick="btnTaskDetails(\'' + full.id + '\')"><i class="ri-eye-fill align-bottom me-2 text-muted"></i></a></li><li class="list-inline-item"><a onclick="EditTaskDetails(\'' + full.id + '\')"><i class="ri-pencil-fill align-bottom me-2 text-muted"></i></a></li><li class="list-inline-item"><a class="remove-item-btn" data-bs-toggle="modal" href="#deleteOrder"><i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i></a></li></ul></div></div>';
+                //}
             },
 
-            {
-                "data": "taskType", "name": "TaskType",
-                "render": function (data, type, full) {
 
-                var taskType = new TaskType(full.taskType);
-                
-                if (full.taskTypeName == "HighPriority") {
-                    data += '<td><span class="badge bg-danger-subtle text-danger text-uppercase">' + full.taskTypeName + '</span></td>';
-                }
-                else if (full.taskTypeName == "MediumPriority") {
-                    data += '<td><span class="badge bg-warning-subtle text-warning text-uppercase">' + full.taskTypeName + '</span></td>';
-                }
-                else {
-                    data += '<td><span class="badge bg-success-subtle text-success text-uppercase">' + full.taskTypeName + '</span></td>';
-                }
-                }
+            {"data": "taskDetails", "name": "TaskDetails"},
+           
+            {
+            "data": "taskType", "name": "TaskType"
+                //"render": function (data, type, full) {
+
+                //var taskType = new TaskType(full.taskType);
+
+                //if (full.taskTypeName == "HighPriority") {
+                //    return '<a class="badge bg-danger-subtle text-danger text-uppercase">' + full.taskTypeName + '</a>';
+                //}
+                //else if (full.taskTypeName == "MediumPriority") {
+                //     return  '<a class="badge bg-warning-subtle text-warning text-uppercase">' + full.taskTypeName + '</a>';
+                //}
+                //else {
+                //    return '<a class="badge bg-success-subtle text-success text-uppercase">' + full.taskTypeName + '</a>';
+                //}
+                //}
             },
             {
                 "data": "taskDate", "name": "TaskDate",
@@ -330,23 +342,21 @@ function AllTaskDetailsList() {debugger
                 }
             },
             {
-                "data": "taskStatus", "name": "TaskStatus",
-                "render": function (data, type, full) {
-                    var taskStatus = new TaskStatus(full.taskStatus);
-
-                    if (full.taskStatus == "Working") {
-                        return (' class="badge bg-warning text-uppercase">' + full.taskStatus + ');
-                }
-                    else if (full.taskStatus == "Completed") {
-                        return ( '<td><a class="badge bg-success text-uppercase">' + full.taskStatus + '</a></td>');
-                }
-                    else if (full.taskStatus == "Pending") {
-                        return ( '<td><a class="badge bg-primary text-uppercase">' + full.taskStatus + '</a></td>');
-                }
-                else {
-                        return ( '<td><a class="badge bg-secondary text-uppercase">' + full.taskStatus + '</a></td>');
-                }
-                }
+                "data": "taskStatus", "name": "TaskStatus"
+                //"render": function (data, type, full) {
+                //    if (full.taskStatus == "Working") {
+                //    return( '<a class="badge bg-warning text-uppercase">' + full.taskStatus + '</a>');
+                //}
+                //else if (full.taskStatus == "Completed") {
+                //    return('<a class="badge bg-success text-uppercase">' + full.taskStatus + '</a>');
+                //}
+                //else if (full.taskStatus == "Pending") {
+                //     return ('<a class="badge bg-primary text-uppercase">' + full.taskStatus + '</a>');
+                //}
+                //else {
+                //    return ('<a class="badge bg-secondary text-uppercase">' + full.taskStatus + '</a>');
+                //}
+                //}
             },
         ],
         columnDefs: [{
