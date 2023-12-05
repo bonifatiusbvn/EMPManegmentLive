@@ -1,43 +1,126 @@
 ﻿@model IEnumerable<EMPManegment.EntityModels.View_Model.EmpDetailsView>
+@using X.PagedList;
+@using X.PagedList.Mvc.Core;
 @{
     ViewData["Title"] = "UserActiveDecative";
     Layout = "~/Views/Shared/_HomeLayout.cshtml";
 }
- @if (Model.Count() > 0)
-            {
-    @foreach (var d in Model)
-    {
-        <div class="card m-2" style="height:auto;width:310px;">
-            <div class="card-body">
-                <div class="justify-content-between d-flex align-items-center mt-3 mb-4">
-                    <h5 class="mb-0 pb-1 text-decoration-underline">@d.UserName</h5>
-                </div>
-                <div class="d-flex mb-4 align-items-center">
-                    <div class="flex-shrink-0">
-                        <img src="~/@d.Image" alt="" class="avatar-sm rounded-circle">
-                    </div>
-                    <div class="flex-grow-1 ms-2">
-                        <h5 class="card-title mb-1">@d.FirstName  @d.LastName</h5>
-                        <p class="text-muted mb-0">@d.DepartmentName</p>
-                    </div>
-                </div>
-
-                <form asp-action="" asp-controller="" method="post">
-                    @if (d.IsActive == true)
-                    {
-                        <a href="javascript:void(0)" class="btn btn-success btn-sm" onclick="ActiveDeactive('@d.UserName')">Active</a>
-
-                    }
-                    @if (d.IsActive == false)
-                    {
-                        <a href="javascript:void(0)" class="btn btn-danger btn-sm" onclick="ActiveDeactive('@d.UserName')">Deactive</a>
-                    }
-                </form>
-            </div>
-        </div>                
+<style>
+    span.deleteicon {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
     }
 
-}
+        span.deleteicon span {
+            position: absolute;
+            display: block;
+            right: 3px;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            color: red;
+            background-color: #ccc;
+            font: 13px monospace;
+            text-align: center;
+            line-height: 1em;
+            cursor: pointer;
+        }
+
+        span.deleteicon input {
+            padding-right: 18px;
+            box-sizing: border-box;
+        }
+</style>
+
+<!-- start page title -->
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-sm-flex align-items-center justify-content-between" style="margin-top:10px;">
+            <h4 class="mb-sm-0">Active Inactive Grid Lists</h4>
+        </div>
+    </div>
+</div>
+<!-- end page title -->
+   
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row gx-lg-5">
+                        <div class="col-xl-4 col-md-8 mx-auto">
+                            <a type="button" class="btn btn-outline-success rounded" href="~/UserDetails/UserActiveDecative" style="margin-left:-120px;"><i class="ri-arrow-left-line m-2"></i>Back</a>
+                        </div>
+
+                        <div class="col-xl-4 col-md-8 mx-auto">
+                            <form asp-action="UserActiveDecative" asp-controller="UserDetails" method="get" class="mx-2 my-2">
+                                <div class="input-group">
+                                    <select class="form-select" id="inputSearch" name="searchby">
+                                        <option selected disabled value="">SearchBy...</option>
+                                        <option value="FirstName">FirstName</option>
+                                        <option value="LastName">LastName</option>
+                                        <option value="DepartmentName">DepartmentName</option>
+                                        <option value="UserName">UserName</option>
+                                    </select>
+                                    <span class="deleteicon col-sm offset-6">
+                                        <input name="searchfor" class="form-control" id="inputsearch" area-describedby="inputSearchProjectTitle" aria-label="Search" autocomplete="off" />
+                                        <span onclick="var input = this.previousElementSibling; input.value = ''; input.focus();">x</span>
+                                    </span>
+                                    <button type="submit" class="btn btn-outline-secondary rounded" id="inputsearch" style="margin-right:-125px;">Search</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div><!-- end row -->
+
+                    <div class="row row-cols-xl-5 row-cols-lg-3 row-cols-md-2 row-cols-1" style="margin-top:20px;">
+                        @if (Model.Count() > 0)
+                        {
+                            @foreach (var item in Model)
+                            {
+                                <div class="col" style="margin-left:60px;">
+                                    <div class="card">
+                                        <img src="~/UserHome/minimal/assets/images/nft/img-03.jpg" alt="" class="object-fit-cover card-img-top" height="120">
+                                        <div class="card-body text-center">
+                                            <img src="~/@item.Image" alt="" class="avatar-md rounded-circle object-fit-cover mt-n5 img-thumbnail border-light mx-auto d-block">
+                                            <a href="pages-profile.html">
+                                                <h5 class="mt-2 mb-1 fs-15">@item.FirstName  @item.LastName</h5>
+                                            </a>
+                                            <p class="text-muted fs-14 mb-2">@item.UserName</p>
+                                            <p class="text-muted fs-14"> Dept : @item.DepartmentName</p>
+                                            <form asp-action="" asp-controller="" method="post">
+                                                @if (item.IsActive == true)
+                                                {
+                                                <a href="javascript:void(0)" class="btn btn-soft-success w-100" onclick="DeactiveUser('@item.UserName')">Active</a>
+
+                                                }
+                                                @if (item.IsActive == false)
+                                                {
+                                                <a href="javascript:void(0)" class="btn btn-soft-danger w-100" onclick="ActiveUser('@item.UserName')">Deactive</a>
+                                                }
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--end col-->
+                            }
+                        }
+                    </div>
+                    <!--end row-->
+                </div>
+                <!-- end card body -->
+            </div>
+            <!-- end card -->
+        </div>
+        <!-- end col -->
+    </div>
+    <!-- end row -->
+    @Html.PagedListPager((IPagedList)Model,page => Url.Action("UserActiveDecative",new{page = page,
+    searchfor = @Context.Request.Query["searchfor"],searchby =@Context.Request.Query["searchby"]}),
+    new X.PagedList.Web.Common.PagedListRenderOptions {
+    LiElementClasses = new string[]{"page-item"},
+    PageClasses = new string[] {"page-link"}
+    })
+
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/moduls/userdetailsscript.js"></script>
 

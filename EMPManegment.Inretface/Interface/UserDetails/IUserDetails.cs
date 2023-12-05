@@ -26,7 +26,9 @@ namespace EMPManegment.Inretface.Interface.UserList
         Task<IEnumerable<EmpDetailsView>> UserEdit();
         Task<EmpDetailsView> GetById(Guid UserId);
         Task<UserResponceModel> UpdateUser(UserEditViewModel UpdateUser);
-        Task<IEnumerable<EmpDetailsView>> GetUsersDetails();
+
+        Task<IEnumerable<EmpDetailsView>> GetUsersDetails(string? searchby, string? searchfor);
+        
 
     }
 }

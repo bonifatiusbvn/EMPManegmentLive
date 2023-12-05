@@ -4,26 +4,182 @@
     Layout = "~/Views/Shared/_HomeLayout.cshtml";
 }
 
-<div class="table-responsive">
-    <table class="table align-middle mb-0" id="VendorTableData">
-        <thead class="table-light">
-            <tr class="text-center">
-                <th scope="col">VendorName</th>
-                <th scope="col">Email</th>
-                <th scope="col">Phone</th>
-                <th scope="col">BankAccountNo</th>
-                <th scope="col">BankName</th>
-                <th scope="col">Bank Ifsc</th>
-                <th scope="col">Gstnumber</th>
-                <th scope="col">Address</th>
-            </tr>
-        </thead>
-        <tbody>
-        </tbody>
-    </table>
-    <!-- end table -->
+
+
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Basic Datatables</h5>
+            </div>
+            <div class="card-body">
+                <div id="example_wrapper" class="dataTables_wrapper dt-bootstrap5 no-footer">
+                    <div class="col-sm-12">
+                        <table id="VendorTableData" class="table table-bordered dt-responsive nowrap table-striped align-middle dataTable no-footer dtr-inline" style="width: 100%;" aria-describedby="example_info">
+                            <thead>
+                                <tr>
+                                    <th>CompanyName</th>
+                                    <th>VendorName</th>
+                                    <th>VendorEmail</th>
+                                    <th>VendorMobileNo</th>
+                                    <th>CompanyContac</th>
+                                    <th>CompanyEmail</th>
+                                    <th>Address</th>
+                                    <th>Details</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal fade bs-example-modal-lg" id="VendorDetailsModel" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                    @*-----------------Company Details---------------*@
+                                    <div class="box-1">
+                                        <div >
+                                                <h5 class="text-center" style="padding-bottom:10px; color: black;">Company Details</h5>
+                                        </div>
+                                            <div class="form-group control-label">
+                                            <label style="color: teal;font-weight: 500;">Name:</label> &nbsp;
+                                                <label style="color: black;font-weight: 500; margin-left: 68px" id="VendorCompany"></label> &nbsp;
+                                        </div>
+                                        <div class="form-group">
+                                            <label style="color: teal;font-weight: 500;">CompanyType:</label> &nbsp;
+                                                <label style="color: black;font-weight: 500; margin-left: 12px" id="VendorCompanyType"></label> &nbsp;
+                                        </div>
+                                        <div class="form-group">
+                                            <label style="color: teal;font-weight: 500;">Email:</label> &nbsp;
+                                                <label style="color: black;font-weight: 500; margin-left: 70px" id="VendorCompanyEmail"></label> &nbsp;
+                                        </div>
+                                        <div class="form-group">
+                                            <label style="color: teal;font-weight: 500;">ContactNumber:</label> &nbsp;
+                                                <label style="color: black;font-weight: 500;" id="VendorCompanyNumber"></label> &nbsp;
+                                        </div>
+                                    </div>
+                                    @*-----------------Vendor Details---------------*@
+                                    <div class="box-2">
+                                        <div>
+                                                <h5 class="text-center" style="padding-bottom:10px; color: black;">Vendor Details</h5>
+                                        </div>
+                                        <div class="form-group">
+                                            <label style="color: teal;font-weight: 500;">Name:</label> &nbsp;
+                                                <label style="color: black;font-weight: 500; margin-left: 31px" id="VendorFirstName"></label> &nbsp;
+                                        </div>
+                                        <div class="form-group">
+                                                <label style="color: teal;font-weight: 500;">Email:</label> &nbsp;
+                                                <label style="color: black;font-weight: 500; margin-left: 34px;" id="VendorEmail"></label> &nbsp;
+                                        </div>
+                                        <div class="form-group">
+                                                <label style="color: teal;font-weight: 500;">Phone:</label> &nbsp;
+                                                <label style="color: black;font-weight: 500; margin-left: 28px;" id="VendorPhone"></label> &nbsp;
+                                        </div>
+                                        <div class="form-group">
+                                                <label style="color: teal;font-weight: 500;">ContectNo:</label> &nbsp;
+                                                <label style="color: black;font-weight: 500;" id="VendorContectNo"></label> &nbsp;
+                                        </div>
+                                         <div class="form-group">
+                                                <label style="color: teal;font-weight: 500;">Type:</label> &nbsp;
+                                                <label style="color: black;font-weight: 500; margin-left: 40px" id="VendorType"></label> &nbsp;
+                                        </div>
+                                    </div>
+                                    </div>
+                                    @*-----------------Address Details---------------*@
+                                    <div class="box-3">
+                                        <div>
+                                            <h5 class="text-center" style="color: black; padding-bottom:10px;">Address</h5>
+                                        </div>
+                                        <div class="form-group">
+                                            <label style="color: teal;font-weight: 500; margin-left:80px;">Country:</label> &nbsp;
+                                            <label style="color: black;font-weight: 500;" id="VendorCountry"></label> &nbsp;
+                                            <label style="color: teal;font-weight: 500; margin-left:60px;">State:</label> &nbsp;
+                                            <label style="color: black;font-weight: 500;" id="VendorState"></label> &nbsp;
+                                            <label style="color: teal;font-weight: 500; margin-left:60px;">City:</label> &nbsp;
+                                            <label style="color: black;font-weight: 500;" id="VendorCity"></label> &nbsp;
+                                        </div>
+                                        <div class="form-group">
+                                            <label style="color: teal;font-weight: 500; margin-left:80px;">PinCode:</label> &nbsp;
+                                            <label style="color: black;font-weight: 500;" id="VendorPinCode"></label> &nbsp;
+                                        </div>
+                                        <div class="form-group">
+                                            <label style="color: teal;font-weight: 500; margin-left:80px;">Address:</label> &nbsp;
+                                            <label style="color: black;font-weight: 500;" id="VendorAddress"></label> &nbsp;
+                                        </div>
+                                    </div>
+                                    @*-----------------Bank Details---------------*@
+                                    <div class="box-4">
+                                        <div>
+                                            <h5 class="text-center" style="padding-bottom:10px; color: black;">Bank Details</h5>
+                                        </div>
+                                        <div class="form-group">
+                                            <label style="color: teal;font-weight: 500; margin-left:30px;">BankName:</label> &nbsp;
+                                            <label style="color: black;font-weight: 500;" id="VendorBankName"></label> &nbsp;
+                                            <label style="color: teal;font-weight: 500; margin-left:195px;">AccountNo:</label> &nbsp;
+                                            <label style="color: black;font-weight: 500;" id="VendorBankAccountNo"></label> &nbsp;
+                                        </div>
+                                        <div class="form-group">
+                                            <label style="color: teal;font-weight: 500; margin-left:30px;">BankBranch:</label> &nbsp;
+                                            <label style="color: black;font-weight: 500;" id="VendorBankBranch"></label> &nbsp;
+                                            <label style="color: teal;font-weight: 500; margin-left:185px;">Ifsc Code:</label> &nbsp;
+                                            <label style="color: black;font-weight: 500;" id="VendorBankIfsc"></label> &nbsp;
+                                        </div>
+                                        <div class="form-group">
+                                            <label style="color: teal;font-weight: 500; margin-left:30px;">AccountHolderName:</label> &nbsp;
+                                            <label style="color: black;font-weight: 500;" id="VendorAccountHolderName"></label> &nbsp;
+                                            <label style="color: teal;font-weight: 500; margin-left:80px;">Gstnumber:</label> &nbsp;
+                                            <label style="color: black;font-weight: 500;" id="VendorGstnumber"></label> &nbsp;
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary m-3" data-bs-dismiss="modal"><i class="ri-close-line me-1 align-middle"></i> Close</button>
+                                </div>
+                            </div><!-- /.modal-content -->
+                        </div><!-- /.modal-dialog -->
+                    </div><!-- /.modal -->
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-<!-- end table responsive -->
+
+
+<style>
+    .box-1, .box-2 {
+        background-color: lightgrey;
+        width: 350px;
+        height:250px;
+        border: 5px solid gray;
+        padding: 20px;
+        float: left;
+        margin-left: 20px;
+    }
+
+    .box-3 {
+        background-color: lightgrey;
+        width: 720px;
+        height: 180px;
+        border: 5px solid gray;
+        padding: 20px;
+        margin-top: 270px;
+        margin-left: 20px;
+    }
+
+    .box-4 {
+        background-color: lightgrey;
+        width: 720px;
+        height: 180px;
+        border: 5px solid gray;
+        padding: 20px;
+        margin-top: 20px;
+        margin-left: 20px;
+    }
+</style>
+
+
 
 <script src="~/moduls/taskscript.js"></script>
 <!-- end table responsive -->

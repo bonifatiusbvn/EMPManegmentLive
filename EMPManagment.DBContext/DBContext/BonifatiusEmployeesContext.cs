@@ -15,6 +15,8 @@ public partial class BonifatiusEmployeesContext : DbContext
     {
     }
 
+    public virtual DbSet<OrderMaster> OrderMasters { get; set; }
+
     public virtual DbSet<TblAttendance> TblAttendances { get; set; }
 
     public virtual DbSet<TblCity> TblCities { get; set; }
@@ -51,6 +53,24 @@ public partial class BonifatiusEmployeesContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<OrderMaster>(entity =>
+        {
+            entity.ToTable("OrderMaster");
+
+            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.Amount).HasColumnType("decimal(18, 0)");
+            entity.Property(e => e.CompanyName).HasMaxLength(50);
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.DeliveryDate).HasColumnType("date");
+            entity.Property(e => e.DeliveryStatus).HasMaxLength(50);
+            entity.Property(e => e.OrderDate).HasColumnType("date");
+            entity.Property(e => e.OrderId).HasMaxLength(50);
+            entity.Property(e => e.PaymentMethod).HasMaxLength(50);
+            entity.Property(e => e.Product).HasMaxLength(50);
+            entity.Property(e => e.Quantity).HasMaxLength(50);
+            entity.Property(e => e.Total).HasColumnType("decimal(18, 0)");
+        });
+
         modelBuilder.Entity<TblAttendance>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK_tbl_BoniAttendance");

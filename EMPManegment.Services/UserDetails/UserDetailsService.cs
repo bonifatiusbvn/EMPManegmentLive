@@ -90,9 +90,9 @@ namespace EMPManegment.Services.UserList
             return await UserList.GetUsersNameList();
         }
 
-        public async Task<IEnumerable<EmpDetailsView>> GetUsersDetails()
+        public async Task<IEnumerable<EmpDetailsView>> GetUsersDetails(string? searchby, string? searchfor)
         {
-            return await UserList.GetUsersDetails();
+            return await UserList.GetUsersDetails(searchby,searchfor);
         }
     }
 }

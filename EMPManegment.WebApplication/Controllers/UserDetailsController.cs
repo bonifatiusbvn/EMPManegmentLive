@@ -25,7 +25,10 @@ using Microsoft.IdentityModel.Tokens;
 using EMPManegment.EntityModels.ViewModels.UserModels;
 using Azure.Core;
 using EMPManegment.EntityModels.ViewModels.TaskModels;
+using X.PagedList;
+using X.PagedList.Mvc;
 using EMPManegment.EntityModels.Crypto;
+using Microsoft.Build.ObjectModelRemoting;
 
 namespace EMPManegment.Web.Controllers
 {
@@ -118,18 +121,19 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
-        public async Task<IActionResult> UserActiveDecative()
+        public async Task<IActionResult> UserActiveDecative(string? searchby, string? searchfor, int? page)
         {
             try
             {
                 List<EmpDetailsView> ActiveDecative = new List<EmpDetailsView>();
-                HttpClient client = WebAPI.Initil();
-                ApiResponseModel res = await APIServices.GetAsync("", "UserDetails/GetAllUsersDetails");
+                HttpClient client = WebAPI.Initil();                                
+                ApiResponseModel res = await APIServices.GetAsync("", "UserDetails/GetAllUsersDetails?searchby="+ searchby +"&searchfor=" + searchfor);
                 if (res.code == 200)
                 {
                     ActiveDecative = JsonConvert.DeserializeObject<List<EmpDetailsView>>(res.data.ToString());
                 }
-                return View(ActiveDecative);
+                var activeDeactivePage = ActiveDecative.ToPagedList(page ?? 1, 4);
+                return View(activeDeactivePage);
             }
             catch (Exception ex)
             {
@@ -255,8 +259,9 @@ namespace EMPManegment.Web.Controllers
         {
             try
             {
+                var DocName = Guid.NewGuid() + "_" + doc.DocumentName.FileName;
                 var path = Environment.WebRootPath;
-                var filepath = "Content/UserDocuments/" + doc.DocumentName.FileName;
+                var filepath = "Content/UserDocuments/" + DocName;
                 var fullpath = Path.Combine(path, filepath);
                 UploadFile(doc.DocumentName, fullpath);
                 var uploadDocument = new DocumentInfoView()
@@ -264,8 +269,8 @@ namespace EMPManegment.Web.Controllers
                     Id = doc.Id,
                     UserId =doc.UserId,
                     DocumentTypeId = doc.DocumentTypeId,
-                    DocumentName = doc.DocumentName.FileName,
-                CreatedBy = doc.CreatedBy,
+                    DocumentName = DocName,
+                    CreatedBy = doc.CreatedBy,
                 };
                 ViewBag.Name = HttpContext.Session.GetString("UserID");
                 ApiResponseModel postuser = await APIServices.PostAsync(uploadDocument, "UserDetails/UploadDocument");
@@ -543,6 +548,22 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
-    }   
+
+        [HttpGet]
+        public async Task<FileResult> DownloadDocument(string documentName)
+        {
+            var filepath = "Content/UserDocuments/" + documentName;
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", filepath);
+            var memory = new MemoryStream();
+            using (var stream = new FileStream(path, FileMode.Open))
+            {
+                 await stream.CopyToAsync(memory);
+            }
+            memory.Position = 0;
+            var ContentType = "application/pdf"; 
+            var fileName = Path.GetFileName(path);
+            return File(memory, ContentType, fileName);
+        }
+    }
 }
 
