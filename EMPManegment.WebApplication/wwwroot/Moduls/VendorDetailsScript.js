@@ -24,7 +24,7 @@ function GetAllVendorData() {
             { "data": "vendorCompanyEmail", "name": "VendorCompanyEmail"},
             { "data": "vendorAddress", "name": "VendorAddress" },
             {
-                "render": function (data, type, full) {debugger      
+                "render": function (data, type, full) {      
                     return '<a class="btn btn-sm btn-secondary edit-item-btn" onclick="VendorDetails(\'' + full.id + '\')">Details</a>';
                 }
             },
@@ -36,7 +36,7 @@ function GetAllVendorData() {
     });
 }
 
-function VendorDetails(Id) {debugger
+function VendorDetails(Id) {
     $.ajax({
         url: '/Vendor/GetVendorDetailsById?VendorId=' + Id,
         type: "get",
@@ -72,11 +72,11 @@ function VendorDetails(Id) {debugger
     });
 }
 function AddVendorDetails() {
-    
 
     if ($("#VendorbankDetails").valid())
     {
         var fromData = {
+            
 
             "VendorFirstName": $("#firstnameInput").val(),
             "VendorLastName": $("#lastnameInput").val(),
@@ -105,7 +105,7 @@ function AddVendorDetails() {
         
         var from_Data = new FormData();
         from_Data.append("ADDVENDOR", JSON.stringify(fromData));
-
+        
 
         $.ajax({
             url: '/Vendor/AddVandorDetail',
@@ -122,7 +122,7 @@ function AddVendorDetails() {
                     confirmButtonColor: '#3085d6',
                     confirmButtonText: 'OK'
                 }).then(function () {
-                    window.location = '/Vendor/AddVandorDetails';
+                    window.location = '/Vendor/DisplayVendorList';
                 });
 
             },

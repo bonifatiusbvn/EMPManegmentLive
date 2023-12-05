@@ -13,22 +13,23 @@ namespace EMPManagment.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AddVendorController : ControllerBase
+    public class VendorController : ControllerBase
     {
-        public IAddVendorDetailsServices VendorDetails { get; }
-        public AddVendorController(IAddVendorDetailsServices VendorDetails)
+        private readonly IAddVendorDetailsServices vendorServices;
+
+        public VendorController(IAddVendorDetailsServices VendorServices)
         {
-            this.VendorDetails = VendorDetails;
+            vendorServices = VendorServices;
         }
 
         [HttpPost]
-        [Route("AddVendors")]
-        public async Task<IActionResult> AddVendors(VendorDetailsView AddVendor)
+        [Route("CreateVendors")]
+        public async Task<IActionResult> CreateVendors(VendorDetailsView AddVendor)
         {
             UserResponceModel response = new UserResponceModel();
             try
             {
-                var addVendor = VendorDetails.AddVendor(AddVendor);
+                var addVendor = vendorServices.AddVendor(AddVendor);
                 if (addVendor.Result.Code == 200)
                 {
                     response.Code = (int)HttpStatusCode.OK;
@@ -51,7 +52,7 @@ namespace EMPManagment.API.Controllers
         [Route("GetVendorList")]
         public async Task<IActionResult> GetVendorList(DataTableRequstModel VendorList)
         {
-            var GetvendorList = await VendorDetails.GetVendorsList(VendorList);
+            var GetvendorList = await vendorServices.GetVendorsList(VendorList);
             return Ok(new { code = 200, data = GetvendorList });
         }
 
@@ -59,7 +60,7 @@ namespace EMPManagment.API.Controllers
         [Route("GetVendorType")]
         public async Task<IActionResult> GetVendorType()
         {
-            IEnumerable<VendorTypeView> VendorType = await VendorDetails.GetVendorType();
+            IEnumerable<VendorTypeView> VendorType = await vendorServices.GetVendorType();
             return Ok(new { code = 200, data = VendorType.ToList() });
         }
 
@@ -67,7 +68,7 @@ namespace EMPManagment.API.Controllers
         [Route("GetVendorDetailsById")]
         public async Task<IActionResult> GetVendorDetailsById(Guid vendorId)
         {
-            var vendor = await VendorDetails.GetVendorById(vendorId);
+            var vendor = await vendorServices.GetVendorById(vendorId);
             return Ok(new { code = 200, data = vendor });
         }
     }
