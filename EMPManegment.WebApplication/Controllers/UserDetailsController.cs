@@ -29,6 +29,7 @@ using X.PagedList;
 using X.PagedList.Mvc;
 using EMPManegment.EntityModels.Crypto;
 using Microsoft.Build.ObjectModelRemoting;
+using EMPManegment.Web.Models;
 
 namespace EMPManegment.Web.Controllers
 {
@@ -38,11 +39,13 @@ namespace EMPManegment.Web.Controllers
         public WebAPI WebAPI { get; }
         public APIServices APIServices { get; }
         public IWebHostEnvironment Environment { get; }
-        public UserDetailsController(WebAPI webAPI, APIServices aPIServices, IWebHostEnvironment environment)
+        public UserSession _userSession { get; }
+        public UserDetailsController(WebAPI webAPI, APIServices aPIServices, IWebHostEnvironment environment, UserSession userSession)
         {
             WebAPI = webAPI;
             APIServices = aPIServices;
             Environment = environment;
+            _userSession = userSession;
         }
 
         public IActionResult Index()
@@ -170,7 +173,7 @@ namespace EMPManegment.Web.Controllers
         {
             try
             {
-                string id = HttpContext.Session.GetString("UserID");
+                Guid id = _userSession.UserId;
                 EmpDetailsView userProfile = new EmpDetailsView();
                 HttpClient client = WebAPI.Initil();
                 ApiResponseModel response = await APIServices.GetAsync("", "UserDetails/GetEmployeeById?id=" + id);
@@ -214,14 +217,14 @@ namespace EMPManegment.Web.Controllers
         {
             try
             {
-                string userid = HttpContext.Session.GetString("UserID");
+                
                 TaskDetailsView usertaskdetails = new TaskDetailsView
                 {
-                    UserId = Guid.Parse(userid),
+                    UserId = _userSession.UserId,
                 };
                 HttpClient client = WebAPI.Initil();
                 List<DocumentInfoView> documentList = new List<DocumentInfoView>();
-                ApiResponseModel res = await APIServices.GetAsync("", "UserDetails/GetDocumentList?Userid=" + userid);
+                ApiResponseModel res = await APIServices.GetAsync("", "UserDetails/GetDocumentList?Userid=" + usertaskdetails.UserId);
                 if (res.code == 200)
                 {
                     documentList = JsonConvert.DeserializeObject<List<DocumentInfoView>>(res.data.ToString());
@@ -232,27 +235,7 @@ namespace EMPManegment.Web.Controllers
             {
                 throw ex;
             }
-            //try
-            //{
-            //    string Userid = HttpContext.Session.GetString("UserID");
-            //    TaskDetailsView usertaskdetails = new TaskDetailsView
-            //    {
-            //        UserId = Guid.Parse(Userid),
-            //    };
-            //    HttpClient client = WebAPI.Initil();
-            //    List<TaskDetailsView> TaskList = new List<TaskDetailsView>();
-            //    ApiResponseModel response = await APIServices.PostAsync("", "UserHome/GetTaskDetails?Taskid=" + Userid);
-            //    if (response.code == 200)
-            //    {
-            //        TaskList = JsonConvert.DeserializeObject<List<TaskDetailsView>>(response.data.ToString());
-
-            //    }
-            //    return View(TaskList);
-            //}
-            //catch (Exception ex)
-            //{
-            //    throw ex;
-            //}
+           
         }
         [HttpPost]
         public async Task<JsonResult> UploadDocument(EmpDocumentView doc)
@@ -328,12 +311,7 @@ namespace EMPManegment.Web.Controllers
         }
         public async Task<IActionResult> LockScreen()
         {
-            HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            var StoredCookies = Request.Cookies.Keys;
-            foreach (var Cookie in StoredCookies)
-            {
-                Response.Cookies.Delete(Cookie);
-            }
+            
             return View();
         }
 
@@ -528,8 +506,7 @@ namespace EMPManegment.Web.Controllers
                 var addmonthobj = HttpContext.Request.Form["FINDBYMONTH"];
                 var month = JsonConvert.DeserializeObject<string>(addmonthobj);
                 List<UserAttendanceModel> getAttendanceList = new List<UserAttendanceModel>();
-                string Userid = HttpContext.Session.GetString("UserID");
-                Guid UserId = Guid.Parse(Userid);
+                Guid UserId = _userSession.UserId;
                 HttpClient client = WebAPI.Initil();
                 ApiResponseModel response = await APIServices.GetAsync("", "UserDetails/GetAttendanceList?id=" + UserId+ "&Cmonth=" + month);
                 if (response.data.Count != 0)

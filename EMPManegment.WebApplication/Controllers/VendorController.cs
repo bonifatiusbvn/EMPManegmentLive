@@ -38,7 +38,7 @@ namespace EMPManegment.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddVandorDetail(IFormFile ProfilePhoto)
+        public async Task<IActionResult> AddVandorDetail()
         {
             try
             {
@@ -73,7 +73,7 @@ namespace EMPManegment.Web.Controllers
                         VendorBankIfsc = addVandorDetails.VendorBankIfsc,
                         VendorTypeId = addVandorDetails.VendorTypeId,
                     };
-                    ApiResponseModel postuser = await APIServices.PostAsync(addVandor, "AddVendor/AddVendors");
+                    ApiResponseModel postuser = await APIServices.PostAsync(addVandor, "Vendor/CreateVendors");
                     if (postuser.code == 200)
                     {
                         return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
@@ -104,7 +104,7 @@ namespace EMPManegment.Web.Controllers
             {
                 List<VendorTypeView> VendorType = new List<VendorTypeView>();
                 HttpClient client = WebAPI.Initil();
-                ApiResponseModel response = await APIServices.GetAsyncId(null, "AddVendor/GetVendorType");
+                ApiResponseModel response = await APIServices.GetAsyncId(null, "Vendor/GetVendorType");
                 if (response.code == 200)
                 {
                     VendorType = JsonConvert.DeserializeObject<List<VendorTypeView>>(response.data.ToString());
@@ -151,7 +151,7 @@ namespace EMPManegment.Web.Controllers
                 List<VendorDetailsView> vendorList = new List<VendorDetailsView>();
                 var data = new jsonData();
                 HttpClient client = WebAPI.Initil();
-                ApiResponseModel res = await APIServices.PostAsync(dataTable, "AddVendor/GetVendorList");
+                ApiResponseModel res = await APIServices.PostAsync(dataTable, "Vendor/GetVendorList");
                 if (res.code == 200)
                 {
                     data = JsonConvert.DeserializeObject<jsonData>(res.data.ToString());
@@ -178,7 +178,7 @@ namespace EMPManegment.Web.Controllers
             {
                 VendorDetailsView vendordetails = new VendorDetailsView();
                 HttpClient client = WebAPI.Initil();
-                ApiResponseModel response = await APIServices.GetAsync("", "AddVendor/GetVendorDetailsById?vendorId=" + VendorId);
+                ApiResponseModel response = await APIServices.GetAsync("", "Vendor/GetVendorDetailsById?vendorId=" + VendorId);
                 if (response.code == 200)
                 {
                     vendordetails = JsonConvert.DeserializeObject<VendorDetailsView>(response.data.ToString());

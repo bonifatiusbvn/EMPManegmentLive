@@ -1,4 +1,4 @@
-﻿namespace EMPManegment.Web.Models.UserSession
+﻿namespace EMPManegment.Web.Models
 {
     public class UserSession
     {
@@ -37,11 +37,11 @@
             }
         }
 
-        public string LastName
+        public string FullName
         {
             get
             {
-                return HttpContext.User.Claims.FirstOrDefault(x => string.Compare(x.Type, "LastName", true) == 0)?.Value;
+                return HttpContext.User.Claims.FirstOrDefault(x => string.Compare(x.Type, "FullName", true) == 0)?.Value;
             }
         }
 

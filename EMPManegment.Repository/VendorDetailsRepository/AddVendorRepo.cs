@@ -56,7 +56,6 @@ namespace EMPManegment.Repository.VendorDetailsRepository
                         VendorCompanyType=vendor.VendorCompanyType,
                         VendorCompanyEmail=vendor.VendorCompanyEmail,
                         VendorCompanyNumber=vendor.VendorCompanyNumber,
-                        VendorCompanyLogo=vendor.VendorCompanyLogo,
                         VendorBankName=vendor.VendorBankName,
                         VendorBankBranch=vendor.VendorBankBranch,
                         VendorAccountHolderName=vendor.VendorAccountHolderName,
