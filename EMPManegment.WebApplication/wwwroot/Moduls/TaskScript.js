@@ -280,7 +280,7 @@ function btnTaskDetails(Id){
 //        }
 //    });
 //};
-function AllTaskDetailsList() {debugger
+function AllTaskDetailsList() {
     $('#tasksTableData').DataTable({
 
         processing: true,
@@ -436,7 +436,7 @@ $('#UpdateDetailsForm').on('change', function () {
 //-----------------Validation-----------------//
 
 function CheckValidation() {
-
+    
     var isValid = true;
     taskTitle = $("#EditTaskTitle").val();
     taskDetails = $("#EditDescription").val();
