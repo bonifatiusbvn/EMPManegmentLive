@@ -95,9 +95,6 @@ namespace EMPManegment.Web.Controllers
                     recordsTotal = data.recordsTotal,
                     data = GetUserList,
                 };
-
-
-
                 return new JsonResult(jsonData);  
             }
             catch (Exception ex)
@@ -173,7 +170,6 @@ namespace EMPManegment.Web.Controllers
         {
             try
             {
-
                 string id = HttpContext.Session.GetString("UserID");
                 EmpDetailsView userProfile = new EmpDetailsView();
                 HttpClient client = WebAPI.Initil();

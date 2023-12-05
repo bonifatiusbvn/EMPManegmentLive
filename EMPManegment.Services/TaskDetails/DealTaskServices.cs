@@ -1,4 +1,5 @@
-﻿using EMPManegment.EntityModels.ViewModels.Models;
+﻿using EMPManegment.EntityModels.ViewModels.DataTableParameters;
+using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.TaskModels;
 using EMPManegment.Inretface.Interface.TaskDetails;
 using EMPManegment.Inretface.Services.TaskServices;
@@ -45,10 +46,10 @@ namespace EMPManegment.Services.TaskDetails
             return await TaskDetails.UpdateTaskStatus(updatetask);
         }
         
-        public async Task<IEnumerable<TaskDetailsView>> GetAllUserTaskDetails()
-        {
-            return await TaskDetails.GetAllUserTaskDetails();
-        }
+        //public async Task<IEnumerable<TaskDetailsView>> GetAllUserTaskDetails()
+        //{
+        //    return await TaskDetails.GetAllUserTaskDetails();
+        //}
 
         public async Task<TaskDetailsView> GetTaskDetailsById(Guid Taskid)
         {
@@ -60,10 +61,9 @@ namespace EMPManegment.Services.TaskDetails
             return await TaskDetails.GetTaskDetails(Taskid);
         }
 
-
-        public async Task<TaskDetailsView> GetTaskofpendingTask(TaskDetailsView pendingtask)
+        public async Task<jsonData> GetAllUserTaskDetails(DataTableRequstModel AllUserTaskDetails)
         {
-            return await TaskDetails.GetTaskofpendingTask(pendingtask);
+            return await TaskDetails.GetAllUserTaskDetails(AllUserTaskDetails);
         }
     }
 }

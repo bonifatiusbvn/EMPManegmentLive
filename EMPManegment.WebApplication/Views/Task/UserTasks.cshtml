@@ -1,18 +1,18 @@
 ﻿@model IEnumerable<EMPManegment.EntityModels.ViewModels.TaskModels.TaskDetailsView>
 @{
     ViewData["Title"] = "0" ;
-    Layout = "~/Views/Shared/_UserHomeLayout.cshtml";
+    Layout = "~/Views/Shared/_HomeLayout.cshtml";
 }
 
 <div class="row">
     <div class="col-12">
         <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-            <h4 class="mb-sm-0">Kanban Board</h4>
+            <h4 class="mb-sm-0">Task Board</h4>
 
             <div class="page-title-right">
                 <ol class="breadcrumb m-0">
                     <li class="breadcrumb-item"><a href="javascript: void(0);">Tasks</a></li>
-                    <li class="breadcrumb-item active">Kanban Board</li>
+                    <li class="breadcrumb-item active">Task Board</li>
                 </ol>
             </div>
 
@@ -26,7 +26,7 @@
         <div class="row g-2">
             <div class="col-lg-auto">
                 <div class="hstack gap-2">
-                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createboardModal"><i class="ri-add-line align-bottom me-1"></i> Create Board</button>
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createboardModal"><i class="mdi mdi-magnify search-widget-icon me-1"></i>Search</button>
                 </div>
             </div>
             <!--end col-->
@@ -37,30 +37,7 @@
                 </div>
             </div>
             <div class="col-auto ms-sm-auto">
-                <div class="avatar-group" id="newMembar">
-                    <a href="javascript: void(0);" class="avatar-group-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Nancy">
-                        <img src="~/UserHome/minimal/assets/images/users/avatar-5.jpg" alt="" class="rounded-circle avatar-xs">
-                    </a>
-                    <a href="javascript: void(0);" class="avatar-group-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Frank">
-                        <img src="~/UserHome/minimal/assets/images/users/avatar-3.jpg" alt="" class="rounded-circle avatar-xs">
-                    </a>
-                    <a href="javascript: void(0);" class="avatar-group-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Tonya">
-                        <img src="~/UserHome/minimal/assets/images/users/avatar-10.jpg" alt="" class="rounded-circle avatar-xs">
-                    </a>
-                    <a href="javascript: void(0);" class="avatar-group-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Thomas">
-                        <img src="~/UserHome/minimal/assets/images/users/avatar-8.jpg" alt="" class="rounded-circle avatar-xs">
-                    </a>
-                    <a href="javascript: void(0);" class="avatar-group-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Herbert">
-                        <img src="~/UserHome/minimal/assets/images/users/avatar-2.jpg" alt="" class="rounded-circle avatar-xs">
-                    </a>
-                    <a href="#addmemberModal" data-bs-toggle="modal" class="avatar-group-item">
-                        <div class="avatar-xs">
-                            <div class="avatar-title rounded-circle">
-                                +
-                            </div>
-                        </div>
-                    </a>
-                </div>
+               
             </div>
             <!--end col-->
         </div>
