@@ -2,15 +2,18 @@
 using EMPManagment.API;
 using EMPManegment.EntityModels.View_Model;
 using EMPManegment.EntityModels.ViewModels;
+using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.TaskModels;
 using EMPManegment.Inretface.Interface.TaskDetails;
 using EMPManegment.Inretface.Interface.UserAttendance;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Dynamic.Core;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -20,6 +23,8 @@ namespace EMPManegment.Repository.TaskRepository
 {
     public class TaskRepo : ITaskDetails
     {
+        private readonly string? pending;
+
         public TaskRepo(BonifatiusEmployeesContext context)
         {
             Context = context;
@@ -118,27 +123,28 @@ namespace EMPManegment.Repository.TaskRepository
             return UserId;
         }
 
-        public async Task<IEnumerable<TaskDetailsView>> GetAllUserTaskDetails()
-        {
-            IEnumerable<TaskDetailsView> AllTaskDetails = from a in Context.TblTaskDetails
-                                                          join b in Context.TblUsers on a.UserId equals b.Id
-                                                          join c in Context.TblTaskMasters on a.TaskType equals c.Id
-                                                          select new TaskDetailsView
-                                                          {
-                                                              Id = a.Id,
-                                                              TaskType = a.TaskType,
-                                                              TaskStatus = a.TaskStatus,
-                                                              TaskDate = a.TaskDate,
-                                                              TaskDetails = a.TaskDetails,
-                                                              TaskEndDate = a.TaskEndDate,
-                                                              TaskTitle = a.TaskTitle,
-                                                              UserProfile = b.Image,
-                                                              UserName = b.UserName,
-                                                              TaskTypeName = c.TaskType
-                                                          };
-            return AllTaskDetails;
-        }
-  
+        //public async Task<IEnumerable<TaskDetailsView>> GetAllUserTaskDetails()
+        //{
+        //    IEnumerable<TaskDetailsView> AllTaskDetails = from a in Context.TblTaskDetails
+        //                                                  join b in Context.TblUsers on a.UserId equals b.Id
+        //                                                  join c in Context.TblTaskMasters on a.TaskType equals c.Id
+        //                                                  select new TaskDetailsView
+        //                                                  {
+        //                                                      Id = a.Id,
+        //                                                      TaskType = a.TaskType,
+        //                                                      TaskStatus = a.TaskStatus,
+        //                                                      TaskDate = a.TaskDate,
+        //                                                      TaskDetails = a.TaskDetails,
+        //                                                      TaskEndDate = a.TaskEndDate,
+        //                                                      TaskTitle = a.TaskTitle,
+        //                                                      //TotalTask = a.TaskStatus + a.TaskStatus + a.TaskStatus.ToString()
+        //                                                      UserProfile = b.Image,
+        //                                                      UserName = b.UserName,
+        //                                                      TaskTypeName = c.TaskType
+        //                                                  };
+        //    return AllTaskDetails;
+        //}
+       
         public async Task<TaskDetailsView> GetTaskDetailsById(Guid Taskid)
         {
             TaskDetailsView taskdata = new TaskDetailsView();
@@ -200,26 +206,44 @@ namespace EMPManegment.Repository.TaskRepository
             }
         }
 
-
-        public async Task<TaskDetailsView> GetTaskofpendingTask(TaskDetailsView pendingtask)
+        public async Task<jsonData> GetAllUserTaskDetails(DataTableRequstModel AllUserTaskDetails)
         {
-            try
+            var AllTaskDetailsDataTable = from a in Context.TblTaskDetails
+                                                          join b in Context.TblUsers on a.UserId equals b.Id
+                                                          join c in Context.TblTaskMasters on a.TaskType equals c.Id
+                                                          select new TaskDetailsView
+                                                          {
+                                                              Id = a.Id,
+                                                              TaskType = a.TaskType,
+                                                              TaskStatus = a.TaskStatus,
+                                                              TaskDate = a.TaskDate,
+                                                              TaskDetails = a.TaskDetails,
+                                                              TaskEndDate = a.TaskEndDate,
+                                                              TaskTitle = a.TaskTitle,
+                                                              UserProfile = b.Image,
+                                                              UserName = b.UserName,
+                                                              TaskTypeName = c.TaskType
+                                                          };
+            if (!string.IsNullOrEmpty(AllUserTaskDetails.sortColumn) && !string.IsNullOrEmpty(AllUserTaskDetails.sortColumnDir))
             {
-                var TaskList = Context.TblTaskDetails.Where(a => a.TaskStatus == pendingtask.TaskStatus).ToList();
-                TaskDetailsView Task = new TaskDetailsView();
-                {
-                    Task.Id = pendingtask.Id;
-                    Task.TaskType = pendingtask.TaskType;
-                    Task.TaskStatus = pendingtask.TaskStatus;
-                    Task.UserId = pendingtask.UserId;
-                }
-                return Task;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
+                AllTaskDetailsDataTable = AllTaskDetailsDataTable.OrderBy(AllUserTaskDetails.sortColumn + " " + AllUserTaskDetails.sortColumnDir);
             }
 
+            if (!string.IsNullOrEmpty(AllUserTaskDetails.searchValue))
+            {
+                AllTaskDetailsDataTable = AllTaskDetailsDataTable.Where(e => e.UserName.Contains(AllUserTaskDetails.searchValue) || e.TaskStatus.Contains(AllUserTaskDetails.searchValue));
+            }
+            int totalRecord = AllTaskDetailsDataTable.Count();
+            var cData = AllTaskDetailsDataTable.Skip(AllUserTaskDetails.skip).Take(AllUserTaskDetails.pageSize).ToList();
+
+            jsonData jsonData = new jsonData
+            {
+                draw = AllUserTaskDetails.draw,
+                recordsFiltered = totalRecord,
+                recordsTotal = totalRecord,
+                data = cData
+            };
+            return jsonData;
         }
     }
 }

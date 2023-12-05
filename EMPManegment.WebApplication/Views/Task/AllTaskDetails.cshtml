@@ -41,8 +41,11 @@
                         <div class="card-body">
                             <div class="d-flex justify-content-between">
                                 <div>
-                                <p class="badge bg-dark  text-uppercase">Total Tasks</p>
-                                    <h2 class="mt-4 ff-secondary fw-semibold"><span class="counter-value" data-target="22"></span></h2>
+                                <h6>Total Tasks</h6>
+                                    <h2 class="mt-4 ff-secondary fw-semibold">
+                                        <span class="counter-value" id="Totaltask">
+                                        </span>
+                                      </h2>
                                     <p class="mb-0 text-muted">
                                         <span class="badge bg-light text-success mb-0">
                                             <i class="ri-arrow-up-line align-middle"></i> 17.32 %
@@ -66,9 +69,10 @@
                         <div class="card-body">
                             <div class="d-flex justify-content-between">
                                 <div>
-
-                                    <p class="badge bg-primary text-uppercase">Pending Tasks</p>
-                                    <h2 class="mt-4 ff-secondary fw-semibold"><span class="counter-value" data-target="05"></span></h2>
+                                    <h6>Pending Tasks</h6>
+                                    <h2 class="mt-4 ff-secondary fw-semibold">
+                                            <span class="counter-value"id="Pendingtask"></span>
+                                        </h2>
                                     <p class="mb-0 text-muted">
                                         <span class="badge bg-light text-danger mb-0">
                                             <i class="ri-arrow-down-line align-middle"></i> 0.87 %
@@ -93,8 +97,10 @@
                         <div class="card-body">
                             <div class="d-flex justify-content-between">
                                 <div>
-                                <p class="badge bg-warning text-uppercase">Working Tasks</p>
-                                    <h2 class="mt-4 ff-secondary fw-semibold"><span class="counter-value" data-target="04"></span></h2>
+                                <h6>Working Tasks</h6>
+                                    <h2 class="mt-4 ff-secondary fw-semibold">
+                                        <span class="counter-value" id="Workingtask"></span>
+                                        </h2>
                                     <p class="mb-0 text-muted">
                                         <span class="badge bg-light text-danger mb-0">
                                             <i class="ri-arrow-down-line align-middle"></i> 2.52 %
@@ -118,8 +124,10 @@
                         <div class="card-body">
                             <div class="d-flex justify-content-between">
                                 <div>
-                                <p class="badge bg-success text-uppercase">Completed Tasks</p>
-                                    <h2 class="mt-4 ff-secondary fw-semibold"><span class="counter-value" data-target="07"></span></h2>
+                                <h6>Completed Tasks</h6>
+                                    <h2 class="mt-4 ff-secondary fw-semibold">
+                                        <span class="counter-value" id="Completetask"></span>
+                                        </h2>
                                     <p class="mb-0 text-muted">
                                         <span class="badge bg-light text-success mb-0">
                                             <i class="ri-arrow-up-line align-middle"></i> 0.63 %
@@ -158,19 +166,19 @@
                         <div class="card-body border border-dashed border-end-0 border-start-0">
                             <form>
                                 <div class="row g-3">
-                                    <div class="col-xxl-5 col-sm-12">
+                                    @* <div class="col-xxl-5 col-sm-12">
                                         <div class="search-box">
                                             <input type="text" class="form-control search bg-light border-light" placeholder="Search for tasks or something...">
                                             <i class="ri-search-line search-icon"></i>
                                         </div>
-                                    </div>
+                                    </div> *@
                                     <!--end col-->
 
-                                    <div class="col-xxl-3 col-sm-4">
+                                   @*  <div class="col-xxl-3 col-sm-4">
                                         <input type="text" class="form-control bg-light border-light" id="demo-datepicker" data-provider="flatpickr" data-date-format="d M, Y" data-range-date="true" placeholder="Select date range">
-                                    </div>
+                                    </div> *@
                                     <!--end col-->
-                                    <div class="col-xxl-3 col-sm-4">
+                                    @* <div class="col-xxl-3 col-sm-4">
                                         <div class="input-light">
                                             <select class="form-control" data-choices data-choices-search-false name="choices-single-default" id="idStatus">
                                                 <option value="">Status</option>
@@ -181,14 +189,14 @@
                                                 <option value="Completed">Completed</option>
                                             </select>
                                         </div>
-                                    </div>
+                                    </div> *@
                                     <!--end col-->
-                                    <div class="col-xxl-1 col-sm-4">
+                                    @* <div class="col-xxl-1 col-sm-4">
                                         <button type="button" class="btn btn-primary w-100" onclick="SearchData();">
                                             <i class="ri-equalizer-fill me-1 align-bottom"></i>
                                             Filters
                                         </button>
-                                    </div>
+                                    </div> *@
                                     <!--end col-->
                                 </div>
                                 <!--end row-->
@@ -197,7 +205,7 @@
                         <!--end card-body-->
                         <div class="card-body">
                             <div class="table-responsive table-card mb-4">
-                                <table class="table table-bordered table-striped align-middle" id="tasksTable">
+                                <table class="table table-bordered table-striped align-middle" id="tasksTableData">
                                       <thead class="table-light text-muted text-center">
                                                 <tr>
                                                     <th class="sort" data-sort="UserName">UserName</th>
