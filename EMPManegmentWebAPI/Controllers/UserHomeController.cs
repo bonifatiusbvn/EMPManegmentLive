@@ -2,6 +2,7 @@
 using EMPManagment.Web.Models.API;
 using EMPManegment.EntityModels.View_Model;
 using EMPManegment.EntityModels.ViewModels;
+using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.TaskModels;
 using EMPManegment.Inretface.Interface.UserAttendance;
@@ -226,12 +227,19 @@ namespace EMPManagment.API.Controllers
             return Ok(new { code = 200, data = userTaskDetails });
         }
 
-        [HttpGet]
+        //[HttpGet]
+        //[Route("GetAllUserTaskDetails")]
+        //public async Task<IActionResult> GetAllUserTaskDetails()
+        //{
+        //    IEnumerable<TaskDetailsView> AllTaskList = await TaskServices.GetAllUserTaskDetails();
+        //    return Ok(new { code = 200, data = AllTaskList.ToList() });
+        //}
+        [HttpPost]
         [Route("GetAllUserTaskDetails")]
-        public async Task<IActionResult> GetAllUserTaskDetails()
+        public async Task<IActionResult> GetAllUserTaskDetails(DataTableRequstModel dataTable)
         {
-            IEnumerable<TaskDetailsView> AllTaskList = await TaskServices.GetAllUserTaskDetails();
-            return Ok(new { code = 200, data = AllTaskList.ToList() });
+            var AllTaskList = await TaskServices.GetAllUserTaskDetails(dataTable);
+            return Ok(new { code = 200, data = AllTaskList });
         }
 
         [HttpPost]
@@ -241,13 +249,7 @@ namespace EMPManagment.API.Controllers
             IEnumerable<TaskDetailsView> userTaskDetails = await TaskServices.GetTaskDetails(Taskid);
             return Ok(new { code = 200, data = userTaskDetails.ToList() });
         }
-        [HttpGet]
-        [Route("PendingTask")]
-        public async Task<IActionResult> GetTaskofpendingTask(TaskDetailsView taskDetailsView)
-        {
-            var pendingtask = await TaskServices.GetTaskofpendingTask(taskDetailsView);
-            return Ok(new { code = 200, message = pendingtask });
-        }
+        
 
     }
 }

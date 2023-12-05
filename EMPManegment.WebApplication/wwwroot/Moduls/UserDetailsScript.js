@@ -6,7 +6,7 @@ $(document).ready(function () {
     UserBirsthDayWish();
     GetAllUserData();
 });
-function GetAllUserData() {
+function GetAllUserData() {debugger
     $('#UserTableData').DataTable({
         processing: true,
         serverSide: true,
