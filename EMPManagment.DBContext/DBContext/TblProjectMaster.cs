@@ -31,7 +31,7 @@ public partial class TblProjectMaster
 
     public string? CreatedBy { get; set; }
 
-    public Guid UserId { get; set; }
+    public Guid? UserId { get; set; }
 
-    public virtual TblUser User { get; set; } = null!;
+    public virtual ICollection<TblProjectDetail> TblProjectDetails { get; set; } = new List<TblProjectDetail>();
 }
