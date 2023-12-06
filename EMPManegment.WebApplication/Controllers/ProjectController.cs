@@ -139,5 +139,9 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
+        public IActionResult AddProjectMember()
+        {
+            return View();  
+        }
     }
 }

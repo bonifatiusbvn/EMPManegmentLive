@@ -219,7 +219,6 @@ namespace EMPManegment.Web.Controllers
             try
             {
 
-
                 Guid userid = _userSession.UserId;
                 HttpClient client = WebAPI.Initil();
                 List<DocumentInfoView> documentList = new List<DocumentInfoView>();
