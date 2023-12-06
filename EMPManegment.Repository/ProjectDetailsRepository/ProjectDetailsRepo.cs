@@ -105,7 +105,7 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
                         ProjectStartDate = item.ProjectStartDate,
                         ProjectEndDate = item.ProjectEndDate,
                         ProjectDeadline = item.ProjectDeadline,
-                        UserId = item.UserId,
+                      
                     });
                 }
             }

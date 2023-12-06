@@ -50,7 +50,7 @@ builder.Services.AddDbContext<BonifatiusEmployeesContext>(option =>
 option.UseSqlServer(builder.Configuration.GetConnectionString("EMPDbconn")));
 
 
-builder.Services.AddScoped<IAuthentication, AddEmpRepo>();
+//builder.Services.AddScoped<IAuthentication, AddEmpRepo>();
 builder.Services.AddScoped<IMasterList, MasterListRepo>();
 builder.Services.AddScoped<IUserLogin, UserLoginRepo> ();
 builder.Services.AddScoped<IUserDetails, UserDetailsRepo>();
