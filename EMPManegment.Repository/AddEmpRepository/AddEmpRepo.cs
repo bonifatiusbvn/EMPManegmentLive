@@ -1,6 +1,6 @@
 ﻿
 using EMPManagment.API;
-
+using EMPManegment.EntityModels.Crypto;
 using EMPManegment.EntityModels.View_Model;
 using EMPManegment.EntityModels.ViewModels;
 using EMPManegment.EntityModels.ViewModels.Models;
@@ -19,7 +19,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace EMPManegment.Repository.AddEmpRepository
 {
-    public class AddEmpRepo : IAddEmpDetails
+    public class AddEmpRepo : IAuthentication
     {
 
         public AddEmpRepo(BonifatiusEmployeesContext context)
@@ -29,7 +29,7 @@ namespace EMPManegment.Repository.AddEmpRepository
 
         public BonifatiusEmployeesContext Context { get; }
 
-        public async Task<UserResponceModel> AddEmployee(EmpDetailsView addemp)
+        public async Task<UserResponceModel> UserSingUp(EmpDetailsView addemp)
         {
             UserResponceModel response = new UserResponceModel();
             try
@@ -81,7 +81,58 @@ namespace EMPManegment.Repository.AddEmpRepository
             return response;
         }
 
+        public async Task<LoginResponseModel> LoginUser(LoginRequest Loginrequest)
+        {
+            LoginResponseModel response = new LoginResponseModel();
+            try
+            {
+                var tblUser = Context.TblUsers.Where(p => p.UserName == Loginrequest.UserName).SingleOrDefault();
+                if (tblUser != null)
+                {
+                    if (tblUser.IsActive == true)
+                    {
+                        if (tblUser.UserName == Loginrequest.UserName && Crypto.VarifyHash(Loginrequest.Password, tblUser.PasswordHash, tblUser.PasswordSalt))
+                        {
 
+                            LoginView userModel = new LoginView();
+                            userModel.UserName = tblUser.UserName;
+                            userModel.Id = tblUser.Id;
+                            userModel.FullName = tblUser.FirstName + " " + tblUser.LastName;
+                            userModel.FirstName = tblUser.FirstName;
+                            userModel.ProfileImage = tblUser.Image;
+                            userModel.Role = tblUser.Role;
+                            response.Data = userModel;
+                            response.Code = (int)HttpStatusCode.OK;
+
+                            tblUser.LastLoginDate = DateTime.Now;
+                            Context.TblUsers.Update(tblUser);
+                            Context.SaveChanges();
+                        }
+                        else
+                        {
+                            response.Message = "Your Password Is Wrong";
+                        }
+                    }
+                    else
+                    {
+                        response.Code = (int)HttpStatusCode.Forbidden;
+                        response.Message = "Your Deactive Contact Your Admin";
+                        return response;
+                    }
+                }
+                else
+                {
+                    response.Message = "User Not Exist";
+                    response.Code = (int)HttpStatusCode.NotFound;
+                    response.Data = null;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return response;
+        }
         public string CheckEmloyess()
         {
             try
@@ -103,21 +154,10 @@ namespace EMPManegment.Repository.AddEmpRepository
                 throw ex;
             }
         }
-        public async Task<IEnumerable<Department>> EmpDepartment()
+
+        public bool GetUserName(string Username)
         {
-            try
-            {
-                IEnumerable<Department> dept = Context.TblDepartments.ToList().Select(a => new Department
-                {
-                    Id = a.Id,
-                    Departments = a.Department
-                });
-                return dept;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            throw new NotImplementedException();
         }
     }   
 }

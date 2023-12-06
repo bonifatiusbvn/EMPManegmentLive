@@ -16,17 +16,20 @@ using System.Security.Claims;
 using static Microsoft.AspNetCore.Razor.Language.TagHelperMetadata;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using EMPManegment.EntityModels.View_Model;
+using EMPManegment.Web.Models;
 
 namespace EMPManegment.Web.Controllers
 {
     
     public class HomeController : Controller
     {
-        public HomeController(WebAPI webAPI, IWebHostEnvironment environment, APIServices aPIServices)
+        private readonly UserSession _userSession;
+        public HomeController(WebAPI webAPI, IWebHostEnvironment environment, APIServices aPIServices,UserSession userSession)
         {
             WebAPI = webAPI;
             Environment = environment;
             APIServices = aPIServices;
+            _userSession = userSession;
         }
 
         public WebAPI WebAPI { get; }
@@ -94,10 +97,10 @@ namespace EMPManegment.Web.Controllers
         {
             try
             {
-                string Userid = HttpContext.Session.GetString("UserID");
+                
                 UserAttendanceRequestModel userAttendance = new UserAttendanceRequestModel
                 {
-                    UserId = Guid.Parse(Userid),
+                    UserId = _userSession.UserId,
                     Date = DateTime.Now,
                 };
                 ApiResponseModel postuser = await APIServices.PostAsync(userAttendance, "UserHome/GetUserAttendanceInTime");
@@ -126,8 +129,8 @@ namespace EMPManegment.Web.Controllers
         {
             try
             {
-                string Userid = HttpContext.Session.GetString("UserID");
-                Guid UserId = Guid.Parse(Userid);
+                
+                Guid UserId = _userSession.UserId;
                 ApiResponseModel postuser = await APIServices.GetAsyncId(UserId,"UserHome/UserBirsthDayWish");
                 UserAttendanceResponseModel responseModel = new UserAttendanceResponseModel();
                 if (postuser.message != null)

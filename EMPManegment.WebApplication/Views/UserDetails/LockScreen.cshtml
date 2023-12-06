@@ -1,5 +1,7 @@
-﻿@model EMPManegment.EntityModels.ViewModels.LoginRequest
+﻿@using EMPManegment.Web.Models
+@model EMPManegment.EntityModels.ViewModels.LoginRequest
 @inject IHttpContextAccessor Accessor
+@inject UserSession _userSession
 <!doctype html>
 <html lang="en" data-layout="vertical" data-topbar="light" data-sidebar="light" data-sidebar-size="lg" data-sidebar-image="none" data-preloader="disable">
 
@@ -71,15 +73,15 @@
                                     <p class="text-muted">Enter your password to unlock the screen!</p>
                                 </div>
                                 <div class="user-thumb text-center">
-                                    <img src="~/@Accessor.HttpContext.Session.GetString("ProfileImage")" class="rounded-circle img-thumbnail avatar-lg" alt="thumbnail">
-                                    <h5 class="font-size-15 mt-3">@Accessor.HttpContext.Session.GetString("FullName")</h5>
+                                    <img src="~/@UserSession.ProfilePhoto" class="rounded-circle img-thumbnail avatar-lg" alt="thumbnail">
+                                    <h5 class="font-size-15 mt-3">@_userSession.FullName </h5>
                                 </div>
                                 <div class="p-2 mt-4">
                                     <form method="post" enctype="multipart/form-data" asp-action="LockScreen" asp-controller="UserDetails">
                                         <div>
                                             <label class="form-label" for="userpassword">Password</label>
                                             <input type="password" asp-for="Password" class="form-control" placeholder="Enter password" required>
-                                            <input type="text" asp-for="UserName" value="@Accessor.HttpContext.Session.GetString("UserName")" hidden>
+                                            <input type="text" asp-for="UserName" value="@_userSession.UserName" hidden>
                                             <span class="text-danger">@TempData["ErrorMessage"]</span>
                                         </div>
                                         <div class="mb-2 mt-4">

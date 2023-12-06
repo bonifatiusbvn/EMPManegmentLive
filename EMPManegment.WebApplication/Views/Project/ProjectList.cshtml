@@ -1,7 +1,9 @@
 ﻿@model IEnumerable<EMPManegment.EntityModels.ViewModels.ProjectModels.ProjectDetailView>
+@using EMPManegment.Web.Models
 @using X.PagedList;
 @using X.PagedList.Mvc.Core;
 @inject IHttpContextAccessor Accessor
+@inject UserSession _userSession
 @{
     ViewData["Title"] = "ProjectList";
     Layout = "~/Views/Shared/_HomeLayout.cshtml";
@@ -231,7 +233,7 @@
                                     <div class="avatar-group">
                                         <a href="javascript: void(0);" class="avatar-group-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="@Accessor.HttpContext.Session.GetString("FullName")">
                                             <div class="avatar-xxs">
-                                                <img src="~/@Accessor.HttpContext.Session.GetString("ProfileImage")" alt="" class="avatar-xs rounded-circle">
+                                                <img src="~/@UserSession.ProfilePhoto" alt="" class="avatar-xs rounded-circle">
                                             </div>
                                         </a>
                                         <a href="javascript: void(0);" class="avatar-group-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Add Members">

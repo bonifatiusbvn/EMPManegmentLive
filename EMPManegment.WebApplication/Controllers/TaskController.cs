@@ -5,6 +5,7 @@ using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.TaskModels;
 using EMPManegment.EntityModels.ViewModels.UserModels;
+using EMPManegment.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Threading.Tasks;
@@ -13,13 +14,15 @@ namespace EMPManegment.Web.Controllers
 {
     public class TaskController : Controller
     {
-        public TaskController(WebAPI webAPI, IWebHostEnvironment environment, APIServices aPIServices)
+        public TaskController(WebAPI webAPI, IWebHostEnvironment environment, APIServices aPIServices, UserSession userSession)
         {
             WebAPI = webAPI;
             Environment = environment;
             APIServices = aPIServices;
+            _userSession = userSession;
         }
 
+        public UserSession _userSession { get; }
         public WebAPI WebAPI { get; }
         public IWebHostEnvironment Environment { get; }
         public APIServices APIServices { get; }
@@ -32,11 +35,7 @@ namespace EMPManegment.Web.Controllers
         {
             try
             {
-                string Userid = HttpContext.Session.GetString("UserID");
-                TaskDetailsView usertaskdetails = new TaskDetailsView
-                {
-                    UserId = Guid.Parse(Userid),
-                };
+                Guid Userid =_userSession.UserId;
                 HttpClient client = WebAPI.Initil();
                 List<TaskDetailsView> TaskList = new List<TaskDetailsView>();
                 ApiResponseModel response = await APIServices.PostAsync("", "UserHome/GetTaskDetails?Taskid=" + Userid);
@@ -106,7 +105,7 @@ namespace EMPManegment.Web.Controllers
             {
                 List<EmpDetailsView> userList = new List<EmpDetailsView>();
                 HttpClient client = WebAPI.Initil();
-                ApiResponseModel res = await APIServices.GetAsync("", "UserDetails/GetUsersNameList");
+                ApiResponseModel res = await APIServices.GetAsync("", "UserProfile/GetUsersNameList");
                 if (res.code == 200)
                 {
                     userList = JsonConvert.DeserializeObject<List<EmpDetailsView>>(res.data.ToString());
@@ -124,10 +123,10 @@ namespace EMPManegment.Web.Controllers
         {
             try
             {
-                string Userid = HttpContext.Session.GetString("UserID");
+               
                 TaskDetailsView responceModel = new TaskDetailsView
                 {
-                    UserId = Guid.Parse(Userid),
+                    UserId = _userSession.UserId,
                 };
                 List<TaskDetailsView> TaskList = new List<TaskDetailsView>();
                 HttpClient client = WebAPI.Initil();
@@ -196,30 +195,6 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
-        //[HttpGet]
-        //public async Task<IActionResult> GetAllUserTaskDetail()
-        //{
-        //    try
-        //    {
-        //        List<TaskDetailsView> TaskList = new List<TaskDetailsView>();
-        //        HttpClient client = WebAPI.Initil();
-        //        ApiResponseModel postuser = await APIServices.GetAsync("", "UserHome/GetAllUserTaskDetails");
-        //        if (postuser.data != null)
-        //        {
-        //            TaskList = JsonConvert.DeserializeObject<List<TaskDetailsView>>(postuser.data.ToString());
-        //        }
-        //        else
-        //        {
-        //            TaskList = new List<TaskDetailsView>();
-        //            ViewBag.Error = "not found";
-        //        }
-        //        return PartialView("~/Views/Task/_UserTaskList.cshtml", TaskList);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw ex;
-        //    }
-        //}
 
         [HttpGet]
         public IActionResult AllTaskDetails()
