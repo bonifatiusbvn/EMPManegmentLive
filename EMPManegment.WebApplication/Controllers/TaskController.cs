@@ -7,6 +7,7 @@ using EMPManegment.EntityModels.ViewModels.TaskModels;
 using EMPManegment.EntityModels.ViewModels.UserModels;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Data;
 using System.Threading.Tasks;
 
 namespace EMPManegment.Web.Controllers
@@ -196,38 +197,39 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
-        //[HttpGet]
-        //public async Task<IActionResult> GetAllUserTaskDetail()
-        //{
-        //    try
-        //    {
-        //        List<TaskDetailsView> TaskList = new List<TaskDetailsView>();
-        //        HttpClient client = WebAPI.Initil();
-        //        ApiResponseModel postuser = await APIServices.GetAsync("", "UserHome/GetAllUserTaskDetails");
-        //        if (postuser.data != null)
-        //        {
-        //            TaskList = JsonConvert.DeserializeObject<List<TaskDetailsView>>(postuser.data.ToString());
-        //        }
-        //        else
-        //        {
-        //            TaskList = new List<TaskDetailsView>();
-        //            ViewBag.Error = "not found";
-        //        }
-        //        return PartialView("~/Views/Task/_UserTaskList.cshtml", TaskList);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw ex;
-        //    }
-        //}
+        [HttpGet]
+        public async Task<JsonResult> GetAllUserTaskDetail()
+        {
+            try
+            {
+                List<TaskDetailsView> TaskList = new List<TaskDetailsView>();
+                HttpClient client = WebAPI.Initil();
+                ApiResponseModel postuser = await APIServices.GetAsync("", "UserHome/GetAllUserTaskDetails");
+                if (postuser.data != null)
+                {
+                    TaskList = JsonConvert.DeserializeObject<List<TaskDetailsView>>(postuser.data.ToString());
+                }
+                else
+                {
+                    TaskList = new List<TaskDetailsView>();
+                    ViewBag.Error = "not found";
+                }
+                return new JsonResult(TaskList);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
 
         [HttpGet]
         public IActionResult AllTaskDetails()
         {
             return View();
         }
+        
         [HttpPost]
-        public async Task<IActionResult> GetAllTaskDetailList()
+        public async Task<IActionResult> TaskDetailsDataTable()
         {
             try
             {
@@ -253,7 +255,7 @@ namespace EMPManegment.Web.Controllers
                 List<TaskDetailsView> TaskList = new List<TaskDetailsView>();
                 var data = new jsonData();
                 HttpClient client = WebAPI.Initil();
-                ApiResponseModel postuser = await APIServices.PostAsync(dataTable, "UserHome/GetAllUserTaskDetails");
+                ApiResponseModel postuser = await APIServices.PostAsync(dataTable, "UserHome/TaskDetailsDataTable");
                 if (postuser.data != null)
                 {
                     data = JsonConvert.DeserializeObject<jsonData>(postuser.data.ToString());
@@ -279,7 +281,7 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
-
+        
         [HttpPost]
         public async Task<IActionResult> UpdateUserTaskDetails(TaskDetailsView updateTaskDetails)
         {

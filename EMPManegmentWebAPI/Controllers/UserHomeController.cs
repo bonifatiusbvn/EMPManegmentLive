@@ -227,16 +227,16 @@ namespace EMPManagment.API.Controllers
             return Ok(new { code = 200, data = userTaskDetails });
         }
 
-        //[HttpGet]
-        //[Route("GetAllUserTaskDetails")]
-        //public async Task<IActionResult> GetAllUserTaskDetails()
-        //{
-        //    IEnumerable<TaskDetailsView> AllTaskList = await TaskServices.GetAllUserTaskDetails();
-        //    return Ok(new { code = 200, data = AllTaskList.ToList() });
-        //}
-        [HttpPost]
+        [HttpGet]
         [Route("GetAllUserTaskDetails")]
-        public async Task<IActionResult> GetAllUserTaskDetails(DataTableRequstModel dataTable)
+        public async Task<IActionResult> GetAllUserTaskDetails()
+        {
+            IEnumerable<TaskDetailsView> AllTaskList = await TaskServices.GetAllUserTaskDetails();
+            return Ok(new { code = 200, data = AllTaskList.ToList() });
+        }
+        [HttpPost]
+        [Route("TaskDetailsDataTable")]
+        public async Task<IActionResult> TaskDetailsDataTable(DataTableRequstModel dataTable)
         {
             var AllTaskList = await TaskServices.GetAllUserTaskDetails(dataTable);
             return Ok(new { code = 200, data = AllTaskList });
