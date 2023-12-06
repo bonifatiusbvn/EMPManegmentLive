@@ -8,7 +8,7 @@ namespace EMPManegment.EntityModels.ViewModels.ProjectModels
 {
     public class ProjectDetailView
     {
-        public Guid ProjectId { get; set; }
+        public Guid? ProjectId { get; set; }
 
         public string? ProjectType { get; set; } = null!;
 

@@ -1,8 +1,15 @@
-﻿
+﻿@model IEnumerable<EMPManegment.EntityModels.ViewModels.OrderModels.OrderDetailView>
 @{
     ViewData["Title"] = "CreateOrder";
     Layout = "~/Views/Shared/_HomeLayout.cshtml";
 }
+<style>
+    #orderId-error, #companyname-error, #productname-error,
+    #productquantity-error, #amount-error, #totalamount-error,
+    #orderdate-error, #deliverydate-error, #payment-error, #deliveredstatus-error {
+        color: red;
+    }
+</style>
 
 <div class="row">
     <div class="col-12">
@@ -31,7 +38,7 @@
                     </div>
                     <div class="col-sm-auto">
                         <div class="d-flex gap-1 flex-wrap">
-                            <button type="button" class="btn btn-primary add-btn" data-bs-toggle="modal" id="create-btn" data-bs-target="#showModal"><i class="ri-add-line align-bottom me-1"></i> Create Order</button>
+                            <button type="button" class="btn btn-primary add-btn" data-bs-toggle="modal" id="create-btn" data-bs-target="#createOrderModal"><i class="ri-add-line align-bottom me-1"></i> Create Order</button>
                             <button type="button" class="btn btn-info"><i class="ri-file-download-line align-bottom me-1"></i> Import</button>
                             <button class="btn btn-soft-danger" id="remove-actions" onClick="deleteMultiple()"><i class="ri-delete-bin-2-line"></i></button>
                         </div>
@@ -124,7 +131,7 @@
                             </a>
                         </li>
                     </ul>
-
+                    
                     <div class="table-responsive table-card mb-1">
                         <table class="table table-nowrap align-middle" id="orderTable">
                             <thead class="text-muted table-light">
@@ -135,56 +142,55 @@
                                         </div>
                                     </th>
                                     <th class="sort" data-sort="id">Order ID</th>
-                                    <th class="sort" data-sort="customer_name">Customer</th>
+                                    <th class="sort" data-sort="company_name">Company</th>
                                     <th class="sort" data-sort="product_name">Product</th>
                                     <th class="sort" data-sort="date">Order Date</th>
-                                    <th class="sort" data-sort="amount">Amount</th>
+                                    <th class="sort" data-sort="total_amount">Amount</th>
                                     <th class="sort" data-sort="payment">Payment Method</th>
                                     <th class="sort" data-sort="status">Delivery Status</th>
                                     <th class="sort" data-sort="city">Action</th>
                                 </tr>
                             </thead>
                             <tbody class="list form-check-all">
-                                <tr>
-                                    <th scope="row">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" name="checkAll" value="option1">
-                                        </div>
-                                    </th>
-                                    <td class="id"><a href="apps-ecommerce-order-details.html" class="fw-medium link-primary">#VZ2101</a></td>
-                                    <td class="customer_name">Frank Hook</td>
-                                    <td class="product_name">Puma Tshirt</td>
-                                    <td class="date">
-                                        20 Dec, 2021, <small class="text-muted">
-                                            02:21
-                                            AM
-                                        </small>
-                                    </td>
-                                    <td class="amount">$654</td>
-                                    <td class="payment">Mastercard</td>
-                                    <td class="status">
-                                        <span class="badge bg-warning-subtle text-warning text-uppercase">Pending</span>
-                                    </td>
-                                    <td>
-                                        <ul class="list-inline hstack gap-2 mb-0">
-                                            <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="View">
-                                                <a href="apps-ecommerce-order-details.html" class="text-primary d-inline-block">
-                                                    <i class="ri-eye-fill fs-16"></i>
-                                                </a>
-                                            </li>
-                                            <li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">
-                                                <a href="#showModal" data-bs-toggle="modal" class="text-primary d-inline-block edit-item-btn">
-                                                    <i class="ri-pencil-fill fs-16"></i>
-                                                </a>
-                                            </li>
-                                            <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Remove">
-                                                <a class="text-danger d-inline-block remove-item-btn" data-bs-toggle="modal" href="#deleteOrder">
-                                                    <i class="ri-delete-bin-5-fill fs-16"></i>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </td>
-                                </tr>
+
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <th scope="row">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" name="checkAll" value="option1">
+                                            </div>
+                                        </th>
+                                        <td class="id"><a href="apps-ecommerce-order-details.html" class="fw-medium link-primary">@item.OrderId</a></td>
+                                        <td class="company_name">@item.CompanyName</td>
+                                        <td class="product_name">@item.Product</td>
+                                        <td class="date">@item.OrderDate.ToShortDateString()</td>
+                                        <td class="total_amount">@item.Total</td>
+                                        <td class="payment">@item.PaymentMethod</td>
+                                        <td class="status">
+                                            <span class="badge bg-warning-subtle text-warning text-uppercase">@item.DeliveryStatus</span>
+                                        </td>
+                                        <td>
+                                            <ul class="list-inline hstack gap-2 mb-0">
+                                                <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="View">
+                                                    <a href="apps-ecommerce-order-details.html" class="text-primary d-inline-block">
+                                                        <i class="ri-eye-fill fs-16"></i>
+                                                    </a>
+                                                </li>
+                                                <li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">
+                                                    <a href="#showModal" data-bs-toggle="modal" class="text-primary d-inline-block edit-item-btn">
+                                                        <i class="ri-pencil-fill fs-16"></i>
+                                                    </a>
+                                                </li>
+                                                <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Remove">
+                                                    <a class="text-danger d-inline-block remove-item-btn" data-bs-toggle="modal" href="#deleteOrder">
+                                                        <i class="ri-delete-bin-5-fill fs-16"></i>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                }
                             </tbody>
                         </table>
                         <div class="noresult" style="display: none">
@@ -212,63 +218,76 @@
                         </div>
                     </div>
                 </div>
-                <div class="modal fade" id="showModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+                <!---------Create Order Modal-------->
+                <div class="modal fade" id="createOrderModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
                             <div class="modal-header bg-light p-3">
                                 <h5 class="modal-title" id="exampleModalLabel">&nbsp;</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"></button>
                             </div>
-                            <form class="tablelist-form" autocomplete="off">
+                            <form class="tablelist-form" autocomplete="off" id="createOrderForm">
                                 <div class="modal-body">
                                     <input type="hidden" id="id-field" />
 
                                     <div class="mb-3" id="modal-id">
                                         <label for="orderId" class="form-label">ID</label>
-                                        <input type="text" id="orderId" class="form-control" placeholder="ID" readonly />
+                                        <input type="text" id="orderId" class="form-control" placeholder="ID" name="orderId" />
                                     </div>
 
                                     <div class="mb-3">
-                                        <label for="customername-field" class="form-label">Customer Name</label>
-                                        <input type="text" id="customername-field" class="form-control" placeholder="Enter name" required />
+                                        <label for="companyname" class="form-label">Customer Name</label>
+                                        <input type="text" id="companyname" class="form-control" placeholder="Enter name" name="companyname" />
                                     </div>
 
                                     <div class="mb-3">
-                                        <label for="productname-field" class="form-label">Product</label>
-                                        <select class="form-control" data-trigger name="productname-field" id="productname-field" required />
-                                        <option value="">Product</option>
-                                        <option value="Puma Tshirt">Puma Tshirt</option>
-                                        <option value="Adidas Sneakers">Adidas Sneakers</option>
-                                        <option value="350 ml Glass Grocery Container">350 ml Glass Grocery Container</option>
-                                        <option value="American egale outfitters Shirt">American egale outfitters Shirt</option>
-                                        <option value="Galaxy Watch4">Galaxy Watch4</option>
-                                        <option value="Apple iPhone 12">Apple iPhone 12</option>
-                                        <option value="Funky Prints T-shirt">Funky Prints T-shirt</option>
-                                        <option value="USB Flash Drive Personalized with 3D Print">USB Flash Drive Personalized with 3D Print</option>
-                                        <option value="Oxford Button-Down Shirt">Oxford Button-Down Shirt</option>
-                                        <option value="Classic Short Sleeve Shirt">Classic Short Sleeve Shirt</option>
-                                        <option value="Half Sleeve T-Shirts (Blue)">Half Sleeve T-Shirts (Blue)</option>
-                                        <option value="Noise Evolve Smartwatch">Noise Evolve Smartwatch</option>
+                                        <label for="productname" class="form-label">Product</label>
+                                        <select class="form-control" data-trigger name="productname" id="productname" required>
+                                            <option selected disabled value="">Product</option>
+                                            <option value="Puma Tshirt">Puma Tshirt</option>
+                                            <option value="Adidas Sneakers">Adidas Sneakers</option>
+                                            <option value="350 ml Glass Grocery Container">350 ml Glass Grocery Container</option>
+                                            <option value="American egale outfitters Shirt">American egale outfitters Shirt</option>
+                                            <option value="Galaxy Watch4">Galaxy Watch4</option>
+                                            <option value="Apple iPhone 12">Apple iPhone 12</option>
+                                            <option value="Funky Prints T-shirt">Funky Prints T-shirt</option>
+                                            <option value="USB Flash Drive Personalized with 3D Print">USB Flash Drive Personalized with 3D Print</option>
+                                            <option value="Oxford Button-Down Shirt">Oxford Button-Down Shirt</option>
+                                            <option value="Classic Short Sleeve Shirt">Classic Short Sleeve Shirt</option>
+                                            <option value="Half Sleeve T-Shirts (Blue)">Half Sleeve T-Shirts (Blue)</option>
+                                            <option value="Noise Evolve Smartwatch">Noise Evolve Smartwatch</option>
                                         </select>
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label for="date-field" class="form-label">Order Date</label>
-                                        <input type="date" id="date-field" class="form-control" data-provider="flatpickr" required data-date-format="d M, Y" data-enable-time required placeholder="Select date" />
                                     </div>
 
                                     <div class="row gy-4 mb-3">
                                         <div class="col-md-6">
                                             <div>
-                                                <label for="amount-field" class="form-label">Amount</label>
-                                                <input type="text" id="amount-field" class="form-control" placeholder="Total amount" required />
+                                                <label for="amount" class="form-label">Amount</label>
+                                                <input type="text" id="amount" class="form-control" placeholder="Enter amount" name="amount" />
+                                            </div>    
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <div>
+                                                <label for="productquantity" class="form-label">Product Quantity</label>
+                                                <input type="text" id="productquantity" class="form-control" placeholder="Enter quantity" name="productquantity" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row gy-4 mb-3">
+                                        <div class="col-md-6">
+                                            <div>
+                                                <label for="totalamount" class="form-label">Total Amount</label>
+                                                <input type="text" id="totalamount" class="form-control" placeholder="Enter total Amount" name="totalamount" />
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div>
-                                                <label for="payment-field" class="form-label">Payment Method</label>
-                                                <select class="form-control" data-trigger name="payment-method" required id="payment-field">
-                                                    <option value="">Payment Method</option>
+                                                <label for="payment" class="form-label">Payment Method</label>
+                                                <select class="form-control" data-trigger name="payment" id="payment">
+                                                    <option selected disabled value="">Payment Method</option>
                                                     <option value="Mastercard">Mastercard</option>
                                                     <option value="Visa">Visa</option>
                                                     <option value="COD">COD</option>
@@ -278,23 +297,51 @@
                                         </div>
                                     </div>
 
-                                    <div>
-                                        <label for="delivered-status" class="form-label">Delivery Status</label>
-                                        <select class="form-control" data-trigger name="delivered-status" required id="delivered-status">
-                                            <option value="">Delivery Status</option>
-                                            <option value="Pending">Pending</option>
-                                            <option value="Inprogress">Inprogress</option>
-                                            <option value="Cancelled">Cancelled</option>
-                                            <option value="Pickups">Pickups</option>
-                                            <option value="Delivered">Delivered</option>
-                                            <option value="Returns">Returns</option>
-                                        </select>
+                                    <div class="row gy-4 mb-3">
+                                        <div class="col-md-6">
+                                            <div>
+                                                <label for="orderdate" class="form-label">Order Date</label>
+                                                <input type="date" id="orderdate" class="form-control" name="orderdate" data-provider="flatpickr" data-date-format="d M, Y" data-enable-time placeholder="Select date" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div>
+                                                <label for="deliverydate" class="form-label">Delivery Date</label>
+                                                <input type="date" id="deliverydate" class="form-control" name="deliverydate" data-provider="flatpickr" data-date-format="d M, Y" data-enable-time placeholder="Select date" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row gy-4 mb-3">
+                                        <div class="col-md-6">
+                                            <div>
+                                                <label for="deliveredstatus" class="form-label">Delivery Status</label>
+                                                <select class="form-control" data-trigger name="deliveredstatus" id="deliveredstatus">
+                                                    <option selected disabled value="">Delivery Status</option>
+                                                    <option value="Pending">Pending</option>
+                                                    <option value="Inprogress">Inprogress</option>
+                                                    <option value="Cancelled">Cancelled</option>
+                                                    <option value="Pickups">Pickups</option>
+                                                    <option value="Delivered">Delivered</option>
+                                                    <option value="Returns">Returns</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        @*<div class="col-md-6">
+                                            <div>
+                                                <label for="ddlusername" class="form-label">Created By</label>
+                                                <select class="form-control" id="ddlusername" name="ddlusername">
+                                                    <option selected disabled value=""></option>
+                                                </select>
+                                                <input type="hidden" class="form-control" id="txtguserid">
+                                            </div>
+                                        </div>*@
                                     </div>
                                 </div>
                                 <div class="modal-footer">
                                     <div class="hstack gap-2 justify-content-end">
                                         <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
-                                        <button type="submit" class="btn btn-success" id="add-btn">Add Order</button>
+                                        <button type="button" class="btn btn-success" onclick="SaveCreateOrder();" id="createorder" value="Validate">Add Order</button>
                                         <!-- <button type="button" class="btn btn-success" id="edit-btn">Update</button> -->
                                     </div>
                                 </div>
@@ -302,6 +349,7 @@
                         </div>
                     </div>
                 </div>
+                <!------End of Create Order Modal------->
 
                 <!-- Modal -->
                 <div class="modal fade flip" id="deleteOrder" tabindex="-1" aria-hidden="true">
@@ -339,3 +387,8 @@
     <!--end col-->
 </div>
 
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+<script src="~/moduls/orderdetailsscript.js"></script>

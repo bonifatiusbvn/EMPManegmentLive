@@ -17,11 +17,11 @@ namespace EMPManegment.EntityModels.ViewModels.VendorModels
         public string? VendorPhone { get; set; }
         public string? VendorContectNo { get; set; }
         public int VendorCountry { get; set; }
-        public string VendorCountryName { get; set; }
+        public string? VendorCountryName { get; set; } 
         public int VendorState { get; set; }
-        public string VendorStateName { get; set; }
+        public string? VendorStateName { get; set; } 
         public int VendorCity { get; set; }
-        public string VendorCityName { get; set; }
+        public string? VendorCityName { get; set; } 
         public string VendorPinCode { get; set; } = null!;
         public string VendorAddress { get; set; } = null!;
         public string? VendorCompanyType { get; set; }
@@ -36,7 +36,7 @@ namespace EMPManegment.EntityModels.ViewModels.VendorModels
         public string? VendorBankIfsc { get; set; }
         public string? VendorGstnumber { get; set; }
         public int VendorTypeId { get; set; }
-        public string VendorTypeName { get; set; }
+        public string? VendorTypeName { get; set; } 
         public DateTime? CreatedOn { get; set; }
         public string? CreatedBy { get; set; }
     }

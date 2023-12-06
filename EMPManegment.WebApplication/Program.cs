@@ -1,4 +1,5 @@
 using EMPManagment.Web.Helper;
+using EMPManegment.Web.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 
@@ -6,7 +7,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddSession();
 builder.Services.AddScoped<WebAPI, WebAPI>();
+builder.Services.AddScoped<UserSession>();
 builder.Services.AddScoped<APIServices, APIServices>();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
@@ -15,8 +18,8 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     .AddCookie(option =>
     {
         option.ExpireTimeSpan = TimeSpan.FromMinutes(60 * 5);
-        option.LoginPath = "/UserLogin/Login";
-        option.AccessDeniedPath = "/UserLogin/Login";
+        option.LoginPath = "/Authentication/Login";
+        option.AccessDeniedPath = "/Authentication/Login";
 
     });
 
@@ -47,9 +50,10 @@ app.UseRouting();
 app.UseSession();
 app.UseAuthentication();
 app.UseAuthorization();
-
+UserSession.Configure(app.Services.GetRequiredService<IHttpContextAccessor>());
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=UserLogin}/{action=Login}/{id?}");
+    pattern: "{controller=Authentication}/{action=Login}/{id?}");
 
 app.Run();
+

@@ -29,6 +29,8 @@ public partial class BonifatiusEmployeesContext : DbContext
 
     public virtual DbSet<TblPageMaster> TblPageMasters { get; set; }
 
+    public virtual DbSet<TblProjectDetail> TblProjectDetails { get; set; }
+
     public virtual DbSet<TblProjectMaster> TblProjectMasters { get; set; }
 
     public virtual DbSet<TblQuestion> TblQuestions { get; set; }
@@ -52,6 +54,7 @@ public partial class BonifatiusEmployeesContext : DbContext
     public virtual DbSet<TblVendorType> TblVendorTypes { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<OrderMaster>(entity =>
@@ -142,6 +145,28 @@ public partial class BonifatiusEmployeesContext : DbContext
                 .HasConstraintName("FK_tblPageMaster_tblUsers");
         });
 
+        modelBuilder.Entity<TblProjectDetail>(entity =>
+        {
+            entity.ToTable("tblProjectDetails");
+
+            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.CreatedOn).HasColumnType("date");
+            entity.Property(e => e.EndDate).HasColumnType("date");
+            entity.Property(e => e.ProjectTitle).HasMaxLength(50);
+            entity.Property(e => e.ProjectType).HasMaxLength(20);
+            entity.Property(e => e.StartDate).HasColumnType("date");
+            entity.Property(e => e.Status).HasMaxLength(20);
+            entity.Property(e => e.UserRole).HasMaxLength(20);
+
+            entity.HasOne(d => d.Project).WithMany(p => p.TblProjectDetails)
+                .HasForeignKey(d => d.ProjectId)
+                .HasConstraintName("FK_tblProjectDetails_tblProjectMaster");
+
+            entity.HasOne(d => d.User).WithMany(p => p.TblProjectDetails)
+                .HasForeignKey(d => d.UserId)
+                .HasConstraintName("FK_tblProjectDetails_tblUsers");
+        });
+
         modelBuilder.Entity<TblProjectMaster>(entity =>
         {
             entity.HasKey(e => e.ProjectId);
@@ -160,11 +185,6 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.Property(e => e.ProjectStatus).HasMaxLength(10);
             entity.Property(e => e.ProjectTitle).HasMaxLength(50);
             entity.Property(e => e.ProjectType).HasMaxLength(20);
-
-            entity.HasOne(d => d.User).WithMany(p => p.TblProjectMasters)
-                .HasForeignKey(d => d.UserId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_tblProjectMaster_tblUsers");
         });
 
         modelBuilder.Entity<TblQuestion>(entity =>

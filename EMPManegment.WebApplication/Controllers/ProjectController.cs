@@ -3,6 +3,7 @@ using EMPManagment.Web.Models.API;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.ProjectModels;
 using EMPManegment.EntityModels.ViewModels.TaskModels;
+using EMPManegment.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Build.ObjectModelRemoting;
 using Newtonsoft.Json;
@@ -16,12 +17,14 @@ namespace EMPManegment.Web.Controllers
         public WebAPI WebAPI { get; }
         public IWebHostEnvironment Environment { get; }
         public APIServices APIServices { get; }
+        public UserSession _userSession { get; }
 
-        public ProjectController(WebAPI webAPI, IWebHostEnvironment environment, APIServices aPIServices)
+        public ProjectController(WebAPI webAPI, IWebHostEnvironment environment, APIServices aPIServices, UserSession userSession)
         {
             WebAPI = webAPI;
             Environment = environment;
             APIServices = aPIServices;
+            _userSession = userSession;
         }
         public IActionResult Index()
         {
@@ -79,10 +82,10 @@ namespace EMPManegment.Web.Controllers
         {
             try
             {
-                string Userid = HttpContext.Session.GetString("UserID");
+               
                  ProjectDetailView responceModel = new ProjectDetailView
                  {
-                    UserId = Guid.Parse(Userid),
+                    UserId = _userSession.UserId,
                 };
                 List<ProjectDetailView> ProjectList = new List<ProjectDetailView>();
                 HttpClient client = WebAPI.Initil();
@@ -110,10 +113,10 @@ namespace EMPManegment.Web.Controllers
         {
             try
             {
-                string Userid = HttpContext.Session.GetString("UserID");
+           
                 ProjectDetailView responceModel = new ProjectDetailView
                 {
-                    UserId = Guid.Parse(Userid),
+                    UserId = _userSession.UserId,
                 };
                 List<ProjectDetailView> ProjectList = new List<ProjectDetailView>();
                 HttpClient client = WebAPI.Initil();
@@ -136,5 +139,9 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
+        public IActionResult AddProjectMember()
+        {
+            return View();  
+        }
     }
 }

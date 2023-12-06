@@ -86,7 +86,7 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
         public async Task<List<ProjectDetailView>> GetUserProjectList(ProjectDetailView GetUserProjectList)
         {
             var UserData = new List<ProjectDetailView>();
-            var data = await Context.TblProjectMasters.Where(x => x.UserId == GetUserProjectList.UserId).ToListAsync();
+            var data = await Context.TblProjectDetails.Where(x => x.UserId == GetUserProjectList.UserId).ToListAsync();
             if (data != null)
             {
                 foreach (var item in data)
@@ -96,16 +96,7 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
                         ProjectId = item.ProjectId,
                         ProjectType = item.ProjectType,
                         ProjectTitle = item.ProjectTitle,
-                        ProjectHead = item.ProjectHead,
-                        ProjectDescription = item.ProjectDescription,
-                        ProjectLocation = item.ProjectLocation,
-                        ProjectPriority = item.ProjectPriority,
-                        ProjectStatus = item.ProjectStatus,
                         CreatedOn = item.CreatedOn,
-                        ProjectStartDate = item.ProjectStartDate,
-                        ProjectEndDate = item.ProjectEndDate,
-                        ProjectDeadline = item.ProjectDeadline,
-                        UserId = item.UserId,
                     });
                 }
             }

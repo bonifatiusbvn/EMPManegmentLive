@@ -14,7 +14,7 @@ function GetAllUserData() {
         "bDestroy": true,
         ajax: {
             type: "Post",
-            url: '/UserDetails/GetUserList',
+            url: '/UserProfile/GetUserList',
             dataType: 'json'
         },
         columns: [
@@ -32,6 +32,18 @@ function GetAllUserData() {
                     return '<div class="d-flex align-items-center fw-medium"><img src="/' + full.image + '" style="height: 40px; width: 40px; border-radius: 50%;">' + full['firstName'] + ' ' + full['lastName'] + '</div >';
                 }
             },
+            {
+                "data": "isActive", "name": "IsActive",
+                "render": function (data, type, full) {
+
+                    if (full.isActive == true) {
+                        return '<a class="badge bg-success text-uppercase">' + full.isActive + '</a>';
+                    }
+                    else {
+                        return '<a class="badge bg-danger text-uppercase">' + full.isActive + '</a>';
+                    }
+                }
+            },
             { "data": "gender", "name": "Gender" },
             {
                 "data": "dateOfBirth", "name": "DateOfBirth", "type": "date",
@@ -46,8 +58,6 @@ function GetAllUserData() {
             },
             { "data": "email", "name": "Email" },
             { "data": "phoneNumber", "name": "PhoneNumber" },
-            { "data": "countryName", "name": "CountryName" },
-            { "data": "stateName", "name": "StateName"},
             { "data": "cityName", "name": "CityName" },
             { "data": "address", "name": "Address" },
            
@@ -83,7 +93,7 @@ function ActiveUser(UserName) {
         if (result.isConfirmed) {
             
             $.ajax({
-                url: '/UserDetails/UserActiveDecative?UserName=' + UserName,
+                url: '/UserProfile/UserActiveDecative?UserName=' + UserName,
                 type: 'Post',
                 contentType: 'application/json;charset=utf-8;',
                 dataType: 'json',
@@ -95,7 +105,7 @@ function ActiveUser(UserName) {
                          Result.message,
                         'success'
                     ).then(function () {
-                        window.location = '/UserDetails/UserActiveDecative';
+                        window.location = '/UserProfile/UserActiveDecative';
                     }); 
 
                 },
@@ -141,7 +151,7 @@ function DeactiveUser(UserName) {
         if (result.isConfirmed) {
 
             $.ajax({
-                url: '/UserDetails/UserActiveDecative?UserName=' + UserName,
+                url: '/UserProfile/UserActiveDecative?UserName=' + UserName,
                 type: 'Post',
                 contentType: 'application/json;charset=utf-8;',
                 dataType: 'json',
@@ -153,7 +163,7 @@ function DeactiveUser(UserName) {
                         Result.message,
                         'success'
                     ).then(function () {
-                        window.location = '/UserDetails/UserActiveDecative';
+                        window.location = '/UserProfile/UserActiveDecative';
                     });
 
                 },
@@ -232,7 +242,7 @@ function ResetPassword()
     fromData.append("Password", $("#password-input").val());
 
     $.ajax({
-        url: '/UserDetails/ResetUserPassword',
+        url: '/UserProfile/ResetUserPassword',
         type: 'Post',
         data: fromData,
         dataType: 'json',
@@ -245,7 +255,7 @@ function ResetPassword()
                 confirmButtonColor: '#3085d6',
                 confirmButtonText: 'OK'
             }).then(function () {
-                window.location = '/UserDetails/ResetUserPassword';
+                window.location = '/UserProfile/ResetUserPassword';
             }); 
 
         },
@@ -345,7 +355,7 @@ function UserBirsthDayWish() {
 function EditUserDetails(EmpId) {
     $.ajax({
 
-        url: '/UserDetails/EditUserDetails?Id=' + EmpId,
+        url: '/UserProfile/EditUserDetails?Id=' + EmpId,
         type: 'Get',
         contentType: 'application/json;charset=utf-8 ',
         datatype: 'json',
@@ -383,7 +393,7 @@ function UpdateUserDetails() {
         Address: $('#Address').val(),
     }
     $.ajax({
-        url: '/UserDetails/UpdateUserDetails',
+        url: '/UserProfile/UpdateUserDetails',
         type: 'post',
         data: objData,
         datatype: 'json',
@@ -395,7 +405,7 @@ function UpdateUserDetails() {
                 confirmButtonColor: '#3085d6',
                 confirmButtonText: 'OK'
             }).then(function () {
-                window.location = '/UserDetails/UserEditList';
+                window.location = '/UserProfile/DisplayUserList';
             });
         },
     })

@@ -1,0 +1,207 @@
+﻿@model EMPManegment.EntityModels.ViewModels.LoginRequest
+
+<!DOCTYPE html>
+
+<html lang="en">
+
+<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+<style>
+    input[type=text] {
+        width: 100%;
+        padding: 12px 20px;
+        margin: 8px 0;
+        box-sizing: border-box;
+        border: 3px solid #b3d9ff;
+        -webkit-transition: 0.5s;
+        transition: 0.5s;
+        outline: none;
+    }
+
+        input[type=text]:focus {
+            border: 3px solid #80bfff;
+        }
+
+    input[type=password] {
+        width: 100%;
+        padding: 12px 20px;
+        margin: 8px 0;
+        box-sizing: border-box;
+        border: 3px solid #b3d9ff;
+        -webkit-transition: 0.5s;
+        transition: 0.5s;
+        outline: none;
+    }
+
+        input[type=password]:focus {
+            border: 3px solid #80bfff;
+        }
+
+</style>
+<head>
+    <title>Bonifatius</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
+    <meta content="Themesbrand" name="author" />
+    <link rel="canonical" href="https://preview.keenthemes.com/metronic8" />
+    <link rel="shortcut icon" href="~/demo/assets/media/logos/favicon.ico" />
+
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700" />
+
+    <link href="~/demo/assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
+    <link href="~/demo/assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
+    <!-- App favicon -->
+    <link rel="shortcut icon" href="~/UserHome/minimal/assets/images/favicon.ico">
+
+    <!-- Layout config Js -->
+    <script src="~/UserHome/minimal/assets/js/layout.js"></script>
+    <!-- Bootstrap Css -->
+    <link href="~/UserHome/minimal/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <!-- Icons Css -->
+    <link href="~/UserHome/minimal/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+    <!-- App Css-->
+    <link href="~/UserHome/minimal/assets/css/app.min.css" rel="stylesheet" type="text/css" />
+    <!-- custom Css-->
+    <link href="~/UserHome/minimal/assets/css/custom.min.css" rel="stylesheet" type="text/css" />
+    <script>
+        (function (w, d, s, l, i) {
+            w[l] = w[l] || []; w[l].push({
+                'gtm.start':
+                    new Date().getTime(), event: 'gtm.js'
+            }); var f = d.getElementsByTagName(s)[0],
+                j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
+                    '../../../../../../www.googletagmanager.com/gtm5445.html?id=' + i + dl; f.parentNode.insertBefore(j, f);
+        })(window, document, 'script', 'dataLayer', 'GTM-5FS8GGP');</script>
+    <script>
+        if (window.top != window.self) {
+            window.top.location.replace(window.self.location.href);
+        }
+    </script>
+</head>
+<body id="kt_body" class="auth-bg bgi-size-cover bgi-attachment-fixed bgi-position-center bgi-no-repeat">
+    <script>
+        var defaultThemeMode = "light";
+        var themeMode;
+        if (document.documentElement) {
+            if (document.documentElement.hasAttribute("data-bs-theme-mode")) {
+                themeMode = document.documentElement.getAttribute("data-bs-theme-mode");
+            } else {
+                if (localStorage.getItem("data-bs-theme") !== null) {
+                    themeMode = localStorage.getItem("data-bs-theme");
+                } else {
+                    themeMode = defaultThemeMode;
+                }
+            }
+            if (themeMode === "system") {
+                themeMode = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+            }
+            document.documentElement.setAttribute("data-bs-theme", themeMode);
+        }
+    </script>
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5FS8GGP" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+
+    <div class="d-flex flex-column flex-root">
+        <style>
+            body {
+                background-image: url('~/demo/assets/media/auth/bg4.jpg');
+            }
+
+            [data-bs-theme="dark"] body {
+                background-image: url('~/demo/assets/media/auth/bg4-dark.jpg');
+            }
+        </style>
+
+        <div class="d-flex flex-column flex-column-fluid flex-lg-row">
+            <div class="d-flex flex-center w-lg-50 pt-15 pt-lg-0 px-10">
+                <div class="d-flex flex-center flex-lg-start flex-column">
+                    <a asp-action="Login" asp-controller="UserLogin" class="mb-7">
+                        <img alt="Logo" src="~/demo/assets/media/logos/1.png" />
+                    </a>
+                    <h2 class="text-white fw-normal m-0">
+                        Bonifatius Technology
+                    </h2>
+                </div>
+            </div>
+
+            <div class="d-flex flex-column-fluid flex-lg-row-auto justify-content-center justify-content-lg-end p-12 p-lg-20">
+
+                <div class="bg-body d-flex flex-column align-items-stretch flex-center rounded-4 w-md-600px p-20">
+
+                    <div class="d-flex flex-center flex-column flex-column-fluid px-lg-10 pb-15 pb-lg-20">
+
+
+                        <form class="form w-100" asp-action="Login" asp-controller="Authentication">
+
+                            <div class="text-center mb-11">
+
+                                <h1 class="text-dark fw-bolder mb-3">
+                                    Log-In
+                                </h1>
+                            </div>
+                            <div class="fv-row mb-8">
+                                <input type="text" asp-for="UserName" placeholder="Emp-ID" class="form-control bg-transparent" />
+                                <span asp-validation-for="UserName" class="text-danger"></span>
+                            </div>
+                            <div class="fv-row mb-3">
+                                <div class="position-relative auth-pass-inputgroup mb-3">
+                                    <input type="password" class="form-control pe-5 password-input" onpaste="return false" placeholder="password" id="password-input" aria-describedby="passwordInput" asp-for="Password">
+                                    <button class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon" type="button" id="password-addon"><i class="ri-eye-fill align-middle" style="margin-left:-90%; margin-top:15%;"></i></button>
+                                </div>
+                                <span asp-validation-for="Password" class="text-danger"></span>
+                                <span class="text-danger">@TempData["ErrorMessage"]</span>
+                            </div>
+                            <div class="d-flex flex-stack flex-wrap gap-3 fs-base fw-semibold mb-8">
+                                <a href="reset-password.html" class="link-primary">
+                                    Forgot Password ?
+                                </a>
+                            </div>
+
+                            <div class="d-grid mb-10">
+                                <button type="submit" id="kt_sign_in_submit" class="btn btn-primary">
+                                    <span class="indicator-label">
+                                        Sign In
+                                    </span>
+
+                                    <span class="indicator-progress">
+                                        Please wait...    <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                                    </span>
+                                </button>
+                            </div>
+
+                            <div class="text-gray-500 text-center fw-semibold fs-6">
+                                Not a Member yet???
+
+                                <a class="link-primary">
+                                    @Html.ActionLink("SingUp", "UserSingUp", "Authentication")
+                                </a>
+                            </div>
+
+                        </form>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <script>
+        var hostUrl = "~/demo/assets/index.html";</script>
+    <script src="~/demo/assets/plugins/global/plugins.bundle.js"></script>
+    <script src="~/demo/assets/js/scripts.bundle.js"></script>
+    <script src="~/demo/assets/js/custom/authentication/sign-in/general.js"></script>
+    <!-- JAVASCRIPT -->
+    <script src="~/UserHome/minimal/assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/UserHome/minimal/assets/libs/simplebar/simplebar.min.js"></script>
+    <script src="~/UserHome/minimal/assets/libs/node-waves/waves.min.js"></script>
+    <script src="~/UserHome/minimal/assets/libs/feather-icons/feather.min.js"></script>
+    <script src="~/UserHome/minimal/assets/js/pages/plugins/lord-icon-2.1.0.js"></script>
+    <script src="~/UserHome/minimal/assets/js/plugins.js"></script>
+
+    <!-- validation init -->
+    <script src="~/UserHome/minimal/assets/js/pages/form-validation.init.js"></script>
+    <!-- password create init -->
+    <script src="~/UserHome/minimal/assets/js/pages/passowrd-create.init.js"></script>
+</body>
+
+</html>

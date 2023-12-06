@@ -197,12 +197,12 @@ function btnTaskDetails(Id){
             $('#UserName').text(response.userName);
             $('#taskTitle-field').text(response.taskTitle);
             $('#taskDescription-field').text(response.taskDetails);
-            var startdate = response.taskDate;
-            var StartDate = startdate.substr(0, 10);
-            $('#taskstartdate-field').text(StartDate);
-            var enddate = response.taskEndDate;
-            var EndDate = enddate.substr(0, 10);
-            $('#taskenddate-field').text(EndDate);
+            //var startdate = response.taskDate;
+            //var StartDate = startdate.substr(0, 10);
+            $('#taskstartdate-field').text(response.taskDate);
+            //var enddate = response.taskEndDate;
+            //var EndDate = enddate.substr(0, 10);
+            $('#taskenddate-field').text(response.taskEndDate);
             $('#taskpriority-field').text(response.taskTypeName);
             $('#taskstatus-field').text(response.taskStatus); 
         },
@@ -382,7 +382,7 @@ $('#UpdateDetailsForm').on('change', function () {
 //-----------------Validation-----------------//
 
 function CheckValidation() {
-
+    
     var isValid = true;
     taskTitle = $("#EditTaskTitle").val();
     taskDetails = $("#EditDescription").val();
