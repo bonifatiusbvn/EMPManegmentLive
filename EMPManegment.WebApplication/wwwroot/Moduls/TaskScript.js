@@ -224,9 +224,16 @@ function GetAllUserTaskDetail() {
             var object = '';
             var pendingTask = result.filter(function (obj) {
                 return (obj.taskStatus == "Pending");
-            
             });
-            $("#Pendingtask").text(pendingTask.length);
+            
+            var nullTask = result.filter(function (obj) {
+                    return (obj.taskStatus == null);
+            });
+
+            
+            var totalPending = parseInt(pendingTask.length) + parseInt(nullTask.length);
+
+            $("#Pendingtask").text(totalPending);
 
             var workingTask = result.filter(function (obj) {
                 return (obj.taskStatus == "Working");
