@@ -1,4 +1,42 @@
-﻿function SaveCreateOrder()
+﻿
+$("#Delivered").on("click", function () {
+    debugger
+    //var url = "/OrderMaster/FilterOrderDetails?deliverd=";
+    //var status = {};
+    //status.deliveryStatus = "Deliverd";
+    //debugger
+    //if ($("#DeliveryStatus").val().length > 0 || $("#DeliveryStatus").val() != "Delivered") {
+    //    $.ajax({
+    //        type: 'POST',
+    //        url: url,
+    //        data: status,
+    //        dataType: "html",
+    //        success: function (data) {
+    //            debugger
+    //            $("#orderTable tbody").html(data);
+    //        },
+    //    });
+    //};
+    var status = {};
+    status.deliveryStatus = "Deliverd";
+    debugger
+            $.ajax({
+                url: '/OrderMaster/FilterOrderDetails',
+                type: 'GET',
+                data: status,
+                success: function (data) {
+                    debugger
+                    $("#orderTable tbody").html(data);
+                },
+                error: function () {
+                    alert('Error occurred while filtering data.');
+                }
+            });
+    });
+
+
+
+function SaveCreateOrder()
 {
     if ($('#createOrderForm').valid()) {
         

@@ -10,6 +10,9 @@ using System.Security.Claims;
 using EMPManegment.EntityModels.Crypto;
 using EMPManegment.EntityModels.View_Model;
 using EMPManegment.Web.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+
 
 namespace EMPManegment.Web.Controllers
 {
@@ -46,43 +49,69 @@ namespace EMPManegment.Web.Controllers
 
                     ApiResponseModel responsemodel = await APIServices.PostAsync(login, "UserLogin/Login");
                     LoginResponseModel userlogin = new LoginResponseModel();
-                    if (responsemodel.code != (int)HttpStatusCode.OK)
+
+                    if (login.RememberMe==true)
                     {
+                        string UserNamecookie = login.UserName;
+                        string Passwordcookie = login.Password;
 
+                        CookieOptions cookieOptions = new CookieOptions
+                        {
+                            Expires = DateTime.Now.AddDays(7),
+                            HttpOnly = true,
+                            Secure = true, 
+                            SameSite = SameSiteMode.Strict
+                        };
 
-                        if (responsemodel.code == (int)HttpStatusCode.Forbidden)
-                        {
-                            TempData["ErrorMessage"] = responsemodel.message;
-                            return Ok(new { Message = string.Format(responsemodel.message), Code = responsemodel.code });
-                        }
-                        else
-                        {
-                            TempData["ErrorMessage"] = responsemodel.message;
-                        }
+                        Response.Cookies.Append("UserName", UserNamecookie, cookieOptions);
+                        Response.Cookies.Append("Password", Passwordcookie, cookieOptions);
+                        //CookieOptions cookie = new CookieOptions();
+                        //cookie.Expires = DateTime.Now.AddYears(1);
+
+                        //Response.Cookies.Append("UserName", login.UserName);
+                        //Response.Cookies.Append("Password", login.Password);
                     }
-
                     else
                     {
-                        var data = JsonConvert.SerializeObject(responsemodel.data);
-                        userlogin.Data = JsonConvert.DeserializeObject<LoginView>(data);
-                        var claims = new List<Claim>()
-                        {
-                            new Claim("UserID", userlogin.Data.Id.ToString()),
-                            new Claim("FirstName", userlogin.Data.FirstName),
-                            new Claim("FullName", userlogin.Data.FullName),
-                            new Claim("UserName", userlogin.Data.UserName),
-                            new Claim("ProfileImage", userlogin.Data.ProfileImage),
-                            new Claim("IsAdmin", userlogin.Data.Role.ToString()),
-
-                        };
-                        UserSession.ProfilePhoto = userlogin.Data.ProfileImage;
-
-
-                        var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-                        var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
-                        await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
-                        return RedirectToAction("UserHome", "Home");
+                        Response.Cookies.Delete("UserName");
+                        Response.Cookies.Delete("Password");
                     }
+
+                    if (responsemodel.code != (int)HttpStatusCode.OK)
+                        {
+                            if (responsemodel.code == (int)HttpStatusCode.Forbidden)
+                            {
+                                TempData["ErrorMessage"] = responsemodel.message;
+                                return Ok(new { Message = string.Format(responsemodel.message), Code = responsemodel.code });
+                            }
+                            else
+                            {
+                                TempData["ErrorMessage"] = responsemodel.message;
+                            }
+                        }
+
+                        else
+                        {
+                                var data = JsonConvert.SerializeObject(responsemodel.data);
+                                userlogin.Data = JsonConvert.DeserializeObject<LoginView>(data);
+                                var claims = new List<Claim>()
+                            {
+                                new Claim("UserID", userlogin.Data.Id.ToString()),
+                                new Claim("FirstName", userlogin.Data.FirstName),
+                                new Claim("FullName", userlogin.Data.FullName),
+                                new Claim("UserName", userlogin.Data.UserName),
+                                new Claim("ProfileImage", userlogin.Data.ProfileImage),
+                                new Claim("IsAdmin", userlogin.Data.Role.ToString()),
+
+                            };
+                            UserSession.ProfilePhoto = userlogin.Data.ProfileImage;
+
+
+                                 var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                                 var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
+                                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
+                                 return RedirectToAction("UserHome", "Home");
+                        }
                 }
                 return View();
             }
@@ -91,13 +120,18 @@ namespace EMPManegment.Web.Controllers
                 return BadRequest(new { Message = "InternalServer" });
             }
         }
-        public IActionResult Logout()
+        public async Task<IActionResult> Logout()
         {
-            HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            var StoredCookies = Request.Cookies.Keys;
-            foreach (var Cookie in StoredCookies)
+            try
             {
-                Response.Cookies.Delete(Cookie);
+                HttpContext.Session.Clear();
+                await HttpContext.SignOutAsync();
+
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
             }
             return RedirectToAction("Login");
         }
