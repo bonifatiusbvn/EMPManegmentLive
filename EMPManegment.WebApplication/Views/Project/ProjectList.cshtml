@@ -105,7 +105,7 @@
                                                     </button>
 
                                                     <div class="dropdown-menu dropdown-menu-end">
-                                                        <a class="dropdown-item" href="apps-projects-overview.html">
+                                                        <a class="dropdown-item" href="/Project/AddProjectMember/?Id=@item.ProjectId">
                                                             <i class="ri-eye-fill align-bottom me-2 text-muted"></i>
                                                             View
                                                         </a>
@@ -145,7 +145,7 @@
                                                     </button>
 
                                                     <div class="dropdown-menu dropdown-menu-end">
-                                                        <a class="dropdown-item" href="apps-projects-overview.html">
+                                                        <a class="dropdown-item" href="/Project/AddProjectMember/?Id=@item.ProjectId" onclick="showProjectMembers('@item.ProjectId');">
                                                             <i class="ri-eye-fill align-bottom me-2 text-muted"></i>
                                                             View
                                                         </a>
@@ -236,8 +236,9 @@
                                                 <img src="~/@UserSession.ProfilePhoto" alt="" class="avatar-xs rounded-circle">
                                             </div>
                                         </a>
-                                        <a href="javascript: void(0);" class="avatar-group-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Add Members">
+                                        <a class="avatar-group-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="@item.ProjectId">
                                             <div class="avatar-xxs">
+                                             @*   <button class="avatar-title fs-16 rounded-circle bg-light border-dashed border text-primary" onclick="btnaddMember('@item.ProjectId');">+</button>*@
                                                 <div class="avatar-title fs-16 rounded-circle bg-light border-dashed border text-primary">
                                                     +
                                                 </div>
@@ -269,3 +270,8 @@ new X.PagedList.Web.Common.PagedListRenderOptions {
     LiElementClasses = new string[]{"page-item"},
     PageClasses = new string[] {"page-link"}
 })
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+<script src="~/moduls/projectdetailsscript.js"></script>

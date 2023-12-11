@@ -1,4 +1,5 @@
-﻿using EMPManegment.EntityModels.ViewModels.Models;
+﻿using EMPManegment.EntityModels.View_Model;
+using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.ProjectModels;
 using EMPManegment.Inretface.Interface.ProjectDetails;
 using EMPManegment.Inretface.Services.ProjectDetailsServices;
@@ -30,6 +31,22 @@ namespace EMPManegment.Services.ProjectDetails
         public async Task<List<ProjectDetailView>> GetUserProjectList(ProjectDetailView GetUserProjectList)
         {
             return await ProjectDetails.GetUserProjectList(GetUserProjectList);
+        }
+        public async Task<ProjectDetailView> GetProjectDetailsById(Guid ProjectId)
+        {
+            return await ProjectDetails.GetProjectDetailsById(ProjectId);
+        }
+        public async Task<IEnumerable<EmpDetailsView>> GetAllMembers()
+        {
+            return await ProjectDetails.GetAllMembers();
+        }
+        public async Task<UserResponceModel> AddMemberToProject(ProjectView AddMember)
+        {
+            return await ProjectDetails.AddMemberToProject(AddMember);
+        }
+        public async Task<IEnumerable<ProjectView>> GetProjectMember(Guid ProjectId)
+        {
+            return await ProjectDetails.GetProjectMember(ProjectId);
         }
     }
 }

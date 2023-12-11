@@ -1,4 +1,12 @@
-﻿function btnCreateProjectDetail() {
+﻿
+//var ProjectId = '';
+//$(document).ready(function () {
+//    debugger
+//    showProjectMembers(ProjectId)
+
+//});
+
+function btnCreateProjectDetail() {
 
     if ($('#formprojectdetails').valid()) {
 
@@ -81,3 +89,105 @@ $(document).ready(function () {
         $('#frmprojectdetails').valid();
     });
 });
+
+function showMember() {
+    $.ajax({
+        url: '/Project/GetMemberList',
+        type: 'Post',
+        dataType: 'json',
+        processData: false,
+        contentType: false,
+        complete: function (Result) {
+            $('#dvinvitemember').html(Result.responseText);
+        },
+        Error: function () {
+            Swal.fire({
+                title: "Can't get data!",
+                icon: 'warning',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'OK',
+            })
+        }
+    })
+}
+function invitemember(Id)
+{
+    debugger
+    const data1 = document.getElementById('projecttitle');
+    var result1 = data1.outerText;
+    const data2 = document.getElementById('projectstartdate');
+    var result2 = data2.outerText;
+    const data4 = document.getElementById('projectstatus');
+    var result4 = data4.outerText;
+    const data5 = document.getElementById('projecttype');
+    var result5 = data5.outerText;
+    const data6 = document.getElementById('projectid').value;
+
+    var MemberData = {
+        ProjectType: result5,
+        Status: result4,
+        StartDate: result2,
+        ProjectTitle: result1,
+        ProjectId: data6,
+        UserId: Id
+    }
+    var form_data = new FormData();
+    form_data.append("InviteMember", JSON.stringify(MemberData));
+
+        $.ajax({
+        url: '/Project/InviteMemberToProject',
+        type: 'Post',
+        data: form_data,
+        dataType: 'json',
+        processData: false,
+        contentType: false,
+            success: function (Result) {
+
+                Swal.fire({
+                    title: Result.message,
+                    icon: 'success',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'OK',
+                }).then(function () {
+                    showProjectMembers(data6);
+                    /*window.location = '/Project/AddProjectMember/?Id=' + data6;*/
+                }); 
+            },
+        Error: function () {
+            Swal.fire({
+                title: "Can't get data!",
+                icon: 'warning',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'OK',
+            })
+        }
+    })
+}
+
+function showProjectMembers(ProjectId) {
+    debugger
+    var formData = new FormData();
+    formData.append("ProjectId", ProjectId);
+    debugger
+    $.ajax({
+        url: '/Project/ShowProjectMembers',
+        type: 'Post',
+        dataType: 'json',
+        data: formData,
+        processData: false,
+        contentType: false,
+        complete: function (Result) {
+            debugger
+            $('#dvshowmembers').html(Result.responseText);
+        },
+        Error: function () {
+            debugger
+            Swal.fire({
+                title: "Can't get data!",
+                icon: 'warning',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'OK',
+            })
+        }
+    })
+}

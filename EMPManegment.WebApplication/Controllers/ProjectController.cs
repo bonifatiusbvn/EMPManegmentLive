@@ -1,5 +1,6 @@
 ﻿using EMPManagment.Web.Helper;
 using EMPManagment.Web.Models.API;
+using EMPManegment.EntityModels.View_Model;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.ProjectModels;
 using EMPManegment.EntityModels.ViewModels.TaskModels;
@@ -138,10 +139,100 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
-
-        public IActionResult AddProjectMember()
+        public async Task<IActionResult> AddProjectMember(Guid Id)
         {
-            return View();  
+            try
+            {
+                ProjectDetailView projectDetails = new ProjectDetailView();
+                HttpClient client = WebAPI.Initil();
+                ApiResponseModel response = await APIServices.GetAsync("", "ProjectDetails/GetProjectDetailsById?ProjectId=" + Id);
+                if (response.code == 200)
+                {
+                    projectDetails = JsonConvert.DeserializeObject<ProjectDetailView>(response.data.ToString());
+                    ViewBag.ProjectId = Id;
+                }
+                return View(projectDetails);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> GetMemberList()
+        {
+            try
+            {
+                List<EmpDetailsView> MembersList = new List<EmpDetailsView>();
+                HttpClient client = WebAPI.Initil();
+                ApiResponseModel postuser = await APIServices.PostAsync("", "ProjectDetails/GetMemberList");
+                if (postuser.data != null)
+                {
+                    MembersList = JsonConvert.DeserializeObject<List<EmpDetailsView>>(postuser.data.ToString());
+
+                }
+                else
+                {
+                    MembersList = new List<EmpDetailsView>();
+                    ViewBag.Error = "note found";
+                }
+                return PartialView("~/Views/Project/_inviteprojectmember.cshtml", MembersList);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> InviteMemberToProject()
+        {
+            try
+            {
+
+                var membersinvited = HttpContext.Request.Form["InviteMember"];
+                var memberDetails = JsonConvert.DeserializeObject<ProjectView>(membersinvited);
+
+                ApiResponseModel postuser = await APIServices.PostAsync(memberDetails, "ProjectDetails/AddMemberToProject");
+                UserResponceModel responseModel = new UserResponceModel();
+                if (postuser.code == 200)
+                {
+                    return Ok(new { postuser.message });
+                }
+
+                return View();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ShowProjectMembers(Guid ProjectId)
+        {
+            try
+            {
+                List<ProjectView> ProjectMembersList = new List<ProjectView>();
+                HttpClient client = WebAPI.Initil();
+                ApiResponseModel postuser = await APIServices.PostAsync("", "ProjectDetails/GetProjectMember?ProjectId=" + ProjectId);
+                if (postuser.data != null)
+                {
+                    ProjectMembersList = JsonConvert.DeserializeObject<List<ProjectView>>(postuser.data.ToString());
+
+                }
+                else
+                {
+                    ProjectMembersList = new List<ProjectView>();
+                    ViewBag.Error = "note found";
+                }
+                return PartialView("~/Views/Project/_ShowProjectMember.cshtml", ProjectMembersList);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }
