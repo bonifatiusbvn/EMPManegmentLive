@@ -16,8 +16,8 @@
 </style>
 
 
-    <div class="page-content">
-        <div class="container-fluid">
+<div class="page-content">
+     <div class="container-fluid">
             <!-- start page title -->
             <div class="row">
                 <div class="col-12">
@@ -148,7 +148,7 @@
                 <!--end col-->
             </div>
             <!--end row-->
-        <div class="card">
+          <div class="card">
             <div class="card-header">
                 <div class="d-flex align-items-center">
                     <h5 class="card-title mb-0 flex-grow-1">All Tasks</h5>
@@ -163,6 +163,8 @@
             <div class="card-body">
                 <div class="listjs-table">
                     <div class="table-responsive">
+                        <div class="col-sm-12 col-md-6">
+                         <div id="tasksTableData_filter" class="dataTables_filter">@* <label>Search:<input type="search" class="form-control form-control-sm" placeholder="" aria-controls="tasksTableData"></label> *@</div></div>
                         <table id="tasksTableData" class="table table-bordered dt-responsive nowrap table-striped align-middle dataTable no-footer dtr-inline" >
                             <thead class="table-light text-muted text-center">
                                 <tr>
@@ -181,7 +183,8 @@
                     </div>
                 </div>
             </div>
-        </div>
+          </div>
+        
 
 
             <!--end row-->
@@ -348,13 +351,14 @@
                 </div>
             </div>
         </div>
-        </div>
+    
+       
         <!-- container-fluid -->
     <!-- Modal -->
-    <div class="modal fade" id="addtasks" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
+     <div class="modal fade zoomIn" id="addtasks" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class=" modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
-                <div class="modal-header bg-light p-3">
+                    <div class="modal-header bg-primary-subtle p-3">
                     <h5 class="modal-title" id="exampleModalLabel">Create Deals</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
@@ -404,10 +408,10 @@
                 </div>
             </div>
         </div>
-    </div>
+     </div>
     <!--end modal-->
+  </div>
 </div>
-    </div>
 
 <script src="~/lib/jquery/dist/jquery.js"></script>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>

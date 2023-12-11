@@ -89,12 +89,11 @@ function btnSaveTaskDetail() {
 }
 
 function GetUsername() {
-    
     $.ajax({
         url: '/Task/GetUserName',
         success: function (result) {
             $.each(result, function (i, data) {
-                $('#ddlusername').append('<Option value=' + data.id + '>' + data.userName + '</Option>')
+                $('#ddlusername').append('<Option value=' + data.id + '>'  + data.firstName + " " + data.lastName + " " + "(" + data.userName + ")" + '</Option>')
             });
         }
     });
@@ -182,6 +181,7 @@ function btnStatusUpdate(Id) {
         },
         error: function (error, status) {
             alert(error);
+        
         }
     })
 }
@@ -255,8 +255,9 @@ function AllTaskDetailsList() {
             dataType: 'json',
         },
         columns: [
-
-            { "data": "userName", "name": "UserName" },
+            {
+                "data": "userName", "name": "UserName",
+            },
             {
                 "data": "taskTitle", "name": "TaskTitle"
             },

@@ -11,7 +11,7 @@ function GetUserAttendance() {
         "bDestroy": true,
         ajax: {
             type: "Post",
-            url: '/UserDetails/GetUserAttendanceList',
+            url: '/UserProfile/GetUserAttendanceList',
             dataType: 'json'
         },
                       
@@ -81,7 +81,7 @@ function EditUserAttendance(attandenceId) {
     $('#EditTimeModel').modal('show');
 
     $.ajax({
-        url: '/UserDetails/EditUserAttendanceOutTime?attendanceId=' + attandenceId,
+        url: '/UserProfile/EditUserAttendanceOutTime?attendanceId=' + attandenceId,
         type: 'Get',
         dataType: 'json',
         processData: false,
@@ -121,7 +121,7 @@ function UpdateUserAttendance() {
     else {
         $("#OutTime").css('border-color', 'lightgray');
         $.ajax({
-            url: '/UserDetails/UpdateUserAttendanceOutTime',
+            url: '/UserProfile/UpdateUserAttendanceOutTime',
             type: 'Post',
             data: objData,
             dataType: 'json',
@@ -168,7 +168,7 @@ function GetAttendance() {
     var form_data = new FormData();
     form_data.append("FINDBYMONTH", JSON.stringify(month));
     $.ajax({
-        url: '/UserDetails/GetAttendanceList',
+        url: '/UserProfile/GetAttendanceList',
         type: 'Post',
         datatype: 'json',
         data: form_data,
