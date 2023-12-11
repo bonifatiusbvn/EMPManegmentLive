@@ -45,12 +45,6 @@ namespace EMPManegment.Services.TaskDetails
         {
             return await TaskDetails.UpdateTaskStatus(updatetask);
         }
-        
-        //public async Task<IEnumerable<TaskDetailsView>> GetAllUserTaskDetails()
-        //{
-        //    return await TaskDetails.GetAllUserTaskDetails();
-        //}
-
         public async Task<TaskDetailsView> GetTaskDetailsById(Guid Taskid)
         {
             return await TaskDetails. GetTaskDetailsById(Taskid);
@@ -65,5 +59,12 @@ namespace EMPManegment.Services.TaskDetails
         {
             return await TaskDetails.GetAllUserTaskDetails(AllUserTaskDetails);
         }
+
+        public async Task<IEnumerable<TaskDetailsView>> GetAllUserTaskDetails()
+        {
+            return await TaskDetails.GetAllUserTaskDetails();
+        }
+
+        
     }
 }

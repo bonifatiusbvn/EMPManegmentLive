@@ -123,28 +123,27 @@ namespace EMPManegment.Repository.TaskRepository
             return UserId;
         }
 
-        //public async Task<IEnumerable<TaskDetailsView>> GetAllUserTaskDetails()
-        //{
-        //    IEnumerable<TaskDetailsView> AllTaskDetails = from a in Context.TblTaskDetails
-        //                                                  join b in Context.TblUsers on a.UserId equals b.Id
-        //                                                  join c in Context.TblTaskMasters on a.TaskType equals c.Id
-        //                                                  select new TaskDetailsView
-        //                                                  {
-        //                                                      Id = a.Id,
-        //                                                      TaskType = a.TaskType,
-        //                                                      TaskStatus = a.TaskStatus,
-        //                                                      TaskDate = a.TaskDate,
-        //                                                      TaskDetails = a.TaskDetails,
-        //                                                      TaskEndDate = a.TaskEndDate,
-        //                                                      TaskTitle = a.TaskTitle,
-        //                                                      //TotalTask = a.TaskStatus + a.TaskStatus + a.TaskStatus.ToString()
-        //                                                      UserProfile = b.Image,
-        //                                                      UserName = b.UserName,
-        //                                                      TaskTypeName = c.TaskType
-        //                                                  };
-        //    return AllTaskDetails;
-        //}
-       
+        public async Task<IEnumerable<TaskDetailsView>> GetAllUserTaskDetails()
+        {
+            IEnumerable<TaskDetailsView> AllTaskDetails = from a in Context.TblTaskDetails
+                                                          join b in Context.TblUsers on a.UserId equals b.Id
+                                                          join c in Context.TblTaskMasters on a.TaskType equals c.Id
+                                                          select new TaskDetailsView
+                                                          {
+                                                              Id = a.Id,
+                                                              TaskType = a.TaskType,
+                                                              TaskStatus = a.TaskStatus,
+                                                              TaskDate = a.TaskDate,
+                                                              TaskDetails = a.TaskDetails,
+                                                              TaskEndDate = a.TaskEndDate,
+                                                              TaskTitle = a.TaskTitle,
+                                                              UserProfile = b.Image,
+                                                              UserName = b.UserName,
+                                                              TaskTypeName = c.TaskType
+                                                          };
+            return AllTaskDetails;
+        }
+
         public async Task<TaskDetailsView> GetTaskDetailsById(Guid Taskid)
         {
             TaskDetailsView taskdata = new TaskDetailsView();
@@ -231,7 +230,7 @@ namespace EMPManegment.Repository.TaskRepository
 
             if (!string.IsNullOrEmpty(AllUserTaskDetails.searchValue))
             {
-                AllTaskDetailsDataTable = AllTaskDetailsDataTable.Where(e => e.UserName.Contains(AllUserTaskDetails.searchValue) || e.TaskStatus.Contains(AllUserTaskDetails.searchValue));
+                AllTaskDetailsDataTable = AllTaskDetailsDataTable.Where(e => e.UserName.Contains(AllUserTaskDetails.searchValue) || e.TaskStatus.Contains(AllUserTaskDetails.searchValue) || e.TaskTypeName.Contains(AllUserTaskDetails.searchValue) || e.TaskEndDate.ToString().ToLower().Contains(AllUserTaskDetails.searchValue.ToLower()));
             }
             int totalRecord = AllTaskDetailsDataTable.Count();
             var cData = AllTaskDetailsDataTable.Skip(AllUserTaskDetails.skip).Take(AllUserTaskDetails.pageSize).ToList();

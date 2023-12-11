@@ -1,5 +1,5 @@
 ﻿function DownloadInvoice() {
-    debugger
+    
     //var Invoice = {
     //    CompanyAddress : $("#companyAddress").val(),
     //    PostalCode: $("#companyaddpostalcode").val(),

@@ -468,12 +468,11 @@ namespace EMPManegment.Repository.UserListRepository
             {
                 Id = a.Id,
                 UserName = a.UserName,
-
+                FirstName = a.FirstName,
+                LastName = a.LastName,
+               
             }).ToList();
-
             return GetUserNameList;
-
-        
         }
 
         public async Task<IEnumerable<EmpDetailsView>> GetUsersDetails(string? searchby, string? searchfor)

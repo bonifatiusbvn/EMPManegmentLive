@@ -1,19 +1,33 @@
-﻿function siteloadershow() {
-    $('.loader').show();
+﻿//function siteloadershow() {
+//    $('.loader').show();
+//}
+//function siteloaderhide() {
+//    $('.loader').hide(); 
+//}
+//$(window).on('beforeunload', function () {
+//    siteloadershow();
+//})
 
+//$(document).on('submit', 'form', function () {
+//    siteloadershow();
+//})
+//window.setTimeout(function () {
+//    siteloaderhide();
+//}, 500)
+
+
+function DisplayLoader() {debugger
+    $('#Loader').show();
 }
-
-function siteloaderhide() {
-    $('.loader').hide();
-
+function HideLoader() {
+    $('#Loader').hide();
 }
-$(window).on('beforeunload', function () {
-    siteloadershow();
-})
-
+$('#Loader').hide();
 $(document).on('submit', 'form', function () {
-    siteloadershow();
+    DisplayLoader();
 })
-window.setTimeout(function () {
-    siteloaderhide();
-}, 500)
+$(window).on('beforeunload', function () {
+    DisplayLoader();
+});
+/*$('#Loader').show();*/
+
