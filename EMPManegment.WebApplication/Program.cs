@@ -1,7 +1,9 @@
+using Azure;
 using EMPManagment.Web.Helper;
 using EMPManegment.Web.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.CodeAnalysis.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,15 +16,23 @@ builder.Services.AddScoped<APIServices, APIServices>();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 
+
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie(option =>
-    {
-        option.ExpireTimeSpan = TimeSpan.FromMinutes(60 * 5);
-        option.LoginPath = "/Authentication/Login";
-        option.AccessDeniedPath = "/Authentication/Login";
-
-    });
-
+        .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
+        {
+            options.LoginPath = "/Authentication/Login";
+            options.LogoutPath = "/Authentication/Logout";
+            options.Cookie.HttpOnly = true;
+            //options.Cookie.Name = "localhost:7204";
+            options.Cookie.SecurePolicy = CookieSecurePolicy.None;
+            options.ExpireTimeSpan = TimeSpan.FromHours(8);
+            options.SlidingExpiration = true;
+        });
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.Cookie.Name = "UserName";
+    options.Cookie.Expiration = TimeSpan.FromMinutes(1);
+});
 builder.Services.AddSession(option =>
 {
     option.IdleTimeout = TimeSpan.FromMinutes(50);
@@ -30,7 +40,6 @@ builder.Services.AddSession(option =>
     option.Cookie.IsEssential = true;
 
 });
-
 
 
 var app = builder.Build();
@@ -48,6 +57,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 app.UseSession();
+app.UseCookiePolicy();
 app.UseAuthentication();
 app.UseAuthorization();
 UserSession.Configure(app.Services.GetRequiredService<IHttpContextAccessor>());

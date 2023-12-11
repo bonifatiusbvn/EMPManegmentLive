@@ -54,7 +54,7 @@ namespace EMPManegment.Repository.UserLoginRepository
                             userModel.Role = tblUser.Role;
                             response.Data = userModel;
                             response.Code = (int)HttpStatusCode.OK;
-
+                            
                             tblUser.LastLoginDate = DateTime.Now;
                             Context.TblUsers.Update(tblUser);
                             Context.SaveChanges();

@@ -6,6 +6,7 @@ using EMPManegment.EntityModels.ViewModels.OrderModels;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using PdfSharpCore.Pdf.Content.Objects;
+using System.Diagnostics;
 
 namespace EMPManegment.Web.Controllers
 {
@@ -23,7 +24,7 @@ namespace EMPManegment.Web.Controllers
         public APIServices APIServices { get; }
 
         [HttpGet]
-        public async Task<IActionResult> CreateOrder()
+        public async Task<IActionResult> CreateOrder(int? page)
         {
             try
             {
@@ -35,6 +36,24 @@ namespace EMPManegment.Web.Controllers
                     orderList = JsonConvert.DeserializeObject<List<OrderDetailView>>(res.data.ToString());
                 }
                 return View(orderList);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public async Task<IActionResult> FilterOrderDetails(string deliverd)
+        {
+            try
+            {
+                List<OrderDetailView> orderList = new List<OrderDetailView>();
+                HttpClient client = WebAPI.Initil();
+                ApiResponseModel res = await APIServices.GetAsync(deliverd, "OrderDetails/GetOrderList");
+                if (res.code == 200)
+                {
+                    orderList = JsonConvert.DeserializeObject<List<OrderDetailView>>(res.data.ToString());
+                }
+                return PartialView("~/Views/OrderMaster/_OrderDetailsPartial.cshtml", orderList);
             }
             catch (Exception ex)
             {
