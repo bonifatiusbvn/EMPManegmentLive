@@ -57,14 +57,6 @@ namespace EMPManagment.API.Controllers
                 return Ok(new { code = 200, data = projectlist.ToList() });
         }
 
-        [HttpPost]
-        [Route("GetUserProjectList")]
-        public async Task<IActionResult> GetUserProjectList(ProjectDetailView GetProjects)
-        {
-            List<ProjectDetailView> userprojectList = await ProjectDetail.GetUserProjectList(GetProjects);
-            return Ok(new { code = 200, data = userprojectList.ToList() });
-        }
-
         [HttpGet]
         [Route("GetProjectDetailsById")]
         public async Task<IActionResult> GetProjectDetailsById(Guid ProjectId)
@@ -106,6 +98,7 @@ namespace EMPManagment.API.Controllers
             }
             return StatusCode(response.Code, response);
         }
+
         [HttpPost]
         [Route("GetProjectMember")]
         public async Task<IActionResult> GetProjectMember(Guid ProjectId)

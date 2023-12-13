@@ -13,7 +13,6 @@ namespace EMPManegment.Inretface.Services.ProjectDetailsServices
     {
         Task<UserResponceModel> CreateProject(ProjectDetailView CreateProject);
         Task<IEnumerable<ProjectDetailView>> GetProjectList(string? searchby, string? searchfor);
-        Task<List<ProjectDetailView>> GetUserProjectList(ProjectDetailView GetUserProjectList);
         Task<ProjectDetailView> GetProjectDetailsById(Guid ProjectId);
         Task<IEnumerable<EmpDetailsView>> GetAllMembers();
         Task<UserResponceModel> AddMemberToProject(ProjectView AddMemberToProject);

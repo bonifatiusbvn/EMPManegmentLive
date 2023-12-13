@@ -78,67 +78,6 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
-        [HttpPost]
-        public async Task<IActionResult> GetUserProjectList()
-        {
-            try
-            {
-               
-                 ProjectDetailView responceModel = new ProjectDetailView
-                 {
-                    UserId = _userSession.UserId,
-                };
-                List<ProjectDetailView> ProjectList = new List<ProjectDetailView>();
-                HttpClient client = WebAPI.Initil();
-                ApiResponseModel postuser = await APIServices.PostAsync(responceModel, "ProjectDetails/GetUserProjectList");
-                if (postuser.data != null)
-                {
-                    ProjectList = JsonConvert.DeserializeObject<List<ProjectDetailView>>(postuser.data.ToString());
-
-                }
-                else
-                {
-                    ProjectList = new List<ProjectDetailView>();
-                    ViewBag.Error = "note found";
-                }
-                return PartialView("~/Views/Project/_UserProjectList.cshtml", ProjectList);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> GetProjectList()
-        {
-            try
-            {
-           
-                ProjectDetailView responceModel = new ProjectDetailView
-                {
-                    UserId = _userSession.UserId,
-                };
-                List<ProjectDetailView> ProjectList = new List<ProjectDetailView>();
-                HttpClient client = WebAPI.Initil();
-                ApiResponseModel postuser = await APIServices.PostAsync(responceModel, "ProjectDetails/GetUserProjectList");
-                if (postuser.data != null)
-                {
-                    ProjectList = JsonConvert.DeserializeObject<List<ProjectDetailView>>(postuser.data.ToString());
-
-                }
-                else
-                {
-                    ProjectList = new List<ProjectDetailView>();
-                    ViewBag.Error = "note found";
-                }
-                return PartialView("~/Views/Project/_GetProjectsDetails.cshtml", ProjectList);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
         public async Task<IActionResult> AddProjectMember(Guid Id)
         {
             try
@@ -190,7 +129,7 @@ namespace EMPManegment.Web.Controllers
         {
             try
             {
-
+                
                 var membersinvited = HttpContext.Request.Form["InviteMember"];
                 var memberDetails = JsonConvert.DeserializeObject<ProjectView>(membersinvited);
 
@@ -220,7 +159,6 @@ namespace EMPManegment.Web.Controllers
                 if (postuser.data != null)
                 {
                     ProjectMembersList = JsonConvert.DeserializeObject<List<ProjectView>>(postuser.data.ToString());
-
                 }
                 else
                 {
@@ -228,6 +166,33 @@ namespace EMPManegment.Web.Controllers
                     ViewBag.Error = "note found";
                 }
                 return PartialView("~/Views/Project/_ShowProjectMember.cshtml", ProjectMembersList);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ShowTeam(Guid ProjectId,int? page)
+        {
+            try
+            {
+                ViewBag.ProjectId = ProjectId;
+                List<ProjectView> ProjectMembersList = new List<ProjectView>();
+                HttpClient client = WebAPI.Initil(); 
+                ApiResponseModel postuser = await APIServices.PostAsync("", "ProjectDetails/GetProjectMember?ProjectId=" + ProjectId);
+                if (postuser.data != null)
+                {
+                    ProjectMembersList = JsonConvert.DeserializeObject<List<ProjectView>>(postuser.data.ToString());
+                }
+                else
+                {
+                    ProjectMembersList = new List<ProjectView>();
+                    ViewBag.Error = "note found";
+                }
+                var pageMembersList = ProjectMembersList.ToPagedList(page ?? 1, 4);
+                return PartialView("~/Views/Project/_showTeam.cshtml", pageMembersList);
             }
             catch (Exception ex)
             {

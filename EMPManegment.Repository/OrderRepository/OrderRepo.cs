@@ -1,7 +1,10 @@
 ﻿using EMPManagment.API;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.OrderModels;
+using EMPManegment.EntityModels.ViewModels.ProjectModels;
+using EMPManegment.EntityModels.ViewModels.TaskModels;
 using EMPManegment.Inretface.Interface.OrderDetails;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -69,6 +72,33 @@ namespace EMPManegment.Repository.OrderRepository
                 CreatedOn= a.CreatedOn,
             });
             return data;
+        }
+
+       public async Task<List<OrderDetailView>> GetOrderDetailsByStatus(string DeliveryStatus)
+        {
+            var orderDetails = new List<OrderDetailView>();
+            var data = await Context.OrderMasters.Where(x => x.DeliveryStatus == DeliveryStatus).ToListAsync();
+            if (data != null)
+            {
+                foreach (var item in data)
+                {
+                    orderDetails.Add(new OrderDetailView()
+                    {
+                        OrderId = item.OrderId,
+                        CompanyName = item.CompanyName,
+                        Product = item.Product,
+                        Quantity = item.Quantity,
+                        OrderDate = item.OrderDate,
+                        Total = item.Total,
+                        Amount = item.Amount,
+                        PaymentMethod = item.PaymentMethod,
+                        DeliveryStatus = item.DeliveryStatus,
+                        DeliveryDate = item.DeliveryDate,
+                        CreatedOn = item.CreatedOn,
+                    });
+                }
+            }
+            return orderDetails;
         }
     }
 }

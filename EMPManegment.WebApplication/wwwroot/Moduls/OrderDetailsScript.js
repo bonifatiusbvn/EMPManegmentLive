@@ -1,38 +1,22 @@
 ﻿
-$("#Delivered").on("click", function () {
+function DeliveryStatus(DeliveryStatus) {
     debugger
-    //var url = "/OrderMaster/FilterOrderDetails?deliverd=";
-    //var status = {};
-    //status.deliveryStatus = "Deliverd";
-    //debugger
-    //if ($("#DeliveryStatus").val().length > 0 || $("#DeliveryStatus").val() != "Delivered") {
-    //    $.ajax({
-    //        type: 'POST',
-    //        url: url,
-    //        data: status,
-    //        dataType: "html",
-    //        success: function (data) {
-    //            debugger
-    //            $("#orderTable tbody").html(data);
-    //        },
-    //    });
-    //};
-    var status = {};
-    status.deliveryStatus = "Deliverd";
+     var formData = new FormData();
+    formData.append("DeliveryStatus", DeliveryStatus);
     debugger
-            $.ajax({
-                url: '/OrderMaster/FilterOrderDetails',
-                type: 'GET',
-                data: status,
-                success: function (data) {
+     $.ajax({
+                url: '/OrderMaster/GetOrderDetailsByStatus',
+                type: 'Post',
+                dataType: 'json',
+                data: formData,
+                processData: false,
+                contentType: false,
+                complete: function (Result) {
                     debugger
-                    $("#orderTable tbody").html(data);
-                },
-                error: function () {
-                    alert('Error occurred while filtering data.');
-                }
-            });
-    });
+                    $("#dvdeliveredstatus").html(Result.responseText);;
+                } 
+     });       
+}
 
 
 

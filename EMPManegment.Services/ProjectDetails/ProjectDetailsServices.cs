@@ -28,10 +28,6 @@ namespace EMPManegment.Services.ProjectDetails
         {
             return await ProjectDetails.GetProjectList(searchby,searchfor);
         }
-        public async Task<List<ProjectDetailView>> GetUserProjectList(ProjectDetailView GetUserProjectList)
-        {
-            return await ProjectDetails.GetUserProjectList(GetUserProjectList);
-        }
         public async Task<ProjectDetailView> GetProjectDetailsById(Guid ProjectId)
         {
             return await ProjectDetails.GetProjectDetailsById(ProjectId);

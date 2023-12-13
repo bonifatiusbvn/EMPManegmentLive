@@ -1,10 +1,8 @@
 ﻿
-//var ProjectId = '';
-//$(document).ready(function () {
-//    debugger
-//    showProjectMembers(ProjectId)
 
-//});
+$(document).ready(function () {
+    document.getElementById("showProjectMembers").click()
+});
 
 function btnCreateProjectDetail() {
 
@@ -112,7 +110,6 @@ function showMember() {
 }
 function invitemember(Id)
 {
-    debugger
     const data1 = document.getElementById('projecttitle');
     var result1 = data1.outerText;
     const data2 = document.getElementById('projectstartdate');
@@ -165,10 +162,8 @@ function invitemember(Id)
 }
 
 function showProjectMembers(ProjectId) {
-    debugger
     var formData = new FormData();
     formData.append("ProjectId", ProjectId);
-    debugger
     $.ajax({
         url: '/Project/ShowProjectMembers',
         type: 'Post',
@@ -177,11 +172,33 @@ function showProjectMembers(ProjectId) {
         processData: false,
         contentType: false,
         complete: function (Result) {
-            debugger
             $('#dvshowmembers').html(Result.responseText);
         },
         Error: function () {
-            debugger
+            Swal.fire({
+                title: "Can't get data!",
+                icon: 'warning',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'OK',
+            })
+        }
+    })
+}
+
+function showTeams(ProjectId) {
+    var formData = new FormData();
+    formData.append("ProjectId", ProjectId);
+    $.ajax({
+        url: '/Project/ShowTeam',
+        type: 'Post',
+        dataType: 'json',
+        data: formData,
+        processData: false,
+        contentType: false,
+        complete: function (Result) {
+            $('#dvshowteam').html(Result.responseText);
+        },
+        Error: function () {
             Swal.fire({
                 title: "Can't get data!",
                 icon: 'warning',

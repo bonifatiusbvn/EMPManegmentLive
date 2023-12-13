@@ -86,7 +86,7 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link fw-semibold" data-bs-toggle="tab" href="#project-team" role="tab">
+                                <a class="nav-link fw-semibold" data-bs-toggle="tab" href="#project-team" role="tab" onclick="showTeams('@Model.ProjectId');">
                                     Team
                                 </a>
                             </li>
@@ -509,7 +509,7 @@
                                  <div class="card-header align-items-center d-flex border-bottom-dashed">
                                     @*<h4 class="card-title mb-0 flex-grow-1">Members</h4>*@
                                     <div class="flex-shrink-0">
-                                        <button type="button" class="btn btn-soft-primary btn-sm" onclick="showProjectMembers('@Model.ProjectId');">Show Project Members</button>
+                                        <button type="button" class="btn btn-soft-primary btn-sm" id="showProjectMembers" onclick="showProjectMembers('@Model.ProjectId');">Show Project Members</button>
                                     </div>
                                     <div class="flex-shrink-0">
                                         <button type="button" class="btn btn-soft-primary btn-sm" style="margin-left:73px;" data-bs-toggle="modal" data-bs-target="#inviteMembersModal" onclick="showMember()"><i class="ri-share-line me-1 align-bottom"></i> Invite Member</button>
@@ -1023,13 +1023,34 @@
                 </div>
                 <!-- end tab pane -->
                 <div class="tab-pane fade" id="project-team" role="tabpanel">
-                    <div class="row g-4 mb-3">
+                    <div id="dvshowteam"></div>
+                </div>
+                
+                    @*<div class="row g-4 mb-3">
                         <div class="col-sm">
                             <div class="d-flex">
-                                <div class="search-box me-2">
-                                    <input type="text" class="form-control" placeholder="Search member...">
-                                    <i class="ri-search-line search-icon"></i>
-                                </div>
+
+                                <div class="row g-4 mb-3">
+                                    <div class="col-sm-auto">
+                                        <a type="button" class="btn btn-outline-success rounded" href="~/Project/ProjectList"><i class="ri-arrow-left-line m-2"></i>Back</a>
+                                    </div>
+
+                                    <div class="col-sm offset-6">
+                                        <form asp-action="ShowTeam" asp-controller="Project" method="get" class="mx-2 my-2">
+                                            <div class="input-group">
+                                                <select class="form-select" id="inputSearch" name="searchby">
+                                                    <option selected disabled value="">SearchBy...</option>
+                                                    <option value="Name">Name</option>
+                                                </select>
+                                                <span class="deleteicon col-sm offset-6">
+                                                    <input name="searchfor" class="form-control" id="inputsearch" area-describedby="inputSearchProjectTitle" aria-label="Search" autocomplete="off" />
+                                                    <span onclick="var input = this.previousElementSibling; input.value = ''; input.focus();">x</span>
+                                                </span>
+                                                <button type="submit" class="btn btn-outline-secondary rounded" id="inputsearch">Search</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div><!-- end row -->
                             </div>
                         </div>
                         <div class="col-sm-auto">
@@ -1038,9 +1059,10 @@
                             </div>
                         </div>
                     </div>
-                    <!-- end row -->
+                    <!-- end row -->*@
 
-                    <div class="team-list list-view-filter">
+                    @*<div class="team-list list-view-filter">
+               
                         <div class="card team-box">
                             <div class="card-body px-4">
                                 <div class="row align-items-center team-row">
@@ -1065,6 +1087,7 @@
                                             </div>
                                         </div>
                                     </div>
+                                   
                                     <div class="col-lg-4 col">
                                         <div class="team-profile-img">
                                             <div class="avatar-lg img-thumbnail rounded-circle">
@@ -1630,9 +1653,9 @@
                         </div>
                         <!--end card-->
                     </div>
-                    <!-- end team list -->
+                    <!-- end team list -->*@
 
-                    <div class="row g-0 text-center text-sm-start align-items-center mb-3">
+                   @* <div class="row g-0 text-center text-sm-start align-items-center mb-3">
                         <div class="col-sm-6">
                             <div>
                                 <p class="mb-sm-0">Showing 1 to 10 of 12 entries</p>
@@ -1649,9 +1672,7 @@
                                 <li class="page-item"> <a href="#" class="page-link"><i class="mdi mdi-chevron-right"></i></a> </li>
                             </ul>
                         </div><!-- end col -->
-                    </div><!-- end row -->
-                </div>
-                <!-- end tab pane -->
+                    </div><!-- end row -->*@
             </div>
         </div>
         <!-- end col -->

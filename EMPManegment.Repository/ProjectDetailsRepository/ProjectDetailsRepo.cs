@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace EMPManegment.Repository.ProjectDetailsRepository
 {
@@ -86,26 +87,6 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
             return data;
         }
 
-        public async Task<List<ProjectDetailView>> GetUserProjectList(ProjectDetailView GetUserProjectList)
-        {
-            var UserData = new List<ProjectDetailView>();
-            var data = await Context.TblProjectDetails.Where(x => x.UserId == GetUserProjectList.UserId).ToListAsync();
-            if (data != null)
-            {
-                foreach (var item in data)
-                {
-                    UserData.Add(new ProjectDetailView()
-                    {
-                        ProjectId = item.ProjectId,
-                        ProjectType = item.ProjectType,
-                        ProjectTitle = item.ProjectTitle,
-                        CreatedOn = item.CreatedOn,
-                    });
-                }
-            }
-            return UserData;
-        }
-
        public async Task<ProjectDetailView> GetProjectDetailsById(Guid ProjectId)
         {
             var projectDetail = await Context.TblProjectMasters.SingleOrDefaultAsync(x=>x.ProjectId == ProjectId);
@@ -175,6 +156,7 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
                                  Id = e.Id,
                                  Fullname = d.FirstName + " " + d.LastName,
                                  Image = d.Image,
+                                 UserRole = e.UserRole,
                              }).ToList();
                 return result;
             }
