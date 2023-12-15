@@ -55,7 +55,9 @@ public partial class BonifatiusEmployeesContext : DbContext
 
     public virtual DbSet<TblVendorType> TblVendorTypes { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseSqlServer("Data Source=BONI002;Initial Catalog=BonifatiusEmployees;User ID=BoniEmp;Password=Admin123;Encrypt=False");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -176,7 +178,6 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.CreadetOn).HasColumnType("datetime");
             entity.Property(e => e.Date).HasColumnType("date");
-            entity.Property(e => e.DocumentName).HasMaxLength(50);
 
             entity.HasOne(d => d.Project).WithMany(p => p.TblProjectDocuments)
                 .HasForeignKey(d => d.ProjectId)
