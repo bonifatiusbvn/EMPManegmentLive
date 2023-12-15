@@ -52,5 +52,12 @@ namespace EMPManagment.API.Controllers
             return Ok(new { code = 200, data = orderlist.ToList() });
          
         }
+        [HttpPost]
+        [Route("GetOrderDetailsByStatus")]
+        public async Task<IActionResult> GetOrderDetailsByStatus(string DeliveryStatus)
+        {
+            List<OrderDetailView> orderdetails = await OrderDetails.GetOrderDetailsByStatus(DeliveryStatus);
+            return Ok(new { code = 200,data = orderdetails.ToList() });
+        }
     }
 }

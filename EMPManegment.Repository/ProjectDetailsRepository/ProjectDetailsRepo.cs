@@ -1,7 +1,10 @@
-﻿using EMPManagment.API;
+﻿using Azure;
+using EMPManagment.API;
+using EMPManegment.EntityModels.View_Model;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.ProjectModels;
 using EMPManegment.EntityModels.ViewModels.TaskModels;
+using EMPManegment.EntityModels.ViewModels.UserModels;
 using EMPManegment.Inretface.Interface.ProjectDetails;
 using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +15,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace EMPManegment.Repository.ProjectDetailsRepository
 {
@@ -83,24 +87,83 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
             return data;
         }
 
-        public async Task<List<ProjectDetailView>> GetUserProjectList(ProjectDetailView GetUserProjectList)
+       public async Task<ProjectDetailView> GetProjectDetailsById(Guid ProjectId)
         {
-            var UserData = new List<ProjectDetailView>();
-            var data = await Context.TblProjectDetails.Where(x => x.UserId == GetUserProjectList.UserId).ToListAsync();
-            if (data != null)
+            var projectDetail = await Context.TblProjectMasters.SingleOrDefaultAsync(x=>x.ProjectId == ProjectId);
+            ProjectDetailView model = new ProjectDetailView()
             {
-                foreach (var item in data)
+                ProjectId = projectDetail.ProjectId,
+                ProjectTitle = projectDetail.ProjectTitle,
+                CreatedOn = projectDetail.CreatedOn,
+                ProjectEndDate = projectDetail.ProjectEndDate,
+                ProjectStatus = projectDetail.ProjectStatus,
+                ProjectPriority = projectDetail.ProjectPriority,
+                ProjectStartDate = projectDetail.ProjectStartDate,
+                ProjectDescription = projectDetail.ProjectDescription,
+                ProjectType = projectDetail.ProjectType,
+            };
+            return model;
+        }
+
+        public async Task<IEnumerable<EmpDetailsView>> GetAllMembers()
+        {
+            IEnumerable<EmpDetailsView> data = Context.TblUsers.ToList().Select(a => new EmpDetailsView
+            {
+                Id = a.Id,
+                FirstName = a.FirstName,
+                LastName = a.LastName,
+                Image = a.Image,              
+            });
+            return data;
+        }
+
+       public async Task<UserResponceModel> AddMemberToProject(ProjectView AddMember)
+        {
+            UserResponceModel response = new UserResponceModel();
+            try 
+            { 
+                var projectmodel = new TblProjectDetail()
                 {
-                    UserData.Add(new ProjectDetailView()
-                    {
-                        ProjectId = item.ProjectId,
-                        ProjectType = item.ProjectType,
-                        ProjectTitle = item.ProjectTitle,
-                        CreatedOn = item.CreatedOn,
-                    });
-                }
+                    Id = Guid.NewGuid(),
+                    ProjectId = AddMember.ProjectId,
+                    ProjectType = AddMember.ProjectType,
+                    ProjectTitle = AddMember.ProjectTitle,
+                    UserId = AddMember.UserId,
+                    StartDate = AddMember.StartDate,
+                    EndDate = AddMember.EndDate,
+                    Status = AddMember.Status,
+                };
+                response.Code = 200;
+                response.Message = "Member add successfully!";
+                Context.TblProjectDetails.Add(projectmodel);
+                Context.SaveChanges();
             }
-            return UserData;
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return response;
+        }
+        public async Task<IEnumerable<ProjectView>> GetProjectMember(Guid ProjectId)
+        {
+            try
+            {
+                var result = (from e in Context.TblProjectDetails
+                             where e.ProjectId == ProjectId
+                             join d in Context.TblUsers on e.UserId equals d.Id
+                             select new ProjectView
+                             {
+                                 Id = e.Id,
+                                 Fullname = d.FirstName + " " + d.LastName,
+                                 Image = d.Image,
+                                 UserRole = e.UserRole,
+                             }).ToList();
+                return result;
+            }
+            catch (Exception ex) 
+            {
+                throw ex;
+            }
         }
     }
 }

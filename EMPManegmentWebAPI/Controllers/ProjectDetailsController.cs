@@ -1,4 +1,5 @@
-﻿using EMPManegment.EntityModels.ViewModels.Models;
+﻿using EMPManegment.EntityModels.View_Model;
+using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.ProjectModels;
 using EMPManegment.EntityModels.ViewModels.TaskModels;
 using EMPManegment.Inretface.Interface.ProjectDetails;
@@ -56,12 +57,54 @@ namespace EMPManagment.API.Controllers
                 return Ok(new { code = 200, data = projectlist.ToList() });
         }
 
-        [HttpPost]
-        [Route("GetUserProjectList")]
-        public async Task<IActionResult> GetUserProjectList(ProjectDetailView GetProjects)
+        [HttpGet]
+        [Route("GetProjectDetailsById")]
+        public async Task<IActionResult> GetProjectDetailsById(Guid ProjectId)
         {
-            List<ProjectDetailView> userprojectList = await ProjectDetail.GetUserProjectList(GetProjects);
-            return Ok(new { code = 200, data = userprojectList.ToList() });
+            var Projectdata = await ProjectDetail.GetProjectDetailsById(ProjectId);
+            return Ok(new { code = 200,data =  Projectdata });
+        }
+
+        [HttpPost]
+        [Route("GetMemberList")]
+        public async Task<IActionResult> GetAllMembers()
+        {
+            IEnumerable<EmpDetailsView> emplist = await ProjectDetail.GetAllMembers();
+            return Ok(new { code = 200, data = emplist.ToList() });
+        }
+
+        [HttpPost]
+        [Route("AddMemberToProject")]
+        public async Task<IActionResult> AddMemberToProject(ProjectView AddMember)
+        {
+            UserResponceModel response = new UserResponceModel();
+            try
+            {
+                var result = ProjectDetail.AddMemberToProject(AddMember);
+                if (result.Result.Code == 200)
+                {
+                    response.Code = (int)HttpStatusCode.OK;
+                    response.Message = result.Result.Message;
+                }
+                else
+                {
+                    response.Message = result.Result.Message;
+                    response.Code = (int)HttpStatusCode.NotFound;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return StatusCode(response.Code, response);
+        }
+
+        [HttpPost]
+        [Route("GetProjectMember")]
+        public async Task<IActionResult> GetProjectMember(Guid ProjectId)
+        {
+            IEnumerable<ProjectView> Members = await ProjectDetail.GetProjectMember(ProjectId);
+            return Ok(new { code = 200, data = Members.ToList()});
         }
     }
 }

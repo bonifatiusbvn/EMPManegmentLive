@@ -27,5 +27,9 @@ namespace EMPManegment.Services.OrderDetails
         {
             return await OrderDetails.GetOrderList();
         }
+        public async Task<List<OrderDetailView>> GetOrderDetailsByStatus(string DeliveryStatus)
+        {
+            return await OrderDetails.GetOrderDetailsByStatus(DeliveryStatus);
+        }
     }
 }

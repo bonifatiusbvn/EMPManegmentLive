@@ -42,18 +42,20 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
-        public async Task<IActionResult> FilterOrderDetails(string deliverd)
+
+        [HttpPost]
+        public async Task<IActionResult> GetOrderDetailsByStatus(string DeliveryStatus)
         {
             try
             {
                 List<OrderDetailView> orderList = new List<OrderDetailView>();
                 HttpClient client = WebAPI.Initil();
-                ApiResponseModel res = await APIServices.GetAsync(deliverd, "OrderDetails/GetOrderList");
+                ApiResponseModel res = await APIServices.PostAsync("", "OrderDetails/GetOrderDetailsByStatus?DeliveryStatus="+ DeliveryStatus);
                 if (res.code == 200)
                 {
                     orderList = JsonConvert.DeserializeObject<List<OrderDetailView>>(res.data.ToString());
                 }
-                return PartialView("~/Views/OrderMaster/_OrderDetailsPartial.cshtml", orderList);
+                return PartialView("~/Views/OrderMaster/_DeliveryStatusOrder.cshtml", orderList);
             }
             catch (Exception ex)
             {

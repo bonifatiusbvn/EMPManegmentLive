@@ -1,6 +1,7 @@
 ﻿using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.OrderModels;
 using EMPManegment.EntityModels.ViewModels.ProjectModels;
+using EMPManegment.EntityModels.ViewModels.TaskModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,5 +14,6 @@ namespace EMPManegment.Inretface.Interface.OrderDetails
     {
         Task<UserResponceModel> CreateOrder(OrderDetailView CreateOrder);
         Task<IEnumerable<OrderDetailView>> GetOrderList();
+        Task<List<OrderDetailView>> GetOrderDetailsByStatus(string DeliveryStatus);
     }
 }

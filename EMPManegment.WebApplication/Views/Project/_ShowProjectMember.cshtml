@@ -1,0 +1,43 @@
+﻿@model List<EMPManegment.EntityModels.ViewModels.ProjectModels.ProjectView>
+
+@if (Model.Count > 0)
+{
+    foreach (var item in Model)
+    {
+        <div style="height: 40px;" class="mx-n3 px-3">
+            <div class="vstack gap-3">
+                <div class="d-flex align-items-center">
+                    <div class="avatar-xs flex-shrink-0 me-3">
+                        <img src="~/@item.Image" alt="" class="img-fluid rounded-circle">
+                    </div>
+                    <div class="flex-grow-1">
+                        <h5 class="fs-13 mb-0"><a href="#" class="text-body d-block">@item.Fullname</a></h5>
+                    </div>
+                    <div class="flex-shrink-0">
+                        <div class="d-flex align-items-center gap-1">
+                            <button type="button" class="btn btn-light btn-sm">Message</button>
+                            <div class="dropdown">
+                                <button class="btn btn-icon btn-sm fs-16 text-muted dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="ri-more-fill"></i>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="javascript:void(0);"><i class="ri-eye-fill text-muted me-2 align-bottom"></i>View</a></li>
+                                    <li><a class="dropdown-item" href="javascript:void(0);"><i class="ri-star-fill text-muted me-2 align-bottom"></i>Favourite</a></li>
+                                    <li><a class="dropdown-item" href="javascript:void(0);"><i class="ri-delete-bin-5-fill text-muted me-2 align-bottom"></i>Delete</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- end member item -->
+            </div>
+            <!-- end list -->
+        </div>
+    }
+}
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+<script src="~/moduls/projectdetailsscript.js"></script>
