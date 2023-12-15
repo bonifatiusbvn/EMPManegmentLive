@@ -77,6 +77,8 @@ public partial class TblUser
 
     public virtual ICollection<TblProjectDetail> TblProjectDetails { get; set; } = new List<TblProjectDetail>();
 
+    public virtual ICollection<TblProjectDocument> TblProjectDocuments { get; set; } = new List<TblProjectDocument>();
+
     public virtual ICollection<TblTaskDetail> TblTaskDetails { get; set; } = new List<TblTaskDetail>();
 
     public virtual ICollection<TblUserDocument> TblUserDocuments { get; set; } = new List<TblUserDocument>();

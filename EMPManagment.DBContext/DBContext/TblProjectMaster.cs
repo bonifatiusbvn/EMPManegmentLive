@@ -32,4 +32,6 @@ public partial class TblProjectMaster
     public string? CreatedBy { get; set; }
 
     public virtual ICollection<TblProjectDetail> TblProjectDetails { get; set; } = new List<TblProjectDetail>();
+
+    public virtual ICollection<TblProjectDocument> TblProjectDocuments { get; set; } = new List<TblProjectDocument>();
 }

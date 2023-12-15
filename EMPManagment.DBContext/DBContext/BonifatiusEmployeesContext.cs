@@ -31,6 +31,8 @@ public partial class BonifatiusEmployeesContext : DbContext
 
     public virtual DbSet<TblProjectDetail> TblProjectDetails { get; set; }
 
+    public virtual DbSet<TblProjectDocument> TblProjectDocuments { get; set; }
+
     public virtual DbSet<TblProjectMaster> TblProjectMasters { get; set; }
 
     public virtual DbSet<TblQuestion> TblQuestions { get; set; }
@@ -165,6 +167,26 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.HasOne(d => d.User).WithMany(p => p.TblProjectDetails)
                 .HasForeignKey(d => d.UserId)
                 .HasConstraintName("FK_tblProjectDetails_tblUsers");
+        });
+
+        modelBuilder.Entity<TblProjectDocument>(entity =>
+        {
+            entity.ToTable("tblProjectDocuments");
+
+            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.CreadetOn).HasColumnType("datetime");
+            entity.Property(e => e.Date).HasColumnType("date");
+            entity.Property(e => e.DocumentName).HasMaxLength(50);
+
+            entity.HasOne(d => d.Project).WithMany(p => p.TblProjectDocuments)
+                .HasForeignKey(d => d.ProjectId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_tblProjectDocuments_tblProjectMaster");
+
+            entity.HasOne(d => d.User).WithMany(p => p.TblProjectDocuments)
+                .HasForeignKey(d => d.UserId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_tblProjectDocuments_tblUsers");
         });
 
         modelBuilder.Entity<TblProjectMaster>(entity =>
