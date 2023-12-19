@@ -13,6 +13,7 @@ namespace EMPManegment.EntityModels.ViewModels
         public byte[]? PasswordHash { get; set; }
 
         public byte[]? PasswordSalt { get; set; }
+        public string? Email { get; set; }
 
     }
     public class PasswordResetResponseModel
@@ -20,7 +21,6 @@ namespace EMPManegment.EntityModels.ViewModels
         public string? UserName { get; set; }
         public string? Password { get; set; }
         public string? ConfirmPassword { get; set; }
-        
-
+       
     }
-}
+ }

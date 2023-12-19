@@ -1,15 +1,18 @@
 ﻿using EMPManagment.API;
 using EMPManegment.EntityModels.View_Model;
 using EMPManegment.EntityModels.ViewModels;
+using EMPManegment.EntityModels.ViewModels.ForgetPasswordModels;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.Inretface.EmployeesInterface.AddEmployee;
 using EMPManegment.Inretface.Interface.UserList;
 using EMPManegment.Inretface.Services.AddEmployeeServies;
 using EMPManegment.Repository.AddEmpRepository;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -45,5 +48,14 @@ namespace EMPManegment.Services.AddEmployee
         {
             return await Authentication.LoginUser(LoginUser);
         }
+        public async Task<bool> EmailSendAsync(string Email, string Subject, string Message)
+        {
+            return await Authentication.EmailSendAsync(Email, Subject, Message);
+        }
+
+        public async Task<UserResponceModel> ForgetPassword(SendEmailModel forgetpass)
+        {
+            return await Authentication.ForgetPassword(forgetpass);
+        }        
     }
 }

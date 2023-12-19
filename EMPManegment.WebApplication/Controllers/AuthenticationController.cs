@@ -12,7 +12,7 @@ using EMPManegment.EntityModels.View_Model;
 using EMPManegment.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-
+using EMPManegment.EntityModels.ViewModels.ForgetPasswordModels;
 
 namespace EMPManegment.Web.Controllers
 {
@@ -36,8 +36,32 @@ namespace EMPManegment.Web.Controllers
         public async Task<IActionResult> Login()
         {
             return View();
+        } 
+        public async Task<IActionResult> ForgetPassword()
+        {
+            return View();
         }
 
+        [HttpPost]
+        public async Task<IActionResult> ForgetPassword(SendEmailModel forgetpass)
+        {
+            try
+            {
+                ApiResponseModel postuser = await APIServices.PostAsync(forgetpass, "UserLogin/ForgetPassword");
+                if (postuser.code == 200)
+                {
+                    return new JsonResult(new { Message = string.Format(postuser.message), Code = postuser.code });
+                }
+                else
+                {
+                    return new JsonResult(new { Message = string.Format(postuser.message), Code = postuser.code });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
 
         [HttpPost]
         public async Task<IActionResult> Login(LoginRequest login)
@@ -218,7 +242,6 @@ namespace EMPManegment.Web.Controllers
             {
                 throw ex;
             }
-
         }
 
         public async Task<JsonResult> GetDepartment()

@@ -9,6 +9,8 @@ using static Azure.Core.HttpHeader;
 using System.Net;
 using System.Reflection;
 using EMPManagment.Web.Models.API;
+using EMPManegment.EntityModels.ViewModels.ForgetPasswordModels;
+using EMPManegment.Inretface.EmployeesInterface.AddEmployee;
 
 namespace EMPManagment.API.Controllers
 {
@@ -16,13 +18,14 @@ namespace EMPManagment.API.Controllers
     [ApiController]
     public class UserLoginController : ControllerBase
     {
-        public UserLoginController(IUserLoginServices userLogin)
+        public UserLoginController(IUserLoginServices userLogin,IAuthentication authentication)
         {
             UserLogin = userLogin;
+            Authentication = authentication;
         }
 
         public IUserLoginServices UserLogin { get; }
-
+        public IAuthentication Authentication { get; }
 
         [AllowAnonymous]
         [HttpPost("Login")]
@@ -52,6 +55,34 @@ namespace EMPManagment.API.Controllers
                 loginresponsemodel.Code = (int)HttpStatusCode.InternalServerError;
             }
             return StatusCode(loginresponsemodel.Code, loginresponsemodel);
+        }
+
+        [HttpPost]
+        [Route("ForgetPassword")]
+        public async Task<IActionResult> ForgetPassword(SendEmailModel ForgetPassword)
+        {
+            ApiResponseModel responseModel = new ApiResponseModel();
+            var forgetPassword = await Authentication.ForgetPassword(ForgetPassword);
+            try
+            {
+
+                if (forgetPassword.Code == 200)
+                {
+                    bool status = await Authentication.EmailSendAsync(ForgetPassword.Email, "Click Here to Reset Your Password ", "https://localhost:7204/UserProfile/ResetUserPassword");
+                    responseModel.code = (int)HttpStatusCode.OK;
+                    responseModel.message = forgetPassword.Message;
+                }
+                else
+                {
+                    responseModel.message = forgetPassword.Message;
+                    responseModel.code = (int)HttpStatusCode.NotFound;
+                }
+            }
+            catch (Exception ex)
+            {
+                responseModel.code = (int)HttpStatusCode.InternalServerError;
+            }
+            return StatusCode(responseModel.code, responseModel);
         }
     }
 }

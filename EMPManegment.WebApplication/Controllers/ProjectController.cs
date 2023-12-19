@@ -305,5 +305,21 @@ namespace EMPManegment.Web.Controllers
             }
 
         }
+
+        [HttpGet]
+        public async Task<FileResult> DownloadProjectDocument(string DocumentName)
+        {
+            var filepath = "Content/UserDocuments/" + DocumentName;
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", filepath);
+            var memory = new MemoryStream();
+            using (var stream = new FileStream(path, FileMode.Open))
+            {
+                await stream.CopyToAsync(memory);
+            }
+            memory.Position = 0;
+            var ContentType = "application/pdf";
+            var fileName = Path.GetFileName(path);
+            return File(memory, ContentType, fileName);
+        }        
     }
 }

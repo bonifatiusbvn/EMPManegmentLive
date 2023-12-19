@@ -3,15 +3,17 @@ using EMPManagment.API;
 using EMPManegment.EntityModels.Crypto;
 using EMPManegment.EntityModels.View_Model;
 using EMPManegment.EntityModels.ViewModels;
+using EMPManegment.EntityModels.ViewModels.ForgetPasswordModels;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.Inretface.EmployeesInterface.AddEmployee;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
 using static System.Runtime.InteropServices.JavaScript.JSType;
@@ -22,12 +24,14 @@ namespace EMPManegment.Repository.AddEmpRepository
     public class AddEmpRepo : IAuthentication
     {
 
-        public AddEmpRepo(BonifatiusEmployeesContext context)
+        public AddEmpRepo(BonifatiusEmployeesContext context,IConfiguration configuration)
         {
             Context = context;
+            Configuration = configuration;
         }
 
         public BonifatiusEmployeesContext Context { get; }
+        public IConfiguration Configuration { get; }
 
         public async Task<UserResponceModel> UserSingUp(EmpDetailsView addemp)
         {
@@ -77,7 +81,7 @@ namespace EMPManegment.Repository.AddEmpRepository
             {
 
                 throw ex;
-            }
+            }          
             return response;
         }
 
@@ -158,6 +162,66 @@ namespace EMPManegment.Repository.AddEmpRepository
         public bool GetUserName(string Username)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<bool> EmailSendAsync(string email, string Subject, string message)
+        {
+            bool status = false;
+            try
+            {
+                EmailSettingView emailSettingView = new EmailSettingView()
+                {
+                    SecretKey = Configuration.GetValue<string>("AppSettings:SecretKey"),
+                    From = Configuration.GetValue<string>("AppSettings:EmailSettings:From"),
+                    SmtpServer = Configuration.GetValue<string>("AppSettings:EmailSettings:SmtpServer"),
+                    Port = Configuration.GetValue<int>("AppSettings:EmailSettings:Port"),
+                    EnableSSL = Configuration.GetValue<bool>("AppSettings:EmailSettings:EnableSSL"),
+                };
+                MailMessage mailMessage = new MailMessage()
+                {
+                    From = new MailAddress(emailSettingView.From),
+                    Subject = Subject,
+                    Body = message
+                };
+                mailMessage.To.Add(email);
+                SmtpClient smtpClient = new SmtpClient(emailSettingView.SmtpServer)
+                {
+                    Port = emailSettingView.Port,
+                    Credentials = new NetworkCredential(emailSettingView.From,emailSettingView.SecretKey),
+                    EnableSsl = emailSettingView.EnableSSL
+                };
+                await smtpClient.SendMailAsync(mailMessage);
+                status = true;
+            }
+            catch(Exception)
+            {
+                status = false;
+            }
+            return status;
+        }
+
+        public async Task<UserResponceModel> ForgetPassword(SendEmailModel forgetpass)
+        {
+            UserResponceModel response = new UserResponceModel();
+            try
+            {
+                var userdata = Context.TblUsers.FirstOrDefault(x => x.Email == forgetpass.Email);
+                if (userdata != null)
+                {
+                    response.Code = 200;
+                    response.Message = "Reset Link send on your Registered Email";
+                }
+                else
+                {
+                    response.Code = 400;
+                    response.Message = "Invalid Email Id!";
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return response;
         }
     }   
 }
