@@ -1,8 +1,9 @@
 ﻿
-
 $(document).ready(function () {
-    document.getElementById("showProjectMembers").click()
+      document.getElementById("showProjectMembers").click()
+      document.getElementById("showProjectDocuments").click()
 });
+
 
 function btnCreateProjectDetail() {
 
@@ -139,15 +140,13 @@ function invitemember(Id)
         processData: false,
         contentType: false,
             success: function (Result) {
-
                 Swal.fire({
                     title: Result.message,
                     icon: 'success',
                     confirmButtonColor: '#3085d6',
                     confirmButtonText: 'OK',
                 }).then(function () {
-                    showProjectMembers(data6);
-                    /*window.location = '/Project/AddProjectMember/?Id=' + data6;*/
+                    window.location = '/Project/AddProjectMember/?Id=' + data6;
                 }); 
             },
         Error: function () {
@@ -197,6 +196,90 @@ function showTeams(ProjectId) {
         contentType: false,
         complete: function (Result) {
             $('#dvshowteam').html(Result.responseText);
+        },
+        Error: function () {
+            Swal.fire({
+                title: "Can't get data!",
+                icon: 'warning',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'OK',
+            })
+        }
+    })
+}
+
+
+function addProjectDocument() {
+        debugger
+    var formData = new FormData();
+    const data6 = document.getElementById('projectid').value;
+    formData.append("ProjectId", data6);
+    formData.append("DocumentName", $("#txtDocumentName")[0].files[0]);
+    debugger
+    $.ajax({
+        url: '/Project/AddDocumentToProject',
+        type: 'Post',
+        dataType: 'json',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function (Result) {
+            Swal.fire({
+                title: Result.message,
+                icon: 'success',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'OK',
+            }).then(function () {
+                window.location = '/Project/AddProjectMember/?Id=' + data6;
+            })
+        },
+        Error: function () {
+            Swal.fire({
+                title: "Can't get data!",
+                icon: 'warning',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'OK',
+            })
+        }
+    })
+}
+
+function showProjectDocuments(ProjectId) {
+    var formData = new FormData();
+    formData.append("ProjectId", ProjectId);
+    $.ajax({
+        url: '/Project/ShowProjectDocuments',
+        type: 'Post',
+        dataType: 'json',
+        data: formData,
+        processData: false,
+        contentType: false,
+        complete: function (Result) {
+            $('#dvshowdocuments').html(Result.responseText);
+        },
+        Error: function () {
+            Swal.fire({
+                title: "Can't get data!",
+                icon: 'warning',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'OK',
+            })
+        }
+    })
+}
+
+function showuploadDocuments(ProjectId) {
+    var formData = new FormData();
+    formData.append("ProjectId", ProjectId);
+    $.ajax({
+        url: '/Project/ShowUploadedDocuments',
+        type: 'Post',
+        dataType: 'json',
+        data: formData,
+        processData: false,
+        contentType: false,
+        complete: function (Result) {
+            $('#dvuploadDocuments').html(Result.responseText);
         },
         Error: function () {
             Swal.fire({

@@ -57,6 +57,15 @@ namespace EMPManagment.API.Controllers
                 return Ok(new { code = 200, data = projectlist.ToList() });
         }
 
+
+        [HttpPost]
+        [Route("GetUserProjectList")]
+        public async Task<IActionResult> GetUserProjectList(Guid UserId)
+        {
+            List<ProjectView> userprojectList = await ProjectDetail.GetUserProjectList(UserId);
+            return Ok(new { code = 200, data = userprojectList.ToList() });
+        }
+
         [HttpGet]
         [Route("GetProjectDetailsById")]
         public async Task<IActionResult> GetProjectDetailsById(Guid ProjectId)
@@ -105,6 +114,40 @@ namespace EMPManagment.API.Controllers
         {
             IEnumerable<ProjectView> Members = await ProjectDetail.GetProjectMember(ProjectId);
             return Ok(new { code = 200, data = Members.ToList()});
+        }
+        [HttpPost]
+        [Route("AddDocumentToProject")]
+        public async Task<IActionResult> AddDocumentToProject(ProjectDocumentView AddDocument)
+        {
+            UserResponceModel response = new UserResponceModel();
+            try
+            {
+                var result = ProjectDetail.AddDocumentToProject(AddDocument);
+                if (result.Result.Code == 200)
+                {
+                    response.Code = (int)HttpStatusCode.OK;
+                    response.Message = result.Result.Message;
+                }
+                else
+                {
+                    response.Message = result.Result.Message;
+                    response.Code = (int)HttpStatusCode.NotFound;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return StatusCode(response.Code, response);
+        }
+
+
+        [HttpPost]
+        [Route("GetProjectDocument")]
+        public async Task<IActionResult> GetProjectDocument(Guid ProjectId)
+        {
+            IEnumerable<ProjectDocumentView> Documents = await ProjectDetail.GetProjectDocument(ProjectId);
+            return Ok(new { code = 200, data = Documents.ToList() });
         }
     }
 }

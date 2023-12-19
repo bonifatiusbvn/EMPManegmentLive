@@ -34,6 +34,7 @@ namespace EMPManegment.Web.Controllers
                 if (res.code == 200)
                 {
                     orderList = JsonConvert.DeserializeObject<List<OrderDetailView>>(res.data.ToString());
+                    ViewBag.ordersList = orderList.Count;
                 }
                 return View(orderList);
             }

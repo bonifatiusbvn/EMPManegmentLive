@@ -1,6 +1,7 @@
 ﻿using EMPManagment.Web.Helper;
 using EMPManagment.Web.Models.API;
 using EMPManegment.EntityModels.View_Model;
+using EMPManegment.EntityModels.ViewModels;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.ProjectModels;
 using EMPManegment.EntityModels.ViewModels.TaskModels;
@@ -36,7 +37,6 @@ namespace EMPManegment.Web.Controllers
             return View();
         }
 
-        [HttpGet]
         public async Task<IActionResult> ProjectList(string? searchby, string? searchfor,int? page) 
         
         {
@@ -51,6 +51,25 @@ namespace EMPManegment.Web.Controllers
                 }
                 var pageProject = projectlist.ToPagedList(page ?? 1, 4);
                 return View(pageProject);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public async Task<IActionResult> GetUserProjectList()
+        {
+            try
+            {
+                Guid UserId = _userSession.UserId;
+                List<ProjectView> projectlist = new List<ProjectView>();
+                HttpClient client = WebAPI.Initil();
+                ApiResponseModel response = await APIServices.PostAsync("", "ProjectDetails/GetUserProjectList?UserId="+ UserId);
+                if (response.code == 200)
+                {
+                    projectlist = JsonConvert.DeserializeObject<List<ProjectView>>(response.data.ToString());
+                } 
+                return PartialView("~/Views/Project/_DisplayUserProjectList.cshtml", projectlist);
             }
             catch (Exception ex)
             {
@@ -128,8 +147,7 @@ namespace EMPManegment.Web.Controllers
         public async Task<IActionResult> InviteMemberToProject()
         {
             try
-            {
-                
+            { 
                 var membersinvited = HttpContext.Request.Form["InviteMember"];
                 var memberDetails = JsonConvert.DeserializeObject<ProjectView>(membersinvited);
 
@@ -198,6 +216,94 @@ namespace EMPManegment.Web.Controllers
             {
                 throw ex;
             }
+
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddDocumentToProject(ProjectDocView projectDocument)
+        {
+            try
+            {
+                var DocName = Guid.NewGuid() + "_" + projectDocument.DocumentName.FileName;
+                var path = Environment.WebRootPath;
+                var filepath = "Content/UserDocuments/" + DocName;
+                var fullpath = Path.Combine(path, filepath);
+                UploadFile(projectDocument.DocumentName, fullpath);
+                var uploadDocument = new ProjectDocumentView()
+                {
+                    ProjectId = projectDocument.ProjectId,
+                    UserId = _userSession.UserId,
+                    DocumentName = DocName,
+                };
+
+                ApiResponseModel postuser = await APIServices.PostAsync(uploadDocument, "ProjectDetails/AddDocumentToProject");
+                UserResponceModel responseModel = new UserResponceModel();
+                if (postuser.code == 200)
+                {
+                    return Ok(new { postuser.message });
+                }
+
+                return View();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public void UploadFile(IFormFile file, string path)
+        {
+            FileStream stream = new FileStream(path, FileMode.Create);
+            file.CopyTo(stream);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ShowProjectDocuments(Guid ProjectId)
+        {
+            try
+            {
+                List<ProjectDocumentView> ProjectDocumentsList = new List<ProjectDocumentView>();
+                HttpClient client = WebAPI.Initil();
+                ApiResponseModel postuser = await APIServices.PostAsync("", "ProjectDetails/GetProjectDocument?ProjectId=" + ProjectId);
+                if (postuser.data != null)
+                {
+                    ProjectDocumentsList = JsonConvert.DeserializeObject<List<ProjectDocumentView>>(postuser.data.ToString());
+                }
+                else
+                {
+                    ProjectDocumentsList = new List<ProjectDocumentView>();
+                    ViewBag.Error = "note found";
+                }
+                return PartialView("~/Views/Project/_showProjectDocuments.cshtml", ProjectDocumentsList);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        [HttpPost]
+        public async Task<IActionResult> ShowUploadedDocuments(Guid ProjectId)
+        {
+            try
+            {
+                List<ProjectDocumentView> ProjectDocumentsList = new List<ProjectDocumentView>();
+                HttpClient client = WebAPI.Initil();
+                ApiResponseModel postuser = await APIServices.PostAsync("", "ProjectDetails/GetProjectDocument?ProjectId=" + ProjectId);
+                if (postuser.data != null)
+                {
+                    ProjectDocumentsList = JsonConvert.DeserializeObject<List<ProjectDocumentView>>(postuser.data.ToString());
+                }
+                else
+                {
+                    ProjectDocumentsList = new List<ProjectDocumentView>();
+                    ViewBag.Error = "note found";
+                }
+                return PartialView("~/Views/Project/_showUploadDocument.cshtml", ProjectDocumentsList);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
         }
     }
 }

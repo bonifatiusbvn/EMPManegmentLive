@@ -10,7 +10,7 @@ namespace EMPManegment.EntityModels.ViewModels.ProjectModels
     {
         public Guid Id { get; set; }
 
-        public Guid ProjectId { get; set; }
+        public Guid? ProjectId { get; set; }
 
         public Guid? UserId { get; set; }
 
@@ -34,5 +34,6 @@ namespace EMPManegment.EntityModels.ViewModels.ProjectModels
          
         public string? Fullname { get; set; }
         public string? Image { get; set; }
+
     }
 }

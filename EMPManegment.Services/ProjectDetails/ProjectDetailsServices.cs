@@ -28,6 +28,10 @@ namespace EMPManegment.Services.ProjectDetails
         {
             return await ProjectDetails.GetProjectList(searchby,searchfor);
         }
+        public async Task<List<ProjectView>> GetUserProjectList(Guid UserId)
+        {
+            return await ProjectDetails.GetUserProjectList(UserId);
+        }
         public async Task<ProjectDetailView> GetProjectDetailsById(Guid ProjectId)
         {
             return await ProjectDetails.GetProjectDetailsById(ProjectId);
@@ -43,6 +47,14 @@ namespace EMPManegment.Services.ProjectDetails
         public async Task<IEnumerable<ProjectView>> GetProjectMember(Guid ProjectId)
         {
             return await ProjectDetails.GetProjectMember(ProjectId);
+        }
+        public async Task<UserResponceModel> AddDocumentToProject(ProjectDocumentView AddDocument)
+        {
+            return await ProjectDetails.AddDocumentToProject(AddDocument);
+        }
+        public async Task<IEnumerable<ProjectDocumentView>> GetProjectDocument(Guid ProjectId)
+        {
+            return await ProjectDetails.GetProjectDocument(ProjectId);
         }
     }
 }

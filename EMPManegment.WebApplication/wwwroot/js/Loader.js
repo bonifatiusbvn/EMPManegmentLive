@@ -16,7 +16,7 @@
 //}, 500)
 
 
-function DisplayLoader() {debugger
+function DisplayLoader() {
     $('#Loader').show();
 }
 function HideLoader() {

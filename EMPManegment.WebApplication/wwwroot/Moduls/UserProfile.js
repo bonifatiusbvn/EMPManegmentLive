@@ -91,9 +91,8 @@ function GetUserProjectList() {
 }
 
 function GetProjectList() {
-
     $.ajax({
-        url: '/Project/GetProjectList',
+        url: '/Project/GetUserProjectList',
         type: 'Post',
         dataType: 'json',
         processData: false,

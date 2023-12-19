@@ -1,9 +1,9 @@
 ﻿
 function DeliveryStatus(DeliveryStatus) {
-    debugger
+
      var formData = new FormData();
     formData.append("DeliveryStatus", DeliveryStatus);
-    debugger
+
      $.ajax({
                 url: '/OrderMaster/GetOrderDetailsByStatus',
                 type: 'Post',
@@ -12,7 +12,7 @@ function DeliveryStatus(DeliveryStatus) {
                 processData: false,
                 contentType: false,
                 complete: function (Result) {
-                    debugger
+            
                     $("#dvdeliveredstatus").html(Result.responseText);;
                 } 
      });       

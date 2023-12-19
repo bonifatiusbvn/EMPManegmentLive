@@ -58,7 +58,7 @@
         contentType: false,
         processData: false,
         success: function (Result) {
-            debugger
+        
             var Response = Result.data;
             const url = window.URL.createObjectURL(new Blob([Result]));
             const link = document.createElement('a');

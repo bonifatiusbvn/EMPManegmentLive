@@ -87,7 +87,29 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
             return data;
         }
 
-       public async Task<ProjectDetailView> GetProjectDetailsById(Guid ProjectId)
+        public async Task<List<ProjectView>> GetUserProjectList(Guid UserId)
+        {
+            var UserData = new List<ProjectView>();
+            var data = await Context.TblProjectDetails.Where(x => x.UserId == UserId).ToListAsync();
+            if (data != null)
+            {
+                foreach (var item in data)
+                {
+                    UserData.Add(new ProjectView()
+                    {
+                        ProjectId = item.ProjectId,
+                        ProjectType = item.ProjectType,
+                        ProjectTitle = item.ProjectTitle,
+                        Status = item.Status,                      
+                        CreatedOn = item.CreatedOn,
+                        UserId = item.UserId,
+                    });
+                }
+            }
+            return UserData;
+        }
+
+        public async Task<ProjectDetailView> GetProjectDetailsById(Guid ProjectId)
         {
             var projectDetail = await Context.TblProjectMasters.SingleOrDefaultAsync(x=>x.ProjectId == ProjectId);
             ProjectDetailView model = new ProjectDetailView()
@@ -161,6 +183,54 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
                 return result;
             }
             catch (Exception ex) 
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<UserResponceModel> AddDocumentToProject(ProjectDocumentView AddDocument)
+        {
+            UserResponceModel response = new UserResponceModel();
+            try 
+            {
+                var projectDocumentmodel = new TblProjectDocument()
+                {
+                    Id = Guid.NewGuid(),
+                    ProjectId = AddDocument.ProjectId,
+                    UserId = AddDocument.UserId,
+                    Date = DateTime.Today,
+                    DocumentName = AddDocument.DocumentName
+                };
+                response.Code = 200;
+                response.Message = "Document uploaded successfully!";
+                Context.TblProjectDocuments.Add(projectDocumentmodel);
+                Context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return response;
+        }
+
+       public async Task<IEnumerable<ProjectDocumentView>> GetProjectDocument(Guid ProjectId)
+        {
+            try
+            {
+                var result = (from e in Context.TblProjectDocuments
+                              where e.ProjectId == ProjectId
+                              join d in Context.TblUsers on e.UserId equals d.Id
+                              select new ProjectDocumentView
+                              {
+                                  Id = e.Id,
+                                  ProjectId = ProjectId,
+                                  DocumentName = e.DocumentName,
+                                  FullName = d.FirstName + " "+d.LastName,
+                                  Date = e.Date
+                              }).ToList();
+                return result;
+            }
+            catch (Exception ex)
             {
                 throw ex;
             }
