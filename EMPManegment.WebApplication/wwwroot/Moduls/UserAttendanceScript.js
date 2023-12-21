@@ -1,7 +1,30 @@
-﻿$(document).ready(function () {
+﻿document.getElementById("currentmonthattendance").click()
+$("#monthbox").show();
+$("#datebox").hide();
+$("#datebox1").hide();
+$(document).ready(function () {
     GetUserAttendance();
-    GetAttendance();
-});
+    GetAttendance(); 
+})
+
+$('#SelectAttandance').change(function () {
+    if ($("#SelectAttandance").val() == "ByMonth") {
+        $("#monthbox").show();
+        $("#datebox").hide();
+        $("#datebox1").hide();
+    }
+    if ($("#SelectAttandance").val() == "BetweenDates") {
+        $("#monthbox").hide();
+        $("#datebox").show();
+        $("#datebox1").show();
+    }
+    if ($("#SelectAttandance").val() == "") {
+        $("#monthbox").show();
+        $("#datebox").hide();
+        $("#datebox1").hide();
+    }
+})
+
 function GetUserAttendance() {
     siteloadershow();
     $('#AttendanceTableData').DataTable({
@@ -162,11 +185,13 @@ function UpdateUserAttendance() {
    
 }
 
+
 function GetAttendance() {
-    
-    var month = $('#txtmonth').val();
+
     var form_data = new FormData();
-    form_data.append("FINDBYMONTH", JSON.stringify(month));
+    form_data.append("Cmonth", $('#txtmonth').val());
+    form_data.append("StartDate", $("#txtstartdate").val());
+    form_data.append("EndDate", $("#txtenddate").val());
     $.ajax({
         url: '/UserProfile/GetAttendanceList',
         type: 'Post',

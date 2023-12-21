@@ -8,7 +8,7 @@ namespace EMPManegment.EntityModels.ViewModels.Models
 {
     public class UserAttendanceModel
     {
-        public Guid UserId { get; set; }
+        public Guid UserId { get; set; }    
      
         public string? UserName { get; set; }
         public DateTime Date { get; set; }
@@ -18,7 +18,7 @@ namespace EMPManegment.EntityModels.ViewModels.Models
         public TimeSpan? TotalHours { get; set;}
         public string? CreatedBy { get; set; }
         public DateTime? CreatedOn { get; set; }
-
+ 
     }
 
     public class UserAttendanceRequestModel
@@ -36,5 +36,12 @@ namespace EMPManegment.EntityModels.ViewModels.Models
 
         public UserAttendanceModel Data { get; set; }
 
+    }
+    public class SearchAttendanceModel
+    {
+        public Guid? UserId { get; set;}
+        public DateTime? Cmonth { get; set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
     }
 }

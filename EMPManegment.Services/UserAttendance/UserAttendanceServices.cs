@@ -41,9 +41,9 @@ namespace EMPManegment.Services.UserAttendance
             return UserAttendance.GetUserAttendanceById(GetattendanceId);
         }
 
-        public Task<IEnumerable<UserAttendanceModel>> GetAttendanceList(Guid Id, DateTime?Cmonth)
+        public Task<IEnumerable<UserAttendanceModel>> GetAttendanceList(SearchAttendanceModel GetAttendanceList)
         {
-            return UserAttendance.GetAttendanceList(Id, Cmonth);
+            return UserAttendance.GetAttendanceList(GetAttendanceList);
         }
     }
 }

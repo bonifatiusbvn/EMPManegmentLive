@@ -239,14 +239,13 @@ namespace EMPManagment.API.Controllers
             return StatusCode(response.Code, response);
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("GetAttendanceList")]
-        public async Task<IActionResult> GetAttendanceList(Guid Id, DateTime? Cmonth)
+        public async Task<IActionResult> GetAttendanceList(SearchAttendanceModel GetAttendanceList)
         {
-            IEnumerable<UserAttendanceModel> getAttendanceList = await UserAttendance.GetAttendanceList(Id, Cmonth);
+            IEnumerable<UserAttendanceModel> getAttendanceList = await UserAttendance.GetAttendanceList(GetAttendanceList);
             return Ok(new { code = 200, data = getAttendanceList.ToList() });
         }
-
 
         [HttpPost]
         [Route("GetMemberList")]

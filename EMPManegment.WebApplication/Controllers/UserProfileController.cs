@@ -30,6 +30,8 @@ using X.PagedList.Mvc;
 using EMPManegment.EntityModels.Crypto;
 using Microsoft.Build.ObjectModelRemoting;
 using EMPManegment.Web.Models;
+using Newtonsoft.Json.Linq;
+using PdfSharpCore;
 
 namespace EMPManegment.Web.Controllers
 {
@@ -492,31 +494,39 @@ namespace EMPManegment.Web.Controllers
         }
 
         public async Task<IActionResult> GetAttendance()
-        {
-            return View();
+        { 
+
+                return View();
         }
 
         [HttpPost]
-        public async Task<JsonResult> GetAttendanceList()
+        public async Task<JsonResult> GetAttendanceList(SearchAttendanceModel GetAttendanceList)
         {
             try
             {
-                var addmonthobj = HttpContext.Request.Form["FINDBYMONTH"];
-                var month = JsonConvert.DeserializeObject<string>(addmonthobj);
                 List<UserAttendanceModel> getAttendanceList = new List<UserAttendanceModel>();
-                Guid UserId = _userSession.UserId;
+                var data = new SearchAttendanceModel
+                {
+                    UserId = _userSession.UserId,
+                    Cmonth = GetAttendanceList.Cmonth,
+                    StartDate = GetAttendanceList.StartDate,
+                    EndDate = GetAttendanceList.EndDate,
+                };
+                
                 HttpClient client = WebAPI.Initil();
-                ApiResponseModel response = await APIServices.GetAsync("", "UserProfile/GetAttendanceList?id=" + UserId+ "&Cmonth=" + month);
+
+                ApiResponseModel response = await APIServices.PostAsync(data, "UserProfile/GetAttendanceList");
                 if (response.data.Count != 0)
                 {
                     getAttendanceList = JsonConvert.DeserializeObject<List<UserAttendanceModel>>(response.data.ToString());
                 }
                 else
                 {
-                    return new JsonResult(new { Message = "No Data Found On Selected Month !!"});
+                    return new JsonResult(new { Message = "No Data Found On Selected Month Or Dates!!" });
 
                 }
                 return new JsonResult(getAttendanceList);
+
             }  
             catch (Exception ex)
             {
