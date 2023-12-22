@@ -210,12 +210,12 @@ function showTeams(ProjectId) {
 
 
 function addProjectDocument() {
-        debugger
+
     var formData = new FormData();
     const data6 = document.getElementById('projectid').value;
     formData.append("ProjectId", data6);
     formData.append("DocumentName", $("#txtDocumentName")[0].files[0]);
-    debugger
+
     $.ajax({
         url: '/Project/AddDocumentToProject',
         type: 'Post',

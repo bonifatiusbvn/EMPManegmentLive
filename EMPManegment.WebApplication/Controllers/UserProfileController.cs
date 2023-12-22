@@ -32,6 +32,15 @@ using Microsoft.Build.ObjectModelRemoting;
 using EMPManegment.Web.Models;
 using Newtonsoft.Json.Linq;
 using PdfSharpCore;
+using ClosedXML.Excel;
+using System.Data;
+using System.Reflection;
+using DocumentFormat.OpenXml.Spreadsheet;
+using DocumentFormat.OpenXml.Drawing.Charts;
+using Microsoft.Data.SqlClient;
+using Aspose.Pdf;
+using Aspose.Pdf.Text;
+using System.IO;
 
 namespace EMPManegment.Web.Controllers
 {
@@ -512,7 +521,10 @@ namespace EMPManegment.Web.Controllers
                     StartDate = GetAttendanceList.StartDate,
                     EndDate = GetAttendanceList.EndDate,
                 };
-                
+                TempData["Cmonth"] = GetAttendanceList.Cmonth;
+                TempData["StartDate"] = GetAttendanceList.StartDate;
+                TempData["EndDate"] = GetAttendanceList.EndDate;
+
                 HttpClient client = WebAPI.Initil();
 
                 ApiResponseModel response = await APIServices.PostAsync(data, "UserProfile/GetAttendanceList");
@@ -548,6 +560,133 @@ namespace EMPManegment.Web.Controllers
             var ContentType = "application/pdf"; 
             var fileName = Path.GetFileName(path);
             return File(memory, ContentType, fileName);
+        }
+
+        public async Task<IActionResult> ExportToPdf()
+        {
+            try
+            {
+                List<UserAttendanceModel> getAttendanceList = new List<UserAttendanceModel>();
+
+                DateTime Cmonth = Convert.ToDateTime(TempData["Cmonth"]);
+                DateTime StartDate = Convert.ToDateTime(TempData["StartDate"]);
+                DateTime EndDate = Convert.ToDateTime(TempData["EndDate"]);
+                IEnumerable<UserAttendanceModel> userAttendance = null;
+
+                var data = new SearchAttendanceModel
+                {
+                    UserId = _userSession.UserId,
+                    Cmonth = Cmonth,
+                    StartDate = StartDate,
+                    EndDate = EndDate,
+                };
+
+                HttpClient client = WebAPI.Initil();
+
+                ApiResponseModel response = await APIServices.PostAsync(data, "UserProfile/GetAttendanceList");
+                if (response.data.Count != 0)
+                {
+                    getAttendanceList = JsonConvert.DeserializeObject<List<UserAttendanceModel>>(response.data.ToString());
+                    var document = new Document
+                    {
+                        PageInfo = new PageInfo { Margin = new MarginInfo(25, 25, 25, 40) }
+                    };
+                    var pdfPage = document.Pages.Add();
+                    Aspose.Pdf.Table table = new Aspose.Pdf.Table()
+                    {
+                        ColumnWidths = "15% 16% 16% 16% 20% 16%",
+                        DefaultCellPadding = new MarginInfo(5, 5, 5, 5),
+                        Border = new BorderInfo(BorderSide.All, .5f, Aspose.Pdf.Color.Black),
+                        DefaultCellBorder = new BorderInfo(BorderSide.All, .2f, Aspose.Pdf.Color.Black),
+                    };
+                    System.Data.DataTable dt = ToConvertDataTable(getAttendanceList.ToList());
+                    table.ImportDataTable(dt, true, 0, 0);
+                    document.Pages[1].Paragraphs.Add(table);
+
+                    using (var streamout = new MemoryStream())
+                    {
+                        document.Save(streamout);
+                        return new FileContentResult(streamout.ToArray(), "application/pdf")
+                        {
+                            FileDownloadName = Guid.NewGuid() + "_AttendanceList.pdf",
+                        };
+                    }
+                }
+                return RedirectToAction("GetAttendance");
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }            
+        }
+
+        public async Task<IActionResult> ExportToExcel()
+        {
+            try
+            {
+                List<UserAttendanceModel> getAttendanceList = new List<UserAttendanceModel>();
+
+                DateTime Cmonth = Convert.ToDateTime(TempData["Cmonth"]);
+                DateTime StartDate = Convert.ToDateTime(TempData["StartDate"]);
+                DateTime EndDate = Convert.ToDateTime(TempData["EndDate"]);
+                IEnumerable<UserAttendanceModel> userAttendance = null;
+
+                var data = new SearchAttendanceModel
+                {
+                    UserId = _userSession.UserId,
+                    Cmonth = Cmonth,
+                    StartDate = StartDate,
+                    EndDate = EndDate,
+                };
+
+                HttpClient client = WebAPI.Initil();
+
+                ApiResponseModel response = await APIServices.PostAsync(data, "UserProfile/GetAttendanceList");
+                if (response.data.Count != 0)
+                {
+                    getAttendanceList = JsonConvert.DeserializeObject<List<UserAttendanceModel>>(response.data.ToString());
+                    using (XLWorkbook wb = new XLWorkbook())
+                    {
+                        wb.Worksheets.Add(ToConvertDataTable(getAttendanceList.ToList()));
+                        using (MemoryStream stream = new MemoryStream())
+                        {
+                            wb.SaveAs(stream);
+                            string FileName = Guid.NewGuid() + "_AttendanceList.xlsx";
+                            return File(stream.ToArray(), "application/vnd.openxmlformats-officedocuments.spreadsheetml.sheet", FileName);
+
+                        }
+                    }
+                }
+                return RedirectToAction("GetAttendance");
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
+        public System.Data.DataTable ToConvertDataTable<T>(List<T> items)
+        {
+            System.Data.DataTable dt = new System.Data.DataTable(typeof(T).Name);
+            PropertyInfo[] propInfo = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+            foreach (PropertyInfo prop in propInfo)
+            {
+                dt.Columns.Add(prop.Name);
+            }
+            foreach (T item in items)
+            {
+                var values = new object[propInfo.Length];
+                for (int i = 1; i < propInfo.Length; i++)
+                {
+                    values[i] = propInfo[i].GetValue(item, null);
+                }
+                dt.Rows.Add(values);
+            }
+            dt.Columns.Remove("UserId");
+            dt.Columns.Remove("CreatedBy");
+            dt.Columns.Remove("AttendanceId");
+            return dt;
         }
     }
 }

@@ -182,7 +182,7 @@ namespace EMPManegment.Repository.UserAttendanceRepository
             try
             {
                 IEnumerable<UserAttendanceModel> userAttendance = null;
-                if (GetAttendanceList.Cmonth != null)
+                if (GetAttendanceList.Cmonth != null && GetAttendanceList.Cmonth != DateTime.MinValue)
                 {
                     IEnumerable<UserAttendanceModel> userAttendance1 = from a in Context.TblAttendances
                                                                        join
@@ -204,7 +204,7 @@ namespace EMPManegment.Repository.UserAttendanceRepository
                 }
                 else
                 {
-                    if (GetAttendanceList.StartDate != null && GetAttendanceList.EndDate != null)
+                    if (GetAttendanceList.StartDate != null && GetAttendanceList.EndDate != null && GetAttendanceList.StartDate != DateTime.MinValue && GetAttendanceList.EndDate != DateTime.MinValue)
                     {
                         userAttendance = from a in Context.TblAttendances
                                          join b in Context.TblUsers on a.User.Id equals b.Id
