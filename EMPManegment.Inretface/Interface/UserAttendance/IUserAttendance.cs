@@ -1,6 +1,7 @@
 ﻿using EMPManegment.EntityModels.View_Model;
 using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 using EMPManegment.EntityModels.ViewModels.Models;
+using EMPManegment.EntityModels.ViewModels.ProjectModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,5 +20,6 @@ namespace EMPManegment.Inretface.Interface.UserAttendance
         Task<jsonData> GetUserAttendanceList(DataTableRequstModel GetAttendanceList);
         Task<UserResponceModel> UpdateUserOutTime(UserAttendanceModel UpdateUserOutTime);
         Task<IEnumerable<UserAttendanceModel>> GetUserAttendanceById(int attendanceId);
+        Task<IEnumerable<UserAttendanceModel>> GetSearchAttendanceList(searchAttendanceListModel GetSearchAttendanceList);
     }
 }

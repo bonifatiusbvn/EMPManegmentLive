@@ -254,5 +254,13 @@ namespace EMPManagment.API.Controllers
             var userList = await UserListServices.GetUsersDetails(searchby, searchfor);
             return Ok(new { code = 200, data = userList });
         }
+
+        [HttpPost]
+        [Route("GetSearchAttendanceList")]
+        public async Task<IActionResult> GetSearchAttendanceList(searchAttendanceListModel AttendanceList)
+        {
+            var Attendancelist = await UserAttendance.GetSearchAttendanceList(AttendanceList);
+            return Ok(new { code = 200, data = Attendancelist});
+        }
     }
 }

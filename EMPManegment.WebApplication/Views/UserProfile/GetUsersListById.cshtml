@@ -5,6 +5,11 @@
 }
 
 <link href="~/css/loader.css" rel="stylesheet" asp-append-version="true" />
+<style>
+    #ddlusername-error, #txtdate-error{
+        color:red;
+    }
+</style>
 
 <!-- start page title -->
 <div class="row" style="margin-top:20px;">
@@ -18,91 +23,147 @@
                     <li class="breadcrumb-item active">Get User Attendance</li>
                 </ol>
             </div>
-
         </div>
     </div>
 </div>
 <!-- end page title -->
+
+
+
 <div class="card">
-    <div class="card-body">
+    <div class="card-header">
+        <form id="attendanceform" style="margin-bottom: -20px;">
+            <div class="listjs-table">
+                <div class="row g-4 mb-3">
+                    <div class="row g-2 text-align">
+                        <div class="col-lg-auto">
+                            <a type="button" href="/UserProfile/GetUsersListById" class="btn btn-warning" id="backbtn"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="m5.828 7l2.536 2.535L6.95 10.95L2 6l4.95-4.95l1.414 1.415L5.828 5H13a8 8 0 1 1 0 16H4v-2h9a6 6 0 0 0 0-12z" /></svg> </a>
+                            <button type="button" class="btn btn-primary btn-sm">
+                                Search By
+                                <select class="btn btn-primary btn-sm dropdown-toggle dropdown-toggle-split" id="selectSearchAttandanceOption" data-choices data-choices-search-false name="choices-single-default">
+                                    <option class="form-control" selected disabled value=""> </option>
+                                    <option class="form-control" value="ByUsername">UserName</option>
+                                    <option class="form-control" value="ByDate">Date</option>
+                                    <option class="form-control" value="ByDate&ByUsername">UserName & Date</option>
+                                </select>
+                            </button>
+                        </div>
+
+                        <div class="col-sm" id="usernamebox">
+                            <div class="search-box">
+                                <select class="form-control" id="ddlusername" name="ddlusername">
+                                    <option selected disabled value="">---Select Username---</option>
+                                </select>
+                                <input type="hidden" class="form-control" id="txtguserid">
+                            </div>
+                        </div>
+                        <div class="col-sm" id="datesbox">
+                            <div class="search-box">
+                                <input type="date" id="txtdate" name="txtdate" class="form-control search" placeholder="Search By date">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16" style="margin-top: -60px;margin-left: 10px;">
+                                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
+                                </svg>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-auto">
+                            <button class="btn btn-success" type="button" onclick="GetSearchAttendanceList()" id="searchattendanceform" value="Validate">
+                                Search
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="card-body" id="attendancedt">
         <div class="listjs-table">
             <div class="table-responsive">
-                <table class="table table-bordered table-striped align-middle" id="AttendanceTableData">
-                    <thead class="table-light">
-                         <tr class="text-center">
-                            <th>UserName</th>
-                            <th>Date</th>
-                            <th>Intime</th>
-                            <th>OutTime</th>
-                            <th>TotalHours</th>
-                            <th>Action</th>
-                         </tr>
+                <div class="col-sm-12 col-md-6">
+                    <div id="attendanceTableData_filter" class="dataTables_filter"></div>
+                </div>
+                <table id="attendanceTableData" class="table table-bordered dt-responsive nowrap table-striped align-middle dataTable dtr-inline">
+                    <thead class="table-light text-muted text-center">
+                        <tr class="text-uppercase">
+                            <th class="sort" data-sort="UserName">UserName</th>
+                            <th class="sort" data-sort="Date">Date</th>
+                            <th class="sort" data-sort="InTime">InTime</th>
+                            <th class="sort" data-sort="OutTime">OutTime</th>
+                            <th class="sort" data-sort="TotalHours">TotalHours</th>
+                            <th class="sort" data-sort="Action">Action</th>
+                        </tr>
                     </thead>
-                     <tbody> </tbody>
+                    <tbody> </tbody>
                 </table>
-    <!-- end table -->
             </div>
-            <div class="modal fade" id="EditTimeModel" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
-                         <div class="modal-header bg-light p-3">
-                            <h5 class="modal-title" id="exampleModalLabel"></h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"></button>
-                         </div>
+        </div>
+    </div>
+    <!---End of DataTable-->
+    <div class="card-body">
+        <!--Partail View-->
+        <div id="dvattendancelist"></div>
+    </div>
+    <h4 class="fs-22 fw-semibold ff-secondary mb-4">
+        <span class="text-danger" id="errorMessage"></span>
+    </h4>
+</div>
 
-                         <div class="modal-body">
-                            <div class="mb-3">
-                                <label for="customername-field" class="form-label">AttandanceId</label>
-                                <input id="AttandanceId" class="form-control" disabled />
-                                <input id="UserId" class="form-control" hidden />
-                            </div>
 
-                            <div class="mb-3">
-                                <label for="customername-field" class="form-label">UserName</label>
-                                <input id="UserName" class="form-control" disabled />
-                            </div>
+<div class="modal fade" id="EditTimeModel" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header bg-light p-3">
+                <h5 class="modal-title" id="exampleModalLabel"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="customername-field" class="form-label">AttandanceId</label>
+                    <input id="AttandanceId" class="form-control" disabled />
+                    <input id="UserId" class="form-control" hidden />
+                </div>
 
-                            <div class="mb-3">
-                                <label for="email-field" class="form-label">Date</label>
-                                <input id="Date" class="form-control" disabled />
-                            </div>
+                <div class="mb-3">
+                    <label for="customername-field" class="form-label">UserName</label>
+                    <input id="UserName" class="form-control" disabled />
+                </div>
 
-                            <div class="mb-3">
-                                <label for="phone-field" class="form-label">Intime</label>
-                                <input id="Intime" class="form-control" disabled />
-                            </div>
+                <div class="mb-3">
+                    <label for="email-field" class="form-label">Date</label>
+                    <input id="Date" class="form-control" disabled />
+                </div>
 
-                            <div class="mb-3">
-                                <label for="date-field" class="form-label">OutTime</label>
-                                <input type="datetime-local" id="OutTime" class="form-control" />
-                                @*<span style="color: #cc0000;" id="outtime">Please Enter User OutTime</span>*@
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <div class="hstack gap-2 justify-content-end">
-                                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-success" onclick="UpdateUserAttendance();" id="SubmitButton">Update Time</button>
-                                <!-- <button type="button" class="btn btn-success" id="edit-btn">Update</button> -->
-                            </div>
-                        </div>
+                <div class="mb-3">
+                    <label for="phone-field" class="form-label">Intime</label>
+                    <input id="Intime" class="form-control" disabled />
+                </div>
 
-                    </div>
+                <div class="mb-3">
+                    <label for="date-field" class="form-label">OutTime</label>
+                    <input type="datetime-local" id="OutTime" class="form-control" />
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="hstack gap-2 justify-content-end">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success" onclick="updateUserAttendance();">Update Time</button>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<script src="~/lib/jquery/dist/jquery.js"></script>
-<script src="~/moduls/userattendancescript.js"></script>
+
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script src="~/js/loader.js"></script>
-
-
-
-<!-----Calander----->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+<script src="~/moduls/userattendancescript.js"></script>
+<script src="~/moduls/taskscript.js" asp-append-version="true"></script>
+    <!-----Calander----->
 <script>
-    var today = new Date().toISOString().split('T')[0];
-    document.getElementById("OutTime").setAttribute("max", today);
+        var today = new Date().toISOString().split('T')[0];
+        document.getElementById("OutTime").setAttribute("max", today);
 </script>
+
 

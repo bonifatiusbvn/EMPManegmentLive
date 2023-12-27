@@ -22,6 +22,7 @@ using System.Globalization;
 using Azure;
 using System.Diagnostics.Eventing.Reader;
 using Microsoft.Extensions.Logging;
+using EMPManegment.EntityModels.ViewModels.ProjectModels;
 
 namespace EMPManegment.Repository.UserAttendanceRepository
 {
@@ -247,6 +248,105 @@ namespace EMPManegment.Repository.UserAttendanceRepository
                         return userAttendance;
                     }
                     
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public async Task<IEnumerable<UserAttendanceModel>> GetSearchAttendanceList(searchAttendanceListModel AttendanceList)
+        {
+            try
+            {
+                IEnumerable<UserAttendanceModel> userAttendance = null;
+                if (AttendanceList.UserId != null && AttendanceList.Date == DateTime.MinValue)
+                {
+                    IEnumerable<UserAttendanceModel> userAttendance1 = from a in Context.TblAttendances.OrderByDescending(a=> a.Date)
+                                                                       join
+                                                                       b in Context.TblUsers on a.User.Id equals b.Id
+                                                                       where (b.Id == AttendanceList.UserId)
+                                                                       select new UserAttendanceModel
+                                                                       {
+                                                                           UserName = b.FirstName + ' ' + b.LastName,
+                                                                           UserId = a.UserId,
+                                                                           AttendanceId = a.Id,
+                                                                           Date = a.Date,
+                                                                           Intime = a.Intime,
+                                                                           OutTime = a.OutTime,
+                                                                           TotalHours = a.TotalHours,
+                                                                           CreatedBy = a.CreatedBy,
+                                                                           CreatedOn = a.CreatedOn,
+                                                                       };
+                    return userAttendance1;
+                }
+                else
+                {
+                    if (AttendanceList.Date != null && AttendanceList.UserId != null && AttendanceList.Date != DateTime.MinValue)
+                    {
+                        userAttendance = from a in Context.TblAttendances.OrderByDescending(a => a.Date)
+                                         join b in Context.TblUsers on a.User.Id equals b.Id
+                                         where (b.Id == AttendanceList.UserId && a.Date == AttendanceList.Date)
+                                         select new UserAttendanceModel
+                                         {
+                                             UserName = b.FirstName + ' ' + b.LastName,
+                                             UserId = a.UserId,
+                                             AttendanceId = a.Id,
+                                             Date = a.Date,
+                                             Intime = a.Intime,
+                                             OutTime = a.OutTime,
+                                             TotalHours = a.TotalHours,
+                                             CreatedBy = a.CreatedBy,
+                                             CreatedOn = a.CreatedOn,
+                                         };
+
+                        return userAttendance;
+                    }
+                    else
+                    {
+                        if (AttendanceList.Date != null && AttendanceList.UserId == null && AttendanceList.Date != DateTime.MinValue)
+                        {
+                            userAttendance = from a in Context.TblAttendances.OrderByDescending(a => a.Date)
+                                             join b in Context.TblUsers on a.User.Id equals b.Id
+                                             where (a.Date == AttendanceList.Date)
+                                             select new UserAttendanceModel
+                                             {
+                                                 UserName = b.FirstName + ' ' + b.LastName,
+                                                 UserId = a.UserId,
+                                                 AttendanceId = a.Id,
+                                                 Date = a.Date,
+                                                 Intime = a.Intime,
+                                                 OutTime = a.OutTime,
+                                                 TotalHours = a.TotalHours,
+                                                 CreatedBy = a.CreatedBy,
+                                                 CreatedOn = a.CreatedOn,
+                                             };
+
+                            return userAttendance;
+                        }
+                        else
+                        {
+                            var AttendanceDataTable = from a in Context.TblAttendances.OrderByDescending(a => a.Date)
+                                                      join
+                                                      b in Context.TblUsers on a.UserId equals b.Id
+                                                      select new UserAttendanceModel
+                                                      {
+                                                          UserName = b.FirstName + ' ' + b.LastName,
+                                                          UserId = a.UserId,
+                                                          AttendanceId = a.Id,
+                                                          Date = a.Date,
+                                                          Intime = a.Intime,
+                                                          OutTime = a.OutTime,
+                                                          TotalHours = a.TotalHours,
+                                                          CreatedBy = a.CreatedBy,
+                                                          CreatedOn = a.CreatedOn,
+
+                                                      };
+
+                            return AttendanceDataTable;
+                        }
+                    }
+
                 }
             }
             catch (Exception ex)

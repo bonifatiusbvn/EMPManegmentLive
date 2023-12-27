@@ -688,6 +688,31 @@ namespace EMPManegment.Web.Controllers
             dt.Columns.Remove("AttendanceId");
             return dt;
         }
+
+        [HttpPost]
+        public async Task<IActionResult> GetSearchAttendanceList(searchAttendanceListModel GetAttendanceList)
+        {
+            try
+            {
+                List<UserAttendanceModel> getAttendanceList = new List<UserAttendanceModel>();
+                HttpClient client = WebAPI.Initil();
+
+                ApiResponseModel response = await APIServices.PostAsync(GetAttendanceList, "UserProfile/GetSearchAttendanceList");
+                if (response.data.Count != 0)
+                {
+                    getAttendanceList = JsonConvert.DeserializeObject<List<UserAttendanceModel>>(response.data.ToString());
+                    return PartialView("~/Views/UserProfile/_SearchAttendanceList.cshtml", getAttendanceList);
+                }
+                else
+                {
+                    return new JsonResult(new { Code = 400 });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }
 

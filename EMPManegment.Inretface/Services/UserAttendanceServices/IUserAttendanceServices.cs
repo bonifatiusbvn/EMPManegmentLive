@@ -16,5 +16,6 @@ namespace EMPManegment.Inretface.Services.UserAttendanceServices
         Task<jsonData> GetUserAttendanceList(DataTableRequstModel GetAttendanceList);
         Task<UserResponceModel> UpdateUserOutTime(UserAttendanceModel UpdateUserOutTime);
         Task<IEnumerable<UserAttendanceModel>> GetUserAttendanceById(int attendanceId);
+        Task<IEnumerable<UserAttendanceModel>> GetSearchAttendanceList(searchAttendanceListModel GetSearchAttendanceList);
     }
 }

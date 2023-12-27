@@ -45,5 +45,9 @@ namespace EMPManegment.Services.UserAttendance
         {
             return UserAttendance.GetAttendanceList(GetAttendanceList);
         }
+        public Task<IEnumerable<UserAttendanceModel>> GetSearchAttendanceList(searchAttendanceListModel AttendanceList)
+        {
+            return UserAttendance.GetSearchAttendanceList(AttendanceList);
+        }
     }
 }

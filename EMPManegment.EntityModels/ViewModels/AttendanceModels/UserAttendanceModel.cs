@@ -44,4 +44,9 @@ namespace EMPManegment.EntityModels.ViewModels.Models
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
     }
+    public class searchAttendanceListModel
+    {
+        public Guid? UserId { get; set; }
+        public DateTime Date { get; set; }
+    }
 }

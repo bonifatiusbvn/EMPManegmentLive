@@ -1,12 +1,52 @@
-﻿document.getElementById("currentmonthattendance").click()
-$("#monthbox").show();
+﻿$("#monthbox").show();
 $("#datebox").hide();
 $("#datebox1").hide();
+$("#usernamebox").show();
+$("#datesbox").hide();
+$("#backbtn").hide();
+function cleartextBox() {
+    $("#ddlusername").find("option").remove().end().append(
+        '<option selected value = "">--Select Username--</option>');
+    $("#txtdate").val('');
+}
 $(document).ready(function () {
-    GetUserAttendance();
-    GetAttendance(); 
-})
+    GetUserAttendance(); 
+    GetAttendance();
+    $("#attendanceform").validate({
+        rules: {
+            ddlusername: "required",
+            txtdate: "required"
+        },
+        messages: {
+            ddlusername: "Please Enter UserName",
+            txtdate: "Please Enter Date"
+        }
+    })
+    $('#searchattendanceform').on('click', function () {
+        $("#attendanceform").validate();
+    });
+});
 
+$('#selectSearchAttandanceOption').change(function () {
+    if($("#selectSearchAttandanceOption").val() == "ByUsername")
+    {
+        GetUsername();
+        $("#usernamebox").show();
+        $("#datesbox").hide();
+        cleartextBox();
+    }
+    if ($("#selectSearchAttandanceOption").val() == "ByDate") {
+        $("#usernamebox").hide();
+        $("#datesbox").show();
+        cleartextBox();
+    }
+    if ($("#selectSearchAttandanceOption").val() == "ByDate&ByUsername") {
+        GetUsername();
+        $("#usernamebox").show();
+        $("#datesbox").show();
+        cleartextBox();
+    }
+})
 $('#SelectAttandance').change(function () {
     if ($("#SelectAttandance").val() == "ByMonth") {
         $("#monthbox").show();
@@ -26,8 +66,8 @@ $('#SelectAttandance').change(function () {
 })
 
 function GetUserAttendance() {
-    siteloadershow();
-    $('#AttendanceTableData').DataTable({
+
+     $('#attendanceTableData').DataTable({
         processing: true,
         serverSide: true,
         filter: true,
@@ -37,7 +77,6 @@ function GetUserAttendance() {
             url: '/UserProfile/GetUserAttendanceList',
             dataType: 'json'
         },
-                      
         columns: [
             { "data": "userName", "name": "UserName" },
             {
@@ -47,7 +86,7 @@ function GetUserAttendance() {
                 }
             },
             {
-                "data": "intime", "name": "intime",
+                "data": "intime", "name": "InTime",
                 "render": function (data, type, full) {
                     return (new Date(full.intime)).toLocaleTimeString('en-US');
                 }
@@ -70,7 +109,7 @@ function GetUserAttendance() {
                 }
             },
             {
-                "data": "totalHours", "name": "totalHours",
+                "data": "totalHours", "name": "TotalHours",
                 "render": function (data, type, full) {
                     var userdate = new Date(full.date).toLocaleDateString('en-US');
                     var todate = new Date().toLocaleDateString('en-US');
@@ -87,7 +126,7 @@ function GetUserAttendance() {
             },
             {
                 "render": function (data, type, full) {
-                    return '<a class="btn btn-sm btn-primary edit-item-btn" onclick="EditUserAttendance(\'' + full.attendanceId + '\')">EditTime</a>';
+                    return '<a class="btn btn-sm btn-primary edit-item-btn" onclick="EditUserAttendance(\'' + full.attendanceId + '\')" >EditTime</a>';
                 }
             },
 
@@ -95,14 +134,13 @@ function GetUserAttendance() {
         columnDefs: [{
             "defaultContent": "",
             "targets": "_all",
-        }]
+        }],
     });
 }
 
 
 function EditUserAttendance(attandenceId) {
     $('#EditTimeModel').modal('show');
-
     $.ajax({
         url: '/UserProfile/EditUserAttendanceOutTime?attendanceId=' + attandenceId,
         type: 'Get',
@@ -124,7 +162,6 @@ function EditUserAttendance(attandenceId) {
         }
     })
 }
-
 
 function UpdateUserAttendance() {
     var objData = {
@@ -170,19 +207,12 @@ function UpdateUserAttendance() {
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'OK'
                     }).then(function () {
-                        window.location = '/UserDetails/GetUsersListById';
+                        window.location = '/UserProfile/GetUsersListById';
                     });
-
-                }
-                
+                }                
             },
-
         })
-
-    }
-
-
-   
+    }  
 }
 
 
@@ -257,6 +287,116 @@ function GetAttendance() {
 
     });
 };
+
+function GetSearchAttendanceList() {
+
+    if ($('#attendanceform').valid()) {
+        var form_data = new FormData();
+        form_data.append("Date", $('#txtdate').val());
+        form_data.append("UserId", $("#ddlusername").val());
+        $.ajax({
+            url: '/UserProfile/GetSearchAttendanceList',
+            type: 'Post',
+            datatype: 'json',
+            data: form_data,
+            processData: false,
+            contentType: false,
+            complete: function (Result) {
+                $("#attendancedt").hide();
+                $("#backbtn").show();
+                if (Result.responseText != '{\"code\":400}') {
+                    $("#errorMessage").hide(); 
+                    $("#dvattendancelist").show();
+                    $("#dvattendancelist").html(Result.responseText);
+                } else {
+                    var message = "No Data Found On Selected Username Or Dates!!";
+                    $("#errorMessage").show();
+                    $("#errorMessage").text(message);
+                    $("#dvattendancelist").hide();
+                }                
+            }
+        });
+    } else {
+        Swal.fire({
+            title: "Kindly Fill the Status",
+            icon: 'warning',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'OK',
+        })
+    }   
+};
+
+function editUserAttendance(attandenceId) {
+    $.ajax({
+        url: '/UserProfile/EditUserAttendanceOutTime?attendanceId=' + attandenceId,
+        type: 'Get',
+        dataType: 'json',
+        processData: false,
+        contentType: false,
+        success: function (response) {
+            $.each(response, function (index, item) {
+                $('#AttandanceId').val(item.attendanceId);
+                $('#UserName').val(item.userName);
+                $('#Date').val((new Date(item.date)).toLocaleDateString('en-US'));
+                $('#Intime').val((new Date(item.intime)).toLocaleTimeString('en-US'));
+                $('#OutTime').val(item.outTime);
+            });
+        },
+        error: function () {
+            alert('Data not Found');
+        }
+    })
+}
+
+function updateUserAttendance() {
+    var objData = {
+        AttendanceId: $("#AttandanceId").val(),
+        OutTime: $("#OutTime").val(),
+        Intime: $("#Intime").val(),
+        UserName: $("#UserName").val(),
+        Date: $("#Date").val(),
+    }
+
+
+    if (objData.OutTime == "") {
+        $("#OutTime").css('border-color', 'red');
+        $("#OutTime").focus();
+    }
+
+    else {
+        $("#OutTime").css('border-color', 'lightgray');
+        $.ajax({
+            url: '/UserProfile/UpdateUserAttendanceOutTime',
+            type: 'Post',
+            data: objData,
+            dataType: 'json',
+            success: function (Result) {
+                var ricon = "warning";
+                if (Result.icone == ricon) {
+                    Swal.fire({
+                        title: Result.message,
+                        icon: Result.icone,
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK'
+                    })
+                }
+                else {
+                    Swal.fire({
+                        title: Result.message,
+                        icon: Result.icone,
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK'
+                    }).then(function () {
+                        window.location = '/UserProfile/GetUsersListById';
+                    });
+
+                }
+
+            },
+
+        })
+    }
+}
 
 //function exportToExcel()
 //{
