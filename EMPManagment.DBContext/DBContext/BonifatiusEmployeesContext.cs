@@ -29,6 +29,10 @@ public partial class BonifatiusEmployeesContext : DbContext
 
     public virtual DbSet<TblPageMaster> TblPageMasters { get; set; }
 
+    public virtual DbSet<TblProductDetailsMaster> TblProductDetailsMasters { get; set; }
+
+    public virtual DbSet<TblProductTypeMaster> TblProductTypeMasters { get; set; }
+
     public virtual DbSet<TblProjectDetail> TblProjectDetails { get; set; }
 
     public virtual DbSet<TblProjectDocument> TblProjectDocuments { get; set; }
@@ -55,9 +59,7 @@ public partial class BonifatiusEmployeesContext : DbContext
 
     public virtual DbSet<TblVendorType> TblVendorTypes { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Data Source=BONI002;Initial Catalog=BonifatiusEmployees;User ID=BoniEmp;Password=Admin123;Encrypt=False");
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -147,6 +149,30 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.HasOne(d => d.User).WithMany(p => p.TblPageMasters)
                 .HasForeignKey(d => d.UserId)
                 .HasConstraintName("FK_tblPageMaster_tblUsers");
+        });
+
+        modelBuilder.Entity<TblProductDetailsMaster>(entity =>
+        {
+            entity.ToTable("tblProductDetailsMaster");
+
+            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.ProductImage).HasMaxLength(50);
+            entity.Property(e => e.ProductName).HasMaxLength(50);
+            entity.Property(e => e.ProductPrice).HasColumnType("decimal(18, 0)");
+            entity.Property(e => e.ProductShortDescription).HasMaxLength(50);
+            entity.Property(e => e.ProductStocks).HasMaxLength(50);
+
+            entity.HasOne(d => d.ProductTypeNavigation).WithMany(p => p.TblProductDetailsMasters)
+                .HasForeignKey(d => d.ProductType)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_tblProductDetailsMaster_tblProductTypeMaster");
+        });
+
+        modelBuilder.Entity<TblProductTypeMaster>(entity =>
+        {
+            entity.ToTable("tblProductTypeMaster");
+
+            entity.Property(e => e.ProductType).HasMaxLength(20);
         });
 
         modelBuilder.Entity<TblProjectDetail>(entity =>
