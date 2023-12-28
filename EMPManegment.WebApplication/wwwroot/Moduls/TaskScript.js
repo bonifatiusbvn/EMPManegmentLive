@@ -29,6 +29,19 @@ function ClearTaskDetails()
 {
     $("#txttaskStatus").val("");
 }
+$(document).ready(function () {
+    $("#tasksList").validate({
+        rules: {
+            ddlStatus: "required"
+        },
+        messages: {
+            ddlStatus: "Please Enter Status"
+        }
+    })
+    $('#StatusUpdate').on('click', function () {
+        $("#tasksList").validate();
+    });
+});
 
 function GetTaskType() {
 
@@ -152,38 +165,50 @@ function GetUserTaskDetails() {
     })
 }
 
-function btnStatusUpdate(Id) { 
-
-    var StausChange = {
-        TaskStatus: $('#ddlStatus' + Id).val(),
-        Id : Id
-    }
-    var form_data = new FormData();
-    form_data.append("STATUSUPDATE", JSON.stringify(StausChange));
+function btnStatusUpdate(Id) {
     
-    $.ajax({
-        url: '/Task/UpdateUserTaskStatus',
-        type: 'Post',
-        data: form_data,
-        dataType: 'json',
-        contentType: false,
-        processData: false,
-        success: function (Result) {
-            GetUserTaskDetails();
-            Swal.fire({
-                title: Result.message,
-                icon: 'success',
-                confirmButtonColor: '#3085d6',
-                confirmButtonText: 'OK',
-            }).then(function () {
-                window.location = '/Task/UserTasks';
-            });
-        },
-        error: function (error, status) {
-            alert(error);
-        
+    if ($("#tasksList").valid()) {
+        var StausChange = {
+            TaskStatus: $('#ddlStatus' + Id).val(),
+            Id: Id
         }
-    })
+        var form_data = new FormData();
+        form_data.append("STATUSUPDATE", JSON.stringify(StausChange));
+
+        $.ajax({
+            url: '/Task/UpdateUserTaskStatus',
+            type: 'Post',
+            data: form_data,
+            dataType: 'json',
+            contentType: false,
+            processData: false,
+            success: function (Result) {
+                GetUserTaskDetails();
+                Swal.fire({
+                    title: Result.message,
+                    icon: 'success',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'OK',
+                }).then(function () {
+                    window.location = '/Task/UserTasks';
+                });
+            },
+            error: function (error, status) {
+                alert(error);
+
+            }
+        });
+    }
+    else {
+        Swal.fire({
+            title: "Kindly Select The Status",
+            icon: 'warning',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'OK',
+        })
+    }
+    
+   
 }
 
 function btnTaskDetails(Id){
@@ -308,6 +333,9 @@ function AllTaskDetailsList() {
                     }
                     else if (full.taskStatus == "Pending") {
                         return ('<a class="badge bg-primary text-uppercase">' + full.taskStatus + '</a>' + '<a onclick="btnTaskDetails(\'' + full.id + '\')"><i class="ri-eye-fill align-bottom me-2 text-muted"></i></a>' + '<a onclick="EditTaskDetails(\'' + full.id + '\')"><i class="ri-pencil-fill align-bottom me-2 text-muted"></i></a>');
+                    }
+                    else if (full.taskStatus == "InReview") {
+                        return ('<a class="badge bg-danger text-uppercase">' + full.taskStatus + '</a>' + '<a onclick="btnTaskDetails(\'' + full.id + '\')"><i class="ri-eye-fill align-bottom me-2 text-muted"></i></a>' + '<a onclick="EditTaskDetails(\'' + full.id + '\')"><i class="ri-pencil-fill align-bottom me-2 text-muted"></i></a>');
                     }
                     else {
                         return ('<a class="badge bg-secondary text-uppercase">' + full.taskStatus + '</a>' + '<a onclick="btnTaskDetails(\'' + full.id + '\')"><i class="ri-eye-fill align-bottom me-2 text-muted"></i></a>' + '<a onclick="EditTaskDetails(\'' + full.id + '\')"><i class="ri-pencil-fill align-bottom me-2 text-muted"></i></a>');
