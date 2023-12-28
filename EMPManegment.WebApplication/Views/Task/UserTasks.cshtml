@@ -3,6 +3,11 @@
     ViewData["Title"] = "0" ;
     Layout = "~/Views/Shared/_HomeLayout.cshtml";
 }
+<style>
+    #ddlStatus-error {
+        color: red;
+    }
+  </style>
 
 <div class="row" style="margin-top:20px;">
     <div class="col-12">
@@ -43,6 +48,7 @@
 </div>
 <!--end card-->
 <div class="tasks-board mb-3" id="kanbanboard">
+  
     <div class="tasks-list">
         <div class="d-flex mb-3">
             <div class="flex-grow-1">
@@ -134,7 +140,8 @@
                                 <div class="d-flex align-items-center">
                                     <div class="flex-grow-1">
                                         <span class="text"> TaskStatus :</span>
-                                        <select id="ddlStatus@(item.Id)" class="form-control">
+                                        <form id="tasksList">
+                                          <select id="ddlStatus@(item.Id)" class="form-control" name="ddlStatus">
                                             <option selected disabled value="">---Select Status---</option>
                                             <option value="Pending">Pending</option>
                                             <option value="Working">Working</option>
@@ -149,11 +156,11 @@
                                             }
                                             @* <option value="Completed">Completed</option> *@
                                         </select>
+                                      </form>
                                     </div>
                                 </div>
                                 <div>
-                                    <button type="submit" class="btn btn-success btn-sm m-2" onclick="btnStatusUpdate('@item.Id')"><i class="bi bi-pencil-fill"></i>Status Update</button>
-
+                                    <button type="submit" class="btn btn-success btn-sm m-2" onclick="btnStatusUpdate('@item.Id')" id="StatusUpdate" value="Validate"><i class="bi bi-pencil-fill"></i>Status Update</button>
                                     <button class="btn btn-primary btn-sm" data-bs-toggle="modal" onclick="btnTaskDetails('@item.Id')"> <i class="bi bi-chat-right-dots"></i> Details</button>
                                 </div>
 
@@ -278,26 +285,26 @@
                                 <div class="d-flex align-items-center">
                                     <div class="flex-grow-1">
                                         <span class="text"> TaskStatus :</span>
-                                        <select id="ddlStatus@(item.Id)" class="form-control">
-                                            <option selected disabled value="">---Select Status---</option>
-                                            <option value="Pending">Pending</option>
-                                            <option value="Working">Working</option>
-                                            <option value="InReview">InReview</option>
-                                            @if (item.TaskStatus == "Completed")
-                                            {
-                                                <option disabled value="Completed">Completed</option>
-                                            }
-                                            else
-                                            {
-                                                <option value="Completed">Completed</option>
-                                            }
-                                            @* <option value="Completed">Completed</option> *@
+                                        <form id="tasksList">
+                                        <select id="ddlStatus@(item.Id)" class="form-control" name="ddlStatus">
+                                                <option selected disabled value="">---Select Status---</option>
+                                                <option   value="Pending">Pending</option>
+                                                <option  value="Working">Working</option>
+                                                <option  value="InReview">InReview</option>
+                                                @if (item.TaskStatus == "Completed")
+                                                {
+                                                    <option disabled value="Completed">Completed</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="Completed">Completed</option>
+                                                }   
                                         </select>
+                                        </form>
                                     </div>
                                 </div>
                                 <div>
-                                    <button type="submit" class="btn btn-success btn-sm m-2" onclick="btnStatusUpdate('@item.Id')"><i class="bi bi-pencil-fill"></i>Status Update</button>
-
+                                    <button type="button" class="btn btn-success btn-sm m-2" onclick="btnStatusUpdate('@item.Id')" id="StatusUpdate" value="Validate"><i class="bi bi-pencil-fill"></i>Status Update</button>
                                     <button class="btn btn-primary btn-sm" data-bs-toggle="modal" onclick="btnTaskDetails('@item.Id')"> <i class="bi bi-chat-right-dots"></i> Details</button>
                                 </div>
 
@@ -448,7 +455,7 @@
                                     </div>
                                 </div>
                                 <div>
-                                    <button type="submit" class="btn btn-success btn-sm m-2" onclick="btnStatusUpdate('@item.Id')"><i class="bi bi-pencil-fill"></i>Status Update</button>
+                                    <button type="submit" class="btn btn-success btn-sm m-2" onclick="btnStatusUpdate('@item.Id')" id="StatusUpdate" value="Validate"><i class="bi bi-pencil-fill"></i>Status Update</button>
                                     <button class="btn btn-primary btn-sm" data-bs-toggle="modal" onclick="btnTaskDetails('@item.Id')"> <i class="bi bi-chat-right-dots"></i> Details</button>
                                 </div>
                             </div>
@@ -577,30 +584,34 @@
                                         <span class="text"> TaskStatus :</span>
                                         @if (item.TaskStatus == "Completed")
                                         {
-                                            <select id="ddlStatus@(item.Id)" name="Status" class="form-control" disabled>
-                                                @* <select id="ddlStatus@(item.Id)" name="Status" class="form-control"> *@
+                                            <form id="tasksList">
+                                                <select id="ddlStatus@(item.Id)" class="form-control" name="ddlStatus" disabled>
+                                            @* <select id="ddlStatus@(item.Id)" name="Status" class="form-control" disabled> *@
                                                 <option selected disabled value="">---Select Status---</option>
                                                 <option value="Pending">Pending</option>
                                                 <option value="Working">Working</option>
                                                 <option value="Completed">Completed</option>
                                                 <option value="InReview">InReview</option>
                                             </select>
+                                            </form>
                                         }
                                         else
                                         {
-                                            <select id="ddlStatus@(item.Id)" name="Status" class="form-control">
-                                                @* <select id="ddlStatus@(item.Id)" name="Status" class="form-control"> *@
+                                            <form id="tasksList">
+                                                <select id="ddlStatus@(item.Id)" class="form-control" name="ddlStatus" disabled>
+                                              @* <select id="ddlStatus@(item.Id)" name="Status" class="form-control"> *@
                                                 <option selected disabled value="">---Select Status---</option>
                                                 <option value="Pending">Pending</option>
                                                 <option value="Working">Working</option>
                                                 <option value="Completed">Completed</option>
                                                 <option value="InReview">InReview</option>
                                             </select>
+                                            </form>
                                         }
                                     </div>
                                 </div>
                                 <div>
-                                    <button type="submit" class="btn btn-success btn-sm m-2" onclick="btnStatusUpdate('@item.Id')"><i class="bi bi-pencil-fill"></i>Status Update</button>
+                                    <button type="submit" class="btn btn-success btn-sm m-2" onclick="btnStatusUpdate('@item.Id')" id="StatusUpdate" value="Validate"><i class="bi bi-pencil-fill"></i>Status Update</button>
                                     <button class="btn btn-primary btn-sm" data-bs-toggle="modal" onclick="btnTaskDetails('@item.Id')"> <i class="bi bi-chat-right-dots"></i> Details</button>
                                 </div>
                             </div>
@@ -721,14 +732,16 @@
                                         <span class="text"> TaskStatus :</span>
                                         @if (item.TaskStatus == "Completed")
                                         {
-                                            <select id="ddlStatus@(item.Id)" name="Status" class="form-control" disabled>
-                                                @* <select id="ddlStatus@(item.Id)" name="Status" class="form-control"> *@
+
+
+                                            <select id="ddlStatus@(item.Id)" name="Status" class="form-control">
                                                 <option selected disabled value="">---Select Status---</option>
                                                 <option value="Pending">Pending</option>
                                                 <option value="Working">Working</option>
                                                 <option value="Completed">Completed</option>
                                                 <option value="InReview">InReview</option>
                                             </select>
+                                            
                                         }
                                         else
                                         {
@@ -747,7 +760,7 @@
                                 <div>
                                     @if (item.TaskStatus == "Completed")
                                     {
-                                        <button type="submit" class="btn btn-success btn-sm m-2" onclick="btnStatusUpdate('@item.Id')" disabled><i class="bi bi-pencil-fill"></i>Status Update</button>
+                                        <button type="submit" class="btn btn-success btn-sm m-2" onclick="btnStatusUpdate('@item.Id')"  disabled><i class="bi bi-pencil-fill"></i>Status Update</button>
                                         <button class="btn btn-primary btn-sm" data-bs-toggle="modal" onclick="btnTaskDetails('@item.Id')"> <i class="bi bi-chat-right-dots"></i> Details</button>
                                     }
                                     else
@@ -845,6 +858,7 @@
         </div>
     </div>
   </div>
+ 
 </div>
 <!--end modal-->
 
