@@ -244,5 +244,28 @@ namespace EMPManegment.Repository.TaskRepository
             };
             return jsonData;
         }
+
+        public async Task<IEnumerable<TaskDetailsView>> GetUserTotalTask(Guid UserId)
+        {
+            var TaskList = new List<TaskDetailsView>();
+            var TotalTask = await Context.TblTaskDetails.Where(x => x.UserId == UserId).ToListAsync();
+            if (TotalTask != null)
+            {
+                foreach (var item in TotalTask)
+                {
+                    TaskList.Add(new TaskDetailsView()
+                    {
+                        Id = item.Id,
+                        TaskType = item.TaskType,
+                        TaskStatus = item.TaskStatus,
+                        TaskDate = item.TaskDate,
+                        TaskDetails = item.TaskDetails,
+                        TaskEndDate = item.TaskEndDate,
+                        TaskTitle = item.TaskTitle,
+                    });
+                }
+            }
+            return TaskList;
+        }
     }
 }

@@ -21,13 +21,23 @@ public partial class BonifatiusEmployeesContext : DbContext
 
     public virtual DbSet<TblCity> TblCities { get; set; }
 
+    public virtual DbSet<TblCompanyMaster> TblCompanyMasters { get; set; }
+
     public virtual DbSet<TblCountry> TblCountries { get; set; }
 
     public virtual DbSet<TblDepartment> TblDepartments { get; set; }
 
     public virtual DbSet<TblDocumentMaster> TblDocumentMasters { get; set; }
 
+    public virtual DbSet<TblInvoice> TblInvoices { get; set; }
+
+    public virtual DbSet<TblInvoiceTypeMaster> TblInvoiceTypeMasters { get; set; }
+
     public virtual DbSet<TblPageMaster> TblPageMasters { get; set; }
+
+    public virtual DbSet<TblProductDetailsMaster> TblProductDetailsMasters { get; set; }
+
+    public virtual DbSet<TblProductTypeMaster> TblProductTypeMasters { get; set; }
 
     public virtual DbSet<TblProjectDetail> TblProjectDetails { get; set; }
 
@@ -55,9 +65,7 @@ public partial class BonifatiusEmployeesContext : DbContext
 
     public virtual DbSet<TblVendorType> TblVendorTypes { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Data Source=BONI002;Initial Catalog=BonifatiusEmployees;User ID=BoniEmp;Password=Admin123;Encrypt=False");
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -113,6 +121,19 @@ public partial class BonifatiusEmployeesContext : DbContext
                 .HasConstraintName("FK_tblCity_tblState");
         });
 
+        modelBuilder.Entity<TblCompanyMaster>(entity =>
+        {
+            entity.ToTable("tblCompanyMaster");
+
+            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.Address).HasMaxLength(50);
+            entity.Property(e => e.CompnyName).HasMaxLength(50);
+            entity.Property(e => e.CreatedOn).HasColumnType("date");
+            entity.Property(e => e.Gst)
+                .HasMaxLength(20)
+                .HasColumnName("GST");
+        });
+
         modelBuilder.Entity<TblCountry>(entity =>
         {
             entity.ToTable("tblCountry");
@@ -138,6 +159,47 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.Property(e => e.DocumentType).HasMaxLength(20);
         });
 
+        modelBuilder.Entity<TblInvoice>(entity =>
+        {
+            entity.ToTable("tblInvoices");
+
+            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.BuyesOrderDate).HasColumnType("date");
+            entity.Property(e => e.BuyesOrderNo).HasMaxLength(100);
+            entity.Property(e => e.Cgst)
+                .HasColumnType("numeric(18, 2)")
+                .HasColumnName("CGST");
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.Destination).HasMaxLength(50);
+            entity.Property(e => e.DispatchThrough).HasMaxLength(20);
+            entity.Property(e => e.Igst)
+                .HasColumnType("numeric(18, 2)")
+                .HasColumnName("IGST");
+            entity.Property(e => e.InvoiceDate).HasColumnType("date");
+            entity.Property(e => e.InvoiceNo).HasMaxLength(100);
+            entity.Property(e => e.Sgst)
+                .HasColumnType("numeric(18, 2)")
+                .HasColumnName("SGST");
+            entity.Property(e => e.TotalAmount).HasColumnType("numeric(18, 2)");
+            entity.Property(e => e.TotalGst)
+                .HasColumnType("numeric(18, 2)")
+                .HasColumnName("TotalGST");
+            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+
+            entity.HasOne(d => d.Product).WithMany(p => p.TblInvoices)
+                .HasForeignKey(d => d.ProductId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_tblInvoices_tblProductDetailsMaster");
+        });
+
+        modelBuilder.Entity<TblInvoiceTypeMaster>(entity =>
+        {
+            entity.ToTable("tblInvoiceTypeMaster");
+
+            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.InvoiceType).HasMaxLength(10);
+        });
+
         modelBuilder.Entity<TblPageMaster>(entity =>
         {
             entity.ToTable("tblPageMaster");
@@ -147,6 +209,38 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.HasOne(d => d.User).WithMany(p => p.TblPageMasters)
                 .HasForeignKey(d => d.UserId)
                 .HasConstraintName("FK_tblPageMaster_tblUsers");
+        });
+
+        modelBuilder.Entity<TblProductDetailsMaster>(entity =>
+        {
+            entity.ToTable("tblProductDetailsMaster");
+
+            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.Gst)
+                .HasColumnType("numeric(3, 2)")
+                .HasColumnName("GST");
+            entity.Property(e => e.Hsn).HasColumnName("HSN");
+            entity.Property(e => e.PerUnitPrice).HasColumnType("numeric(18, 2)");
+            entity.Property(e => e.PerUnitWithGstprice)
+                .HasColumnType("numeric(18, 2)")
+                .HasColumnName("PerUnitWithGSTPrice");
+            entity.Property(e => e.ProductImage).HasMaxLength(50);
+            entity.Property(e => e.ProductName).HasMaxLength(50);
+            entity.Property(e => e.ProductShortDescription).HasMaxLength(50);
+            entity.Property(e => e.ProductStocks).HasColumnType("decimal(18, 2)");
+            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+
+            entity.HasOne(d => d.ProductTypeNavigation).WithMany(p => p.TblProductDetailsMasters)
+                .HasForeignKey(d => d.ProductType)
+                .HasConstraintName("FK_tblProductDetailsMaster_tblProductTypeMaster");
+        });
+
+        modelBuilder.Entity<TblProductTypeMaster>(entity =>
+        {
+            entity.ToTable("tblProductTypeMaster");
+
+            entity.Property(e => e.ProductType).HasMaxLength(20);
         });
 
         modelBuilder.Entity<TblProjectDetail>(entity =>

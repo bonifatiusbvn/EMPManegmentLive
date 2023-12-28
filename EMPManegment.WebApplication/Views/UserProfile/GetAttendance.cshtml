@@ -42,13 +42,20 @@
                     <div class="row g-4 mb-3">
                         <div class="row g-2">
                             <div class="col-lg-auto">
-                                <button type="button" class="btn btn-primary btn-sm">Search By
+                                <div class="btn btn-primary" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <select class="dropdown-toggle dropdown-toggle-split show" id="SelectAttandance" >
+                                    <option class="dropdown-item" selected disabled value="">Search By</option>
+                                    <option class="dropdown-item btn-light" value="ByMonth">Month</option>
+                                    <option class="dropdown-item btn-light" value="BetweenDates">Between Dates</option>
+                                </select>
+                                </div>
+                                @* <button type="button" class="btn btn-primary btn-sm">Search By
                                     <select class="btn btn-primary btn-sm dropdown-toggle dropdown-toggle-split buttonsort" id="SelectAttandance" data-choices data-choices-search-false name="choices-single-default">                 
                                     <option class="form-control" selected disabled value=""> </option> 
                                     <option class="form-control" value="ByMonth">Month</option>
                                     <option class="form-control" value="BetweenDates">Between Dates</option>
                                 </select>
-                                </button>
+                                </button> *@
                             </div>
                             <div class="col-sm" id="monthbox">
                                 <div class="search-box">
