@@ -20,6 +20,6 @@ namespace EMPManegment.Inretface.Services.TaskServices
         Task<IEnumerable<TaskDetailsView>> GetAllUserTaskDetails();
         Task<jsonData> GetAllUserTaskDetails(DataTableRequstModel AllUserTaskDetails);
         Task<IEnumerable<TaskDetailsView>> GetTaskDetails(Guid Taskid);
-
+        Task<IEnumerable<TaskDetailsView>> GetUserTotalTask(Guid UserId);
     }
 }

@@ -2,6 +2,7 @@
     
     GetAllUserTaskDetail()
     AllTaskDetailsList()
+    GetUserTotalTask()
 });
 
 
@@ -250,6 +251,17 @@ function GetAllUserTaskDetail() {
     });
 };
 
+function GetUserTotalTask() {debugger
+    $.ajax({
+        url: '/Home/GetUserTotalTask',
+        type: 'Get',
+        dataType: 'json',
+        contentType: 'application/json;charset=utf-8;',
+        success: function (result) {
+            $("#UserTotalTask").text(result.length);
+        },
+    });
+};
 function AllTaskDetailsList() {
     $('#tasksTableData').DataTable({
         processing: true,
