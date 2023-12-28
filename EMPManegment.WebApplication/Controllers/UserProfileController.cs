@@ -136,13 +136,13 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
-        public async Task<IActionResult> UserActiveDecative(string? searchby, string? searchfor, int? page)
+        public async Task<IActionResult> UserActiveDecative(int? page)
         {
             try
             {
                 List<EmpDetailsView> ActiveDecative = new List<EmpDetailsView>();
                 HttpClient client = WebAPI.Initil();                                
-                ApiResponseModel res = await APIServices.GetAsync("", "UserProfile/GetAllUsersDetails?searchby=" + searchby +"&searchfor=" + searchfor);
+                ApiResponseModel res = await APIServices.GetAsync("", "UserProfile/GetAllUsersDetails");
                 if (res.code == 200)
                 {
                     ActiveDecative = JsonConvert.DeserializeObject<List<EmpDetailsView>>(res.data.ToString());
@@ -154,7 +154,31 @@ namespace EMPManegment.Web.Controllers
             {
                 throw ex;
             }
+        }
 
+        [HttpPost]
+        public async Task<IActionResult> GetSearchEmpList(EmpDetailsModel EmpList)
+        {
+            try
+            {
+                List<EmpDetailsView> EmployeeList = new List<EmpDetailsView>();
+                HttpClient client = WebAPI.Initil();
+
+                ApiResponseModel response = await APIServices.PostAsync(EmpList, "UserProfile/GetSearchEmplList");
+                if (response.data.Count != 0)
+                {
+                    EmployeeList = JsonConvert.DeserializeObject<List<EmpDetailsView>>(response.data.ToString());
+                    return PartialView("~/Views/UserProfile/_ActiveInactiveEmployeeList.cshtml", EmployeeList);
+                }
+                else
+                {
+                    return new JsonResult(new { Code = 400 });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         [HttpPost]

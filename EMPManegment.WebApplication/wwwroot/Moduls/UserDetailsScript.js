@@ -1,11 +1,52 @@
-﻿
-
+﻿$("#usernamebox").show();
+$("#departmentbox").hide();
+$("#backbtn").hide();
 
 $(document).ready(function () {
     GetUserAttendanceInTime();
     UserBirsthDayWish();
     GetAllUserData();
+    clearSelectedBox()
+    $("#activeInactiveForm").validate({
+        rules: {
+            ddlusername: "required",
+            ddlDepartmenrnt: "required"
+        },
+        messages: {
+            ddlusername: "Please Select UserName",
+            ddlDepartmenrnt: "Please Select Department"
+        }
+    })
+    $('#searchEmployeeform').on('click', function () {
+        $("#activeInactiveForm").validate();
+    });
 });
+
+function clearSelectedBox() {
+    debugger
+    $("#ddlusername").find("option").remove().end().append(
+        '<option selected disabled value = "">--Select Username--</option>');
+
+    $("#ddlDepartmenrnt").find("option").remove().end().append(
+        '<option selected disabled value = "">--Select Department--</option>');
+}
+
+$('#searchEmployee').change(function () {
+    debugger
+    if ($("#searchEmployee").val() == "ByUsername") {
+        clearSelectedBox();
+        GetUsername();
+        $("#empnamebox").show();
+        $("#departmentbox").hide();
+    }
+    if ($("#searchEmployee").val() == "ByDepartment") {
+        clearSelectedBox();
+        GetDepartment();
+        $("#empnamebox").hide();
+        $("#departmentbox").show();        
+    } 
+});
+
 function GetAllUserData() {
     $('#UserTableData').DataTable({
         processing: true,
@@ -527,3 +568,44 @@ $('#txtserch').keyup(function () {
         }
     })
 });
+
+function GetSearchEmpList() {
+    debugger
+    if ($('#activeInactiveForm').valid()) {
+        var form_data = new FormData();
+        form_data.append("DepartmentId", $('#ddlDepartmenrnt').val());
+        form_data.append("Id", $("#ddlusername").val());
+        $.ajax({
+            url: '/UserProfile/GetSearchEmpList',
+            type: 'Post',
+            datatype: 'json',
+            data: form_data,
+            processData: false,
+            contentType: false,
+            complete: function (Result) {
+                debugger
+                $("#allemplist").hide();
+                $("#activedeactivepagination").hide();
+                $("#backbtn").show();
+                if (Result.responseText != '{\"code\":400}') {
+                    $("#errorMessage").hide();
+                    $("#dvseachemplist").show();
+                    $("#dvseachemplist").html(Result.responseText);
+                } else {
+                    var message = "No Data Found On Selected Username Or Department!!";
+                    $("#errorMessage").show();
+                    $("#errorMessage").text(message);
+                    $("#dvseachemplist").hide();
+                }
+                clearSelectedBox()
+            }
+        });
+    } else {
+        Swal.fire({
+            title: "Kindly Fill the Status",
+            icon: 'warning',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'OK',
+        })
+    }
+};
