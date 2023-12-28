@@ -38,15 +38,15 @@
                     <div class="row g-2 text-align">
                         <div class="col-lg-auto">
                             <a type="button" href="/UserProfile/GetUsersListById" class="btn btn-warning" id="backbtn"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="m5.828 7l2.536 2.535L6.95 10.95L2 6l4.95-4.95l1.414 1.415L5.828 5H13a8 8 0 1 1 0 16H4v-2h9a6 6 0 0 0 0-12z" /></svg> </a>
-                            <button type="button" class="btn btn-primary btn-sm">
-                                Search By
-                                <select class="btn btn-primary btn-sm dropdown-toggle dropdown-toggle-split" id="selectSearchAttandanceOption" data-choices data-choices-search-false name="choices-single-default">
-                                    <option class="form-control" selected disabled value=""> </option>
-                                    <option class="form-control" value="ByUsername">UserName</option>
-                                    <option class="form-control" value="ByDate">Date</option>
-                                    <option class="form-control" value="ByDate&ByUsername">UserName & Date</option>
+
+                            <div class="btn btn-primary" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <select class="dropdown-toggle dropdown-toggle-split show" id="selectSearchAttandanceOption">
+                                    <option class="dropdown-item" selected disabled value="">Search By</option>
+                                    <option class="dropdown-item" value="ByUsername">UserName</option>
+                                    <option class="dropdown-item" value="ByDate">Date</option>
+                                    <option class="dropdown-item" value="ByDate&ByUsername">UserName & Date</option>
                                 </select>
-                            </button>
+                            </div>
                         </div>
 
                         <div class="col-sm" id="usernamebox">
@@ -76,11 +76,55 @@
             </div>
         </form>
     </div>
+
     <div class="card-body" id="attendancedt">
         <div class="listjs-table">
             <div class="table-responsive">
                 <div class="col-sm-12 col-md-6">
                     <div id="attendanceTableData_filter" class="dataTables_filter"></div>
+                </div>
+                <div class="modal fade" id="EditTimeModel" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header bg-light p-3">
+                                <h5 class="modal-title" id="exampleModalLabel"></h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label for="customername-field" class="form-label">AttandanceId</label>
+                                    <input id="AttandanceId" class="form-control" disabled />
+                                    <input id="UserId" class="form-control" hidden />
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="customername-field" class="form-label">UserName</label>
+                                    <input id="UserName" class="form-control" disabled />
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="email-field" class="form-label">Date</label>
+                                    <input id="Date" class="form-control" disabled />
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="phone-field" class="form-label">Intime</label>
+                                    <input id="Intime" class="form-control" disabled />
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="date-field" class="form-label">OutTime</label>
+                                    <input type="datetime-local" id="OutTime" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <div class="hstack gap-2 justify-content-end">
+                                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-success" onclick="updateUserAttendance();">Update Time</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <table id="attendanceTableData" class="table table-bordered dt-responsive nowrap table-striped align-middle dataTable dtr-inline">
                     <thead class="table-light text-muted text-center">
@@ -109,49 +153,7 @@
 </div>
 
 
-<div class="modal fade" id="EditTimeModel" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header bg-light p-3">
-                <h5 class="modal-title" id="exampleModalLabel"></h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"></button>
-            </div>
-            <div class="modal-body">
-                <div class="mb-3">
-                    <label for="customername-field" class="form-label">AttandanceId</label>
-                    <input id="AttandanceId" class="form-control" disabled />
-                    <input id="UserId" class="form-control" hidden />
-                </div>
 
-                <div class="mb-3">
-                    <label for="customername-field" class="form-label">UserName</label>
-                    <input id="UserName" class="form-control" disabled />
-                </div>
-
-                <div class="mb-3">
-                    <label for="email-field" class="form-label">Date</label>
-                    <input id="Date" class="form-control" disabled />
-                </div>
-
-                <div class="mb-3">
-                    <label for="phone-field" class="form-label">Intime</label>
-                    <input id="Intime" class="form-control" disabled />
-                </div>
-
-                <div class="mb-3">
-                    <label for="date-field" class="form-label">OutTime</label>
-                    <input type="datetime-local" id="OutTime" class="form-control" />
-                </div>
-            </div>
-            <div class="modal-footer">
-                <div class="hstack gap-2 justify-content-end">
-                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-success" onclick="updateUserAttendance();">Update Time</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
