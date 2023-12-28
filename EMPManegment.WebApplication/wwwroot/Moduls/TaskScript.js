@@ -2,6 +2,7 @@
     
     GetAllUserTaskDetail()
     AllTaskDetailsList()
+    GetUserTotalTask()
 });
 
 
@@ -275,6 +276,17 @@ function GetAllUserTaskDetail() {
     });
 };
 
+function GetUserTotalTask() {debugger
+    $.ajax({
+        url: '/Home/GetUserTotalTask',
+        type: 'Get',
+        dataType: 'json',
+        contentType: 'application/json;charset=utf-8;',
+        success: function (result) {
+            $("#UserTotalTask").text(result.length);
+        },
+    });
+};
 function AllTaskDetailsList() {
     $('#tasksTableData').DataTable({
         processing: true,
@@ -326,19 +338,22 @@ function AllTaskDetailsList() {
                 "render": function (data, type, full) {
 
                     if (full.taskStatus == "Working") {
-                        return ('<a class="badge bg-warning text-uppercase">' + full.taskStatus + '</a>' + '<a onclick="btnTaskDetails(\'' + full.id + '\')"><i class="ri-eye-fill align-bottom me-2 text-muted"></i></a>' + '<a onclick="EditTaskDetails(\'' + full.id + '\')"><i class="ri-pencil-fill align-bottom me-2 text-muted"></i></a>');
+                        return ('<ul class="list-inline hstack gap-2 mb-0"><li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="View"><a class="badge bg-warning text-uppercase">' + full.taskStatus + '</a></li><li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="View" style="margin-left:7px;"><a onclick="btnTaskDetails(\'' + full.id + '\')"><i class="ri-eye-fill fs-16"></i></a></li><li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit"><a onclick="EditTaskDetails(\'' + full.id + '\')"><i class="ri-pencil-fill fs-16"></i></a></li></ul>');
                     }
                     else if (full.taskStatus == "Completed") {
-                        return ('<a class="badge bg-success text-uppercase">' + full.taskStatus + '</a>' + '<a onclick="btnTaskDetails(\'' + full.id + '\')"><i class="ri-eye-fill align-bottom me-2 text-muted"></i></a>' + '<a onclick="EditTaskDetails(\'' + full.id + '\')"><i class="ri-pencil-fill align-bottom me-2 text-muted"></i></a>');
+                        return ('<ul class="list-inline hstack gap-2 mb-0"><a class="badge bg-success text-uppercase">' + full.taskStatus + '</a><li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="View" style="margin-left:3px;"><a onclick="btnTaskDetails(\'' + full.id + '\')"><i class="ri-eye-fill fs-16"></i></a></li><li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit"><a onclick="EditTaskDetails(\'' + full.id + '\')"><i class="ri-pencil-fill fs-16"></i></a></li></ul>');
                     }
                     else if (full.taskStatus == "Pending") {
-                        return ('<a class="badge bg-primary text-uppercase">' + full.taskStatus + '</a>' + '<a onclick="btnTaskDetails(\'' + full.id + '\')"><i class="ri-eye-fill align-bottom me-2 text-muted"></i></a>' + '<a onclick="EditTaskDetails(\'' + full.id + '\')"><i class="ri-pencil-fill align-bottom me-2 text-muted"></i></a>');
+                        return ('<ul class="list-inline hstack gap-2 mb-0"><li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="View"><a class="badge bg-primary text-uppercase">' + full.taskStatus + '</a></li><li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="View" style="margin-left:10px;"><a onclick="btnTaskDetails(\'' + full.id + '\')"><i class="ri-eye-fill fs-16"></i></a></li><li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit"><a onclick="EditTaskDetails(\'' + full.id + '\')"><i class="ri-pencil-fill fs-16"></i></a></li></ul>');
+                    }
+                    else if (full.taskStatus == "InReview") {
+                        return ('<ul class="list-inline hstack gap-2 mb-0"><li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="View"><a class="badge bg-secondary text-uppercase">' + full.taskStatus + '</a></li><li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="View" style="margin-left:7px;"><a onclick="btnTaskDetails(\'' + full.id + '\')"><i class="ri-eye-fill fs-16"></i></a></li><li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit" ><a onclick="EditTaskDetails(\'' + full.id + '\')"><i class="ri-pencil-fill fs-16"></i></a></li></ul>');
                     }
                     else if (full.taskStatus == "InReview") {
                         return ('<a class="badge bg-danger text-uppercase">' + full.taskStatus + '</a>' + '<a onclick="btnTaskDetails(\'' + full.id + '\')"><i class="ri-eye-fill align-bottom me-2 text-muted"></i></a>' + '<a onclick="EditTaskDetails(\'' + full.id + '\')"><i class="ri-pencil-fill align-bottom me-2 text-muted"></i></a>');
                     }
                     else {
-                        return ('<a class="badge bg-secondary text-uppercase">' + full.taskStatus + '</a>' + '<a onclick="btnTaskDetails(\'' + full.id + '\')"><i class="ri-eye-fill align-bottom me-2 text-muted"></i></a>' + '<a onclick="EditTaskDetails(\'' + full.id + '\')"><i class="ri-pencil-fill align-bottom me-2 text-muted"></i></a>');
+                        return ('<ul class="list-inline hstack gap-2 mb-0"><li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="View"><a class="badge bg-secondary text-uppercase">' + full.taskStatus + '</a></li><li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="View" style="margin-left:29px;"><a onclick="btnTaskDetails(\'' + full.id + '\')"><i class="ri-eye-fill fs-16"></i></a></li><li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit" ><a onclick="EditTaskDetails(\'' + full.id + '\')"><i class="ri-pencil-fill fs-16"></i></a></li></ul>');
                     }
                 }
             },

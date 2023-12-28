@@ -7,19 +7,35 @@ public partial class TblProductDetailsMaster
 {
     public Guid Id { get; set; }
 
-    public int ProductType { get; set; }
+    public int? ProductType { get; set; }
 
-    public string? ProductName { get; set; }
+    public string ProductName { get; set; } = null!;
 
-    public string? ProductDescription { get; set; }
+    public string ProductDescription { get; set; } = null!;
 
     public string? ProductShortDescription { get; set; }
 
     public string? ProductImage { get; set; }
 
-    public string? ProductStocks { get; set; }
+    public decimal ProductStocks { get; set; }
 
-    public decimal? ProductPrice { get; set; }
+    public decimal PerUnitPrice { get; set; }
 
-    public virtual TblProductTypeMaster ProductTypeNavigation { get; set; } = null!;
+    public int? Hsn { get; set; }
+
+    public decimal Gst { get; set; }
+
+    public decimal PerUnitWithGstprice { get; set; }
+
+    public DateTime CreatedOn { get; set; }
+
+    public Guid CreatedBy { get; set; }
+
+    public DateTime? UpdatedOn { get; set; }
+
+    public Guid? UpdatedBy { get; set; }
+
+    public virtual TblProductTypeMaster? ProductTypeNavigation { get; set; }
+
+    public virtual ICollection<TblInvoice> TblInvoices { get; set; } = new List<TblInvoice>();
 }

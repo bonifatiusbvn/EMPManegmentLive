@@ -38,9 +38,9 @@ namespace EMPManagment.API.Controllers
 
         [HttpGet]
         [Route("GetAllUsersDetails")]
-        public async Task<IActionResult> GetAllUsersDetails(string? searchby, string? searchfor)
+        public async Task<IActionResult> GetAllUsersDetails()
         {
-            var userList = await UserListServices.GetUsersDetails(searchby, searchfor);
+            var userList = await UserListServices.GetUsersDetails();
             return Ok(new { code = 200, data = userList });
         }
 
@@ -249,9 +249,9 @@ namespace EMPManagment.API.Controllers
 
         [HttpPost]
         [Route("GetMemberList")]
-        public async Task<IActionResult> GetMemberList(string? searchby, string? searchfor)
+        public async Task<IActionResult> GetMemberList()
         {
-            var userList = await UserListServices.GetUsersDetails(searchby, searchfor);
+            var userList = await UserListServices.GetUsersDetails();
             return Ok(new { code = 200, data = userList });
         }
 
@@ -261,6 +261,14 @@ namespace EMPManagment.API.Controllers
         {
             var Attendancelist = await UserAttendance.GetSearchAttendanceList(AttendanceList);
             return Ok(new { code = 200, data = Attendancelist});
+        }
+
+        [HttpPost]
+        [Route("GetSearchEmplList")]
+        public async Task<IActionResult> GetSearchEmpList(EmpDetailsModel EmpList)
+        {
+            var EmployeeList = await UserListServices.GetSearchEmpList(EmpList);
+            return Ok(new { code = 200, data = EmployeeList });
         }
     }
 }

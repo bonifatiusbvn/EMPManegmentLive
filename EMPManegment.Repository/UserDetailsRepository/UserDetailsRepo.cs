@@ -475,7 +475,7 @@ namespace EMPManegment.Repository.UserListRepository
             return GetUserNameList;
         }
 
-        public async Task<IEnumerable<EmpDetailsView>> GetUsersDetails(string? searchby, string? searchfor)
+        public async Task<IEnumerable<EmpDetailsView>> GetUsersDetails()
         {
             IEnumerable<EmpDetailsView> GetUsersList = from e in Context.TblUsers
                                join d in Context.TblDepartments on e.DepartmentId equals d.Id
@@ -499,24 +499,88 @@ namespace EMPManegment.Repository.UserListRepository
                                    StateName = s.State,
                                    CountryName = c.Country,
                                    DepartmentName = d.Department
-                               };
-            if (searchby == "FirstName" && searchfor != null)
-            {
-                GetUsersList = GetUsersList.Where(ser => ser.FirstName.ToLower().Contains(searchfor.ToLower())).ToList();
-            }
-            if (searchby == "LastName" && searchfor != null)
-            {
-                GetUsersList = GetUsersList.Where(ser => ser.LastName.ToLower().Contains(searchfor.ToLower())).ToList();
-            }
-            if (searchby == "DepartmentName" && searchfor != null)
-            {
-                GetUsersList = GetUsersList.Where(ser => ser.DepartmentName.ToLower().Contains(searchfor.ToLower())).ToList();
-            }
-            if (searchby == "UserName" && searchfor != null)
-            {
-                GetUsersList = GetUsersList.Where(ser => ser.UserName.ToLower().Contains(searchfor.ToLower())).ToList();
-            }
+                               };           
             return GetUsersList;
+        }
+        public async Task<IEnumerable<EmpDetailsView>> GetSearchEmpList(EmpDetailsModel EmpList)
+        {
+            try
+            {
+                IEnumerable<EmpDetailsView> empDetails = null;
+                if (EmpList.Id != null)
+                {
+                    empDetails = from a in Context.TblUsers
+                                 join b in Context.TblDepartments on a.DepartmentId equals b.Id
+                                 where (a.Id == EmpList.Id)
+                                 select new EmpDetailsView
+                                 {
+                                     UserName = a.FirstName + ' ' + a.LastName,
+                                     DepartmentName = b.Department,
+                                     Id = a.Id,
+                                     Image = a.Image,
+                                     IsActive = a.IsActive,
+                                     Gender = a.Gender,
+                                     DateOfBirth = a.DateOfBirth,
+                                     Email = a.Email,
+                                     PhoneNumber = a.PhoneNumber,
+                                 };
+                    return empDetails;
+                }
+                else
+                {
+                    if (EmpList.DepartmentId != null)
+                    {
+                        empDetails = from a in Context.TblUsers
+                                     join b in Context.TblDepartments on a.DepartmentId equals b.Id
+                                     where (a.DepartmentId == EmpList.DepartmentId)
+                                     select new EmpDetailsView
+                                     {
+                                         UserName = a.FirstName + ' ' + a.LastName,
+                                         DepartmentName = b.Department,
+                                         Id = a.Id,
+                                         Image = a.Image,
+                                         IsActive = a.IsActive,
+                                         Gender = a.Gender,
+                                         DateOfBirth = a.DateOfBirth,
+                                         Email = a.Email,
+                                         PhoneNumber = a.PhoneNumber,
+                                     };
+                        return empDetails;
+                    }
+                    else
+                    {
+                        empDetails = from a in Context.TblUsers
+                                     join b in Context.TblDepartments on a.DepartmentId equals b.Id
+                                     join c in Context.TblCountries on a.CountryId equals c.Id
+                                     join s in Context.TblStates on a.StateId equals s.Id
+                                     join ct in Context.TblCities on a.CityId equals ct.Id
+                                     select new EmpDetailsView
+                                     {
+                                         Id = a.Id,
+                                         IsActive = a.IsActive,
+                                         UserName = a.UserName,
+                                         FirstName = a.FirstName,
+                                         LastName = a.LastName,
+                                         Image = a.Image,
+                                         Gender = a.Gender,
+                                         DateOfBirth = a.DateOfBirth,
+                                         Email = a.Email,
+                                         PhoneNumber = a.PhoneNumber,
+                                         Address = a.Address,
+                                         CityName = ct.City,
+                                         StateName = s.State,
+                                         CountryName = c.Country,
+                                         DepartmentName = b.Department
+                                     };
+                        return empDetails;
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }

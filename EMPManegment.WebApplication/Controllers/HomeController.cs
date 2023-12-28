@@ -17,6 +17,7 @@ using static Microsoft.AspNetCore.Razor.Language.TagHelperMetadata;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using EMPManegment.EntityModels.View_Model;
 using EMPManegment.Web.Models;
+using DocumentFormat.OpenXml.Spreadsheet;
 
 namespace EMPManegment.Web.Controllers
 {
@@ -142,6 +143,31 @@ namespace EMPManegment.Web.Controllers
                 {
                     return Ok(new { postuser.code }); ;
                 }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        [HttpGet]
+        public async Task<JsonResult> GetUserTotalTask()
+        {
+            try
+            {
+                var UserId = _userSession.UserId;
+                List<TaskDetailsView> TaskList = new List<TaskDetailsView>();
+                HttpClient client = WebAPI.Initil();
+                ApiResponseModel postuser = await APIServices.GetAsync("","UserHome/GetUserTotalTask?UserId="+ UserId);
+                if (postuser.data != null)
+                {
+                    TaskList = JsonConvert.DeserializeObject<List<TaskDetailsView>>(postuser.data.ToString());
+                }
+                else
+                {
+                    TaskList = new List<TaskDetailsView>();
+                    ViewBag.Error = "not found";
+                }
+                return new JsonResult(TaskList);
             }
             catch (Exception ex)
             {

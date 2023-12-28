@@ -803,15 +803,15 @@
                                         </a>
                                         <div class="collapse menu-dropdown" id="sidebarEcommerce">
                                             <ul class="nav nav-sm flex-column">
-                                               @*  <li class="nav-item">
+                                                <li class="nav-item">
                                                     <a href="apps-ecommerce-products.html" class="nav-link" data-key="t-products"> Products </a>
                                                 </li>
                                                 <li class="nav-item">
                                                     <a href="apps-ecommerce-product-details.html" class="nav-link" data-key="t-product-Details"> Product Details </a>
                                                 </li>
                                                 <li class="nav-item">
-                                                    <a href="apps-ecommerce-add-product.html" class="nav-link" data-key="t-create-product"> Create Product </a>
-                                                </li> *@
+                                                    <a asp-action="CreateProduct" asp-controller="ProductMaster" class="nav-link" data-key="t-create-product"> Create Product </a>
+                                                </li> 
                                                 <li class="nav-item">
                                                     <a asp-action="CreateOrder" asp-controller="OrderMaster" class="nav-link" data-key="t-orders"> Orders </a>
                                                 </li>
@@ -832,7 +832,7 @@
                                                 </li>
                                                 <li class="nav-item">
                                                     <a href="apps-ecommerce-seller-details.html" class="nav-link" data-key="t-sellers-details"> Seller Details </a>
-                                                </li> *@
+                                                </li>
                                             </ul>
                                         </div>
                                     </li>

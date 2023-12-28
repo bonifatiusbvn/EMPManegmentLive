@@ -14,6 +14,7 @@ using EMPManegment.Services.UserAttendance;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.EntityFrameworkCore.ValueGeneration;
 using System.Net;
 
 namespace EMPManagment.API.Controllers
@@ -249,7 +250,13 @@ namespace EMPManagment.API.Controllers
             IEnumerable<TaskDetailsView> userTaskDetails = await TaskServices.GetTaskDetails(Taskid);
             return Ok(new { code = 200, data = userTaskDetails.ToList() });
         }
-        
 
+        [HttpGet]
+        [Route("GetUserTotalTask")]
+        public async Task<IActionResult> GetUserTotalTask(Guid UserId)
+        {
+            IEnumerable<TaskDetailsView> UserTotalTask = await TaskServices.GetUserTotalTask(UserId);
+            return Ok(new { code = 200, data = UserTotalTask.ToList() });
+        }
     }
 }
