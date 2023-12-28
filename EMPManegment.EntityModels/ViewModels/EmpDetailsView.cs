@@ -65,11 +65,10 @@ namespace EMPManegment.EntityModels.View_Model
         public string? DepartmentName { get; set; }
 
         public string? DocumentType { get; set; }
-
-
-
     }
-
-
-
+    public class EmpDetailsModel
+    {
+        public Guid? Id { get; set; }
+        public int? DepartmentId { get; set; }
+    }
 }

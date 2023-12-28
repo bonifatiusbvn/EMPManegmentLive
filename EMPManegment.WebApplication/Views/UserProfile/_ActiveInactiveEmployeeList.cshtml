@@ -1,0 +1,37 @@
+﻿@model IEnumerable<EMPManegment.EntityModels.View_Model.EmpDetailsView>
+
+
+<div class="row row-cols-xl-5 row-cols-lg-3 row-cols-md-2 row-cols-1" style="margin-top:20px;">
+    @if (Model.Count() > 0)
+    {
+        @foreach (var item in Model)
+        {
+            <div class="col" style="margin-left:60px;">
+                <div class="card">
+                    <img src="~/UserHome/minimal/assets/images/nft/img-03.jpg" alt="" class="object-fit-cover card-img-top" height="120">
+                    <div class="card-body text-center">
+                        <img src="~/@item.Image" alt="" class="avatar-md rounded-circle object-fit-cover mt-n5 img-thumbnail border-light mx-auto d-block">
+                        <a href="pages-profile.html">
+                            <h5 class="mt-2 mb-1 fs-15">@item.FirstName  @item.LastName</h5>
+                        </a>
+                        <p class="text-muted fs-14 mb-2">@item.UserName</p>
+                        <p class="text-muted fs-14"> Dept : @item.DepartmentName</p>
+                        <form asp-action="" asp-controller="" method="post">
+                            @if (item.IsActive == true)
+                            {
+                                <a href="javascript:void(0)" class="btn btn-soft-success w-100" onclick="DeactiveUser('@item.UserName')">Active</a>
+
+                            }
+                            @if (item.IsActive == false)
+                            {
+                                <a href="javascript:void(0)" class="btn btn-soft-danger w-100" onclick="ActiveUser('@item.UserName')">Deactive</a>
+                            }
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!--end col-->
+        }
+    }
+</div>
+<!--end row-->
