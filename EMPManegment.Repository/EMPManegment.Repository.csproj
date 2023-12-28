@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ProductMasterRepository\" />
+    <Folder Include="InvoiceMasterRepository\" />
     <Folder Include="TaskRepository\" />
   </ItemGroup>
 

@@ -16,9 +16,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Interface\ProductMaster\" />
+    <Folder Include="Interface\InvoiceMaster\" />
     <Folder Include="Interface\TaskDetails\" />
-    <Folder Include="Services\ProductMasterServices\" />
+    <Folder Include="Services\InvoiceMasterServices\" />
   </ItemGroup>
 
 </Project>
