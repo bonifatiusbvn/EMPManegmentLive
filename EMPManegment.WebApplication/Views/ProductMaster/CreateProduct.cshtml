@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "CreateProduct";
     Layout = "~/Views/Shared/_HomeLayout.cshtml";
 }
@@ -25,23 +24,19 @@
         </div>
         <!-- end page title -->
 
-        <form id="createproduct-form" autocomplete="off" class="needs-validation" novalidate>
+        <form id="createproduct-form" autocomplete="off">
             <div class="row">
                 <div class="col-lg-8">
                     <div class="card">
                         <div class="card-body">
                             <div class="mb-3">
                                 <label class="form-label" for="product-title-input">Product Title</label>
-                                <input type="hidden" class="form-control" id="formAction" name="formAction" value="add">
-                                <input type="text" class="form-control d-none" id="product-id-input">
-                                <input type="text" class="form-control" id="product-title-input" value="" placeholder="Enter product title" required>
-                                <div class="invalid-feedback">Please Enter a product title.</div>
+                                <input type="text" class="form-control" id="txtproducttitle" name="txtproducttitle" placeholder="Enter product title" required>
                             </div>
                             <div>
                                 <label>Product Description</label>
-
                                 <div id="ckeditor-classic">
-                                   
+                                    <input type="text" class="form-control" id="txtproductdescription" name="txtproductdescription" placeholder="Enter product description" required>
                                 </div>
                             </div>
                         </div>
@@ -59,8 +54,6 @@
                                 <div class="text-center">
                                     <div class="position-relative d-inline-block">
                                         <div class="position-absolute top-100 start-100 translate-middle">
-                                            
-                                            
                                         </div>
                                         <div class="avatar-lg">
                                             <div class="avatar-title bg-light rounded">
@@ -73,16 +66,14 @@
                             <div>
                                 <h5 class="fs-14 mb-1">Product Gallery</h5>
                                 <p class="text-muted">Add Product Gallery Images.</p>
-
                                 <div class="dropzone">
                                     <div class="fallback">
-                                        <input name="file" type="file" multiple="multiple">
+                                        <input type="file" class="form-control bg-transparent" id="txtimage" name="txtimage" />
                                     </div>
                                     <div class="dz-message needsclick">
                                         <div class="mb-3">
                                             <i class="display-4 text-muted ri-upload-cloud-2-fill"></i>
                                         </div>
-
                                         <h5>Drop files here or click to upload.</h5>
                                     </div>
                                 </div>
@@ -125,7 +116,7 @@
                                         General Info
                                     </a>
                                 </li>
-                                
+
                             </ul>
                         </div>
                         <!-- end card header -->
@@ -133,16 +124,22 @@
                             <div class="tab-content">
                                 <div class="tab-pane active" id="addproduct-general-info" role="tabpanel">
                                     <div class="row">
-                                        <div class="col-lg-6">
+                                        <div class="col-lg-4">
                                             <div class="mb-3">
-                                                <label class="form-label" for="manufacturer-name-input">Manufacturer Name</label>
-                                                <input type="text" class="form-control" id="manufacturer-name-input" placeholder="Enter manufacturer name">
+                                                <label class="form-label" for="PerUnitPrice">Per Unit Price</label>
+                                                <input type="text" class="form-control" id="txtPerUnitPrice" name="txtPerUnitPrice" placeholder="Enter PerUnitPrice">
                                             </div>
                                         </div>
-                                        <div class="col-lg-6">
+                                        <div class="col-lg-4">
                                             <div class="mb-3">
-                                                <label class="form-label" for="manufacturer-brand-input">Manufacturer Brand</label>
-                                                <input type="text" class="form-control" id="manufacturer-brand-input" placeholder="Enter manufacturer brand">
+                                                <label class="form-label" for="HSN">HSN</label>
+                                                <input type="text" class="form-control" id="txtHSN" name="txtHSN" placeholder="Enter HSN">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div class="mb-3">
+                                                <label class="form-label" for="GST">GST</label>
+                                                <input type="text" class="form-control" id="txtGST" name="txtGST" placeholder="Enter GST">
                                             </div>
                                         </div>
                                     </div>
@@ -151,8 +148,8 @@
                                     <div class="row">
                                         <div class="col-lg-3 col-sm-6">
                                             <div class="mb-3">
-                                                <label class="form-label" for="stocks-input">Stocks</label>
-                                                <input type="text" class="form-control" id="stocks-input" placeholder="Stocks" required>
+                                                <label class="form-label" for="stocks">Stocks</label>
+                                                <input type="text" class="form-control" id="txtstocks" name="txtstocks" placeholder="Stocks" required>
                                                 <div class="invalid-feedback">Please Enter a product stocks.</div>
                                             </div>
                                         </div>
@@ -160,21 +157,17 @@
                                             <div class="mb-3">
                                                 <label class="form-label" for="product-price-input">Price</label>
                                                 <div class="input-group has-validation mb-3">
-                                                    <span class="input-group-text" id="product-price-addon">$</span>
-                                                    <input type="text" class="form-control" id="product-price-input" placeholder="Enter price" aria-label="Price" aria-describedby="product-price-addon" required>
-                                                    <div class="invalid-feedback">Please Enter a product price.</div>
+                                                    <span class="input-group-text" id="txtproductprice">$</span>
+                                                    <input type="text" class="form-control" id="txtproductprice" name="txtproductprice" placeholder="Enter price">
                                                 </div>
-
                                             </div>
                                         </div>
                                         <div class="col-lg-3 col-sm-6">
                                             <div class="mb-3">
-                                                
                                             </div>
                                         </div>
                                         <div class="col-lg-3 col-sm-6">
                                             <div class="mb-3">
-                                               
                                             </div>
                                         </div>
                                         <!-- end col -->
@@ -182,8 +175,6 @@
                                     <!-- end row -->
                                 </div>
                                 <!-- end tab-pane -->
-
-                              
                                 <!-- end tab pane -->
                             </div>
                             <!-- end tab content -->
@@ -198,7 +189,7 @@
                 <!-- end col -->
 
                 <div class="col-lg-4">
-                   
+
                     <div class="card">
                         <div class="card-header">
                             <h5 class="card-title mb-0">Product Categories</h5>
@@ -210,7 +201,7 @@
                                     New
                                 </button>Select product category
                             </p>
-                            <select class="form-select" id="choices-category-input" name="choices-category-input" data-choices data-choices-search-false>
+                            <select class="form-select" id="txtproductcategory" name="txtproductcategory" data-choices data-choices-search-false>
                                 <option value="Appliances">Appliances</option>
                                 <option value="Automotive Accessories">Automotive Accessories</option>
                                 <option value="Electronics">Electronics</option>
@@ -227,20 +218,21 @@
                         <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="flipModalLabel">Add Product</h5>
+                                    <h5 class="modal-title" id="flipModalLabel">Modal Heading</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                    <form id="AddProductCategory">
-                                    <div class="mb-3">
-                                        <input type="text" class="form-control" id="txtPtoductName" name="txtPtoductName" />
-                                    </div>
-                                    </form>
+                                    <h5 class="fs-16">
+                                        Overflowing text to show scroll behavior
+                                    </h5>
+                                    <p class="text-muted">One morning, when Gregor Samsa woke from troubled dreams, he found himself transformed in his bed into a horrible vermin. He lay on his armour-like back, and if he lifted his head a little he could see his brown belly, slightly domed and divided by arches into stiff sections.</p>
+                                    <p class="text-muted">The bedding was hardly able to cover it and seemed ready to slide off any moment. His many legs, pitifully thin compared with the size of the rest of him, waved about helplessly as he looked. "What's happened to me?" he thought.</p>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
-                                    <button type="button" class="btn btn-primary ">Save</button>
+                                    <button type="button" class="btn btn-primary ">Save Changes</button>
                                 </div>
+
                             </div><!-- /.modal-content -->
                         </div><!-- /.modal-dialog -->
                     </div><!-- /.modal -->
@@ -252,7 +244,7 @@
                         <div class="card-body">
                             <div class="hstack gap-3 align-items-start">
                                 <div class="flex-grow-1">
-                                    <input class="form-control" data-choices data-choices-multiple-remove="true" placeholder="Enter tags" type="text" value="Cotton" />
+                                    <input class="form-control" id="txtproducttag" name="txtproducttag" data-choices data-choices-multiple-remove="true" placeholder="Enter tags" type="text" />
                                 </div>
                             </div>
                         </div>
@@ -266,7 +258,7 @@
                         </div>
                         <div class="card-body">
                             <p class="text-muted mb-2">Add short description for product</p>
-                            <textarea class="form-control" placeholder="Must enter minimum of a 100 characters" rows="3"></textarea>
+                            <textarea class="form-control" id="txtshortdescription" name="txtshortdescription" placeholder="Must enter minimum of a 100 characters" rows="3"></textarea>
                         </div>
                         <!-- end card body -->
                     </div>

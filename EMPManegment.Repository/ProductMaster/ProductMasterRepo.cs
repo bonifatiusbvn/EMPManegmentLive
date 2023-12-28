@@ -50,5 +50,39 @@ namespace EMPManegment.Repository.ProductMaster
             }
             return response;
         }
+       public async Task<UserResponceModel> AddProductDetails(ProductDetailsView AddProduct)
+       {
+            UserResponceModel response = new UserResponceModel();
+            try
+            {
+                var productdetails = new TblProductDetailsMaster()
+                {
+                    Id = Guid.NewGuid(),
+                    ProductType = AddProduct.ProductType,
+                    ProductName = AddProduct.ProductName,
+                    ProductDescription = AddProduct.ProductDescription,
+                    ProductShortDescription = AddProduct.ProductShortDescription,
+                    ProductImage = AddProduct.ProductImage,
+                    ProductStocks = AddProduct.ProductStocks,
+                    PerUnitPrice = AddProduct.PerUnitPrice,
+                    Hsn = AddProduct.Hsn,
+                    Gst = AddProduct.Gst,
+                    PerUnitWithGstprice = AddProduct.PerUnitWithGstprice,
+                    CreatedBy = AddProduct.CreatedBy,
+                    CreatedOn = AddProduct.CreatedOn,
+                    UpdatedBy = AddProduct.UpdatedBy,
+                    UpdatedOn = AddProduct.UpdatedOn,
+                };
+                response.Code = 200;
+                response.Message = "Task add successfully!";
+                Context.TblProductDetailsMasters.Add(productdetails);
+                Context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return response;
+        }
     }
 }

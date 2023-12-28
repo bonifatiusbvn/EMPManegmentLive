@@ -11,5 +11,6 @@ namespace EMPManegment.Inretface.Services.ProductMaster
     public interface IProductMasterServices
     {
         Task<UserResponceModel> AddProductType(ProductTypeView AddProduct);
+        Task<UserResponceModel> AddProductDetails(ProductDetailsView AddProductDetails);
     }
 }

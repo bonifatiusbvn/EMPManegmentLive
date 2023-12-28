@@ -22,5 +22,9 @@ namespace EMPManegment.Services.ProductMaster
         {
             throw new NotImplementedException();
         }
+        public async Task<UserResponceModel> AddProductDetails(ProductDetailsView AddProduct)
+        {
+            return await productMaster.AddProductDetails(AddProduct);
+        }
     }
 }
