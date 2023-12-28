@@ -9,7 +9,7 @@ using EMPManegment.EntityModels.ViewModels.Models;
 
 namespace EMPManegment.Web.Controllers
 {
-    public class SalesController : Controller
+    public class InvoiceController : Controller
     {
         public IActionResult Index()
         {
