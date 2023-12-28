@@ -21,5 +21,13 @@ public partial class TblProductDetailsMaster
 
     public decimal? ProductPrice { get; set; }
 
+    public string? ManufacturerName { get; set; }
+
+    public string? ManufacturerBrand { get; set; }
+
+    public DateTime? CreatedOn { get; set; }
+
+    public Guid? CreatedBy { get; set; }
+
     public virtual TblProductTypeMaster ProductTypeNavigation { get; set; } = null!;
 }

@@ -156,6 +156,9 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.ToTable("tblProductDetailsMaster");
 
             entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.ManufacturerBrand).HasMaxLength(50);
+            entity.Property(e => e.ManufacturerName).HasMaxLength(50);
             entity.Property(e => e.ProductImage).HasMaxLength(50);
             entity.Property(e => e.ProductName).HasMaxLength(50);
             entity.Property(e => e.ProductPrice).HasColumnType("decimal(18, 0)");
