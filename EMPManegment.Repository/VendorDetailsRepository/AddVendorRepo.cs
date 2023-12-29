@@ -190,7 +190,7 @@ namespace EMPManegment.Repository.VendorDetailsRepository
         {
             IEnumerable<VendorDetailsView> GetVendorList = Context.TblVendorMasters.ToList().Select(a => new VendorDetailsView
             {
-                VendorTypeId = a.VendorTypeId,
+                Id = a.Vid,
                 VendorCompany = a.VendorCompany,
 
             }).ToList();

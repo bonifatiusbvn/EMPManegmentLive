@@ -7,18 +7,12 @@
 <style>
     #txtproductname-error, #txtproductdescription-error, #txtshortdescription-error,
     #txtproductimage-error, #txtstocks-error, #txtPerUnitPrice-error,
-    #txtHSN-error, #txtGST-error, #txtPerUnitWithGSTPrice-error, #txtProductType-error {
+    #txtHSN-error, #txtGST-error, #txtPerUnitWithGSTPrice-error, #txtProductType-error,
+    #txtvendorname-error, #txtProducts-error{
         color: red;
     }
 </style>
 
-<style>
-    #txtproductname-error, #txtproductdescription-error, #txtshortdescription-error,
-    #txtproductimage-error, #txtstocks-error, #txtPerUnitPrice-error,
-    #txtHSN-error, #txtGST-error, #txtPerUnitWithGSTPrice-error {
-        color:red;
-    }
-</style>
 
 <div class="page-content">
     <div class="container-fluid">
@@ -47,19 +41,10 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="mb-3">
-                                <label class="form-label" for="product-title-input">Product Title</label>
-                                <input type="text" class="form-control" id="txtproducttitle" name="txtproducttitle" placeholder="Enter product title">
                                 <label class="form-label" for="ProductName">Product Name</label>
-                                <input type="text" class="form-control" id="txtproductname" name="txtproductname" placeholder="Enter product title" required>
+                                <input type="text" class="form-control" id="txtproductname" name="txtproductname" placeholder="Enter product name" required>
                             </div>
                             <div>
-                                <label>Product Description</label>
-                                <div id="ckeditor-classic">
-                                    <input type="text" class="form-control" id="txtproductdescription" name="txtproductdescription" placeholder="Enter product description" >
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                                 <label class="form-label" for="ProductDescription">Product Description</label>
                                 <textarea rows="10" class="form-control" id="txtproductdescription" name="txtproductdescription" placeholder="Enter product description"></textarea>
                             </div>
@@ -92,8 +77,8 @@
                                 <p class="text-muted">Add Product Gallery Images.</p>
                                 <label class="form-label" for="ProductImage"></label>
                                 <div class="mb-3">
-                                    <input type="file" class="form-control" id="txtproductimage" name="txtproductimage" />
-                                    <i class="display-4 text-muted ri-upload-cloud-2-fill"></i>
+                                    <input type="file" class="form-control" id="txtproductimage" name="txtproductimage"/>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" style="margin-top:-60px;margin-left:970px;" viewBox="0 0 24 24"><path fill="currentColor" d="M1 14.5a6.496 6.496 0 0 1 3.064-5.519a8.001 8.001 0 0 1 15.872 0a6.5 6.5 0 0 1-2.936 12L7 21c-3.356-.274-6-3.078-6-6.5m15.848 4.487a4.5 4.5 0 0 0 2.03-8.309l-.807-.503l-.12-.942a6.001 6.001 0 0 0-11.903 0l-.12.942l-.805.503a4.5 4.5 0 0 0 2.029 8.309l.173.013h9.35zM13 13v4h-2v-4H8l4-5l4 5z" /></svg>
                                 </div>
                             </div>
                         </div>
@@ -140,22 +125,6 @@
                                     <div class="row">
                                         <div class="col-lg-3 col-sm-6">
                                             <div class="mb-3">
-                                                <label class="form-label" for="stocks">Stocks</label>
-                                                <input type="text" class="form-control" id="txtstocks" name="txtstocks" placeholder="Stocks" >
-                                                <div class="invalid-feedback">Please Enter a product stocks.</div>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-3 col-sm-6">
-                                            <div class="mb-3">
-                                                <label class="form-label" for="product-price-input">Price</label>
-                                                <div class="input-group has-validation mb-3">
-                                                    <span class="input-group-text" id="txtproductprice">$</span>
-                                                    <input type="text" class="form-control" id="txtproductprice" name="txtproductprice" placeholder="Enter price">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-3 col-sm-6">
-                                            <div class="mb-3">
                                                 <label class="form-label" for="HSN">HSN</label>
                                                 <input type="text" class="form-control" id="txtHSN" name="txtHSN" placeholder="Enter HSN">
                                             </div>
@@ -193,12 +162,12 @@
                         <div class="card-body">
                             <p class="text-muted mb-2">
                                 <button type="button" data-bs-toggle="modal" data-bs-target="#flipModal" class="float-end text-decoration-underline btn btn-link waves-effect">
-                                    Add
-                                    New
-                                </button>Select product category
+                                    Add New
+                                </button>
                             </p>
-                            <select id="txtProducts" class="form-control bg-transparent">
-                                <option>--Select Product--</option>
+                            <label for="ProductType" class="form-label">Product Type</label>
+                            <select id="txtProducts" class="form-control bg-transparent" name="txtProducts">
+                                <option selected disabled value="">----Select Product Type---</option>
                             </select>
                         </div>
                         <!-- end card body -->
@@ -229,12 +198,16 @@
                     <!-- end card -->
                     <div class="card">
                         <div class="card-header">
-                            <h5 class="card-title mb-0">Product Tags</h5>
+                            <h5 class="card-title mb-0">Add Vendor</h5>
                         </div>
                         <div class="card-body">
                             <div class="hstack gap-3 align-items-start">
                                 <div class="flex-grow-1">
-                                    <input class="form-control" id="txtproducttag" name="txtproducttag" data-choices data-choices-multiple-remove="true" placeholder="Enter tags" type="text" />
+                                    <label for="VendorId" class="form-label">Vendor Name</label>
+                                    <select class="form-control" id="txtvendorname" name="txtvendorname">
+                                        <option selected disabled value="">----Select Vendor Name---</option>
+                                    </select>
+                                    <input type="hidden" class="form-control" id="txtvendornameid">
                                 </div>
                             </div>
                         </div>
@@ -284,4 +257,5 @@
 
 <!-- Modal Js -->
 <script src="~/UserHome/minimal/assets/js/pages/modal.init.js"></script>
+
 

@@ -61,6 +61,7 @@ namespace EMPManegment.Repository.ProductMaster
                 var productdetails = new TblProductDetailsMaster()
                 {
                     Id = Guid.NewGuid(),
+                    VendorId = AddProduct.VendorId,
                     ProductType = AddProduct.ProductType,
                     ProductName = AddProduct.ProductName,
                     ProductDescription = AddProduct.ProductDescription,
