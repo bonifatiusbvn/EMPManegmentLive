@@ -37,5 +37,10 @@ namespace EMPManegment.Services.VendorDetails
         {
             return await details.GetVendorType();
         }
+
+        public async Task<IEnumerable<VendorDetailsView>> GetVendorNameList()
+        { 
+            return await details.GetVendorNameList();
+        }
     }
 }

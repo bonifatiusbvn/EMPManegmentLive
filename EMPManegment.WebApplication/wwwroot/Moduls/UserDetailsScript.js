@@ -23,7 +23,7 @@ $(document).ready(function () {
 });
 
 function clearSelectedBox() {
-    debugger
+  
     $("#ddlusername").find("option").remove().end().append(
         '<option selected disabled value = "">--Select Username--</option>');
 
@@ -32,7 +32,7 @@ function clearSelectedBox() {
 }
 
 $('#searchEmployee').change(function () {
-    debugger
+   
     if ($("#searchEmployee").val() == "ByUsername") {
         clearSelectedBox();
         GetUsername();
@@ -570,7 +570,7 @@ $('#txtserch').keyup(function () {
 });
 
 function GetSearchEmpList() {
-    debugger
+    
     if ($('#activeInactiveForm').valid()) {
         var form_data = new FormData();
         form_data.append("DepartmentId", $('#ddlDepartmenrnt').val());
@@ -583,7 +583,7 @@ function GetSearchEmpList() {
             processData: false,
             contentType: false,
             complete: function (Result) {
-                debugger
+       
                 $("#allemplist").hide();
                 $("#activedeactivepagination").hide();
                 $("#backbtn").show();

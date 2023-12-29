@@ -3,6 +3,14 @@
     Layout = "~/Views/Shared/_HomeLayout.cshtml";
 }
 
+<style>
+    #txtproductname-error, #txtproductdescription-error, #txtshortdescription-error,
+    #txtproductimage-error, #txtstocks-error, #txtPerUnitPrice-error,
+    #txtHSN-error, #txtGST-error, #txtPerUnitWithGSTPrice-error {
+        color:red;
+    }
+</style>
+
 <div class="page-content">
     <div class="container-fluid">
 
@@ -24,20 +32,18 @@
         </div>
         <!-- end page title -->
 
-        <form id="createproduct-form" autocomplete="off">
+        <form id="createproductform" autocomplete="off">
             <div class="row">
                 <div class="col-lg-8">
                     <div class="card">
                         <div class="card-body">
                             <div class="mb-3">
-                                <label class="form-label" for="product-title-input">Product Title</label>
-                                <input type="text" class="form-control" id="txtproducttitle" name="txtproducttitle" placeholder="Enter product title" required>
+                                <label class="form-label" for="ProductName">Product Name</label>
+                                <input type="text" class="form-control" id="txtproductname" name="txtproductname" placeholder="Enter product title" required>
                             </div>
                             <div>
-                                <label>Product Description</label>
-                                <div id="ckeditor-classic">
-                                    <input type="text" class="form-control" id="txtproductdescription" name="txtproductdescription" placeholder="Enter product description" required>
-                                </div>
+                                <label class="form-label" for="ProductDescription">Product Description</label>
+                                <textarea rows="10" class="form-control" id="txtproductdescription" name="txtproductdescription" placeholder="Enter product description"></textarea>
                             </div>
                         </div>
                     </div>
@@ -56,53 +62,21 @@
                                         <div class="position-absolute top-100 start-100 translate-middle">
                                         </div>
                                         <div class="avatar-lg">
-                                            <div class="avatar-title bg-light rounded">
-                                                <img src="#" id="~/UserHome/minimal/product-img" class="avatar-md h-auto" />
+                                            <div class="holder m-2">
+                                                <img id="imgPreview" alt="Product image" style="height:120px;width:auto;margin-left:-700px;margin-bottom:-110px;" />
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div>
-                                <h5 class="fs-14 mb-1">Product Gallery</h5>
+                                <h5 class="fs-14 mb-1" style="margin-top:120px;">Product Gallery</h5>
                                 <p class="text-muted">Add Product Gallery Images.</p>
-                                <div class="dropzone">
-                                    <div class="fallback">
-                                        <input type="file" class="form-control bg-transparent" id="txtimage" name="txtimage" />
-                                    </div>
-                                    <div class="dz-message needsclick">
-                                        <div class="mb-3">
-                                            <i class="display-4 text-muted ri-upload-cloud-2-fill"></i>
-                                        </div>
-                                        <h5>Drop files here or click to upload.</h5>
-                                    </div>
+                                <label class="form-label" for="ProductImage"></label>
+                                <div class="mb-3">
+                                    <input type="file" class="form-control" id="txtproductimage" name="txtproductimage" />
+                                    <i class="display-4 text-muted ri-upload-cloud-2-fill"></i>
                                 </div>
-
-                                <ul class="list-unstyled mb-0" id="dropzone-preview">
-                                    <li class="mt-2" id="dropzone-preview-list">
-                                        <!-- This is used as the file preview template -->
-                                        <div class="border rounded">
-                                            <div class="d-flex p-2">
-                                                <div class="flex-shrink-0 me-3">
-                                                    <div class="avatar-sm bg-light rounded">
-                                                        <img data-dz-thumbnail class="img-fluid rounded d-block" src="#" alt="Product-Image" />
-                                                    </div>
-                                                </div>
-                                                <div class="flex-grow-1">
-                                                    <div class="pt-1">
-                                                        <h5 class="fs-14 mb-1" data-dz-name>&nbsp;</h5>
-                                                        <p class="fs-13 text-muted mb-0" data-dz-size></p>
-                                                        <strong class="error text-danger" data-dz-errormessage></strong>
-                                                    </div>
-                                                </div>
-                                                <div class="flex-shrink-0 ms-3">
-                                                    <button data-dz-remove class="btn btn-sm btn-primary">Delete</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
-                                </ul>
-                                <!-- end dropzon-preview -->
                             </div>
                         </div>
                     </div>
@@ -132,14 +106,14 @@
                                         </div>
                                         <div class="col-lg-4">
                                             <div class="mb-3">
-                                                <label class="form-label" for="HSN">HSN</label>
-                                                <input type="text" class="form-control" id="txtHSN" name="txtHSN" placeholder="Enter HSN">
+                                                <label class="form-label" for="GST">GST</label>
+                                                <input type="text" class="form-control" id="txtGST" name="txtGST" placeholder="Enter GST">
                                             </div>
                                         </div>
                                         <div class="col-lg-4">
                                             <div class="mb-3">
-                                                <label class="form-label" for="GST">GST</label>
-                                                <input type="text" class="form-control" id="txtGST" name="txtGST" placeholder="Enter GST">
+                                                <label class="form-label" for="PerUnitWithGSTPrice">Per Unit With GST Price</label>
+                                                <input type="text" class="form-control" id="txtPerUnitWithGSTPrice" name="txtPerUnitWithGSTPrice" placeholder="Enter price">
                                             </div>
                                         </div>
                                     </div>
@@ -148,26 +122,14 @@
                                     <div class="row">
                                         <div class="col-lg-3 col-sm-6">
                                             <div class="mb-3">
+                                                <label class="form-label" for="HSN">HSN</label>
+                                                <input type="text" class="form-control" id="txtHSN" name="txtHSN" placeholder="Enter HSN">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 col-sm-6">
+                                            <div class="mb-3">
                                                 <label class="form-label" for="stocks">Stocks</label>
                                                 <input type="text" class="form-control" id="txtstocks" name="txtstocks" placeholder="Stocks" required>
-                                                <div class="invalid-feedback">Please Enter a product stocks.</div>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-3 col-sm-6">
-                                            <div class="mb-3">
-                                                <label class="form-label" for="product-price-input">Price</label>
-                                                <div class="input-group has-validation mb-3">
-                                                    <span class="input-group-text" id="txtproductprice">$</span>
-                                                    <input type="text" class="form-control" id="txtproductprice" name="txtproductprice" placeholder="Enter price">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-3 col-sm-6">
-                                            <div class="mb-3">
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-3 col-sm-6">
-                                            <div class="mb-3">
                                             </div>
                                         </div>
                                         <!-- end col -->
@@ -183,7 +145,7 @@
                     </div>
                     <!-- end card -->
                     <div class="text-end mb-3">
-                        <button type="submit" class="btn btn-primary w-sm">Submit</button>
+                        <button type="button" class="btn btn-primary w-sm" onclick="SaveProductDetails()" id="saveproductdetails" value="Validation">Submit</button>
                     </div>
                 </div>
                 <!-- end col -->
@@ -275,6 +237,12 @@
     <!-- container-fluid -->
 </div>
 
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+<script src="~/moduls/productmasterscript.js"></script>
+
 <script src="~/UserHome/minimal/assets/libs/%40ckeditor/ckeditor5-build-classic/build/ckeditor.js"></script>
 
 <!-- dropzone js -->
@@ -288,3 +256,4 @@
 
 <!-- Modal Js -->
 <script src="~/UserHome/minimal/assets/js/pages/modal.init.js"></script>
+

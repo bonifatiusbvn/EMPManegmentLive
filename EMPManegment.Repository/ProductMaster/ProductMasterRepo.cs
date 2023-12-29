@@ -69,12 +69,12 @@ namespace EMPManegment.Repository.ProductMaster
                     Gst = AddProduct.Gst,
                     PerUnitWithGstprice = AddProduct.PerUnitWithGstprice,
                     CreatedBy = AddProduct.CreatedBy,
-                    CreatedOn = AddProduct.CreatedOn,
+                    CreatedOn = DateTime.Today,
                     UpdatedBy = AddProduct.UpdatedBy,
                     UpdatedOn = AddProduct.UpdatedOn,
                 };
                 response.Code = 200;
-                response.Message = "Task add successfully!";
+                response.Message = "Product add successfully!";
                 Context.TblProductDetailsMasters.Add(productdetails);
                 Context.SaveChanges();
             }
