@@ -185,5 +185,16 @@ namespace EMPManegment.Repository.VendorDetailsRepository
             }
             return vendordata;
         }
+
+        public async Task<IEnumerable<VendorDetailsView>> GetVendorNameList()
+        {
+            IEnumerable<VendorDetailsView> GetVendorList = Context.TblVendorMasters.ToList().Select(a => new VendorDetailsView
+            {
+                Id = a.Vid,
+                VendorCompany = a.VendorCompany,
+
+            }).ToList();
+            return GetVendorList;
+        }
     }
 }

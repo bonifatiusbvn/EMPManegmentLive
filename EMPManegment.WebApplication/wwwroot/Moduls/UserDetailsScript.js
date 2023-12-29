@@ -24,6 +24,22 @@ $(document).ready(function () {
 
 
 
+$('#searchEmployee').change(function () {
+    
+    if ($("#searchEmployee").val() == "ByUsername") {
+        clearSelectedBox();
+        GetUsername();
+        $("#empnamebox").show();
+        $("#departmentbox").hide();
+    }
+    if ($("#searchEmployee").val() == "ByDepartment") {
+        clearSelectedBox();
+        GetDepartment();
+        $("#empnamebox").hide();
+        $("#departmentbox").show();        
+    } 
+});
+
 function GetAllUserData() {
     $('#UserTableData').DataTable({
         processing: true,
@@ -596,7 +612,8 @@ function GetDepartment() {
 }
 
 function GetSearchEmpList() {
-    if ($('#activeInactiveForm').valid()) {debugger
+    debugger
+    if ($('#activeInactiveForm').valid()) {
         var form_data = new FormData();
         form_data.append("DepartmentId", $('#ddlDepartmenrnt').val());
         form_data.append("Id", $("#ddlusername").val());debugger
@@ -608,6 +625,7 @@ function GetSearchEmpList() {
             processData: false,
             contentType: false,
             complete: function (Result) {
+                debugger
                 $("#allemplist").hide();
                 $("#activedeactivepagination").hide();
                 $("#backbtn").show();
