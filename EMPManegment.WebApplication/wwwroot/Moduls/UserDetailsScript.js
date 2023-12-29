@@ -22,24 +22,6 @@ $(document).ready(function () {
     });
 });
 
-
-
-$('#searchEmployee').change(function () {
-    
-    if ($("#searchEmployee").val() == "ByUsername") {
-        clearSelectedBox();
-        GetUsername();
-        $("#empnamebox").show();
-        $("#departmentbox").hide();
-    }
-    if ($("#searchEmployee").val() == "ByDepartment") {
-        clearSelectedBox();
-        GetDepartment();
-        $("#empnamebox").hide();
-        $("#departmentbox").show();        
-    } 
-});
-
 function GetAllUserData() {
     $('#UserTableData').DataTable({
         processing: true,
@@ -571,9 +553,9 @@ function clearSelectedBox() {
         '<option selected disabled value = "">--Select Department--</option>');
 }
 
-$('#searchEmployee').change(function (e) {
+$('#searchEmployee').on('change',function (e) {debugger
     e.stopImmediatePropagation();
-    if ($("#searchEmployee").val() == "ByUsername") {
+    if ($("#searchEmployee").val() == "ByUsername") {debugger
         clearSelectedBox();
         GetUsername();
         $("#empnamebox").show();
@@ -590,7 +572,7 @@ $('#searchEmployee').change(function (e) {
 function GetUsername() {
     $.ajax({
         url: '/Task/GetUserName',
-        success: function (result) {
+        success: function (result) {debugger
             $.each(result, function (i, data) {
                 $('#ddlusername').append('<Option value=' + data.id + '>' + data.firstName + " " + data.lastName + " " + "(" + data.userName + ")" + '</Option>')
             });
