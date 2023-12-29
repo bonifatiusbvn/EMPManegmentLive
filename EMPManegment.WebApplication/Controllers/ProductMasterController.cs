@@ -36,7 +36,7 @@ namespace EMPManegment.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddProductDetails(productDetailsView AddProduct)
+        public async Task<IActionResult> AddProductDetails(ProductRequestModel AddProduct)
         {
             try
             {
@@ -46,6 +46,7 @@ namespace EMPManegment.Web.Controllers
                 UploadFile(AddProduct.ProductImage, fullpath);
                 var ProductDetails = new ProductDetailsView
                 {
+                    VendorId = AddProduct.VendorId,
                     CreatedBy = _userSession.UserId,
                     ProductType = AddProduct.ProductType,
                     ProductName = AddProduct.ProductName,
@@ -88,7 +89,7 @@ namespace EMPManegment.Web.Controllers
             {
                 List<VendorDetailsView> VendorNameList = new List<VendorDetailsView>();
                 HttpClient client = WebAPI.Initil();
-                ApiResponseModel res = await APIServices.GetAsync("", "VendorController/GetVendorsNameList");
+                ApiResponseModel res = await APIServices.GetAsync("", "Vendor/GetVendorsNameList");
                 if (res.code == 200)
                 {
                     VendorNameList = JsonConvert.DeserializeObject<List<VendorDetailsView>>(res.data.ToString());

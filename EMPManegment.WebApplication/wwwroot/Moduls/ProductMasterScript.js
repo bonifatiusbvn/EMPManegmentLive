@@ -1,8 +1,22 @@
 ﻿$(document).ready(function () {
     GetProducts();
-
+    GetVendorNameList();
 });
 
+function GetVendorNameList() {
+    $.ajax({
+        url: '/ProductMaster/GetVendorsNameList',
+        success: function (result) {
+            $.each(result, function (i, data) {
+                $('#txtvendorname').append('<Option value=' + data.id + '>' + data.vendorCompany + '</Option>')
+            });
+        }
+    });
+}
+
+function VendorCompanyNametext(sel) {
+    $("#txtvendornameid").val((sel.options[sel.selectedIndex].text));
+}
 function AddProductType() {
     if ($("#createproduct-form").valid()) {
         var formData = new FormData();
@@ -15,7 +29,6 @@ function AddProductType() {
             contentType: false,
             processData: false,
             success: function (Result) {
-
                 if (Result.message == "Product Successfully Inserted") {
                     Swal.fire({
                         title: Result.message,
@@ -92,6 +105,8 @@ $(document).ready(function () {
             txtHSN: "required",
             txtGST: "required",
             txtPerUnitWithGSTPrice: "required",
+            txtvendorname: "required",
+            txtProducts:"required"
         },
         messages: {
             txtproductname: "Please Enter Product Name",
@@ -103,10 +118,12 @@ $(document).ready(function () {
             txtHSN: "Please Enter HSN",
             txtGST: "Please Enter GST",
             txtPerUnitWithGSTPrice: "Please Enter Per Unit With GST Price of the Product",
+            txtvendorname: "Please Select Vendor Name",
+            txtProducts:"Please Select Product Type"
         }
     })
     $('#saveproductdetails').on('click', function () {
-        $("#createproductform").validate();
+        $("#createproductform").validate();        
     });
 });
 
@@ -115,6 +132,8 @@ function SaveProductDetails()
     if ($('#createproductform').valid()) {
         var formData = new FormData();
         formData.append("ProductName", $("#txtproductname").val());
+        formData.append("ProductType", $("#txtProducts").val());
+        formData.append("VendorId", $("#txtvendorname").val());
         formData.append("ProductDescription", $("#txtproductdescription").val());
         formData.append("ProductShortDescription", $("#txtshortdescription").val());
         formData.append("ProductImage", $("#txtproductimage")[0].files[0]);
@@ -131,7 +150,6 @@ function SaveProductDetails()
             contentType: false,
             processData: false,
             success: function (Result) {
-                debugger
                 if (Result.message != null) {
                     Swal.fire({
                         title: Result.message,

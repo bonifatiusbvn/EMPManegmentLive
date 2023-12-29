@@ -24,4 +24,17 @@ namespace EMPManegment.EntityModels.ViewModels.ProjectModels
         public Guid? CreatdBy { get; set; }
         public string? FullName { get; set; }
     }
+    public class ProjectRequestModel
+    {
+        public Guid Id { get; set; }
+
+        public Guid ProjectId { get; set; }
+
+        public Guid UserId { get; set; }
+
+        public DateTime Date { get; set; }
+
+        public IFormFile DocumentName { get; set; } = null!;
+    }
+        
 }
