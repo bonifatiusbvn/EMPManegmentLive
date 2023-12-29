@@ -22,17 +22,10 @@ $(document).ready(function () {
     });
 });
 
-function clearSelectedBox() {
-  
-    $("#ddlusername").find("option").remove().end().append(
-        '<option selected disabled value = "">--Select Username--</option>');
 
-    $("#ddlDepartmenrnt").find("option").remove().end().append(
-        '<option selected disabled value = "">--Select Department--</option>');
-}
 
 $('#searchEmployee').change(function () {
-   
+    
     if ($("#searchEmployee").val() == "ByUsername") {
         clearSelectedBox();
         GetUsername();
@@ -569,12 +562,61 @@ $('#txtserch').keyup(function () {
     })
 });
 
+
+function clearSelectedBox() {
+    $("#ddlusername").find("option").remove().end().append(
+        '<option selected disabled value = "">--Select Username--</option>');
+
+    $("#ddlDepartmenrnt").find("option").remove().end().append(
+        '<option selected disabled value = "">--Select Department--</option>');
+}
+
+$('#searchEmployee').change(function (e) {
+    e.stopImmediatePropagation();
+    if ($("#searchEmployee").val() == "ByUsername") {
+        clearSelectedBox();
+        GetUsername();
+        $("#empnamebox").show();
+        $("#departmentbox").hide();
+    }
+    else if ($("#searchEmployee").val() == "ByDepartment") {
+        clearSelectedBox();
+        GetDepartment();
+        $("#empnamebox").hide();
+        $("#departmentbox").show();
+    }
+});
+
+function GetUsername() {
+    $.ajax({
+        url: '/Task/GetUserName',
+        success: function (result) {
+            $.each(result, function (i, data) {
+                $('#ddlusername').append('<Option value=' + data.id + '>' + data.firstName + " " + data.lastName + " " + "(" + data.userName + ")" + '</Option>')
+            });
+        }
+    });
+}
+
+function GetDepartment() {
+
+    $.ajax({
+        url: '/Authentication/GetDepartment',
+        success: function (result) {
+            $.each(result, function (i, data) {
+                $('#ddlDepartmenrnt').append('<Option value=' + data.id + '>' + data.departments + '</Option>')
+
+            });
+        }
+    });
+}
+
 function GetSearchEmpList() {
-    
+    debugger
     if ($('#activeInactiveForm').valid()) {
         var form_data = new FormData();
         form_data.append("DepartmentId", $('#ddlDepartmenrnt').val());
-        form_data.append("Id", $("#ddlusername").val());
+        form_data.append("Id", $("#ddlusername").val());debugger
         $.ajax({
             url: '/UserProfile/GetSearchEmpList',
             type: 'Post',
@@ -583,7 +625,7 @@ function GetSearchEmpList() {
             processData: false,
             contentType: false,
             complete: function (Result) {
-       
+                debugger
                 $("#allemplist").hide();
                 $("#activedeactivepagination").hide();
                 $("#backbtn").show();
