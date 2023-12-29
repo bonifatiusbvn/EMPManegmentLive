@@ -8,7 +8,7 @@ namespace EMPManagment.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class SalesController : ControllerBase
+    public class InvoiceController : ControllerBase
     {
         [HttpPost]
         public async Task<IActionResult> GenerateInvoice(string InvoiceNo) 

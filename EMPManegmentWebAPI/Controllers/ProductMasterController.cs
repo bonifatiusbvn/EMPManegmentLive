@@ -1,4 +1,6 @@
-﻿using EMPManegment.EntityModels.ViewModels.Models;
+﻿using DocumentFormat.OpenXml.Spreadsheet;
+using EMPManegment.EntityModels.ViewModels;
+using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.ProductMaster;
 using EMPManegment.Inretface.Interface.ProductMaster;
 using EMPManegment.Inretface.Interface.ProjectDetails;
@@ -44,6 +46,40 @@ namespace EMPManagment.API.Controllers
                 throw ex;
             }
             return StatusCode(response.Code, response);
+        }
+        [HttpPost]
+        [Route("AddProductType")]
+        public async Task<IActionResult> AddProductType(ProductTypeView AddProduct)
+        {
+            UserResponceModel response = new UserResponceModel();
+            try
+            {
+                var Product = productMaster.AddProductType(AddProduct);
+                if (Product.Result.Code == 200)
+                {
+                    response.Code = (int)HttpStatusCode.OK;
+                    response.Message = Product.Result.Message;
+                    response.Icone = Product.Result.Icone;
+                }
+                else
+                {
+                    response.Message = Product.Result.Message;
+                    response.Code = (int)HttpStatusCode.NotFound;
+                    response.Icone = Product.Result.Icone;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return StatusCode(response.Code, response);
+        }
+        [HttpGet]
+        [Route("GetProduct")]
+        public async Task<IActionResult> GetProduct()
+        {
+            IEnumerable<ProductTypeView> getProduct = await productMaster.GetProduct();
+            return Ok(new { code = 200, data = getProduct.ToList() });
         }
     }
 }

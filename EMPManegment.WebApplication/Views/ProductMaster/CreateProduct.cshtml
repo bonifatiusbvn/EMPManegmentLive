@@ -3,6 +3,15 @@
     Layout = "~/Views/Shared/_HomeLayout.cshtml";
 }
 
+
+<style>
+    #txtproductname-error, #txtproductdescription-error, #txtshortdescription-error,
+    #txtproductimage-error, #txtstocks-error, #txtPerUnitPrice-error,
+    #txtHSN-error, #txtGST-error, #txtPerUnitWithGSTPrice-error, #txtProductType-error {
+        color: red;
+    }
+</style>
+
 <style>
     #txtproductname-error, #txtproductdescription-error, #txtshortdescription-error,
     #txtproductimage-error, #txtstocks-error, #txtPerUnitPrice-error,
@@ -38,10 +47,19 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="mb-3">
+                                <label class="form-label" for="product-title-input">Product Title</label>
+                                <input type="text" class="form-control" id="txtproducttitle" name="txtproducttitle" placeholder="Enter product title">
                                 <label class="form-label" for="ProductName">Product Name</label>
                                 <input type="text" class="form-control" id="txtproductname" name="txtproductname" placeholder="Enter product title" required>
                             </div>
                             <div>
+                                <label>Product Description</label>
+                                <div id="ckeditor-classic">
+                                    <input type="text" class="form-control" id="txtproductdescription" name="txtproductdescription" placeholder="Enter product description" >
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                                 <label class="form-label" for="ProductDescription">Product Description</label>
                                 <textarea rows="10" class="form-control" id="txtproductdescription" name="txtproductdescription" placeholder="Enter product description"></textarea>
                             </div>
@@ -122,6 +140,22 @@
                                     <div class="row">
                                         <div class="col-lg-3 col-sm-6">
                                             <div class="mb-3">
+                                                <label class="form-label" for="stocks">Stocks</label>
+                                                <input type="text" class="form-control" id="txtstocks" name="txtstocks" placeholder="Stocks" >
+                                                <div class="invalid-feedback">Please Enter a product stocks.</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 col-sm-6">
+                                            <div class="mb-3">
+                                                <label class="form-label" for="product-price-input">Price</label>
+                                                <div class="input-group has-validation mb-3">
+                                                    <span class="input-group-text" id="txtproductprice">$</span>
+                                                    <input type="text" class="form-control" id="txtproductprice" name="txtproductprice" placeholder="Enter price">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 col-sm-6">
+                                            <div class="mb-3">
                                                 <label class="form-label" for="HSN">HSN</label>
                                                 <input type="text" class="form-control" id="txtHSN" name="txtHSN" placeholder="Enter HSN">
                                             </div>
@@ -163,15 +197,8 @@
                                     New
                                 </button>Select product category
                             </p>
-                            <select class="form-select" id="txtproductcategory" name="txtproductcategory" data-choices data-choices-search-false>
-                                <option value="Appliances">Appliances</option>
-                                <option value="Automotive Accessories">Automotive Accessories</option>
-                                <option value="Electronics">Electronics</option>
-                                <option value="Fashion">Fashion</option>
-                                <option value="Furniture">Furniture</option>
-                                <option value="Grocery">Grocery</option>
-                                <option value="Kids">Kids</option>
-                                <option value="Watches">Watches</option>
+                            <select id="txtProducts" class="form-control bg-transparent">
+                                <option>--Select Product--</option>
                             </select>
                         </div>
                         <!-- end card body -->
@@ -180,19 +207,20 @@
                         <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="flipModalLabel">Modal Heading</h5>
+                                    <h5 class="modal-title" id="flipModalLabel">Add Product</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                    <h5 class="fs-16">
-                                        Overflowing text to show scroll behavior
-                                    </h5>
-                                    <p class="text-muted">One morning, when Gregor Samsa woke from troubled dreams, he found himself transformed in his bed into a horrible vermin. He lay on his armour-like back, and if he lifted his head a little he could see his brown belly, slightly domed and divided by arches into stiff sections.</p>
-                                    <p class="text-muted">The bedding was hardly able to cover it and seemed ready to slide off any moment. His many legs, pitifully thin compared with the size of the rest of him, waved about helplessly as he looked. "What's happened to me?" he thought.</p>
+                                    <div class="hstack gap-3 align-items-start">
+                                        <div class="flex-grow-1">
+                                            <label>Product Name</label>
+                                                <input class="form-control" id="txtProductType" name="txtProductType" placeholder="Enter ProductName" type="text" />
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
-                                    <button type="button" class="btn btn-primary ">Save Changes</button>
+                                    <button type="button" class="btn btn-primary " onclick="AddProductType()" id="AddProductTypeButton" value="Validate">Save</button>
                                 </div>
 
                             </div><!-- /.modal-content -->

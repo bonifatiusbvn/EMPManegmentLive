@@ -186,8 +186,8 @@ public partial class BonifatiusEmployeesContext : DbContext
                 .HasColumnName("TotalGST");
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
 
-            entity.HasOne(d => d.Product).WithMany(p => p.TblInvoices)
-                .HasForeignKey(d => d.ProductId)
+            entity.HasOne(d => d.Vandor).WithMany(p => p.TblInvoices)
+                .HasForeignKey(d => d.VandorId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_tblInvoices_tblProductDetailsMaster");
         });

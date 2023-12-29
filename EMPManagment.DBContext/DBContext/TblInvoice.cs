@@ -43,5 +43,5 @@ public partial class TblInvoice
 
     public Guid? UpdatedBy { get; set; }
 
-    public virtual TblProductDetailsMaster Product { get; set; } = null!;
+    public virtual TblVendorMaster Vandor { get; set; } = null!;
 }
