@@ -11,7 +11,6 @@ namespace EMPManegment.EntityModels.ViewModels.ProductMaster
     {
         public Guid Id { get; set; }
         public Guid VendorId { get; set; }
-
         public int? ProductType { get; set; }
 
         public string ProductName { get; set; } = null!;
