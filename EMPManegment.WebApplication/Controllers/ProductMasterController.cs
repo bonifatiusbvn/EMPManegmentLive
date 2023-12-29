@@ -140,5 +140,10 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
+
+        public IActionResult ProductList()
+        {
+            return View();  
+        }
     }
 }
