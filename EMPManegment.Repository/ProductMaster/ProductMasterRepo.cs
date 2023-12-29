@@ -1,4 +1,5 @@
 ﻿using EMPManagment.API;
+using EMPManegment.EntityModels.ViewModels;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.ProductMaster;
 using EMPManegment.Inretface.Interface.ProductMaster;
@@ -31,6 +32,7 @@ namespace EMPManegment.Repository.ProductMaster
                     response.Message = "This Product Is already exists";
                     response.Data = AddProduct;
                     response.Code = (int)HttpStatusCode.NotFound;
+                    response.Icone = "warning";
                 }
                 else
                 {
@@ -39,7 +41,8 @@ namespace EMPManegment.Repository.ProductMaster
                         ProductType = AddProduct.ProductType,
                     };
                     response.Code = (int)HttpStatusCode.OK;
-                    response.Message = "Vendor Data Successfully Inserted";
+                    response.Message = "Product Successfully Inserted";
+                    response.Icone = "success";
                     Context.TblProductTypeMasters.Add(Product);
                     Context.SaveChanges();
                 }
@@ -83,6 +86,23 @@ namespace EMPManegment.Repository.ProductMaster
                 throw ex;
             }
             return response;
+        }
+
+        public async Task<IEnumerable<ProductTypeView>> GetProduct()
+        {
+            try
+            {
+                IEnumerable<ProductTypeView> Product = Context.TblProductTypeMasters.ToList().Select(a => new ProductTypeView
+                {
+                    Id = a.Id,
+                    ProductType = a.ProductType
+                });
+                return Product;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }
