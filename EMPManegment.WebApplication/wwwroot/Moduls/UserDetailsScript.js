@@ -228,27 +228,91 @@ function EnterInTime() {
 }
 
 function EnterOutTime() {
-    
-    var fromData = new FormData();
-    fromData.append("UserId", $("#txtuserid").val());
-    $.ajax({
-        url: '/Home/EnterUserOutTime',
-        type: 'Post',
-        data: fromData,
-        dataType: 'json',
-        processData: false,
-        contentType: false,
-        success: function (Result) {
-            Swal.fire({
-                title: Result.message,
-                icon: Result.icone,
-                confirmButtonColor: '#3085d6',
-                confirmButtonText: 'OK'
-            })
-            GetUserAttendanceInTime();
-        },
-       
-    })
+    debugger
+    if ($("#todayouttime").text() != "Pending") {
+        var fromData = new FormData();
+        fromData.append("UserId", $("#txtuserid").val());
+        $.ajax({
+            url: '/Home/EnterUserOutTime',
+            type: 'Post',
+            data: fromData,
+            dataType: 'json',
+            processData: false,
+            contentType: false,
+            success: function (Result) {
+                Swal.fire({
+                    title: Result.message,
+                    icon: Result.icone,
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'OK'
+                })
+                GetUserAttendanceInTime();
+            },
+
+        })
+    }
+
+    else
+    {
+        debugger
+        const swalWithBootstrapButtons = Swal.mixin({
+            customClass: {
+                confirmButton: 'btn btn-success',
+                cancelButton: 'btn btn-danger'
+            },
+            buttonsStyling: false
+        })
+
+
+
+        swalWithBootstrapButtons.fire({
+            title: 'Are you sure?',
+            text: "You won't to Enter OUT-Time!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, Enter it!',
+            cancelButtonText: 'No, cancel!',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+
+                var fromData = new FormData();
+                fromData.append("UserId", $("#txtuserid").val());
+                $.ajax({
+                    url: '/Home/EnterUserOutTime',
+                    type: 'Post',
+                    data: fromData,
+                    dataType: 'json',
+                    processData: false,
+                    contentType: false,
+                    success: function (Result) {
+                        Swal.fire({
+                            title: Result.message,
+                            icon: Result.icone,
+                            confirmButtonColor: '#3085d6',
+                            confirmButtonText: 'OK'
+                        })
+                        GetUserAttendanceInTime();
+                    },
+
+                })
+
+            } else if (
+                /* Read more about handling dismissals below */
+                result.dismiss === Swal.DismissReason.cancel
+            ) {
+                swalWithBootstrapButtons.fire(
+                    'Cancelled',
+                    'User Have No Changes.!! :)',
+                    'error'
+                )
+            }
+        })
+
+
+    }
+
+   
 }
 
 function ResetPassword()
@@ -392,6 +456,68 @@ function EditUserDetails(EmpId) {
 }
 
 
+function Logout()
+{
+    debugger
+    const swalWithBootstrapButtons = Swal.mixin({
+        customClass: {
+            confirmButton: 'btn btn-success',
+            cancelButton: 'btn btn-danger'
+        },
+        buttonsStyling: false
+    })
+
+
+
+    swalWithBootstrapButtons.fire({
+        title: 'Are you sure?',
+        text: "You won't to Log Out ",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes !',
+        cancelButtonText: 'No, cancel!',
+        reverseButtons: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+
+            debugger
+            $.ajax({
+                url: '/Authentication/Logout',
+                type: 'GET',
+                contentType: 'application/json;charset=utf-8;',
+                dataType: 'json',
+
+                success: function (Result) {
+                    debugger
+
+                    swalWithBootstrapButtons.fire(
+                        'Done!',
+                        'Successfully LogOut.!!',
+                        'success'
+                    ).then(function () {
+                        window.location = '/UserProfile/UserActiveDecative';
+                    });
+
+                },
+                error: function () {
+                    toastr.error('There is some problem in your request.');
+                }
+            })
+
+        } else if (
+            /* Read more about handling dismissals below */
+            result.dismiss === Swal.DismissReason.cancel
+        ) {
+            swalWithBootstrapButtons.fire(
+                'Cancelled',
+                'User Have No Changes.!! :)',
+                'error'
+            )
+        }
+    })
+
+
+}
 
 function UpdateUserDetails() {
     var objData = {
