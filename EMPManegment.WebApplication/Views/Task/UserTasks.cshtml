@@ -4,10 +4,10 @@
     Layout = "~/Views/Shared/_HomeLayout.cshtml";
 }
 <style>
-    #ddlStatus-error {
-        color: red;
+    #tasksListform, #tasksListMedium, #tasksListLow, #tasksListhigh {
+        color: white;
     }
-  </style>
+</style>
 
 <div class="row" style="margin-top:20px;">
     <div class="col-12">
@@ -66,6 +66,7 @@
                 </div>
             </div>
         </div>
+        @* ----- Lowpriority----- *@
         <div data-simplebar class="tasks-wrapper px-3 mx-n3">
              <div id="unassigned-task" class="tasks">
                 @foreach (var item in Model)
@@ -140,7 +141,7 @@
                                 <div class="d-flex align-items-center">
                                     <div class="flex-grow-1">
                                         <span class="text"> TaskStatus :</span>
-                                        <form id="tasksList">
+                                        <form id="tasksListLow">
                                           <select id="ddlStatus@(item.Id)" class="form-control" name="ddlStatus">
                                             <option selected disabled value="">---Select Status---</option>
                                             <option value="Pending">Pending</option>
@@ -154,13 +155,12 @@
                                             {
                                                 <option value="Completed">Completed</option>
                                             }
-                                            @* <option value="Completed">Completed</option> *@
                                         </select>
                                       </form>
                                     </div>
                                 </div>
                                 <div>
-                                    <button type="submit" class="btn btn-success btn-sm m-2" onclick="btnStatusUpdate('@item.Id')" id="StatusUpdate" value="Validate"><i class="bi bi-pencil-fill"></i>Status Update</button>
+                                    <button type="submit" class="btn btn-success btn-sm m-2" onclick="btnStatusUpdateLow('@item.Id')" id="StatusUpdate" value="Validate"><i class="bi bi-pencil-fill"></i>Status Update</button>
                                     <button class="btn btn-primary btn-sm" data-bs-toggle="modal" onclick="btnTaskDetails('@item.Id')"> <i class="bi bi-chat-right-dots"></i> Details</button>
                                 </div>
 
@@ -207,6 +207,8 @@
                 </div>
             </div>
         </div>
+
+       @* ----- Mediumpriority----- *@
         <div data-simplebar class="tasks-wrapper px-3 mx-n3">
             <div id="todo-task" class="tasks">
                 @foreach (var item in Model)
@@ -285,12 +287,12 @@
                                 <div class="d-flex align-items-center">
                                     <div class="flex-grow-1">
                                         <span class="text"> TaskStatus :</span>
-                                        <form id="tasksList">
-                                        <select id="ddlStatus@(item.Id)" class="form-control" name="ddlStatus">
+                                        <form id="tasksListMedium">
+                                            <select id="ddlStatus@(item.Id)" class="form-control" name="ddlStatus">
                                                 <option selected disabled value="">---Select Status---</option>
-                                                <option   value="Pending">Pending</option>
-                                                <option  value="Working">Working</option>
-                                                <option  value="InReview">InReview</option>
+                                                <option value="Pending">Pending</option>
+                                                <option value="Working">Working</option>
+                                                <option value="InReview">InReview</option>
                                                 @if (item.TaskStatus == "Completed")
                                                 {
                                                     <option disabled value="Completed">Completed</option>
@@ -298,13 +300,13 @@
                                                 else
                                                 {
                                                     <option value="Completed">Completed</option>
-                                                }   
-                                        </select>
+                                                }
+                                            </select>
                                         </form>
                                     </div>
                                 </div>
                                 <div>
-                                    <button type="button" class="btn btn-success btn-sm m-2" onclick="btnStatusUpdate('@item.Id')" id="StatusUpdate" value="Validate"><i class="bi bi-pencil-fill"></i>Status Update</button>
+                                    <button type="button" class="btn btn-success btn-sm m-2" onclick="btnStatusUpdateMedium('@item.Id')" id="StatusUpdate" value="Validate"><i class="bi bi-pencil-fill"></i>Status Update</button>
                                     <button class="btn btn-primary btn-sm" data-bs-toggle="modal" onclick="btnTaskDetails('@item.Id')"> <i class="bi bi-chat-right-dots"></i> Details</button>
                                 </div>
 
@@ -353,6 +355,7 @@
                 </div>
             </div>
         </div>
+        @* ----Highpriority---- *@
         <div data-simplebar class="tasks-wrapper px-3 mx-n3">
             <div id="inprogress-task" class="tasks">
                 @foreach (var item in Model)
@@ -432,30 +435,34 @@
                                         <span class="text"> TaskStatus :</span>
                                         @if (item.TaskStatus == "Completed")
                                         {
-                                            <select id="ddlStatus@(item.Id)" name="Status" class="form-control" disabled>
+                                            <form id="tasksListhigh">
+                                                <select id="ddlStatus@(item.Id)" class="form-control" name="ddlStatus">
                                                 @* <select id="ddlStatus@(item.Id)" name="Status" class="form-control"> *@
                                                 <option selected disabled value="">---Select Status---</option>
                                                 <option value="Pending">Pending</option>
                                                 <option value="Working">Working</option>
                                                 <option value="Completed">Completed</option>
                                                 <option value="InReview">InReview</option>
-                                            </select>
+                                                </select>
+                                            </form>
                                         }
                                         else
                                         {
-                                            <select id="ddlStatus@(item.Id)" name="Status" class="form-control">
-                                                @* <select id="ddlStatus@(item.Id)" name="Status" class="form-control"> *@
-                                                <option selected disabled value="">---Select Status---</option>
-                                                <option value="Pending">Pending</option>
-                                                <option value="Working">Working</option>
-                                                <option value="Completed">Completed</option>
-                                                <option value="InReview">InReview</option>
-                                            </select>
+                                            <form id="tasksListhigh">
+                                                <select id="ddlStatus@(item.Id)" class="form-control" name="ddlStatus">
+                                                    @* <select id="ddlStatus@(item.Id)" name="Status" class="form-control"> *@
+                                                    <option selected disabled value="">---Select Status---</option>
+                                                    <option value="Pending">Pending</option>
+                                                    <option value="Working">Working</option>
+                                                    <option value="Completed">Completed</option>
+                                                    <option value="InReview">InReview</option>
+                                                </select>
+                                            </form>
                                         }
                                     </div>
                                 </div>
                                 <div>
-                                    <button type="submit" class="btn btn-success btn-sm m-2" onclick="btnStatusUpdate('@item.Id')" id="StatusUpdate" value="Validate"><i class="bi bi-pencil-fill"></i>Status Update</button>
+                                    <button type="submit" class="btn btn-success btn-sm m-2" onclick="btnStatusUpdateHigh('@item.Id')" id="StatusUpdate" value="Validate"><i class="bi bi-pencil-fill"></i>Status Update</button>
                                     <button class="btn btn-primary btn-sm" data-bs-toggle="modal" onclick="btnTaskDetails('@item.Id')"> <i class="bi bi-chat-right-dots"></i> Details</button>
                                 </div>
                             </div>
@@ -505,6 +512,7 @@
                 </div>
             </div>
         </div>
+    @*-----------InReview------------ *@
         <div data-simplebar class="tasks-wrapper px-3 mx-n3">
             <div id="inprogress-task" class="tasks">
                 @foreach (var item in Model)
@@ -521,7 +529,6 @@
                                             </a>
                                         </h6>
                                     </div>
-
                                     <div class="dropdown">
                                         <a href="javascript:void(0);" class="text-muted" id="dropdownMenuLink6" data-bs-toggle="dropdown" aria-expanded="false"><i class="ri-more-fill"></i></a>
                                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink6">
@@ -571,7 +578,6 @@
                                         <a class="badge bg-secondary text-uppercase">  @item.TaskStatus  </a>
                                     }
                                     <div class="flex-grow-1">
-                                        @* <span class="badge bg-primary-subtle  text-uppercase">@item.TaskStatus</span> *@
                                     </div>
                                     <div class="flex-shrink-0">
                                         <div class="avatar-group">
@@ -584,34 +590,32 @@
                                         <span class="text"> TaskStatus :</span>
                                         @if (item.TaskStatus == "Completed")
                                         {
-                                            <form id="tasksList">
-                                                <select id="ddlStatus@(item.Id)" class="form-control" name="ddlStatus" disabled>
-                                            @* <select id="ddlStatus@(item.Id)" name="Status" class="form-control" disabled> *@
-                                                <option selected disabled value="">---Select Status---</option>
-                                                <option value="Pending">Pending</option>
-                                                <option value="Working">Working</option>
-                                                <option value="Completed">Completed</option>
-                                                <option value="InReview">InReview</option>
-                                            </select>
+                                            <form id="tasksListform">
+                                                <select id="ddlStatus@(item.Id)" class="form-control" name="ddlStatus">
+                                                    <option selected disabled value="">---Select Status---</option>
+                                                    <option value="Pending">Pendings</option>
+                                                    <option value="Working">Working</option>
+                                                    <option value="Completed">Completed</option>
+                                                    <option value="InReview">InReview</option>
+                                                </select>
                                             </form>
                                         }
                                         else
                                         {
-                                            <form id="tasksList">
-                                                <select id="ddlStatus@(item.Id)" class="form-control" name="ddlStatus" disabled>
-                                              @* <select id="ddlStatus@(item.Id)" name="Status" class="form-control"> *@
-                                                <option selected disabled value="">---Select Status---</option>
-                                                <option value="Pending">Pending</option>
-                                                <option value="Working">Working</option>
-                                                <option value="Completed">Completed</option>
-                                                <option value="InReview">InReview</option>
-                                            </select>
+                                            <form id="tasksListform">
+                                                <select id="ddlStatus@(item.Id)" class="form-control" name="ddlStatus">
+                                                    <option selected disabled value="">---Select Status---</option>
+                                                    <option value="Pending">Pending</option>
+                                                    <option value="Working">Working</option>
+                                                    <option value="Completed">Completed</option>
+                                                    <option value="InReview">InReview</option>
+                                                </select>
                                             </form>
                                         }
                                     </div>
                                 </div>
                                 <div>
-                                    <button type="submit" class="btn btn-success btn-sm m-2" onclick="btnStatusUpdate('@item.Id')" id="StatusUpdate" value="Validate"><i class="bi bi-pencil-fill"></i>Status Update</button>
+                                    <button type="button" class="btn btn-success btn-sm m-2" onclick="btnStatusUpdate('@item.Id')" id="StatusUpdate" value="Validate"><i class="bi bi-pencil-fill"></i>Status Update</button>
                                     <button class="btn btn-primary btn-sm" data-bs-toggle="modal" onclick="btnTaskDetails('@item.Id')"> <i class="bi bi-chat-right-dots"></i> Details</button>
                                 </div>
                             </div>
@@ -656,6 +660,7 @@
                 </div>
             </div>
         </div>
+      @*-----CompletedTask----- *@
         <div data-simplebar class="tasks-wrapper px-3 mx-n3">
             <div id="completed-task" class="tasks">
                 @foreach (var item in Model)
@@ -732,8 +737,6 @@
                                         <span class="text"> TaskStatus :</span>
                                         @if (item.TaskStatus == "Completed")
                                         {
-
-
                                             <select id="ddlStatus@(item.Id)" name="Status" class="form-control">
                                                 <option selected disabled value="">---Select Status---</option>
                                                 <option value="Pending">Pending</option>
@@ -741,7 +744,6 @@
                                                 <option value="Completed">Completed</option>
                                                 <option value="InReview">InReview</option>
                                             </select>
-                                            
                                         }
                                         else
                                         {
@@ -868,3 +870,4 @@
 <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
 <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
 <script src="~/moduls/taskscript.js" asp-append-version="true"></script>
+
