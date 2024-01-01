@@ -15,5 +15,6 @@ namespace EMPManegment.Inretface.Interface.ProductMaster
         Task<UserResponceModel> AddProductType(ProductTypeView AddProduct);
         Task<UserResponceModel> AddProductDetails(ProductDetailsView AddProductDetails);
         Task<IEnumerable<ProductTypeView>> GetProduct();
+        Task<List<ProductDetailsView>> GetProductDetailsByVendorId(Guid vendorId);
     }
 }

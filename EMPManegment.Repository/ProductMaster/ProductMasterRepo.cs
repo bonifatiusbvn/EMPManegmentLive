@@ -2,7 +2,9 @@
 using EMPManegment.EntityModels.ViewModels;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.ProductMaster;
+using EMPManegment.EntityModels.ViewModels.TaskModels;
 using EMPManegment.Inretface.Interface.ProductMaster;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -99,6 +101,34 @@ namespace EMPManegment.Repository.ProductMaster
                     ProductType = a.ProductType
                 });
                 return Product;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public async Task<List<ProductDetailsView>> GetProductDetailsByVendorId(Guid VendorId)
+        {
+            try
+            {
+                var vendorDetails = new List<ProductDetailsView>();
+                var data = await Context.TblProductDetailsMasters.Where(x => x.VendorId == VendorId).ToListAsync();
+                if (data != null)
+                {
+                    foreach (var item in data)
+                    {
+                        vendorDetails.Add(new ProductDetailsView()
+                        {
+                            Id = item.Id,
+                            VendorId = item.VendorId,
+                            ProductImage = item.ProductImage,
+                            ProductName = item.ProductName,
+                            ProductStocks = item.ProductStocks,
+                            PerUnitPrice = item.PerUnitPrice,
+                        });
+                    }
+                }
+                return vendorDetails;
             }
             catch (Exception ex)
             {
