@@ -6,7 +6,7 @@
 
 
 <!-- dropzone css -->
-<link rel="stylesheet" href="assets/libs/dropzone/dropzone.css" type="text/css" />
+<link rel="stylesheet" href="~/UserHome/minimal/assets/libs/dropzone/dropzone.css" type="text/css" />
     <div class="page-content">
         <div class="container-fluid">
 
@@ -37,7 +37,7 @@
                             <h5 class="card-title mb-0 flex-grow-1">Invoices</h5>
                             <div class="flex-shrink-0">
                                 <div class="d-flex gap-2 flex-wrap">
-                                    <select class="form-control" data-choices data-choices-search-false id="idStatus" name="idStatus">
+                                    <select class="form-control" data-choices data-choices-search-false id="idStatus">
                                         <option selected value=" ">Type</option>
                                         <option value="Pending">Selse</option>
                                         <option value="Inprogress">Purchase</option>
@@ -50,7 +50,6 @@
                     </div>
                     <div class="card-body">
                         <div>
-
                             <div class="row justify-content-center">
                                 <div class="col-xxl-9">
                                     <div class="card">
@@ -67,39 +66,53 @@
                                                                 </span>
                                                             </label>
                                                         </div>
-                                                        <div>
-                                                            <div>
-                                                                <label for="companyAddress">CompanyAddress</label>
-                                                            </div>
-                                                            <div class="mb-2">
-                                                                <select class="form-control" data-choices data-choices-search-false id="idStatus" name="idStatus">
+                                                              <div id="Companyname">
+                                                                 <label>CompanyAddress</label>
+                                                              </div>
+                                                              <div class="mb-2">
+                                                                  <select class="form-control" data-choices data-choices-search-false id="idStatusCompany" name="Company">
                                                                     <option selected value=" ">Type</option>
                                                                     <option value="Pending">Bonifatius</option>
                                                                     <option value="Inprogress">Purchase</option>
                                                                 </select>
-                                                            </div>
-                                                            <div>
-                                                               
-                                                            </div>
-                                                        </div>
+                                                               </div>
+                                                                <div class="col-lg-12 ms-auto" id="vender" >
+                                                                  <select class="form-control" data-choices data-choices-search-false id="idStatusvender" name="vender">
+                                                                    <option selected value=" ">Vendor</option>
+                                                                    <option value="Pending">Bonifatius</option>
+                                                                    <option value="Inprogress">Purchase</option>
+                                                                  </select>
+                                                                </div>
                                                     </div>
                                                     <!--end col-->
-                                                    <div class="col-lg-4 ms-auto">
-                                                        
-                                                        <select class="form-control" data-choices data-choices-search-false id="idStatus" name="idStatus">
+                                                        <div class="col-lg-4 ms-auto" id="vender">
+                                                           <select class="form-control" data-choices data-choices-search-false id="idvender" name="vender">
                                                             <option selected value=" ">Vendor</option>
-                                                            <option value="Pending">Bonifatius</option>
-                                                            <option value="Inprogress">Purchase</option>
-                                                        </select>
-                                                       
-                                                    </div>
+                                                           <option value="Pending">Bonifatius</option>
+                                                          <option value="Inprogress">Purchase</option>
+                                                          </select>
+
+
+                                                             <div id="CompanCCP">
+                                                                 <label>CompanyAddress</label>
+                                                             </div>
+                                                            <div class="mb-2">
+                                                             <select class="form-control" data-choices data-choices-search-false id="idCompany" name="Company">
+                                                                <option selected value=" ">Type</option>
+                                                                <option value="Pending">Bonifatius</option>
+                                                                <option value="Inprogress">Purchase</option>
+                                                             </select>
+                                                           </div>
+                                                        </div>
+                                                    
+                                                    
                                                 </div>
                                                 <!--end row-->
                                             </div>
                                             <div class="card-body p-4">
                                                 <div class="row g-3">
                                                     <div class="col-lg-3 col-sm-6">
-                                                        <label for="invoicenoInput">Invoice No</label>
+                                                        <label for="invoicenoInput" id="InvoiceNo">Invoice No</label>
                                                         <input type="text" class="form-control bg-light border-0" id="invoicenoInput" placeholder="Invoice No" value="#VL25000355" />
                                                     </div>
                                                     <!--end col-->
@@ -405,4 +418,4 @@
 <!--Invoice create init js-->
 <script src="~/UserHome/minimal/assets/js/pages/invoicecreate.init.js"></script>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script src="~/moduls/salesscript.js"></script>
+<script src="~/moduls/invoicemasterscript.js"></script>

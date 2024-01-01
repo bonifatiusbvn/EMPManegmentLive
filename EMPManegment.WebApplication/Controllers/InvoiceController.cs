@@ -21,10 +21,7 @@ namespace EMPManegment.Web.Controllers
             return View();
         }
 
-        public IActionResult EditInvoice()
-        {
-            return View();
-        }
+       
 
 
     }
