@@ -71,5 +71,13 @@ namespace EMPManagment.API.Controllers
             var vendor = await vendorServices.GetVendorById(vendorId);
             return Ok(new { code = 200, data = vendor });
         }
+
+        [HttpGet]
+        [Route("GetVendorsNameList")]
+        public async Task<IActionResult> GetVendorNameList()
+        {
+            var getVendorsNameList = await vendorServices.GetVendorNameList();
+            return Ok(new { code = 200, data = getVendorsNameList.ToList() });
+        }
     }
 }

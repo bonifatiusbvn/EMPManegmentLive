@@ -1,7 +1,10 @@
 ﻿using EMPManagment.API;
+using EMPManegment.EntityModels.ViewModels;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.ProductMaster;
+using EMPManegment.EntityModels.ViewModels.TaskModels;
 using EMPManegment.Inretface.Interface.ProductMaster;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,6 +34,7 @@ namespace EMPManegment.Repository.ProductMaster
                     response.Message = "This Product Is already exists";
                     response.Data = AddProduct;
                     response.Code = (int)HttpStatusCode.NotFound;
+                    response.Icone = "warning";
                 }
                 else
                 {
@@ -39,7 +43,8 @@ namespace EMPManegment.Repository.ProductMaster
                         ProductType = AddProduct.ProductType,
                     };
                     response.Code = (int)HttpStatusCode.OK;
-                    response.Message = "Vendor Data Successfully Inserted";
+                    response.Message = "Product Successfully Inserted";
+                    response.Icone = "success";
                     Context.TblProductTypeMasters.Add(Product);
                     Context.SaveChanges();
                 }
@@ -58,6 +63,7 @@ namespace EMPManegment.Repository.ProductMaster
                 var productdetails = new TblProductDetailsMaster()
                 {
                     Id = Guid.NewGuid(),
+                    VendorId = AddProduct.VendorId,
                     ProductType = AddProduct.ProductType,
                     ProductName = AddProduct.ProductName,
                     ProductDescription = AddProduct.ProductDescription,
@@ -69,12 +75,12 @@ namespace EMPManegment.Repository.ProductMaster
                     Gst = AddProduct.Gst,
                     PerUnitWithGstprice = AddProduct.PerUnitWithGstprice,
                     CreatedBy = AddProduct.CreatedBy,
-                    CreatedOn = AddProduct.CreatedOn,
+                    CreatedOn = DateTime.Today,
                     UpdatedBy = AddProduct.UpdatedBy,
                     UpdatedOn = AddProduct.UpdatedOn,
                 };
                 response.Code = 200;
-                response.Message = "Task add successfully!";
+                response.Message = "Product add successfully!";
                 Context.TblProductDetailsMasters.Add(productdetails);
                 Context.SaveChanges();
             }
@@ -83,6 +89,51 @@ namespace EMPManegment.Repository.ProductMaster
                 throw ex;
             }
             return response;
+        }
+
+        public async Task<IEnumerable<ProductTypeView>> GetProduct()
+        {
+            try
+            {
+                IEnumerable<ProductTypeView> Product = Context.TblProductTypeMasters.ToList().Select(a => new ProductTypeView
+                {
+                    Id = a.Id,
+                    ProductType = a.ProductType
+                });
+                return Product;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public async Task<List<ProductDetailsView>> GetProductDetailsByVendorId(Guid VendorId)
+        {
+            try
+            {
+                var vendorDetails = new List<ProductDetailsView>();
+                var data = await Context.TblProductDetailsMasters.Where(x => x.VendorId == VendorId).ToListAsync();
+                if (data != null)
+                {
+                    foreach (var item in data)
+                    {
+                        vendorDetails.Add(new ProductDetailsView()
+                        {
+                            Id = item.Id,
+                            VendorId = item.VendorId,
+                            ProductImage = item.ProductImage,
+                            ProductName = item.ProductName,
+                            ProductStocks = item.ProductStocks,
+                            PerUnitPrice = item.PerUnitPrice,
+                        });
+                    }
+                }
+                return vendorDetails;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }

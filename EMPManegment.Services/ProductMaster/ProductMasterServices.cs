@@ -18,13 +18,21 @@ namespace EMPManegment.Services.ProductMaster
             productMaster = ProductMaster;
         }
 
-        public Task<UserResponceModel> AddProductType(ProductTypeView AddProduct)
+        public async Task<UserResponceModel> AddProductType(ProductTypeView AddProduct)
         {
-            throw new NotImplementedException();
+            return await productMaster.AddProductType(AddProduct);
         }
         public async Task<UserResponceModel> AddProductDetails(ProductDetailsView AddProduct)
         {
             return await productMaster.AddProductDetails(AddProduct);
+        }
+        public async Task<IEnumerable<ProductTypeView>> GetProduct()
+        {
+            return await productMaster.GetProduct();
+        }
+        public async Task<List<ProductDetailsView>> GetProductDetailsByVendorId(Guid VendorId)
+        {
+            return await productMaster.GetProductDetailsByVendorId(VendorId);
         }
     }
 }

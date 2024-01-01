@@ -220,7 +220,7 @@ namespace EMPManegment.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddDocumentToProject(ProjectDocView projectDocument)
+        public async Task<IActionResult> AddDocumentToProject(ProjectRequestModel projectDocument)
         {
             try
             {

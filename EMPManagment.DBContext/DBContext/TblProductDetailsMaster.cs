@@ -7,6 +7,8 @@ public partial class TblProductDetailsMaster
 {
     public Guid Id { get; set; }
 
+    public Guid VendorId { get; set; }
+
     public int? ProductType { get; set; }
 
     public string ProductName { get; set; } = null!;
@@ -36,6 +38,4 @@ public partial class TblProductDetailsMaster
     public Guid? UpdatedBy { get; set; }
 
     public virtual TblProductTypeMaster? ProductTypeNavigation { get; set; }
-
-    public virtual ICollection<TblInvoice> TblInvoices { get; set; } = new List<TblInvoice>();
 }

@@ -17,5 +17,6 @@ namespace EMPManegment.Inretface.Interface.VendorDetails
         Task<jsonData> GetVendorsList(DataTableRequstModel VendordataTable);
         Task<IEnumerable<VendorTypeView>> GetVendorType();
         Task<VendorDetailsView> GetVendorById(Guid VendorId);
+        Task<IEnumerable<VendorDetailsView>> GetVendorNameList();
     }
 }
