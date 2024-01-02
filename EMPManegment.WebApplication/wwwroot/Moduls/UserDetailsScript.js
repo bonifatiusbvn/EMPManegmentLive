@@ -458,7 +458,7 @@ function EditUserDetails(EmpId) {
 
 function Logout()
 {
-    debugger
+    
     const swalWithBootstrapButtons = Swal.mixin({
         customClass: {
             confirmButton: 'btn btn-success',
@@ -488,8 +488,7 @@ function Logout()
                 dataType: 'json',
 
                 success: function (Result) {
-                    debugger
-
+                    
                     swalWithBootstrapButtons.fire(
                         'Done!',
                         'Successfully LogOut.!!',
