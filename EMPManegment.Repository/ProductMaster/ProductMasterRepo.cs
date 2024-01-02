@@ -28,7 +28,7 @@ namespace EMPManegment.Repository.ProductMaster
             UserResponceModel response = new UserResponceModel();
             try
             {
-                bool isProductAlredyExists = Context.TblProductTypeMasters.Any(x => x.ProductType == AddProduct.ProductType);
+                bool isProductAlredyExists = Context.TblProductTypeMasters.Any(x => x.ProductName == AddProduct.ProductName);
                 if (isProductAlredyExists == true)
                 {
                     response.Message = "This Product Is already exists";
@@ -40,7 +40,8 @@ namespace EMPManegment.Repository.ProductMaster
                 {
                     var Product = new TblProductTypeMaster()
                     {
-                        ProductType = AddProduct.ProductType,
+                        ProductId = AddProduct.ProductId,
+                        ProductName = AddProduct.ProductName,
                     };
                     response.Code = (int)HttpStatusCode.OK;
                     response.Message = "Product Successfully Inserted";
@@ -98,7 +99,7 @@ namespace EMPManegment.Repository.ProductMaster
                 IEnumerable<ProductTypeView> Product = Context.TblProductTypeMasters.ToList().Select(a => new ProductTypeView
                 {
                     Id = a.Id,
-                    ProductType = a.ProductType
+                    ProductName = a.ProductName
                 });
                 return Product;
             }
@@ -129,6 +130,23 @@ namespace EMPManegment.Repository.ProductMaster
                     }
                 }
                 return vendorDetails;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<IEnumerable<ProductTypeView>> GetProductById(Guid ProductId)
+        {
+            try
+            {
+                IEnumerable<ProductTypeView> Product = Context.TblProductTypeMasters.Where(x=>x.ProductId==ProductId).Select(a => new ProductTypeView
+                {
+                    Id = a.Id,
+                    ProductName = a.ProductName
+                }).ToList();
+                return Product;
             }
             catch (Exception ex)
             {

@@ -71,6 +71,32 @@ function VendorDetails(Id) {
         }
     });
 }
+$('#AddVendorModelButton').click(function () {
+    ClearTextBox();
+});
+function ClearTextBox() {
+    $("#firstnameInput").val('');
+    $("#lastnameInput").val('');
+    $("#contactnumberInput").val('');
+    $("#phonenumberInput").val('');
+    $("#emailidInput").val('');
+    $("#ddlVendorType").val('');
+    $("#ddlCountry").val('');
+    $("#ddlState").val('');
+    $("#ddlCity").val('');
+    $("#AddressidInput").val('');
+    $("#pincodeidInput").val('');
+    $("#companynameInput").val('');
+    $("#CompanyType").val('');
+    $("#companyemailInput").val('');
+    $("#worknumberInput").val('');
+    $("#banknameInput").val('');
+    $("#branchInput").val('');
+    $("#accountnameInput").val('');
+    $("#accountnumberInput").val('');
+    $("#ifscInput").val('');
+    $("#GSTNumberInput").val('');
+}
 function AddVendorDetails() {
 
     if ($("#VendorbankDetails").valid())
@@ -160,7 +186,7 @@ $('#CloseButton').click(function () {
 
 function openvendormodel() {
     
-    $("#BuisnessDetailsModel").prop("disabled", true);
+    $("#PersonalDetailsModel").prop("disabled", true);
     $("#BankDetailsModel").prop("disabled", true);
     $("#addSeller").modal('show');
   
@@ -169,11 +195,11 @@ function openvendormodel() {
 
 //-----------------Validation-----------------//
 
-function nexttoBuisnessDetails() {
+function nexttoPersonalDetails() {
     
     if ($('#VendorFormId').valid()) {
-        $("#BuisnessDetailsModel").prop("disabled", false);
-        document.getElementById("BuisnessDetailsModel").click()
+        $("#PersonalDetailsModel").prop("disabled", false);
+        document.getElementById("PersonalDetailsModel").click()
     }
     else {
         Swal.fire({
@@ -186,7 +212,7 @@ function nexttoBuisnessDetails() {
 }
 function nexttoBankDetails() {
     
-    if ($('#Vendorbusiness').valid()) {
+    if ($('#VendorPersonalDetails').valid()) {
         $("#BankDetailsModel").prop("disabled", false);
         document.getElementById("BankDetailsModel").click()
     }
@@ -206,8 +232,7 @@ $(document).ready(function () {
         
         rules: {
 
-            firstnameInput: "required",
-            lastnameInput: "required",
+            companynameInput: "required",
             contactnumberInput: "required",
             phonenumberInput: "required",
             emailidInput: "required",
@@ -219,8 +244,7 @@ $(document).ready(function () {
             pincodeidInput: "required",
         },
         messages: {
-            firstnameInput: "Please Enter FirstName",
-            lastnameInput: "Please Enter LastName",
+            companynameInput: "Please Enter Company",
             contactnumberInput: "Please Enter ContectNo",
             phonenumberInput: "Please Enter Phone",
             emailidInput: "Please Enter Email",
@@ -232,9 +256,10 @@ $(document).ready(function () {
             pincodeidInput: "Please Enter PinCode",
         }
     })
-    $("#Vendorbusiness").validate({
+    $("#VendorPersonalDetails").validate({
         rules: {
-            companynameInput: "required",
+            firstnameInput: "required",
+            lastnameInput: "required",
             CompanyType: "required",
             companyemailInput: "required",
             worknumberInput: "required",
@@ -247,7 +272,8 @@ $(document).ready(function () {
             GSTNumberInput: "required",
         },
         messages: {
-            companynameInput: "Please Enter Company",
+            firstnameInput: "Please Enter FirstName",
+            lastnameInput: "Please Enter LastName",
             CompanyType: "Please Enter CompanyType",
             companyemailInput: "Please Enter CompanyEmail",
             worknumberInput: "Please Enter CompanyNumber",
@@ -280,7 +306,6 @@ $(document).ready(function () {
     })
    
 });
-
 
 
 

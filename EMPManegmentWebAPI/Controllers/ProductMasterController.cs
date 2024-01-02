@@ -83,6 +83,13 @@ namespace EMPManagment.API.Controllers
             IEnumerable<ProductTypeView> getProduct = await productMaster.GetProduct();
             return Ok(new { code = 200, data = getProduct.ToList() });
         }
+        [HttpGet]
+        [Route("GetProductById")]
+        public async Task<IActionResult> GetProductById(Guid ProductId)
+        {
+            var getProduct = await productMaster.GetProductById(ProductId);
+            return Ok(new { code = 200, data = getProduct.ToList() });
+        }
 
         [HttpPost]
         [Route("GetProductDetailsByVendorId")]

@@ -65,8 +65,10 @@ public partial class BonifatiusEmployeesContext : DbContext
 
     public virtual DbSet<TblVendorType> TblVendorTypes { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
 
+    }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<OrderMaster>(entity =>
@@ -82,9 +84,14 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.Property(e => e.OrderDate).HasColumnType("date");
             entity.Property(e => e.OrderId).HasMaxLength(50);
             entity.Property(e => e.PaymentMethod).HasMaxLength(50);
-            entity.Property(e => e.Product).HasMaxLength(50);
             entity.Property(e => e.Quantity).HasMaxLength(50);
             entity.Property(e => e.Total).HasColumnType("decimal(18, 0)");
+            entity.Property(e => e.Type).HasMaxLength(20);
+
+            entity.HasOne(d => d.ProductNavigation).WithMany(p => p.OrderMasters)
+                .HasForeignKey(d => d.Product)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_OrderMaster_OrderMaster");
         });
 
         modelBuilder.Entity<TblAttendance>(entity =>
@@ -240,7 +247,11 @@ public partial class BonifatiusEmployeesContext : DbContext
         {
             entity.ToTable("tblProductTypeMaster");
 
-            entity.Property(e => e.ProductType).HasMaxLength(20);
+            entity.Property(e => e.ProductName).HasMaxLength(20);
+
+            entity.HasOne(d => d.Product).WithMany(p => p.TblProductTypeMasters)
+                .HasForeignKey(d => d.ProductId)
+                .HasConstraintName("FK_tblProductTypeMaster_tblVendor_Master");
         });
 
         modelBuilder.Entity<TblProjectDetail>(entity =>
@@ -504,7 +515,7 @@ public partial class BonifatiusEmployeesContext : DbContext
         {
             entity.ToTable("tblVendorType");
 
-            entity.Property(e => e.VendorType).HasMaxLength(50);
+            entity.Property(e => e.VendorName).HasMaxLength(50);
         });
 
         OnModelCreatingPartial(modelBuilder);
