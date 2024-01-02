@@ -30,31 +30,18 @@
     </div>
 </div>
 <!-- end page title -->
-
-<div id="flipModal" class="modal fade flip" tabindex="-1" aria-labelledby="flipModalLabel" aria-hidden="true" style="display: none;">
+<@* div id="flipModal" class="modal fade flip" tabindex="-1" aria-labelledby="flipModalLabel" aria-hidden="true" style="display: none;">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="flipModalLabel">Add Product</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
+           
             <form id="createproductform">
-            <div class="modal-body">
-                    <div class="hstack gap-3 align-items-start">
-                        <div class="flex-grow-1">
-                            <label>Product Name</label>
-                            <input class="form-control" id="txtProductType" name="txtProductType" placeholder="Enter ProductName" type="text" />
-                        </div>
-                    </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary " onclick="AddProductType()" id="AddProductTypeButton" value="Validate">Save</button>
-            </div>
+                
+                
             </form>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
+</div> *@
+<!-- /.modal -->
 <!-- end card -->
 
 <div class="page-content" style="margin-top:-90px;">
@@ -335,9 +322,9 @@
                             <div class="row g-4">
                                 <div class="col-sm-auto">
                                     <div>
-                                        <a type="button" data-bs-toggle="modal" data-bs-target="#flipModal" class="btn btn-primary">
-                                            <i class="ri-add-line align-bottom me-1"></i> Add Product
-                                        </a>
+                                        <a asp-action="CreateProduct" asp-controller="ProductMaster" class="btn btn-primary">
+                                            <i class="ri-add-line align-bottom me-1"></i>   
+                                        Add Product</a>
                                     </div>
                                 </div>
                                 <div class="col-sm">
