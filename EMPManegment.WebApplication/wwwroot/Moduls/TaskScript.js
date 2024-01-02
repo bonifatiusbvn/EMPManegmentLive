@@ -276,7 +276,7 @@ function GetAllUserTaskDetail() {
     });
 };
 
-function GetUserTotalTask() {debugger
+function GetUserTotalTask() {
     $.ajax({
         url: '/Home/GetUserTotalTask',
         type: 'Get',

@@ -110,15 +110,34 @@ function SearchData() {
     }
 }
 
+$(document).ready(function () {debugger 
+    $('#txtvendorname').change(function () {
+        var Text = $("#txtvendorname Option:Selected").text();
+        var ProductId = $(this).val();
+        $("#txtvendornameid").val(Text);
+        $('#productname').empty();
+        $('#productname').append('<Option >--Select Product--</Option>');
+        $.ajax({
+            url: '/ProductMaster/GetProductById?ProductId=' + ProductId,
+            success: function (result) {
 
+                $.each(result, function (i, data) {
+                    $('#productname').append('<Option value=' + data.id + '>' + data.productType + '</Option>')
+                });
+            }
+        });
+    });
+});
 
 function SaveCreateOrder()
 {
     if ($('#createOrderForm').valid()) {
         
         var formData = new FormData();
+        formData.append("Type", $("#OrderType").val());
         formData.append("OrderId", $("#orderId").val());
-        formData.append("CompanyName", $("#companyname").val());
+        formData.append("VendorId", $("#txtvendorname").val());
+        formData.append("CompanyName", $("#txtvendorname").val());
         formData.append("Product", $("#productname").val());
         formData.append("Quantity", $("#productquantity").val());
         formData.append("Amount", $("#amount").val());
@@ -127,6 +146,7 @@ function SaveCreateOrder()
         formData.append("DeliveryDate", $("#deliverydate").val());
         formData.append("PaymentMethod", $("#payment").val());
         formData.append("DeliveryStatus", $("#deliveredstatus").val());
+        formData.append("CreatedBy", $("#ddlusername").val());
         $.ajax({
             url: '/OrderMaster/CreateOrder',
             type: 'Post',

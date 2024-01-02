@@ -7,7 +7,13 @@ public partial class TblProductTypeMaster
 {
     public int Id { get; set; }
 
-    public string? ProductType { get; set; }
+    public string? ProductName { get; set; }
+
+    public Guid? ProductId { get; set; }
+
+    public virtual ICollection<OrderMaster> OrderMasters { get; set; } = new List<OrderMaster>();
+
+    public virtual TblVendorMaster? Product { get; set; }
 
     public virtual ICollection<TblProductDetailsMaster> TblProductDetailsMasters { get; set; } = new List<TblProductDetailsMaster>();
 }

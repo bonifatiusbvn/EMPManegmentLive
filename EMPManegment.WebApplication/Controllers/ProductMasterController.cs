@@ -107,14 +107,21 @@ namespace EMPManegment.Web.Controllers
         {
             try
             {
-                ApiResponseModel postuser = await APIServices.PostAsync(AddProduct, "ProductMaster/AddProductType");
-                if (postuser.code == 200)
+                if (ModelState.IsValid)
                 {
-                    return Ok(new { Message = string.Format(postuser.message), Icone = string.Format(postuser.Icone), Code = postuser.code });
+                    ApiResponseModel postuser = await APIServices.PostAsync(AddProduct, "ProductMaster/AddProductType");
+                    if (postuser.code == 200)
+                    {
+                        return Ok(new { Message = string.Format(postuser.message), Icone = string.Format(postuser.Icone), Code = postuser.code });
+                    }
+                    else
+                    {
+                        return new JsonResult(new { Message = string.Format(postuser.message), Icone = string.Format(postuser.Icone), Code = postuser.code });
+                    }
                 }
                 else
                 {
-                    return new JsonResult(new { Message = string.Format(postuser.message), Icone = string.Format(postuser.Icone), Code = postuser.code });
+                    return new JsonResult(new {Message="Please Select Product",Icone= "warning"});
                 }
             }
             catch (Exception ex)
@@ -142,6 +149,25 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
+        public async Task<JsonResult> GetProductById(Guid ProductId)
+        {
+            try
+            {
+                List<ProductTypeView> products = new List<ProductTypeView>();
+                HttpClient client = WebAPI.Initil();
+                ApiResponseModel response = await APIServices.GetAsync("","ProductMaster/GetProductById?ProductId="+ ProductId);
+                if (response.code == 200)
+                {
+                    products = JsonConvert.DeserializeObject<List<ProductTypeView>>(response.data.ToString());
+                }
+                return new JsonResult(products);
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
         public IActionResult ProductList()
         {
             return View();  

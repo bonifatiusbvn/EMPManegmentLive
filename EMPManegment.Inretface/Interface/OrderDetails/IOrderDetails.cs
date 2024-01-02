@@ -15,5 +15,6 @@ namespace EMPManegment.Inretface.Interface.OrderDetails
         Task<UserResponceModel> CreateOrder(OrderDetailView CreateOrder);
         Task<IEnumerable<OrderDetailView>> GetOrderList();
         Task<List<OrderDetailView>> GetOrderDetailsByStatus(string DeliveryStatus);
+        string CheckOrder();
     }
 }

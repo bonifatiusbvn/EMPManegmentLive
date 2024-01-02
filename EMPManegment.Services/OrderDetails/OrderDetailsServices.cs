@@ -31,5 +31,10 @@ namespace EMPManegment.Services.OrderDetails
         {
             return await OrderDetails.GetOrderDetailsByStatus(DeliveryStatus);
         }
+
+        public string CheckOrder()
+        {
+            return OrderDetails.CheckOrder();
+        }
     }
 }

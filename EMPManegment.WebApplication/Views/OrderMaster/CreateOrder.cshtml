@@ -1,4 +1,7 @@
-﻿@model IEnumerable<EMPManegment.EntityModels.ViewModels.OrderModels.OrderDetailView>
+﻿@using EMPManegment.Web.Models
+@model IEnumerable<EMPManegment.EntityModels.ViewModels.OrderModels.OrderDetailView>
+ @inject IHttpContextAccessor Accessor;
+@inject UserSession _userSession
 @*@using X.PagedList;
 @using X.PagedList.Mvc.Core;*@
 @{
@@ -171,7 +174,7 @@
                                             </th>
                                             <td class="id"><a href="apps-ecommerce-order-details.html" class="fw-medium link-primary">@item.OrderId</a></td>
                                             <td class="company_name">@item.CompanyName</td>
-                                            <td class="product_name">@item.Product</td>
+                                            <td class="product_name">@item.ProductName</td>
                                             <td class="date">@item.OrderDate.ToShortDateString()</td>
                                             <td class="total_amount">@item.Total</td>
                                             <td class="payment">@item.PaymentMethod</td>
@@ -831,33 +834,32 @@
                 <form class="tablelist-form" autocomplete="off" id="createOrderForm">
                     <div class="modal-body">
                         <input type="hidden" id="id-field" />
-
-                        <div class="mb-3" id="modal-id">
-                            <label for="orderId" class="form-label">ID</label>
-                            <input type="text" id="orderId" class="form-control" placeholder="ID" name="orderId" />
+                        <div class="mb-3">
+                            <label for="companyname" class="form-label">Order Type</label>
+                            <select class="form-control" data-trigger name="OrderType" id="OrderType">
+                                <option selected disabled value="">--Order Type--</option>
+                                <option value="Sale">Sale</option>
+                                <option value="Purchase">Purchase</option>
+                            </select>
                         </div>
 
                         <div class="mb-3">
-                            <label for="companyname" class="form-label">Customer Name</label>
-                            <input type="text" id="companyname" class="form-control" placeholder="Enter name" name="companyname" />
+                            <label for="companyname" class="form-label">Vendor Name</label>
+                            <select class="form-control" id="txtvendorname" name="txtvendorname">
+                                <option selected disabled value="">----Select Vendor Name---</option>
+                            </select>
+                            <input type="hidden" class="form-control" id="txtvendornameid">
+                        </div>
+
+                        <div class="mb-3" id="modal-id">
+                            <label for="orderId" class="form-label">Order ID</label>
+                            <input type="text" id="orderId" class="form-control" placeholder="ID" name="orderId" value="@ViewBag.OrderId" readonly />
                         </div>
 
                         <div class="mb-3">
                             <label for="productname" class="form-label">Product</label>
-                            <select class="form-control" data-trigger name="productname" id="productname" required>
-                                <option selected disabled value="">Product</option>
-                                <option value="Puma Tshirt">Puma Tshirt</option>
-                                <option value="Adidas Sneakers">Adidas Sneakers</option>
-                                <option value="350 ml Glass Grocery Container">350 ml Glass Grocery Container</option>
-                                <option value="American egale outfitters Shirt">American egale outfitters Shirt</option>
-                                <option value="Galaxy Watch4">Galaxy Watch4</option>
-                                <option value="Apple iPhone 12">Apple iPhone 12</option>
-                                <option value="Funky Prints T-shirt">Funky Prints T-shirt</option>
-                                <option value="USB Flash Drive Personalized with 3D Print">USB Flash Drive Personalized with 3D Print</option>
-                                <option value="Oxford Button-Down Shirt">Oxford Button-Down Shirt</option>
-                                <option value="Classic Short Sleeve Shirt">Classic Short Sleeve Shirt</option>
-                                <option value="Half Sleeve T-Shirts (Blue)">Half Sleeve T-Shirts (Blue)</option>
-                                <option value="Noise Evolve Smartwatch">Noise Evolve Smartwatch</option>
+                            <select id="productname" class="form-control bg-transparent">
+                                <option>--Select Product--</option>
                             </select>
                         </div>
 
@@ -929,13 +931,10 @@
                                 </div>
                             </div>
                             <div class="col-md-6">
-                            <div>
-                            <label for="ddlusername" class="form-label">Created By</label>
-                            <select class="form-control" id="ddlusername" name="ddlusername">
-                            <option selected disabled value=""></option>
-                            </select>
-                            <input type="hidden" class="form-control" id="txtguserid">
-                            </div>
+                                <div>
+                                    <label for="ddlusername" class="form-label" hidden>Created By</label>
+                                    <input type="text" class="form-control" id="ddlusername" value="@_userSession.UserId" hidden>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -994,3 +993,4 @@ new X.PagedList.Web.Common.PagedListRenderOptions {
 <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
 <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
 <script src="~/moduls/orderdetailsscript.js"></script>
+<script src="~/moduls/productmasterscript.js"></script>

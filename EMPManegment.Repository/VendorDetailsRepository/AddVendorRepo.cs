@@ -128,7 +128,7 @@ namespace EMPManegment.Repository.VendorDetailsRepository
                 IEnumerable<VendorTypeView> VendorType = Context.TblVendorTypes.ToList().Select(a => new VendorTypeView
                 {
                     Id = a.Id,
-                    VendorType = a.VendorType
+                    VendorType = a.VendorName
                 });
                 return VendorType;
             }
@@ -176,7 +176,7 @@ namespace EMPManegment.Repository.VendorDetailsRepository
                                   VendorBankIfsc = d.VendorBankIfsc,
                                   VendorGstnumber = d.VendorGstnumber,
                                   VendorTypeId = d.VendorTypeId,
-                                  VendorTypeName = t.VendorType,
+                                  VendorTypeName = t.VendorName,
                               }).First();
             }
             catch (Exception ex)

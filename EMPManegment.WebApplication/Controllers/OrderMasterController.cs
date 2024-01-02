@@ -31,8 +31,10 @@ namespace EMPManegment.Web.Controllers
                 List<OrderDetailView> orderList = new List<OrderDetailView>();
                 HttpClient client = WebAPI.Initil();
                 ApiResponseModel res = await APIServices.GetAsync("", "OrderDetails/GetOrderList");
-                if (res.code == 200)
+                ApiResponseModel Response = await APIServices.GetAsync("", "OrderDetails/CheckOrder");
+                if (res.code == 200 || Response.code == 200)
                 {
+                    ViewBag.OrderId = Response.data;
                     orderList = JsonConvert.DeserializeObject<List<OrderDetailView>>(res.data.ToString());
                     ViewBag.ordersList = orderList.Count;
                 }
@@ -64,13 +66,14 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
+
+
         [HttpPost]
         public async Task<IActionResult> CreateOrder(OrderDetailView orderDetail)
         {
             try
             {
                 ApiResponseModel postuser = await APIServices.PostAsync(orderDetail, "OrderDetails/CreateOrder");
-                UserResponceModel responseModel = new UserResponceModel();
                 if (postuser.code == 200)
                 {
                     return Ok(new { postuser.message });
