@@ -1,5 +1,6 @@
 ﻿using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.OrderModels;
+using EMPManegment.Inretface.EmployeesInterface.AddEmployee;
 using EMPManegment.Inretface.Services.OrderDetails;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -49,7 +50,7 @@ namespace EMPManagment.API.Controllers
         public async Task<IActionResult> GetOrderList()
         {
             IEnumerable<OrderDetailView> orderlist = await OrderDetails.GetOrderList();
-            return Ok(new { code = 200, data = orderlist.ToList() });
+            return Ok(new { code = 200, data = orderlist });
          
         }
         [HttpPost]
@@ -58,6 +59,14 @@ namespace EMPManagment.API.Controllers
         {
             List<OrderDetailView> orderdetails = await OrderDetails.GetOrderDetailsByStatus(DeliveryStatus);
             return Ok(new { code = 200,data = orderdetails.ToList() });
+        }
+
+        [HttpGet]
+        [Route("CheckOrder")]
+        public IActionResult CheckOrder()
+        {
+            var checkOrder = OrderDetails.CheckOrder();
+            return Ok(new { code = 200, data = checkOrder });
         }
     }
 }

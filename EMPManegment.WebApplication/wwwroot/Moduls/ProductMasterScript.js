@@ -17,8 +17,10 @@ function GetVendorNameList() {
 
 function AddProductType() {
     if ($("#createproductform").valid()) {
+function AddProductType() {
         var formData = new FormData();
-        formData.append("ProductType", $("#txtProductType").val());
+        formData.append("ProductId", $("#txtvendorname").val());
+        formData.append("ProductName", $("#txtProductType").val());
         $.ajax({
             url: '/ProductMaster/AddProductType',
             type: 'Post',
@@ -48,30 +50,7 @@ function AddProductType() {
             }
         })
     }
-    else {
-        Swal.fire({
-            title: "Kindly Fill All Datafield",
-            icon: 'warning',
-            confirmButtonColor: '#3085d6',
-            confirmButtonText: 'OK',
-        })
-    }
-}
 
-
-$(document).ready(function(){
-    $("#createproductform").validate({
-        rules: {
-            txtProductType: "required"
-        },
-        messages: {
-            txtProductType: "Please Enter Product"
-        }
-    })
-    $('#AddProductTypeButton').on('click', function () {
-        $("#createproductform").validate();
-    });
-})
 
 function GetProducts() {
 

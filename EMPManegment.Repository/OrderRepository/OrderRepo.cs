@@ -1,4 +1,5 @@
 ﻿using EMPManagment.API;
+using EMPManegment.EntityModels.ViewModels;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.OrderModels;
 using EMPManegment.EntityModels.ViewModels.ProjectModels;
@@ -31,7 +32,9 @@ namespace EMPManegment.Repository.OrderRepository
                 {
                    Id = Guid.NewGuid(),
                     OrderId = "Order_" + CreateOrder.OrderId,
+                    Type = CreateOrder.Type,
                    CompanyName = CreateOrder.CompanyName,
+                   VendorId= CreateOrder.VendorId,
                    Product = CreateOrder.Product,
                    Quantity = CreateOrder.Quantity,
                    Amount = CreateOrder.Amount,
@@ -57,20 +60,24 @@ namespace EMPManegment.Repository.OrderRepository
 
         public async Task<IEnumerable<OrderDetailView>> GetOrderList()
         {
-            IEnumerable<OrderDetailView> data = Context.OrderMasters.ToList().Select(a => new OrderDetailView
-            {
-                OrderId = a.OrderId,
-                CompanyName = a.CompanyName,
-                Product = a.Product,    
-                Quantity = a.Quantity,
-                OrderDate = a.OrderDate,
-                Total = a.Total,
-                Amount= a.Amount,
-                PaymentMethod = a.PaymentMethod,
-                DeliveryStatus = a.DeliveryStatus,
-                DeliveryDate = a.DeliveryDate,
-                CreatedOn= a.CreatedOn,
-            });
+            IEnumerable<OrderDetailView> data = from a in Context.OrderMasters
+                                                join b in Context.TblVendorMasters on a.VendorId equals b.Vid
+                                                join c in Context.TblProductTypeMasters on a.Product equals c.Id
+                                                select new OrderDetailView
+                                                {
+                                                    OrderId = a.OrderId,
+                                                    CompanyName = b.VendorCompany,
+                                                    VendorId = a.VendorId,
+                                                    ProductName = c.ProductName,
+                                                    Quantity = a.Quantity,
+                                                    OrderDate = a.OrderDate,
+                                                    Total = a.Total,
+                                                    Amount = a.Amount,
+                                                    PaymentMethod = a.PaymentMethod,
+                                                    DeliveryStatus = a.DeliveryStatus,
+                                                    DeliveryDate = a.DeliveryDate,
+                                                    CreatedOn = a.CreatedOn,
+                                                };
             return data;
         }
 
@@ -99,6 +106,28 @@ namespace EMPManegment.Repository.OrderRepository
                 }
             }
             return orderDetails;
+        }
+
+        public string CheckOrder()
+        {
+            try
+            {
+                var LastOrder = Context.OrderMasters.OrderByDescending(e => e.CreatedOn).FirstOrDefault();
+                string UserOrderId;
+                if (LastOrder == null)
+                {
+                    UserOrderId = "BTPL/PO/PROJ-01/23-24-001";
+                }
+                else
+                {
+                    UserOrderId = "BTPL/PO/PROJ-01/23-24-" + (Convert.ToUInt32(LastOrder.OrderId.Substring(28, LastOrder.OrderId.Length - 28)) + 1).ToString("D3");
+                }
+                return UserOrderId;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }

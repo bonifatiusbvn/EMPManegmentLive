@@ -7,7 +7,7 @@ public partial class TblVendorType
 {
     public int Id { get; set; }
 
-    public string VendorType { get; set; } = null!;
+    public string VendorName { get; set; } = null!;
 
     public virtual ICollection<TblVendorMaster> TblVendorMasters { get; set; } = new List<TblVendorMaster>();
 }

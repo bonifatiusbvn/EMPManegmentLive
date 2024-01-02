@@ -11,10 +11,14 @@ namespace EMPManegment.EntityModels.ViewModels.OrderModels
         public Guid Id { get; set; }
 
         public string OrderId { get; set; } = null!;
+        public string? Type { get; set; }
 
-        public string CompanyName { get; set; } = null!;
+        public Guid? VendorId { get; set; }
 
-        public string Product { get; set; } = null!;
+        public string? CompanyName { get; set; }
+
+        public int Product { get; set; }
+        public string ProductName { get; set; }
 
         public string Quantity { get; set; } = null!;
 
