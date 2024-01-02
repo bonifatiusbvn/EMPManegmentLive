@@ -15,9 +15,6 @@ function GetVendorNameList() {
     });
 }
 
-function VendorCompanyNametext(sel) {
-    $("#txtvendornameid").val((sel.options[sel.selectedIndex].text));
-}
 function AddProductType() {
     if ($("#createproductform").valid()) {
         var formData = new FormData();
@@ -171,7 +168,7 @@ function SaveProductDetails()
             confirmButtonColor: '#3085d6',
             confirmButtonText: 'OK',
         })
-    }    
+    } 
 }
 
 $("#txtvendorname").change(function () {
