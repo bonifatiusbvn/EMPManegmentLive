@@ -26,7 +26,6 @@ namespace EMPManegment.Services.ProductMaster
         {
             return await productMaster.AddProductDetails(AddProduct);
         }
-
         public async Task<IEnumerable<ProductTypeView>> GetProduct()
         {
             return await productMaster.GetProduct();
@@ -35,6 +34,10 @@ namespace EMPManegment.Services.ProductMaster
         public async Task<IEnumerable<ProductTypeView>> GetProductById(Guid ProductId)
         {
             return await productMaster.GetProductById(ProductId);
+        }
+        public async Task<List<ProductDetailsView>> GetProductDetailsByVendorId(Guid VendorId)
+        {
+            return await productMaster.GetProductDetailsByVendorId(VendorId);
         }
     }
 }

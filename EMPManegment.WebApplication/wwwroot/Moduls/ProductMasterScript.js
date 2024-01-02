@@ -1,6 +1,7 @@
 ﻿$(document).ready(function () {
     GetProducts();
     GetVendorNameList();
+    document.getElementById("txtvendorname").click()
 });
 
 function GetVendorNameList() {
@@ -17,7 +18,9 @@ function GetVendorNameList() {
 function VendorCompanyNametext(sel) {
     $("#txtvendornameid").val((sel.options[sel.selectedIndex].text));
 }
-function AddProductType() {debugger
+function AddProductType() {
+    if ($("#createproductform").valid()) {
+function AddProductType() {
         var formData = new FormData();
         formData.append("ProductId", $("#txtvendorname").val());
         formData.append("ProductName", $("#txtProductType").val());
@@ -99,13 +102,13 @@ $(document).ready(function () {
             txtProducts:"Please Select Product Type"
         }
     })
-    $('#saveproductdetails').on('click', function () {
+    $("#saveproductdetails").on('click', function () {
         $("#createproductform").validate();        
     });
 });
 
 function SaveProductDetails()
-{ 
+{
     if ($('#createproductform').valid()) {
         var formData = new FormData();
         formData.append("ProductName", $("#txtproductname").val());
@@ -148,4 +151,26 @@ function SaveProductDetails()
             confirmButtonText: 'OK',
         })
     }    
+}
+
+$("#txtvendorname").change(function () {
+    ProductDetails()
+})
+function ProductDetails()
+{
+    var form_data = new FormData();
+    form_data.append("VendorId", $('#txtvendorname').val());
+    $.ajax({
+        url: '/ProductMaster/GetProductDetailsByVendorId',
+        type: 'Post',
+        datatype: 'json',
+        data: form_data,
+        processData: false,
+        contentType: false,
+        complete: function (Result)
+        {
+            $("#table-product-list-all").hide();            
+            $("#dvproductdetails").html(Result.responseText);
+        }
+    });   
 }

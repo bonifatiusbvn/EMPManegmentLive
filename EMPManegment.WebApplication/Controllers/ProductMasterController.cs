@@ -4,6 +4,7 @@ using EMPManegment.EntityModels.Crypto;
 using EMPManegment.EntityModels.View_Model;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.ProductMaster;
+using EMPManegment.EntityModels.ViewModels.TaskModels;
 using EMPManegment.EntityModels.ViewModels.VendorModels;
 using EMPManegment.Web.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -171,6 +172,31 @@ namespace EMPManegment.Web.Controllers
         public IActionResult ProductList()
         {
             return View();  
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> GetProductDetailsByVendorId(Guid VendorId)
+        {
+            try
+            {
+                List<ProductDetailsView> ProductList = new List<ProductDetailsView>();
+                HttpClient client = WebAPI.Initil();
+                ApiResponseModel postuser = await APIServices.PostAsync("", "ProductMaster/GetProductDetailsByVendorId?VendorId=" + VendorId);
+                if (postuser.data != null)
+                {
+                    ProductList = JsonConvert.DeserializeObject<List<ProductDetailsView>>(postuser.data.ToString());
+                }
+                else
+                {
+                    ProductList = new List<ProductDetailsView>();
+                    ViewBag.Error = "note found";
+                }
+                return PartialView("~/Views/ProductMaster/_ProductDetailsbtVendorId.cshtml", ProductList);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         public IActionResult ProductDetails()

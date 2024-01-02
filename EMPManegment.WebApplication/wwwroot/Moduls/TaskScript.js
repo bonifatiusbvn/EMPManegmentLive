@@ -30,19 +30,7 @@ function ClearTaskDetails()
 {
     $("#txttaskStatus").val("");
 }
-$(document).ready(function () {
-    $("#tasksList").validate({
-        rules: {
-            ddlStatus: "required"
-        },
-        messages: {
-            ddlStatus: "Please Enter Status"
-        }
-    })
-    $('#StatusUpdate').on('click', function () {
-        $("#tasksList").validate();
-    });
-});
+
 
 function GetTaskType() {
 
@@ -168,7 +156,7 @@ function GetUserTaskDetails() {
 
 function btnStatusUpdate(Id) {
     
-    if ($("#tasksList").valid()) {
+    if ($("#tasksListform").valid()) {
         var StausChange = {
             TaskStatus: $('#ddlStatus' + Id).val(),
             Id: Id
@@ -184,6 +172,7 @@ function btnStatusUpdate(Id) {
             contentType: false,
             processData: false,
             success: function (Result) {
+                
                 GetUserTaskDetails();
                 Swal.fire({
                     title: Result.message,
@@ -196,7 +185,6 @@ function btnStatusUpdate(Id) {
             },
             error: function (error, status) {
                 alert(error);
-
             }
         });
     }
@@ -208,10 +196,218 @@ function btnStatusUpdate(Id) {
             confirmButtonText: 'OK',
         })
     }
-    
-   
 }
+/*----ValidateMeassge----*/
+$(document).ready(function () {
+    
 
+    $("#tasksListform").validate({
+        rules: {
+            ddlStatus: "required"
+        },
+        messages: {
+            ddlStatus: "Please Enter Status"
+        }
+    })
+    $('#StatusUpdate').on('click', function () {
+        
+        $("#tasksListform").validate();
+    });
+});
+
+////////////////MEDIUMPRIORITY//////////
+function btnStatusUpdateMedium(Id) {
+    
+
+    if ($("#tasksListMedium").valid()) {
+        
+        var StausChange = {
+            TaskStatus: $('#ddlStatus' + Id).val(),
+            Id: Id
+        }
+        var form_data = new FormData();
+        form_data.append("STATUSUPDATE", JSON.stringify(StausChange));
+
+        $.ajax({
+            url: '/Task/UpdateUserTaskStatus',
+            type: 'Post',
+            data: form_data,
+            dataType: 'json',
+            contentType: false,
+            processData: false,
+            success: function (Result) {
+                
+                GetUserTaskDetails();
+                Swal.fire({
+                    title: Result.message,
+                    icon: 'success',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'OK',
+                }).then(function () {
+                    window.location = '/Task/UserTasks';
+                });
+            },
+            error: function (error, status) {
+                alert(error);
+            }
+        });
+    }
+    else {
+        
+        Swal.fire({
+            title: "Kindly Select The Status",
+            icon: 'warning',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'OK',
+        })
+    }
+}
+/*----ValidateMeassge----*/
+$(document).ready(function () {
+    
+
+    $("#tasksListMedium").validate({
+        rules: {
+            ddlStatus: "required"
+        },
+        messages: {
+            ddlStatus: "Please Enter Status"
+        }
+    })
+    $('#StatusUpdate').on('click', function () {
+        
+        $("#tasksListMedium").validate();
+    });
+});
+
+////////////////LOWPRIORITY//////////
+function btnStatusUpdateLow(Id) {
+    
+
+    if ($("#tasksListLow").valid()) {
+        
+        var StausChange = {
+            TaskStatus: $('#ddlStatus' + Id).val(),
+            Id: Id
+        }
+        var form_data = new FormData();
+        form_data.append("STATUSUPDATE", JSON.stringify(StausChange));
+
+        $.ajax({
+            url: '/Task/UpdateUserTaskStatus',
+            type: 'Post',
+            data: form_data,
+            dataType: 'json',
+            contentType: false,
+            processData: false,
+            success: function (Result) {
+                
+                GetUserTaskDetails();
+                Swal.fire({
+                    title: Result.message,
+                    icon: 'success',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'OK',
+                }).then(function () {
+                    window.location = '/Task/UserTasks';
+                });
+            },
+            error: function (error, status) {
+                alert(error);
+            }
+        });
+    }
+    else {
+        
+        Swal.fire({
+            title: "Kindly Select The Status",
+            icon: 'warning',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'OK',
+        })
+    }
+}
+/*----ValidateMeassge----*/
+$(document).ready(function () {
+    
+
+    $("#tasksListLow").validate({
+        rules: {
+            ddlStatus: "required"
+        },
+        messages: {
+            ddlStatus: "Please Enter Status"
+        }
+    })
+    $('#StatusUpdate').on('click', function () {
+        
+        $("#tasksListLow").validate();
+    });
+});
+////////////////HIGHPRIORITY//////////
+function btnStatusUpdateHigh(Id) {
+    
+
+    if ($("#tasksListhigh").valid()) {
+        
+        var StausChange = {
+            TaskStatus: $('#ddlStatus' + Id).val(),
+            Id: Id
+        }
+        var form_data = new FormData();
+        form_data.append("STATUSUPDATE", JSON.stringify(StausChange));
+
+        $.ajax({
+            url: '/Task/UpdateUserTaskStatus',
+            type: 'Post',
+            data: form_data,
+            dataType: 'json',
+            contentType: false,
+            processData: false,
+            success: function (Result) {
+                
+                GetUserTaskDetails();
+                Swal.fire({
+                    title: Result.message,
+                    icon: 'success',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'OK',
+                }).then(function () {
+                    window.location = '/Task/UserTasks';
+                });
+            },
+            error: function (error, status) {
+                alert(error);
+            }
+        });
+    }
+    else {
+        
+        Swal.fire({
+            title: "Kindly Select The Status",
+            icon: 'warning',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'OK',
+        })
+    }
+}
+/*----ValidateMeassge----*/
+$(document).ready(function () {
+    
+
+    $("#tasksListhigh").validate({
+        rules: {
+            ddlStatus: "required"
+        },
+        messages: {
+            ddlStatus: "Please Enter Status"
+        }
+    })
+    $('#StatusUpdate').on('click', function () {
+        
+        $("#tasksListhigh").validate();
+    });
+});
 function btnTaskDetails(Id){
     $.ajax({
         url: '/Task/GetTaskDetailsById?Id=' + Id,

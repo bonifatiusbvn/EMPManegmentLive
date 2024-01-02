@@ -2,9 +2,11 @@
 using EMPManegment.EntityModels.ViewModels;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.ProductMaster;
+using EMPManegment.EntityModels.ViewModels.TaskModels;
 using EMPManegment.Inretface.Interface.ProductMaster;
 using EMPManegment.Inretface.Interface.ProjectDetails;
 using EMPManegment.Inretface.Services.ProductMaster;
+using EMPManegment.Inretface.Services.TaskServices;
 using EMPManegment.Services.ProductMaster;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -87,6 +89,14 @@ namespace EMPManagment.API.Controllers
         {
             var getProduct = await productMaster.GetProductById(ProductId);
             return Ok(new { code = 200, data = getProduct.ToList() });
+        }
+
+        [HttpPost]
+        [Route("GetProductDetailsByVendorId")]
+        public async Task<IActionResult> GetProductDetailsByVendorId(Guid VendorId)
+        {
+            List<ProductDetailsView> VendorProductList = await productMaster.GetProductDetailsByVendorId(VendorId);
+            return Ok(new { code = 200, data = VendorProductList.ToList() });
         }
     }
 }
