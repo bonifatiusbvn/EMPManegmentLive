@@ -111,23 +111,21 @@ function showMember() {
 }
 function invitemember(Id)
 {
-    const data1 = document.getElementById('projecttitle');
-    var result1 = data1.outerText;
-    const data2 = document.getElementById('projectstartdate');
-    var result2 = data2.outerText;
-    const data4 = document.getElementById('projectstatus');
-    var result4 = data4.outerText;
-    const data5 = document.getElementById('projecttype');
-    var result5 = data5.outerText;
-    const data6 = document.getElementById('projectid').value;
-
+    
+    var protitel = document.getElementById("projecttitle").textContent;
+    var proStartDate = $('#projectenddate').val();
+    var proStatus = document.getElementById('projectstatus').textContent;
+    var proProjectType = document.getElementById('projecttype').textContent;
+    var proProjectId = $('#projectid').val();
+    
     var MemberData = {
-        ProjectType: result5,
-        Status: result4,
-        StartDate: result2,
-        ProjectTitle: result1,
-        ProjectId: data6,
-        UserId: Id
+        ProjectId: proProjectId,
+        UserId: Id,
+        ProjectType: proProjectType,
+        ProjectTitle: protitel,
+        StartDate: proStartDate,
+        Status: proStatus
+      
     }
     var form_data = new FormData();
     form_data.append("InviteMember", JSON.stringify(MemberData));
@@ -146,7 +144,7 @@ function invitemember(Id)
                     confirmButtonColor: '#3085d6',
                     confirmButtonText: 'OK',
                 }).then(function () {
-                    window.location = '/Project/AddProjectMember/?Id=' + data6;
+                    window.location = '/Project/AddProjectMember/?Id=' + proProjectId;
                 }); 
             },
         Error: function () {

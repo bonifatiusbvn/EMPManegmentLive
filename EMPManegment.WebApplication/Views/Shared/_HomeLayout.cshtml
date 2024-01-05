@@ -815,7 +815,7 @@
                                                 <li class="nav-item">
                                                     <a asp-action="CreateOrder" asp-controller="OrderMaster" class="nav-link" data-key="t-orders"> Orders </a>
                                                 </li>
-                                                @* <li class="nav-item">
+                                               @*  <li class="nav-item">
                                                     <a href="apps-ecommerce-order-details.html" class="nav-link" data-key="t-order-details"> Order Details </a>
                                                 </li>
                                                 <li class="nav-item">
@@ -832,7 +832,7 @@
                                                 </li>
                                                 <li class="nav-item">
                                                     <a href="apps-ecommerce-seller-details.html" class="nav-link" data-key="t-sellers-details"> Seller Details </a>
-                                                </li>
+                                                </li> *@
                                             </ul>
                                         </div>
                                     </li>
@@ -845,12 +845,12 @@
                                                 <li class="nav-item">
                                                     <a asp-action="ProjectList" asp-controller="Project" class="nav-link" data-key="t-list"> List </a>
                                                 </li>
-                                                <li class="nav-item">
+                                                @* <li class="nav-item">
                                                     <a href="#" class="nav-link" data-key="t-overview"> Overview </a>
                                                 </li>
-                                                @*<li class="nav-item">
+                                                <li class="nav-item">
                                                     <a asp-action="AddProjectMember" asp-controller="Project" class="nav-link" data-key="t-overview"> Add Member </a>
-                                                </li>*@
+                                                </li> *@
                                                 <li class="nav-item">
                                                     <a asp-action="CreateProject" asp-controller="Project" class="nav-link" data-key="t-create-project"> Create Project </a>
                                                 </li>
@@ -922,7 +922,7 @@
                                                 </li>
                                             </ul>
                                         </div>
-                                    </li> *@
+                                    </li>
                                     <li class="nav-item">
                                         <a href="#sidebarInvoices" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarInvoices" data-key="t-invoices">
                                             Invoices
@@ -1678,7 +1678,9 @@
        <script src="~/moduls/userprofile.js"></script>
 
         <!-- listjs init -->
-      
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
         <!-- Sweet Alerts js -->
         <script src="~/UserHome/minimal/assets/libs/sweetalert2/sweetalert2.min.js"></script>
 
