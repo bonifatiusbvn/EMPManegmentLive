@@ -1,8 +1,10 @@
-﻿using EMPManagment.API;
+﻿using Azure;
+using EMPManagment.API;
 using EMPManegment.EntityModels.ViewModels;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.ProductMaster;
 using EMPManegment.EntityModels.ViewModels.TaskModels;
+using EMPManegment.EntityModels.ViewModels.VendorModels;
 using EMPManegment.Inretface.Interface.ProductMaster;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -56,34 +58,47 @@ namespace EMPManegment.Repository.ProductMaster
             }
             return response;
         }
-       public async Task<UserResponceModel> AddProductDetails(ProductDetailsView AddProduct)
+       
+        public async Task<UserResponceModel> AddProductDetails(ProductDetailsView AddProduct)
        {
             UserResponceModel response = new UserResponceModel();
             try
             {
-                var productdetails = new TblProductDetailsMaster()
+                bool isProductAlredyExists = Context.TblProductDetailsMasters.Any(x => x.ProductName == AddProduct.ProductName );
+                if (isProductAlredyExists == true)
                 {
-                    Id = Guid.NewGuid(),
-                    VendorId = AddProduct.VendorId,
-                    ProductType = AddProduct.ProductType,
-                    ProductName = AddProduct.ProductName,
-                    ProductDescription = AddProduct.ProductDescription,
-                    ProductShortDescription = AddProduct.ProductShortDescription,
-                    ProductImage = AddProduct.ProductImage,
-                    ProductStocks = AddProduct.ProductStocks,
-                    PerUnitPrice = AddProduct.PerUnitPrice,
-                    Hsn = AddProduct.Hsn,
-                    Gst = AddProduct.Gst,
-                    PerUnitWithGstprice = AddProduct.PerUnitWithGstprice,
-                    CreatedBy = AddProduct.CreatedBy,
-                    CreatedOn = DateTime.Today,
-                    UpdatedBy = AddProduct.UpdatedBy,
-                    UpdatedOn = AddProduct.UpdatedOn,
-                };
-                response.Code = 200;
-                response.Message = "Product add successfully!";
-                Context.TblProductDetailsMasters.Add(productdetails);
-                Context.SaveChanges();
+                    response.Message = " this product Is already exists";
+                    response.Data = AddProduct;
+                    response.Code = (int)HttpStatusCode.NotFound;
+                    response.Icone = "warning";
+                }
+
+                else 
+                {
+                    var productdetails = new TblProductDetailsMaster()
+                    {
+                        Id = Guid.NewGuid(),
+                        VendorId = AddProduct.VendorId,
+                        ProductType = AddProduct.ProductType,
+                        ProductName = AddProduct.ProductName,
+                        ProductDescription = AddProduct.ProductDescription,
+                        ProductShortDescription = AddProduct.ProductShortDescription,
+                        ProductImage = AddProduct.ProductImage,
+                        ProductStocks = AddProduct.ProductStocks,
+                        PerUnitPrice = AddProduct.PerUnitPrice,
+                        Hsn = AddProduct.Hsn,
+                        Gst = AddProduct.Gst,
+                        PerUnitWithGstprice = AddProduct.PerUnitWithGstprice,
+                        CreatedBy = AddProduct.CreatedBy,
+                        CreatedOn = DateTime.Today,
+                        UpdatedBy = AddProduct.UpdatedBy,
+                        UpdatedOn = AddProduct.UpdatedOn,
+                    };
+                    response.Code = 200;
+                    response.Message = "Product add successfully!";
+                    Context.TblProductDetailsMasters.Add(productdetails);
+                    Context.SaveChanges();
+                }
             }
             catch (Exception ex)
             {
@@ -153,5 +168,9 @@ namespace EMPManegment.Repository.ProductMaster
                 throw ex;
             }
         }
+
+        
     }
+    
 }
+

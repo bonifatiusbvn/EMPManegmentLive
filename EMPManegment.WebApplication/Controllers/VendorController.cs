@@ -64,7 +64,6 @@ namespace EMPManegment.Web.Controllers
                         VendorCompanyType = addVandorDetails.VendorCompanyType,
                         VendorCompanyEmail = addVandorDetails.VendorCompanyEmail,
                         VendorCompanyNumber = addVandorDetails.VendorCompanyNumber,
-                        
                         VendorBankName = addVandorDetails.VendorBankName,
                         VendorBankBranch = addVandorDetails.VendorBankBranch,
                         VendorAccountHolderName = addVandorDetails.VendorAccountHolderName,

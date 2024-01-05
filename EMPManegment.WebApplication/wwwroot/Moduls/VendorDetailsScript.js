@@ -97,13 +97,11 @@ function ClearTextBox() {
     $("#ifscInput").val('');
     $("#GSTNumberInput").val('');
 }
-function AddVendorDetails() {
+function AddVendorDetails() {debugger
 
     if ($("#VendorbankDetails").valid())
     {
         var fromData = {
-            
-
             "VendorFirstName": $("#firstnameInput").val(),
             "VendorLastName": $("#lastnameInput").val(),
             "VendorContectNo": $('#contactnumberInput').val(),

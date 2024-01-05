@@ -1,4 +1,5 @@
-﻿using EMPManagment.Web.Helper;
+﻿using Aspose.Pdf.Operators;
+using EMPManagment.Web.Helper;
 using EMPManagment.Web.Models.API;
 using EMPManegment.EntityModels.Crypto;
 using EMPManegment.EntityModels.View_Model;
@@ -102,7 +103,7 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
-
+      
         [HttpPost]
         public async Task<IActionResult> AddProductType(ProductTypeView AddProduct)
         {
@@ -142,7 +143,6 @@ namespace EMPManegment.Web.Controllers
                     products = JsonConvert.DeserializeObject<List<ProductTypeView>>(response.data.ToString());
                 }
                 return new JsonResult(products);
-
             }
             catch (Exception ex)
             {
@@ -156,13 +156,12 @@ namespace EMPManegment.Web.Controllers
             {
                 List<ProductTypeView> products = new List<ProductTypeView>();
                 HttpClient client = WebAPI.Initil();
-                ApiResponseModel response = await APIServices.GetAsync("","ProductMaster/GetProductById?ProductId="+ ProductId);
+                ApiResponseModel response = await APIServices.GetAsync("", "ProductMaster/GetProductById?ProductId=" + ProductId);
                 if (response.code == 200)
                 {
                     products = JsonConvert.DeserializeObject<List<ProductTypeView>>(response.data.ToString());
                 }
                 return new JsonResult(products);
-
             }
             catch (Exception ex)
             {
@@ -203,5 +202,6 @@ namespace EMPManegment.Web.Controllers
         {
             return View();
         }
+
     }
 }

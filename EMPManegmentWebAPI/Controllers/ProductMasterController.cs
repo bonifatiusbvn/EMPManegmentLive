@@ -3,11 +3,13 @@ using EMPManegment.EntityModels.ViewModels;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.ProductMaster;
 using EMPManegment.EntityModels.ViewModels.TaskModels;
+using EMPManegment.EntityModels.ViewModels.VendorModels;
 using EMPManegment.Inretface.Interface.ProductMaster;
 using EMPManegment.Inretface.Interface.ProjectDetails;
 using EMPManegment.Inretface.Services.ProductMaster;
 using EMPManegment.Inretface.Services.TaskServices;
 using EMPManegment.Services.ProductMaster;
+using EMPManegment.Services.VendorDetails;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -49,6 +51,7 @@ namespace EMPManagment.API.Controllers
             }
             return StatusCode(response.Code, response);
         }
+
         [HttpPost]
         [Route("AddProductType")]
         public async Task<IActionResult> AddProductType(ProductTypeView AddProduct)

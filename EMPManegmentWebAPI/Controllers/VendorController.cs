@@ -2,7 +2,9 @@
 using EMPManegment.EntityModels.ViewModels;
 using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 using EMPManegment.EntityModels.ViewModels.Models;
+using EMPManegment.EntityModels.ViewModels.ProductMaster;
 using EMPManegment.EntityModels.ViewModels.VendorModels;
+using EMPManegment.Inretface.Interface.ProductMaster;
 using EMPManegment.Inretface.Interface.VendorDetails;
 using EMPManegment.Inretface.Services.VendorDetailsServices;
 using Microsoft.AspNetCore.Http;
@@ -79,5 +81,6 @@ namespace EMPManagment.API.Controllers
             var getVendorsNameList = await vendorServices.GetVendorNameList();
             return Ok(new { code = 200, data = getVendorsNameList.ToList() });
         }
+     
     }
 }
