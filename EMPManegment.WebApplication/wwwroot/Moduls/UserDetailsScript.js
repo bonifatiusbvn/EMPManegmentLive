@@ -228,7 +228,7 @@ function EnterInTime() {
 }
 
 function EnterOutTime() {
-    debugger
+    
     if ($("#todayouttime").text() != "Pending") {
         var fromData = new FormData();
         fromData.append("UserId", $("#txtuserid").val());
@@ -254,7 +254,7 @@ function EnterOutTime() {
 
     else
     {
-        debugger
+        
         const swalWithBootstrapButtons = Swal.mixin({
             customClass: {
                 confirmButton: 'btn btn-success',
@@ -480,7 +480,7 @@ function Logout()
     }).then((result) => {
         if (result.isConfirmed) {
 
-            debugger
+            
             $.ajax({
                 url: '/Authentication/Logout',
                 type: 'GET',
@@ -678,9 +678,9 @@ function clearSelectedBox() {
         '<option selected disabled value = "">--Select Department--</option>');
 }
 
-$('#searchEmployee').on('change',function (e) {debugger
+$('#searchEmployee').on('change',function (e) {
     e.stopImmediatePropagation();
-    if ($("#searchEmployee").val() == "ByUsername") {debugger
+    if ($("#searchEmployee").val() == "ByUsername") {
         clearSelectedBox();
         GetUsername();
         $("#empnamebox").show();
@@ -697,7 +697,7 @@ $('#searchEmployee').on('change',function (e) {debugger
 function GetUsername() {
     $.ajax({
         url: '/Task/GetUserName',
-        success: function (result) {debugger
+        success: function (result) {
             $.each(result, function (i, data) {
                 $('#ddlusername').append('<Option value=' + data.id + '>' + data.firstName + " " + data.lastName + " " + "(" + data.userName + ")" + '</Option>')
             });
@@ -719,11 +719,11 @@ function GetDepartment() {
 }
 
 function GetSearchEmpList() {
-    debugger
+    
     if ($('#activeInactiveForm').valid()) {
         var form_data = new FormData();
         form_data.append("DepartmentId", $('#ddlDepartmenrnt').val());
-        form_data.append("Id", $("#ddlusername").val());debugger
+        form_data.append("Id", $("#ddlusername").val());
         $.ajax({
             url: '/UserProfile/GetSearchEmpList',
             type: 'Post',
@@ -732,7 +732,7 @@ function GetSearchEmpList() {
             processData: false,
             contentType: false,
             complete: function (Result) {
-                debugger
+                
                 $("#allemplist").hide();
                 $("#activedeactivepagination").hide();
                 $("#backbtn").show();
