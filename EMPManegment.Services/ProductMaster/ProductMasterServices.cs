@@ -39,5 +39,7 @@ namespace EMPManegment.Services.ProductMaster
         {
             return await productMaster.GetProductDetailsByVendorId(VendorId);
         }
+
+       
     }
 }

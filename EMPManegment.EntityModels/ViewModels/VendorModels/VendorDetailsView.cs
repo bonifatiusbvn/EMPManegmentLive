@@ -40,4 +40,12 @@ namespace EMPManegment.EntityModels.ViewModels.VendorModels
         public DateTime? CreatedOn { get; set; }
         public string? CreatedBy { get; set; }
     }
+
+
+    public class VendorListDetailsView
+    {
+        public Guid Id { get; set; }
+        public string? VendorCompany { get; set; }
+    }
+
 }

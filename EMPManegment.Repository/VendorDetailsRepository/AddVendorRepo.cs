@@ -3,6 +3,7 @@ using EMPManegment.EntityModels.View_Model;
 using EMPManegment.EntityModels.ViewModels;
 using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 using EMPManegment.EntityModels.ViewModels.Models;
+using EMPManegment.EntityModels.ViewModels.ProductMaster;
 using EMPManegment.EntityModels.ViewModels.TaskModels;
 using EMPManegment.EntityModels.ViewModels.VendorModels;
 using EMPManegment.Inretface.Interface.VendorDetails;
@@ -186,9 +187,11 @@ namespace EMPManegment.Repository.VendorDetailsRepository
             return vendordata;
         }
 
-        public async Task<IEnumerable<VendorDetailsView>> GetVendorNameList()
+
+
+        public async Task<IEnumerable<VendorListDetailsView>> GetVendorNameList()
         {
-            IEnumerable<VendorDetailsView> GetVendorList = Context.TblVendorMasters.ToList().Select(a => new VendorDetailsView
+            IEnumerable<VendorListDetailsView> GetVendorList = Context.TblVendorMasters.ToList().Select(a => new VendorListDetailsView
             {
                 Id = a.Vid,
                 VendorCompany = a.VendorCompany,
@@ -196,5 +199,7 @@ namespace EMPManegment.Repository.VendorDetailsRepository
             }).ToList();
             return GetVendorList;
         }
+
+
     }
 }
