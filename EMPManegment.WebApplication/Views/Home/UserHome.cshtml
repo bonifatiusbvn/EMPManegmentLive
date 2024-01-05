@@ -92,10 +92,9 @@
                         <h4 class="fs-22 fw-semibold ff-secondary mb-4">
                             <span class="counter-value" id="txttotalhours"></span>
                         </h4>
-                        <button type="button" class="btn btn-success custom-toggle" data-bs-toggle="button" aria-pressed="false">
-                            <span class="icon-on"><i class="ri-thumb-up-line align-bottom me-1"></i> Yes</span>
-                            <span class="icon-off"><i class="ri-thumb-down-line align-bottom me-1"></i> No</span>
-                        </button>
+                        <a asp-action="GetAttendance" asp-controller="UserProfile" class="btn btn-success custom-toggle">
+                            View Summary
+                        </a>
                     </div>
                     <div class="avatar-sm flex-shrink-0">
                         <span class="avatar-title bg-primary-subtle rounded fs-3">
@@ -125,10 +124,9 @@
                         <h4 class="fs-22 fw-semibold ff-secondary mb-4">
                              <span class="counter-value" id="UserTotalTask">05</span>
                         </h4>
-                        <button type="button" class="btn btn-warning custom-toggle active" data-bs-toggle="button" aria-pressed="true">
-                            <span class="icon-on"><i class="ri-add-line align-bottom me-1"></i> Follow</span>
-                            <span class="icon-off"><i class="ri-user-unfollow-line align-bottom me-1"></i> Unfollow</span>
-                        </button>
+                        <a asp-action="UserTasks" asp-controller="Task" class="btn btn-warning custom-toggle active">
+                           View TaskBoard
+                        </a>
                     </div>
                     <div class="avatar-sm flex-shrink-0">
                         <span class="avatar-title bg-primary-subtle rounded fs-3">
