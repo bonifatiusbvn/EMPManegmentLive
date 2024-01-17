@@ -16,5 +16,8 @@ namespace EMPManegment.Inretface.Services.ProductMaster
         Task<IEnumerable<ProductTypeView>> GetProductById(Guid ProductId);
         Task<List<ProductDetailsView>> GetProductDetailsByVendorId(Guid vendorId);
         //Task<UserResponceModel> AddVendorType(ProductDetailsView AddProductDetails);
+        Task<ProductDetailsView> GetProductDetailsById(Guid ProductId);
+        Task<UserResponceModel> UpdateProductDetails(ProductDetailsView UpdateProduct);
+        Task<List<ProductDetailsView>> GetProductDetailsByProductId(int ProductId);
     }
 }

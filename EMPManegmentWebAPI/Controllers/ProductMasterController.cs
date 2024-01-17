@@ -101,5 +101,47 @@ namespace EMPManagment.API.Controllers
             List<ProductDetailsView> VendorProductList = await productMaster.GetProductDetailsByVendorId(VendorId);
             return Ok(new { code = 200, data = VendorProductList.ToList() });
         }
+
+        [HttpGet]
+        [Route("GetProductDetailsById")]
+        public async Task<IActionResult> GetProductDetailsById(Guid ProductId)
+        {
+            var getProductDetails = await productMaster.GetProductDetailsById(ProductId);
+            return Ok(new { code = 200, data = getProductDetails });
+        }
+
+        [HttpPost]
+        [Route("UpdateProductDetails")]
+        public async Task<IActionResult> UpdateProductDetails(ProductDetailsView Product)
+        {
+            UserResponceModel updateresponsemodel = new UserResponceModel();
+            try
+            {
+                var UpdateProduct = productMaster.UpdateProductDetails(Product);
+                if (UpdateProduct.Result.Code == 200)
+                {
+                    updateresponsemodel.Code = (int)HttpStatusCode.OK;
+                    updateresponsemodel.Message = UpdateProduct.Result.Message;
+                    updateresponsemodel.Icone = UpdateProduct.Result.Icone;
+                }
+                else
+                {
+                    updateresponsemodel.Message = UpdateProduct.Result.Message;
+                    updateresponsemodel.Code = (int)HttpStatusCode.NotFound;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return StatusCode(updateresponsemodel.Code, updateresponsemodel);
+        }
+        [HttpPost]
+        [Route("GetProductDetailsByProductId")]
+        public async Task<IActionResult> GetProductDetailsByProductId(int ProductId)
+        {
+            List<ProductDetailsView> ProductList = await productMaster.GetProductDetailsByProductId(ProductId);
+            return Ok(new { code = 200, data = ProductList.ToList() });
+        }
     }
 }

@@ -9,10 +9,15 @@
 <link rel="stylesheet" href="~/UserHome/minimal/assets/libs/gridjs/theme/mermaid.min.css">
 
 <style>
-    #txtProductType-error {
+    #txtProductType-error,
+    #txtProductName-error, #txtProductDescription-error, #txtshortdescription-error,
+    #txtproductImage-error, #txtstocks-error, #txtPerUnitPrice-error,
+    #txtHSN-error, #txtGST-error, #txtPerUnitWithGSTPrice-error, #txtProductType-error,
+    #txtvendornamed-error, #txtProducts-error {
         color: red;
     }
 </style>
+
 <!-- start page title -->
 <div class="row" style="margin-top:20px;">
     <div class="col-12">
@@ -60,89 +65,14 @@
                         </div>
 
                         <div class="filter-choices-input">
-                            <input class="form-control" data-choices data-choices-removeItem type="text" id="filter-choices-input" value="T-Shirts" />
+                             <select class="form-control" id="txtProductList" onchange="selectProductId()">
+                                 <option selected disabled value="">---Select Products---</option>
+                             </select>
+                             <input type="hidden" class="form-control" id="txtProductListId">
                         </div>
                     </div>
 
                     <div class="accordion accordion-flush filter-accordion">
-
-                        <div class="card-body border-bottom">
-                            <div>
-                                <p class="text-muted text-uppercase fs-12 fw-medium mb-2">Products</p>
-                                <ul class="list-unstyled mb-0 filter-list">
-                                    <li>
-                                        <a href="#" class="d-flex py-1 align-items-center">
-                                            <div class="flex-grow-1">
-                                                <h5 class="fs-13 mb-0 listname">Grocery</h5>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#" class="d-flex py-1 align-items-center">
-                                            <div class="flex-grow-1">
-                                                <h5 class="fs-13 mb-0 listname">Fashion</h5>
-                                            </div>
-                                            <div class="flex-shrink-0 ms-2">
-                                                <span class="badge bg-light text-muted">5</span>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#" class="d-flex py-1 align-items-center">
-                                            <div class="flex-grow-1">
-                                                <h5 class="fs-13 mb-0 listname">Watches</h5>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#" class="d-flex py-1 align-items-center">
-                                            <div class="flex-grow-1">
-                                                <h5 class="fs-13 mb-0 listname">Electronics</h5>
-                                            </div>
-                                            <div class="flex-shrink-0 ms-2">
-                                                <span class="badge bg-light text-muted">5</span>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#" class="d-flex py-1 align-items-center">
-                                            <div class="flex-grow-1">
-                                                <h5 class="fs-13 mb-0 listname">Furniture</h5>
-                                            </div>
-                                            <div class="flex-shrink-0 ms-2">
-                                                <span class="badge bg-light text-muted">6</span>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#" class="d-flex py-1 align-items-center">
-                                            <div class="flex-grow-1">
-                                                <h5 class="fs-13 mb-0 listname">Automotive Accessories</h5>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#" class="d-flex py-1 align-items-center">
-                                            <div class="flex-grow-1">
-                                                <h5 class="fs-13 mb-0 listname">Appliances</h5>
-                                            </div>
-                                            <div class="flex-shrink-0 ms-2">
-                                                <span class="badge bg-light text-muted">7</span>
-                                            </div>
-                                        </a>
-                                    </li>
-
-                                    <li>
-                                        <a href="#" class="d-flex py-1 align-items-center">
-                                            <div class="flex-grow-1">
-                                                <h5 class="fs-13 mb-0 listname">Kids</h5>
-                                            </div>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-
                         <div class="card-body border-bottom">
                             <p class="text-muted text-uppercase fs-12 fw-medium mb-4">Price</p>
 
@@ -409,10 +339,100 @@
         </div>
         <!-- end row -->
 
+          <div class="modal fade zoomIn" id="UpdateProductDetails" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+                <div class="modal-content border-0">
+                    <div class="modal-header p-3 bg-primary-subtle">
+                        <h5 class="modal-title" id="exampleModalLabel">Update Product</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"></button>
+                    </div>
+                    <form class="tablelist-form" autocomplete="off" id="UpdateDetailsForm">
+                        <div class="modal-body">
+                            <input type="hidden" id="tasksId" />
+                            <div class="row g-3">
+                                <div class="col-lg-12">
+                                    <label for="projectName-field" class="form-label">Product Name</label>
+                                    <input type="text" id="txtProductName" class="form-control" placeholder="Enter ProductName"/>
+                                    <input type="hidden" id="txtProductId" hidden/>
+                                </div>
+                                <!--end col-->
+                                <div class="col-lg-12">
+                                    <div>
+                                        <label for="TaskTitle" class="form-label">Product Description</label>
+                                        <input type="text" id="txtProductDescription" class="form-control" placeholder="Enter ProductDescription"/>
+                                        <input type="hidden" id="txtproductImage" class="form-control" placeholder="Enter product Image"/>
+                                    </div>
+                                </div>
+                                <!--end col-->
+                                <div class="col-lg-6">
+                                    <label for="TaskDate" class="form-label">Per Unit Price</label>
+                                    <input type="text" id="txtPerUnitPrice" class="form-control" placeholder="Enter PerUnit Price" />
+                                </div>
+                                <!--end col-->
+                                <div class="col-lg-6">
+                                    <label for="TaskEndDate" class="form-label">GST</label>
+                                    <input type="text" id="txtGST" class="form-control" data-provider="flatpickr" placeholder="Enter GST"/>
+                                </div>
+                                <!--end col-->
+                                <div class="col-lg-6">
+                                    <label for="TaskStatus" class="form-label">Per Unit With GST Price</label>
+                                    <input type="text" class="form-control" id="txtPerUnitWithGSTPrice" name="txtPerUnitWithGSTPrice" placeholder="Enter PerUnit GST Price" required>
+                                </div>
+                                <!--end col-->
+                                <div class="col-lg-6">
+                                   <label class="form-label" for="HSN">HSN</label>
+                                   <input type="text" class="form-control" id="txtHSN" name="txtHSN" placeholder="Enter HSN" required>
+                                </div>
+                                <!--end col-->
+                                <div class="col-lg-6">
+                                    <label class="form-label" for="stocks">Stocks</label>
+                                    <input type="text" class="form-control" id="txtstocks" name="txtstocks" placeholder="Enter Stocks" required>
+                                </div>
+                                <!--end col-->
+                                 <div class="col-lg-6">
+                                    <label for="ProductType" class="form-label">Product Type</label>
+                                        <select id="txtProducts" class="form-control bg-transparent" name="txtProducts" required>
+                                             <option selected disabled value="">----Select Product Type---</option>
+                                        </select>
+                                        <input type="hidden" class="form-control" id="txtProductType">
+                                </div>
+                                <!--end col-->
+                                 <div class="col-lg-6">
+                                    <label for="ProductType" class="form-label">Product Short Description</label>
+                                    <textarea class="form-control" id="txtshortdescription" name="txtshortdescription" placeholder="Must enter minimum of a 100 characters" rows="3" required></textarea>
+                                </div>
+                                <!--end col-->
+                                 <div class="col-lg-6">
+                                   <label for="VendorId" class="form-label">Vendor Name</label>
+                                    <select class="form-control" id="txtvendornamed" name="txtvendornamed" required>
+                                        <option selected disabled value="">----Select Vendor Name---</option>
+                                    </select>
+                                    <input type="hidden" class="form-control" id="txtvendornameid">
+                                </div>
+                                <!--end col-->
+                            </div>
+                            <!--end row-->
+                        </div>
+                        <div class="modal-footer">
+                            <div class="hstack gap-2 justify-content-end">
+                                <button type="button" class="btn btn-light" id="close-modal" data-bs-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-success" onclick="UpdateProductDetails()" id="UpdateDetailsBtn">Update Product</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
     </div>
     <!-- container-fluid -->
 </div>
 <!-- End Page-content -->
+
+
+
+
+
 
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
@@ -420,6 +440,7 @@
 <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
 <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
 <script src="~/moduls/productmasterscript.js"></script>
+
 
 <!-- nouisliderribute js -->
 <script src="~/UserHome/minimal/assets/libs/nouislider/nouislider.min.js"></script>
