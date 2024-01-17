@@ -13,6 +13,8 @@ using EMPManegment.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using EMPManegment.EntityModels.ViewModels.ForgetPasswordModels;
+using DocumentFormat.OpenXml.Spreadsheet;
+using EMPManegment.EntityModels.Common;
 
 namespace EMPManegment.Web.Controllers
 {
@@ -74,32 +76,6 @@ namespace EMPManegment.Web.Controllers
                     ApiResponseModel responsemodel = await APIServices.PostAsync(login, "UserLogin/Login");
                     LoginResponseModel userlogin = new LoginResponseModel();
 
-                    if (login.RememberMe==true)
-                    {
-                        string UserNamecookie = login.UserName;
-                        string Passwordcookie = login.Password;
-
-                        CookieOptions cookieOptions = new CookieOptions
-                        {
-                            Expires = DateTime.Now.AddDays(7),
-                            HttpOnly = true,
-                            Secure = true, 
-                            SameSite = SameSiteMode.Strict
-                        };
-
-                        Response.Cookies.Append("UserName", UserNamecookie, cookieOptions);
-                        Response.Cookies.Append("Password", Passwordcookie, cookieOptions);
-                        //CookieOptions cookie = new CookieOptions();
-                        //cookie.Expires = DateTime.Now.AddYears(1);
-
-                        //Response.Cookies.Append("UserName", login.UserName);
-                        //Response.Cookies.Append("Password", login.Password);
-                    }
-                    else
-                    {
-                        Response.Cookies.Delete("UserName");
-                        Response.Cookies.Delete("Password");
-                    }
 
                     if (responsemodel.code != (int)HttpStatusCode.OK)
                         {
@@ -119,7 +95,7 @@ namespace EMPManegment.Web.Controllers
                                 var data = JsonConvert.SerializeObject(responsemodel.data);
                                 userlogin.Data = JsonConvert.DeserializeObject<LoginView>(data);
                                 var claims = new List<Claim>()
-                            {
+                              {
                                 new Claim("UserID", userlogin.Data.Id.ToString()),
                                 new Claim("FirstName", userlogin.Data.FirstName),
                                 new Claim("FullName", userlogin.Data.FullName),
@@ -127,14 +103,27 @@ namespace EMPManegment.Web.Controllers
                                 new Claim("ProfileImage", userlogin.Data.ProfileImage),
                                 new Claim("IsAdmin", userlogin.Data.Role.ToString()),
 
-                            };
-                            UserSession.ProfilePhoto = userlogin.Data.ProfileImage;
+                              };
 
 
-                                 var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-                                 var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
-                                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
-                                 return RedirectToAction("UserHome", "Home");
+                        if (login.RememberMe == true)
+                        {
+                            CookieOptions cookie = new CookieOptions();
+                            cookie.Expires = DateTime.Now.AddYears(1);
+                            Response.Cookies.Append("UserName", Common.EncryptStrSALT(userlogin.Data.UserName), cookie);
+                            Response.Cookies.Append("Password", Common.EncryptStrSALT(login.Password), cookie);
+
+                        }
+                        else
+                        {
+                            Response.Cookies.Delete("UserName");
+                            Response.Cookies.Delete("Password");
+                        }
+                         UserSession.ProfilePhoto = userlogin.Data.ProfileImage;
+                         var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                         var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
+                         await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
+                         return RedirectToAction("UserHome", "Home");
                         }
                 }
                 return View();
@@ -144,6 +133,8 @@ namespace EMPManegment.Web.Controllers
                 return BadRequest(new { Message = "InternalServer" });
             }
         }
+
+        [HttpPost]
         public async Task<IActionResult> Logout()
         {
             try
