@@ -20,7 +20,7 @@
                         <td>@item.UserName</td>
                         <td>@item.Date.ToShortDateString()</td>
                         <td>@item.Intime.ToLongTimeString()</td>
-                        <div>
+                      
                             @if(item.OutTime != null)
                             {
                             <td>@item.OutTime</td>
@@ -33,8 +33,7 @@
                             {
                             <td>Missing</td>
                             }
-                        </div>
-                        <div>
+                        
                             @if(item.TotalHours != null)
                             {
                             <td>@item.TotalHours</td>
@@ -47,8 +46,8 @@
                             {
                             <td>Missing</td>
                             }
-                        </div>
-                        <td><button type="button" class="btn btn-sm btn-primary" onclick="editUserAttendance('@item.AttendanceId')" data-bs-toggle="modal" data-bs-target="#editTimeModel">Edit Time</button></td>
+
+                        <td><button type="button" class="btn btn-sm btn-primary" onclick="editUserAttendanceSrc('@item.AttendanceId')">Edit Time</button></td>
                     </tr>
                 }
             </tbody>
@@ -67,7 +66,7 @@
     </div>
 </div>
 
-<div class="modal fade" id="editTimeModel" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="editTimeModelsearch" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header bg-light p-3">
@@ -77,34 +76,34 @@
             <div class="modal-body">
                 <div class="mb-3">
                     <label for="customername-field" class="form-label">AttandanceId</label>
-                    <input id="AttandanceId" class="form-control" disabled />
+                    <input id="srcAttandanceId" class="form-control" disabled />
                     <input id="UserId" class="form-control" hidden />
                 </div>
 
                 <div class="mb-3">
                     <label for="customername-field" class="form-label">UserName</label>
-                    <input id="UserName" class="form-control" disabled />
+                    <input id="srcUserName" class="form-control" disabled />
                 </div>
 
                 <div class="mb-3">
                     <label for="email-field" class="form-label">Date</label>
-                    <input id="Date" class="form-control" disabled />
+                    <input id="srcDate" class="form-control" disabled />
                 </div>
 
                 <div class="mb-3">
                     <label for="phone-field" class="form-label">Intime</label>
-                    <input id="Intime" class="form-control" disabled />
+                    <input id="srcIntime" class="form-control" disabled />
                 </div>
 
                 <div class="mb-3">
                     <label for="date-field" class="form-label">OutTime</label>
-                    <input type="datetime-local" id="OutTime" class="form-control" />
+                    <input type="datetime-local" id="srcOutTime" class="form-control" />
                 </div>
             </div>
             <div class="modal-footer">
                 <div class="hstack gap-2 justify-content-end">
                     <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-success" onclick="UpdateUserAttendance();" id="SubmitButton">Update Time</button>
+                    <button type="submit" class="btn btn-success" onclick="UpdateUserAttendanceSrc()" id="SubmitButton">Update Time</button>
                 </div>
             </div>
         </div>

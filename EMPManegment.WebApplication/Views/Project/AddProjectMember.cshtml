@@ -42,7 +42,8 @@
                                                 <div class="fw-medium" id="projecttype">@Model.ProjectType</div>
                                                 <input type="text" id="projectid" value="@Model.ProjectId" hidden/>
                                                 <div class="vr"></div>
-                                                <div>Create Date : <span class="fw-medium" id="projectstartdate">@Model.ProjectStartDate.ToShortDateString()</span></div>
+                                                <div>Create Date : <span class="fw-medium" >@Model.ProjectStartDate.ToShortDateString()</span></div>
+                                                <input type="hidden" value="@Model.ProjectStartDate" id="projectstartdate" />
                                                 <div class="vr"></div>
                                                 <div>Due Date : <span class="fw-medium" id="projectenddate"></span>@Model.ProjectEndDate.ToShortDateString()</div>
                                                 <div class="vr"></div>

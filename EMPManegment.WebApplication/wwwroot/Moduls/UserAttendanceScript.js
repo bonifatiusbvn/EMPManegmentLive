@@ -326,7 +326,7 @@ function GetSearchAttendanceList() {
     }   
 };
 
-function editUserAttendance(attandenceId) {
+function editUserAttendanceSrc(attandenceId) {
     $.ajax({
         url: '/UserProfile/EditUserAttendanceOutTime?attendanceId=' + attandenceId,
         type: 'Get',
@@ -334,18 +334,73 @@ function editUserAttendance(attandenceId) {
         processData: false,
         contentType: false,
         success: function (response) {
+            
             $.each(response, function (index, item) {
-                $('#AttandanceId').val(item.attendanceId);
-                $('#UserName').val(item.userName);
-                $('#Date').val((new Date(item.date)).toLocaleDateString('en-US'));
-                $('#Intime').val((new Date(item.intime)).toLocaleTimeString('en-US'));
-                $('#OutTime').val(item.outTime);
+                $('#srcAttandanceId').val(item.attendanceId);
+                $('#srcUserName').val(item.userName);
+                $('#srcDate').val((new Date(item.date)).toLocaleDateString('en-US'));
+                $('#srcIntime').val((new Date(item.intime)).toLocaleTimeString('en-US'));
+                $('#srcOutTime').val(item.outTime);
             });
+            $('#editTimeModelsearch').modal('show');
         },
         error: function () {
             alert('Data not Found');
         }
     })
+}
+
+
+function UpdateUserAttendanceSrc() {
+    var objData = {
+        AttendanceId: $("#srcAttandanceId").val(),
+        OutTime: $("#srcOutTime").val(),
+        Intime: $("#srcIntime").val(),
+        UserName: $("#srcUserName").val(),
+        Date: $("#srcDate").val(),
+    }
+
+
+    if (objData.OutTime == "") {
+        $("#OutTime").css('border-color', 'red');
+        $("#OutTime").focus();
+    }
+
+    else {
+        $("#OutTime").css('border-color', 'lightgray');
+        $.ajax({
+            url: '/UserProfile/UpdateUserAttendanceOutTime',
+            type: 'Post',
+            data: objData,
+            dataType: 'json',
+            success: function (Result) {
+
+                var ricon = "warning";
+
+                if (Result.icone == ricon) {
+
+                    Swal.fire({
+                        title: Result.message,
+                        icon: Result.icone,
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK'
+                    })
+                }
+
+                else {
+
+                    Swal.fire({
+                        title: Result.message,
+                        icon: Result.icone,
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK'
+                    }).then(function () {
+                        window.location = '/UserProfile/GetUsersListById';
+                    });
+                }
+            },
+        })
+    }
 }
 
 function updateUserAttendance() {

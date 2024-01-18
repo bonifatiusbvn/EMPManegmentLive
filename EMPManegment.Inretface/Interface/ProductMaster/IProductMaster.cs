@@ -1,6 +1,7 @@
 ﻿using EMPManegment.EntityModels.ViewModels;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.ProductMaster;
+using EMPManegment.EntityModels.ViewModels.TaskModels;
 using EMPManegment.EntityModels.ViewModels.VendorModels;
 using System;
 using System.Collections.Generic;
@@ -17,6 +18,10 @@ namespace EMPManegment.Inretface.Interface.ProductMaster
         Task<IEnumerable<ProductTypeView>> GetProduct();
         Task<IEnumerable<ProductTypeView>> GetProductById(Guid ProductId);
         Task<List<ProductDetailsView>> GetProductDetailsByVendorId(Guid vendorId);
+        //Task<UserResponceModel> AddVendorType(ProductDetailsView AddProductDetails);
+        Task<ProductDetailsView> GetProductDetailsById(Guid ProductId);
+        Task<UserResponceModel> UpdateProductDetails(ProductDetailsView UpdateProduct);
+        Task<List<ProductDetailsView>> GetProductDetailsByProductId(int ProductId);
         Task<IEnumerable<ProductDetailsView>> GetSearchProductByProductName(String ProductName);
     }
 }

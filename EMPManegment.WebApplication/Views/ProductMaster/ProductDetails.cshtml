@@ -1,4 +1,5 @@
-﻿
+﻿@model EMPManegment.EntityModels.ViewModels.ProductMaster.ProductDetailsView
+
 @{
     ViewData["Title"] = "ProductDetails";
     Layout = "~/Views/Shared/_HomeLayout.cshtml";
@@ -32,47 +33,22 @@
                                         <div class="swiper product-thumbnail-slider p-2 rounded bg-light">
                                             <div class="swiper-wrapper">
                                                 <div class="swiper-slide">
-                                                    <img src="~/UserHome/minimal/assets/images/products/img-8.png" alt="" class="img-fluid d-block" />
+                                        <img id="txtImage" src="~/@Model.ProductImage" alt="" style="height: 400px; width: 400px; margin-left: 10px;" class="img-fluid d-block" />
                                                 </div>
                                                 <div class="swiper-slide">
-                                                    <img src="~/UserHome/minimal/assets/images/products/img-6.png" alt="" class="img-fluid d-block" />
+                                                    <img src="~/@Model.ProductImage" alt="" class="img-fluid d-block" />
                                                 </div>
                                                 <div class="swiper-slide">
-                                                    <img src="~/UserHome/minimal/assets/images/products/img-1.png" alt="" class="img-fluid d-block" />
+                                                    <img src="~/@Model.ProductImage" alt="" class="img-fluid d-block" />
                                                 </div>
                                                 <div class="swiper-slide">
-                                                    <img src="~/UserHome/minimal/assets/images/products/img-8.png" alt="" class="img-fluid d-block" />
+                                                    <img src="~/@Model.ProductImage" alt="" class="img-fluid d-block" />
                                                 </div>
                                             </div>
                                             <div class="swiper-button-next"></div>
                                             <div class="swiper-button-prev"></div>
                                         </div>
                                         <!-- end swiper thumbnail slide -->
-                                        <div class="swiper product-nav-slider mt-2">
-                                            <div class="swiper-wrapper">
-                                                <div class="swiper-slide">
-                                                    <div class="nav-slide-item ">
-                                                        <img src="~/UserHome/minimal/assets/images/products/img-8.png" alt="" class="img-fluid d-block" />
-                                                    </div>
-                                                </div>
-                                                <div class="swiper-slide">
-                                                    <div class="nav-slide-item">
-                                                        <img src="~/UserHome/minimal/assets/images/products/img-6.png" alt="" class="img-fluid d-block" />
-                                                    </div>
-                                                </div>
-                                                <div class="swiper-slide">
-                                                    <div class="nav-slide-item">
-                                                        <img src="~/UserHome/minimal/assets/images/products/img-1.png" alt="" class="img-fluid d-block" />
-                                                    </div>
-                                                </div>
-                                                <div class="swiper-slide">
-                                                    <div class="nav-slide-item">
-                                                        <img src="~/UserHome/minimal/assets/images/products/img-8.png" alt="" class="img-fluid d-block" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!-- end swiper nav slide -->
                                     </div>
                                 </div>
                                 <!-- end col -->
@@ -81,17 +57,16 @@
                                     <div class="mt-xl-0 mt-5">
                                         <div class="d-flex">
                                             <div class="flex-grow-1">
-                                                <h4>Full Sleeve Sweatshirt for Men (Pink)</h4>
+                                                <h4 id="txtProductName">@Model.ProductName</h4>
                                                 <div class="hstack gap-3 flex-wrap">
                                                     <div>
-                                                        <a href="#" class="text-primary d-block">
-                                                            Tommy
-                                                            Hilfiger
+                                                        <a  class="text-primary d-block" id="txtProductTypeName">
+                                                    @Model.ProductTypeName
                                                         </a>
                                                     </div>
                                                     <div class="vr"></div>
                                                     <div class="text-muted">
-                                                        Seller : <span class="text-body fw-medium">Zoetic Fashion</span>
+                                                        Seller : <span class="text-body fw-medium" id="txtVendorName">@Model.VendorName</span>
                                                     </div>
                                                     <div class="vr"></div>
                                                     <div class="text-muted">
@@ -128,7 +103,7 @@
                                                         </div>
                                                         <div class="flex-grow-1">
                                                             <p class="text-muted mb-1">Price :</p>
-                                                            <h5 class="mb-0">$120.40</h5>
+                                                            <h5 class="mb-0">@Model.PerUnitWithGstprice</h5>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -160,7 +135,7 @@
                                                         </div>
                                                         <div class="flex-grow-1">
                                                             <p class="text-muted mb-1">Available Stocks :</p>
-                                                            <h5 class="mb-0">1,230</h5>
+                                                            <h5 class="mb-0">@Model.ProductStocks</h5>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -266,11 +241,7 @@
                                         <div class="mt-4 text-muted">
                                             <h5 class="fs-14">Description :</h5>
                                             <p>
-                                                Tommy Hilfiger men striped pink sweatshirt. Crafted with cotton.
-                                                Material composition is 100% organic cotton. This is one of the
-                                                world’s leading designer lifestyle brands and is internationally
-                                                recognized for celebrating the essence of classic American cool
-                                                style, featuring preppy with a twist designs.
+                                                @Model.ProductDescription
                                             </p>
                                         </div>
 
@@ -331,11 +302,11 @@
                                                                     <th scope="row" style="width: 200px;">
                                                                         Category
                                                                     </th>
-                                                                    <td>T-Shirt</td>
+                                                                    <td>@Model.ProductTypeName</td>
                                                                 </tr>
                                                                 <tr>
                                                                     <th scope="row">Brand</th>
-                                                                    <td>Tommy Hilfiger</td>
+                                                                    <td>@Model.VendorName</td>
                                                                 </tr>
                                                                 <tr>
                                                                     <th scope="row">Color</th>
@@ -356,33 +327,27 @@
                                                 <div class="tab-pane fade" id="nav-detail" role="tabpanel" aria-labelledby="nav-detail-tab">
                                                     <div>
                                                         <h5 class="font-size-16 mb-3">
-                                                            Tommy Hilfiger Sweatshirt
-                                                            for Men (Pink)
+                                                            @Model.ProductName
                                                         </h5>
                                                         <p>
-                                                            Tommy Hilfiger men striped pink sweatshirt. Crafted
-                                                            with cotton. Material composition is 100% organic
-                                                            cotton. This is one of the world’s leading designer
-                                                            lifestyle brands and is internationally recognized
-                                                            for celebrating the essence of classic American cool
-                                                            style, featuring preppy with a twist designs.
+                                                            @Model.ProductShortDescription
                                                         </p>
                                                         <div>
                                                             <p class="mb-2">
                                                                 <i class="mdi mdi-circle-medium me-1 text-muted align-middle"></i>
-                                                                Machine Wash
+                                                                PerUnitPrice: @Model.PerUnitPrice
                                                             </p>
                                                             <p class="mb-2">
                                                                 <i class="mdi mdi-circle-medium me-1 text-muted align-middle"></i>
-                                                                Fit Type: Regular
+                                                                GST: @Model.Gst
                                                             </p>
                                                             <p class="mb-2">
                                                                 <i class="mdi mdi-circle-medium me-1 text-muted align-middle"></i>
-                                                                100% Cotton
+                                                                HSN: @Model.Hsn
                                                             </p>
-                                                            <p class="mb-0">
+                                                            <p class="mb-2">
                                                                 <i class="mdi mdi-circle-medium me-1 text-muted align-middle"></i>
-                                                                Long sleeve
+                                                                STOCKS: @Model.ProductStocks
                                                             </p>
                                                         </div>
                                                     </div>
@@ -711,7 +676,6 @@
             <!-- end row -->
 
     <!-- End Page-content -->
-
     <footer class="footer">
         <div class="container-fluid">
             <div class="row">

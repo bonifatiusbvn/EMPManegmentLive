@@ -168,6 +168,104 @@ namespace EMPManegment.Repository.ProductMaster
             }
         }
 
+        public async Task<ProductDetailsView> GetProductDetailsById(Guid ProductId)
+        {
+            ProductDetailsView Product = new ProductDetailsView();
+            try
+            {
+                 Product =(from a in Context.TblProductDetailsMasters.Where(x => x.Id == ProductId)
+                                                         join b in Context.TblProductTypeMasters
+                                                         on a.ProductType equals b.Id
+                                                         join c in Context.TblVendorMasters
+                                                         on a.VendorId equals c.Vid
+                                                         select new ProductDetailsView
+                                                         {
+                                                             Id = a.Id,
+                                                             VendorName =c.VendorCompany,
+                                                             VendorId=a.VendorId,
+                                                             ProductType=a.ProductType,
+                                                             ProductTypeName = b.ProductName,
+                                                             ProductName = a.ProductName,
+                                                             ProductDescription = a.ProductDescription,
+                                                             ProductShortDescription = a.ProductShortDescription,
+                                                             ProductImage = a.ProductImage,
+                                                             ProductStocks = a.ProductStocks,
+                                                             PerUnitPrice = a.PerUnitPrice,
+                                                             Hsn = a.Hsn,
+                                                             Gst = a.Gst,
+                                                             PerUnitWithGstprice = a.PerUnitWithGstprice,
+                                                             CreatedBy = a.CreatedBy,
+                                                         }).First();
+                return Product;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<UserResponceModel> UpdateProductDetails(ProductDetailsView UpdateProduct)
+        {
+            UserResponceModel model = new UserResponceModel();
+            var getProduct = Context.TblProductDetailsMasters.Where(e => e.Id == UpdateProduct.Id).FirstOrDefault();
+            try
+            {
+                if (getProduct != null)
+                {
+                    getProduct.ProductName = UpdateProduct.ProductName;
+                    getProduct.ProductDescription = UpdateProduct.ProductDescription;
+                    getProduct.ProductShortDescription = UpdateProduct.ProductShortDescription;
+                    getProduct.PerUnitPrice = UpdateProduct.PerUnitPrice;
+                    getProduct.ProductType = UpdateProduct.ProductType;
+                    getProduct.ProductImage = UpdateProduct.ProductImage;
+                    getProduct.Gst = UpdateProduct.Gst;
+                    getProduct.Hsn = UpdateProduct.Hsn;
+                    getProduct.Id = UpdateProduct.Id;
+                    getProduct.PerUnitWithGstprice= UpdateProduct.PerUnitWithGstprice;
+                    getProduct.ProductStocks = UpdateProduct.ProductStocks;
+                    getProduct.VendorId = UpdateProduct.VendorId;
+                }
+                Context.TblProductDetailsMasters.Update(getProduct);
+                Context.SaveChanges();
+                model.Code = 200;
+                model.Message = "Product Details Updated Successfully!";
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return model;
+        }
+
+        public async Task<List<ProductDetailsView>> GetProductDetailsByProductId(int ProductId)
+        {
+            try
+            {
+                var productDetails = new List<ProductDetailsView>();
+                var data = await Context.TblProductDetailsMasters.Where(x => x.ProductType == ProductId).ToListAsync();
+                if (data != null)
+                {
+                    foreach (var item in data)
+                    {
+                        productDetails.Add(new ProductDetailsView()
+                        {
+                            Id = item.Id,
+                            VendorId = item.VendorId,
+                            ProductImage = item.ProductImage,
+                            ProductName = item.ProductName,
+                            ProductStocks = item.ProductStocks,
+                            PerUnitPrice = item.PerUnitPrice,
+                        });
+                    }
+                }
+                return productDetails;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+    }
         public async Task<IEnumerable<ProductDetailsView>> SearchProductName(String ProductName)
         {
             try

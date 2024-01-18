@@ -228,7 +228,7 @@ function EnterInTime() {
 }
 
 function EnterOutTime() {
-    debugger
+    
     if ($("#todayouttime").text() != "Pending") {
         var fromData = new FormData();
         fromData.append("UserId", $("#txtuserid").val());
@@ -254,7 +254,7 @@ function EnterOutTime() {
 
     else
     {
-        debugger
+        
         const swalWithBootstrapButtons = Swal.mixin({
             customClass: {
                 confirmButton: 'btn btn-success',
@@ -456,66 +456,46 @@ function EditUserDetails(EmpId) {
 }
 
 
-function Logout()
+function UserLogout()
 {
-    
-    const swalWithBootstrapButtons = Swal.mixin({
-        customClass: {
-            confirmButton: 'btn btn-success',
-            cancelButton: 'btn btn-danger'
-        },
-        buttonsStyling: false
-    })
-
-
-
-    swalWithBootstrapButtons.fire({
-        title: 'Are you sure?',
-        text: "You won't to Log Out ",
+    Swal.fire({
+        title: 'Logout Confirmation',
+        text: 'Are you sure you want to logout?',
         icon: 'warning',
         showCancelButton: true,
-        confirmButtonText: 'Yes !',
-        cancelButtonText: 'No, cancel!',
-        reverseButtons: true
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, logout'
     }).then((result) => {
         if (result.isConfirmed) {
-
-            debugger
-            $.ajax({
-                url: '/Authentication/Logout',
-                type: 'GET',
-                contentType: 'application/json;charset=utf-8;',
-                dataType: 'json',
-
-                success: function (Result) {
-                    
-                    swalWithBootstrapButtons.fire(
-                        'Done!',
-                        'Successfully LogOut.!!',
-                        'success'
-                    ).then(function () {
-                        window.location = '/UserProfile/UserActiveDecative';
-                    });
-
-                },
-                error: function () {
-                    toastr.error('There is some problem in your request.');
-                }
-            })
-
-        } else if (
-            /* Read more about handling dismissals below */
-            result.dismiss === Swal.DismissReason.cancel
-        ) {
-            swalWithBootstrapButtons.fire(
-                'Cancelled',
-                'User Have No Changes.!! :)',
-                'error'
-            )
+            // User confirmed, perform logout via AJAX request
+            logout();
         }
+    });
+    
+   
+
+}
+
+function logout() {
+    
+    fetch('/Authentication/Logout', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'RequestVerificationToken': '@Token.Get(Request.HttpContext)'
+           
+        },
+        body: ''
     })
-
-
+        .then(response => {
+            // Handle response as needed, for example, redirect to the home page
+            window.location.href = '/Authentication/Login';
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            // Handle errors if necessary
+        });
 }
 
 function UpdateUserDetails() {
@@ -678,9 +658,9 @@ function clearSelectedBox() {
         '<option selected disabled value = "">--Select Department--</option>');
 }
 
-$('#searchEmployee').on('change',function (e) {debugger
+$('#searchEmployee').on('change',function (e) {
     e.stopImmediatePropagation();
-    if ($("#searchEmployee").val() == "ByUsername") {debugger
+    if ($("#searchEmployee").val() == "ByUsername") {
         clearSelectedBox();
         GetUsername();
         $("#empnamebox").show();
@@ -697,7 +677,7 @@ $('#searchEmployee').on('change',function (e) {debugger
 function GetUsername() {
     $.ajax({
         url: '/Task/GetUserName',
-        success: function (result) {debugger
+        success: function (result) {
             $.each(result, function (i, data) {
                 $('#ddlusername').append('<Option value=' + data.id + '>' + data.firstName + " " + data.lastName + " " + "(" + data.userName + ")" + '</Option>')
             });

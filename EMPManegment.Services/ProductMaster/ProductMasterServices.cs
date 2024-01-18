@@ -40,6 +40,20 @@ namespace EMPManegment.Services.ProductMaster
             return await productMaster.GetProductDetailsByVendorId(VendorId);
         }
 
+        public async Task<ProductDetailsView> GetProductDetailsById(Guid ProductId)
+        {
+            return await productMaster.GetProductDetailsById(ProductId);
+        }
+
+        public async Task<UserResponceModel> UpdateProductDetails(ProductDetailsView UpdateProduct)
+        {
+            return await productMaster.UpdateProductDetails(UpdateProduct);
+        }
+
+        public async Task<List<ProductDetailsView>> GetProductDetailsByProductId(int ProductId)
+        {
+            return await productMaster.GetProductDetailsByProductId(ProductId);
+        }
         public async Task<IEnumerable<ProductDetailsView>> GetSearchProductByProductName(String ProductName)
         {
             return await productMaster.GetSearchProductByProductName(ProductName);

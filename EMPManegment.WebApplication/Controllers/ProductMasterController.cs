@@ -197,6 +197,25 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
+        [HttpGet]
+        public async Task<IActionResult> GetProductDetailsById(Guid ProductId)
+        {
+            try
+            {
+                ProductDetailsView products = new ProductDetailsView();
+                HttpClient client = WebAPI.Initil();
+                ApiResponseModel response = await APIServices.GetAsync("", "ProductMaster/GetProductDetailsById?ProductId=" + ProductId);
+                if (response.code == 200)
+                {
+                    products = JsonConvert.DeserializeObject<ProductDetailsView>(response.data.ToString());
+                }
+                return View("ProductDetails", products);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
         [HttpPost]
         public async Task<IActionResult>SearchProductName(String ProductName)
         {
@@ -226,6 +245,68 @@ namespace EMPManegment.Web.Controllers
         {
             return View();
         }
-
+        [HttpGet]
+        public async Task<IActionResult> EditProductDetails(Guid ProductId)
+        {
+            try
+            {
+                ProductDetailsView products = new ProductDetailsView();
+                HttpClient client = WebAPI.Initil();
+                ApiResponseModel response = await APIServices.GetAsync("", "ProductMaster/GetProductDetailsById?ProductId=" + ProductId);
+                if (response.code == 200)
+                {
+                    products = JsonConvert.DeserializeObject<ProductDetailsView>(response.data.ToString());
+                }
+                return new JsonResult(products);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        [HttpPost]
+        public async Task<IActionResult> UpdateProductDetails(ProductDetailsView UpdateProduct)
+        {
+            try
+            {
+                ApiResponseModel postuser = await APIServices.PostAsync(UpdateProduct, "ProductMaster/UpdateProductDetails");
+                if (postuser.code == 200)
+                {
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
+                }
+                else
+                {
+                    return new JsonResult(new { Message = string.Format(postuser.message), Code = postuser.code });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        [HttpPost]
+        public async Task<IActionResult> GetProductDetailsByProductId(int ProductId)
+        {
+            try
+            {
+                List<ProductDetailsView> ProductList = new List<ProductDetailsView>();
+                HttpClient client = WebAPI.Initil();
+                ApiResponseModel postuser = await APIServices.PostAsync("", "ProductMaster/GetProductDetailsByProductId?ProductId=" + ProductId);
+                if (postuser.data != null)
+                {
+                    ProductList = JsonConvert.DeserializeObject<List<ProductDetailsView>>(postuser.data.ToString());
+                }
+                else
+                {
+                    ProductList = new List<ProductDetailsView>();
+                    ViewBag.Error = "not found";
+                }
+                return PartialView("~/Views/ProductMaster/_ProductDetailsbtVendorId.cshtml", ProductList);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }
