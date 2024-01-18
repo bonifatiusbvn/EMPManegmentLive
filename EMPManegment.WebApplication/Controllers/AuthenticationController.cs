@@ -101,7 +101,7 @@ namespace EMPManegment.Web.Controllers
                                 new Claim("FullName", userlogin.Data.FullName),
                                 new Claim("UserName", userlogin.Data.UserName),
                                 new Claim("ProfileImage", userlogin.Data.ProfileImage),
-                                new Claim("IsAdmin", userlogin.Data.Role.ToString()),
+                                new Claim("IsAdmin", userlogin.Data.Role),
 
                               };
 
