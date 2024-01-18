@@ -15,6 +15,7 @@ namespace EMPManegment.Inretface.Services.ProductMaster
         Task<IEnumerable<ProductTypeView>> GetProduct();
         Task<IEnumerable<ProductTypeView>> GetProductById(Guid ProductId);
         Task<List<ProductDetailsView>> GetProductDetailsByVendorId(Guid vendorId);
+        Task<IEnumerable<ProductDetailsView>> SearchProductName(String ProductName);
         //Task<UserResponceModel> AddVendorType(ProductDetailsView AddProductDetails);
         Task<ProductDetailsView> GetProductDetailsById(Guid ProductId);
         Task<UserResponceModel> UpdateProductDetails(ProductDetailsView UpdateProduct);

@@ -15,4 +15,5 @@ namespace EMPManegment.EntityModels.ViewModels.ProductMaster
         [Required]
         public Guid? ProductId { get; set; }
     }
+    
 }
