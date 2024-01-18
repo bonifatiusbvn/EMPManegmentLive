@@ -5,15 +5,15 @@
 });
 
 function GetVendorNameList() {
-    
     $.ajax({
         url: '/ProductMaster/GetVendorsNameList',
         success: function (result) {
-            
             $.each(result, function (i, data) {
                 $('#txtvendorname').append('<Option value=' + data.id + '>' + data.vendorCompany + '</Option>')
             });
-
+            $.each(result, function (i, data) {
+                $('#txtvendornamed').append('<Option value=' + data.id + '>' + data.vendorCompany + '</Option>')
+            });
         }
     });
 }
@@ -52,7 +52,7 @@ function AddProductType() {
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'OK'
                     }).then(function () {
-                        window.location = '/ProductMaster/CreateProduct';
+                        window.location = '/ProductMaster/Login';
                     });
                 }
                 else {
@@ -185,4 +185,23 @@ function AddProductType() {
                 }
             });
         }
+
+// -------SearchProductName--------
+function SearchProductName() {
     
+    var form_data = new FormData();
+    form_data.append("ProductName", $('#txtsearch').val());
+    $.ajax({
+        url: '/ProductMaster/SearchProductName',
+        type: 'Post',
+        datatype: 'json',
+        data: form_data,
+        processData: false,
+        contentType: false,
+        complete: function (Result) {
+            $("#table-product-list-all").hide();
+            $("#dvproductdetails").html(Result.responseText);
+        }
+    });
+}
+

@@ -197,6 +197,30 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
+        [HttpPost]
+        public async Task<IActionResult>SearchProductName(String ProductName)
+        {
+            try
+            {
+                List<ProductDetailsView> ProductList = new List<ProductDetailsView>();
+                HttpClient client = WebAPI.Initil();
+                ApiResponseModel postuser = await APIServices.PostAsync("", "ProductMaster/SearchProductName?ProductName=" + ProductName);
+                if (postuser.data != null)
+                {
+                    ProductList = JsonConvert.DeserializeObject<List<ProductDetailsView>>(postuser.data.ToString());
+                }
+                else
+                {
+                    ProductList = new List<ProductDetailsView>();
+                    ViewBag.Error = "note found";
+                }
+                return PartialView("~/Views/ProductMaster/_ProductDetailsbtVendorId.cshtml", ProductList);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
 
         public IActionResult ProductDetails()
         {

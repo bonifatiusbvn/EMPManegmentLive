@@ -30,17 +30,8 @@
     </div>
 </div>
 <!-- end page title -->
-<@* div id="flipModal" class="modal fade flip" tabindex="-1" aria-labelledby="flipModalLabel" aria-hidden="true" style="display: none;">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-           
-            <form id="createproductform">
-                
-                
-            </form>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div> *@
+
+
 <!-- /.modal -->
 <!-- end card -->
 
@@ -314,33 +305,54 @@
                 <!-- end card -->
             </div>
             <!-- end col -->
-
+          
             <div class="col-xl-9 col-lg-8">
                 <div>
                     <div class="card">
                         <div class="card-header border-0">
-                            <div class="row g-4">
-                                <div class="col-sm-auto">
-                                    <div>
-                                        <a asp-action="CreateProduct" asp-controller="ProductMaster" class="btn btn-primary">
-                                            <i class="ri-add-line align-bottom me-1"></i>   
-                                        Add Product</a>
+                            <div class="row g-4 mb-3">
+                                <div class="row g-4" style="position:relative;margin-top:10px;">
+                                    <div class="col-sm-auto">
+                                        <a asp-action="CreateProduct" asp-controller="ProductMaster" class="btn btn-primary" style="margin-left:630%;height:100%;width:110%;">
+                                            <i class="ri-add-line align-bottom me-1 "></i>
+                                            Add Product
+                                        </a>
                                     </div>
                                 </div>
-                                <div class="col-sm">
-                                    <div class="d-flex justify-content-sm-end">
-                                        <span class="fw-bold" style="margin-top:25px;">Vendor :</span>
-                                        <div class="search-box ms-2">
-                                            <label for="VendorId" class="form-label"></label>
-                                            <select class="form-control" id="txtvendorname" name="txtvendorname">
-                                                <option selected disabled value="">----Select Vendor Name---</option>
-                                            </select>
-                                            <input type="hidden" class="form-control" id="txtvendornameid">
+
+
+                                <div class="row g-3" style="position:relative;margin-top:10px;">
+                                    <div class="col-6">
+                                        <div class="d-flex justify-content-sm">
+                                            <span class="fw-bold" style="margin-top:25px; margin-left:40%;">Vendor:</span>
+                                            <div class="search-box ms-2">
+                                                <label for="VendorId" class="form-label"></label>
+                                                <select class="form-control" id="txtvendorname" name="txtvendorname" style="width:115%">
+                                                    <option selected disabled value="">----Select Vendor Name---</option>
+                                                </select>
+                                                <input type="hidden" class="form-control" id="txtvendornameid">
+                                            </div>
                                         </div>
+                                    </div>
+                                    @*------end col----- *@
+                                    <div class="col-4">
+                                        <div class="d-flex justify-content-sm">
+                                            <span class="fw-bold" style="margin-top:25px;margin-left:10%">ProductName:</span>
+                                            <div class="search-box ms-2">
+                                                <label for="ProductId" class="form-label"></label>
+                                                <input type="text" placeholder="Search here...." id="txtsearch" class="form-control mb-1 float-end" style="width:100%; margin-top:-1%; margin-left:100px;" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @*------end col----- *@
+                                    <div class="col-lg-auto m-1">
+                                        <button class="btn btn-success float-md-end" type="button" onclick="SearchProductName()" id="searchproductname" value="Validate" style="margin-top:30px; margin-left:70px;"> Search </button>
                                     </div>
                                 </div>
                             </div>
                         </div>
+    
+  
 
                         <div class="card-header">
                             <div class="row align-items-center">
@@ -398,7 +410,6 @@
                                 <!-- end tab pane -->
                             </div>
                             <!-- end tab content -->
-
                         </div>
                         <!-- end card body -->
                     </div>
@@ -408,10 +419,10 @@
             <!-- end col -->
         </div>
         <!-- end row -->
-
     </div>
     <!-- container-fluid -->
 </div>
+
 <!-- End Page-content -->
 
 

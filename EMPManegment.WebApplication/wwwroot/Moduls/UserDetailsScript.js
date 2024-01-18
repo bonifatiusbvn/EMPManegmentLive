@@ -719,11 +719,11 @@ function GetDepartment() {
 }
 
 function GetSearchEmpList() {
-    debugger
+    
     if ($('#activeInactiveForm').valid()) {
         var form_data = new FormData();
         form_data.append("DepartmentId", $('#ddlDepartmenrnt').val());
-        form_data.append("Id", $("#ddlusername").val());debugger
+        form_data.append("Id", $("#ddlusername").val());
         $.ajax({
             url: '/UserProfile/GetSearchEmpList',
             type: 'Post',
@@ -732,7 +732,7 @@ function GetSearchEmpList() {
             processData: false,
             contentType: false,
             complete: function (Result) {
-                debugger
+                
                 $("#allemplist").hide();
                 $("#activedeactivepagination").hide();
                 $("#backbtn").show();

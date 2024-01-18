@@ -98,7 +98,6 @@ namespace EMPManegment.Repository.ProductMaster
                     response.Message = "Product add successfully!";
                     Context.TblProductDetailsMasters.Add(productdetails);
                     Context.SaveChanges();
-                }
             }
             catch (Exception ex)
             {
@@ -169,7 +168,35 @@ namespace EMPManegment.Repository.ProductMaster
             }
         }
 
-        
+        public async Task<IEnumerable<ProductDetailsView>> SearchProductName(String ProductName)
+        {
+            try
+            {
+                var productDetails = new List<ProductDetailsView>();
+                var data = await Context.TblProductDetailsMasters.Where(x => x.ProductName == ProductName).ToListAsync();
+                if (data != null)
+                {
+                    foreach (var item in data)
+                    {
+                        productDetails.Add(new ProductDetailsView()
+                        {
+                            Id = item.Id,
+                            VendorId = item.VendorId,
+                            ProductImage = item.ProductImage,
+                            ProductName = item.ProductName,
+                            ProductStocks = item.ProductStocks,
+                            PerUnitPrice = item.PerUnitPrice,
+                        });
+                    }
+                }
+                return productDetails;
+                
+            }
+            catch (Exception ex) 
+            {
+                throw ex;
+            }
+        }
     }
     
 }

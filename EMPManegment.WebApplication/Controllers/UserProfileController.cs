@@ -362,7 +362,7 @@ namespace EMPManegment.Web.Controllers
                     }
                     else
                     {
-                    TempData["ErrorMessage"] = response.message;
+                       TempData["ErrorMessage"] = response.message;
                     }
 
                 return View();

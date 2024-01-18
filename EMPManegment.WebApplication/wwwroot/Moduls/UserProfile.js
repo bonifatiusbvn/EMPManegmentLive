@@ -111,3 +111,19 @@ function GetProjectList() {
     })
 }
 
+
+$(document).ready(function () {
+    debugger
+    $("#open").click(function () {
+        debugger
+        $("#open").hide();
+        $("#closed").show();
+        $("#password").attr("type", "text");
+    });
+    $("#closed").click(function () {debugger
+        $("#closed").hide();
+        $("#open").show();
+        $("#password").attr("type", "password");
+    });
+});
+
