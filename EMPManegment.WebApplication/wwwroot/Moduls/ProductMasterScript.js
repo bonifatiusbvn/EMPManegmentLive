@@ -325,3 +325,23 @@ $(document).ready(function () {
         $("#UpdateDetailsForm").validate();
     });
 });
+
+//$("#txtvendorname").change(function () {
+//    SearchProductName()
+//})
+function SearchProductName() {debugger
+    var form_data = new FormData();
+    form_data.append("ProductName", $('#txtsearch').val());
+    $.ajax({
+        url: '/ProductMaster/SearchProductName',
+        type: 'Post',
+        datatype: 'json',
+        data: form_data,
+        processData: false,
+        contentType: false,
+        complete: function (Result) {
+            $("#table-product-list-all").hide();
+            $("#dvproductdetails").html(Result.responseText);
+        }
+    });
+} 

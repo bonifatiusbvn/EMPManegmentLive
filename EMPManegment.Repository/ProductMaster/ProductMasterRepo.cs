@@ -73,7 +73,7 @@ namespace EMPManegment.Repository.ProductMaster
                     response.Icone = "warning";
                 }
 
-                else 
+                else
                 {
                     var productdetails = new TblProductDetailsMaster()
                     {
@@ -98,6 +98,7 @@ namespace EMPManegment.Repository.ProductMaster
                     response.Message = "Product add successfully!";
                     Context.TblProductDetailsMasters.Add(productdetails);
                     Context.SaveChanges();
+                }
             }
             catch (Exception ex)
             {
@@ -265,7 +266,7 @@ namespace EMPManegment.Repository.ProductMaster
                 throw ex;
             }
         }
-    }
+
         public async Task<IEnumerable<ProductDetailsView>> SearchProductName(String ProductName)
         {
             try
@@ -288,14 +289,16 @@ namespace EMPManegment.Repository.ProductMaster
                     }
                 }
                 return productDetails;
-                
+
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 throw ex;
             }
         }
     }
-    
+        
 }
+    
+
 
