@@ -53,7 +53,7 @@ function AddProductType() {
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'OK'
                     }).then(function () {
-                        window.location = '/ProductMaster/Login';
+                        window.location = '/ProductMaster/CreateProduct';
                     });
                 }
                 else {
