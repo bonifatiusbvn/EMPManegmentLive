@@ -97,7 +97,7 @@ function ClearTextBox() {
     $("#ifscInput").val('');
     $("#GSTNumberInput").val('');
 }
-function AddVendorDetails() {debugger
+function AddVendorDetails() {
 
     if ($("#VendorbankDetails").valid())
     {
