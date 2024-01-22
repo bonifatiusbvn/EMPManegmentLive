@@ -797,8 +797,9 @@
                                             </ul>
                                         </div>
                                     </li> *@
-                                    <li class="nav-item">
-                                        <a href="#sidebarEcommerce" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarEcommerce" data-key="t-ecommerce">
+                                   
+                                        <li class="nav-item">
+                                            <a href="#sidebarEcommerce" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarEcommerce" data-key="t-ecommerce">
                                             Ecommerce
                                         </a>
                                         <div class="collapse menu-dropdown" id="sidebarEcommerce">
@@ -833,8 +834,10 @@
                                             </ul>
                                         </div>
                                     </li>
-                                    <li class="nav-item">
-                                        <a href="#sidebarProjects" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarProjects" data-key="t-projects">
+                                    
+                                   
+                                        <li class="nav-item">
+                                            <a href="#sidebarProjects" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarProjects" data-key="t-projects">
                                             Projects
                                         </a>
                                         <div class="collapse menu-dropdown" id="sidebarProjects">
@@ -848,9 +851,12 @@
                                                 <li class="nav-item">
                                                     <a asp-action="AddProjectMember" asp-controller="Project" class="nav-link" data-key="t-overview"> Add Member </a>
                                                 </li> *@
-                                                <li class="nav-item">
-                                                    <a asp-action="CreateProject" asp-controller="Project" class="nav-link" data-key="t-create-project"> Create Project </a>
+                                                @if (_userSession.UserRoll == "Admin")
+                                                {
+                                                    <li class="nav-item">
+                                                        <a asp-action="CreateProject" asp-controller="Project" class="nav-link" data-key="t-create-project"> Create Project </a>
                                                 </li>
+                                                }
                                             </ul>
                                         </div>
                                     </li>
@@ -863,12 +869,15 @@
                                                 <li class="nav-item">
                                                     <a asp-action="UserTasks" asp-controller="Task" class="nav-link" data-key="t-kanbanboard">Task Board </a>
                                                 </li>
-                                                <li class="nav-item">
-                                                    <a asp-action="AllTaskDetails" asp-controller="Task" class="nav-link" data-key="t-list-view"> List View </a>
+                                                @if(_userSession.UserRoll == "Admin")
+                                                {
+                                                    <li class="nav-item">
+                                                        <a asp-action="AllTaskDetails" asp-controller="Task" class="nav-link" data-key="t-list-view"> List View </a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a href="#" class="nav-link" data-key="t-task-details"> Task Details </a>
                                                 </li>
-                                                <li class="nav-item">
-                                                    <a href="#" class="nav-link" data-key="t-task-details"> Task Details </a>
-                                                </li>
+                                                }
                                             </ul>
                                         </div>
                                     </li>
@@ -1108,19 +1117,24 @@
                                     <div class="collapse menu-dropdown" id="sidebarPages">
                                         <ul class="nav nav-sm flex-column">
 
-                                            <li class="nav-item">
-                                        <a class="nav-link" data-key="t-user-list" asp-action="DisplayUserList" asp-controller="UserProfile">User List </a>
+                                    @if(_userSession.UserRoll == "Admin")
+                                    {
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-key="t-user-list" asp-action="DisplayUserList" asp-controller="UserProfile">User List </a>
                                             </li>
+                                    }
                                             <li class="nav-item">
                                                 <a class="nav-link" data-key="t-user-list" asp-action="DisplayVendorList" asp-controller="Vendor">Vendor List </a>
                                             </li>
+                                    @if (_userSession.UserRoll == "Admin")
+                                    {
+                                        <li class="nav-item">
+                                            <a asp-action="UserActiveDecative" asp-controller="UserProfile" class="nav-link" data-key="t-team">ActiveDeactive</a>
+                                        </li>
 
-                                            <li class="nav-item">
-                                        <a asp-action="UserActiveDecative" asp-controller="UserProfile" class="nav-link" data-key="t-team">ActiveDeactive</a>
-                                            </li>
-                                            <li class="nav-item">
-                                        <a asp-action="GetUsersListById" asp-controller="UserProfile" class="nav-link" data-key="t-timeline">GetUserAttendance</a>
-                                            </li>
+                                        <li class="nav-item">
+                                            <a asp-action="GetUsersListById" asp-controller="UserProfile" class="nav-link" data-key="t-timeline">GetUserAttendance</a>
+                                            </li>}
                                             <li class="nav-item">
                                         <a asp-action="GetAttendance" asp-controller="UserProfile" class="nav-link" data-key="t-timeline">GetAttendance</a>
                                             </li>

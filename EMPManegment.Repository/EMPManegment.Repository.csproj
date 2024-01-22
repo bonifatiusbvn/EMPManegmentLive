@@ -7,12 +7,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="InvoiceMasterRepository\**" />
+    <EmbeddedResource Remove="InvoiceMasterRepository\**" />
+    <None Remove="InvoiceMasterRepository\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\EMPManagment.DBContext\EMPManagment.DBContext.csproj" />
     <ProjectReference Include="..\EMPManegment.Inretface\EMPManegment.Inretface.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="InvoiceMasterRepository\" />
     <Folder Include="TaskRepository\" />
   </ItemGroup>
 

@@ -138,7 +138,6 @@ namespace EMPManegment.Web.Controllers
                 {
                     return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
                 }
-
                 else
                 {
                     return Ok(new { postuser.code }); ;

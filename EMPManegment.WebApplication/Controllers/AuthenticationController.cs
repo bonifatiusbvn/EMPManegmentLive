@@ -101,24 +101,24 @@ namespace EMPManegment.Web.Controllers
                                 new Claim("FullName", userlogin.Data.FullName),
                                 new Claim("UserName", userlogin.Data.UserName),
                                 new Claim("ProfileImage", userlogin.Data.ProfileImage),
-                                new Claim("IsAdmin", userlogin.Data.Role.ToString()),
+                                new Claim("IsAdmin", userlogin.Data.Role),
 
                               };
 
 
-                        if (login.RememberMe == true)
-                        {
+                            if (login.RememberMe == true)
+                           {
                             CookieOptions cookie = new CookieOptions();
                             cookie.Expires = DateTime.Now.AddYears(1);
                             Response.Cookies.Append("UserName", Common.EncryptStrSALT(userlogin.Data.UserName), cookie);
                             Response.Cookies.Append("Password", Common.EncryptStrSALT(login.Password), cookie);
 
-                        }
-                        else
-                        {
+                           }
+                            else
+                           {
                             Response.Cookies.Delete("UserName");
                             Response.Cookies.Delete("Password");
-                        }
+                           }
                          UserSession.ProfilePhoto = userlogin.Data.ProfileImage;
                          var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                          var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
