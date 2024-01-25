@@ -11,6 +11,7 @@ namespace EMPManegment.EntityModels.ViewModels
     public class EmpDocumentView
     {
         public int Id { get; set; }
+
         [Required]
         public string DocumentType { get; set; }
         public Guid? UserId { get; set; }

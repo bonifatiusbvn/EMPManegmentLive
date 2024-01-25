@@ -712,7 +712,7 @@ namespace EMPManegment.Web.Controllers
             dt.Columns.Remove("AttendanceId");
             return dt;
         }
-
+         
         [HttpPost]
         public async Task<IActionResult> GetSearchAttendanceList(searchAttendanceListModel GetAttendanceList)
         {
