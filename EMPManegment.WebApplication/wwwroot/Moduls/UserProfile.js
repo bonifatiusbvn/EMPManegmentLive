@@ -113,9 +113,7 @@ function GetProjectList() {
 
 
 $(document).ready(function () {
-    
     $("#open").click(function () {
-        
         $("#open").hide();
         $("#closed").show();
         $("#password").attr("type", "text");

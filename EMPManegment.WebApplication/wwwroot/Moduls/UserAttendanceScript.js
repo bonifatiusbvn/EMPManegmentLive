@@ -33,7 +33,7 @@ $('#selectSearchAttandanceOption').change(function () {
         GetUsername();
         $("#usernamebox").show();
         $("#datesbox").hide();
-        cleartextBox();
+              cleartextBox();
     }
     if ($("#selectSearchAttandanceOption").val() == "ByDate") {
         $("#usernamebox").hide();
@@ -82,36 +82,37 @@ function GetUserAttendance() {
             {
                 "data": "date", "name": "Date",
                 "render": function (data, type, full) {
-                    return (new Date(full.date)).toLocaleDateString('en-US');
+                    return (new Date(full.date)).toLocaleDateString('en-GB');
                 }
             },
             {
                 "data": "intime", "name": "InTime",
                 "render": function (data, type, full) {
-                    return (new Date(full.intime)).toLocaleTimeString('en-US');
+                    return (new Date(full.intime)).toLocaleTimeString('en-GB');
                 }
             },
             {
                 "data": "outTime", "name": "OutTime",
                 "render": function (data, type, full) {
-                    var userdate = new Date(full.date).toLocaleDateString('en-US');
-                    var todate = new Date().toLocaleDateString('en-US');
-                    if (full.outTime != null) {
-                        return (new Date(full.outTime)).toLocaleTimeString('en-US');
+                    var userdate = new Date(full.date).toLocaleDateString('en-GB');
+                    var todate = new Date().toLocaleDateString('en-GB');
+                    
+                     if (full.outTime != null) {
+                        return (new Date(full.outTime)).toLocaleTimeString('en-GB');
                     }
                     else if (full.outTime == null && userdate == todate)
                     {
                        return ("Pending..");
                     }
-                    else {
-                        return ("Missing");
+                    else  {
+                         return ("Missing");
                     }
                 }
             },
             {
                 "data": "totalHours", "name": "TotalHours",
                 "render": function (data, type, full) {
-                    var userdate = new Date(full.date).toLocaleDateString('en-US');
+                    var userdate = new Date(full.date).toLocaleDateString('en-GB');
                     var todate = new Date().toLocaleDateString('en-US');
                     if (full.totalHours != null) {
                         return (full.totalHours?.substr(0, 8)) + ('hr');
@@ -129,7 +130,6 @@ function GetUserAttendance() {
                     return '<a class="btn btn-sm btn-primary edit-item-btn" onclick="EditUserAttendance(\'' + full.attendanceId + '\')" >EditTime</a>';
                 }
             },
-
         ],
         columnDefs: [{
             "defaultContent": "",
@@ -148,13 +148,17 @@ function EditUserAttendance(attandenceId) {
         processData: false,
         contentType: false,
         success: function (response) {
-           
             $.each(response, function (index, item) {
                 $('#AttandanceId').val(item.attendanceId);
                 $('#UserName').val(item.userName);
-                $('#Date').val((new Date(item.date)).toLocaleDateString('en-US'));
-                $('#Intime').val((new Date(item.intime)).toLocaleTimeString('en-US'));
-                $('#OutTime').val(item.outTime);
+                $('#Date').val((new Date(item.date)).toLocaleDateString('en-GB'));
+                $('#Intime').val((new Date(item.intime)).toLocaleTimeString('en-GB'));
+                if (item.outTime == null) {
+                    $('#OutTime').val(item.date);
+                }
+                else {
+                    $('#OutTime').val(item.outTime);
+                }
             });
         },
         error: function () {
@@ -237,7 +241,7 @@ function GetAttendance() {
                     var todate = new Date().toLocaleDateString('en-US');
                     object += '<tr>';
                     object += '<td>' + item.userName + '</td>';
-                    object += '<td>' + (new Date(item.date)).toLocaleDateString('en-US') + '</td>';
+                    object += '<td>' + (new Date(item.date)).toLocaleDateString('en-GB') + '</td>';
                     object += '<td>' + (new Date(item.intime)).toLocaleTimeString('en-US') + '</td>';
                     //---------OutTime---------//
                     if (item.outTime != null) {
@@ -334,13 +338,17 @@ function editUserAttendanceSrc(attandenceId) {
         processData: false,
         contentType: false,
         success: function (response) {
-            
             $.each(response, function (index, item) {
                 $('#srcAttandanceId').val(item.attendanceId);
                 $('#srcUserName').val(item.userName);
-                $('#srcDate').val((new Date(item.date)).toLocaleDateString('en-US'));
-                $('#srcIntime').val((new Date(item.intime)).toLocaleTimeString('en-US'));
-                $('#srcOutTime').val(item.outTime);
+                $('#srcDate').val((new Date(item.date)).toLocaleDateString('en-GB'));
+                $('#srcIntime').val((new Date(item.intime)).toLocaleTimeString('en-GB'));
+                if (item.outTime == null) {
+                    $('#srcOutTime').val(item.date);
+                }
+                else {
+                    $('#srcOutTime').val(item.outTime);
+                }
             });
             $('#editTimeModelsearch').modal('show');
         },
@@ -413,7 +421,7 @@ function updateUserAttendance() {
     }
 
 
-    if (objData.OutTime == "") {
+    if (objData.OutTime == null) {
         $("#OutTime").css('border-color', 'red');
         $("#OutTime").focus();
     }
@@ -455,7 +463,7 @@ function updateUserAttendance() {
 
 //function exportToExcel()
 //{
-//    debugger
+//    
 //    $.ajax({
 //        url: '/UserProfile/ExportToExcel',
 //        type: 'Get',
@@ -463,10 +471,10 @@ function updateUserAttendance() {
 //        processData: false,
 //        contentType: false,
 //        success: function (Result) {
-//            debugger
+//            
 //            var bytes = new Uint8Array(Result.fileContents);
 //            var blob = new Blob([bytes], { type: "application/vnd.openxmlformats-officedocuments.spreadsheetml.sheet" });
-//            debugger
+//            
 //            var link = document.createElement('a');
 //            link.href = window.URL.createObjectURL(blob);
 //            link.download = Result.fileDownloadName;

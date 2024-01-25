@@ -329,7 +329,7 @@ $(document).ready(function () {
 //$("#txtvendorname").change(function () {
 //    SearchProductName()
 //})
-function SearchProductName() {debugger
+function SearchProductName() {
     var form_data = new FormData();
     form_data.append("ProductName", $('#txtsearch').val());
     $.ajax({
