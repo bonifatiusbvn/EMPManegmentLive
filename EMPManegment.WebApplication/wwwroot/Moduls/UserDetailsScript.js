@@ -641,7 +641,7 @@ $('#searchEmployee').on('change', function (e) {
     e.stopImmediatePropagation();
     if ($("#searchEmployee").val() == "ByUsername") {
         clearSelectedBox();
-        GetUsername();
+        GetUsername()
         $("#empnamebox").show();
         $("#departmentbox").hide();
     }
@@ -663,6 +663,7 @@ function GetUsername() {
         }
     });
 }
+
 
 function GetDepartment() {
 
@@ -705,7 +706,7 @@ function GetSearchEmpList() {
                     $("#errorMessage").text(message);
                     $("#dvseachemplist").hide();
                 }
-                clearSelectedBox()
+                /*clearSelectedBox()*/
             }
         });
     } else {
