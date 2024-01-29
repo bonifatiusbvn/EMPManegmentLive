@@ -1,4 +1,6 @@
-﻿@model IEnumerable<EMPManegment.EntityModels.ViewModels.TaskModels.TaskDetailsView>
+﻿@using EMPManegment.Web.Models
+@model IEnumerable<EMPManegment.EntityModels.ViewModels.TaskModels.TaskDetailsView>
+@inject UserSession _userSession
 @{
     ViewData["Title"] = "0" ;
     Layout = "~/Views/Shared/_HomeLayout.cshtml";
@@ -48,7 +50,7 @@
 </div>
 <!--end card-->
 <div class="tasks-board mb-3" id="kanbanboard">
-  
+    <input type="hidden" value="@_userSession.UserRoll" id="userrole"/>
     <div class="tasks-list">
         <div class="d-flex mb-3">
             <div class="flex-grow-1">
@@ -288,12 +290,12 @@
                                     <div class="flex-grow-1">
                                         <span class="text"> TaskStatus :</span>
                                         <form id="tasksListMedium">
-                                            <select id="ddlStatus@(item.Id)" class="form-control" name="ddlStatus">
+                                            <select id="ddlStatusMedium@(item.Id)" class="form-control" name="ddlStatus">
                                                 <option selected disabled value="">---Select Status---</option>
                                                 <option value="Pending">Pending</option>
                                                 <option value="Working">Working</option>
                                                 <option value="InReview">InReview</option>
-                                                @if (item.TaskStatus == "Completed")
+                                                @if (item.TaskStatus == "Completed" )
                                                 {
                                                     <option disabled value="Completed">Completed</option>
                                                 }
@@ -436,7 +438,7 @@
                                         @if (item.TaskStatus == "Completed")
                                         {
                                             <form id="tasksListhigh">
-                                                <select id="ddlStatus@(item.Id)" class="form-control" name="ddlStatus">
+                                                <select id="ddlStatusHigh@(item.Id)" class="form-control" name="ddlStatus">
                                                 @* <select id="ddlStatus@(item.Id)" name="Status" class="form-control"> *@
                                                 <option selected disabled value="">---Select Status---</option>
                                                 <option value="Pending">Pending</option>
@@ -449,7 +451,7 @@
                                         else
                                         {
                                             <form id="tasksListhigh">
-                                                <select id="ddlStatus@(item.Id)" class="form-control" name="ddlStatus">
+                                                <select id="ddlStatusHigh@(item.Id)" class="form-control" name="ddlStatus">
                                                     @* <select id="ddlStatus@(item.Id)" name="Status" class="form-control"> *@
                                                     <option selected disabled value="">---Select Status---</option>
                                                     <option value="Pending">Pending</option>
@@ -514,12 +516,137 @@
         </div>
     @*-----------InReview------------ *@
         <div data-simplebar class="tasks-wrapper px-3 mx-n3">
-            <div id="inprogress-task" class="tasks">
+          <input type="hidden" value=" @_userSession.UserId" id="CreatedByid" />
+            <div id="inprogress-task" class="tasks"> 
+
                 @foreach (var item in Model)
                 {
-                    @if (item.TaskStatus == "InReview")
+                        @if (item.TaskStatus == "InReview")
+                        {
+                            <div class="card tasks-box">
+                                <div class="card-body">
+                                    <div class="d-flex mb-2">
+                                        <div class="flex-grow-1">
+                                            <h6 class="fs-15 mb-0 text-truncate task-title">
+                                                <a href="apps-tasks-details.html" class="link-secondary" style="color:darkblue">
+                                                    @item.TaskTitle
+                                                </a>
+                                            </h6>
+                                        </div>
+                                        <div class="dropdown">
+                                            <a href="javascript:void(0);" class="text-muted" id="dropdownMenuLink6" data-bs-toggle="dropdown" aria-expanded="false"><i class="ri-more-fill"></i></a>
+                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink6">
+                                                <li>
+                                                    <a class="dropdown-item" href="apps-tasks-details.html">
+                                                        <i class="ri-eye-fill align-bottom me-2 text-muted"></i>
+                                                        View
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item" href="#">
+                                                        <i class="ri-edit-2-line align-bottom me-2 text-muted"></i>
+                                                        Edit
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item" data-bs-toggle="modal" href="#deleteRecordModal">
+                                                        <i class="ri-delete-bin-5-line align-bottom me-2 text-muted"></i>
+                                                        Delete
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <p class="text-muted">
+                                        @item.TaskDetails
+                                    </p>
+                                    <div class="d-flex align-items-center">
+                                        @if (item.TaskStatus == "Working")
+                                        {
+                                            <a class="badge bg-warning text-uppercase">  @item.TaskStatus  </a>
+                                        }
+                                        else if (item.TaskStatus == "Completed")
+                                        {
+                                            <a class="badge bg-success text-uppercase">  @item.TaskStatus  </a>
+                                        }
+                                        else if (item.TaskStatus == "Pending")
+                                        {
+                                            <a class="badge bg-primary text-uppercase">  @item.TaskStatus  </a>
+                                        }
+                                        else if (item.TaskStatus == "InReview")
+                                        {
+                                            <a class="badge text-uppercase" style="background-color:orangered">  @item.TaskStatus  </a>
+                                        }
+                                        else
+                                        {
+                                            <a class="badge bg-secondary text-uppercase">  @item.TaskStatus  </a>
+                                        }
+                                        <div class="flex-grow-1">
+                                        </div>
+                                        <div class="flex-shrink-0">
+                                            <div class="avatar-group">
+                                                <img src="~/@item.UserProfile" alt="" class="avatar-xs rounded-circle">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-items-center">
+                                        <div class="flex-grow-1">
+                                            <span class="text"> TaskStatus :</span>
+                                            @if (item.TaskStatus == "Completed")
+                                            {
+                                                <form id="tasksListform">
+                                                    <select id="ddlStatusReview@(item.Id)" class="form-control" name="ddlStatus">
+                                                        <option selected disabled value="">---Select Status---</option>
+                                                        <option value="Pending">Pendings</option>
+                                                        <option value="Working">Working</option>
+                                                        <option value="Completed">Completed</option>
+                                                        <option value="InReview">InReview</option>
+                                                    </select>
+                                                </form>
+                                            }
+
+                                            else
+                                            {
+                                                <form id="tasksListform">
+                                                    <select id="ddlStatusReview@(item.Id)" class="form-control" name="ddlStatus">
+                                                        <option selected disabled value="">---Select Status---</option>
+                                                        <option value="Pending">Pending</option>
+                                                        <option value="Working">Working</option>
+                                                        <option value="Completed">Completed</option>
+                                                        <option value="InReview">InReview</option>
+                                                    </select>
+                                                </form>
+                                            }
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <button type="button" class="btn btn-success btn-sm m-2" onclick="btnStatusUpdate('@item.Id')" id="StatusUpdate" value="Validate"><i class="bi bi-pencil-fill"></i>Status Update</button>
+                                        <button class="btn btn-primary btn-sm" data-bs-toggle="modal" onclick="btnTaskDetails('@item.Id')"> <i class="bi bi-chat-right-dots"></i> Details</button>
+                                    </div>
+                                </div>
+                                <!--end card-body-->
+                                <div class="card-footer border-top-dashed">
+                                    <div class="d-flex mb-1">
+                                        <div class="flex-grow-1">
+                                            <span class="text-muted">
+                                                <i class="ri-time-line align-bottom"></i>
+                                                @item.TaskDate.Value.ToShortDateString()
+                                            </span>
+                                        </div>
+                                        <div class="flex-grow-1">
+                                            <span class="text-muted">
+                                                <i class="ri-time-line align-bottom"></i>
+                                                @item.TaskEndDate.Value.ToShortDateString()
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    
+                   @*  @if (item.TaskStatus == "InReview")
                     {
-                        <div class="card tasks-box">
+                       <div class="card tasks-box">
                             <div class="card-body">
                                 <div class="d-flex mb-2">
                                     <div class="flex-grow-1">
@@ -590,27 +717,28 @@
                                         <span class="text"> TaskStatus :</span>
                                         @if (item.TaskStatus == "Completed")
                                         {
-                                            <form id="tasksListform">
-                                                <select id="ddlStatus@(item.Id)" class="form-control" name="ddlStatus">
-                                                    <option selected disabled value="">---Select Status---</option>
-                                                    <option value="Pending">Pendings</option>
-                                                    <option value="Working">Working</option>
-                                                    <option value="Completed">Completed</option>
-                                                    <option value="InReview">InReview</option>
-                                                </select>
-                                            </form>
+                                              <form id="tasksListform">
+                                                <select id="ddlStatusReview@(item.Id)" class="form-control" name="ddlStatus">
+                                                       <option selected disabled value="">---Select Status---</option>
+                                                       <option value="Pending">Pendings</option>
+                                                       <option value="Working">Working</option>
+                                                       <option value="Completed">Completed</option>
+                                                       <option value="InReview">InReview</option>
+                                                   </select>
+                                              </form>
                                         }
+                                       
                                         else
                                         {
-                                            <form id="tasksListform">
-                                                <select id="ddlStatus@(item.Id)" class="form-control" name="ddlStatus">
-                                                    <option selected disabled value="">---Select Status---</option>
-                                                    <option value="Pending">Pending</option>
-                                                    <option value="Working">Working</option>
-                                                    <option value="Completed">Completed</option>
-                                                    <option value="InReview">InReview</option>
-                                                </select>
-                                            </form>
+                                             <form id="tasksListform">
+                                                <select id="ddlStatusReview@(item.Id)" class="form-control" name="ddlStatus">
+                                                     <option selected disabled value="">---Select Status---</option>
+                                                     <option value="Pending">Pending</option>
+                                                     <option value="Working">Working</option>
+                                                     <option value="Completed">Completed</option>   
+                                                     <option value="InReview">InReview</option>
+                                                  </select>
+                                             </form>
                                         }
                                     </div>
                                 </div>
@@ -637,8 +765,9 @@
                                 </div>
                             </div>
                         </div>
-                    }
+                    } *@
                 }
+               
             </div>
         </div>
     </div>

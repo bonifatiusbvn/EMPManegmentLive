@@ -18,6 +18,8 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using Azure;
+using Azure.Identity;
 
 namespace EMPManegment.Repository.TaskRepository
 {
@@ -62,7 +64,8 @@ namespace EMPManegment.Repository.TaskRepository
                     TaskDetails = addtask.TaskDetails,
                     TaskDate = addtask.TaskDate,
                     UserId = addtask.UserId,
-                    CreatedOn = DateTime.Now,
+                    CreatedBy = addtask.CreatedBy,
+                    CreatedOn = DateTime.Today,
                     TaskEndDate = addtask.TaskEndDate,
                 };
                 response.Code = 200;
@@ -79,25 +82,65 @@ namespace EMPManegment.Repository.TaskRepository
 
         public async Task<UserResponceModel> UpdateTaskStatus(TaskDetailsView updatetask)
         {
-            UserResponceModel model = new UserResponceModel();
-            var gettask = Context.TblTaskDetails.Where(e => e.Id == updatetask.Id).FirstOrDefault();
-            try
+            UserResponceModel responcemodel = new UserResponceModel();
+            if (updatetask.TaskStatus == "Completed")
             {
-                if (gettask != null)
+
+                bool gettaskCheck = Context.TblTaskDetails.Any(e => e.Id == updatetask.Id && e.CreatedBy == updatetask.UserId);
+                try
                 {
-                    gettask.TaskStatus = updatetask.TaskStatus;
-               
+                    if (gettaskCheck == true)
+                    {
+                        var taskstatusupdate = Context.TblTaskDetails.Where(e => e.Id == updatetask.Id).FirstOrDefault();
+                        try
+                        {
+                            if (taskstatusupdate != null)
+                            {
+                                taskstatusupdate.TaskStatus = updatetask.TaskStatus;
+                            }
+                            Context.TblTaskDetails.Update(taskstatusupdate);
+                            Context.SaveChanges();
+                            responcemodel.Code = 200;
+                            responcemodel.Message = "Task Status Updated Successfully!";
+                        }
+                        catch (Exception ex)
+                        {
+                            throw ex;
+                        }
+                    }
+                    else
+                    {
+                        responcemodel.Message = "You aren't Authorize!!";
+                        responcemodel.Icone = "warning";
+                    }
                 }
-                Context.TblTaskDetails.Update(gettask);
-                Context.SaveChanges();
-                model.Code = 200;
-                model.Message = "Task Status Updated Successfully!";
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
             }
-            catch (Exception ex)
+
+            else
             {
-                throw ex;
+                var gettask = Context.TblTaskDetails.Where(e => e.Id == updatetask.Id).FirstOrDefault();
+                try
+                {
+                    if (gettask != null)
+                    {
+                        gettask.TaskStatus = updatetask.TaskStatus;
+                    }
+                    Context.TblTaskDetails.Update(gettask);
+                    Context.SaveChanges();
+                    responcemodel.Code = 200;
+                    responcemodel.Message = "Task Status Updated Successfully!";
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
             }
-            return model;
+
+            return responcemodel;
         }
 
         public async Task<List<TaskDetailsView>> GetUserTaskDetails(TaskDetailsView GetUserTaskDetails)
@@ -164,7 +207,8 @@ namespace EMPManegment.Repository.TaskRepository
                                 TaskDetails = d.TaskDetails,
                                 TaskStatus = d.TaskStatus,
                                 UserName = b.UserName,
-                                TaskTypeName = m.TaskType
+                                TaskTypeName = m.TaskType,
+                                CreatedBy=d.CreatedBy
                             }).First();
             }
             catch (Exception ex)
@@ -174,29 +218,66 @@ namespace EMPManegment.Repository.TaskRepository
             return taskdata;
         }
 
+        //public async Task<IEnumerable<TaskDetailsView>> GetTaskDetails(Guid Taskid)
+        //{
+        //    try
+        //    {
+        //        IEnumerable<TaskDetailsView>
+        //        AllTaskDetails = from a in Context.TblTaskDetails
+        //                             //where a.UserId = Taskid && a.CreatedBy == Taskid
+        //                         join b in Context.TblUsers on a.User.Id equals b.Id
+        //                         join c in Context.TblTaskMasters on a.TaskType equals c.Id
+        //                         where b.Id == Taskid
+        //                         select new TaskDetailsView
+        //                         {
+        //                             Id = a.Id,
+        //                             UserId = b.Id,
+        //                             TaskType = a.TaskType,
+        //                             TaskStatus = a.TaskStatus,
+        //                             TaskDate = a.TaskDate,
+        //                             TaskDetails = a.TaskDetails,
+        //                             TaskEndDate = a.TaskEndDate,
+        //                             TaskTitle = a.TaskTitle,
+        //                             UserProfile = b.Image,
+        //                             UserName = b.UserName,
+        //                             TaskTypeName = c.TaskType,
+        //                             CreatedBy = a.CreatedBy,
+
+        //                         };
+        //        return AllTaskDetails;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw ex;
+        //    }
+        //}
+
+
         public async Task<IEnumerable<TaskDetailsView>> GetTaskDetails(Guid Taskid)
         {
             try
             {
-                IEnumerable<TaskDetailsView>
-                AllTaskDetails = from a in Context.TblTaskDetails
-                                 join b in Context.TblUsers on a.User.Id equals b.Id
-                                 join c in Context.TblTaskMasters on a.TaskType equals c.Id
-                                 where b.Id == Taskid
-                                 select new TaskDetailsView
-                                 {
-                                     Id = a.Id,
-                                     UserId = b.Id,
-                                     TaskType = a.TaskType,
-                                     TaskStatus = a.TaskStatus,
-                                     TaskDate = a.TaskDate,
-                                     TaskDetails = a.TaskDetails,
-                                     TaskEndDate = a.TaskEndDate,
-                                     TaskTitle = a.TaskTitle,
-                                     UserProfile = b.Image,
-                                     UserName = b.UserName,
-                                     TaskTypeName = c.TaskType
-                                 };
+                IEnumerable<TaskDetailsView> AllTaskDetails =
+                    from a in Context.TblTaskDetails
+                    join b in Context.TblUsers on a.UserId equals b.Id
+                    join c in Context.TblTaskMasters on a.TaskType equals c.Id
+                    where a.UserId == Taskid || a.CreatedBy == Taskid
+                    select new TaskDetailsView
+                    {
+                        Id = a.Id,
+                        UserId = b.Id,
+                        TaskType = a.TaskType,
+                        TaskStatus = a.TaskStatus,
+                        TaskDate = a.TaskDate,
+                        TaskDetails = a.TaskDetails,
+                        TaskEndDate = a.TaskEndDate,
+                        TaskTitle = a.TaskTitle,
+                        UserProfile = b.Image,
+                        UserName = b.UserName,
+                        TaskTypeName = c.TaskType,
+                        CreatedBy = a.CreatedBy,
+                    };
+
                 return AllTaskDetails;
             }
             catch (Exception ex)

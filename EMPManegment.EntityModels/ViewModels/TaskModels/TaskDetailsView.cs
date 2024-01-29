@@ -22,13 +22,12 @@ namespace EMPManegment.EntityModels.ViewModels.TaskModels
         public DateTime? TaskDate { get; set; }
         
         public Guid? UserId { get; set; }
-
         public DateTime? CreatedOn { get; set; }
-
-        public string? CreatedBy { get; set; }
+        public Guid? CreatedBy { get; set; }
         public DateTime? TaskEndDate { get; set; }
         public string? TaskStatus { get; set; }
         public string? UserProfile { get; set; }
         public string? UserName { get; set; }
+        public string? Role { get; set; }
     }
 }

@@ -21,7 +21,7 @@ public partial class TblTaskDetail
 
     public DateTime? CreatedOn { get; set; }
 
-    public string? CreatedBy { get; set; }
+    public Guid? CreatedBy { get; set; }
 
     public string? TaskStatus { get; set; }
 

@@ -153,13 +153,14 @@ function GetUserTaskDetails() {
         }
     })
 }
-
+/*---------InReview------------*/
 function btnStatusUpdate(Id) {
-    
     if ($("#tasksListform").valid()) {
         var StausChange = {
-            TaskStatus: $('#ddlStatus' + Id).val(),
-            Id: Id
+            TaskStatus: $('#ddlStatusReview' + Id).val(),
+            Role: $('#userrole').val(),
+            Id: Id,
+            UserId: UserId
         }
         var form_data = new FormData();
         form_data.append("STATUSUPDATE", JSON.stringify(StausChange));
@@ -172,23 +173,29 @@ function btnStatusUpdate(Id) {
             contentType: false,
             processData: false,
             success: function (Result) {
-                
                 GetUserTaskDetails();
-                Swal.fire({
-                    title: Result.message,
-                    icon: 'success',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK',
-                }).then(function () {
-                    window.location = '/Task/UserTasks';
-                });
+                if (Result.code == 200) {
+                    Swal.fire({
+                        title: Result.message,
+                        icon: 'success',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK',
+                    }).then(function () {
+                        window.location = '/Task/UserTasks';
+                    });
+                }
+                else {
+                    Swal.fire({
+                        title: Result.message,
+                        icon: 'warning',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK',
+                    });
+                }
             },
-            error: function (error, status) {
-                alert(error);
-            }
         });
     }
-    else {
+    else {debugger
         Swal.fire({
             title: "Kindly Select The Status",
             icon: 'warning',
@@ -203,10 +210,10 @@ $(document).ready(function () {
 
     $("#tasksListform").validate({
         rules: {
-            ddlStatus: "required"
+            ddlStatusReview: "required"
         },
         messages: {
-            ddlStatus: "Please Enter Status"
+            ddlStatusReview: "Please Enter Status"
         }
     })
     $('#StatusUpdate').on('click', function () {
@@ -214,85 +221,18 @@ $(document).ready(function () {
         $("#tasksListform").validate();
     });
 });
-
-////////////////MEDIUMPRIORITY//////////
-function btnStatusUpdateMedium(Id) {
-    
-
-    if ($("#tasksListMedium").valid()) {
-        
-        var StausChange = {
-            TaskStatus: $('#ddlStatus' + Id).val(),
-            Id: Id
-        }
-        var form_data = new FormData();
-        form_data.append("STATUSUPDATE", JSON.stringify(StausChange));
-
-        $.ajax({
-            url: '/Task/UpdateUserTaskStatus',
-            type: 'Post',
-            data: form_data,
-            dataType: 'json',
-            contentType: false,
-            processData: false,
-            success: function (Result) {
-                
-                GetUserTaskDetails();
-                Swal.fire({
-                    title: Result.message,
-                    icon: 'success',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK',
-                }).then(function () {
-                    window.location = '/Task/UserTasks';
-                });
-            },
-            error: function (error, status) {
-                alert(error);
-            }
-        });
-    }
-    else {
-        
-        Swal.fire({
-            title: "Kindly Select The Status",
-            icon: 'warning',
-            confirmButtonColor: '#3085d6',
-            confirmButtonText: 'OK',
-        })
-    }
-}
-/*----ValidateMeassge----*/
-$(document).ready(function () {
-    
-
-    $("#tasksListMedium").validate({
-        rules: {
-            ddlStatus: "required"
-        },
-        messages: {
-            ddlStatus: "Please Enter Status"
-        }
-    })
-    $('#StatusUpdate').on('click', function () {
-        
-        $("#tasksListMedium").validate();
-    });
-});
-
-////////////////LOWPRIORITY//////////
+/*-------LOWPRIORITY---------*/
 function btnStatusUpdateLow(Id) {
-    
-
     if ($("#tasksListLow").valid()) {
-        
+
         var StausChange = {
             TaskStatus: $('#ddlStatus' + Id).val(),
-            Id: Id
+            Role: $('#userrole').val(),
+            Id: Id,
+            UserId: UserId,
         }
         var form_data = new FormData();
         form_data.append("STATUSUPDATE", JSON.stringify(StausChange));
-
         $.ajax({
             url: '/Task/UpdateUserTaskStatus',
             type: 'Post',
@@ -301,16 +241,27 @@ function btnStatusUpdateLow(Id) {
             contentType: false,
             processData: false,
             success: function (Result) {
-                
                 GetUserTaskDetails();
-                Swal.fire({
-                    title: Result.message,
-                    icon: 'success',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK',
-                }).then(function () {
-                    window.location = '/Task/UserTasks';
-                });
+                if (Result.code == 200) {
+
+                    Swal.fire({
+                        title: Result.message,
+                        icon: 'success',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK',
+                    }).then(function () {
+                        window.location = '/Task/UserTasks';
+                    });
+                }
+                else {
+
+                    Swal.fire({
+                        title: Result.message,
+                        icon: 'warning',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK',
+                    });
+                }
             },
             error: function (error, status) {
                 alert(error);
@@ -318,7 +269,7 @@ function btnStatusUpdateLow(Id) {
         });
     }
     else {
-        
+
         Swal.fire({
             title: "Kindly Select The Status",
             icon: 'warning',
@@ -327,9 +278,9 @@ function btnStatusUpdateLow(Id) {
         })
     }
 }
-/*----ValidateMeassge----*/
+/*----ValidateMeassge LowPrority----*/
 $(document).ready(function () {
-    
+
 
     $("#tasksListLow").validate({
         rules: {
@@ -340,19 +291,23 @@ $(document).ready(function () {
         }
     })
     $('#StatusUpdate').on('click', function () {
-        
+
         $("#tasksListLow").validate();
     });
 });
-////////////////HIGHPRIORITY//////////
-function btnStatusUpdateHigh(Id) {
+
+/*/-------MEDIUMPRIORITY------------*/
+function btnStatusUpdateMedium(Id) {
     
 
-    if ($("#tasksListhigh").valid()) {
+    if ($("#tasksListMedium").valid()) {
         
         var StausChange = {
-            TaskStatus: $('#ddlStatus' + Id).val(),
-            Id: Id
+            TaskStatus: $('#ddlStatusMedium' + Id).val(),
+            Role : $('#userrole').val(),
+            Id: Id,
+            UserId: UserId,
+           
         }
         var form_data = new FormData();
         form_data.append("STATUSUPDATE", JSON.stringify(StausChange));
@@ -367,20 +322,32 @@ function btnStatusUpdateHigh(Id) {
             success: function (Result) {
                 
                 GetUserTaskDetails();
-                Swal.fire({
-                    title: Result.message,
-                    icon: 'success',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK',
-                }).then(function () {
-                    window.location = '/Task/UserTasks';
-                });
+                if (Result.code == 200) {
+                    
+                    Swal.fire({
+                        title: Result.message,
+                        icon: 'success',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK',
+                    }).then(function () {
+                        window.location = '/Task/UserTasks';
+                    });
+                }
+                else {
+                    
+                    Swal.fire({
+                        title: Result.message,
+                        icon: 'warning',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK',
+                    });
+                }
             },
             error: function (error, status) {
                 alert(error);
             }
         });
-    }
+      }
     else {
         
         Swal.fire({
@@ -391,23 +358,99 @@ function btnStatusUpdateHigh(Id) {
         })
     }
 }
-/*----ValidateMeassge----*/
+/*----ValidateMeassge MediumPrority----*/
 $(document).ready(function () {
-    
 
-    $("#tasksListhigh").validate({
+
+    $("#tasksListMedium").validate({
         rules: {
-            ddlStatus: "required"
+            ddlStatusMedium: "required"
         },
         messages: {
-            ddlStatus: "Please Enter Status"
+            ddlStatusMedium: "Please Enter Status"
         }
     })
     $('#StatusUpdate').on('click', function () {
-        
+
+        $("#tasksListMedium").validate();
+    });
+});
+/*---------HIGHPRIORITY-----------*/
+function btnStatusUpdateHigh(Id) {
+
+    if ($("#tasksListhigh").valid()) {
+
+        var StausChange = {
+            TaskStatus: $('#ddlStatusHigh' + Id).val(),
+            Role: $('#userrole').val(),
+            Id: Id,
+            UserId: UserId
+        }
+        var form_data = new FormData();
+        form_data.append("STATUSUPDATE", JSON.stringify(StausChange));
+
+        $.ajax({
+            url: '/Task/UpdateUserTaskStatus',
+            type: 'Post',
+            data: form_data,
+            dataType: 'json',
+            contentType: false,
+            processData: false,
+            success: function (Result) {
+
+                GetUserTaskDetails();
+                if (Result.code == 200) {
+
+                    Swal.fire({
+                        title: Result.message,
+                        icon: 'success',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK',
+                    }).then(function () {
+                        window.location = '/Task/UserTasks';
+                    });
+                }
+                else {
+
+                    Swal.fire({
+                        title: Result.message,
+                        icon: 'warning',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK',
+                    });
+                }
+            },
+            error: function (error, status) {
+                alert(error);
+            }
+        });
+    }
+    else {
+
+        Swal.fire({
+            title: "Kindly Select The Status",
+            icon: 'warning',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'OK',
+        })
+    }
+}
+/*----ValidateMeassge HighPrority----*/
+$(document).ready(function () {
+    $("#tasksListhigh").validate({
+        rules: {
+            ddlStatusHigh: "required"
+        },
+        messages: {
+            ddlStatusHigh: "Please Enter Status"
+        }
+    })
+    $('#StatusUpdate').on('click', function () {
+
         $("#tasksListhigh").validate();
     });
 });
+
 function btnTaskDetails(Id){
     $.ajax({
         url: '/Task/GetTaskDetailsById?Id=' + Id,
