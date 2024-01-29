@@ -230,26 +230,6 @@ function EnterInTime() {
 function EnterOutTime() {
 
     if ($("#todayouttime").text() == "Pending") {
-        var formData = new FormData();
-        formData.append("UserId", $("#txtuserid").val());
-        $.ajax({
-            url: '/Home/EnterUserOutTime',
-            type: 'Post',
-            data: formData,
-            dataType: 'json',
-            processData: false,
-            contentType: false,
-            success: function (Result) {
-                Swal.fire({
-                    title: Result.message,
-                    icon: Result.icone,
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK'
-                });
-                GetUserAttendanceInTime();
-            }
-        });
-    } else {
 
         Swal.fire({
             title: "Are you sure want to Enter OUT-TIME..?",
@@ -290,11 +270,35 @@ function EnterOutTime() {
 
                 Swal.fire(
                     'Cancelled',
-                    'User Have No Changes.!! :)',
+                    'User Have No Changes.!!😊',
                     'error'
                 );
             }
         });
+
+
+    } else {
+
+        var formData = new FormData();
+        formData.append("UserId", $("#txtuserid").val());
+        $.ajax({
+            url: '/Home/EnterUserOutTime',
+            type: 'Post',
+            data: formData,
+            dataType: 'json',
+            processData: false,
+            contentType: false,
+            success: function (Result) {
+                Swal.fire({
+                    title: Result.message,
+                    icon: Result.icone,
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'OK'
+                });
+                GetUserAttendanceInTime();
+            }
+        });
+
     }
 }
 
