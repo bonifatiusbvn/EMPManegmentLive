@@ -40,7 +40,7 @@ function GetAllUserData() {
                     return '<div class="d-flex"><div class="flex-grow-1 tasks_name">' + full.departmentName + '</div><div class="flex-shrink-0 ms-4"><ul class="list-inline tasks-list-menu mb-0"><li class="list-inline-item"><a onclick="UserProfileDetails(\'' + full.id + '\')"><i class="ri-eye-fill align-bottom me-2 text-muted"></i></a></li><li class="list-inline-item"><a onclick="EditUserDetails(\'' + full.id + '\')"><i class="ri-pencil-fill align-bottom me-2 text-muted"></i></a></li></ul></div></div>';
                 }
             },
-            /*{ "data": "departmentName", "name": "DepartmentName" },*/
+
             { "data": "userName", "name": "UserName" },
             {
                 "data": "firstName",
@@ -76,7 +76,7 @@ function GetAllUserData() {
             { "data": "phoneNumber", "name": "PhoneNumber" },
             { "data": "cityName", "name": "CityName" },
             { "data": "address", "name": "Address" },
-           
+
         ],
         columnDefs: [{
             "defaultContent": "",
@@ -85,125 +85,213 @@ function GetAllUserData() {
     });
 }
 
+//function ActiveUser(UserName) {
+
+//    const swalWithBootstrapButtons = Swal.mixin({
+//        customClass: {
+//            confirmButton: 'btn btn-success',
+//            cancelButton: 'btn btn-danger'
+//        },
+//        buttonsStyling: false
+//    })
+//    swalWithBootstrapButtons.fire({
+//        title: 'Are you sure?',
+//        text: "You won't to Active this User!",
+//        icon: 'warning',
+//        showCancelButton: true,
+//        confirmButtonText: 'Yes, Active it!',
+//        cancelButtonText: 'No, cancel!',
+//        reverseButtons: true
+//    }).then((result) => {
+//        if (result.isConfirmed) {
+
+//            $.ajax({
+//                url: '/UserProfile/UserActiveDecative?UserName=' + UserName,
+//                type: 'Post',
+//                contentType: 'application/json;charset=utf-8;',
+//                dataType: 'json',
+
+//                success: function (Result) {
+
+//                    swalWithBootstrapButtons.fire(
+//                        'Done!',
+//                        Result.message,
+//                        'success'
+//                    ).then(function () {
+//                        window.location = '/UserProfile/UserActiveDecative';
+//                    });
+
+//                },
+//                error: function () {
+//                    toastr.error('There is some problem in your request.');
+//                }
+//            })
+
+//        } else if (
+//            /* Read more about handling dismissals below */
+//            result.dismiss === Swal.DismissReason.cancel
+//        ) {
+//            swalWithBootstrapButtons.fire(
+//                'Cancelled',
+//                'User Have No Changes.!! :)',
+//                'error'
+//            )
+//        }
+//    })
+
+//}
 function ActiveUser(UserName) {
-    
-    const swalWithBootstrapButtons = Swal.mixin({
-        customClass: {
-            confirmButton: 'btn btn-success',
-            cancelButton: 'btn btn-danger'
-        },
-        buttonsStyling: false
-    })
+        Swal.fire({
+            title: "Are you sure want to Active this User?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes, Enter it!",
+            cancelButtonText: "No, cancel!",
+            confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
+            cancelButtonClass: "btn btn-danger w-xs mt-2",
+            buttonsStyling: false,
+            showCloseButton: true
+        }).then((result) => {
 
+            if (result.isConfirmed) {
+                var formData = new FormData();
+                formData.append("UserId", $("#txtuserid").val());
 
+                $.ajax({
+                    url: '/UserProfile/UserActiveDecative?UserName=' + UserName,
+                                    type: 'Post',
+                                    contentType: 'application/json;charset=utf-8;',
+                                    dataType: 'json',
+                    success: function (Result) {
+                        Swal.fire({
+                            title: "Active!",
+                            text: Result.message,
+                            icon: "success",
+                            confirmButtonClass: "btn btn-primary w-xs mt-2",
+                            buttonsStyling: false
+                        }).then(function () {
+                          window.location = '/UserProfile/UserActiveDecative';
+                          });
+                         
+                    }
+                });
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                Swal.fire(
+                    'Cancelled',
+                    'User Have No Changes.!!😊',
+                    'error'
+                );
+            }
+        });
 
-    swalWithBootstrapButtons.fire({
-        title: 'Are you sure?',
-        text: "You won't to Active this User!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Yes, Active it!',
-        cancelButtonText: 'No, cancel!',
-        reverseButtons: true
-    }).then((result) => {
-        if (result.isConfirmed) {
-            
-            $.ajax({
-                url: '/UserProfile/UserActiveDecative?UserName=' + UserName,
-                type: 'Post',
-                contentType: 'application/json;charset=utf-8;',
-                dataType: 'json',
-            
-                success: function (Result) {
-                    
-                    swalWithBootstrapButtons.fire(
-                        'Done!',
-                         Result.message,
-                        'success'
-                    ).then(function () {
-                        window.location = '/UserProfile/UserActiveDecative';
-                    }); 
-
-                },
-                error: function () {
-                    toastr.error('There is some problem in your request.');
-                }
-            })
-            
-        } else if (
-            /* Read more about handling dismissals below */
-            result.dismiss === Swal.DismissReason.cancel
-        ) {
-            swalWithBootstrapButtons.fire(
-                'Cancelled',
-                'User Have No Changes.!! :)',
-                'error'
-            )
-        }
-    })
-  
 }
 function DeactiveUser(UserName) {
-
-    const swalWithBootstrapButtons = Swal.mixin({
-        customClass: {
-            confirmButton: 'btn btn-success',
-            cancelButton: 'btn btn-danger'
-        },
-        buttonsStyling: false
-    })
-
-
-
-    swalWithBootstrapButtons.fire({
-        title: 'Are you sure?',
-        text: "You won't to DeActive this User!",
-        icon: 'warning',
+    
+    Swal.fire({
+        title: "Are you sure want to DeActive this User?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
         showCancelButton: true,
-        confirmButtonText: 'Yes, Deactive it!',
-        cancelButtonText: 'No, cancel!',
-        reverseButtons: true
+        confirmButtonText: "Yes, Enter it!",
+        cancelButtonText: "No, cancel!",
+        confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
+        cancelButtonClass: "btn btn-danger w-xs mt-2",
+        buttonsStyling: false,
+        showCloseButton: true
     }).then((result) => {
         if (result.isConfirmed) {
+            
+            var formData = new FormData();
+            formData.append("UserId", $("#txtuserid").val());
 
             $.ajax({
                 url: '/UserProfile/UserActiveDecative?UserName=' + UserName,
-                type: 'Post',
-                contentType: 'application/json;charset=utf-8;',
-                dataType: 'json',
-
+                                type: 'Post',
+                                contentType: 'application/json;charset=utf-8;',
+                                dataType: 'json',
                 success: function (Result) {
-
-                    swalWithBootstrapButtons.fire(
-                        'Done!',
-                        Result.message,
-                        'success'
-                    ).then(function () {
+                    
+                    Swal.fire({
+                        title: "DeActive!",
+                        text: Result.message,
+                        icon: "success",
+                        confirmButtonClass: "btn btn-primary w-xs mt-2",
+                        buttonsStyling: false
+                    }).then(function () {
                         window.location = '/UserProfile/UserActiveDecative';
                     });
-
-                },
-                error: function () {
-                    toastr.error('There is some problem in your request.');
                 }
-            })
-
-        } else if (
-            /* Read more about handling dismissals below */
-            result.dismiss === Swal.DismissReason.cancel
-        ) {
-            swalWithBootstrapButtons.fire(
+            });
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+            
+            Swal.fire(
                 'Cancelled',
-                'User Have No Changes.!! :)',
+                'User Have No Changes.!!😊',
                 'error'
-            )
+            );
         }
-    })
+    });
 
 }
+//function DeactiveUser(UserName) {
+
+//    const swalWithBootstrapButtons = Swal.mixin({
+//        customClass: {
+//            confirmButton: 'btn btn-success',
+//            cancelButton: 'btn btn-danger'
+//        },
+//        buttonsStyling: false
+//    })
+//    swalWithBootstrapButtons.fire({
+//        title: 'Are you sure?',
+//        text: "You won't to DeActive this User!",
+//        icon: 'warning',
+//        showCancelButton: true,
+//        confirmButtonText: 'Yes, Deactive it!',
+//        cancelButtonText: 'No, cancel!',
+//        reverseButtons: true
+//    }).then((result) => {
+//        if (result.isConfirmed) {
+
+//            $.ajax({
+//                url: '/UserProfile/UserActiveDecative?UserName=' + UserName,
+//                type: 'Post',
+//                contentType: 'application/json;charset=utf-8;',
+//                dataType: 'json',
+
+//                success: function (Result) {
+
+//                    swalWithBootstrapButtons.fire(
+//                        'Done!',
+//                        Result.message,
+//                        'success'
+//                    ).then(function () {
+//                        window.location = '/UserProfile/UserActiveDecative';
+//                    });
+
+//                },
+//                error: function () {
+//                    toastr.error('There is some problem in your request.');
+//                }
+//            })
+
+//        } else if (
+//            /* Read more about handling dismissals below */
+//            result.dismiss === Swal.DismissReason.cancel
+//        ) {
+//            swalWithBootstrapButtons.fire(
+//                'Cancelled',
+//                'User Have No Changes.!! :)',
+//                'error'
+//            )
+//        }
+//    })
+
+//}
 
 function EnterInTime() {
-    
+
     var fromData = new FormData();
     fromData.append("UserId", $("#txtuserid").val());
     fromData.append("Date", $("#txttodayDate").val());
@@ -216,26 +304,75 @@ function EnterInTime() {
         contentType: false,
         success: function (Result) {
             Swal.fire({
-                title: Result.message, 
+                title: Result.message,
                 icon: Result.icone,
                 confirmButtonColor: '#3085d6',
                 confirmButtonText: 'OK'
             })
             GetUserAttendanceInTime();
         },
-        
+
     })
 }
 
 function EnterOutTime() {
-    
-    if ($("#todayouttime").text() != "Pending") {
-        var fromData = new FormData();
-        fromData.append("UserId", $("#txtuserid").val());
+
+    if ($("#todayouttime").text() == "Pending") {
+
+        Swal.fire({
+            title: "Are you sure want to Enter OUT-TIME..?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes, Enter it!",
+            cancelButtonText: "No, cancel!",
+            confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
+            cancelButtonClass: "btn btn-danger w-xs mt-2",
+            buttonsStyling: false,
+            showCloseButton: true
+        }).then((result) => {
+
+            if (result.isConfirmed) {
+                var formData = new FormData();
+                formData.append("UserId", $("#txtuserid").val());
+
+                $.ajax({
+                    url: '/Home/EnterUserOutTime',
+                    type: 'Post',
+                    data: formData,
+                    dataType: 'json',
+                    processData: false,
+                    contentType: false,
+                    success: function (Result) {
+                        Swal.fire({
+                            title: "Deleted!",
+                            text: Result.message,
+                            icon: "success",
+                            confirmButtonClass: "btn btn-primary w-xs mt-2",
+                            buttonsStyling: false
+                        });
+                        GetUserAttendanceInTime();
+                    }
+                });
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+
+                Swal.fire(
+                    'Cancelled',
+                    'User Have No Changes.!!😊',
+                    'error'
+                );
+            }
+        });
+
+
+    } else {
+
+        var formData = new FormData();
+        formData.append("UserId", $("#txtuserid").val());
         $.ajax({
             url: '/Home/EnterUserOutTime',
             type: 'Post',
-            data: fromData,
+            data: formData,
             dataType: 'json',
             processData: false,
             contentType: false,
@@ -245,78 +382,15 @@ function EnterOutTime() {
                     icon: Result.icone,
                     confirmButtonColor: '#3085d6',
                     confirmButtonText: 'OK'
-                })
+                });
                 GetUserAttendanceInTime();
-            },
-
-        })
-    }
-
-    else
-    {
-        
-        const swalWithBootstrapButtons = Swal.mixin({
-            customClass: {
-                confirmButton: 'btn btn-success',
-                cancelButton: 'btn btn-danger'
-            },
-            buttonsStyling: false
-        })
-
-
-
-        swalWithBootstrapButtons.fire({
-            title: 'Are you sure?',
-            text: "You won't to Enter OUT-Time!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Yes, Enter it!',
-            cancelButtonText: 'No, cancel!',
-            reverseButtons: true
-        }).then((result) => {
-            if (result.isConfirmed) {
-
-                var fromData = new FormData();
-                fromData.append("UserId", $("#txtuserid").val());
-                $.ajax({
-                    url: '/Home/EnterUserOutTime',
-                    type: 'Post',
-                    data: fromData,
-                    dataType: 'json',
-                    processData: false,
-                    contentType: false,
-                    success: function (Result) {
-                        Swal.fire({
-                            title: Result.message,
-                            icon: Result.icone,
-                            confirmButtonColor: '#3085d6',
-                            confirmButtonText: 'OK'
-                        })
-                        GetUserAttendanceInTime();
-                    },
-
-                })
-
-            } else if (
-                /* Read more about handling dismissals below */
-                result.dismiss === Swal.DismissReason.cancel
-            ) {
-                swalWithBootstrapButtons.fire(
-                    'Cancelled',
-                    'User Have No Changes.!! :)',
-                    'error'
-                )
             }
-        })
-
+        });
 
     }
-
-   
 }
 
-function ResetPassword()
-{
+function ResetPassword() {
     var fromData = new FormData();
     fromData.append("UserName", $("#txtUserName").val());
     fromData.append("Password", $("#password-input").val());
@@ -336,7 +410,7 @@ function ResetPassword()
                 confirmButtonText: 'OK'
             }).then(function () {
                 window.location = '/UserProfile/ResetUserPassword';
-            }); 
+            });
 
         },
         error: function () {
@@ -346,7 +420,7 @@ function ResetPassword()
 }
 
 function GetUserAttendanceInTime() {
-    
+
     $.ajax({
         url: '/Home/GetUserAttendanceInTime',
         type: 'Post',
@@ -354,7 +428,7 @@ function GetUserAttendanceInTime() {
         processData: false,
         contentType: false,
         success: function (Result) {
-            
+
             var datetime = Result.data;
             if (datetime != null) {
                 var userInTime = datetime.intime;
@@ -375,18 +449,16 @@ function GetUserAttendanceInTime() {
 
                     var userTotalHour = datetime.totalHours;
                     if (userTotalHour != null) {
-                        var TotalHour = userTotalHour.substr(0,2);
+                        var TotalHour = userTotalHour.substr(0, 2);
                         let Hours = TotalHour > 01 ? 'hrs' : 'hr';
-                        var minutes = userTotalHour.substr(2,3);
+                        var minutes = userTotalHour.substr(2, 3);
                         $("#txttotalhours").text(TotalHour + minutes + ' ' + Hours);
                     }
-                    else
-                    {
+                    else {
                         $("#txttotalhours").text("Pending");
                     }
                 }
-                else
-                {
+                else {
                     $("#todayouttime").text("Pending");
                     $("#txttotalhours").text("Pending");
                 }
@@ -398,12 +470,12 @@ function GetUserAttendanceInTime() {
             }
 
         },
-       
+
     })
 }
 
 function UserBirsthDayWish() {
-    
+
     $.ajax({
         url: '/Home/UserBirsthDayWish',
         type: 'Get',
@@ -456,8 +528,7 @@ function EditUserDetails(EmpId) {
 }
 
 
-function UserLogout()
-{
+function UserLogout() {
     Swal.fire({
         title: 'Logout Confirmation',
         text: 'Are you sure you want to logout?',
@@ -472,19 +543,19 @@ function UserLogout()
             logout();
         }
     });
-    
-   
+
+
 
 }
 
 function logout() {
-    
+
     fetch('/Authentication/Logout', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
             'RequestVerificationToken': '@Token.Get(Request.HttpContext)'
-           
+
         },
         body: ''
     })
@@ -658,11 +729,11 @@ function clearSelectedBox() {
         '<option selected disabled value = "">--Select Department--</option>');
 }
 
-$('#searchEmployee').on('change',function (e) {
+$('#searchEmployee').on('change', function (e) {
     e.stopImmediatePropagation();
     if ($("#searchEmployee").val() == "ByUsername") {
         clearSelectedBox();
-        GetUsername();
+        GetUsername()
         $("#empnamebox").show();
         $("#departmentbox").hide();
     }
@@ -685,6 +756,7 @@ function GetUsername() {
     });
 }
 
+
 function GetDepartment() {
 
     $.ajax({
@@ -699,7 +771,7 @@ function GetDepartment() {
 }
 
 function GetSearchEmpList() {
-    
+
     if ($('#activeInactiveForm').valid()) {
         var form_data = new FormData();
         form_data.append("DepartmentId", $('#ddlDepartmenrnt').val());
@@ -712,7 +784,7 @@ function GetSearchEmpList() {
             processData: false,
             contentType: false,
             complete: function (Result) {
-                
+
                 $("#allemplist").hide();
                 $("#activedeactivepagination").hide();
                 $("#backbtn").show();
@@ -726,7 +798,7 @@ function GetSearchEmpList() {
                     $("#errorMessage").text(message);
                     $("#dvseachemplist").hide();
                 }
-                clearSelectedBox()
+                /*clearSelectedBox()*/
             }
         });
     } else {

@@ -134,7 +134,7 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
                 Id = a.Id,
                 FirstName = a.FirstName,
                 LastName = a.LastName,
-                Image = a.Image,              
+                Image = a.Image,
             });
             return data;
         }
@@ -178,7 +178,8 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
                                  Id = e.Id,
                                  Fullname = d.FirstName + " " + d.LastName,
                                  Image = d.Image,
-                                 UserRole = e.UserRole,
+                                 //UserRole = e.UserRole,
+                                 Designation = d.Designation,
                              }).ToList();
                 return result;
             }

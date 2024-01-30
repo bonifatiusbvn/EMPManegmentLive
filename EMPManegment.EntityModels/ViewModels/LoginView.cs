@@ -20,7 +20,7 @@ namespace EMPManegment.EntityModels.ViewModels
         public DateTime LastLoginDate { get; set; }
 
         public string FullName { get; set; }
-        public int? Role { get; set; }
+        public string Role { get; set; }
     }
     public class LoginResponseModel
     {
@@ -29,6 +29,12 @@ namespace EMPManegment.EntityModels.ViewModels
         public int Code { get; set; }
 
         public LoginView Data { get; set; }
+
+    }
+
+    public class UserRole
+    {
+        public string Role { get; set; }
 
     }
 }

@@ -23,7 +23,7 @@ namespace EMPManegment.EntityModels.View_Model
 
         public DateTime DateOfBirth { get; set; }
         public DateTime? JoiningDate { get; set; }
-
+        public string? Designation { get; set; }
         public string? Email { get; set; }
 
         public bool? EmailConfirmed { get; set; }

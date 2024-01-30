@@ -143,6 +143,17 @@ namespace EMPManagment.API.Controllers
             List<ProductDetailsView> ProductList = await productMaster.GetProductDetailsByProductId(ProductId);
             return Ok(new { code = 200, data = ProductList.ToList() });
         }
+
+
+        [HttpPost]
+        [Route("SearchProductName")]
+        public async Task<IActionResult> SearchProductName(String ProductName)
+        {
+            {
+                var Product = await productMaster.SearchProductName(ProductName);
+                return Ok(new { code = 200, data = Product.ToList() });
+            }
+        }
         [HttpPost]
         [Route("SerchProductByVendor")]
         public async Task<IActionResult> SerchProductByVendor(int ProductId, Guid VendorId)

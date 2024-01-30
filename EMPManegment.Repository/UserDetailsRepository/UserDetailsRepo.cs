@@ -1,6 +1,7 @@
 ﻿using Azure;
 using Azure.Core;
 using EMPManagment.API;
+using EMPManegment.EntityModels.Crypto;
 using EMPManegment.EntityModels.View_Model;
 using EMPManegment.EntityModels.ViewModels;
 using EMPManegment.EntityModels.ViewModels.DataTableParameters;
@@ -322,7 +323,7 @@ namespace EMPManegment.Repository.UserListRepository
                 var tblUser = Context.TblUsers.Where(p => p.UserName == loginrequest.UserName).SingleOrDefault();
                 if(tblUser != null)
                 {
-                    if (tblUser.UserName =="")// loginrequest.UserName && Crypto.VarifyHash(loginrequest.Password, tblUser.PasswordHash, tblUser.PasswordSalt))
+                    if (tblUser.UserName == loginrequest.UserName && Crypto.VarifyHash(loginrequest.Password, tblUser.PasswordHash, tblUser.PasswordSalt))
                     {
                         LoginView userModel = new LoginView();
                         userModel.UserName = tblUser.UserName;

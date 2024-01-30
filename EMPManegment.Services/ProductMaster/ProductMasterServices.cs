@@ -64,5 +64,9 @@ namespace EMPManegment.Services.ProductMaster
         {
             return await productMaster.DisplayProductDetailsById(ProductId);
         }
+        public async Task<IEnumerable<ProductDetailsView>> SearchProductName(String ProductName)
+        {
+            return await productMaster.SearchProductName(ProductName);
+        }
     }
 }

@@ -67,5 +67,13 @@
                 StaticHttpContext.Session.SetString("ProfilePhoto", value);
             }
         }
+
+        public string UserRoll
+        {
+            get
+            {
+                return HttpContext.User.Claims.FirstOrDefault(x => string.Compare(x.Type, "IsAdmin", true) == 0)?.Value;
+            }
+        }
     }
 }

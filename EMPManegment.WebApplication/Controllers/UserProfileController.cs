@@ -362,7 +362,7 @@ namespace EMPManegment.Web.Controllers
                     }
                     else
                     {
-                    TempData["ErrorMessage"] = response.message;
+                       TempData["ErrorMessage"] = response.message;
                     }
 
                 return View();
@@ -712,7 +712,7 @@ namespace EMPManegment.Web.Controllers
             dt.Columns.Remove("AttendanceId");
             return dt;
         }
-
+         
         [HttpPost]
         public async Task<IActionResult> GetSearchAttendanceList(searchAttendanceListModel GetAttendanceList)
         {

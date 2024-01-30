@@ -11,6 +11,7 @@ using EMPManegment.Inretface.Services.UserAttendanceServices;
 using EMPManegment.Inretface.Services.UserListServices;
 using EMPManegment.Repository.UserAttendanceRepository;
 using EMPManegment.Services.UserAttendance;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
@@ -212,6 +213,7 @@ namespace EMPManagment.API.Controllers
                 {
                     updateresponsemodel.Message = UpdateTask.Result.Message;
                     updateresponsemodel.Code = (int)HttpStatusCode.NotFound;
+                    updateresponsemodel.Icone = UpdateTask.Result.Icone;
                 }
             }
             catch (Exception ex)

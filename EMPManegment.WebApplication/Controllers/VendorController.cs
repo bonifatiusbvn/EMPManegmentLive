@@ -12,9 +12,11 @@ using EMPManegment.EntityModels.ViewModels.UserModels;
 using EMPManegment.EntityModels.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using EMPManegment.EntityModels.ViewModels.TaskModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EMPManegment.Web.Controllers
 {
+    //[Authorize]
     public class VendorController : Controller
     {
         public WebAPI WebAPI { get; }

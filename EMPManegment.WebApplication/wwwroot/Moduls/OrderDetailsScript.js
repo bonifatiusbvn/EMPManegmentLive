@@ -110,6 +110,25 @@ function SearchData() {
     }
 }
 
+$(document).ready(function () { 
+    $('#txtvendorname').change(function () {
+        var Text = $("#txtvendorname Option:Selected").text();
+        var ProductId = $(this).val();
+        $("#txtvendornameid").val(Text);
+        $('#productname').empty();
+        $('#productname').append('<Option >--Select Product--</Option>');
+        $.ajax({
+            url: '/ProductMaster/GetProductById?ProductId=' + ProductId,
+            success: function (result) {
+
+                $.each(result, function (i, data) {
+                    $('#productname').append('<Option value=' + data.id + '>' + data.productType + '</Option>')
+                });
+            }
+        });
+    });
+});
+
 function SaveCreateOrder()
 {
     if ($('#createOrderForm').valid()) {

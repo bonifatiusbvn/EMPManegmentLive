@@ -22,6 +22,7 @@ public partial class TblUser
     public bool? EmailConfirmed { get; set; }
 
     public DateTime? JoiningDate { get; set; }
+    public string? Designation { get; set; }
 
     public string? Designation { get; set; }
 

@@ -34,6 +34,7 @@ namespace EMPManegment.EntityModels.ViewModels.ProjectModels
          
         public string? Fullname { get; set; }
         public string? Image { get; set; }
+        public string? Designation { get; set; }
 
     }
 }

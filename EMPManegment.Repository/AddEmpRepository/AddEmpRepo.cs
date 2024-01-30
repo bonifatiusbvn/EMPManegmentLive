@@ -104,7 +104,7 @@ namespace EMPManegment.Repository.AddEmpRepository
                             userModel.FullName = tblUser.FirstName + " " + tblUser.LastName;
                             userModel.FirstName = tblUser.FirstName;
                             userModel.ProfileImage = tblUser.Image;
-                            userModel.Role = tblUser.Role;
+                            //userModel.Role = tblUser.Role;
                             response.Data = userModel;
                             response.Code = (int)HttpStatusCode.OK;
 

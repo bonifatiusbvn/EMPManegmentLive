@@ -1,11 +1,15 @@
-﻿using EMPManagment.Web.Helper;
+﻿using Aspose.Pdf.Operators;
+using EMPManagment.Web.Helper;
 using EMPManagment.Web.Models.API;
 using EMPManegment.EntityModels.View_Model;
 using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 using EMPManegment.EntityModels.ViewModels.Models;
+using EMPManegment.EntityModels.ViewModels.ProductMaster;
 using EMPManegment.EntityModels.ViewModels.TaskModels;
 using EMPManegment.EntityModels.ViewModels.UserModels;
 using EMPManegment.Web.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Data;
@@ -81,7 +85,19 @@ namespace EMPManegment.Web.Controllers
         {
             try
             {
-                ApiResponseModel postuser = await APIServices.PostAsync(task, "UserHome/AddTaskDetails");
+                var TaskDetails = new TaskDetailsView
+                {
+                    CreatedBy = _userSession.UserId,
+                    TaskStatus = task.TaskStatus,
+                    TaskType = task.TaskType,
+                    TaskTypeName = task.TaskTypeName,
+                    TaskDate   = task.TaskDate,
+                    TaskEndDate = task.TaskEndDate,
+                    TaskDetails =task.TaskDetails,
+                    UserId = _userSession.UserId,
+                    TaskTitle = task.TaskTitle,
+                };
+                ApiResponseModel postuser = await APIServices.PostAsync(TaskDetails, "UserHome/AddTaskDetails");
                 UserResponceModel responseModel = new UserResponceModel();
                 if (postuser.code == 200)
                 {
@@ -162,11 +178,11 @@ namespace EMPManegment.Web.Controllers
                 UserResponceModel userResponceModel = new UserResponceModel();
                 if (postuser.code == 200)
                 {
-                    return Ok(new { postuser.message });
+                    return Ok(new { postuser.message , postuser.code ,postuser.Icone });
                 }
                 else
                 {
-                    return Ok(new { postuser.code });
+                    return Ok(new { postuser.code, postuser.message,postuser.Icone });
                 }
             }
             catch (Exception ex)
