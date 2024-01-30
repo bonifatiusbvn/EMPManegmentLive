@@ -110,7 +110,7 @@ function SearchData() {
     }
 }
 
-$(document).ready(function () {debugger 
+$(document).ready(function () { 
     $('#txtvendorname').change(function () {
         var Text = $("#txtvendorname Option:Selected").text();
         var ProductId = $(this).val();

@@ -195,7 +195,7 @@ function btnStatusUpdate(Id) {
             },
         });
     }
-    else {debugger
+    else {
         Swal.fire({
             title: "Kindly Select The Status",
             icon: 'warning',

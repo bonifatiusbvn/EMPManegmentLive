@@ -85,122 +85,210 @@ function GetAllUserData() {
     });
 }
 
+//function ActiveUser(UserName) {
+
+//    const swalWithBootstrapButtons = Swal.mixin({
+//        customClass: {
+//            confirmButton: 'btn btn-success',
+//            cancelButton: 'btn btn-danger'
+//        },
+//        buttonsStyling: false
+//    })
+//    swalWithBootstrapButtons.fire({
+//        title: 'Are you sure?',
+//        text: "You won't to Active this User!",
+//        icon: 'warning',
+//        showCancelButton: true,
+//        confirmButtonText: 'Yes, Active it!',
+//        cancelButtonText: 'No, cancel!',
+//        reverseButtons: true
+//    }).then((result) => {
+//        if (result.isConfirmed) {
+
+//            $.ajax({
+//                url: '/UserProfile/UserActiveDecative?UserName=' + UserName,
+//                type: 'Post',
+//                contentType: 'application/json;charset=utf-8;',
+//                dataType: 'json',
+
+//                success: function (Result) {
+
+//                    swalWithBootstrapButtons.fire(
+//                        'Done!',
+//                        Result.message,
+//                        'success'
+//                    ).then(function () {
+//                        window.location = '/UserProfile/UserActiveDecative';
+//                    });
+
+//                },
+//                error: function () {
+//                    toastr.error('There is some problem in your request.');
+//                }
+//            })
+
+//        } else if (
+//            /* Read more about handling dismissals below */
+//            result.dismiss === Swal.DismissReason.cancel
+//        ) {
+//            swalWithBootstrapButtons.fire(
+//                'Cancelled',
+//                'User Have No Changes.!! :)',
+//                'error'
+//            )
+//        }
+//    })
+
+//}
 function ActiveUser(UserName) {
+        Swal.fire({
+            title: "Are you sure want to Active this User?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes, Enter it!",
+            cancelButtonText: "No, cancel!",
+            confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
+            cancelButtonClass: "btn btn-danger w-xs mt-2",
+            buttonsStyling: false,
+            showCloseButton: true
+        }).then((result) => {
 
-    const swalWithBootstrapButtons = Swal.mixin({
-        customClass: {
-            confirmButton: 'btn btn-success',
-            cancelButton: 'btn btn-danger'
-        },
-        buttonsStyling: false
-    })
+            if (result.isConfirmed) {
+                var formData = new FormData();
+                formData.append("UserId", $("#txtuserid").val());
 
-
-
-    swalWithBootstrapButtons.fire({
-        title: 'Are you sure?',
-        text: "You won't to Active this User!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Yes, Active it!',
-        cancelButtonText: 'No, cancel!',
-        reverseButtons: true
-    }).then((result) => {
-        if (result.isConfirmed) {
-
-            $.ajax({
-                url: '/UserProfile/UserActiveDecative?UserName=' + UserName,
-                type: 'Post',
-                contentType: 'application/json;charset=utf-8;',
-                dataType: 'json',
-
-                success: function (Result) {
-
-                    swalWithBootstrapButtons.fire(
-                        'Done!',
-                        Result.message,
-                        'success'
-                    ).then(function () {
-                        window.location = '/UserProfile/UserActiveDecative';
-                    });
-
-                },
-                error: function () {
-                    toastr.error('There is some problem in your request.');
-                }
-            })
-
-        } else if (
-            /* Read more about handling dismissals below */
-            result.dismiss === Swal.DismissReason.cancel
-        ) {
-            swalWithBootstrapButtons.fire(
-                'Cancelled',
-                'User Have No Changes.!! :)',
-                'error'
-            )
-        }
-    })
+                $.ajax({
+                    url: '/UserProfile/UserActiveDecative?UserName=' + UserName,
+                                    type: 'Post',
+                                    contentType: 'application/json;charset=utf-8;',
+                                    dataType: 'json',
+                    success: function (Result) {
+                        Swal.fire({
+                            title: "Active!",
+                            text: Result.message,
+                            icon: "success",
+                            confirmButtonClass: "btn btn-primary w-xs mt-2",
+                            buttonsStyling: false
+                        }).then(function () {
+                          window.location = '/UserProfile/UserActiveDecative';
+                          });
+                         
+                    }
+                });
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                Swal.fire(
+                    'Cancelled',
+                    'User Have No Changes.!!😊',
+                    'error'
+                );
+            }
+        });
 
 }
 function DeactiveUser(UserName) {
-
-    const swalWithBootstrapButtons = Swal.mixin({
-        customClass: {
-            confirmButton: 'btn btn-success',
-            cancelButton: 'btn btn-danger'
-        },
-        buttonsStyling: false
-    })
-
-
-
-    swalWithBootstrapButtons.fire({
-        title: 'Are you sure?',
-        text: "You won't to DeActive this User!",
-        icon: 'warning',
+    
+    Swal.fire({
+        title: "Are you sure want to DeActive this User?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
         showCancelButton: true,
-        confirmButtonText: 'Yes, Deactive it!',
-        cancelButtonText: 'No, cancel!',
-        reverseButtons: true
+        confirmButtonText: "Yes, Enter it!",
+        cancelButtonText: "No, cancel!",
+        confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
+        cancelButtonClass: "btn btn-danger w-xs mt-2",
+        buttonsStyling: false,
+        showCloseButton: true
     }).then((result) => {
         if (result.isConfirmed) {
+            
+            var formData = new FormData();
+            formData.append("UserId", $("#txtuserid").val());
 
             $.ajax({
                 url: '/UserProfile/UserActiveDecative?UserName=' + UserName,
-                type: 'Post',
-                contentType: 'application/json;charset=utf-8;',
-                dataType: 'json',
-
+                                type: 'Post',
+                                contentType: 'application/json;charset=utf-8;',
+                                dataType: 'json',
                 success: function (Result) {
-
-                    swalWithBootstrapButtons.fire(
-                        'Done!',
-                        Result.message,
-                        'success'
-                    ).then(function () {
+                    
+                    Swal.fire({
+                        title: "DeActive!",
+                        text: Result.message,
+                        icon: "success",
+                        confirmButtonClass: "btn btn-primary w-xs mt-2",
+                        buttonsStyling: false
+                    }).then(function () {
                         window.location = '/UserProfile/UserActiveDecative';
                     });
-
-                },
-                error: function () {
-                    toastr.error('There is some problem in your request.');
                 }
-            })
-
-        } else if (
-            /* Read more about handling dismissals below */
-            result.dismiss === Swal.DismissReason.cancel
-        ) {
-            swalWithBootstrapButtons.fire(
+            });
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+            
+            Swal.fire(
                 'Cancelled',
-                'User Have No Changes.!! :)',
+                'User Have No Changes.!!😊',
                 'error'
-            )
+            );
         }
-    })
+    });
 
 }
+//function DeactiveUser(UserName) {
+
+//    const swalWithBootstrapButtons = Swal.mixin({
+//        customClass: {
+//            confirmButton: 'btn btn-success',
+//            cancelButton: 'btn btn-danger'
+//        },
+//        buttonsStyling: false
+//    })
+//    swalWithBootstrapButtons.fire({
+//        title: 'Are you sure?',
+//        text: "You won't to DeActive this User!",
+//        icon: 'warning',
+//        showCancelButton: true,
+//        confirmButtonText: 'Yes, Deactive it!',
+//        cancelButtonText: 'No, cancel!',
+//        reverseButtons: true
+//    }).then((result) => {
+//        if (result.isConfirmed) {
+
+//            $.ajax({
+//                url: '/UserProfile/UserActiveDecative?UserName=' + UserName,
+//                type: 'Post',
+//                contentType: 'application/json;charset=utf-8;',
+//                dataType: 'json',
+
+//                success: function (Result) {
+
+//                    swalWithBootstrapButtons.fire(
+//                        'Done!',
+//                        Result.message,
+//                        'success'
+//                    ).then(function () {
+//                        window.location = '/UserProfile/UserActiveDecative';
+//                    });
+
+//                },
+//                error: function () {
+//                    toastr.error('There is some problem in your request.');
+//                }
+//            })
+
+//        } else if (
+//            /* Read more about handling dismissals below */
+//            result.dismiss === Swal.DismissReason.cancel
+//        ) {
+//            swalWithBootstrapButtons.fire(
+//                'Cancelled',
+//                'User Have No Changes.!! :)',
+//                'error'
+//            )
+//        }
+//    })
+
+//}
 
 function EnterInTime() {
 
