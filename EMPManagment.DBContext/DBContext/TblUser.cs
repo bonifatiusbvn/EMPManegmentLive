@@ -23,9 +23,15 @@ public partial class TblUser
 
     public DateTime? JoiningDate { get; set; }
 
+    public string? Designation { get; set; }
+
     public string? Address { get; set; }
 
     public int? CityId { get; set; }
+
+    public int? StateId { get; set; }
+
+    public int? CountryId { get; set; }
 
     public string? Pincode { get; set; }
 
@@ -54,10 +60,6 @@ public partial class TblUser
     public DateTime? CreatedOn { get; set; }
 
     public string? CreatedBy { get; set; }
-
-    public int? StateId { get; set; }
-
-    public int? CountryId { get; set; }
 
     public virtual TblCity? City { get; set; }
 

@@ -834,6 +834,21 @@
                                         </div>
                                     </li>
                                     <li class="nav-item">
+                                        <a href="#sidebarInvoices" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarInvoices" data-key="t-invoices">
+                                            Invoices
+                                        </a>
+                                        <div class="collapse menu-dropdown" id="sidebarInvoices">
+                                            <ul class="nav nav-sm flex-column">
+                                                <li class="nav-item">
+                                                    <a asp-action="InvoiceListView" asp-controller="Invoice" class="nav-link" data-key="t-products"> List View</a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a asp-action="CreateInvoice" asp-controller="Invoice" class="nav-link" data-key="t-orders"> Create Invoice </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                    <li class="nav-item">
                                         <a href="#sidebarProjects" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarProjects" data-key="t-projects">
                                             Projects
                                         </a>

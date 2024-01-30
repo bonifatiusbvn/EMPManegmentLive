@@ -266,6 +266,76 @@ namespace EMPManegment.Repository.ProductMaster
                 throw ex;
             }
         }
+
+        public async Task<List<ProductDetailsView>> SerchProductByVendor(int ProductId, Guid VendorId)
+        {
+            try
+            {
+                var productDetails = new List<ProductDetailsView>();
+                var data = await Context.TblProductDetailsMasters.Where(x => x.ProductType == ProductId && x.VendorId == VendorId).ToListAsync();
+                if (data != null)
+                { 
+                    foreach (var item in data)
+                    {
+                        productDetails.Add(new ProductDetailsView()
+                        {
+                            Id = item.Id,
+                            VendorId = item.VendorId,
+                            ProductImage = item.ProductImage,
+                            ProductName = item.ProductName,
+                            ProductStocks = item.ProductStocks,
+                            PerUnitPrice = item.PerUnitPrice,
+                            PerUnitWithGstprice = item.PerUnitWithGstprice,
+                            Hsn = item.Hsn,
+                            Gst=item.Gst,
+                            ProductDescription = item.ProductDescription,
+                            ProductShortDescription = item.ProductShortDescription,
+                        });
+                    }
+                }
+                return productDetails;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<List<ProductDetailsView>> DisplayProductDetailsById(Guid ProductId)
+        {
+            try
+            {
+                var ProductDetails = new List<ProductDetailsView>();
+                var data = await Context.TblProductDetailsMasters.Where(x => x.Id == ProductId).ToListAsync();
+                if (data != null)
+                {
+                    foreach (var item in data)
+                    {
+                        ProductDetails.Add(new ProductDetailsView()
+                        {
+                            Id = item.Id,
+                            VendorId = item.VendorId,
+                            ProductType = item.ProductType,
+                            ProductName = item.ProductName,
+                            ProductDescription = item.ProductDescription,
+                            ProductShortDescription = item.ProductShortDescription,
+                            ProductImage = item.ProductImage,
+                            ProductStocks = item.ProductStocks,
+                            PerUnitPrice = item.PerUnitPrice,
+                            Hsn = item.Hsn,
+                            Gst = item.Gst,
+                            PerUnitWithGstprice = item.PerUnitWithGstprice,
+                            CreatedBy = item.CreatedBy,
+                        });
+                    }
+                }
+                return ProductDetails;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }
 

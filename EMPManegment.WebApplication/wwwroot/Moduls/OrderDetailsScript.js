@@ -110,25 +110,6 @@ function SearchData() {
     }
 }
 
-$(document).ready(function () {debugger 
-    $('#txtvendorname').change(function () {
-        var Text = $("#txtvendorname Option:Selected").text();
-        var ProductId = $(this).val();
-        $("#txtvendornameid").val(Text);
-        $('#productname').empty();
-        $('#productname').append('<Option >--Select Product--</Option>');
-        $.ajax({
-            url: '/ProductMaster/GetProductById?ProductId=' + ProductId,
-            success: function (result) {
-
-                $.each(result, function (i, data) {
-                    $('#productname').append('<Option value=' + data.id + '>' + data.productType + '</Option>')
-                });
-            }
-        });
-    });
-});
-
 function SaveCreateOrder()
 {
     if ($('#createOrderForm').valid()) {
@@ -252,3 +233,201 @@ $("#returnsactive").click(function () {
     $("#status-returns").show();
     $("#dvdeliveredstatus").hide();
 });
+
+
+$(document).ready(function () {
+    GetVendorNameList()
+    document.getElementById("txtvendorname").click()
+    document.getElementById("productname").click()
+    document.getElementById("searchproductname").click()
+});
+function GetVendorNameList() {
+    $.ajax({
+        url: '/ProductMaster/GetVendorsNameList',
+        success: function (result) {
+            $.each(result, function (i, data) {
+                $('#txtvendorname').append('<Option value=' + data.id + '>' + data.vendorCompany + '</Option>')
+            });
+        }
+    });
+}
+function selectvendorId() {
+    document.getElementById("txtvendorTypeid").value = document.getElementById("txtvendorname").value;
+}
+
+$(document).ready(function () {
+    $('#txtvendorname').change(function () {
+        var Text = $("#txtvendorname Option:Selected").text();
+        var ProductId = $(this).val();
+        $("#txtvendornameid").val(Text);
+        $('#productname').empty();
+        $('#productname').append('<Option >--Select Product--</Option>');
+        $.ajax({
+            url: '/ProductMaster/GetProductById?ProductId=' + ProductId,
+            success: function (result) {
+                $.each(result, function (i, data) {
+                    $('#productname').append('<Option value=' + data.id + '>' + data.productName + '</Option>')
+                });
+            }
+        });
+    });
+    $('#productname').change(function () {
+
+        var Text = $("#productname Option:Selected").text();
+        var ProductTypeId = $(this).val();
+        var VendorTypeId = $("#txtvendorname").val();
+        $("#txtProductnameid").val(Text);
+        $('#searchproductname').empty();
+        $('#searchproductname').append('<Option >--Select ProductName--</Option>');
+        $.ajax({
+            url: '/ProductMaster/SerchProductByVendor?ProductId=' + ProductTypeId + '&VendorId=' + VendorTypeId,
+            type: 'Post',
+            success: function (result) {
+                $.each(result, function (i, data) {
+                    $('#searchproductname').append('<Option value=' + data.id + '>' + data.productName + '</Option>');
+
+                });
+            }
+        });
+    });
+});
+function searchProductTypeId() {
+    document.getElementById("searchproductnameid").value = document.getElementById("searchproductname").value;
+}
+
+function SerchProductDetailsById() {debugger
+    var GetProductId = {
+        Id: $('#searchproductname').val(),
+    }
+    var form_data = new FormData();
+    form_data.append("PRODUCTID", JSON.stringify(GetProductId));debugger
+    $.ajax({
+        url: '/ProductMaster/DisplayProductDetailsById',
+        type: 'Post',
+        datatype: 'json',
+        data: form_data,
+        processData: false,
+        contentType: false,
+        complete: function (Result) {debugger
+            $("#table-product-list-all").hide();
+            $("#productdetailsPartial").html(Result.responseText);
+        }
+    });
+}
+
+$(document).ready(function () {debugger
+    var rowCounter = 0;
+
+    $("#addItemButton").click(function () {
+        debugger
+        var newRow = $("#templateRow").clone().removeAttr("style").removeAttr("id");
+        debugger
+        newRow.find("select").attr("name", "data[" + rowCounter + "].Option");
+        debugger
+        $("#DisplayProductTable tbody").append(newRow);
+        debugger
+        rowCounter++;
+    });
+
+    // Submit form using AJAX
+});
+
+//$(document).ready(function () {
+//    var dataArray = [];
+
+//    function displayData() {debugger
+//        /*$("#searchproductname").empty();*/
+
+//        for (var i = 0; i < dataArray.length; i++) {debugger
+//            $("#searchproductname").append("<li>" + dataArray[i] + "</li>");
+//        }
+//    }
+
+//    $('#addNewProductBtn').click(function () {debugger
+//        var Data = { Id: $('#searchproductname').val(), }
+//        debugger
+//        dataArray.push(Data);
+//        debugger
+//        displayData();
+//        debugger
+//        SerchProductDetailsById();
+//    })
+//})
+
+//$("body").on("click", "#addNewProductBtn", function () {debugger
+//    //Reference the Name and Country TextBoxes.
+//    var ProductId = $('#searchproductname').val();
+//    debugger
+//    //Get the reference of the Table's TBODY element.
+//    var tBody = $("#DisplayProductTable > TBODY")[0];
+//    debugger
+//    //Add Row.
+//    var row = tBody.insertRow(-1);
+//    debugger
+//    //Add Name cell.
+//    var cell = $(row.insertCell(-1));
+//    cell.html(ProductId.val());
+//    debugger
+//    //Add Button cell.
+//    cell = $(row.insertCell(-1));
+//    var btnRemove = $("<input />");
+//    btnRemove.attr("type", "button");
+//    btnRemove.attr("onclick", "Remove(this);");
+//    btnRemove.val("Remove");
+//    cell.append(btnRemove);
+//    debugger
+//    //Clear the TextBoxes.
+//    ProductId.val("");
+//});
+
+//$("body").on("click", "#addItemButton", function () {
+//    //Loop through the Table rows and build a JSON array.
+//    var Products = new Array();
+//    $("#DisplayProductTable TBODY TR").each(function () {
+//        var row = $(this);
+//        var product = {};
+//        product.ProductName = row.find("TD").eq(0).html();
+//        product.Id = row.find("TD").eq(1).html();
+//        product.ProductShortDescription = row.find("TD").eq(2).html();
+//        product.PerUnitPrice = row.find("TD").eq(3).html();
+//        product.PerUnitWithGstprice = row.find("TD").eq(4).html();
+//        Products.push(product);
+//    });
+
+//    //Send the JSON array to Controller using AJAX.
+//    $.ajax({
+//        type: "POST",
+//        url: "/Home/InsertCustomers",
+//        data: JSON.stringify(customers),
+//        contentType: "application/json; charset=utf-8",
+//        dataType: "json",
+//        success: function (r) {
+//            alert(r + " record(s) inserted.");
+//        }
+//    });
+//});
+
+
+
+function selectProductTypeId() {
+    document.getElementById("txtProductnameid").value = document.getElementById("productname").value;
+}
+$("#productname").change(function () {
+    ProductDetailsByProductTypeId()
+})
+function ProductDetailsByProductTypeId() {
+    var form_data = new FormData();
+    form_data.append("ProductId", $('#productname').val());
+    $.ajax({
+        url: '/ProductMaster/GetProductById',
+        type: 'Post',
+        datatype: 'json',
+        data: form_data,
+        processData: false,
+        contentType: false,
+        complete: function (Result) {
+            $("#table-product-list-all").hide();
+            $("#ProductdetailsPartial").html(Result.responseText);
+        }
+    });
+}

@@ -3,6 +3,7 @@
 using EMPManagment.API;
 using EMPManegment.Inretface.EmployeesInterface.AddEmployee;
 using EMPManegment.Inretface.Interface.CSC;
+using EMPManegment.Inretface.Interface.InvoiceMaster;
 using EMPManegment.Inretface.Interface.OrderDetails;
 using EMPManegment.Inretface.Interface.ProductMaster;
 using EMPManegment.Inretface.Interface.ProjectDetails;
@@ -13,6 +14,7 @@ using EMPManegment.Inretface.Interface.UsersLogin;
 using EMPManegment.Inretface.Interface.VendorDetails;
 using EMPManegment.Inretface.Services.AddEmployeeServies;
 using EMPManegment.Inretface.Services.CSC;
+using EMPManegment.Inretface.Services.InvoiceMaster;
 using EMPManegment.Inretface.Services.OrderDetails;
 using EMPManegment.Inretface.Services.ProductMaster;
 using EMPManegment.Inretface.Services.ProjectDetailsServices;
@@ -23,6 +25,7 @@ using EMPManegment.Inretface.Services.UserLoginServices;
 using EMPManegment.Inretface.Services.VendorDetailsServices;
 using EMPManegment.Repository.AddEmpRepository;
 using EMPManegment.Repository.CSCRepository;
+using EMPManegment.Repository.InvoiceMasterRepository;
 using EMPManegment.Repository.OrderRepository;
 using EMPManegment.Repository.ProductMaster;
 using EMPManegment.Repository.ProjectDetailsRepository;
@@ -33,6 +36,7 @@ using EMPManegment.Repository.UserLoginRepository;
 using EMPManegment.Repository.VendorDetailsRepository;
 using EMPManegment.Services.AddEmployee;
 using EMPManegment.Services.CSC;
+using EMPManegment.Services.InvoiceMaster;
 using EMPManegment.Services.OrderDetails;
 using EMPManegment.Services.ProductMaster;
 using EMPManegment.Services.ProjectDetails;
@@ -64,6 +68,7 @@ builder.Services.AddScoped<ITaskDetails, TaskRepo>();
 builder.Services.AddScoped<IProjectDetails, ProjectDetailsRepo>();
 builder.Services.AddScoped<IOrderDetails, OrderRepo>();
 builder.Services.AddScoped<IProductMaster, ProductMasterRepo>();
+builder.Services.AddScoped<IInvoiceMaster, InvoiceMasterRepo>();
 
 builder.Services.AddScoped<IAuthenticationServices, AuthenticationService>();
 builder.Services.AddScoped<IMasterListServices, MasterListService>();
@@ -75,6 +80,7 @@ builder.Services.AddScoped<ITaskServices, DealTaskServices>();
 builder.Services.AddScoped<IProjectDetailServices, ProjectDetailsServices>();
 builder.Services.AddScoped<IOrderDetailsServices, OrderDetailsServices>();
 builder.Services.AddScoped<IProductMasterServices, ProductMasterServices>();
+builder.Services.AddScoped<IInvoiceMasterServices, InvoiceMasterServices>();
 
 
 

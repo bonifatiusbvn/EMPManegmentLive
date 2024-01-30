@@ -1,4 +1,13 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using EMPManegment.EntityModels.ViewModels.Invoice;
+using EMPManegment.EntityModels.ViewModels.OrderModels;
+using EMPManegment.EntityModels.ViewModels.TaskModels;
+using EMPManegment.Inretface.Interface.OrderDetails;
+using EMPManegment.Inretface.Interface.ProductMaster;
+using EMPManegment.Inretface.Services.InvoiceMaster;
+using EMPManegment.Inretface.Services.ProductMaster;
+using EMPManegment.Inretface.Services.TaskServices;
+using EMPManegment.Services.VendorDetails;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PdfSharpCore;
 using PdfSharpCore.Pdf;
@@ -10,6 +19,33 @@ namespace EMPManagment.API.Controllers
     [ApiController]
     public class InvoiceController : ControllerBase
     {
+        private readonly IInvoiceMasterServices InvoiceMaster;
+        public InvoiceController(IInvoiceMasterServices invoiceMaster)
+        {
+            InvoiceMaster = invoiceMaster;
+        }
+
+        [HttpGet]
+        [Route("GetInvoiceDetailsById")]
+        public async Task<IActionResult> GetInvoiceDetailsById(Guid Id)
+        {
+            var getInvoice = await InvoiceMaster.GetInvoiceDetailsById(Id);
+            return Ok(new { code = 200, data = getInvoice });
+        }
+        [HttpGet]
+        [Route("GetInvoiceNoList")]
+        public async Task<IActionResult> GetInvoiceNoList()
+        {
+            var getInvoiceList = await InvoiceMaster.GetInvoiceNoList();
+            return Ok(new { code = 200, data = getInvoiceList.ToList() });
+        }
+        [HttpGet]
+        [Route("GetInvoiceDetailsList")]
+        public async Task<IActionResult> GetInvoiceDetailsList()
+        {
+            var invoiceList = await InvoiceMaster.GetInvoiceDetailsList();
+            return Ok(new { code = 200, data = invoiceList.ToList() });
+        }
         [HttpPost]
         public async Task<IActionResult> GenerateInvoice(string InvoiceNo) 
         {

@@ -33,6 +33,21 @@ namespace EMPManegment.EntityModels.ViewModels.OrderModels
         public string? PaymentMethod { get; set; }
 
         public string? DeliveryStatus { get; set; }
+        public string ProductDescription { get; set; } = null!;
+
+        public string? ProductShortDescription { get; set; }
+
+        public string? ProductImage { get; set; }
+
+        public decimal ProductStocks { get; set; }
+
+        public decimal PerUnitPrice { get; set; }
+
+        public int? Hsn { get; set; }
+
+        public decimal Gst { get; set; }
+
+        public decimal PerUnitWithGstprice { get; set; }
 
         public DateTime? CreatedOn { get; set; }
 

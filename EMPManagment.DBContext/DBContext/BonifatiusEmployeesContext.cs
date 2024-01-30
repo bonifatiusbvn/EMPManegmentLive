@@ -65,10 +65,7 @@ public partial class BonifatiusEmployeesContext : DbContext
 
     public virtual DbSet<TblVendorType> TblVendorTypes { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-
-    }
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<OrderMaster>(entity =>
@@ -84,12 +81,13 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.Property(e => e.OrderDate).HasColumnType("date");
             entity.Property(e => e.OrderId).HasMaxLength(50);
             entity.Property(e => e.PaymentMethod).HasMaxLength(50);
+            entity.Property(e => e.PaymentStatus).HasMaxLength(50);
             entity.Property(e => e.Quantity).HasMaxLength(50);
             entity.Property(e => e.Total).HasColumnType("decimal(18, 0)");
             entity.Property(e => e.Type).HasMaxLength(20);
 
-            entity.HasOne(d => d.ProductNavigation).WithMany(p => p.OrderMasters)
-                .HasForeignKey(d => d.Product)
+            entity.HasOne(d => d.ProductTypeNavigation).WithMany(p => p.OrderMasters)
+                .HasForeignKey(d => d.ProductType)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_OrderMaster_OrderMaster");
         });
@@ -361,12 +359,11 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.ToTable("tblTaskDetails");
 
             entity.Property(e => e.Id).ValueGeneratedNever();
-            entity.Property(e => e.CreatedBy).HasMaxLength(50);
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.IsCompleted).HasMaxLength(20);
             entity.Property(e => e.TaskDate).HasColumnType("datetime");
-            entity.Property(e => e.TaskDetails).HasMaxLength(150);
             entity.Property(e => e.TaskEndDate).HasColumnType("datetime");
-            entity.Property(e => e.TaskStatus).HasMaxLength(50);
+            entity.Property(e => e.TaskStatus).HasMaxLength(20);
             entity.Property(e => e.TaskTitle).HasMaxLength(50);
 
             entity.HasOne(d => d.TaskTypeNavigation).WithMany(p => p.TblTaskDetails)
@@ -405,6 +402,7 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.Property(e => e.CreatedBy).HasMaxLength(20);
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
             entity.Property(e => e.DateOfBirth).HasColumnType("date");
+            entity.Property(e => e.Designation).HasMaxLength(20);
             entity.Property(e => e.Email).HasMaxLength(50);
             entity.Property(e => e.FirstName).HasMaxLength(30);
             entity.Property(e => e.Gender).HasMaxLength(8);

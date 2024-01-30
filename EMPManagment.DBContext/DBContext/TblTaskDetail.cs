@@ -7,6 +7,8 @@ public partial class TblTaskDetail
 {
     public Guid Id { get; set; }
 
+    public Guid? UserId { get; set; }
+
     public int? TaskType { get; set; }
 
     public string? TaskTitle { get; set; }
@@ -17,13 +19,15 @@ public partial class TblTaskDetail
 
     public DateTime? TaskEndDate { get; set; }
 
-    public Guid? UserId { get; set; }
+    public string? TaskStatus { get; set; }
+
+    public string? IsCompleted { get; set; }
+
+    public Guid? CompletedBy { get; set; }
 
     public DateTime? CreatedOn { get; set; }
 
-    public string? CreatedBy { get; set; }
-
-    public string? TaskStatus { get; set; }
+    public Guid? CreatedBy { get; set; }
 
     public virtual TblTaskMaster? TaskTypeNavigation { get; set; }
 

@@ -220,6 +220,27 @@ namespace EMPManegment.Web.Controllers
         {
             return View();
         }
+        [HttpPost]
+        public async Task<IActionResult> DisplayProductDetailsById()
+        {
+            try
+            {
+                string Productstatus = HttpContext.Request.Form["PRODUCTID"];
+                var GetProduct = Newtonsoft.Json.JsonConvert.DeserializeObject<ProductDetailsView>(Productstatus.ToString());
+                List<ProductDetailsView> products = new List<ProductDetailsView>();
+                HttpClient client = WebAPI.Initil();
+                ApiResponseModel response = await APIServices.PostAsync("", "ProductMaster/DisplayProductDetailsById?ProductId=" + GetProduct.Id);
+                if (response.code == 200)
+                {
+                    products = JsonConvert.DeserializeObject<List<ProductDetailsView>>(response.data.ToString());
+                }
+                return PartialView("~/Views/OrderMaster/_DisplayProductDetailsById.cshtml", products);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
         [HttpGet]
         public async Task<IActionResult> EditProductDetails(Guid ProductId)
         {
@@ -277,6 +298,30 @@ namespace EMPManegment.Web.Controllers
                     ViewBag.Error = "not found";
                 }
                 return PartialView("~/Views/ProductMaster/_ProductDetailsbtVendorId.cshtml", ProductList);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        [HttpPost]
+        public async Task<IActionResult> SerchProductByVendor(int ProductId, Guid VendorId)
+        {
+            try
+            {
+                List<ProductDetailsView> ProductList = new List<ProductDetailsView>();
+                HttpClient client = WebAPI.Initil();
+                ApiResponseModel postuser = await APIServices.PostAsync("", "ProductMaster/SerchProductByVendor?ProductId=" + ProductId + "&VendorId=" + VendorId);
+                if (postuser.data != null)
+                {
+                    ProductList = JsonConvert.DeserializeObject<List<ProductDetailsView>>(postuser.data.ToString());
+                }
+                else
+                {
+                    ProductList = new List<ProductDetailsView>();
+                    ViewBag.Error = "not found";
+                }
+                return new JsonResult(ProductList);
             }
             catch (Exception ex)
             {

@@ -43,7 +43,7 @@
                         </div>
                         <div class="col-sm-auto">
                             <div class="d-flex gap-1 flex-wrap">
-                                <button type="button" class="btn btn-primary add-btn" data-bs-toggle="modal" id="create-btn" data-bs-target="#createOrderModal"><i class="ri-add-line align-bottom me-1"></i> Create Order</button>
+                                <a class="btn btn-primary add-btn" id="create-btn" asp-action="CreateOrderView" asp-controller="OrderMaster" ><i class="ri-add-line align-bottom me-1"></i> Create Order</a>
                                 <button type="button" class="btn btn-info"><i class="ri-file-download-line align-bottom me-1"></i> Import</button>
                                 <button class="btn btn-soft-danger" id="remove-actions" onClick="deleteMultiple()"><i class="ri-delete-bin-2-line"></i></button>
                             </div>
@@ -98,7 +98,7 @@
                     <div>
                         <ul class="nav nav-tabs nav-tabs-custom nav-primary mb-3" role="tablist">
                             <li class="nav-item">
-                                <a class="nav-link active fw-semibold" id="allordersactive" data-bs-toggle="tab" href="#project-overview" role="tab">
+                                <a class="nav-link active fw-semibold" id="allordersactive" data-bs-toggle="tab"  href="#project-overview" role="tab">
                                     <i class="ri-store-2-fill me-1 align-bottom"></i> All Orders <span class="badge bg-secondary align-middle ms-1">@ViewBag.ordersList</span>
                                 </a>
                             </li>
@@ -172,7 +172,7 @@
                                                     <input class="form-check-input" type="checkbox" name="checkAll" value="option1">
                                                 </div>
                                             </th>
-                                            <td class="id"><a asp-action="ShowProductDetails" asp-controller="OrderMaster" class="fw-medium link-primary">@item.OrderId</a></td>
+                                            <td class="id"><a href="/OrderMaster/GetOrderDetailsById/?OrderId=@item.OrderId" class="fw-medium link-primary">@item.OrderId</a></td>
                                             <td class="company_name">@item.CompanyName</td>
                                             <td class="product_name">@item.ProductName</td>
                                             <td class="date">@item.OrderDate.ToShortDateString()</td>
@@ -275,7 +275,7 @@
                                                 </th>
                                                 <td class="id"><a href="apps-ecommerce-order-details.html" class="fw-medium link-primary">@item.OrderId</a></td>
                                                 <td class="company_name">@item.CompanyName</td>
-                                                <td class="product_name">@item.Product</td>
+                                                <td class="product_name">@item.ProductName</td>
                                                 <td class="date">@item.OrderDate.ToShortDateString()</td>
                                                 <td class="total_amount">@item.Total</td>
                                                 <td class="payment">@item.PaymentMethod</td>
@@ -372,7 +372,7 @@
                                                 </th>
                                                 <td class="id"><a href="apps-ecommerce-order-details.html" class="fw-medium link-primary">@item.OrderId</a></td>
                                                 <td class="company_name">@item.CompanyName</td>
-                                                <td class="product_name">@item.Product</td>
+                                                <td class="product_name">@item.ProductName</td>
                                                 <td class="date">@item.OrderDate.ToShortDateString()</td>
                                                 <td class="total_amount">@item.Total</td>
                                                 <td class="payment">@item.PaymentMethod</td>
@@ -469,7 +469,7 @@
                                                 </th>
                                                 <td class="id"><a href="apps-ecommerce-order-details.html" class="fw-medium link-primary">@item.OrderId</a></td>
                                                 <td class="company_name">@item.CompanyName</td>
-                                                <td class="product_name">@item.Product</td>
+                                                <td class="product_name">@item.ProductName</td>
                                                 <td class="date">@item.OrderDate.ToShortDateString()</td>
                                                 <td class="total_amount">@item.Total</td>
                                                 <td class="payment">@item.PaymentMethod</td>
@@ -566,7 +566,7 @@
                                                 </th>
                                                 <td class="id"><a href="apps-ecommerce-order-details.html" class="fw-medium link-primary">@item.OrderId</a></td>
                                                 <td class="company_name">@item.CompanyName</td>
-                                                <td class="product_name">@item.Product</td>
+                                                <td class="product_name">@item.ProductName</td>
                                                 <td class="date">@item.OrderDate.ToShortDateString()</td>
                                                 <td class="total_amount">@item.Total</td>
                                                 <td class="payment">@item.PaymentMethod</td>
@@ -663,7 +663,7 @@
                                                 </th>
                                                 <td class="id"><a href="apps-ecommerce-order-details.html" class="fw-medium link-primary">@item.OrderId</a></td>
                                                 <td class="company_name">@item.CompanyName</td>
-                                                <td class="product_name">@item.Product</td>
+                                                <td class="product_name">@item.ProductName</td>
                                                 <td class="date">@item.OrderDate.ToShortDateString()</td>
                                                 <td class="total_amount">@item.Total</td>
                                                 <td class="payment">@item.PaymentMethod</td>
@@ -760,7 +760,7 @@
                                                 </th>
                                                 <td class="id"><a href="apps-ecommerce-order-details.html" class="fw-medium link-primary">@item.OrderId</a></td>
                                                 <td class="company_name">@item.CompanyName</td>
-                                                <td class="product_name">@item.Product</td>
+                                                <td class="product_name">@item.ProductName</td>
                                                 <td class="date">@item.OrderDate.ToShortDateString()</td>
                                                 <td class="total_amount">@item.Total</td>
                                                 <td class="payment">@item.PaymentMethod</td>
@@ -824,7 +824,7 @@
     <!--Partail View-->
     <div id="dvdeliveredstatus"></div>
     <!---------Create Order Modal-------->
-    <div class="modal fade" id="createOrderModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    @* <div class="modal fade" id="createOrderModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header bg-light p-3">
@@ -948,7 +948,7 @@
                 </form>
             </div>
         </div>
-    </div>
+    </div> *@
     <!------End of Create Order Modal------->
     <!-- Delete Modal -->
     <div class="modal fade flip" id="deleteOrder" tabindex="-1" aria-hidden="true">

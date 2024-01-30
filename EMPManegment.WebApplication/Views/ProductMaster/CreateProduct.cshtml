@@ -166,9 +166,10 @@
                                 </button>
                             </p>
                             <label for="ProductType" class="form-label">Product Type</label>
-                            <select id="txtProducts" class="form-control bg-transparent" name="txtProducts" required>
+                            <select id="txtProducts" class="form-control bg-transparent" onchange="selectProductTypeId()" required>
                                 <option selected disabled value="">----Select Product Type---</option>
                             </select>
+                            <input type="hidden" class="form-control" id="txtProductTypeid">
                         </div>
                         <!-- end card body -->
                     </div>

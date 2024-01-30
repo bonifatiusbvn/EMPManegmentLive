@@ -3,6 +3,7 @@ using EMPManagment.Web.Models.API;
 using EMPManegment.EntityModels.ViewModels;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.OrderModels;
+using EMPManegment.EntityModels.ViewModels.ProductMaster;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using PdfSharpCore.Pdf.Content.Objects;
@@ -31,10 +32,8 @@ namespace EMPManegment.Web.Controllers
                 List<OrderDetailView> orderList = new List<OrderDetailView>();
                 HttpClient client = WebAPI.Initil();
                 ApiResponseModel res = await APIServices.GetAsync("", "OrderDetails/GetOrderList");
-                ApiResponseModel Response = await APIServices.GetAsync("", "OrderDetails/CheckOrder");
-                if (res.code == 200 || Response.code == 200)
+                if (res.code == 200)
                 {
-                    ViewBag.OrderId = Response.data;
                     orderList = JsonConvert.DeserializeObject<List<OrderDetailView>>(res.data.ToString());
                     ViewBag.ordersList = orderList.Count;
                 }
@@ -91,5 +90,41 @@ namespace EMPManegment.Web.Controllers
             return View();
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetOrderDetailsById(string OrderId)
+        {
+            try
+            {
+                OrderDetailView order = new OrderDetailView();
+                HttpClient client = WebAPI.Initil();
+                ApiResponseModel response = await APIServices.GetAsync("", "OrderDetails/GetOrderDetailsById?OrderId=" + OrderId);
+                if (response.code == 200)
+                {
+                    order = JsonConvert.DeserializeObject<OrderDetailView>(response.data.ToString());
+                }
+                return View("ShowProductDetails", order);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        [HttpGet]
+        public async Task<IActionResult> CreateOrderView()
+        {
+            try
+            {
+                ApiResponseModel Response = await APIServices.GetAsync("", "OrderDetails/CheckOrder");
+                if (Response.code == 200)
+                {
+                    ViewBag.OrderId = Response.data;
+                }
+                return View();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

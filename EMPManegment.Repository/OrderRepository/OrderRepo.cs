@@ -4,7 +4,9 @@ using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.OrderModels;
 using EMPManegment.EntityModels.ViewModels.ProjectModels;
 using EMPManegment.EntityModels.ViewModels.TaskModels;
+using EMPManegment.EntityModels.ViewModels.VendorModels;
 using EMPManegment.Inretface.Interface.OrderDetails;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -35,7 +37,7 @@ namespace EMPManegment.Repository.OrderRepository
                     Type = CreateOrder.Type,
                    CompanyName = CreateOrder.CompanyName,
                    VendorId= CreateOrder.VendorId,
-                   Product = CreateOrder.Product,
+                   ProductType = CreateOrder.Product,
                    Quantity = CreateOrder.Quantity,
                    Amount = CreateOrder.Amount,
                    Total = CreateOrder.Total,
@@ -62,7 +64,7 @@ namespace EMPManegment.Repository.OrderRepository
         {
             IEnumerable<OrderDetailView> data = from a in Context.OrderMasters
                                                 join b in Context.TblVendorMasters on a.VendorId equals b.Vid
-                                                join c in Context.TblProductTypeMasters on a.Product equals c.Id
+                                                join c in Context.TblProductTypeMasters on a.ProductType equals c.Id
                                                 select new OrderDetailView
                                                 {
                                                     OrderId = a.OrderId,
@@ -93,7 +95,7 @@ namespace EMPManegment.Repository.OrderRepository
                     {
                         OrderId = item.OrderId,
                         CompanyName = item.CompanyName,
-                        Product = item.Product,
+                        Product = item.ProductType,
                         Quantity = item.Quantity,
                         OrderDate = item.OrderDate,
                         Total = item.Total,
@@ -128,6 +130,46 @@ namespace EMPManegment.Repository.OrderRepository
             {
                 throw ex;
             }
+        }
+
+        public async Task<OrderDetailView> GetOrderDetailsById(string OrderId)
+        {
+            OrderDetailView OrderDetail = new OrderDetailView();
+            try
+            {
+            OrderDetail = (from a in Context.OrderMasters.Where(d => d.OrderId == OrderId)
+                               join b in Context.TblVendorMasters on a.VendorId equals b.Vid
+                               join c in Context.TblProductDetailsMasters on a.ProductType equals c.ProductType
+                               select new OrderDetailView
+                               {
+                                  Id = a.Id,
+                                  OrderId = a.OrderId,
+                                  CompanyName = b.VendorCompany,
+                                  VendorId = a.VendorId,
+                                  ProductName = c.ProductName,
+                                  ProductDescription = c.ProductDescription,
+                                  ProductImage = c.ProductImage,
+                                  PerUnitPrice = c.PerUnitPrice,
+                                  ProductStocks = c.ProductStocks,
+                                  PerUnitWithGstprice = c.PerUnitWithGstprice,
+                                  Gst = c.Gst,
+                                  ProductShortDescription = c.ProductShortDescription,
+                                  Hsn = c.Hsn,
+                                  Quantity = a.Quantity,
+                                  OrderDate = a.OrderDate,
+                                  Total = a.Total,
+                                  Amount = a.Amount,
+                                  PaymentMethod = a.PaymentMethod,
+                                  DeliveryStatus = a.DeliveryStatus,
+                                  DeliveryDate = a.DeliveryDate,
+                                  CreatedOn = a.CreatedOn,
+                              }).First();          
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return OrderDetail;
         }
     }
 }

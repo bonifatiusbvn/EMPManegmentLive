@@ -36,5 +36,10 @@ namespace EMPManegment.Services.OrderDetails
         {
             return OrderDetails.CheckOrder();
         }
+
+        public async Task<OrderDetailView> GetOrderDetailsById(string OrderId)
+        {
+            return await OrderDetails.GetOrderDetailsById(OrderId);
+        }
     }
 }

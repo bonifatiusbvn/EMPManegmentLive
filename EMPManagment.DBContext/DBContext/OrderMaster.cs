@@ -13,7 +13,7 @@ public partial class OrderMaster
 
     public string? CompanyName { get; set; }
 
-    public int Product { get; set; }
+    public int ProductType { get; set; }
 
     public string Quantity { get; set; } = null!;
 
@@ -27,6 +27,8 @@ public partial class OrderMaster
 
     public string? PaymentMethod { get; set; }
 
+    public string? PaymentStatus { get; set; }
+
     public string? DeliveryStatus { get; set; }
 
     public DateTime? CreatedOn { get; set; }
@@ -35,5 +37,5 @@ public partial class OrderMaster
 
     public string? OrderId { get; set; }
 
-    public virtual TblProductTypeMaster ProductNavigation { get; set; } = null!;
+    public virtual TblProductTypeMaster ProductTypeNavigation { get; set; } = null!;
 }

@@ -68,5 +68,13 @@ namespace EMPManagment.API.Controllers
             var checkOrder = OrderDetails.CheckOrder();
             return Ok(new { code = 200, data = checkOrder });
         }
+
+        [HttpGet]
+        [Route("GetOrderDetailsById")]
+        public async Task<IActionResult> GetOrderDetailsById(string OrderId)
+        {
+            OrderDetailView orderdetails = await OrderDetails.GetOrderDetailsById(OrderId);
+            return Ok(new { code = 200, data = orderdetails});
+        }
     }
 }
