@@ -30,6 +30,7 @@ namespace EMPManegment.Services.InvoiceMaster
 
         public async Task<IEnumerable<InvoiceViewModel>> GetInvoiceNoList()
         {
+
             return await InvoiceMaster.GetInvoiceNoList();
         }
     }

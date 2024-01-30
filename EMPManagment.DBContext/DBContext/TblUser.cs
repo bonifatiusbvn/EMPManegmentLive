@@ -24,8 +24,6 @@ public partial class TblUser
     public DateTime? JoiningDate { get; set; }
     public string? Designation { get; set; }
 
-    public string? Designation { get; set; }
-
     public string? Address { get; set; }
 
     public int? CityId { get; set; }
