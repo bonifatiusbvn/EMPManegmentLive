@@ -18,7 +18,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Data;
 using System.Net;
 using Microsoft.EntityFrameworkCore.Metadata;
-using NuGet.Protocol.Core.Types;
+
 
 namespace EMPManagment.API.Controllers
 {
@@ -29,7 +29,7 @@ namespace EMPManagment.API.Controllers
         public IUserDetailsServices UserListServices { get; }
         public IUserAttendanceServices UserAttendance { get; }
 
-        public UserProfileController(IUserDetailsServices userListServices,IUserAttendanceServices userAttendance)
+        public UserProfileController(IUserDetailsServices userListServices, IUserAttendanceServices userAttendance)
         {
             UserListServices = userListServices;
             UserAttendance = userAttendance;
@@ -200,8 +200,8 @@ namespace EMPManagment.API.Controllers
                 {
                     response.Code = (int)HttpStatusCode.OK;
                     response.Message = updateUserOutTime.Result.Message;
-                    response.Icone = updateUserOutTime.Result.Icone;   
-                }  
+                    response.Icone = updateUserOutTime.Result.Icone;
+                }
             }
             catch (Exception ex)
             {
@@ -219,7 +219,7 @@ namespace EMPManagment.API.Controllers
         }
         [HttpGet]
         [Route("GetEmployeeById")]
-        public async Task<IActionResult>GetEmployeeById(Guid id)
+        public async Task<IActionResult> GetEmployeeById(Guid id)
         {
             var userProfile = await UserListServices.GetById(id);
             return Ok(new { code = 200, data = userProfile });
@@ -260,7 +260,7 @@ namespace EMPManagment.API.Controllers
         public async Task<IActionResult> GetSearchAttendanceList(searchAttendanceListModel AttendanceList)
         {
             var Attendancelist = await UserAttendance.GetSearchAttendanceList(AttendanceList);
-            return Ok(new { code = 200, data = Attendancelist});
+            return Ok(new { code = 200, data = Attendancelist });
         }
 
         [HttpPost]

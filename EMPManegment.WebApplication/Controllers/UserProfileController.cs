@@ -1,5 +1,4 @@
-﻿using Azure;
-using EMPManagment.API;
+﻿
 using EMPManagment.Web.Helper;
 using EMPManagment.Web.Models.API;
 using EMPManegment.EntityModels.View_Model;
@@ -16,14 +15,14 @@ using EMPManegment.EntityModels.ViewModels.Models;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
 using static System.Net.Mime.MediaTypeNames;
-using EMPManagment.API;
+
 using System.Security.Claims;
 using System.Text.Json;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using EMPManegment.EntityModels.ViewModels.DataTableParameters;
-using Microsoft.IdentityModel.Tokens;
+
 using EMPManegment.EntityModels.ViewModels.UserModels;
-using Azure.Core;
+
 using EMPManegment.EntityModels.ViewModels.TaskModels;
 using X.PagedList;
 using X.PagedList.Mvc;
@@ -37,7 +36,7 @@ using System.Data;
 using System.Reflection;
 using DocumentFormat.OpenXml.Spreadsheet;
 using DocumentFormat.OpenXml.Drawing.Charts;
-using Microsoft.Data.SqlClient;
+
 using Aspose.Pdf;
 using Aspose.Pdf.Text;
 using System.IO;
@@ -77,7 +76,7 @@ namespace EMPManegment.Web.Controllers
                 var draw = Request.Form["draw"].FirstOrDefault();
                 var start = Request.Form["start"].FirstOrDefault();
                 var length = Request.Form["length"].FirstOrDefault();
-                var sortColumn = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault()+"][name]"].FirstOrDefault();
+                var sortColumn = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
                 var sortColumnDir = Request.Form["order[0][dir]"].FirstOrDefault();
                 var searchValue = Request.Form["search[value]"].FirstOrDefault();
                 int pageSize = length != null ? Convert.ToInt32(length) : 0;
@@ -91,13 +90,13 @@ namespace EMPManegment.Web.Controllers
                     skip = skip,
                     lenght = length,
                     searchValue = searchValue,
-                    sortColumn =  sortColumn,
+                    sortColumn = sortColumn,
                     sortColumnDir = sortColumnDir
                 };
                 List<UserDataTblModel> GetUserList = new List<UserDataTblModel>();
                 var data = new jsonData();
                 HttpClient client = WebAPI.Initil();
-                ApiResponseModel res = await APIServices.PostAsync(dataTable,"UserProfile/GetAllUserList");
+                ApiResponseModel res = await APIServices.PostAsync(dataTable, "UserProfile/GetAllUserList");
                 if (res.code == 200)
                 {
                     data = JsonConvert.DeserializeObject<jsonData>(res.data.ToString());
@@ -110,7 +109,7 @@ namespace EMPManegment.Web.Controllers
                     recordsTotal = data.recordsTotal,
                     data = GetUserList,
                 };
-                return new JsonResult(jsonData);  
+                return new JsonResult(jsonData);
             }
             catch (Exception ex)
             {
@@ -141,7 +140,7 @@ namespace EMPManegment.Web.Controllers
             try
             {
                 List<EmpDetailsView> ActiveDecative = new List<EmpDetailsView>();
-                HttpClient client = WebAPI.Initil();                                
+                HttpClient client = WebAPI.Initil();
                 ApiResponseModel res = await APIServices.GetAsync("", "UserProfile/GetAllUsersDetails");
                 if (res.code == 200)
                 {
@@ -268,7 +267,7 @@ namespace EMPManegment.Web.Controllers
             {
                 throw ex;
             }
-           
+
         }
         [HttpPost]
         public async Task<JsonResult> UploadDocument(EmpDocumentView doc)
@@ -283,7 +282,7 @@ namespace EMPManegment.Web.Controllers
                 var uploadDocument = new DocumentInfoView()
                 {
                     Id = doc.Id,
-                    UserId =doc.UserId,
+                    UserId = doc.UserId,
                     DocumentTypeId = doc.DocumentTypeId,
                     DocumentName = DocName,
                     CreatedBy = doc.CreatedBy,
@@ -337,14 +336,15 @@ namespace EMPManegment.Web.Controllers
                 {
                     return new JsonResult(new { Message = string.Format(postuser.message), Code = postuser.code });
                 }
-            }catch (Exception ex)  
-            { 
+            }
+            catch (Exception ex)
+            {
                 throw ex;
             }
         }
         public async Task<IActionResult> LockScreen()
         {
-            
+
             return View();
         }
 
@@ -353,17 +353,17 @@ namespace EMPManegment.Web.Controllers
         {
             try
             {
-                    ApiResponseModel response = await APIServices.PostAsync(login, "UserProfile/UnLockScreen");
-                    if (response.code == (int)HttpStatusCode.OK)
-                    {
-                       var data = JsonConvert.SerializeObject(response.data);
-                       response.data = JsonConvert.DeserializeObject<LoginView>(data);
-                       return RedirectToAction("UserHome", "Home");
-                    }
-                    else
-                    {
-                       TempData["ErrorMessage"] = response.message;
-                    }
+                ApiResponseModel response = await APIServices.PostAsync(login, "UserProfile/UnLockScreen");
+                if (response.code == (int)HttpStatusCode.OK)
+                {
+                    var data = JsonConvert.SerializeObject(response.data);
+                    response.data = JsonConvert.DeserializeObject<LoginView>(data);
+                    return RedirectToAction("UserHome", "Home");
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = response.message;
+                }
 
                 return View();
 
@@ -385,7 +385,7 @@ namespace EMPManegment.Web.Controllers
         public async Task<IActionResult> GetUserAttendanceList()
         {
             try
-             {
+            {
                 var draw = Request.Form["draw"].FirstOrDefault();
                 var start = Request.Form["start"].FirstOrDefault();
                 var length = Request.Form["length"].FirstOrDefault();
@@ -439,7 +439,7 @@ namespace EMPManegment.Web.Controllers
                 HttpClient client = WebAPI.Initil();
                 ApiResponseModel res = await APIServices.GetAsync("", "UserProfile/GetUserAttendanceById?attendanceId=" + attendanceId);
 
-                if (res.code==200)
+                if (res.code == 200)
                 {
                     Editattend = JsonConvert.DeserializeObject<List<UserAttendanceModel>>(res.data.ToString());
                 }
@@ -460,7 +460,7 @@ namespace EMPManegment.Web.Controllers
                 {
 
                     return Ok(new UserResponceModel { Message = string.Format(postuser.message), Icone = string.Format(postuser.Icone), Code = postuser.code });
-                    
+
 
                 }
                 else
@@ -527,9 +527,9 @@ namespace EMPManegment.Web.Controllers
         }
 
         public async Task<IActionResult> GetAttendance()
-        { 
+        {
 
-                return View();
+            return View();
         }
 
         [HttpPost]
@@ -563,7 +563,7 @@ namespace EMPManegment.Web.Controllers
                 }
                 return new JsonResult(getAttendanceList);
 
-            }  
+            }
             catch (Exception ex)
             {
                 throw ex;
@@ -578,10 +578,10 @@ namespace EMPManegment.Web.Controllers
             var memory = new MemoryStream();
             using (var stream = new FileStream(path, FileMode.Open))
             {
-                 await stream.CopyToAsync(memory);
+                await stream.CopyToAsync(memory);
             }
             memory.Position = 0;
-            var ContentType = "application/pdf"; 
+            var ContentType = "application/pdf";
             var fileName = Path.GetFileName(path);
             return File(memory, ContentType, fileName);
         }
@@ -641,7 +641,7 @@ namespace EMPManegment.Web.Controllers
             catch (Exception ex)
             {
                 throw ex;
-            }            
+            }
         }
 
         public async Task<IActionResult> ExportToExcel()
@@ -712,7 +712,7 @@ namespace EMPManegment.Web.Controllers
             dt.Columns.Remove("AttendanceId");
             return dt;
         }
-         
+
         [HttpPost]
         public async Task<IActionResult> GetSearchAttendanceList(searchAttendanceListModel GetAttendanceList)
         {

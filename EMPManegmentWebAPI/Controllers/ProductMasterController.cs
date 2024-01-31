@@ -1,4 +1,4 @@
-﻿using DocumentFormat.OpenXml.Spreadsheet;
+﻿
 using EMPManegment.EntityModels.ViewModels;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.ProductMaster;
@@ -158,7 +158,7 @@ namespace EMPManagment.API.Controllers
         [Route("SerchProductByVendor")]
         public async Task<IActionResult> SerchProductByVendor(int ProductId, Guid VendorId)
         {
-            List<ProductDetailsView> ProductList = await productMaster.SerchProductByVendor(ProductId,VendorId);
+            List<ProductDetailsView> ProductList = await productMaster.SerchProductByVendor(ProductId, VendorId);
             return Ok(new { code = 200, data = ProductList.ToList() });
         }
         [HttpPost]
