@@ -23,6 +23,8 @@ namespace EMPManegment.EntityModels.ViewModels.TaskModels
         
         public Guid? UserId { get; set; }
         public DateTime? CreatedOn { get; set; }
+        public string? IsCompleted { get; set; }
+        public Guid? CompletedBy { get; set; }
         public Guid? CreatedBy { get; set; }
         public DateTime? TaskEndDate { get; set; }
         public string? TaskStatus { get; set; }

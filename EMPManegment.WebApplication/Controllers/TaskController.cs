@@ -1,4 +1,5 @@
 ﻿using Aspose.Pdf.Operators;
+using DocumentFormat.OpenXml.Spreadsheet;
 using EMPManagment.Web.Helper;
 using EMPManagment.Web.Models.API;
 using EMPManegment.EntityModels.View_Model;
@@ -173,7 +174,6 @@ namespace EMPManegment.Web.Controllers
             {
                 var userstausres = HttpContext.Request.Form["STATUSUPDATE"];
                 var statusRequest = JsonConvert.DeserializeObject<TaskDetailsView>(userstausres);
-
                 ApiResponseModel postuser = await APIServices.PostAsync(statusRequest, "UserHome/UpdateTaskStatus");
                 UserResponceModel userResponceModel = new UserResponceModel();
                 if (postuser.code == 200)
@@ -189,7 +189,6 @@ namespace EMPManegment.Web.Controllers
             {
                 throw ex;
             }
-
         }
 
         [HttpGet]

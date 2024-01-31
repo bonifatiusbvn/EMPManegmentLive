@@ -160,7 +160,9 @@ function btnStatusUpdate(Id) {
             TaskStatus: $('#ddlStatusReview' + Id).val(),
             Role: $('#userrole').val(),
             Id: Id,
-            UserId: UserId
+            UserId: $('#CreatedByid').val(),
+
+            
         }
         var form_data = new FormData();
         form_data.append("STATUSUPDATE", JSON.stringify(StausChange));

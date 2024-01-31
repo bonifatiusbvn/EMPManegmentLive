@@ -85,7 +85,6 @@ namespace EMPManegment.Repository.TaskRepository
             UserResponceModel responcemodel = new UserResponceModel();
             if (updatetask.TaskStatus == "Completed")
             {
-
                 bool gettaskCheck = Context.TblTaskDetails.Any(e => e.Id == updatetask.Id && e.CreatedBy == updatetask.UserId);
                 try
                 {
@@ -94,9 +93,11 @@ namespace EMPManegment.Repository.TaskRepository
                         var taskstatusupdate = Context.TblTaskDetails.Where(e => e.Id == updatetask.Id).FirstOrDefault();
                         try
                         {
-                            if (taskstatusupdate != null)
+                            if (taskstatusupdate != null  )
                             {
                                 taskstatusupdate.TaskStatus = updatetask.TaskStatus;
+                                taskstatusupdate.IsCompleted = updatetask.TaskStatus;
+                                taskstatusupdate.CompletedBy = updatetask.UserId; 
                             }
                             Context.TblTaskDetails.Update(taskstatusupdate);
                             Context.SaveChanges();
@@ -119,7 +120,6 @@ namespace EMPManegment.Repository.TaskRepository
                     throw ex;
                 }
             }
-
             else
             {
                 var gettask = Context.TblTaskDetails.Where(e => e.Id == updatetask.Id).FirstOrDefault();
@@ -128,6 +128,7 @@ namespace EMPManegment.Repository.TaskRepository
                     if (gettask != null)
                     {
                         gettask.TaskStatus = updatetask.TaskStatus;
+                        gettask.CompletedBy = updatetask.UserId;
                     }
                     Context.TblTaskDetails.Update(gettask);
                     Context.SaveChanges();
@@ -139,9 +140,10 @@ namespace EMPManegment.Repository.TaskRepository
                     throw ex;
                 }
             }
-
             return responcemodel;
         }
+
+
 
         public async Task<List<TaskDetailsView>> GetUserTaskDetails(TaskDetailsView GetUserTaskDetails)
         {
@@ -348,5 +350,7 @@ namespace EMPManegment.Repository.TaskRepository
             }
             return TaskList;
         }
+
+
     }
 }
