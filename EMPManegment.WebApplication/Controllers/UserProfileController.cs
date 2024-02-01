@@ -15,14 +15,11 @@ using EMPManegment.EntityModels.ViewModels.Models;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
 using static System.Net.Mime.MediaTypeNames;
-
 using System.Security.Claims;
 using System.Text.Json;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using EMPManegment.EntityModels.ViewModels.DataTableParameters;
-
 using EMPManegment.EntityModels.ViewModels.UserModels;
-
 using EMPManegment.EntityModels.ViewModels.TaskModels;
 using X.PagedList;
 using X.PagedList.Mvc;
@@ -36,7 +33,6 @@ using System.Data;
 using System.Reflection;
 using DocumentFormat.OpenXml.Spreadsheet;
 using DocumentFormat.OpenXml.Drawing.Charts;
-
 using Aspose.Pdf;
 using Aspose.Pdf.Text;
 using System.IO;

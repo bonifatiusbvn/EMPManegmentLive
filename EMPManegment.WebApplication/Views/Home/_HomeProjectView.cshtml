@@ -1,4 +1,4 @@
-﻿@model IEnumerable<EMPManegment.EntityModels.ViewModels.ProjectModels.ProjectDetailView>
+﻿@model List<EMPManegment.EntityModels.ViewModels.ProjectModels.ProjectDetailView>
 @using EMPManegment.Web.Models
 @using X.PagedList;
 @using X.PagedList.Mvc.Core;
@@ -7,7 +7,7 @@
 @*
     For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 *@
-<div class="row g-4 mb-3">
+@* <div class="row g-4 mb-3">
     <div class="col-sm-auto">
         <a type="button" class="btn btn-outline-success rounded" href="~/Project/ProjectList"><i class="ri-arrow-left-line m-2"></i>Back</a>
     </div>
@@ -28,7 +28,7 @@
             </div>
         </form>
     </div>
-</div><!-- end row -->
+</div><!-- end row --> *@
 <div class="row">
     @foreach (var item in Model)
     {

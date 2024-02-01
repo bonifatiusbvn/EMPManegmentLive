@@ -27,7 +27,7 @@
             }
         }
 
-       
+
 
         public string FirstName
         {
@@ -73,6 +73,15 @@
             get
             {
                 return HttpContext.User.Claims.FirstOrDefault(x => string.Compare(x.Type, "IsAdmin", true) == 0)?.Value;
+            }
+        }
+
+        public Guid ProjectId
+        {
+            get
+            {
+                var projectid = StaticHttpContext.User.Claims.FirstOrDefault(x => string.Compare(x.Type, "ProjectId", true) == 0);
+                return projectid != null ? Guid.Parse(projectid.Value) : Guid.Empty;
             }
         }
     }
