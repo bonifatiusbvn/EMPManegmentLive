@@ -4,7 +4,7 @@ $(document).ready(function () {
     GetDocumentList();
     GetDocumentType();
     GetProjectList();
-    GetHomeProjectList();
+    loadPartialView(page);
 });
 
 function GetDocumentType() {
@@ -91,28 +91,6 @@ function GetUserProjectList() {
     })
 }
 
-function GetHomeProjectList() {
-    debugger
-    $.ajax({
-        url: '/Project/GetHomeProjectList',
-        type: 'Post',
-        dataType: 'json',
-        processData: false,
-        contentType: false,
-        complete: function (Result) {
-
-            $('#dvhomeprojectdetail').html(Result.responseText);
-        },
-        Error: function () {
-            Swal.fire({
-                title: "Can't get data!",
-                icon: 'warning',
-                confirmButtonColor: '#3085d6',
-                confirmButtonText: 'OK',
-            })
-        }
-    })
-}
 
 function GetProjectList() {
     $.ajax({
@@ -149,3 +127,38 @@ $(document).ready(function () {
     });
 });
 
+function loadPartialView(page) {
+
+    var searchBy = $("#inputSearch").val();
+    var searchFor = $("#inputsearch").val();
+
+    $.get("/Home/GetHomeProjectListPartial", { searchby: searchBy, searchfor: searchFor, page: page })
+        .done(function (result) {
+
+            $("#projectListContainer").html(result);
+        })
+        .fail(function (error) {
+            console.error(error);
+        });
+}
+
+loadPartialView(1);
+
+
+$(document).on("click", ".pagination a", function (e) {
+    e.preventDefault();
+    var page = $(this).text();
+    loadPartialView(page);
+});
+
+
+$(document).on("click", "#backButton", function (e) {
+    e.preventDefault();
+    var page = $(this).text();
+    loadPartialView(page);
+});
+
+function serrchproject() {
+
+    loadPartialView(1);
+}

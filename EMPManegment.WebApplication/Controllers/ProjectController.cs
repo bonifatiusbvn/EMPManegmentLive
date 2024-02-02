@@ -77,27 +77,6 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
-
-        public async Task<IActionResult> GetHomeProjectList()
-        {
-            try
-            {
-                Guid UserId = _userSession.UserId;
-                List<ProjectDetailView> projectlist = new List<ProjectDetailView>();
-                HttpClient client = WebAPI.Initil();
-                ApiResponseModel response = await APIServices.PostAsync("", "ProjectDetails/GetUserProjectList?UserId=" + UserId);
-                if (response.code == 200)
-                {
-                    projectlist = JsonConvert.DeserializeObject<List<ProjectDetailView>>(response.data.ToString());
-                }
-                return PartialView("~/Views/Home/_HomeProjectView.cshtml", projectlist);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
         [HttpPost]
         public async Task<IActionResult> CreateProject(ProjectDetailView project)
         {

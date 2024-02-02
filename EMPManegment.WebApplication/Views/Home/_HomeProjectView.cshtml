@@ -1,4 +1,4 @@
-﻿@model List<EMPManegment.EntityModels.ViewModels.ProjectModels.ProjectDetailView>
+﻿@model IEnumerable<EMPManegment.EntityModels.ViewModels.ProjectModels.ProjectDetailView>
 @using EMPManegment.Web.Models
 @using X.PagedList;
 @using X.PagedList.Mvc.Core;
@@ -7,13 +7,44 @@
 @*
     For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 *@
-@* <div class="row g-4 mb-3">
+<style>
+    span.deleteicon {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+    }
+
+        span.deleteicon span {
+            position: absolute;
+            display: block;
+            right: 3px;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            color: red;
+            background-color: #ccc;
+            font: 13px monospace;
+            text-align: center;
+            line-height: 1em;
+            cursor: pointer;
+        }
+
+        span.deleteicon input {
+            padding-right: 18px;
+            box-sizing: border-box;
+        }
+</style>
+
+
+<!-- ... your existing form content ... -->
+
+<div class="row g-4 mb-3">
     <div class="col-sm-auto">
-        <a type="button" class="btn btn-outline-success rounded" href="~/Project/ProjectList"><i class="ri-arrow-left-line m-2"></i>Back</a>
+        <a id="backButton" class="btn btn-outline-success rounded"><i class="ri-arrow-left-line m-2"></i>Back</a>
     </div>
 
     <div class="col-sm offset-6">
-        <form asp-action="ProjectList" asp-controller="Project" method="get" class="mx-2 my-2">
+        <form class="mx-2 my-2">
             <div class="input-group">
                 <select class="form-select" id="inputSearch" name="searchby">
                     <option selected disabled value="">SearchBy...</option>
@@ -24,14 +55,16 @@
                     <input name="searchfor" class="form-control" id="inputsearch" area-describedby="inputSearchProjectTitle" aria-label="Search" autocomplete="off" />
                     <span onclick="var input = this.previousElementSibling; input.value = ''; input.focus();">x</span>
                 </span>
-                <button type="submit" class="btn btn-outline-secondary rounded" id="inputsearch">Search</button>
+                <button type="button" class="btn btn-outline-secondary rounded" onclick="serrchproject()">Search</button>
             </div>
         </form>
+
     </div>
-</div><!-- end row --> *@
+</div><!-- end row -->
 <div class="row">
     @foreach (var item in Model)
     {
+
         <div class="col-xxl-3 col-sm-6 project-card">
             <div class="card">
                 <div class="card-body">
@@ -213,3 +246,23 @@
         <!-- end col -->
     }
 </div>
+
+
+@Html.PagedListPager((IPagedList)Model, page => Url.Action("GetHomeProjectListPartial", new
+    {
+        page = page,
+        searchfor = @Context.Request.Query["searchfor"],
+        searchby = @Context.Request.Query["searchby"]
+    }),
+                             new X.PagedList.Web.Common.PagedListRenderOptions
+                         {
+                             LiElementClasses = new string[] { "page-item" },
+                             PageClasses = new string[] { "page-link" }
+                         })
+
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+

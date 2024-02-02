@@ -18,6 +18,8 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 using EMPManegment.EntityModels.View_Model;
 using EMPManegment.Web.Models;
 using DocumentFormat.OpenXml.Spreadsheet;
+using EMPManegment.EntityModels.ViewModels.ProjectModels;
+using X.PagedList;
 
 namespace EMPManegment.Web.Controllers
 {
@@ -173,5 +175,32 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetHomeProjectListPartial(string? searchby, string? searchfor, int? page)
+        {
+            try
+            {
+                List<ProjectDetailView> projectlist = new List<ProjectDetailView>();
+                HttpClient client = WebAPI.Initil();
+                ApiResponseModel response = await APIServices.GetAsync("", "ProjectDetails/GetProjectList?searchby=" + searchby + "&searchfor=" + searchfor);
+                if (response.code == 200)
+                {
+                    projectlist = JsonConvert.DeserializeObject<List<ProjectDetailView>>(response.data.ToString());
+                }
+
+                int pageSize = 4;
+                var pageNumber = page ?? 1;
+
+                var pagedList = projectlist.ToPagedList(pageNumber, pageSize);
+
+                return PartialView("~/Views/Home/_HomeProjectView.cshtml", pagedList);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
     }
 }
