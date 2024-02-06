@@ -1,4 +1,4 @@
-﻿using Azure;
+﻿
 using EMPManagment.Web.Helper;
 using EMPManagment.Web.Models.API;
 using EMPManegment.EntityModels.ViewModels;
@@ -18,14 +18,16 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 using EMPManegment.EntityModels.View_Model;
 using EMPManegment.Web.Models;
 using DocumentFormat.OpenXml.Spreadsheet;
+using EMPManegment.EntityModels.ViewModels.ProjectModels;
+using X.PagedList;
 
 namespace EMPManegment.Web.Controllers
 {
-    
+
     public class HomeController : Controller
     {
         private readonly UserSession _userSession;
-        public HomeController(WebAPI webAPI, IWebHostEnvironment environment, APIServices aPIServices,UserSession userSession)
+        public HomeController(WebAPI webAPI, IWebHostEnvironment environment, APIServices aPIServices, UserSession userSession)
         {
             WebAPI = webAPI;
             Environment = environment;
@@ -54,7 +56,7 @@ namespace EMPManegment.Web.Controllers
                 if (postuser.code == 200)
                 {
 
-                    return Ok(new UserResponceModel { Message = string.Format(postuser.message), Icone = string.Format(postuser.Icone),Code = postuser.code });
+                    return Ok(new UserResponceModel { Message = string.Format(postuser.message), Icone = string.Format(postuser.Icone), Code = postuser.code });
 
                 }
                 else
@@ -98,7 +100,7 @@ namespace EMPManegment.Web.Controllers
         {
             try
             {
-                
+
                 UserAttendanceRequestModel userAttendance = new UserAttendanceRequestModel
                 {
                     UserId = _userSession.UserId,
@@ -110,11 +112,11 @@ namespace EMPManegment.Web.Controllers
                 {
                     var data = JsonConvert.SerializeObject(postuser.data);
                     responseModel.Data = JsonConvert.DeserializeObject<UserAttendanceModel>(data);
-                    return Ok(new {responseModel.Data});
+                    return Ok(new { responseModel.Data });
                 }
                 else
                 {
-                    return Ok(new {postuser.code});
+                    return Ok(new { postuser.code });
                 }
             }
             catch (Exception ex)
@@ -123,16 +125,16 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
-        
+
 
         [HttpGet]
         public async Task<IActionResult> UserBirsthDayWish()
         {
             try
             {
-                
+
                 Guid UserId = _userSession.UserId;
-                ApiResponseModel postuser = await APIServices.GetAsyncId(UserId,"UserHome/UserBirsthDayWish");
+                ApiResponseModel postuser = await APIServices.GetAsyncId(UserId, "UserHome/UserBirsthDayWish");
                 UserAttendanceResponseModel responseModel = new UserAttendanceResponseModel();
                 if (postuser.message != null)
                 {
@@ -156,7 +158,7 @@ namespace EMPManegment.Web.Controllers
                 var UserId = _userSession.UserId;
                 List<TaskDetailsView> TaskList = new List<TaskDetailsView>();
                 HttpClient client = WebAPI.Initil();
-                ApiResponseModel postuser = await APIServices.GetAsync("","UserHome/GetUserTotalTask?UserId="+ UserId);
+                ApiResponseModel postuser = await APIServices.GetAsync("", "UserHome/GetUserTotalTask?UserId=" + UserId);
                 if (postuser.data != null)
                 {
                     TaskList = JsonConvert.DeserializeObject<List<TaskDetailsView>>(postuser.data.ToString());
@@ -173,5 +175,32 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetHomeProjectListPartial(string? searchby, string? searchfor, int? page)
+        {
+            try
+            {
+                List<ProjectDetailView> projectlist = new List<ProjectDetailView>();
+                HttpClient client = WebAPI.Initil();
+                ApiResponseModel response = await APIServices.GetAsync("", "ProjectDetails/GetProjectList?searchby=" + searchby + "&searchfor=" + searchfor);
+                if (response.code == 200)
+                {
+                    projectlist = JsonConvert.DeserializeObject<List<ProjectDetailView>>(response.data.ToString());
+                }
+
+                int pageSize = 4;
+                var pageNumber = page ?? 1;
+
+                var pagedList = projectlist.ToPagedList(pageNumber, pageSize);
+
+                return PartialView("~/Views/Home/_HomeProjectView.cshtml", pagedList);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
     }
 }

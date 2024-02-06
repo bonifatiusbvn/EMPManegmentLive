@@ -23,7 +23,6 @@
     <ProjectReference Include="..\EMPManegment.Inretface\EMPManegment.Inretface.csproj" />
     <ProjectReference Include="..\EMPManegment.Repository\EMPManegment.Repository.csproj" />
     <ProjectReference Include="..\EMPManegment.Services\EMPManegment.Services.csproj" />
-    <ProjectReference Include="..\EMPManegment.WebApplication\EMPManegment.Web.csproj" />
   </ItemGroup>
 
 

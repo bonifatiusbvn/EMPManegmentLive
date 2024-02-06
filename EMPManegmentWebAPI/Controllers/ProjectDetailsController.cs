@@ -7,7 +7,7 @@ using EMPManegment.Inretface.Services.ProjectDetailsServices;
 using EMPManegment.Inretface.Services.TaskServices;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Build.ObjectModelRemoting;
+
 using System.Net;
 
 namespace EMPManagment.API.Controllers
@@ -53,8 +53,8 @@ namespace EMPManagment.API.Controllers
         [Route("GetProjectList")]
         public async Task<IActionResult> GetProjectList(string? searchby, string? searchfor)
         {
-                IEnumerable<ProjectDetailView> projectlist = await ProjectDetail.GetProjectList(searchby,searchfor);
-                return Ok(new { code = 200, data = projectlist.ToList() });
+            IEnumerable<ProjectDetailView> projectlist = await ProjectDetail.GetProjectList(searchby, searchfor);
+            return Ok(new { code = 200, data = projectlist.ToList() });
         }
 
 
@@ -71,7 +71,7 @@ namespace EMPManagment.API.Controllers
         public async Task<IActionResult> GetProjectDetailsById(Guid ProjectId)
         {
             var Projectdata = await ProjectDetail.GetProjectDetailsById(ProjectId);
-            return Ok(new { code = 200,data =  Projectdata });
+            return Ok(new { code = 200, data = Projectdata });
         }
 
         [HttpPost]
@@ -113,7 +113,7 @@ namespace EMPManagment.API.Controllers
         public async Task<IActionResult> GetProjectMember(Guid ProjectId)
         {
             IEnumerable<ProjectView> Members = await ProjectDetail.GetProjectMember(ProjectId);
-            return Ok(new { code = 200, data = Members.ToList()});
+            return Ok(new { code = 200, data = Members.ToList() });
         }
         [HttpPost]
         [Route("AddDocumentToProject")]

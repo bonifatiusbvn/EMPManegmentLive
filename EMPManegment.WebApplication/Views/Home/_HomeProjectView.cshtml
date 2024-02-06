@@ -1,0 +1,268 @@
+﻿@model IEnumerable<EMPManegment.EntityModels.ViewModels.ProjectModels.ProjectDetailView>
+@using EMPManegment.Web.Models
+@using X.PagedList;
+@using X.PagedList.Mvc.Core;
+@inject IHttpContextAccessor Accessor
+@inject UserSession _userSession
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+<style>
+    span.deleteicon {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+    }
+
+        span.deleteicon span {
+            position: absolute;
+            display: block;
+            right: 3px;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            color: red;
+            background-color: #ccc;
+            font: 13px monospace;
+            text-align: center;
+            line-height: 1em;
+            cursor: pointer;
+        }
+
+        span.deleteicon input {
+            padding-right: 18px;
+            box-sizing: border-box;
+        }
+</style>
+
+
+<!-- ... your existing form content ... -->
+
+<div class="row g-4 mb-3">
+    <div class="col-sm-auto">
+        <a id="backButton" class="btn btn-outline-success rounded"><i class="ri-arrow-left-line m-2"></i>Back</a>
+    </div>
+
+    <div class="col-sm offset-6">
+        <form class="mx-2 my-2">
+            <div class="input-group">
+                <select class="form-select" id="inputSearch" name="searchby">
+                    <option selected disabled value="">SearchBy...</option>
+                    <option value="ProjectTitle">ProjectTitle</option>
+                    <option value="ProjectStatus">ProjectStatus</option>
+                </select>
+                <span class="deleteicon col-sm offset-6">
+                    <input name="searchfor" class="form-control" id="inputsearch" area-describedby="inputSearchProjectTitle" aria-label="Search" autocomplete="off" />
+                    <span onclick="var input = this.previousElementSibling; input.value = ''; input.focus();">x</span>
+                </span>
+                <button type="button" class="btn btn-outline-secondary rounded" onclick="serrchproject()">Search</button>
+            </div>
+        </form>
+
+    </div>
+</div><!-- end row -->
+<div class="row">
+    @foreach (var item in Model)
+    {
+
+        <div class="col-xxl-3 col-sm-6 project-card">
+            <div class="card">
+                <div class="card-body">
+                    @if (item.ProjectStatus == "Inprogress")
+                    {
+                        <div class="p-1 mt-n3 mx-n3 bg-warning-subtle rounded-top">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-grow-1 mt-3">
+                                    <p class="text-muted">Updated 2hrs ago</p>
+                                </div>
+                                <div class="flex-shrink-0">
+                                    <div class="d-flex gap-1 align-items-center my-n2">
+                                        <button type="button" class="btn avatar-xs p-0 favourite-btn active">
+                                            <span class="avatar-title bg-transparent fs-15">
+                                                <i class="ri-star-fill"></i>
+                                            </span>
+                                        </button>
+                                        <div class="dropdown">
+                                            <button class="btn btn-link text-muted p-1 mt-n1 py-0 text-decoration-none fs-15" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                <i data-feather="more-horizontal" class="icon-sm"></i>
+                                            </button>
+
+                                            <div class="dropdown-menu dropdown-menu-end">
+                                                <a class="dropdown-item" href="/Project/AddProjectMember/?Id=@item.ProjectId">
+                                                    <i class="ri-eye-fill align-bottom me-2 text-muted"></i>
+                                                    View
+                                                </a>
+                                                <a class="dropdown-item" href="apps-projects-create.html">
+                                                    <i class="ri-pencil-fill align-bottom me-2 text-muted"></i>
+                                                    Edit
+                                                </a>
+                                                <div class="dropdown-divider"></div>
+                                                <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#removeProjectModal">
+                                                    <i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>
+                                                    Remove
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="p-1 mt-n3 mx-n3 bg-success-subtle rounded-top">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-grow-1 mt-3">
+                                    <p class="text-muted">Updated 2hrs ago</p>
+                                </div>
+                                <div class="flex-shrink-0">
+                                    <div class="d-flex gap-1 align-items-center my-n2">
+                                        <button type="button" class="btn avatar-xs p-0 favourite-btn active">
+                                            <span class="avatar-title bg-transparent fs-15">
+                                                <i class="ri-star-fill"></i>
+                                            </span>
+                                        </button>
+                                        <div class="dropdown">
+                                            <button class="btn btn-link text-muted p-1 mt-n1 py-0 text-decoration-none fs-15" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                <i data-feather="more-horizontal" class="icon-sm"></i>
+                                            </button>
+
+                                            <div class="dropdown-menu dropdown-menu-end">
+                                                <a class="dropdown-item" href="/Project/AddProjectMember/?Id=@item.ProjectId" onclick="showProjectMembers('@item.ProjectId');">
+                                                    <i class="ri-eye-fill align-bottom me-2 text-muted"></i>
+                                                    View
+                                                </a>
+                                                <a class="dropdown-item" href="apps-projects-create.html">
+                                                    <i class="ri-pencil-fill align-bottom me-2 text-muted"></i>
+                                                    Edit
+                                                </a>
+                                                <div class="dropdown-divider"></div>
+                                                <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#removeProjectModal">
+                                                    <i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>
+                                                    Remove
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+
+                    <div class="py-3">
+                        <div class="row gy-3">
+                            <div class="d-flex mb-2">
+                                <div class="flex-shrink-0 me-3">
+                                    <div class="avatar-sm">
+                                        <span class="avatar-title bg-primary-subtle rounded p-2">
+                                            <img src="~/UserHome/minimal/assets/images/brands/mail_chimp.png" alt="" class="img-fluid p-1">
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <h5 class="mb-1 fs-15"><a class="text-body">@item.ProjectTitle</a></h5>
+                                    <p class="text-muted text-truncate-two-lines mb-3">
+                                        @item.ProjectDescription
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row gy-3">
+                        <div class="col-6">
+                            <div>
+                                <p class="text-muted mb-1">Status</p>
+                                @if (item.ProjectStatus == "Inprogress")
+                                {
+                                    <div class="badge bg-warning-subtle text-warning fs-12">@item.ProjectStatus</div>
+                                }
+                                else
+                                {
+                                    <div class="badge bg-success-subtle text-success fs-12">@item.ProjectStatus</div>
+                                }
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div>
+                                <p class="text-muted mb-1">Deadline</p>
+                                <h5 class="fs-14">@item.ProjectDeadline.ToShortDateString()</h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="py-3">
+                        <div class="row gy-3">
+                            <div class="d-flex mb-2">
+                                <div class="flex-grow-1">
+                                    <div>Task</div>
+                                </div>
+                                <div class="flex-shrink-0">
+                                    <div>
+                                        <i class="ri-list-check align-bottom me-1 text-muted"></i>
+                                        14/20
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="progress progress-sm animated-progress">
+                                <div class="progress-bar bg-primary" role="progressbar" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100" style="width: 65%;">
+                                </div><!-- /.progress-bar -->
+                            </div><!-- /.progress -->
+                        </div>
+                    </div>
+                </div>
+                <!-- end card body -->
+                <div class="card-footer bg-transparent border-top-dashed py-2">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-grow-1">
+                            <div class="avatar-group">
+                                <a href="javascript: void(0);" class="avatar-group-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="@Accessor.HttpContext.Session.GetString("FullName")">
+                                    <div class="avatar-xxs">
+                                        <img src="~/@UserSession.ProfilePhoto" alt="" class="avatar-xs rounded-circle">
+                                    </div>
+                                </a>
+                                <a class="avatar-group-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="@item.ProjectId">
+                                    <div class="avatar-xxs">
+                                        @*   <button class="avatar-title fs-16 rounded-circle bg-light border-dashed border text-primary" onclick="btnaddMember('@item.ProjectId');">+</button>*@
+                                        <div class="avatar-title fs-16 rounded-circle bg-light border-dashed border text-primary">
+                                            +
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="flex-shrink-0">
+                            <div class="text-muted">
+                                <i class="ri-calendar-event-fill me-1 align-bottom"></i> 10 Jul, 2021
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+                <!-- end card footer -->
+            </div>
+            <!-- end card -->
+        </div>
+        <!-- end col -->
+    }
+</div>
+
+
+@Html.PagedListPager((IPagedList)Model, page => Url.Action("GetHomeProjectListPartial", new
+    {
+        page = page,
+        searchfor = @Context.Request.Query["searchfor"],
+        searchby = @Context.Request.Query["searchby"]
+    }),
+                             new X.PagedList.Web.Common.PagedListRenderOptions
+                         {
+                             LiElementClasses = new string[] { "page-item" },
+                             PageClasses = new string[] { "page-link" }
+                         })
+
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+

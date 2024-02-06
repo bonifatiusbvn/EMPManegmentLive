@@ -141,53 +141,53 @@ function GetAllUserData() {
 
 //}
 function ActiveUser(UserName) {
-        Swal.fire({
-            title: "Are you sure want to Active this User?",
-            text: "You won't be able to revert this!",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonText: "Yes, Enter it!",
-            cancelButtonText: "No, cancel!",
-            confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
-            cancelButtonClass: "btn btn-danger w-xs mt-2",
-            buttonsStyling: false,
-            showCloseButton: true
-        }).then((result) => {
+    Swal.fire({
+        title: "Are you sure want to Active this User?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, Enter it!",
+        cancelButtonText: "No, cancel!",
+        confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
+        cancelButtonClass: "btn btn-danger w-xs mt-2",
+        buttonsStyling: false,
+        showCloseButton: true
+    }).then((result) => {
 
-            if (result.isConfirmed) {
-                var formData = new FormData();
-                formData.append("UserId", $("#txtuserid").val());
+        if (result.isConfirmed) {
+            var formData = new FormData();
+            formData.append("UserId", $("#txtuserid").val());
 
-                $.ajax({
-                    url: '/UserProfile/UserActiveDecative?UserName=' + UserName,
-                                    type: 'Post',
-                                    contentType: 'application/json;charset=utf-8;',
-                                    dataType: 'json',
-                    success: function (Result) {
-                        Swal.fire({
-                            title: "Active!",
-                            text: Result.message,
-                            icon: "success",
-                            confirmButtonClass: "btn btn-primary w-xs mt-2",
-                            buttonsStyling: false
-                        }).then(function () {
-                          window.location = '/UserProfile/UserActiveDecative';
-                          });
-                         
-                    }
-                });
-            } else if (result.dismiss === Swal.DismissReason.cancel) {
-                Swal.fire(
-                    'Cancelled',
-                    'User Have No Changes.!!😊',
-                    'error'
-                );
-            }
-        });
+            $.ajax({
+                url: '/UserProfile/UserActiveDecative?UserName=' + UserName,
+                type: 'Post',
+                contentType: 'application/json;charset=utf-8;',
+                dataType: 'json',
+                success: function (Result) {
+                    Swal.fire({
+                        title: "Active!",
+                        text: Result.message,
+                        icon: "success",
+                        confirmButtonClass: "btn btn-primary w-xs mt-2",
+                        buttonsStyling: false
+                    }).then(function () {
+                        window.location = '/UserProfile/UserActiveDecative';
+                    });
+
+                }
+            });
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+            Swal.fire(
+                'Cancelled',
+                'User Have No Changes.!!😊',
+                'error'
+            );
+        }
+    });
 
 }
 function DeactiveUser(UserName) {
-    
+
     Swal.fire({
         title: "Are you sure want to DeActive this User?",
         text: "You won't be able to revert this!",
@@ -201,17 +201,17 @@ function DeactiveUser(UserName) {
         showCloseButton: true
     }).then((result) => {
         if (result.isConfirmed) {
-            
+
             var formData = new FormData();
             formData.append("UserId", $("#txtuserid").val());
 
             $.ajax({
                 url: '/UserProfile/UserActiveDecative?UserName=' + UserName,
-                                type: 'Post',
-                                contentType: 'application/json;charset=utf-8;',
-                                dataType: 'json',
+                type: 'Post',
+                contentType: 'application/json;charset=utf-8;',
+                dataType: 'json',
                 success: function (Result) {
-                    
+
                     Swal.fire({
                         title: "DeActive!",
                         text: Result.message,
@@ -224,7 +224,7 @@ function DeactiveUser(UserName) {
                 }
             });
         } else if (result.dismiss === Swal.DismissReason.cancel) {
-            
+
             Swal.fire(
                 'Cancelled',
                 'User Have No Changes.!!😊',
@@ -465,7 +465,7 @@ function GetUserAttendanceInTime() {
             }
             else {
                 $("#todayintime").text("Pending");
-                $("#todayouttime").text("Pending");
+                $("#todayouttime").text("Missing");
                 $("#txttotalhours").text("Pending");
             }
 

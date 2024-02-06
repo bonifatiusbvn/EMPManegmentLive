@@ -7,12 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="InvoiceMaster\**" />
-    <EmbeddedResource Remove="InvoiceMaster\**" />
-    <None Remove="InvoiceMaster\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\EMPManegment.Inretface\EMPManegment.Inretface.csproj" />
     <ProjectReference Include="..\EMPManegment.Repository\EMPManegment.Repository.csproj" />
   </ItemGroup>

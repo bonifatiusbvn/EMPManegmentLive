@@ -51,6 +51,7 @@
 <!--end card-->
 <div class="tasks-board mb-3" id="kanbanboard">
     <input type="hidden" value="@_userSession.UserRoll" id="userrole"/>
+  @*   <input type="hidden" value=" @_userSession.UserId" id="userrole" /> *@
     <div class="tasks-list">
         <div class="d-flex mb-3">
             <div class="flex-grow-1">
@@ -149,14 +150,14 @@
                                             <option value="Pending">Pending</option>
                                             <option value="Working">Working</option>
                                             <option value="InReview">InReview</option>
-                                            @if (item.TaskStatus == "Completed")
+                                            @* @if (item.TaskStatus == "Completed")
                                             {
                                                 <option disabled value="Completed">Completed</option>
                                             }
                                             else
                                             {
                                                 <option value="Completed">Completed</option>
-                                            }
+                                            } *@
                                         </select>
                                       </form>
                                     </div>
@@ -295,14 +296,14 @@
                                                 <option value="Pending">Pending</option>
                                                 <option value="Working">Working</option>
                                                 <option value="InReview">InReview</option>
-                                                @if (item.TaskStatus == "Completed" )
+                                                @* @if (item.TaskStatus == "Completed" )
                                                 {
                                                     <option disabled value="Completed">Completed</option>
                                                 }
                                                 else
                                                 {
                                                     <option value="Completed">Completed</option>
-                                                }
+                                                } *@
                                             </select>
                                         </form>
                                     </div>
@@ -443,7 +444,7 @@
                                                 <option selected disabled value="">---Select Status---</option>
                                                 <option value="Pending">Pending</option>
                                                 <option value="Working">Working</option>
-                                                <option value="Completed">Completed</option>
+                                                @* <option value="Completed">Completed</option> *@
                                                 <option value="InReview">InReview</option>
                                                 </select>
                                             </form>
@@ -456,7 +457,7 @@
                                                     <option selected disabled value="">---Select Status---</option>
                                                     <option value="Pending">Pending</option>
                                                     <option value="Working">Working</option>
-                                                    <option value="Completed">Completed</option>
+                                                    @* <option value="Completed">Completed</option> *@
                                                     <option value="InReview">InReview</option>
                                                 </select>
                                             </form>
@@ -516,7 +517,7 @@
         </div>
     @*-----------InReview------------ *@
         <div data-simplebar class="tasks-wrapper px-3 mx-n3">
-          <input type="hidden" value=" @_userSession.UserId" id="CreatedByid" />
+          <input type="hidden" value="@_userSession.UserId" id="CreatedByid" />
             <div id="inprogress-task" class="tasks"> 
 
                 @foreach (var item in Model)
@@ -792,7 +793,7 @@
       @*-----CompletedTask----- *@
         <div data-simplebar class="tasks-wrapper px-3 mx-n3">
             <div id="completed-task" class="tasks">
-                @foreach (var item in Model)
+                @foreach (var item in Model.TakeLast(11))
                 {
                     @if (item.TaskStatus == "Completed")
                     {
@@ -866,7 +867,7 @@
                                         <span class="text"> TaskStatus :</span>
                                         @if (item.TaskStatus == "Completed")
                                         {
-                                            <select id="ddlStatus@(item.Id)" name="Status" class="form-control">
+                                            <select  id="ddlStatus@(item.Id)" name="Status" class="form-control">
                                                 <option selected disabled value="">---Select Status---</option>
                                                 <option value="Pending">Pending</option>
                                                 <option value="Working">Working</option>
