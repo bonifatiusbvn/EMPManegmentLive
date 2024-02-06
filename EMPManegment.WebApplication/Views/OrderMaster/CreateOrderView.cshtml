@@ -131,75 +131,195 @@
                 </div>
                 <div class="card-body p-4 border-top border-top-dashed">
                     <div class="row">
-                        <div class="col-lg-4 col-sm-4">
-                            <div>
-                                <label for="companyname" class="text-muted text-uppercase fw-semibold">Vendor Name</label>
-                            </div>
-                            <div class="mb-2">
-                                <div class="input-light">
-                                    <select class="text-muted text-uppercase fw-semibold" id="txtvendorname" name="txtvendorname" style="border:hidden;">
-                                        <option selected disabled value="">----Select Vendor Name---</option>
-                                    </select>
-                                    <input type="hidden" class="text-muted text-uppercase fw-semibold" id="txtvendornameid">
+                        <form id="dropdownValidationForm">
+                            <div class="col-lg-4 col-sm-4">
+                                <div>
+                                    <label for="txtvendorname" class="text-muted text-uppercase fw-semibold">Vendor Name</label>
+                                </div>
+                                <div class="mb-2">
+                                    <div class="input-light">
+                                        <select class="text-muted text-uppercase fw-semibold" id="txtvendorname" name="txtvendorname" style="border:hidden;">
+                                            <option selected disabled value="">----Select Vendor Name---</option>
+                                        </select>
+                                        <input type="hidden" class="text-muted text-uppercase fw-semibold" id="txtvendornameid">
+                                        <div id="vendorvalidationMessage" class="text-danger"></div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <!--end col-->
-                        <div class="col-sm-4 ms-auto">
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <div>
-                                        <label for="productname" class="text-muted text-uppercase fw-semibold">Product</label>
-                                    </div>
-                                    <div class="mb-2">
-                                        <div class="input-light">
-                                            <select id="productname" class="text-muted text-uppercase fw-semibold" style="border:hidden;">
-                                                <option selected disabled value="">--Select Product--</option>
-                                            </select>
-                                            <input type="hidden" class="text-muted text-uppercase fw-semibold" id="txtProductnameid">
+                            <!--end col-->
+                            <div class="col-sm-4 ms-auto">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div>
+                                            <label for="productname" class="text-muted text-uppercase fw-semibold">Product</label>
+                                        </div>
+                                        <div class="mb-2">
+                                            <div class="input-light">
+                                                <select id="productname" class="text-muted text-uppercase fw-semibold" style="border:hidden;">
+                                                    <option selected disabled value="">--Select Product--</option>
+                                                </select>
+                                                <input type="hidden" class="text-muted text-uppercase fw-semibold" id="txtProductnameid">
+                                                <div id="productvalidationMessage" class="text-danger"></div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <!--end col-->
-                        <div class="col-sm-4 ms-auto">
-                            <div class="row">
-                                <div class="col-lg-8">
-                                    <div>
-                                        <label for="productname" class="text-muted text-uppercase fw-semibold">Product Names</label>
-                                    </div>
-                                    <div class="mb-2">
-                                        <div class="input-light">
-                                            <select id="searchproductname" class="text-muted text-uppercase fw-semibold"  style="border:hidden;">
-                                                <option selected disabled value="">--Select ProductName--</option>
-                                            </select>
-                                            <input type="hidden" class="text-muted text-uppercase fw-semibold" id="searchproductnameid">
+                            <!--end col-->
+                            <div class="col-sm-4 ms-auto">
+                                <div class="row">
+                                    <div class="col-lg-8">
+                                        <div>
+                                            <label for="searchproductname" class="text-muted text-uppercase fw-semibold">Product Names</label>
+                                        </div>
+                                        <div class="mb-2">
+                                            <div class="input-light">
+                                                <select id="searchproductname" class="text-muted text-uppercase fw-semibold" style="border:hidden;">
+                                                    <option selected disabled value="">--Select ProductName--</option>
+                                                </select>
+                                                <input type="hidden" class="text-muted text-uppercase fw-semibold" id="searchproductnameid">
+                                                <div id="searchvalidationMessage" class="text-danger"></div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-sm-2 ms-auto">
-                            <a id="addItemButton" class="btn btn-secondary fw-small" onclick="SerchProductDetailsById()">Add Product</a>
-                        </div>
-                        <!--end col-->
-                        <div colspan="3">
-                            
-                        </div>
+                            <div class="col-sm-2 ms-auto">
+                                <a id="addItemButton" class="btn btn-secondary fw-small" onclick="SerchProductDetailsById()">Add Product</a>
+                            </div>
+                            <!--end col-->
+                            <div colspan="3">
+                            </div>
+                        </form>
                     </div>
                     <!--end row-->
                 </div>
-                <!---- Add New Item ---->
-                <div colspan="5">
-                    <a href="javascript:new_link()" id="addNewProductBtn" class="btn btn-soft-secondary fw-medium"><i class="ri-add-fill me-1 align-bottom"></i> Add Item</a>
-                    @* <a id="addNewProductBtn" class="btn btn-soft-secondary fw-medium"><i class="ri-add-fill me-1 align-bottom"></i> Add Item</a> *@
-                </div>
-                <!---- Product Details ---->
-                <!--Partial View-->
-                <div id="productdetailsPartial"></div>
-                <div id="table-product-list-all" class="table-card gridjs-border-none"></div>
 
+                <!---- Product Details ---->
+
+                <div class="card-body p-4">
+                    <div class="table-responsive">
+                        <table class="invoice-table table table-borderless table-nowrap mb-0">
+                            <thead class="align-middle">
+                                <tr class="table-active">
+                                    <th scope="col" style="width: 50px;">#</th>
+                                    <th scope="col" style="width: 400px;">
+                                        Product Details
+                                    </th>
+                                    <th scope="col" style="width: 220px;">
+                                            Rate
+                                    </th>
+                                    <th scope="col" style="width: 120px;">
+                                            GST
+                                    </th>
+                                    <th scope="col" style="width: 120px;">
+                                            GSTPrice
+                                    </th>
+                                    <th scope="col" style="width: 120px;">Quantity</th>
+                                    <th scope="col" class="text-end" style="width: 170px;">Amount</th>
+                                    <th scope="col" class="text-end" style="width: 120px;">Action</th>
+                                </tr>
+                            </thead>
+
+                            <div>
+                                <form id="newRowfrm">
+                                <!--Partial View-->
+                                <tbody id="addNewlink">
+                                <div id="productdetailsPartial"></div>
+                                </tbody>
+                                </form>
+                                
+                            </div>
+
+                            <tbody>
+                                <tr id="newForm" style="display: none;"><td class="d-none" colspan="5"><p>Add New Form</p></td></tr>
+                                <tr class="border-top border-top-dashed mt-2">
+                                    <td colspan="3"></td>
+                                    <td colspan="2" class="p-0">
+                                        <table class="table table-borderless table-sm table-nowrap align-middle mb-0">
+                                            <tbody>
+                                                <tr>
+                                                    <th scope="row">Sub Total</th>
+                                                    <td style="width:150px;">
+                                                        <input type="text" class="form-control bg-light border-0" id="cart-subtotal" placeholder="$0.00" style="width: 80px;" readonly />
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">Estimated Tax (12.5%)</th>
+                                                    <td>
+                                                        <input type="text" class="form-control bg-light border-0" id="cart-tax" placeholder="$0.00" readonly />
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">Total Gst(18%)</th>
+                                                    <td>
+                                                        <input type="text" class="form-control bg-light border-0" id="totalgst" placeholder="$0.00" readonly />
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">Discount <small class="text-muted">(VELZON15)</small></th>
+                                                    <td>
+                                                        <input type="text" class="form-control bg-light border-0" id="cart-discount" placeholder="$0.00" readonly />
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">Shipping Charge</th>
+                                                    <td>
+                                                        <input type="text" class="form-control bg-light border-0" id="cart-shipping" placeholder="$0.00" readonly />
+                                                    </td>
+                                                </tr>
+                                                <tr class="border-top border-top-dashed">
+                                                    <th scope="row">Total Amount</th>
+                                                    <td>
+                                                        <input type="text" class="form-control bg-light border-0" id="cart-total" placeholder="$0.00" readonly />
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <!--end table-->
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <!--end table-->
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-lg-4">
+                            <div class="mb-2">
+                                <label for="choices-payment-type" class="form-label text-muted text-uppercase fw-semibold">Payment Details</label>
+                                <div class="input-light">
+                                    <select class="form-control bg-light border-0" data-choices data-choices-search-false data-choices-removeItem id="choices-payment-type">
+                                        <option value="">Payment Method</option>
+                                        <option value="Mastercard">Mastercard</option>
+                                        <option value="Credit Card">Credit Card</option>
+                                        <option value="Visa">Visa</option>
+                                        <option value="Paypal">Paypal</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="mb-2">
+                                <input class="form-control bg-light border-0" type="text" id="cardholderName" placeholder="Card Holder Name">
+                            </div>
+                            <div class="mb-2">
+                                <input class="form-control bg-light border-0" type="text" id="cardNumber" placeholder="xxxx xxxx xxxx xxxx">
+                            </div>
+                            <div>
+                                <input class="form-control  bg-light border-0" type="text" id="amountTotalPay" placeholder="$0.00" readonly />
+                            </div>
+                        </div>
+                        <!--end col-->
+                    </div>
+                    <!--end row-->
+                    <div class="mt-4">
+                        <label for="exampleFormControlTextarea1" class="form-label text-muted text-uppercase fw-semibold">NOTES</label>
+                        <textarea class="form-control alert alert-info" id="exampleFormControlTextarea1" placeholder="Notes" rows="2" required>All accounts are to be paid within 7 days from receipt of invoice. To be paid by cheque or credit card or direct payment online. If account is not paid within 7 days the credits details supplied as confirmation of work undertaken will be charged the agreed quoted fee noted above.</textarea>
+                    </div>
+                    <div class="hstack gap-2 justify-content-end d-print-none mt-4">
+                        <button type="submit" class="btn btn-success"><i class="ri-printer-line align-bottom me-1"></i> Save</button>
+                        <a href="javascript:void(0);" class="btn btn-primary"><i class="ri-download-2-line align-bottom me-1"></i> Download Invoice</a>
+                        <a href="javascript:void(0);" class="btn btn-danger"><i class="ri-send-plane-fill align-bottom me-1"></i> Send Invoice</a>
+                    </div>
+                </div>
               
             </form>
         </div>
@@ -227,9 +347,6 @@
 
 <!-- cleave.js -->
 <script src="~/UserHome/minimal/assets/libs/cleave.js/cleave.min.js"></script>
-
-<!--Invoice create init js-->
-<script src="~/UserHome/minimal/assets/js/pages/invoicecreate.init.js"></script>
 
 <!-- Sweet Alerts js -->
 <script src="~/UserHome/minimal/assets/libs/sweetalert2/sweetalert2.min.js"></script>

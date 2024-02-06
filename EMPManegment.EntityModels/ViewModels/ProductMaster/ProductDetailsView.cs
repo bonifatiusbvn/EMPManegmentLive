@@ -32,6 +32,7 @@ namespace EMPManegment.EntityModels.ViewModels.ProductMaster
         public decimal Gst { get; set; }
 
         public decimal PerUnitWithGstprice { get; set; }
+        public decimal Quantity { get; set; }
 
         public DateTime? CreatedOn { get; set; }
 
