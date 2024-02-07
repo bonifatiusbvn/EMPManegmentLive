@@ -149,5 +149,13 @@ namespace EMPManagment.API.Controllers
             IEnumerable<ProjectDocumentView> Documents = await ProjectDetail.GetProjectDocument(ProjectId);
             return Ok(new { code = 200, data = Documents.ToList() });
         }
+
+        [HttpPost]
+        [Route("GetProjectListById")]
+        public async Task<IActionResult> GetProjectListById(string? searchby, string? searchfor,Guid UserId)
+        {
+            List<ProjectDetailView> projectlist = await ProjectDetail.GetProjectListById(searchby, searchfor,UserId);
+            return Ok(new { code = 200, data = projectlist.ToList() });
+        }
     }
 }

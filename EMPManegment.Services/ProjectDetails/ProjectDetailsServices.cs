@@ -56,5 +56,10 @@ namespace EMPManegment.Services.ProjectDetails
         {
             return await ProjectDetails.GetProjectDocument(ProjectId);
         }
+
+        public async Task<List<ProjectDetailView>> GetProjectListById(string? searchby, string? searchfor, Guid UserId)
+        {
+            return await ProjectDetails.GetProjectListById(searchby, searchfor, UserId);
+        }
     }
 }
