@@ -30,7 +30,6 @@ namespace EMPManegment.Web.Controllers
             try
             {
                 List<OrderDetailView> orderList = new List<OrderDetailView>();
-                HttpClient client = WebAPI.Initil();
                 ApiResponseModel res = await APIServices.GetAsync("", "OrderDetails/GetOrderList");
                 if (res.code == 200)
                 {
@@ -51,8 +50,7 @@ namespace EMPManegment.Web.Controllers
             try
             {
                 List<OrderDetailView> orderList = new List<OrderDetailView>();
-                HttpClient client = WebAPI.Initil();
-                ApiResponseModel res = await APIServices.PostAsync("", "OrderDetails/GetOrderDetailsByStatus?DeliveryStatus="+ DeliveryStatus);
+                ApiResponseModel res = await APIServices.PostAsync("", "OrderDetails/GetOrderDetailsByStatus?DeliveryStatus=" + DeliveryStatus);
                 if (res.code == 200)
                 {
                     orderList = JsonConvert.DeserializeObject<List<OrderDetailView>>(res.data.ToString());
@@ -79,7 +77,7 @@ namespace EMPManegment.Web.Controllers
                 }
                 return View(orderDetail);
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 throw ex;
             }
@@ -96,7 +94,6 @@ namespace EMPManegment.Web.Controllers
             try
             {
                 OrderDetailView order = new OrderDetailView();
-                HttpClient client = WebAPI.Initil();
                 ApiResponseModel response = await APIServices.GetAsync("", "OrderDetails/GetOrderDetailsById?OrderId=" + OrderId);
                 if (response.code == 200)
                 {

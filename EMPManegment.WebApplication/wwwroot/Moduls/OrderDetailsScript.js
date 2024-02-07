@@ -98,7 +98,7 @@ function SearchData() {
         }
         else {
             window.location = '/OrderMaster/CreateOrder';
-        } 
+        }
     }
     else {
         Swal.fire({
@@ -110,7 +110,7 @@ function SearchData() {
     }
 }
 
-$(document).ready(function () { 
+$(document).ready(function () {
     $('#txtvendorname').change(function () {
         var Text = $("#txtvendorname Option:Selected").text();
         var ProductId = $(this).val();
@@ -129,10 +129,9 @@ $(document).ready(function () {
     });
 });
 
-function SaveCreateOrder()
-{
+function SaveCreateOrder() {
     if ($('#createOrderForm').valid()) {
-        
+
         var formData = new FormData();
         formData.append("Type", $("#OrderType").val());
         formData.append("OrderId", $("#orderId").val());
@@ -185,8 +184,8 @@ $(document).ready(function () {
             orderId: "required",
             companyname: "required",
             productname: "required",
-            productquantity: "required", 
-            amount: "required", 
+            productquantity: "required",
+            amount: "required",
             totalamount: "required",
             orderdate: "required",
             deliverydate: "required",
@@ -216,12 +215,12 @@ $(document).ready(function () {
             idStatus: "required"
         },
         messages: {
-            idStatus: "Please Enter Delivered Status"            
+            idStatus: "Please Enter Delivered Status"
         }
     })
     $('#statussearch').on('click', function () {
         $("#statusform").validate();
-    });      
+    });
 });
 
 $("#deliveredactive").click(function () {

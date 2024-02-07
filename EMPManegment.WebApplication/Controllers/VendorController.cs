@@ -50,41 +50,41 @@ namespace EMPManegment.Web.Controllers
                 //    var filepath = "Content/Image/" + ProfilePhoto.FileName;
                 //    var fullpath = Path.Combine(path, filepath);
                 //    UploadFile(ProfilePhoto, fullpath);
-                    var addVandor = new VendorDetailsView()
-                    {
-                        VendorFirstName = addVandorDetails.VendorFirstName,
-                        VendorLastName = addVandorDetails.VendorLastName,
-                        VendorContectNo = addVandorDetails.VendorContectNo,
-                        VendorPhone = addVandorDetails.VendorPhone,
-                        VendorEmail = addVandorDetails.VendorEmail,
-                        VendorCountry = addVandorDetails.VendorCountry,
-                        VendorState = addVandorDetails.VendorState,
-                        VendorCity = addVandorDetails.VendorCity,
-                        VendorAddress = addVandorDetails.VendorAddress,
-                        VendorPinCode = addVandorDetails.VendorPinCode,
-                        VendorCompany = addVandorDetails.VendorCompany,
-                        VendorCompanyType = addVandorDetails.VendorCompanyType,
-                        VendorCompanyEmail = addVandorDetails.VendorCompanyEmail,
-                        VendorCompanyNumber = addVandorDetails.VendorCompanyNumber,
-                        VendorBankName = addVandorDetails.VendorBankName,
-                        VendorBankBranch = addVandorDetails.VendorBankBranch,
-                        VendorAccountHolderName = addVandorDetails.VendorAccountHolderName,
-                        VendorBankAccountNo = addVandorDetails.VendorBankAccountNo,
-                        VendorGstnumber = addVandorDetails.VendorGstnumber,
-                        VendorBankIfsc = addVandorDetails.VendorBankIfsc,
-                        VendorTypeId = addVandorDetails.VendorTypeId,
-                    };
-                    ApiResponseModel postuser = await APIServices.PostAsync(addVandor, "Vendor/CreateVendors");
-                    if (postuser.code == 200)
-                    {
-                        return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
-                    }
-                    else
-                    {
-                        return new JsonResult(new { Message = string.Format(postuser.message), Code = postuser.code });
-                    }
-                
-                
+                var addVandor = new VendorDetailsView()
+                {
+                    VendorFirstName = addVandorDetails.VendorFirstName,
+                    VendorLastName = addVandorDetails.VendorLastName,
+                    VendorContectNo = addVandorDetails.VendorContectNo,
+                    VendorPhone = addVandorDetails.VendorPhone,
+                    VendorEmail = addVandorDetails.VendorEmail,
+                    VendorCountry = addVandorDetails.VendorCountry,
+                    VendorState = addVandorDetails.VendorState,
+                    VendorCity = addVandorDetails.VendorCity,
+                    VendorAddress = addVandorDetails.VendorAddress,
+                    VendorPinCode = addVandorDetails.VendorPinCode,
+                    VendorCompany = addVandorDetails.VendorCompany,
+                    VendorCompanyType = addVandorDetails.VendorCompanyType,
+                    VendorCompanyEmail = addVandorDetails.VendorCompanyEmail,
+                    VendorCompanyNumber = addVandorDetails.VendorCompanyNumber,
+                    VendorBankName = addVandorDetails.VendorBankName,
+                    VendorBankBranch = addVandorDetails.VendorBankBranch,
+                    VendorAccountHolderName = addVandorDetails.VendorAccountHolderName,
+                    VendorBankAccountNo = addVandorDetails.VendorBankAccountNo,
+                    VendorGstnumber = addVandorDetails.VendorGstnumber,
+                    VendorBankIfsc = addVandorDetails.VendorBankIfsc,
+                    VendorTypeId = addVandorDetails.VendorTypeId,
+                };
+                ApiResponseModel postuser = await APIServices.PostAsync(addVandor, "Vendor/CreateVendors");
+                if (postuser.code == 200)
+                {
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
+                }
+                else
+                {
+                    return new JsonResult(new { Message = string.Format(postuser.message), Code = postuser.code });
+                }
+
+
             }
             catch (Exception ex)
             {
@@ -104,7 +104,6 @@ namespace EMPManegment.Web.Controllers
             try
             {
                 List<VendorTypeView> VendorType = new List<VendorTypeView>();
-                HttpClient client = WebAPI.Initil();
                 ApiResponseModel response = await APIServices.GetAsyncId(null, "Vendor/GetVendorType");
                 if (response.code == 200)
                 {
@@ -121,7 +120,7 @@ namespace EMPManegment.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> DisplayVendorList()
         {
-            return View() ;
+            return View();
         }
 
         [HttpPost]
@@ -151,7 +150,6 @@ namespace EMPManegment.Web.Controllers
                 };
                 List<VendorDetailsView> vendorList = new List<VendorDetailsView>();
                 var data = new jsonData();
-                HttpClient client = WebAPI.Initil();
                 ApiResponseModel res = await APIServices.PostAsync(dataTable, "Vendor/GetVendorList");
                 if (res.code == 200)
                 {
@@ -178,7 +176,6 @@ namespace EMPManegment.Web.Controllers
             try
             {
                 VendorDetailsView vendordetails = new VendorDetailsView();
-                HttpClient client = WebAPI.Initil();
                 ApiResponseModel response = await APIServices.GetAsync("", "Vendor/GetVendorDetailsById?vendorId=" + VendorId);
                 if (response.code == 200)
                 {

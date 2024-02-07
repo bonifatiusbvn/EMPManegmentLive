@@ -157,7 +157,6 @@ namespace EMPManegment.Web.Controllers
             {
                 var UserId = _userSession.UserId;
                 List<TaskDetailsView> TaskList = new List<TaskDetailsView>();
-                HttpClient client = WebAPI.Initil();
                 ApiResponseModel postuser = await APIServices.GetAsync("", "UserHome/GetUserTotalTask?UserId=" + UserId);
                 if (postuser.data != null)
                 {

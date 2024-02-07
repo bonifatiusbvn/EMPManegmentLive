@@ -43,7 +43,6 @@ namespace EMPManegment.Web.Controllers
             try
             {
                 List<ProjectDetailView> projectlist = new List<ProjectDetailView>();
-                HttpClient client = WebAPI.Initil();
                 ApiResponseModel response = await APIServices.GetAsync("", "ProjectDetails/GetProjectList?searchby=" + searchby + "&searchfor=" + searchfor);
                 if (response.code == 200)
                 {
@@ -63,7 +62,6 @@ namespace EMPManegment.Web.Controllers
             {
                 Guid UserId = _userSession.UserId;
                 List<ProjectView> projectlist = new List<ProjectView>();
-                HttpClient client = WebAPI.Initil();
                 ApiResponseModel response = await APIServices.PostAsync("", "ProjectDetails/GetUserProjectList?UserId=" + UserId);
                 if (response.code == 200)
                 {
@@ -102,7 +100,6 @@ namespace EMPManegment.Web.Controllers
             try
             {
                 ProjectDetailView projectDetails = new ProjectDetailView();
-                HttpClient client = WebAPI.Initil();
                 ApiResponseModel response = await APIServices.GetAsync("", "ProjectDetails/GetProjectDetailsById?ProjectId=" + Id);
                 if (response.code == 200)
                 {
@@ -123,7 +120,6 @@ namespace EMPManegment.Web.Controllers
             try
             {
                 List<EmpDetailsView> MembersList = new List<EmpDetailsView>();
-                HttpClient client = WebAPI.Initil();
                 ApiResponseModel postuser = await APIServices.PostAsync("", "ProjectDetails/GetMemberList");
                 if (postuser.data != null)
                 {
@@ -172,7 +168,6 @@ namespace EMPManegment.Web.Controllers
             try
             {
                 List<ProjectView> ProjectMembersList = new List<ProjectView>();
-                HttpClient client = WebAPI.Initil();
                 ApiResponseModel postuser = await APIServices.PostAsync("", "ProjectDetails/GetProjectMember?ProjectId=" + ProjectId);
                 if (postuser.data != null)
                 {
@@ -198,7 +193,6 @@ namespace EMPManegment.Web.Controllers
             {
                 ViewBag.ProjectId = ProjectId;
                 List<ProjectView> ProjectMembersList = new List<ProjectView>();
-                HttpClient client = WebAPI.Initil();
                 ApiResponseModel postuser = await APIServices.PostAsync("", "ProjectDetails/GetProjectMember?ProjectId=" + ProjectId);
                 if (postuser.data != null)
                 {
@@ -262,7 +256,6 @@ namespace EMPManegment.Web.Controllers
             try
             {
                 List<ProjectDocumentView> ProjectDocumentsList = new List<ProjectDocumentView>();
-                HttpClient client = WebAPI.Initil();
                 ApiResponseModel postuser = await APIServices.PostAsync("", "ProjectDetails/GetProjectDocument?ProjectId=" + ProjectId);
                 if (postuser.data != null)
                 {
@@ -286,7 +279,6 @@ namespace EMPManegment.Web.Controllers
             try
             {
                 List<ProjectDocumentView> ProjectDocumentsList = new List<ProjectDocumentView>();
-                HttpClient client = WebAPI.Initil();
                 ApiResponseModel postuser = await APIServices.PostAsync("", "ProjectDetails/GetProjectDocument?ProjectId=" + ProjectId);
                 if (postuser.data != null)
                 {
