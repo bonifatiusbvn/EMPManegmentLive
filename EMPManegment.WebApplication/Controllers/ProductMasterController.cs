@@ -90,7 +90,6 @@ namespace EMPManegment.Web.Controllers
             try
             {
                 List<VendorDetailsView> VendorNameList = new List<VendorDetailsView>();
-                HttpClient client = WebAPI.Initil();
                 ApiResponseModel res = await APIServices.GetAsync("", "Vendor/GetVendorsNameList");
                 if (res.code == 200)
                 {
@@ -103,7 +102,7 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
-      
+
         [HttpPost]
         public async Task<IActionResult> AddProductType(ProductTypeView AddProduct)
         {
@@ -123,7 +122,7 @@ namespace EMPManegment.Web.Controllers
                 }
                 else
                 {
-                    return new JsonResult(new {Message="Please Select Product",Icone= "warning"});
+                    return new JsonResult(new { Message = "Please Select Product", Icone = "warning" });
                 }
             }
             catch (Exception ex)
@@ -136,7 +135,6 @@ namespace EMPManegment.Web.Controllers
             try
             {
                 List<ProductTypeView> products = new List<ProductTypeView>();
-                HttpClient client = WebAPI.Initil();
                 ApiResponseModel response = await APIServices.GetAsyncId(null, "ProductMaster/GetProduct");
                 if (response.code == 200)
                 {
@@ -155,7 +153,6 @@ namespace EMPManegment.Web.Controllers
             try
             {
                 List<ProductTypeView> products = new List<ProductTypeView>();
-                HttpClient client = WebAPI.Initil();
                 ApiResponseModel response = await APIServices.GetAsync("", "ProductMaster/GetProductById?ProductId=" + ProductId);
                 if (response.code == 200)
                 {
@@ -170,7 +167,7 @@ namespace EMPManegment.Web.Controllers
         }
         public IActionResult ProductList()
         {
-            return View();  
+            return View();
         }
 
         [HttpPost]
@@ -179,7 +176,6 @@ namespace EMPManegment.Web.Controllers
             try
             {
                 List<ProductDetailsView> ProductList = new List<ProductDetailsView>();
-                HttpClient client = WebAPI.Initil();
                 ApiResponseModel postuser = await APIServices.PostAsync("", "ProductMaster/GetProductDetailsByVendorId?VendorId=" + VendorId);
                 if (postuser.data != null)
                 {
@@ -203,7 +199,6 @@ namespace EMPManegment.Web.Controllers
             try
             {
                 ProductDetailsView products = new ProductDetailsView();
-                HttpClient client = WebAPI.Initil();
                 ApiResponseModel response = await APIServices.GetAsync("", "ProductMaster/GetProductDetailsById?ProductId=" + ProductId);
                 if (response.code == 200)
                 {
@@ -217,12 +212,11 @@ namespace EMPManegment.Web.Controllers
             }
         }
         [HttpPost]
-        public async Task<IActionResult>SearchProductName(String ProductName)
+        public async Task<IActionResult> SearchProductName(String ProductName)
         {
             try
             {
                 List<ProductDetailsView> ProductList = new List<ProductDetailsView>();
-                HttpClient client = WebAPI.Initil();
                 ApiResponseModel postuser = await APIServices.PostAsync("", "ProductMaster/SearchProductName?ProductName=" + ProductName);
                 if (postuser.data != null)
                 {
@@ -253,7 +247,6 @@ namespace EMPManegment.Web.Controllers
                 string Productstatus = HttpContext.Request.Form["PRODUCTID"];
                 var GetProduct = Newtonsoft.Json.JsonConvert.DeserializeObject<ProductDetailsView>(Productstatus.ToString());
                 List<ProductDetailsView> products = new List<ProductDetailsView>();
-                HttpClient client = WebAPI.Initil();
                 ApiResponseModel response = await APIServices.PostAsync("", "ProductMaster/DisplayProductDetailsById?ProductId=" + GetProduct.Id);
                 if (response.code == 200)
                 {
@@ -272,7 +265,6 @@ namespace EMPManegment.Web.Controllers
             try
             {
                 ProductDetailsView products = new ProductDetailsView();
-                HttpClient client = WebAPI.Initil();
                 ApiResponseModel response = await APIServices.GetAsync("", "ProductMaster/GetProductDetailsById?ProductId=" + ProductId);
                 if (response.code == 200)
                 {
@@ -311,7 +303,6 @@ namespace EMPManegment.Web.Controllers
             try
             {
                 List<ProductDetailsView> ProductList = new List<ProductDetailsView>();
-                HttpClient client = WebAPI.Initil();
                 ApiResponseModel postuser = await APIServices.PostAsync("", "ProductMaster/GetProductDetailsByProductId?ProductId=" + ProductId);
                 if (postuser.data != null)
                 {
@@ -335,7 +326,6 @@ namespace EMPManegment.Web.Controllers
             try
             {
                 List<ProductDetailsView> ProductList = new List<ProductDetailsView>();
-                HttpClient client = WebAPI.Initil();
                 ApiResponseModel postuser = await APIServices.PostAsync("", "ProductMaster/SerchProductByVendor?ProductId=" + ProductId + "&VendorId=" + VendorId);
                 if (postuser.data != null)
                 {

@@ -57,7 +57,6 @@ namespace EMPManegment.Web.Controllers
             try
             {
                 InvoiceViewModel products = new InvoiceViewModel();
-                HttpClient client = WebAPI.Initil();
                 ApiResponseModel response = await APIServices.GetAsync("", "Invoice/GetInvoiceDetailsById?Id=" + Id);
                 if (response.code == 200)
                 {
@@ -77,7 +76,6 @@ namespace EMPManegment.Web.Controllers
             try
             {
                 List<InvoiceViewModel> InvoiceNoList = new List<InvoiceViewModel>();
-                HttpClient client = WebAPI.Initil();
                 ApiResponseModel res = await APIServices.GetAsync("", "Invoice/GetInvoiceNoList");
                 if (res.code == 200)
                 {
@@ -95,7 +93,6 @@ namespace EMPManegment.Web.Controllers
             try
             {
                 List<InvoiceViewModel> invoice = new List<InvoiceViewModel>();
-                HttpClient client = WebAPI.Initil();
                 ApiResponseModel response = await APIServices.GetAsyncId(null, "Invoice/GetInvoiceDetailsList");
                 if (response.code == 200)
                 {

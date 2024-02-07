@@ -157,7 +157,6 @@ namespace EMPManegment.Web.Controllers
             {
                 var UserId = _userSession.UserId;
                 List<TaskDetailsView> TaskList = new List<TaskDetailsView>();
-                HttpClient client = WebAPI.Initil();
                 ApiResponseModel postuser = await APIServices.GetAsync("", "UserHome/GetUserTotalTask?UserId=" + UserId);
                 if (postuser.data != null)
                 {
@@ -182,7 +181,6 @@ namespace EMPManegment.Web.Controllers
             try
             {
                 List<ProjectDetailView> projectlist = new List<ProjectDetailView>();
-                HttpClient client = WebAPI.Initil();
                 ApiResponseModel response = await APIServices.GetAsync("", "ProjectDetails/GetProjectList?searchby=" + searchby + "&searchfor=" + searchfor);
                 if (response.code == 200)
                 {

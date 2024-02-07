@@ -91,7 +91,6 @@ namespace EMPManegment.Web.Controllers
                 };
                 List<UserDataTblModel> GetUserList = new List<UserDataTblModel>();
                 var data = new jsonData();
-                HttpClient client = WebAPI.Initil();
                 ApiResponseModel res = await APIServices.PostAsync(dataTable, "UserProfile/GetAllUserList");
                 if (res.code == 200)
                 {
@@ -117,7 +116,6 @@ namespace EMPManegment.Web.Controllers
             try
             {
                 List<EmpDetailsView> EditUser = new List<EmpDetailsView>();
-                HttpClient client = WebAPI.Initil();
                 ApiResponseModel res = await APIServices.GetAsync("", "UserProfile/UserEdit");
                 if (res.code == 200)
                 {
@@ -136,7 +134,6 @@ namespace EMPManegment.Web.Controllers
             try
             {
                 List<EmpDetailsView> ActiveDecative = new List<EmpDetailsView>();
-                HttpClient client = WebAPI.Initil();
                 ApiResponseModel res = await APIServices.GetAsync("", "UserProfile/GetAllUsersDetails");
                 if (res.code == 200)
                 {
@@ -157,8 +154,6 @@ namespace EMPManegment.Web.Controllers
             try
             {
                 List<EmpDetailsView> EmployeeList = new List<EmpDetailsView>();
-                HttpClient client = WebAPI.Initil();
-
                 ApiResponseModel response = await APIServices.PostAsync(EmpList, "UserProfile/GetSearchEmplList");
                 if (response.data.Count != 0)
                 {
@@ -206,7 +201,6 @@ namespace EMPManegment.Web.Controllers
             {
                 Guid id = _userSession.UserId;
                 EmpDetailsView userProfile = new EmpDetailsView();
-                HttpClient client = WebAPI.Initil();
                 ApiResponseModel response = await APIServices.GetAsync("", "UserProfile/GetEmployeeById?id=" + id);
                 if (response.code == 200)
                 {
@@ -230,7 +224,6 @@ namespace EMPManegment.Web.Controllers
             try
             {
                 List<EmpDocumentView> documentsType = new List<EmpDocumentView>();
-                HttpClient client = WebAPI.Initil();
                 ApiResponseModel res = await APIServices.GetAsync(null, "UserProfile/GetDocumentType");
                 if (res.code == 200)
                 {
@@ -250,7 +243,6 @@ namespace EMPManegment.Web.Controllers
             {
 
                 Guid userid = _userSession.UserId;
-                HttpClient client = WebAPI.Initil();
                 List<DocumentInfoView> documentList = new List<DocumentInfoView>();
                 ApiResponseModel res = await APIServices.GetAsync("", "UserProfile/GetDocumentList?Userid=" + userid);
                 if (res.code == 200)
@@ -283,7 +275,7 @@ namespace EMPManegment.Web.Controllers
                     DocumentName = DocName,
                     CreatedBy = doc.CreatedBy,
                 };
-                ViewBag.Name = HttpContext.Session.GetString("UserID");
+
                 ApiResponseModel postuser = await APIServices.PostAsync(uploadDocument, "UserProfile/UploadDocument");
                 if (postuser.code == 200)
                 {
@@ -340,7 +332,6 @@ namespace EMPManegment.Web.Controllers
         }
         public async Task<IActionResult> LockScreen()
         {
-
             return View();
         }
 
@@ -432,7 +423,6 @@ namespace EMPManegment.Web.Controllers
             try
             {
                 List<UserAttendanceModel> Editattend = new List<UserAttendanceModel>();
-                HttpClient client = WebAPI.Initil();
                 ApiResponseModel res = await APIServices.GetAsync("", "UserProfile/GetUserAttendanceById?attendanceId=" + attendanceId);
 
                 if (res.code == 200)
@@ -475,7 +465,6 @@ namespace EMPManegment.Web.Controllers
             try
             {
                 EmpDetailsView editDetails = new EmpDetailsView();
-                HttpClient client = WebAPI.Initil();
                 ApiResponseModel res = await APIServices.GetAsync("", "UserProfile/GetEmployeeById?id=" + id);
                 if (res.code == 200)
                 {
@@ -715,8 +704,6 @@ namespace EMPManegment.Web.Controllers
             try
             {
                 List<UserAttendanceModel> getAttendanceList = new List<UserAttendanceModel>();
-                HttpClient client = WebAPI.Initil();
-
                 ApiResponseModel response = await APIServices.PostAsync(GetAttendanceList, "UserProfile/GetSearchAttendanceList");
                 if (response.data.Count != 0)
                 {
