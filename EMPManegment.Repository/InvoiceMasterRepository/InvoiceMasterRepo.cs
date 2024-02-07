@@ -73,34 +73,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
 
         public async Task<IEnumerable<InvoiceViewModel>> GetInvoiceDetailsList()
         {
-            //try
-            //{
-            //    IEnumerable<InvoiceViewModel> InvoiceList = Context.TblInvoices.ToList().Select(a => new InvoiceViewModel
-            //    {
-            //        Id = a.Id,
-            //        InvoiceNo = a.InvoiceNo,
-            //        VandorId = a.VandorId,
-            //        DispatchThrough = a.DispatchThrough,
-            //        Destination = a.Destination,
-            //        ProductId = a.ProductId,
-            //        Cgst = a.Cgst,
-            //        Igst = a.Igst,
-            //        Sgst = a.Sgst,
-            //        BuyesOrderNo = a.BuyesOrderNo,
-            //        BuyesOrderDate = a.BuyesOrderDate,
-            //        TotalAmount = a.TotalAmount,
-            //        CreatedOn = a.CreatedOn,
-            //        CreatedBy = a.CreatedBy,
-            //        UpdatedOn = a.UpdatedOn,
-            //        UpdatedBy = a.UpdatedBy,
-            //    });
-            //    return InvoiceList;
-            //}
-            //catch (Exception ex)
-            //{
-            //    throw ex;
-            //}
-            var InvoiceList = from a in Context.TblInvoices
+            IEnumerable<InvoiceViewModel> InvoiceList = from a in Context.TblInvoices
                                                         join b in Context.TblVendorMasters on a.VandorId equals b.Vid
                                                         join c in Context.TblProductDetailsMasters on a.ProductId equals c.Id
                                                         select new InvoiceViewModel
