@@ -236,5 +236,36 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
                 throw ex;
             }
         }
+
+        public async Task<List<ProjectDetailView>> GetProjectListById(string? searchby, string? searchfor, Guid UserId)
+        {
+            var UserData = new List<ProjectDetailView>();
+            var data = await Context.TblProjectDetails.Where(x => x.UserId == UserId).ToListAsync();
+            if (data != null)
+            {
+                foreach (var item in data)
+                {
+                    UserData.Add(new ProjectDetailView()
+                    {
+                        Id=item.Id,
+                        ProjectId = item.ProjectId,
+                        ProjectType = item.ProjectType,
+                        ProjectTitle = item.ProjectTitle,
+                        ProjectStatus = item.Status,
+                        CreatedOn = item.CreatedOn,
+                        UserId = item.UserId,
+                    });
+                }
+            }
+            if (searchby == "ProjectTitle" && searchfor != null)
+            {
+                data = data.Where(ser => ser.ProjectTitle.ToLower().Contains(searchfor.ToLower())).ToList();
+            }
+            if (searchby == "ProjectStatus" && searchfor != null)
+            {
+                data = data.Where(ser => ser.Status.ToLower().Contains(searchfor.ToLower())).ToList();
+            }
+            return UserData;
+        }
     }
 }

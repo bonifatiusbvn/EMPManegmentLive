@@ -180,8 +180,9 @@ namespace EMPManegment.Web.Controllers
         {
             try
             {
+                Guid UserId = _userSession.UserId;
                 List<ProjectDetailView> projectlist = new List<ProjectDetailView>();
-                ApiResponseModel response = await APIServices.GetAsync("", "ProjectDetails/GetProjectList?searchby=" + searchby + "&searchfor=" + searchfor);
+                ApiResponseModel response = await APIServices.PostAsync("", "ProjectDetails/GetProjectListById?searchby=" + searchby + "&searchfor=" + searchfor + "&UserId=" + UserId);
                 if (response.code == 200)
                 {
                     projectlist = JsonConvert.DeserializeObject<List<ProjectDetailView>>(response.data.ToString());
