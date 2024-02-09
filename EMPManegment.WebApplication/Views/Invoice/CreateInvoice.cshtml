@@ -12,34 +12,33 @@
         <input type="hidden" class="form-control" id="txtInvoiceNoid">
     </div>
     <div class="col-10">
-    <a id="GenerateInvoiceButton" class="btn btn-secondary fw-small" onclick="GenerateInvoiceDetails()" style="margin-top: 28px;">Generate Invoice</a>
+        <a id="GenerateInvoiceButton" class="btn btn-secondary fw-small" onclick="GenerateInvoiceDetails()" style="margin-top: 28px;">Generate Invoice</a>
     </div>
 </div>
 
 <!-- dropzone css -->
 <link rel="stylesheet" href="~/UserHome/minimal/assets/libs/dropzone/dropzone.css" type="text/css" />
-    <div class="page-content">
-        <div class="container-fluid">
+<div class="page-content">
+    <div class="container-fluid">
 
-            <!-- start page title -->
-            <div class="row" style="margin-top:-70px;">
-                <div class="col-12">
-                    <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                        <h4 class="mb-sm-0">Create Invoice</h4>
+        <!-- start page title -->
+        <div class="row" style="margin-top:-70px;">
+            <div class="col-12">
+                <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                    <h4 class="mb-sm-0">Create Invoice</h4>
 
-                        <div class="page-title-right">
-                            <ol class="breadcrumb m-0">
-                                <li class="breadcrumb-item"><a href="javascript: void(0);">Invoices</a></li>
-                                <li class="breadcrumb-item active">Create Invoice</li>
-                            </ol>
-                        </div>
-                        <div>
-
-                        </div>
+                    <div class="page-title-right">
+                        <ol class="breadcrumb m-0">
+                            <li class="breadcrumb-item"><a href="javascript: void(0);">Invoices</a></li>
+                            <li class="breadcrumb-item active">Create Invoice</li>
+                        </ol>
+                    </div>
+                    <div>
                     </div>
                 </div>
             </div>
-            <!-- end page title -->
+        </div>
+        <!-- end page title -->
         <div class="row">
             <div class="col-lg-12">
                 <div class="card" id="invoiceList">
@@ -77,48 +76,48 @@
                                                                 </span>
                                                             </label>
                                                         </div>
-                                                              <div id="Companyname">
-                                                                 <label>CompanyAddress</label>
-                                                              </div>
-                                                              <div class="mb-2">
+                                                        <div id="Companyname">
+                                                            <label>CompanyAddress</label>
+                                                        </div>
+                                                        <div class="mb-2">
                                                             <select class="form-control" name="data[#].CompanyAddress" data-choices data-choices-search-false id="idStatusCompany" name="Company">
-                                                                    <option selected value=" ">Type</option>
-                                                                    <option value="Pending">Bonifatius</option>
-                                                                    <option value="Inprogress">Purchase</option>
-                                                                </select>
-                                                               </div>
-                                                                <div class="col-lg-12 ms-auto" id="vender" >
-                                                                  <select class="form-control" data-choices data-choices-search-false id="idStatusvender" name="vender">
-                                                                    <option selected value=" ">Vendor</option>
-                                                                    <option value="Pending">Bonifatius</option>
-                                                                    <option value="Inprogress">Purchase</option>
-                                                                  </select>
-                                                                </div>
-                                                    </div>
-                                                    <!--end col-->
-                                                        <div class="col-lg-4 ms-auto" id="vender">
-                                                           <select class="form-control" data-choices data-choices-search-false id="idvender" name="vender">
-                                                            <option selected value=" ">Vendor</option>
-                                                           <option value="Pending">Bonifatius</option>
-                                                          <option value="Inprogress">Purchase</option>
-                                                          </select>
-
-
-                                                             <div id="CompanCCP">
-                                                                 <label>CompanyAddress</label>
-                                                             </div>
-                                                            <div class="mb-2">
-                                                             <select class="form-control" data-choices data-choices-search-false id="idCompany" name="Company">
                                                                 <option selected value=" ">Type</option>
                                                                 <option value="Pending">Bonifatius</option>
                                                                 <option value="Inprogress">Purchase</option>
-                                                             </select>
-                                                           </div>
+                                                            </select>
                                                         </div>
+                                                        <div class="col-lg-12 ms-auto" id="vender">
+                                                            <select class="form-control" data-choices data-choices-search-false id="idStatusvender" name="vender">
+                                                                <option selected value=" ">Vendor</option>
+                                                                <option value="Pending">Bonifatius</option>
+                                                                <option value="Inprogress">Purchase</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <!--end col-->
+                                                    <div class="col-lg-4 ms-auto" id="vender">
+                                                        <select class="form-control" data-choices data-choices-search-false id="idvender" name="vender">
+                                                            <option selected value=" ">Vendor</option>
+                                                            <option value="Pending">Bonifatius</option>
+                                                            <option value="Inprogress">Purchase</option>
+                                                        </select>
+
+
+                                                        <div id="CompanCCP">
+                                                            <label>CompanyAddress</label>
+                                                        </div>
+                                                        <div class="mb-2">
+                                                            <select class="form-control" data-choices data-choices-search-false id="idCompany" name="Company">
+                                                                <option selected value=" ">Type</option>
+                                                                <option value="Pending">Bonifatius</option>
+                                                                <option value="Inprogress">Purchase</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                                 <!--end row-->
                                             </div>
-                                            <div class="card-body p-4" >
+                                            <div class="card-body p-4">
                                                 <div class="row g-3 ">
                                                     <div class="col-lg-3 col-sm-6">
                                                         <label for="invoicenoInput" id="InvoiceNo">Invoice No</label>
@@ -229,7 +228,7 @@
                                                 </div>
                                                 <!--end row-->
                                             </div>
-                                            <div class="card-body p-4" >
+                                            <div class="card-body p-4">
                                                 <div class="table-responsive ">
                                                     <table class="invoice-table table table-borderless table-nowrap mb-0">
                                                         <thead class="align-middle">
@@ -239,7 +238,7 @@
                                                                     Product Details
                                                                 </th>
                                                                 <th scope="col">
-                                                                   HSN/SAC
+                                                                    HSN/SAC
                                                                 </th>
                                                                 <th scope="col" style="width: 120px;">
                                                                     <div class="d-flex currency-select input-light align-items-center">
@@ -258,7 +257,7 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody id="invoiceItems">
-                                                            <tr  class="product invoice-item">
+                                                            <tr class="product invoice-item">
                                                                 <th scope="row" class="product-id">1</th>
                                                                 <td class="text-start">
                                                                     <div class="mb-2">
@@ -395,7 +394,7 @@
                                                 </div>
                                                 <div class="hstack gap-2 justify-content-end d-print-none mt-4">
                                                     <button type="submit" id="SubmitInvoiceBtn" class="btn btn-success"><i class="ri-printer-line align-bottom me-1"></i> Save</button>
-                                                    <a href="javascript:void(0);" id="generatePDF" class="btn btn-primary" ><i class="ri-download-2-line align-bottom me-1"></i> Download Invoice</a>
+                                                    <a href="javascript:void(0);" id="generatePDF" class="btn btn-primary"><i class="ri-download-2-line align-bottom me-1"></i> Download Invoice</a>
                                                     <a href="javascript:window.print()" class="btn btn-soft-primary"><i class="ri-printer-line align-bottom me-1"></i> Print</a>
                                                     <a href="javascript:void(0);" class="btn btn-danger"><i class="ri-send-plane-fill align-bottom me-1"></i> Send Invoice</a>
                                                 </div>
@@ -414,31 +413,17 @@
             </div>
             <!--end col-->
         </div>
-            <!--end row-->
+        <!--end row-->
 
-        </div>
-        <!-- container-fluid -->
     </div>
-    <!-- End Page-content -->
-
-
+    <!-- container-fluid -->
+</div>
+<!-- End Page-content -->
 <!--Invoice create init js-->
 <script src="~/UserHome/minimal/assets/js/pages/invoicecreate.init.js"></script>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/moduls/invoicemasterscript.js"></script>
 <!-- JAVASCRIPT -->
-<script src="~/UserHome/minimal/assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script src="~/UserHome/minimal/assets/libs/simplebar/simplebar.min.js"></script>
-<script src="~/UserHome/minimal/assets/libs/node-waves/waves.min.js"></script>
-<script src="~/UserHome/minimal/assets/libs/feather-icons/feather.min.js"></script>
-<script src="~/UserHome/minimal/assets/js/pages/plugins/lord-icon-2.1.0.js"></script>
-<script src="~/UserHome/minimal/assets/js/plugins.js"></script>
-<!-- dropzone min -->
-<script src="~/UserHome/minimal/assets/libs/dropzone/dropzone-min.js"></script>
-
-<!-- cleave.js -->
-<script src="~/UserHome/minimal/assets/libs/cleave.js/cleave.min.js"></script>
-
 <!--jsPDF-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.debug.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.min.js"></script>

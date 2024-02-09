@@ -1,29 +1,7 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "CreateOrderView";
     Layout = "~/Views/Shared/_HomeLayout.cshtml";
 }
-
-<!-- App favicon -->
-<link rel="shortcut icon" href="~/UserHome/minimal/assets/images/favicon.ico">
-
-<!-- dropzone css -->
-<link rel="stylesheet" href="~/UserHome/minimal/assets/libs/dropzone/dropzone.css" type="text/css" />
-
-<!-- Sweet Alert css-->
-<link href="~/UserHome/minimal/assets/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css" />
-
-<!-- Layout config Js -->
-<script src="~/UserHome/minimal/assets/js/layout.js"></script>
-<!-- Bootstrap Css -->
-<link href="~/UserHome/minimal/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-<!-- Icons Css -->
-<link href="~/UserHome/minimal/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
-<!-- App Css-->
-<link href="~/UserHome/minimal/assets/css/app.min.css" rel="stylesheet" type="text/css" />
-<!-- custom Css-->
-<link href="~/UserHome/minimal/assets/css/custom.min.css" rel="stylesheet" type="text/css" />
-
 
 <div class="row justify-content-center">
     <div class="col-xxl-9">
@@ -51,7 +29,7 @@
                                         <option value="Sale">Sale</option>
                                         <option value="Purchase">Purchase</option>
                                     </select>
-                                <input type="hidden" class="form-control bg-light border-0" id="OrderTypeId" />
+                                    <input type="hidden" class="form-control bg-light border-0" id="OrderTypeId" />
                                 </div>
                             </div>
                         </div>
@@ -64,12 +42,12 @@
                             <label for="orderId" class="text-muted text-uppercase fw-semibold">Order ID</label>
                             <input type="text" id="orderId" class="form-control bg-light border-0" name="orderId" value="@ViewBag.OrderId" readonly />
                         </div>
-@*                         <!--end col-->
+                        @*                         <!--end col-->
                         <div class="col-lg-3 col-sm-6">
-                            <div>
-                                <label for="date-field">Date</label>
-                                <input type="text" class="form-control bg-light border-0" id="date-field" data-provider="flatpickr" data-time="true" placeholder="Select Date-time">
-                            </div>
+                        <div>
+                        <label for="date-field">Date</label>
+                        <input type="text" class="form-control bg-light border-0" id="date-field" data-provider="flatpickr" data-time="true" placeholder="Select Date-time">
+                        </div>
                         </div> *@
                         <!--end col-->
                         <div class="col-lg-4 col-sm-6">
@@ -207,32 +185,30 @@
                                         Product Details
                                     </th>
                                     <th scope="col" style="width: 220px;">
-                                            Rate
+                                        Rate
                                     </th>
                                     <th scope="col" style="width: 120px;">
-                                            GST
+                                        GST
                                     </th>
                                     <th scope="col" style="width: 120px;">
-                                            GSTPrice
+                                        GSTPrice
                                     </th>
                                     <th scope="col" style="width: 120px;">Quantity</th>
                                     <th scope="col" class="text-end" style="width: 170px;">Amount</th>
                                     <th scope="col" class="text-end" style="width: 120px;">Action</th>
                                 </tr>
                             </thead>
-
                             <div>
-                                <form id="newRowfrm">
-                                <!--Partial View-->
-                                <tbody id="addNewlink">
-                                <div id="productdetailsPartial"></div>
-                                </tbody>
+                                <form id="newRowfrm" style="display: none;">
                                 </form>
-                                
+                                <table>
+                                    <tbody id="addNewlink">
+                                    </tbody>
+                                </table>
                             </div>
 
                             <tbody>
-                                <tr id="newForm" style="display: none;"><td class="d-none" colspan="5"><p>Add New Form</p></td></tr>
+                                <tr id="newForm" style="display: none;"><td class="d-none" colspan="5"></td></tr>
                                 <tr class="border-top border-top-dashed mt-2">
                                     <td colspan="3"></td>
                                     <td colspan="2" class="p-0">
@@ -320,7 +296,7 @@
                         <a href="javascript:void(0);" class="btn btn-danger"><i class="ri-send-plane-fill align-bottom me-1"></i> Send Invoice</a>
                     </div>
                 </div>
-              
+
             </form>
         </div>
     </div>
@@ -332,24 +308,3 @@
 <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
 <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
 <script src="~/moduls/orderdetailsscript.js"></script>
-@* <script src="~/moduls/productmasterscript.js"></script> *@
-
-<!-- JAVASCRIPT -->
-<script src="~/UserHome/minimal/assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script src="~/UserHome/minimal/assets/libs/simplebar/simplebar.min.js"></script>
-<script src="~/UserHome/minimal/assets/libs/node-waves/waves.min.js"></script>
-<script src="~/UserHome/minimal/assets/libs/feather-icons/feather.min.js"></script>
-<script src="~/UserHome/minimal/assets/js/pages/plugins/lord-icon-2.1.0.js"></script>
-<script src="~/UserHome/minimal/assets/js/plugins.js"></script>
-
-<!-- dropzone min -->
-<script src="~/UserHome/minimal/assets/libs/dropzone/dropzone-min.js"></script>
-
-<!-- cleave.js -->
-<script src="~/UserHome/minimal/assets/libs/cleave.js/cleave.min.js"></script>
-
-<!-- Sweet Alerts js -->
-<script src="~/UserHome/minimal/assets/libs/sweetalert2/sweetalert2.min.js"></script>
-
-<!-- App js -->
-<script src="~/UserHome/minimal/assets/js/app.js"></script>

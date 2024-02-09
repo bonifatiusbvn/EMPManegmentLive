@@ -92,15 +92,6 @@
                                                     <i class="ri-eye-fill align-bottom me-2 text-muted"></i>
                                                     View
                                                 </a>
-                                                <a class="dropdown-item" href="apps-projects-create.html">
-                                                    <i class="ri-pencil-fill align-bottom me-2 text-muted"></i>
-                                                    Edit
-                                                </a>
-                                                <div class="dropdown-divider"></div>
-                                                <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#removeProjectModal">
-                                                    <i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>
-                                                    Remove
-                                                </a>
                                             </div>
                                         </div>
                                     </div>
@@ -131,15 +122,6 @@
                                                 <a class="dropdown-item" href="/Project/AddProjectMember/?Id=@item.ProjectId" onclick="showProjectMembers('@item.ProjectId');">
                                                     <i class="ri-eye-fill align-bottom me-2 text-muted"></i>
                                                     View
-                                                </a>
-                                                <a class="dropdown-item" href="apps-projects-create.html">
-                                                    <i class="ri-pencil-fill align-bottom me-2 text-muted"></i>
-                                                    Edit
-                                                </a>
-                                                <div class="dropdown-divider"></div>
-                                                <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#removeProjectModal">
-                                                    <i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>
-                                                    Remove
                                                 </a>
                                             </div>
                                         </div>
@@ -254,11 +236,11 @@
         searchfor = @Context.Request.Query["searchfor"],
         searchby = @Context.Request.Query["searchby"]
     }),
-                             new X.PagedList.Web.Common.PagedListRenderOptions
-                         {
-                             LiElementClasses = new string[] { "page-item" },
-                             PageClasses = new string[] { "page-link" }
-                         })
+                                         new X.PagedList.Web.Common.PagedListRenderOptions
+                                     {
+                                         LiElementClasses = new string[] { "page-item" },
+                                         PageClasses = new string[] { "page-link" }
+                                     })
 
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
