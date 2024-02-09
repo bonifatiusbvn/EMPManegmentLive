@@ -23,7 +23,7 @@ function GetVendorNameList() {
     });
 }
 function selectvendorId() {
-    document.getElementById("txtvendorTypeid").value = document.getElementById("txtvendorname").value; 
+    document.getElementById("txtvendorTypeid").value = document.getElementById("txtvendorname").value;
 }
 
 
@@ -32,13 +32,13 @@ function ClearTextBox() {
     $("#txtvendorname").val('');
 }
 function AddProductType() {
-    
+
     if ($("#addproduct").valid()) {
-        
-        var formData =  new FormData();
+
+        var formData = new FormData();
         formData.append("ProductId", $("#txtvendorTypeid").val());
         formData.append("ProductName", $("#txtProductType").val());
-         
+
         $.ajax({
             url: '/ProductMaster/AddProductType',
             type: 'Post',
@@ -72,11 +72,11 @@ function AddProductType() {
 
 
 function GetProducts() {
-    debugger
+
     $.ajax({
         url: '/ProductMaster/GetProduct',
         success: function (result) {
-            debugger
+
             $.each(result, function (i, data) {
                 $('#txtProducts').append('<Option value=' + data.id + '>' + data.productName + '</Option>')
             });
@@ -85,13 +85,13 @@ function GetProducts() {
             });
         }
     });
-}      
+}
 
 function selectProductId() {
     document.getElementById("txtProductListId").value = document.getElementById("txtProductList").value;
 }
 function selectProductTypeId() {
-    debugger
+
     document.getElementById("txtProductTypeid").value = document.getElementById("txtProducts").value;
 }
 
@@ -157,10 +157,10 @@ $(document).ready(function () {
     });
 });
 
-function SaveProductDetails() {debugger
-    
-    if ($('#createproductform').valid()) {debugger
-        
+function SaveProductDetails() {
+
+    if ($('#createproductform').valid()) {
+
         var formData = new FormData();
         formData.append("ProductName", $("#txtproductname").val());
         formData.append("ProductType", $("#txtProductTypeid").val());
@@ -222,7 +222,7 @@ function ProductDetails() {
             $("#dvproductdetails").html(Result.responseText);
         }
     });
-}      
+}
 
 function EditProductDetails(Id) {
     $.ajax({
@@ -266,7 +266,7 @@ function UpdateProductDetails() {
         formData.append("Gst", $("#txtGST").val());
         formData.append("PerUnitWithGstprice", $("#txtPerUnitWithGSTPrice").val());
         formData.append("ProductImage", $("#txtproductImage").val());
-       
+
         $.ajax({
             url: '/ProductMaster/UpdateProductDetails',
             type: 'Post',
@@ -299,7 +299,7 @@ function UpdateProductDetails() {
 }
 
 $(document).ready(function () {
-    
+
     $("#UpdateDetailsForm").validate({
         rules: {
             txtProductName: "required",

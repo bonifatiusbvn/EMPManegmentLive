@@ -391,10 +391,10 @@ function otherPayment() {
 Array.from(document.getElementsByClassName("product-line-price")).forEach(function (e) {
     e.value = paymentSign + "0.00"
 });
-var isPaymentEl = document.getElementById("choices-payment-currency"),
-    choices = new Choices(isPaymentEl, {
-        searchEnabled: !1
-    });
+//var isPaymentEl = document.getElementById("choices-payment-currency"),
+//    choices = new Choices(isPaymentEl, {
+//        searchEnabled: !1
+//    });
 
 function isData() {
     var e = document.getElementsByClassName("plus"),
@@ -426,7 +426,6 @@ document.querySelector("#profile-img-file-input").addEventListener("change", fun
 var count = 1;
 
 function AddNewRow(Result) {
-
     count++;
     var e = document.createElement("tr");
     e.id = count;
@@ -434,98 +433,100 @@ function AddNewRow(Result) {
     e.innerHTML = document.getElementById("newRowfrm").innerHTML + Result;
     document.getElementById("addNewlink").appendChild(e);
 
-    updateProductTotalAmount();
-    // Assign the created row to the newRow variable
-    var newRow = e;
-
     // Initialize Choices plugin for new elements
-    Array.from(newRow.querySelectorAll("[data-trigger]")).forEach(function (element) {
+    Array.from(e.querySelectorAll("[data-trigger]")).forEach(function (element) {
         new Choices(element, {
             placeholderValue: "This is a placeholder set in the config",
             searchPlaceholderValue: "This is a search placeholder"
         });
     });
-    updateProductTotalAmount()
-    // Bind event listeners
+
     bindEventListeners();
+
+    // Update product total amount for the new row
+    updateProductTotalAmount(e);
+
+    // Update totals after adding the new row
+    updateTotals();
 }
 
 function bindEventListeners() {
+    // Event listener for removing a product
     document.querySelectorAll(".product-removal a").forEach(function (e) {
         e.addEventListener("click", function (event) {
             removeItem(event.target.closest("tr"));
-            updateProductTotalAmount()
-            updateTotalGst();
+            updateTotals();
         });
     });
 
+    // Event listener for increasing product quantity
     document.querySelectorAll(".plus").forEach(function (btn) {
         btn.addEventListener("click", function (event) {
-            var row = event.target.closest("tr");
-            var quantityInput = row.querySelector(".product-quantity");
-            quantityInput.value = parseInt(quantityInput.value) + 1;
-            updateProductTotalAmount();
-            updateTotalGst();
+            updateProductQuantity(event.target.closest("tr"), 1);
+            updateTotals();
         });
     });
 
+    // Event listener for decreasing product quantity
     document.querySelectorAll(".minus").forEach(function (btn) {
         btn.addEventListener("click", function (event) {
-            var row = event.target.closest("tr");
-            var quantityInput = row.querySelector(".product-quantity");
-            quantityInput.value = parseInt(quantityInput.value) - 1;
-            updateProductTotalAmount();
-
+            updateProductQuantity(event.target.closest("tr"), -1);
+            updateTotals();
         });
     });
+}
+
+function updateProductQuantity(row, increment) {
+    var quantityInput = row.querySelector(".product-quantity");
+    var currentQuantity = parseInt(quantityInput.value);
+    var newQuantity = currentQuantity + increment;
+    if (newQuantity >= 0) {
+        quantityInput.value = newQuantity;
+        updateProductTotalAmount(row);
+    }
 }
 
 function updateProductTotalAmount(row) {
+    var productPrice = parseFloat(row.querySelector("#txtproductamount").value);
+    var quantity = parseInt(row.querySelector(".product-quantity").value);
+    var gst = parseFloat(row.querySelector("#txtgst").value);
+    var totalGst = (productPrice * quantity * gst) / 100;
+    var totalAmount = productPrice * quantity + totalGst;
 
-    var productPrice = parseFloat($("#txtproductamount").val());
-    var quantity = parseInt($("#txtproductquantity").val());
+    row.querySelector("#txtproductamountwithGST").value = totalGst.toFixed(2);
+    row.querySelector("#txtproducttotalamount").value = totalAmount.toFixed(2);
+}
 
-
+function updateTotals() {
+    var totalSubtotal = 0;
     var totalGst = 0;
+    var totalAmount = 0;
+
     document.querySelectorAll(".product").forEach(function (row) {
+        var subtotal = parseFloat(row.querySelector("#txtproducttotalamount").value);
+        var gst = parseFloat(row.querySelector("#txtproductamountwithGST").value);
 
-        var gst = $("#txtgst").val();
-        var quantity = parseFloat(row.querySelector(".product-quantity").value);
-        var productPrice = parseFloat(row.querySelector("#txtproductamount").value);
-        totalGst += (productPrice * quantity * gst) / 100;
-
+        totalSubtotal += subtotal;
+        totalGst += gst;
+        totalAmount += subtotal + gst;
     });
-    document.getElementById("totalgst").value = totalGst.toFixed(2);
-    document.getElementById("txtproductamountwithGST").value = totalGst.toFixed(2);
-    var subtotal = productPrice * quantity;
-    var quantity = parseInt($("#txtproductquantity").val());
-    var totalAmount = productPrice * quantity;
-    var totalgst = totalGst + totalAmount;
-    var alltotal = subtotal + totalgst;
-    $("#txtproductamountwithGST").val(totalGst.toFixed(2))
-    $("#txtproducttotalamount").val(totalgst.toFixed(2));
-    $("#cart-subtotal").val(subtotal.toFixed(2));
-    $("#cart-total").val(alltotal.toFixed(2));
+
+    $("#cart-subtotal").val(totalSubtotal.toFixed(2));
+    $("#totalgst").val(totalGst.toFixed(2));
+    $("#cart-total").val(totalAmount.toFixed(2));
 }
 
 
 
-function updateTotalGst() {
-    var totalGst = 0;
-    document.querySelectorAll(".product").forEach(function (row) {
-        var gst = parseFloat(row.querySelector("#txtgst").value);
-        var quantity = parseFloat(row.querySelector(".product-quantity").value);
-        var productPrice = parseFloat(row.querySelector("#txtproductamount").value);
-        totalGst += (productPrice * quantity * gst) / 100;
-    });
-    document.getElementById("totalgst").value = totalGst.toFixed(2);
-    document.getElementById("txtproductamountwithGST").value = totalGst.toFixed(2);
-}
+
+
 remove();
 var taxRate = .125,
     shippingRate = 65,
     discountRate = .15,
     gst = 18;
+
+
 
 
 function remove() {

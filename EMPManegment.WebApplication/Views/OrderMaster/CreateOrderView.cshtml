@@ -177,25 +177,17 @@
 
                 <div class="card-body p-4">
                     <div class="table-responsive">
-                        <table class="invoice-table table table-borderless table-nowrap mb-0">
-                            <thead class="align-middle">
-                                <tr class="table-active">
-                                    <th scope="col" style="width: 50px;">#</th>
-                                    <th scope="col" style="width: 400px;">
-                                        Product Details
-                                    </th>
-                                    <th scope="col" style="width: 220px;">
-                                        Rate
-                                    </th>
-                                    <th scope="col" style="width: 120px;">
-                                        GST
-                                    </th>
-                                    <th scope="col" style="width: 120px;">
-                                        GSTPrice
-                                    </th>
-                                    <th scope="col" style="width: 120px;">Quantity</th>
-                                    <th scope="col" class="text-end" style="width: 170px;">Amount</th>
-                                    <th scope="col" class="text-end" style="width: 120px;">Action</th>
+                        <table class="invoice-table table table-bordered table-striped mb-0">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Product Details</th>
+                                    <th>Rate</th>
+                                    <th>GST (%)</th>
+                                    <th>GST Price</th>
+                                    <th>Quantity</th>
+                                    <th class="text-end">Amount</th>
+                                    <th class="text-end">Action</th>
                                 </tr>
                             </thead>
                             <div>
@@ -206,59 +198,57 @@
                                     </tbody>
                                 </table>
                             </div>
-
-                            <tbody>
-                                <tr id="newForm" style="display: none;"><td class="d-none" colspan="5"></td></tr>
-                                <tr class="border-top border-top-dashed mt-2">
-                                    <td colspan="3"></td>
-                                    <td colspan="2" class="p-0">
-                                        <table class="table table-borderless table-sm table-nowrap align-middle mb-0">
-                                            <tbody>
-                                                <tr>
-                                                    <th scope="row">Sub Total</th>
-                                                    <td style="width:150px;">
-                                                        <input type="text" class="form-control bg-light border-0" id="cart-subtotal" placeholder="$0.00" style="width: 80px;" readonly />
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <th scope="row">Estimated Tax (12.5%)</th>
-                                                    <td>
-                                                        <input type="text" class="form-control bg-light border-0" id="cart-tax" placeholder="$0.00" readonly />
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <th scope="row">Total Gst(18%)</th>
-                                                    <td>
-                                                        <input type="text" class="form-control bg-light border-0" id="totalgst" placeholder="$0.00" readonly />
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <th scope="row">Discount <small class="text-muted">(VELZON15)</small></th>
-                                                    <td>
-                                                        <input type="text" class="form-control bg-light border-0" id="cart-discount" placeholder="$0.00" readonly />
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <th scope="row">Shipping Charge</th>
-                                                    <td>
-                                                        <input type="text" class="form-control bg-light border-0" id="cart-shipping" placeholder="$0.00" readonly />
-                                                    </td>
-                                                </tr>
-                                                <tr class="border-top border-top-dashed">
-                                                    <th scope="row">Total Amount</th>
-                                                    <td>
-                                                        <input type="text" class="form-control bg-light border-0" id="cart-total" placeholder="$0.00" readonly />
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                        <!--end table-->
-                                    </td>
-                                </tr>
-                            </tbody>
                         </table>
-                        <!--end table-->
                     </div>
+                    <tbody>
+                        <tr id="newForm" style="display: none;"><td class="d-none" colspan="5"></td></tr>
+                        <tr class="border-top border-top-dashed mt-2">
+                            <td colspan="3"></td>
+                            <td colspan="2" class="p-0">
+                                <table class="table table-borderless table-sm table-nowrap align-middle mb-0">
+                                    <tbody>
+                                        <tr>
+                                            <th scope="row">Sub Total</th>
+                                            <td style="width:150px;">
+                                                <input type="text" class="form-control bg-light border-0" id="cart-subtotal" placeholder="$0.00" style="width: 80px;" readonly />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Estimated Tax (12.5%)</th>
+                                            <td>
+                                                <input type="text" class="form-control bg-light border-0" id="cart-tax" placeholder="$0.00" readonly />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Total Gst(18%)</th>
+                                            <td>
+                                                <input type="text" class="form-control bg-light border-0" id="totalgst" placeholder="$0.00" readonly />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Discount <small class="text-muted">(VELZON15)</small></th>
+                                            <td>
+                                                <input type="text" class="form-control bg-light border-0" id="cart-discount" placeholder="$0.00" readonly />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Shipping Charge</th>
+                                            <td>
+                                                <input type="text" class="form-control bg-light border-0" id="cart-shipping" placeholder="$0.00" readonly />
+                                            </td>
+                                        </tr>
+                                        <tr class="border-top border-top-dashed">
+                                            <th scope="row">Total Amount</th>
+                                            <td>
+                                                <input type="text" class="form-control bg-light border-0" id="cart-total" placeholder="$0.00" readonly />
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <!--end table-->
+                            </td>
+                        </tr>
+                    </tbody>
                     <div class="row mt-3">
                         <div class="col-lg-4">
                             <div class="mb-2">
@@ -296,7 +286,6 @@
                         <a href="javascript:void(0);" class="btn btn-danger"><i class="ri-send-plane-fill align-bottom me-1"></i> Send Invoice</a>
                     </div>
                 </div>
-
             </form>
         </div>
     </div>
