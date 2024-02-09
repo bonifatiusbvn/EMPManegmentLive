@@ -2,59 +2,43 @@
 
 @foreach (var item in Model)
 {
-         <tr id="templateRow" class="product">
+    <tr id="templateRow" class="product">
         <th scope="row" class="product-id">1</th>
-                <td class="text-start">
-                   <input type="text" class="form-control bg-light border-0" id="txtproductName" value="@item.ProductName" readonly />
-                   <input type="hidden" class="form-control bg-light border-0" id="txtproductId"  readonly hidden />
-                   <input class="form-control bg-light border-0" id="txtproductDescription" rows="2" value="@item.ProductShortDescription" readonly />
-                </td>
-                <td>
-                    <input type="number" class="form-control product-price bg-light border-0" id="txtproductamount" value="@item.PerUnitPrice" readonly style="width: 90px;" step="0.01" />
-                </td>
-                <td>
-                <input type="number" class="form-control product-price bg-light border-0" id="txtgst" value="@item.Gst" readonly step="0.01"  />
-                </td>
-                <td>
-                    @{
-                        decimal a = item.PerUnitPrice;
-                        decimal b = item.Gst;
-                        decimal c = item.Quantity;
-                        decimal total = a * b / 100;
-                        //decimal totalwithquantity = total * c;
-                    }
-            <input type="number" class="form-control bg-light border-0 product-line-prices" id="txtproductamountwithGST" value="@total" readonly step="0.01" />
-                </td>
-                <td>
-                    @{
-                    decimal d = item.PerUnitPrice;
-                    decimal totalamount = total + d;
-                    }
-                    <input type="hidden" class="form-control product-price bg-light border-0" id="txtproductamountwithGST" value="@totalamount" hidden step="0.01" />
-                </td>
-                <td>
-                   <div class="input-step">
-                      <button type="button" class='minus' id="minusbtn">–</button>
-                      <input type="number" class="product-quantity" id="txtproductquantity" value="0" >
-                      <button type="button" class='plus' id="plusbtn">+</button>
-                   </div>
-                </td>
-                <td class="text-end">
-                   <div>
-                <input type="text" class="form-control bg-light border-0 product-line-price" id="txtproducttotalamount" placeholder="$0.00" style="margin-left: 50px;" readonly/>
-                   </div>
-                </td>
-                <td class="product-removal">
-                    <a href="javascript:void(0)"><i class="ri-delete-bin-fill align-bottom me-2 text-muted" style="margin-left: 260px;"></i></a>
-                </td>
-         </tr>
+        <td class="text-start">
+            <input type="text" class="form-control bg-light border-0" id="txtproductName" value="@item.ProductName" readonly />
+            <input type="hidden" class="form-control bg-light border-0" id="txtproductId" readonly hidden />
+            <input class="form-control bg-light border-0" id="txtproductDescription" rows="2" value="@item.ProductShortDescription" readonly />
+        </td>
+        <td>
+            <input type="number" class="form-control bg-light border-0" id="txtproductamount" value="@item.PerUnitPrice" readonly style="width: 90px;" step="0.01" />
+        </td>
+        <td>
+            <input type="number" class="form-control bg-light border-0" id="txtgst" value="@item.Gst" readonly step="0.01" />
+        </td>
+        <td>
+
+            <input type="number" class="form-control bg-light border-0" id="txtproductamountwithGST" readonly step="0.01" />
+        </td>
+        <td>
+        </td>
+        <td>
+            <div class="input-step">
+                <button type="button" class='minus' id="minusbtn">–</button>
+                <input type="number" class="product-quantity" id="txtproductquantity" value="1">
+                <button type="button" class='plus' id="plusbtn">+</button>
+            </div>
+        </td>
+        <td class="text-end">
+            <div>
+                <input type="text" class="form-control bg-light border-0" id="txtproducttotalamount" readonly />
+            </div>
+        </td>
+        <td class="product-removal">
+            <a href="javascript:void(0)"><i class="ri-delete-bin-fill align-bottom me-2 text-muted" style="margin-left: 260px;"></i></a>
+        </td>
+    </tr>
 }
-<script>
-    var d = $('#txtproductamount').val();
-    var e = $('#txtproductquantity').val();
-    var b = $('#txtgst').val();
-    var total = d * b / 100 * e;
-</script>
+
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
