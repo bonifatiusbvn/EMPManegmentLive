@@ -1,5 +1,7 @@
-﻿@model List<EMPManegment.EntityModels.ViewModels.ProjectModels.ProjectView>
-
+﻿@using EMPManegment.Web.Models
+@model List<EMPManegment.EntityModels.ViewModels.ProjectModels.ProjectView>
+@inject IHttpContextAccessor Accessor
+@inject UserSession _userSession
 
 <div class="tab-pane" role="tabpanel">
     <div class="card">
@@ -11,7 +13,7 @@
                     {
                         @if (item.Status == "Inprogress")
                         {
-                            <div class="col-xxl-3 col-sm-6">
+                            <div class="col-xxl-4 col-sm-6">
                                 <div class="card profile-project-card shadow-none profile-project-warning">
                                     <div class="card-body p-4">
                                         <div class="d-flex">
@@ -20,9 +22,8 @@
                                                     <a href="#" class="text-body">@item.ProjectTitle</a>
                                                 </h5>
                                                 <p class="text-muted text-truncate mb-0">
-                                                    Last
-                                                    Update : <span class="fw-semibold text-body">
-                                                        @item.StartDate
+                                                    Description : <span class="fw-semibold text-body">
+                                                        @item.ProjectDescription
                                                     </span>
                                                 </p>
                                             </div>
@@ -42,23 +43,11 @@
                                                         </h5>
                                                     </div>
                                                     <div class="avatar-group">
-                                                        <div class="avatar-group-item">
-                                                            <div class="avatar-xs">
-                                                                <img src="~/UserHome/minimal/assets/images/users/avatar-1.jpg" alt="" class="rounded-circle img-fluid" />
+                                                        <a href="javascript: void(0);" class="avatar-group-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="@Accessor.HttpContext.Session.GetString("FullName")">
+                                                            <div class="avatar-xxs">
+                                                                <img src="~/@UserSession.ProfilePhoto" alt="" class="avatar-xs rounded-circle">
                                                             </div>
-                                                        </div>
-                                                        <div class="avatar-group-item">
-                                                            <div class="avatar-xs">
-                                                                <img src="~/UserHome/minimal/assets/images/users/avatar-3.jpg" alt="" class="rounded-circle img-fluid" />
-                                                            </div>
-                                                        </div>
-                                                        <div class="avatar-group-item">
-                                                            <div class="avatar-xs">
-                                                                <div class="avatar-title rounded-circle bg-light text-primary">
-                                                                    J
-                                                                </div>
-                                                            </div>
-                                                        </div>
+                                                        </a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -72,7 +61,7 @@
                         }
                         else
                         {
-                            <div class="col-xxl-3 col-sm-6">
+                            <div class="col-xxl-4 col-sm-6">
                                 <div class="card profile-project-card shadow-none profile-project-success">
                                     <div class="card-body p-4">
                                         <div class="d-flex">
@@ -81,9 +70,8 @@
                                                     <a href="#" class="text-body">@item.ProjectTitle</a>
                                                 </h5>
                                                 <p class="text-muted text-truncate mb-0">
-                                                    Last
-                                                    Update : <span class="fw-semibold text-body">
-                                                        @item.StartDate
+                                                    Description : <span class="fw-semibold text-body">
+                                                        @item.ProjectDescription
                                                     </span>
                                                 </p>
                                             </div>
@@ -103,23 +91,11 @@
                                                         </h5>
                                                     </div>
                                                     <div class="avatar-group">
-                                                        <div class="avatar-group-item">
-                                                            <div class="avatar-xs">
-                                                                <img src="~/UserHome/minimal/assets/images/users/avatar-1.jpg" alt="" class="rounded-circle img-fluid" />
+                                                        <a href="javascript: void(0);" class="avatar-group-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="@Accessor.HttpContext.Session.GetString("FullName")">
+                                                            <div class="avatar-xxs">
+                                                                <img src="~/@UserSession.ProfilePhoto" alt="" class="avatar-xs rounded-circle">
                                                             </div>
-                                                        </div>
-                                                        <div class="avatar-group-item">
-                                                            <div class="avatar-xs">
-                                                                <img src="~/UserHome/minimal/assets/images/users/avatar-3.jpg" alt="" class="rounded-circle img-fluid" />
-                                                            </div>
-                                                        </div>
-                                                        <div class="avatar-group-item">
-                                                            <div class="avatar-xs">
-                                                                <div class="avatar-title rounded-circle bg-light text-primary">
-                                                                    J
-                                                                </div>
-                                                            </div>
-                                                        </div>
+                                                        </a>
                                                     </div>
                                                 </div>
                                             </div>

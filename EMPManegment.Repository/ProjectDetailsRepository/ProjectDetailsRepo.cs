@@ -90,19 +90,42 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
         public async Task<List<ProjectView>> GetUserProjectList(Guid UserId)
         {
             var UserData = new List<ProjectView>();
-            var data = await Context.TblProjectDetails.Where(x => x.UserId == UserId).ToListAsync();
+            var data = await (from a in Context.TblProjectDetails
+                              join b in Context.TblProjectMasters
+                              on a.ProjectId equals b.ProjectId
+                              where a.UserId == UserId
+                              select new
+                              {
+                                  a.Id,
+                                  a.ProjectId,
+                                  a.ProjectType,
+                                  a.ProjectTitle,
+                                  a.Status,
+                                  a.CreatedOn,
+                                  a.UserId,
+                                  a.TotalMember,
+                                  a.StartDate,
+                                  a.EndDate,
+                                  b.ProjectDescription,
+                              }).ToListAsync();
+
             if (data != null)
             {
                 foreach (var item in data)
                 {
                     UserData.Add(new ProjectView()
                     {
+                        Id = item.Id,
                         ProjectId = item.ProjectId,
                         ProjectType = item.ProjectType,
                         ProjectTitle = item.ProjectTitle,
-                        Status = item.Status,                      
+                        Status = item.Status,
                         CreatedOn = item.CreatedOn,
                         UserId = item.UserId,
+                        TotalMember = item.TotalMember,
+                        StartDate = item.StartDate,
+                        EndDate = item.EndDate,
+                        ProjectDescription = item.ProjectDescription,
                     });
                 }
             }
@@ -237,23 +260,45 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
             }
         }
 
-        public async Task<List<ProjectDetailView>> GetProjectListById(string? searchby, string? searchfor, Guid UserId)
+        public async Task<List<ProjectView>> GetProjectListById(string? searchby, string? searchfor, Guid UserId)
         {
-            var UserData = new List<ProjectDetailView>();
-            var data = await Context.TblProjectDetails.Where(x => x.UserId == UserId).ToListAsync();
+            var UserData = new List<ProjectView>();
+            var data = await (from projectDetail in Context.TblProjectDetails
+                              join projectMaster in Context.TblProjectMasters
+                              on projectDetail.ProjectId equals projectMaster.ProjectId
+                              where projectDetail.UserId == UserId
+                              select new
+                              {
+                                  projectDetail.Id,
+                                  projectDetail.ProjectId,
+                                  projectDetail.ProjectType,
+                                  projectDetail.ProjectTitle,
+                                  projectDetail.Status,
+                                  projectDetail.CreatedOn,
+                                  projectDetail.UserId,
+                                  projectDetail.TotalMember,
+                                  projectDetail.StartDate,
+                                  projectDetail.EndDate,
+                                  projectMaster.ProjectDescription,
+                              }).ToListAsync();
+
             if (data != null)
             {
                 foreach (var item in data)
                 {
-                    UserData.Add(new ProjectDetailView()
+                    UserData.Add(new ProjectView()
                     {
-                        Id=item.Id,
+                        Id = item.Id,
                         ProjectId = item.ProjectId,
                         ProjectType = item.ProjectType,
                         ProjectTitle = item.ProjectTitle,
-                        ProjectStatus = item.Status,
+                        Status = item.Status,
                         CreatedOn = item.CreatedOn,
                         UserId = item.UserId,
+                        TotalMember = item.TotalMember,
+                        StartDate = item.StartDate,
+                        EndDate = item.EndDate,
+                        ProjectDescription = item.ProjectDescription,
                     });
                 }
             }

@@ -1,5 +1,6 @@
 ﻿
 $(document).ready(function () {
+      GetAllUserProjectDetailsList();
       document.getElementById("showProjectMembers").click()
       document.getElementById("showProjectDocuments").click()
 });
@@ -288,4 +289,40 @@ function showuploadDocuments(ProjectId) {
             })
         }
     })
+}
+
+function GetAllUserProjectDetailsList(page) {debugger
+
+    var searchBy = $("#inputSearch").val();
+    var searchFor = $("#inputsearch").val();
+
+    $.get("/Project/GetAllUserProjectList", { searchby: searchBy, searchfor: searchFor, page: page })
+        .done(function (result) {debugger
+
+            $("#getallprojectlist").html(result);
+        })
+        .fail(function (error) {
+            console.error(error);
+        });
+}
+
+GetAllUserProjectDetailsList(1);
+
+
+$(document).on("click", ".pagination a", function (e) {debugger
+    e.preventDefault();
+    var page = $(this).text();
+    GetAllUserProjectDetailsList(page);
+});
+
+
+$(document).on("click", "#backButton", function (e) {debugger
+    e.preventDefault();
+    var page = $(this).text();
+    GetAllUserProjectDetailsList(page);
+});
+
+function searchproject() {debugger
+
+    GetAllUserProjectDetailsList(1);
 }

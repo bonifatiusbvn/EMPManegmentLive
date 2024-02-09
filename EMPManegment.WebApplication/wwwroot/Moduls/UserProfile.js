@@ -68,29 +68,22 @@ function UploadDocument() {
     });
 }
 
-function GetUserProjectList() {
+function GetUserProjectList(page) {
 
-    $.ajax({
-        url: '/Project/GetUserProjectList',
-        type: 'Post',
-        dataType: 'json',
-        processData: false,
-        contentType: false,
-        complete: function (Result) {
+    var searchBy = $("#inputSearch").val();
+    var searchFor = $("#inputsearch").val();
 
-            $('#dvprojectdetail').html(Result.responseText);
-        },
-        Error: function () {
-            Swal.fire({
-                title: "Can't get data!",
-                icon: 'warning',
-                confirmButtonColor: '#3085d6',
-                confirmButtonText: 'OK',
-            })
-        }
-    })
+    $.get("/Project/ShowUserProjectList", { searchby: searchBy, searchfor: searchFor, page: page })
+        .done(function (result) {
+
+            $("#dvshowprojectdetail").html(result);
+        })
+        .fail(function (error) {
+            console.error(error);
+        });
 }
 
+GetUserProjectList(1);
 
 function GetProjectList() {
     $.ajax({
@@ -161,4 +154,5 @@ $(document).on("click", "#backButton", function (e) {
 function serrchproject() {
 
     loadPartialView(1);
+    GetUserProjectList(1);
 }

@@ -205,13 +205,13 @@ namespace EMPManegment.Web.Controllers
                         Image = filepath,
                         IsActive = AddEmployee.IsActive,
                     };
-                    ApiResponseModel postuser = await APIServices.PostAsync(AddUser, "User/AddEmployees");
+                    ApiResponseModel postuser = await APIServices.PostAsync(AddUser, "User/UserSingUp");
                     if (postuser.code == 200)
                     {
                         var identity = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, AddEmployee.UserName) }, CookieAuthenticationDefaults.AuthenticationScheme);
                         var principal = new ClaimsPrincipal(identity);
                         HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
-                        return RedirectToAction("Login", "UserLogin");
+                        return RedirectToAction("Login", "Authentication");
                     }
                     else
                     {

@@ -37,8 +37,11 @@ namespace EMPManegment.Web.Controllers
             return View();
         }
 
-        public async Task<IActionResult> ProjectList(string? searchby, string? searchfor, int? page)
-
+        public async Task<IActionResult> ProjectList()
+        {
+            return View();
+        }
+        public async Task<IActionResult> GetAllUserProjectList(string? searchby, string? searchfor, int? page)
         {
             try
             {
@@ -48,8 +51,11 @@ namespace EMPManegment.Web.Controllers
                 {
                     projectlist = JsonConvert.DeserializeObject<List<ProjectDetailView>>(response.data.ToString());
                 }
-                var pageProject = projectlist.ToPagedList(page ?? 1, 4);
-                return View(pageProject);
+                int pageSize = 4;
+                var pageNumber = page ?? 1;
+
+                var pagedList = projectlist.ToPagedList(pageNumber, pageSize);
+                return PartialView("~/Views/Project/_GetAllUserProjectList.cshtml", pagedList);
             }
             catch (Exception ex)
             {
@@ -74,7 +80,30 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
+        [HttpGet]
+        public async Task<IActionResult> ShowUserProjectList(string? searchby, string? searchfor, int? page)
+        {
+            try
+            {
+                Guid UserId = _userSession.UserId;
+                List<ProjectView> projectlist = new List<ProjectView>();
+                ApiResponseModel response = await APIServices.PostAsync("", "ProjectDetails/GetProjectListById?searchby=" + searchby + "&searchfor=" + searchfor + "&UserId=" + UserId);
+                if (response.code == 200)
+                {
+                    projectlist = JsonConvert.DeserializeObject<List<ProjectView>>(response.data.ToString());
+                }
+                int pageSize = 4;
+                var pageNumber = page ?? 1;
 
+                var pagedList = projectlist.ToPagedList(pageNumber, pageSize);
+
+                return PartialView("~/Views/Project/_ShowUserProjectList.cshtml", pagedList);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
         [HttpPost]
         public async Task<IActionResult> CreateProject(ProjectDetailView project)
         {

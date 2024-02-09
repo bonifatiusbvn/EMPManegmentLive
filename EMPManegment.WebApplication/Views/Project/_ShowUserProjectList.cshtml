@@ -1,0 +1,181 @@
+﻿@model IEnumerable<EMPManegment.EntityModels.ViewModels.ProjectModels.ProjectView>
+@using EMPManegment.Web.Models
+@using X.PagedList;
+@using X.PagedList.Mvc.Core;
+@inject IHttpContextAccessor Accessor
+@inject UserSession _userSession
+
+<style>
+    span.deleteicon {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+    }
+
+        span.deleteicon span {
+            position: absolute;
+            display: block;
+            right: 3px;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            color: red;
+            background-color: #ccc;
+            font: 13px monospace;
+            text-align: center;
+            line-height: 1em;
+            cursor: pointer;
+        }
+
+        span.deleteicon input {
+            padding-right: 18px;
+            box-sizing: border-box;
+        }
+</style>
+
+<div class="tab-pane" role="tabpanel">
+    <div class="card">
+        <div class="card-body">
+            <!-- ... your existing form content ... -->
+
+            <div class="row g-4 mb-3">
+                <div class="col-sm-auto">
+                    <a id="backButton" class="btn btn-outline-success rounded"><i class="ri-arrow-left-line m-2"></i>Back</a>
+                </div>
+
+                <div class="col-sm offset-6">
+                    <form class="mx-2 my-2">
+                        <div class="input-group">
+                            <select class="form-select" id="inputSearch" name="searchby" style="height:40px;">
+                                <option selected disabled value="">SearchBy...</option>
+                                <option value="ProjectTitle">ProjectTitle</option>
+                                <option value="ProjectStatus">ProjectStatus</option>
+                            </select>
+                            <span class="deleteicon col-sm offset-6">
+                                <input name="searchfor" class="form-control" id="inputsearch" area-describedby="inputSearchProjectTitle" aria-label="Search" autocomplete="off" style="height:40px;" />
+                                <span onclick="var input = this.previousElementSibling; input.value = ''; input.focus();">x</span>
+                            </span>
+                            <button type="button" class="btn btn-outline-secondary rounded" onclick="serrchproject()" style="width:100px; height:40px;">Search</button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+            <!-- end row -->
+            <div class="row">
+                @foreach (var item in Model)
+                {
+                    @if (item.Status == "Inprogress")
+                    {
+                        <div class="col-xxl-3 col-sm-6">
+                            <div class="card profile-project-card shadow-none profile-project-warning">
+                                <div class="card-body p-4">
+                                    <div class="d-flex">
+                                        <div class="flex-grow-1 text-muted overflow-hidden">
+                                            <h5 class="fs-14 text-truncate">
+                                                <a href="#" class="text-body">@item.ProjectTitle</a>
+                                            </h5>
+                                        </div>
+                                        <p class="text-muted text-truncate mb-0">
+                                            Description : <span class="fw-semibold text-body">
+                                                @item.ProjectDescription
+                                            </span>
+                                        </p>
+                                        <div class="flex-shrink-0 ms-2">
+                                            <div class="badge bg-warning-subtle text-warning fs-12">
+                                                @item.Status
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex mt-4">
+                                        <div class="flex-grow-1">
+                                            <div class="d-flex align-items-center gap-2">
+                                                <div>
+                                                    <h5 class="fs-12 text-muted mb-0">
+                                                        Members :
+                                                    </h5>
+                                                </div>
+                                                <div class="avatar-group">
+                                                    <a href="javascript: void(0);" class="avatar-group-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="@Accessor.HttpContext.Session.GetString("FullName")">
+                                                        <div class="avatar-xxs">
+                                                            <img src="~/@UserSession.ProfilePhoto" alt="" class="avatar-xs rounded-circle">
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- end card body -->
+                            </div>
+                            <!-- end card -->
+                        </div>
+                        <!--end col-->
+                    }
+                    else
+                    {
+                        <div class="col-xxl-3 col-sm-6">
+                            <div class="card profile-project-card shadow-none profile-project-success">
+                                <div class="card-body p-4">
+                                    <div class="d-flex">
+                                        <div class="flex-grow-1 text-muted overflow-hidden">
+                                            <h5 class="fs-14 text-truncate">
+                                                <a href="#" class="text-body">@item.ProjectTitle</a>
+                                            </h5>
+                                            <p class="text-muted text-truncate mb-0">
+                                                Description : <span class="fw-semibold text-body">
+                                                    @item.ProjectDescription
+                                                </span>
+                                            </p>
+                                        </div>
+                                        <div class="flex-shrink-0 ms-2">
+                                            <div class="badge bg-success-subtle text-success fs-12">
+                                                @item.Status
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex mt-4">
+                                        <div class="flex-grow-1">
+                                            <div class="d-flex align-items-center gap-2">
+                                                <div>
+                                                    <h5 class="fs-12 text-muted mb-0">
+                                                        Members :
+                                                    </h5>
+                                                </div>
+                                                <div class="avatar-group">
+                                                    <a href="javascript: void(0);" class="avatar-group-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="@Accessor.HttpContext.Session.GetString("FullName")">
+                                                        <div class="avatar-xxs">
+                                                            <img src="~/@UserSession.ProfilePhoto" alt="" class="avatar-xs rounded-circle">
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- end card body -->
+                            </div>
+                            <!-- end card -->
+                        </div>
+                        <!--end col-->
+                    }
+                }
+            </div>
+
+            @Html.PagedListPager((IPagedList)Model, page => Url.Action("GetUserProjectList", new
+                {
+                    page = page,
+                    searchfor = @Context.Request.Query["searchfor"],
+                    searchby = @Context.Request.Query["searchby"]
+                }),
+                     new X.PagedList.Web.Common.PagedListRenderOptions
+            {
+                LiElementClasses = new string[] { "page-item" },
+                PageClasses = new string[] { "page-link" }
+            })
+
+        </div>
+    </div>
+</div>
