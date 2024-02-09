@@ -72,11 +72,9 @@ function AddProductType() {
 
 
 function GetProducts() {
-    debugger
     $.ajax({
         url: '/ProductMaster/GetProduct',
         success: function (result) {
-            debugger
             $.each(result, function (i, data) {
                 $('#txtProducts').append('<Option value=' + data.id + '>' + data.productName + '</Option>')
             });
@@ -91,7 +89,6 @@ function selectProductId() {
     document.getElementById("txtProductListId").value = document.getElementById("txtProductList").value;
 }
 function selectProductTypeId() {
-    debugger
     document.getElementById("txtProductTypeid").value = document.getElementById("txtProducts").value;
 }
 
@@ -157,9 +154,9 @@ $(document).ready(function () {
     });
 });
 
-function SaveProductDetails() {debugger
+function SaveProductDetails() {
     
-    if ($('#createproductform').valid()) {debugger
+    if ($('#createproductform').valid()) {
         
         var formData = new FormData();
         formData.append("ProductName", $("#txtproductname").val());
