@@ -1,8 +1,8 @@
 ﻿
 $(document).ready(function () {
-      GetAllUserProjectDetailsList();
-      document.getElementById("showProjectMembers").click()
-      document.getElementById("showProjectDocuments").click()
+    GetAllUserProjectDetailsList();
+    document.getElementById("showProjectMembers").click()
+    document.getElementById("showProjectDocuments").click()
 });
 
 
@@ -37,7 +37,7 @@ function btnCreateProjectDetail() {
                     confirmButtonText: 'OK',
                 }).then(function () {
                     window.location = '/Project/CreateProject';
-                });     
+                });
             }
         })
     }
@@ -110,15 +110,14 @@ function showMember() {
         }
     })
 }
-function invitemember(Id)
-{
-    
+function invitemember(Id) {
+
     var protitel = document.getElementById("projecttitle").textContent;
     var proStartDate = $('#projectenddate').val();
     var proStatus = document.getElementById('projectstatus').textContent;
     var proProjectType = document.getElementById('projecttype').textContent;
     var proProjectId = $('#projectid').val();
-    
+
     var MemberData = {
         ProjectId: proProjectId,
         UserId: Id,
@@ -126,28 +125,28 @@ function invitemember(Id)
         ProjectTitle: protitel,
         StartDate: proStartDate,
         Status: proStatus
-      
+
     }
     var form_data = new FormData();
     form_data.append("InviteMember", JSON.stringify(MemberData));
 
-        $.ajax({
+    $.ajax({
         url: '/Project/InviteMemberToProject',
         type: 'Post',
         data: form_data,
         dataType: 'json',
         processData: false,
         contentType: false,
-            success: function (Result) {
-                Swal.fire({
-                    title: Result.message,
-                    icon: 'success',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK',
-                }).then(function () {
-                    window.location = '/Project/AddProjectMember/?Id=' + proProjectId;
-                }); 
-            },
+        success: function (Result) {
+            Swal.fire({
+                title: Result.message,
+                icon: 'success',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'OK',
+            }).then(function () {
+                window.location = '/Project/AddProjectMember/?Id=' + proProjectId;
+            });
+        },
         Error: function () {
             Swal.fire({
                 title: "Can't get data!",
@@ -291,13 +290,13 @@ function showuploadDocuments(ProjectId) {
     })
 }
 
-function GetAllUserProjectDetailsList(page) {debugger
+function GetAllUserProjectDetailsList(page) {
 
     var searchBy = $("#inputSearch").val();
     var searchFor = $("#inputsearch").val();
 
     $.get("/Project/GetAllUserProjectList", { searchby: searchBy, searchfor: searchFor, page: page })
-        .done(function (result) {debugger
+        .done(function (result) {
 
             $("#getallprojectlist").html(result);
         })
@@ -309,20 +308,20 @@ function GetAllUserProjectDetailsList(page) {debugger
 GetAllUserProjectDetailsList(1);
 
 
-$(document).on("click", ".pagination a", function (e) {debugger
+$(document).on("click", ".pagination a", function (e) {
     e.preventDefault();
     var page = $(this).text();
     GetAllUserProjectDetailsList(page);
 });
 
 
-$(document).on("click", "#backButton", function (e) {debugger
+$(document).on("click", "#backButton", function (e) {
     e.preventDefault();
     var page = $(this).text();
     GetAllUserProjectDetailsList(page);
 });
 
-function searchproject() {debugger
+function searchproject() {
 
     GetAllUserProjectDetailsList(1);
 }

@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "ProductList";
     Layout = "~/Views/Shared/_HomeLayout.cshtml";
 }
@@ -35,8 +34,6 @@
     </div>
 </div>
 <!-- end page title -->
-
-
 <!-- /.modal -->
 <!-- end card -->
 
@@ -56,10 +53,10 @@
                         </div>
 
                         <div class="filter-choices-input">
-                             <select class="form-control" id="txtProductList" onchange="selectProductId()">
-                                 <option selected disabled value="">---Select Products---</option>
-                             </select>
-                             <input type="hidden" class="form-control" id="txtProductListId">
+                            <select class="form-control" id="txtProductList" onchange="selectProductId()">
+                                <option selected disabled value="">---Select Products---</option>
+                            </select>
+                            <input type="hidden" class="form-control" id="txtProductListId">
                         </div>
                     </div>
 
@@ -234,9 +231,9 @@
                 <!-- end card -->
             </div>
             <!-- end col -->
-        
+
             <div class="col-xl-9 col-lg-8">
-                
+
                 <div>
                     <div class="card">
                         <div class="card-header border-0">
@@ -258,14 +255,12 @@
                             <form>
                                 <div class="row g-3">
                                     <div class="col-xxl-5 col-sm-6">
-                                        <div >
-                                           
+                                        <div>
                                         </div>
                                     </div>
                                     <!--end col-->
                                     <div class="col-xxl-2 col-sm-6">
                                         <div>
-                                            
                                         </div>
                                     </div>
                                     <!--end col-->
@@ -280,7 +275,7 @@
                                     <div class="col-xxl-2 col-sm-4">
                                         <div>
                                             <label for="ProductId" class="form-label"></label>
-                                            <input type="text" placeholder="Search here...." id="txtsearch" class="form-control mb-1 float-end"/>
+                                            <input type="text" placeholder="Search here...." id="txtsearch" class="form-control mb-1 float-end" />
                                         </div>
                                     </div>
                                     <!--end col-->
@@ -300,12 +295,12 @@
                                     <ul class="nav nav-tabs-custom card-header-tabs border-bottom-0" role="tablist">
                                         <li class="nav-item">
                                             <a class="nav-link active fw-semibold" data-bs-toggle="tab" href="#productnav-all" role="tab">
-                                                All <span class="badge bg-secondary align-middle rounded-pill ms-1">12</span>
+                                                All <span class="badge bg-secondary align-middle rounded-pill ms-1"></span>
                                             </a>
                                         </li>
                                         <li class="nav-item">
                                             <a class="nav-link fw-semibold" data-bs-toggle="tab" href="#productnav-published" role="tab">
-                                                Published <span class="badge bg-secondary align-middle rounded-pill ms-1">5</span>
+                                                Published <span class="badge bg-secondary align-middle rounded-pill ms-1"></span>
                                             </a>
                                         </li>
                                         <li class="nav-item">
@@ -331,7 +326,7 @@
                                 <div class="tab-pane active" id="productnav-all" role="tabpanel">
                                     <!--Partial View-->
                                     <div id="dvproductdetails"></div>
-                                   <div id="table-product-list-all" class="table-card gridjs-border-none"></div>
+                                    <div id="table-product-list-all" class="table-card gridjs-border-none"></div>
                                 </div>
                                 <!-- end tab pane -->
 
