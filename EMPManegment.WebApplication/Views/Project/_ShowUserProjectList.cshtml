@@ -40,22 +40,22 @@
 
             <div class="row g-4 mb-3">
                 <div class="col-sm-auto">
-                    <a id="backButton" class="btn btn-outline-success rounded"><i class="ri-arrow-left-line m-2"></i>Back</a>
+                    <a id="btnbackButton" class="btn btn-outline-success rounded"><i class="ri-arrow-left-line m-2"></i>Back</a>
                 </div>
 
                 <div class="col-sm offset-6">
                     <form class="mx-2 my-2">
                         <div class="input-group">
-                            <select class="form-select" id="inputSearch" name="searchby" style="height:40px;">
+                            <select class="form-select" id="idinputSearch" name="searchby" style="height:40px;">
                                 <option selected disabled value="">SearchBy...</option>
                                 <option value="ProjectTitle">ProjectTitle</option>
                                 <option value="ProjectStatus">ProjectStatus</option>
                             </select>
                             <span class="deleteicon col-sm offset-6">
-                                <input name="searchfor" class="form-control" id="inputsearch" area-describedby="inputSearchProjectTitle" aria-label="Search" autocomplete="off" style="height:40px;" />
+                                <input name="searchfor" class="form-control" id="txtinputSearch" area-describedby="inputSearchProjectTitle" aria-label="Search" autocomplete="off" style="height:40px;" />
                                 <span onclick="var input = this.previousElementSibling; input.value = ''; input.focus();">x</span>
                             </span>
-                            <button type="button" class="btn btn-outline-secondary rounded" onclick="serrchproject()" style="width:100px; height:40px;">Search</button>
+                            <button type="button" class="btn btn-outline-secondary rounded" onclick="btnserrchproject()" style="width:100px; height:40px;">Search</button>
                         </div>
                     </form>
 
@@ -164,7 +164,7 @@
                 }
             </div>
 
-            @Html.PagedListPager((IPagedList)Model, page => Url.Action("GetUserProjectList", new
+            @Html.PagedListPager((IPagedList)Model, page => Url.Action("ShowUserProjectList", new
                 {
                     page = page,
                     searchfor = @Context.Request.Query["searchfor"],
@@ -179,3 +179,5 @@
         </div>
     </div>
 </div>
+
+

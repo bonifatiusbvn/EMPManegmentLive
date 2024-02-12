@@ -76,5 +76,30 @@ namespace EMPManagment.API.Controllers
             OrderDetailView orderdetails = await OrderDetails.GetOrderDetailsById(OrderId);
             return Ok(new { code = 200, data = orderdetails});
         }
+        [HttpPost]
+        [Route("InsertMultipleOrder")]
+        public async Task<IActionResult> InsertMultipleOrder(List<OrderView> orderDetails)
+        {
+            UserResponceModel response = new UserResponceModel();
+            try
+            {
+                var createOrder = OrderDetails.InsertMultipleOrder(orderDetails);
+                if (createOrder.Result.Code == 200)
+                {
+                    response.Code = (int)HttpStatusCode.OK;
+                    response.Message = createOrder.Result.Message;
+                }
+                else
+                {
+                    response.Message = createOrder.Result.Message;
+                    response.Code = (int)HttpStatusCode.NotFound;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return StatusCode(response.Code, response);
+        }
     }
 }

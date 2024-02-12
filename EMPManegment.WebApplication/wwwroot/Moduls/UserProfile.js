@@ -70,8 +70,8 @@ function UploadDocument() {
 
 function GetUserProjectList(page) {
 
-    var searchBy = $("#inputSearch").val();
-    var searchFor = $("#inputsearch").val();
+    var searchBy = $("#idinputSearch").val();
+    var searchFor = $("#txtinputSearch").val();
 
     $.get("/Project/ShowUserProjectList", { searchby: searchBy, searchfor: searchFor, page: page })
         .done(function (result) {
@@ -84,6 +84,23 @@ function GetUserProjectList(page) {
 }
 
 GetUserProjectList(1);
+$(document).on("click", ".pagination a", function (e) {debugger
+    e.preventDefault();
+    var page = $(this).text();
+    GetUserProjectList(page);
+});
+
+
+$(document).on("click", "#btnbackButton", function (e) {debugger
+    e.preventDefault();
+    var page = $(this).text();
+    GetUserProjectList(page);
+});
+
+function btnserrchproject() {debugger
+
+    GetUserProjectList(1);
+}
 
 function GetProjectList() {
     $.ajax({

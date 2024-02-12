@@ -4,7 +4,15 @@
     ViewData["Title"] = "ProductDetails";
     Layout = "~/Views/Shared/_HomeLayout.cshtml";
 }
-
+<style>
+    #txtProductType-error,
+    #txtProductName-error, #txtProductDescription-error, #txtshortdescription-error,
+    #txtproductImage-error, #txtstocks-error, #txtPerUnitPrice-error,
+    #txtHSN-error, #txtGST-error, #txtPerUnitWithGSTPrice-error, #txtProductType-error,
+    #txtvendornamed-error, #txtProducts-error {
+        color: red;
+    }
+</style>
             <!-- start page title -->
             <div class="row">
                 <div class="col-12">
@@ -57,7 +65,7 @@
                                     <div class="mt-xl-0 mt-5">
                                         <div class="d-flex">
                                             <div class="flex-grow-1">
-                                                <h4 id="txtProductName">@Model.ProductName</h4>
+                                                <h4 id="txtProductName1">@Model.ProductName</h4>
                                                 <div class="hstack gap-3 flex-wrap">
                                                     <div>
                                                         <a  class="text-primary d-block" id="txtProductTypeName">
@@ -76,7 +84,7 @@
                                             </div>
                                             <div class="flex-shrink-0">
                                                 <div>
-                                                    <a href="apps-ecommerce-add-product.html" class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"><i class="ri-pencil-fill align-bottom"></i></a>
+                                        <a class="btn btn-light" data-bs-toggle="tooltip" onclick="EditProductDetails('@Model.Id')" data-bs-placement="top" title="Edit"><i class="ri-pencil-fill align-bottom"></i></a>
                                                 </div>
                                             </div>
                                         </div>
@@ -668,13 +676,96 @@
                             <!-- end row -->
                         </div>
                         <!-- end card body -->
+            <div class="modal fade zoomIn" id="UpdateProductDetails" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-lg">
+                    <div class="modal-content border-0">
+                        <div class="modal-header p-3 bg-primary-subtle">
+                            <h5 class="modal-title" id="exampleModalLabel">Update Product</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"></button>
+                        </div>
+                        <form class="tablelist-form" autocomplete="off" id="UpdateDetailsForm">
+                            <div class="modal-body">
+                                <input type="hidden" id="tasksId" />
+                                <div class="row g-3">
+                                    <div class="col-lg-12">
+                                        <label for="projectName-field" class="form-label">Product Name</label>
+                                        <input type="text" id="txtProductName" name="txtProductName" class="form-control" placeholder="Enter ProductName" />
+                                        <input type="hidden" id="txtProductId" hidden />
+                                    </div>
+                                    <!--end col-->
+                                    <div class="col-lg-12">
+                                        <div>
+                                            <label for="TaskTitle" class="form-label">Product Description</label>
+                                            <input type="text" id="txtProductDescription" name="txtProductDescription" class="form-control" placeholder="Enter ProductDescription" />
+                                            <input type="hidden" id="txtproductImage" class="form-control" placeholder="Enter product Image" />
+                                        </div>
+                                    </div>
+                                    <!--end col-->
+                                    <div class="col-lg-6">
+                                        <label for="TaskDate" class="form-label">Per Unit Price</label>
+                                        <input type="text" id="txtPerUnitPrice" name="txtPerUnitPrice" class="form-control" placeholder="Enter PerUnit Price" />
+                                    </div>
+                                    <!--end col-->
+                                    <div class="col-lg-6">
+                                        <label for="TaskEndDate" class="form-label">GST</label>
+                                        <input type="text" id="txtGST" class="form-control" data-provider="flatpickr" placeholder="Enter GST" />
+                                    </div>
+                                    <!--end col-->
+                                    <div class="col-lg-6">
+                                        <label for="TaskStatus" class="form-label">Per Unit With GST Price</label>
+                                        <input type="text" class="form-control" id="txtPerUnitWithGSTPrice" name="txtPerUnitWithGSTPrice" placeholder="Enter PerUnit GST Price" required>
+                                    </div>
+                                    <!--end col-->
+                                    <div class="col-lg-6">
+                                        <label class="form-label" for="HSN">HSN</label>
+                                        <input type="text" class="form-control" id="txtHSN" name="txtHSN" placeholder="Enter HSN" required>
+                                    </div>
+                                    <!--end col-->
+                                    <div class="col-lg-6">
+                                        <label class="form-label" for="stocks">Stocks</label>
+                                        <input type="text" class="form-control" id="txtstocks" name="txtstocks" placeholder="Enter Stocks" required>
+                                    </div>
+                                    <!--end col-->
+                                    <div class="col-lg-6">
+                                        <label for="ProductType" class="form-label">Product Type</label>
+                                        <select id="txtProducts" class="form-control bg-transparent" name="txtProducts" required>
+                                            <option selected disabled value="">----Select Product Type---</option>
+                                        </select>
+                                        <input type="hidden" class="form-control" id="txtProductType">
+                                    </div>
+                                    <!--end col-->
+                                    <div class="col-lg-6">
+                                        <label for="ProductType" class="form-label">Product Short Description</label>
+                                        <textarea class="form-control" id="txtshortdescription" name="txtshortdescription" placeholder="Must enter minimum of a 100 characters" rows="3" required></textarea>
+                                    </div>
+                                    <!--end col-->
+                                    <div class="col-lg-6">
+                                        <label for="VendorId" class="form-label">Vendor Name</label>
+                                        <select class="form-control" id="txtvendornamed" name="txtvendornamed" required>
+                                            <option selected disabled value="">----Select Vendor Name---</option>
+                                        </select>
+                                        <input type="hidden" class="form-control" id="txtvendornameid">
+                                    </div>
+                                    <!--end col-->
+                                </div>
+                                <!--end row-->
+                            </div>
+                            <div class="modal-footer">
+                                <div class="hstack gap-2 justify-content-end">
+                                    <button type="button" class="btn btn-light" id="close-modal" data-bs-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-success" onclick="UpdateProductDetails()" id="UpdateDetailsBtn">Update Product</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
                     </div>
                     <!-- end card -->
                 </div>
                 <!-- end col -->
             </div>
             <!-- end row -->
-
     <!-- End Page-content -->
     <footer class="footer">
         <div class="container-fluid">
@@ -696,3 +787,18 @@
 
 <!-- ecommerce product details init -->
 <script src="~/UserHome/minimal/assets/js/pages/ecommerce-product-details.init.js"></script>
+<script src="~/UserHome/minimal/assets/js/pages/ecommerce-product-list.init.js"></script>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+<script src="~/moduls/productmasterscript.js"></script>
+
+
+<!-- nouisliderribute js -->
+<script src="~/UserHome/minimal/assets/libs/nouislider/nouislider.min.js"></script>
+<script src="~/UserHome/minimal/assets/libs/wnumb/wNumb.min.js"></script>
+
+<!-- gridjs js -->
+<script src="~/UserHome/minimal/assets/libs/gridjs/gridjs.umd.js"></script>
+<script src="~/UserHome/minimal/unpkg.com/gridjs%406.0.6/plugins/selection/dist/selection.umd.js"></script>

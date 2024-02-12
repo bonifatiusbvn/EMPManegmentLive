@@ -122,7 +122,15 @@ namespace EMPManegment.Repository.OrderRepository
                 }
                 else
                 {
-                    UserOrderId = "BTPL/PO/PROJ-01/23-24-" + (Convert.ToUInt32(LastOrder.OrderId.Substring(28, LastOrder.OrderId.Length - 28)) + 1).ToString("D3");
+                    if (LastOrder.OrderId.Length >= 25)
+                    {
+                        int orderNumber = int.Parse(LastOrder.OrderId.Substring(24)) + 1;
+                        UserOrderId = "BTPL/PO/PROJ-01/23-24-" + orderNumber.ToString("D3");
+                    }
+                    else
+                    {
+                        throw new Exception("OrderId does not have expected format.");
+                    }
                 }
                 return UserOrderId;
             }
@@ -170,6 +178,48 @@ namespace EMPManegment.Repository.OrderRepository
                 throw ex;
             }
             return OrderDetail;
+        }
+
+        public async Task<UserResponceModel> InsertMultipleOrder(List<OrderView> InsertOrder)
+        {
+            UserResponceModel response = new UserResponceModel();
+            try
+            {
+                foreach (var item in InsertOrder)
+                {
+                    var ordermodel = new OrderMaster()
+                    {
+                        Id = Guid.NewGuid(),
+                        OrderId=item.OrderId,
+                        Type = item.Type,
+                        CompanyName = item.CompanyName,
+                        VendorId = item.VendorId,
+                        ProductType = item.ProductType,
+                        Quantity = item.Quantity,
+                        Amount = item.Amount,
+                        Total = item.Total,
+                        OrderDate = item.OrderDate,
+                        DeliveryDate = item.DeliveryDate,
+                        PaymentMethod = item.PaymentMethod,
+                        PaymentStatus = item.PaymentStatus,
+                        DeliveryStatus = item.DeliveryStatus,
+                        CreatedOn = DateTime.Now,
+                        CreatedBy = item.CreatedBy,
+                    };
+                    Context.OrderMasters.Add(ordermodel);
+                }
+
+                await Context.SaveChangesAsync();
+
+                response.Code = 200;
+                response.Message = "Orders Created successfully!";
+            }
+            catch (Exception ex)
+            {
+                response.Code = 500;
+                response.Message = "Error creating orders: " + ex.Message;
+            }
+            return response;
         }
     }
 }

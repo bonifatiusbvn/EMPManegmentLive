@@ -4,6 +4,7 @@ using EMPManegment.EntityModels.ViewModels;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.OrderModels;
 using EMPManegment.EntityModels.ViewModels.ProductMaster;
+using EMPManegment.EntityModels.ViewModels.TaskModels;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using PdfSharpCore.Pdf.Content.Objects;
@@ -117,6 +118,28 @@ namespace EMPManegment.Web.Controllers
                     ViewBag.OrderId = Response.data;
                 }
                 return View();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        [HttpPost]
+        public async Task<IActionResult> InsertMultipleOrders()
+        {
+            try
+            {
+                var OrderDetails = HttpContext.Request.Form["ORDERDETAILS"];
+                var InsertDetails = JsonConvert.DeserializeObject<List<OrderView>>(OrderDetails);
+                ApiResponseModel postuser = await APIServices.PostAsync(InsertDetails, "OrderDetails/InsertMultipleOrder");
+                if (postuser.code == 200)
+                {
+                    return Ok(new { postuser.message });
+                }
+                else
+                {
+                    return Ok(new { postuser.message });
+                }
             }
             catch (Exception ex)
             {

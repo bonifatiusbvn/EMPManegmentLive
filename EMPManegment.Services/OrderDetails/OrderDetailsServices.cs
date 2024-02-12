@@ -41,5 +41,10 @@ namespace EMPManegment.Services.OrderDetails
         {
             return await OrderDetails.GetOrderDetailsById(OrderId);
         }
+
+        public async Task<UserResponceModel> InsertMultipleOrder(List<OrderView> InsertOrder)
+        {
+            return await OrderDetails.InsertMultipleOrder(InsertOrder);
+        }
     }
 }
