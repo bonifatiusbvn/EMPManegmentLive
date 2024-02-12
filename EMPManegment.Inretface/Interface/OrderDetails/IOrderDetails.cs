@@ -17,5 +17,6 @@ namespace EMPManegment.Inretface.Interface.OrderDetails
         Task<List<OrderDetailView>> GetOrderDetailsByStatus(string DeliveryStatus);
         string CheckOrder();
         Task<OrderDetailView> GetOrderDetailsById(string OrderId);
+        Task<UserResponceModel> InsertMultipleOrder(List<OrderView> InsertOrder);
     }
 }
