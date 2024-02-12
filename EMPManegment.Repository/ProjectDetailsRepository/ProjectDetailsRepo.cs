@@ -304,11 +304,11 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
             }
             if (searchby == "ProjectTitle" && searchfor != null)
             {
-                data = data.Where(ser => ser.ProjectTitle.ToLower().Contains(searchfor.ToLower())).ToList();
+                UserData = UserData.Where(ser => ser.ProjectTitle.ToLower().Contains(searchfor.ToLower())).ToList();
             }
             if (searchby == "ProjectStatus" && searchfor != null)
             {
-                data = data.Where(ser => ser.Status.ToLower().Contains(searchfor.ToLower())).ToList();
+                UserData = UserData.Where(ser => ser.Status.ToLower().Contains(searchfor.ToLower())).ToList();
             }
             return UserData;
         }
