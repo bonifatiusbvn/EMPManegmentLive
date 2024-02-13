@@ -6,9 +6,12 @@ using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.ProjectModels;
 using EMPManegment.EntityModels.ViewModels.TaskModels;
 using EMPManegment.Web.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Build.ObjectModelRemoting;
 using Newtonsoft.Json;
+using System.Security.Claims;
 using X.PagedList;
 using X.PagedList.Mvc;
 
@@ -133,7 +136,13 @@ namespace EMPManegment.Web.Controllers
                 if (response.code == 200)
                 {
                     projectDetails = JsonConvert.DeserializeObject<ProjectDetailView>(response.data.ToString());
-                    ViewBag.ProjectId = Id;
+                    var claims = new List<Claim>()
+                              {
+                                new Claim("ProjectId",projectDetails.Id.ToString()),
+                              };
+                    var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                    var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
+                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
                 }
                 return View(projectDetails);
             }

@@ -253,49 +253,50 @@ $("#returnsactive").click(function () {
 });
 
 
-function InsertMultipleOrder() {debugger
-    /*    if ($('#createOrderForm').valid()) {*/
+function InsertMultipleOrder() {
+    debugger
+
     var orderDetails = [];
 
     var objData = {
-            Type: $("#OrderType").val(),
-            OrderId: $("#orderId").val(),
-            PaymentStatus: $("#txtPaymentStatus").val(),
-            PaymentMethod: $("#paymentMethod").val(),
-            OrderDate: $("#orderdate").val(),
-            DeliveryDate: $("#deliverydate").val(),
-            VendorId: $("#txtvendorname").val(),
-            CompanyName: $("#txtvendornameid").val(),
-            ProductType: $("#productname").val(),
-            Quantity: $("#txtproductquantity").val(),
-            Amount: $("#txtproductamount").val(),
-            Total: $("#txtproducttotalamount").val(),
+        Type: $("#OrderType").val(),
+        OrderId: $("#orderId").val(),
+        PaymentStatus: $("#txtPaymentStatus").val(),
+        PaymentMethod: $("#paymentMethod").val(),
+        OrderDate: $("#orderdate").val(),
+        DeliveryDate: $("#deliverydate").val(),
+        VendorId: $("#txtvendorname").val(),
+        CompanyName: $("#txtvendornameid").val(),
+        ProductType: $("#productname").val(),
+        Quantity: $("#txtproductquantity").val(),
+        Amount: $("#txtproductamount").val(),
+        Total: $("#txtproducttotalamount").val(),
     };
-    debugger
+
     orderDetails.push(objData);
     var form_data = new FormData();
     form_data.append("ORDERDETAILS", JSON.stringify(orderDetails));
-        $.ajax({
-            url: '/OrderMaster/InsertMultipleOrders',
-            type: 'Post',
-            data: form_data,
-            dataType: 'json',
-            contentType: false,
-            processData: false,
-            success: function (Result) {debugger
+    $.ajax({
+        url: '/OrderMaster/InsertMultipleOrders',
+        type: 'Post',
+        data: form_data,
+        dataType: 'json',
+        contentType: false,
+        processData: false,
+        success: function (Result) {
 
-                if (Result.message != null) {
-                    Swal.fire({
-                        title: Result.message,
-                        icon: 'success',
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'OK',
-                    }).then(function () {
-                        window.location = '/OrderMaster/CreateOrderView';
-                    });
-                }
+            if (Result.message != null) {
+                Swal.fire({
+                    title: Result.message,
+                    icon: 'success',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'OK',
+                }).then(function () {
+                    window.location = '/OrderMaster/CreateOrderView';
+                });
             }
-        })
+        }
+    })
     //}
     //else {
     //    Swal.fire({
