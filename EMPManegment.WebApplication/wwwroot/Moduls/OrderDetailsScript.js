@@ -257,23 +257,24 @@ function InsertMultipleOrder() {
     debugger
 
     var orderDetails = [];
-
-    var objData = {
-        Type: $("#OrderType").val(),
-        OrderId: $("#orderId").val(),
-        PaymentStatus: $("#txtPaymentStatus").val(),
-        PaymentMethod: $("#paymentMethod").val(),
-        OrderDate: $("#orderdate").val(),
-        DeliveryDate: $("#deliverydate").val(),
-        VendorId: $("#txtvendorname").val(),
-        CompanyName: $("#txtvendornameid").val(),
-        ProductType: $("#productname").val(),
-        Quantity: $("#txtproductquantity").val(),
-        Amount: $("#txtproductamount").val(),
-        Total: $("#txtproducttotalamount").val(),
-    };
-
-    orderDetails.push(objData);
+    for (var i = 0; i < 2; i++) {debugger
+        var objData = {
+            Type: $("#OrderType").val(),
+            OrderId: $("#orderId").val(),
+            PaymentStatus: $("#txtPaymentStatus").val(),
+            PaymentMethod: $("#paymentMethod").val(),
+            OrderDate: $("#orderdate").val(),
+            DeliveryDate: $("#deliverydate").val(),
+            VendorId: $("#txtvendorname").val(),
+            CompanyName: $("#txtvendornameid").val(),
+            ProductType: $("#productname").val(),
+            Quantity: $("#txtproductquantity").val(),
+            Amount: $("#txtproductamount").val(),
+            Total: $("#txtproducttotalamount").val(),
+        };
+        debugger
+        orderDetails.push(objData);
+    }
     var form_data = new FormData();
     form_data.append("ORDERDETAILS", JSON.stringify(orderDetails));
     $.ajax({
