@@ -256,8 +256,8 @@ $("#returnsactive").click(function () {
 function InsertMultipleOrder() {debugger
     /*    if ($('#createOrderForm').valid()) {*/
     var orderDetails = [];
-
-    var objData = {
+    for (var i = 0; i < 2; i++) {debugger
+        var objData = {
             Type: $("#OrderType").val(),
             OrderId: $("#orderId").val(),
             PaymentStatus: $("#txtPaymentStatus").val(),
@@ -270,9 +270,10 @@ function InsertMultipleOrder() {debugger
             Quantity: $("#txtproductquantity").val(),
             Amount: $("#txtproductamount").val(),
             Total: $("#txtproducttotalamount").val(),
-    };
-    debugger
-    orderDetails.push(objData);
+        };
+        debugger
+        orderDetails.push(objData);
+    }
     var form_data = new FormData();
     form_data.append("ORDERDETAILS", JSON.stringify(orderDetails));
         $.ajax({
