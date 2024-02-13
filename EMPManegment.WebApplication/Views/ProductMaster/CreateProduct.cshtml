@@ -1,6 +1,6 @@
 ﻿@{
     ViewData["Title"] = "CreateProduct";
-    Layout = "~/Views/Shared/_HomeLayout.cshtml";
+    Layout = "~/Views/Shared/_UserHomeLayout.cshtml";
 }
 
 
@@ -8,7 +8,7 @@
     #txtproductname-error, #txtproductdescription-error, #txtshortdescription-error,
     #txtproductimage-error, #txtstocks-error, #txtPerUnitPrice-error,
     #txtHSN-error, #txtGST-error, #txtPerUnitWithGSTPrice-error, #txtProductType-error,
-    #txtvendorname-error, #txtProducts-error{
+    #txtvendorname-error, #txtProducts-error {
         color: red;
     }
 </style>
@@ -66,7 +66,7 @@
                                         </div>
                                         <div class="avatar-lg">
                                             <div class="holder m-2">
-                                                <img id="imgPreview" alt="Product image" style="height:200px;width:auto;margin-left:-500px;margin-bottom:-100px;" src="~/UserHome/minimal/assets/images/no-preview.png"/>
+                                                <img id="imgPreview" alt="Product image" style="height:200px;width:auto;margin-left:-500px;margin-bottom:-100px;" src="~/UserHome/minimal/assets/images/no-preview.png" />
                                             </div>
                                         </div>
                                     </div>
@@ -78,7 +78,6 @@
                                 <label class="form-label" for="ProductImage"></label>
                                 <div class="mb-3">
                                     <input type="file" class="form-control" id="txtproductimage" name="txtproductimage" required />
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" style="margin-top:-60px;margin-left:970px;" viewBox="0 0 24 24"><path fill="currentColor" d="M1 14.5a6.496 6.496 0 0 1 3.064-5.519a8.001 8.001 0 0 1 15.872 0a6.5 6.5 0 0 1-2.936 12L7 21c-3.356-.274-6-3.078-6-6.5m15.848 4.487a4.5 4.5 0 0 0 2.03-8.309l-.807-.503l-.12-.942a6.001 6.001 0 0 0-11.903 0l-.12.942l-.805.503a4.5 4.5 0 0 0 2.029 8.309l.173.013h9.35zM13 13v4h-2v-4H8l4-5l4 5z"/></svg>
                                 </div>
                             </div>
                         </div>
@@ -93,7 +92,6 @@
                                         General Info
                                     </a>
                                 </li>
-
                             </ul>
                         </div>
                         <!-- end card header -->
@@ -173,7 +171,7 @@
                         </div>
                         <!-- end card body -->
                     </div>
-                   
+
                     <!-- end card -->
                     <div class="card">
                         <div class="card-header">
@@ -210,39 +208,39 @@
             <!-- end row -->
         </form>
         <form id="addproduct">
-        <div id="flipModal" class="modal fade flip" tabindex="-1" aria-labelledby="flipModalLabel" aria-hidden="true" style="display: none;">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="flipModalLabel">Add Product</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="hstack gap-3 align-items-start">    
-                            <div class="flex-grow-1">
+            <div id="flipModal" class="modal fade flip" tabindex="-1" aria-labelledby="flipModalLabel" aria-hidden="true" style="display: none;">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="flipModalLabel">Add Product</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="hstack gap-3 align-items-start">
+                                <div class="flex-grow-1">
                                     <label for="VendorTypeId" class="form-label">Vendor Name</label>
                                     <select class="form-control" id="txtvendorname" onchange="selectvendorId()">
-                                    <option selected disabled value="">----Select Vendor Name---</option>
-                                </select>
+                                        <option selected disabled value="">----Select Vendor Name---</option>
+                                    </select>
                                     <input type="hidden" class="form-control" id="txtvendorTypeid">
+                                </div>
+                            </div>
+                            <div class="hstack gap-3 align-items-start">
+                                <div class="flex-grow-1">
+                                    <label>Product Name</label>
+                                    <input class="form-control" id="txtProductType" name="txtProductType" placeholder="Enter ProductName" type="text" />
+                                </div>
                             </div>
                         </div>
-                        <div class="hstack gap-3 align-items-start">
-                            <div class="flex-grow-1">
-                                <label>Product Name</label>
-                                <input class="form-control" id="txtProductType" name="txtProductType" placeholder="Enter ProductName" type="text" />
-                            </div>
-                        </div> 
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary " onclick="AddProductType()" id="AddProductTypeButton" value="Validate">Save</button>
-                    </div>
-        
-                </div><!-- /.modal-content -->
-       
-            </div><!-- /.modal-dialog -->
-        </div><!-- /.modal -->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary " onclick="AddProductType()" id="AddProductTypeButton" value="Validate">Save</button>
+                        </div>
+
+                    </div><!-- /.modal-content -->
+
+                </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
         </form>
     </div>
     <!-- container-fluid -->

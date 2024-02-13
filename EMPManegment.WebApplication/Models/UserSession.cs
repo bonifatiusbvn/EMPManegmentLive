@@ -1,4 +1,6 @@
-﻿namespace EMPManegment.Web.Models
+﻿using Microsoft.AspNetCore.Http;
+
+namespace EMPManegment.Web.Models
 {
     public class UserSession
     {
@@ -76,12 +78,18 @@
             }
         }
 
-        public Guid ProjectId
+        public static string ProjectId
         {
             get
             {
-                var projectid = StaticHttpContext.User.Claims.FirstOrDefault(x => string.Compare(x.Type, "ProjectId", true) == 0);
-                return projectid != null ? Guid.Parse(projectid.Value) : Guid.Empty;
+                if (StaticHttpContext.Session.GetString("ProjectId") == null)
+                    return null;
+                else
+                    return StaticHttpContext.Session.GetString("ProjectId");
+            }
+            set
+            {
+                StaticHttpContext.Session.SetString("ProjectId", value);
             }
         }
     }

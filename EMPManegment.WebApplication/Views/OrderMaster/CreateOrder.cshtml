@@ -6,12 +6,12 @@
 @using X.PagedList.Mvc.Core;*@
 @{
     ViewData["Title"] = "CreateOrder";
-    Layout = "~/Views/Shared/_HomeLayout.cshtml";
+    Layout = "~/Views/Shared/_UserHomeLayout.cshtml";
 }
 <style>
     #orderId-error, #companyname-error, #productname-error,
     #productquantity-error, #amount-error, #totalamount-error,
-    #orderdate-error, #deliverydate-error, #payment-error, #deliveredstatus-error ,#idStatus-error {
+    #orderdate-error, #deliverydate-error, #payment-error, #deliveredstatus-error, #idStatus-error {
         color: red;
     }
 </style>
@@ -43,7 +43,7 @@
                         </div>
                         <div class="col-sm-auto">
                             <div class="d-flex gap-1 flex-wrap">
-                                <a class="btn btn-primary add-btn" id="create-btn" asp-action="CreateOrderView" asp-controller="OrderMaster" ><i class="ri-add-line align-bottom me-1"></i> Create Order</a>
+                                <a class="btn btn-primary add-btn" id="create-btn" asp-action="CreateOrderView" asp-controller="OrderMaster"><i class="ri-add-line align-bottom me-1"></i> Create Order</a>
                                 <button type="button" class="btn btn-info"><i class="ri-file-download-line align-bottom me-1"></i> Import</button>
                                 <button class="btn btn-soft-danger" id="remove-actions" onClick="deleteMultiple()"><i class="ri-delete-bin-2-line"></i></button>
                             </div>
@@ -74,7 +74,7 @@
                                         <option value="Delivered">Delivered</option>
                                         <option value="Pickups">Pickups</option>
                                         <option value="Returns">Returns</option>
-                                        <option value="Cancelled">Cancelled</option>      
+                                        <option value="Cancelled">Cancelled</option>
                                         <option value="Pending">Pending</option>
                                         <option value="Inprogress">Inprogress</option>
                                     </select>
@@ -98,7 +98,7 @@
                     <div>
                         <ul class="nav nav-tabs nav-tabs-custom nav-primary mb-3" role="tablist">
                             <li class="nav-item">
-                                <a class="nav-link active fw-semibold" id="allordersactive" data-bs-toggle="tab"  href="#project-overview" role="tab">
+                                <a class="nav-link active fw-semibold" id="allordersactive" data-bs-toggle="tab" href="#project-overview" role="tab">
                                     <i class="ri-store-2-fill me-1 align-bottom"></i> All Orders <span class="badge bg-secondary align-middle ms-1">@ViewBag.ordersList</span>
                                 </a>
                             </li>
@@ -232,7 +232,7 @@
                             </div>
                         </div>
                     </div>
-                </div>                                                
+                </div>
             </div>
 
         </div>
@@ -825,129 +825,129 @@
     <div id="dvdeliveredstatus"></div>
     <!---------Create Order Modal-------->
     @* <div class="modal fade" id="createOrderModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header bg-light p-3">
-                    <h5 class="modal-title" id="exampleModalLabel">&nbsp;</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"></button>
-                </div>
-                <form class="tablelist-form" autocomplete="off" id="createOrderForm">
-                    <div class="modal-body">
-                        <input type="hidden" id="id-field" />
-                        <div class="mb-3">
-                            <label for="companyname" class="form-label">Order Type</label>
-                            <select class="form-control" data-trigger name="OrderType" id="OrderType">
-                                <option selected disabled value="">--Order Type--</option>
-                                <option value="Sale">Sale</option>
-                                <option value="Purchase">Purchase</option>
-                            </select>
-                        </div>
+    <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+    <div class="modal-header bg-light p-3">
+    <h5 class="modal-title" id="exampleModalLabel">&nbsp;</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"></button>
+    </div>
+    <form class="tablelist-form" autocomplete="off" id="createOrderForm">
+    <div class="modal-body">
+    <input type="hidden" id="id-field" />
+    <div class="mb-3">
+    <label for="companyname" class="form-label">Order Type</label>
+    <select class="form-control" data-trigger name="OrderType" id="OrderType">
+    <option selected disabled value="">--Order Type--</option>
+    <option value="Sale">Sale</option>
+    <option value="Purchase">Purchase</option>
+    </select>
+    </div>
 
-                        <div class="mb-3">
-                            <label for="companyname" class="form-label">Vendor Name</label>
-                            <select class="form-control" id="txtvendorname" name="txtvendorname">
-                                <option selected disabled value="">----Select Vendor Name---</option>
-                            </select>
-                            <input type="hidden" class="form-control" id="txtvendornameid">
-                        </div>
+    <div class="mb-3">
+    <label for="companyname" class="form-label">Vendor Name</label>
+    <select class="form-control" id="txtvendorname" name="txtvendorname">
+    <option selected disabled value="">----Select Vendor Name---</option>
+    </select>
+    <input type="hidden" class="form-control" id="txtvendornameid">
+    </div>
 
-                        <div class="mb-3" id="modal-id">
-                            <label for="orderId" class="form-label">Order ID</label>
-                            <input type="text" id="orderId" class="form-control" placeholder="ID" name="orderId" value="@ViewBag.OrderId" readonly />
-                        </div>
+    <div class="mb-3" id="modal-id">
+    <label for="orderId" class="form-label">Order ID</label>
+    <input type="text" id="orderId" class="form-control" placeholder="ID" name="orderId" value="@ViewBag.OrderId" readonly />
+    </div>
 
-                        <div class="mb-3">
-                            <label for="productname" class="form-label">Product</label>
-                            <select id="productname" class="form-control bg-transparent">
-                                <option>--Select Product--</option>
-                            </select>
-                        </div>
+    <div class="mb-3">
+    <label for="productname" class="form-label">Product</label>
+    <select id="productname" class="form-control bg-transparent">
+    <option>--Select Product--</option>
+    </select>
+    </div>
 
-                        <div class="row gy-4 mb-3">
-                            <div class="col-md-6">
-                                <div>
-                                    <label for="amount" class="form-label">Amount</label>
-                                    <input type="text" id="amount" class="form-control" placeholder="Enter amount" name="amount" />
-                                </div>
-                            </div>
+    <div class="row gy-4 mb-3">
+    <div class="col-md-6">
+    <div>
+    <label for="amount" class="form-label">Amount</label>
+    <input type="text" id="amount" class="form-control" placeholder="Enter amount" name="amount" />
+    </div>
+    </div>
 
-                            <div class="col-md-6">
-                                <div>
-                                    <label for="productquantity" class="form-label">Product Quantity</label>
-                                    <input type="text" id="productquantity" class="form-control" placeholder="Enter quantity" name="productquantity" />
-                                </div>
-                            </div>
-                        </div>
+    <div class="col-md-6">
+    <div>
+    <label for="productquantity" class="form-label">Product Quantity</label>
+    <input type="text" id="productquantity" class="form-control" placeholder="Enter quantity" name="productquantity" />
+    </div>
+    </div>
+    </div>
 
-                        <div class="row gy-4 mb-3">
-                            <div class="col-md-6">
-                                <div>
-                                    <label for="totalamount" class="form-label">Total Amount</label>
-                                    <input type="text" id="totalamount" class="form-control" placeholder="Enter total Amount" name="totalamount" />
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div>
-                                    <label for="payment" class="form-label">Payment Method</label>
-                                    <select class="form-control" data-trigger name="payment" id="payment">
-                                        <option selected disabled value="">Payment Method</option>
-                                        <option value="Mastercard">Mastercard</option>
-                                        <option value="Visa">Visa</option>
-                                        <option value="COD">COD</option>
-                                        <option value="Paypal">Paypal</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
+    <div class="row gy-4 mb-3">
+    <div class="col-md-6">
+    <div>
+    <label for="totalamount" class="form-label">Total Amount</label>
+    <input type="text" id="totalamount" class="form-control" placeholder="Enter total Amount" name="totalamount" />
+    </div>
+    </div>
+    <div class="col-md-6">
+    <div>
+    <label for="payment" class="form-label">Payment Method</label>
+    <select class="form-control" data-trigger name="payment" id="payment">
+    <option selected disabled value="">Payment Method</option>
+    <option value="Mastercard">Mastercard</option>
+    <option value="Visa">Visa</option>
+    <option value="COD">COD</option>
+    <option value="Paypal">Paypal</option>
+    </select>
+    </div>
+    </div>
+    </div>
 
-                        <div class="row gy-4 mb-3">
-                            <div class="col-md-6">
-                                <div>
-                                    <label for="orderdate" class="form-label">Order Date</label>
-                                    <input type="date" id="orderdate" class="form-control" name="orderdate" data-provider="flatpickr" data-date-format="d M, Y" data-enable-time placeholder="Select date" />
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div>
-                                    <label for="deliverydate" class="form-label">Delivery Date</label>
-                                    <input type="date" id="deliverydate" class="form-control" name="deliverydate" data-provider="flatpickr" data-date-format="d M, Y" data-enable-time placeholder="Select date" />
-                                </div>
-                            </div>
-                        </div>
+    <div class="row gy-4 mb-3">
+    <div class="col-md-6">
+    <div>
+    <label for="orderdate" class="form-label">Order Date</label>
+    <input type="date" id="orderdate" class="form-control" name="orderdate" data-provider="flatpickr" data-date-format="d M, Y" data-enable-time placeholder="Select date" />
+    </div>
+    </div>
+    <div class="col-md-6">
+    <div>
+    <label for="deliverydate" class="form-label">Delivery Date</label>
+    <input type="date" id="deliverydate" class="form-control" name="deliverydate" data-provider="flatpickr" data-date-format="d M, Y" data-enable-time placeholder="Select date" />
+    </div>
+    </div>
+    </div>
 
-                        <div class="row gy-4 mb-3">
-                            <div class="col-md-6">
-                                <div>
-                                    <label for="deliveredstatus" class="form-label">Delivery Status</label>
-                                    <select class="form-control" data-trigger name="deliveredstatus" id="deliveredstatus">
-                                        <option selected disabled value="">Delivery Status</option>
-                                        <option value="Pending">Pending</option>
-                                        <option value="Inprogress">Inprogress</option>
-                                        <option value="Cancelled">Cancelled</option>
-                                        <option value="Pickups">Pickups</option>
-                                        <option value="Delivered">Delivered</option>
-                                        <option value="Returns">Returns</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div>
-                                    <label for="ddlusername" class="form-label" hidden>Created By</label>
-                                    <input type="text" class="form-control" id="ddlusername" value="@_userSession.UserId" hidden>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <div class="hstack gap-2 justify-content-end">
-                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-success" onclick="SaveCreateOrder();" id="createorder" value="Validate">Add Order</button>
-                            <!-- <button type="button" class="btn btn-success" id="edit-btn">Update</button> -->
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
+    <div class="row gy-4 mb-3">
+    <div class="col-md-6">
+    <div>
+    <label for="deliveredstatus" class="form-label">Delivery Status</label>
+    <select class="form-control" data-trigger name="deliveredstatus" id="deliveredstatus">
+    <option selected disabled value="">Delivery Status</option>
+    <option value="Pending">Pending</option>
+    <option value="Inprogress">Inprogress</option>
+    <option value="Cancelled">Cancelled</option>
+    <option value="Pickups">Pickups</option>
+    <option value="Delivered">Delivered</option>
+    <option value="Returns">Returns</option>
+    </select>
+    </div>
+    </div>
+    <div class="col-md-6">
+    <div>
+    <label for="ddlusername" class="form-label" hidden>Created By</label>
+    <input type="text" class="form-control" id="ddlusername" value="@_userSession.UserId" hidden>
+    </div>
+    </div>
+    </div>
+    </div>
+    <div class="modal-footer">
+    <div class="hstack gap-2 justify-content-end">
+    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+    <button type="button" class="btn btn-success" onclick="SaveCreateOrder();" id="createorder" value="Validate">Add Order</button>
+    <!-- <button type="button" class="btn btn-success" id="edit-btn">Update</button> -->
+    </div>
+    </div>
+    </form>
+    </div>
+    </div>
     </div> *@
     <!------End of Create Order Modal------->
     <!-- Delete Modal -->

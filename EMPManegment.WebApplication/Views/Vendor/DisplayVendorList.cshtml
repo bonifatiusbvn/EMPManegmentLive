@@ -1,7 +1,6 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "DisplayVendorList";
-    Layout = "~/Views/Shared/_HomeLayout.cshtml";
+    Layout = "~/Views/Shared/_UserHomeLayout.cshtml";
 }
 
 
@@ -61,54 +60,54 @@
                             <div class="modal-content">
                                 <div class="modal-body">
                                     <div class="form-group">
-                                    @*-----------------Company Details---------------*@
-                                    <div class="box-1">
-                                        <div >
+                                        @*-----------------Company Details---------------*@
+                                        <div class="box-1">
+                                            <div>
                                                 <h5 class="text-center" style="padding-bottom:10px; color: black;">Company Details</h5>
-                                        </div>
+                                            </div>
                                             <div class="form-group control-label">
-                                            <label style="color: teal;font-weight: 500;">Name:</label> &nbsp;
+                                                <label style="color: teal;font-weight: 500;">Name:</label> &nbsp;
                                                 <label style="color: black;font-weight: 500; margin-left: 68px" id="VendorCompany"></label> &nbsp;
-                                        </div>
-                                        <div class="form-group">
-                                            <label style="color: teal;font-weight: 500;">CompanyType:</label> &nbsp;
+                                            </div>
+                                            <div class="form-group">
+                                                <label style="color: teal;font-weight: 500;">CompanyType:</label> &nbsp;
                                                 <label style="color: black;font-weight: 500; margin-left: 12px" id="VendorCompanyType"></label> &nbsp;
-                                        </div>
-                                        <div class="form-group">
-                                            <label style="color: teal;font-weight: 500;">Email:</label> &nbsp;
+                                            </div>
+                                            <div class="form-group">
+                                                <label style="color: teal;font-weight: 500;">Email:</label> &nbsp;
                                                 <label style="color: black;font-weight: 500; margin-left: 70px" id="VendorCompanyEmail"></label> &nbsp;
-                                        </div>
-                                        <div class="form-group">
-                                            <label style="color: teal;font-weight: 500;">ContactNumber:</label> &nbsp;
+                                            </div>
+                                            <div class="form-group">
+                                                <label style="color: teal;font-weight: 500;">ContactNumber:</label> &nbsp;
                                                 <label style="color: black;font-weight: 500;" id="VendorCompanyNumber"></label> &nbsp;
+                                            </div>
                                         </div>
-                                    </div>
-                                    @*-----------------Vendor Details---------------*@
-                                    <div class="box-2">
-                                        <div>
+                                        @*-----------------Vendor Details---------------*@
+                                        <div class="box-2">
+                                            <div>
                                                 <h5 class="text-center" style="padding-bottom:10px; color: black;">Vendor Details</h5>
-                                        </div>
-                                        <div class="form-group">
-                                            <label style="color: teal;font-weight: 500;">Name:</label> &nbsp;
+                                            </div>
+                                            <div class="form-group">
+                                                <label style="color: teal;font-weight: 500;">Name:</label> &nbsp;
                                                 <label style="color: black;font-weight: 500; margin-left: 31px" id="VendorFirstName"></label> &nbsp;
-                                        </div>
-                                        <div class="form-group">
+                                            </div>
+                                            <div class="form-group">
                                                 <label style="color: teal;font-weight: 500;">Email:</label> &nbsp;
                                                 <label style="color: black;font-weight: 500; margin-left: 34px;" id="VendorEmail"></label> &nbsp;
-                                        </div>
-                                        <div class="form-group">
+                                            </div>
+                                            <div class="form-group">
                                                 <label style="color: teal;font-weight: 500;">Phone:</label> &nbsp;
                                                 <label style="color: black;font-weight: 500; margin-left: 28px;" id="VendorPhone"></label> &nbsp;
-                                        </div>
-                                        <div class="form-group">
+                                            </div>
+                                            <div class="form-group">
                                                 <label style="color: teal;font-weight: 500;">ContectNo:</label> &nbsp;
                                                 <label style="color: black;font-weight: 500;" id="VendorContectNo"></label> &nbsp;
-                                        </div>
-                                         <div class="form-group">
+                                            </div>
+                                            <div class="form-group">
                                                 <label style="color: teal;font-weight: 500;">Type:</label> &nbsp;
                                                 <label style="color: black;font-weight: 500; margin-left: 40px" id="VendorType"></label> &nbsp;
+                                            </div>
                                         </div>
-                                    </div>
                                     </div>
                                     @*-----------------Address Details---------------*@
                                     <div class="box-3">
@@ -248,7 +247,7 @@
                                                         </div>
                                                     </div>
                                                     <!--end col-->
-                                                    
+
                                                     <div class="col-lg-4">
                                                         <div class="mb-3">
                                                             <label for="ddlCountry" class="form-label">Country</label>
@@ -344,7 +343,7 @@
                                                     </div>
                                                     <!--end col-->
 
-                                                    
+
                                                 </div>
                                                 <!--end row-->
                                             </form>
@@ -402,7 +401,7 @@
                                                         </div>
                                                     </div>
                                                     <!--end col-->
-                                                   
+
                                                 </div>
                                                 <!--end row-->
                                             </form>
@@ -434,7 +433,7 @@
     .box-1, .box-2 {
         background-color: lightgrey;
         width: 350px;
-        height:250px;
+        height: 250px;
         border: 5px solid gray;
         padding: 20px;
         float: left;

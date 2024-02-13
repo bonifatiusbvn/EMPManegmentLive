@@ -136,13 +136,8 @@ namespace EMPManegment.Web.Controllers
                 if (response.code == 200)
                 {
                     projectDetails = JsonConvert.DeserializeObject<ProjectDetailView>(response.data.ToString());
-                    var claims = new List<Claim>()
-                              {
-                                new Claim("ProjectId",projectDetails.Id.ToString()),
-                              };
-                    var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-                    var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
-                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
+                    UserSession.ProjectId = projectDetails.ProjectId.ToString();
+
                 }
                 return View(projectDetails);
             }

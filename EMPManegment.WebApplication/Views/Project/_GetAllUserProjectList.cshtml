@@ -7,6 +7,7 @@
 @*
     For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 *@
+<link href="~/UserHome/minimal/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
 <style>
     span.deleteicon {
         position: relative;
@@ -77,31 +78,10 @@
                                 </div>
                                 <div class="flex-shrink-0">
                                     <div class="d-flex gap-1 align-items-center my-n2">
-                                        <button type="button" class="btn avatar-xs p-0 favourite-btn active">
-                                            <span class="avatar-title bg-transparent fs-15">
-                                                <i class="ri-star-fill"></i>
-                                            </span>
-                                        </button>
-                                        <div class="dropdown">
-                                            <button class="btn btn-link text-muted p-1 mt-n1 py-0 text-decoration-none fs-15" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                                <i data-feather="more-horizontal" class="icon-sm"></i>
-                                            </button>
-
-                                            <div class="dropdown-menu dropdown-menu-end">
-                                                <a class="dropdown-item" href="/Project/AddProjectMember/?Id=@item.ProjectId">
-                                                    <i class="ri-eye-fill align-bottom me-2 text-muted"></i>
-                                                    View
-                                                </a>
-                                                <a class="dropdown-item" href="apps-projects-create.html">
-                                                    <i class="ri-pencil-fill align-bottom me-2 text-muted"></i>
-                                                    Edit
-                                                </a>
-                                                <div class="dropdown-divider"></div>
-                                                <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#removeProjectModal">
-                                                    <i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>
-                                                    Remove
-                                                </a>
-                                            </div>
+                                        <div>
+                                            <a class="dropdown-item" href="/Project/AddProjectMember/?Id=@item.ProjectId">
+                                                <i class="ri-eye-fill align-bottom me-2 text-muted"></i>
+                                            </a>
                                         </div>
                                     </div>
                                 </div>
@@ -127,19 +107,9 @@
                                                 <i data-feather="more-horizontal" class="icon-sm"></i>
                                             </button>
 
-                                            <div class="dropdown-menu dropdown-menu-end">
-                                                <a class="dropdown-item" href="/Project/AddProjectMember/?Id=@item.ProjectId" onclick="showProjectMembers('@item.ProjectId');">
+                                            <div>
+                                                <a class="dropdown-item" href="/Project/AddProjectMember/?Id=@item.ProjectId">
                                                     <i class="ri-eye-fill align-bottom me-2 text-muted"></i>
-                                                    View
-                                                </a>
-                                                <a class="dropdown-item" href="apps-projects-create.html">
-                                                    <i class="ri-pencil-fill align-bottom me-2 text-muted"></i>
-                                                    Edit
-                                                </a>
-                                                <div class="dropdown-divider"></div>
-                                                <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#removeProjectModal">
-                                                    <i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>
-                                                    Remove
                                                 </a>
                                             </div>
                                         </div>
@@ -254,15 +224,15 @@
         searchfor = @Context.Request.Query["searchfor"],
         searchby = @Context.Request.Query["searchby"]
     }),
-                                 new X.PagedList.Web.Common.PagedListRenderOptions
-                             {
-                                 LiElementClasses = new string[] { "page-item" },
-                                 PageClasses = new string[] { "page-link" }
-                             })
+                                                            new X.PagedList.Web.Common.PagedListRenderOptions
+                                                        {
+                                                            LiElementClasses = new string[] { "page-item" },
+                                                            PageClasses = new string[] { "page-link" }
+                                                        })
 
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
 <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
-
+<script src="~/UserHome/minimal/assets/js/pages/project-list.init.js"></script>
