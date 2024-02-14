@@ -1,7 +1,7 @@
 ﻿@model EMPManegment.EntityModels.View_Model.EmpDetailsView
 @{
     ViewData["Title"] = "Edit";
-    Layout = "~/Views/Shared/_HomeLayout.cshtml";
+    Layout = "~/Views/Shared/_UserHomeLayout.cshtml";
 }
 
 <div class="madal fade modal" id="EmployeeMadal">
@@ -33,7 +33,7 @@
                                 <span asp-validation-for="LastName" class="text-danger"></span>
                             </div>
                         </div>
-                      </div>
+                    </div>
                     <div class="fv-row mb-8" data-kt-password-meter="true">
                         <div class="mb-1">
                             <div class="position-relative mb-3">
@@ -116,7 +116,7 @@
                                 <span asp-validation-for="Address" class="text-danger"></span>
                             </div>
                         </div>
-                        </div>
+                    </div>
                     <div class="fv-row mb-4">
                         <label class="fs-8 fw-semibold form-label mt-3">Upload Image</label>
                         <input type="file" asp-for="Image" id="Imagepath" autocomplete="off" class="form-control bg-transparent" />

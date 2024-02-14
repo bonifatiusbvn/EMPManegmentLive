@@ -1,13 +1,12 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "GetUsersListById";
-    Layout = "~/Views/Shared/_HomeLayout.cshtml";
+    Layout = "~/Views/Shared/_UserHomeLayout.cshtml";
 }
 
 <link href="~/css/loader.css" rel="stylesheet" asp-append-version="true" />
 <style>
-    #ddlusername-error, #txtdate-error{
-        color:red;
+    #ddlusername-error, #txtdate-error {
+        color: red;
     }
 </style>
 
@@ -174,10 +173,10 @@
 <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
 <script src="~/moduls/userattendancescript.js"></script>
 <script src="~/moduls/taskscript.js" asp-append-version="true"></script>
-    <!-----Calander----->
+<!-----Calander----->
 <script>
-        var today = new Date().toISOString().split('T')[0];
-        document.getElementById("OutTime").setAttribute("max", today);
+    var today = new Date().toISOString().split('T')[0];
+    document.getElementById("OutTime").setAttribute("max", today);
 </script>
 
 

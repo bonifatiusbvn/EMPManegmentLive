@@ -3,12 +3,12 @@
 @using X.PagedList.Mvc.Core;
 @{
     ViewData["Title"] = "UserActiveDecative";
-    Layout = "~/Views/Shared/_HomeLayout.cshtml";
+    Layout = "~/Views/Shared/_UserHomeLayout.cshtml";
 }
 
 <style>
     #ddlDepartmenrnt-error, #ddlusername-error {
-        color:red;
+        color: red;
     }
 </style>
 <!-- start page title -->
@@ -33,43 +33,43 @@
     <div class="card-header">
         <form id="activeInactiveForm" style="margin-bottom: -20px;">
             <div class="row g-4 mb-3">
-                    <div class="row g-2 text-align">
-                        <div class="col-lg-auto">
-                            <a type="button" href="/UserProfile/UserActiveDecative" class="btn btn-warning" id="backbtn"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="m5.828 7l2.536 2.535L6.95 10.95L2 6l4.95-4.95l1.414 1.415L5.828 5H13a8 8 0 1 1 0 16H4v-2h9a6 6 0 0 0 0-12z" /></svg> </a>
-                            <button type="button" class="btn btn-primary btn-sm">
-                                Search By
-                                <select class="btn btn-primary btn-sm dropdown-toggle dropdown-toggle-split" data-choices data-choices-search-false name="choices-single-default" id="searchEmployee">
-                                    <option class="form-control" selected disabled value=""> </option>
-                                    <option class="form-control" value="ByUsername">Username</option>
-                                    <option class="form-control" value="ByDepartment">Department</option>
-                                </select>
-                            </button>
-                        </div>
+                <div class="row g-2 text-align">
+                    <div class="col-lg-auto">
+                        <a type="button" href="/UserProfile/UserActiveDecative" class="btn btn-warning" id="backbtn"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="m5.828 7l2.536 2.535L6.95 10.95L2 6l4.95-4.95l1.414 1.415L5.828 5H13a8 8 0 1 1 0 16H4v-2h9a6 6 0 0 0 0-12z" /></svg> </a>
+                        <button type="button" class="btn btn-primary btn-sm">
+                            Search By
+                            <select class="btn btn-primary btn-sm dropdown-toggle dropdown-toggle-split" data-choices data-choices-search-false name="choices-single-default" id="searchEmployee">
+                                <option class="form-control" selected disabled value=""> </option>
+                                <option class="form-control" value="ByUsername">Username</option>
+                                <option class="form-control" value="ByDepartment">Department</option>
+                            </select>
+                        </button>
+                    </div>
 
-                        <div class="col-sm" id="empnamebox">
-                            <div class="search-box">
-                                <select class="form-control" id="ddlusername" name="ddlusername">
-                                    <option selected disabled value="">---Select Username---</option>
-                                </select>
-                                <input type="hidden" class="form-control" id="txtguserid">
-                            </div>
-                        </div>
-                        <div class="col-sm" id="departmentbox">
-                            <div class="search-box">
-                                <select class="form-control" id="ddlDepartmenrnt" name="ddlDepartmenrnt">
-                                    <option selected disabled>--Select Department--</option>
-                                </select>
-                                <input type="hidden" class="form-control" id="txtdeptid" />
-                            </div>
-                        </div>
-
-                        <div class="col-lg-auto">
-                            <button class="btn btn-success" type="button" onclick="GetSearchEmpList()" id="searchEmployeeform" value="Validate">
-                                Search
-                            </button>
+                    <div class="col-sm" id="empnamebox">
+                        <div class="search-box">
+                            <select class="form-control" id="ddlusername" name="ddlusername">
+                                <option selected disabled value="">---Select Username---</option>
+                            </select>
+                            <input type="hidden" class="form-control" id="txtguserid">
                         </div>
                     </div>
+                    <div class="col-sm" id="departmentbox">
+                        <div class="search-box">
+                            <select class="form-control" id="ddlDepartmenrnt" name="ddlDepartmenrnt">
+                                <option selected disabled>--Select Department--</option>
+                            </select>
+                            <input type="hidden" class="form-control" id="txtdeptid" />
+                        </div>
+                    </div>
+
+                    <div class="col-lg-auto">
+                        <button class="btn btn-success" type="button" onclick="GetSearchEmpList()" id="searchEmployeeform" value="Validate">
+                            Search
+                        </button>
+                    </div>
                 </div>
+            </div>
         </form>
     </div>
     <div class="card-body" id="allemplist">
@@ -122,11 +122,16 @@
 <!-- end card -->
 
 <div id="activedeactivepagination">
-    @Html.PagedListPager((IPagedList)Model,page => Url.Action("UserActiveDecative",new{page = page,
-    searchfor = @Context.Request.Query["searchfor"],searchby =@Context.Request.Query["searchby"]}),
-    new X.PagedList.Web.Common.PagedListRenderOptions {
-    LiElementClasses = new string[]{"page-item"},
-    PageClasses = new string[] {"page-link"}
+    @Html.PagedListPager((IPagedList)Model, page => Url.Action("UserActiveDecative", new
+        {
+            page = page,
+            searchfor = @Context.Request.Query["searchfor"],
+            searchby = @Context.Request.Query["searchby"]
+        }),
+            new X.PagedList.Web.Common.PagedListRenderOptions
+    {
+        LiElementClasses = new string[] { "page-item" },
+        PageClasses = new string[] { "page-link" }
     })
 </div>
 

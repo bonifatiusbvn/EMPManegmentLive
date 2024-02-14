@@ -1,7 +1,7 @@
 ﻿@model List<EMPManegment.EntityModels.ViewModels.Invoice.InvoiceViewModel>
 @{
     ViewData["Title"] = "InvoiceListView";
-    Layout = "~/Views/Shared/_HomeLayout.cshtml";
+    Layout = "~/Views/Shared/_UserHomeLayout.cshtml";
 }
 
 <div class="row">
@@ -88,7 +88,7 @@
                                         <td>
                                             <ul class="list-inline hstack gap-2 mb-0">
                                                 <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="View">
-                                                    <a class="text-primary d-inline-block"  href="/Invoice/GenerateInvoiceNoById/?Id=@item.Id">
+                                                    <a class="text-primary d-inline-block" href="/Invoice/GenerateInvoiceNoById/?Id=@item.Id">
                                                         <i class="ri-eye-fill fs-16"></i>
                                                     </a>
                                                 </li>

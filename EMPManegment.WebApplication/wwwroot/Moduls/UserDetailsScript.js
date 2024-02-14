@@ -1,4 +1,4 @@
-﻿$("#usernamebox").show();
+﻿
 $("#departmentbox").hide();
 $("#backbtn").hide();
 

@@ -1,7 +1,7 @@
 ﻿@model EMPManegment.EntityModels.ViewModels.ProjectModels.ProjectDetailView
 @{
     ViewData["Title"] = "AddProjectMember";
-    Layout = "~/Views/Shared/_HomeLayout.cshtml";
+    Layout = "~/Views/Shared/_UserHomeLayout.cshtml";
 }
 <div class="row" style="margin-top:20px;">
     <div class="col-12">
@@ -40,9 +40,9 @@
                                             <div class="hstack gap-3 flex-wrap">
                                                 <div><i class="ri-building-line align-bottom me-1"></i></div>
                                                 <div class="fw-medium" id="projecttype">@Model.ProjectType</div>
-                                                <input type="text" id="projectid" value="@Model.ProjectId" hidden/>
+                                                <input type="text" id="projectid" value="@Model.ProjectId" hidden />
                                                 <div class="vr"></div>
-                                                <div>Create Date : <span class="fw-medium" >@Model.ProjectStartDate.ToShortDateString()</span></div>
+                                                <div>Create Date : <span class="fw-medium">@Model.ProjectStartDate.ToShortDateString()</span></div>
                                                 <input type="hidden" value="@Model.ProjectStartDate" id="projectstartdate" />
                                                 <div class="vr"></div>
                                                 <div>Due Date : <span class="fw-medium" id="projectenddate"></span>@Model.ProjectEndDate.ToShortDateString()</div>
@@ -120,7 +120,6 @@
                         <!-- modal-dialog -->
                     </div>
                     <!-- end modal -->
-
                     <!---Partial View 2--->
                     <!-- Modal -->
                     <div class="modal fade" id="documentUploadModal" tabindex="-1" aria-labelledby="documentUploadModalLabel" aria-hidden="true">
@@ -387,10 +386,9 @@
                                 <!-- end card body -->
                             </div>
                             <!-- end card -->
-
                             <!----Partial View---->
                             <div class="card">
-                                 <div class="card-header align-items-center d-flex border-bottom-dashed">
+                                <div class="card-header align-items-center d-flex border-bottom-dashed">
                                     <div class="flex-shrink-0">
                                         <button type="button" class="btn btn-soft-primary btn-sm" id="showProjectMembers" onclick="showProjectMembers('@Model.ProjectId')">Show Project Members</button>
                                     </div>
@@ -404,15 +402,14 @@
                                 <!-- end card body -->
                             </div>
                             <!-- end card -->
-
                             <!----Partial View---->
                             <div class="card">
                                 <div class="card-header align-items-center d-flex border-bottom-dashed">
                                     <div class="flex-shrink-0">
                                         <button type="button" class="btn btn-soft-primary btn-sm" id="showProjectDocuments" onclick="showProjectDocuments('@Model.ProjectId')">Attachments</button>
-                                    </div>     
+                                    </div>
                                     <div class="flex-shrink-0">
-                                        <button type="button" class="btn btn-soft-primary btn-sm" style="margin-left:160px;" data-bs-toggle="modal"  data-bs-target="#documentUploadModal"><i class="ri-upload-2-fill me-1 align-bottom"></i> Upload</button>
+                                        <button type="button" class="btn btn-soft-primary btn-sm" style="margin-left:160px;" data-bs-toggle="modal" data-bs-target="#documentUploadModal"><i class="ri-upload-2-fill me-1 align-bottom"></i> Upload</button>
                                     </div>
                                 </div>
 
@@ -577,7 +574,7 @@
                 <!-- end tab pane -->
                 <div class="tab-pane fade" id="project-teams" role="tabpanel">
                     <div id="dvshowteam"></div>
-                </div>  
+                </div>
                 <!-- Modal -->
                 <div class="modal fade zoomIn" id="adddocuments" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class=" modal-dialog modal-dialog-centered modal-lg">
@@ -635,7 +632,7 @@
                 </div>
                 <!--end modal-->
             </div>
-        </div> 
+        </div>
     </div>
     <!-- end row -->
 </div>

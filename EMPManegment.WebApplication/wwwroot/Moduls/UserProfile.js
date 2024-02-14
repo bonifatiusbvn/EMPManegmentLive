@@ -4,7 +4,7 @@ $(document).ready(function () {
     GetDocumentList();
     GetDocumentType();
     GetProjectList();
-    loadPartialView(page);
+    loadPartialView();
 });
 
 function GetDocumentType() {
@@ -84,20 +84,23 @@ function GetUserProjectList(page) {
 }
 
 GetUserProjectList(1);
-$(document).on("click", ".pagination a", function (e) {debugger
+$(document).on("click", ".pagination a", function (e) {
+    debugger
     e.preventDefault();
     var page = $(this).text();
     GetUserProjectList(page);
 });
 
 
-$(document).on("click", "#btnbackButton", function (e) {debugger
+$(document).on("click", "#btnbackButton", function (e) {
+    debugger
     e.preventDefault();
     var page = $(this).text();
     GetUserProjectList(page);
 });
 
-function btnserrchproject() {debugger
+function btnserrchproject() {
+    debugger
 
     GetUserProjectList(1);
 }
