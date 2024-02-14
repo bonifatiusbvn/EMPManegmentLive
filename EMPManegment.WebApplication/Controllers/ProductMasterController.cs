@@ -152,11 +152,11 @@ namespace EMPManegment.Web.Controllers
         {
             try
             {
-                List<ProductTypeView> products = new List<ProductTypeView>();
+                List<ProductDetailsView> products = new List<ProductDetailsView>();
                 ApiResponseModel response = await APIServices.GetAsync("", "ProductMaster/GetProductById?ProductId=" + ProductId);
                 if (response.code == 200)
                 {
-                    products = JsonConvert.DeserializeObject<List<ProductTypeView>>(response.data.ToString());
+                    products = JsonConvert.DeserializeObject<List<ProductDetailsView>>(response.data.ToString());
                 }
                 return new JsonResult(products);
             }
@@ -170,7 +170,7 @@ namespace EMPManegment.Web.Controllers
             return View();
         }
 
-        [HttpPost]
+        [HttpGet]
         public async Task<IActionResult> GetProductDetailsByVendorId(Guid VendorId)
         {
             try

@@ -33,10 +33,9 @@ function ClearTextBox() {
 }
 function AddProductType() {
 
-    if ($("#addproduct").valid()) {
+    /*if ($("#addproduct").valid()) {*/
 
         var formData = new FormData();
-        formData.append("ProductId", $("#txtvendorTypeid").val());
         formData.append("ProductName", $("#txtProductType").val());
 
         $.ajax({
@@ -68,7 +67,7 @@ function AddProductType() {
             }
         });
     }
-}
+
 
 
 function GetProducts() {

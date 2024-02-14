@@ -312,12 +312,11 @@ function InsertMultipleOrder() {debugger
 
 
 $(document).ready(function () {
-    GetVendorNameList()
-    document.getElementById("txtvendorname").click()
     document.getElementById("productname").click()
     document.getElementById("searchproductname").click()
 });
 function GetVendorNameList() {
+    
     $.ajax({
         url: '/ProductMaster/GetVendorsNameList',
         success: function (result) {
@@ -332,24 +331,9 @@ function selectvendorId() {
 }
 
 $(document).ready(function () {
-    $('#txtvendorname').change(function () {
-        var Text = $("#txtvendorname Option:Selected").text();
-        var ProductId = $(this).val();
-        $("#txtvendornameid").val(Text);
-        $('#productname').empty();
-        $('#productname').append('<Option >--Select Product--</Option>');
-        $.ajax({
-            url: '/ProductMaster/GetProductById?ProductId=' + ProductId,
-            success: function (result) {
-                $.each(result, function (i, data) {
-                    $('#productname').append('<Option value=' + data.id + '>' + data.productName + '</Option>')
-                });
-            }
-        });
-    });
-    $('#productname').change(function () {
+    $('#txtProducts').change(function () {debugger
 
-        var Text = $("#productname Option:Selected").text();
+        var Text = $("#txtProducts Option:Selected").text();
         var ProductTypeId = $(this).val();
         var VendorTypeId = $("#txtvendorname").val();
         $("#txtProductnameid").val(Text);

@@ -57,8 +57,6 @@ public partial class TblVendorMaster
 
     public virtual ICollection<TblInvoice> TblInvoices { get; set; } = new List<TblInvoice>();
 
-    public virtual ICollection<TblProductTypeMaster> TblProductTypeMasters { get; set; } = new List<TblProductTypeMaster>();
-
     public virtual TblCity VendorCityNavigation { get; set; } = null!;
 
     public virtual TblCountry VendorCountryNavigation { get; set; } = null!;

@@ -11,13 +11,13 @@ namespace EMPManegment.EntityModels.ViewModels.ProductMaster
     {
         public Guid Id { get; set; }
         public Guid VendorId { get; set; }
-        public string? VendorName { get; set; } = null;
+        public string? VendorName { get; set; } 
         public int? ProductType { get; set; }
-        public string? ProductTypeName { get; set; } = null;
+        public string? ProductTypeName { get; set; } 
 
-        public string ProductName { get; set; } = null!;
+        public string ProductName { get; set; } 
 
-        public string ProductDescription { get; set; } = null!;
+        public string ProductDescription { get; set; }
 
         public string? ProductShortDescription { get; set; }
 
@@ -32,7 +32,7 @@ namespace EMPManegment.EntityModels.ViewModels.ProductMaster
         public decimal Gst { get; set; }
 
         public decimal PerUnitWithGstprice { get; set; }
-        public decimal Quantity { get; set; }
+        public decimal? Quantity { get; set; }
 
         public DateTime? CreatedOn { get; set; }
 

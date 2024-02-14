@@ -90,7 +90,7 @@ namespace EMPManagment.API.Controllers
         [Route("GetProductById")]
         public async Task<IActionResult> GetProductById(Guid ProductId)
         {
-            var getProduct = await productMaster.GetProductById(ProductId);
+            List<ProductDetailsView> getProduct = await productMaster.GetProductById(ProductId);
             return Ok(new { code = 200, data = getProduct.ToList() });
         }
 

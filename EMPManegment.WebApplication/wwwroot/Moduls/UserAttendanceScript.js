@@ -4,6 +4,8 @@ $("#datebox1").hide();
 $("#usernamebox").show();
 $("#datesbox").hide();
 $("#backbtn").hide();
+$("#startdatebox").hide();
+$("#enddatebox").hide();
 function cleartextBox() {
     $("#ddlusername").find("option").remove().end().append(
         '<option selected value = "">--Select Username--</option>');
@@ -44,6 +46,13 @@ $('#selectSearchAttandanceOption').change(function () {
         GetUsername();
         $("#usernamebox").show();
         $("#datesbox").show();
+        cleartextBox();
+    }
+    if ($("#selectSearchAttandanceOption").val() == "ByBetweenDates&ByUsername") {
+        GetUsername();
+        $("#usernamebox").show();
+        $("#startdatebox").show();
+        $("#enddatebox").show();
         cleartextBox();
     }
 })
@@ -298,6 +307,8 @@ function GetSearchAttendanceList() {
         var form_data = new FormData();
         form_data.append("Date", $('#txtdate').val());
         form_data.append("UserId", $("#ddlusername").val());
+        form_data.append("StartDate", $("#txtstartdatebox").val());
+        form_data.append("EndDate", $("#txtenddatebox").val());
         $.ajax({
             url: '/UserProfile/GetSearchAttendanceList',
             type: 'Post',

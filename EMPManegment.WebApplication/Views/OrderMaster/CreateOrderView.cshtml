@@ -87,7 +87,7 @@
                                 <label for="orderdate" class="text-muted text-uppercase fw-semibold">Order Date</label>
                             </div>
                             <div class="mb-2">
-                                <input type="text" id="orderdate" class="form-control" name="orderdate" data-provider="flatpickr" data-date-format="d M, Y" data-enable-time data-time="true" placeholder="Select Order-Date" />
+                                <input type="date" id="orderdate" class="form-control" name="orderdate" data-provider="flatpickr" data-date-format="d M, Y" data-enable-time data-time="true" placeholder="Select Order-Date" />
                             </div>
                         </div>
                         <!--end col-->
@@ -98,7 +98,7 @@
                                         <label for="deliverydate" class="text-muted text-uppercase fw-semibold">Delivery Date</label>
                                     </div>
                                     <div class="mb-2">
-                                        <input type="text" id="deliverydate" class="form-control" name="deliverydate" data-provider="flatpickr" data-date-format="d M, Y" data-enable-time data-time="true" placeholder="Select Delivery-Date" />
+                                        <input type="date" id="deliverydate" class="form-control" name="deliverydate" data-provider="flatpickr" data-date-format="d M, Y" data-enable-time data-time="true" placeholder="Select Delivery-Date" />
                                     </div>
                                 </div>
                             </div>
@@ -129,14 +129,15 @@
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div>
-                                            <label for="productname" class="text-muted text-uppercase fw-semibold">Product</label>
+                                            <label for="ProductType" class="text-muted text-uppercase fw-semibold">Product Type</label>
                                         </div>
                                         <div class="mb-2">
                                             <div class="input-light">
-                                                <select id="productname" class="text-muted text-uppercase fw-semibold" style="border:hidden;">
-                                                    <option selected disabled value="">--Select Product--</option>
+                                                
+                                                <select id="txtProducts" class="text-muted text-uppercase fw-semibold" onchange="selectProductTypeId()" style="border:hidden;">
+                                                    <option selected disabled value="">----Select Product Type---</option>
                                                 </select>
-                                                <input type="hidden" class="text-muted text-uppercase fw-semibold" id="txtProductnameid">
+                                                <input type="hidden" class="form-control" id="txtProductTypeid">
                                                 <div id="productvalidationMessage" class="text-danger"></div>
                                             </div>
                                         </div>
@@ -297,3 +298,4 @@
 <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
 <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
 <script src="~/moduls/orderdetailsscript.js"></script>
+<script src="~/moduls/productmasterscript.js"></script>

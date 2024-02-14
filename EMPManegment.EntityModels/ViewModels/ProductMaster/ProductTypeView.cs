@@ -12,8 +12,6 @@ namespace EMPManegment.EntityModels.ViewModels.ProductMaster
         public int Id { get; set; }
         [Required]
         public string? ProductName { get; set; }
-        [Required]
-        public Guid? ProductId { get; set; }
     }
     
 }

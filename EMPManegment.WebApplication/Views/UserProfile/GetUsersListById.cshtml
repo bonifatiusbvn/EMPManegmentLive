@@ -45,6 +45,7 @@
                                     <option class="dropdown-item" value="ByUsername">UserName</option>
                                     <option class="dropdown-item" value="ByDate">Date</option>
                                     <option class="dropdown-item" value="ByDate&ByUsername">UserName & Date</option>
+                                    <option class="dropdown-item" value="ByBetweenDates&ByUsername">UserName & Between-Dates</option>
                                 </select>
                             </div>
                         </div>
@@ -65,7 +66,18 @@
                                 </svg>
                             </div>
                         </div>
-
+                        <div class="col-sm" id="startdatebox">
+                            <div class="search-box">
+                                <input type="date" id="txtstartdatebox" class="form-control search" placeholder="Search By start date">
+                                <i class="ri-search-line search-icon"></i>
+                            </div>
+                        </div>
+                        <div class="col-sm" id="enddatebox">
+                            <div class="search-box">
+                                <input type="date" id="txtenddatebox" class="form-control search" placeholder="Search By end date">
+                                <i class="ri-search-line search-icon"></i>
+                            </div>
+                        </div>
                         <div class="col-lg-auto">
                             <button class="btn btn-success" type="button" onclick="GetSearchAttendanceList()" id="searchattendanceform" value="Validate">
                                 Search

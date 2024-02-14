@@ -246,10 +246,6 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.ToTable("tblProductTypeMaster");
 
             entity.Property(e => e.ProductName).HasMaxLength(20);
-
-            entity.HasOne(d => d.Product).WithMany(p => p.TblProductTypeMasters)
-                .HasForeignKey(d => d.ProductId)
-                .HasConstraintName("FK_tblProductTypeMaster_tblVendor_Master");
         });
 
         modelBuilder.Entity<TblProjectDetail>(entity =>

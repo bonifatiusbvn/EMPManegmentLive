@@ -13,7 +13,7 @@ namespace EMPManegment.Inretface.Services.ProductMaster
         Task<UserResponceModel> AddProductType(ProductTypeView AddProduct);
         Task<UserResponceModel> AddProductDetails(ProductDetailsView AddProductDetails);
         Task<IEnumerable<ProductTypeView>> GetProduct();
-        Task<IEnumerable<ProductTypeView>> GetProductById(Guid ProductId);
+        Task<List<ProductDetailsView>> GetProductById(Guid ProductId);
         Task<List<ProductDetailsView>> GetProductDetailsByVendorId(Guid vendorId);
         Task<IEnumerable<ProductDetailsView>> SearchProductName(String ProductName);
         //Task<UserResponceModel> AddVendorType(ProductDetailsView AddProductDetails);

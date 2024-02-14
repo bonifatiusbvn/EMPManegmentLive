@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Numerics;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -42,7 +43,6 @@ namespace EMPManegment.Repository.ProductMaster
                 {
                     var Product = new TblProductTypeMaster()
                     {
-                        ProductId = AddProduct.ProductId,
                         ProductName = AddProduct.ProductName,
                     };
                     response.Code = (int)HttpStatusCode.OK;
@@ -128,7 +128,21 @@ namespace EMPManegment.Repository.ProductMaster
             try
             {
                 var vendorDetails = new List<ProductDetailsView>();
-                var data = await Context.TblProductDetailsMasters.Where(x => x.VendorId == VendorId).ToListAsync();
+                var data = await(from a in Context.TblProductDetailsMasters
+                    join b in Context.TblProductTypeMasters
+                    on a.ProductType equals b.Id
+                    where a.VendorId==VendorId
+                    select new
+                    {
+                        a.Id,
+                        a.VendorId,
+                        a.ProductImage,
+                        a.ProductStocks,
+                        a.ProductType,
+                        a.PerUnitPrice,
+                       // a.ProductName,
+                        b.ProductName,
+                    }).ToListAsync();
                 if (data != null)
                 {
                     foreach (var item in data)
@@ -141,6 +155,7 @@ namespace EMPManegment.Repository.ProductMaster
                             ProductName = item.ProductName,
                             ProductStocks = item.ProductStocks,
                             PerUnitPrice = item.PerUnitPrice,
+                            ProductTypeName=item.ProductName
                         });
                     }
                 }
@@ -152,16 +167,43 @@ namespace EMPManegment.Repository.ProductMaster
             }
         }
 
-        public async Task<IEnumerable<ProductTypeView>> GetProductById(Guid ProductId)
+        public async Task<List<ProductDetailsView>> GetProductById(Guid VendorId)
         {
             try
             {
-                IEnumerable<ProductTypeView> Product = Context.TblProductTypeMasters.Where(x=>x.ProductId==ProductId).Select(a => new ProductTypeView
+                var vendorDetails = new List<ProductDetailsView>();
+                var data = await (from a in Context.TblProductDetailsMasters
+                                  join b in Context.TblProductTypeMasters
+                                  on a.ProductType equals b.Id
+                                  where a.VendorId == VendorId
+                                  select new
+                                  {
+                                      a.Id,
+                                      a.VendorId,
+                                      a.ProductImage,
+                                      a.ProductStocks,
+                                      a.ProductType,
+                                      a.PerUnitPrice,
+                                      // a.ProductName,
+                                      b.ProductName,
+                                  }).ToListAsync();
+                if (data != null)
                 {
-                    Id = a.Id,
-                    ProductName = a.ProductName
-                }).ToList();
-                return Product;
+                    foreach (var item in data)
+                    {
+                        vendorDetails.Add(new ProductDetailsView()
+                        {
+                            Id = item.Id,
+                            VendorId = item.VendorId,
+                            ProductImage = item.ProductImage,
+                            ProductName = item.ProductName,
+                            ProductStocks = item.ProductStocks,
+                            PerUnitPrice = item.PerUnitPrice,
+                            ProductTypeName = item.ProductName
+                        });
+                    }
+                }
+                return vendorDetails;
             }
             catch (Exception ex)
             {
