@@ -255,9 +255,10 @@ $("#returnsactive").click(function () {
 
 function InsertMultipleOrder() {
     debugger
-
+    /*    if ($('#createOrderForm').valid()) {*/
     var orderDetails = [];
-    for (var i = 0; i < 2; i++) {debugger
+    for (var i = 0; i < 2; i++) {
+        debugger
         var objData = {
             Type: $("#OrderType").val(),
             OrderId: $("#orderId").val(),
@@ -285,6 +286,7 @@ function InsertMultipleOrder() {
         contentType: false,
         processData: false,
         success: function (Result) {
+            debugger
 
             if (Result.message != null) {
                 Swal.fire({
@@ -317,7 +319,7 @@ $(document).ready(function () {
     document.getElementById("searchproductname").click()
 });
 function GetVendorNameList() {
-    
+
     $.ajax({
         url: '/ProductMaster/GetVendorsNameList',
         success: function (result) {
@@ -332,7 +334,8 @@ function selectvendorId() {
 }
 
 $(document).ready(function () {
-    $('#txtProducts').change(function () {debugger
+    $('#txtProducts').change(function () {
+        debugger
 
         var Text = $("#txtProducts Option:Selected").text();
         var ProductTypeId = $(this).val();

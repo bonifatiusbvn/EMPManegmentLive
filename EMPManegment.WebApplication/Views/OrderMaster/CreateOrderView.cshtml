@@ -124,11 +124,11 @@
 
                             <div class="col-sm-2">
                                 <div>
-                                    <label for="productname" class="text-muted text-uppercase fw-semibold">Product</label>
-                                </div><select id="productname" class="text-muted text-uppercase fw-semibold" style="border:hidden;">
-                                    <option selected disabled value="">--Select Product--</option>
+                                    <label for="ProductType" class="text-muted text-uppercase fw-semibold">Product Type</label>
+                                </div><select id="txtProducts" class="text-muted text-uppercase fw-semibold" onchange="selectProductTypeId()" style="border:hidden;">
+                                    <option selected disabled value="">----Select Product Type---</option>
                                 </select>
-                                <input type="hidden" class="text-muted text-uppercase fw-semibold" id="txtProductnameid">
+                                <input type="hidden" class="form-control" id="txtProductTypeid">
                                 <div id="productvalidationMessage" class="text-danger"></div>
                             </div>
                             <!--end col-->
