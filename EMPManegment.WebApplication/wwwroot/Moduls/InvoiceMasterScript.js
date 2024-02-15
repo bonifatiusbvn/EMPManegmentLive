@@ -32,18 +32,24 @@ function selectvendorId() {
 
 $(document).ready(function () {
     $('#txtvendorname').change(function () {
-        var Text = $("#txtvendorname Option:Selected").text();
         var VendorTypeId = $("#txtvendorname").val();
-        $('#vendorcompanyaddress').empty();
-        $('#vendorcompanyaddress').append(' <h6><span>Bonifatius Technologies Pvt. Ltd.</span></h6>');
+        $.ajax({
+            url: '/Vendor/GetVendorDetailsById?VendorId=' + VendorTypeId,
+            type: 'Post',
+            success: function (result) {           
+                $('#vendorcompanyaddress').append('<div><label>Vendor Company Address</label></div><div><div class="form-control"><h6 class="mb-0"><span class="text-muted fw-normal">' + result.vendorCompany + '</span></h6><h6 class="mb-0"><span class="text-muted fw-normal">Address : </span><span id="contact-no">' + result.vendorAddress +'</span></h6><h6 class="mb-0"><span class="text-muted fw-normal">Email: </span><span>' + result.vendorCompanyEmail + '</span></h6><h6 class="mb-0"><span class="text-muted fw-normal">Contact No: </span><span id="contact-no"> ' + result.vendorCompanyNumber +'</span></h6></div></div>');
+            }
+        });
+    });
+});
+$(document).ready(function () {
+    $('#txtvendorname1').change(function () {
+        var VendorTypeId = $("#txtvendorname1").val();
         $.ajax({
             url: '/Vendor/GetVendorDetailsById?VendorId=' + VendorTypeId,
             type: 'Post',
             success: function (result) {
-                $.each(result, function (i, data) {
-                    $('#searchproductname').append('<Option value=' + data.id + '>' + data.productName + '</Option>');
-
-                });
+                $('#vendorcompanyaddress1').append('<div><label>Vendor Company Address</label></div><div><div class="form-control"><h6 class="mb-0"><span class="text-muted fw-normal">' + result.vendorCompany + '</span></h6><h6 class="mb-0"><span class="text-muted fw-normal">Address : </span><span id="contact-no">' + result.vendorAddress + '</span></h6><h6 class="mb-0"><span class="text-muted fw-normal">Email: </span><span>' + result.vendorCompanyEmail + '</span></h6><h6 class="mb-0"><span class="text-muted fw-normal">Contact No: </span><span id="contact-no"> ' + result.vendorCompanyNumber + '</span></h6></div></div>');
             }
         });
     });
@@ -338,6 +344,8 @@ $('#idStatus').change(function () {
         $("#CompanCCP").hide();
         $("#vender").hide();
         $("#txtvendorname1").show();
+        $("#vendorcompanyaddress1").show();
+        $("#vendorcompanyaddress").hide();
         cleartextBox();
     }
     if ($("#idStatus").val() == "Purchase") {
@@ -347,6 +355,8 @@ $('#idStatus').change(function () {
         $("#Companyname").hide();
         $("#txtvendorname1").hide();
         $("#vender").show();
+        $("#vendorcompanyaddress").show();
+        $("#vendorcompanyaddress1").hide();
         cleartextBox();
     }
 });
