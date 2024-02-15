@@ -43,8 +43,8 @@ namespace EMPManagment.API.Controllers
         [Route("GetInvoiceDetailsList")]
         public async Task<IActionResult> GetInvoiceDetailsList()
         {
-            IEnumerable<InvoiceViewModel> invoiceList = await InvoiceMaster.GetInvoiceDetailsList();
-            return Ok(new { code = 200, data = invoiceList });
+            var invoiceList = await InvoiceMaster.GetInvoiceDetailsList();
+            return Ok(new { code = 200, data = invoiceList.ToList() });
         }
         [HttpPost]
         public async Task<IActionResult> GenerateInvoice(string InvoiceNo) 

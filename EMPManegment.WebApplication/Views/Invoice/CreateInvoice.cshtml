@@ -4,17 +4,6 @@
     Layout = "~/Views/Shared/_UserHomeLayout.cshtml";
 }
 
-<div class="row">
-    <div class="col-2">
-        <select class="form-control" id="txtInvoiceNo" style="margin-top: 28px;">
-            <option selected disabled value="">----Select Invoice No---</option>
-        </select>
-        <input type="hidden" class="form-control" id="txtInvoiceNoid">
-    </div>
-    <div class="col-10">
-        <a id="GenerateInvoiceButton" class="btn btn-secondary fw-small" onclick="GenerateInvoiceDetails()" style="margin-top: 28px;">Generate Invoice</a>
-    </div>
-</div>
 
 <!-- dropzone css -->
 <link rel="stylesheet" href="~/UserHome/minimal/assets/libs/dropzone/dropzone.css" type="text/css" />
@@ -49,8 +38,8 @@
                                 <div class="d-flex gap-2 flex-wrap">
                                     <select class="form-control" data-choices data-choices-search-false id="idStatus">
                                         <option selected value=" ">Type</option>
-                                        <option value="Pending">Selse</option>
-                                        <option value="Inprogress">Purchase</option>
+                                        <option value="Selse">Selse</option>
+                                        <option value="Purchase">Purchase</option>
                                     </select>
                                 </div>
                             </div>
@@ -76,15 +65,20 @@
                                                                 </span>
                                                             </label>
                                                         </div>
-                                                        <div id="Companyname">
+                                                        <div id="Companyname" style="display:none;">
                                                             <label>CompanyAddress</label>
                                                         </div>
-                                                        <div class="mb-2">
-                                                            <select class="form-control" name="data[#].CompanyAddress" data-choices data-choices-search-false id="idStatusCompany" name="Company">
+                                                        <div class="mb-2" style="display:none;" id="idStatusCompany">
+                                                            <div class="form-control">
+                                                                <h6><span class="text-muted fw-normal">Bonifatius Technologies Pvt. Ltd.</span></h6>
+                                                                <h6><span class="text-muted fw-normal">SF- 203, Peridot Complex, Urmi co-Operative scoiety Akota,Vadodara,Gujarat 390020</span></h6>
+                                                                <h6 class="mb-0"><span class="text-muted fw-normal">Contact No: </span><span id="contact-no"> +(91) 643 234 6789</span></h6>
+                                                            </div>
+                                                            @* <select class="form-control" name="data[#].CompanyAddress" data-choices data-choices-search-false id="idStatusCompany" name="Company">
                                                                 <option selected value=" ">Type</option>
                                                                 <option value="Pending">Bonifatius</option>
                                                                 <option value="Inprogress">Purchase</option>
-                                                            </select>
+                                                            </select> *@
                                                         </div>
                                                         <div class="col-lg-12 ms-auto" id="vender">
                                                             <select class="form-control" data-choices data-choices-search-false id="idStatusvender" name="vender">
@@ -103,15 +97,20 @@
                                                         </select>
 
 
-                                                        <div id="CompanCCP">
+                                                        <div id="CompanCCP" style="display:none;">
                                                             <label>CompanyAddress</label>
                                                         </div>
-                                                        <div class="mb-2">
-                                                            <select class="form-control" data-choices data-choices-search-false id="idCompany" name="Company">
+                                                        <div class="mb-2" style="display:none;" id="idCompany">
+                                                            <div class="form-control">
+                                                                <h6><span class="text-muted fw-normal">Bonifatius Technologies Pvt. Ltd.</span></h6>
+                                                                <h6><span class="text-muted fw-normal">SF- 203, Peridot Complex, Urmi co-Operative scoiety Akota,Vadodara,Gujarat 390020</span></h6>
+                                                                <h6 class="mb-0"><span class="text-muted fw-normal">Contact No: </span><span id="contact-no"> +(91) 643 234 6789</span></h6>
+                                                            </div>
+                                                            @* <select class="form-control" data-choices data-choices-search-false id="idCompany" name="Company">
                                                                 <option selected value=" ">Type</option>
                                                                 <option value="Pending">Bonifatius</option>
                                                                 <option value="Inprogress">Purchase</option>
-                                                            </select>
+                                                            </select> *@
                                                         </div>
                                                     </div>
                                                 </div>

@@ -66,6 +66,7 @@ public partial class BonifatiusEmployeesContext : DbContext
     public virtual DbSet<TblVendorType> TblVendorTypes { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<OrderMaster>(entity =>
@@ -90,6 +91,11 @@ public partial class BonifatiusEmployeesContext : DbContext
                 .HasForeignKey(d => d.ProductType)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_OrderMaster_OrderMaster");
+
+            entity.HasOne(d => d.Project).WithMany(p => p.OrderMasters)
+                .HasForeignKey(d => d.ProjectId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_OrderMaster_tblProjectMaster");
         });
 
         modelBuilder.Entity<TblAttendance>(entity =>
@@ -245,7 +251,7 @@ public partial class BonifatiusEmployeesContext : DbContext
         {
             entity.ToTable("tblProductTypeMaster");
 
-            entity.Property(e => e.ProductName).HasMaxLength(20);
+            entity.Property(e => e.Type).HasMaxLength(20);
         });
 
         modelBuilder.Entity<TblProjectDetail>(entity =>

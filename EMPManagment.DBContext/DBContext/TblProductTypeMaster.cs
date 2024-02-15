@@ -7,7 +7,7 @@ public partial class TblProductTypeMaster
 {
     public int Id { get; set; }
 
-    public string? ProductName { get; set; }
+    public string? Type { get; set; }
 
     public virtual ICollection<OrderMaster> OrderMasters { get; set; } = new List<OrderMaster>();
 

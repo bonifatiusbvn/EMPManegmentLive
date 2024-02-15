@@ -193,6 +193,26 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
+        [HttpPost]
+        public async Task<IActionResult> DisplayProductDetailsByVendorId()
+        {
+            try
+            {
+                string Vendorstatus = HttpContext.Request.Form["VendorId"];
+                var GetVendorId = Newtonsoft.Json.JsonConvert.DeserializeObject<ProductDetailsView>(Vendorstatus.ToString());
+                List<ProductDetailsView> ProductList = new List<ProductDetailsView>();
+                ApiResponseModel response = await APIServices.PostAsync("", "ProductMaster/GetProductDetailsByVendorId?VendorId=" + GetVendorId.VendorId);
+                if (response.code == 200)
+                {
+                    ProductList = JsonConvert.DeserializeObject<List<ProductDetailsView>>(response.data.ToString());
+                }
+                return PartialView("~/Views/ProductMaster/_ProductDetailsbtVendorId.cshtml", ProductList);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
         [HttpGet]
         public async Task<IActionResult> GetProductDetailsById(Guid ProductId)
         {

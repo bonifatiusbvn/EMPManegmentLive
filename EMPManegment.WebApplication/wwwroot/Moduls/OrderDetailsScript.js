@@ -314,7 +314,10 @@ function InsertMultipleOrder() {
 
 
 
-
+$(document).ready(function () {
+    GetVendorNameList();
+    GetProducts();
+});
 function GetVendorNameList() {
 
     $.ajax({
@@ -329,7 +332,19 @@ function GetVendorNameList() {
 function selectvendorId() {
     document.getElementById("txtvendorTypeid").value = document.getElementById("txtvendorname").value;
 }
-
+function GetProducts() {
+    $.ajax({
+        url: '/ProductMaster/GetProduct',
+        success: function (result) {
+            $.each(result, function (i, data) {
+                $('#txtProducts').append('<Option value=' + data.id + '>' + data.productName + '</Option>')
+            });
+        }
+    });
+}
+function selectProductTypeId() {
+    document.getElementById("txtProductTypeid").value = document.getElementById("txtProducts").value;
+}
 $(document).ready(function () {
     $('#txtProducts').change(function () {
 
@@ -337,7 +352,7 @@ $(document).ready(function () {
         var Text = $("#txtProducts Option:Selected").text();
         var ProductTypeId = $(this).val();
         var VendorTypeId = $("#txtvendorname").val();
-        $("#txtProductnameid").val(Text);
+        $("#txtProductTypeid").val(Text);
         $('#searchproductname').empty();
         $('#searchproductname').append('<Option >--Select ProductName--</Option>');
         $.ajax({
@@ -380,16 +395,16 @@ function SerchProductDetailsById() {
             }
             else {
                 var vendorname = $('#txtvendorname').val();
-                var productname = $('#productname').val();
+                var productname = $('#txtProducts').val();
                 var serchproductname = $('#searchproductname').val();
                 if (vendorname === '' || vendorname === null) {
                     $('#vendorvalidationMessage').text('Please select Vendor!!');
                 }
                 if (productname === "--Select Product--" || productname === null) {
-                    $('#productvalidationMessage').text('Please select Product!!');
+                    $('#productvalidationMessage').text('Please select ProductType!!');
                 }
                 if (serchproductname === "--Select ProductName--" || serchproductname === null) {
-                    $('#searchvalidationMessage').text('Please select Product!!');
+                    $('#searchvalidationMessage').text('Please select ProductName!!');
                 }
                 else {
                     $('#vendorvalidationMessage').text('');
@@ -403,14 +418,14 @@ function SerchProductDetailsById() {
 
 
 function selectProductTypeId() {
-    document.getElementById("txtProductnameid").value = document.getElementById("productname").value;
+    document.getElementById("txtProductTypeid").value = document.getElementById("txtProducts").value;
 }
-$("#productname").change(function () {
+$("#txtProducts").change(function () {
     ProductDetailsByProductTypeId()
 })
 function ProductDetailsByProductTypeId() {
     var form_data = new FormData();
-    form_data.append("ProductId", $('#productname').val());
+    form_data.append("ProductId", $('#txtProducts').val());
     $.ajax({
         url: '/ProductMaster/GetProductById',
         type: 'Post',
