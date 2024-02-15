@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace EMPManegment.Services.ProductMaster
 {
-    public class ProductMasterServices:IProductMasterServices
+    public class ProductMasterServices : IProductMasterServices
     {
         private readonly IProductMaster productMaster;
         public ProductMasterServices(IProductMaster ProductMaster)
@@ -60,7 +60,7 @@ namespace EMPManegment.Services.ProductMaster
             return await productMaster.SerchProductByVendor(ProductId, VendorId);
         }
 
-        public async Task<List<ProductDetailsView>> DisplayProductDetailsById(Guid ProductId)
+        public async Task<ProductDetailsView> DisplayProductDetailsById(Guid ProductId)
         {
             return await productMaster.DisplayProductDetailsById(ProductId);
         }

@@ -254,11 +254,11 @@ $("#returnsactive").click(function () {
 
 
 function InsertMultipleOrder() {
-    debugger
+
     /*    if ($('#createOrderForm').valid()) {*/
     var orderDetails = [];
     for (var i = 0; i < 2; i++) {
-        debugger
+
         var objData = {
             Type: $("#OrderType").val(),
             OrderId: $("#orderId").val(),
@@ -273,7 +273,7 @@ function InsertMultipleOrder() {
             Amount: $("#txtproductamount").val(),
             Total: $("#txtproducttotalamount").val(),
         };
-        debugger
+
         orderDetails.push(objData);
     }
     var form_data = new FormData();
@@ -286,7 +286,7 @@ function InsertMultipleOrder() {
         contentType: false,
         processData: false,
         success: function (Result) {
-            debugger
+
 
             if (Result.message != null) {
                 Swal.fire({
@@ -314,10 +314,7 @@ function InsertMultipleOrder() {
 
 
 
-$(document).ready(function () {
-    document.getElementById("productname").click()
-    document.getElementById("searchproductname").click()
-});
+
 function GetVendorNameList() {
 
     $.ajax({
@@ -335,7 +332,7 @@ function selectvendorId() {
 
 $(document).ready(function () {
     $('#txtProducts').change(function () {
-        debugger
+
 
         var Text = $("#txtProducts Option:Selected").text();
         var ProductTypeId = $(this).val();
@@ -363,6 +360,7 @@ function SerchProductDetailsById() {
 
     var GetProductId = {
         Id: $('#searchproductname').val(),
+        RowNumber: $('#addNewlink tr').length,
     }
     var form_data = new FormData();
     form_data.append("PRODUCTID", JSON.stringify(GetProductId));
@@ -376,6 +374,7 @@ function SerchProductDetailsById() {
         processData: false,
         contentType: false,
         complete: function (Result) {
+
             if (Result.statusText === "success") {
                 AddNewRow(Result.responseText);
             }
@@ -465,37 +464,29 @@ document.querySelector("#profile-img-file-input").addEventListener("change", fun
     n.addEventListener("load", function () {
         e.src = n.result
     }, !1), t && n.readAsDataURL(t)
-}), flatpickr("#date-field", {
-    enableTime: !0,
-    dateFormat: "d M, Y, h:i K"
 }), isData();
 var count = 1;
 
 function AddNewRow(Result) {
+
     count++;
-    var e = document.createElement("tr");
-    e.id = count;
-    e.className = "product";
-    e.innerHTML = document.getElementById("newRowfrm").innerHTML + Result;
-    document.getElementById("addNewlink").appendChild(e);
+    $("#addNewlink").append(Result);
 
-    // Initialize Choices plugin for new elements
-    Array.from(e.querySelectorAll("[data-trigger]")).forEach(function (element) {
-        new Choices(element, {
-            placeholderValue: "This is a placeholder set in the config",
-            searchPlaceholderValue: "This is a search placeholder"
-        });
-    });
 
-    bindEventListeners();
 
-    // Update product total amount for the new row
-    updateProductTotalAmount(e);
-
-    // Update totals after adding the new row
+    updateProductTotalAmount();
     updateTotals();
-}
 
+}
+$(document).on("click", ".plus", function () {
+    updateProductQuantity($(this).closest(".product"), 1);
+    return
+});
+
+$(document).on("click", ".minus", function () {
+    updateProductQuantity($(this).closest(".product"), -1);
+    return
+});
 function bindEventListeners() {
     // Event listener for removing a product
     document.querySelectorAll(".product-removal a").forEach(function (e) {
@@ -522,35 +513,42 @@ function bindEventListeners() {
     });
 }
 
-function updateProductQuantity(row, increment) {
-    var quantityInput = row.querySelector(".product-quantity");
-    var currentQuantity = parseInt(quantityInput.value);
-    var newQuantity = currentQuantity + increment;
-    if (newQuantity >= 0) {
-        quantityInput.value = newQuantity;
-        updateProductTotalAmount(row);
-    }
+function updateProductTotalAmount() {
+
+    $(".product").each(function () {
+        var row = $(this);
+        var productPrice = parseFloat(row.find("#txtproductamount").val());
+        var quantity = parseInt(row.find("#txtproductquantity").val());
+        var gst = parseFloat(row.find("#txtgst").val());
+        var totalGst = (productPrice * quantity * gst) / 100;
+        var totalAmount = productPrice * quantity + totalGst;
+
+        row.find("#txtproductamountwithGST").val(totalGst.toFixed(2));
+        row.find("#txtproducttotalamount").val(totalAmount.toFixed(2));
+    });
 }
 
-function updateProductTotalAmount(row) {
-    var productPrice = parseFloat(row.querySelector("#txtproductamount").value);
-    var quantity = parseInt(row.querySelector(".product-quantity").value);
-    var gst = parseFloat(row.querySelector("#txtgst").value);
-    var totalGst = (productPrice * quantity * gst) / 100;
-    var totalAmount = productPrice * quantity + totalGst;
-
-    row.querySelector("#txtproductamountwithGST").value = totalGst.toFixed(2);
-    row.querySelector("#txtproducttotalamount").value = totalAmount.toFixed(2);
+function updateProductQuantity(row, increment) {
+    debugger
+    var quantityInput = row.find(".product-quantity").val();
+    var currentQuantity = parseInt(quantityInput);
+    var newQuantity = currentQuantity + increment;
+    if (newQuantity >= 0) {
+        row.find(".product-quantity").val(newQuantity.toFixed(2));;
+        updateProductTotalAmount();
+        return
+    }
 }
 
 function updateTotals() {
     var totalSubtotal = 0;
     var totalGst = 0;
     var totalAmount = 0;
-
-    document.querySelectorAll(".product").forEach(function (row) {
-        var subtotal = parseFloat(row.querySelector("#txtproducttotalamount").value);
-        var gst = parseFloat(row.querySelector("#txtproductamountwithGST").value);
+    debugger
+    $(".product").each(function () {
+        var row = $(this);
+        var subtotal = parseFloat(row.find("#txtproducttotalamount").val());
+        var gst = parseFloat(row.find("#txtproductamountwithGST").val());
 
         totalSubtotal += subtotal;
         totalGst += gst;
@@ -586,7 +584,7 @@ function remove() {
 function resetRow() {
     Array.from(document.getElementById("addNewlink").querySelectorAll("tr")).forEach(function (e, t) {
         t += 1;
-        e.querySelector(".product-id").innerHTML = t
+        e.querySelector("#product-id").innerHTML = t
     })
 }
 
@@ -634,11 +632,11 @@ Array.from(genericExamples).forEach(function (e) {
         searchPlaceholderValue: "This is a search placeholder"
     })
 });
-var cleaveBlocks = new Cleave("#cardNumber", {
-    blocks: [4, 4, 4, 4],
-    uppercase: !0
-}),
-    genericExamples = document.querySelectorAll('[data-plugin="cleave-phone"]');
+//var cleaveBlocks = new Cleave("#cardNumber", {
+//    blocks: [4, 4, 4, 4],
+//    uppercase: !0
+//}),
+//    genericExamples = document.querySelectorAll('[data-plugin="cleave-phone"]');
 Array.from(genericExamples).forEach(function (e) {
     new Cleave(e, {
         delimiters: ["(", ")", "-"],

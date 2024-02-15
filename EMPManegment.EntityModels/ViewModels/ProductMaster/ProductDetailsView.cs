@@ -11,11 +11,11 @@ namespace EMPManegment.EntityModels.ViewModels.ProductMaster
     {
         public Guid Id { get; set; }
         public Guid VendorId { get; set; }
-        public string? VendorName { get; set; } 
+        public string? VendorName { get; set; }
         public int? ProductType { get; set; }
-        public string? ProductTypeName { get; set; } 
+        public string? ProductTypeName { get; set; }
 
-        public string ProductName { get; set; } 
+        public string ProductName { get; set; }
 
         public string ProductDescription { get; set; }
 
@@ -36,14 +36,16 @@ namespace EMPManegment.EntityModels.ViewModels.ProductMaster
 
         public DateTime? CreatedOn { get; set; }
 
-        public Guid CreatedBy { get; set; } 
+        public Guid CreatedBy { get; set; }
 
         public DateTime? UpdatedOn { get; set; }
 
         public Guid? UpdatedBy { get; set; }
+
+        public int RowNumber { get; set; }
     }
     public class ProductRequestModel
-     {
+    {
         public Guid Id { get; set; }
         public Guid VendorId { get; set; }
         public int? ProductType { get; set; }
@@ -71,5 +73,5 @@ namespace EMPManegment.EntityModels.ViewModels.ProductMaster
         public DateTime? UpdatedOn { get; set; }
 
         public Guid? UpdatedBy { get; set; }
-      }
+    }
 }

@@ -122,7 +122,7 @@
                             </div>
                             <!--end col-->
 
-                            <div class="col-sm-2">
+                            <div class="col-sm-4">
                                 <div>
                                     <label for="ProductType" class="text-muted text-uppercase fw-semibold">Product Type</label>
                                 </div><select id="txtProducts" class="text-muted text-uppercase fw-semibold" onchange="selectProductTypeId()" style="border:hidden;">
@@ -133,7 +133,7 @@
                             </div>
                             <!--end col-->
 
-                            <div class="col-sm-2">
+                            <div class="col-sm-4">
                                 <div class="input-light">
                                     <div>
                                         <label for="searchproductname" class="text-muted text-uppercase fw-semibold">Product Names</label>
@@ -161,17 +161,113 @@
 
                 <!---- Product Details ---->
 
-                <div>
-                    <form id="newRowfrm" style="display: none;">
-                    </form>
-                    <table>
-                        <tbody id="addNewlink">
-                        </tbody>
-                    </table>
+                <div class="card-body p-4">
+                    <div class="table-responsive">
+                        <table class="invoice-table table table-bordered table-striped mb-0">
+                            <thead>
+                                <tr>
+                                    <th class="text-start">#</th>
+                                    <th class="text-start">Product Details</th>
+                                    <th class="text-start">Rate</th>
+                                    <th class="text-start">GST (%)</th>
+                                    <th class="text-start">GST Price</th>
+                                    <th class="text-start">Quantity</th>
+                                    <th class="text-start">Amount</th>
+                                    <th class="text-end">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="addNewlink">
+                            </tbody>
+
+
+                        </table>
+                    </div>
+                    <tbody>
+                        <tr id="newForm" style="display: none;"><td class="d-none" colspan="5"></td></tr>
+                        <tr class="border-top border-top-dashed mt-2">
+                            <td colspan="3"></td>
+                            <td colspan="2" class="p-0">
+                                <table class="table table-borderless table-sm table-nowrap align-middle mb-0">
+                                    <tbody>
+                                        <tr>
+                                            <th scope="row">Sub Total</th>
+                                            <td style="width:150px;">
+                                                <input type="text" class="form-control bg-light border-0" id="cart-subtotal" placeholder="$0.00" style="width: 80px;" readonly />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Estimated Tax (12.5%)</th>
+                                            <td>
+                                                <input type="text" class="form-control bg-light border-0" id="cart-tax" placeholder="$0.00" readonly />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Total Gst(18%)</th>
+                                            <td>
+                                                <input type="text" class="form-control bg-light border-0" id="totalgst" placeholder="$0.00" readonly />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Discount <small class="text-muted">(VELZON15)</small></th>
+                                            <td>
+                                                <input type="text" class="form-control bg-light border-0" id="cart-discount" placeholder="$0.00" readonly />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Shipping Charge</th>
+                                            <td>
+                                                <input type="text" class="form-control bg-light border-0" id="cart-shipping" placeholder="$0.00" readonly />
+                                            </td>
+                                        </tr>
+                                        <tr class="border-top border-top-dashed">
+                                            <th scope="row">Total Amount</th>
+                                            <td>
+                                                <input type="text" class="form-control bg-light border-0" id="cart-total" placeholder="$0.00" readonly />
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <!--end table-->
+                            </td>
+                        </tr>
+                    </tbody>
+                    <div class="row mt-3">
+                        <div class="col-lg-4">
+                            <div class="mb-2">
+                                <label for="choices-payment-type" class="form-label text-muted text-uppercase fw-semibold">Payment Details</label>
+                                <div class="input-light">
+                                    <select class="form-control bg-light border-0" data-choices data-choices-search-false data-choices-removeItem id="txtpaymentmethod">
+                                        <option value="">Payment Method</option>
+                                        <option value="Mastercard">Mastercard</option>
+                                        <option value="Credit Card">Credit Card</option>
+                                        <option value="Visa">Visa</option>
+                                        <option value="Paypal">Paypal</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="mb-2">
+                                <input class="form-control bg-light border-0" type="text" id="cardholderName" placeholder="Card Holder Name">
+                            </div>
+                            <div class="mb-2">
+                                <input class="form-control bg-light border-0" type="text" id="cardNumber" placeholder="xxxx xxxx xxxx xxxx">
+                            </div>
+                            <div>
+                                <input class="form-control  bg-light border-0" type="text" id="amountTotalPay" placeholder="$0.00" readonly />
+                            </div>
+                        </div>
+                        <!--end col-->
+                    </div>
+                    <!--end row-->
+                    <div class="mt-4">
+                        <label for="exampleFormControlTextarea1" class="form-label text-muted text-uppercase fw-semibold">NOTES</label>
+                        <textarea class="form-control alert alert-info" id="exampleFormControlTextarea1" placeholder="Notes" rows="2" required>All accounts are to be paid within 7 days from receipt of invoice. To be paid by cheque or credit card or direct payment online. If account is not paid within 7 days the credits details supplied as confirmation of work undertaken will be charged the agreed quoted fee noted above.</textarea>
+                    </div>
+                    <div class="hstack gap-2 justify-content-end d-print-none mt-4">
+                        <button type="button" class="btn btn-success" onclick="InsertMultipleOrder()"><i class="ri-printer-line align-bottom me-1"></i> Save</button>
+                        <a href="javascript:void(0);" class="btn btn-primary"><i class="ri-download-2-line align-bottom me-1"></i> Download Invoice</a>
+                        <a href="javascript:void(0);" class="btn btn-danger"><i class="ri-send-plane-fill align-bottom me-1"></i> Send Invoice</a>
+                    </div>
                 </div>
-
-                <!--end row-->
-
             </form>
         </div>
     </div>

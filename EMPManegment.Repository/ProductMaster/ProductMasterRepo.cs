@@ -58,13 +58,13 @@ namespace EMPManegment.Repository.ProductMaster
             }
             return response;
         }
-       
+
         public async Task<UserResponceModel> AddProductDetails(ProductDetailsView AddProduct)
-       {
+        {
             UserResponceModel response = new UserResponceModel();
             try
             {
-                bool isProductAlredyExists = Context.TblProductDetailsMasters.Any(x => x.ProductName == AddProduct.ProductName );
+                bool isProductAlredyExists = Context.TblProductDetailsMasters.Any(x => x.ProductName == AddProduct.ProductName);
                 if (isProductAlredyExists == true)
                 {
                     response.Message = " this product Is already exists";
@@ -128,21 +128,21 @@ namespace EMPManegment.Repository.ProductMaster
             try
             {
                 var vendorDetails = new List<ProductDetailsView>();
-                var data = await(from a in Context.TblProductDetailsMasters
-                    join b in Context.TblProductTypeMasters
-                    on a.ProductType equals b.Id
-                    where a.VendorId==VendorId
-                    select new
-                    {
-                        a.Id,
-                        a.VendorId,
-                        a.ProductImage,
-                        a.ProductStocks,
-                        a.ProductType,
-                        a.PerUnitPrice,
-                       // a.ProductName,
-                        b.ProductName,
-                    }).ToListAsync();
+                var data = await (from a in Context.TblProductDetailsMasters
+                                  join b in Context.TblProductTypeMasters
+                                  on a.ProductType equals b.Id
+                                  where a.VendorId == VendorId
+                                  select new
+                                  {
+                                      a.Id,
+                                      a.VendorId,
+                                      a.ProductImage,
+                                      a.ProductStocks,
+                                      a.ProductType,
+                                      a.PerUnitPrice,
+                                      // a.ProductName,
+                                      b.ProductName,
+                                  }).ToListAsync();
                 if (data != null)
                 {
                     foreach (var item in data)
@@ -155,7 +155,7 @@ namespace EMPManegment.Repository.ProductMaster
                             ProductName = item.ProductName,
                             ProductStocks = item.ProductStocks,
                             PerUnitPrice = item.PerUnitPrice,
-                            ProductTypeName=item.ProductName
+                            ProductTypeName = item.ProductName
                         });
                     }
                 }
@@ -216,29 +216,29 @@ namespace EMPManegment.Repository.ProductMaster
             ProductDetailsView Product = new ProductDetailsView();
             try
             {
-                 Product =(from a in Context.TblProductDetailsMasters.Where(x => x.Id == ProductId)
-                                                         join b in Context.TblProductTypeMasters
-                                                         on a.ProductType equals b.Id
-                                                         join c in Context.TblVendorMasters
-                                                         on a.VendorId equals c.Vid
-                                                         select new ProductDetailsView
-                                                         {
-                                                             Id = a.Id,
-                                                             VendorName =c.VendorCompany,
-                                                             VendorId=a.VendorId,
-                                                             ProductType=a.ProductType,
-                                                             ProductTypeName = b.ProductName,
-                                                             ProductName = a.ProductName,
-                                                             ProductDescription = a.ProductDescription,
-                                                             ProductShortDescription = a.ProductShortDescription,
-                                                             ProductImage = a.ProductImage,
-                                                             ProductStocks = a.ProductStocks,
-                                                             PerUnitPrice = a.PerUnitPrice,
-                                                             Hsn = a.Hsn,
-                                                             Gst = a.Gst,
-                                                             PerUnitWithGstprice = a.PerUnitWithGstprice,
-                                                             CreatedBy = a.CreatedBy,
-                                                         }).First();
+                Product = (from a in Context.TblProductDetailsMasters.Where(x => x.Id == ProductId)
+                           join b in Context.TblProductTypeMasters
+                           on a.ProductType equals b.Id
+                           join c in Context.TblVendorMasters
+                           on a.VendorId equals c.Vid
+                           select new ProductDetailsView
+                           {
+                               Id = a.Id,
+                               VendorName = c.VendorCompany,
+                               VendorId = a.VendorId,
+                               ProductType = a.ProductType,
+                               ProductTypeName = b.ProductName,
+                               ProductName = a.ProductName,
+                               ProductDescription = a.ProductDescription,
+                               ProductShortDescription = a.ProductShortDescription,
+                               ProductImage = a.ProductImage,
+                               ProductStocks = a.ProductStocks,
+                               PerUnitPrice = a.PerUnitPrice,
+                               Hsn = a.Hsn,
+                               Gst = a.Gst,
+                               PerUnitWithGstprice = a.PerUnitWithGstprice,
+                               CreatedBy = a.CreatedBy,
+                           }).First();
                 return Product;
             }
             catch (Exception ex)
@@ -264,7 +264,7 @@ namespace EMPManegment.Repository.ProductMaster
                     getProduct.Gst = UpdateProduct.Gst;
                     getProduct.Hsn = UpdateProduct.Hsn;
                     getProduct.Id = UpdateProduct.Id;
-                    getProduct.PerUnitWithGstprice= UpdateProduct.PerUnitWithGstprice;
+                    getProduct.PerUnitWithGstprice = UpdateProduct.PerUnitWithGstprice;
                     getProduct.ProductStocks = UpdateProduct.ProductStocks;
                     getProduct.VendorId = UpdateProduct.VendorId;
                 }
@@ -346,7 +346,7 @@ namespace EMPManegment.Repository.ProductMaster
                 var productDetails = new List<ProductDetailsView>();
                 var data = await Context.TblProductDetailsMasters.Where(x => x.ProductType == ProductId && x.VendorId == VendorId).ToListAsync();
                 if (data != null)
-                { 
+                {
                     foreach (var item in data)
                     {
                         productDetails.Add(new ProductDetailsView()
@@ -359,7 +359,7 @@ namespace EMPManegment.Repository.ProductMaster
                             PerUnitPrice = item.PerUnitPrice,
                             PerUnitWithGstprice = item.PerUnitWithGstprice,
                             Hsn = item.Hsn,
-                            Gst=item.Gst,
+                            Gst = item.Gst,
                             ProductDescription = item.ProductDescription,
                             ProductShortDescription = item.ProductShortDescription,
                         });
@@ -373,34 +373,33 @@ namespace EMPManegment.Repository.ProductMaster
             }
         }
 
-        public async Task<List<ProductDetailsView>> DisplayProductDetailsById(Guid ProductId)
+        public async Task<ProductDetailsView> DisplayProductDetailsById(Guid ProductId)
         {
             try
             {
-                var ProductDetails = new List<ProductDetailsView>();
-                var data = await Context.TblProductDetailsMasters.Where(x => x.Id == ProductId).ToListAsync();
+                var ProductDetails = new ProductDetailsView();
+                var data = Context.TblProductDetailsMasters.Where(x => x.Id == ProductId).SingleOrDefault();
                 if (data != null)
                 {
-                    foreach (var item in data)
+
+                    ProductDetails = new ProductDetailsView()
                     {
-                        ProductDetails.Add(new ProductDetailsView()
-                        {
-                            Id = item.Id,
-                            VendorId = item.VendorId,
-                            ProductType = item.ProductType,
-                            ProductName = item.ProductName,
-                            ProductDescription = item.ProductDescription,
-                            ProductShortDescription = item.ProductShortDescription,
-                            ProductImage = item.ProductImage,
-                            ProductStocks = item.ProductStocks,
-                            PerUnitPrice = item.PerUnitPrice,
-                            Hsn = item.Hsn,
-                            Gst = item.Gst,
-                            PerUnitWithGstprice = item.PerUnitWithGstprice,
-                            CreatedBy = item.CreatedBy,
-                        });
-                    }
+                        Id = data.Id,
+                        VendorId = data.VendorId,
+                        ProductType = data.ProductType,
+                        ProductName = data.ProductName,
+                        ProductDescription = data.ProductDescription,
+                        ProductShortDescription = data.ProductShortDescription,
+                        ProductImage = data.ProductImage,
+                        ProductStocks = data.ProductStocks,
+                        PerUnitPrice = data.PerUnitPrice,
+                        Hsn = data.Hsn,
+                        Gst = data.Gst,
+                        PerUnitWithGstprice = data.PerUnitWithGstprice,
+                        CreatedBy = data.CreatedBy,
+                    };
                 }
+
                 return ProductDetails;
             }
             catch (Exception ex)
@@ -409,8 +408,8 @@ namespace EMPManegment.Repository.ProductMaster
             }
         }
     }
-        
+
 }
-    
+
 
 

@@ -165,8 +165,8 @@ namespace EMPManagment.API.Controllers
         [Route("DisplayProductDetailsById")]
         public async Task<IActionResult> DisplayProductDetailsById(Guid ProductId)
         {
-            List<ProductDetailsView> ProductList = await productMaster.DisplayProductDetailsById(ProductId);
-            return Ok(new { code = 200, data = ProductList.ToList() });
+            ProductDetailsView ProductList = await productMaster.DisplayProductDetailsById(ProductId);
+            return Ok(new { code = 200, data = ProductList });
         }
     }
 }

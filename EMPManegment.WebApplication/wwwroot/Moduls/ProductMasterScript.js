@@ -2,9 +2,6 @@
 
     GetVendorNameList()
     GetProducts()
-    document.getElementById("txtvendorname").click()
-    document.getElementById("txtProductList").click()
-    document.getElementById("txtProducts").click()
 });
 
 function GetVendorNameList() {
@@ -35,38 +32,38 @@ function AddProductType() {
 
     /*if ($("#addproduct").valid()) {*/
 
-        var formData = new FormData();
-        formData.append("ProductName", $("#txtProductType").val());
+    var formData = new FormData();
+    formData.append("ProductName", $("#txtProductType").val());
 
-        $.ajax({
-            url: '/ProductMaster/AddProductType',
-            type: 'Post',
-            data: formData,
-            dataType: 'json',
-            contentType: false,
-            processData: false,
-            success: function (Result) {
-                if (Result.message == "Product Successfully Inserted") {
-                    Swal.fire({
-                        title: Result.message,
-                        icon: Result.icone,
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'OK'
-                    }).then(function () {
-                        window.location = '/ProductMaster/CreateProduct';
-                    });
-                }
-                else {
-                    Swal.fire({
-                        title: Result.message,
-                        icon: Result.icone,
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'OK'
-                    });
-                }
+    $.ajax({
+        url: '/ProductMaster/AddProductType',
+        type: 'Post',
+        data: formData,
+        dataType: 'json',
+        contentType: false,
+        processData: false,
+        success: function (Result) {
+            if (Result.message == "Product Successfully Inserted") {
+                Swal.fire({
+                    title: Result.message,
+                    icon: Result.icone,
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'OK'
+                }).then(function () {
+                    window.location = '/ProductMaster/CreateProduct';
+                });
             }
-        });
-    }
+            else {
+                Swal.fire({
+                    title: Result.message,
+                    icon: Result.icone,
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'OK'
+                });
+            }
+        }
+    });
+}
 
 
 
@@ -154,9 +151,9 @@ $(document).ready(function () {
 });
 
 function SaveProductDetails() {
-    
+
     if ($('#createproductform').valid()) {
-        
+
         var formData = new FormData();
         formData.append("ProductName", $("#txtproductname").val());
         formData.append("ProductType", $("#txtProductTypeid").val());
