@@ -254,7 +254,7 @@ $("#returnsactive").click(function () {
 
 
 function InsertMultipleOrder() {
-    debugger
+
     var orderDetails = [];
     var numOrders = $(".product").length;
     $(".product").each(function () {
@@ -278,10 +278,10 @@ function InsertMultipleOrder() {
         };
         orderDetails.push(objData);
     });
-    debugger
+
     var form_data = new FormData();
     form_data.append("ORDERDETAILS", JSON.stringify(orderDetails));
-    debugger
+
     $.ajax({
         url: '/OrderMaster/InsertMultipleOrders',
         type: 'POST',
@@ -351,12 +351,12 @@ function selectProductTypeId() {
 $(document).ready(function () {
     $('#txtProducts').change(function () {
 
-        debugger
+
         var Text = $("#txtProducts Option:Selected").text();
         var ProductTypeId = $(this).val();
         var VendorTypeId = $("#txtvendorname").val();
         var Productid = $("#txtProductid").val(ProductTypeId);
-        debugger
+
         $("#txtProductTypeid").val(Text);
         $('#searchproductname').empty();
         $('#searchproductname').append('<Option >--Select ProductName--</Option>');
@@ -489,15 +489,36 @@ var count = 1;
 
 function AddNewRow(Result) {
 
-    count++;
-    $("#addNewlink").append(Result);
+    var newProductRow = $(Result);
+    var newProductId = newProductRow.attr('data-product-id');
+    var isDuplicate = false;
 
+    $('#addNewlink .product').each(function () {
 
+        var existingProductRow = $(this);
+        var existingProductId = existingProductRow.attr('data-product-id');
+        if (existingProductId === newProductId) {
+            isDuplicate = true;
+            return false;
+        }
+    });
 
-    updateProductTotalAmount();
-    updateTotals();
-
+    if (!isDuplicate) {
+        count++;
+        $("#addNewlink").append(Result);
+        updateProductTotalAmount();
+        updateTotals();
+    } else {
+        Swal.fire({
+            title: "Product already added!",
+            text: "The selected product is already added.",
+            icon: "warning",
+            confirmButtonColor: "#3085d6",
+            confirmButtonText: "OK"
+        });
+    }
 }
+
 $(document).on("click", ".plus", function () {
     updateProductQuantity($(this).closest(".product"), 1);
     return
@@ -508,7 +529,7 @@ $(document).on("click", ".minus", function () {
     return
 });
 function bindEventListeners() {
-    // Event listener for removing a product
+
     document.querySelectorAll(".product-removal a").forEach(function (e) {
         e.addEventListener("click", function (event) {
             removeItem(event.target.closest("tr"));
@@ -516,7 +537,7 @@ function bindEventListeners() {
         });
     });
 
-    // Event listener for increasing product quantity
+
     document.querySelectorAll(".plus").forEach(function (btn) {
         btn.addEventListener("click", function (event) {
             updateProductQuantity(event.target.closest("tr"), 1);
@@ -524,7 +545,7 @@ function bindEventListeners() {
         });
     });
 
-    // Event listener for decreasing product quantity
+
     document.querySelectorAll(".minus").forEach(function (btn) {
         btn.addEventListener("click", function (event) {
             updateProductQuantity(event.target.closest("tr"), -1);
