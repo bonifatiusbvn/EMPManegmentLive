@@ -82,6 +82,8 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.Property(e => e.OrderId).HasMaxLength(50);
             entity.Property(e => e.PaymentMethod).HasMaxLength(50);
             entity.Property(e => e.PaymentStatus).HasMaxLength(50);
+            entity.Property(e => e.ProductName).HasMaxLength(50);
+            entity.Property(e => e.ProductShortDescription).HasMaxLength(50);
             entity.Property(e => e.Quantity).HasMaxLength(50);
             entity.Property(e => e.Total).HasColumnType("decimal(18, 0)");
             entity.Property(e => e.Type).HasMaxLength(20);

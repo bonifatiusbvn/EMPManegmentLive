@@ -15,6 +15,10 @@ public partial class OrderMaster
 
     public string? CompanyName { get; set; }
 
+    public string? ProductName { get; set; }
+
+    public string? ProductShortDescription { get; set; }
+
     public int ProductType { get; set; }
 
     public string Quantity { get; set; } = null!;

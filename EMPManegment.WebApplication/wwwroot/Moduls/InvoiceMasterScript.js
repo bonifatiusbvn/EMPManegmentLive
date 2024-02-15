@@ -29,6 +29,26 @@ function selectvendorId() {
     document.getElementById("txtvendorTypeid").value = document.getElementById("txtvendorname").value;
     document.getElementById("txtvendorTypeid1").value = document.getElementById("txtvendorname1").value;
 }
+
+$(document).ready(function () {
+    $('#txtvendorname').change(function () {
+        var Text = $("#txtvendorname Option:Selected").text();
+        var VendorTypeId = $("#txtvendorname").val();
+        $('#vendorcompanyaddress').empty();
+        $('#vendorcompanyaddress').append(' <h6><span>Bonifatius Technologies Pvt. Ltd.</span></h6>');
+        $.ajax({
+            url: '/Vendor/GetVendorDetailsById?VendorId=' + VendorTypeId,
+            type: 'Post',
+            success: function (result) {
+                $.each(result, function (i, data) {
+                    $('#searchproductname').append('<Option value=' + data.id + '>' + data.productName + '</Option>');
+
+                });
+            }
+        });
+    });
+});
+
 $(document).ready(function () {
     $("#generatePDF").click(function () {
         // Create a new jsPDF instance
