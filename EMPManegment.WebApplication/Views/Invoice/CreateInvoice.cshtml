@@ -11,7 +11,7 @@
     <div class="container-fluid">
 
         <!-- start page title -->
-        <div class="row" style="margin-top:-70px;">
+        <div class="row" style="margin-top:20px;">
             <div class="col-12">
                 <div class="page-title-box d-sm-flex align-items-center justify-content-between">
                     <h4 class="mb-sm-0">Create Invoice</h4>
@@ -22,8 +22,7 @@
                             <li class="breadcrumb-item active">Create Invoice</li>
                         </ol>
                     </div>
-                    <div>
-                    </div>
+
                 </div>
             </div>
         </div>
@@ -90,13 +89,10 @@
                                                     </div>
                                                     <!--end col-->
                                                     <div class="col-lg-4 ms-auto" id="vender">
-                                                        <select class="form-control" data-choices data-choices-search-false id="idvender" name="vender">
-                                                            <option selected value=" ">Vendor</option>
-                                                            <option value="Pending">Bonifatius</option>
-                                                            <option value="Inprogress">Purchase</option>
+                                                        <select class="form-control" data-choices data-choices-search-false id="txtvendorname" name="txtvendorname">
+                                                            <option selected disabled value="">---Select Vendor Name---</option>
                                                         </select>
-
-
+                                                        <input type="hidden" class="text-muted text-uppercase fw-semibold" id="txtvendornameid">
                                                         <div id="CompanCCP" style="display:none;">
                                                             <label>CompanyAddress</label>
                                                         </div>

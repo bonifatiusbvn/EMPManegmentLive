@@ -1,10 +1,7 @@
 ﻿
 $(document).ready(function () {
     GetInvoiceNoList()
-    //$("#idStatusCompany").hide();
-    //$("#idCompany").hide();
-    //$("#Companyname").hide();
-    //$("#CompanCCP").hide();
+    GetVendorName()
 });
 function GetInvoiceNoList() {
     $.ajax({
@@ -16,7 +13,20 @@ function GetInvoiceNoList() {
         }
     });
 }
+function GetVendorName() {
 
+    $.ajax({
+        url: '/ProductMaster/GetVendorsNameList',
+        success: function (result) {
+            $.each(result, function (i, data) {
+                $('#txtvendorname').append('<Option value=' + data.id + '>' + data.vendorCompany + '</Option>')
+            });
+        }
+    });
+}
+function selectvendorId() {
+    document.getElementById("txtvendorTypeid").value = document.getElementById("txtvendorname").value;
+}
 $(document).ready(function () {
     $("#generatePDF").click(function () {
         // Create a new jsPDF instance
