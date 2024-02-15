@@ -10,6 +10,4 @@ public partial class TblProductTypeMaster
     public string? Type { get; set; }
 
     public virtual ICollection<OrderMaster> OrderMasters { get; set; } = new List<OrderMaster>();
-
-    public virtual ICollection<TblProductDetailsMaster> TblProductDetailsMasters { get; set; } = new List<TblProductDetailsMaster>();
 }

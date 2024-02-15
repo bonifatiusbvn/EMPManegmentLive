@@ -66,7 +66,6 @@ public partial class BonifatiusEmployeesContext : DbContext
     public virtual DbSet<TblVendorType> TblVendorTypes { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<OrderMaster>(entity =>
@@ -90,11 +89,10 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.HasOne(d => d.ProductTypeNavigation).WithMany(p => p.OrderMasters)
                 .HasForeignKey(d => d.ProductType)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_OrderMaster_OrderMaster");
+                .HasConstraintName("FK_OrderMaster_tblProductTypeMaster");
 
             entity.HasOne(d => d.Project).WithMany(p => p.OrderMasters)
                 .HasForeignKey(d => d.ProjectId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_OrderMaster_tblProjectMaster");
         });
 
@@ -196,11 +194,6 @@ public partial class BonifatiusEmployeesContext : DbContext
                 .HasColumnType("numeric(18, 2)")
                 .HasColumnName("TotalGST");
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
-
-            entity.HasOne(d => d.Vandor).WithMany(p => p.TblInvoices)
-                .HasForeignKey(d => d.VandorId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_tblInvoices_tblProductDetailsMaster");
         });
 
         modelBuilder.Entity<TblInvoiceTypeMaster>(entity =>
@@ -241,10 +234,6 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.Property(e => e.ProductShortDescription).HasMaxLength(50);
             entity.Property(e => e.ProductStocks).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
-
-            entity.HasOne(d => d.ProductTypeNavigation).WithMany(p => p.TblProductDetailsMasters)
-                .HasForeignKey(d => d.ProductType)
-                .HasConstraintName("FK_tblProductDetailsMaster_tblProductTypeMaster");
         });
 
         modelBuilder.Entity<TblProductTypeMaster>(entity =>

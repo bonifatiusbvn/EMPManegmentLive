@@ -36,7 +36,7 @@
                             <div class="flex-shrink-0">
                                 <div class="d-flex gap-2 flex-wrap">
                                     <select class="form-control" data-choices data-choices-search-false id="idStatus">
-                                        <option selected value=" ">Type</option>
+                                        <option selected disabled value=" ">Type</option>
                                         <option value="Selse">Selse</option>
                                         <option value="Purchase">Purchase</option>
                                     </select>
@@ -79,20 +79,24 @@
                                                                 <option value="Inprogress">Purchase</option>
                                                             </select> *@
                                                         </div>
-                                                        <div class="col-lg-12 ms-auto" id="vender">
-                                                            <select class="form-control" data-choices data-choices-search-false id="idStatusvender" name="vender">
-                                                                <option selected value=" ">Vendor</option>
-                                                                <option value="Pending">Bonifatius</option>
-                                                                <option value="Inprogress">Purchase</option>
+                                                        <div class="col-lg-12 ms-auto" id="vender" style="display:none;">
+                                                            <select class="form-control" data-choices data-choices-search-false id="txtvendorname" name="txtvendorname">
+                                                                <option selected disabled value="">---Select Vendor Name---</option>
                                                             </select>
+                                                            <input type="hidden" class="text-muted text-uppercase fw-semibold" id="txtvendornameid">
+                                                        </div>
+                                                        <div class="mb-2" style="display:none;" id="vendorcompanyaddress">
+                                                            <div class="form-control">
+                                                                <h6><span class="text-muted fw-normal">Bonifatius Technologies Pvt. Ltd.</span></h6>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                     <!--end col-->
                                                     <div class="col-lg-4 ms-auto" id="vender">
-                                                        <select class="form-control" data-choices data-choices-search-false id="txtvendorname" name="txtvendorname">
+                                                        <select class="form-control" data-choices data-choices-search-false id="txtvendorname1" name="txtvendorname">
                                                             <option selected disabled value="">---Select Vendor Name---</option>
                                                         </select>
-                                                        <input type="hidden" class="text-muted text-uppercase fw-semibold" id="txtvendornameid">
+                                                        <input type="hidden" class="text-muted text-uppercase fw-semibold" id="txtvendornameid1">
                                                         <div id="CompanCCP" style="display:none;">
                                                             <label>CompanyAddress</label>
                                                         </div>

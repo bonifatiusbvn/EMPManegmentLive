@@ -42,6 +42,4 @@ public partial class TblInvoice
     public DateTime? UpdatedOn { get; set; }
 
     public Guid? UpdatedBy { get; set; }
-
-    public virtual TblVendorMaster Vandor { get; set; } = null!;
 }

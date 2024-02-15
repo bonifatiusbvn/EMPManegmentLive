@@ -36,6 +36,4 @@ public partial class TblProductDetailsMaster
     public DateTime? UpdatedOn { get; set; }
 
     public Guid? UpdatedBy { get; set; }
-
-    public virtual TblProductTypeMaster? ProductTypeNavigation { get; set; }
 }

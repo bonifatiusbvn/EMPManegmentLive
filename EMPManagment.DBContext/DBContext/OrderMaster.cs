@@ -7,7 +7,7 @@ public partial class OrderMaster
 {
     public Guid Id { get; set; }
 
-    public Guid ProjectId { get; set; }
+    public Guid? ProjectId { get; set; }
 
     public string? Type { get; set; }
 
@@ -41,5 +41,5 @@ public partial class OrderMaster
 
     public virtual TblProductTypeMaster ProductTypeNavigation { get; set; } = null!;
 
-    public virtual TblProjectMaster Project { get; set; } = null!;
+    public virtual TblProjectMaster? Project { get; set; }
 }

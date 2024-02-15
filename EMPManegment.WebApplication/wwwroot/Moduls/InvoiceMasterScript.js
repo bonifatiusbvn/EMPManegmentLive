@@ -20,12 +20,14 @@ function GetVendorName() {
         success: function (result) {
             $.each(result, function (i, data) {
                 $('#txtvendorname').append('<Option value=' + data.id + '>' + data.vendorCompany + '</Option>')
+                $('#txtvendorname1').append('<Option value=' + data.id + '>' + data.vendorCompany + '</Option>')
             });
         }
     });
 }
 function selectvendorId() {
     document.getElementById("txtvendorTypeid").value = document.getElementById("txtvendorname").value;
+    document.getElementById("txtvendorTypeid1").value = document.getElementById("txtvendorname1").value;
 }
 $(document).ready(function () {
     $("#generatePDF").click(function () {
@@ -311,19 +313,20 @@ function cleartextBox() {
 $('#idStatus').change(function () {
     if ($("#idStatus").val() == "Selse") {
         $("#idStatusCompany").show();
-        $("#idStatusvender").hide();
-        $("#idvender").show();
         $("#Companyname").show();
+        $("#idCompany").hide();
+        $("#CompanCCP").hide();
+        $("#vender").hide();
+        $("#txtvendorname1").show();
         cleartextBox();
     }
     if ($("#idStatus").val() == "Purchase") {
-
-        $("#idStatusvender").show();
-        $("#idvender").hide();
         $("#idCompany").show();
         $("#CompanCCP").show();
         $("#idStatusCompany").hide();
         $("#Companyname").hide();
+        $("#txtvendorname1").hide();
+        $("#vender").show();
         cleartextBox();
     }
 });
