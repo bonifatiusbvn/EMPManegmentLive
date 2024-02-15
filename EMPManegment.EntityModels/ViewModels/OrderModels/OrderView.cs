@@ -39,5 +39,8 @@ namespace EMPManegment.EntityModels.ViewModels.OrderModels
         public Guid? CreatedBy { get; set; }
 
         public string? OrderId { get; set; }
+        public string? ProductName { get; set; }
+        public string? ProductShortDescription { get; set; }
+        public Guid ProjectId { get; set; }
     }
 }

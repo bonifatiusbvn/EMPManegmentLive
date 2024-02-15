@@ -51,6 +51,12 @@ namespace EMPManegment.Web.Controllers
         {
             return View();
         }
+
+        [HttpGet]
+        public async Task<IActionResult> InvoiceDetails()
+        {
+            return View();
+        }
         [HttpGet]
         public async Task<IActionResult> GenerateInvoiceNoById(Guid Id)
         {
