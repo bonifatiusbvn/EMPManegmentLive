@@ -31,7 +31,7 @@ namespace EMPManegment.Repository.ProductMaster
             UserResponceModel response = new UserResponceModel();
             try
             {
-                bool isProductAlredyExists = Context.TblProductTypeMasters.Any(x => x.ProductName == AddProduct.ProductName);
+                bool isProductAlredyExists = Context.TblProductTypeMasters.Any(x => x.Type == AddProduct.ProductName);
                 if (isProductAlredyExists == true)
                 {
                     response.Message = "This Product Is already exists";
@@ -43,7 +43,7 @@ namespace EMPManegment.Repository.ProductMaster
                 {
                     var Product = new TblProductTypeMaster()
                     {
-                        ProductName = AddProduct.ProductName,
+                        Type = AddProduct.ProductName,
                     };
                     response.Code = (int)HttpStatusCode.OK;
                     response.Message = "Product Successfully Inserted";
@@ -114,7 +114,7 @@ namespace EMPManegment.Repository.ProductMaster
                 IEnumerable<ProductTypeView> Product = Context.TblProductTypeMasters.ToList().Select(a => new ProductTypeView
                 {
                     Id = a.Id,
-                    ProductName = a.ProductName
+                    ProductName = a.Type
                 });
                 return Product;
             }
@@ -140,8 +140,8 @@ namespace EMPManegment.Repository.ProductMaster
                         a.ProductStocks,
                         a.ProductType,
                         a.PerUnitPrice,
-                       // a.ProductName,
-                        b.ProductName,
+                        a.ProductName,
+                        b.Type,
                     }).ToListAsync();
                 if (data != null)
                 {
@@ -155,7 +155,7 @@ namespace EMPManegment.Repository.ProductMaster
                             ProductName = item.ProductName,
                             ProductStocks = item.ProductStocks,
                             PerUnitPrice = item.PerUnitPrice,
-                            ProductTypeName=item.ProductName
+                            ProductTypeName=item.Type,
                         });
                     }
                 }
@@ -184,8 +184,8 @@ namespace EMPManegment.Repository.ProductMaster
                                       a.ProductStocks,
                                       a.ProductType,
                                       a.PerUnitPrice,
-                                      // a.ProductName,
-                                      b.ProductName,
+                                      a.ProductName,
+                                      b.Type,
                                   }).ToListAsync();
                 if (data != null)
                 {
@@ -199,7 +199,7 @@ namespace EMPManegment.Repository.ProductMaster
                             ProductName = item.ProductName,
                             ProductStocks = item.ProductStocks,
                             PerUnitPrice = item.PerUnitPrice,
-                            ProductTypeName = item.ProductName
+                            ProductTypeName = item.Type
                         });
                     }
                 }
@@ -227,7 +227,7 @@ namespace EMPManegment.Repository.ProductMaster
                                                              VendorName =c.VendorCompany,
                                                              VendorId=a.VendorId,
                                                              ProductType=a.ProductType,
-                                                             ProductTypeName = b.ProductName,
+                                                             ProductTypeName = b.Type,
                                                              ProductName = a.ProductName,
                                                              ProductDescription = a.ProductDescription,
                                                              ProductShortDescription = a.ProductShortDescription,

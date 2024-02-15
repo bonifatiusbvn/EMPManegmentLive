@@ -2,9 +2,6 @@
 
     GetVendorNameList()
     GetProducts()
-    document.getElementById("txtvendorname").click()
-    document.getElementById("txtProductList").click()
-    document.getElementById("txtProducts").click()
 });
 
 function GetVendorNameList() {
@@ -204,10 +201,13 @@ $("#txtvendorname").change(function () {
     ProductDetails()
 })
 function ProductDetails() {
+    var GetVendorId = {
+        VendorId: $('#txtvendorname').val(),
+    }
     var form_data = new FormData();
-    form_data.append("VendorId", $('#txtvendorname').val());
+    form_data.append("VendorId", JSON.stringify(GetVendorId));
     $.ajax({
-        url: '/ProductMaster/GetProductDetailsByVendorId',
+        url: '/ProductMaster/DisplayProductDetailsByVendorId',
         type: 'Post',
         datatype: 'json',
         data: form_data,

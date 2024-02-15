@@ -31,7 +31,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                            on a.VandorId equals b.Vid
                            join c in Context.TblProductDetailsMasters
                            on a.ProductId equals c.Id
-                           join d in Context.OrderMasters on a.VandorId equals d.VendorId
+                           //join d in Context.OrderMasters on a.VandorId equals d.VendorId
                            select new InvoiceViewModel
                            {
                                Id = a.Id,
@@ -57,10 +57,10 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                                UpdatedOn=a.UpdatedOn,
                                UpdatedBy=a.UpdatedBy,
                                PerUnitPrice=c.PerUnitPrice,
-                               PaymentMethod = d.PaymentMethod,
-                               PaymentStatus = d.PaymentStatus,
-                               Quantity = d.Quantity,
-                               TotalAmountWithQuantity = d.Total,
+                               //PaymentMethod = d.PaymentMethod,
+                               //PaymentStatus = d.PaymentStatus,
+                               //Quantity = d.Quantity,
+                               //TotalAmountWithQuantity = d.Total,
 
                            }).First();
                 return invoice;
@@ -80,6 +80,8 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                                                         {
                                                             Id = a.Id,
                                                             InvoiceNo = a.InvoiceNo,
+                                                            InvoiceType = a.InvoiceType,
+                                                            InvoiceDate = a.InvoiceDate,
                                                             VendorName = b.VendorCompany,
                                                             VandorId = a.VandorId,
                                                             ProductName = c.ProductName,

@@ -1,6 +1,10 @@
 ﻿
 $(document).ready(function () {
     GetInvoiceNoList()
+    //$("#idStatusCompany").hide();
+    //$("#idCompany").hide();
+    //$("#Companyname").hide();
+    //$("#CompanCCP").hide();
 });
 function GetInvoiceNoList() {
     $.ajax({
@@ -294,26 +298,22 @@ function cleartextBox() {
 
 }
 
-
 $('#idStatus').change(function () {
-    if ($("#idStatus").val() == "Pending") {
+    if ($("#idStatus").val() == "Selse") {
         $("#idStatusCompany").show();
         $("#idStatusvender").hide();
         $("#idvender").show();
-        $("#idCompany").hide();
         $("#Companyname").show();
-        $("#CompanCCP").hide();
-
         cleartextBox();
     }
-    if ($("#idStatus").val() == "Inprogress") {
+    if ($("#idStatus").val() == "Purchase") {
 
-        $("#idStatusCompany").hide();
         $("#idStatusvender").show();
         $("#idvender").hide();
         $("#idCompany").show();
-        $("#Companyname").hide();
         $("#CompanCCP").show();
+        $("#idStatusCompany").hide();
+        $("#Companyname").hide();
         cleartextBox();
     }
 });

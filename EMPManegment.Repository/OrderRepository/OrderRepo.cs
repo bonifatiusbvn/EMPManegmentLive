@@ -70,7 +70,7 @@ namespace EMPManegment.Repository.OrderRepository
                                                     OrderId = a.OrderId,
                                                     CompanyName = b.VendorCompany,
                                                     VendorId = a.VendorId,
-                                                    ProductName = c.ProductName,
+                                                    ProductName = c.Type,
                                                     Quantity = a.Quantity,
                                                     OrderDate = a.OrderDate,
                                                     Total = a.Total,
