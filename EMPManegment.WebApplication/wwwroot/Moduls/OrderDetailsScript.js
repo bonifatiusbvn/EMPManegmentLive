@@ -254,12 +254,13 @@ $("#returnsactive").click(function () {
 
 
 function InsertMultipleOrder() {
-
-    /*    if ($('#createOrderForm').valid()) {*/
+    debugger
     var orderDetails = [];
-    for (var i = 0; i < 2; i++) {
-
+    var numOrders = $(".product").length;
+    $(".product").each(function () {
+        var orderRow = $(this);
         var objData = {
+            ProjectId: $("#txtProjectId").val(),
             Type: $("#OrderType").val(),
             OrderId: $("#orderId").val(),
             PaymentStatus: $("#txtPaymentStatus").val(),
@@ -268,29 +269,30 @@ function InsertMultipleOrder() {
             DeliveryDate: $("#deliverydate").val(),
             VendorId: $("#txtvendorname").val(),
             CompanyName: $("#txtvendornameid").val(),
-            ProductType: $("#productname").val(),
-            Quantity: $("#txtproductquantity").val(),
-            Amount: $("#txtproductamount").val(),
-            Total: $("#txtproducttotalamount").val(),
+            ProductType: $("#txtProductid").val(),
+            Quantity: orderRow.find("#txtproductquantity").val(),
+            Amount: orderRow.find("#txtproductamount").val(),
+            Total: orderRow.find("#txtproducttotalamount").val(),
+            ProductShortDescription: orderRow.find("#txtproductDescription").val(),
+            ProductName: orderRow.find("#txtproductName").val(),
         };
-
         orderDetails.push(objData);
-    }
+    });
+    debugger
     var form_data = new FormData();
     form_data.append("ORDERDETAILS", JSON.stringify(orderDetails));
+    debugger
     $.ajax({
         url: '/OrderMaster/InsertMultipleOrders',
-        type: 'Post',
+        type: 'POST',
         data: form_data,
         dataType: 'json',
         contentType: false,
         processData: false,
-        success: function (Result) {
-
-
-            if (Result.message != null) {
+        success: function (result) {
+            if (result.message != null) {
                 Swal.fire({
-                    title: Result.message,
+                    title: result.message,
                     icon: 'success',
                     confirmButtonColor: '#3085d6',
                     confirmButtonText: 'OK',
@@ -298,18 +300,19 @@ function InsertMultipleOrder() {
                     window.location = '/OrderMaster/CreateOrderView';
                 });
             }
+        },
+        error: function (xhr, status, error) {
+            Swal.fire({
+                title: 'Error',
+                text: 'An error occurred while processing your request.',
+                icon: 'error',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'OK',
+            });
         }
-    })
-    //}
-    //else {
-    //    Swal.fire({
-    //        title: "Kindly Fill All Datafield",
-    //        icon: 'warning',
-    //        confirmButtonColor: '#3085d6',
-    //        confirmButtonText: 'OK',
-    //    })
-    //}
+    });
 }
+
 
 
 
@@ -348,10 +351,12 @@ function selectProductTypeId() {
 $(document).ready(function () {
     $('#txtProducts').change(function () {
 
-
+        debugger
         var Text = $("#txtProducts Option:Selected").text();
         var ProductTypeId = $(this).val();
         var VendorTypeId = $("#txtvendorname").val();
+        var Productid = $("#txtProductid").val(ProductTypeId);
+        debugger
         $("#txtProductTypeid").val(Text);
         $('#searchproductname').empty();
         $('#searchproductname').append('<Option >--Select ProductName--</Option>');
@@ -544,7 +549,7 @@ function updateProductTotalAmount() {
 }
 
 function updateProductQuantity(row, increment) {
-    debugger
+
     var quantityInput = row.find(".product-quantity").val();
     var currentQuantity = parseInt(quantityInput);
     var newQuantity = currentQuantity + increment;
@@ -559,7 +564,7 @@ function updateTotals() {
     var totalSubtotal = 0;
     var totalGst = 0;
     var totalAmount = 0;
-    debugger
+
     $(".product").each(function () {
         var row = $(this);
         var subtotal = parseFloat(row.find("#txtproducttotalamount").val());
