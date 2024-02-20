@@ -36,35 +36,37 @@ $(document).ready(function () {
         $.ajax({
             url: '/Vendor/GetVendorDetailsById?VendorId=' + VendorTypeId,
             type: 'Post',
-            success: function (result) {           
-                $('#vendorcompanyaddress').append('<div><label>Vendor Company Address</label></div><div><div class="form-control"><h6 class="mb-0"><span class="text-muted fw-normal">' + result.vendorCompany + '</span></h6><h6 class="mb-0"><span class="text-muted fw-normal">Address : </span><span id="contact-no">' + result.vendorAddress +'</span></h6><h6 class="mb-0"><span class="text-muted fw-normal">Email: </span><span>' + result.vendorCompanyEmail + '</span></h6><h6 class="mb-0"><span class="text-muted fw-normal">Contact No: </span><span id="contact-no"> ' + result.vendorCompanyNumber +'</span></h6></div></div>');
+            success: function (result) {
+                $('#vendorcompanyaddress').empty();
+                $('#vendorcompanyaddress').append('<div><label>Vendor Company Address</label></div><div><div class="form-control"><h6 class="mb-0"><span class="text-muted fw-normal">' + result.vendorCompany + '</span></h6><h6 class="mb-0"><span class="text-muted fw-normal">Address : </span><span id="contact-no">' + result.vendorAddress + '</span></h6><h6 class="mb-0"><span class="text-muted fw-normal">Email: </span><span>' + result.vendorCompanyEmail + '</span></h6><h6 class="mb-0"><span class="text-muted fw-normal">Contact No: </span><span id="contact-no"> ' + result.vendorCompanyNumber + '</span></h6></div></div>');
             }
         });
     });
-});
-$(document).ready(function () {
+
     $('#txtvendorname1').change(function () {
         var VendorTypeId = $("#txtvendorname1").val();
         $.ajax({
             url: '/Vendor/GetVendorDetailsById?VendorId=' + VendorTypeId,
             type: 'Post',
             success: function (result) {
+                $('#vendorcompanyaddress1').empty();
                 $('#vendorcompanyaddress1').append('<div><label>Vendor Company Address</label></div><div><div class="form-control"><h6 class="mb-0"><span class="text-muted fw-normal">' + result.vendorCompany + '</span></h6><h6 class="mb-0"><span class="text-muted fw-normal">Address : </span><span id="contact-no">' + result.vendorAddress + '</span></h6><h6 class="mb-0"><span class="text-muted fw-normal">Email: </span><span>' + result.vendorCompanyEmail + '</span></h6><h6 class="mb-0"><span class="text-muted fw-normal">Contact No: </span><span id="contact-no"> ' + result.vendorCompanyNumber + '</span></h6></div></div>');
             }
         });
     });
 });
 
+
 $(document).ready(function () {
     $("#generatePDF").click(function () {
-        // Create a new jsPDF instance
+
         var pdf = new jsPDF();
 
-        // Generate HTML content dynamically using jQuery
+
         var htmlContent = "<h1 style='color: #3498db; text-align: center;'>PDF Generated with jQuery</h1>";
         htmlContent += "<p>This is a dynamically generated PDF content.</p>";
 
-        // Add the HTML content to the PDF with styles
+
         pdf.fromHTML(htmlContent, 15, 15, {
             'width': 170,
             'elementHandlers': {
@@ -74,7 +76,7 @@ $(document).ready(function () {
             }
         });
 
-        // Save or download the PDF
+
         pdf.save("generated_pdf.pdf");
     });
 });
@@ -158,184 +160,6 @@ $(document).ready(function () {
 });
 
 
-//function generatePdf(data) {debugger
-//    var doc = new jsPDF();
-//    doc.text("Invoice Details", 20, 10);
-//    var yPos = 20;
-//    debugger
-//    yPos += 10; debugger
-//    doc.text("InvoiceNo: " + data.invoiceNo, 20, yPos);
-//    yPos += 10;
-//    doc.text("CompanyAddress: " + data.companyAddress, 20, yPos);
-//    yPos += 10; debugger
-//    doc.text("Date: " + data.date, 20, yPos);
-//    yPos += 10;
-//    doc.text("BillingName: " + data.billingName, 20, yPos);
-//    yPos += 10;
-//    doc.text("BillingAddress: " + data.billingAddress, 20, yPos);
-//    yPos += 10;
-//    doc.text("BillingNumber: " + data.billingNumber, 20, yPos);
-//    yPos += 10;
-//    doc.text("BillingTaxNumber: " + data.billingTaxNumber, 20, yPos);
-//    yPos += 10;
-//    doc.text("ShippingName: " + data.shippingName, 20, yPos);
-//    yPos += 10;
-//    doc.text("ShippingAddress: " + data.shippingAddress, 20, yPos);
-//    yPos += 10;
-//    doc.text("ShippingTaxNumber: " + data.shippingTaxNumber, 20, yPos);
-//    yPos += 10;
-//    doc.text("ProductName: " + data.productName, 20, yPos);
-//    yPos += 10;
-//    doc.text("ProductDetails: " + data.productDetails, 20, yPos);
-//    yPos += 10;
-//    doc.text("HSN: " + data.hsn, 20, yPos);
-//    yPos += 10;
-//    doc.text("Price: " + data.price, 20, yPos);
-//    yPos += 10;
-//    doc.text("Quantity: " + data.quantity, 20, yPos);
-//    yPos += 10;
-//    doc.text("TotalAmount: " + data.totalAmount, 20, yPos);
-//    yPos += 10;
-//    doc.text("PaymentMethod: " + data.paymentMethod, 20, yPos);
-//    yPos += 10;
-//    doc.text("CardHolderName: " + data.cardHolderName, 20, yPos);
-//    yPos += 10;
-//    doc.text("PaymentMethod: " + data.cardNumber, 20, yPos);
-//    debugger
-//    doc.save("invoice.pdf");
-//}
-
-
-//var formData = $(this).serializeArray();
-
-
-//for (var i = 0; i < data.length; i++) {
-//    debugger
-//    yPos += 10; debugger
-//    doc.text("InvoiceNo: " + data[i].invoiceNo, 20, yPos);
-//    yPos += 10;
-//    doc.text("CompanyAddress: " + data[i].companyAddress, 20, yPos);
-//    yPos += 10; debugger
-//    doc.text("Date: " + data[i].date, 20, yPos);
-//    yPos += 10;
-//    doc.text("PaymentStatus: $" + data[i].paymentStatus, 20, yPos);
-//    yPos += 10;
-//    doc.text("BillingName: " + data[i].billingName, 20, yPos);
-//    yPos += 10;
-//    doc.text("BillingAddress: " + data[i].billingAddress, 20, yPos);
-//    yPos += 10;
-//    doc.text("BillingNumber: " + data[i].billingNumber, 20, yPos);
-//    yPos += 10;
-//    doc.text("BillingTaxNumber: " + data[i].billingTaxNumber, 20, yPos);
-//    yPos += 10;
-//    doc.text("ShippingName: " + data[i].shippingName, 20, yPos);
-//    yPos += 10;
-//    doc.text("ShippingAddress: " + data[i].shippingAddress, 20, yPos);
-//    yPos += 10;
-//    doc.text("ShippingTaxNumber: " + data[i].shippingTaxNumber, 20, yPos);
-//    yPos += 10;
-//    doc.text("ProductName: " + data[i].productName, 20, yPos);
-//    yPos += 10;
-//    doc.text("ProductDetails: " + data[i].productDetails, 20, yPos);
-//    yPos += 10;
-//    doc.text("HSN: $" + data[i].hsn, 20, yPos);
-//    yPos += 10;
-//    doc.text("Price: $" + data[i].price, 20, yPos);
-//    yPos += 10;
-//    doc.text("Quantity: $" + data[i].quantity, 20, yPos);
-//    yPos += 10;
-//    doc.text("TotalAmount: $" + data[i].totalAmount, 20, yPos);
-//    yPos += 10;
-//    doc.text("PaymentMethod: $" + data[i].paymentMethod, 20, yPos);
-//    yPos += 10;
-//    doc.text("CardHolderName: " + data[i].cardHolderName, 20, yPos);
-//    yPos += 10;
-//    doc.text("PaymentMethod: " + data[i].cardNumber, 20, yPos);
-//}
-
-//function DownloadInvoice() {
-
-//    //var Invoice = {
-//    //    CompanyAddress : $("#companyAddress").val(),
-//    //    PostalCode: $("#companyaddpostalcode").val(),
-//    //    LegalRegistrationNo: $("#registrationNumber").val(),
-//    //    EmailAddress : $("#companyEmail").val(),
-//    //    Website: $("#companyWebsite").val(),
-//    //    PhoneNo: $("#companyContactno").val(),
-//    //    InvoiceNo: $("#invoicenoInput").val(),
-//    //    Date: $("#date-field").val(),
-//    //    PaymentStatus: $("#choices-payment-status").val(),
-//    //    BillingName: $("#billingName").val(),
-//    //    BillingAddress: $("#billingAddress").val(),
-//    //    BillingPhoneNo: $("#billingPhoneno").val(),
-//    //    BillingTaxNo: $("#billingTaxno").val(),
-//    //    ShippingName: $("#shippingName").val(),
-//    //    ShippingAddress: $("#shippingAddress").val(),
-//    //    ShippingPhoneNo: $("#shippingPhoneno").val(),
-//    //    ShippingTaxNo: $("#shippingTaxno").val(),
-//    //    ProductName: $("#productName-1").val(),
-//    //    ProductDetails: $("#productDetails-1").val(),
-//    //    Quantity: $("#product-qty-1").val(),
-//    //    Amount: $("#productPrice-1").val(),
-//    //    Subtotal: $("#cart-subtotal").val()
-//    //}
-//    //var form_data = new FormData();
-//    //form_data.append("ViewInvoice", JSON.stringify(Invoice));
-//    var formData = new FormData();
-//    formData.append("CompanyAddress", $("#companyAddress").val());
-//    formData.append("PostalCode", $("#companyaddpostalcode").val());
-//    formData.append("LegalRegistrationNo", $("#registrationNumber").val());
-//    formData.append("EmailAddress", $("#companyEmail").val());
-//    formData.append("Website", $("#companyWebsite").val());
-//    formData.append("PhoneNo", $("#companyContactno").val());
-//    formData.append("InvoiceNo", $("#invoicenoInput").val());
-//    formData.append("Date", $("#date-field").val());
-//    formData.append("PaymentStatus", $("#choices-payment-status").val());
-//    formData.append("BillingName", $("#billingName").val());
-//    formData.append("BillingAddress", $("#billingAddress").val());
-//    formData.append("BillingPhoneNo", $("#billingPhoneno").val());
-//    formData.append("BillingTaxNo", $("#billingTaxno").val());
-//    formData.append("ShippingName", $("#shippingName").val());
-//    formData.append("ShippingAddress", $("#shippingAddress").val());
-//    formData.append("ShippingPhoneNo", $("#shippingPhoneno").val());
-//    formData.append("ShippingTaxNo", $("#shippingTaxno").val());
-//    formData.append("ProductName", $("#productName-1").val());
-//    formData.append("ProductDetails", $("#productDetails-1").val());
-//    formData.append("Rate", $("#productRate-1").val());
-//    formData.append("Quantity", $("#product-qty-1").val());
-//    formData.append("Amount", $("#productPrice-1").val());
-//    formData.append("Subtotal", $("#cart-subtotal").val());
-//    $.ajax({
-//        url: '/Sales/GenerateInvoice',
-//        type: 'Post',
-//        data: formData,
-//        dataType: 'json',
-//        contentType: false,
-//        processData: false,
-//        success: function (Result) {
-
-//            var Response = Result.data;
-//            const url = window.URL.createObjectURL(new Blob([Result]));
-//            const link = document.createElement('a');
-//            link.href = url;
-//            link.setAttribute('download', Result);
-//            document.body.appendChild(link);
-//            link.click();
-//            Swal.fire({
-//                title: 'Successfully Download',
-//                icon: 'success',
-//                confirmButtonColor: '#3085d6',
-//                confirmButtonText: 'OK',
-//            }).then(function () {
-//                window.location = '/Sales/CreateInvoice';
-//            });
-//        }
-//    })
-//}
-function cleartextBox() {
-
-}
-
 $('#idStatus').change(function () {
     if ($("#idStatus").val() == "Selse") {
         $("#idStatusCompany").show();
@@ -360,28 +184,6 @@ $('#idStatus').change(function () {
         cleartextBox();
     }
 });
-
-
-
-
-//function DownloadInvoice() {
-//
-//    axios({
-/*//        url: 'https://source.unsplash.com/random/500x500',*/
-//        method: 'GET',
-//        responseType: 'blob'
-//    })
-//        .then((response) => {
-//            const url = window.URL
-//                .createObjectURL(new Blob([response.data]));
-//            const link = document.createElement('a');
-//            link.href = url;
-//            link.setAttribute('download', 'image.jpg');
-//            document.body.appendChild(link);
-//            link.click();
-//        })
-//}
-
 
 
 

@@ -1,7 +1,7 @@
 ﻿@model EMPManegment.EntityModels.ViewModels.ProductMaster.ProductDetailsView
 
 
-<tr id="templateRow_@Convert.ToInt64(Model.RowNumber + 1)" class="product">
+<tr id="templateRow_@Convert.ToInt64(Model.RowNumber + 1)" class="product" data-product-id="@Model.Id">
     <th scope="row" class="product-id">@Convert.ToInt64(Model.RowNumber + 1)</th>
     <td class="text-start">
         <input type="text" class="form-control bg-light border-0" id="txtproductName" value="@Model.ProductName" readonly />
