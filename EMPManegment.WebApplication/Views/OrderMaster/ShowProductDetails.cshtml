@@ -1,4 +1,4 @@
-﻿@model EMPManegment.EntityModels.ViewModels.OrderModels.OrderDetailView
+﻿@model IEnumerable<EMPManegment.EntityModels.ViewModels.OrderModels.OrderDetailView>
 @{
     ViewData["Title"] = "ShowProductDetails";
     Layout = "~/Views/Shared/_UserHomeLayout.cshtml";
@@ -22,79 +22,81 @@
     </div>
 </div>
 <!-- end page title -->
+@{
+    var firstItem = Model.FirstOrDefault();
+    decimal? subTotal = 0;
+    decimal? totalAmount = 0;
+}
 
 <div class="row">
     <div class="col-xl-9">
         <div class="card">
-            <div class="card-header">
-                <div class="d-flex align-items-center">
-                    <h5 class="card-title flex-grow-1 mb-0">@Model.OrderId</h5>
-                    <div class="flex-shrink-0">
-                        <a href="apps-invoices-details.html" class="btn btn-primary btn-sm"><i class="ri-download-2-fill align-middle me-1"></i> Invoice</a>
+           
+                <div class="card-header">
+                @if (firstItem != null)
+                {
+                    <div class="d-flex align-items-center">
+                        <h5 class="card-title flex-grow-1 mb-0">@firstItem.OrderId</h5>
+                        <div class="flex-shrink-0">
+                            <a class="btn btn-primary btn-sm"><i class="ri-download-2-fill align-middle me-1"></i> Invoice</a>
+                        </div>
                     </div>
+                }
                 </div>
-            </div>
-            <div class="card-body">
-                <div class="table-responsive table-card">
-                    <table class="table table-nowrap align-middle table-borderless mb-0">
-                        <thead class="table-light text-muted">
-                            <tr>
-                                <th scope="col">Product Details</th>
-                                <th scope="col">Item Price</th>
-                                <th scope="col">Quantity</th>
-                                <th scope="col">Price With Gst</th>
-                                <th scope="col" class="text-end">Total Amount</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <div class="d-flex">
-                                        <div class="flex-shrink-0 avatar-md bg-light rounded p-1">
-                                            <img src="~/@Model.ProductImage" alt="" class="img-fluid d-block">
-                                        </div>
-                                        <div class="flex-grow-1 ms-3">
-                                            <h5 class="fs-15"><a href="apps-ecommerce-product-details.html" class="link-primary">@Model.ProductName</a></h5>
-                                            <p class="text-muted mb-0">Description: <span class="fw-medium">@Model.ProductShortDescription</span></p>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>@Model.PerUnitPrice</td>
-                                <td>@Model.Quantity</td>
-                                <td>@Model.PerUnitWithGstprice</td>
-                                <td class="fw-medium text-end">
-                                </td>
-                            </tr>
-                            <tr class="border-top border-top-dashed">
-                                <td colspan="3"></td>
-                                <td colspan="2" class="fw-medium p-0">
-                                    <table class="table table-borderless mb-0">
-                                        <tbody>
-                                            <tr>
-                                                <td>Sub Total :</td>
-                                                <td class="text-end">$359.96</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Discount <span class="text-muted">(VELZON15)</span> : :</td>
-                                                <td class="text-end">-$53.99</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Shipping Charge :</td>
-                                                <td class="text-end">$65.00</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Estimated Tax :</td>
-                                                <td class="text-end">$44.99</td>
-                                            </tr>
-                                            <tr class="border-top border-top-dashed">
-                                                <th scope="row">Total (USD) :</th>
-                                                <th class="text-end">$415.96</th>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </td>
-                            </tr>
-                        </tbody>
+
+                <div class="card-body">
+                    <div class="table-responsive table-card">
+                        <table class="table table-nowrap align-middle table-borderless mb-0">
+                            <thead class="table-light text-muted">
+                                <tr>
+                                    <th scope="col">Product Details</th>
+                                    <th scope="col">Item Price</th>
+                                    <th scope="col">Quantity</th>
+                                    <th scope="col">Price With Gst</th>
+                                    <th scope="col" class="text-end">Total Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                <!----Partial View----->
+                                @Html.Partial("_DisplayOrderDetails")
+
+
+                                @foreach (var item in Model)
+                                {
+                                    subTotal += item.Amount;
+                                    totalAmount += item.Total;
+                                }
+                                        <tr class="border-top border-top-dashed">
+                                            <td colspan="3"></td>
+                                            <td colspan="2" class="fw-medium p-0">
+                                                <table class="table table-borderless mb-0">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>Sub Total :</td>
+                                                    <td class="text-end">@subTotal</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Discount <span class="text-muted">(VELZON15)</span> : :</td>
+                                                            <td class="text-end">-$53.99</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Shipping Charge :</td>
+                                                            <td class="text-end">$65.00</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Estimated Tax :</td>
+                                                            <td class="text-end">$44.99</td>
+                                                        </tr>
+                                                        <tr class="border-top border-top-dashed">
+                                                            <th scope="row">Total (USD) :</th>
+                                                    <th class="text-end">@totalAmount</th>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                            </tbody>
                     </table>
                 </div>
             </div>
@@ -355,19 +357,4 @@
     <!--end col-->
 </div>
 <!--end row-->
-
-<footer class="footer">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-sm-6">
-                <script>document.write(new Date().getFullYear())</script> © Velzon.
-            </div>
-            <div class="col-sm-6">
-                <div class="text-sm-end d-none d-sm-block">
-                    Design & Develop by Themesbrand
-                </div>
-            </div>
-        </div>
-    </div>
-</footer>
 

@@ -75,6 +75,8 @@ public partial class TblUser
 
     public virtual ICollection<TblAttendance> TblAttendances { get; set; } = new List<TblAttendance>();
 
+    public virtual ICollection<TblExpenseMaster> TblExpenseMasters { get; set; } = new List<TblExpenseMaster>();
+
     public virtual ICollection<TblPageMaster> TblPageMasters { get; set; } = new List<TblPageMaster>();
 
     public virtual ICollection<TblProjectDetail> TblProjectDetails { get; set; } = new List<TblProjectDetail>();

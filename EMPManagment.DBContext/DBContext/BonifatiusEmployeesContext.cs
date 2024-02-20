@@ -29,11 +29,17 @@ public partial class BonifatiusEmployeesContext : DbContext
 
     public virtual DbSet<TblDocumentMaster> TblDocumentMasters { get; set; }
 
+    public virtual DbSet<TblExpenseMaster> TblExpenseMasters { get; set; }
+
+    public virtual DbSet<TblExpenseType> TblExpenseTypes { get; set; }
+
     public virtual DbSet<TblInvoice> TblInvoices { get; set; }
 
     public virtual DbSet<TblInvoiceTypeMaster> TblInvoiceTypeMasters { get; set; }
 
     public virtual DbSet<TblPageMaster> TblPageMasters { get; set; }
+
+    public virtual DbSet<TblPaymentType> TblPaymentTypes { get; set; }
 
     public virtual DbSet<TblProductDetailsMaster> TblProductDetailsMasters { get; set; }
 
@@ -87,6 +93,10 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.Property(e => e.Quantity).HasMaxLength(50);
             entity.Property(e => e.Total).HasColumnType("decimal(18, 0)");
             entity.Property(e => e.Type).HasMaxLength(20);
+
+            entity.HasOne(d => d.Product).WithMany(p => p.OrderMasters)
+                .HasForeignKey(d => d.ProductId)
+                .HasConstraintName("FK_OrderMaster_tblProductDetailsMaster");
 
             entity.HasOne(d => d.ProductTypeNavigation).WithMany(p => p.OrderMasters)
                 .HasForeignKey(d => d.ProductType)
@@ -170,6 +180,46 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.Property(e => e.DocumentType).HasMaxLength(20);
         });
 
+        modelBuilder.Entity<TblExpenseMaster>(entity =>
+        {
+            entity.ToTable("tblExpenseMaster");
+
+            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.Account).HasMaxLength(20);
+            entity.Property(e => e.ApprovedByName).HasMaxLength(50);
+            entity.Property(e => e.BillNumber).HasMaxLength(50);
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.Date).HasColumnType("datetime");
+            entity.Property(e => e.Description).HasMaxLength(500);
+            entity.Property(e => e.Image).HasMaxLength(50);
+            entity.Property(e => e.TotalAmount).HasColumnType("numeric(18, 2)");
+
+            entity.HasOne(d => d.ExpenseTypeNavigation).WithMany(p => p.TblExpenseMasters)
+                .HasForeignKey(d => d.ExpenseType)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_tblExpenseMaster_tblExpenseType");
+
+            entity.HasOne(d => d.PaymentTypeNavigation).WithMany(p => p.TblExpenseMasters)
+                .HasForeignKey(d => d.PaymentType)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_tblExpenseMaster_tblPaymentType");
+
+            entity.HasOne(d => d.User).WithMany(p => p.TblExpenseMasters)
+                .HasForeignKey(d => d.UserId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_tblExpenseMaster_tblUsers");
+        });
+
+        modelBuilder.Entity<TblExpenseType>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK_ExpenseType");
+
+            entity.ToTable("tblExpenseType");
+
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.Type).HasMaxLength(30);
+        });
+
         modelBuilder.Entity<TblInvoice>(entity =>
         {
             entity.ToTable("tblInvoices");
@@ -215,6 +265,14 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.HasOne(d => d.User).WithMany(p => p.TblPageMasters)
                 .HasForeignKey(d => d.UserId)
                 .HasConstraintName("FK_tblPageMaster_tblUsers");
+        });
+
+        modelBuilder.Entity<TblPaymentType>(entity =>
+        {
+            entity.ToTable("tblPaymentType");
+
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.Type).HasMaxLength(30);
         });
 
         modelBuilder.Entity<TblProductDetailsMaster>(entity =>

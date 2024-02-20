@@ -96,11 +96,11 @@ namespace EMPManegment.Web.Controllers
         {
             try
             {
-                OrderDetailView order = new OrderDetailView();
+                List<OrderDetailView> order = new List<OrderDetailView>();
                 ApiResponseModel response = await APIServices.GetAsync("", "OrderDetails/GetOrderDetailsById?OrderId=" + OrderId);
                 if (response.code == 200)
                 {
-                    order = JsonConvert.DeserializeObject<OrderDetailView>(response.data.ToString());
+                    order = JsonConvert.DeserializeObject<List<OrderDetailView>>(response.data.ToString());
                 }
                 return View("ShowProductDetails", order);
             }

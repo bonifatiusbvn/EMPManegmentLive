@@ -1,7 +1,8 @@
-﻿using EMPManagment.API;
+﻿ using EMPManagment.API;
 using EMPManegment.EntityModels.ViewModels;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.OrderModels;
+using EMPManegment.EntityModels.ViewModels.ProductMaster;
 using EMPManegment.EntityModels.ViewModels.ProjectModels;
 using EMPManegment.EntityModels.ViewModels.TaskModels;
 using EMPManegment.EntityModels.ViewModels.VendorModels;
@@ -140,44 +141,68 @@ namespace EMPManegment.Repository.OrderRepository
             }
         }
 
-        public async Task<OrderDetailView> GetOrderDetailsById(string OrderId)
+        public async Task<List<OrderDetailView>> GetOrderDetailsById(string OrderId)
         {
-            OrderDetailView OrderDetail = new OrderDetailView();
             try
             {
-                OrderDetail = (from a in Context.OrderMasters.Where(d => d.OrderId == OrderId)
-                               join b in Context.TblVendorMasters on a.VendorId equals b.Vid
-                               join c in Context.TblProductDetailsMasters on a.ProductType equals c.ProductType
-                               select new OrderDetailView
-                               {
-                                   Id = a.Id,
-                                   OrderId = a.OrderId,
-                                   CompanyName = b.VendorCompany,
-                                   VendorId = a.VendorId,
-                                   ProductName = c.ProductName,
-                                   ProductDescription = c.ProductDescription,
-                                   ProductImage = c.ProductImage,
-                                   PerUnitPrice = c.PerUnitPrice,
-                                   ProductStocks = c.ProductStocks,
-                                   PerUnitWithGstprice = c.PerUnitWithGstprice,
-                                   Gst = c.Gst,
-                                   ProductShortDescription = c.ProductShortDescription,
-                                   Hsn = c.Hsn,
-                                   Quantity = a.Quantity,
-                                   OrderDate = a.OrderDate,
-                                   Total = a.Total,
-                                   Amount = a.Amount,
-                                   PaymentMethod = a.PaymentMethod,
-                                   DeliveryStatus = a.DeliveryStatus,
-                                   DeliveryDate = a.DeliveryDate,
-                                   CreatedOn = a.CreatedOn,
-                               }).First();
+                var orderDetails = new List<OrderDetailView>();
+                var data = await (from a in Context.OrderMasters
+                                  join c in Context.TblProductDetailsMasters on a.ProductId equals c.Id
+                                  where a.OrderId==OrderId
+                                  select new OrderDetailView
+                                  {
+                                      Id = a.Id,
+                                      OrderId = a.OrderId,
+                                      VendorId = a.VendorId,
+                                      Type = a.Type,
+                                      CompanyName = a.CompanyName,
+                                      ProductImage = c.ProductImage,
+                                      ProductName = a.ProductName,
+                                      ProductShortDescription = a.ProductShortDescription,
+                                      Quantity = a.Quantity,
+                                      OrderDate = a.OrderDate,
+                                      PerUnitPrice=c.PerUnitPrice,
+                                      Total = a.Total,
+                                      Amount = a.Amount,
+                                      PaymentMethod = a.PaymentMethod,
+                                      PaymentStatus= a.PaymentStatus,
+                                      DeliveryStatus = a.DeliveryStatus,
+                                      DeliveryDate = a.DeliveryDate,
+                                      CreatedOn = a.CreatedOn,
+                                  }).ToListAsync();
+                if (data != null)
+                {
+                    foreach (var item in data)
+                    {
+                        orderDetails.Add(new OrderDetailView()
+                        {
+                            Id = item.Id,
+                            OrderId = item.OrderId,
+                            CompanyName = item.CompanyName,
+                            VendorId = item.VendorId,
+                            ProductName = item.ProductName,
+                            ProductImage = item.ProductImage,
+                            ProductShortDescription = item.ProductShortDescription,
+                            Quantity = item.Quantity,
+                            OrderDate = item.OrderDate,
+                            PerUnitPrice = item.PerUnitPrice,
+                            Total = item.Total,
+                            Amount = item.Amount,
+                            PaymentMethod = item.PaymentMethod,
+                            DeliveryStatus = item.DeliveryStatus,
+                            DeliveryDate = item.DeliveryDate,
+                            CreatedOn = item.CreatedOn,
+                            Type = item.Type,
+                            PaymentStatus = item.PaymentStatus,
+                        });
+                    }
+                }
+                return orderDetails;
             }
             catch (Exception ex)
             {
                 throw ex;
             }
-            return OrderDetail;
         }
 
         public async Task<UserResponceModel> InsertMultipleOrder(List<OrderView> InsertOrder)
