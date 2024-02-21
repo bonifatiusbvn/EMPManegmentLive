@@ -247,6 +247,7 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.Property(e => e.ProductShortDescription).HasMaxLength(50);
             entity.Property(e => e.Quantity).HasMaxLength(50);
             entity.Property(e => e.Total).HasColumnType("decimal(18, 0)");
+            entity.Property(e => e.TotalGst).HasColumnType("decimal(18, 0)");
             entity.Property(e => e.Type).HasMaxLength(20);
 
             entity.HasOne(d => d.Product).WithMany(p => p.TblOrderMasters)

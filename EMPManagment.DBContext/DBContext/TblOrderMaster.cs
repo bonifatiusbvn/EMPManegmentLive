@@ -27,6 +27,8 @@ public partial class TblOrderMaster
 
     public string Quantity { get; set; } = null!;
 
+    public decimal? TotalGst { get; set; }
+
     public decimal? Amount { get; set; }
 
     public decimal? Total { get; set; }
