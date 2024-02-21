@@ -1,6 +1,6 @@
-﻿@model List<EMPManegment.EntityModels.ViewModels.Invoice.InvoiceViewModel>
+﻿@model List<EMPManegment.EntityModels.ViewModels.ExpenseMaster.ExpenseDetailsView>
 @{
-    ViewData["Title"] = "InvoiceListView";
+    ViewData["Title"] = "ExpenseList";
     Layout = "~/Views/Shared/_UserHomeLayout.cshtml";
 }
 
@@ -13,7 +13,7 @@
                     <div class="flex-shrink-0">
                         <div class="d-flex gap-2 flex-wrap">
                             <button class="btn btn-primary" id="remove-actions" onClick="deleteMultiple()"><i class="ri-delete-bin-2-line"></i></button>
-                            <a asp-action="CreateInvoice" asp-controller="Invoice" class="btn btn-soft-primary"><i class="ri-add-line align-bottom me-1"></i> Create Invoice</a>
+                            <a class="btn btn-soft-primary"><i class="ri-add-line align-bottom me-1"></i> Add Expense</a>
                         </div>
                     </div>
                 </div>
@@ -62,15 +62,15 @@
                         <table class="table align-middle table-nowrap" id="invoiceTable">
                             <thead class="text-muted">
                                 <tr>
-                                    <th class="sort text-uppercase" data-sort="invoice_id">ID</th>
-                                    <th class="sort text-uppercase" data-sort="customer_name">
-                                        OrderNo
+                                    <th class="sort text-uppercase" data-sort="ID">ID</th>
+                                    <th class="sort text-uppercase" data-sort="Description">
+                                        Description
                                     </th>
-                                    <th class="sort text-uppercase" data-sort="email">OrderDate</th>
-                                    <th class="sort text-uppercase" data-sort="country">DispatchThrough</th>
-                                    <th class="sort text-uppercase" data-sort="date">Gst</th>
-                                    <th class="sort text-uppercase" data-sort="invoice_amount">
-                                        TotalAmount
+                                    <th class="sort text-uppercase" data-sort="BillNo">BillNo</th>
+                                    <th class="sort text-uppercase" data-sort="Date">Date</th>
+                                    <th class="sort text-uppercase" data-sort="TotalAmount">TotalAmount</th>
+                                    <th class="sort text-uppercase" data-sort="Account">
+                                        Account
                                     </th>
                                     <th class="sort text-uppercase" data-sort="action">Action</th>
                                 </tr>
@@ -79,12 +79,12 @@
                                 @foreach (var item in Model)
                                 {
                                     <tr>
-                                        <td>@item.InvoiceNo</td>
-                                        <td>@item.BuyesOrderNo</td>
-                                        <td>@item.BuyesOrderDate</td>
-                                        <td>@item.DispatchThrough</td>
-                                        <td>@item.TotalGst</td>
+                                        <td>@item.Id</td>
+                                        <td>@item.Description</td>
+                                        <td>@item.BillNumber</td>
+                                        <td>@item.Date.ToShortDateString()</td>
                                         <td>@item.TotalAmount</td>
+                                        <td>@item.Account</td>
                                         <td>
                                             <ul class="list-inline hstack gap-2 mb-0">
                                                 <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="View">
@@ -158,3 +158,59 @@
     <!--end col-->
 </div>
 <!--end row-->
+<!-- Modal -->
+<div class="modal fade zoomIn" id="AddExpenseModel" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class=" modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-primary-subtle p-3">
+                <h5 class="modal-title" id="exampleModalLabel">Add Expense Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formexpensedetails">
+                    <div class="mb-3">
+                        <label for="taskType" class="form-label"></label>
+                        <select class="form-control" id="taskType" name="taskType">
+                            <option selected disabled value=""></option>
+                        </select>
+                        <input type="hidden" class="form-control" id="txtTaskType">
+
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Task Title</label>
+                        <input type="text" id="dealTitle" class="form-control" name="dealTitle" placeholder="Enter title" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="ddlusername" class="form-label">Task ProvideTo</label>
+                        <select class="form-control" id="ddlusername" name="ddlusername">
+                            <option selected disabled value=""></option>
+                        </select>
+                        <input type="hidden" class="form-control" id="txtguserid">
+
+                    </div>
+                    <div class="mb-3">
+                        <label for="dueDate" class="form-label">Task Start-Date</label>
+                        <input type="datetime-local" class="form-control material_blue" id="txtdatetime" name="txtdatetime" />
+
+                    </div>
+                    <div class="mb-3">
+                        <label for="dealEmail" class="form-label">Task End-Date</label>
+                        <input type="datetime-local" class="form-control material_blue" id="txtenddatetime" name="txtenddatetime">
+
+                    </div>
+                    <div class="mb-3">
+                        <label for="contactDescription" class="form-label">Task Description</label>
+                        <textarea class="form-control " id="contactDescription" rows="3" placeholder="Enter description" name="contactDescription"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light" id="close-modal" data-bs-dismiss="modal" onclick="ClearTextBox()">Close</button>
+                <button type="submit" class="btn btn-success" onclick="btnSaveTaskDetail();" id="taskDetails" value="Validate">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--end modal-->
