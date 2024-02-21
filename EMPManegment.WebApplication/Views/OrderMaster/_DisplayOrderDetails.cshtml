@@ -1,25 +1,26 @@
 ﻿@model List<EMPManegment.EntityModels.ViewModels.OrderModels.OrderDetailView>
 
 
- <!---tbody--->
- @foreach (var item in Model)
- {
+<!---tbody--->
+@foreach (var item in Model)
+{
     <tr class="product">
-    <td>
-        <div class="d-flex">
-            <div class="flex-shrink-0 avatar-md bg-light rounded p-1">
-                <img src="~/@item.ProductImage" alt="" class="img-fluid d-block">
+        <td>
+            <div class="d-flex">
+                <div class="flex-shrink-0 avatar-md bg-light rounded p-1">
+                    <img src="~/@item.ProductImage" alt="" class="img-fluid d-block">
+                </div>
+                <div class="flex-grow-1 ms-3">
+                    <h5 class="fs-15"><a href="/ProductMaster/GetProductDetailsById/?ProductId=@item.ProductId" class="fw-medium link-primary">@item.ProductName</a></h5>
+                    <p class="text-muted mb-0">Description: <span class="fw-medium">@item.ProductShortDescription</span></p>
+                </div>
             </div>
-            <div class="flex-grow-1 ms-3">
-                <h5 class="fs-15"><a href="apps-ecommerce-product-details.html" class="link-primary">@item.ProductName</a></h5>
-                <p class="text-muted mb-0">Description: <span class="fw-medium">@item.ProductShortDescription</span></p>
-            </div>
-        </div>
-    </td>
-    <td >@item.PerUnitPrice</td>
-    <td>@item.Quantity</td>
-    <td>@item.Amount</td>
-    <td class="fw-medium text-end">@item.Total
-    </td>
-</tr>
- }
+        </td>
+        <td>@item.PerUnitPrice</td>
+        <td>@item.Quantity</td>
+        <td>@item.Amount</td>
+        <td class="fw-medium text-end">
+            @item.Total
+        </td>
+    </tr>
+}

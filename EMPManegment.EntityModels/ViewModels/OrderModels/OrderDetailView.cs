@@ -10,7 +10,7 @@ namespace EMPManegment.EntityModels.ViewModels.OrderModels
     {
         public Guid Id { get; set; }
 
-        public string OrderId { get; set; } 
+        public string OrderId { get; set; }
         public string? Type { get; set; }
 
         public Guid? VendorId { get; set; }
@@ -20,7 +20,7 @@ namespace EMPManegment.EntityModels.ViewModels.OrderModels
         public int Product { get; set; }
         public string ProductName { get; set; }
 
-        public string Quantity { get; set; } 
+        public string Quantity { get; set; }
 
         public decimal? Amount { get; set; }
 
@@ -52,6 +52,7 @@ namespace EMPManegment.EntityModels.ViewModels.OrderModels
         public DateTime? CreatedOn { get; set; }
 
         public Guid? CreatedBy { get; set; }
+        public Guid? ProductId { get; set; }
         public string? PaymentStatus { get; set; }
         public string VendorEmail { get; set; } = null!;
 

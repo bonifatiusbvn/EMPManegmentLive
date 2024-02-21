@@ -1,4 +1,4 @@
-﻿ using EMPManagment.API;
+﻿using EMPManagment.API;
 using EMPManegment.EntityModels.ViewModels;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.OrderModels;
@@ -69,6 +69,7 @@ namespace EMPManegment.Repository.OrderRepository
                                                 select new OrderDetailView
                                                 {
                                                     OrderId = a.OrderId,
+                                                    ProductId = a.ProductId,
                                                     CompanyName = b.VendorCompany,
                                                     VendorId = a.VendorId,
                                                     ProductName = c.Type,
@@ -94,6 +95,7 @@ namespace EMPManegment.Repository.OrderRepository
                 {
                     orderDetails.Add(new OrderDetailView()
                     {
+                        ProductId = item.ProjectId,
                         OrderId = item.OrderId,
                         CompanyName = item.CompanyName,
                         Product = item.ProductType,
@@ -157,6 +159,7 @@ namespace EMPManegment.Repository.OrderRepository
                                       VendorId = a.VendorId,
                                       Type = a.Type,
                                       CompanyName = a.CompanyName,
+                                      ProductId = a.ProductId,
                                       VendorAddress=b.VendorAddress,
                                       VendorContact=b.VendorContact,
                                       VendorEmail=b.VendorCompanyEmail,
@@ -170,7 +173,7 @@ namespace EMPManegment.Repository.OrderRepository
                                       Total = a.Total,
                                       Amount = a.Amount,
                                       PaymentMethod = a.PaymentMethod,
-                                      PaymentStatus= a.PaymentStatus,
+                                      PaymentStatus = a.PaymentStatus,
                                       DeliveryStatus = a.DeliveryStatus,
                                       DeliveryDate = a.DeliveryDate,
                                       CreatedOn = a.CreatedOn,
@@ -185,6 +188,7 @@ namespace EMPManegment.Repository.OrderRepository
                             OrderId = item.OrderId,
                             CompanyName = item.CompanyName,
                             VendorId = item.VendorId,
+                            ProductId = item.ProductId,
                             VendorEmail = item.VendorEmail,
                             VendorContact = item.VendorContact,
                             VendorAddress = item.VendorAddress,

@@ -7,7 +7,7 @@ public partial class OrderMaster
 {
     public Guid Id { get; set; }
 
-    public Guid? ProjectId { get; set; }
+    public Guid ProjectId { get; set; }
 
     public string? OrderId { get; set; }
 
