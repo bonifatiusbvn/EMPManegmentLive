@@ -53,5 +53,9 @@ namespace EMPManegment.EntityModels.ViewModels.OrderModels
 
         public Guid? CreatedBy { get; set; }
         public string? PaymentStatus { get; set; }
+        public string VendorEmail { get; set; } = null!;
+
+        public string? VendorContact { get; set; }
+        public string VendorAddress { get; set; } = null!;
     }
 }

@@ -320,6 +320,7 @@ function InsertMultipleOrder() {
 $(document).ready(function () {
     GetVendorNameList();
     GetProducts();
+    GetPaymentTypeList();
 });
 function GetVendorNameList() {
 
@@ -341,6 +342,16 @@ function GetProducts() {
         success: function (result) {
             $.each(result, function (i, data) {
                 $('#txtProducts').append('<Option value=' + data.id + '>' + data.productName + '</Option>')
+            });
+        }
+    });
+}
+function GetPaymentTypeList() {debugger
+    $.ajax({
+        url: '/ExpenseMaster/GetPaymentTypeList',
+        success: function (result) {debugger    
+            $.each(result, function (i, data) {
+                $('#paymentMethod').append('<Option value=' + data.id + '>' + data.type + '</Option>')
             });
         }
     });

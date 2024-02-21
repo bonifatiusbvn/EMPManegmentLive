@@ -13,6 +13,8 @@ public partial class TblInvoice
 
     public string? InvoiceNo { get; set; }
 
+    public Guid? ProjectId { get; set; }
+
     public string? OrderId { get; set; }
 
     public DateTime InvoiceDate { get; set; }
@@ -44,4 +46,6 @@ public partial class TblInvoice
     public DateTime? UpdatedOn { get; set; }
 
     public Guid? UpdatedBy { get; set; }
+
+    public virtual TblProjectMaster? Project { get; set; }
 }

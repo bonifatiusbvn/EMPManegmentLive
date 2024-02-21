@@ -9,6 +9,8 @@ public partial class TblTaskDetail
 
     public Guid? UserId { get; set; }
 
+    public Guid? ProjectId { get; set; }
+
     public int? TaskType { get; set; }
 
     public string? TaskTitle { get; set; }
@@ -29,7 +31,7 @@ public partial class TblTaskDetail
 
     public Guid? CreatedBy { get; set; }
 
-    public virtual TblTaskMaster? TaskTypeNavigation { get; set; }
+    public virtual TblProjectMaster? Project { get; set; }
 
     public virtual TblUser? User { get; set; }
 }
