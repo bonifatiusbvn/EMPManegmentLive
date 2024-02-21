@@ -5,10 +5,10 @@
 
 
 <style>
-    #txtproductname-error, #txtproductdescription-error, #txtshortdescription-error,
-    #txtproductimage-error, #txtstocks-error, #txtPerUnitPrice-error,
-    #txtHSN-error, #txtGST-error, #txtPerUnitWithGSTPrice-error, #txtProductType-error,
-    #txtvendorname-error, #txtProducts-error {
+    #txtproductname-error, #txtproductdescription-error,
+    #txtstocks-error, #txtPerUnitPrice-error,
+     #txtGST-error, #txtPerUnitWithGSTPrice-error, #txtProductType-error,
+    #txtvendornamed-error{
         color: red;
     }
 </style>
@@ -77,7 +77,7 @@
                                 <p class="text-muted">Add Product Gallery Images.</p>
                                 <label class="form-label" for="ProductImage"></label>
                                 <div class="mb-3">
-                                    <input type="file" class="form-control" id="txtproductimage" name="txtproductimage" required />
+                                    <input type="file" class="form-control" id="txtproductimage" name="txtproductimage" />
                                 </div>
                             </div>
                         </div>
@@ -124,7 +124,7 @@
                                         <div class="col-lg-3 col-sm-6">
                                             <div class="mb-3">
                                                 <label class="form-label" for="HSN">HSN</label>
-                                                <input type="text" class="form-control" id="txtHSN" name="txtHSN" placeholder="Enter HSN" required>
+                                                <input type="text" class="form-control" id="txtHSN" name="txtHSN" placeholder="Enter HSN">
                                             </div>
                                         </div>
                                         <div class="col-lg-3 col-sm-6">
@@ -140,7 +140,7 @@
                                 <!-- end tab-pane -->
                                 <!-- end tab pane -->
                             </div>
-                            <!-- end tab content -->
+                            <!-- end tab content --> 
                         </div>
                         <!-- end card body -->
                     </div>
@@ -164,7 +164,7 @@
                                 </button>
                             </p>
                             <label for="ProductType" class="form-label">Product Type</label>
-                            <select id="txtProducts" class="form-control bg-transparent" onchange="selectProductTypeId()" required>
+                            <select id="txtProducts" class="form-control bg-transparent" onchange="selectProductTypeId()">
                                 <option selected disabled value="">----Select Product Type---</option>
                             </select>
                             <input type="hidden" class="form-control" id="txtProductTypeid">
@@ -181,7 +181,7 @@
                             <div class="hstack gap-3 align-items-start">
                                 <div class="flex-grow-1">
                                     <label for="VendorId" class="form-label">Vendor Name</label>
-                                    <select class="form-control" id="txtvendornamed" name="txtvendornamed" required>
+                                    <select class="form-control" id="txtvendornamed" name="txtvendornamed">
                                         <option selected disabled value="">----Select Vendor Name---</option>
                                     </select>
                                     <input type="hidden" class="form-control" id="txtvendornameid">
@@ -197,7 +197,7 @@
                         </div>
                         <div class="card-body">
                             <p class="text-muted mb-2">Add short description for product</p>
-                            <textarea class="form-control" id="txtshortdescription" name="txtshortdescription" placeholder="Must enter minimum of a 100 characters" rows="3" required></textarea>
+                            <textarea class="form-control" id="txtshortdescription" name="txtshortdescription" placeholder="Must enter minimum of a 100 characters" rows="3"></textarea>
                         </div>
                         <!-- end card body -->
                     </div>
