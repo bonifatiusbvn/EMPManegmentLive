@@ -24,6 +24,31 @@ namespace EMPManegment.Services.ExpenseMaster
             return await expenseMaster.AddExpenseDetails(ExpenseDetails);
         }
 
+        public async Task<UserResponceModel> AddExpenseType(ExpenseTypeView AddExpense)
+        {
+            return await expenseMaster.AddExpenseType(AddExpense);
+        }
+
+        public async Task<UserResponceModel> AddPaymentType(PaymentTypeView AddPayment)
+        {
+            return await expenseMaster.AddPaymentType(AddPayment);
+        }
+
+        public async Task<IEnumerable<ExpenseTypeView>> GetAllExpensType()
+        {
+            return await expenseMaster.GetAllExpensType();
+        }
+
+        public async Task<IEnumerable<PaymentTypeView>> GetAllPaymentType()
+        {
+            return await expenseMaster.GetAllPaymentType();
+        }
+
+        public async Task<ExpenseTypeView> GetExpenseById(int ExpenseId)
+        {
+            return await expenseMaster.GetExpenseById(ExpenseId);
+        }
+
         public async Task<ExpenseDetailsView> GetExpenseDetailById(Guid Id)
         {
             return await expenseMaster.GetExpenseDetailById(Id);
@@ -34,19 +59,24 @@ namespace EMPManegment.Services.ExpenseMaster
             return await expenseMaster.GetExpenseDetailList();
         }
 
-        public async Task<IEnumerable<ExpenseTypeView>> GetExpensetypeList()
+        public async Task<PaymentTypeView> GetPaymentById(int PaymentId)
         {
-            return await expenseMaster.GetExpensetypeList();
-        }
-
-        public async Task<IEnumerable<PaymentTypeView>> GetpaymenttypeList()
-        {
-            return await expenseMaster.GetpaymenttypeList();
+            return await expenseMaster.GetPaymentById(PaymentId);
         }
 
         public async Task<UserResponceModel> UpdateExpenseDetail(ExpenseDetailsView ExpenseDetails)
         {
             return await expenseMaster.UpdateExpenseDetail(ExpenseDetails);
+        }
+
+        public async Task<UserResponceModel> UpdateExpenseType(ExpenseTypeView UpdateExpense)
+        {
+            return await expenseMaster.UpdateExpenseType(UpdateExpense);
+        }
+
+        public async Task<UserResponceModel> UpdatePaymentType(PaymentTypeView UpdatePayment)
+        {
+            return await expenseMaster.UpdatePaymentType(UpdatePayment);
         }
     }
 }

@@ -32,7 +32,5 @@ namespace EMPManegment.Inretface.Interface.ExpenseMaster
         Task<IEnumerable<ExpenseDetailsView>> GetExpenseDetailList();
         Task<ExpenseDetailsView> GetExpenseDetailById(Guid Id);
         Task<UserResponceModel> UpdateExpenseDetail(ExpenseDetailsView ExpenseDetails);
-        Task<IEnumerable<ExpenseTypeView>> GetExpensetypeList();
-        Task<IEnumerable<PaymentTypeView>> GetpaymenttypeList();
     }
 }

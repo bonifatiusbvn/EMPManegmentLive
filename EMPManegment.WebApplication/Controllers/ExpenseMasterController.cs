@@ -46,7 +46,7 @@ namespace EMPManegment.Web.Controllers
             try
             {
                 List<ExpenseTypeView> ExpenseType = new List<ExpenseTypeView>();
-                ApiResponseModel res = await APIServices.GetAsync("", "ExpenseMaster/GetExpensetypeList");
+                ApiResponseModel res = await APIServices.GetAsync("", "ExpenseMaster/GetAllExpensType");
                 if (res.code == 200)
                 {
                     ExpenseType = JsonConvert.DeserializeObject<List<ExpenseTypeView>>(res.data.ToString());
@@ -64,7 +64,7 @@ namespace EMPManegment.Web.Controllers
             try
             {
                 List<PaymentTypeView> PaymentType = new List<PaymentTypeView>();
-                ApiResponseModel res = await APIServices.GetAsync("", "ExpenseMaster/GetPaymentTypeList");
+                ApiResponseModel res = await APIServices.GetAsync("", "ExpenseMaster/GetAllPaymentType");
                 if (res.code == 200)
                 {
                     PaymentType = JsonConvert.DeserializeObject<List<PaymentTypeView>>(res.data.ToString());
