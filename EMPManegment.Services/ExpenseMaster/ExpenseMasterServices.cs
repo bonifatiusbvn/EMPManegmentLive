@@ -34,6 +34,16 @@ namespace EMPManegment.Services.ExpenseMaster
             return await expenseMaster.GetExpenseDetailList();
         }
 
+        public async Task<IEnumerable<ExpenseTypeView>> GetExpensetypeList()
+        {
+            return await expenseMaster.GetExpensetypeList();
+        }
+
+        public async Task<IEnumerable<PaymentTypeView>> GetpaymenttypeList()
+        {
+            return await expenseMaster.GetpaymenttypeList();
+        }
+
         public async Task<UserResponceModel> UpdateExpenseDetail(ExpenseDetailsView ExpenseDetails)
         {
             return await expenseMaster.UpdateExpenseDetail(ExpenseDetails);

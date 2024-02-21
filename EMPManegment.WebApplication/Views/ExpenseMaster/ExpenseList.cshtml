@@ -12,8 +12,8 @@
                     <h5 class="card-title mb-0 flex-grow-1">Invoices</h5>
                     <div class="flex-shrink-0">
                         <div class="d-flex gap-2 flex-wrap">
-                            <button class="btn btn-primary" id="remove-actions" onClick="deleteMultiple()"><i class="ri-delete-bin-2-line"></i></button>
-                            <a class="btn btn-soft-primary"><i class="ri-add-line align-bottom me-1"></i> Add Expense</a>
+                            <button class="btn btn-primary" id="remove-actions"><i class="ri-delete-bin-2-line"></i></button>
+                            <a class="btn btn-soft-primary" onclick="DisplayAddExpenseModel()"><i class="ri-add-line align-bottom me-1"></i> Add Expense</a>
                         </div>
                     </div>
                 </div>
@@ -168,41 +168,93 @@
             </div>
             <div class="modal-body">
                 <form id="formexpensedetails">
-                    <div class="mb-3">
-                        <label for="taskType" class="form-label"></label>
-                        <select class="form-control" id="taskType" name="taskType">
-                            <option selected disabled value=""></option>
-                        </select>
-                        <input type="hidden" class="form-control" id="txtTaskType">
-
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="mb-3">
+                                <label for="txtexpensetype" class="form-label">Expense Type</label>
+                                <select class="form-control" id="txtexpensetype" name="txtexpensetype">
+                                    <option selected disabled value="">---Select Expense Type---</option>
+                                </select>
+                                <input type="hidden" class="text-muted text-uppercase fw-semibold" id="txtexpensetypeid">
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="mb-3">
+                                <label class="form-label">Description</label>
+                                <input type="text" id="txtDescription" class="form-control" name="txtDescription" placeholder="Enter Description" />
+                            </div>
+                        </div>
                     </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Task Title</label>
-                        <input type="text" id="dealTitle" class="form-control" name="dealTitle" placeholder="Enter title" />
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="mb-3">
+                                <label class="form-label">Bill Number</label>
+                                <input type="text" id="txtbillno" class="form-control" name="txtbillno" placeholder="Enter Bill Number" />
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="mb-3">
+                                <label class="form-label">Date</label>
+                                <input type="date" id="txtdate" class="form-control" name="txtdate" placeholder="Enter Date" />
+                            </div>
+                        </div>
                     </div>
-
-                    <div class="mb-3">
-                        <label for="ddlusername" class="form-label">Task ProvideTo</label>
-                        <select class="form-control" id="ddlusername" name="ddlusername">
-                            <option selected disabled value=""></option>
-                        </select>
-                        <input type="hidden" class="form-control" id="txtguserid">
-
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="mb-3">
+                                <label class="form-label">Total Amount</label>
+                                <input type="text" id="txttotalamount" class="form-control" name="txttotalamount" placeholder="Enter Amount" />
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="mb-3">
+                                <label class="form-label">Image</label>
+                                <input type="file" id="txtimage" class="form-control" name="txtimage" placeholder="Enter Image" />
+                            </div>
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label for="dueDate" class="form-label">Task Start-Date</label>
-                        <input type="datetime-local" class="form-control material_blue" id="txtdatetime" name="txtdatetime" />
-
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="mb-3">
+                                <label class="form-label">Account</label>
+                                <select class="form-control" id="txtaccount">
+                                    <option selected disabled value="">Select Account Type</option>
+                                    <option value="Credit">Credit</option>
+                                    <option value="Dabit">Dabit</option>
+                                    <input type="hidden" id="txtaccountid" class="form-control" placeholder="Enter Account" />
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="mb-3">
+                                <label for="txtpaymenttype" class="form-label">Payment Type</label>
+                                <select class="form-control" id="txtpaymenttype" name="txtpaymenttype">
+                                    <option selected disabled value="">---Select Payment Type---</option>
+                                </select>
+                                <input type="hidden" class="text-muted text-uppercase fw-semibold" id="txtpaymenttypeid">
+                            </div>
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label for="dealEmail" class="form-label">Task End-Date</label>
-                        <input type="datetime-local" class="form-control material_blue" id="txtenddatetime" name="txtenddatetime">
-
-                    </div>
-                    <div class="mb-3">
-                        <label for="contactDescription" class="form-label">Task Description</label>
-                        <textarea class="form-control " id="contactDescription" rows="3" placeholder="Enter description" name="contactDescription"></textarea>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="mb-3">
+                                <label class="form-label">Is Paid?</label>
+                                <select class="form-control" id="txtispaid">
+                                    <option selected disabled value="">Is Paid</option>
+                                    <option value="True">True</option>
+                                    <option value="False">False</option>
+                                    <input type="hidden" id="txtispaidid" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="mb-3">
+                                <label class="form-label">Is Approved?</label>
+                                <select class="form-control" id="txtisapproved">
+                                    <option selected disabled value="">Is Approved</option>
+                                    <option value="True">True</option>
+                                    <option value="False">False</option>
+                                    <input type="hidden" id="txtisapprovedid" class="form-control" />
+                            </div>
+                        </div>
                     </div>
                 </form>
             </div>
@@ -214,3 +266,10 @@
     </div>
 </div>
 <!--end modal-->
+
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+<script src="~/moduls/expensemaster.js"></script>

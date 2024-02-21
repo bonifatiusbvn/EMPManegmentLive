@@ -115,6 +115,42 @@ namespace EMPManegment.Repository.ExpenseMaster
             }
         }
 
+        public async Task<IEnumerable<ExpenseTypeView>> GetExpensetypeList()
+        {
+            try
+            {
+                IEnumerable<ExpenseTypeView> Expense = Context.TblExpenseTypes.ToList().Select(a => new ExpenseTypeView
+                {
+                    Id = a.Id,
+                    Type = a.Type,
+                    CreatedOn = a.CreatedOn,
+                });
+                return Expense;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<IEnumerable<PaymentTypeView>> GetpaymenttypeList()
+        {
+            try
+            {
+                IEnumerable<PaymentTypeView> Payment = Context.TblPaymentTypes.ToList().Select(a => new PaymentTypeView
+                {
+                    Id = a.Id,
+                    Type = a.Type,
+                    CreatedOn = a.CreatedOn,
+                });
+                return Payment;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public async Task<UserResponceModel> UpdateExpenseDetail(ExpenseDetailsView ExpenseDetails)
         {
             UserResponceModel model = new UserResponceModel();

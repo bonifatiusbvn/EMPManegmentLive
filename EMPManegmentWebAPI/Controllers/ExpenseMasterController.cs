@@ -83,5 +83,19 @@ namespace EMPManagment.API.Controllers
             }
             return StatusCode(response.Code, response);
         }
+        [HttpGet]
+        [Route("GetExpensetypeList")]
+        public async Task<IActionResult> GetExpensetypeList()
+        {
+            IEnumerable<ExpenseTypeView> getExpense = await expenseMaster.GetExpensetypeList();
+            return Ok(new { code = 200, data = getExpense.ToList() });
+        }
+        [HttpGet]
+        [Route("GetPaymentTypeList")]
+        public async Task<IActionResult> GetPaymentTypeList()
+        {
+            IEnumerable<PaymentTypeView> getExpense = await expenseMaster.GetpaymenttypeList();
+            return Ok(new { code = 200, data = getExpense.ToList() });
+        }
     }
 }
