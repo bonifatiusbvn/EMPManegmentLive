@@ -1,4 +1,6 @@
-﻿
+﻿$(document).ready(function () {
+    GetPaymentTypeList();
+});
 function SearchData() {
     if ($('#statusform').valid()) {
         if ($("#idStatus").val() != "All") {
@@ -279,7 +281,6 @@ function InsertMultipleOrder() {
         };
         orderDetails.push(objData);
     });
-
     var form_data = new FormData();
     form_data.append("ORDERDETAILS", JSON.stringify(orderDetails));
 
@@ -321,7 +322,6 @@ function InsertMultipleOrder() {
 $(document).ready(function () {
     GetVendorNameList();
     GetProducts();
-    GetPaymentTypeList();
 });
 function GetVendorNameList() {
 
@@ -347,10 +347,10 @@ function GetProducts() {
         }
     });
 }
-function GetPaymentTypeList() {debugger
+function GetPaymentTypeList() {
     $.ajax({
         url: '/ExpenseMaster/GetPaymentTypeList',
-        success: function (result) {debugger    
+        success: function (result) {    
             $.each(result, function (i, data) {
                 $('#paymentMethod').append('<Option value=' + data.id + '>' + data.type + '</Option>')
             });
