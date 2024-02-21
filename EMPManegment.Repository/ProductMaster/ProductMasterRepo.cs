@@ -128,21 +128,21 @@ namespace EMPManegment.Repository.ProductMaster
             try
             {
                 var vendorDetails = new List<ProductDetailsView>();
-                var data = await(from a in Context.TblProductDetailsMasters
-                    join b in Context.TblProductTypeMasters
-                    on a.ProductType equals b.Id
-                    where a.VendorId==VendorId
-                    select new
-                    {
-                        a.Id,
-                        a.VendorId,
-                        a.ProductImage,
-                        a.ProductStocks,
-                        a.ProductType,
-                        a.PerUnitPrice,
-                        a.ProductName,
-                        b.Type,
-                    }).ToListAsync();
+                var data = await (from a in Context.TblProductDetailsMasters
+                                  join b in Context.TblProductTypeMasters
+                                  on a.ProductType equals b.Id
+                                  where a.VendorId == VendorId
+                                  select new
+                                  {
+                                      a.Id,
+                                      a.VendorId,
+                                      a.ProductImage,
+                                      a.ProductStocks,
+                                      a.ProductType,
+                                      a.PerUnitPrice,
+                                      a.ProductName,
+                                      b.Type,
+                                  }).ToListAsync();
                 if (data != null)
                 {
                     foreach (var item in data)
@@ -155,7 +155,7 @@ namespace EMPManegment.Repository.ProductMaster
                             ProductName = item.ProductName,
                             ProductStocks = item.ProductStocks,
                             PerUnitPrice = item.PerUnitPrice,
-                            ProductTypeName=item.Type,
+                            ProductTypeName = item.Type,
                         });
                     }
                 }
@@ -216,29 +216,29 @@ namespace EMPManegment.Repository.ProductMaster
             ProductDetailsView Product = new ProductDetailsView();
             try
             {
-                 Product =(from a in Context.TblProductDetailsMasters.Where(x => x.Id == ProductId)
-                                                         join b in Context.TblProductTypeMasters
-                                                         on a.ProductType equals b.Id
-                                                         join c in Context.TblVendorMasters
-                                                         on a.VendorId equals c.Vid
-                                                         select new ProductDetailsView
-                                                         {
-                                                             Id = a.Id,
-                                                             VendorName =c.VendorCompany,
-                                                             VendorId=a.VendorId,
-                                                             ProductType=a.ProductType,
-                                                             ProductTypeName = b.Type,
-                                                             ProductName = a.ProductName,
-                                                             ProductDescription = a.ProductDescription,
-                                                             ProductShortDescription = a.ProductShortDescription,
-                                                             ProductImage = a.ProductImage,
-                                                             ProductStocks = a.ProductStocks,
-                                                             PerUnitPrice = a.PerUnitPrice,
-                                                             Hsn = a.Hsn,
-                                                             Gst = a.Gst,
-                                                             PerUnitWithGstprice = a.PerUnitWithGstprice,
-                                                             CreatedBy = a.CreatedBy,
-                                                         }).First();
+                Product = (from a in Context.TblProductDetailsMasters.Where(x => x.Id == ProductId)
+                           join b in Context.TblProductTypeMasters
+                           on a.ProductType equals b.Id
+                           join c in Context.TblVendorMasters
+                           on a.VendorId equals c.Vid
+                           select new ProductDetailsView
+                           {
+                               Id = a.Id,
+                               VendorName = c.VendorCompany,
+                               VendorId = a.VendorId,
+                               ProductType = a.ProductType,
+                               ProductTypeName = b.Type,
+                               ProductName = a.ProductName,
+                               ProductDescription = a.ProductDescription,
+                               ProductShortDescription = a.ProductShortDescription,
+                               ProductImage = a.ProductImage,
+                               ProductStocks = a.ProductStocks,
+                               PerUnitPrice = a.PerUnitPrice,
+                               Hsn = a.Hsn,
+                               Gst = a.Gst,
+                               PerUnitWithGstprice = a.PerUnitWithGstprice,
+                               CreatedBy = a.CreatedBy,
+                           }).First();
                 return Product;
             }
             catch (Exception ex)
@@ -387,6 +387,7 @@ namespace EMPManegment.Repository.ProductMaster
                         Id = data.Id,
                         VendorId = data.VendorId,
                         ProductType = data.ProductType,
+                        ProductId = data.Id,
                         ProductName = data.ProductName,
                         ProductDescription = data.ProductDescription,
                         ProductShortDescription = data.ProductShortDescription,

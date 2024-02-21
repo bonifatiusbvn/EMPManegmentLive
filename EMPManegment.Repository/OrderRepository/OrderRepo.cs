@@ -151,7 +151,7 @@ namespace EMPManegment.Repository.OrderRepository
                 var data = await (from a in Context.TblOrderMasters
                                   join c in Context.TblProductDetailsMasters on a.ProductId equals c.Id
                                   join b in Context.TblVendorMasters on a.VendorId equals b.Vid
-                                  where a.OrderId==OrderId
+                                  where a.OrderId == OrderId
                                   select new OrderDetailView
                                   {
                                       Id = a.Id,
@@ -160,16 +160,16 @@ namespace EMPManegment.Repository.OrderRepository
                                       Type = a.Type,
                                       CompanyName = a.CompanyName,
                                       ProductId = a.ProductId,
-                                      VendorAddress=b.VendorAddress,
-                                      VendorContact=b.VendorContact,
-                                      VendorEmail=b.VendorCompanyEmail,
+                                      VendorAddress = b.VendorAddress,
+                                      VendorContact = b.VendorContact,
+                                      VendorEmail = b.VendorCompanyEmail,
                                       ProductImage = c.ProductImage,
                                       ProductName = a.ProductName,
                                       ProductShortDescription = a.ProductShortDescription,
                                       Quantity = a.Quantity,
                                       OrderDate = a.OrderDate,
-                                      PerUnitPrice=c.PerUnitPrice,
-                                      PerUnitWithGstprice=c.PerUnitWithGstprice,
+                                      PerUnitPrice = c.PerUnitPrice,
+                                      PerUnitWithGstprice = c.PerUnitWithGstprice,
                                       Total = a.Total,
                                       Amount = a.Amount,
                                       PaymentMethod = a.PaymentMethod,
@@ -234,6 +234,7 @@ namespace EMPManegment.Repository.OrderRepository
                         VendorId = item.VendorId,
                         ProductType = item.ProductType,
                         Quantity = item.Quantity,
+                        TotalGst = item.TotalGst,
                         Amount = item.Amount,
                         Total = item.Total,
                         OrderDate = item.OrderDate,
@@ -244,6 +245,7 @@ namespace EMPManegment.Repository.OrderRepository
                         CreatedOn = DateTime.Now,
                         CreatedBy = item.CreatedBy,
                         ProjectId = item.ProjectId,
+                        ProductId = item.ProductId,
                         ProductName = item.ProductName,
                         ProductShortDescription = item.ProductShortDescription,
                     };

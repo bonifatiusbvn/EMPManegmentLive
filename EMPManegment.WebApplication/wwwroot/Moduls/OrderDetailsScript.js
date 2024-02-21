@@ -269,7 +269,8 @@ function InsertMultipleOrder() {
             DeliveryDate: $("#deliverydate").val(),
             VendorId: $("#txtvendorname").val(),
             CompanyName: $("#txtvendornameid").val(),
-            ProductType: $("#txtProductid").val(),
+            ProductId: orderRow.find("#Product_Id").val(),
+            ProductType: orderRow.find("#Product_TypeId").val(),
             Quantity: orderRow.find("#txtproductquantity").val(),
             TotalGst: orderRow.find("#txtproductamountwithGST").val(),
             Amount: orderRow.find("#txtproductamount").val(),
@@ -347,10 +348,12 @@ function GetProducts() {
         }
     });
 }
-function GetPaymentTypeList() {debugger
+function GetPaymentTypeList() {
+
     $.ajax({
         url: '/ExpenseMaster/GetPaymentTypeList',
-        success: function (result) {debugger    
+        success: function (result) {
+
             $.each(result, function (i, data) {
                 $('#paymentMethod').append('<Option value=' + data.id + '>' + data.type + '</Option>')
             });

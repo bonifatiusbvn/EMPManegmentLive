@@ -5,7 +5,8 @@
     <th scope="row" class="product-id">@Convert.ToInt64(Model.RowNumber + 1)</th>
     <td class="text-start">
         <input type="text" class="form-control bg-light border-0" id="txtproductName" value="@Model.ProductName" readonly />
-        <input type="hidden" class="form-control bg-light border-0" id="txtproductId" readonly hidden />
+        <input type="hidden" class="form-control bg-light border-0" id="Product_Id" readonly value="@Model.ProductId" />
+        <input type="hidden" class="form-control bg-light border-0" id="Product_TypeId" readonly value="@Model.ProductType" />
         <input class="form-control bg-light border-0" id="txtproductDescription" rows="2" value="@Model.ProductShortDescription" readonly />
     </td>
     <td class="text-start">
