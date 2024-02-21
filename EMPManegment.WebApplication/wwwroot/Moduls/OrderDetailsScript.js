@@ -271,6 +271,7 @@ function InsertMultipleOrder() {
             CompanyName: $("#txtvendornameid").val(),
             ProductType: $("#txtProductid").val(),
             Quantity: orderRow.find("#txtproductquantity").val(),
+            TotalGst: orderRow.find("#txtproductamountwithGST").val(),
             Amount: orderRow.find("#txtproductamount").val(),
             Total: orderRow.find("#txtproducttotalamount").val(),
             ProductShortDescription: orderRow.find("#txtproductDescription").val(),
@@ -573,7 +574,7 @@ function updateProductTotalAmount() {
         var quantity = parseInt(row.find("#txtproductquantity").val());
         var gst = parseFloat(row.find("#txtgst").val());
         var totalGst = (productPrice * quantity * gst) / 100;
-        var totalAmount = productPrice * quantity + totalGst;
+        var totalAmount = productPrice * quantity;
 
         row.find("#txtproductamountwithGST").val(totalGst.toFixed(2));
         row.find("#txtproducttotalamount").val(totalAmount.toFixed(2));
@@ -588,11 +589,13 @@ function updateProductQuantity(row, increment) {
     if (newQuantity >= 0) {
         row.find(".product-quantity").val(newQuantity.toFixed(2));;
         updateProductTotalAmount();
-        return
+        updateTotals();
+
     }
 }
 
 function updateTotals() {
+
     var totalSubtotal = 0;
     var totalGst = 0;
     var totalAmount = 0;
@@ -612,18 +615,11 @@ function updateTotals() {
     $("#cart-total").val(totalAmount.toFixed(2));
 }
 
-
-
-
-
 remove();
 var taxRate = .125,
     shippingRate = 65,
     discountRate = .15,
     gst = 18;
-
-
-
 
 function remove() {
     Array.from(document.querySelectorAll(".product-removal a")).forEach(function (e) {
