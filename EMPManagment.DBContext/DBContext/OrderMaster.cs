@@ -47,7 +47,5 @@ public partial class OrderMaster
 
     public virtual TblProductDetailsMaster? Product { get; set; }
 
-    public virtual TblProductTypeMaster ProductTypeNavigation { get; set; } = null!;
-
     public virtual TblProjectMaster? Project { get; set; }
 }

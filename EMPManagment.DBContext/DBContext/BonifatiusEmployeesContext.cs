@@ -98,11 +98,6 @@ public partial class BonifatiusEmployeesContext : DbContext
                 .HasForeignKey(d => d.ProductId)
                 .HasConstraintName("FK_OrderMaster_tblProductDetailsMaster");
 
-            entity.HasOne(d => d.ProductTypeNavigation).WithMany(p => p.OrderMasters)
-                .HasForeignKey(d => d.ProductType)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_OrderMaster_tblProductTypeMaster");
-
             entity.HasOne(d => d.Project).WithMany(p => p.OrderMasters)
                 .HasForeignKey(d => d.ProjectId)
                 .HasConstraintName("FK_OrderMaster_tblProjectMaster");
