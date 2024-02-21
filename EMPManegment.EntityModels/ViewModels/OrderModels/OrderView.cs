@@ -17,6 +17,7 @@ namespace EMPManegment.EntityModels.ViewModels.OrderModels
         public string? CompanyName { get; set; }
 
         public int ProductType { get; set; }
+        public decimal? TotalGst { get; set; }
 
         public string Quantity { get; set; } = null!;
 
