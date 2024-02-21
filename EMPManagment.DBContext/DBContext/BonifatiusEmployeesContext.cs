@@ -15,8 +15,6 @@ public partial class BonifatiusEmployeesContext : DbContext
     {
     }
 
-    public virtual DbSet<OrderMaster> OrderMasters { get; set; }
-
     public virtual DbSet<TblAttendance> TblAttendances { get; set; }
 
     public virtual DbSet<TblCity> TblCities { get; set; }
@@ -36,6 +34,8 @@ public partial class BonifatiusEmployeesContext : DbContext
     public virtual DbSet<TblInvoice> TblInvoices { get; set; }
 
     public virtual DbSet<TblInvoiceTypeMaster> TblInvoiceTypeMasters { get; set; }
+
+    public virtual DbSet<TblOrderMaster> TblOrderMasters { get; set; }
 
     public virtual DbSet<TblPageMaster> TblPageMasters { get; set; }
 
@@ -74,35 +74,6 @@ public partial class BonifatiusEmployeesContext : DbContext
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<OrderMaster>(entity =>
-        {
-            entity.ToTable("OrderMaster");
-
-            entity.Property(e => e.Id).ValueGeneratedNever();
-            entity.Property(e => e.Amount).HasColumnType("decimal(18, 0)");
-            entity.Property(e => e.CompanyName).HasMaxLength(50);
-            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
-            entity.Property(e => e.DeliveryDate).HasColumnType("date");
-            entity.Property(e => e.DeliveryStatus).HasMaxLength(50);
-            entity.Property(e => e.OrderDate).HasColumnType("date");
-            entity.Property(e => e.OrderId).HasMaxLength(50);
-            entity.Property(e => e.PaymentMethod).HasMaxLength(50);
-            entity.Property(e => e.PaymentStatus).HasMaxLength(50);
-            entity.Property(e => e.ProductName).HasMaxLength(50);
-            entity.Property(e => e.ProductShortDescription).HasMaxLength(50);
-            entity.Property(e => e.Quantity).HasMaxLength(50);
-            entity.Property(e => e.Total).HasColumnType("decimal(18, 0)");
-            entity.Property(e => e.Type).HasMaxLength(20);
-
-            entity.HasOne(d => d.Product).WithMany(p => p.OrderMasters)
-                .HasForeignKey(d => d.ProductId)
-                .HasConstraintName("FK_OrderMaster_tblProductDetailsMaster");
-
-            entity.HasOne(d => d.Project).WithMany(p => p.OrderMasters)
-                .HasForeignKey(d => d.ProjectId)
-                .HasConstraintName("FK_OrderMaster_tblProjectMaster");
-        });
-
         modelBuilder.Entity<TblAttendance>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK_tbl_BoniAttendance");
@@ -250,6 +221,38 @@ public partial class BonifatiusEmployeesContext : DbContext
 
             entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.InvoiceType).HasMaxLength(10);
+        });
+
+        modelBuilder.Entity<TblOrderMaster>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK_OrderMaster");
+
+            entity.ToTable("tblOrderMaster");
+
+            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.Amount).HasColumnType("decimal(18, 0)");
+            entity.Property(e => e.CompanyName).HasMaxLength(50);
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.DeliveryDate).HasColumnType("date");
+            entity.Property(e => e.DeliveryStatus).HasMaxLength(50);
+            entity.Property(e => e.OrderDate).HasColumnType("date");
+            entity.Property(e => e.OrderId).HasMaxLength(50);
+            entity.Property(e => e.PaymentMethod).HasMaxLength(50);
+            entity.Property(e => e.PaymentStatus).HasMaxLength(50);
+            entity.Property(e => e.ProductName).HasMaxLength(50);
+            entity.Property(e => e.ProductShortDescription).HasMaxLength(50);
+            entity.Property(e => e.Quantity).HasMaxLength(50);
+            entity.Property(e => e.Total).HasColumnType("decimal(18, 0)");
+            entity.Property(e => e.Type).HasMaxLength(20);
+
+            entity.HasOne(d => d.Product).WithMany(p => p.TblOrderMasters)
+                .HasForeignKey(d => d.ProductId)
+                .HasConstraintName("FK_OrderMaster_tblProductDetailsMaster");
+
+            entity.HasOne(d => d.ProductTypeNavigation).WithMany(p => p.TblOrderMasters)
+                .HasForeignKey(d => d.ProductType)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_tblOrderMaster_tblProductTypeMaster");
         });
 
         modelBuilder.Entity<TblPageMaster>(entity =>

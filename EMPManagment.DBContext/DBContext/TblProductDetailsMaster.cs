@@ -37,5 +37,5 @@ public partial class TblProductDetailsMaster
 
     public Guid? UpdatedBy { get; set; }
 
-    public virtual ICollection<OrderMaster> OrderMasters { get; set; } = new List<OrderMaster>();
+    public virtual ICollection<TblOrderMaster> TblOrderMasters { get; set; } = new List<TblOrderMaster>();
 }

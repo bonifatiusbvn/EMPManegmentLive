@@ -123,7 +123,7 @@ namespace EMPManegment.Web.Controllers
                 {
                     order = JsonConvert.DeserializeObject<List<OrderDetailView>>(response.data.ToString());
                 }
-                return View("ShowProductDetails", order);
+                return View("InvoiceDetails", order);
             }
             catch (Exception ex)
             {
