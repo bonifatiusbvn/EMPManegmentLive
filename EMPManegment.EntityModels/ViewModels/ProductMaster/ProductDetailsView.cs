@@ -41,6 +41,7 @@ namespace EMPManegment.EntityModels.ViewModels.ProductMaster
         public DateTime? UpdatedOn { get; set; }
 
         public Guid? UpdatedBy { get; set; }
+        public Guid? ProductId { get; set; }
 
         public int RowNumber { get; set; }
     }

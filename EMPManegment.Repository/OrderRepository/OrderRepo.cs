@@ -1,4 +1,4 @@
-﻿ using EMPManagment.API;
+﻿using EMPManagment.API;
 using EMPManegment.EntityModels.ViewModels;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.OrderModels;
@@ -69,6 +69,7 @@ namespace EMPManegment.Repository.OrderRepository
                                                 select new OrderDetailView
                                                 {
                                                     OrderId = a.OrderId,
+                                                    ProductId = a.ProductId,
                                                     CompanyName = b.VendorCompany,
                                                     VendorId = a.VendorId,
                                                     ProductName = c.Type,
@@ -94,6 +95,7 @@ namespace EMPManegment.Repository.OrderRepository
                 {
                     orderDetails.Add(new OrderDetailView()
                     {
+                        ProductId = item.ProjectId,
                         OrderId = item.OrderId,
                         CompanyName = item.CompanyName,
                         Product = item.ProductType,
@@ -148,7 +150,7 @@ namespace EMPManegment.Repository.OrderRepository
                 var orderDetails = new List<OrderDetailView>();
                 var data = await (from a in Context.OrderMasters
                                   join c in Context.TblProductDetailsMasters on a.ProductId equals c.Id
-                                  where a.OrderId==OrderId
+                                  where a.OrderId == OrderId
                                   select new OrderDetailView
                                   {
                                       Id = a.Id,
@@ -161,11 +163,11 @@ namespace EMPManegment.Repository.OrderRepository
                                       ProductShortDescription = a.ProductShortDescription,
                                       Quantity = a.Quantity,
                                       OrderDate = a.OrderDate,
-                                      PerUnitPrice=c.PerUnitPrice,
+                                      PerUnitPrice = c.PerUnitPrice,
                                       Total = a.Total,
                                       Amount = a.Amount,
                                       PaymentMethod = a.PaymentMethod,
-                                      PaymentStatus= a.PaymentStatus,
+                                      PaymentStatus = a.PaymentStatus,
                                       DeliveryStatus = a.DeliveryStatus,
                                       DeliveryDate = a.DeliveryDate,
                                       CreatedOn = a.CreatedOn,
