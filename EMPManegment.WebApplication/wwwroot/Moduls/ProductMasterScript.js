@@ -121,28 +121,20 @@ $(document).ready(function () {
         rules: {
             txtproductname: "required",
             txtproductdescription: "required",
-            txtshortdescription: "required",
-            txtproductimage: "required",
             txtstocks: "required",
             txtPerUnitPrice: "required",
-            txtHSN: "required",
             txtGST: "required",
             txtPerUnitWithGSTPrice: "required",
-            txtvendorname: "required",
-            txtProducts: "required"
+            txtvendornamed: "required"
         },
         messages: {
             txtproductname: "Please Enter Product Name",
             txtproductdescription: "Please Enter Product Description",
-            txtshortdescription: "Please Enter Product Short Description",
-            txtproductimage: "Please Enter Product Image",
             txtstocks: "Please Enter Product Stocks",
             txtPerUnitPrice: "Please Enter Per Unit Price of the Product",
-            txtHSN: "Please Enter HSN",
             txtGST: "Please Enter GST",
             txtPerUnitWithGSTPrice: "Please Enter Per Unit With GST Price of the Product",
-            txtvendorname: "Please Select Vendor Name",
-            txtProducts: "Please Select Product Type"
+            txtvendornamed: "Please Select Vendor Name"
         }
     })
     $("#saveproductdetails").on('click', function () {
