@@ -14,6 +14,7 @@ using EMPManagment.Web.Models.API;
 using EMPManegment.EntityModels.ViewModels.ProductMaster;
 using EMPManegment.Web.Models;
 using EMPManegment.EntityModels.ViewModels.VendorModels;
+using EMPManegment.EntityModels.ViewModels.OrderModels;
 
 namespace EMPManegment.Web.Controllers
 {
@@ -105,6 +106,24 @@ namespace EMPManegment.Web.Controllers
                     invoice = JsonConvert.DeserializeObject<List<InvoiceViewModel>>(response.data.ToString());
                 }
                 return View(invoice);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        [HttpGet]
+        public async Task<IActionResult> GetInvoiceDetailsByOrderId(string OrderId)
+        {
+            try
+            {
+                List<OrderDetailView> order = new List<OrderDetailView>();
+                ApiResponseModel response = await APIServices.GetAsync("", "OrderDetails/GetOrderDetailsById?OrderId=" + OrderId);
+                if (response.code == 200)
+                {
+                    order = JsonConvert.DeserializeObject<List<OrderDetailView>>(response.data.ToString());
+                }
+                return View("ShowProductDetails", order);
             }
             catch (Exception ex)
             {

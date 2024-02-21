@@ -13,6 +13,8 @@ public partial class TblInvoice
 
     public string? InvoiceNo { get; set; }
 
+    public string? OrderId { get; set; }
+
     public DateTime InvoiceDate { get; set; }
 
     public string BuyesOrderNo { get; set; } = null!;

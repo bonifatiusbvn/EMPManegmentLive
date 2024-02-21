@@ -202,7 +202,7 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.HasOne(d => d.User).WithMany(p => p.TblExpenseMasters)
                 .HasForeignKey(d => d.UserId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_tblExpenseMaster_tblUsers");
+                .HasConstraintName("FK_tblExpenseMaster_tblUsers1");
         });
 
         modelBuilder.Entity<TblExpenseType>(entity =>
@@ -233,6 +233,7 @@ public partial class BonifatiusEmployeesContext : DbContext
                 .HasColumnName("IGST");
             entity.Property(e => e.InvoiceDate).HasColumnType("date");
             entity.Property(e => e.InvoiceNo).HasMaxLength(100);
+            entity.Property(e => e.OrderId).HasMaxLength(50);
             entity.Property(e => e.Sgst)
                 .HasColumnType("numeric(18, 2)")
                 .HasColumnName("SGST");
