@@ -213,6 +213,10 @@ public partial class BonifatiusEmployeesContext : DbContext
                 .HasColumnType("numeric(18, 2)")
                 .HasColumnName("TotalGST");
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+
+            entity.HasOne(d => d.Project).WithMany(p => p.TblInvoices)
+                .HasForeignKey(d => d.ProjectId)
+                .HasConstraintName("FK_tblInvoices_tblProjectMaster");
         });
 
         modelBuilder.Entity<TblInvoiceTypeMaster>(entity =>
@@ -416,8 +420,8 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.Property(e => e.TaskStatus).HasMaxLength(20);
             entity.Property(e => e.TaskTitle).HasMaxLength(50);
 
-            entity.HasOne(d => d.TaskTypeNavigation).WithMany(p => p.TblTaskDetails)
-                .HasForeignKey(d => d.TaskType)
+            entity.HasOne(d => d.Project).WithMany(p => p.TblTaskDetails)
+                .HasForeignKey(d => d.ProjectId)
                 .HasConstraintName("FK_tblTaskDetails_tblTaskMaster");
 
             entity.HasOne(d => d.User).WithMany(p => p.TblTaskDetails)

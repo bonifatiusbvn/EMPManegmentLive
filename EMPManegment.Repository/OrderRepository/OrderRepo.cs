@@ -150,7 +150,8 @@ namespace EMPManegment.Repository.OrderRepository
                 var orderDetails = new List<OrderDetailView>();
                 var data = await (from a in Context.TblOrderMasters
                                   join c in Context.TblProductDetailsMasters on a.ProductId equals c.Id
-                                  where a.OrderId == OrderId
+                                  join b in Context.TblVendorMasters on a.VendorId equals b.Vid
+                                  where a.OrderId==OrderId
                                   select new OrderDetailView
                                   {
                                       Id = a.Id,
@@ -159,12 +160,16 @@ namespace EMPManegment.Repository.OrderRepository
                                       Type = a.Type,
                                       CompanyName = a.CompanyName,
                                       ProductId = a.ProductId,
+                                      VendorAddress=b.VendorAddress,
+                                      VendorContact=b.VendorContact,
+                                      VendorEmail=b.VendorCompanyEmail,
                                       ProductImage = c.ProductImage,
                                       ProductName = a.ProductName,
                                       ProductShortDescription = a.ProductShortDescription,
                                       Quantity = a.Quantity,
                                       OrderDate = a.OrderDate,
-                                      PerUnitPrice = c.PerUnitPrice,
+                                      PerUnitPrice=c.PerUnitPrice,
+                                      PerUnitWithGstprice=c.PerUnitWithGstprice,
                                       Total = a.Total,
                                       Amount = a.Amount,
                                       PaymentMethod = a.PaymentMethod,
@@ -184,12 +189,16 @@ namespace EMPManegment.Repository.OrderRepository
                             CompanyName = item.CompanyName,
                             VendorId = item.VendorId,
                             ProductId = item.ProductId,
+                            VendorEmail = item.VendorEmail,
+                            VendorContact = item.VendorContact,
+                            VendorAddress = item.VendorAddress,
                             ProductName = item.ProductName,
                             ProductImage = item.ProductImage,
                             ProductShortDescription = item.ProductShortDescription,
                             Quantity = item.Quantity,
                             OrderDate = item.OrderDate,
                             PerUnitPrice = item.PerUnitPrice,
+                            PerUnitWithGstprice = item.PerUnitWithGstprice,
                             Total = item.Total,
                             Amount = item.Amount,
                             PaymentMethod = item.PaymentMethod,
