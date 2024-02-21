@@ -31,7 +31,7 @@ namespace EMPManegment.Repository.OrderRepository
             UserResponceModel response = new UserResponceModel();
             try
             {
-                var ordermodel = new OrderMaster()
+                var ordermodel = new TblOrderMaster()
                 {
                     Id = Guid.NewGuid(),
                     OrderId = "Order_" + CreateOrder.OrderId,
@@ -51,7 +51,7 @@ namespace EMPManegment.Repository.OrderRepository
                 };
                 response.Code = 200;
                 response.Message = "Order Created successfully!";
-                Context.OrderMasters.Add(ordermodel);
+                Context.TblOrderMasters.Add(ordermodel);
                 Context.SaveChanges();
             }
             catch (Exception ex)
@@ -63,7 +63,7 @@ namespace EMPManegment.Repository.OrderRepository
 
         public async Task<IEnumerable<OrderDetailView>> GetOrderList()
         {
-            IEnumerable<OrderDetailView> data = from a in Context.OrderMasters
+            IEnumerable<OrderDetailView> data = from a in Context.TblOrderMasters
                                                 join b in Context.TblVendorMasters on a.VendorId equals b.Vid
                                                 join c in Context.TblProductTypeMasters on a.ProductType equals c.Id
                                                 select new OrderDetailView
@@ -88,7 +88,7 @@ namespace EMPManegment.Repository.OrderRepository
         public async Task<List<OrderDetailView>> GetOrderDetailsByStatus(string DeliveryStatus)
         {
             var orderDetails = new List<OrderDetailView>();
-            var data = await Context.OrderMasters.Where(x => x.DeliveryStatus == DeliveryStatus).ToListAsync();
+            var data = await Context.TblOrderMasters.Where(x => x.DeliveryStatus == DeliveryStatus).ToListAsync();
             if (data != null)
             {
                 foreach (var item in data)
@@ -117,7 +117,7 @@ namespace EMPManegment.Repository.OrderRepository
         {
             try
             {
-                var LastOrder = Context.OrderMasters.OrderByDescending(e => e.CreatedOn).FirstOrDefault();
+                var LastOrder = Context.TblOrderMasters.OrderByDescending(e => e.CreatedOn).FirstOrDefault();
                 string UserOrderId;
                 if (LastOrder == null)
                 {
@@ -148,7 +148,7 @@ namespace EMPManegment.Repository.OrderRepository
             try
             {
                 var orderDetails = new List<OrderDetailView>();
-                var data = await (from a in Context.OrderMasters
+                var data = await (from a in Context.TblOrderMasters
                                   join c in Context.TblProductDetailsMasters on a.ProductId equals c.Id
                                   where a.OrderId == OrderId
                                   select new OrderDetailView
@@ -158,6 +158,7 @@ namespace EMPManegment.Repository.OrderRepository
                                       VendorId = a.VendorId,
                                       Type = a.Type,
                                       CompanyName = a.CompanyName,
+                                      ProductId = a.ProductId,
                                       ProductImage = c.ProductImage,
                                       ProductName = a.ProductName,
                                       ProductShortDescription = a.ProductShortDescription,
@@ -182,6 +183,7 @@ namespace EMPManegment.Repository.OrderRepository
                             OrderId = item.OrderId,
                             CompanyName = item.CompanyName,
                             VendorId = item.VendorId,
+                            ProductId = item.ProductId,
                             ProductName = item.ProductName,
                             ProductImage = item.ProductImage,
                             ProductShortDescription = item.ProductShortDescription,
@@ -214,7 +216,7 @@ namespace EMPManegment.Repository.OrderRepository
             {
                 foreach (var item in InsertOrder)
                 {
-                    var ordermodel = new OrderMaster()
+                    var ordermodel = new TblOrderMaster()
                     {
                         Id = Guid.NewGuid(),
                         OrderId = item.OrderId,
@@ -236,7 +238,7 @@ namespace EMPManegment.Repository.OrderRepository
                         ProductName = item.ProductName,
                         ProductShortDescription = item.ProductShortDescription,
                     };
-                    Context.OrderMasters.Add(ordermodel);
+                    Context.TblOrderMasters.Add(ordermodel);
                 }
 
                 await Context.SaveChangesAsync();
