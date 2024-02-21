@@ -212,7 +212,7 @@
                                 <div class="col-lg-6">
                                     <div class="mb-3">
                                         <label class="form-label">Account</label>
-                                        <select class="form-control" id="txtaccount">
+                                        <select class="form-control" id="txtaccount" name="txtaccount">
                                             <option selected disabled value="">Select Account Type</option>
                                             <option value="Credit">Credit</option>
                                             <option value="Dabit">Dabit</option>
@@ -234,7 +234,7 @@
                                 <div class="col-lg-6">
                                     <div class="mb-3">
                                         <label class="form-label">Is Paid?</label>
-                                        <select class="form-control" id="txtispaid">
+                                        <select class="form-control" id="txtispaid" name="txtispaid">
                                             <option selected disabled value="">Is Paid</option>
                                             <option value="True">True</option>
                                             <option value="False">False</option>
@@ -245,12 +245,12 @@
                                 <div class="col-lg-6">
                                     <div class="mb-3">
                                         <label class="form-label">Is Approved?</label>
-                                        <select class="form-control" id="txtisapproved">
+                                        <select class="form-control" id="txtisapproved" name="txtisapproved">
                                             <option selected disabled value="">Is Approved</option>
                                             <option value="True">True</option>
                                             <option value="False">False</option>
-                                            </select>
-                                            <input type="hidden" id="txtisapprovedid" class="form-control" />
+                                        </select>
+                                        <input type="hidden" id="txtisapprovedid" class="form-control" />
                                     </div>
                                 </div>
                             </div>
@@ -258,7 +258,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-light" id="close-modal" data-bs-dismiss="modal" onclick="ClearTextBox()">Close</button>
-                        <button type="submit" class="btn btn-success" onclick="btnSaveTaskDetail();" id="taskDetails" value="Validate">Save</button>
+                        <button type="submit" class="btn btn-success" onclick="AddExpenseDetails();" id="taskDetails" value="Validate">Save</button>
                     </div>
                 </div>
             </div>
@@ -268,7 +268,14 @@
     <!--end col-->
 </div>
 <!--end row-->
+<style>
+    #txtexpensetype-error, #txtDescription-error, #txtbillno-error,
+    #txtdate-error, #txttotalamount-error, #txtimage-error, 
+    #txtaccount-error, #txtpaymenttype-error, #txtispaid-error, #txtisapproved-error {
+        color: red;
+    }
 
+</style>
 
 <script src="~/lib/jquery/dist/jquery.js"></script>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>

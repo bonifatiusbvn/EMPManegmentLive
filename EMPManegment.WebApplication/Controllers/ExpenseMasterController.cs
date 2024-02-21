@@ -2,6 +2,8 @@
 using EMPManagment.Web.Models.API;
 using EMPManegment.EntityModels.ViewModels.ExpenseMaster;
 using EMPManegment.EntityModels.ViewModels.Invoice;
+using EMPManegment.EntityModels.ViewModels.Models;
+using EMPManegment.EntityModels.ViewModels.ProductMaster;
 using EMPManegment.EntityModels.ViewModels.VendorModels;
 using EMPManegment.Web.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -75,6 +77,52 @@ namespace EMPManegment.Web.Controllers
             {
                 throw ex;
             }
+        }
+        [HttpPost]
+        public async Task<IActionResult> AddexpenseDetails(ExpenseRequestModel Addexpense)
+        {
+            try
+            {
+                var path = Environment.WebRootPath;
+                var filepath = "Content/Image/" + Addexpense.Image.FileName;
+                var fullpath = Path.Combine(path, filepath);
+                UploadFile(Addexpense.Image, fullpath);
+                var ExpenseDetails = new ExpenseDetailsView
+                {
+                    UserId = _userSession.UserId,
+                    ExpenseType=Addexpense.ExpenseType,
+                    PaymentType=Addexpense.PaymentType,
+                    BillNumber=Addexpense.BillNumber,
+                    Description=Addexpense.Description,
+                    Date=Addexpense.Date,
+                    TotalAmount=Addexpense.TotalAmount,
+                    Image=filepath,
+                    Account=Addexpense.Account,
+                    IsPaid=Addexpense.IsPaid,
+                    IsApproved=Addexpense.IsApproved,
+                    CreatedBy = _userSession.UserId,
+                };
+                ApiResponseModel postuser = await APIServices.PostAsync(ExpenseDetails, "ExpenseMaster/AddExpenseDetails");
+                UserResponceModel responseModel = new UserResponceModel();
+                if (postuser.code == 200)
+                {
+                    return Ok(new { postuser.message });
+                }
+                else
+                {
+
+                    return Ok(new { postuser.code });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public void UploadFile(IFormFile ImageFile, string ImagePath)
+        {
+            FileStream stream = new FileStream(ImagePath, FileMode.Create);
+            ImageFile.CopyTo(stream);
         }
     }
 }
