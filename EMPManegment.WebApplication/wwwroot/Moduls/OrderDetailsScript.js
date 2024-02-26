@@ -316,8 +316,10 @@ function InsertMultipleOrder() {
     });
 }
 
+function showPaymentDetails() {
 
-
+    $("#PaymentDetails").modal("show")
+}
 
 
 $(document).ready(function () {
@@ -351,7 +353,7 @@ function GetProducts() {
 function GetPaymentTypeList() {
     $.ajax({
         url: '/ExpenseMaster/GetPaymentTypeList',
-        success: function (result) {    
+        success: function (result) {
             $.each(result, function (i, data) {
                 $('#paymentMethod').append('<Option value=' + data.id + '>' + data.type + '</Option>')
             });

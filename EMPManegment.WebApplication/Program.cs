@@ -1,4 +1,6 @@
 
+using DinkToPdf;
+using DinkToPdf.Contracts;
 using EMPManagment.Web.Helper;
 using EMPManegment.Web.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -14,7 +16,6 @@ builder.Services.AddScoped<WebAPI, WebAPI>();
 builder.Services.AddScoped<UserSession>();
 builder.Services.AddScoped<APIServices, APIServices>();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-
 
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -41,6 +42,7 @@ builder.Services.AddSession(option =>
 
 });
 
+builder.Services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
 
 var app = builder.Build();
 

@@ -9,7 +9,6 @@ using EMPManegment.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis;
 using Newtonsoft.Json;
-using PdfSharpCore.Pdf.Content.Objects;
 using System.Diagnostics;
 
 namespace EMPManegment.Web.Controllers
@@ -147,6 +146,11 @@ namespace EMPManegment.Web.Controllers
             {
                 throw ex;
             }
+        }
+
+        public IActionResult ShowPaymentDetails()
+        {
+            return View();
         }
     }
 }

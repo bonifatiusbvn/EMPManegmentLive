@@ -9,14 +9,17 @@
   <ItemGroup>
     <PackageReference Include="Aspose.PDF" Version="23.12.0" />
     <PackageReference Include="ClosedXML" Version="0.102.1" />
+    <PackageReference Include="ContentReportBuilder.iTextSharp" Version="1.1.9.3" />
     <PackageReference Include="DinkToPdf" Version="1.0.8" />
+    <PackageReference Include="DotNetCorePdf" Version="1.0.3" />
+    <PackageReference Include="HtmlToPdfConverter.Core" Version="2.0.0" />
+    <PackageReference Include="LibWkHtmlToX-32" Version="0.12.6.1" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="7.0.12" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="Polybioz.HtmlRenderer.PdfSharp.Core" Version="1.0.0" />
     <PackageReference Include="RestSharp" Version="110.2.0" />
     <PackageReference Include="System.Linq.Dynamic.Core" Version="1.3.5" />
-    <PackageReference Include="X.PagedList.Mvc.Core" Version="8.4.3" />
-    <PackageReference Include="X.PagedList.Web.Common" Version="8.0.5" />
+    <PackageReference Include="X.PagedList.Mvc.Core" Version="8.4.7" />
+    <PackageReference Include="X.PagedList.Web.Common" Version="8.0.7" />
   </ItemGroup>
 
   <ItemGroup>

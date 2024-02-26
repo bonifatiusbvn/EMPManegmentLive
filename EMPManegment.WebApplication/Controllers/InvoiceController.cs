@@ -1,7 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PdfSharpCore.Pdf;
-using PdfSharpCore;
-using TheArtOfDev.HtmlRenderer.PdfSharp;
 using EMPManegment.EntityModels.ViewModels.SalesFolder;
 using EMPManegment.EntityModels.ViewModels.TaskModels;
 using Newtonsoft.Json;
@@ -15,7 +12,13 @@ using EMPManegment.EntityModels.ViewModels.ProductMaster;
 using EMPManegment.Web.Models;
 using EMPManegment.EntityModels.ViewModels.VendorModels;
 using EMPManegment.EntityModels.ViewModels.OrderModels;
+using DinkToPdf.Contracts;
+using Aspose.Pdf.Facades;
+using DinkToPdf;
 using Newtonsoft.Json.Converters;
+
+
+
 
 namespace EMPManegment.Web.Controllers
 {
@@ -25,13 +28,15 @@ namespace EMPManegment.Web.Controllers
         public IWebHostEnvironment Environment { get; }
         public APIServices APIServices { get; }
         public UserSession _userSession { get; }
+        public IConverter PdfConverter { get; }
 
-        public InvoiceController(WebAPI webAPI, IWebHostEnvironment environment, APIServices aPIServices, UserSession userSession)
+        public InvoiceController(WebAPI webAPI, IWebHostEnvironment environment, APIServices aPIServices, UserSession userSession, IConverter pdfConverter)
         {
             WebAPI = webAPI;
             Environment = environment;
             APIServices = aPIServices;
             _userSession = userSession;
+            PdfConverter = pdfConverter;
         }
         public IActionResult Index()
         {
@@ -160,5 +165,38 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
+
+        [HttpPost]
+        public async Task<IActionResult> DownloadPdf()
+        {
+            string Content = HttpContext.Request.Form["DOWNLOADINVOICE"];
+
+            var globalSettings = new GlobalSettings
+            {
+                PaperSize = PaperKind.A4,
+                Orientation = Orientation.Landscape,
+                DPI = 300
+            };
+
+            var objectSettings = new ObjectSettings
+            {
+                PagesCount = true,
+                HtmlContent = Content,
+                WebSettings = { DefaultEncoding = "utf-8" },
+                HeaderSettings = { FontName = "Arial", FontSize = 9, Right = "Page [page] of [toPage]", Line = true },
+                FooterSettings = { FontName = "Arial", FontSize = 9, Line = true, Center = "Footer" }
+            };
+
+            var pdf = new HtmlToPdfDocument()
+            {
+                GlobalSettings = globalSettings,
+                Objects = { objectSettings }
+            };
+
+            var fileContent = PdfConverter.Convert(pdf);
+
+            return File(fileContent, "application/pdf", "document.pdf");
+        }
+
     }
 }
