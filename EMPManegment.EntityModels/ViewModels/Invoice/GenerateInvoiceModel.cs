@@ -22,7 +22,7 @@ namespace EMPManegment.EntityModels.ViewModels.Invoice
 
         public DateTime InvoiceDate { get; set; }
 
-        public string? BuyesOrderNo { get; set; } 
+        public string? BuyesOrderNo { get; set; }
 
         public DateTime? BuyesOrderDate { get; set; }
 
@@ -49,5 +49,9 @@ namespace EMPManegment.EntityModels.ViewModels.Invoice
         public DateTime? UpdatedOn { get; set; }
 
         public Guid? UpdatedBy { get; set; }
+        public int? PaymentType { get; set; }
+
+        public decimal? CreditDebitAmount { get; set; }
+        public decimal? PendingAmount { get; set; }
     }
 }

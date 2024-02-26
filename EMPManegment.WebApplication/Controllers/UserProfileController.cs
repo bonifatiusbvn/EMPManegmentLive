@@ -27,7 +27,7 @@ using EMPManegment.EntityModels.Crypto;
 using Microsoft.Build.ObjectModelRemoting;
 using EMPManegment.Web.Models;
 using Newtonsoft.Json.Linq;
-using PdfSharpCore;
+
 using ClosedXML.Excel;
 using System.Data;
 using System.Reflection;

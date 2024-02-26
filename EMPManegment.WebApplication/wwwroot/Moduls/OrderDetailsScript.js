@@ -317,7 +317,6 @@ function InsertMultipleOrder() {
 }
 
 function showPaymentDetails() {
-
     $("#PaymentDetails").modal("show")
 }
 
