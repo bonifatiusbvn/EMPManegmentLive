@@ -141,16 +141,16 @@ namespace EMPManegment.Web.Controllers
             }
         }
         [HttpPost]
-        public async Task<IActionResult> InsertMultipleInvoice()
+        public async Task<IActionResult> InsertInvoiceDetails()
         {
             try
             {
                 var InvoiceDetails = HttpContext.Request.Form["INVOICEDETAILS"];
-                var format = "dd/MM/yyyy"; // your datetime format
+                var format = "dd/MM/yyyy"; 
                 var dateTimeConverter = new IsoDateTimeConverter { DateTimeFormat = format };
-                var InsertDetails = JsonConvert.DeserializeObject<List<GenerateInvoiceModel>>(InvoiceDetails, dateTimeConverter);
+                var InsertDetails = JsonConvert.DeserializeObject<GenerateInvoiceModel>(InvoiceDetails, dateTimeConverter);
 
-                ApiResponseModel postuser = await APIServices.PostAsync(InsertDetails, "Invoice/InsertMultipleInvoice");
+                ApiResponseModel postuser = await APIServices.PostAsync(InsertDetails, "Invoice/InsertInvoiceDetails");
                 if (postuser.code == 200)
                 {
                     return Ok(new { postuser.message });

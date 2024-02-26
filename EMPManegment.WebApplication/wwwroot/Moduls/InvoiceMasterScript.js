@@ -56,12 +56,8 @@ $(document).ready(function () {
     });
 });
 
-function InsertMultipleInvoice() {debugger
+function InsertInvoiceDetails() {debugger
 
-    var invoiceDetail = [];
-    var numInvoice = $(".product").length;
-    $(".product").each(function () {debugger
-        var orderRow = $(this);
         var objData = {
             InvoiceNo: $("#txtinvoiceid").val(),
             CreatedBy: $("#txtuserid").val(),
@@ -69,19 +65,17 @@ function InsertMultipleInvoice() {debugger
             BuyesOrderDate: document.getElementById("txtdate").innerHTML,
             OrderId: document.getElementById("txtorderid").innerHTML,
             InvoiceType: document.getElementById("txtinvoicetype").innerHTML,
-            ProductId: orderRow.find("#txtproductid").val(),
             VandorId: document.getElementById("txtvendorid").innerText,
             DispatchThrough: document.getElementById("txtshippingcompany").innerText,
             Destination: document.getElementById("txtshippingaddress").innerText,
-            TotalAmount: orderRow.find("#txttotal").val(),
-        };debugger
-        invoiceDetail.push(objData);
-    });
+            TotalAmount: document.getElementById("txttotalamount").innerText,
+            TotalGst: document.getElementById("txttotalgst").innerText,
+    };
     var form_data = new FormData();
-    form_data.append("INVOICEDETAILS", JSON.stringify(invoiceDetail));
+    form_data.append("INVOICEDETAILS", JSON.stringify(objData));
     debugger
     $.ajax({
-        url: '/Invoice/InsertMultipleInvoice',
+        url: '/Invoice/InsertInvoiceDetails',
         type: 'POST',
         data: form_data,
         dataType: 'json',
