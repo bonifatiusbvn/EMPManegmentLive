@@ -9,7 +9,7 @@ $(document).ready(function () {
 function btnCreateProjectDetail() {
 
     if ($('#formprojectdetails').valid()) {
-
+        debugger
         var formData = new FormData();
         formData.append("ProjectTitle", $("#projectTitle").val());
         formData.append("ProjectPriority", $("#projectPriority").val());
@@ -17,6 +17,7 @@ function btnCreateProjectDetail() {
         formData.append("ProjectStatus", $("#projectStatus").val());
         formData.append("ProjectDeadline", $("#projectdeadline").val());
         formData.append("ProjectType", $("#projectType").val());
+        formData.append("ProjectName", $("#projectname").val());
         formData.append("ProjectHead", $("#projectHead").val());
         formData.append("ProjectLocation", $("#projectLocation").val());
         formData.append("ProjectStartDate", $("#projectStartDate").val());

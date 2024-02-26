@@ -35,9 +35,22 @@ namespace EMPManegment.Web.Controllers
         {
             return View();
         }
-        public IActionResult CreateProject()
+        [HttpGet]
+        public async Task<IActionResult> CreateProject()
         {
-            return View();
+            try
+            {
+                ApiResponseModel Response = await APIServices.GetAsync("", "ProjectDetails/CheckProjectName");
+                if (Response.code == 200)
+                {
+                    ViewBag.ProjectName = Response.data;
+                }
+                return View();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         public async Task<IActionResult> ProjectList()
@@ -137,6 +150,7 @@ namespace EMPManegment.Web.Controllers
                 {
                     projectDetails = JsonConvert.DeserializeObject<ProjectDetailView>(response.data.ToString());
                     UserSession.ProjectId = projectDetails.ProjectId.ToString();
+                    //UserSession.ProjectName = projectDetails.ProjectName.ToString();
 
                 }
                 return View(projectDetails);

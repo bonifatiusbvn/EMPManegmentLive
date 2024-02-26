@@ -1,4 +1,6 @@
 ﻿using EMPManegment.EntityModels.ViewModels.Invoice;
+using EMPManegment.EntityModels.ViewModels.Models;
+using EMPManegment.EntityModels.ViewModels.OrderModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,5 +14,7 @@ namespace EMPManegment.Inretface.Services.InvoiceMaster
         Task<InvoiceViewModel> GetInvoiceDetailsById(Guid Id);
         Task<IEnumerable<InvoiceViewModel>> GetInvoiceNoList();
         Task<IEnumerable<InvoiceViewModel>> GetInvoiceDetailsList();
+        string CheckInvoiceNo(string OrderId);
+        Task<UserResponceModel> InsertInvoiceDetails(GenerateInvoiceModel InsertInvoice);
     }
 }

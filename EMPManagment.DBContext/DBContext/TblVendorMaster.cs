@@ -55,6 +55,8 @@ public partial class TblVendorMaster
 
     public string? CreatedBy { get; set; }
 
+    public virtual ICollection<TblCreditDebitMaster> TblCreditDebitMasters { get; set; } = new List<TblCreditDebitMaster>();
+
     public virtual TblCity VendorCityNavigation { get; set; } = null!;
 
     public virtual TblCountry VendorCountryNavigation { get; set; } = null!;

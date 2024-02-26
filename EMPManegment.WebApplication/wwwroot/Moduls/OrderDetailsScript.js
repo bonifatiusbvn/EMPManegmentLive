@@ -379,7 +379,8 @@ $(document).ready(function () {
             success: function (result) {
                 $.each(result, function (i, data) {
                     $('#searchproductname').append('<Option value=' + data.id + '>' + data.productName + '</Option>');
-
+                    $('#txtvendorname').prop('disabled', true);
+                    $('#txtProducts').prop('disabled', true);
                 });
             }
         });

@@ -92,5 +92,20 @@ namespace EMPManegment.Web.Models
                 StaticHttpContext.Session.SetString("ProjectId", value);
             }
         }
+
+        public static string ProjectName
+        {
+            get
+            {
+                if (StaticHttpContext.Session.GetString("ProjectName") == null)
+                    return null;
+                else
+                    return StaticHttpContext.Session.GetString("ProjectName");
+            }
+            set
+            {
+                StaticHttpContext.Session.SetString("ProjectName", value);
+            }
+        }
     }
 }

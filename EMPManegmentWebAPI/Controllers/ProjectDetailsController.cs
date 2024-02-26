@@ -2,6 +2,7 @@
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.ProjectModels;
 using EMPManegment.EntityModels.ViewModels.TaskModels;
+using EMPManegment.Inretface.Interface.OrderDetails;
 using EMPManegment.Inretface.Interface.ProjectDetails;
 using EMPManegment.Inretface.Services.ProjectDetailsServices;
 using EMPManegment.Inretface.Services.TaskServices;
@@ -156,6 +157,13 @@ namespace EMPManagment.API.Controllers
         {
             List<ProjectView> projectlist = await ProjectDetail.GetProjectListById(searchby, searchfor,UserId);
             return Ok(new { code = 200, data = projectlist.ToList() });
+        }
+        [HttpGet]
+        [Route("CheckProjectName")]
+        public IActionResult CheckProjectName()
+        {
+            var checkProject = ProjectDetail.CheckProjectName();
+            return Ok(new { code = 200, data = checkProject });
         }
     }
 }

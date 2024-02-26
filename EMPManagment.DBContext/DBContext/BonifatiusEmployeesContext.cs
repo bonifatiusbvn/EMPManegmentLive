@@ -23,6 +23,8 @@ public partial class BonifatiusEmployeesContext : DbContext
 
     public virtual DbSet<TblCountry> TblCountries { get; set; }
 
+    public virtual DbSet<TblCreditDebitMaster> TblCreditDebitMasters { get; set; }
+
     public virtual DbSet<TblDepartment> TblDepartments { get; set; }
 
     public virtual DbSet<TblDocumentMaster> TblDocumentMasters { get; set; }
@@ -128,6 +130,31 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.Property(e => e.Country).HasMaxLength(30);
         });
 
+        modelBuilder.Entity<TblCreditDebitMaster>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK_tblPaymentDetailMaster");
+
+            entity.ToTable("tblCreditDebitMaster");
+
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.CreditDebitAmount).HasColumnType("decimal(18, 0)");
+            entity.Property(e => e.Date).HasColumnType("date");
+            entity.Property(e => e.InvoiceNo).HasMaxLength(100);
+            entity.Property(e => e.PendingAmount).HasColumnType("decimal(18, 0)");
+            entity.Property(e => e.TotalAmount).HasColumnType("decimal(18, 0)");
+            entity.Property(e => e.Type).HasMaxLength(10);
+            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+            entity.Property(e => e.VendorName).HasMaxLength(10);
+
+            entity.HasOne(d => d.PaymentTypeNavigation).WithMany(p => p.TblCreditDebitMasters)
+                .HasForeignKey(d => d.PaymentType)
+                .HasConstraintName("FK_tblCreditDebitMaster_tblPaymentType");
+
+            entity.HasOne(d => d.Vendor).WithMany(p => p.TblCreditDebitMasters)
+                .HasForeignKey(d => d.VendorId)
+                .HasConstraintName("FK_tblCreditDebitMaster_tblVendor_Master");
+        });
+
         modelBuilder.Entity<TblDepartment>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK_tbl_BoniDepartment");
@@ -204,6 +231,7 @@ public partial class BonifatiusEmployeesContext : DbContext
                 .HasColumnName("IGST");
             entity.Property(e => e.InvoiceDate).HasColumnType("date");
             entity.Property(e => e.InvoiceNo).HasMaxLength(100);
+            entity.Property(e => e.InvoiceType).HasMaxLength(20);
             entity.Property(e => e.OrderId).HasMaxLength(50);
             entity.Property(e => e.Sgst)
                 .HasColumnType("numeric(18, 2)")
@@ -361,6 +389,7 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.Property(e => e.ProjectEndDate).HasColumnType("date");
             entity.Property(e => e.ProjectHead).HasMaxLength(50);
             entity.Property(e => e.ProjectLocation).HasMaxLength(50);
+            entity.Property(e => e.ProjectName).HasMaxLength(50);
             entity.Property(e => e.ProjectPriority).HasMaxLength(10);
             entity.Property(e => e.ProjectStartDate).HasColumnType("date");
             entity.Property(e => e.ProjectStatus).HasMaxLength(10);

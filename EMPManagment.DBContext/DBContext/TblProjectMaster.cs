@@ -11,6 +11,8 @@ public partial class TblProjectMaster
 
     public string? ProjectTitle { get; set; }
 
+    public string? ProjectName { get; set; }
+
     public string? ProjectHead { get; set; }
 
     public string? ProjectDescription { get; set; }

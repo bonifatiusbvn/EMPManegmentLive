@@ -7,7 +7,7 @@ public partial class TblInvoice
 {
     public Guid Id { get; set; }
 
-    public int InvoiceType { get; set; }
+    public string InvoiceType { get; set; } = null!;
 
     public Guid VandorId { get; set; }
 
@@ -19,11 +19,9 @@ public partial class TblInvoice
 
     public DateTime InvoiceDate { get; set; }
 
-    public string BuyesOrderNo { get; set; } = null!;
+    public string? BuyesOrderNo { get; set; }
 
     public DateTime? BuyesOrderDate { get; set; }
-
-    public Guid ProductId { get; set; }
 
     public string DispatchThrough { get; set; } = null!;
 

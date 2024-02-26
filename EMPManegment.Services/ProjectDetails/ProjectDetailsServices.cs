@@ -61,5 +61,10 @@ namespace EMPManegment.Services.ProjectDetails
         {
             return await ProjectDetails.GetProjectListById(searchby, searchfor, UserId);
         }
+
+        public string CheckProjectName()
+        {
+            return ProjectDetails.CheckProjectName();
+        }
     }
 }

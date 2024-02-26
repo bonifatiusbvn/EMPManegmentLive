@@ -56,7 +56,60 @@ $(document).ready(function () {
     });
 });
 
+function InsertMultipleInvoice() {debugger
 
+    var invoiceDetail = [];
+    var numInvoice = $(".product").length;
+    $(".product").each(function () {debugger
+        var orderRow = $(this);
+        var objData = {
+            InvoiceNo: $("#txtinvoiceid").val(),
+            CreatedBy: $("#txtuserid").val(),
+            ProjectId: $("#txtprojectid").val(),
+            BuyesOrderDate: document.getElementById("txtdate").innerHTML,
+            OrderId: document.getElementById("txtorderid").innerHTML,
+            InvoiceType: document.getElementById("txtinvoicetype").innerHTML,
+            ProductId: orderRow.find("#txtproductid").val(),
+            VandorId: document.getElementById("txtvendorid").innerText,
+            DispatchThrough: document.getElementById("txtshippingcompany").innerText,
+            Destination: document.getElementById("txtshippingaddress").innerText,
+            TotalAmount: orderRow.find("#txttotal").val(),
+        };debugger
+        invoiceDetail.push(objData);
+    });
+    var form_data = new FormData();
+    form_data.append("INVOICEDETAILS", JSON.stringify(invoiceDetail));
+    debugger
+    $.ajax({
+        url: '/Invoice/InsertMultipleInvoice',
+        type: 'POST',
+        data: form_data,
+        dataType: 'json',
+        contentType: false,
+        processData: false,
+        success: function (result) {
+            if (result.message != null) {
+                Swal.fire({
+                    title: result.message,
+                    icon: 'success',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'OK',
+                }).then(function () {
+                    window.location = '/OrderMaster/CreateOrder';
+                });
+            }
+        },
+        error: function (xhr, status, error) {
+            Swal.fire({
+                title: 'Error',
+                text: 'An error occurred while processing your request.',
+                icon: 'error',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'OK',
+            });
+        }
+    });
+}
 $(document).ready(function () {
     $("#generatePDF").click(function () {
 

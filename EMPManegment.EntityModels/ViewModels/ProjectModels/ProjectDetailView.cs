@@ -14,6 +14,7 @@ namespace EMPManegment.EntityModels.ViewModels.ProjectModels
         public string? ProjectType { get; set; } = null!;
 
         public string? ProjectTitle { get; set; } = null!;
+        public string? ProjectName { get; set; }
 
         public string? ProjectHead { get; set; } = null!;
 

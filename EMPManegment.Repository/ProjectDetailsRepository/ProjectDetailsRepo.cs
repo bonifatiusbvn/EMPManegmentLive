@@ -38,6 +38,7 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
                     ProjectId = Guid.NewGuid(),
                     ProjectType = createproject.ProjectType,
                     ProjectTitle = createproject.ProjectTitle,
+                    ProjectName = createproject.ProjectName,
                     ProjectHead = createproject.ProjectHead,
                     ProjectDescription = createproject.ProjectDescription,
                     ProjectLocation = createproject.ProjectLocation,
@@ -311,6 +312,44 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
                 UserData = UserData.Where(ser => ser.Status.ToLower().Contains(searchfor.ToLower())).ToList();
             }
             return UserData;
+        }
+
+        public string CheckProjectName()
+        {
+            try
+            {
+                var LastProject = Context.TblProjectMasters.OrderByDescending(e => e.CreatedOn).FirstOrDefault();
+                string UserProjectId;
+                if (LastProject == null)
+                {
+                    UserProjectId = "PROJ-01";
+                }
+                else
+                {
+                    if (LastProject.ProjectName.Length >= 7)
+                    {
+                        string projectNumberStr = LastProject.ProjectName.Substring(5);
+                        if (int.TryParse(projectNumberStr, out int projectNumber))
+                        {
+                            int incrementedProjectNumber = projectNumber + 1;
+                            UserProjectId = "PROJ-" + incrementedProjectNumber.ToString("D2");
+                        }
+                        else
+                        {
+                            throw new Exception("Unable to parse project number from project name.");
+                        }
+                    }
+                    else
+                    {
+                        throw new Exception("ProjectName does not have expected format.");
+                    }
+                }
+                return UserProjectId;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }

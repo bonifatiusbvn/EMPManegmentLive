@@ -173,6 +173,10 @@
                 </div>
                 <div class="card-body">
                     <div class="mb-3">
+                        <label for="projectType" class="form-label">Project Name</label>
+                        <input type="text" class="form-control material_blue" id="projectname" name="projectname" value="@ViewBag.ProjectName" readonly />
+                    </div>
+                    <div class="mb-3">
                         <label for="projectType" class="form-label">Project Type</label>
                         <input type="text" class="form-control material_blue" id="projectType" name="projectType" placeholder="Enter Project Type" />
                         @*<select class="form-select" data-choices data-choices-search-false id="projectType" name="projectType">

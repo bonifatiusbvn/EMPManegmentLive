@@ -234,7 +234,6 @@ namespace EMPManegment.Repository.OrderRepository
                         VendorId = item.VendorId,
                         ProductType = item.ProductType,
                         Quantity = item.Quantity,
-                        TotalGst = item.TotalGst,
                         Amount = item.Amount,
                         Total = item.Total,
                         OrderDate = item.OrderDate,
@@ -245,7 +244,6 @@ namespace EMPManegment.Repository.OrderRepository
                         CreatedOn = DateTime.Now,
                         CreatedBy = item.CreatedBy,
                         ProjectId = item.ProjectId,
-                        ProductId = item.ProductId,
                         ProductName = item.ProductName,
                         ProductShortDescription = item.ProductShortDescription,
                     };

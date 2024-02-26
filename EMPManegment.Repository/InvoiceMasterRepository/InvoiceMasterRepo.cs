@@ -1,11 +1,13 @@
 ﻿using EMPManagment.API;
 using EMPManegment.EntityModels.ViewModels.Invoice;
+using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.OrderModels;
 using EMPManegment.EntityModels.ViewModels.ProductMaster;
 using EMPManegment.EntityModels.ViewModels.TaskModels;
 using EMPManegment.EntityModels.ViewModels.VendorModels;
 using EMPManegment.Inretface.Interface.InvoiceMaster;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +23,47 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
             this.Context = Context;
         }
         public BonifatiusEmployeesContext Context { get; }
+
+        public string CheckInvoiceNo(string OrderId)
+        {
+            try
+            {
+                var LastInvoiceId = Context.TblInvoices.OrderByDescending(e => e.CreatedOn).FirstOrDefault();
+                string InvoiceId;
+                var invoice = (from a in Context.TblOrderMasters.Where(x => x.OrderId == OrderId)
+                           join b in Context.TblProjectMasters
+                           on a.ProjectId equals b.ProjectId
+                           select new CheckInvoiceView
+                           {
+                               OrderId=a.OrderId,
+                               ProjectId = a.ProjectId,
+                               ProjectName=b.ProjectName
+                           }).FirstOrDefault();
+                
+                if (LastInvoiceId == null)
+                {
+                    InvoiceId = "BTPL/INVOICE/" + invoice.ProjectName + "/23-24-001";
+                }
+                else
+                {
+                    if (LastInvoiceId.InvoiceNo.Length >= 24)
+                    {
+                        int orderNumber = int.Parse(LastInvoiceId.InvoiceNo.Substring(29)) + 1;
+                        InvoiceId = "BTPL/INVOICE/" + invoice.ProjectName + "/23-24-" + orderNumber.ToString("D3");
+                    }
+                    else
+                    {
+                        throw new Exception("InvoiceId does not have expected format.");
+                    }
+                }
+                return InvoiceId;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public async Task<InvoiceViewModel> GetInvoiceDetailsById(Guid Id)
         {
             InvoiceViewModel invoice = new InvoiceViewModel();
@@ -29,8 +72,6 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                 invoice = (from a in Context.TblInvoices.Where(x => x.Id == Id)
                            join b in Context.TblVendorMasters
                            on a.VandorId equals b.Vid
-                           join c in Context.TblProductDetailsMasters
-                           on a.ProductId equals c.Id
                            //join d in Context.OrderMasters on a.VandorId equals d.VendorId
                            select new InvoiceViewModel
                            {
@@ -38,14 +79,13 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                                InvoiceNo=a.InvoiceNo,
                                VendorName = b.VendorCompany,
                                VandorId = a.VandorId,
-                               ProductName = c.ProductName,
-                               ProductDetails = c.ProductShortDescription,
-                               HSN = c.Hsn,
-                               Price = c.PerUnitPrice,
-                               TotalGst=c.Gst,
+                               //ProductName = c.ProductName,
+                               //ProductDetails = c.ProductShortDescription,
+                               //HSN = c.Hsn,
+                               //Price = c.PerUnitPrice,
+                               //TotalGst=c.Gst,
                                DispatchThrough = a.DispatchThrough,
                                Destination = a.Destination,
-                               ProductId = a.ProductId,
                                Cgst=a.Cgst,
                                Igst=a.Igst,
                                Sgst=a.Sgst,
@@ -56,7 +96,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                                CreatedBy = a.CreatedBy,
                                UpdatedOn=a.UpdatedOn,
                                UpdatedBy=a.UpdatedBy,
-                               PerUnitPrice=c.PerUnitPrice,
+                               //PerUnitPrice=c.PerUnitPrice,
                                //PaymentMethod = d.PaymentMethod,
                                //PaymentStatus = d.PaymentStatus,
                                //Quantity = d.Quantity,
@@ -75,7 +115,6 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
         {
             IEnumerable<InvoiceViewModel> InvoiceList = from a in Context.TblInvoices
                                                         join b in Context.TblVendorMasters on a.VandorId equals b.Vid
-                                                        join c in Context.TblProductDetailsMasters on a.ProductId equals c.Id
                                                         select new InvoiceViewModel
                                                         {
                                                             Id = a.Id,
@@ -84,14 +123,13 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                                                             InvoiceDate = a.InvoiceDate,
                                                             VendorName = b.VendorCompany,
                                                             VandorId = a.VandorId,
-                                                            ProductName = c.ProductName,
-                                                            ProductDetails = c.ProductShortDescription,
-                                                            HSN = c.Hsn,
-                                                            Price = c.PerUnitPrice,
-                                                            TotalGst = c.Gst,
+                                                            //ProductName = c.ProductName,
+                                                            //ProductDetails = c.ProductShortDescription,
+                                                            //HSN = c.Hsn,
+                                                            //Price = c.PerUnitPrice,
+                                                            //TotalGst = c.Gst,
                                                             DispatchThrough = a.DispatchThrough,
                                                             Destination = a.Destination,
-                                                            ProductId = a.ProductId,
                                                             Cgst = a.Cgst,
                                                             Igst = a.Igst,
                                                             Sgst = a.Sgst,
@@ -102,7 +140,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                                                             CreatedBy = a.CreatedBy,
                                                             UpdatedOn = a.UpdatedOn,
                                                             UpdatedBy = a.UpdatedBy,
-                                                            PerUnitPrice = c.PerUnitPrice
+                                                            //PerUnitPrice = c.PerUnitPrice
                                                         };
             return InvoiceList;
         }
@@ -116,6 +154,45 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
 
             }).ToList();
             return GetInvoiceList;
+        }
+
+        public async Task<UserResponceModel> InsertInvoiceDetails(GenerateInvoiceModel InsertInvoice)
+        {
+            UserResponceModel response = new UserResponceModel();
+            try
+            {
+                    var invoicemodel = new TblInvoice()
+                    {
+                        Id = Guid.NewGuid(),
+                        OrderId = InsertInvoice.OrderId,
+                        InvoiceType = InsertInvoice.InvoiceType,
+                        VandorId = InsertInvoice.VandorId,
+                        InvoiceNo = InsertInvoice.InvoiceNo,
+                        ProjectId = InsertInvoice.ProjectId,
+                        InvoiceDate = DateTime.Now,
+                        BuyesOrderDate = InsertInvoice.BuyesOrderDate,
+                        BuyesOrderNo = InsertInvoice.BuyesOrderNo,
+                        DispatchThrough = InsertInvoice.DispatchThrough,
+                        Destination = InsertInvoice.Destination,
+                        Cgst = InsertInvoice.Cgst,
+                        Sgst = InsertInvoice.Sgst,
+                        Igst = InsertInvoice.Igst,
+                        TotalGst = InsertInvoice.TotalGst,
+                        TotalAmount = InsertInvoice.TotalAmount,
+                        CreatedOn = DateTime.Now,
+                        CreatedBy = InsertInvoice.CreatedBy,
+                    };
+                    Context.TblInvoices.Add(invoicemodel);
+                await Context.SaveChangesAsync();
+                response.Code = 200;
+                response.Message = "Invoice Generated successfully!";
+            }
+            catch (Exception ex)
+            {
+                response.Code = 500;
+                response.Message = "Error creating Invoice: " + ex.Message;
+            }
+            return response;
         }
     }
 }

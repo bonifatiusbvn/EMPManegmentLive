@@ -15,6 +15,7 @@ using EMPManegment.EntityModels.ViewModels.ProductMaster;
 using EMPManegment.Web.Models;
 using EMPManegment.EntityModels.ViewModels.VendorModels;
 using EMPManegment.EntityModels.ViewModels.OrderModels;
+using Newtonsoft.Json.Converters;
 
 namespace EMPManegment.Web.Controllers
 {
@@ -54,10 +55,32 @@ namespace EMPManegment.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> InvoiceDetails()
+        public IActionResult InvoiceDetails()
         {
-            return View();
+                return View();
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetInvoiceDetailsByOrderId(string OrderId)
+        {
+            try
+            {
+                List<OrderDetailView> order = new List<OrderDetailView>();
+                ApiResponseModel Response = await APIServices.GetAsync("","Invoice/CheckInvoiceNo?OrderId="+OrderId);
+                ApiResponseModel response = await APIServices.GetAsync("", "OrderDetails/GetOrderDetailsById?OrderId=" + OrderId);
+                if (response.code == 200 && Response.code == 200)
+                {
+                    order = JsonConvert.DeserializeObject<List<OrderDetailView>>(response.data.ToString());
+                    ViewBag.InvoiceNo = Response.data;
+                }
+                return View("InvoiceDetails", order);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         [HttpGet]
         public async Task<IActionResult> GenerateInvoiceNoById(Guid Id)
         {
@@ -112,18 +135,25 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
-        [HttpGet]
-        public async Task<IActionResult> GetInvoiceDetailsByOrderId(string OrderId)
+        [HttpPost]
+        public async Task<IActionResult> InsertMultipleInvoice()
         {
             try
             {
-                List<OrderDetailView> order = new List<OrderDetailView>();
-                ApiResponseModel response = await APIServices.GetAsync("", "OrderDetails/GetOrderDetailsById?OrderId=" + OrderId);
-                if (response.code == 200)
+                var InvoiceDetails = HttpContext.Request.Form["INVOICEDETAILS"];
+                var format = "dd/MM/yyyy"; // your datetime format
+                var dateTimeConverter = new IsoDateTimeConverter { DateTimeFormat = format };
+                var InsertDetails = JsonConvert.DeserializeObject<List<GenerateInvoiceModel>>(InvoiceDetails, dateTimeConverter);
+
+                ApiResponseModel postuser = await APIServices.PostAsync(InsertDetails, "Invoice/InsertMultipleInvoice");
+                if (postuser.code == 200)
                 {
-                    order = JsonConvert.DeserializeObject<List<OrderDetailView>>(response.data.ToString());
+                    return Ok(new { postuser.message });
                 }
-                return View("InvoiceDetails", order);
+                else
+                {
+                    return Ok(new { postuser.message });
+                }
             }
             catch (Exception ex)
             {

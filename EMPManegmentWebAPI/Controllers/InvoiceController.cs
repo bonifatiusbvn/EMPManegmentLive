@@ -1,4 +1,5 @@
 ﻿using EMPManegment.EntityModels.ViewModels.Invoice;
+using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.OrderModels;
 using EMPManegment.EntityModels.ViewModels.TaskModels;
 using EMPManegment.Inretface.Interface.OrderDetails;
@@ -11,6 +12,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PdfSharpCore;
 using PdfSharpCore.Pdf;
+using System.Net;
 using TheArtOfDev.HtmlRenderer.PdfSharp;
 
 namespace EMPManagment.API.Controllers
@@ -46,6 +48,39 @@ namespace EMPManagment.API.Controllers
             var invoiceList = await InvoiceMaster.GetInvoiceDetailsList();
             return Ok(new { code = 200, data = invoiceList.ToList() });
         }
+        [HttpGet]
+        [Route("CheckInvoiceNo")]
+        public IActionResult CheckInvoiceNo(string OrderId)
+        {
+            var checkInvoice = InvoiceMaster.CheckInvoiceNo(OrderId);
+            return Ok(new { code = 200, data = checkInvoice });
+        }
+        [HttpPost]
+        [Route("InsertInvoiceDetails")]
+        public async Task<IActionResult> InsertInvoiceDetails(GenerateInvoiceModel InvoiceList)
+        {
+            UserResponceModel response = new UserResponceModel();
+            try
+            {
+                var createInvoice = InvoiceMaster.InsertInvoiceDetails(InvoiceList);
+                if (createInvoice.Result.Code == 200)
+                {
+                    response.Code = (int)HttpStatusCode.OK;
+                    response.Message = createInvoice.Result.Message;
+                }
+                else
+                {
+                    response.Message = createInvoice.Result.Message;
+                    response.Code = (int)HttpStatusCode.NotFound;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return StatusCode(response.Code, response);
+        }
+
         [HttpPost]
         public async Task<IActionResult> GenerateInvoice(string InvoiceNo) 
         {

@@ -21,5 +21,6 @@ namespace EMPManegment.Inretface.Services.ProjectDetailsServices
         Task<IEnumerable<ProjectView>> GetProjectMember(Guid ProjectId);
         Task<UserResponceModel> AddDocumentToProject(ProjectDocumentView AddDocumentToProject);
         Task<IEnumerable<ProjectDocumentView>> GetProjectDocument(Guid ProjectId);
+        string CheckProjectName();
     }
 }

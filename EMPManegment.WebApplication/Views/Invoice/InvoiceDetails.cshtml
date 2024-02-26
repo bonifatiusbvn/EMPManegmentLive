@@ -1,4 +1,7 @@
 ﻿@model IEnumerable<EMPManegment.EntityModels.ViewModels.OrderModels.OrderDetailView>
+@using EMPManegment.Web.Models;
+ @inject IHttpContextAccessor Accessor;
+@inject UserSession _userSession
 @{
     ViewData["Title"] = "InvoiceDetails";
     Layout = "~/Views/Shared/_UserHomeLayout.cshtml";
@@ -67,22 +70,26 @@
                                         {
                                         <div class="col-lg-3 col-6">
                                             <p class="text-muted mb-2 text-uppercase fw-semibold">Invoice No</p>
-                                            <h5 class="fs-14 mb-0">@firstItem.OrderId</h5>
+                                            <input type="text" class="form-control" id="txtinvoiceid" value="@ViewBag.InvoiceNo" style="border:hidden;"/>
+                                            <input type="hidden" class="form-control" id="txtuserid" value="@_userSession.UserId" style="border:hidden;" />
+                                            <input type="hidden" class="form-control" id="txtprojectid" value="@UserSession.ProjectId" style="border:hidden;" />
                                         </div>
                                         <!--end col-->
                                         <div class="col-lg-3 col-6">
                                             <p class="text-muted mb-2 text-uppercase fw-semibold">Date</p>
-                                            <h5 class="fs-14 mb-0"><span id="invoice-date">@firstItem.OrderDate.ToShortDateString()</span></h5>
+                                            <h5 class="fs-14 mb-0" id="txtdate">@firstItem.OrderDate.ToShortDateString()</h5>
+                                            <h5 class="fs-14 mb-0" id="txtinvoicetype" hidden>@firstItem.Type</h5>
+                                            <h5 class="fs-14 mb-0" id="txtorderid" hidden>@firstItem.OrderId</h5>
                                         </div>
                                         <!--end col-->
                                         <div class="col-lg-3 col-6">
                                             <p class="text-muted mb-2 text-uppercase fw-semibold">Payment Status</p>
-                                            <span class="badge bg-success-subtle text-success fs-11" id="payment-status">@firstItem.PaymentStatus</span>
+                                            <span class="badge bg-success-subtle text-success fs-11" id="txtpaymentstatus">@firstItem.PaymentStatus</span>
                                         </div>
                                         <!--end col-->
                                         <div class="col-lg-3 col-6">
                                             <p class="text-muted mb-2 text-uppercase fw-semibold">Total Amount</p>
-                                            <h5 class="fs-14 mb-0">₹<span id="total-amount">@totalAmount</span></h5>
+                                            <h5 class="fs-14 mb-0">₹<span id="txttotalamount">@totalAmount</span></h5>
                                         </div>
                                         <!--end col-->
                                         }
@@ -98,18 +105,19 @@
                                     <div class="row g-3">
                                         <div class="col-6">
                                             <h6 class="text-muted text-uppercase fw-semibold mb-3">Billing Address</h6>
-                                            <p class="fw-medium mb-2" id="billing-name">@firstItem.CompanyName</p>
-                                            <p class="text-muted mb-1" id="billing-address-line-1">@firstItem.VendorAddress</p>
-                                            <p class="text-muted mb-1"><span>Email: </span><span id="billing-phone-no">@firstItem.VendorEmail</span></p>
-                                            <p class="text-muted mb-1"><span>Phone: +</span><span id="billing-phone-no">@firstItem.VendorContact</span></p>
+                                            <p class="fw-medium mb-2" id="txtcompanyname">@firstItem.CompanyName</p>
+                                            <p class="fw-medium mb-2" id="txtvendorid" hidden>@firstItem.VendorId</p>
+                                            <p class="text-muted mb-1" id="txtaddress">@firstItem.VendorAddress</p>
+                                            <p class="text-muted mb-1"><span>Email: </span><span id="txtemail">@firstItem.VendorEmail</span></p>
+                                            <p class="text-muted mb-1"><span>Phone: +</span><span id="txtcontect">@firstItem.VendorContact</span></p>
                                         </div>
                                         <!--end col-->
                                         <div class="col-6">
                                             <h6 class="text-muted text-uppercase fw-semibold mb-3">Shipping Address</h6>
-                                            <p class="fw-medium mb-2" id="shipping-name">@firstItem.CompanyName</p>
-                                            <p class="text-muted mb-1" id="billing-address-line-1">@firstItem.VendorAddress</p>
-                                            <p class="text-muted mb-1"><span>Email: </span><span id="billing-phone-no">@firstItem.VendorEmail</span></p>
-                                            <p class="text-muted mb-1"><span>Phone: +</span><span id="billing-phone-no">@firstItem.VendorContact</span></p>
+                                            <p class="fw-medium mb-2" id="txtshippingcompany">@firstItem.CompanyName</p>
+                                            <p class="text-muted mb-1" id="txtshippingaddress">@firstItem.VendorAddress</p>
+                                            <p class="text-muted mb-1"><span>Email: </span><span id="txtshippingemail">@firstItem.VendorEmail</span></p>
+                                            <p class="text-muted mb-1"><span>Phone: +</span><span id="txtshippingcontect">@firstItem.VendorContact</span></p>
                                         </div>
                                         <!--end col-->
                                     </div>
@@ -134,15 +142,16 @@
                                             <tbody id="products-list">
                                                 @foreach (var item in Model)
                                                 {
-                                                <tr>
+                                                <tr class="product">
                                                     <td class="text-start">
-                                                        <span class="fw-medium">@item.ProductName</span>
-                                                        <p class="text-muted mb-0">@item.ProductShortDescription</p>
+                                                        <span class="fw-medium" id="txtproductname">@item.ProductName</span>
+                                                        <span class="fw-medium" id="txtproductid" hidden>@item.ProductId</span>
+                                                        <p class="text-muted mb-0" id="txtdescription">@item.ProductShortDescription</p>
                                                     </td>
-                                                    <td>@item.PerUnitPrice</td>
-                                                    <td>@item.Quantity</td>
-                                                    <td>@item.PerUnitWithGstprice</td>
-                                                    <td class="text-end">@item.Total</td>
+                                                    <td id="txtperunitprice">@item.PerUnitPrice</td>
+                                                    <td id="txtquantity">@item.Quantity</td>
+                                                    <td id="txtperunitwithgstprice">@item.PerUnitWithGstprice</td>
+                                                    <td class="text-end" id="txttotal">@item.Total</td>
                                                 </tr>
                                                 }
                                             </tbody>
@@ -153,7 +162,7 @@
                                             <tbody>
                                                 <tr class="border-top border-top-dashed fs-15">
                                                     <th scope="row">Total Amount</th>
-                                                    <th class="text-end">₹@totalAmount</th>
+                                                    <th class="text-end" id="txttotalamount">₹@totalAmount</th>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -163,7 +172,7 @@
                                          @if (firstItem != null)
                                         {
                                         <h6 class="text-muted text-uppercase fw-semibold mb-3">Payment Details:</h6>
-                                        <p class="text-muted mb-1">Payment Method: <span class="fw-medium" id="payment-method">@firstItem.PaymentMethod</span></p>
+                                        <p class="text-muted mb-1">Payment Method: <span class="fw-medium" id="txtpaymentmethod">@firstItem.PaymentMethod</span></p>
                                         <p class="text-muted mb-1">Card Holder: <span class="fw-medium" id="card-holder-name">@firstItem.CompanyName</span></p>
                                         <p class="text-muted mb-1">Card Number: <span class="fw-medium" id="card-number">xxx xxxx xxxx 1234</span></p>
                                         <p class="text-muted">Total Amount: <span class="fw-medium" id="">₹ </span><span id="card-total-amount">@totalAmount</span></p>
@@ -184,7 +193,7 @@
                                     </div>
                                     <div class="hstack gap-2 justify-content-end d-print-none mt-4">
                                         <a href="javascript:window.print()" class="btn btn-soft-primary"><i class="ri-printer-line align-bottom me-1"></i> Print</a>
-                                        <a href="javascript:void(0);" class="btn btn-primary"><i class="ri-download-2-line align-bottom me-1"></i> Download</a>
+                                    <a class="btn btn-primary" href="#" onclick="InsertMultipleInvoice();"><i class="ri-download-2-line align-bottom me-1"></i> Generate Invoice</a>
                                     </div>
                                 </div>
                                 <!--end card-body-->
@@ -202,3 +211,5 @@
 
 
 <script src="~/UserHome/minimal/assets/js/pages/invoicedetails.js"></script>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/moduls/invoicemasterscript.js"></script>

@@ -11,5 +11,7 @@ public partial class TblPaymentType
 
     public DateTime CreatedOn { get; set; }
 
+    public virtual ICollection<TblCreditDebitMaster> TblCreditDebitMasters { get; set; } = new List<TblCreditDebitMaster>();
+
     public virtual ICollection<TblExpenseMaster> TblExpenseMasters { get; set; } = new List<TblExpenseMaster>();
 }
