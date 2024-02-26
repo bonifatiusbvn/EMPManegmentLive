@@ -187,6 +187,32 @@ $('#idStatus').change(function () {
 
 
 
+function downloadPDF() {
+
+    var htmlContent = document.getElementById('printableContent').innerHTML;
+    var form_data = new FormData();
+    form_data.append("DOWNLOADINVOICE", htmlContent);
+
+    $.ajax({
+        url: '/Invoice/DownloadPdf',
+        type: 'POST',
+        data: form_data,
+        contentType: false,
+        processData: false,
+        success: function (data) {
+            debugger
+            console.log('PDF generated successfully:', data);
+
+            window.location.href = data;
+        },
+        error: function (xhr, status, error) {
+
+            console.error(xhr.responseText);
+        }
+    });
+}
+
+
 
 
 
