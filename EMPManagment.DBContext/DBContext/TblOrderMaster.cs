@@ -37,7 +37,7 @@ public partial class TblOrderMaster
 
     public DateTime? DeliveryDate { get; set; }
 
-    public string? PaymentMethod { get; set; }
+    public int? PaymentMethod { get; set; }
 
     public string? PaymentStatus { get; set; }
 
@@ -46,6 +46,8 @@ public partial class TblOrderMaster
     public DateTime? CreatedOn { get; set; }
 
     public Guid? CreatedBy { get; set; }
+
+    public virtual TblPaymentMethodType? PaymentMethodNavigation { get; set; }
 
     public virtual TblProductDetailsMaster? Product { get; set; }
 

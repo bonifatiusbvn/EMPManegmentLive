@@ -59,4 +59,13 @@ namespace EMPManegment.EntityModels.ViewModels.OrderModels
         public string? VendorContact { get; set; }
         public string VendorAddress { get; set; } = null!;
     }
+    public class OrderResponseModel
+    {
+        public string? Message { get; set; }
+
+        public int Code { get; set; }
+
+        public List<OrderDetailView> Data { get; set; }
+
+    }
 }

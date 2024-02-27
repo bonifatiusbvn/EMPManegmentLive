@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -161,48 +162,42 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
             UserResponceModel response = new UserResponceModel();
             try
             {
-                var invoicemodel = new TblInvoice()
+                bool isInvoiceAlredyExists = Context.TblInvoices.Any(x => x.OrderId == InsertInvoice.OrderId);
+                if (isInvoiceAlredyExists == true)
                 {
-                    Id = Guid.NewGuid(),
-                    OrderId = InsertInvoice.OrderId,
-                    InvoiceType = InsertInvoice.InvoiceType,
-                    VandorId = InsertInvoice.VandorId,
-                    InvoiceNo = InsertInvoice.InvoiceNo,
-                    ProjectId = InsertInvoice.ProjectId,
-                    InvoiceDate = DateTime.Now,
-                    BuyesOrderDate = InsertInvoice.BuyesOrderDate,
-                    BuyesOrderNo = InsertInvoice.BuyesOrderNo,
-                    DispatchThrough = InsertInvoice.DispatchThrough,
-                    Destination = InsertInvoice.Destination,
-                    Cgst = InsertInvoice.Cgst,
-                    Sgst = InsertInvoice.Sgst,
-                    Igst = InsertInvoice.Igst,
-                    TotalGst = InsertInvoice.TotalGst,
-                    TotalAmount = InsertInvoice.TotalAmount,
-                    CreatedOn = DateTime.Now,
-                    CreatedBy = InsertInvoice.CreatedBy,
-                };
-
-                var craditdebit = new TblCreditDebitMaster()
+                    response.Message = "This Invoice Is already Generated";
+                    response.Data = InsertInvoice;
+                    response.Code = (int)HttpStatusCode.NotFound;
+                    response.Icone = "warning";
+                }
+                else
                 {
-                    VendorId = InsertInvoice.VandorId,
-                    Type = InsertInvoice.InvoiceType,
-                    InvoiceNo = InsertInvoice.InvoiceNo,
-                    Date = DateTime.Now,
-                    PaymentType = InsertInvoice.PaymentType,
-                    CreditDebitAmount = InsertInvoice.CreditDebitAmount,
-                    PendingAmount = InsertInvoice.PendingAmount,
-                    TotalAmount = InsertInvoice.TotalAmount,
-                    CreatedOn = DateTime.Now,
-                    CreatedBy = InsertInvoice.CreatedBy,
-                };
-
-
-                Context.TblInvoices.Add(invoicemodel);
-                Context.TblCreditDebitMasters.Add(craditdebit);
-                await Context.SaveChangesAsync();
-                response.Code = 200;
-                response.Message = "Invoice Generated successfully!";
+                    var invoicemodel = new TblInvoice()
+                    {
+                        Id = Guid.NewGuid(),
+                        OrderId = InsertInvoice.OrderId,
+                        InvoiceType = InsertInvoice.InvoiceType,
+                        VandorId = InsertInvoice.VandorId,
+                        InvoiceNo = InsertInvoice.InvoiceNo,
+                        ProjectId = InsertInvoice.ProjectId,
+                        InvoiceDate = DateTime.Now,
+                        BuyesOrderDate = InsertInvoice.BuyesOrderDate,
+                        BuyesOrderNo = InsertInvoice.BuyesOrderNo,
+                        DispatchThrough = InsertInvoice.DispatchThrough,
+                        Destination = InsertInvoice.Destination,
+                        Cgst = InsertInvoice.Cgst,
+                        Sgst = InsertInvoice.Sgst,
+                        Igst = InsertInvoice.Igst,
+                        TotalGst = InsertInvoice.TotalGst,
+                        TotalAmount = InsertInvoice.TotalAmount,
+                        CreatedOn = DateTime.Now,
+                        CreatedBy = InsertInvoice.CreatedBy,
+                    };
+                    Context.TblInvoices.Add(invoicemodel);
+                    await Context.SaveChangesAsync();
+                    response.Code = 200;
+                    response.Message = "Invoice Generated successfully!";
+                }
             }
             catch (Exception ex)
             {

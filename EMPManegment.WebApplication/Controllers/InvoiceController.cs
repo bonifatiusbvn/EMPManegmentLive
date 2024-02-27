@@ -153,11 +153,11 @@ namespace EMPManegment.Web.Controllers
                 ApiResponseModel postuser = await APIServices.PostAsync(InsertDetails, "Invoice/InsertInvoiceDetails");
                 if (postuser.code == 200)
                 {
-                    return Ok(new { postuser.message });
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
                 }
                 else
                 {
-                    return Ok(new { postuser.message });
+                    return new JsonResult(new { Message = string.Format(postuser.message), Icone = string.Format(postuser.Icone), Code = postuser.code });
                 }
             }
             catch (Exception ex)
