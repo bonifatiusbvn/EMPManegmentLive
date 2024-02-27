@@ -30,7 +30,7 @@ namespace EMPManegment.EntityModels.ViewModels.OrderModels
 
         public DateTime? DeliveryDate { get; set; }
 
-        public string? PaymentMethod { get; set; }
+        public int? PaymentMethod { get; set; }
 
         public string? PaymentStatus { get; set; }
 
