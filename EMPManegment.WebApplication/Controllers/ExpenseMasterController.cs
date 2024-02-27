@@ -91,16 +91,16 @@ namespace EMPManegment.Web.Controllers
                 var ExpenseDetails = new ExpenseDetailsView
                 {
                     UserId = _userSession.UserId,
-                    ExpenseType=Addexpense.ExpenseType,
-                    PaymentType=Addexpense.PaymentType,
-                    BillNumber=Addexpense.BillNumber,
-                    Description=Addexpense.Description,
-                    Date=Addexpense.Date,
-                    TotalAmount=Addexpense.TotalAmount,
-                    Image=filepath,
-                    Account=Addexpense.Account,
-                    IsPaid=Addexpense.IsPaid,
-                    IsApproved=Addexpense.IsApproved,
+                    ExpenseType = Addexpense.ExpenseType,
+                    PaymentType = Addexpense.PaymentType,
+                    BillNumber = Addexpense.BillNumber,
+                    Description = Addexpense.Description,
+                    Date = Addexpense.Date,
+                    TotalAmount = Addexpense.TotalAmount,
+                    Image = filepath,
+                    Account = Addexpense.Account,
+                    IsPaid = Addexpense.IsPaid,
+                    IsApproved = Addexpense.IsApproved,
                     CreatedBy = _userSession.UserId,
                 };
                 ApiResponseModel postuser = await APIServices.PostAsync(ExpenseDetails, "ExpenseMaster/AddExpenseDetails");
@@ -126,7 +126,7 @@ namespace EMPManegment.Web.Controllers
             ImageFile.CopyTo(stream);
         }
         [HttpGet]
-        public async Task<IActionResult> EditExpenseDetails(Guid ExpenseId)
+        public async Task<JsonResult> EditExpenseDetails(Guid ExpenseId)
         {
             try
             {

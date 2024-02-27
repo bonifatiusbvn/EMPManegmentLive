@@ -26,7 +26,7 @@ function GetPaymentTypeList() {
     $.ajax({
         url: '/ExpenseMaster/GetPaymentTypeList',
         success: function (result) {
-            debugger
+
             $.each(result, function (i, data) {
                 $('#txtpaymenttype').append('<Option value=' + data.id + '>' + data.type + '</Option>')
                 $('#Editpaymenttype').append('<Option value=' + data.id + '>' + data.type + '</Option>')
@@ -83,86 +83,42 @@ function AddExpenseDetails() {
         })
     }
 }
+function populateDropdown(elementId, options) {
+    var dropdown = $('#' + elementId);
+    dropdown.empty();
+    $.each(options, function (index, option) {
+        dropdown.append($('<option></option>').attr('value', option).text(option));
+    });
+}
+
 function EditExpenseDetails(Id) {
-    debugger
     $.ajax({
         url: '/ExpenseMaster/EditExpenseDetails?ExpenseId=' + Id,
-        type: 'Get',
-        datatype: 'json',
+        type: "Get",
+        contentType: 'application/json;charset=utf-8;',
+        dataType: 'json',
         success: function (response) {
-            debugger;
+            debugger
             $('#EditExpenseModel').modal('show');
-            $('#Editexpenseid').val(response.id);
-            $('#EditUserId').val(response.userId);
             $('#Editexpensetype').val(response.expenseType);
             $('#EditDescription').val(response.description);
             $('#Editbillno').val(response.billNumber);
             $('#Editdate').val(response.date);
             $('#Edittotalamount').val(response.totalAmount);
-            $('#Editimage').val(response.image);
+            $('#Editaccount').val(response.account);
+            $('#Editpaymenttype').val(response.paymentType);
+            $('#IsPaid').val(response.isPaid.toString());
+            $('#IsApproved').val(response.isApproved.toString());
 
-            // Populate Expense Type dropdown
-            var expenseTypeDropdown = $('#Editexpensetype');
-            expenseTypeDropdown.empty(); // Clear existing options
-
-           debugger
-            expenseTypeDropdown.append($('<option>').text('---Select Expense Type---').attr('disabled', 'true').attr('selected', 'true'));
-
-            // Populate options based on response data
-            $.each(response.expenseTypes, function (index, expenseType) {
-                expenseTypeDropdown.append($('<option>').text(expenseType.name).attr('value', expenseType.id));
-            });
-
-            debugger
-            expenseTypeDropdown.val(response.expenseType);
-
-            // Populate Account dropdown
-            var accountDropdown = $('#Editaccount');
-            accountDropdown.empty();
-            accountDropdown.append($('<option>').text('Select Account Type').attr('disabled', 'true').attr('selected', 'true'));
-            accountDropdown.append($('<option>').text('Credit').attr('value', 'Credit'));
-            accountDropdown.append($('<option>').text('Debit').attr('value', 'Debit'));
-
-            // Set the selected value for the account dropdown
-            accountDropdown.val(response.account);
-
-           debugger
-            var paymentTypeDropdown = $('#Editpaymenttype');
-            paymentTypeDropdown.empty();
-            paymentTypeDropdown.append($('<option>').text('---Select Payment Type---').attr('disabled', 'true').attr('selected', 'true'));
-
-            // Set the selected value for the payment type dropdown
-            paymentTypeDropdown.val(response.paymentType);
-
-            // Populate Is Paid dropdown
-            var isPaidDropdown = $('#Editispaid');
-            isPaidDropdown.empty();
-            isPaidDropdown.append($('<option>').text('Is Paid').attr('disabled', 'true').attr('selected', 'true'));
-            isPaidDropdown.append($('<option>').text('True').attr('value', 'True'));
-            isPaidDropdown.append($('<option>').text('False').attr('value', 'False'));
-
-            // Set the selected value for the is paid dropdown
-            isPaidDropdown.val(response.isPaid);
-
-            // Populate Is Approved dropdown
-            var isApprovedDropdown = $('#Editisapproved');
-            isApprovedDropdown.empty();
-            isApprovedDropdown.append($('<option>').text('Is Approved').attr('disabled', 'true').attr('selected', 'true'));
-            isApprovedDropdown.append($('<option>').text('True').attr('value', 'True'));
-            isApprovedDropdown.append($('<option>').text('False').attr('value', 'False'));
-
-            // Set the selected value for the is approved dropdown
-            isApprovedDropdown.val(response.isApproved);
-
-            // ...
-            // Continue setting other values as you did before
         },
-
         error: function () {
             alert("Data not found");
         }
-    })
+    });
 }
+
+
+
 //function UpdateExpenseDetails() {
 //    if ($('#frmtaskdetails').valid()) {
 //        var formData = new FormData();
