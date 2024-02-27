@@ -26,8 +26,6 @@ namespace EMPManegment.EntityModels.ViewModels.Invoice
 
         public DateTime? BuyesOrderDate { get; set; }
 
-        public Guid ProductId { get; set; }
-
         public string DispatchThrough { get; set; } = null!;
 
         public string Destination { get; set; } = null!;

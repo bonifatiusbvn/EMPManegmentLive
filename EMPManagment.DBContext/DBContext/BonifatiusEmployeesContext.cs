@@ -144,7 +144,7 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.Property(e => e.TotalAmount).HasColumnType("decimal(18, 0)");
             entity.Property(e => e.Type).HasMaxLength(10);
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
-            entity.Property(e => e.VendorName).HasMaxLength(10);
+
 
             entity.HasOne(d => d.PaymentTypeNavigation).WithMany(p => p.TblCreditDebitMasters)
                 .HasForeignKey(d => d.PaymentType)
