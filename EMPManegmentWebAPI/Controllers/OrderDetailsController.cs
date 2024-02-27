@@ -1,6 +1,7 @@
 ﻿using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.OrderModels;
 using EMPManegment.Inretface.EmployeesInterface.AddEmployee;
+using EMPManegment.Inretface.Interface.InvoiceMaster;
 using EMPManegment.Inretface.Services.OrderDetails;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -73,8 +74,28 @@ namespace EMPManagment.API.Controllers
         [Route("GetOrderDetailsById")]
         public async Task<IActionResult> GetOrderDetailsById(string OrderId)
         {
-           List<OrderDetailView> orderdetails = await OrderDetails.GetOrderDetailsById(OrderId);
-            return Ok(new { code = 200, data = orderdetails});
+            //List<OrderDetailView> orderdetails = await OrderDetails.GetOrderDetailsById(OrderId);
+            // return Ok(new { code = 200, data = orderdetails});
+            OrderResponseModel response = new OrderResponseModel();
+            try
+            {
+                var orderdetails = OrderDetails.GetOrderDetailsById(OrderId);
+                if (orderdetails.Result.Code == 404)
+                {
+                    response.Message = orderdetails.Result.Message;
+                    response.Code = (int)HttpStatusCode.NotFound;
+                }
+                else
+                {
+                    response.Data = orderdetails.Result.Data;
+                    response.Code = (int)HttpStatusCode.OK;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return StatusCode(response.Code, response);
         }
         [HttpPost]
         [Route("InsertMultipleOrder")]

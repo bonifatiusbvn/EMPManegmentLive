@@ -37,6 +37,8 @@ public partial class TblInvoice
 
     public decimal? TotalAmount { get; set; }
 
+    public int? PaymentMethod { get; set; }
+
     public DateTime CreatedOn { get; set; }
 
     public Guid CreatedBy { get; set; }
@@ -44,6 +46,8 @@ public partial class TblInvoice
     public DateTime? UpdatedOn { get; set; }
 
     public Guid? UpdatedBy { get; set; }
+
+    public virtual TblPaymentMethodType? PaymentMethodNavigation { get; set; }
 
     public virtual TblProjectMaster? Project { get; set; }
 }

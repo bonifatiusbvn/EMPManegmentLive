@@ -81,8 +81,8 @@ function InsertInvoiceDetails() {debugger
         dataType: 'json',
         contentType: false,
         processData: false,
-        success: function (result) {
-            if (result.message != null) {
+        success: function (result) {debugger
+            if (result.message == "Invoice Generated successfully!") {
                 Swal.fire({
                     title: result.message,
                     icon: 'success',
@@ -91,6 +91,14 @@ function InsertInvoiceDetails() {debugger
                 }).then(function () {
                     window.location = '/OrderMaster/CreateOrder';
                 });
+            }
+            else {debugger
+                Swal.fire({
+                    title: result.message,
+                    icon: result.icone,
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'OK',
+                })
             }
         },
         error: function (xhr, status, error) {

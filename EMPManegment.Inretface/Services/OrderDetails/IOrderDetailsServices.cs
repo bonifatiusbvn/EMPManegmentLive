@@ -14,7 +14,7 @@ namespace EMPManegment.Inretface.Services.OrderDetails
         Task<IEnumerable<OrderDetailView>> GetOrderList();
         Task<List<OrderDetailView>> GetOrderDetailsByStatus(string DeliveryStatus);
         string CheckOrder();
-        Task<List<OrderDetailView>> GetOrderDetailsById(string OrderId);
+        Task<OrderResponseModel> GetOrderDetailsById(string OrderId);
         Task<UserResponceModel> InsertMultipleOrder(List<OrderView> InsertOrder);
     }
 }

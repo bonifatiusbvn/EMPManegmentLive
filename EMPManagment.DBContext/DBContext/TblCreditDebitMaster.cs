@@ -9,8 +9,6 @@ public partial class TblCreditDebitMaster
 
     public Guid? VendorId { get; set; }
 
-    public string? VendorName { get; set; }
-
     public string? Type { get; set; }
 
     public string? InvoiceNo { get; set; }
@@ -25,6 +23,8 @@ public partial class TblCreditDebitMaster
 
     public decimal? TotalAmount { get; set; }
 
+    public int? PaymentMethod { get; set; }
+
     public DateTime? CreatedOn { get; set; }
 
     public Guid? CreatedBy { get; set; }
@@ -32,6 +32,8 @@ public partial class TblCreditDebitMaster
     public DateTime? UpdatedOn { get; set; }
 
     public Guid? UpdatedBy { get; set; }
+
+    public virtual TblPaymentMethodType? PaymentMethodNavigation { get; set; }
 
     public virtual TblPaymentType? PaymentTypeNavigation { get; set; }
 

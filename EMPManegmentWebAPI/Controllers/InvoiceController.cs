@@ -72,6 +72,7 @@ namespace EMPManagment.API.Controllers
                 {
                     response.Message = createInvoice.Result.Message;
                     response.Code = (int)HttpStatusCode.NotFound;
+                    response.Icone = createInvoice.Result.Icone;
                 }
             }
             catch (Exception ex)

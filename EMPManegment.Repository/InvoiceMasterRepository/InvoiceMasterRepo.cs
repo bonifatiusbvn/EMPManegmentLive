@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -161,6 +162,16 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
             UserResponceModel response = new UserResponceModel();
             try
             {
+                bool isInvoiceAlredyExists = Context.TblInvoices.Any(x => x.OrderId == InsertInvoice.OrderId);
+                if (isInvoiceAlredyExists == true)
+                {
+                    response.Message = "This Invoice Is already Generated";
+                    response.Data = InsertInvoice;
+                    response.Code = (int)HttpStatusCode.NotFound;
+                    response.Icone = "warning";
+                }
+                else
+                {
                     var invoicemodel = new TblInvoice()
                     {
                         Id = Guid.NewGuid(),
@@ -183,9 +194,10 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                         CreatedBy = InsertInvoice.CreatedBy,
                     };
                     Context.TblInvoices.Add(invoicemodel);
-                await Context.SaveChangesAsync();
-                response.Code = 200;
-                response.Message = "Invoice Generated successfully!";
+                    await Context.SaveChangesAsync();
+                    response.Code = 200;
+                    response.Message = "Invoice Generated successfully!";
+                }
             }
             catch (Exception ex)
             {
