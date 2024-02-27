@@ -2,6 +2,7 @@
 using EMPManagment.Web.Models.API;
 using EMPManegment.EntityModels.ViewModels.ExpenseMaster;
 using EMPManegment.EntityModels.ViewModels.Invoice;
+using EMPManegment.EntityModels.ViewModels.ProductMaster;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.ProductMaster;
 using EMPManegment.EntityModels.ViewModels.VendorModels;
@@ -123,6 +124,44 @@ namespace EMPManegment.Web.Controllers
         {
             FileStream stream = new FileStream(ImagePath, FileMode.Create);
             ImageFile.CopyTo(stream);
+        }
+        [HttpGet]
+        public async Task<IActionResult> EditExpenseDetails(Guid ExpenseId)
+        {
+            try
+            {
+                ExpenseDetailsView ExpenseDetails = new ExpenseDetailsView();
+                ApiResponseModel response = await APIServices.GetAsync("", "ExpenseMaster/GetExpenseDetailById?Id=" + ExpenseId);
+                if (response.code == 200)
+                {
+                    ExpenseDetails = JsonConvert.DeserializeObject<ExpenseDetailsView>(response.data.ToString());
+                }
+                return new JsonResult(ExpenseDetails);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        [HttpPost]
+        public async Task<IActionResult> UpdateExpenseDetails(ExpenseDetailsView ExpenseDetails)
+        {
+            try
+            {
+                ApiResponseModel postuser = await APIServices.PostAsync(ExpenseDetails, "ExpenseMaster/UpdateExpenseDetails");
+                if (postuser.code == 200)
+                {
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
+                }
+                else
+                {
+                    return new JsonResult(new { Message = string.Format(postuser.message), Code = postuser.code });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }

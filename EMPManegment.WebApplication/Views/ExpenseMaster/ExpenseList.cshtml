@@ -4,12 +4,12 @@
     Layout = "~/Views/Shared/_UserHomeLayout.cshtml";
 }
 
-<div class="row">
+
     <div class="col-lg-12">
         <div class="card" id="invoiceList">
             <div class="card-header border-0">
                 <div class="d-flex align-items-center">
-                    <h5 class="card-title mb-0 flex-grow-1">Invoices</h5>
+                    <h5 class="card-title mb-0 flex-grow-1">Expense</h5>
                     <div class="flex-shrink-0">
                         <div class="d-flex gap-2 flex-wrap">
                             <button class="btn btn-primary" id="remove-actions"><i class="ri-delete-bin-2-line"></i></button>
@@ -18,6 +18,119 @@
                     </div>
                 </div>
             </div>
+        <!--Edit Expense Modal -->
+        <div class="modal fade zoomIn" id="EditExpenseModel" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class=" modal-dialog modal-dialog-centered modal-lg">
+                <div class="modal-content border-0">
+                    <div class="modal-header bg-primary-subtle p-3">
+                        <h5 class="modal-title" id="editModalLabel">Edit Expense Details</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="editexpensedetails">
+                           
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <label for="txtexpensetype" class="form-label">Expense Type</label>
+                                        <select class="form-control" id="Editexpensetype" name="Editexpensetype">
+                                            <option selected disabled value="">---Select Expense Type---</option>
+                                        </select>
+                                        <input type="hidden" class="text-muted text-uppercase fw-semibold" id="Editexpensetypeid" />
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Description</label>
+                                        <input type="text" id="EditDescription" class="form-control" name="txtDescription" @* placeholder="Enter Description" *@ />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Bill Number</label>
+                                        <input type="text" id="Editbillno" class="form-control" name="txtbillno" @* placeholder="Enter Bill Number" *@ />
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Date</label>
+                                        <input type="datetime-local" id="Editdate" class="form-control" name="txtdate" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Total Amount</label>
+                                        <input type="text" id="Edittotalamount" class="form-control" name="txttotalamount" @* placeholder="Enter Amount" *@ />
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Image</label>
+                                        <input type="file" id="Editimage" class="form-control" name="txtimage" @* placeholder="Enter Image" *@ />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Account</label>
+                                        <select class="form-control" id="Editaccount">
+                                            <option selected disabled value="">Select Account Type</option>
+                                            <option value="Credit">Credit</option>
+                                            <option value="Dabit">Dabit</option>
+                                        </select>
+                                        <input type="hidden" id="Editaccountid" class="form-control" @* placeholder="Enter Account" *@ />
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <label for="txtpaymenttype" class="form-label">Payment Type</label>
+                                        <select class="form-control" id="Editpaymenttype" name="Edittxtpaymenttype">
+                                            <option selected disabled value="">---Select Payment Type---</option>
+                                        </select>
+                                        <input type="hidden" class="text-muted text-uppercase fw-semibold" id="Editpaymenttypeid" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Is Paid?</label>
+                                        <select class="form-control" id="Editispaid">
+                                            <option selected disabled value="">Is Paid</option>
+                                            <option value="True">True</option>
+                                            <option value="False">False</option>
+                                        </select>
+                                        <input type="hidden" id="editispaidid" class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Is Approved?</label>
+                                        <select class="form-control" id="Editisapproved">
+                                            <option selected disabled value="">Is Approved</option>
+                                            <option value="True">True</option>
+                                            <option value="False">False</option>
+                                        </select>
+                                        <input type="hidden" id="editisapprovedid" class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light" id="close-modal" data-bs-dismiss="modal" onclick="ClearTextBox()">Close</button>
+                        <button class="btn btn-warning m-1" onclick="UpdateExpenseDetails()" id="btnUpdate">Update</button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--end Edit Expense modal-->
             <div class="card-body bg-light-subtle border border-dashed border-start-0 border-end-0">
                 <form>
                     <div class="row g-3">
@@ -93,7 +206,7 @@
                                                     </a>
                                                 </li>
                                                 <li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">
-                                                    <a href="#showModal" onclick="EditProductDetails('@item.Id')" data-bs-toggle="modal" class="text-primary d-inline-block edit-item-btn">
+                                                            <a onclick="EditExpenseDetails('@item.Id')" data-bs-toggle="modal" class="text-primary d-inline-block edit-item-btn">
                                                         <i class="ri-pencil-fill fs-16"></i>
                                                     </a>
                                                 </li>
@@ -264,9 +377,10 @@
             </div>
         </div>
         <!--end modal-->
+        
     </div>
     <!--end col-->
-</div>
+
 <!--end row-->
 <style>
     #txtexpensetype-error, #txtDescription-error, #txtbillno-error,

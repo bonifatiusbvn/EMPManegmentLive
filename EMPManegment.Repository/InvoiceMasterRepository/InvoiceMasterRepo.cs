@@ -32,15 +32,15 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                 var LastInvoiceId = Context.TblInvoices.OrderByDescending(e => e.CreatedOn).FirstOrDefault();
                 string InvoiceId;
                 var invoice = (from a in Context.TblOrderMasters.Where(x => x.OrderId == OrderId)
-                           join b in Context.TblProjectMasters
-                           on a.ProjectId equals b.ProjectId
-                           select new CheckInvoiceView
-                           {
-                               OrderId=a.OrderId,
-                               ProjectId = a.ProjectId,
-                               ProjectName=b.ProjectName
-                           }).FirstOrDefault();
-                
+                               join b in Context.TblProjectMasters
+                               on a.ProjectId equals b.ProjectId
+                               select new CheckInvoiceView
+                               {
+                                   OrderId = a.OrderId,
+                                   ProjectId = a.ProjectId,
+                                   ProjectName = b.ProjectName
+                               }).FirstOrDefault();
+
                 if (LastInvoiceId == null)
                 {
                     InvoiceId = "BTPL/INVOICE/" + invoice.ProjectName + "/23-24-001";
@@ -77,7 +77,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                            select new InvoiceViewModel
                            {
                                Id = a.Id,
-                               InvoiceNo=a.InvoiceNo,
+                               InvoiceNo = a.InvoiceNo,
                                VendorName = b.VendorCompany,
                                VandorId = a.VandorId,
                                //ProductName = c.ProductName,
@@ -87,16 +87,16 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                                //TotalGst=c.Gst,
                                DispatchThrough = a.DispatchThrough,
                                Destination = a.Destination,
-                               Cgst=a.Cgst,
-                               Igst=a.Igst,
-                               Sgst=a.Sgst,
+                               Cgst = a.Cgst,
+                               Igst = a.Igst,
+                               Sgst = a.Sgst,
                                BuyesOrderNo = a.BuyesOrderNo,
-                               BuyesOrderDate=a.BuyesOrderDate,
-                               TotalAmount=a.TotalAmount,
-                               CreatedOn=a.CreatedOn,
+                               BuyesOrderDate = a.BuyesOrderDate,
+                               TotalAmount = a.TotalAmount,
+                               CreatedOn = a.CreatedOn,
                                CreatedBy = a.CreatedBy,
-                               UpdatedOn=a.UpdatedOn,
-                               UpdatedBy=a.UpdatedBy,
+                               UpdatedOn = a.UpdatedOn,
+                               UpdatedBy = a.UpdatedBy,
                                //PerUnitPrice=c.PerUnitPrice,
                                //PaymentMethod = d.PaymentMethod,
                                //PaymentStatus = d.PaymentStatus,

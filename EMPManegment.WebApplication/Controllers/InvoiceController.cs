@@ -62,7 +62,7 @@ namespace EMPManegment.Web.Controllers
         [HttpGet]
         public IActionResult InvoiceDetails()
         {
-                return View();
+            return View();
         }
 
         [HttpGet]
@@ -71,7 +71,7 @@ namespace EMPManegment.Web.Controllers
             try
             {
                 List<OrderDetailView> order = new List<OrderDetailView>();
-                ApiResponseModel Response = await APIServices.GetAsync("","Invoice/CheckInvoiceNo?OrderId="+OrderId);
+                ApiResponseModel Response = await APIServices.GetAsync("", "Invoice/CheckInvoiceNo?OrderId=" + OrderId);
                 ApiResponseModel response = await APIServices.GetAsync("", "OrderDetails/GetOrderDetailsById?OrderId=" + OrderId);
                 if (response.code == 200 && Response.code == 200)
                 {
@@ -146,7 +146,7 @@ namespace EMPManegment.Web.Controllers
             try
             {
                 var InvoiceDetails = HttpContext.Request.Form["INVOICEDETAILS"];
-                var format = "dd/MM/yyyy"; 
+                var format = "dd/MM/yyyy";
                 var dateTimeConverter = new IsoDateTimeConverter { DateTimeFormat = format };
                 var InsertDetails = JsonConvert.DeserializeObject<GenerateInvoiceModel>(InvoiceDetails, dateTimeConverter);
 
@@ -198,5 +198,10 @@ namespace EMPManegment.Web.Controllers
             return File(fileContent, "application/pdf", "document.pdf");
         }
 
+        [HttpGet]
+        public IActionResult CreditDebitListView()
+        {
+            return View();
+        }
     }
 }
