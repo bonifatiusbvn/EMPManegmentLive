@@ -106,7 +106,7 @@ namespace EMPManagment.API.Controllers
         {
             try
             {
-                var vendorInloviceList = InvoiceMaster.GetInvoiceListByVendorId(Vid);
+                IEnumerable<InvoiceViewModel> vendorInloviceList =await InvoiceMaster.GetInvoiceListByVendorId(Vid);
                 return Ok(new { code = 200, data = vendorInloviceList });
             }
             catch (Exception ex)

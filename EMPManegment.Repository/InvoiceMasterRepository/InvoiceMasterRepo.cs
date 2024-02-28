@@ -279,32 +279,12 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                                                              select new InvoiceViewModel
                                                              {
                                                                  Id = a.Id,
-                                                                 InvoiceNo = a.InvoiceNo,
+                                                                 OrderId = a.OrderId,
                                                                  VendorName = b.VendorCompany,
-                                                                 VandorId = a.VandorId,
-                                                                 //ProductName = c.ProductName,
-                                                                 //ProductDetails = c.ProductShortDescription,
-                                                                 //HSN = c.Hsn,
-                                                                 //Price = c.PerUnitPrice,
-                                                                 //TotalGst=c.Gst,
-                                                                 DispatchThrough = a.DispatchThrough,
-                                                                 Destination = a.Destination,
-                                                                 Cgst = a.Cgst,
-                                                                 Igst = a.Igst,
-                                                                 Sgst = a.Sgst,
-                                                                 BuyesOrderNo = a.BuyesOrderNo,
-                                                                 BuyesOrderDate = a.BuyesOrderDate,
+                                                                 VandorId = b.Vid,
+                                                                 Date = a.InvoiceDate,
+                                                                 TotalGst = a.TotalGst,
                                                                  TotalAmount = a.TotalAmount,
-                                                                 CreatedOn = a.CreatedOn,
-                                                                 CreatedBy = a.CreatedBy,
-                                                                 UpdatedOn = a.UpdatedOn,
-                                                                 UpdatedBy = a.UpdatedBy,
-                                                                 //PerUnitPrice=c.PerUnitPrice,
-                                                                 //PaymentMethod = d.PaymentMethod,
-                                                                 //PaymentStatus = d.PaymentStatus,
-                                                                 //Quantity = d.Quantity,
-                                                                 //TotalAmountWithQuantity = d.Total,
-
                                                              });
                 return invoiceList;
             }
