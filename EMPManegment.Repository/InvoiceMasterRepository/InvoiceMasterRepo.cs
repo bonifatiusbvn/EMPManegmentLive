@@ -1,4 +1,5 @@
 ﻿using EMPManagment.API;
+using EMPManegment.EntityModels.ViewModels.ExpenseMaster;
 using EMPManegment.EntityModels.ViewModels.Invoice;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.OrderModels;
@@ -14,6 +15,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace EMPManegment.Repository.InvoiceMasterRepository
 {
@@ -62,6 +64,34 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
             catch (Exception ex)
             {
                 throw ex;
+            }
+        }
+
+        public async Task<IEnumerable<CreditDebitView>> GetCreditDebitListView()
+        {
+            try
+            {
+                IEnumerable<CreditDebitView> Payment = Context.TblCreditDebitMasters.ToList().Select(a => new CreditDebitView
+                {
+                    Id = a.Id,
+                    VendorId = a.VendorId,
+                    Type = a.Type,
+                    InvoiceNo = a.InvoiceNo,
+                    Date = a.Date,
+                    PaymentType = a.PaymentType,
+                    CreditDebitAmount = a.CreditDebitAmount,
+                    PendingAmount = a.PendingAmount,
+                    TotalAmount = a.TotalAmount,
+                    CreatedOn = a.CreatedOn,
+                    CreatedBy = a.CreatedBy,
+                    UpdatedOn = a.UpdatedOn,
+                    UpdatedBy = a.UpdatedBy,
+                });
+                return Payment;
+            }
+            catch (Exception )
+            {
+                throw ;
             }
         }
 
