@@ -87,7 +87,7 @@ function InsertInvoiceDetails() {
     };
     var form_data = new FormData();
     form_data.append("INVOICEDETAILS", JSON.stringify(objData));
-    
+
     $.ajax({
         url: '/Invoice/InsertInvoiceDetails',
         type: 'POST',
@@ -96,7 +96,7 @@ function InsertInvoiceDetails() {
         contentType: false,
         processData: false,
         success: function (result) {
-            
+
             if (result.message == "Invoice Generated successfully!") {
                 Swal.fire({
                     title: result.message,
@@ -108,7 +108,7 @@ function InsertInvoiceDetails() {
                 });
             }
             else {
-                
+
                 Swal.fire({
                     title: result.message,
                     icon: result.icone,

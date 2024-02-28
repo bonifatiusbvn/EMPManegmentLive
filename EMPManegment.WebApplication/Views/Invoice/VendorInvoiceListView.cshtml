@@ -1,4 +1,5 @@
-﻿@{
+﻿@model IEnumerable<EMPManegment.EntityModels.ViewModels.Invoice.InvoiceViewModel>
+@{
     ViewData["Title"] = "VendorInvoiceListView";
     Layout = "~/Views/Shared/_UserHomeLayout.cshtml";
 }
@@ -205,12 +206,12 @@
                 <thead class="table-light text-muted">
                     <tr>
                         <th class="sort" data-sort="name" scope="col" style="width: 60px;"></th>
-                        <th class="sort" data-sort="date" scope="col">Timestamp</th>
-                        <th class="sort" data-sort="currency_name" scope="col">Currency</th>
-                        <th class="sort" data-sort="form_name" scope="col">Form</th>
-                        <th class="sort" data-sort="to_name" scope="col">To</th>
-                        <th class="sort" data-sort="details" scope="col">Details</th>
-                        <th class="sort" data-sort="transaction_id" scope="col">Transaction ID</th>
+                        <th class="sort" data-sort="date" scope="col">VendorName</th>
+                        <th class="sort" data-sort="currency_name" scope="col">Type</th>
+                        <th class="sort" data-sort="form_name" scope="col">InvoiceNo</th>
+                        <th class="sort" data-sort="to_name" scope="col">Date</th>
+                        <th class="sort" data-sort="details" scope="col">GST</th>
+                        <th class="sort" data-sort="transaction_id" scope="col">Amount</th>
                         <th class="sort" data-sort="type" scope="col">Type</th>
                         <th class="sort" data-sort="amount" scope="col">Amount</th>
                         <th class="sort" data-sort="status" scope="col">Status</th>
@@ -218,306 +219,32 @@
                     <!--end tr-->
                 </thead>
                 <tbody class="list form-check-all">
-                    <tr>
-                        <td class="id" style="display:none;"><a href="javascript:void(0);" class="fw-medium link-primary">#VZ001</a></td>
-                        <td>
-                            <div class="avatar-xs">
-                                <div class="avatar-title bg-danger-subtle text-danger rounded-circle fs-16">
-                                    <i class="ri-arrow-right-up-fill"></i>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="id" style="display:none;"><a href="javascript:void(0);" class="fw-medium link-primary">#VZ001</a></td>
+                            <td>
+                                <div class="avatar-xs">
+                                    <div class="avatar-title bg-danger-subtle text-danger rounded-circle fs-16">
+                                        <i class="ri-arrow-right-up-fill"></i>
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
-                        <td class="date">24 Dec, 2021 <small class="text-muted">08:58AM</small></td>
-                        <td class="currency_name">
-                            <div class="d-flex align-items-center">
-                                <img src="assets/images/svg/crypto-icons/btc.svg" alt="" class="avatar-xxs me-2">
-                                BTC
-                            </div>
-                        </td>
-                        <td class="form_name">Wallet</td>
-                        <td class="to_name">Thomas Taylor</td>
-                        <td class="details">Membership Fees</td>
-                        <td class="transaction_id">16b1d9234b61e8778d9e3588f20</td>
-                        <td class="type">Withdraw</td>
-                        <td>
-                            <h6 class="text-danger mb-1 amount">-142.35 BTC</h6>
-                            <p class="text-muted mb-0">$697.88k</p>
-                        </td>
-                        <td class="status">
-                            <span class="badge bg-primary-subtle text-primary fs-11"><i class="ri-time-line align-bottom"></i> Processing</span>
-                        </td>
-                    </tr>
-                    <!--end tr-->
-                    <tr>
-                        <td class="id" style="display:none;"><a href="javascript:void(0);" class="fw-medium link-primary">#VZ002</a></td>
-                        <td>
-                            <div class="avatar-xs">
-                                <div class="avatar-title bg-success-subtle text-success rounded-circle fs-16">
-                                    <i class="ri-arrow-left-down-fill"></i>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="date">16 Dec, 2021 <small class="text-muted">10:32PM</small></td>
-                        <td class="currency_name">
-                            <div class="d-flex align-items-center">
-                                <img src="assets/images/svg/crypto-icons/eth.svg" alt="" class="avatar-xxs me-2">
-                                ETH
-                            </div>
-                        </td>
-                        <td class="form_name">Tonya Noble</td>
-                        <td class="to_name">Wallet</td>
-                        <td class="details">Spring Telephone Network</td>
-                        <td class="transaction_id">0a4b5e0e15d70ce79809eabbe</td>
-                        <td class="type">Deposit</td>
-                        <td>
-                            <h6 class="text-success mb-1 amount">+342.35 ETH</h6>
-                            <p class="text-muted mb-0">$14565.35</p>
-                        </td>
-                        <td class="status">
-                            <span class="badge bg-success-subtle text-success fs-11"><i class="ri-checkbox-circle-line align-bottom"></i> Success</span>
-                        </td>
-                    </tr>
-                    <!--end tr-->
-                    <tr>
-                        <td class="id" style="display:none;"><a href="javascript:void(0);" class="fw-medium link-primary">#VZ003</a></td>
-                        <td>
-                            <div class="avatar-xs">
-                                <div class="avatar-title bg-success-subtle text-success rounded-circle fs-16">
-                                    <i class="ri-arrow-left-down-fill"></i>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="date">04 Jan, 2022 <small class="text-muted">02:24AM</small></td>
-                        <td class="currency_name">
-                            <div class="d-flex align-items-center">
-                                <img src="assets/images/svg/crypto-icons/eur.svg" alt="" class="avatar-xxs me-2">
-                                EUR
-                            </div>
-                        </td>
-                        <td class="form_name">Nancy Martino</td>
-                        <td class="to_name">Wallet</td>
-                        <td class="details">Funding Purse with Payment Check</td>
-                        <td class="transaction_id">cca3da2b7711985361825f615e9</td>
-                        <td class="type">Deposit</td>
-                        <td>
-                            <h6 class="text-success mb-1 amount">+174.23 EUR</h6>
-                            <p class="text-muted mb-0">$354.14</p>
-                        </td>
-                        <td class="status">
-                            <span class="badge bg-danger-subtle text-danger fs-11"><i class="ri-close-circle-line align-bottom"></i> Failed</span>
-                        </td>
-                    </tr>
-                    <!--end tr-->
-                    <tr>
-                        <td class="id" style="display:none;"><a href="javascript:void(0);" class="fw-medium link-primary">#VZ004</a></td>
-                        <td>
-                            <div class="avatar-xs">
-                                <div class="avatar-title bg-danger-subtle text-danger rounded-circle fs-16">
-                                    <i class="ri-arrow-right-up-fill"></i>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="date">28 Oct, 2021 <small class="text-muted">11:42AM</small></td>
-                        <td class="currency_name">
-                            <div class="d-flex align-items-center">
-                                <img src="assets/images/svg/crypto-icons/gbp.svg" alt="" class="avatar-xxs me-2">
-                                GBP
-                            </div>
-                        </td>
-                        <td class="form_name">Wallet</td>
-                        <td class="to_name">Michael Morris</td>
-                        <td class="details">British Pound Sterling Block</td>
-                        <td class="transaction_id">062e0e0123f2b1e9862f659c28</td>
-                        <td class="type">Withdraw</td>
-                        <td>
-                            <h6 class="text-danger mb-1 amount">-365.00 GBP</h6>
-                            <p class="text-muted mb-0">$7532.21</p>
-                        </td>
-                        <td class="status">
-                            <span class="badge bg-success-subtle text-success fs-11"><i class="ri-checkbox-circle-line align-bottom"></i> Success</span>
-                        </td>
-                    </tr>
-                    <!--end tr-->
-                    <tr>
-                        <td class="id" style="display:none;"><a href="javascript:void(0);" class="fw-medium link-primary">#VZ005</a></td>
-                        <td>
-                            <div class="avatar-xs">
-                                <div class="avatar-title bg-success-subtle text-success rounded-circle fs-16">
-                                    <i class="ri-arrow-left-down-fill"></i>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="date">14 Nov, 2021 <small class="text-muted">12:38PM</small></td>
-                        <td class="currency_name">
-                            <div class="d-flex align-items-center">
-                                <img src="assets/images/svg/crypto-icons/jpy.svg" alt="" class="avatar-xxs me-2">
-                                JPY
-                            </div>
-                        </td>
-                        <td class="form_name">Alexis Clarke</td>
-                        <td class="to_name">Wallet</td>
-                        <td class="details">Platinum Business</td>
-                        <td class="transaction_id">1deffa9713917ee0af26bbb5f272</td>
-                        <td class="type">Deposit</td>
-                        <td>
-                            <h6 class="text-success mb-1 amount">+341.74 JPY</h6>
-                            <p class="text-muted mb-0">$748.10</p>
-                        </td>
-                        <td class="status">
-                            <span class="badge bg-primary-subtle text-primary fs-11"><i class="ri-time-line align-bottom"></i> Processing</span>
-                        </td>
-                    </tr>
-                    <!--end tr-->
-                    <tr>
-                        <td class="id" style="display:none;"><a href="javascript:void(0);" class="fw-medium link-primary">#VZ006</a></td>
-                        <td>
-                            <div class="avatar-xs">
-                                <div class="avatar-title bg-danger-subtle text-danger rounded-circle fs-16">
-                                    <i class="ri-arrow-right-up-fill"></i>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="date">02 Jan, 2022 <small class="text-muted">08:58AM</small></td>
-                        <td class="currency_name">
-                            <div class="d-flex align-items-center">
-                                <img src="assets/images/svg/crypto-icons/xrp.svg" alt="" class="avatar-xxs me-2">
-                                XRP
-                            </div>
-                        </td>
-                        <td class="form_name">Wallet</td>
-                        <td class="to_name">Kevin Dawson</td>
-                        <td class="details">Business Advantage Fundaments - Banking</td>
-                        <td class="transaction_id">186aa96d8014061d994f025ac4</td>
-                        <td class="type">Withdraw</td>
-                        <td>
-                            <h6 class="text-danger mb-1 amount">-240.74 XRP</h6>
-                            <p class="text-muted mb-0">$3254.20</p>
-                        </td>
-                        <td class="status">
-                            <span class="badge bg-danger-subtle text-danger fs-11"><i class="ri-close-circle-line align-bottom"></i> Failed</span>
-                        </td>
-                    </tr>
-                    <!--end tr-->
-                    <tr>
-                        <td class="id" style="display:none;"><a href="javascript:void(0);" class="fw-medium link-primary">#VZ007</a></td>
-                        <td>
-                            <div class="avatar-xs">
-                                <div class="avatar-title bg-success-subtle text-success rounded-circle fs-16">
-                                    <i class="ri-arrow-left-down-fill"></i>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="date">17 Oct, 2021 <small class="text-muted">07:08PM</small></td>
-                        <td class="currency_name">
-                            <div class="d-flex align-items-center">
-                                <img src="assets/images/svg/crypto-icons/ltc.svg" alt="" class="avatar-xxs me-2">
-                                LTC
-                            </div>
-                        </td>
-                        <td class="form_name">Tonya Noble</td>
-                        <td class="to_name">Wallet</td>
-                        <td class="details">Litecoin Sale</td>
-                        <td class="transaction_id">c94b5581418c41c2c74448a5ec</td>
-                        <td class="type">Deposit</td>
-                        <td>
-                            <h6 class="text-success mb-1 amount">+298.72 LTC</h6>
-                            <p class="text-muted mb-0">$149.32</p>
-                        </td>
-                        <td class="status">
-                            <span class="badge bg-success-subtle text-success fs-11"><i class="ri-checkbox-circle-line align-bottom"></i> Success</span>
-                        </td>
-                    </tr>
-                    <!--end tr-->
-                    <tr>
-                        <td class="id" style="display:none;"><a href="javascript:void(0);" class="fw-medium link-primary">#VZ008</a></td>
-                        <td>
-                            <div class="avatar-xs">
-                                <div class="avatar-title bg-danger-subtle text-danger rounded-circle fs-16">
-                                    <i class="ri-arrow-right-up-fill"></i>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="date">27 Dec, 2021 <small class="text-muted">01:24PM</small></td>
-                        <td class="currency_name">
-                            <div class="d-flex align-items-center">
-                                <img src="assets/images/svg/crypto-icons/xmr.svg" alt="" class="avatar-xxs me-2">
-                                XMR
-                            </div>
-                        </td>
-                        <td class="form_name">Wallet</td>
-                        <td class="to_name">Mary Cousar</td>
-                        <td class="details">Monero Purchase</td>
-                        <td class="transaction_id">9a592451d1b0e0e5af6d4908f7</td>
-                        <td class="type">Withdraw</td>
-                        <td>
-                            <h6 class="text-danger amount mb-1">-365.13 XMR</h6>
-                            <p class="text-muted mb-0">$754.91</p>
-                        </td>
-                        <td class="status">
-                            <span class="badge bg-danger-subtle text-danger fs-11"><i class="ri-close-circle-line align-bottom"></i> Failed</span>
-                        </td>
-                    </tr>
-                    <!--end tr-->
-                    <tr>
-                        <td class="id" style="display:none;"><a href="javascript:void(0);" class="fw-medium link-primary">#VZ009</a></td>
-                        <td>
-                            <div class="avatar-xs">
-                                <div class="avatar-title bg-success-subtle text-success rounded-circle fs-16">
-                                    <i class="ri-arrow-left-down-fill"></i>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="date">23 Dec, 2021 <small class="text-muted">01:47AM</small></td>
-                        <td class="currency_name">
-                            <div class="d-flex align-items-center">
-                                <img src="assets/images/svg/crypto-icons/xpm.svg" alt="" class="avatar-xxs me-2">
-                                XPM
-                            </div>
-                        </td>
-                        <td class="form_name">Glen Matney</td>
-                        <td class="to_name">Wallet</td>
-                        <td class="details">British Pound Sterling Block</td>
-                        <td class="transaction_id">c1bf44fd100fff59a5c64c28dfe0</td>
-                        <td class="type">Deposit</td>
-                        <td>
-                            <h6 class="text-success mb-1 amount">+174.09 XPM</h6>
-                            <p class="text-muted mb-0">$657.28</p>
-                        </td>
-                        <td class="status">
-                            <span class="badge bg-primary-subtle text-primary fs-11"><i class="ri-time-line align-bottom"></i> Processing</span>
-                        </td>
-                    </tr>
-                    <!--end tr-->
-                    <tr>
-                        <td class="id" style="display:none;"><a href="javascript:void(0);" class="fw-medium link-primary">#VZ010</a></td>
-                        <td>
-                            <div class="avatar-xs">
-                                <div class="avatar-title bg-success-subtle text-success rounded-circle fs-16">
-                                    <i class="ri-arrow-left-down-fill"></i>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="date">15 Dec, 2021 <small class="text-muted">08:58AM</small></td>
-                        <td class="currency_name">
-                            <div class="d-flex align-items-center">
-                                <img src="assets/images/svg/crypto-icons/ppt.svg" alt="" class="avatar-xxs me-2">
-                                PPT
-                            </div>
-                        </td>
-                        <td class="form_name">Timothy Smith</td>
-                        <td class="to_name">Wallet</td>
-                        <td class="details">British Pound Sterling Block</td>
-                        <td class="transaction_id">v98p141d5f4j145614sdsa78gh48t98</td>
-                        <td class="type">Withdraw</td>
-                        <td>
-                            <h6 class="text-danger amount mb-1">-142.35 PPT</h6>
-                            <p class="text-muted mb-0">$398.35</p>
-                        </td>
-                        <td class="status">
-                            <span class="badge bg-success-subtle text-success fs-11"><i class="ri-checkbox-circle-line align-bottom"></i> Success</span>
-                        </td>
-                    </tr>
-                    <!--end tr-->
+                            </td>
+                            <td class="date">@item.VendorName<small class="text-muted"></small></td>
+                            <td class="form_name">@item.InvoiceType</td>
+                            <td class="to_name">@item.OrderId</td>
+                            <td class="details">@item.InvoiceDate</td>
+                            <td class="transaction_id">@item.TotalGst</td>
+                            <td class="type">@item.TotalAmount</td>
+                            <td>
+                                <h6 class="text-danger mb-1 amount">-142.35 BTC</h6>
+                                <p class="text-muted mb-0">$697.88k</p>
+                            </td>
+                            <td class="status">
+                                <span class="badge bg-primary-subtle text-primary fs-11"><i class="ri-time-line align-bottom"></i> Processing</span>
+                            </td>
+                        </tr>
+                    }
                 </tbody>
             </table>
             <!--end table-->
