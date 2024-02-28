@@ -46,5 +46,10 @@ namespace EMPManegment.Services.OrderDetails
         {
             return await OrderDetails.InsertMultipleOrder(InsertOrder);
         }
+
+        public async Task<IEnumerable<PaymentMethodView>> GetAllPaymentMethod()
+        {
+            return await OrderDetails.GetAllPaymentMethod();
+        }
     }
 }

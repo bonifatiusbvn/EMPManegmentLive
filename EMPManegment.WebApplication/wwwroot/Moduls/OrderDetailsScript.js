@@ -145,7 +145,7 @@ function SaveCreateOrder() {
         formData.append("Total", $("#totalamount").val());
         formData.append("OrderDate", $("#orderdate").val());
         formData.append("DeliveryDate", $("#deliverydate").val());
-        formData.append("PaymentMethod", $("#payment").val());
+        formData.append("paymenttype", $("#payment").val());
         formData.append("DeliveryStatus", $("#deliveredstatus").val());
         formData.append("CreatedBy", $("#ddlusername").val());
         $.ajax({
@@ -266,7 +266,7 @@ function InsertMultipleOrder() {
             Type: $("#OrderType").val(),
             OrderId: $("#orderId").val(),
             PaymentStatus: $("#txtPaymentStatus").val(),
-            PaymentMethod: $("#paymentMethod").val(),
+            PaymentMethod: $("#paymenttype").val(),
             OrderDate: $("#orderdate").val(),
             DeliveryDate: $("#deliverydate").val(),
             VendorId: $("#txtvendorname").val(),
@@ -324,6 +324,7 @@ function showPaymentDetails() {
 $(document).ready(function () {
     GetVendorNameList();
     GetProducts();
+    GetPaymentMethodList();
 });
 function GetVendorNameList() {
 
@@ -354,13 +355,24 @@ function GetPaymentTypeList() {
         url: '/ExpenseMaster/GetPaymentTypeList',
         success: function (result) {
             $.each(result, function (i, data) {
-                $('#paymentMethod').append('<Option value=' + data.id + '>' + data.type + '</Option>')
+                $('#paymenttype').append('<Option value=' + data.id + '>' + data.type + '</Option>')
             });
         }
     });
 }
 function selectProductTypeId() {
     document.getElementById("txtProductTypeid").value = document.getElementById("txtProducts").value;
+}
+function GetPaymentMethodList() {
+
+    $.ajax({
+        url: '/OrderMaster/GetPaymentMethodList',
+        success: function (result) {
+            $.each(result, function (i, data) {
+                $('#txtpaymentmethod').append('<Option value=' + data.id + '>' + data.paymentMethod + '</Option>')
+            });
+        }
+    });
 }
 $(document).ready(function () {
     $('#txtProducts').change(function () {

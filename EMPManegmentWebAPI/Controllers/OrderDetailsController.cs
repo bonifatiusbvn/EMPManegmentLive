@@ -1,6 +1,8 @@
-﻿using EMPManegment.EntityModels.ViewModels.Models;
+﻿using EMPManegment.EntityModels.ViewModels.ExpenseMaster;
+using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.OrderModels;
 using EMPManegment.Inretface.EmployeesInterface.AddEmployee;
+using EMPManegment.Inretface.Interface.ExpenseMaster;
 using EMPManegment.Inretface.Interface.InvoiceMaster;
 using EMPManegment.Inretface.Services.OrderDetails;
 using Microsoft.AspNetCore.Http;
@@ -101,6 +103,13 @@ namespace EMPManagment.API.Controllers
                 throw ex;
             }
             return StatusCode(response.Code, response);
+        }
+        [HttpGet]
+        [Route("GetAllPaymentMethod")]
+        public async Task<IActionResult> GetAllPaymentMethod()
+        {
+            IEnumerable<PaymentMethodView> paymentmethod = await OrderDetails.GetAllPaymentMethod();
+            return Ok(new { code = 200, data = paymentmethod.ToList() });
         }
     }
 }

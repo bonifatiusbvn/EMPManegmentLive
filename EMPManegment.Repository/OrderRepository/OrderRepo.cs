@@ -1,6 +1,7 @@
 ﻿using Azure;
 using EMPManagment.API;
 using EMPManegment.EntityModels.ViewModels;
+using EMPManegment.EntityModels.ViewModels.ExpenseMaster;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.OrderModels;
 using EMPManegment.EntityModels.ViewModels.ProductMaster;
@@ -258,6 +259,23 @@ namespace EMPManegment.Repository.OrderRepository
                     }
                 }
                 return orderDetails;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<IEnumerable<PaymentMethodView>> GetAllPaymentMethod()
+        {
+            try
+            {
+                IEnumerable<PaymentMethodView> paymentMethod = Context.TblPaymentMethodTypes.ToList().Select(a => new PaymentMethodView
+                {
+                    Id = a.Id,
+                    PaymentMethod=a.PaymentMethod,
+                });
+                return paymentMethod;
             }
             catch (Exception ex)
             {
