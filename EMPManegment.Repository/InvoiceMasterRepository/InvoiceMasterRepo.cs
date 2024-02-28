@@ -23,9 +23,9 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
     {
         private readonly BonifatiusEmployeesContext Context;
 
-        public InvoiceMasterRepo(BonifatiusEmployeesContext Context)
+        public InvoiceMasterRepo(BonifatiusEmployeesContext context)
         {
-            Context = Context;
+            Context = context;
         }
 
 
