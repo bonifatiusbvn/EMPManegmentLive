@@ -19,11 +19,13 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
 {
     public class InvoiceMasterRepo : IInvoiceMaster
     {
+        private readonly BonifatiusEmployeesContext Context;
+
         public InvoiceMasterRepo(BonifatiusEmployeesContext Context)
         {
-            this.Context = Context;
+            Context = Context;
         }
-        public BonifatiusEmployeesContext Context { get; }
+
 
         public string CheckInvoiceNo(string OrderId)
         {
@@ -234,6 +236,52 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                                                             //PerUnitPrice = c.PerUnitPrice
                                                         };
             return InvoiceList;
+        }
+
+        public async Task<IEnumerable<InvoiceViewModel>> GetInvoiceListByVendorId(Guid Vid)
+        {
+
+            try
+            {
+                IEnumerable<InvoiceViewModel> invoiceList = (from a in Context.TblInvoices.Where(x => x.VandorId == Vid)
+                                                             join b in Context.TblVendorMasters
+                                                             on a.VandorId equals b.Vid
+                                                             select new InvoiceViewModel
+                                                             {
+                                                                 Id = a.Id,
+                                                                 InvoiceNo = a.InvoiceNo,
+                                                                 VendorName = b.VendorCompany,
+                                                                 VandorId = a.VandorId,
+                                                                 //ProductName = c.ProductName,
+                                                                 //ProductDetails = c.ProductShortDescription,
+                                                                 //HSN = c.Hsn,
+                                                                 //Price = c.PerUnitPrice,
+                                                                 //TotalGst=c.Gst,
+                                                                 DispatchThrough = a.DispatchThrough,
+                                                                 Destination = a.Destination,
+                                                                 Cgst = a.Cgst,
+                                                                 Igst = a.Igst,
+                                                                 Sgst = a.Sgst,
+                                                                 BuyesOrderNo = a.BuyesOrderNo,
+                                                                 BuyesOrderDate = a.BuyesOrderDate,
+                                                                 TotalAmount = a.TotalAmount,
+                                                                 CreatedOn = a.CreatedOn,
+                                                                 CreatedBy = a.CreatedBy,
+                                                                 UpdatedOn = a.UpdatedOn,
+                                                                 UpdatedBy = a.UpdatedBy,
+                                                                 //PerUnitPrice=c.PerUnitPrice,
+                                                                 //PaymentMethod = d.PaymentMethod,
+                                                                 //PaymentStatus = d.PaymentStatus,
+                                                                 //Quantity = d.Quantity,
+                                                                 //TotalAmountWithQuantity = d.Total,
+
+                                                             });
+                return invoiceList;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         public async Task<IEnumerable<InvoiceViewModel>> GetInvoiceNoList()

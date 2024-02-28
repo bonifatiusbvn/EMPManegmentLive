@@ -16,6 +16,7 @@ using DinkToPdf.Contracts;
 using Aspose.Pdf.Facades;
 using DinkToPdf;
 using Newtonsoft.Json.Converters;
+using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 
 
 
@@ -207,5 +208,75 @@ namespace EMPManegment.Web.Controllers
         {
             return View();
         }
+
+        [HttpPost]
+        public async Task<IActionResult> GetVendorList()
+        {
+            try
+            {
+                var draw = Request.Form["draw"].FirstOrDefault();
+                var start = Request.Form["start"].FirstOrDefault();
+                var length = Request.Form["length"].FirstOrDefault();
+                var sortColumn = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
+                var sortColumnDir = Request.Form["order[0][dir]"].FirstOrDefault();
+                var searchValue = Request.Form["search[value]"].FirstOrDefault();
+                int pageSize = length != null ? Convert.ToInt32(length) : 0;
+                int skip = start != null ? Convert.ToInt32(start) : 0;
+
+                var dataTable = new DataTableRequstModel
+                {
+                    draw = draw,
+                    start = start,
+                    pageSize = pageSize,
+                    skip = skip,
+                    lenght = length,
+                    searchValue = searchValue,
+                    sortColumn = sortColumn,
+                    sortColumnDir = sortColumnDir
+                };
+                List<VendorDetailsView> vendorList = new List<VendorDetailsView>();
+                var data = new jsonData();
+                ApiResponseModel res = await APIServices.PostAsync(dataTable, "Vendor/GetVendorList");
+                if (res.code == 200)
+                {
+                    data = JsonConvert.DeserializeObject<jsonData>(res.data.ToString());
+                    vendorList = JsonConvert.DeserializeObject<List<VendorDetailsView>>(data.data.ToString());
+                }
+                var jsonData = new
+                {
+                    draw = data.draw,
+                    recordsFiltered = data.recordsFiltered,
+                    recordsTotal = data.recordsTotal,
+                    data = vendorList,
+                };
+                return new JsonResult(jsonData);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> VendorInvoiceListView(Guid Vid)
+        {
+            try
+            {
+                InvoiceViewModel products = new InvoiceViewModel();
+                ApiResponseModel response = await APIServices.GetAsync("", "Invoice/GetInvoiceListByVendorId?Id=" + Vid);
+                if (response.code == 200)
+                {
+                    products = JsonConvert.DeserializeObject<InvoiceViewModel>(response.data.ToString());
+                }
+                return View(products);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
+
+
 }

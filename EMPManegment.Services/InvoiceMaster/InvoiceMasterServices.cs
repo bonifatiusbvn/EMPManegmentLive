@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace EMPManegment.Services.InvoiceMaster
 {
-    public class InvoiceMasterServices:IInvoiceMasterServices
+    public class InvoiceMasterServices : IInvoiceMasterServices
     {
         private readonly IInvoiceMaster InvoiceMaster;
         public InvoiceMasterServices(IInvoiceMaster invoiceMaster)
@@ -38,6 +38,11 @@ namespace EMPManegment.Services.InvoiceMaster
         public async Task<IEnumerable<InvoiceViewModel>> GetInvoiceDetailsList()
         {
             return await InvoiceMaster.GetInvoiceDetailsList();
+        }
+
+        public async Task<IEnumerable<InvoiceViewModel>> GetInvoiceListByVendorId(Guid Vid)
+        {
+            return await InvoiceMaster.GetInvoiceListByVendorId(Vid);
         }
 
         public async Task<IEnumerable<InvoiceViewModel>> GetInvoiceNoList()

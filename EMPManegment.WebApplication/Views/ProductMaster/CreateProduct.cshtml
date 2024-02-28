@@ -7,235 +7,230 @@
 <style>
     #txtproductname-error, #txtproductdescription-error,
     #txtstocks-error, #txtPerUnitPrice-error,
-     #txtGST-error, #txtPerUnitWithGSTPrice-error, #txtProductType-error,
-    #txtvendornamed-error{
+    #txtGST-error, #txtPerUnitWithGSTPrice-error, #txtProductType-error,
+    #txtvendornamed-error {
         color: red;
     }
 </style>
 
 
-<div class="page-content">
-    <div class="container-fluid">
 
-        <!-- start page title -->
-        <div class="row">
-            <div class="col-12">
-                <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                    <h4 class="mb-sm-0">Create Product</h4>
+<!-- start page title -->
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+            <h4 class="mb-sm-0">Create Product</h4>
 
-                    <div class="page-title-right">
-                        <ol class="breadcrumb m-0">
-                            <li class="breadcrumb-item"><a href="javascript: void(0);">Ecommerce</a></li>
-                            <li class="breadcrumb-item active">Create Product</li>
-                        </ol>
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Ecommerce</a></li>
+                    <li class="breadcrumb-item active">Create Product</li>
+                </ol>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- end page title -->
+
+<form id="createproductform" autocomplete="off">
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label class="form-label" for="ProductName">Product Name</label>
+                        <input type="text" class="form-control" id="txtproductname" name="txtproductname" placeholder="Enter product name" required>
                     </div>
-
+                    <div>
+                        <label class="form-label" for="ProductDescription">Product Description</label>
+                        <textarea rows="10" class="form-control" id="txtproductdescription" name="txtproductdescription" placeholder="Enter product description" required></textarea>
+                    </div>
                 </div>
+            </div>
+            <!-- end card -->
+
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Product Gallery</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-4">
+                        <h5 class="fs-14 mb-1">Product Image</h5>
+                        <p class="text-muted">Add Product main Image.</p>
+                        <div class="text-center">
+                            <div class="position-relative d-inline-block">
+                                <div class="position-absolute top-100 start-100 translate-middle">
+                                </div>
+                                <div class="avatar-lg">
+                                    <div class="holder m-2">
+                                        <img id="imgPreview" alt="Product image" style="height:200px;width:auto;margin-left:-500px;margin-bottom:-100px;" src="~/UserHome/minimal/assets/images/no-preview.png" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <h5 class="fs-14 mb-1" style="margin-top:120px;">Product Gallery</h5>
+                        <p class="text-muted">Add Product Gallery Images.</p>
+                        <label class="form-label" for="ProductImage"></label>
+                        <div class="mb-3">
+                            <input type="file" class="form-control" id="txtproductimage" name="txtproductimage" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- end card -->
+
+            <div class="card">
+                <div class="card-header">
+                    <ul class="nav nav-tabs-custom card-header-tabs border-bottom-0" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-bs-toggle="tab" href="#addproduct-general-info" role="tab">
+                                General Info
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <!-- end card header -->
+                <div class="card-body">
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="addproduct-general-info" role="tabpanel">
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="PerUnitPrice">Per Unit Price</label>
+                                        <input type="text" class="form-control" id="txtPerUnitPrice" name="txtPerUnitPrice" placeholder="Enter PerUnitPrice" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="GST">GST</label>
+                                        <input type="text" class="form-control" id="txtGST" name="txtGST" placeholder="Enter GST" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="PerUnitWithGSTPrice">Per Unit With GST Price</label>
+                                        <input type="text" class="form-control" id="txtPerUnitWithGSTPrice" name="txtPerUnitWithGSTPrice" placeholder="Enter price" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- end row -->
+
+                            <div class="row">
+                                <div class="col-lg-3 col-sm-6">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="HSN">HSN</label>
+                                        <input type="text" class="form-control" id="txtHSN" name="txtHSN" placeholder="Enter HSN">
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-sm-6">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="stocks">Stocks</label>
+                                        <input type="text" class="form-control" id="txtstocks" name="txtstocks" placeholder="Stocks" required>
+                                    </div>
+                                </div>
+                                <!-- end col -->
+                            </div>
+                            <!-- end row -->
+                        </div>
+                        <!-- end tab-pane -->
+                        <!-- end tab pane -->
+                    </div>
+                    <!-- end tab content -->
+                </div>
+                <!-- end card body -->
+            </div>
+            <!-- end card -->
+            <div class="text-end mb-3">
+                <button type="button" class="btn btn-primary w-sm" onclick="SaveProductDetails()" id="saveproductdetails" value="Validation">Submit</button>
             </div>
         </div>
-        <!-- end page title -->
+        <!-- end col -->
 
-        <form id="createproductform" autocomplete="off">
-            <div class="row">
-                <div class="col-lg-8">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="mb-3">
-                                <label class="form-label" for="ProductName">Product Name</label>
-                                <input type="text" class="form-control" id="txtproductname" name="txtproductname" placeholder="Enter product name" required>
-                            </div>
-                            <div>
-                                <label class="form-label" for="ProductDescription">Product Description</label>
-                                <textarea rows="10" class="form-control" id="txtproductdescription" name="txtproductdescription" placeholder="Enter product description" required></textarea>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- end card -->
+        <div class="col-lg-4">
 
-                    <div class="card">
-                        <div class="card-header">
-                            <h5 class="card-title mb-0">Product Gallery</h5>
-                        </div>
-                        <div class="card-body">
-                            <div class="mb-4">
-                                <h5 class="fs-14 mb-1">Product Image</h5>
-                                <p class="text-muted">Add Product main Image.</p>
-                                <div class="text-center">
-                                    <div class="position-relative d-inline-block">
-                                        <div class="position-absolute top-100 start-100 translate-middle">
-                                        </div>
-                                        <div class="avatar-lg">
-                                            <div class="holder m-2">
-                                                <img id="imgPreview" alt="Product image" style="height:200px;width:auto;margin-left:-500px;margin-bottom:-100px;" src="~/UserHome/minimal/assets/images/no-preview.png" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
-                                <h5 class="fs-14 mb-1" style="margin-top:120px;">Product Gallery</h5>
-                                <p class="text-muted">Add Product Gallery Images.</p>
-                                <label class="form-label" for="ProductImage"></label>
-                                <div class="mb-3">
-                                    <input type="file" class="form-control" id="txtproductimage" name="txtproductimage" />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- end card -->
-
-                    <div class="card">
-                        <div class="card-header">
-                            <ul class="nav nav-tabs-custom card-header-tabs border-bottom-0" role="tablist">
-                                <li class="nav-item">
-                                    <a class="nav-link active" data-bs-toggle="tab" href="#addproduct-general-info" role="tab">
-                                        General Info
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                        <!-- end card header -->
-                        <div class="card-body">
-                            <div class="tab-content">
-                                <div class="tab-pane active" id="addproduct-general-info" role="tabpanel">
-                                    <div class="row">
-                                        <div class="col-lg-4">
-                                            <div class="mb-3">
-                                                <label class="form-label" for="PerUnitPrice">Per Unit Price</label>
-                                                <input type="text" class="form-control" id="txtPerUnitPrice" name="txtPerUnitPrice" placeholder="Enter PerUnitPrice" required>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-4">
-                                            <div class="mb-3">
-                                                <label class="form-label" for="GST">GST</label>
-                                                <input type="text" class="form-control" id="txtGST" name="txtGST" placeholder="Enter GST" required>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-4">
-                                            <div class="mb-3">
-                                                <label class="form-label" for="PerUnitWithGSTPrice">Per Unit With GST Price</label>
-                                                <input type="text" class="form-control" id="txtPerUnitWithGSTPrice" name="txtPerUnitWithGSTPrice" placeholder="Enter price" required>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- end row -->
-
-                                    <div class="row">
-                                        <div class="col-lg-3 col-sm-6">
-                                            <div class="mb-3">
-                                                <label class="form-label" for="HSN">HSN</label>
-                                                <input type="text" class="form-control" id="txtHSN" name="txtHSN" placeholder="Enter HSN">
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-3 col-sm-6">
-                                            <div class="mb-3">
-                                                <label class="form-label" for="stocks">Stocks</label>
-                                                <input type="text" class="form-control" id="txtstocks" name="txtstocks" placeholder="Stocks" required>
-                                            </div>
-                                        </div>
-                                        <!-- end col -->
-                                    </div>
-                                    <!-- end row -->
-                                </div>
-                                <!-- end tab-pane -->
-                                <!-- end tab pane -->
-                            </div>
-                            <!-- end tab content --> 
-                        </div>
-                        <!-- end card body -->
-                    </div>
-                    <!-- end card -->
-                    <div class="text-end mb-3">
-                        <button type="button" class="btn btn-primary w-sm" onclick="SaveProductDetails()" id="saveproductdetails" value="Validation">Submit</button>
-                    </div>
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Product Categories</h5>
                 </div>
-                <!-- end col -->
-
-                <div class="col-lg-4">
-
-                    <div class="card">
-                        <div class="card-header">
-                            <h5 class="card-title mb-0">Product Categories</h5>
-                        </div>
-                        <div class="card-body">
-                            <p class="text-muted mb-2">
-                                <button type="button" data-bs-toggle="modal" data-bs-target="#flipModal" class="float-end text-decoration-underline btn btn-link waves-effect">
-                                    Add New
-                                </button>
-                            </p>
-                            <label for="ProductType" class="form-label">Product Type</label>
-                            <select id="txtProducts" class="form-control bg-transparent" onchange="selectProductTypeId()">
-                                <option selected disabled value="">----Select Product Type---</option>
-                            </select>
-                            <input type="hidden" class="form-control" id="txtProductTypeid">
-                        </div>
-                        <!-- end card body -->
-                    </div>
-
-                    <!-- end card -->
-                    <div class="card">
-                        <div class="card-header">
-                            <h5 class="card-title mb-0">Add Vendor</h5>
-                        </div>
-                        <div class="card-body">
-                            <div class="hstack gap-3 align-items-start">
-                                <div class="flex-grow-1">
-                                    <label for="VendorId" class="form-label">Vendor Name</label>
-                                    <select class="form-control" id="txtvendornamed" name="txtvendornamed">
-                                        <option selected disabled value="">----Select Vendor Name---</option>
-                                    </select>
-                                    <input type="hidden" class="form-control" id="txtvendornameid">
-                                </div>
-                            </div>
-                        </div>
-                        <!-- end card body -->
-                    </div>
-                    <!-- end card -->
-                    <div class="card">
-                        <div class="card-header">
-                            <h5 class="card-title mb-0">Product Short Description</h5>
-                        </div>
-                        <div class="card-body">
-                            <p class="text-muted mb-2">Add short description for product</p>
-                            <textarea class="form-control" id="txtshortdescription" name="txtshortdescription" placeholder="Must enter minimum of a 100 characters" rows="3"></textarea>
-                        </div>
-                        <!-- end card body -->
-                    </div>
-                    <!-- end card -->
+                <div class="card-body">
+                    <p class="text-muted mb-2">
+                        <button type="button" data-bs-toggle="modal" data-bs-target="#flipModal" class="float-end text-decoration-underline btn btn-link waves-effect">
+                            Add New
+                        </button>
+                    </p>
+                    <label for="ProductType" class="form-label">Product Type</label>
+                    <select id="txtProducts" class="form-control bg-transparent" onchange="selectProductTypeId()">
+                        <option selected disabled value="">----Select Product Type---</option>
+                    </select>
+                    <input type="hidden" class="form-control" id="txtProductTypeid">
                 </div>
-                <!-- end col -->
+                <!-- end card body -->
             </div>
-            <!-- end row -->
-        </form>
-        <form id="addproduct">
-            <div id="flipModal" class="modal fade flip" tabindex="-1" aria-labelledby="flipModalLabel" aria-hidden="true" style="display: none;">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="flipModalLabel">Add Product Type</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="hstack gap-3 align-items-start">
-                                <div class="flex-grow-1">
-                                    <label>Product Name</label>
-                                    <input class="form-control" id="txtProductType" name="txtProductType" placeholder="Enter ProductName" type="text" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary " onclick="AddProductType()" id="AddProductTypeButton" value="Validate">Save</button>
-                        </div>
 
-                    </div><!-- /.modal-content -->
-
-                </div><!-- /.modal-dialog -->
-            </div><!-- /.modal -->
-        </form>
+            <!-- end card -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Add Vendor</h5>
+                </div>
+                <div class="card-body">
+                    <div class="hstack gap-3 align-items-start">
+                        <div class="flex-grow-1">
+                            <label for="VendorId" class="form-label">Vendor Name</label>
+                            <select class="form-control" id="txtvendornamed" name="txtvendornamed">
+                                <option selected disabled value="">----Select Vendor Name---</option>
+                            </select>
+                            <input type="hidden" class="form-control" id="txtvendornameid">
+                        </div>
+                    </div>
+                </div>
+                <!-- end card body -->
+            </div>
+            <!-- end card -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Product Short Description</h5>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted mb-2">Add short description for product</p>
+                    <textarea class="form-control" id="txtshortdescription" name="txtshortdescription" placeholder="Must enter minimum of a 100 characters" rows="3"></textarea>
+                </div>
+                <!-- end card body -->
+            </div>
+            <!-- end card -->
+        </div>
+        <!-- end col -->
     </div>
-    <!-- container-fluid -->
-</div>
+    <!-- end row -->
+</form>
+<form id="addproduct">
+    <div id="flipModal" class="modal fade flip" tabindex="-1" aria-labelledby="flipModalLabel" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="flipModalLabel">Add Product Type</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="hstack gap-3 align-items-start">
+                        <div class="flex-grow-1">
+                            <label>Product Name</label>
+                            <input class="form-control" id="txtProductType" name="txtProductType" placeholder="Enter ProductName" type="text" />
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary " onclick="AddProductType()" id="AddProductTypeButton" value="Validate">Save</button>
+                </div>
+
+            </div><!-- /.modal-content -->
+
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+</form>
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>

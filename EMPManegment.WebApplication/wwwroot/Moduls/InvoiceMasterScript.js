@@ -2,6 +2,7 @@
 $(document).ready(function () {
     GetInvoiceNoList()
     GetVendorName()
+    GetAllVendorData()
 });
 function GetInvoiceNoList() {
     $.ajax({
@@ -56,20 +57,21 @@ $(document).ready(function () {
     });
 });
 
-function InsertInvoiceDetails() {debugger
+function InsertInvoiceDetails() {
+    debugger
 
-        var objData = {
-            InvoiceNo: $("#txtinvoiceid").val(),
-            CreatedBy: $("#txtuserid").val(),
-            ProjectId: $("#txtprojectid").val(),
-            BuyesOrderDate: document.getElementById("txtdate").innerHTML,
-            OrderId: document.getElementById("txtorderid").innerHTML,
-            InvoiceType: document.getElementById("txtinvoicetype").innerHTML,
-            VandorId: document.getElementById("txtvendorid").innerText,
-            DispatchThrough: document.getElementById("txtshippingcompany").innerText,
-            Destination: document.getElementById("txtshippingaddress").innerText,
-            TotalAmount: document.getElementById("txttotalamount").innerText,
-            TotalGst: document.getElementById("txttotalgst").innerText,
+    var objData = {
+        InvoiceNo: $("#txtinvoiceid").val(),
+        CreatedBy: $("#txtuserid").val(),
+        ProjectId: $("#txtprojectid").val(),
+        BuyesOrderDate: document.getElementById("txtdate").innerHTML,
+        OrderId: document.getElementById("txtorderid").innerHTML,
+        InvoiceType: document.getElementById("txtinvoicetype").innerHTML,
+        VandorId: document.getElementById("txtvendorid").innerText,
+        DispatchThrough: document.getElementById("txtshippingcompany").innerText,
+        Destination: document.getElementById("txtshippingaddress").innerText,
+        TotalAmount: document.getElementById("txttotalamount").innerText,
+        TotalGst: document.getElementById("txttotalgst").innerText,
     };
     var form_data = new FormData();
     form_data.append("INVOICEDETAILS", JSON.stringify(objData));
@@ -81,7 +83,8 @@ function InsertInvoiceDetails() {debugger
         dataType: 'json',
         contentType: false,
         processData: false,
-        success: function (result) {debugger
+        success: function (result) {
+            debugger
             if (result.message == "Invoice Generated successfully!") {
                 Swal.fire({
                     title: result.message,
@@ -92,7 +95,8 @@ function InsertInvoiceDetails() {debugger
                     window.location = '/OrderMaster/CreateOrder';
                 });
             }
-            else {debugger
+            else {
+                debugger
                 Swal.fire({
                     title: result.message,
                     icon: result.icone,
@@ -267,6 +271,41 @@ function downloadPDF() {
     });
 }
 
+function GetAllVendorData() {
+
+    $('#VendorTableData').DataTable({
+        processing: true,
+        serverSide: true,
+        filter: true,
+        "bDestroy": true,
+        ajax: {
+            type: "Post",
+            url: '/Invoice/GetVendorList',
+            dataType: 'json'
+        },
+        columns: [
+            {
+                "render": function (data, type, full) {
+                    return '<h5 class="fs-15"><a href="/Invoice/VendorInvoiceListView/?Id=' + full.id + '" class="fw-medium link-primary">' + full.vendorCompany; '</a></h5>';
+                }
+            },
+            {
+                "data": null,
+                "name": "VendorFullName",
+                "render": function (data, type, full, meta) {
+                    return full.vendorFirstName + ' ' + full.vendorLastName;
+                }
+            },
+            { "data": "vendorEmail", "name": "VendorEmail" },
+            { "data": "vendorPhone", "name": "VendorPhone" },
+            { "data": "vendorAddress", "name": "VendorAddress" },
+        ],
+        columnDefs: [{
+            "defaultContent": "",
+            "targets": "_all",
+        }]
+    });
+}
 
 
 
