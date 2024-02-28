@@ -1,5 +1,6 @@
 ﻿using EMPManegment.EntityModels.ViewModels.Invoice;
 using EMPManegment.EntityModels.ViewModels.Models;
+using EMPManegment.EntityModels.ViewModels.OrderModels;
 using EMPManegment.Inretface.Interface.InvoiceMaster;
 using EMPManegment.Inretface.Interface.ProductMaster;
 using EMPManegment.Inretface.Services.InvoiceMaster;
@@ -27,6 +28,11 @@ namespace EMPManegment.Services.InvoiceMaster
         public async Task<InvoiceViewModel> GetInvoiceDetailsById(Guid Id)
         {
             return await InvoiceMaster.GetInvoiceDetailsById(Id);
+        }
+
+        public async Task<OrderResponseModel> GetInvoiceDetailsByOrderId(string OrderId)
+        {
+            return await InvoiceMaster.GetInvoiceDetailsByOrderId(OrderId);
         }
 
         public async Task<IEnumerable<InvoiceViewModel>> GetInvoiceDetailsList()

@@ -107,8 +107,8 @@ function EditExpenseDetails(Id) {
             $('#Edittotalamount').val(response.totalAmount);
             $('#Editaccount').val(response.account);
             $('#Editpaymenttype').val(response.paymentType);
-            $('#IsPaid').val(response.isPaid.toString());
-            $('#IsApproved').val(response.isApproved.toString());
+            $('#EditIsPaid').val(response.isPaid);
+            $('#EditIsApproved').val(response.isApproved);
 
         },
         error: function () {

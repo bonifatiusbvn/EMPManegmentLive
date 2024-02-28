@@ -37,7 +37,7 @@ namespace EMPManegment.Services.OrderDetails
             return OrderDetails.CheckOrder();
         }
 
-        public async Task<OrderResponseModel> GetOrderDetailsById(string OrderId)
+        public async Task<List<OrderDetailView>> GetOrderDetailsById(string OrderId)
         {
             return await OrderDetails.GetOrderDetailsById(OrderId);
         }

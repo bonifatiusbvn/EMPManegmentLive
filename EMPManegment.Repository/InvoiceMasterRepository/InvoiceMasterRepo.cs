@@ -112,6 +112,96 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
             }
         }
 
+        public async Task<OrderResponseModel> GetInvoiceDetailsByOrderId(string OrderId)
+        {
+            OrderResponseModel response = new OrderResponseModel();
+            try
+            {
+                bool isInvoiceAlredyExists = Context.TblInvoices.Any(x => x.OrderId == OrderId);
+                if (isInvoiceAlredyExists == true)
+                {
+
+                    response.Message = "This Invoice Is already Generated";
+                    response.Code = 400;
+                }
+                else
+                {
+                    var orderDetails = new List<OrderDetailView>();
+                    var data = await (from a in Context.TblOrderMasters
+                                      join c in Context.TblProductDetailsMasters on a.ProductId equals c.Id
+                                      join b in Context.TblVendorMasters on a.VendorId equals b.Vid
+                                      where a.OrderId == OrderId
+                                      select new OrderDetailView
+                                      {
+                                          Id = a.Id,
+                                          OrderId = a.OrderId,
+                                          VendorId = a.VendorId,
+                                          Type = a.Type,
+                                          CompanyName = a.CompanyName,
+                                          ProductId = a.ProductId,
+                                          VendorAddress = b.VendorAddress,
+                                          VendorContact = b.VendorContact,
+                                          VendorEmail = b.VendorCompanyEmail,
+                                          ProductImage = c.ProductImage,
+                                          ProductName = a.ProductName,
+                                          ProductShortDescription = a.ProductShortDescription,
+                                          Quantity = a.Quantity,
+                                          OrderDate = a.OrderDate,
+                                          PerUnitPrice = c.PerUnitPrice,
+                                          PerUnitWithGstprice = c.PerUnitWithGstprice,
+                                          Total = a.Total,
+                                          Amount = a.Amount,
+                                          PaymentMethod = a.PaymentMethod,
+                                          PaymentStatus = a.PaymentStatus,
+                                          DeliveryStatus = a.DeliveryStatus,
+                                          DeliveryDate = a.DeliveryDate,
+                                          CreatedOn = a.CreatedOn,
+                                      }).ToListAsync();
+                    if (data != null)
+                    {
+                        foreach (var item in data)
+                        {
+                            orderDetails.Add(new OrderDetailView()
+                            {
+                                Id = item.Id,
+                                OrderId = item.OrderId,
+                                CompanyName = item.CompanyName,
+                                VendorId = item.VendorId,
+                                ProductId = item.ProductId,
+                                VendorEmail = item.VendorEmail,
+                                VendorContact = item.VendorContact,
+                                VendorAddress = item.VendorAddress,
+                                ProductName = item.ProductName,
+                                ProductImage = item.ProductImage,
+                                ProductShortDescription = item.ProductShortDescription,
+                                Quantity = item.Quantity,
+                                OrderDate = item.OrderDate,
+                                PerUnitPrice = item.PerUnitPrice,
+                                PerUnitWithGstprice = item.PerUnitWithGstprice,
+                                Total = item.Total,
+                                Amount = item.Amount,
+                                PaymentMethod = item.PaymentMethod,
+                                DeliveryStatus = item.DeliveryStatus,
+                                DeliveryDate = item.DeliveryDate,
+                                CreatedOn = item.CreatedOn,
+                                Type = item.Type,
+                                PaymentStatus = item.PaymentStatus,
+                            });
+                        }
+                        response.Data = orderDetails;
+                        response.Code = 200;
+                        response.Message = "Invoice Is Generated successfully";
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return response;
+        }
+
         public async Task<IEnumerable<InvoiceViewModel>> GetInvoiceDetailsList()
         {
             IEnumerable<InvoiceViewModel> InvoiceList = from a in Context.TblInvoices

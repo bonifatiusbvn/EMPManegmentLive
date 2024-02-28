@@ -72,13 +72,17 @@ namespace EMPManegment.Web.Controllers
             {
                 List<OrderDetailView> order = new List<OrderDetailView>();
                 ApiResponseModel Response = await APIServices.GetAsync("", "Invoice/CheckInvoiceNo?OrderId=" + OrderId);
-                ApiResponseModel response = await APIServices.GetAsync("", "OrderDetails/GetOrderDetailsById?OrderId=" + OrderId);
+                ApiResponseModel response = await APIServices.GetAsync("", "Invoice/GetInvoiceDetailsByOrderId?OrderId=" + OrderId);
                 if (response.code == 200 && Response.code == 200)
                 {
                     order = JsonConvert.DeserializeObject<List<OrderDetailView>>(response.data.ToString());
                     ViewBag.InvoiceNo = Response.data;
                 }
-                return View("InvoiceDetails", order);
+                else
+                {
+                    return new JsonResult(new { Message = string.Format(response.message), Code = response.code });
+                }
+                return View("InvoiceDetails", response.data);
             }
             catch (Exception ex)
             {

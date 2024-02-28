@@ -170,7 +170,7 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
-        [HttpPost]
+        [HttpGet]
         public async Task<JsonResult> GetVendorDetailsById(Guid VendorId)
         {
             try
