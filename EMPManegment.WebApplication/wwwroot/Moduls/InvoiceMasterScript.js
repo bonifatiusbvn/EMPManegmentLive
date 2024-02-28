@@ -298,7 +298,7 @@ function GetAllVendorData() {
         columns: [
             {
                 "render": function (data, type, full) {
-                    return '<h5 class="fs-15"><a href="/Invoice/VendorInvoiceListView/?Id=' + full.id + '" class="fw-medium link-primary">' + full.vendorCompany; '</a></h5>';
+                    return '<h5 class="fs-15"><a href="/Invoice/VendorInvoiceListView/?Vid=' + full.id + '" class="fw-medium link-primary">' + full.vendorCompany; '</a></h5>';
                 }
             },
             {

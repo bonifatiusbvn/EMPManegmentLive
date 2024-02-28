@@ -263,11 +263,11 @@ namespace EMPManegment.Web.Controllers
         {
             try
             {
-                InvoiceViewModel products = new InvoiceViewModel();
-                ApiResponseModel response = await APIServices.GetAsync("", "Invoice/GetInvoiceListByVendorId?Id=" + Vid);
+                List<InvoiceViewModel> products = new List<InvoiceViewModel>();
+                ApiResponseModel response = await APIServices.GetAsync("", "Invoice/GetInvoiceListByVendorId?Vid=" + Vid);
                 if (response.code == 200)
                 {
-                    products = JsonConvert.DeserializeObject<InvoiceViewModel>(response.data.ToString());
+                    products = JsonConvert.DeserializeObject<List<InvoiceViewModel>>(response.data.ToString());
                 }
                 return View(products);
             }
