@@ -57,6 +57,31 @@ $(document).ready(function () {
     });
 });
 
+function GetInvoiceDetailsByOrderId(OrderId) {debugger
+    $.ajax({
+        url: '/Invoice/GetInvoiceDetailsByOrderId/?OrderId=' + OrderId,
+        type: 'GET',
+        success: function (result) {debugger
+            if (result.code == 400) {
+                Swal.fire({
+                    title: result.message,
+                    icon: result.icone,
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'OK',
+                });
+            } else {debugger
+                window.location = '/Invoice/InvoiceDetails/?OrderId=' + OrderId;
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error('AJAX Error:', error);
+            // Handle error here, for example, show an alert
+            alert('An error occurred while fetching data.');
+        }
+    });
+}
+
+function InsertInvoiceDetails() {debugger
 function InsertInvoiceDetails() {
     debugger
 

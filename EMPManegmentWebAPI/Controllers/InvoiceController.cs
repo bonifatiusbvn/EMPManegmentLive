@@ -92,7 +92,7 @@ namespace EMPManagment.API.Controllers
                 if (orderdetails.Result.Code == 400)
                 {
                     response.Message = orderdetails.Result.Message;
-                    response.Code = (int)HttpStatusCode.NotFound;
+                    response.Code = (int)HttpStatusCode.BadRequest;
                 }
                 else
                 {

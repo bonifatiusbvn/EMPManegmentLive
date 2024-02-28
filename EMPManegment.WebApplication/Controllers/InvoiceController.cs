@@ -16,6 +16,7 @@ using DinkToPdf.Contracts;
 using Aspose.Pdf.Facades;
 using DinkToPdf;
 using Newtonsoft.Json.Converters;
+using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
 using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 
 
@@ -60,10 +61,29 @@ namespace EMPManegment.Web.Controllers
             return View();
         }
 
-        [HttpGet]
-        public IActionResult InvoiceDetails()
+        public async Task<IActionResult> InvoiceDetails(string OrderId)
         {
-            return View();
+            try
+            {
+                ApiResponseModel Response = await APIServices.GetAsync("", "Invoice/CheckInvoiceNo?OrderId=" + OrderId);
+                List<OrderDetailView> order = new List<OrderDetailView>();
+                ApiResponseModel response = await APIServices.GetAsync("", "Invoice/GetInvoiceDetailsByOrderId?OrderId=" + OrderId);
+                if (response.code == 200)
+                {
+                    order = JsonConvert.DeserializeObject<List<OrderDetailView>>(response.data.ToString());
+                    response.data = order;
+
+                }
+                if (Response.code == 200)
+                {
+                    ViewBag.InvoiceNo = Response.data;
+                }
+                return View(order);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         [HttpGet]
@@ -71,19 +91,16 @@ namespace EMPManegment.Web.Controllers
         {
             try
             {
-                List<OrderDetailView> order = new List<OrderDetailView>();
-                ApiResponseModel Response = await APIServices.GetAsync("", "Invoice/CheckInvoiceNo?OrderId=" + OrderId);
                 ApiResponseModel response = await APIServices.GetAsync("", "Invoice/GetInvoiceDetailsByOrderId?OrderId=" + OrderId);
-                if (response.code == 200 && Response.code == 200)
+                if (response.code == 200)
                 {
-                    order = JsonConvert.DeserializeObject<List<OrderDetailView>>(response.data.ToString());
-                    ViewBag.InvoiceNo = Response.data;
+                    return Ok(new { Code = response.code });
                 }
                 else
                 {
-                    return new JsonResult(new { Message = string.Format(response.message), Code = response.code });
+                    return new JsonResult(new { Message = string.Format(response.message), Code = response.code, Icone = "warning" });
                 }
-                return View("InvoiceDetails", response.data);
+                //return View("InvoiceDetails", response.data);
             }
             catch (Exception ex)
             {
@@ -204,9 +221,22 @@ namespace EMPManegment.Web.Controllers
         }
 
         [HttpGet]
-        public IActionResult CreditDebitListView()
+        public async Task<IActionResult> CreditDebitListView()
         {
-            return View();
+            try
+            {
+                List<CreditDebitView> invoice = new List<CreditDebitView>();
+                ApiResponseModel response = await APIServices.GetAsyncId(null, "Invoice/GetInvoiceDetailsList");
+                if (response.code == 200)
+                {
+                    invoice = JsonConvert.DeserializeObject<List<CreditDebitView>>(response.data.ToString());
+                }
+                return View(invoice);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         [HttpPost]
