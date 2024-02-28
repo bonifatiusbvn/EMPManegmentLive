@@ -203,9 +203,22 @@ namespace EMPManegment.Web.Controllers
         }
 
         [HttpGet]
-        public IActionResult CreditDebitListView()
+        public async Task<IActionResult> CreditDebitListView()
         {
-            return View();
+            try
+            {
+                List<CreditDebitView> invoice = new List<CreditDebitView>();
+                ApiResponseModel response = await APIServices.GetAsyncId(null, "Invoice/GetInvoiceDetailsList");
+                if (response.code == 200)
+                {
+                    invoice = JsonConvert.DeserializeObject<List<CreditDebitView>>(response.data.ToString());
+                }
+                return View(invoice);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }

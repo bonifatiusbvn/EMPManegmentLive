@@ -17,5 +17,6 @@ namespace EMPManegment.Inretface.Services.InvoiceMaster
         string CheckInvoiceNo(string OrderId);
         Task<UserResponceModel> InsertInvoiceDetails(GenerateInvoiceModel InsertInvoice);
         Task<OrderResponseModel> GetInvoiceDetailsByOrderId(string OrderId);
+       
     }
 }
