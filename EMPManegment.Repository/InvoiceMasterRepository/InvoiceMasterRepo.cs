@@ -91,9 +91,9 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                 });
                 return Payment;
             }
-            catch (Exception )
+            catch (Exception)
             {
-                throw ;
+                throw;
             }
         }
 
@@ -350,7 +350,22 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                         CreatedOn = DateTime.Now,
                         CreatedBy = InsertInvoice.CreatedBy,
                     };
+                    var craditdebit = new TblCreditDebitMaster()
+                    {
+                        VendorId = InsertInvoice.VandorId,
+                        Type = InsertInvoice.InvoiceType,
+                        InvoiceNo = InsertInvoice.InvoiceNo,
+                        Date = DateTime.Now,
+                        PaymentType = InsertInvoice.PaymentType,
+                        CreditDebitAmount = InsertInvoice.CreditDebitAmount,
+                        PendingAmount = InsertInvoice.PendingAmount,
+                        TotalAmount = InsertInvoice.TotalAmount,
+                        CreatedOn = DateTime.Now,
+                        CreatedBy = InsertInvoice.CreatedBy,
+                    };
+
                     Context.TblInvoices.Add(invoicemodel);
+                    Context.TblCreditDebitMasters.Add(craditdebit);
                     await Context.SaveChangesAsync();
                     response.Code = 200;
                     response.Message = "Invoice Generated successfully!";
