@@ -66,12 +66,8 @@
                         <!--end col-->
                         <div class="col-lg-4 col-sm-6">
                             <div>
-                                <label for="payment" class="text-muted text-uppercase fw-semibold">Payment Method</label>
-                                <div class="input-light">
-                                    <select class="form-control bg-light border-0" data-choices data-choices-search-false id="paymentMethod" name="payment">
-                                        <option selected disabled value="">---Select Payment Type---</option>
-                                    </select>
-                                </div>
+                                <label for="payment" class="text-muted text-uppercase fw-semibold">Payment Type</label>
+                                <input type="text" id="paymenttype" class="form-control bg-light border-0" name="payment" value="Credit" readonly />
                             </div>
                         </div>
                         <!--end col-->
@@ -236,19 +232,10 @@
                                 <label for="choices-payment-type" class="form-label text-muted text-uppercase fw-semibold">Payment Details</label>
                                 <div class="input-light">
                                     <select class="form-control bg-light border-0" data-choices data-choices-search-false data-choices-removeItem id="txtpaymentmethod">
-                                        <option value="">Payment Method</option>
-                                        <option value="Mastercard">Mastercard</option>
-                                        <option value="Credit Card">Credit Card</option>
-                                        <option value="Visa">Visa</option>
-                                        <option value="Paypal">Paypal</option>
+                                        <option selected disabled value="">---Select Payment Method---</option>
                                     </select>
+                                    <input type="hidden" class="text-muted text-uppercase fw-semibold" id="txtpaymentmethodid">
                                 </div>
-                            </div>
-                            <div class="mb-2">
-                                <input class="form-control bg-light border-0" type="text" id="cardholderName" placeholder="Card Holder Name">
-                            </div>
-                            <div class="mb-2">
-                                <input class="form-control bg-light border-0" type="text" id="cardNumber" placeholder="xxxx xxxx xxxx xxxx">
                             </div>
                             <div>
                                 <input class="form-control  bg-light border-0" type="text" id="amountTotalPay" placeholder="$0.00" readonly />

@@ -1,6 +1,7 @@
 ﻿using EMPManagment.Web.Helper;
 using EMPManagment.Web.Models.API;
 using EMPManegment.EntityModels.ViewModels;
+using EMPManegment.EntityModels.ViewModels.ExpenseMaster;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.OrderModels;
 using EMPManegment.EntityModels.ViewModels.ProductMaster;
@@ -147,7 +148,24 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
-
+        [HttpGet]
+        public async Task<JsonResult> GetPaymentMethodList()
+        {
+            try
+            {
+                List<PaymentMethodView> PaymentMethod = new List<PaymentMethodView>();
+                ApiResponseModel res = await APIServices.GetAsync("", "OrderDetails/GetAllPaymentMethod");
+                if (res.code == 200)
+                {
+                    PaymentMethod = JsonConvert.DeserializeObject<List<PaymentMethodView>>(res.data.ToString());
+                }
+                return new JsonResult(PaymentMethod);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
         public IActionResult ShowPaymentDetails()
         {
             return View();

@@ -16,5 +16,6 @@ namespace EMPManegment.Inretface.Services.OrderDetails
         string CheckOrder();
         Task<List<OrderDetailView>> GetOrderDetailsById(string OrderId);
         Task<UserResponceModel> InsertMultipleOrder(List<OrderView> InsertOrder);
+        Task<IEnumerable<PaymentMethodView>> GetAllPaymentMethod();
     }
 }
