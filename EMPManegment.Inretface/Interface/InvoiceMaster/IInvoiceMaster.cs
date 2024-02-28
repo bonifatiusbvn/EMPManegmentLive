@@ -15,7 +15,6 @@ namespace EMPManegment.Inretface.Interface.InvoiceMaster
     public interface IInvoiceMaster
     {
         Task<InvoiceViewModel> GetInvoiceDetailsById(Guid Id);
-        Task<IEnumerable<InvoiceViewModel>> GetInvoiceNoList();
         Task<IEnumerable<InvoiceViewModel>> GetInvoiceListByVendorId(Guid Vid);
         Task<IEnumerable<InvoiceViewModel>> GetInvoiceDetailsList();
         string CheckInvoiceNo(string OrderId);

@@ -314,17 +314,6 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
             }
         }
 
-        public async Task<IEnumerable<InvoiceViewModel>> GetInvoiceNoList()
-        {
-            IEnumerable<InvoiceViewModel> GetInvoiceList = Context.TblInvoices.ToList().Select(a => new InvoiceViewModel
-            {
-                Id = a.Id,
-                InvoiceNo = a.InvoiceNo,
-
-            }).ToList();
-            return GetInvoiceList;
-        }
-
         public async Task<UserResponceModel> InsertInvoiceDetails(GenerateInvoiceModel InsertInvoice)
         {
             UserResponceModel response = new UserResponceModel();

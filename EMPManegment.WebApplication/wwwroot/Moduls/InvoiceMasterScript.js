@@ -1,19 +1,8 @@
 ﻿
 $(document).ready(function () {
-    GetInvoiceNoList()
     GetVendorName()
     GetAllVendorData()
 });
-function GetInvoiceNoList() {
-    $.ajax({
-        url: '/Invoice/GetInvoiceNoList',
-        success: function (result) {
-            $.each(result, function (i, data) {
-                $('#txtInvoiceNo').append('<Option value=' + data.id + '>' + data.invoiceNo + '</Option>')
-            });
-        }
-    });
-}
 function GetVendorName() {
 
     $.ajax({
@@ -57,11 +46,11 @@ $(document).ready(function () {
     });
 });
 
-function GetInvoiceDetailsByOrderId(OrderId) {debugger
+function GetInvoiceDetailsByOrderId(OrderId) {
     $.ajax({
         url: '/Invoice/GetInvoiceDetailsByOrderId/?OrderId=' + OrderId,
         type: 'GET',
-        success: function (result) {debugger
+        success: function (result) {
             if (result.code == 400) {
                 Swal.fire({
                     title: result.message,
@@ -69,7 +58,7 @@ function GetInvoiceDetailsByOrderId(OrderId) {debugger
                     confirmButtonColor: '#3085d6',
                     confirmButtonText: 'OK',
                 });
-            } else {debugger
+            } else {
                 window.location = '/Invoice/InvoiceDetails/?OrderId=' + OrderId;
             }
         },
@@ -81,9 +70,7 @@ function GetInvoiceDetailsByOrderId(OrderId) {debugger
     });
 }
 
-function InsertInvoiceDetails() {debugger
 function InsertInvoiceDetails() {
-    debugger
 
     var objData = {
         InvoiceNo: $("#txtinvoiceid").val(),
@@ -100,7 +87,7 @@ function InsertInvoiceDetails() {
     };
     var form_data = new FormData();
     form_data.append("INVOICEDETAILS", JSON.stringify(objData));
-    debugger
+    
     $.ajax({
         url: '/Invoice/InsertInvoiceDetails',
         type: 'POST',
@@ -109,7 +96,7 @@ function InsertInvoiceDetails() {
         contentType: false,
         processData: false,
         success: function (result) {
-            debugger
+            
             if (result.message == "Invoice Generated successfully!") {
                 Swal.fire({
                     title: result.message,
@@ -121,7 +108,7 @@ function InsertInvoiceDetails() {
                 });
             }
             else {
-                debugger
+                
                 Swal.fire({
                     title: result.message,
                     icon: result.icone,

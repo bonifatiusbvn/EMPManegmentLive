@@ -127,24 +127,6 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
-        [HttpGet]
-        public async Task<JsonResult> GetInvoiceNoList()
-        {
-            try
-            {
-                List<InvoiceViewModel> InvoiceNoList = new List<InvoiceViewModel>();
-                ApiResponseModel res = await APIServices.GetAsync("", "Invoice/GetInvoiceNoList");
-                if (res.code == 200)
-                {
-                    InvoiceNoList = JsonConvert.DeserializeObject<List<InvoiceViewModel>>(res.data.ToString());
-                }
-                return new JsonResult(InvoiceNoList);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
         public async Task<IActionResult> InvoiceListView()
         {
             try

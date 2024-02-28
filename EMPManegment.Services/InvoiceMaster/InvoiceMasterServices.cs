@@ -45,12 +45,6 @@ namespace EMPManegment.Services.InvoiceMaster
             return await InvoiceMaster.GetInvoiceListByVendorId(Vid);
         }
 
-        public async Task<IEnumerable<InvoiceViewModel>> GetInvoiceNoList()
-        {
-
-            return await InvoiceMaster.GetInvoiceNoList();
-        }
-
         public async Task<UserResponceModel> InsertInvoiceDetails(GenerateInvoiceModel InsertInvoice)
         {
             return await InvoiceMaster.InsertInvoiceDetails(InsertInvoice);
