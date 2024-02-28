@@ -100,7 +100,7 @@ namespace EMPManegment.Web.Controllers
                 {
                     return new JsonResult(new { Message = string.Format(response.message), Code = response.code, Icone = "warning" });
                 }
-                //return View("InvoiceDetails", response.data);
+
             }
             catch (Exception ex)
             {
@@ -205,20 +205,8 @@ namespace EMPManegment.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> CreditDebitListView()
         {
-            try
-            {
-                List<CreditDebitView> invoice = new List<CreditDebitView>();
-                ApiResponseModel response = await APIServices.GetAsyncId(null, "Invoice/GetInvoiceDetailsList");
-                if (response.code == 200)
-                {
-                    invoice = JsonConvert.DeserializeObject<List<CreditDebitView>>(response.data.ToString());
-                }
-                return View(invoice);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            return View();
+
         }
 
         [HttpPost]
