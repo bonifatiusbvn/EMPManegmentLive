@@ -5,6 +5,13 @@
 }
 <link href="~/UserHome/minimal/assets/libs/swiper/swiper-bundle.min.css" rel="stylesheet" type="text/css" />
 
+@{
+    decimal? TotalAmount = 0;
+}
+@foreach (var item in Model)
+{
+    TotalAmount += item.TotalAmount;
+}
 <!-- start page title -->
 <div class="row">
     <div class="col-12">
@@ -104,7 +111,7 @@
                                     <a href="javascript:void(0);" class="fw-medium">Bitcoin (BTC)</a>
                                 </div>
                             </div>
-                            <h3 class="mb-2">$245<small class="text-muted fs-13">.65k</small></h3>
+                            <h3 class="mb-2">₹@TotalAmount</h3>
                             <h6 class="text-muted mb-0">Send - Receive (Previous Month)</h6>
                         </div>
                     </div>
@@ -194,8 +201,7 @@
                                     <th class="sort" data-sort="currency_name" scope="col">Type</th>
                                     <th class="sort" data-sort="form_name" scope="col">InvoiceNo</th>
                                     <th class="sort" data-sort="to_name" scope="col">Date</th>
-                                    <th class="sort" data-sort="transaction_id" scope="col">Amount</th>
-                                    <th class="sort" data-sort="details" scope="col">GST</th>
+                                    <th class="sort" data-sort="transaction_id" scope="col">TotalAmount</th>
                                     <th class="sort" data-sort="status" scope="col">Status</th>
                                 </tr>
                                 <!--end tr-->
@@ -215,11 +221,10 @@
                                         <td class="date">@item.VendorName<small class="text-muted"></small></td>
                                         <td class="form_name">@item.InvoiceType</td>
                                         <td class="to_name">@item.OrderId</td>
-                                        <td class="details">@item.Date</td>
+                                        <td class="details">@item.Date.ToShortDateString()</td>
                                         <td>
                                             <h6 class="text-success mb-1 amount">@item.TotalAmount</h6>
                                         </td>
-                                        <td class="transaction_id">@item.TotalGst</td>
                                         <td class="status">
                                             <span class="badge bg-primary-subtle text-primary fs-11"><i class="ri-time-line align-bottom"></i> Processing</span>
                                         </td>
