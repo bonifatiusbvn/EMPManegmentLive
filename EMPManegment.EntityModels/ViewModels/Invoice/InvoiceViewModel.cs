@@ -51,7 +51,7 @@ namespace EMPManegment.EntityModels.ViewModels.Invoice
 
         public Guid? UpdatedBy { get; set; }
         public decimal? PerUnitPrice { get; set; }
-        public DateTime? Date { get; set; }
+        public DateTime Date { get; set; }
         public string VendorName { get; set; }
         public string? PaymentStatus { get; set; }
         public string? BillingName { get; set; }
