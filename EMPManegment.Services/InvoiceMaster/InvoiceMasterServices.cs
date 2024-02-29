@@ -45,6 +45,11 @@ namespace EMPManegment.Services.InvoiceMaster
             return await InvoiceMaster.GetInvoiceListByVendorId(Vid);
         }
 
+        public async Task<IEnumerable<CreditDebitView>> GetLastTransactionByVendorId(Guid Vid)
+        {
+            return await InvoiceMaster.GetLastTransactionByVendorId(Vid);
+        }
+
         public async Task<UserResponceModel> InsertInvoiceDetails(GenerateInvoiceModel InsertInvoice)
         {
             return await InvoiceMaster.InsertInvoiceDetails(InsertInvoice);

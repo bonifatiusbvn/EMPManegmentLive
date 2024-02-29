@@ -295,6 +295,32 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
             }
         }
 
+        public async Task<IEnumerable<CreditDebitView>> GetLastTransactionByVendorId(Guid Vid)
+        {
+            try
+            {
+                IEnumerable<CreditDebitView> invoiceList = (from a in Context.TblCreditDebitMasters.Where(x => x.VendorId == Vid)
+                                                            join b in Context.TblVendorMasters
+                                                            on a.VendorId equals b.Vid
+                                                            select new CreditDebitView
+                                                            {
+                                                                Id = a.Id,
+                                                                VendorName = b.VendorCompany,
+                                                                Date = a.Date,
+                                                                PaymentType = a.PaymentType,
+                                                                PaymentMethod = a.PaymentMethod,
+                                                                PendingAmount = a.PendingAmount,
+                                                                CreditDebitAmount = a.CreditDebitAmount,
+                                                                TotalAmount = a.TotalAmount,
+                                                            });
+                return invoiceList;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public async Task<UserResponceModel> InsertInvoiceDetails(GenerateInvoiceModel InsertInvoice)
         {
             UserResponceModel response = new UserResponceModel();

@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Services\InvoiceMasterServices\**" />
+    <EmbeddedResource Remove="Services\InvoiceMasterServices\**" />
+    <None Remove="Services\InvoiceMasterServices\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="5.0.17" />
   </ItemGroup>
 
@@ -17,7 +23,6 @@
 
   <ItemGroup>
     <Folder Include="Interface\TaskDetails\" />
-    <Folder Include="Services\InvoiceMasterServices\" />
   </ItemGroup>
 
 </Project>
