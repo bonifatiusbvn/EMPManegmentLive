@@ -160,12 +160,30 @@
                     <!--end col-->
                     <div class="col-auto ms-auto">
                         <div class="d-flex gap-2">
-                            <button class="btn btn-primary"><i class="ri-equalizer-line align-bottom me-1"></i> Filters</button>
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#zoomInModal"><i class="ri-equalizer-line align-bottom me-1"></i> Filters</button>
                         </div>
                     </div>
                     <!--end col-->
                 </div>
             </div><!-- end card header -->
+            <div id="zoomInModal" class="modal fade zoomIn" tabindex="-1" aria-labelledby="zoomInModalLabel" aria-hidden="true" style="display: none;">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="zoomInModalLabel">Last 10 Transaction</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary ">Save Changes</button>
+                        </div>
+
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
             <div class="card-body p-0">
                 <div class="card-body">
                     <div class="table-responsive table-card">
