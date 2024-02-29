@@ -194,10 +194,8 @@
                                     <th class="sort" data-sort="currency_name" scope="col">Type</th>
                                     <th class="sort" data-sort="form_name" scope="col">InvoiceNo</th>
                                     <th class="sort" data-sort="to_name" scope="col">Date</th>
-                                    <th class="sort" data-sort="details" scope="col">GST</th>
                                     <th class="sort" data-sort="transaction_id" scope="col">Amount</th>
-                                    <th class="sort" data-sort="type" scope="col">Type</th>
-                                    <th class="sort" data-sort="amount" scope="col">Amount</th>
+                                    <th class="sort" data-sort="details" scope="col">GST</th>
                                     <th class="sort" data-sort="status" scope="col">Status</th>
                                 </tr>
                                 <!--end tr-->
@@ -214,16 +212,14 @@
                                                 </div>
                                             </div>
                                         </td>
-                                        <td class="date">VendorName<small class="text-muted"></small></td>
-                                        <td class="form_name">InvoiceType</td>
-                                        <td class="to_name">OrderId</td>
-                                        <td class="details">InvoiceDate</td>
-                                        <td class="transaction_id">TotalGst</td>
-                                        <td class="type">TotalAmount</td>
+                                        <td class="date">@item.VendorName<small class="text-muted"></small></td>
+                                        <td class="form_name">@item.InvoiceType</td>
+                                        <td class="to_name">@item.OrderId</td>
+                                        <td class="details">@item.Date</td>
                                         <td>
-                                            <h6 class="text-danger mb-1 amount">-142.35 BTC</h6>
-                                            <p class="text-muted mb-0">$697.88k</p>
+                                            <h6 class="text-success mb-1 amount">@item.TotalAmount</h6>
                                         </td>
+                                        <td class="transaction_id">@item.TotalGst</td>
                                         <td class="status">
                                             <span class="badge bg-primary-subtle text-primary fs-11"><i class="ri-time-line align-bottom"></i> Processing</span>
                                         </td>

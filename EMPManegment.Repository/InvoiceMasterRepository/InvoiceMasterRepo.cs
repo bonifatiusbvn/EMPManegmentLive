@@ -280,6 +280,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                                                              {
                                                                  Id = a.Id,
                                                                  OrderId = a.OrderId,
+                                                                 InvoiceType = a.InvoiceType,
                                                                  VendorName = b.VendorCompany,
                                                                  VandorId = b.Vid,
                                                                  Date = a.InvoiceDate,
