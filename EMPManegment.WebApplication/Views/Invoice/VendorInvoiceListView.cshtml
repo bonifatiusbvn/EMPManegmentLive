@@ -243,7 +243,7 @@
                     <div class="tab-pane active" id="cryptoBuy" role="tabpanel">
                         <div class="p-3 bg-primary-subtle">
                             <div class="float-end ms-2">
-                                <h6 class="text-primary mb-0"><span class="text-body">$12,426.07</span></h6>
+                                <h6 class="text-primary mb-0"><span class="text-body">₹@TotalAmount</span></h6>
                             </div>
                             <h6 class="mb-0">Total Outstanding</h6>
                         </div>
@@ -252,21 +252,19 @@
                                 <div class="col-6">
                                     <div class="mb-3">
                                         <label>Payment Type :</label>
-                                        <select class="form-select">
-                                            <option>Credit</option>
-                                            <option>Debit</option>
+                                        <select class="form-select" id="paymenttype">
+                                            <option selected disabled value=""></option>
                                         </select>
+                                        <input type="hidden" class="text-muted text-uppercase fw-semibold" id="paymenttypeid">
                                     </div>
                                 </div><!-- end col -->
                                 <div class="col-6">
                                     <div class="mb-3">
                                         <label>Payment Method :</label>
-                                        <select class="form-select">
-                                            <option>Wallet Balance</option>
-                                            <option>Credit / Debit Card</option>
-                                            <option>PayPal</option>
-                                            <option>Payoneer</option>
+                                        <select class="form-select" id="txtpaymentmethod">
+                                            <option selected disabled value=""></option>
                                         </select>
+                                        <input type="hidden" class="text-muted text-uppercase fw-semibold" id="txtpaymentmethodid">
                                     </div>
                                 </div><!-- end col -->
                             </div><!-- end row -->
@@ -336,3 +334,6 @@
 
 <!--crypto transactions init js-->
 <script src="~/UserHome/minimal/assets/js/pages/crypto-transactions.init.js"></script>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/moduls/creditdebitmasterscript.js"></script>
