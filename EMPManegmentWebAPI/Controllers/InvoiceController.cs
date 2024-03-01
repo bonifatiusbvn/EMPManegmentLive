@@ -2,6 +2,7 @@
 using EMPManegment.EntityModels.ViewModels.Invoice;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.OrderModels;
+using EMPManegment.EntityModels.ViewModels.ProductMaster;
 using EMPManegment.EntityModels.ViewModels.TaskModels;
 using EMPManegment.Inretface.Interface.OrderDetails;
 using EMPManegment.Inretface.Interface.ProductMaster;
@@ -167,6 +168,37 @@ namespace EMPManagment.API.Controllers
 
                 throw ex;
             }
+        }
+        [HttpPost]
+        [Route("InsertCreditDebitDetails")]
+        public async Task<IActionResult> InsertCreditDebitDetails(CreditDebitView creditdebit)
+        {
+            UserResponceModel response = new UserResponceModel();
+            try
+            {
+                var insertcreditdebit = InvoiceMaster.InsertCreditDebitDetails(creditdebit);
+                if (insertcreditdebit.Result.Code == 200)
+                {
+                    response.Code = (int)HttpStatusCode.OK;
+                    response.Message = insertcreditdebit.Result.Message;
+                }
+                else
+                {
+                    response.Code = (int)HttpStatusCode.NotFound;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return StatusCode(response.Code, response);
+        }
+        [HttpPost]
+        [Route("GetCreditDebitDetailsByVendorId")]
+        public async Task<IActionResult> GetCreditDebitDetailsByVendorId(Guid Vid)
+        {
+            IEnumerable<CreditDebitView> creditdebit = await InvoiceMaster.GetCreditDebitListByVendorId(Vid);
+            return Ok(new { code = 200, data = creditdebit.ToList() });
         }
     }
 }

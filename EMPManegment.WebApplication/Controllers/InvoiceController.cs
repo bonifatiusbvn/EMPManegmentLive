@@ -172,6 +172,30 @@ namespace EMPManegment.Web.Controllers
         }
 
         [HttpPost]
+        public async Task<IActionResult> InsertCreditDebitDetails()
+        {
+            try
+            {
+                var creditdebit = HttpContext.Request.Form["CREDITDEBITDETAILS"];
+                var InsertDetails = JsonConvert.DeserializeObject<CreditDebitView>(creditdebit);
+
+                ApiResponseModel postuser = await APIServices.PostAsync(InsertDetails, "Invoice/InsertCreditDebitDetails");
+                if (postuser.code == 200)
+                {
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser });
+                }
+                else
+                {
+                    return new JsonResult(new { Message = string.Format(postuser.message), Icone = string.Format(postuser.Icone), Code = postuser.code });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpPost]
         public async Task<IActionResult> DownloadPdf()
         {
             string Content = HttpContext.Request.Form["DOWNLOADINVOICE"];
@@ -374,6 +398,26 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
+        [HttpPost]
+        public async Task<JsonResult> GetCreditDebitDetailsByVendorId()
+        {
+            try
+            {
+                var creditdebitdetails = HttpContext.Request.Form["CREDITDEBITDETAILSBYID"];
+                var InsertDetails = JsonConvert.DeserializeObject<CreditDebitView>(creditdebitdetails);
+                List<CreditDebitView> creditdebit = new List<CreditDebitView>();
+                ApiResponseModel response = await APIServices.PostAsync(null, "Invoice/GetCreditDebitDetailsByVendorId?Vid="+InsertDetails.VendorId);
+                if (response.code == 200)
+                {
+                    creditdebit = JsonConvert.DeserializeObject<List<CreditDebitView>>(response.data.ToString());
+                }
+                return new JsonResult(creditdebit);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 
 
