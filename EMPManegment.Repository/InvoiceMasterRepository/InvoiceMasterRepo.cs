@@ -70,6 +70,34 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
             }
         }
 
+        public async Task<IEnumerable<CreditDebitView>> GetCreditDebitListView()
+        {
+            try
+            {
+                IEnumerable<CreditDebitView> Payment = Context.TblCreditDebitMasters.ToList().Select(a => new CreditDebitView
+                {
+                    Id = a.Id,
+                    VendorId = a.VendorId,
+                    Type = a.Type,
+                    InvoiceNo = a.InvoiceNo,
+                    Date = a.Date,
+                    PaymentType = a.PaymentType,
+                    CreditDebitAmount = a.CreditDebitAmount,
+                    PendingAmount = a.PendingAmount,
+                    TotalAmount = a.TotalAmount,
+                    CreatedOn = a.CreatedOn,
+                    CreatedBy = a.CreatedBy,
+                    UpdatedOn = a.UpdatedOn,
+                    UpdatedBy = a.UpdatedBy,
+                });
+                return Payment;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         public async Task<IEnumerable<CreditDebitView>> GetCreditDebitListByVendorId(Guid Vid)
         {
             try
