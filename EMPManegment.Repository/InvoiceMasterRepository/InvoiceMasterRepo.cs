@@ -108,20 +108,27 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                 var data = await Context.TblCreditDebitMasters.Where(x => x.VendorId == Vid).ToListAsync();
                 if (data != null)
                 {
-                    Id = a.Id,
-                    VendorId = a.VendorId,
-                    Type = a.Type,
-                    InvoiceNo = a.InvoiceNo,
-                    Date = a.Date,
-                    CreditDebitAmount = a.CreditDebitAmount,
-                    PendingAmount = a.PendingAmount,
-                    TotalAmount = a.TotalAmount,
-                    CreatedOn = a.CreatedOn,
-                    CreatedBy = a.CreatedBy,
-                    UpdatedOn = a.UpdatedOn,
-                    UpdatedBy = a.UpdatedBy,
-                });
-                return Payment;
+                    foreach (var a in data)
+                    {
+                        creditdebit.Add(new CreditDebitView()
+                        {
+                            Id = a.Id,
+                            VendorId = a.VendorId,
+                            Type = a.Type,
+                            InvoiceNo = a.InvoiceNo,
+                            Date = a.Date,
+                            PaymentType = a.PaymentType,
+                            CreditDebitAmount = a.CreditDebitAmount,
+                            PendingAmount = a.PendingAmount,
+                            TotalAmount = a.TotalAmount,
+                            CreatedOn = a.CreatedOn,
+                            CreatedBy = a.CreatedBy,
+                            UpdatedOn = a.UpdatedOn,
+                            UpdatedBy = a.UpdatedBy,
+                        });
+                    }
+                }
+                return creditdebit;
             }
             catch (Exception ex)
             {
@@ -342,8 +349,8 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                                                                 Id = a.Id,
                                                                 VendorName = b.VendorCompany,
                                                                 Date = a.Date,
-                                                                PaymentType = c.Type,
-                                                                PaymentMethod = d.PaymentMethod,
+                                                                PaymentTypeName = c.Type,
+                                                                PaymentMethodName = d.PaymentMethod,
                                                                 PendingAmount = a.PendingAmount,
                                                                 CreditDebitAmount = a.CreditDebitAmount,
                                                                 TotalAmount = a.TotalAmount,
@@ -404,8 +411,8 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                                                                Id = a.Id,
                                                                VendorName = b.VendorCompany,
                                                                Date = a.Date,
-                                                               PaymentType = c.Type,
-                                                               PaymentMethod = d.PaymentMethod,
+                                                               PaymentTypeName = c.Type,
+                                                               PaymentMethodName = d.PaymentMethod,
                                                                PendingAmount = a.PendingAmount,
                                                                CreditDebitAmount = a.CreditDebitAmount,
                                                                TotalAmount = a.TotalAmount,
@@ -497,8 +504,8 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                                                                Id = a.Id,
                                                                VendorName = b.VendorCompany,
                                                                Date = a.Date,
-                                                               PaymentType = c.Type,
-                                                               PaymentMethod = d.PaymentMethod,
+                                                               PaymentTypeName = c.Type,
+                                                               PaymentMethodName = d.PaymentMethod,
                                                                PendingAmount = a.PendingAmount,
                                                                CreditDebitAmount = a.CreditDebitAmount,
                                                                TotalAmount = a.TotalAmount,
@@ -524,8 +531,8 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                                     Id = a.Id,
                                     VendorName = b.VendorCompany,
                                     Date = a.Date,
-                                    PaymentType = c.Type,
-                                    PaymentMethod = d.PaymentMethod,
+                                    PaymentTypeName = c.Type,
+                                    PaymentMethodName = d.PaymentMethod,
                                     PendingAmount = a.PendingAmount,
                                     CreditDebitAmount = a.CreditDebitAmount,
                                     TotalAmount = a.TotalAmount
@@ -547,8 +554,8 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
             {
                 allCreditList = allCreditList.Where(e =>
                     e.VendorName.Contains(dataTable.searchValue) ||
-                    e.PaymentType.Contains(dataTable.searchValue) ||
-                    e.PaymentMethod.Contains(dataTable.searchValue));
+                    e.PaymentTypeName.Contains(dataTable.searchValue) ||
+                    e.PaymentMethodName.Contains(dataTable.searchValue));
             }
 
             int totalRecord = await allCreditList.CountAsync();

@@ -13,7 +13,8 @@ namespace EMPManegment.EntityModels.ViewModels.Invoice
         public Guid? VendorId { get; set; }
 
         public string? VendorName { get; set; }
-        public string PaymentMethod { get; set; }
+        public int PaymentMethod { get; set; }
+        public string PaymentMethodName { get; set; }
 
         public string? Type { get; set; }
 
@@ -21,7 +22,8 @@ namespace EMPManegment.EntityModels.ViewModels.Invoice
 
         public DateTime? Date { get; set; }
 
-        public string PaymentType { get; set; }
+        public int? PaymentType { get; set; }
+        public string PaymentTypeName { get; set; }
 
         public decimal? CreditDebitAmount { get; set; }
 
