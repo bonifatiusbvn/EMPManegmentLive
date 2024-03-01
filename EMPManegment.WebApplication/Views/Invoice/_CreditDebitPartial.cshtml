@@ -10,10 +10,11 @@
                     <tr>
                         <th class="sort" data-sort="name" scope="col" style="width: 60px;"></th>
                         <th class="sort" data-sort="date" scope="col">VendorName</th>
-                        <th class="sort" data-sort="currency_name" scope="col">Type</th>
-                        <th class="sort" data-sort="form_name" scope="col">InvoiceNo</th>
-                        <th class="sort" data-sort="to_name" scope="col">Date</th>
-                        <th class="sort" data-sort="transaction_id" scope="col">TotalAmount</th>
+                        <th class="sort" data-sort="currency_name" scope="col">Date</th>
+                        <th class="sort" data-sort="form_name" scope="col">PaymentMethod</th>
+                        <th class="sort" data-sort="to_name" scope="col">PaymentType</th>
+                        <th class="sort" data-sort="transaction_id" scope="col">CreditDebitAmount</th>
+                        <th class="sort" data-sort="transaction_id" scope="col">PendingAmount</th>
                         <th class="sort" data-sort="status" scope="col">Status</th>
                     </tr>
                     <!--end tr-->
@@ -31,12 +32,11 @@
                                 </div>
                             </td>
                             <td class="date">@item.VendorName<small class="text-muted"></small></td>
-                            <td class="form_name">@item.InvoiceType</td>
-                            <td class="to_name">@item.OrderId</td>
-                            <td class="details">@item.Date.ToShortDateString()</td>
-                            <td>
-                                <h6 class="text-success mb-1 amount">@item.TotalAmount</h6>
-                            </td>
+                            <td class="form_name">@item.Date</td>
+                            <td class="to_name">@item.PaymentMethod</td>
+                            <td class="to_name">@item.PaymentType</td>
+                            <td class="to_name text-success">@item.CreditDebitAmount</td>
+                            <td class="to_name text-danger">@item.PendingAmount</td>
                             <td class="status">
                                 <span class="badge bg-primary-subtle text-primary fs-11"><i class="ri-time-line align-bottom"></i> Processing</span>
                             </td>
@@ -59,3 +59,4 @@
         </div>
     </div>
 </div><!-- end cardbody -->
+<script src="~/moduls/invoicemasterscript.js"></script>

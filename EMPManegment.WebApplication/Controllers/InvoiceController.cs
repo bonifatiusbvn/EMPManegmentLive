@@ -18,6 +18,7 @@ using DinkToPdf;
 using Newtonsoft.Json.Converters;
 using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
 using EMPManegment.EntityModels.ViewModels.DataTableParameters;
+using Microsoft.AspNetCore.Components;
 
 
 
@@ -276,6 +277,103 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetLastTransactionByVendorId(Guid Vid)
+        {
+            try
+            {
+                List<CreditDebitView> products = new List<CreditDebitView>();
+                ApiResponseModel response = await APIServices.GetAsync("", "Invoice/GetLastTransactionByVendorId?Vid=" + Vid);
+                if (response.code == 200)
+                {
+                    products = JsonConvert.DeserializeObject<List<CreditDebitView>>(response.data.ToString());
+                }
+
+                return PartialView("~/Views/Invoice/_CreditDebitPartial.cshtml", products);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllTransactionByVendorId(Guid Vid)
+        {
+            try
+            {
+                List<CreditDebitView> products = new List<CreditDebitView>();
+                ApiResponseModel response = await APIServices.GetAsync("", "Invoice/GetLastTransactionByVendorId?Vid=" + Vid);
+                if (response.code == 200)
+                {
+                    products = JsonConvert.DeserializeObject<List<CreditDebitView>>(response.data.ToString());
+                }
+                return View(products);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        [HttpGet]
+        public async Task<IActionResult> GetAllTransaction()
+        {
+            return View();
+        }
+
+
+
+        [HttpPost]
+        public async Task<IActionResult> GetAllTransactiondata()
+        {
+            try
+            {
+
+                var draw = Request.Form["draw"].FirstOrDefault();
+                var start = Request.Form["start"].FirstOrDefault();
+                var length = Request.Form["length"].FirstOrDefault();
+                var sortColumn = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
+                var sortColumnDir = Request.Form["order[0][dir]"].FirstOrDefault();
+                var searchValue = Request.Form["search[value]"].FirstOrDefault();
+                int pageSize = length != null ? Convert.ToInt32(length) : 0;
+                int skip = start != null ? Convert.ToInt32(start) : 0;
+
+                var dataTable = new DataTableRequstModel
+                {
+                    draw = draw,
+                    start = start,
+                    pageSize = pageSize,
+                    skip = skip,
+                    lenght = length,
+                    searchValue = searchValue,
+                    sortColumn = sortColumn,
+                    sortColumnDir = sortColumnDir
+                };
+                List<CreditDebitView> transactions = new List<CreditDebitView>();
+                var data = new jsonData();
+                ApiResponseModel response = await APIServices.PostAsync(dataTable, "Invoice/GetAllTransaction");
+                if (response.code == 200)
+                {
+                    data = JsonConvert.DeserializeObject<jsonData>(response.data.ToString());
+                    transactions = JsonConvert.DeserializeObject<List<CreditDebitView>>(data.data.ToString());
+                }
+                var jsonData = new
+                {
+                    draw = data.draw,
+                    recordsFiltered = data.recordsFiltered,
+                    recordsTotal = data.recordsTotal,
+                    data = transactions,
+                };
+                return new JsonResult(jsonData);
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
     }
 
 

@@ -2,6 +2,8 @@
 $(document).ready(function () {
     GetVendorName()
     GetAllVendorData()
+    getAllTransactions()
+    GetAllVendorData()
 });
 function GetVendorName() {
 
@@ -271,7 +273,7 @@ function downloadPDF() {
         contentType: false,
         processData: false,
         success: function (data) {
-            debugger
+
             console.log('PDF generated successfully:', data);
 
             window.location.href = data;
@@ -319,6 +321,72 @@ function GetAllVendorData() {
     });
 }
 
+function getLastTransaction() {
+    var Vid = $('#txtvendorid').val();
+
+    $.ajax({
+        url: '/Invoice/GetLastTransactionByVendorId',
+        type: 'GET',
+        dataType: 'html',
+        data: { Vid: Vid },
+        success: function (response) {
+
+
+            $("#lasttenTransaction").html(response);
+            $("#zoomInModal").modal('show');
+        },
+
+    });
+}
+
+function getAllTransactions() {
+
+    var Vid = $('#txtvendorid').val();
+
+    $.ajax({
+        url: '/Invoice/GetAllTransactionPartial',
+        type: 'GET',
+        dataType: 'html',
+        data: { Vid: Vid },
+        success: function (response) {
+            $("#allCreditTransactions").html(response);
+        },
+
+    });
+}
+
+function GetAllVendorData() {
+    debugger
+    $('#transactionTable').DataTable({
+        processing: true,
+        serverSide: true,
+        filter: true,
+        "bDestroy": true,
+        ajax: {
+            type: "Post",
+            url: '/Invoice/GetAllTransactiondata',
+            dataType: 'json'
+        },
+        columns: [
+            { "data": "vendorName", "name": "VendorName" },
+            { "data": "date", "name": "Date" },
+            { "data": "paymentMethod", "name": "PaymentMethod" },
+            { "data": "paymentType", "name": "PaymentType" },
+            { "data": "creditDebitAmount", "name": "CreditDebitAmount" },
+            { "data": "pendingAmount", "name": "PendingAmount" },
+            { "data": "vendorAddress", "name": "VendorAddress" },
+            {
+                "render": function (data, type, full) {
+                    return '<a class="btn btn-sm btn-secondary edit-item-btn" onclick="VendorDetails(\'' + full.id + '\')">Details</a>';
+                }
+            },
+        ],
+        columnDefs: [{
+            "defaultContent": "",
+            "targets": "_all",
+        }]
+    });
+}
 
 
 

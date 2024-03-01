@@ -3,109 +3,16 @@
 <html lang="en" data-layout="vertical" data-topbar="light" data-sidebar="light" data-sidebar-size="lg" data-sidebar-image="none" data-preloader="disable">
 
 
-<!-- Mirrored from themesbrand.com/velzon/html/minimal/auth-signup-cover.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 04 Oct 2023 11:02:38 GMT -->
+<!-- Mirrored from themesbrand.com/velzon/html/minimal/auth-signup-basic.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 04 Oct 2023 11:02:37 GMT -->
 <head>
-    <style>
-        input[type=text] {
-            width: 100%;
-            padding: 10px 20px;
-            margin: 2px 0;
-            box-sizing: border-box;
-            border: 3px solid #ccc;
-            -webkit-transition: 0.5s;
-            transition: 0.5s;
-            outline: none;
-        }
 
-            input[type=text]:focus {
-                border: 3px solid #80bfff;
-            }
-
-        input[type=file] {
-            width: 100%;
-            padding: 10px 20px;
-            margin: 2px 0;
-            box-sizing: border-box;
-            border: 3px solid #ccc;
-            -webkit-transition: 0.5s;
-            transition: 0.5s;
-            outline: none;
-        }
-
-            input[type=file]:focus {
-                border: 3px solid #80bfff;
-            }
-
-        input[type=date] {
-            width: 100%;
-            padding: 10px 20px;
-            margin: 2px 0;
-            box-sizing: border-box;
-            border: 3px solid #ccc;
-            -webkit-transition: 0.5s;
-            transition: 0.5s;
-            outline: none;
-        }
-
-            input[type=date]:focus {
-                border: 3px solid #80bfff;
-            }
-
-        #ddlDepartmenrnt, #Gender, #ddlCountry, #ddlState, #ddlCity {
-            width: 100%;
-            padding: 10px 20px;
-            margin: 2px 0;
-            box-sizing: border-box;
-            border: 3px solid #ccc;
-            -webkit-transition: 0.5s;
-            transition: 0.5s;
-            outline: none;
-        }
-
-            #ddlDepartmenrnt:focus {
-                border: 3px solid #80bfff;
-            }
-
-            #Gender:focus {
-                border: 3px solid #80bfff;
-            }
-
-            #ddlCountry:focus {
-                border: 3px solid #80bfff;
-            }
-
-            #ddlState:focus {
-                border: 3px solid #80bfff;
-            }
-
-            #ddlCity:focus {
-                border: 3px solid #80bfff;
-            }
-
-
-        input[type=password] {
-            width: 100%;
-            padding: 10px 20px;
-            margin: -5px 0;
-            box-sizing: border-box;
-            border: 3px solid #ccc;
-            -webkit-transition: 0.5s;
-            transition: 0.5s;
-            outline: none;
-        }
-
-            input[type=password]:focus {
-                border: 3px solid #80bfff;
-            }
-
-    </style>
     <meta charset="utf-8" />
     <title>Sign Up | Velzon - Admin & Dashboard Template</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
     <meta content="Themesbrand" name="author" />
     <!-- App favicon -->
-    <link rel="shortcut icon" href="~/UserHome/minimal/assets/images/bonifatiusicon.ico">
+    <link rel="shortcut icon" href="~/UserHome/minimal/assets/images/favicon.ico">
 
     <!-- Layout config Js -->
     <script src="~/UserHome/minimal/assets/js/layout.js"></script>
@@ -123,177 +30,187 @@
 
 <body>
 
-    <!-- auth-page wrapper -->
-    <div class="auth-page-wrapper auth-bg-cover py-5 d-flex justify-content-center align-items-center min-vh-100">
-        <div class="bg-overlay"></div>
-        <!-- auth-page content -->
-        <div class="auth-page-content overflow-hidden pt-lg-5">
+    <div class="auth-page-wrapper pt-5">
+        <!-- auth page bg -->
+        <div class="auth-one-bg-position auth-one-bg" id="auth-particles">
+            <div class="bg-overlay"></div>
+
+            <div class="shape">
+                <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1440 120">
+                    <path d="M 0,36 C 144,53.6 432,123.2 720,124 C 1008,124.8 1296,56.8 1440,40L1440 140L0 140z"></path>
+                </svg>
+            </div>
+        </div>
+
+        <!-- auth page content -->
+        <div class="auth-page-content">
             <div class="container">
                 <div class="row">
                     <div class="col-lg-12">
-                        <div class="card overflow-hidden border-0 m-0">
-                            <div class="row justify-content-center g-0">
+                        <div class="text-center mt-sm-5 mb-4 text-white-50">
+                            <div>
+                                <a href="index.html" class="d-inline-block auth-logo">
+                                    <img src="~/UserHome/minimal/assets/images/bonifatiusicon.ico" alt="" height="150">
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- end row -->
 
-
-                                <div class="col-lg-12">
-                                    <div class="p-lg-5 p-4">
-                                        <div class="center">
-                                            <h5 class="text-primary"> Bonifatius SingUp Form</h5>
+                <div class="row justify-content-center">
+                    <div class="row justify-content-center">
+                        <div class="card mt-4">
+                            <div class="card-body p-4">
+                                <div class="text-center mt-2">
+                                    <h5 class="text-primary">Create New Account</h5>
+                                    <p class="text-muted">Get your free velzon account now</p>
+                                </div>
+                                <div class="p-2 mt-4">
+                                    <form class="form w-150 h-100" id="empaddDetails" asp-action="UserSingUp" method="post" enctype="multipart/form-data">
+                                        <div class="fv-row mb-4">
+                                            <select asp-for=DepartmentId id="ddlDepartmenrnt" class="form-control">
+                                                <option>--Select Department--</option>
+                                            </select>
+                                            <input type="hidden" asp-for="DepartmentId" id="txtdeptid" value="" />
+                                            <span asp-validation-for="DepartmentId" class="text-danger"></span>
                                         </div>
+                                        <div class="fv-row mb-4">
+                                            <input type="text" asp-for="UserName" readonly id="EmpId" autocomplete="off" class="form-control" value="@ViewBag.EmpId" />
+                                        </div>
+                                        <div class="row">
 
-                                        <div class="mt-4">
-                                            <form class="form w-150 h-100" id="empaddDetails" asp-action="UserSingUp" method="post" enctype="multipart/form-data">
+                                            <div class="col-6">
                                                 <div class="fv-row mb-4">
-                                                    <select asp-for=DepartmentId id="ddlDepartmenrnt" class="form-control">
-                                                        <option>--Select Department--</option>
-                                                    </select>
-                                                    <input type="hidden" asp-for="DepartmentId" id="txtdeptid" value="" />
-                                                    <span asp-validation-for="DepartmentId" class="text-danger"></span>
+                                                    <input type="text" asp-for="FirstName" placeholder="First Name" name="FirstName" class="form-control" />
+                                                    <span asp-validation-for="FirstName" class="text-danger"></span>
                                                 </div>
+                                            </div>
+                                            <div class="col-6">
                                                 <div class="fv-row mb-4">
-                                                    <input type="text" asp-for="UserName" readonly id="EmpId" autocomplete="off" class="form-control" value="@ViewBag.EmpId" />
+                                                    <input type="text" asp-for="LastName" placeholder="Last Name" name="LastName" class="form-control" />
+                                                    <span asp-validation-for="LastName" class="text-danger"></span>
                                                 </div>
-                                                <div class="row">
-
-                                                    <div class="col-6">
-                                                        <div class="fv-row mb-4">
-                                                            <input type="text" asp-for="FirstName" placeholder="First Name" name="FirstName" class="form-control" />
-                                                            <span asp-validation-for="FirstName" class="text-danger"></span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-6">
-                                                        <div class="fv-row mb-4">
-                                                            <input type="text" asp-for="LastName" placeholder="Last Name" name="LastName" class="form-control" />
-                                                            <span asp-validation-for="LastName" class="text-danger"></span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="fv-row mb-6" data-kt-password-meter="true">
-                                                    <div class="mb-1">
-                                                        <div class="position-relative mb-3">
-                                                            <div class="row">
-                                                                <div class="col-6">
-                                                                    <div class="fv-row mb-4">
-                                                                        <input type="date" asp-for="DateOfBirth" placeholder="DOB" itemid="DOB" max="" autocomplete="off" class="form-control bg-transparent" />
-                                                                        <span asp-validation-for="DateOfBirth" class="text-danger"></span>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-6">
-                                                                    <div class="fv-row mb-4">
-                                                                        <select asp-for="Gender" id="Gender" class="form-control">
-                                                                            <option>--Select Gender--</option>
-                                                                            <option value="Male">Male</option>
-                                                                            <option value="Female">Female</option>
-                                                                            <option value="Other">Other</option>
-                                                                        </select>
-                                                                        <span asp-validation-for="Gender" class="text-danger"></span>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="fv-row mb-4">
-                                                                <input type="text" asp-for="Email" placeholder="Email" id="email" autocomplete="off" class="form-control bg-transparent" />
-                                                                <span asp-validation-for="Email" class="text-danger"></span>
-                                                                <span class="text-danger">@TempData["ErrorMessage"]</span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="row">
-                                                    <div class="col-6">
-                                                        <div class="fv-row mb-4">
-                                                            <select asp-for=CountryId id="ddlCountry" class="form-control bg-transparent">
-                                                                <option>--Select Country--</option>
-                                                            </select>
-                                                            <input type="hidden" asp-for="CountryId" id="txtcountry" value="" />
-                                                            <span asp-validation-for="CountryId" class="text-danger"></span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-6">
-                                                        <div class="fv-row mb-4">
-                                                            <select asp-for=StateId id="ddlState" class="form-control bg-transparent">
-                                                                <option>--Select State--</option>
-                                                            </select>
-                                                            <input type="hidden" asp-for="StateId" id="txtstate" value="" />
-                                                            <span asp-validation-for="StateId" class="text-danger"></span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="fv-row mb-4">
+                                            </div>
+                                        </div>
+                                        <div class="fv-row mb-6" data-kt-password-meter="true">
+                                            <div class="mb-1">
+                                                <div class="position-relative mb-3">
                                                     <div class="row">
                                                         <div class="col-6">
                                                             <div class="fv-row mb-4">
-                                                                <select asp-for=CityId id="ddlCity" class="form-control bg-transparent">
-                                                                    <option>--Select City--</option>
-                                                                </select>
-                                                                <input type="hidden" asp-for="CityId" id="txtcity" value="" />
-                                                                <span asp-validation-for="CityId" class="text-danger"></span>
+                                                                <input type="date" asp-for="DateOfBirth" placeholder="DOB" itemid="DOB" max="" autocomplete="off" class="form-control bg-transparent" />
+                                                                <span asp-validation-for="DateOfBirth" class="text-danger"></span>
                                                             </div>
                                                         </div>
                                                         <div class="col-6">
                                                             <div class="fv-row mb-4">
-                                                                <input type="text" asp-for="PhoneNumber" placeholder="Mobile.NO" id="PhoneNumber" autocomplete="off" class="form-control bg-transparent" />
-                                                                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                                                                <select asp-for="Gender" id="Gender" class="form-control">
+                                                                    <option>--Select Gender--</option>
+                                                                    <option value="Male">Male</option>
+                                                                    <option value="Female">Female</option>
+                                                                    <option value="Other">Other</option>
+                                                                </select>
+                                                                <span asp-validation-for="Gender" class="text-danger"></span>
                                                             </div>
                                                         </div>
-                                                        <div class="fv-row mb-6">
-                                                            <input type="text" asp-for="Address" class="form-control bg-transparent" placeholder="Address" id="Address" style="height: 75px;" />
-                                                            <span asp-validation-for="Address" class="text-danger"></span>
-                                                        </div>
+                                                    </div>
+                                                    <div class="fv-row mb-4">
+                                                        <input type="text" asp-for="Email" placeholder="Email" id="email" autocomplete="off" class="form-control bg-transparent" />
+                                                        <span asp-validation-for="Email" class="text-danger"></span>
+                                                        <span class="text-danger">@TempData["ErrorMessage"]</span>
                                                     </div>
                                                 </div>
-                                                <div class="row">
-                                                    <div class="col-6">
-                                                        <div class="mb-3">
+                                            </div>
+                                        </div>
 
-                                                            <div class="position-relative auth-pass-inputgroup">
-                                                                <input type="password" class="form-control pe-5 password-input" onpaste="return false" placeholder="Enter password" id="password-input" aria-describedby="passwordInput" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" asp-for="Password">
-                                                                <button class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon" type="button" id="password-addon"><i class="ri-eye-fill align-middle"></i></button>
-                                                            </div>
-                                                        </div>
-                                                        <div id="password-contain" class="p-3 bg-light mb-2 rounded">
-                                                            <h5 class="fs-13 fw-semibold">Password must contain:</h5>
-                                                            <p id="pass-length" class="invalid fs-12 mb-2">Minimum <b>8 characters</b></p>
-                                                            <p id="pass-lower" class="invalid fs-12 mb-2">At <b>lowercase</b> letter (a-z)</p>
-                                                            <p id="pass-upper" class="invalid fs-12 mb-2">At least <b>uppercase</b> letter (A-Z)</p>
-                                                            <p id="pass-number" class="invalid fs-12 mb-0">A least <b>number</b> (0-9)</p>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-6">
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <div class="fv-row mb-4">
+                                                    <select asp-for=CountryId id="ddlCountry" class="form-control bg-transparent">
+                                                        <option>--Select Country--</option>
+                                                    </select>
+                                                    <input type="hidden" asp-for="CountryId" id="txtcountry" value="" />
+                                                    <span asp-validation-for="CountryId" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="fv-row mb-4">
+                                                    <select asp-for=StateId id="ddlState" class="form-control bg-transparent">
+                                                        <option>--Select State--</option>
+                                                    </select>
+                                                    <input type="hidden" asp-for="StateId" id="txtstate" value="" />
+                                                    <span asp-validation-for="StateId" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                        </div>
 
-                                                        <div class="fv-row mb-2">
-                                                            <input type="password" placeholder="Confirm Password" asp-for="ConfirmPassword" autocomplete="off" class="form-control" />
-                                                        </div>
+                                        <div class="fv-row mb-4">
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <div class="fv-row mb-4">
+                                                        <select asp-for=CityId id="ddlCity" class="form-control bg-transparent">
+                                                            <option>--Select City--</option>
+                                                        </select>
+                                                        <input type="hidden" asp-for="CityId" id="txtcity" value="" />
+                                                        <span asp-validation-for="CityId" class="text-danger"></span>
                                                     </div>
                                                 </div>
+                                                <div class="col-6">
+                                                    <div class="fv-row mb-4">
+                                                        <input type="text" asp-for="PhoneNumber" placeholder="Mobile.NO" id="PhoneNumber" autocomplete="off" class="form-control bg-transparent" />
+                                                        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                                                    </div>
+                                                </div>
+                                                <div class="fv-row mb-6">
+                                                    <input type="text" asp-for="Address" class="form-control bg-transparent" placeholder="Address" id="Address" style="height: 75px;" />
+                                                    <span asp-validation-for="Address" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <div class="mb-3">
+
+                                                    <div class="position-relative auth-pass-inputgroup">
+                                                        <input type="password" class="form-control pe-5 password-input" onpaste="return false" placeholder="Enter password" id="password-input" aria-describedby="passwordInput" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" asp-for="Password">
+                                                        <button class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon" type="button" id="password-addon"><i class="ri-eye-fill align-middle"></i></button>
+                                                    </div>
+                                                </div>
+                                                <div id="password-contain" class="p-3 bg-light mb-2 rounded">
+                                                    <h5 class="fs-13 fw-semibold">Password must contain:</h5>
+                                                    <p id="pass-length" class="invalid fs-12 mb-2">Minimum <b>8 characters</b></p>
+                                                    <p id="pass-lower" class="invalid fs-12 mb-2">At <b>lowercase</b> letter (a-z)</p>
+                                                    <p id="pass-upper" class="invalid fs-12 mb-2">At least <b>uppercase</b> letter (A-Z)</p>
+                                                    <p id="pass-number" class="invalid fs-12 mb-0">A least <b>number</b> (0-9)</p>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+
                                                 <div class="fv-row mb-2">
-                                                    <label class="fs-6 fw-semibold form-label mt-1">Upload Image</label>
-                                                    <input type="file" asp-for="Image" autocomplete="off" class="form-control bg-transparent" />
+                                                    <input type="password" placeholder="Confirm Password" asp-for="ConfirmPassword" autocomplete="off" class="form-control" />
                                                 </div>
-                                                <div class="mt-4">
-                                                    <button class="btn btn-success w-100" type="submit">Sign Up</button>
-                                                </div>
-
-
-                                            </form>
+                                            </div>
+                                        </div>
+                                        <div class="fv-row mb-2">
+                                            <label class="fs-6 fw-semibold form-label mt-1">Upload Image</label>
+                                            <input type="file" asp-for="Image" autocomplete="off" class="form-control bg-transparent" />
+                                        </div>
+                                        <div class="mt-4">
+                                            <button class="btn btn-success w-100" type="submit">Sign Up</button>
                                         </div>
 
-                                        <div class="text-center fw-semibold fs-6 mb-1">
-                                            Already have an Account?
-                                            <a class="link-primary fw-semibold">
-                                                @Html.ActionLink("Login", "Login", "Authentication")
-                                            </a>
-                                        </div>
-                                    </div>
+
+                                    </form>
                                 </div>
                             </div>
                         </div>
-                        <!-- end card -->
+                        <div class="mt-4 text-center">
+                            <p class="mb-0">Already have an account? <a href="auth-signin-basic.html" class="fw-semibold text-primary text-decoration-underline">Sign In</a></p>
+                        </div>
                     </div>
-                    <!-- end col -->
-
                 </div>
+
                 <!-- end row -->
             </div>
             <!-- end container -->
@@ -305,9 +222,9 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="text-center">
-                            <p class="mb-0">
+                            <p class="mb-0 text-muted">
                                 &copy;
-                                <script>document.write(new Date().getFullYear())</script>Bonifatius <i class="mdi mdi-heart text-danger"></i>
+                                <script>document.write(new Date().getFullYear())</script> Velzon. Crafted with <i class="mdi mdi-heart text-danger"></i> by Themesbrand
                             </p>
                         </div>
                     </div>
@@ -334,5 +251,5 @@
 </body>
 
 
-<!-- Mirrored from themesbrand.com/velzon/html/minimal/auth-signup-cover.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 04 Oct 2023 11:02:38 GMT -->
+<!-- Mirrored from themesbrand.com/velzon/html/minimal/auth-signup-basic.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 04 Oct 2023 11:02:38 GMT -->
 </html>

@@ -1,4 +1,5 @@
-﻿using EMPManegment.EntityModels.ViewModels.Invoice;
+﻿using EMPManegment.EntityModels.ViewModels.DataTableParameters;
+using EMPManegment.EntityModels.ViewModels.Invoice;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.OrderModels;
 using EMPManegment.EntityModels.ViewModels.TaskModels;
@@ -106,7 +107,7 @@ namespace EMPManagment.API.Controllers
         {
             try
             {
-                IEnumerable<InvoiceViewModel> vendorInloviceList =await InvoiceMaster.GetInvoiceListByVendorId(Vid);
+                IEnumerable<InvoiceViewModel> vendorInloviceList = await InvoiceMaster.GetInvoiceListByVendorId(Vid);
                 return Ok(new { code = 200, data = vendorInloviceList });
             }
             catch (Exception ex)
@@ -116,6 +117,56 @@ namespace EMPManagment.API.Controllers
             }
 
 
+        }
+
+        [HttpGet]
+        [Route("GetLastTransactionByVendorId")]
+        public async Task<IActionResult> GetLastTransactionByVendorId(Guid Vid)
+        {
+            try
+            {
+                IEnumerable<CreditDebitView> vendorInloviceList = await InvoiceMaster.GetLastTransactionByVendorId(Vid);
+                return Ok(new { code = 200, data = vendorInloviceList });
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+
+
+        }
+
+        [HttpGet]
+        [Route("GetAllTransactionByVendorId")]
+        public async Task<IActionResult> GetAllTransactionByVendorId(Guid Vid)
+        {
+            try
+            {
+                IEnumerable<CreditDebitView> allCreditList = await InvoiceMaster.GetAllTransactionByVendorId(Vid);
+                return Ok(new { code = 200, data = allCreditList });
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+
+        [HttpGet]
+        [Route("GetAllTransaction")]
+        public async Task<IActionResult> GetAllTransaction(DataTableRequstModel CreditList)
+        {
+            try
+            {
+                var allCreditList = await InvoiceMaster.GetAllTransaction(CreditList);
+                return Ok(new { code = 200, data = allCreditList });
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
         }
     }
 }

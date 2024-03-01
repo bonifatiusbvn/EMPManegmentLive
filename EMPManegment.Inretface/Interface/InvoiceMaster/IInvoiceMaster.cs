@@ -1,4 +1,5 @@
-﻿using EMPManegment.EntityModels.ViewModels.Invoice;
+﻿using EMPManegment.EntityModels.ViewModels.DataTableParameters;
+using EMPManegment.EntityModels.ViewModels.Invoice;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.OrderModels;
 using EMPManegment.EntityModels.ViewModels.ProductMaster;
@@ -17,6 +18,8 @@ namespace EMPManegment.Inretface.Interface.InvoiceMaster
         Task<InvoiceViewModel> GetInvoiceDetailsById(Guid Id);
         Task<IEnumerable<InvoiceViewModel>> GetInvoiceListByVendorId(Guid Vid);
         Task<IEnumerable<CreditDebitView>> GetLastTransactionByVendorId(Guid Vid);
+        Task<IEnumerable<CreditDebitView>> GetAllTransactionByVendorId(Guid Vid);
+        Task<jsonData> GetAllTransaction(DataTableRequstModel dataTable);
         Task<IEnumerable<InvoiceViewModel>> GetInvoiceDetailsList();
         string CheckInvoiceNo(string OrderId);
         Task<UserResponceModel> InsertInvoiceDetails(GenerateInvoiceModel InsertInvoice);

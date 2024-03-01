@@ -1,4 +1,5 @@
 ﻿using EMPManagment.API;
+using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 using EMPManegment.EntityModels.ViewModels.ExpenseMaster;
 using EMPManegment.EntityModels.ViewModels.Invoice;
 using EMPManegment.EntityModels.ViewModels.Models;
@@ -13,6 +14,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using static System.Runtime.InteropServices.JavaScript.JSType;
@@ -80,7 +82,6 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                     Type = a.Type,
                     InvoiceNo = a.InvoiceNo,
                     Date = a.Date,
-                    PaymentType = a.PaymentType,
                     CreditDebitAmount = a.CreditDebitAmount,
                     PendingAmount = a.PendingAmount,
                     TotalAmount = a.TotalAmount,
@@ -299,20 +300,24 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
         {
             try
             {
-                IEnumerable<CreditDebitView> invoiceList = (from a in Context.TblCreditDebitMasters.Where(x => x.VendorId == Vid)
-                                                            join b in Context.TblVendorMasters
-                                                            on a.VendorId equals b.Vid
+                IEnumerable<CreditDebitView> invoiceList = (from a in Context.TblCreditDebitMasters
+                                                            join b in Context.TblVendorMasters on a.VendorId equals b.Vid
+                                                            join c in Context.TblPaymentTypes on a.PaymentType equals c.Id
+                                                            join d in Context.TblPaymentMethodTypes on a.PaymentMethod equals d.Id
+                                                            where a.VendorId == Vid
+                                                            orderby a.Date descending
                                                             select new CreditDebitView
                                                             {
                                                                 Id = a.Id,
                                                                 VendorName = b.VendorCompany,
                                                                 Date = a.Date,
-                                                                PaymentType = a.PaymentType,
-                                                                PaymentMethod = a.PaymentMethod,
+                                                                PaymentType = c.Type,
+                                                                PaymentMethod = d.PaymentMethod,
                                                                 PendingAmount = a.PendingAmount,
                                                                 CreditDebitAmount = a.CreditDebitAmount,
                                                                 TotalAmount = a.TotalAmount,
-                                                            });
+                                                            }).Take(10);
+
                 return invoiceList;
             }
             catch (Exception ex)
@@ -321,6 +326,35 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
             }
         }
 
+        public async Task<IEnumerable<CreditDebitView>> GetAllTransactionByVendorId(Guid Vid)
+        {
+            try
+            {
+                IEnumerable<CreditDebitView> CreditList = (from a in Context.TblCreditDebitMasters
+                                                           join b in Context.TblVendorMasters on a.VendorId equals b.Vid
+                                                           join c in Context.TblPaymentTypes on a.PaymentType equals c.Id
+                                                           join d in Context.TblPaymentMethodTypes on a.PaymentMethod equals d.Id
+                                                           where a.VendorId == Vid
+                                                           orderby a.Date descending
+                                                           select new CreditDebitView
+                                                           {
+                                                               Id = a.Id,
+                                                               VendorName = b.VendorCompany,
+                                                               Date = a.Date,
+                                                               PaymentType = c.Type,
+                                                               PaymentMethod = d.PaymentMethod,
+                                                               PendingAmount = a.PendingAmount,
+                                                               CreditDebitAmount = a.CreditDebitAmount,
+                                                               TotalAmount = a.TotalAmount,
+                                                           });
+
+                return CreditList;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
         public async Task<UserResponceModel> InsertInvoiceDetails(GenerateInvoiceModel InsertInvoice)
         {
             UserResponceModel response = new UserResponceModel();
@@ -385,5 +419,89 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
             }
             return response;
         }
+
+        public async Task<IEnumerable<CreditDebitView>> GetAllTransaction()
+        {
+            try
+            {
+                IEnumerable<CreditDebitView> CreditList = (from a in Context.TblCreditDebitMasters
+                                                           join b in Context.TblVendorMasters on a.VendorId equals b.Vid
+                                                           join c in Context.TblPaymentTypes on a.PaymentType equals c.Id
+                                                           join d in Context.TblPaymentMethodTypes on a.PaymentMethod equals d.Id
+                                                           orderby a.Date descending
+                                                           select new CreditDebitView
+                                                           {
+                                                               Id = a.Id,
+                                                               VendorName = b.VendorCompany,
+                                                               Date = a.Date,
+                                                               PaymentType = c.Type,
+                                                               PaymentMethod = d.PaymentMethod,
+                                                               PendingAmount = a.PendingAmount,
+                                                               CreditDebitAmount = a.CreditDebitAmount,
+                                                               TotalAmount = a.TotalAmount,
+                                                           });
+
+                return CreditList;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<jsonData> GetAllTransaction(DataTableRequstModel dataTable)
+        {
+            var allCreditList = from a in Context.TblCreditDebitMasters
+                                join b in Context.TblVendorMasters on a.VendorId equals b.Vid
+                                join c in Context.TblPaymentTypes on a.PaymentType equals c.Id
+                                join d in Context.TblPaymentMethodTypes on a.PaymentMethod equals d.Id
+                                orderby a.Date descending
+                                select new CreditDebitView
+                                {
+                                    Id = a.Id,
+                                    VendorName = b.VendorCompany,
+                                    Date = a.Date,
+                                    PaymentType = c.Type,
+                                    PaymentMethod = d.PaymentMethod,
+                                    PendingAmount = a.PendingAmount,
+                                    CreditDebitAmount = a.CreditDebitAmount,
+                                    TotalAmount = a.TotalAmount
+                                };
+
+            if (!string.IsNullOrEmpty(dataTable.sortColumn) && !string.IsNullOrEmpty(dataTable.sortColumnDir))
+            {
+                if (dataTable.sortColumnDir == "asc")
+                {
+                    allCreditList = allCreditList.OrderBy(e => EF.Property<object>(e, dataTable.sortColumn));
+                }
+                else
+                {
+                    allCreditList = allCreditList.OrderByDescending(e => EF.Property<object>(e, dataTable.sortColumn));
+                }
+            }
+
+            if (!string.IsNullOrEmpty(dataTable.searchValue))
+            {
+                allCreditList = allCreditList.Where(e =>
+                    e.VendorName.Contains(dataTable.searchValue) ||
+                    e.PaymentType.Contains(dataTable.searchValue) ||
+                    e.PaymentMethod.Contains(dataTable.searchValue));
+            }
+
+            int totalRecord = await allCreditList.CountAsync();
+
+            var cData = await allCreditList.Skip(dataTable.skip).Take(dataTable.pageSize).ToListAsync();
+
+            jsonData jsonData = new jsonData
+            {
+                draw = dataTable.draw,
+                recordsFiltered = totalRecord,
+                recordsTotal = totalRecord,
+                data = cData
+            };
+
+            return jsonData;
+        }
+
     }
 }

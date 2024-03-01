@@ -1,4 +1,5 @@
-﻿using EMPManegment.EntityModels.ViewModels.Invoice;
+﻿using EMPManegment.EntityModels.ViewModels.DataTableParameters;
+using EMPManegment.EntityModels.ViewModels.Invoice;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.OrderModels;
 using EMPManegment.Inretface.Interface.InvoiceMaster;
@@ -23,6 +24,16 @@ namespace EMPManegment.Services.InvoiceMaster
         public string CheckInvoiceNo(string OrderId)
         {
             return InvoiceMaster.CheckInvoiceNo(OrderId);
+        }
+
+        public Task<jsonData> GetAllTransaction(DataTableRequstModel dataTable)
+        {
+            return InvoiceMaster.GetAllTransaction(dataTable);
+        }
+
+        public async Task<IEnumerable<CreditDebitView>> GetAllTransactionByVendorId(Guid Vid)
+        {
+            return await InvoiceMaster.GetAllTransactionByVendorId(Vid);
         }
 
         public async Task<InvoiceViewModel> GetInvoiceDetailsById(Guid Id)

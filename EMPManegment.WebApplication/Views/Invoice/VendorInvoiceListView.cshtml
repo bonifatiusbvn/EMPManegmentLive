@@ -7,6 +7,7 @@
 
 @{
     decimal? TotalAmount = 0;
+    Guid vendorid = Model.FirstOrDefault().VandorId;
 }
 @foreach (var item in Model)
 {
@@ -160,30 +161,34 @@
                     <!--end col-->
                     <div class="col-auto ms-auto">
                         <div class="d-flex gap-2">
-                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#zoomInModal"><i class="ri-equalizer-line align-bottom me-1"></i> Filters</button>
+                            <button type="button" class="btn btn-primary" onclick="getLastTransaction()"><i class="ri-equalizer-line align-bottom me-1"></i> See LastTransactions</button>
+                            <a class="btn btn-primary" id="" href="/Invoice/GetAllTransactionByVendorId?Vid=@vendorid"><i class="ri-equalizer-line align-bottom me-1"></i> See AllTransactions</a>
                         </div>
+
                     </div>
                     <!--end col-->
                 </div>
             </div><!-- end card header -->
-            <div id="zoomInModal" class="modal fade zoomIn" tabindex="-1" aria-labelledby="zoomInModalLabel" aria-hidden="true" style="display: none;">
-                <div class="modal-dialog modal-dialog-centered">
+            <div class="modal fade bs-example-modal-xl" tabindex="-1" role="dialog" id="zoomInModal" aria-hidden="true">
+                <div class="modal-dialog modal-xl modal-dialog-centered">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="zoomInModalLabel">Last 10 Transaction</h5>
+                            <h5 class="modal-title" id="myExtraLargeModalLabel">
+                                Last Transactions
+                            </h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-
+                            <div id="lasttenTransaction">
+                            </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary ">Save Changes</button>
+                            <a href="javascript:void(0);" class="btn btn-link link-success fw-medium" data-bs-dismiss="modal"><i class="ri-close-line me-1 align-middle"></i> Close</a>
+                            <button type="button" class="btn btn-primary ">Save changes</button>
                         </div>
-
                     </div><!-- /.modal-content -->
                 </div><!-- /.modal-dialog -->
-            </div><!-- /.modal -->
+            </div>
             <div class="card-body p-0">
                 <div class="card-body">
                     <div class="table-responsive table-card">
@@ -204,6 +209,7 @@
                                 @foreach (var item in Model)
                                 {
                                     <tr>
+                                        <input type="text" hidden id="txtvendorid" value="@item.VandorId" />
                                         <td class="id" style="display:none;"><a href="javascript:void(0);" class="fw-medium link-primary">#VZ001</a></td>
                                         <td>
                                             <div class="avatar-xs">
@@ -345,12 +351,6 @@
     <!--end col-->
 </div>
 <!--end card-->
+<script src="~/moduls/invoicemasterscript.js"></script>
 <script src="~/UserHome/minimal/assets/libs/swiper/swiper-bundle.min.js"></script>
-<!-- apexcharts -->
-<script src="~/UserHome/minimal/assets/libs/apexcharts/apexcharts.min.js"></script>
 
-<!--crypto-buy-sell init-->
-<script src="~/UserHome/minimal/assets/js/pages/crypto-buy-sell.init.js"></script>
-
-<!--crypto transactions init js-->
-<script src="~/UserHome/minimal/assets/js/pages/crypto-transactions.init.js"></script>
