@@ -1,4 +1,5 @@
-﻿using EMPManagment.API;
+﻿using Azure;
+using EMPManagment.API;
 using EMPManegment.EntityModels.ViewModels.ExpenseMaster;
 using EMPManegment.EntityModels.ViewModels.Invoice;
 using EMPManegment.EntityModels.ViewModels.Models;
@@ -69,31 +70,39 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
             }
         }
 
-        public async Task<IEnumerable<CreditDebitView>> GetCreditDebitListView()
+        public async Task<IEnumerable<CreditDebitView>> GetCreditDebitListByVendorId(Guid Vid)
         {
             try
             {
-                IEnumerable<CreditDebitView> Payment = Context.TblCreditDebitMasters.ToList().Select(a => new CreditDebitView
+                var creditdebit = new List<CreditDebitView>();
+                var data = await Context.TblCreditDebitMasters.Where(x => x.VendorId == Vid).ToListAsync();
+                if (data != null)
                 {
-                    Id = a.Id,
-                    VendorId = a.VendorId,
-                    Type = a.Type,
-                    InvoiceNo = a.InvoiceNo,
-                    Date = a.Date,
-                    PaymentType = a.PaymentType,
-                    CreditDebitAmount = a.CreditDebitAmount,
-                    PendingAmount = a.PendingAmount,
-                    TotalAmount = a.TotalAmount,
-                    CreatedOn = a.CreatedOn,
-                    CreatedBy = a.CreatedBy,
-                    UpdatedOn = a.UpdatedOn,
-                    UpdatedBy = a.UpdatedBy,
-                });
-                return Payment;
+                    foreach (var a in data)
+                    {
+                        creditdebit.Add(new CreditDebitView()
+                        {
+                            Id = a.Id,
+                            VendorId = a.VendorId,
+                            Type = a.Type,
+                            InvoiceNo = a.InvoiceNo,
+                            Date = a.Date,
+                            PaymentType = a.PaymentType,
+                            CreditDebitAmount = a.CreditDebitAmount,
+                            PendingAmount = a.PendingAmount,
+                            TotalAmount = a.TotalAmount,
+                            CreatedOn = a.CreatedOn,
+                            CreatedBy = a.CreatedBy,
+                            UpdatedOn = a.UpdatedOn,
+                            UpdatedBy = a.UpdatedBy,
+                        });
+                    }
+                }
+                return creditdebit;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                throw ex;
             }
         }
 
@@ -319,6 +328,38 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
             {
                 throw ex;
             }
+        }
+
+        public async Task<UserResponceModel> InsertCreditDebitDetails(CreditDebitView CreditDebit)
+        {
+            UserResponceModel response = new UserResponceModel();
+            try
+            {
+                var insertcraditdebit = new TblCreditDebitMaster()
+                {
+                    VendorId = CreditDebit.VendorId,
+                    Type = CreditDebit.Type,
+                    InvoiceNo = CreditDebit.InvoiceNo,
+                    Date = DateTime.Now,
+                    PaymentType = CreditDebit.PaymentType,
+                    CreditDebitAmount = CreditDebit.CreditDebitAmount,
+                    PendingAmount = CreditDebit.PendingAmount,
+                    TotalAmount = CreditDebit.TotalAmount,
+                    PaymentMethod= CreditDebit.PaymentMethod,
+                    CreatedOn = DateTime.Now,
+                    CreatedBy = CreditDebit.CreatedBy,
+                };
+
+                Context.TblCreditDebitMasters.Add(insertcraditdebit);
+                await Context.SaveChangesAsync();
+                response.Code = 200;
+                response.Message = "Details Inserted successfully!";
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return response;
         }
 
         public async Task<UserResponceModel> InsertInvoiceDetails(GenerateInvoiceModel InsertInvoice)

@@ -21,6 +21,7 @@ namespace EMPManegment.Inretface.Interface.InvoiceMaster
         string CheckInvoiceNo(string OrderId);
         Task<UserResponceModel> InsertInvoiceDetails(GenerateInvoiceModel InsertInvoice);
         Task<OrderResponseModel> GetInvoiceDetailsByOrderId(string OrderId);
-        Task<IEnumerable<CreditDebitView>> GetCreditDebitListView();
+        Task<IEnumerable<CreditDebitView>> GetCreditDebitListByVendorId(Guid Vid);
+        Task<UserResponceModel> InsertCreditDebitDetails(CreditDebitView CreditDebit);
     }
 }
