@@ -155,7 +155,7 @@ namespace EMPManagment.API.Controllers
         [Route("GetProjectListById")]
         public async Task<IActionResult> GetProjectListById(string? searchby, string? searchfor,Guid UserId)
         {
-            List<ProjectView> projectlist = await ProjectDetail.GetProjectListById(searchby, searchfor,UserId);
+            List<ProjectDetailView> projectlist = await ProjectDetail.GetProjectListById(searchby, searchfor,UserId);
             return Ok(new { code = 200, data = projectlist.ToList() });
         }
         [HttpGet]

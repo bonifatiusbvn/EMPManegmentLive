@@ -261,9 +261,9 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
             }
         }
 
-        public async Task<List<ProjectView>> GetProjectListById(string? searchby, string? searchfor, Guid UserId)
+        public async Task<List<ProjectDetailView>> GetProjectListById(string? searchby, string? searchfor, Guid UserId)
         {
-            var UserData = new List<ProjectView>();
+            var UserData = new List<ProjectDetailView>();
             var data = await (from projectDetail in Context.TblProjectDetails
                               join projectMaster in Context.TblProjectMasters
                               on projectDetail.ProjectId equals projectMaster.ProjectId
@@ -278,8 +278,9 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
                                   projectDetail.CreatedOn,
                                   projectDetail.UserId,
                                   projectDetail.TotalMember,
-                                  projectDetail.StartDate,
-                                  projectDetail.EndDate,
+                                  projectMaster.ProjectStartDate,
+                                  projectMaster.ProjectEndDate,
+                                  projectMaster.ProjectDeadline,
                                   projectMaster.ProjectDescription,
                               }).ToListAsync();
 
@@ -287,18 +288,17 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
             {
                 foreach (var item in data)
                 {
-                    UserData.Add(new ProjectView()
+                    UserData.Add(new ProjectDetailView()
                     {
                         Id = item.Id,
                         ProjectId = item.ProjectId,
                         ProjectType = item.ProjectType,
                         ProjectTitle = item.ProjectTitle,
-                        Status = item.Status,
+                        ProjectStatus = item.Status,
                         CreatedOn = item.CreatedOn,
                         UserId = item.UserId,
-                        TotalMember = item.TotalMember,
-                        StartDate = item.StartDate,
-                        EndDate = item.EndDate,
+                        ProjectStartDate = item.ProjectStartDate,
+                        ProjectDeadline = item.ProjectDeadline,
                         ProjectDescription = item.ProjectDescription,
                     });
                 }
@@ -309,7 +309,7 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
             }
             if (searchby == "ProjectStatus" && searchfor != null)
             {
-                UserData = UserData.Where(ser => ser.Status.ToLower().Contains(searchfor.ToLower())).ToList();
+                UserData = UserData.Where(ser => ser.ProjectStatus.ToLower().Contains(searchfor.ToLower())).ToList();
             }
             return UserData;
         }

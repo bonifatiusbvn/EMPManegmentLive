@@ -579,7 +579,6 @@
                             </a>
                             <div class="collapse menu-dropdown" id="sidebarApps">
                                 <ul class="nav nav-sm flex-column">
-
                                     <li class="nav-item">
                                         <a href="#sidebarEcommerce" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarEcommerce" data-key="t-ecommerce">
                                             Ecommerce
@@ -667,10 +666,28 @@
                                                 @if (_userSession.UserRoll == "Admin")
                                                 {
                                                     <li class="nav-item">
-                                                        <a asp-action="CreditDebitListView" asp-controller="Invoice" class="nav-link" data-key="t-orders"> Payment Details </a>
+                                                        <a asp-action="CreditDebitListView" asp-controller="Invoice" class="nav-link" data-key="t-orders">Payment Details By Vendor </a>
                                                     </li>
                                                     <li class="nav-item">
-                                                        <a asp-action="GetAllTransaction" asp-controller="Invoice" class="nav-link" data-key="t-orders"> Payment Details </a>
+                                                        <a asp-action="GetAllTransaction" asp-controller="Invoice" class="nav-link" data-key="t-orders">All Payment Details</a>
+                                                    </li>
+                                                }
+                                            </ul>
+                                        </div>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="#purchaseOrder" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarTasks" data-key="t-tasks">
+                                            Purchase Order
+                                        </a>
+                                        <div class="collapse menu-dropdown" id="purchaseOrder">
+                                            <ul class="nav nav-sm flex-column">
+                                                @if (_userSession.UserRoll == "Admin")
+                                                {
+                                                    <li class="nav-item">
+                                                        <a asp-action="CreateOP" asp-controller="PO" class="nav-link" data-key="t-orders">Genret PO</a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a asp-action="GetAllTransaction" asp-controller="PO" class="nav-link" data-key="t-orders">PO LIST</a>
                                                     </li>
                                                 }
                                             </ul>
