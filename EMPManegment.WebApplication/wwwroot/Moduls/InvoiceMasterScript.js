@@ -1,9 +1,9 @@
 ﻿
 $(document).ready(function () {
     GetVendorName()
-    GetAllVendorData()
     getAllTransactions()
-
+    GetAllVendorData()
+    GetAllTransactionData()
 });
 function GetVendorName() {
 
