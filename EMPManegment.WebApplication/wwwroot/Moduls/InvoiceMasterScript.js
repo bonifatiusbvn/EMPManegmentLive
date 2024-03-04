@@ -1,9 +1,9 @@
 ﻿
 $(document).ready(function () {
     GetVendorName()
-    GetAllVendorData()
     getAllTransactions()
     GetAllVendorData()
+    GetAllTransactionData()
 });
 function GetVendorName() {
 
@@ -355,7 +355,7 @@ function getAllTransactions() {
     });
 }
 
-function GetAllVendorData() {
+function GetAllTransactionData() {
     debugger
     $('#transactionTable').DataTable({
         processing: true,
@@ -369,17 +369,18 @@ function GetAllVendorData() {
         },
         columns: [
             { "data": "vendorName", "name": "VendorName" },
-            { "data": "date", "name": "Date" },
-            { "data": "paymentMethod", "name": "PaymentMethod" },
-            { "data": "paymentType", "name": "PaymentType" },
+            {
+                "data": "date", "name": "Date",
+                "render": function (data, type, row) {
+                    var date = new Date(data);
+                    return date.toLocaleDateString();
+                }
+            },
+            { "data": "paymentMethodName", "name": "PaymentMethodName" },
+            { "data": "paymentTypeName", "name": "PaymentTypeName" },
             { "data": "creditDebitAmount", "name": "CreditDebitAmount" },
             { "data": "pendingAmount", "name": "PendingAmount" },
             { "data": "vendorAddress", "name": "VendorAddress" },
-            {
-                "render": function (data, type, full) {
-                    return '<a class="btn btn-sm btn-secondary edit-item-btn" onclick="VendorDetails(\'' + full.id + '\')">Details</a>';
-                }
-            },
         ],
         columnDefs: [{
             "defaultContent": "",

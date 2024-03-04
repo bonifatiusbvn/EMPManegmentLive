@@ -535,7 +535,8 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                                     PaymentMethodName = d.PaymentMethod,
                                     PendingAmount = a.PendingAmount,
                                     CreditDebitAmount = a.CreditDebitAmount,
-                                    TotalAmount = a.TotalAmount
+                                    TotalAmount = a.TotalAmount,
+                                    VendorAddress=b.VendorAddress
                                 };
 
             if (!string.IsNullOrEmpty(dataTable.sortColumn) && !string.IsNullOrEmpty(dataTable.sortColumnDir))
@@ -552,11 +553,25 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
 
             if (!string.IsNullOrEmpty(dataTable.searchValue))
             {
-                allCreditList = allCreditList.Where(e =>
-                    e.VendorName.Contains(dataTable.searchValue) ||
-                    e.PaymentTypeName.Contains(dataTable.searchValue) ||
-                    e.PaymentMethodName.Contains(dataTable.searchValue));
+                decimal searchValueDecimal;
+                if (decimal.TryParse(dataTable.searchValue, out searchValueDecimal))
+                {
+                    allCreditList = allCreditList.Where(e =>
+                        e.VendorName.Contains(dataTable.searchValue) ||
+                        e.PaymentTypeName.Contains(dataTable.searchValue) ||
+                        (e.CreditDebitAmount.HasValue && e.CreditDebitAmount.Value == searchValueDecimal) ||
+                        (e.PendingAmount.HasValue && e.PendingAmount.Value == searchValueDecimal) ||
+                        e.PaymentMethodName.Contains(dataTable.searchValue));
+                }
+                else
+                {
+                    allCreditList = allCreditList.Where(e =>
+                        e.VendorName.Contains(dataTable.searchValue) ||
+                        e.PaymentTypeName.Contains(dataTable.searchValue) ||
+                        e.PaymentMethodName.Contains(dataTable.searchValue));
+                }
             }
+
 
             int totalRecord = await allCreditList.CountAsync();
 

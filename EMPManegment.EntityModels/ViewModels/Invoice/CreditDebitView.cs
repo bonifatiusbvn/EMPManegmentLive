@@ -30,6 +30,7 @@ namespace EMPManegment.EntityModels.ViewModels.Invoice
         public decimal? PendingAmount { get; set; }
 
         public decimal? TotalAmount { get; set; }
+        public string VendorAddress { get; set; } = null!;
 
         public DateTime? CreatedOn { get; set; }
 

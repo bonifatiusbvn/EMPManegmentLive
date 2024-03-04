@@ -154,7 +154,7 @@ namespace EMPManagment.API.Controllers
             }
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("GetAllTransaction")]
         public async Task<IActionResult> GetAllTransaction(DataTableRequstModel CreditList)
         {

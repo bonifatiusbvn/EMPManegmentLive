@@ -24,56 +24,12 @@
         <div class="card">
             <div class="card-header d-flex align-items-center border-0">
                 <h5 class="card-title mb-0 flex-grow-1">All Transactions</h5>
-                <div class="flex-shrink-0">
-                    <div class="flax-shrink-0 hstack gap-2">
-                        <button class="btn btn-primary">Today's Transactions</button>
-                        <button class="btn btn-soft-secondary">Past Transactions</button>
-                    </div>
-                </div>
-            </div>
-            <div class="card-body border border-dashed border-end-0 border-start-0">
-                <div class="row g-2">
-                    <div class="col-xl-4 col-md-6">
-                        <div class="search-box">
-                            <input type="text" class="form-control search" placeholder="Search to orders...">
-                            <i class="ri-search-line search-icon"></i>
-                        </div>
-                    </div>
-                    <!--end col-->
-                    <div class="col-xl-3 col-md-6">
-                        <div class="input-group">
-                            <span class="input-group-text" id="basic-addon1"><i class="ri-calendar-2-line"></i></span>
-                            <input type="text" class="form-control" data-provider="flatpickr" data-date-format="d M, Y" data-range-date="true" placeholder="Select date" id="range-datepicker" aria-describedby="basic-addon1">
-                        </div>
-                    </div>
-                    <!--end col-->
-                    <div class="col-xl-2 col-md-4">
-                        <select class="form-control" data-choices data-choices-search-false name="idType" id="idType">
-                            <option value="all">Select Type</option>
-                            <option value="Buy">Buy</option>
-                            <option value="Sell">Sell</option>
-                        </select>
-                    </div>
-                    <!--end col-->
-                    <div class="col-xl-2 col-md-4">
-                        <select class="form-control" data-choices data-choices-search-false name="idStatus" id="idStatus">
-                            <option value="all">Select Status</option>
-                            <option value="Successful">Successful</option>
-                            <option value="Cancelled">Cancelled</option>
-                            <option value="Pending">Pending</option>
-                        </select>
-                    </div>
-                    <!--end col-->
-                    <div class="col-xl-1 col-md-4">
-                        <button class="btn btn-primary w-100" onclick="filterData();">Filters</button>
-                    </div>
-                </div>
-                <!--end row-->
             </div>
             <div class="card-body p-0">
                 <div class="card-body">
-                    <div class="table-responsive table-card">
-                        <table id="transactionTable" class="table table-bordered">
+                    <div id="example_wrapper" class="dataTables_wrapper dt-bootstrap5 no-footer">
+                        <div class="col-sm-12">
+                        <table id="transactionTable" class="table table-bordered dt-responsive nowrap table-striped align-middle dataTable no-footer dtr-inline" style="width: 100%;" aria-describedby="example_info">
                             <thead>
                                 <tr>
                                     <th>VendorName</th>
@@ -89,6 +45,7 @@
                             </tbody>
                         </table>
                         <!--end table-->
+                        </div>
                         <div class="noresult" style="display: none">
                             <div class="text-center">
                                 <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#25a0e2,secondary:#00bd9d" style="width:75px;height:75px">
