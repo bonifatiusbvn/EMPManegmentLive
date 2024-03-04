@@ -64,12 +64,17 @@ function GetAllUserData() {
             {
                 "data": "dateOfBirth", "name": "DateOfBirth", "type": "date",
                 "render": function (data) {
-                    var date = new Date(data);
-                    var month = date.getMonth() + 1;
-                    var day = date.getDate();
-                    return ("0" + day).slice(-2) + "/"
-                        + (month.length > 1 ? month : month) + "/"
-                        + date.getFullYear();
+                    var dateObj = new Date(data);
+                    var day = dateObj.getDate();
+                    var month = dateObj.getMonth() + 1;
+                    var year = dateObj.getFullYear();
+                    if (day < 10) {
+                        day = '0' + day;
+                    }
+                    if (month < 10) {
+                        month = '0' + month;
+                    }
+                    return day + '-' + month + '-' + year;
                 }
             },
             { "data": "email", "name": "Email" },

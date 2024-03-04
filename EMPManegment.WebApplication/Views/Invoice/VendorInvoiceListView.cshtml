@@ -226,7 +226,7 @@
                                         <td class="form_name" id="txtinvoicetype">@item.InvoiceType</td>
                                         <td class="form_name" id="txtinvoiceno" hidden>@item.InvoiceType</td>
                                         <td class="to_name" id="txtorderid">@item.OrderId</td>
-                                        <td class="details" id="txtdate">@item.Date.ToShortDateString()</td>
+                                        <td class="details" id="txtdate">@item.Date.ToString("dd/MM/yyyy")</td>
                                         <td>
                                             <h6 class="text-success mb-1 amount">@item.TotalAmount</h6>
                                         </td>

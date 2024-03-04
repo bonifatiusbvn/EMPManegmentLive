@@ -9,7 +9,6 @@ $(document).ready(function () {
 function btnCreateProjectDetail() {
 
     if ($('#formprojectdetails').valid()) {
-        debugger
         var formData = new FormData();
         formData.append("ProjectTitle", $("#projectTitle").val());
         formData.append("ProjectPriority", $("#projectPriority").val());

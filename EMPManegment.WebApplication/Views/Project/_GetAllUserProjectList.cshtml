@@ -145,7 +145,7 @@
                         <div class="col-6">
                             <div>
                                 <p class="text-muted mb-1">Deadline</p>
-                                <h5 class="fs-14">@item.ProjectDeadline.ToShortDateString()</h5>
+                                <h5 class="fs-14">@item.ProjectDeadline.ToString("dd/MM/yyyy")</h5>
                             </div>
                         </div>
                     </div>
@@ -191,7 +191,7 @@
                         </div>
                         <div class="flex-shrink-0">
                             <div class="text-muted">
-                                <i class="ri-calendar-event-fill me-1 align-bottom"></i> @item.ProjectStartDate.ToShortDateString()
+                                <i class="ri-calendar-event-fill me-1 align-bottom"></i> @item.ProjectStartDate.ToString("dd/MM/yyyy")
                             </div>
                         </div>
 

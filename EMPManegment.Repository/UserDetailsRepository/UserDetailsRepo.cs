@@ -134,7 +134,7 @@ namespace EMPManegment.Repository.UserListRepository
             {
                 if (Intimedata.OutTime == null && Intimedata.Date != DateTime.Today)
                 {
-                    response.Message = "You Missed Out-Time of " + Intimedata.Date.ToShortDateString() + " " + "Kindly Contact Your Admin";
+                    response.Message = "You Missed Out-Time of " + Intimedata.Date.ToString("dd/MM/yyyy") + " " + "Kindly Contact Your Admin";
                     response.Icone = "warning";
                 } 
                 
@@ -191,7 +191,7 @@ namespace EMPManegment.Repository.UserListRepository
             var Outtimedata = Context.TblAttendances.Where(a => a.UserId == userAttendance.UserId).OrderByDescending(a => a.Date).FirstOrDefault();;
             if (Outtimedata.OutTime == null && Outtimedata.Date != DateTime.Today)
             {
-                response.Message = "You Missed Out-Time of " + Outtimedata.Date.ToShortDateString() + " " + "Kindly Contact Your Admin";
+                response.Message = "You Missed Out-Time of " + Outtimedata.Date.ToString("dd/MM/yyyy") + " " + "Kindly Contact Your Admin";
                 response.Icone = "warning";
 
             }
