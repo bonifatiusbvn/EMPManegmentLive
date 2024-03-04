@@ -1,4 +1,7 @@
 ﻿@model List<EMPManegment.EntityModels.ViewModels.TaskModels.TaskDetailsView>
+@using EMPManegment.Web.Models;
+ @inject IHttpContextAccessor Accessor;
+@inject UserSession _userSession
 @{
     ViewData["Title"] = "AllTaskDetails";
     Layout = "~/Views/Shared/_UserHomeLayout.cshtml";
@@ -16,7 +19,7 @@
 </style>
 
 
-
+<input type="hidden" class="form-control" id="txtprojectid" value="@UserSession.ProjectId" style="border:hidden;" />
 <!-- start page title -->
 <div class="row" style="margin-top:-70px;">
     <div class="col-12">
@@ -182,9 +185,207 @@
                 <!-- end table -->
             </div>
         </div>
+        <!-- container-fluid -->
+        <!-- Modal -->
+        <div class="modal fade zoomIn" id="addtasks" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class=" modal-dialog modal-dialog-centered modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header bg-primary-subtle p-3">
+                        <h5 class="modal-title" id="exampleModalLabel">Create Deals</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="frmtaskdetails">
+                            <div class="mb-3">
+                                <label for="taskType" class="form-label">Task Type</label>
+                                <select class="form-control" id="taskType" name="taskType">
+                                    <option selected disabled value=""></option>
+                                </select>
+                                <input type="hidden" class="form-control" id="txtTaskType">
+
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Task Title</label>
+                                <input type="text" id="dealTitle" class="form-control" name="dealTitle" placeholder="Enter title" />
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="ddlusername" class="form-label">Task ProvideTo</label>
+                                <select class="form-control" id="ddlusername" name="ddlusername">
+                                    <option selected disabled value=""></option>
+                                </select>
+                                <input type="hidden" class="form-control" id="txtguserid">
+
+                            </div>
+                            <div class="mb-3">
+                                <label for="dueDate" class="form-label">Task Start-Date</label>
+                                <input type="datetime-local" class="form-control material_blue" id="txtdatetime" name="txtdatetime" />
+
+                            </div>
+                            <div class="mb-3">
+                                <label for="dealEmail" class="form-label">Task End-Date</label>
+                                <input type="datetime-local" class="form-control material_blue" id="txtenddatetime" name="txtenddatetime">
+
+                            </div>
+                            <div class="mb-3">
+                                <label for="contactDescription" class="form-label">Task Description</label>
+                                <textarea class="form-control " id="contactDescription" rows="3" placeholder="Enter description" name="contactDescription"></textarea>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light" id="close-modal" data-bs-dismiss="modal" onclick="ClearTextBox()">Close</button>
+                        <button type="submit" class="btn btn-success" onclick="btnSaveTaskDetail();" id="taskDetails" value="Validate">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--end modal-->
+
+        <div class="modal fade zoomIn" id="UpdateTaskDetails" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+                <div class="modal-content border-0">
+                    <div class="modal-header p-3 bg-primary-subtle">
+                        <h5 class="modal-title" id="exampleModalLabel">Update Task</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"></button>
+                    </div>
+                    <form class="tablelist-form" autocomplete="off" id="UpdateDetailsForm">
+                        <div class="modal-body">
+                            <input type="hidden" id="tasksId" />
+                            <div class="row g-3">
+                                <div class="col-lg-12">
+                                    <label for="projectName-field" class="form-label">UserName</label>
+                                    <input type="text" id="EditUserName" class="form-control" readonly />
+                                    <input type="text" id="EditId" class="form-control" hidden />
+                                </div>
+                                <!--end col-->
+                                <div class="col-lg-12">
+                                    <div>
+                                        <label for="TaskTitle" class="form-label">TaskTitle</label>
+                                        <input type="text" id="EditTaskTitle" class="form-control" required />
+                                        <span id="ValidateTaskTitle" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div>
+                                        <label for="TaskDescription" class="form-label">Description</label>
+                                        <input type="text" id="EditDescription" class="form-control" required />
+                                        <span id="ValidateDescription" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <!--end col-->
+                                <div class="col-lg-6">
+                                    <label for="TaskDate" class="form-label">Start Date</label>
+                                    <input type="date" id="EditStartDate" class="form-control" required />
+                                    <span id="ValidateStartDate" class="text-danger"></span>
+                                </div>
+                                <!--end col-->
+                                <div class="col-lg-6">
+                                    <label for="TaskEndDate" class="form-label">Due Date</label>
+                                    <input type="date" id="EditEndDate" class="form-control" data-provider="flatpickr" placeholder="Due date" required />
+                                    <span id="ValidateEndDate" class="text-danger"></span>
+                                </div>
+                                <!--end col-->
+                                <div class="col-lg-6">
+                                    <label for="TaskStatus" class="form-label">Status</label>
+                                    <select class="form-control" id="EditStatus">
+                                        <option value="Pending">Pending</option>
+                                        <option value="Working">Working</option>
+                                        <option value="Completed">Completed</option>
+                                        <option value="InReview">InReview</option>
+
+                                    </select>
+                                </div>
+                                <!--end col-->
+                                <div class="col-lg-6">
+                                    <select class="form-control" id="EditTaskType" hidden>
+                                        <option value="HighPriority">HighPriority</option>
+                                        <option value="MediumPriority">MediumPriority</option>
+                                        <option value="LowPriority">LowPriority</option>
+                                    </select>
+                                    <input id="EditTaskTypeId" class="form-control" hidden />
+                                </div>
+                                <!--end col-->
+                            </div>
+                            <!--end row-->
+                        </div>
+                        <div class="modal-footer">
+                            <div class="hstack gap-2 justify-content-end">
+                                <button type="button" class="btn btn-light" id="close-modal" data-bs-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-success" onclick="UpdateTaskDetails()" id="add-btn">Update Task</button>
+                                <!-- <button type="button" class="btn btn-success" id="edit-btn">Update Task</button> -->
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!--end modal-->
+        <div class="modal fade zoomIn" id="showDetailsModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+                <div class="modal-content border-0">
+                    <div class="modal-header p-3 bg-primary-subtle">
+                        <h5 class="modal-title" id="exampleModalLabel">Task Details</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"></button>
+                    </div>
+                    <form class="tablelist-form" autocomplete="off">
+                        <div class="modal-body">
+                            <div class="row g-3">
+                                <div class="col-lg-12">
+                                    <label for="projectName-field" class="form-label">UserName</label>
+                                    <span id="UserName" class="form-control"></span>
+                                </div>
+                                <!--end col-->
+                                <div class="col-lg-12">
+                                    <div>
+                                        <label for="TaskTitle" class="form-label">TaskTitle</label>
+                                        <span id="taskTitle-field" class="form-control"></span>
+                                    </div>
+                                </div>
+                                <!--end col-->
+                                <div class="col-lg-12">
+                                    <label for="TaskDescription" class="form-label">Description</label>
+                                    <textarea class="form-control " id="taskDescription-field" rows="3" readonly></textarea>
+                                </div>
+                                <!--end col-->
+                                <div class="col-lg-6">
+                                    <label for="TaskDate" class="form-label">Start Date</label>
+                                    <span id="taskstartdate-field" class="form-control"> </span>
+                                </div>
+                                <!--end col-->
+                                <div class="col-lg-6">
+                                    <label for="TaskEndDate" class="form-label">Due Date</label>
+                                    <span id="taskenddate-field" class="form-control"></span>
+                                </div>
+                                <!--end col-->
+                                <div class="col-lg-6">
+                                    <label for="TaskPriority" class="form-label">TaskType</label>
+                                    <span id="taskpriority-field" class="form-control"></span>
+                                </div>
+                                <!--end col-->
+                                <div class="col-lg-6">
+                                    <label for="TaskStatus" class="form-label">Status</label>
+                                    <span id="taskstatus-field" class="form-control"></span>
+                                </div>
+                                <!--end col-->
+                            </div>
+                            <!--end row-->
+                        </div>
+                        <div class="modal-footer">
+                            <div class="hstack gap-2 justify-content-end">
+                                <button type="button" class="btn btn-light" id="close-modal" data-bs-dismiss="modal">Close</button>
+                                <!-- <button type="submit" class="btn btn-success" id="add-btn">Add Task</button> -->
+                                <!-- <button type="button" class="btn btn-success" id="edit-btn">Update Task</button> -->
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!--end modal-->
     </div>
 </div>
-
 
 
 <!--end row-->
@@ -211,207 +412,11 @@
 </div>
 <!--end delete modal -->
 
-<div class="modal fade zoomIn" id="showDetailsModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content border-0">
-            <div class="modal-header p-3 bg-primary-subtle">
-                <h5 class="modal-title" id="exampleModalLabel">Task Details</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"></button>
-            </div>
-            <form class="tablelist-form" autocomplete="off">
-                <div class="modal-body">
-                    <div class="row g-3">
-                        <div class="col-lg-12">
-                            <label for="projectName-field" class="form-label">UserName</label>
-                            <span id="UserName" class="form-control"></span>
-                        </div>
-                        <!--end col-->
-                        <div class="col-lg-12">
-                            <div>
-                                <label for="TaskTitle" class="form-label">TaskTitle</label>
-                                <span id="taskTitle-field" class="form-control"></span>
-                            </div>
-                        </div>
-                        <!--end col-->
-                        <div class="col-lg-12">
-                            <label for="TaskDescription" class="form-label">Description</label>
-                            <textarea class="form-control " id="taskDescription-field" rows="3" readonly></textarea>
-                        </div>
-                        <!--end col-->
-                        <div class="col-lg-6">
-                            <label for="TaskDate" class="form-label">Start Date</label>
-                            <span id="taskstartdate-field" class="form-control"> </span>
-                        </div>
-                        <!--end col-->
-                        <div class="col-lg-6">
-                            <label for="TaskEndDate" class="form-label">Due Date</label>
-                            <span id="taskenddate-field" class="form-control"></span>
-                        </div>
-                        <!--end col-->
-                        <div class="col-lg-6">
-                            <label for="TaskPriority" class="form-label">TaskType</label>
-                            <span id="taskpriority-field" class="form-control"></span>
-                        </div>
-                        <!--end col-->
-                        <div class="col-lg-6">
-                            <label for="TaskStatus" class="form-label">Status</label>
-                            <span id="taskstatus-field" class="form-control"></span>
-                        </div>
-                        <!--end col-->
-                    </div>
-                    <!--end row-->
-                </div>
-                <div class="modal-footer">
-                    <div class="hstack gap-2 justify-content-end">
-                        <button type="button" class="btn btn-light" id="close-modal" data-bs-dismiss="modal">Close</button>
-                        <!-- <button type="submit" class="btn btn-success" id="add-btn">Add Task</button> -->
-                        <!-- <button type="button" class="btn btn-success" id="edit-btn">Update Task</button> -->
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-<!--end modal-->
 
 
-<div class="modal fade zoomIn" id="UpdateTaskDetails" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content border-0">
-            <div class="modal-header p-3 bg-primary-subtle">
-                <h5 class="modal-title" id="exampleModalLabel">Update Task</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"></button>
-            </div>
-            <form class="tablelist-form" autocomplete="off" id="UpdateDetailsForm">
-                <div class="modal-body">
-                    <input type="hidden" id="tasksId" />
-                    <div class="row g-3">
-                        <div class="col-lg-12">
-                            <label for="projectName-field" class="form-label">UserName</label>
-                            <input type="text" id="EditUserName" class="form-control" readonly />
-                            <input type="text" id="EditId" class="form-control" hidden />
-                        </div>
-                        <!--end col-->
-                        <div class="col-lg-12">
-                            <div>
-                                <label for="TaskTitle" class="form-label">TaskTitle</label>
-                                <input type="text" id="EditTaskTitle" class="form-control" required />
-                                <span id="ValidateTaskTitle" class="text-danger"></span>
-                            </div>
-                        </div>
-                        <div class="col-lg-12">
-                            <div>
-                                <label for="TaskDescription" class="form-label">Description</label>
-                                <input type="text" id="EditDescription" class="form-control" required />
-                                <span id="ValidateDescription" class="text-danger"></span>
-                            </div>
-                        </div>
-                        <!--end col-->
-                        <div class="col-lg-6">
-                            <label for="TaskDate" class="form-label">Start Date</label>
-                            <input type="date" id="EditStartDate" class="form-control" required />
-                            <span id="ValidateStartDate" class="text-danger"></span>
-                        </div>
-                        <!--end col-->
-                        <div class="col-lg-6">
-                            <label for="TaskEndDate" class="form-label">Due Date</label>
-                            <input type="date" id="EditEndDate" class="form-control" data-provider="flatpickr" placeholder="Due date" required />
-                            <span id="ValidateEndDate" class="text-danger"></span>
-                        </div>
-                        <!--end col-->
-                        <div class="col-lg-6">
-                            <label for="TaskStatus" class="form-label">Status</label>
-                            <select class="form-control" id="EditStatus">
-                                <option value="Pending">Pending</option>
-                                <option value="Working">Working</option>
-                                <option value="Completed">Completed</option>
-                                <option value="InReview">InReview</option>
-
-                            </select>
-                        </div>
-                        <!--end col-->
-                        <div class="col-lg-6">
-                            <select class="form-control" id="EditTaskType" hidden>
-                                <option value="HighPriority">HighPriority</option>
-                                <option value="MediumPriority">MediumPriority</option>
-                                <option value="LowPriority">LowPriority</option>
-                            </select>
-                            <input id="EditTaskTypeId" class="form-control" hidden />
-                        </div>
-                        <!--end col-->
-                    </div>
-                    <!--end row-->
-                </div>
-                <div class="modal-footer">
-                    <div class="hstack gap-2 justify-content-end">
-                        <button type="button" class="btn btn-light" id="close-modal" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-success" onclick="UpdateTaskDetails()" id="add-btn">Update Task</button>
-                        <!-- <button type="button" class="btn btn-success" id="edit-btn">Update Task</button> -->
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
 
 
-<!-- container-fluid -->
-<!-- Modal -->
-<div class="modal fade zoomIn" id="addtasks" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class=" modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content">
-            <div class="modal-header bg-primary-subtle p-3">
-                <h5 class="modal-title" id="exampleModalLabel">Create Deals</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form id="frmtaskdetails">
-                    <div class="mb-3">
-                        <label for="taskType" class="form-label">Task Type</label>
-                        <select class="form-control" id="taskType" name="taskType">
-                            <option selected disabled value=""></option>
-                        </select>
-                        <input type="hidden" class="form-control" id="txtTaskType">
 
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Task Title</label>
-                        <input type="text" id="dealTitle" class="form-control" name="dealTitle" placeholder="Enter title" />
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="ddlusername" class="form-label">Task ProvideTo</label>
-                        <select class="form-control" id="ddlusername" name="ddlusername">
-                            <option selected disabled value=""></option>
-                        </select>
-                        <input type="hidden" class="form-control" id="txtguserid">
-
-                    </div>
-                    <div class="mb-3">
-                        <label for="dueDate" class="form-label">Task Start-Date</label>
-                        <input type="datetime-local" class="form-control material_blue" id="txtdatetime" name="txtdatetime" />
-
-                    </div>
-                    <div class="mb-3">
-                        <label for="dealEmail" class="form-label">Task End-Date</label>
-                        <input type="datetime-local" class="form-control material_blue" id="txtenddatetime" name="txtenddatetime">
-
-                    </div>
-                    <div class="mb-3">
-                        <label for="contactDescription" class="form-label">Task Description</label>
-                        <textarea class="form-control " id="contactDescription" rows="3" placeholder="Enter description" name="contactDescription"></textarea>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-light" id="close-modal" data-bs-dismiss="modal" onclick="ClearTextBox()">Close</button>
-                <button type="submit" class="btn btn-success" onclick="btnSaveTaskDetail();" id="taskDetails" value="Validate">Save</button>
-            </div>
-        </div>
-    </div>
-</div>
-<!--end modal-->
 
 <script src="~/lib/jquery/dist/jquery.js"></script>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>

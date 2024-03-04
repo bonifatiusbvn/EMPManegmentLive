@@ -247,9 +247,9 @@ namespace EMPManagment.API.Controllers
 
         [HttpPost]
         [Route("GetTaskDetails")]
-        public async Task<IActionResult> GetTaskDetails(Guid Taskid)
+        public async Task<IActionResult> GetTaskDetails(Guid Taskid, Guid ProjectId)
         {
-            IEnumerable<TaskDetailsView> userTaskDetails = await TaskServices.GetTaskDetails(Taskid);
+            IEnumerable<TaskDetailsView> userTaskDetails = await TaskServices.GetTaskDetails(Taskid,ProjectId);
             return Ok(new { code = 200, data = userTaskDetails.ToList() });
         }
 
