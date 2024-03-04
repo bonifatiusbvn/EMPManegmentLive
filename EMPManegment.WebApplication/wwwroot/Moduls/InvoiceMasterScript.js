@@ -3,7 +3,7 @@ $(document).ready(function () {
     GetVendorName()
     GetAllVendorData()
     getAllTransactions()
-    GetAllVendorData()
+
 });
 function GetVendorName() {
 
@@ -287,6 +287,7 @@ function downloadPDF() {
 
 function GetAllVendorData() {
 
+    debugger
     $('#VendorTableData').DataTable({
         processing: true,
         serverSide: true,
@@ -322,6 +323,7 @@ function GetAllVendorData() {
 }
 
 function getLastTransaction() {
+    debugger
     var Vid = $('#txtvendorid').val();
 
     $.ajax({
@@ -355,38 +357,38 @@ function getAllTransactions() {
     });
 }
 
-function GetAllVendorData() {
-    debugger
-    $('#transactionTable').DataTable({
-        processing: true,
-        serverSide: true,
-        filter: true,
-        "bDestroy": true,
-        ajax: {
-            type: "Post",
-            url: '/Invoice/GetAllTransactiondata',
-            dataType: 'json'
-        },
-        columns: [
-            { "data": "vendorName", "name": "VendorName" },
-            { "data": "date", "name": "Date" },
-            { "data": "paymentMethod", "name": "PaymentMethod" },
-            { "data": "paymentType", "name": "PaymentType" },
-            { "data": "creditDebitAmount", "name": "CreditDebitAmount" },
-            { "data": "pendingAmount", "name": "PendingAmount" },
-            { "data": "vendorAddress", "name": "VendorAddress" },
-            {
-                "render": function (data, type, full) {
-                    return '<a class="btn btn-sm btn-secondary edit-item-btn" onclick="VendorDetails(\'' + full.id + '\')">Details</a>';
-                }
-            },
-        ],
-        columnDefs: [{
-            "defaultContent": "",
-            "targets": "_all",
-        }]
-    });
-}
+//function GetAllVendorData() {
+//    debugger
+//    $('#transactionTable').DataTable({
+//        processing: true,
+//        serverSide: true,
+//        filter: true,
+//        "bDestroy": true,
+//        ajax: {
+//            type: "Post",
+//            url: '/Invoice/GetAllTransactiondata',
+//            dataType: 'json'
+//        },
+//        columns: [
+//            { "data": "vendorName", "name": "VendorName" },
+//            { "data": "date", "name": "Date" },
+//            { "data": "paymentMethod", "name": "PaymentMethod" },
+//            { "data": "paymentType", "name": "PaymentType" },
+//            { "data": "creditDebitAmount", "name": "CreditDebitAmount" },
+//            { "data": "pendingAmount", "name": "PendingAmount" },
+//            { "data": "vendorAddress", "name": "VendorAddress" },
+//            {
+//                "render": function (data, type, full) {
+//                    return '<a class="btn btn-sm btn-secondary edit-item-btn" onclick="VendorDetails(\'' + full.id + '\')">Details</a>';
+//                }
+//            },
+//        ],
+//        columnDefs: [{
+//            "defaultContent": "",
+//            "targets": "_all",
+//        }]
+//    });
+//}
 
 
 
