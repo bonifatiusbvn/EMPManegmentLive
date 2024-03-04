@@ -8,6 +8,7 @@ using EMPManegment.Inretface.Interface.InvoiceMaster;
 using EMPManegment.Inretface.Interface.OrderDetails;
 using EMPManegment.Inretface.Interface.ProductMaster;
 using EMPManegment.Inretface.Interface.ProjectDetails;
+using EMPManegment.Inretface.Interface.PurchaseOrder;
 using EMPManegment.Inretface.Interface.TaskDetails;
 using EMPManegment.Inretface.Interface.UserAttendance;
 using EMPManegment.Inretface.Interface.UserList;
@@ -20,6 +21,7 @@ using EMPManegment.Inretface.Services.InvoiceMaster;
 using EMPManegment.Inretface.Services.OrderDetails;
 using EMPManegment.Inretface.Services.ProductMaster;
 using EMPManegment.Inretface.Services.ProjectDetailsServices;
+using EMPManegment.Inretface.Services.PurchaseOrderSevices;
 using EMPManegment.Inretface.Services.TaskServices;
 using EMPManegment.Inretface.Services.UserAttendanceServices;
 using EMPManegment.Inretface.Services.UserListServices;
@@ -32,6 +34,7 @@ using EMPManegment.Repository.InvoiceMasterRepository;
 using EMPManegment.Repository.OrderRepository;
 using EMPManegment.Repository.ProductMaster;
 using EMPManegment.Repository.ProjectDetailsRepository;
+using EMPManegment.Repository.PurchaseOrderRepository;
 using EMPManegment.Repository.TaskRepository;
 using EMPManegment.Repository.UserAttendanceRepository;
 using EMPManegment.Repository.UserListRepository;
@@ -44,6 +47,7 @@ using EMPManegment.Services.InvoiceMaster;
 using EMPManegment.Services.OrderDetails;
 using EMPManegment.Services.ProductMaster;
 using EMPManegment.Services.ProjectDetails;
+using EMPManegment.Services.PurchaseOrderMaster;
 using EMPManegment.Services.TaskDetails;
 using EMPManegment.Services.UserAttendance;
 using EMPManegment.Services.UserList;
@@ -64,7 +68,7 @@ option.UseSqlServer(builder.Configuration.GetConnectionString("EMPDbconn")));
 
 builder.Services.AddScoped<IAuthentication, AddEmpRepo>();
 builder.Services.AddScoped<IMasterList, MasterListRepo>();
-builder.Services.AddScoped<IUserLogin, UserLoginRepo> ();
+builder.Services.AddScoped<IUserLogin, UserLoginRepo>();
 builder.Services.AddScoped<IUserDetails, UserDetailsRepo>();
 builder.Services.AddScoped<IUserAttendance, UserAttendanceRepo>();
 builder.Services.AddScoped<IAddVendorDetails, AddVendorRepo>();
@@ -74,6 +78,7 @@ builder.Services.AddScoped<IOrderDetails, OrderRepo>();
 builder.Services.AddScoped<IProductMaster, ProductMasterRepo>();
 builder.Services.AddScoped<IInvoiceMaster, InvoiceMasterRepo>();
 builder.Services.AddScoped<IExpenseMaster, ExpenseMasterRepo>();
+builder.Services.AddScoped<IPurchaseOrder, PurchaseOrderRepo>();
 
 builder.Services.AddScoped<IAuthenticationServices, AuthenticationService>();
 builder.Services.AddScoped<IMasterListServices, MasterListService>();
@@ -87,6 +92,7 @@ builder.Services.AddScoped<IOrderDetailsServices, OrderDetailsServices>();
 builder.Services.AddScoped<IProductMasterServices, ProductMasterServices>();
 builder.Services.AddScoped<IInvoiceMasterServices, InvoiceMasterServices>();
 builder.Services.AddScoped<IExpenseMasterServices, ExpenseMasterServices>();
+builder.Services.AddScoped<IPOServices, PurchaseOrderServices>();
 
 
 

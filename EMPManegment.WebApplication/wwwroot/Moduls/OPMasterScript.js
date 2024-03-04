@@ -1,5 +1,44 @@
 ﻿
 
+// Function to handle form submission
+function saveFormData(event) {
+    event.preventDefault(); // Prevent the default form submission
+
+    // Gather form data
+    var formData = {
+        companyAddress: document.getElementById('companyAddress').value,
+        companyaddpostalcode: document.getElementById('companyaddpostalcode').value,
+        registrationNumber: document.getElementById('registrationNumber').value,
+        companyEmail: document.getElementById('companyEmail').value,
+        companyWebsite: document.getElementById('companyWebsite').value,
+        compnayContactno: document.getElementById('compnayContactno').value,
+        invoicenoInput: document.getElementById('invoicenoInput').value,
+        dateField: document.getElementById('date-field').value,
+        choicesPaymentStatus: document.getElementById('choices-payment-status').value,
+        totalamountInput: document.getElementById('totalamountInput').value,
+        billingName: document.getElementById('billingName').value,
+        billingAddress: document.getElementById('billingAddress').value,
+        billingPhoneno: document.getElementById('billingPhoneno').value,
+        billingTaxno: document.getElementById('billingTaxno').value,
+        shippingName: document.getElementById('shippingName').value,
+        shippingAddress: document.getElementById('shippingAddress').value,
+        shippingPhoneno: document.getElementById('shippingPhoneno').value,
+        shippingTaxno: document.getElementById('shippingTaxno').value,
+        // Add more fields as needed
+    };
+
+    // You can now use the formData object to perform further operations,
+    // such as sending it to a server via AJAX or processing it locally.
+
+    // For demonstration, log the formData object to the console
+    console.log(formData);
+}
+
+// Add form submission event listener
+var form = document.getElementById('invoice_form');
+form.addEventListener('submit', saveFormData);
+
+
 
 
 var paymentSign = "$";
