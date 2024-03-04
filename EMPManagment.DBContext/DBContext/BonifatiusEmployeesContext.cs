@@ -55,6 +55,8 @@ public partial class BonifatiusEmployeesContext : DbContext
 
     public virtual DbSet<TblProjectMaster> TblProjectMasters { get; set; }
 
+    public virtual DbSet<TblPurchaseOrder> TblPurchaseOrders { get; set; }
+
     public virtual DbSet<TblQuestion> TblQuestions { get; set; }
 
     public virtual DbSet<TblRoleMaster> TblRoleMasters { get; set; }
@@ -414,6 +416,24 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.Property(e => e.ProjectStatus).HasMaxLength(10);
             entity.Property(e => e.ProjectTitle).HasMaxLength(50);
             entity.Property(e => e.ProjectType).HasMaxLength(20);
+        });
+
+        modelBuilder.Entity<TblPurchaseOrder>(entity =>
+        {
+            entity.ToTable("tblPurchaseOrder");
+
+            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.DeliveryDate).HasColumnType("date");
+            entity.Property(e => e.Opid)
+                .HasMaxLength(50)
+                .HasColumnName("OPId");
+            entity.Property(e => e.OrderDate).HasColumnType("date");
+            entity.Property(e => e.Status).HasMaxLength(50);
+            entity.Property(e => e.TotalAmount).HasColumnType("numeric(18, 2)");
+
+            entity.HasOne(d => d.Vendor).WithMany(p => p.TblPurchaseOrders)
+                .HasForeignKey(d => d.VendorId)
+                .HasConstraintName("FK_tblPurchaseOrder_tblVendor_Master");
         });
 
         modelBuilder.Entity<TblQuestion>(entity =>
