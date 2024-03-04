@@ -57,6 +57,8 @@ public partial class TblVendorMaster
 
     public virtual ICollection<TblCreditDebitMaster> TblCreditDebitMasters { get; set; } = new List<TblCreditDebitMaster>();
 
+    public virtual ICollection<TblPurchaseOrder> TblPurchaseOrders { get; set; } = new List<TblPurchaseOrder>();
+
     public virtual TblCity VendorCityNavigation { get; set; } = null!;
 
     public virtual TblCountry VendorCountryNavigation { get; set; } = null!;

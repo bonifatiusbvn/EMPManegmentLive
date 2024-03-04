@@ -58,6 +58,7 @@ function btnSaveTaskDetail() {
         formData.append("TaskDate", $("#txtdatetime").val());
         formData.append("TaskEndDate", $("#txtenddatetime").val());
         formData.append("TaskDetails", $("#contactDescription").val());
+        formData.append("ProjectId", $("#txtprojectid").val());
         $.ajax({
             url: '/Task/AddTaskDetails',
             type: 'Post',

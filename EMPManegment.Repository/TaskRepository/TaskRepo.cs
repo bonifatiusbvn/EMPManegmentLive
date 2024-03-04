@@ -67,6 +67,7 @@ namespace EMPManegment.Repository.TaskRepository
                     CreatedBy = addtask.CreatedBy,
                     CreatedOn = DateTime.Today,
                     TaskEndDate = addtask.TaskEndDate,
+                    ProjectId = addtask.ProjectId,
                 };
                 response.Code = 200;
                 response.Message = "Task add successfully!";
@@ -255,7 +256,7 @@ namespace EMPManegment.Repository.TaskRepository
         //}
 
 
-        public async Task<IEnumerable<TaskDetailsView>> GetTaskDetails(Guid Taskid)
+        public async Task<IEnumerable<TaskDetailsView>> GetTaskDetails(Guid Taskid,Guid ProjectId)
         {
             try
             {
@@ -263,7 +264,8 @@ namespace EMPManegment.Repository.TaskRepository
                     from a in Context.TblTaskDetails
                     join b in Context.TblUsers on a.UserId equals b.Id
                     join c in Context.TblTaskMasters on a.TaskType equals c.Id
-                    where a.UserId == Taskid || a.CreatedBy == Taskid
+                    where a.UserId == Taskid || a.CreatedBy == Taskid 
+                    where a.ProjectId == ProjectId
                     select new TaskDetailsView
                     {
                         Id = a.Id,
