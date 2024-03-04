@@ -42,8 +42,9 @@ namespace EMPManegment.Web.Controllers
             try
             {
                 Guid Userid = _userSession.UserId;
+                string ProjectId = UserSession.ProjectId;
                 List<TaskDetailsView> TaskList = new List<TaskDetailsView>();
-                ApiResponseModel response = await APIServices.PostAsync("", "UserHome/GetTaskDetails?Taskid=" + Userid);
+                ApiResponseModel response = await APIServices.PostAsync("", "UserHome/GetTaskDetails?Taskid=" + Userid + "&ProjectId=" + ProjectId);
                 if (response.code == 200)
                 {
                     TaskList = JsonConvert.DeserializeObject<List<TaskDetailsView>>(response.data.ToString());
@@ -95,6 +96,7 @@ namespace EMPManegment.Web.Controllers
                     TaskDetails = task.TaskDetails,
                     UserId = _userSession.UserId,
                     TaskTitle = task.TaskTitle,
+                    ProjectId=task.ProjectId,
                 };
                 ApiResponseModel postuser = await APIServices.PostAsync(TaskDetails, "UserHome/AddTaskDetails");
                 UserResponceModel responseModel = new UserResponceModel();
