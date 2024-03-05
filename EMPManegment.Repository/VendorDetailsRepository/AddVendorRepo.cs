@@ -1,4 +1,5 @@
-﻿using EMPManagment.API;
+﻿using Azure;
+using EMPManagment.API;
 using EMPManegment.EntityModels.View_Model;
 using EMPManegment.EntityModels.ViewModels;
 using EMPManegment.EntityModels.ViewModels.DataTableParameters;
@@ -201,6 +202,39 @@ namespace EMPManegment.Repository.VendorDetailsRepository
             return GetVendorList;
         }
 
+        public async Task<UserResponceModel> UpdateVendorDetails(VendorDetailsView updateVendor)
+        {
+            UserResponceModel response = new UserResponceModel();
+            var Vendordata = await Context.TblVendorMasters.FirstOrDefaultAsync(a => a.Vid == updateVendor.Id);
+            if (Vendordata.Vid != null)
+            {
+                                  
+                Vendordata.Vid = updateVendor.Id;
+                Vendordata.VendorFirstName = updateVendor.VendorFirstName;
+                Vendordata.VendorLastName = updateVendor.VendorLastName;
+                Vendordata.VendorEmail = updateVendor.VendorEmail;
+                Vendordata.VendorPhone = updateVendor.VendorPhone;
+                Vendordata.VendorContact = updateVendor.VendorContectNo;
+                Vendordata.VendorPinCode = updateVendor.VendorPinCode;
+                Vendordata.VendorAddress = updateVendor.VendorAddress;
+                Vendordata.VendorCompany = updateVendor.VendorCompany;
+                Vendordata.VendorCompanyType = updateVendor.VendorCompanyType;
+                Vendordata.VendorCompanyEmail = updateVendor.VendorCompanyEmail;
+                Vendordata.VendorCompanyNumber = updateVendor.VendorCompanyNumber;
+                Vendordata.VendorBankAccountNo = updateVendor.VendorBankAccountNo;
+                Vendordata.VendorBankName = updateVendor.VendorBankName;
+                Vendordata.VendorBankBranch = updateVendor.VendorBankBranch;
+                Vendordata.VendorAccountHolderName = updateVendor.VendorAccountHolderName;
+                Vendordata.VendorBankIfsc = updateVendor.VendorBankIfsc;
+                Vendordata.VendorGstnumber = updateVendor.VendorGstnumber;
+                Context.TblVendorMasters.Update(Vendordata);
+                await Context.SaveChangesAsync();
+            }
+            response.Code = 200;
+            response.Message = "Vendor Data Updated Successfully!";
+            return response;
+
+        }
 
     }
 }

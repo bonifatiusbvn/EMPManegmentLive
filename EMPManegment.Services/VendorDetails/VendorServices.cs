@@ -41,5 +41,9 @@ namespace EMPManegment.Services.VendorDetails
         {
             return await details.GetVendorNameList();
         }
+        public async Task<UserResponceModel> UpdateVendorDetails(VendorDetailsView updateVendor)
+        {
+            return await details.UpdateVendorDetails(updateVendor);
+        }
     }
 }

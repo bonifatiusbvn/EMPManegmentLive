@@ -137,15 +137,28 @@ function invitemember(Id) {
         dataType: 'json',
         processData: false,
         contentType: false,
-        success: function (Result) {
-            Swal.fire({
-                title: Result.message,
-                icon: 'success',
-                confirmButtonColor: '#3085d6',
-                confirmButtonText: 'OK',
-            }).then(function () {
-                window.location = '/Project/AddProjectMember/?Id=' + proProjectId;
-            });
+        success: function (Result)
+        {
+            if (Result.code == 200) {
+                Swal.fire({
+                    title: Result.message,
+                    icon: 'success',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'OK',
+                }).then(function () {
+                    window.location = '/Project/AddProjectMember/?Id=' + proProjectId;
+                });
+            }
+            else {
+                Swal.fire({
+                    title: Result.message,
+                    icon: 'warning',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'OK',
+                }).then(function () {
+                    window.location = '/Project/AddProjectMember/?Id=' + proProjectId;
+                });
+            }
         },
         Error: function () {
             Swal.fire({
