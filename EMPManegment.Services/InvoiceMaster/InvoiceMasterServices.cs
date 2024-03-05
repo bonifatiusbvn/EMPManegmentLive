@@ -21,9 +21,9 @@ namespace EMPManegment.Services.InvoiceMaster
             InvoiceMaster = invoiceMaster;
         }
 
-        public string CheckInvoiceNo(string OrderId)
+        public string CheckInvoiceNo(string porjectname)
         {
-            return InvoiceMaster.CheckInvoiceNo(OrderId);
+            return InvoiceMaster.CheckInvoiceNo(porjectname);
         }
 
         public Task<jsonData> GetAllTransaction(DataTableRequstModel dataTable)

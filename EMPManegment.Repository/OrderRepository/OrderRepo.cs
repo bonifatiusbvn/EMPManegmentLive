@@ -120,26 +120,29 @@ namespace EMPManegment.Repository.OrderRepository
             return orderDetails;
         }
 
-        public string CheckOrder()
+        public string CheckOrder(string projectname)
         {
             try
             {
                 var LastOrder = Context.TblOrderMasters.OrderByDescending(e => e.CreatedOn).FirstOrDefault();
+                var currentYear = DateTime.Now.Year;
+                var lastYear = currentYear - 1;
+
                 string UserOrderId;
                 if (LastOrder == null)
                 {
-                    UserOrderId = "BTPL/PO/PROJ-01/23-24-001";
+                    UserOrderId = $"BTPL/ODR/{projectname}/{lastYear % 100}-{currentYear % 100}-01";
                 }
                 else
                 {
                     if (LastOrder.OrderId.Length >= 25)
                     {
                         int orderNumber = int.Parse(LastOrder.OrderId.Substring(24)) + 1;
-                        UserOrderId = "BTPL/PO/PROJ-01/23-24-" + orderNumber.ToString("D3");
+                        UserOrderId = $"BTPL/ODR/{projectname}/{lastYear % 100}-{currentYear % 100}-" + orderNumber.ToString("D3");
                     }
                     else
                     {
-                        throw new Exception("OrderId does not have expected format.");
+                        throw new Exception("OrderId does not have the expected format.");
                     }
                 }
                 return UserOrderId;
@@ -149,6 +152,7 @@ namespace EMPManegment.Repository.OrderRepository
                 throw ex;
             }
         }
+
 
         public async Task<UserResponceModel> InsertMultipleOrder(List<OrderView> InsertOrder)
         {
@@ -165,6 +169,7 @@ namespace EMPManegment.Repository.OrderRepository
                         CompanyName = item.CompanyName,
                         VendorId = item.VendorId,
                         ProductType = item.ProductType,
+                        ProductId = item.ProductId,
                         Quantity = item.Quantity,
                         Amount = item.Amount,
                         Total = item.Total,
@@ -200,36 +205,36 @@ namespace EMPManegment.Repository.OrderRepository
             try
             {
                 var orderDetails = new List<OrderDetailView>();
-                var data = await(from a in Context.TblOrderMasters
-                                 join c in Context.TblProductDetailsMasters on a.ProductId equals c.Id
-                                 join b in Context.TblVendorMasters on a.VendorId equals b.Vid
-                                 where a.OrderId == OrderId
-                                 select new OrderDetailView
-                                 {
-                                     Id = a.Id,
-                                     OrderId = a.OrderId,
-                                     VendorId = a.VendorId,
-                                     Type = a.Type,
-                                     CompanyName = a.CompanyName,
-                                     ProductId = a.ProductId,
-                                     VendorAddress = b.VendorAddress,
-                                     VendorContact = b.VendorContact,
-                                     VendorEmail = b.VendorCompanyEmail,
-                                     ProductImage = c.ProductImage,
-                                     ProductName = a.ProductName,
-                                     ProductShortDescription = a.ProductShortDescription,
-                                     Quantity = a.Quantity,
-                                     OrderDate = a.OrderDate,
-                                     PerUnitPrice = c.PerUnitPrice,
-                                     PerUnitWithGstprice = c.PerUnitWithGstprice,
-                                     Total = a.Total,
-                                     Amount = a.Amount,
-                                     PaymentMethod = a.PaymentMethod,
-                                     PaymentStatus = a.PaymentStatus,
-                                     DeliveryStatus = a.DeliveryStatus,
-                                     DeliveryDate = a.DeliveryDate,
-                                     CreatedOn = a.CreatedOn,
-                                 }).ToListAsync();
+                var data = await (from a in Context.TblOrderMasters
+                                  join c in Context.TblProductDetailsMasters on a.ProductId equals c.Id
+                                  join b in Context.TblVendorMasters on a.VendorId equals b.Vid
+                                  where a.OrderId == OrderId
+                                  select new OrderDetailView
+                                  {
+                                      Id = a.Id,
+                                      OrderId = a.OrderId,
+                                      VendorId = a.VendorId,
+                                      Type = a.Type,
+                                      CompanyName = a.CompanyName,
+                                      ProductId = a.ProductId,
+                                      VendorAddress = b.VendorAddress,
+                                      VendorContact = b.VendorContact,
+                                      VendorEmail = b.VendorCompanyEmail,
+                                      ProductImage = c.ProductImage,
+                                      ProductName = a.ProductName,
+                                      ProductShortDescription = a.ProductShortDescription,
+                                      Quantity = a.Quantity,
+                                      OrderDate = a.OrderDate,
+                                      PerUnitPrice = c.PerUnitPrice,
+                                      PerUnitWithGstprice = c.PerUnitWithGstprice,
+                                      Total = a.Total,
+                                      Amount = a.Amount,
+                                      PaymentMethod = a.PaymentMethod,
+                                      PaymentStatus = a.PaymentStatus,
+                                      DeliveryStatus = a.DeliveryStatus,
+                                      DeliveryDate = a.DeliveryDate,
+                                      CreatedOn = a.CreatedOn,
+                                  }).ToListAsync();
                 if (data != null)
                 {
                     foreach (var item in data)
@@ -277,7 +282,7 @@ namespace EMPManegment.Repository.OrderRepository
                 IEnumerable<PaymentMethodView> paymentMethod = Context.TblPaymentMethodTypes.ToList().Select(a => new PaymentMethodView
                 {
                     Id = a.Id,
-                    PaymentMethod=a.PaymentMethod,
+                    PaymentMethod = a.PaymentMethod,
                 });
                 return paymentMethod;
             }

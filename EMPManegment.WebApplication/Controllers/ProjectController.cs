@@ -140,7 +140,7 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
-        public async Task<IActionResult> AddProjectMember(Guid Id)
+        public async Task<IActionResult> GetProjectDetails(Guid Id)
         {
             try
             {
@@ -150,7 +150,7 @@ namespace EMPManegment.Web.Controllers
                 {
                     projectDetails = JsonConvert.DeserializeObject<ProjectDetailView>(response.data.ToString());
                     UserSession.ProjectId = projectDetails.ProjectId.ToString();
-                    //UserSession.ProjectName = projectDetails.ProjectName.ToString();
+                    UserSession.ProjectName = projectDetails.ProjectName.ToString();
 
                 }
                 return View(projectDetails);
@@ -160,6 +160,9 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
+
+
+
 
         [HttpPost]
         public async Task<IActionResult> GetMemberList()
@@ -193,15 +196,16 @@ namespace EMPManegment.Web.Controllers
             {
                 var membersinvited = HttpContext.Request.Form["InviteMember"];
                 var memberDetails = JsonConvert.DeserializeObject<ProjectView>(membersinvited);
-
                 ApiResponseModel postuser = await APIServices.PostAsync(memberDetails, "ProjectDetails/AddMemberToProject");
                 UserResponceModel responseModel = new UserResponceModel();
                 if (postuser.code == 200)
                 {
-                    return Ok(new { postuser.message });
+                    return Ok(new { postuser.message, postuser.code });
                 }
-
-                return View();
+                else
+                {
+                    return Ok(new { postuser.message, postuser.code });
+                }
             }
             catch (Exception ex)
             {

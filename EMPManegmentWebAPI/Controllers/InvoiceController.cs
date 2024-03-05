@@ -45,9 +45,9 @@ namespace EMPManagment.API.Controllers
         }
         [HttpGet]
         [Route("CheckInvoiceNo")]
-        public IActionResult CheckInvoiceNo(string OrderId)
+        public IActionResult CheckInvoiceNo(string porjectname)
         {
-            var checkInvoice = InvoiceMaster.CheckInvoiceNo(OrderId);
+            var checkInvoice = InvoiceMaster.CheckInvoiceNo(porjectname);
             return Ok(new { code = 200, data = checkInvoice });
         }
         [HttpPost]

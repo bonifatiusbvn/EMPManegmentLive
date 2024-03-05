@@ -32,39 +32,32 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
         }
 
 
-        public string CheckInvoiceNo(string OrderId)
+        public string CheckInvoiceNo(string projectname)
         {
             try
             {
-                var LastInvoiceId = Context.TblInvoices.OrderByDescending(e => e.CreatedOn).FirstOrDefault();
-                string InvoiceId;
-                var invoice = (from a in Context.TblOrderMasters.Where(x => x.OrderId == OrderId)
-                               join b in Context.TblProjectMasters
-                               on a.ProjectId equals b.ProjectId
-                               select new CheckInvoiceView
-                               {
-                                   OrderId = a.OrderId,
-                                   ProjectId = a.ProjectId,
-                                   ProjectName = b.ProjectName
-                               }).FirstOrDefault();
+                var LastOrder = Context.TblOrderMasters.OrderByDescending(e => e.CreatedOn).FirstOrDefault();
+                var currentYear = DateTime.Now.Year;
+                var lastYear = currentYear - 1;
 
-                if (LastInvoiceId == null)
+                string INVOICEId;
+                if (LastOrder == null)
                 {
-                    InvoiceId = "BTPL/INVOICE/" + invoice.ProjectName + "/23-24-001";
+                    INVOICEId = $"BTPL/INVOICE/{projectname}/{lastYear % 100}-{currentYear % 100}-01";
                 }
                 else
                 {
-                    if (LastInvoiceId.InvoiceNo.Length >= 24)
+                    if (LastOrder.OrderId.Length >= 25)
                     {
-                        int orderNumber = int.Parse(LastInvoiceId.InvoiceNo.Substring(29)) + 1;
-                        InvoiceId = "BTPL/INVOICE/" + invoice.ProjectName + "/23-24-" + orderNumber.ToString("D3");
+                        int orderNumber = int.Parse(LastOrder.OrderId.Substring(24)) + 1;
+                        INVOICEId = $"BTPL/INVOICE/{projectname}/{lastYear % 100}-{currentYear % 100}-" + orderNumber.ToString("D3");
                     }
                     else
                     {
-                        throw new Exception("InvoiceId does not have expected format.");
+                        throw new Exception("OrderId does not have the expected format.");
                     }
                 }
-                return InvoiceId;
+                return INVOICEId;
             }
             catch (Exception ex)
             {
@@ -379,7 +372,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                     CreditDebitAmount = CreditDebit.CreditDebitAmount,
                     PendingAmount = CreditDebit.PendingAmount,
                     TotalAmount = CreditDebit.TotalAmount,
-                    PaymentMethod= CreditDebit.PaymentMethod,
+                    PaymentMethod = CreditDebit.PaymentMethod,
                     CreatedOn = DateTime.Now,
                     CreatedBy = CreditDebit.CreatedBy,
                 };
@@ -536,7 +529,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                                     PendingAmount = a.PendingAmount,
                                     CreditDebitAmount = a.CreditDebitAmount,
                                     TotalAmount = a.TotalAmount,
-                                    VendorAddress=b.VendorAddress
+                                    VendorAddress = b.VendorAddress
                                 };
 
             if (!string.IsNullOrEmpty(dataTable.sortColumn) && !string.IsNullOrEmpty(dataTable.sortColumnDir))

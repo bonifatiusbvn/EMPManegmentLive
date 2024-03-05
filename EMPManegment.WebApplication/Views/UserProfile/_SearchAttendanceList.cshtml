@@ -18,7 +18,7 @@
                 {
                     <tr>
                         <td>@item.UserName</td>
-                        <td>@item.Date.ToShortDateString()</td>
+                        <td>@item.Date.ToString("dd/MM/yyyy")</td>
                         <td>@item.Intime.ToLongTimeString()</td>
                       
                             @if(item.OutTime != null)

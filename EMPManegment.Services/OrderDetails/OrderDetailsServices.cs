@@ -32,9 +32,9 @@ namespace EMPManegment.Services.OrderDetails
             return await OrderDetails.GetOrderDetailsByStatus(DeliveryStatus);
         }
 
-        public string CheckOrder()
+        public string CheckOrder(string projectname)
         {
-            return OrderDetails.CheckOrder();
+            return OrderDetails.CheckOrder(projectname);
         }
 
         public async Task<List<OrderDetailView>> GetOrderDetailsById(string OrderId)

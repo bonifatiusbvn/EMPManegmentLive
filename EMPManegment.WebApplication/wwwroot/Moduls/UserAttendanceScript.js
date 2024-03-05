@@ -90,8 +90,18 @@ function GetUserAttendance() {
             { "data": "userName", "name": "UserName" },
             {
                 "data": "date", "name": "Date",
-                "render": function (data, type, full) {
-                    return (new Date(full.date)).toLocaleDateString('en-GB');
+                render: function (data, type, row) {
+                    var dateObj = new Date(data);
+                    var day = dateObj.getDate();
+                    var month = dateObj.getMonth() + 1; 
+                    var year = dateObj.getFullYear();
+                    if (day < 10) {
+                        day = '0' + day;
+                    }
+                    if (month < 10) {
+                        month = '0' + month;
+                    }
+                    return day + '-' + month + '-' + year;
                 }
             },
             {
@@ -243,14 +253,14 @@ function GetAttendance() {
         processData: false,
         contentType: false,
         success: function (Result, status, xhr) {
-            
                 var object = '';
                 $.each(Result, function (index, item) {
                     var userdate = new Date(item.date).toLocaleDateString('en-US');
                     var todate = new Date().toLocaleDateString('en-US');
                     object += '<tr>';
                     object += '<td>' + item.userName + '</td>';
-                    object += '<td>' + (new Date(item.date)).toLocaleDateString('en-GB') + '</td>';
+                    var formattedDate = formatDate(new Date(item.date));
+                    object += '<td>' + formattedDate + '</td>';
                     object += '<td>' + (new Date(item.intime)).toLocaleTimeString('en-US') + '</td>';
                     //---------OutTime---------//
                     if (item.outTime != null) {
@@ -300,6 +310,13 @@ function GetAttendance() {
 
     });
 };
+function formatDate(date) {
+    var day = String(date.getDate()).padStart(2, '0');
+    var month = String(date.getMonth() + 1).padStart(2, '0');
+    var year = date.getFullYear();
+
+    return day + '-' + month + '-' + year;
+}
 
 function GetSearchAttendanceList() {
 

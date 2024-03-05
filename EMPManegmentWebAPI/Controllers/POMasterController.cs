@@ -2,6 +2,7 @@
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.POMaster;
 using EMPManegment.Inretface.Interface.InvoiceMaster;
+using EMPManegment.Inretface.Interface.OrderDetails;
 using EMPManegment.Inretface.Services.PurchaseOrderSevices;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -46,6 +47,22 @@ namespace EMPManagment.API.Controllers
             }
             return StatusCode(response.Code, response);
         }
+
+        [HttpGet]
+        [Route("CheckOPNo")]
+        public async Task<IActionResult> CheckOPNo(string projectname)
+        {
+            try
+            {
+                var checkOPNo = POServices.CheckOPNo(projectname);
+                return Ok(new { code = 200, data = checkOPNo });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { code = 500, message = ex.Message });
+            }
+        }
+
 
     }
 }

@@ -565,14 +565,34 @@ function AllTaskDetailsList() {
             },
             {
                 "data": "taskDate", "name": "TaskDate",
-                "render": function (data, type, full) {
-                    return (new Date(full.taskDate)).toLocaleDateString('en-US');
+                render: function (data, type, row) {
+                    var dateObj = new Date(data);
+                    var day = dateObj.getDate();
+                    var month = dateObj.getMonth() + 1;
+                    var year = dateObj.getFullYear();
+                    if (day < 10) {
+                        day = '0' + day;
+                    }
+                    if (month < 10) {
+                        month = '0' + month;
+                    }
+                    return day + '-' + month + '-' + year;
                 }
             },
             {
                 "data": "taskEndDate", "name": "TaskEndDate",
-                "render": function (data, type, full) {
-                    return (new Date(full.taskEndDate)).toLocaleDateString('en-US');
+                render: function (data, type, row) {
+                    var dateObj = new Date(data);
+                    var day = dateObj.getDate();
+                    var month = dateObj.getMonth() + 1;
+                    var year = dateObj.getFullYear();
+                    if (day < 10) {
+                        day = '0' + day;
+                    }
+                    if (month < 10) {
+                        month = '0' + month;
+                    }
+                    return day + '-' + month + '-' + year;
                 }
             },
             {

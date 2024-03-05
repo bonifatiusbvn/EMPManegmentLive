@@ -925,12 +925,6 @@
                                                 <li class="nav-item">
                                                     <a asp-action="ProjectList" asp-controller="Project" class="nav-link" data-key="t-list"> List </a>
                                                 </li>
-                                                @* <li class="nav-item">
-                                                <a href="#" class="nav-link" data-key="t-overview"> Overview </a>
-                                                </li>
-                                                <li class="nav-item">
-                                                <a asp-action="AddProjectMember" asp-controller="Project" class="nav-link" data-key="t-overview"> Add Member </a>
-                                                </li> *@
                                                 @if (_userSession.UserRoll == "Admin")
                                                 {
                                                     <li class="nav-item">
@@ -1753,7 +1747,7 @@
                                                                     </tr>
                                                                     <tr>
                                                                         <th class="ps-0" scope="row">Birth Date:</th>
-                                                                        <td class="text-muted" id="LastName">@Model.DateOfBirth.ToShortDateString()</td>
+                                                                        <td class="text-muted" id="LastName">@Model.DateOfBirth.ToString("dd/MM/yyyy")</td>
                                                                     </tr>
                                                                     <tr>
                                                                         <th class="ps-0" scope="row">E-mail:</th>
@@ -1765,7 +1759,7 @@
                                                                     </tr>
                                                                     <tr>
                                                                         <th class="ps-0" scope="row">JoiningDate:</th>
-                                                                        <td class="text-muted" id="JoiningDate">@Model.JoiningDate.Value.ToShortDateString()</td>
+                                                                        <td class="text-muted" id="JoiningDate">@Model.JoiningDate.Value.ToString("dd/MM/yyyy")</td>
                                                                     </tr>
                                                                     <tr>
                                                                         <th class="ps-0" scope="row">Address:</th>

@@ -323,7 +323,7 @@ function GetAllVendorData() {
 }
 
 function getLastTransaction() {
-    debugger
+    
     var Vid = $('#txtvendorid').val();
 
     $.ajax({
@@ -357,7 +357,7 @@ function getAllTransactions() {
     });
 }
 function GetAllTransactionData() {
-    debugger
+
     $('#transactionTable').DataTable({
         processing: true,
         serverSide: true,

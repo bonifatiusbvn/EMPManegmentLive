@@ -13,7 +13,7 @@
             <div class="page-title-right">
                 <ol class="breadcrumb m-0">
                     <li class="breadcrumb-item"><a href="javascript: void(0);">Invoices</a></li>
-                    <li class="breadcrumb-item active">Invoice List</li>
+                    <li class="breadcrumb-item active">List View</li>
                 </ol>
             </div>
 
@@ -99,7 +99,7 @@
                                     <tr>
                                         <td>@item.InvoiceNo</td>
                                         <td>@item.BuyesOrderNo</td>
-                                        <td>@item.BuyesOrderDate</td>
+                                        <td>@item.BuyesOrderDate?.ToString("dd/MM/yyyy")</td>
                                         <td>@item.DispatchThrough</td>
                                         <td>@item.TotalGst</td>
                                         <td>@item.TotalAmount</td>

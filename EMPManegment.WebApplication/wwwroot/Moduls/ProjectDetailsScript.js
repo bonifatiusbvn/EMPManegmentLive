@@ -9,7 +9,6 @@ $(document).ready(function () {
 function btnCreateProjectDetail() {
 
     if ($('#formprojectdetails').valid()) {
-        debugger
         var formData = new FormData();
         formData.append("ProjectTitle", $("#projectTitle").val());
         formData.append("ProjectPriority", $("#projectPriority").val());
@@ -139,14 +138,26 @@ function invitemember(Id) {
         processData: false,
         contentType: false,
         success: function (Result) {
-            Swal.fire({
-                title: Result.message,
-                icon: 'success',
-                confirmButtonColor: '#3085d6',
-                confirmButtonText: 'OK',
-            }).then(function () {
-                window.location = '/Project/AddProjectMember/?Id=' + proProjectId;
-            });
+            if (Result.code == 200) {
+                Swal.fire({
+                    title: Result.message,
+                    icon: 'success',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'OK',
+                }).then(function () {
+                    window.location = '/Project/GetProjectDetails/?Id=' + proProjectId;
+                });
+            }
+            else {
+                Swal.fire({
+                    title: Result.message,
+                    icon: 'warning',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'OK',
+                }).then(function () {
+                    window.location = '/Project/GetProjectDetails/?Id=' + proProjectId;
+                });
+            }
         },
         Error: function () {
             Swal.fire({
@@ -229,7 +240,7 @@ function addProjectDocument() {
                 confirmButtonColor: '#3085d6',
                 confirmButtonText: 'OK',
             }).then(function () {
-                window.location = '/Project/AddProjectMember/?Id=' + data6;
+                window.location = '/Project/GetProjectDetails/?Id=' + data6;
             })
         },
         Error: function () {

@@ -48,5 +48,38 @@ namespace EMPManegment.Repository.PurchaseOrderRepository
             }
             return response;
         }
+
+        public string CheckOPNo(string projectname)
+        {
+            try
+            {
+                var LastOrder = Context.TblOrderMasters.OrderByDescending(e => e.CreatedOn).FirstOrDefault();
+                var currentYear = DateTime.Now.Year;
+                var lastYear = currentYear - 1;
+
+                string POId;
+                if (LastOrder == null)
+                {
+                    POId = $"BTPL/OP/{projectname}/{lastYear % 100}-{currentYear % 100}-01";
+                }
+                else
+                {
+                    if (LastOrder.OrderId.Length >= 25)
+                    {
+                        int orderNumber = int.Parse(LastOrder.OrderId.Substring(24)) + 1;
+                        POId = $"BTPL/ODR/{projectname}/{lastYear % 100}-{currentYear % 100}-" + orderNumber.ToString("D3");
+                    }
+                    else
+                    {
+                        throw new Exception("OrderId does not have the expected format.");
+                    }
+                }
+                return POId;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

@@ -13,7 +13,7 @@
             <div class="card border-0 overflow-hidden">
                 <a class="card-body bg-primary-subtle" data-bs-toggle="collapse" href="#lowPriority" role="button" aria-expanded="false" aria-controls="lowPriority">
                     <h5 class="card-title text-uppercase fw-semibold mb-1 fs-15 text-success">Low Priority Task</h5>
-                    <p class="text-muted mb-0" id="txttodayDate">@DateTime.Today.ToShortDateString() <span class="fw-medium m-2">@Model.Count(t => t.TaskType == 1) Tasks</span></p>
+                    <p class="text-muted mb-0" id="txttodayDate">@DateTime.Today.ToString("dd/MM/yyyy") <span class="fw-medium m-2">@Model.Count(t => t.TaskType == 1) Tasks</span></p>
                 </a>
             </div>
         </div>
@@ -110,7 +110,7 @@
             <div class="card border-0 overflow-hidden">
                 <a class="card-body bg-primary-subtle" data-bs-toggle="collapse" href="#mediumPriority" role="button" aria-expanded="false" aria-controls="mediumPriority">
                     <h5 class="card-title text-uppercase fw-semibold mb-1 fs-15" style="color:darkorange">Medium Priority Task</h5>
-                    <p class="text-muted mb-0" id="txttodayDate">@DateTime.Today.ToShortDateString() <span class="fw-medium m-2">@Model.Count(t => t.TaskType == 2) Tasks</span></p>
+                <p class="text-muted mb-0" id="txttodayDate">@DateTime.Today.ToString("dd/MM/yyyy") <span class="fw-medium m-2">@Model.Count(t => t.TaskType == 2) Tasks</span></p>
                 </a>
             </div>
             <!--end card-->
@@ -203,7 +203,7 @@
             <div class="card border-0 overflow-hidden">
                 <a class="card-body bg-primary-subtle" data-bs-toggle="collapse" href="#highPriority" role="button" aria-expanded="false" aria-controls="highPriority">
                     <h5 class="card-title text-uppercase fw-semibold mb-1 fs-15 text-danger">High Priority Task</h5>
-                    <p class="text-muted mb-0" id="txttodayDate">@DateTime.Today.ToShortDateString() <span class="fw-medium m-2">@Model.Count(t => t.TaskType == 3) Tasks</span></p>
+                <p class="text-muted mb-0" id="txttodayDate">@DateTime.Today.ToString("dd/MM/yyyy") <span class="fw-medium m-2">@Model.Count(t => t.TaskType == 3) Tasks</span></p>
                 </a>
             </div>
             <!--end card-->

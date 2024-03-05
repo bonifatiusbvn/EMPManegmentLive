@@ -114,7 +114,8 @@ namespace EMPManegment.Web.Controllers
         {
             try
             {
-                ApiResponseModel Response = await APIServices.GetAsync("", "OrderDetails/CheckOrder");
+                string porjectname = UserSession.ProjectName;
+                ApiResponseModel Response = await APIServices.GetAsync("", "OrderDetails/CheckOrder?projectname=" + porjectname);
                 if (Response.code == 200)
                 {
                     ViewBag.OrderId = Response.data;
@@ -132,7 +133,7 @@ namespace EMPManegment.Web.Controllers
             try
             {
                 var OrderDetails = HttpContext.Request.Form["ORDERDETAILS"];
-                var InsertDetails = JsonConvert.DeserializeObject<List<OrderView>>(OrderDetails);
+                var InsertDetails = JsonConvert.DeserializeObject<List<OrderView>>(OrderDetails.ToString());
                 ApiResponseModel postuser = await APIServices.PostAsync(InsertDetails, "OrderDetails/InsertMultipleOrder");
                 if (postuser.code == 200)
                 {

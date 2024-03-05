@@ -98,7 +98,7 @@ function EditExpenseDetails(Id) {
         contentType: 'application/json;charset=utf-8;',
         dataType: 'json',
         success: function (response) {
-            debugger
+           
             $('#EditExpenseModel').modal('show');
             $('#Editexpensetype').val(response.expenseType);
             $('#EditDescription').val(response.description);

@@ -85,7 +85,7 @@ function GetUserProjectList(page) {
 
 GetUserProjectList(1);
 $(document).on("click", ".pagination a", function (e) {
-    debugger
+   
     e.preventDefault();
     var page = $(this).text();
     GetUserProjectList(page);
@@ -93,14 +93,14 @@ $(document).on("click", ".pagination a", function (e) {
 
 
 $(document).on("click", "#btnbackButton", function (e) {
-    debugger
+    
     e.preventDefault();
     var page = $(this).text();
     GetUserProjectList(page);
 });
 
 function btnserrchproject() {
-    debugger
+    
 
     GetUserProjectList(1);
 }

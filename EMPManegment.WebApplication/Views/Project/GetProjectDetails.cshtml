@@ -1,6 +1,7 @@
 ﻿@model EMPManegment.EntityModels.ViewModels.ProjectModels.ProjectDetailView
+
 @{
-    ViewData["Title"] = "AddProjectMember";
+    ViewData["Title"] = "GetProjectDetails";
     Layout = "~/Views/Shared/_UserHomeLayout.cshtml";
 }
 <div class="row" style="margin-top:20px;">
@@ -42,10 +43,10 @@
                                                 <div class="fw-medium" id="projecttype">@Model.ProjectType</div>
                                                 <input type="text" id="projectid" value="@Model.ProjectId" hidden />
                                                 <div class="vr"></div>
-                                                <div>Create Date : <span class="fw-medium">@Model.ProjectStartDate.ToShortDateString()</span></div>
+                                                <div>Create Date : <span class="fw-medium">@Model.ProjectStartDate.ToString("dd/MM/yyyy")</span></div>
                                                 <input type="hidden" value="@Model.ProjectStartDate" id="projectstartdate" />
                                                 <div class="vr"></div>
-                                                <div>Due Date : <span class="fw-medium" id="projectenddate"></span>@Model.ProjectEndDate.ToShortDateString()</div>
+                                                <div>Due Date : <span class="fw-medium" id="projectenddate"></span>@Model.ProjectEndDate.ToString("dd/MM/yyyy")</div>
                                                 <div class="vr"></div>
                                                 <div class="badge rounded-pill bg-primary fs-12" id="projectstatus">@Model.ProjectStatus</div>
                                                 <div class="badge rounded-pill bg-success fs-12" id="projectpriority">@Model.ProjectPriority</div>
@@ -172,13 +173,13 @@
                                                 <div class="col-lg-3 col-sm-6">
                                                     <div>
                                                         <p class="mb-2 text-uppercase fw-medium">Create Date :</p>
-                                                        <h5 class="fs-15 mb-0" id="projectstartdate">@Model.ProjectStartDate.ToShortDateString()</h5>
+                                                        <h5 class="fs-15 mb-0" id="projectstartdate">@Model.ProjectStartDate.ToString("dd/MM/yyyy")</h5>
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-3 col-sm-6">
                                                     <div>
                                                         <p class="mb-2 text-uppercase fw-medium">Due Date :</p>
-                                                        <h5 class="fs-15 mb-0" id="projectenddate">@Model.ProjectEndDate.ToShortDateString()</h5>
+                                                        <h5 class="fs-15 mb-0" id="projectenddate">@Model.ProjectEndDate.ToString("dd/MM/yyyy")</h5>
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-3 col-sm-6">

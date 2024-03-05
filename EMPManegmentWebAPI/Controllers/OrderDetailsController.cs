@@ -55,22 +55,29 @@ namespace EMPManagment.API.Controllers
         {
             IEnumerable<OrderDetailView> orderlist = await OrderDetails.GetOrderList();
             return Ok(new { code = 200, data = orderlist });
-         
+
         }
         [HttpPost]
         [Route("GetOrderDetailsByStatus")]
         public async Task<IActionResult> GetOrderDetailsByStatus(string DeliveryStatus)
         {
             List<OrderDetailView> orderdetails = await OrderDetails.GetOrderDetailsByStatus(DeliveryStatus);
-            return Ok(new { code = 200,data = orderdetails.ToList() });
+            return Ok(new { code = 200, data = orderdetails.ToList() });
         }
 
         [HttpGet]
         [Route("CheckOrder")]
-        public IActionResult CheckOrder()
+        public async Task<IActionResult> CheckOrder(string projectname)
         {
-            var checkOrder = OrderDetails.CheckOrder();
-            return Ok(new { code = 200, data = checkOrder });
+            try
+            {
+                var checkOrder = OrderDetails.CheckOrder(projectname);
+                return Ok(new { code = 200, data = checkOrder });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { code = 500, message = ex.Message });
+            }
         }
 
         [HttpGet]
