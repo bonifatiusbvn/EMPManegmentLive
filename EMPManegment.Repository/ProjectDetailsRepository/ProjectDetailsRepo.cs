@@ -92,7 +92,7 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
         public async Task<List<ProjectView>> GetUserProjectList(Guid UserId)
         {
             var UserData = new List<ProjectView>();
-            var data = await (from a in Context.TblProjectDetails
+            var data = await (from a in Context.TblProjectMembes
                               join b in Context.TblProjectMasters
                               on a.ProjectId equals b.ProjectId
                               where a.UserId == UserId
@@ -170,7 +170,7 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
             UserResponceModel response = new UserResponceModel();
             try
             {
-                bool isMemberAlreadyExists = Context.TblProjectDetails.Any(x => x.UserId == AddMember.UserId && x.ProjectId == AddMember.ProjectId);
+                bool isMemberAlreadyExists = Context.TblProjectMembes.Any(x => x.UserId == AddMember.UserId && x.ProjectId == AddMember.ProjectId);
                 if (isMemberAlreadyExists == true)
                 {
                     response.Message = "Member already exists";
@@ -178,7 +178,7 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
                 }
                 else
                 {
-                    var projectmodel = new TblProjectDetail()
+                    var projectmodel = new TblProjectMembe()
                     {
                         Id = Guid.NewGuid(),
                         ProjectId = AddMember.ProjectId,
@@ -191,7 +191,7 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
                     };
                     response.Code = 200;
                     response.Message = "Member add successfully!";
-                    Context.TblProjectDetails.Add(projectmodel);
+                    Context.TblProjectMembes.Add(projectmodel);
                     Context.SaveChanges();
                 }
             }
@@ -205,7 +205,7 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
         {
             try
             {
-                var result = (from e in Context.TblProjectDetails
+                var result = (from e in Context.TblProjectMembes
                               where e.ProjectId == ProjectId
                               join d in Context.TblUsers on e.UserId equals d.Id
                               select new ProjectView
@@ -275,7 +275,7 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
         public async Task<List<ProjectDetailView>> GetProjectListById(string? searchby, string? searchfor, Guid UserId)
         {
             var UserData = new List<ProjectDetailView>();
-            var data = await (from projectDetail in Context.TblProjectDetails
+            var data = await (from projectDetail in Context.TblProjectMembes
                               join projectMaster in Context.TblProjectMasters
                               on projectDetail.ProjectId equals projectMaster.ProjectId
                               where projectDetail.UserId == UserId

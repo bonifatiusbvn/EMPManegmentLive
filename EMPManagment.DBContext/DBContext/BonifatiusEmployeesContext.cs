@@ -53,7 +53,7 @@ public partial class BonifatiusEmployeesContext : DbContext
 
     public virtual DbSet<TblProjectMaster> TblProjectMasters { get; set; }
 
-    public virtual DbSet<TblProjectMembe> TblProjectMembes { get; set; }
+    public virtual DbSet<TblProjectMember> TblProjectMembers { get; set; }
 
     public virtual DbSet<TblPurchaseOrder> TblPurchaseOrders { get; set; }
 
@@ -397,11 +397,11 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.Property(e => e.ProjectType).HasMaxLength(20);
         });
 
-        modelBuilder.Entity<TblProjectMembe>(entity =>
+        modelBuilder.Entity<TblProjectMember>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK_tblProjectDetails");
 
-            entity.ToTable("tblProjectMembes");
+            entity.ToTable("tblProjectMembers");
 
             entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.CreatedOn).HasColumnType("date");
@@ -412,11 +412,11 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.Property(e => e.Status).HasMaxLength(20);
             entity.Property(e => e.UserRole).HasMaxLength(20);
 
-            entity.HasOne(d => d.Project).WithMany(p => p.TblProjectMembes)
+            entity.HasOne(d => d.Project).WithMany(p => p.TblProjectMembers)
                 .HasForeignKey(d => d.ProjectId)
                 .HasConstraintName("FK_tblProjectDetails_tblProjectMaster");
 
-            entity.HasOne(d => d.User).WithMany(p => p.TblProjectMembes)
+            entity.HasOne(d => d.User).WithMany(p => p.TblProjectMembers)
                 .HasForeignKey(d => d.UserId)
                 .HasConstraintName("FK_tblProjectDetails_tblUsers");
         });
