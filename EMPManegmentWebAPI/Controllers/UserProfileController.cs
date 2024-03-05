@@ -18,6 +18,8 @@ using Microsoft.AspNetCore.Mvc;
 using System.Data;
 using System.Net;
 using Microsoft.EntityFrameworkCore.Metadata;
+using EMPManegment.EntityModels.ViewModels.ProjectModels;
+using EMPManegment.Inretface.Interface.ProjectDetails;
 
 
 namespace EMPManagment.API.Controllers
@@ -42,6 +44,13 @@ namespace EMPManagment.API.Controllers
         {
             var userList = await UserListServices.GetUsersDetails();
             return Ok(new { code = 200, data = userList });
+        }
+        [HttpGet]
+        [Route("GetActiveDeactiveUserList")]
+        public async Task<IActionResult> GetActiveDeactiveUserList(string? searchby, string? searchfor)
+        {
+            var activedeactive = await UserListServices.GetActiveDeactiveUserList(searchby, searchfor);
+            return Ok(new { code = 200, data = activedeactive });
         }
 
 

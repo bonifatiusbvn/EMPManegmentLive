@@ -36,6 +36,7 @@ using DocumentFormat.OpenXml.Drawing.Charts;
 using Aspose.Pdf;
 using Aspose.Pdf.Text;
 using System.IO;
+using EMPManegment.EntityModels.ViewModels.ProjectModels;
 
 namespace EMPManegment.Web.Controllers
 {
@@ -128,26 +129,33 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
-
-        public async Task<IActionResult> UserActiveDecative(int? page)
+        public async Task<IActionResult> UserActiveDecative()
+        {
+            return View();
+        }
+        [HttpGet]
+        public async Task<IActionResult> UserActiveDecativeList(string? searchby, string? searchfor, int? page)
         {
             try
             {
                 List<EmpDetailsView> ActiveDecative = new List<EmpDetailsView>();
-                ApiResponseModel res = await APIServices.GetAsync("", "UserProfile/GetAllUsersDetails");
+                ApiResponseModel res = await APIServices.GetAsync("", "UserProfile/GetAllUsersDetails?searchby=" + searchby + "&searchfor=" + searchfor);
                 if (res.code == 200)
                 {
                     ActiveDecative = JsonConvert.DeserializeObject<List<EmpDetailsView>>(res.data.ToString());
                 }
-                var activeDeactivePage = ActiveDecative.ToPagedList(page ?? 1, 4);
-                return View(activeDeactivePage);
+                int pageSize = 4;
+                var pageNumber = page ?? 1;
+
+                var pagedList = ActiveDecative.ToPagedList(pageNumber, pageSize);
+
+                return PartialView("~/Views/UserProfile/_UserActiveDeactivePartial.cshtml", pagedList);
             }
             catch (Exception ex)
             {
                 throw ex;
             }
         }
-
         [HttpPost]
         public async Task<IActionResult> GetSearchEmpList(EmpDetailsModel EmpList)
         {

@@ -49,11 +49,11 @@ public partial class BonifatiusEmployeesContext : DbContext
 
     public virtual DbSet<TblProductTypeMaster> TblProductTypeMasters { get; set; }
 
-    public virtual DbSet<TblProjectDetail> TblProjectDetails { get; set; }
-
     public virtual DbSet<TblProjectDocument> TblProjectDocuments { get; set; }
 
     public virtual DbSet<TblProjectMaster> TblProjectMasters { get; set; }
+
+    public virtual DbSet<TblProjectMembe> TblProjectMembes { get; set; }
 
     public virtual DbSet<TblPurchaseOrder> TblPurchaseOrders { get; set; }
 
@@ -280,6 +280,7 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.Property(e => e.DeliveryStatus).HasMaxLength(50);
             entity.Property(e => e.OrderDate).HasColumnType("date");
             entity.Property(e => e.OrderId).HasMaxLength(50);
+            entity.Property(e => e.OrderStatus).HasMaxLength(20);
             entity.Property(e => e.PaymentStatus).HasMaxLength(50);
             entity.Property(e => e.ProductName).HasMaxLength(50);
             entity.Property(e => e.ProductShortDescription).HasMaxLength(50);
@@ -356,28 +357,6 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.Property(e => e.Type).HasMaxLength(20);
         });
 
-        modelBuilder.Entity<TblProjectDetail>(entity =>
-        {
-            entity.ToTable("tblProjectDetails");
-
-            entity.Property(e => e.Id).ValueGeneratedNever();
-            entity.Property(e => e.CreatedOn).HasColumnType("date");
-            entity.Property(e => e.EndDate).HasColumnType("date");
-            entity.Property(e => e.ProjectTitle).HasMaxLength(50);
-            entity.Property(e => e.ProjectType).HasMaxLength(20);
-            entity.Property(e => e.StartDate).HasColumnType("date");
-            entity.Property(e => e.Status).HasMaxLength(20);
-            entity.Property(e => e.UserRole).HasMaxLength(20);
-
-            entity.HasOne(d => d.Project).WithMany(p => p.TblProjectDetails)
-                .HasForeignKey(d => d.ProjectId)
-                .HasConstraintName("FK_tblProjectDetails_tblProjectMaster");
-
-            entity.HasOne(d => d.User).WithMany(p => p.TblProjectDetails)
-                .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK_tblProjectDetails_tblUsers");
-        });
-
         modelBuilder.Entity<TblProjectDocument>(entity =>
         {
             entity.ToTable("tblProjectDocuments");
@@ -418,11 +397,36 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.Property(e => e.ProjectType).HasMaxLength(20);
         });
 
+        modelBuilder.Entity<TblProjectMembe>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK_tblProjectDetails");
+
+            entity.ToTable("tblProjectMembes");
+
+            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.CreatedOn).HasColumnType("date");
+            entity.Property(e => e.EndDate).HasColumnType("date");
+            entity.Property(e => e.ProjectTitle).HasMaxLength(50);
+            entity.Property(e => e.ProjectType).HasMaxLength(20);
+            entity.Property(e => e.StartDate).HasColumnType("date");
+            entity.Property(e => e.Status).HasMaxLength(20);
+            entity.Property(e => e.UserRole).HasMaxLength(20);
+
+            entity.HasOne(d => d.Project).WithMany(p => p.TblProjectMembes)
+                .HasForeignKey(d => d.ProjectId)
+                .HasConstraintName("FK_tblProjectDetails_tblProjectMaster");
+
+            entity.HasOne(d => d.User).WithMany(p => p.TblProjectMembes)
+                .HasForeignKey(d => d.UserId)
+                .HasConstraintName("FK_tblProjectDetails_tblUsers");
+        });
+
         modelBuilder.Entity<TblPurchaseOrder>(entity =>
         {
             entity.ToTable("tblPurchaseOrder");
 
             entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.CreatedOn).HasColumnType("date");
             entity.Property(e => e.DeliveryDate).HasColumnType("date");
             entity.Property(e => e.Opid)
                 .HasMaxLength(50)

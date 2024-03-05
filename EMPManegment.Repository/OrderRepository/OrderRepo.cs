@@ -70,8 +70,10 @@ namespace EMPManegment.Repository.OrderRepository
             IEnumerable<OrderDetailView> data = from a in Context.TblOrderMasters
                                                 join b in Context.TblVendorMasters on a.VendorId equals b.Vid
                                                 join c in Context.TblProductTypeMasters on a.ProductType equals c.Id
+                                                join d in Context.TblPaymentMethodTypes on a.PaymentMethod equals d.Id
                                                 select new OrderDetailView
                                                 {
+                                                    Id= a.Id,
                                                     OrderId = a.OrderId,
                                                     ProductId = a.ProductId,
                                                     CompanyName = b.VendorCompany,
@@ -82,6 +84,7 @@ namespace EMPManegment.Repository.OrderRepository
                                                     Total = a.Total,
                                                     Amount = a.Amount,
                                                     PaymentMethod = a.PaymentMethod,
+                                                    PaymentMethodName=d.PaymentMethod,
                                                     DeliveryStatus = a.DeliveryStatus,
                                                     DeliveryDate = a.DeliveryDate,
                                                     CreatedOn = a.CreatedOn,
@@ -169,7 +172,8 @@ namespace EMPManegment.Repository.OrderRepository
                         DeliveryDate = item.DeliveryDate,
                         PaymentMethod = item.PaymentMethod,
                         PaymentStatus = item.PaymentStatus,
-                        DeliveryStatus = item.DeliveryStatus,
+                        DeliveryStatus = "Pending",
+                        OrderStatus="Confirmed",
                         CreatedOn = DateTime.Now,
                         CreatedBy = item.CreatedBy,
                         ProjectId = item.ProjectId,
@@ -281,6 +285,67 @@ namespace EMPManegment.Repository.OrderRepository
             {
                 throw ex;
             }
+        }
+
+        public async Task<UpdateOrderView> EditOrderDetails(Guid Id)
+        {
+            try
+            {
+                var OrderDetails = new UpdateOrderView();
+                var data = Context.TblOrderMasters.Where(x => x.Id == Id).SingleOrDefault();
+                if (data != null)
+                {
+
+                    OrderDetails = new UpdateOrderView()
+                    {
+                        Id = data.Id,
+                        OrderId=data.OrderId,
+                        OrderDate = data.OrderDate,
+                        CompanyName = data.CompanyName,
+                        ProductName=data.ProductName,
+                        Total=data.Total,
+                        PaymentMethod=data.PaymentMethod,
+                        DeliveryStatus=data.DeliveryStatus,
+                        OrderStatus=data.OrderStatus,
+                    };
+                }
+
+                return OrderDetails;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<UserResponceModel> UpdateOrderDetails(UpdateOrderView Updateorder)
+        {
+            UserResponceModel model = new UserResponceModel();
+            var orderdetails = Context.TblOrderMasters.Where(e => e.Id == Updateorder.Id).FirstOrDefault();
+            try
+            {
+                if (orderdetails != null)
+                {
+                    orderdetails.Id = Updateorder.Id;
+                   orderdetails.OrderId = Updateorder.OrderId;
+                    orderdetails.OrderDate = Updateorder.OrderDate;
+                    orderdetails.CompanyName = Updateorder.CompanyName;
+                    orderdetails.ProductName = Updateorder.ProductName;
+                    orderdetails.Total = Updateorder.Total;
+                    orderdetails.PaymentMethod = Updateorder.PaymentMethod;
+                    orderdetails.DeliveryStatus = Updateorder.DeliveryStatus;
+                    orderdetails.OrderStatus = Updateorder.OrderStatus;
+                }
+                Context.TblOrderMasters.Update(orderdetails);
+                Context.SaveChanges();
+                model.Code = 200;
+                model.Message = "Order Details Updated Successfully!";
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return model;
         }
     }
 }

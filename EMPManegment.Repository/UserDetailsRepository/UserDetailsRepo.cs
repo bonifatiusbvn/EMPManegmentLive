@@ -583,6 +583,42 @@ namespace EMPManegment.Repository.UserListRepository
                 throw ex;
             }
         }
+
+        public async Task<IEnumerable<EmpDetailsView>> GetActiveDeactiveUserList(string? searchby, string? searchfor)
+        {
+            IEnumerable<EmpDetailsView> GetUsersList = from e in Context.TblUsers
+                                                       join d in Context.TblDepartments on e.DepartmentId equals d.Id
+                                                       join c in Context.TblCountries on e.CountryId equals c.Id
+                                                       join s in Context.TblStates on e.StateId equals s.Id
+                                                       join ct in Context.TblCities on e.CityId equals ct.Id
+                                                       select new EmpDetailsView
+                                                       {
+                                                           Id = e.Id,
+                                                           IsActive = e.IsActive,
+                                                           UserName = e.UserName,
+                                                           FirstName = e.FirstName,
+                                                           LastName = e.LastName,
+                                                           Image = e.Image,
+                                                           Gender = e.Gender,
+                                                           DateOfBirth = e.DateOfBirth,
+                                                           Email = e.Email,
+                                                           PhoneNumber = e.PhoneNumber,
+                                                           Address = e.Address,
+                                                           CityName = ct.City,
+                                                           StateName = s.State,
+                                                           CountryName = c.Country,
+                                                           DepartmentName = d.Department
+                                                       };
+            if (searchby == "Username" && searchfor != null)
+            {
+                GetUsersList = GetUsersList.Where(ser => ser.UserName.ToLower().Contains(searchfor.ToLower())).ToList();
+            }
+            if (searchby == "Department" && searchfor != null)
+            {
+                GetUsersList = GetUsersList.Where(ser => ser.DepartmentName.ToLower().Contains(searchfor.ToLower())).ToList();
+            }
+            return GetUsersList;
+        }
     }
 }
 

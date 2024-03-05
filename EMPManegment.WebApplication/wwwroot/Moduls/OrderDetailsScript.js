@@ -256,7 +256,6 @@ $("#returnsactive").click(function () {
 
 
 function InsertMultipleOrder() {
-
     var orderDetails = [];
     var numOrders = $(".product").length;
     $(".product").each(function () {
@@ -284,7 +283,6 @@ function InsertMultipleOrder() {
     });
     var form_data = new FormData();
     form_data.append("ORDERDETAILS", JSON.stringify(orderDetails));
-
     $.ajax({
         url: '/OrderMaster/InsertMultipleOrders',
         type: 'POST',
@@ -448,6 +446,102 @@ function SerchProductDetailsById() {
     });
 }
 
+function EditOrderDetails(Id) {
+    $.ajax({
+        url: '/OrderMaster/EditOrderDetails?Id=' + Id,
+        type: "Get",
+        contentType: 'application/json;charset=utf-8;',
+        dataType: 'json',
+        success: function (response) {
+            $('#UpdateOrderModel').modal('show');
+            $('#txtorderid').val(response.id);
+            $('#txtproduct').val(response.product);
+            $('#txtorderno').html(response.orderId);
+            $('#txtorderdate').val(response.orderDate);
+            $('#txtcompanyname').val(response.companyName);
+            $('#txtorderdetails').val(response.productName);
+            $('#txtamount').val(response.total);
+            $('#txtpaymentmethod').val(response.paymentMethod);
+            $('#txtdeliverystatus').val(response.deliveryStatus);
+            $('#txtorderstatus').val(response.orderStatus);
+        },
+        error: function () {
+            alert('Data not found');
+        }
+    });
+}
+
+function UpdateOrderDetails() {
+    if ($('#UpdateOrderDetailsForm').valid()) {
+        var formData = new FormData();
+        formData.append("Id", $("#txtorderid").val());
+        formData.append("Product", $("#txtproduct").val());
+        formData.append("orderId", $("#txtorderno").val());
+        formData.append("orderDate", $("#txtorderdate").val());
+        formData.append("companyName", $("#txtcompanyname").val());
+        formData.append("productName", $("#txtorderdetails").val());
+        formData.append("total", $("#txtamount").val());
+        formData.append("paymentMethod", $("#txtpaymentmethod").val());
+        formData.append("deliveryStatus", $("#txtdeliverystatus").val());
+        formData.append("orderStatus", $("#txtorderstatus").val());
+
+        $.ajax({
+            url: '/OrderMaster/UpdateOrderDetails',
+            type: 'Post',
+            data: formData,
+            dataType: 'json',
+            contentType: false,
+            processData: false,
+            success: function (Result) {
+                if (Result.message != null) {
+                    Swal.fire({
+                        title: Result.message,
+                        icon: 'success',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK',
+                    }).then(function () {
+                        window.location = '/OrderMaster/CreateOrder';
+                    });
+                }
+            }
+        })
+    }
+    else {
+        Swal.fire({
+            title: "Kindly Fill All Details",
+            icon: 'warning',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'OK',
+        })
+    }
+}
+
+$(document).ready(function () {
+
+    $("#UpdateOrderDetailsForm").validate({
+        rules: {
+            txtorderdate: "required",
+            txtcompanyname: "required",
+            txtorderdetails: "required",
+            txtamount: "required",
+            txtpaymentmethod: "required",
+            txtdeliverystatus: "required",
+            txtorderstatus: "required"
+        },
+        messages: {
+            txtorderdate: "Please emter order date",
+            txtcompanyname: "Please enter company name",
+            txtorderdetails: "Please enter order details",
+            txtamount: "Please enter order Amount",
+            txtpaymentmethod: "Please Enter Payment method",
+            txtdeliverystatus: "Please Enter Delivery status",
+            txtorderstatus: "Plese enter orderstatus"
+        }
+    })
+    $("#updatedetailbtn").on('click', function () {
+        $("#UpdateOrderDetailsForm").validate();
+    });
+});
 
 function selectProductTypeId() {
     document.getElementById("txtProductTypeid").value = document.getElementById("txtProducts").value;

@@ -51,5 +51,15 @@ namespace EMPManegment.Services.OrderDetails
         {
             return await OrderDetails.GetAllPaymentMethod();
         }
+
+        public async Task<UpdateOrderView> EditOrderDetails(Guid Id)
+        {
+            return await OrderDetails.EditOrderDetails(Id);
+        }
+
+        public async Task<UserResponceModel> UpdateOrderDetails(UpdateOrderView Updateorder)
+        {
+            return await OrderDetails.UpdateOrderDetails(Updateorder);
+        }
     }
 }

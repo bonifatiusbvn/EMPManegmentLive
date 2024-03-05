@@ -35,6 +35,8 @@ public partial class TblOrderMaster
 
     public DateTime OrderDate { get; set; }
 
+    public string? OrderStatus { get; set; }
+
     public DateTime? DeliveryDate { get; set; }
 
     public int? PaymentMethod { get; set; }

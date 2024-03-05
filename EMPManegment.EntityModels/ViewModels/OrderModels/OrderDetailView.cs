@@ -17,10 +17,10 @@ namespace EMPManegment.EntityModels.ViewModels.OrderModels
 
         public string? CompanyName { get; set; }
 
-        public int Product { get; set; }
+        public int Product { get; set; } 
         public string ProductName { get; set; }
 
-        public string Quantity { get; set; }
+        public string? Quantity { get; set; }
 
         public decimal? Amount { get; set; }
 
@@ -31,33 +31,35 @@ namespace EMPManegment.EntityModels.ViewModels.OrderModels
         public DateTime? DeliveryDate { get; set; }
 
         public int? PaymentMethod { get; set; }
+        public string? PaymentMethodName { get; set; } 
 
         public string? DeliveryStatus { get; set; }
+        public string? OrderStatus { get; set; }
         public string ProductDescription { get; set; }
 
         public string? ProductShortDescription { get; set; }
 
         public string? ProductImage { get; set; }
 
-        public decimal ProductStocks { get; set; }
+        public decimal? ProductStocks { get; set; }
 
-        public decimal PerUnitPrice { get; set; }
+        public decimal? PerUnitPrice { get; set; }
 
         public int? Hsn { get; set; }
 
-        public decimal Gst { get; set; }
+        public decimal? Gst { get; set; }
 
-        public decimal PerUnitWithGstprice { get; set; }
+        public decimal? PerUnitWithGstprice { get; set; }
 
         public DateTime? CreatedOn { get; set; }
 
         public Guid? CreatedBy { get; set; }
         public Guid? ProductId { get; set; }
         public string? PaymentStatus { get; set; }
-        public string VendorEmail { get; set; } = null!;
+        public string? VendorEmail { get; set; }
 
         public string? VendorContact { get; set; }
-        public string VendorAddress { get; set; } = null!;
+        public string? VendorAddress { get; set; }
     }
     public class OrderResponseModel
     {
@@ -67,5 +69,17 @@ namespace EMPManegment.EntityModels.ViewModels.OrderModels
 
         public List<OrderDetailView> Data { get; set; }
 
+    }
+    public class UpdateOrderView
+    {
+        public Guid Id { get; set; }
+        public string OrderId { get; set; }
+        public string? CompanyName { get; set; }
+        public string ProductName { get; set; }
+        public decimal? Total { get; set; }
+        public DateTime OrderDate { get; set; }
+        public int? PaymentMethod { get; set; }
+        public string? DeliveryStatus { get; set; }
+        public string? OrderStatus { get; set; }
     }
 }

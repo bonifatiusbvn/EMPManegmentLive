@@ -35,6 +35,7 @@ namespace EMPManegment.EntityModels.ViewModels.OrderModels
         public string? PaymentStatus { get; set; }
 
         public string? DeliveryStatus { get; set; }
+        public string? OrderStatus { get; set; }
 
         public DateTime? CreatedOn { get; set; }
 

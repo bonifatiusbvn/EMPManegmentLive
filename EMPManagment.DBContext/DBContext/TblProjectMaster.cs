@@ -35,9 +35,9 @@ public partial class TblProjectMaster
 
     public virtual ICollection<TblInvoice> TblInvoices { get; set; } = new List<TblInvoice>();
 
-    public virtual ICollection<TblProjectDetail> TblProjectDetails { get; set; } = new List<TblProjectDetail>();
-
     public virtual ICollection<TblProjectDocument> TblProjectDocuments { get; set; } = new List<TblProjectDocument>();
+
+    public virtual ICollection<TblProjectMembe> TblProjectMembes { get; set; } = new List<TblProjectMembe>();
 
     public virtual ICollection<TblTaskDetail> TblTaskDetails { get; set; } = new List<TblTaskDetail>();
 }

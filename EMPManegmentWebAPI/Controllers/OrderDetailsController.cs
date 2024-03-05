@@ -4,6 +4,7 @@ using EMPManegment.EntityModels.ViewModels.OrderModels;
 using EMPManegment.Inretface.EmployeesInterface.AddEmployee;
 using EMPManegment.Inretface.Interface.ExpenseMaster;
 using EMPManegment.Inretface.Interface.InvoiceMaster;
+using EMPManegment.Inretface.Interface.ProductMaster;
 using EMPManegment.Inretface.Services.OrderDetails;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -110,6 +111,38 @@ namespace EMPManagment.API.Controllers
         {
             IEnumerable<PaymentMethodView> paymentmethod = await OrderDetails.GetAllPaymentMethod();
             return Ok(new { code = 200, data = paymentmethod.ToList() });
+        }
+        [HttpGet]
+        [Route("EditOrderDetails")]
+        public async Task<IActionResult> EditOrderDetails(Guid Id)
+        {
+            var getorderDetails = await OrderDetails.EditOrderDetails(Id);
+            return Ok(new { code = 200, data = getorderDetails });
+        }
+        [HttpPost]
+        [Route("UpdateOrderDetails")]
+        public async Task<IActionResult> UpdateOrderDetails(UpdateOrderView orderDetails)
+        {
+            UserResponceModel response = new UserResponceModel();
+            try
+            {
+                var updateorder = OrderDetails.UpdateOrderDetails(orderDetails);
+                if (updateorder.Result.Code == 200)
+                {
+                    response.Code = (int)HttpStatusCode.OK;
+                    response.Message = updateorder.Result.Message;
+                }
+                else
+                {
+                    response.Message = updateorder.Result.Message;
+                    response.Code = (int)HttpStatusCode.NotFound;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return StatusCode(response.Code, response);
         }
     }
 }

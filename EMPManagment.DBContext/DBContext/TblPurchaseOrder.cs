@@ -19,5 +19,9 @@ public partial class TblPurchaseOrder
 
     public string? Status { get; set; }
 
+    public DateTime? CreatedOn { get; set; }
+
+    public Guid? CreatedBy { get; set; }
+
     public virtual TblVendorMaster? Vendor { get; set; }
 }

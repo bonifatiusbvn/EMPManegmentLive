@@ -810,3 +810,42 @@ function GetSearchEmpList() {
         })
     }
 };
+
+
+
+function GetActiveDeactiveList(page) {debugger
+
+    var searchBy = $("#searchEmployee").val();
+    var searchFor = $("#ddlusername").val();
+    debugger
+    $.get("/UserProfile/UserActiveDecativeList", { searchby: searchBy, searchfor: searchFor, page: page })
+        .done(function (result) {debugger
+
+            $("#activedeactivepartial").html(result);
+        })
+        .fail(function (error) {
+            console.error(error);
+        });
+}
+
+GetActiveDeactiveList(1);
+$(document).on("click", ".pagination a", function (e) {
+    debugger
+    e.preventDefault();
+    var page = $(this).text();
+    GetActiveDeactiveList(page);
+});
+
+
+$(document).on("click", "#btnbackButton", function (e) {
+    debugger
+    e.preventDefault();
+    var page = $(this).text();
+    GetActiveDeactiveList(page);
+});
+
+function BtnSearchDetails() {
+    debugger
+
+    GetActiveDeactiveList(1);
+}

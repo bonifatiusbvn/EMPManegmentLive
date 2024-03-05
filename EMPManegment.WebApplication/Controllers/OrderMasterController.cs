@@ -170,5 +170,41 @@ namespace EMPManegment.Web.Controllers
         {
             return View();
         }
+        [HttpGet]
+        public async Task<JsonResult> EditOrderDetails(Guid Id)
+        {
+            try
+            {
+                UpdateOrderView order = new UpdateOrderView();
+                ApiResponseModel response = await APIServices.GetAsync("", "OrderDetails/EditOrderDetails?Id=" + Id);
+                if (response.code == 200)
+                {
+                    order = JsonConvert.DeserializeObject<UpdateOrderView>(response.data.ToString());
+                }
+                return new JsonResult(order);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateOrderDetails(UpdateOrderView orderDetail)
+        {
+            try
+            {
+                ApiResponseModel postuser = await APIServices.PostAsync(orderDetail, "OrderDetails/UpdateOrderDetails");
+                if (postuser.code == 200)
+                {
+                    return Ok(new { postuser.message });
+                }
+                return View(orderDetail);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }
