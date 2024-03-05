@@ -3,7 +3,7 @@
 // Function to handle form submission
 function saveFormData(event) {
     event.preventDefault(); // Prevent the default form submission
-
+    debugger
     // Gather form data
     var formData = {
         companyAddress: document.getElementById('companyAddress').value,
@@ -39,8 +39,6 @@ var form = document.getElementById('invoice_form');
 form.addEventListener('submit', saveFormData);
 
 
-
-
 var paymentSign = "$";
 
 function otherPayment() {
@@ -52,10 +50,10 @@ function otherPayment() {
 Array.from(document.getElementsByClassName("product-line-price")).forEach(function (e) {
     e.value = paymentSign + "0.00"
 });
-var isPaymentEl = document.getElementById("choices-payment-currency"),
-    choices = new Choices(isPaymentEl, {
-        searchEnabled: !1
-    });
+//var isPaymentEl = document.getElementById("choices-payment-currency"),
+//    choices = new Choices(isPaymentEl, {
+//        searchEnabled: !1
+//    });
 
 function isData() {
     var e = document.getElementsByClassName("plus"),
@@ -72,6 +70,7 @@ function isData() {
         }
     })
 }
+
 document.querySelector("#profile-img-file-input").addEventListener("change", function () {
     var e = document.querySelector(".user-profile-image"),
         t = document.querySelector(".profile-img-file-input").files[0],
@@ -79,28 +78,130 @@ document.querySelector("#profile-img-file-input").addEventListener("change", fun
     n.addEventListener("load", function () {
         e.src = n.result
     }, !1), t && n.readAsDataURL(t)
-}), flatpickr("#date-field", {
-    enableTime: !0,
-    dateFormat: "d M, Y, h:i K"
 }), isData();
 var count = 1;
 
-function new_link() {
-    count++;
-    var e = document.createElement("tr"),
-        t = (e.id = count, e.className = "product", '<tr><th scope="row" class="product-id">' + count + '</th><td class="text-start"><div class="mb-2"><input class="form-control bg-light border-0" type="text" id="productName-' + count + '" placeholder="Product Name"></div><textarea class="form-control bg-light border-0" id="productDetails-' + count + '" rows="2" placeholder="Product Details"></textarea></div></td><td><input class="form-control bg-light border-0 product-price" type="number" id="productRate-' + count + '" step="0.01" placeholder="$0.00"></td><td><div class="input-step"><button type="button" class="minus">–</button><input type="number" class="product-quantity" id="product-qty-' + count + '" value="0" readonly><button type="button" class="plus">+</button></div></td><td class="text-end"><div><input type="text" class="form-control bg-light border-0 product-line-price" id="productPrice-' + count + '" value="$0.00" placeholder="$0.00" /></div></td><td class="product-removal"><a class="btn btn-success">Delete</a></td></tr>'),
-        t = (e.innerHTML = document.getElementById("newForm").innerHTML + t, document.getElementById("newlink").appendChild(e), document.querySelectorAll("[data-trigger]"));
-    Array.from(t).forEach(function (e) {
-        new Choices(e, {
-            placeholderValue: "This is a placeholder set in the config",
-            searchPlaceholderValue: "This is a search placeholder"
-        })
-    }), isData(), remove(), amountKeyup(), resetRow()
+function AddNewRow(Result) {
+
+    var newProductRow = $(Result);
+    var newProductId = newProductRow.attr('data-product-id');
+    var isDuplicate = false;
+
+    $('#addNewlink .product').each(function () {
+
+        var existingProductRow = $(this);
+        var existingProductId = existingProductRow.attr('data-product-id');
+        if (existingProductId === newProductId) {
+            isDuplicate = true;
+            return false;
+        }
+    });
+
+    if (!isDuplicate) {
+        count++;
+        $("#addNewlink").append(Result);
+        updateProductTotalAmount();
+        updateTotals();
+    } else {
+        Swal.fire({
+            title: "Product already added!",
+            text: "The selected product is already added.",
+            icon: "warning",
+            confirmButtonColor: "#3085d6",
+            confirmButtonText: "OK"
+        });
+    }
 }
+
+$(document).on("click", ".plus", function () {
+    updateProductQuantity($(this).closest(".product"), 1);
+    return
+});
+
+$(document).on("click", ".minus", function () {
+    updateProductQuantity($(this).closest(".product"), -1);
+    return
+});
+function bindEventListeners() {
+
+    document.querySelectorAll(".product-removal a").forEach(function (e) {
+        e.addEventListener("click", function (event) {
+            removeItem(event.target.closest("tr"));
+            updateTotals();
+        });
+    });
+
+
+    document.querySelectorAll(".plus").forEach(function (btn) {
+        btn.addEventListener("click", function (event) {
+            updateProductQuantity(event.target.closest("tr"), 1);
+            updateTotals();
+        });
+    });
+
+
+    document.querySelectorAll(".minus").forEach(function (btn) {
+        btn.addEventListener("click", function (event) {
+            updateProductQuantity(event.target.closest("tr"), -1);
+            updateTotals();
+        });
+    });
+}
+
+function updateProductTotalAmount() {
+
+    $(".product").each(function () {
+        var row = $(this);
+        var productPrice = parseFloat(row.find("#txtproductamount").val());
+        var quantity = parseInt(row.find("#txtproductquantity").val());
+        var gst = parseFloat(row.find("#txtgst").val());
+        var totalGst = (productPrice * quantity * gst) / 100;
+        var totalAmount = productPrice * quantity;
+
+        row.find("#txtproductamountwithGST").val(totalGst.toFixed(2));
+        row.find("#txtproducttotalamount").val(totalAmount.toFixed(2));
+    });
+}
+
+function updateProductQuantity(row, increment) {
+
+    var quantityInput = row.find(".product-quantity").val();
+    var currentQuantity = parseInt(quantityInput);
+    var newQuantity = currentQuantity + increment;
+    if (newQuantity >= 0) {
+        row.find(".product-quantity").val(newQuantity.toFixed(2));;
+        updateProductTotalAmount();
+        updateTotals();
+
+    }
+}
+
+function updateTotals() {
+
+    var totalSubtotal = 0;
+    var totalGst = 0;
+    var totalAmount = 0;
+
+    $(".product").each(function () {
+        var row = $(this);
+        var subtotal = parseFloat(row.find("#txtproducttotalamount").val());
+        var gst = parseFloat(row.find("#txtproductamountwithGST").val());
+
+        totalSubtotal += subtotal;
+        totalGst += gst;
+        totalAmount += subtotal + gst;
+    });
+
+    $("#cart-subtotal").val(totalSubtotal.toFixed(2));
+    $("#totalgst").val(totalGst.toFixed(2));
+    $("#cart-total").val(totalAmount.toFixed(2));
+}
+
 remove();
 var taxRate = .125,
     shippingRate = 65,
-    discountRate = .15;
+    discountRate = .15,
+    gst = 18;
 
 function remove() {
     Array.from(document.querySelectorAll(".product-removal a")).forEach(function (e) {
@@ -111,9 +212,9 @@ function remove() {
 }
 
 function resetRow() {
-    Array.from(document.getElementById("newlink").querySelectorAll("tr")).forEach(function (e, t) {
+    Array.from(document.getElementById("addNewlink").querySelectorAll("tr")).forEach(function (e, t) {
         t += 1;
-        e.querySelector(".product-id").innerHTML = t
+        e.querySelector("#product-id").innerHTML = t
     })
 }
 
@@ -126,8 +227,10 @@ function recalculateCart() {
         }), t * taxRate),
         n = t * discountRate,
         o = 0 < t ? shippingRate : 0,
-        a = t + e + o - n;
-    document.getElementById("cart-subtotal").value = paymentSign + t.toFixed(2), document.getElementById("cart-tax").value = paymentSign + e.toFixed(2), document.getElementById("cart-shipping").value = paymentSign + o.toFixed(2), document.getElementById("cart-total").value = paymentSign + a.toFixed(2), document.getElementById("cart-discount").value = paymentSign + n.toFixed(2), document.getElementById("totalamountInput").value = paymentSign + a.toFixed(2), document.getElementById("amountTotalPay").value = paymentSign + a.toFixed(2)
+        a = t + e + o - n,
+        b = t * 18 / 100;
+    p = t
+    document.getElementById("cart-subtotal").value = t.toFixed(2), document.getElementById("cart-tax").value = paymentSign + e.toFixed(2), document.getElementById("totalgst").value = b.toFixed(2), document.getElementById("cart-shipping").value = paymentSign + o.toFixed(2), document.getElementById("cart-total").value = paymentSign + a.toFixed(2), document.getElementById("cart-discount").value = paymentSign + n.toFixed(2), document.getElementById("totalamountInput").value = paymentSign + a.toFixed(2), document.getElementById("amountTotalPay").value = paymentSign + a.toFixed(2)
 }
 
 function amountKeyup() {
@@ -159,11 +262,11 @@ Array.from(genericExamples).forEach(function (e) {
         searchPlaceholderValue: "This is a search placeholder"
     })
 });
-var cleaveBlocks = new Cleave("#cardNumber", {
-    blocks: [4, 4, 4, 4],
-    uppercase: !0
-}),
-    genericExamples = document.querySelectorAll('[data-plugin="cleave-phone"]');
+//var cleaveBlocks = new Cleave("#cardNumber", {
+//    blocks: [4, 4, 4, 4],
+//    uppercase: !0
+//}),
+//    genericExamples = document.querySelectorAll('[data-plugin="cleave-phone"]');
 Array.from(genericExamples).forEach(function (e) {
     new Cleave(e, {
         delimiters: ["(", ")", "-"],
@@ -195,7 +298,7 @@ if (null === localStorage.getItem("invoice_no") && null === localStorage.getItem
             Array.from(paroducts_list).forEach(function (e) {
                 document.getElementById("productName-" + counter_1).value = e.product_name, document.getElementById("productDetails-" + counter_1).value = e.product_details, document.getElementById("productRate-" + counter_1).value = e.rates, document.getElementById("product-qty-" + counter_1).value = e.quantity, document.getElementById("productPrice-" + counter_1).value = "$" + e.rates * e.quantity, counter_1++
             })
-        }, 300), document.getElementById("cart-subtotal").value = "$" + viewobj.order_summary.sub_total, document.getElementById("cart-tax").value = "$" + viewobj.order_summary.estimated_tex, document.getElementById("cart-discount").value = "$" + viewobj.order_summary.discount, document.getElementById("cart-shipping").value = "$" + viewobj.order_summary.shipping_charge, document.getElementById("cart-total").value = "$" + viewobj.order_summary.total_amount, document.getElementById("choices-payment-type").value = viewobj.payment_details.payment_method, document.getElementById("cardholderName").value = viewobj.payment_details.card_holder_name, new Cleave("#cardNumber", {
+        }, 300), document.getElementById("cart-subtotal").value = viewobj.order_summary.sub_total, document.getElementById("cart-tax").value = viewobj.order_summary.estimated_tex, document.getElementById("cart-discount").value = "$" + viewobj.order_summary.discount, document.getElementById("cart-shipping").value = "$" + viewobj.order_summary.shipping_charge, document.getElementById("cart-total").value = "$" + viewobj.order_summary.total_amount, document.getElementById("choices-payment-type").value = viewobj.payment_details.payment_method, document.getElementById("cardholderName").value = viewobj.payment_details.card_holder_name, new Cleave("#cardNumber", {
             prefix: viewobj.payment_details.card_number,
             delimiter: " ",
             blocks: [4, 4, 4, 4],
@@ -241,17 +344,21 @@ document.addEventListener("DOMContentLoaded", function () {
             N = 1,
             C = [];
         Array.from(A).forEach(e => {
-            var t = e.querySelector("#productName-" + N).value,
-                n = e.querySelector("#productDetails-" + N).value,
-                o = parseInt(e.querySelector("#productRate-" + N).value),
+            var t = e.querySelector("#txtproductName-" + N).value,
+                n = e.querySelector("#txtproductDescription-" + N).value,
+                o = parseInt(e.querySelector("#txtproductamount-" + N).value),
+                p = parseInt(e.querySelector("#txtgst-" + N).value),
+                q = parseInt(e.querySelector("#txtproductamountwithGST-" + N).value),
                 a = parseInt(e.querySelector("#product-qty-" + N).value),
                 e = e.querySelector("#productPrice-" + N).value.split("$"),
                 t = {
-                    product_name: t,
-                    product_details: n,
-                    rates: o,
+                    productName: t,
+                    productShortDescription: n,
+                    perUnitPrice: o,
+                    gst: p,
+                    perUnitWithGstprice: q,
                     quantity: a,
-                    amount: parseInt(e[1])
+                    totalAmount: parseInt(e[1])
                 };
             C.push(t), N++
         }), !1 === T.checkValidity() ? T.classList.add("was-validated") : ("edit-invoice" == options && invoice_no == t ? (objIndex = invoices.findIndex(e => e.invoice_no == t), invoices[objIndex].invoice_no = t, invoices[objIndex].customer = l, invoices[objIndex].img = "", invoices[objIndex].email = e, invoices[objIndex].date = n, invoices[objIndex].invoice_amount = o, invoices[objIndex].status = a, invoices[objIndex].billing_address = {
@@ -328,3 +435,4 @@ document.addEventListener("DOMContentLoaded", function () {
         })), window.location.href = "apps-invoices-list.html")
     })
 });
+

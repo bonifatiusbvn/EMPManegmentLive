@@ -76,9 +76,9 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
                 ProjectStartDate = a.ProjectStartDate,
                 ProjectEndDate = a.ProjectEndDate,
                 ProjectDeadline = a.ProjectDeadline,
-                CreatedOn= a.CreatedOn
+                CreatedOn = a.CreatedOn
             });
-            if(searchby == "ProjectTitle" && searchfor != null)
+            if (searchby == "ProjectTitle" && searchfor != null)
             {
                 data = data.Where(ser => ser.ProjectTitle.ToLower().Contains(searchfor.ToLower())).ToList();
             }
@@ -136,11 +136,12 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
 
         public async Task<ProjectDetailView> GetProjectDetailsById(Guid ProjectId)
         {
-            var projectDetail = await Context.TblProjectMasters.SingleOrDefaultAsync(x=>x.ProjectId == ProjectId);
+            var projectDetail = await Context.TblProjectMasters.SingleOrDefaultAsync(x => x.ProjectId == ProjectId);
             ProjectDetailView model = new ProjectDetailView()
             {
                 ProjectId = projectDetail.ProjectId,
                 ProjectTitle = projectDetail.ProjectTitle,
+                ProjectName = projectDetail.ProjectName,
                 CreatedOn = projectDetail.CreatedOn,
                 ProjectEndDate = projectDetail.ProjectEndDate,
                 ProjectStatus = projectDetail.ProjectStatus,
@@ -164,7 +165,7 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
             return data;
         }
 
-       public async Task<UserResponceModel> AddMemberToProject(ProjectView AddMember)
+        public async Task<UserResponceModel> AddMemberToProject(ProjectView AddMember)
         {
             UserResponceModel response = new UserResponceModel();
             try
@@ -205,19 +206,19 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
             try
             {
                 var result = (from e in Context.TblProjectDetails
-                             where e.ProjectId == ProjectId
-                             join d in Context.TblUsers on e.UserId equals d.Id
-                             select new ProjectView
-                             {
-                                 Id = e.Id,
-                                 Fullname = d.FirstName + " " + d.LastName,
-                                 Image = d.Image,
-                                 //UserRole = e.UserRole,
-                                 Designation = d.Designation,
-                             }).ToList();
+                              where e.ProjectId == ProjectId
+                              join d in Context.TblUsers on e.UserId equals d.Id
+                              select new ProjectView
+                              {
+                                  Id = e.Id,
+                                  Fullname = d.FirstName + " " + d.LastName,
+                                  Image = d.Image,
+                                  //UserRole = e.UserRole,
+                                  Designation = d.Designation,
+                              }).ToList();
                 return result;
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 throw ex;
             }
@@ -226,7 +227,7 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
         public async Task<UserResponceModel> AddDocumentToProject(ProjectDocumentView AddDocument)
         {
             UserResponceModel response = new UserResponceModel();
-            try 
+            try
             {
                 var projectDocumentmodel = new TblProjectDocument()
                 {
@@ -248,7 +249,7 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
             return response;
         }
 
-       public async Task<IEnumerable<ProjectDocumentView>> GetProjectDocument(Guid ProjectId)
+        public async Task<IEnumerable<ProjectDocumentView>> GetProjectDocument(Guid ProjectId)
         {
             try
             {
@@ -260,7 +261,7 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
                                   Id = e.Id,
                                   ProjectId = ProjectId,
                                   DocumentName = e.DocumentName,
-                                  FullName = d.FirstName + " "+d.LastName,
+                                  FullName = d.FirstName + " " + d.LastName,
                                   Date = e.Date
                               }).ToList();
                 return result;

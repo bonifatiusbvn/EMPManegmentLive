@@ -107,5 +107,7 @@ namespace EMPManegment.Web.Models
                 StaticHttpContext.Session.SetString("ProjectName", value);
             }
         }
+
+
     }
 }

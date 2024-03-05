@@ -114,7 +114,8 @@ namespace EMPManegment.Web.Controllers
         {
             try
             {
-                ApiResponseModel Response = await APIServices.GetAsync("", "OrderDetails/CheckOrder");
+                string porjectname = UserSession.ProjectName;
+                ApiResponseModel Response = await APIServices.GetAsync("", "OrderDetails/CheckOrder?porjectname=" + porjectname);
                 if (Response.code == 200)
                 {
                     ViewBag.OrderId = Response.data;

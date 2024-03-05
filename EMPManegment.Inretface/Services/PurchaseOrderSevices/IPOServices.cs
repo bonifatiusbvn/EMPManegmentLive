@@ -12,5 +12,6 @@ namespace EMPManegment.Inretface.Services.PurchaseOrderSevices
     public interface IPOServices
     {
         Task<UserResponceModel> CreatePO(OPMasterView CreateProject);
+        string CheckOPNo(string projectname);
     }
 }

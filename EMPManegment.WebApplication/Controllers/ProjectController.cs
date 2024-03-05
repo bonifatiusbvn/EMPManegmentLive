@@ -150,7 +150,7 @@ namespace EMPManegment.Web.Controllers
                 {
                     projectDetails = JsonConvert.DeserializeObject<ProjectDetailView>(response.data.ToString());
                     UserSession.ProjectId = projectDetails.ProjectId.ToString();
-                    //UserSession.ProjectName = projectDetails.ProjectName.ToString();
+                    UserSession.ProjectName = projectDetails.ProjectName.ToString();
 
                 }                
                 return View(projectDetails);
