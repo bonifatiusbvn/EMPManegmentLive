@@ -20,9 +20,22 @@ namespace EMPManegment.Web.Controllers
             APIServices = aPIServices;
             _userSession = userSession;
         }
-        public IActionResult CreateOP()
+        public async Task<IActionResult> CreateOP()
         {
-            return View();
+            try
+            {
+                string projectname = UserSession.ProjectName;
+                ApiResponseModel Response = await APIServices.GetAsync("", "POMaster/CheckOPNo?projectname=" + projectname);
+                if (Response.code == 200)
+                {
+                    ViewBag.OrderId = Response.data;
+                }
+                return View();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
 

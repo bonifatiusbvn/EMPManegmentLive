@@ -12,7 +12,7 @@ namespace EMPManegment.Services.OrderDetails
 {
     public class OrderDetailsServices : IOrderDetailsServices
     {
-        public OrderDetailsServices(IOrderDetails orderDetails)
+        public OrderDetailsServices(IOrderDetails orderDetails) 
         {
             OrderDetails = orderDetails;
         }

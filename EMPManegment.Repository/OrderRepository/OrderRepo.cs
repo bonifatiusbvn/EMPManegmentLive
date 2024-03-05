@@ -166,6 +166,7 @@ namespace EMPManegment.Repository.OrderRepository
                         CompanyName = item.CompanyName,
                         VendorId = item.VendorId,
                         ProductType = item.ProductType,
+                        ProductId = item.ProductId,
                         Quantity = item.Quantity,
                         Amount = item.Amount,
                         Total = item.Total,

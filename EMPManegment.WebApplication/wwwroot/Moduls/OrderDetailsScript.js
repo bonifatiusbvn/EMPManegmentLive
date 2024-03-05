@@ -132,6 +132,7 @@ $(document).ready(function () {
 });
 
 function SaveCreateOrder() {
+    
     if ($('#createOrderForm').valid()) {
 
         var formData = new FormData();
@@ -156,7 +157,7 @@ function SaveCreateOrder() {
             contentType: false,
             processData: false,
             success: function (Result) {
-
+                
                 if (Result.message != null) {
                     Swal.fire({
                         title: Result.message,
@@ -266,7 +267,8 @@ function InsertMultipleOrder() {
             Type: $("#OrderType").val(),
             OrderId: $("#orderId").val(),
             PaymentStatus: $("#txtPaymentStatus").val(),
-            PaymentMethod: $("#paymenttype").val(),
+            PaymentType: $("#paymenttype").val(),
+            PaymentMethod: $("#txtpaymentmethod").val(),
             OrderDate: $("#orderdate").val(),
             DeliveryDate: $("#deliverydate").val(),
             VendorId: $("#txtvendorname").val(),
