@@ -13,7 +13,7 @@ namespace EMPManegment.Inretface.Services.OrderDetails
         Task<UserResponceModel> CreateOrder(OrderDetailView CreateOrder);
         Task<IEnumerable<OrderDetailView>> GetOrderList();
         Task<List<OrderDetailView>> GetOrderDetailsByStatus(string DeliveryStatus);
-        string CheckOrder();
+        string CheckOrder(string projectname);
         Task<List<OrderDetailView>> GetOrderDetailsById(string OrderId);
         Task<UserResponceModel> InsertMultipleOrder(List<OrderView> InsertOrder);
         Task<IEnumerable<PaymentMethodView>> GetAllPaymentMethod();

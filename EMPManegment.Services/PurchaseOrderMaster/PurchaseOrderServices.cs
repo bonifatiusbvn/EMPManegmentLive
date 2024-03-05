@@ -20,6 +20,11 @@ namespace EMPManegment.Services.PurchaseOrderMaster
 
         public IPurchaseOrder PurchaseOrder { get; }
 
+        public string CheckOPNo(string projectname)
+        {
+            return PurchaseOrder.CheckOPNo(projectname);
+        }
+
         public Task<UserResponceModel> CreatePO(OPMasterView CreateProject)
         {
             return PurchaseOrder.CreatePO(CreateProject);
