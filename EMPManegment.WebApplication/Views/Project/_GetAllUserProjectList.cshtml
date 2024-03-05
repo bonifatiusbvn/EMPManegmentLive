@@ -79,7 +79,7 @@
                                 <div class="flex-shrink-0">
                                     <div class="d-flex gap-1 align-items-center my-n2">
                                         <div>
-                                            <a class="dropdown-item" href="/Project/AddProjectMember/?Id=@item.ProjectId">
+                                            <a class="dropdown-item" href="/Project/GetProjectDetails/?Id=@item.ProjectId">
                                                 <i class="ri-eye-fill align-bottom me-2 text-muted"></i>
                                             </a>
                                         </div>
@@ -98,7 +98,7 @@
                                 <div class="flex-shrink-0">
                                     <div class="d-flex gap-1 align-items-center my-n2">
                                         <div>
-                                            <a class="dropdown-item" href="/Project/AddProjectMember/?Id=@item.ProjectId">
+                                            <a class="dropdown-item" href="/Project/GetProjectDetails/?Id=@item.ProjectId">
                                                 <i class="ri-eye-fill align-bottom me-2 text-muted"></i>
                                             </a>
                                         </div>
@@ -213,11 +213,11 @@
         searchfor = @Context.Request.Query["searchfor"],
         searchby = @Context.Request.Query["searchby"]
     }),
-          new X.PagedList.Web.Common.PagedListRenderOptions
-      {
-          LiElementClasses = new string[] { "page-item" },
-          PageClasses = new string[] { "page-link" }
-      })
+                      new X.PagedList.Web.Common.PagedListRenderOptions
+                  {
+                      LiElementClasses = new string[] { "page-item" },
+                      PageClasses = new string[] { "page-link" }
+                  })
 
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>

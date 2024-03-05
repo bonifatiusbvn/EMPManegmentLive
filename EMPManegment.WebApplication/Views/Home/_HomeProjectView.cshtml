@@ -74,7 +74,7 @@
                             <div class="d-flex align-items-center">
                                 <div class="flex-grow-1 mt-3">
                                     <p class="text-muted">
-                                    
+
                                     </p>
                                 </div>
                                 <div class="flex-shrink-0">
@@ -85,7 +85,7 @@
                                             </span>
                                         </button>
                                         <div>
-                                            <a class="dropdown-item" href="/Project/AddProjectMember/?Id=@item.ProjectId">
+                                            <a class="dropdown-item" href="/Project/GetProjectDetails/?Id=@item.ProjectId">
                                                 <i class="ri-eye-fill align-bottom me-2 text-muted"></i>
                                             </a>
                                         </div>
@@ -109,7 +109,7 @@
                                             </span>
                                         </button>
                                         <div>
-                                            <a class="dropdown-item" href="/Project/AddProjectMember/?Id=@item.ProjectId">
+                                            <a class="dropdown-item" href="/Project/GetProjectDetails/?Id=@item.ProjectId">
                                                 <i class="ri-eye-fill align-bottom me-2 text-muted"></i>
                                             </a>
                                         </div>
@@ -224,11 +224,11 @@
         searchfor = @Context.Request.Query["searchfor"],
         searchby = @Context.Request.Query["searchby"]
     }),
-                                                                                         new X.PagedList.Web.Common.PagedListRenderOptions
-                                                                                     {
-                                                                                         LiElementClasses = new string[] { "page-item" },
-                                                                                         PageClasses = new string[] { "page-link" }
-                                                                                     })
+                                                                                                     new X.PagedList.Web.Common.PagedListRenderOptions
+                                                                                                 {
+                                                                                                     LiElementClasses = new string[] { "page-item" },
+                                                                                                     PageClasses = new string[] { "page-link" }
+                                                                                                 })
 
 
 
