@@ -13,6 +13,7 @@ using EMPManegment.EntityModels.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using EMPManegment.EntityModels.ViewModels.TaskModels;
 using Microsoft.AspNetCore.Authorization;
+using EMPManegment.EntityModels.ViewModels.Models;
 
 namespace EMPManegment.Web.Controllers
 {
@@ -182,6 +183,29 @@ namespace EMPManegment.Web.Controllers
                     vendordetails = JsonConvert.DeserializeObject<VendorDetailsView>(response.data.ToString());
                 }
                 return new JsonResult(vendordetails);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        [HttpPost]
+        public async Task<IActionResult> UpdateVendorDetails(VendorDetailsView VendorDetails)
+        {
+            try
+            {
+                ApiResponseModel postuser = await APIServices.PostAsync(VendorDetails, "Vendor/UpdateVendorDetails");
+                if (postuser.code == 200)
+                {
+
+                    return Ok(new UserResponceModel { Message = string.Format(postuser.message),Code = postuser.code });
+
+
+                }
+                else
+                {
+                    return new JsonResult(new { Message = string.Format(postuser.message), Code = postuser.code });
+                }
             }
             catch (Exception ex)
             {

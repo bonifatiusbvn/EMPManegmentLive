@@ -13,6 +13,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using static System.Runtime.InteropServices.JavaScript.JSType;
@@ -169,21 +170,30 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
             UserResponceModel response = new UserResponceModel();
             try
             {
-                var projectmodel = new TblProjectDetail()
+                bool isMemberAlreadyExists = Context.TblProjectDetails.Any(x => x.UserId == AddMember.UserId && x.ProjectId == AddMember.ProjectId);
+                if (isMemberAlreadyExists == true)
                 {
-                    Id = Guid.NewGuid(),
-                    ProjectId = AddMember.ProjectId,
-                    ProjectType = AddMember.ProjectType,
-                    ProjectTitle = AddMember.ProjectTitle,
-                    UserId = AddMember.UserId,
-                    StartDate = AddMember.StartDate,
-                    EndDate = AddMember.EndDate,
-                    Status = AddMember.Status,
-                };
-                response.Code = 200;
-                response.Message = "Member add successfully!";
-                Context.TblProjectDetails.Add(projectmodel);
-                Context.SaveChanges();
+                    response.Message = "Member already exists";
+                    response.Code = 404;
+                }
+                else
+                {
+                    var projectmodel = new TblProjectDetail()
+                    {
+                        Id = Guid.NewGuid(),
+                        ProjectId = AddMember.ProjectId,
+                        ProjectType = AddMember.ProjectType,
+                        ProjectTitle = AddMember.ProjectTitle,
+                        UserId = AddMember.UserId,
+                        StartDate = AddMember.StartDate,
+                        EndDate = AddMember.EndDate,
+                        Status = AddMember.Status,
+                    };
+                    response.Code = 200;
+                    response.Message = "Member add successfully!";
+                    Context.TblProjectDetails.Add(projectmodel);
+                    Context.SaveChanges();
+                }
             }
             catch (Exception ex)
             {

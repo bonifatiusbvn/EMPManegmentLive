@@ -3,6 +3,7 @@ using EMPManegment.EntityModels.ViewModels;
 using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.ProductMaster;
+using EMPManegment.EntityModels.ViewModels.TaskModels;
 using EMPManegment.EntityModels.ViewModels.VendorModels;
 using System;
 using System.Collections.Generic;
@@ -19,5 +20,6 @@ namespace EMPManegment.Inretface.Interface.VendorDetails
         Task<IEnumerable<VendorTypeView>> GetVendorType();
         Task<VendorDetailsView> GetVendorById(Guid VendorId);
         Task<IEnumerable<VendorListDetailsView>> GetVendorNameList();
+        Task<UserResponceModel> UpdateVendorDetails(VendorDetailsView updateVendor);
     }
 }

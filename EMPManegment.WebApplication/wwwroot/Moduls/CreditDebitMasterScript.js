@@ -33,10 +33,10 @@ function GetPaymentTypeList() {
     });
 }
 
-function InsertCreditDebitDetails() {debugger
+function InsertCreditDebitDetails() {
     var value = $('#txtcreditdebitamount').val();
     if (value.trim() === '') {
-        debugger
+        
         $('#warningMessage').text('Please Enter value for credit amount!!');
         return;
     }

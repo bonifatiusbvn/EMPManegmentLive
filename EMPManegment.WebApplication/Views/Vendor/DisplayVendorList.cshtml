@@ -48,7 +48,7 @@
                                     <th>CompanyContac</th>
                                     <th>CompanyEmail</th>
                                     <th>Address</th>
-                                    <th>Details</th>
+                                    <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -422,6 +422,260 @@
                     </div>
                     <!--end modal-->
 
+                    <!---Edit Vendor Modal--->
+                    <div class="modal fade zoomIn" id="UpdateVendorModel" tabindex="-1" aria-labelledby="EditSellerLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="EditSellerLabel">Edit Vendor Details</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-content border-0 mt-3">
+                                    <ul class="nav nav-tabs nav-tabs-custom nav-primary p-2 pb-0 bg-light" role="tablist">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" data-bs-toggle="tab" href="#editbusinessDetails" role="tab" aria-selected="true">
+                                                Business Details
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <button class="nav-link" data-bs-toggle="tab" id="editPersonalDetailsModel" href="#editpersonalDetails" role="tab" aria-selected="false">
+                                                Personal Details
+                                            </button>
+                                        </li>
+                                        <li class="nav-item">
+                                            <button class="nav-link" data-bs-toggle="tab" id="editBankDetailsModel" href="#editbankDetails" role="tab" aria-selected="false">
+                                                Bank Details
+                                            </button>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="modal-body">
+
+                                    <div class="tab-content">
+                                        <div class="tab-pane active" id="editbusinessDetails" role="tabpanel">
+                                            <form id="editVendorFormId">
+                                                <div class="row">
+                                                    <div class="col-lg-6">
+                                                        <div class="mb-3">
+                                                            <label for="companynameInput" class="form-label">Company Name</label>
+                                                             <input type="hidden" class="form-control" autocomplete="off" id="vendorId" name="vendorId">
+                                                            <input type="text" class="form-control" autocomplete="off" id="EditcompanynameInput" name="EditcompanynameInput" placeholder="Enter your company name">
+                                                        </div>
+                                                    </div>
+                                                    <!--end col-->
+                                                    <div class="col-lg-6">
+                                                        <div class="mb-3">
+                                                            <label for="CompanyType" class="form-label">Company Type</label>
+                                                            <select class="form-control" id="EditCompanyType" name="EditCompanyType">
+                                                                <option value="">Select type</option>
+                                                                @* <option value="All" selected>All</option>*@
+                                                                <option value="Merchandising">Merchandising</option>
+                                                                <option value="Manufacturing">Manufacturing</option>
+                                                                <option value="Partnership">Partnership</option>
+                                                                <option value="Corporation">Corporation</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <!--end col-->
+                                                    <div class="col-lg-6">
+                                                        <div class="mb-3">
+                                                            <label for="emailidInput" class="form-label">Email</label>
+                                                            <input type="email" class="form-control" autocomplete="off" id="EditemailidInput" name="EditemailidInput" placeholder="Enter your email">
+                                                        </div>
+                                                    </div>
+                                                    <!--end col-->
+                                                    <div class="col-lg-6">
+                                                        <div class="mb-3">
+                                                            <label for="ddlVendorType" class="form-label">VendorType</label>
+                                                            <select id="ddlVendorType" name="ddlVendorType" class="form-control bg-transparent">
+                                                                <option>--Select Type--</option>
+                                                            </select>
+                                                            <input type="hidden" id="VendorTypeInput" name="VendorTypeInput" value="" />
+                                                        </div>
+                                                    </div>
+                                                    <!--end col-->
+                                                    <div class="col-lg-6">
+                                                        <div class="mb-3">
+                                                            <label for="contactnumberInput" class="form-label">Contact Number</label>
+                                                            <input type="text" class="form-control" autocomplete="off" id="EditcontactnumberInput" name="EditcontactnumberInput" placeholder="Enter your number">
+                                                        </div>
+                                                    </div>
+                                                    <!--end col-->
+                                                    <div class="col-lg-6">
+                                                        <div class="mb-3">
+                                                            <label for="phonenumberInput" class="form-label">Phone Number</label>
+                                                            <input type="number" class="form-control" autocomplete="off" id="EditphonenumberInput" name="EditphonenumberInput" placeholder="Enter your number">
+                                                        </div>
+                                                    </div>
+                                                    <!--end col-->
+
+                                                    <div class="col-lg-4">
+                                                        <div class="mb-3">
+                                                            <label for="ddlCountry" class="form-label">Country</label>
+                                                            <select id="ddlCountry" name="ddlCountry" class="form-control bg-transparent">
+                                                                <option>--Select Country--</option>
+                                                            </select>
+                                                            <input type="hidden" id="txtcountry" name="txtcountry" value="" />
+                                                        </div>
+                                                    </div>
+                                                    <!--end col-->
+                                                    <div class="col-lg-4">
+                                                        <div class="mb-3">
+                                                            <label for="ddlState" class="form-label">State</label>
+                                                            <select id="ddlState" name="ddlState" class="form-control bg-transparent">
+                                                                <option>--Select State--</option>
+                                                            </select>
+                                                            <input type="hidden" id="txtstate" name="txtstate" value="" />
+                                                        </div>
+                                                    </div>
+                                                    <!--end col-->
+                                                    <div class="col-lg-4">
+                                                        <div class="mb-3">
+                                                            <label for="ddlCity" class="form-label">City</label>
+                                                            <select id="ddlCity" name="ddlCity" class="form-control bg-transparent">
+                                                                <option>--Select City--</option>
+                                                            </select>
+                                                            <input type="hidden" id="txtcity" name="txtcity" value="" />
+                                                        </div>
+                                                    </div>
+                                                    <!--end col-->
+                                                    <div class="col-lg-4">
+                                                        <div class="mb-3">
+                                                            <label for="AddressidInput" class="form-label">Address</label>
+                                                            <textarea type="text" class="form-control" id="EditAddressidInput" name="EditAddressidInput" rows="3" placeholder="Enter your Address"></textarea>
+                                                        </div>
+                                                    </div>
+                                                    <!--end col-->
+                                                    <div class="col-lg-4">
+                                                        <div class="mb-3">
+                                                            <label for="PincodeidInput" class="form-label">PinCode</label>
+                                                            <input type="number" class="form-control" id="EditpincodeidInput" name="EditpincodeidInput" placeholder="Enter your Pincode">
+                                                        </div>
+                                                    </div>
+                                                    <!--end col-->
+                                                </div>
+                                                <!--end row-->
+                                            </form>
+                                            <div class="col-lg-12">
+                                                <div class="hstack gap-2 justify-content-end">
+                                                    <button class="btn btn-link link-success text-decoration-none fw-medium" data-bs-dismiss="modal"><i class="ri-close-line me-1 align-middle"></i> Close</button>
+                                                    <button type="button" class="btn btn-primary" id="nextPersonalDetails" onclick="editnexttoPersonalDetails()" value="Validate"><i class="ri-speed-fill align-bottom me-1"></i> Next</button>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="tab-pane" id="editpersonalDetails" role="tabpanel">
+                                            <form id="editVendorPersonalDetails" enctype="multipart/form-data">
+                                                <div class="row">
+                                                    <div class="col-lg-6">
+                                                        <div class="mb-3">
+                                                            <label for="firstnameInput" class="form-label">First Name</label>
+                                                            <input type="text" class="form-control" autocomplete="off" id="EditfirstnameInput" name="EditfirstnameInput" placeholder="Enter your firstname">
+                                                        </div>
+                                                    </div>
+                                                    <!--end col-->
+                                                    <div class="col-lg-6">
+                                                        <div class="mb-3">
+                                                            <label for="lastnameInput" class="form-label">Last Name</label>
+                                                            <input type="text" class="form-control" autocomplete="off" id="EditlastnameInput" name="EditlastnameInput" placeholder="Enter your lastname">
+                                                        </div>
+                                                    </div>
+                                                    <!--end col-->
+                                                    <div class="col-lg-6">
+                                                        <div class="mb-3">
+                                                            <label for="companyemailInput" class="form-label">Email</label>
+                                                            <input type="email" class="form-control" id="EditcompanyemailInput" name="EditcompanyemailInput" placeholder="Enter your email" autocomplete="off">
+                                                        </div>
+                                                    </div>
+                                                    <!--end col-->
+                                                    <div class="col-lg-6">
+                                                        <div class="mb-3">
+                                                            <label for="worknumberInput" class="form-label">Number</label>
+                                                            <input type="number" class="form-control" autocomplete="off" id="EditworknumberInput" name="EditworknumberInput" placeholder="Enter your number">
+                                                        </div>
+                                                    </div>
+                                                    <!--end col-->
+
+
+                                                </div>
+                                                <!--end row-->
+                                            </form>
+                                            <div class="col-lg-12">
+                                                <div class="hstack gap-2 justify-content-end">
+                                                    <button class="btn btn-link link-success text-decoration-none fw-medium" data-bs-dismiss="modal"><i class="ri-close-line me-1 align-middle"></i> Close</button>
+                                                    <button type="button" class="btn btn-primary" id="nextbankDetails" onclick="editnexttoBankDetails()" value="Validate"><i class="ri-speed-fill align-bottom me-1"></i> Next</button>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="tab-pane" id="editbankDetails" role="tabpanel">
+                                            <form id="editVendorbankDetails">
+                                                <div class="row">
+                                                    <div class="col-lg-6">
+                                                        <div class="mb-3">
+                                                            <label for="banknameInput" class="form-label">Bank Name</label>
+                                                            <input type="text" class="form-control" autocomplete="off" id="EditbanknameInput" name="EditbanknameInput" placeholder="Enter your bank name">
+                                                        </div>
+                                                    </div>
+                                                    <!--end col-->
+                                                    <div class="col-lg-6">
+                                                        <div class="mb-3">
+                                                            <label for="branchInput" class="form-label">Branch</label>
+                                                            <input type="text" class="form-control" autocomplete="off" id="EditbranchInput" name="EditbranchInput" placeholder="Branch">
+                                                        </div>
+                                                    </div>
+                                                    <!--end col-->
+                                                    <div class="col-lg-12">
+                                                        <div class="mb-3">
+                                                            <label for="accountnameInput" class="form-label">Account Holder Name</label>
+                                                            <input type="text" class="form-control" autocomplete="off" id="EditaccountnameInput" name="EditaccountnameInput" placeholder="Enter account holder name">
+                                                        </div>
+                                                    </div>
+                                                    <!--end col-->
+                                                    <div class="col-lg-6">
+                                                        <div class="mb-3">
+                                                            <label for="accountnumberInput" class="form-label">Account Number</label>
+                                                            <input type="number" class="form-control" autocomplete="off" id="EditaccountnumberInput" name="EditaccountnumberInput" placeholder="Enter account number">
+                                                        </div>
+                                                    </div>
+                                                    <!--end col-->
+                                                    <div class="col-lg-6">
+                                                        <div class="mb-3">
+                                                            <label for="ifscInput" class="form-label">IFSC</label>
+                                                            <input type="text" class="form-control" autocomplete="off" id="EditifscInput" name="EditifscInput" placeholder="IFSC">
+                                                        </div>
+                                                    </div>
+                                                    <!--end col-->
+                                                    <div class="col-lg-6">
+                                                        <div class="mb-3">
+                                                            <label for="GSTInput" class="form-label">GSTNumber</label>
+                                                            <input type="text" class="form-control" autocomplete="off" id="EditGSTNumberInput" name="EditGSTNumberInput" placeholder="GST-Number">
+                                                        </div>
+                                                    </div>
+                                                    <!--end col-->
+
+                                                </div>
+                                                <!--end row-->
+                                            </form>
+                                            <div class="col-lg-12">
+                                                <div class="hstack gap-2 justify-content-end">
+                                                    <button class="btn btn-link link-priamry text-decoration-none fw-medium" data-bs-dismiss="modal" id="CloseButton"><i class="ri-close-line me-1 align-middle"></i> Close</button>
+                                                    <button type="button" class="btn btn-primary" onclick="UpdateVendorDetails()" id="updateVendorDetails" value="Validate"><i class="ri-save-3-line align-bottom me-1"></i> Save</button>
+                                                </div>
+                                            </div>
+                                            <!--end col-->
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--end modal-->
+
                 </div>
             </div>
         </div>
@@ -467,7 +721,15 @@
     #CompanyType-error, #companyemailInput-error, #worknumberInput-error.error,
     #companylogoInput-error, #banknameInput-error, #branchInput-error, #accountnameInput-error,
     #accountnumberInput-error, #ifscInput-error.error,
-    #GSTNumberInput-error {
+    #GSTNumberInput-error ,
+     #EditfirstnameInput-error, #EditlastnameInput-error, #EditcontactnumberInput-error.error,
+     #EditphonenumberInput-error, #EditemailidInput-error,
+    #EditAddressidInput-error, #EditpincodeidInput-error, #EditcompanynameInput-error,
+    #EditCompanyType-error, #EditcompanyemailInput-error, #EditworknumberInput-error.error,
+    #EditcompanylogoInput-error, #EditbanknameInput-error, #EditbranchInput-error, #EditaccountnameInput-error,
+    #EditaccountnumberInput-error, #EditifscInput-error.error,
+    #EditGSTNumberInput-error
+    {
         color: red;
     }
 

@@ -5,6 +5,7 @@ using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.ProductMaster;
 using EMPManegment.EntityModels.ViewModels.VendorModels;
 using EMPManegment.Inretface.Interface.ProductMaster;
+using EMPManegment.Inretface.Interface.UserAttendance;
 using EMPManegment.Inretface.Interface.VendorDetails;
 using EMPManegment.Inretface.Services.VendorDetailsServices;
 using Microsoft.AspNetCore.Http;
@@ -81,6 +82,26 @@ namespace EMPManagment.API.Controllers
             var getVendorsNameList = await vendorServices.GetVendorNameList();
             return Ok(new { code = 200, data = getVendorsNameList.ToList() });
         }
-     
+
+        [HttpPost]
+        [Route("UpdateVendorDetails")]
+        public async Task<IActionResult> UpdateVendorDetails(VendorDetailsView updateVendor)
+        {
+            UserResponceModel response = new UserResponceModel();
+            try
+            {
+                var vendordetails = vendorServices.UpdateVendorDetails(updateVendor);
+                if (vendordetails.Result.Code == 200)
+                {
+                    response.Code = 200;
+                    response.Message = vendordetails.Result.Message;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return StatusCode(response.Code, response);
+        }
     }
 }
