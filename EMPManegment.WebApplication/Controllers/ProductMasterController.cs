@@ -232,7 +232,7 @@ namespace EMPManegment.Web.Controllers
             }
         }
         [HttpPost]
-        public async Task<IActionResult> SearchProductName(String ProductName)
+        public async Task<IActionResult> SearchProductName(string ProductName)
         {
             try
             {

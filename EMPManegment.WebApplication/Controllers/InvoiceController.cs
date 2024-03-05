@@ -66,7 +66,8 @@ namespace EMPManegment.Web.Controllers
         {
             try
             {
-                ApiResponseModel Response = await APIServices.GetAsync("", "Invoice/CheckInvoiceNo?OrderId=" + OrderId);
+                string porjectname = UserSession.ProjectName;
+                ApiResponseModel Response = await APIServices.GetAsync("", "Invoice/CheckInvoiceNo?porjectname=" + porjectname);
                 List<OrderDetailView> order = new List<OrderDetailView>();
                 ApiResponseModel response = await APIServices.GetAsync("", "Invoice/GetInvoiceDetailsByOrderId?OrderId=" + OrderId);
                 if (response.code == 200)
@@ -406,7 +407,7 @@ namespace EMPManegment.Web.Controllers
                 var creditdebitdetails = HttpContext.Request.Form["CREDITDEBITDETAILSBYID"];
                 var InsertDetails = JsonConvert.DeserializeObject<CreditDebitView>(creditdebitdetails);
                 List<CreditDebitView> creditdebit = new List<CreditDebitView>();
-                ApiResponseModel response = await APIServices.PostAsync(null, "Invoice/GetCreditDebitDetailsByVendorId?Vid="+InsertDetails.VendorId);
+                ApiResponseModel response = await APIServices.PostAsync(null, "Invoice/GetCreditDebitDetailsByVendorId?Vid=" + InsertDetails.VendorId);
                 if (response.code == 200)
                 {
                     creditdebit = JsonConvert.DeserializeObject<List<CreditDebitView>>(response.data.ToString());

@@ -57,24 +57,24 @@ namespace EMPManegment.Repository.PurchaseOrderRepository
                 var currentYear = DateTime.Now.Year;
                 var lastYear = currentYear - 1;
 
-                string UserOrderId;
+                string POId;
                 if (LastOrder == null)
                 {
-                    UserOrderId = $"BTPL/OP/{projectname}/{lastYear % 100}-{currentYear % 100}-01";
+                    POId = $"BTPL/OP/{projectname}/{lastYear % 100}-{currentYear % 100}-01";
                 }
                 else
                 {
                     if (LastOrder.OrderId.Length >= 25)
                     {
                         int orderNumber = int.Parse(LastOrder.OrderId.Substring(24)) + 1;
-                        UserOrderId = $"BTPL/ODR/{projectname}/{lastYear % 100}-{currentYear % 100}-" + orderNumber.ToString("D3");
+                        POId = $"BTPL/ODR/{projectname}/{lastYear % 100}-{currentYear % 100}-" + orderNumber.ToString("D3");
                     }
                     else
                     {
                         throw new Exception("OrderId does not have the expected format.");
                     }
                 }
-                return UserOrderId;
+                return POId;
             }
             catch (Exception ex)
             {
