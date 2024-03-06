@@ -1,5 +1,148 @@
 ﻿
+$(document).ready(function () {
+    GetVendorNameList();
+    GetProducts();
+    GetPaymentMethodList();
+});
+function GetVendorNameList() {
 
+    $.ajax({
+        url: '/ProductMaster/GetVendorsNameList',
+        success: function (result) {
+            $.each(result, function (i, data) {
+                $('#txtvendorname').append('<Option value=' + data.id + '>' + data.vendorCompany + '</Option>')
+            });
+        }
+    });
+}
+function selectvendorId() {
+    document.getElementById("txtvendorTypeid").value = document.getElementById("txtvendorname").value;
+}
+function GetProducts() {
+    $.ajax({
+        url: '/ProductMaster/GetProduct',
+        success: function (result) {
+            $.each(result, function (i, data) {
+                $('#txtProducts').append('<Option value=' + data.id + '>' + data.productName + '</Option>')
+            });
+        }
+    });
+}
+function GetPaymentTypeList() {
+    $.ajax({
+        url: '/ExpenseMaster/GetPaymentTypeList',
+        success: function (result) {
+            $.each(result, function (i, data) {
+                $('#paymenttype').append('<Option value=' + data.id + '>' + data.type + '</Option>')
+            });
+        }
+    });
+}
+function selectProductTypeId() {
+    document.getElementById("txtProductTypeid").value = document.getElementById("txtProducts").value;
+}
+function GetPaymentMethodList() {
+
+    $.ajax({
+        url: '/OrderMaster/GetPaymentMethodList',
+        success: function (result) {
+            $.each(result, function (i, data) {
+                $('#txtpaymentmethod').append('<Option value=' + data.id + '>' + data.paymentMethod + '</Option>')
+            });
+        }
+    });
+}
+$(document).ready(function () {
+    $('#txtvendorname').change(function () {
+        var Text = $("#txtvendorname Option:Selected").text();
+        var ProductId = $(this).val();
+        $("#txtvendornameid").val(Text);
+        $('#productname').empty();
+        $('#productname').append('<Option >--Select Product--</Option>');
+        $.ajax({
+            url: '/ProductMaster/GetProductById?ProductId=' + ProductId,
+            success: function (result) {
+
+                $.each(result, function (i, data) {
+                    $('#productname').append('<Option value=' + data.id + '>' + data.productType + '</Option>')
+                });
+            }
+        });
+    });
+});
+
+$(document).ready(function () {
+    $('#txtProducts').change(function () {
+
+
+        var Text = $("#txtProducts Option:Selected").text();
+        var ProductTypeId = $(this).val();
+        var VendorTypeId = $("#txtvendorname").val();
+        var Productid = $("#txtProductid").val(ProductTypeId);
+        $("#txtProductTypeid").val(Text);
+        $('#searchproductname').empty();
+        $('#searchproductname').append('<Option >--Select ProductName--</Option>');
+        $.ajax({
+            url: '/ProductMaster/SerchProductByVendor?ProductId=' + ProductTypeId + '&VendorId=' + VendorTypeId,
+            type: 'Post',
+            success: function (result) {
+                $.each(result, function (i, data) {
+                    $('#searchproductname').append('<Option value=' + data.id + '>' + data.productName + '</Option>');
+                    $('#txtvendorname').prop('disabled', true);
+                    $('#txtProducts').prop('disabled', true);
+                });
+            }
+        });
+    });
+});
+function searchProductTypeId() {
+    document.getElementById("searchproductnameid").value = document.getElementById("searchproductname").value;
+}
+
+function SerchProductDetailsById() {
+
+    var GetProductId = {
+        Id: $('#searchproductname').val(),
+        RowNumber: $('#addNewlink tr').length,
+    }
+    var form_data = new FormData();
+    form_data.append("PRODUCTID", JSON.stringify(GetProductId));
+
+
+    $.ajax({
+        url: '/ProductMaster/DisplayProductDetailsById',
+        type: 'Post',
+        datatype: 'json',
+        data: form_data,
+        processData: false,
+        contentType: false,
+        complete: function (Result) {
+
+            if (Result.statusText === "success") {
+                AddNewRow(Result.responseText);
+            }
+            else {
+                var vendorname = $('#txtvendorname').val();
+                var productname = $('#txtProducts').val();
+                var serchproductname = $('#searchproductname').val();
+                if (vendorname === '' || vendorname === null) {
+                    $('#vendorvalidationMessage').text('Please select Vendor!!');
+                }
+                if (productname === "--Select Product--" || productname === null) {
+                    $('#productvalidationMessage').text('Please select ProductType!!');
+                }
+                if (serchproductname === "--Select ProductName--" || serchproductname === null) {
+                    $('#searchvalidationMessage').text('Please select ProductName!!');
+                }
+                else {
+                    $('#vendorvalidationMessage').text('');
+                    $('#productvalidationMessage').text('');
+                    $('#searchvalidationMessage').text('');
+                }
+            }
+        }
+    });
+}
 function CreatePurchaseOrder() {
 
     var orderDetails = [];
@@ -8,30 +151,27 @@ function CreatePurchaseOrder() {
         var orderRow = $(this);
         var objData = {
             ProjectId: $("#txtProjectId").val(),
-            Type: $("#OrderType").val(),
-            OrderId: $("#orderId").val(),
-            PaymentStatus: $("#txtPaymentStatus").val(),
-            PaymentMethod: $("#paymenttype").val(),
+            Opid: $("#orderId").val(),
+            Status: $("#txtPaymentStatus").val(),
             OrderDate: $("#orderdate").val(),
             DeliveryDate: $("#deliverydate").val(),
             VendorId: $("#txtvendorname").val(),
             CompanyName: $("#txtvendornameid").val(),
+            CreatedBy: $("#txtuserid").val(),
             ProductId: orderRow.find("#Product_Id").val(),
             ProductType: orderRow.find("#Product_TypeId").val(),
             Quantity: orderRow.find("#txtproductquantity").val(),
-            TotalGst: orderRow.find("#txtproductamountwithGST").val(),
-            Amount: orderRow.find("#txtproductamount").val(),
-            Total: orderRow.find("#txtproducttotalamount").val(),
+            TotalAmount: orderRow.find("#txtproducttotalamount").val(),
             ProductShortDescription: orderRow.find("#txtproductDescription").val(),
             ProductName: orderRow.find("#txtproductName").val(),
         };
         orderDetails.push(objData);
     });
     var form_data = new FormData();
-    form_data.append("ORDERDETAILS", JSON.stringify(orderDetails));
-
+    form_data.append("PURCHASEORDER", JSON.stringify(orderDetails));
+    count
     $.ajax({
-        url: '/OrderMaster/InsertMultipleOrders',
+        url: '/PO/CreatePO',
         type: 'POST',
         data: form_data,
         dataType: 'json',
@@ -45,7 +185,7 @@ function CreatePurchaseOrder() {
                     confirmButtonColor: '#3085d6',
                     confirmButtonText: 'OK',
                 }).then(function () {
-                    window.location = '/OrderMaster/CreateOrderView';
+                    window.location = '/PO/CreateOP';
                 });
             }
         },
