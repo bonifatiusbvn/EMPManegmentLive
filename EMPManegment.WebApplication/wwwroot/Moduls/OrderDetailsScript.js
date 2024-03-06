@@ -132,7 +132,7 @@ $(document).ready(function () {
 });
 
 function SaveCreateOrder() {
-    
+
     if ($('#createOrderForm').valid()) {
 
         var formData = new FormData();
@@ -157,7 +157,7 @@ function SaveCreateOrder() {
             contentType: false,
             processData: false,
             success: function (Result) {
-                
+
                 if (Result.message != null) {
                     Swal.fire({
                         title: Result.message,
@@ -567,72 +567,6 @@ function ProductDetailsByProductTypeId() {
         }
     });
 }
-
-
-
-
-
-function CreatePurchaseOrder() {
-
-    var orderDetails = [];
-    var numOrders = $(".product").length;
-    $(".product").each(function () {
-        var orderRow = $(this);
-        var objData = {
-            ProjectId: $("#txtProjectId").val(),
-            Type: $("#OrderType").val(),
-            OrderId: $("#orderId").val(),
-            PaymentStatus: $("#txtPaymentStatus").val(),
-            PaymentMethod: $("#paymenttype").val(),
-            OrderDate: $("#orderdate").val(),
-            DeliveryDate: $("#deliverydate").val(),
-            VendorId: $("#txtvendorname").val(),
-            CompanyName: $("#txtvendornameid").val(),
-            ProductId: orderRow.find("#Product_Id").val(),
-            ProductType: orderRow.find("#Product_TypeId").val(),
-            Quantity: orderRow.find("#txtproductquantity").val(),
-            TotalGst: orderRow.find("#txtproductamountwithGST").val(),
-            Amount: orderRow.find("#txtproductamount").val(),
-            Total: orderRow.find("#txtproducttotalamount").val(),
-            ProductShortDescription: orderRow.find("#txtproductDescription").val(),
-            ProductName: orderRow.find("#txtproductName").val(),
-        };
-        orderDetails.push(objData);
-    });
-    var form_data = new FormData();
-    form_data.append("ORDERDETAILS", JSON.stringify(orderDetails));
-
-    $.ajax({
-        url: '/OrderMaster/InsertMultipleOrders',
-        type: 'POST',
-        data: form_data,
-        dataType: 'json',
-        contentType: false,
-        processData: false,
-        success: function (result) {
-            if (result.message != null) {
-                Swal.fire({
-                    title: result.message,
-                    icon: 'success',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK',
-                }).then(function () {
-                    window.location = '/OrderMaster/CreateOrderView';
-                });
-            }
-        },
-        error: function (xhr, status, error) {
-            Swal.fire({
-                title: 'Error',
-                text: 'An error occurred while processing your request.',
-                icon: 'error',
-                confirmButtonColor: '#3085d6',
-                confirmButtonText: 'OK',
-            });
-        }
-    });
-}
-
 
 var paymentSign = "$";
 

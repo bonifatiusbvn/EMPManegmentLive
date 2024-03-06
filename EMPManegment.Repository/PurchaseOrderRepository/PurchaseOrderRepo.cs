@@ -67,7 +67,7 @@ namespace EMPManegment.Repository.PurchaseOrderRepository
                     if (LastOrder.OrderId.Length >= 25)
                     {
                         int orderNumber = int.Parse(LastOrder.OrderId.Substring(24)) + 1;
-                        POId = $"BTPL/ODR/{projectname}/{lastYear % 100}-{currentYear % 100}-" + orderNumber.ToString("D3");
+                        POId = $"BTPL/OP/{projectname}/{lastYear % 100}-{currentYear % 100}-" + orderNumber.ToString("D3");
                     }
                     else
                     {
