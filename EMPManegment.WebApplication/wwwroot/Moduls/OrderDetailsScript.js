@@ -280,12 +280,12 @@ function InsertMultipleOrder() {
             ProductName: orderRow.find("#txtproductName").val(),
             AmountPerUnit: orderRow.find("#txtproductamount").val(),
             GstPerUnit: orderRow.find("#txtproductamountwithGST").val(),
-            TotalGst: $("#totalgst").val(),
+            SubTotal: orderRow.find("#txtproducttotalamount").val(),
             TotalGst: $("#totalgst").val(),
             TotalAmount: $("#cart-total").val(),
         };
         orderDetails.push(objData);
-        debugger
+
     });
     var form_data = new FormData();
     form_data.append("ORDERDETAILS", JSON.stringify(orderDetails));

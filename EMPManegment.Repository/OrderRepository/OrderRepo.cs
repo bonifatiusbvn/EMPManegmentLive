@@ -196,6 +196,7 @@ namespace EMPManegment.Repository.OrderRepository
                         AmountPerUnit = item.AmountPerUnit,
                         TotalGst = item.TotalGst,
                         GstPerUnit = item.GstPerUnit,
+                        SubTotal = item.SubTotal,
                         TotalAmount = item.TotalAmount,
                         OrderDate = item.OrderDate,
                         DeliveryDate = item.DeliveryDate,
