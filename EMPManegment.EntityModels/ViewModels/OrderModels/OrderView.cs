@@ -19,12 +19,13 @@ namespace EMPManegment.EntityModels.ViewModels.OrderModels
         public int ProductType { get; set; }
         public Guid? ProductId { get; set; }
         public decimal? TotalGst { get; set; }
+        public decimal? GstPerUnit { get; set; }
 
         public string Quantity { get; set; } = null!;
 
-        public decimal? Amount { get; set; }
+        public decimal? AmountPerUnit { get; set; }
 
-        public decimal? Total { get; set; }
+        public decimal TotalAmount { get; set; }
 
         public DateTime OrderDate { get; set; }
 

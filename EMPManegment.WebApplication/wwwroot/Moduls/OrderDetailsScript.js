@@ -257,6 +257,7 @@ $("#returnsactive").click(function () {
 
 
 function InsertMultipleOrder() {
+
     var orderDetails = [];
     var numOrders = $(".product").length;
     $(".product").each(function () {
@@ -275,13 +276,15 @@ function InsertMultipleOrder() {
             ProductId: orderRow.find("#Product_Id").val(),
             ProductType: orderRow.find("#Product_TypeId").val(),
             Quantity: orderRow.find("#txtproductquantity").val(),
-            TotalGst: orderRow.find("#txtproductamountwithGST").val(),
-            Amount: orderRow.find("#txtproductamount").val(),
-            Total: orderRow.find("#txtproducttotalamount").val(),
             ProductShortDescription: orderRow.find("#txtproductDescription").val(),
             ProductName: orderRow.find("#txtproductName").val(),
+            AmountPerUnit: orderRow.find("#txtproductamount").val(),
+            GstPerUnit: orderRow.find("#txtproductamountwithGST").val(),
+            TotalGst: $("#totalgst").val(),
+            Total: $("#cart-total").val(),
         };
         orderDetails.push(objData);
+        debugger
     });
     var form_data = new FormData();
     form_data.append("ORDERDETAILS", JSON.stringify(orderDetails));

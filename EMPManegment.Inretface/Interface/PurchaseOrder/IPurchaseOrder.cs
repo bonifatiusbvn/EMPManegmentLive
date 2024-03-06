@@ -1,4 +1,5 @@
 ﻿using EMPManegment.EntityModels.ViewModels.Models;
+using EMPManegment.EntityModels.ViewModels.OrderModels;
 using EMPManegment.EntityModels.ViewModels.POMaster;
 using EMPManegment.EntityModels.ViewModels.ProjectModels;
 using System;
@@ -13,5 +14,6 @@ namespace EMPManegment.Inretface.Interface.PurchaseOrder
     {
         string CheckOPNo(string projectname);
         Task<UserResponceModel> CreatePO(List<OPMasterView> CreatePO);
+        Task<IEnumerable<OPMasterView>> GetPOList();
     }
 }

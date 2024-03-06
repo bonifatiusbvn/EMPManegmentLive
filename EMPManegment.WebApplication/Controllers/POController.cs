@@ -62,6 +62,11 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
+
+        public async Task<IActionResult> GetPOList()
+        {
+            return View();
+        }
     }
 
 }

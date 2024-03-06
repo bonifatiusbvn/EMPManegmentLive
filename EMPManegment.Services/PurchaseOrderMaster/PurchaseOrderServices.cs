@@ -29,5 +29,10 @@ namespace EMPManegment.Services.PurchaseOrderMaster
         {
             return await PurchaseOrder.CreatePO(CreatePO);
         }
+
+        public async Task<IEnumerable<OPMasterView>> GetPOList()
+        {
+            return await PurchaseOrder.GetPOList();
+        }
     }
 }

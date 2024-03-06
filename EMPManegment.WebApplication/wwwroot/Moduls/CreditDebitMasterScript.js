@@ -34,7 +34,7 @@ function GetPaymentTypeList() {
 }
 
 function InsertCreditDebitDetails() {
-    debugger
+
     var value = $('#txtcreditdebitamount').val();
     if (value.trim() === '') {
 
