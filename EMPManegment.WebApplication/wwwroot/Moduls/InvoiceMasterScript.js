@@ -362,22 +362,7 @@ function EditInvoceDetails() {
             $('#Edittotalamount').val(response.totalAmount);
         }
     });
-}
-
-    $.ajax({
-        url: '/Invoice/GetAllTransactionPartial',
-        type: 'GET',
-        dataType: 'html',
-        data: { Vid: Vid },
-        success: function (response) {
-            $("#allCreditTransactions").html(response);
-        },
-        //error: function () {
-        //    alert("Data not found");
-        //}
-    });
-}
-
+}   
 function GetAllTransactionData() {
     $('#transactionTable').DataTable({
         processing: true,

@@ -61,6 +61,7 @@ namespace EMPManegment.EntityModels.ViewModels.OrderModels
 
         public string? VendorContact { get; set; }
         public string? VendorAddress { get; set; }
+        public string? InvoiceNo { get; set; }
     }
     public class OrderResponseModel
     {

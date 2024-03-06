@@ -27,7 +27,7 @@ namespace EMPManegment.Services.InvoiceMaster
             return InvoiceMaster.CheckInvoiceNo(porjectname);
         }
 
-        public Task<UserResponceModel> DisplayInvoiceDetails(string OrderId)
+        public Task<OrderResponseModel> DisplayInvoiceDetails(string OrderId)
         {
             return InvoiceMaster.DisplayInvoiceDetails(OrderId);
         }
@@ -80,11 +80,6 @@ namespace EMPManegment.Services.InvoiceMaster
         public async Task<UserResponceModel> InsertInvoiceDetails(GenerateInvoiceModel InsertInvoice)
         {
             return await InvoiceMaster.InsertInvoiceDetails(InsertInvoice);
-        }
-
-        Task<UserResponceModel> IInvoiceMasterServices.DisplayInvoiceDetails(string OrderId)
-        {
-            throw new NotImplementedException();
         }
     }
 }
