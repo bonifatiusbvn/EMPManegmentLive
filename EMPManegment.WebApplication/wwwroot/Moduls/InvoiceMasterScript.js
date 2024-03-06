@@ -287,7 +287,7 @@ function downloadPDF() {
 
 function GetAllVendorData() {
 
-    
+
     $('#VendorTableData').DataTable({
         processing: true,
         serverSide: true,
@@ -323,7 +323,7 @@ function GetAllVendorData() {
 }
 
 function getLastTransaction() {
-    
+
     var Vid = $('#txtvendorid').val();
 
     $.ajax({
@@ -355,11 +355,7 @@ function EditInvoceDetails() {
         dataType: 'json',
         contentType: false,
         processData: false,
-    //$.ajax({
-    //    url: '/ Invoice/EditInvoceDetails/?Id=' + Id,
-    //    type: "Get",
-    //    contentType: 'application/json;charset=utf-8;',
-    //    dataType: 'json',
+
         success: function (response) {
             debugger
             $('#EditInvoiceModel').modal('show');
@@ -368,7 +364,9 @@ function EditInvoceDetails() {
             $('#EditProjectName').val(response.projectName);
             $('#EditOrderId').val(response.orderId);
             $('#Edittotalamount').val(response.totalAmount);
-
+        }
+    });
+}
 function getAllTransactions() {
 
     var Vid = $('#txtvendorid').val();
@@ -381,15 +379,12 @@ function getAllTransactions() {
         success: function (response) {
             $("#allCreditTransactions").html(response);
         },
-        },
         error: function () {
             alert("Data not found");
         }
     });
 }
 
-    });
-}
 function GetAllTransactionData() {
 
     $('#transactionTable').DataTable({
