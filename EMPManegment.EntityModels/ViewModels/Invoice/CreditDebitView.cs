@@ -14,7 +14,7 @@ namespace EMPManegment.EntityModels.ViewModels.Invoice
 
         public string? VendorName { get; set; }
         public int PaymentMethod { get; set; }
-        public string PaymentMethodName { get; set; }
+        public string? PaymentMethodName { get; set; }
 
         public string? Type { get; set; }
 
@@ -23,14 +23,14 @@ namespace EMPManegment.EntityModels.ViewModels.Invoice
         public DateTime? Date { get; set; }
 
         public int? PaymentType { get; set; }
-        public string PaymentTypeName { get; set; }
+        public string? PaymentTypeName { get; set; }
 
         public decimal? CreditDebitAmount { get; set; }
 
         public decimal? PendingAmount { get; set; }
 
         public decimal? TotalAmount { get; set; }
-        public string VendorAddress { get; set; } = null!;
+        public string? VendorAddress { get; set; } = null!;
 
         public DateTime? CreatedOn { get; set; }
 

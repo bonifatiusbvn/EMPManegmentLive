@@ -164,7 +164,7 @@
                     <!--end col-->
                     <div class="col-auto ms-auto">
                         <div class="d-flex gap-2">
-                            <button type="button" class="btn btn-primary" onclick="getLastTransaction()"><i class="ri-equalizer-line align-bottom me-1"></i> See LastTransactions</button>
+                            <button type="button" class="btn btn-primary" onclick="getLastTransaction('@vendorid')"><i class="ri-equalizer-line align-bottom me-1"></i> See LastTransactions</button>
                             <a class="btn btn-primary" id="" href="/Invoice/GetAllTransactionByVendorId?Vid=@vendorid"><i class="ri-equalizer-line align-bottom me-1"></i> See AllTransactions</a>
                         </div>
 
@@ -222,7 +222,7 @@
                                         <td class="date">@item.VendorName<small class="text-muted"></small></td>
                                         <td class="form_name" id="txtvendorid" hidden>@item.VandorId</td>
                                         <td class="form_name" id="txtinvoicetype">@item.InvoiceType</td>
-                                        <td class="form_name" id="txtinvoiceno" hidden>@item.InvoiceType</td>
+                                        <td class="form_name" id="txtinvoiceno" hidden>@item.InvoiceNo</td>
                                         <td class="to_name" id="txtorderid">@item.OrderId</td>
                                         <td class="details" id="txtdate">@item.Date.ToString("dd/MM/yyyy")</td>
                                         <td>
@@ -341,7 +341,7 @@
                                 </div>
                             </div>
                             <div class="mt-3 pt-2">
-                                <button type="button" class="btn btn-primary w-100" id="creditdebitsubmitbtn" onclick="InsertCreditDebitDetails()">Buy Coin</button>
+                                <button type="button" class="btn btn-primary w-100" id="creditdebitsubmitbtn" onclick="InsertCreditDebitDetails()">Submit</button>
                             </div>
                         </div>
                     </div>

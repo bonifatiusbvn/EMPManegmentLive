@@ -34,9 +34,10 @@ function GetPaymentTypeList() {
 }
 
 function InsertCreditDebitDetails() {
+    debugger
     var value = $('#txtcreditdebitamount').val();
     if (value.trim() === '') {
-        
+
         $('#warningMessage').text('Please Enter value for credit amount!!');
         return;
     }
@@ -89,7 +90,7 @@ function GetCreditDebitTotalAmount() {
     var Vid = {
         VendorId: document.getElementById("txtvendorid").innerText,
     }
-    
+
     var form_data = new FormData();
     form_data.append("CREDITDEBITDETAILSBYID", JSON.stringify(Vid));
     $.ajax({
@@ -110,7 +111,7 @@ function GetCreditDebitTotalAmount() {
 
             var totalAmount = parseFloat($('#txttotalamount').val());
             var totalpendingAmount = totalAmount - total;
-            
+
             $("#txttotalpendingamount").text('₹' + totalpendingAmount);
             $("#pendingamount").text('₹' + totalpendingAmount);
 
