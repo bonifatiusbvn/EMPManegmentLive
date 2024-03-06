@@ -270,6 +270,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
         {
             IEnumerable<InvoiceViewModel> InvoiceList = from a in Context.TblInvoices
                                                         join b in Context.TblVendorMasters on a.VandorId equals b.Vid
+                                                        join c in Context.TblProjectMasters on a.ProjectId equals c.ProjectId
                                                         select new InvoiceViewModel
                                                         {
                                                             Id = a.Id,
@@ -278,6 +279,9 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                                                             InvoiceDate = a.InvoiceDate,
                                                             VendorName = b.VendorCompany,
                                                             VandorId = a.VandorId,
+                                                            OrderId = a.OrderId,
+                                                            ProjectId = a.ProjectId,
+                                                            ProjectName = c.ProjectName,
                                                             //ProductName = c.ProductName,
                                                             //ProductDetails = c.ProductShortDescription,
                                                             //HSN = c.Hsn,
@@ -285,6 +289,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                                                             //TotalGst = c.Gst,
                                                             DispatchThrough = a.DispatchThrough,
                                                             Destination = a.Destination,
+                                                            //TotalGst = a.TotalGst,
                                                             Cgst = a.Cgst,
                                                             Igst = a.Igst,
                                                             Sgst = a.Sgst,

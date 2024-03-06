@@ -287,7 +287,7 @@ function downloadPDF() {
 
 function GetAllVendorData() {
 
-    
+
     $('#VendorTableData').DataTable({
         processing: true,
         serverSide: true,
@@ -323,7 +323,7 @@ function GetAllVendorData() {
 }
 
 function getLastTransaction() {
-    
+
     var Vid = $('#txtvendorid').val();
 
     $.ajax({
@@ -340,7 +340,33 @@ function getLastTransaction() {
 
     });
 }
+function EditInvoceDetails() {
+    debugger
+    var Id = {
+        Id: document.getElementById("txtinvoiceid").innerText,
+    }
+    debugger
+    var form_data = new FormData();
+    form_data.append("ID", JSON.stringify(Id));
+    $.ajax({
+        url: '/Invoice/EditInvoceDetails',
+        type: 'Post',
+        data: form_data,
+        dataType: 'json',
+        contentType: false,
+        processData: false,
 
+        success: function (response) {
+            debugger
+            $('#EditInvoiceModel').modal('show');
+            $('#EditInvoiceNo').val(response.invoiceNo);
+            $('#EditVendorName').val(response.vendorName);
+            $('#EditProjectName').val(response.projectName);
+            $('#EditOrderId').val(response.orderId);
+            $('#Edittotalamount').val(response.totalAmount);
+        }
+    });
+}
 function getAllTransactions() {
 
     var Vid = $('#txtvendorid').val();
@@ -353,9 +379,12 @@ function getAllTransactions() {
         success: function (response) {
             $("#allCreditTransactions").html(response);
         },
-
+        error: function () {
+            alert("Data not found");
+        }
     });
 }
+
 function GetAllTransactionData() {
 
     $('#transactionTable').DataTable({

@@ -419,6 +419,26 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
+        [HttpPost]
+        public async Task<JsonResult> EditInvoceDetails()
+        {
+            try
+            {
+                var Id = HttpContext.Request.Form["ID"];
+                var InsertDetails = JsonConvert.DeserializeObject<InvoiceViewModel>(Id);
+                InvoiceViewModel InvoiceDetails = new InvoiceViewModel();
+                ApiResponseModel response = await APIServices.GetAsync("", "Invoice/GetInvoiceDetailsById?Id=" + InsertDetails.Id);
+                if (response.code == 200)
+                {
+                    InvoiceDetails = JsonConvert.DeserializeObject<InvoiceViewModel>(response.data.ToString());
+                }
+                return new JsonResult(InvoiceDetails);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 
 
