@@ -200,5 +200,30 @@ namespace EMPManagment.API.Controllers
             IEnumerable<CreditDebitView> creditdebit = await InvoiceMaster.GetCreditDebitListByVendorId(Vid);
             return Ok(new { code = 200, data = creditdebit.ToList() });
         }
+        [HttpGet]
+        [Route("DisplayInvoiceDetails")]
+        public async Task<IActionResult> DisplayInvoiceDetails(string OrderId)
+        {
+            UserResponceModel response = new UserResponceModel();
+            try
+            {
+                var orderdetails = InvoiceMaster.DisplayInvoiceDetails(OrderId);
+                if (orderdetails.Result.Code == 400)
+                {
+                    response.Message = orderdetails.Result.Message;
+                    response.Code = (int)HttpStatusCode.BadRequest;
+                }
+                else
+                {
+                    response.Data = orderdetails.Result.Data;
+                    response.Code = (int)HttpStatusCode.OK;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return StatusCode(response.Code, response);
+        }
     }
 }

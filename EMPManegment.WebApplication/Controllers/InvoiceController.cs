@@ -87,6 +87,25 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
+        public async Task<IActionResult> DisplayInvoiceDetails(string OrderId)
+        {
+            try
+            {
+                List<InvoiceViewModel> order = new List<InvoiceViewModel>();
+                ApiResponseModel response = await APIServices.GetAsync("", "Invoice/DisplayInvoiceDetails?OrderId=" + OrderId);
+                if (response.code == 200)
+                {
+                    order = JsonConvert.DeserializeObject<List<InvoiceViewModel>>(response.data.ToString());
+                    response.data = order;
+
+                }
+                return View(order);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
 
         [HttpGet]
         public async Task<IActionResult> GetInvoiceDetailsByOrderId(string OrderId)

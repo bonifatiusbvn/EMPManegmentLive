@@ -379,9 +379,9 @@ function getAllTransactions() {
         success: function (response) {
             $("#allCreditTransactions").html(response);
         },
-        error: function () {
-            alert("Data not found");
-        }
+        //error: function () {
+        //    alert("Data not found");
+        //}
     });
 }
 

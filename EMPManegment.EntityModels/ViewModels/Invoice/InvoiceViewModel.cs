@@ -72,5 +72,6 @@ namespace EMPManegment.EntityModels.ViewModels.Invoice
         public string? CardHolderName { get; set; }
         public decimal? CardNumber { get; set; }
         public string? CompanyAddress { get; set; }
+        public string? VendorCompanyEmail { get; set; }
     }
 }

@@ -7,6 +7,7 @@ using EMPManegment.Inretface.Interface.ProductMaster;
 using EMPManegment.Inretface.Services.InvoiceMaster;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,6 +25,11 @@ namespace EMPManegment.Services.InvoiceMaster
         public string CheckInvoiceNo(string porjectname)
         {
             return InvoiceMaster.CheckInvoiceNo(porjectname);
+        }
+
+        public Task<UserResponceModel> DisplayInvoiceDetails(string OrderId)
+        {
+            return InvoiceMaster.DisplayInvoiceDetails(OrderId);
         }
 
         public Task<jsonData> GetAllTransaction(DataTableRequstModel dataTable)
@@ -74,6 +80,11 @@ namespace EMPManegment.Services.InvoiceMaster
         public async Task<UserResponceModel> InsertInvoiceDetails(GenerateInvoiceModel InsertInvoice)
         {
             return await InvoiceMaster.InsertInvoiceDetails(InsertInvoice);
+        }
+
+        Task<UserResponceModel> IInvoiceMasterServices.DisplayInvoiceDetails(string OrderId)
+        {
+            throw new NotImplementedException();
         }
     }
 }
