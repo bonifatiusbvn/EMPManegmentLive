@@ -33,6 +33,8 @@ public partial class TblOrderMaster
 
     public decimal? AmountPerUnit { get; set; }
 
+    public decimal? SubTotal { get; set; }
+
     public decimal TotalAmount { get; set; }
 
     public DateTime OrderDate { get; set; }

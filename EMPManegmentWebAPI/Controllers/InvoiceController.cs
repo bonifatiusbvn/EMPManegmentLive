@@ -204,7 +204,7 @@ namespace EMPManagment.API.Controllers
         [Route("DisplayInvoiceDetails")]
         public async Task<IActionResult> DisplayInvoiceDetails(string OrderId)
         {
-            UserResponceModel response = new UserResponceModel();
+            OrderResponseModel response = new OrderResponseModel();
             try
             {
                 var orderdetails = InvoiceMaster.DisplayInvoiceDetails(OrderId);

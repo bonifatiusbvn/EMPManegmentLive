@@ -847,5 +847,7 @@ $(document).on("click", "#backbtn", function (e) {
 });
 
 function BtnSearchDetails() {
+    
+
     GetActiveDeactiveList(1);
 }

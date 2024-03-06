@@ -286,6 +286,7 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.Property(e => e.ProductName).HasMaxLength(50);
             entity.Property(e => e.ProductShortDescription).HasMaxLength(50);
             entity.Property(e => e.Quantity).HasMaxLength(50);
+            entity.Property(e => e.SubTotal).HasColumnType("decimal(18, 0)");
             entity.Property(e => e.TotalAmount).HasColumnType("decimal(18, 0)");
             entity.Property(e => e.TotalGst).HasColumnType("decimal(18, 0)");
             entity.Property(e => e.Type).HasMaxLength(20);

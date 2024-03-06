@@ -165,5 +165,35 @@ namespace EMPManagment.API.Controllers
             var checkProject = ProjectDetail.CheckProjectName();
             return Ok(new { code = 200, data = checkProject });
         }
+
+
+        [HttpPost]
+        [Route("IsDeletedMember")]
+        public async Task<IActionResult> IsDeletedMember(ProjectMemberUpdate projectMember)
+        {
+            UserResponceModel responseModel = new UserResponceModel();
+
+            var Member = await ProjectDetail.MemberIsDeleted(projectMember);
+            try
+            {
+
+                if (Member != null)
+                {
+
+                    responseModel.Code = (int)HttpStatusCode.OK;
+                    responseModel.Message = Member.Message;
+                }
+                else
+                {
+                    responseModel.Message = Member.Message;
+                    responseModel.Code = (int)HttpStatusCode.NotFound;
+                }
+            }
+            catch (Exception ex)
+            {
+                responseModel.Code = (int)HttpStatusCode.InternalServerError;
+            }
+            return StatusCode(responseModel.Code, responseModel);
+        }
     }
 }
