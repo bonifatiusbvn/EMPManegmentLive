@@ -1,9 +1,11 @@
 ﻿using EMPManagment.Web.Helper;
 using EMPManagment.Web.Models.API;
 using EMPManegment.EntityModels.ViewModels.Models;
+using EMPManegment.EntityModels.ViewModels.OrderModels;
 using EMPManegment.EntityModels.ViewModels.POMaster;
 using EMPManegment.Web.Models;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace EMPManegment.Web.Controllers
 {
@@ -38,25 +40,32 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
-
         [HttpPost]
-        public async Task<IActionResult> CreateOP(OPMasterView CreatePO)
+        public async Task<IActionResult> CreatePO()
         {
             try
             {
-                ApiResponseModel postuser = await APIServices.PostAsync(CreatePO, "ProjectDetails/CreateProject");
-                UserResponceModel responseModel = new UserResponceModel();
+                var PurchaseOrder = HttpContext.Request.Form["PURCHASEORDER"];
+                var InsertDetails = JsonConvert.DeserializeObject<List<OPMasterView>>(PurchaseOrder.ToString());
+                ApiResponseModel postuser = await APIServices.PostAsync(InsertDetails, "POMaster/CreatePO");
                 if (postuser.code == 200)
                 {
                     return Ok(new { postuser.message });
                 }
-
-                return View();
+                else
+                {
+                    return Ok(new { postuser.message });
+                }
             }
             catch (Exception ex)
             {
                 throw ex;
             }
+        }
+
+        public async Task<IActionResult> GetPOList()
+        {
+            return View();
         }
     }
 

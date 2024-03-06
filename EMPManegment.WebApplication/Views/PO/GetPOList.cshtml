@@ -1,8 +1,8 @@
-﻿@model List<EMPManegment.EntityModels.ViewModels.Invoice.InvoiceViewModel>
-@{
-    ViewData["Title"] = "InvoiceListView";
+﻿@{
+    ViewData["Title"] = "GetPOList";
     Layout = "~/Views/Shared/_UserHomeLayout.cshtml";
 }
+
 
 <!-- start page title -->
 <div class="row">
@@ -13,14 +13,13 @@
             <div class="page-title-right">
                 <ol class="breadcrumb m-0">
                     <li class="breadcrumb-item"><a href="javascript: void(0);">Invoices</a></li>
-                    <li class="breadcrumb-item active">List View</li>
+                    <li class="breadcrumb-item active">Invoice List</li>
                 </ol>
             </div>
 
         </div>
     </div>
 </div>
-<!-- end page title -->
 
 <div class="row">
     <div class="col-lg-12">
@@ -31,69 +30,11 @@
                     <div class="flex-shrink-0">
                         <div class="d-flex gap-2 flex-wrap">
                             <button class="btn btn-primary" id="remove-actions" onClick="deleteMultiple()"><i class="ri-delete-bin-2-line"></i></button>
-                            <a asp-action="CreateInvoice" asp-controller="Invoice" class="btn btn-soft-primary"><i class="ri-add-line align-bottom me-1"></i> Create Invoice</a>
+                            <a href="apps-invoices-create.html" class="btn btn-soft-primary"><i class="ri-add-line align-bottom me-1"></i> Create Invoice</a>
                         </div>
                     </div>
                 </div>
             </div>
-            <!--Edit Invoice Modal -->
-            <div class="modal fade zoomIn" id="EditInvoiceModel" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class=" modal-dialog modal-dialog-centered modal-lg">
-                    <div class="modal-content border-0">
-                        <div class="modal-header bg-primary-subtle p-3">
-                            <h5 class="modal-title" id="editModalLabel">Edit Invoice Details</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <form id="editinvoicedetails">
-
-                                <div class="row">
-                                    <div class="col-lg-6">
-                                        <div class="mb-3">
-                                            <label for="txtinvoice" class="form-label">InvoiceNo</label>
-                                            <input type="text" class="form-control" id="EditInvoiceNo" />
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">VendorName</label>
-                                            <input type="text" id="EditVendorName" class="form-control" />
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-lg-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">ProjectName</label>
-                                            <input type="text" id="EditProjectName" class="form-control" />
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">OrderId</label>
-                                            <input type="text" id="EditOrderId" class="form-control" />
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-lg-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">Total Amount</label>
-                                            <input type="text" id="Edittotalamount" class="form-control" />
-                                        </div>
-                                    </div>
-                                    </div>
-                            </form>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-light" id="close-modal" data-bs-dismiss="modal" onclick="ClearTextBox()">Close</button>
-                            <button class="btn btn-warning m-1" onclick="UpdateInvoiceDetails()" id="btnUpdate">Update</button>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!--end Edit Expense modal-->
             <div class="card-body bg-light-subtle border border-dashed border-start-0 border-end-0">
                 <form>
                     <div class="row g-3">
@@ -138,35 +79,29 @@
                         <table class="table align-middle table-nowrap" id="invoiceTable">
                             <thead class="text-muted">
                                 <tr>
-                                    <th class="sort text-uppercase" data-sort="isnvoiceNo">InvoiceNo</th>
-                                    <th class="sort text-uppercase" data-sort="isnvoiceNo">VendorName</th>
-                                    <th class="sort text-uppercase" data-sort="isnvoiceNo">ProjectName</th>
-                                    <th class="sort text-uppercase" data-sort="isnvoiceNo">OrderId</th>
-                                    <th class="sort text-uppercase" data-sort="invoiceDate">TotalAmount</th>
+                                    <th scope="col" style="width: 50px;">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="checkAll" value="option">
+                                        </div>
+                                    </th>
+                                    <th class="sort text-uppercase" data-sort="invoice_id">ID</th>
+                                    <th class="sort text-uppercase" data-sort="customer_name">
+                                        Customer
+                                    </th>
+                                    <th class="sort text-uppercase" data-sort="email">Email</th>
+                                    <th class="sort text-uppercase" data-sort="country">Country</th>
+                                    <th class="sort text-uppercase" data-sort="date">Date</th>
+                                    <th class="sort text-uppercase" data-sort="invoice_amount">
+                                        Amount
+                                    </th>
+                                    <th class="sort text-uppercase" data-sort="status">
+                                        Payment
+                                        Status
+                                    </th>
                                     <th class="sort text-uppercase" data-sort="action">Action</th>
                                 </tr>
                             </thead>
                             <tbody class="list form-check-all" id="invoice-list-data">
-                                @foreach (var item in Model)
-                                {
-                                    <tr>
-                                        <td class="fw-medium link-primary"><a href="/Invoice/DisplayInvoiceDetails?OrderId=@item.OrderId">@item.InvoiceNo</a></td>
-                                        <td>@item.VendorName</td>
-                                        <td>@item.ProjectName</td>
-                                        <td id="txtinvoiceid" hidden>@item.Id</td>
-                                        <td>@item.OrderId</td> 
-                                        <td>@item.TotalAmount</td>
-                                        <td>
-                                            <ul class="list-inline hstack gap-2 mb-0">
-                                                <li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">
-                                                    <a  onclick="EditInvoceDetails()" data-bs-toggle="modal" class="text-primary d-inline-block edit-item-btn">
-                                                        <i class="ri-pencil-fill fs-16"></i>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </td>
-                                    </tr>
-                                }
                             </tbody>
                         </table>
                         <div class="noresult" style="display: none">
@@ -222,8 +157,5 @@
 
     </div>
     <!--end col-->
-</div> <!-- end row-->
+</div>
 <!--end row-->
-<script src="~/lib/jquery/dist/jquery.js"></script>
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script src="~/moduls/invoicemasterscript.js"></script>

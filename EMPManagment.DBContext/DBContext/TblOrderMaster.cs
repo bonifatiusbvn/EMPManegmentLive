@@ -27,11 +27,13 @@ public partial class TblOrderMaster
 
     public string Quantity { get; set; } = null!;
 
+    public decimal? GstPerUnit { get; set; }
+
     public decimal? TotalGst { get; set; }
 
-    public decimal? Amount { get; set; }
+    public decimal? AmountPerUnit { get; set; }
 
-    public decimal? Total { get; set; }
+    public decimal TotalAmount { get; set; }
 
     public DateTime OrderDate { get; set; }
 

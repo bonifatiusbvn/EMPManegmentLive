@@ -821,8 +821,7 @@ function GetSearchEmpList() {
 function GetActiveDeactiveList(page) {
 
     var searchBy = $("#searchEmployee").val();
-    var searchFor = $("#ddlusername").val();
-    
+    var searchFor = $('#txtsearchfor').val();
     $.get("/UserProfile/UserActiveDecativeList", { searchby: searchBy, searchfor: searchFor, page: page })
         .done(function (result) {
 
@@ -835,15 +834,13 @@ function GetActiveDeactiveList(page) {
 
 GetActiveDeactiveList(1);
 $(document).on("click", ".pagination a", function (e) {
-   
     e.preventDefault();
     var page = $(this).text();
     GetActiveDeactiveList(page);
 });
 
 
-$(document).on("click", "#btnbackButton", function (e) {
-  
+$(document).on("click", "#backbtn", function (e) {
     e.preventDefault();
     var page = $(this).text();
     GetActiveDeactiveList(page);

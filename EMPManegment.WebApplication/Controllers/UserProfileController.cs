@@ -139,7 +139,7 @@ namespace EMPManegment.Web.Controllers
             try
             {
                 List<EmpDetailsView> ActiveDecative = new List<EmpDetailsView>();
-                ApiResponseModel res = await APIServices.GetAsync("", "UserProfile/GetAllUsersDetails?searchby=" + searchby + "&searchfor=" + searchfor);
+                ApiResponseModel res = await APIServices.GetAsync("", "UserProfile/GetActiveDeactiveUserList?searchby=" + searchby + "&searchfor=" + searchfor);
                 if (res.code == 200)
                 {
                     ActiveDecative = JsonConvert.DeserializeObject<List<EmpDetailsView>>(res.data.ToString());

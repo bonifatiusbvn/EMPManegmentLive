@@ -1,4 +1,112 @@
 ﻿
+$(document).ready(function () {
+    GetVendorNameList();
+    GetProducts();
+    GetPaymentMethodList();
+});
+function GetVendorNameList() {
+
+    $.ajax({
+        url: '/ProductMaster/GetVendorsNameList',
+        success: function (result) {
+            $.each(result, function (i, data) {
+                $('#txtvendorname').append('<Option value=' + data.id + '>' + data.vendorCompany + '</Option>')
+            });
+        }
+    });
+}
+function selectvendorId() {
+    document.getElementById("txtvendorTypeid").value = document.getElementById("txtvendorname").value;
+}
+function GetProducts() {
+    $.ajax({
+        url: '/ProductMaster/GetProduct',
+        success: function (result) {
+            $.each(result, function (i, data) {
+                $('#txtProducts').append('<Option value=' + data.id + '>' + data.productName + '</Option>')
+            });
+        }
+    });
+}
+function GetPaymentTypeList() {
+    $.ajax({
+        url: '/ExpenseMaster/GetPaymentTypeList',
+        success: function (result) {
+            $.each(result, function (i, data) {
+                $('#paymenttype').append('<Option value=' + data.id + '>' + data.type + '</Option>')
+            });
+        }
+    });
+}
+function selectProductTypeId() {
+    document.getElementById("txtProductTypeid").value = document.getElementById("txtProducts").value;
+}
+function GetPaymentMethodList() {
+
+    $.ajax({
+        url: '/OrderMaster/GetPaymentMethodList',
+        success: function (result) {
+            $.each(result, function (i, data) {
+                $('#txtpaymentmethod').append('<Option value=' + data.id + '>' + data.paymentMethod + '</Option>')
+            });
+        }
+    });
+}
+$(document).ready(function () {
+    $('#txtvendorname').change(function () {
+        var Text = $("#txtvendorname Option:Selected").text();
+        var ProductId = $(this).val();
+        $("#txtvendornameid").val(Text);
+        $('#productname').empty();
+        $('#productname').append('<Option >--Select Product--</Option>');
+        $.ajax({
+            url: '/ProductMaster/GetProductById?ProductId=' + ProductId,
+            success: function (result) {
+
+                $.each(result, function (i, data) {
+                    $('#productname').append('<Option value=' + data.id + '>' + data.productType + '</Option>')
+                });
+            }
+        });
+    });
+});
+
+$(document).ready(function () {
+    $('#txtProducts').change(function () {
+
+
+        var Text = $("#txtProducts Option:Selected").text();
+        var ProductTypeId = $(this).val();
+        var VendorTypeId = $("#txtvendorname").val();
+        var Productid = $("#txtProductid").val(ProductTypeId);
+        $("#txtProductTypeid").val(Text);
+        $('#searchproductname').empty();
+        $('#searchproductname').append('<Option >--Select ProductName--</Option>');
+        $.ajax({
+            url: '/ProductMaster/SerchProductByVendor?ProductId=' + ProductTypeId + '&VendorId=' + VendorTypeId,
+            type: 'Post',
+            success: function (result) {
+                $.each(result, function (i, data) {
+                    $('#searchproductname').append('<Option value=' + data.id + '>' + data.productName + '</Option>');
+                    $('#txtvendorname').prop('disabled', true);
+                    $('#txtProducts').prop('disabled', true);
+                });
+            }
+        });
+    });
+});
+function searchProductTypeId() {
+    document.getElementById("searchproductnameid").value = document.getElementById("searchproductname").value;
+}
+
+function SerchProductDetailsById() {
+
+    var GetProductId = {
+        Id: $('#searchproductname').val(),
+        RowNumber: $('#addNewlink tr').length,
+    }
+    var form_data = new FormData();
+    form_data.append("PRODUCTID", JSON.stringify(GetProductId));
 
 // Function to handle form submission
 function saveFormData(event) {
@@ -27,16 +135,97 @@ function saveFormData(event) {
         // Add more fields as needed
     };
 
-    // You can now use the formData object to perform further operations,
-    // such as sending it to a server via AJAX or processing it locally.
+    $.ajax({
+        url: '/ProductMaster/DisplayProductDetailsById',
+        type: 'Post',
+        datatype: 'json',
+        data: form_data,
+        processData: false,
+        contentType: false,
+        complete: function (Result) {
 
-    // For demonstration, log the formData object to the console
-    console.log(formData);
+            if (Result.statusText === "success") {
+                AddNewRow(Result.responseText);
+            }
+            else {
+                var vendorname = $('#txtvendorname').val();
+                var productname = $('#txtProducts').val();
+                var serchproductname = $('#searchproductname').val();
+                if (vendorname === '' || vendorname === null) {
+                    $('#vendorvalidationMessage').text('Please select Vendor!!');
+                }
+                if (productname === "--Select Product--" || productname === null) {
+                    $('#productvalidationMessage').text('Please select ProductType!!');
+                }
+                if (serchproductname === "--Select ProductName--" || serchproductname === null) {
+                    $('#searchvalidationMessage').text('Please select ProductName!!');
+                }
+                else {
+                    $('#vendorvalidationMessage').text('');
+                    $('#productvalidationMessage').text('');
+                    $('#searchvalidationMessage').text('');
+                }
+            }
+        }
+    });
 }
+function CreatePurchaseOrder() {
 
-// Add form submission event listener
-var form = document.getElementById('invoice_form');
-form.addEventListener('submit', saveFormData);
+    var orderDetails = [];
+    var numOrders = $(".product").length;
+    $(".product").each(function () {
+        var orderRow = $(this);
+        var objData = {
+            ProjectId: $("#txtProjectId").val(),
+            Opid: $("#orderId").val(),
+            Status: $("#txtPaymentStatus").val(),
+            OrderDate: $("#orderdate").val(),
+            DeliveryDate: $("#deliverydate").val(),
+            VendorId: $("#txtvendorname").val(),
+            CompanyName: $("#txtvendornameid").val(),
+            CreatedBy: $("#txtuserid").val(),
+            ProductId: orderRow.find("#Product_Id").val(),
+            ProductType: orderRow.find("#Product_TypeId").val(),
+            Quantity: orderRow.find("#txtproductquantity").val(),
+            TotalAmount: orderRow.find("#txtproducttotalamount").val(),
+            ProductShortDescription: orderRow.find("#txtproductDescription").val(),
+            ProductName: orderRow.find("#txtproductName").val(),
+        };
+        orderDetails.push(objData);
+    });
+    var form_data = new FormData();
+    form_data.append("PURCHASEORDER", JSON.stringify(orderDetails));
+    count
+    $.ajax({
+        url: '/PO/CreatePO',
+        type: 'POST',
+        data: form_data,
+        dataType: 'json',
+        contentType: false,
+        processData: false,
+        success: function (result) {
+            if (result.message != null) {
+                Swal.fire({
+                    title: result.message,
+                    icon: 'success',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'OK',
+                }).then(function () {
+                    window.location = '/PO/CreateOP';
+                });
+            }
+        },
+        error: function (xhr, status, error) {
+            Swal.fire({
+                title: 'Error',
+                text: 'An error occurred while processing your request.',
+                icon: 'error',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'OK',
+            });
+        }
+    });
+}
 
 
 var paymentSign = "$";
@@ -435,4 +624,3 @@ document.addEventListener("DOMContentLoaded", function () {
         })), window.location.href = "apps-invoices-list.html")
     })
 });
-

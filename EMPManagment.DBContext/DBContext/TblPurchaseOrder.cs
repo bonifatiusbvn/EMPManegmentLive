@@ -11,6 +11,18 @@ public partial class TblPurchaseOrder
 
     public string? Opid { get; set; }
 
+    public string? CompanyName { get; set; }
+
+    public string? ProductName { get; set; }
+
+    public string? ProductShortDescription { get; set; }
+
+    public Guid? ProductId { get; set; }
+
+    public int? ProductType { get; set; }
+
+    public string? Quantity { get; set; }
+
     public DateTime? OrderDate { get; set; }
 
     public DateTime? DeliveryDate { get; set; }
@@ -22,6 +34,8 @@ public partial class TblPurchaseOrder
     public DateTime? CreatedOn { get; set; }
 
     public Guid? CreatedBy { get; set; }
+
+    public virtual TblProductDetailsMaster? Product { get; set; }
 
     public virtual TblVendorMaster? Vendor { get; set; }
 }

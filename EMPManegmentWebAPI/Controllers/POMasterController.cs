@@ -1,5 +1,6 @@
 ﻿using EMPManegment.EntityModels.ViewModels.Invoice;
 using EMPManegment.EntityModels.ViewModels.Models;
+using EMPManegment.EntityModels.ViewModels.OrderModels;
 using EMPManegment.EntityModels.ViewModels.POMaster;
 using EMPManegment.Inretface.Interface.InvoiceMaster;
 using EMPManegment.Inretface.Interface.OrderDetails;
@@ -23,22 +24,21 @@ namespace EMPManagment.API.Controllers
 
         [HttpPost]
         [Route("CreatePO")]
-        public async Task<IActionResult> CreatePO(OPMasterView POList)
+        public async Task<IActionResult> CreatePO(List<OPMasterView> createPO)
         {
             UserResponceModel response = new UserResponceModel();
             try
             {
-                var createInvoice = POServices.CreatePO(POList);
-                if (createInvoice.Result.Code == 200)
+                var purchaseorder = POServices.CreatePO(createPO);
+                if (purchaseorder.Result.Code == 200)
                 {
                     response.Code = (int)HttpStatusCode.OK;
-                    response.Message = createInvoice.Result.Message;
+                    response.Message = purchaseorder.Result.Message;
                 }
                 else
                 {
-                    response.Message = createInvoice.Result.Message;
+                    response.Message = purchaseorder.Result.Message;
                     response.Code = (int)HttpStatusCode.NotFound;
-
                 }
             }
             catch (Exception ex)

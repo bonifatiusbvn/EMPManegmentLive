@@ -44,8 +44,8 @@ namespace EMPManegment.Repository.OrderRepository
                     VendorId = CreateOrder.VendorId,
                     ProductType = CreateOrder.Product,
                     Quantity = CreateOrder.Quantity,
-                    Amount = CreateOrder.Amount,
-                    Total = CreateOrder.Total,
+                    AmountPerUnit = CreateOrder.AmountPerUnit,
+                    TotalAmount = CreateOrder.TotalAmount,
                     OrderDate = CreateOrder.OrderDate,
                     DeliveryDate = CreateOrder.DeliveryDate,
                     PaymentMethod = CreateOrder.PaymentMethod,
@@ -67,30 +67,52 @@ namespace EMPManegment.Repository.OrderRepository
 
         public async Task<IEnumerable<OrderDetailView>> GetOrderList()
         {
-            IEnumerable<OrderDetailView> data = from a in Context.TblOrderMasters
-                                                join b in Context.TblVendorMasters on a.VendorId equals b.Vid
-                                                join c in Context.TblProductTypeMasters on a.ProductType equals c.Id
-                                                join d in Context.TblPaymentMethodTypes on a.PaymentMethod equals d.Id
-                                                select new OrderDetailView
-                                                {
-                                                    Id= a.Id,
-                                                    OrderId = a.OrderId,
-                                                    ProductId = a.ProductId,
-                                                    CompanyName = b.VendorCompany,
-                                                    VendorId = a.VendorId,
-                                                    ProductName = c.Type,
-                                                    Quantity = a.Quantity,
-                                                    OrderDate = a.OrderDate,
-                                                    Total = a.Total,
-                                                    Amount = a.Amount,
-                                                    PaymentMethod = a.PaymentMethod,
-                                                    PaymentMethodName=d.PaymentMethod,
-                                                    DeliveryStatus = a.DeliveryStatus,
-                                                    DeliveryDate = a.DeliveryDate,
-                                                    CreatedOn = a.CreatedOn,
-                                                };
-            return data;
+            try
+            {
+                var data = await (from a in Context.TblOrderMasters
+                                  join b in Context.TblVendorMasters on a.VendorId equals b.Vid
+                                  join c in Context.TblProductTypeMasters on a.ProductType equals c.Id
+                                  join d in Context.TblPaymentMethodTypes on a.PaymentMethod equals d.Id
+                                  select new
+                                  {
+                                      Order = a,
+                                      Vendor = b,
+                                      ProductType = c,
+                                      PaymentMethod = d
+                                  }).ToListAsync();
+
+                var orderList = data.GroupBy(x => x.Order.OrderId)
+                                    .Select(group => group.First())
+                                    .Select(item => new OrderDetailView
+                                    {
+                                        Id = item.Order.Id,
+                                        OrderId = item.Order.OrderId,
+                                        ProductId = item.Order.ProductId,
+                                        CompanyName = item.Vendor.VendorCompany,
+                                        VendorId = item.Order.VendorId,
+                                        ProductName = item.ProductType.Type,
+                                        Quantity = item.Order.Quantity,
+                                        OrderDate = item.Order.OrderDate,
+                                        TotalAmount = item.Order.TotalAmount,
+                                        AmountPerUnit = item.Order.AmountPerUnit,
+                                        PaymentMethod = item.Order.PaymentMethod,
+                                        PaymentMethodName = item.PaymentMethod.PaymentMethod,
+                                        DeliveryStatus = item.Order.DeliveryStatus,
+                                        DeliveryDate = item.Order.DeliveryDate,
+                                        CreatedOn = item.Order.CreatedOn,
+                                    });
+
+                return orderList.ToList();
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
         }
+
+
+
 
         public async Task<List<OrderDetailView>> GetOrderDetailsByStatus(string DeliveryStatus)
         {
@@ -108,8 +130,8 @@ namespace EMPManegment.Repository.OrderRepository
                         Product = item.ProductType,
                         Quantity = item.Quantity,
                         OrderDate = item.OrderDate,
-                        Total = item.Total,
-                        Amount = item.Amount,
+                        TotalAmount = item.TotalAmount,
+                        AmountPerUnit = item.AmountPerUnit,
                         PaymentMethod = item.PaymentMethod,
                         DeliveryStatus = item.DeliveryStatus,
                         DeliveryDate = item.DeliveryDate,
@@ -171,14 +193,16 @@ namespace EMPManegment.Repository.OrderRepository
                         ProductType = item.ProductType,
                         ProductId = item.ProductId,
                         Quantity = item.Quantity,
-                        Amount = item.Amount,
-                        Total = item.Total,
+                        AmountPerUnit = item.AmountPerUnit,
+                        TotalGst = item.TotalGst,
+                        GstPerUnit = item.GstPerUnit,
+                        TotalAmount = item.TotalAmount,
                         OrderDate = item.OrderDate,
                         DeliveryDate = item.DeliveryDate,
                         PaymentMethod = item.PaymentMethod,
                         PaymentStatus = item.PaymentStatus,
                         DeliveryStatus = "Pending",
-                        OrderStatus="Confirmed",
+                        OrderStatus = "Confirmed",
                         CreatedOn = DateTime.Now,
                         CreatedBy = item.CreatedBy,
                         ProjectId = item.ProjectId,
@@ -227,8 +251,8 @@ namespace EMPManegment.Repository.OrderRepository
                                       OrderDate = a.OrderDate,
                                       PerUnitPrice = c.PerUnitPrice,
                                       PerUnitWithGstprice = c.PerUnitWithGstprice,
-                                      Total = a.Total,
-                                      Amount = a.Amount,
+                                      TotalAmount = a.TotalAmount,
+                                      AmountPerUnit = a.AmountPerUnit,
                                       PaymentMethod = a.PaymentMethod,
                                       PaymentStatus = a.PaymentStatus,
                                       DeliveryStatus = a.DeliveryStatus,
@@ -256,8 +280,8 @@ namespace EMPManegment.Repository.OrderRepository
                             OrderDate = item.OrderDate,
                             PerUnitPrice = item.PerUnitPrice,
                             PerUnitWithGstprice = item.PerUnitWithGstprice,
-                            Total = item.Total,
-                            Amount = item.Amount,
+                            TotalAmount = item.TotalAmount,
+                            AmountPerUnit = item.AmountPerUnit,
                             PaymentMethod = item.PaymentMethod,
                             DeliveryStatus = item.DeliveryStatus,
                             DeliveryDate = item.DeliveryDate,
@@ -304,14 +328,14 @@ namespace EMPManegment.Repository.OrderRepository
                     OrderDetails = new UpdateOrderView()
                     {
                         Id = data.Id,
-                        OrderId=data.OrderId,
+                        OrderId = data.OrderId,
                         OrderDate = data.OrderDate,
                         CompanyName = data.CompanyName,
-                        ProductName=data.ProductName,
-                        Total=data.Total,
-                        PaymentMethod=data.PaymentMethod,
-                        DeliveryStatus=data.DeliveryStatus,
-                        OrderStatus=data.OrderStatus,
+                        ProductName = data.ProductName,
+                        TotalAmount = data.TotalAmount,
+                        PaymentMethod = data.PaymentMethod,
+                        DeliveryStatus = data.DeliveryStatus,
+                        OrderStatus = data.OrderStatus,
                     };
                 }
 
@@ -332,11 +356,11 @@ namespace EMPManegment.Repository.OrderRepository
                 if (orderdetails != null)
                 {
                     orderdetails.Id = Updateorder.Id;
-                   orderdetails.OrderId = Updateorder.OrderId;
+                    orderdetails.OrderId = Updateorder.OrderId;
                     orderdetails.OrderDate = Updateorder.OrderDate;
                     orderdetails.CompanyName = Updateorder.CompanyName;
                     orderdetails.ProductName = Updateorder.ProductName;
-                    orderdetails.Total = Updateorder.Total;
+                    orderdetails.TotalAmount = Updateorder.TotalAmount;
                     orderdetails.PaymentMethod = Updateorder.PaymentMethod;
                     orderdetails.DeliveryStatus = Updateorder.DeliveryStatus;
                     orderdetails.OrderStatus = Updateorder.OrderStatus;

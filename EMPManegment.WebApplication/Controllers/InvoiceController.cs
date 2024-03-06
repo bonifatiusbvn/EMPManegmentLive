@@ -87,6 +87,25 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
+        public async Task<IActionResult> DisplayInvoiceDetails(string OrderId)
+        {
+            try
+            {
+                List<InvoiceViewModel> order = new List<InvoiceViewModel>();
+                ApiResponseModel response = await APIServices.GetAsync("", "Invoice/DisplayInvoiceDetails?OrderId=" + OrderId);
+                if (response.code == 200)
+                {
+                    order = JsonConvert.DeserializeObject<List<InvoiceViewModel>>(response.data.ToString());
+                    response.data = order;
+
+                }
+                return View(order);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
 
         [HttpGet]
         public async Task<IActionResult> GetInvoiceDetailsByOrderId(string OrderId)
@@ -413,6 +432,26 @@ namespace EMPManegment.Web.Controllers
                     creditdebit = JsonConvert.DeserializeObject<List<CreditDebitView>>(response.data.ToString());
                 }
                 return new JsonResult(creditdebit);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        [HttpPost]
+        public async Task<JsonResult> EditInvoceDetails()
+        {
+            try
+            {
+                var Id = HttpContext.Request.Form["ID"];
+                var InsertDetails = JsonConvert.DeserializeObject<InvoiceViewModel>(Id);
+                InvoiceViewModel InvoiceDetails = new InvoiceViewModel();
+                ApiResponseModel response = await APIServices.GetAsync("", "Invoice/GetInvoiceDetailsById?Id=" + InsertDetails.Id);
+                if (response.code == 200)
+                {
+                    InvoiceDetails = JsonConvert.DeserializeObject<InvoiceViewModel>(response.data.ToString());
+                }
+                return new JsonResult(InvoiceDetails);
             }
             catch (Exception ex)
             {

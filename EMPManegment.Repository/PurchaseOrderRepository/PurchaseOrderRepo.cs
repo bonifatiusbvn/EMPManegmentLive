@@ -1,5 +1,6 @@
 ﻿using EMPManagment.API;
 using EMPManegment.EntityModels.ViewModels.Models;
+using EMPManegment.EntityModels.ViewModels.OrderModels;
 using EMPManegment.EntityModels.ViewModels.POMaster;
 using EMPManegment.EntityModels.ViewModels.ProjectModels;
 using EMPManegment.Inretface.Interface.PurchaseOrder;
@@ -22,33 +23,6 @@ namespace EMPManegment.Repository.PurchaseOrderRepository
 
         public BonifatiusEmployeesContext Context { get; }
 
-        public async Task<UserResponceModel> CreatePO(OPMasterView CreatePO)
-        {
-            UserResponceModel response = new UserResponceModel();
-            try
-            {
-                var Pomodel = new TblPurchaseOrder()
-                {
-                    Id = Guid.NewGuid(),
-                    VendorId = CreatePO.VendorId,
-                    Opid = CreatePO.Opid,
-                    OrderDate = CreatePO.OrderDate,
-                    DeliveryDate = CreatePO.DeliveryDate,
-                    Status = CreatePO.Status,
-                    TotalAmount = CreatePO.TotalAmount,
-                };
-                response.Code = 200;
-                response.Message = "PO add successfully!";
-                Context.TblPurchaseOrders.Add(Pomodel);
-                Context.SaveChanges();
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-            return response;
-        }
-
         public string CheckOPNo(string projectname)
         {
             try
@@ -67,7 +41,7 @@ namespace EMPManegment.Repository.PurchaseOrderRepository
                     if (LastOrder.OrderId.Length >= 25)
                     {
                         int orderNumber = int.Parse(LastOrder.OrderId.Substring(24)) + 1;
-                        POId = $"BTPL/ODR/{projectname}/{lastYear % 100}-{currentYear % 100}-" + orderNumber.ToString("D3");
+                        POId = $"BTPL/OP/{projectname}/{lastYear % 100}-{currentYear % 100}-" + orderNumber.ToString("D3");
                     }
                     else
                     {
@@ -80,6 +54,67 @@ namespace EMPManegment.Repository.PurchaseOrderRepository
             {
                 throw ex;
             }
+        }
+
+        public async Task<UserResponceModel> CreatePO(List<OPMasterView> CreatePO)
+        {
+            UserResponceModel response = new UserResponceModel();
+            try
+            {
+                foreach (var item in CreatePO)
+                {
+                    var purchaseorder = new TblPurchaseOrder()
+                    {
+                        Id = Guid.NewGuid(),
+                        VendorId = item.VendorId,
+                        Opid = item.Opid,
+                        CompanyName = item.CompanyName,
+                        ProductName = item.ProductName,
+                        ProductShortDescription = item.ProductShortDescription,
+                        ProductId = item.ProductId,
+                        ProductType = item.ProductType,
+                        Quantity = item.Quantity,
+                        OrderDate = item.OrderDate,
+                        DeliveryDate = item.DeliveryDate,
+                        Status = item.Status,
+                        TotalAmount = item.TotalAmount,
+                        CreatedBy = item.CreatedBy,
+                        CreatedOn = DateTime.Now,
+                    };
+                    Context.TblPurchaseOrders.Add(purchaseorder);
+                }
+
+                await Context.SaveChangesAsync();
+                response.Code = 200;
+                response.Message = "Purchase Order Created successfully!";
+            }
+            catch (Exception ex)
+            {
+                response.Code = 500;
+                response.Message = "Error creating orders: " + ex.Message;
+            }
+            return response;
+        }
+
+        public async Task<IEnumerable<OPMasterView>> GetPOList()
+        {
+            IEnumerable<OPMasterView> data = from a in Context.TblPurchaseOrders
+                                             join b in Context.TblVendorMasters on a.VendorId equals b.Vid
+                                             join c in Context.TblProductTypeMasters on a.ProductType equals c.Id
+                                             select new OPMasterView
+                                             {
+                                                 Id = a.Id,
+                                                 ProductId = a.ProductId,
+                                                 CompanyName = b.VendorCompany,
+                                                 VendorId = a.VendorId,
+                                                 ProductName = c.Type,
+                                                 Quantity = a.Quantity,
+                                                 TotalAmount = a.TotalAmount,
+                                                 OrderDate = a.OrderDate,
+                                                 DeliveryDate = a.DeliveryDate,
+                                                 CreatedOn = a.CreatedOn
+                                             };
+            return data;
         }
     }
 }

@@ -17,21 +17,21 @@ namespace EMPManegment.EntityModels.ViewModels.OrderModels
 
         public string? CompanyName { get; set; }
 
-        public int Product { get; set; } 
+        public int Product { get; set; }
         public string ProductName { get; set; }
 
         public string? Quantity { get; set; }
 
-        public decimal? Amount { get; set; }
+        public decimal? AmountPerUnit { get; set; }
 
-        public decimal? Total { get; set; }
+        public decimal TotalAmount { get; set; }
 
         public DateTime OrderDate { get; set; }
 
         public DateTime? DeliveryDate { get; set; }
 
         public int? PaymentMethod { get; set; }
-        public string? PaymentMethodName { get; set; } 
+        public string? PaymentMethodName { get; set; }
 
         public string? DeliveryStatus { get; set; }
         public string? OrderStatus { get; set; }
@@ -47,7 +47,8 @@ namespace EMPManegment.EntityModels.ViewModels.OrderModels
 
         public int? Hsn { get; set; }
 
-        public decimal? Gst { get; set; }
+        public decimal? GstPerUnit { get; set; }
+        public decimal? TotalGst { get; set; }
 
         public decimal? PerUnitWithGstprice { get; set; }
 
@@ -76,7 +77,7 @@ namespace EMPManegment.EntityModels.ViewModels.OrderModels
         public string OrderId { get; set; }
         public string? CompanyName { get; set; }
         public string ProductName { get; set; }
-        public decimal? Total { get; set; }
+        public decimal TotalAmount { get; set; }
         public DateTime OrderDate { get; set; }
         public int? PaymentMethod { get; set; }
         public string? DeliveryStatus { get; set; }

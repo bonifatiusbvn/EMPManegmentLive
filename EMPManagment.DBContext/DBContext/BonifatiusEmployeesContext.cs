@@ -273,11 +273,12 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.ToTable("tblOrderMaster");
 
             entity.Property(e => e.Id).ValueGeneratedNever();
-            entity.Property(e => e.Amount).HasColumnType("decimal(18, 0)");
+            entity.Property(e => e.AmountPerUnit).HasColumnType("decimal(18, 0)");
             entity.Property(e => e.CompanyName).HasMaxLength(50);
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
             entity.Property(e => e.DeliveryDate).HasColumnType("date");
             entity.Property(e => e.DeliveryStatus).HasMaxLength(50);
+            entity.Property(e => e.GstPerUnit).HasColumnType("decimal(18, 0)");
             entity.Property(e => e.OrderDate).HasColumnType("date");
             entity.Property(e => e.OrderId).HasMaxLength(50);
             entity.Property(e => e.OrderStatus).HasMaxLength(20);
@@ -285,7 +286,7 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.Property(e => e.ProductName).HasMaxLength(50);
             entity.Property(e => e.ProductShortDescription).HasMaxLength(50);
             entity.Property(e => e.Quantity).HasMaxLength(50);
-            entity.Property(e => e.Total).HasColumnType("decimal(18, 0)");
+            entity.Property(e => e.TotalAmount).HasColumnType("decimal(18, 0)");
             entity.Property(e => e.TotalGst).HasColumnType("decimal(18, 0)");
             entity.Property(e => e.Type).HasMaxLength(20);
 
@@ -426,14 +427,22 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.ToTable("tblPurchaseOrder");
 
             entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.CompanyName).HasMaxLength(50);
             entity.Property(e => e.CreatedOn).HasColumnType("date");
             entity.Property(e => e.DeliveryDate).HasColumnType("date");
             entity.Property(e => e.Opid)
                 .HasMaxLength(50)
                 .HasColumnName("OPId");
             entity.Property(e => e.OrderDate).HasColumnType("date");
+            entity.Property(e => e.ProductName).HasMaxLength(50);
+            entity.Property(e => e.ProductShortDescription).HasMaxLength(50);
+            entity.Property(e => e.Quantity).HasMaxLength(50);
             entity.Property(e => e.Status).HasMaxLength(50);
             entity.Property(e => e.TotalAmount).HasColumnType("numeric(18, 2)");
+
+            entity.HasOne(d => d.Product).WithMany(p => p.TblPurchaseOrders)
+                .HasForeignKey(d => d.ProductId)
+                .HasConstraintName("FK_tblPurchaseOrder_tblProductDetailsMaster");
 
             entity.HasOne(d => d.Vendor).WithMany(p => p.TblPurchaseOrders)
                 .HasForeignKey(d => d.VendorId)

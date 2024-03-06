@@ -609,11 +609,11 @@ namespace EMPManegment.Repository.UserListRepository
                                                            CountryName = c.Country,
                                                            DepartmentName = d.Department
                                                        };
-            if (searchby == "Username" && searchfor != null)
+            if (searchby == "ByUsername" && searchfor != null)
             {
                 GetUsersList = GetUsersList.Where(ser => ser.UserName.ToLower().Contains(searchfor.ToLower())).ToList();
             }
-            if (searchby == "Department" && searchfor != null)
+            if (searchby == "ByDepartment" && searchfor != null)
             {
                 GetUsersList = GetUsersList.Where(ser => ser.DepartmentName.ToLower().Contains(searchfor.ToLower())).ToList();
             }

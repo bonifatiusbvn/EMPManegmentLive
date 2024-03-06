@@ -1,7 +1,6 @@
 ﻿
 $(document).ready(function () {
     GetVendorName()
-    getAllTransactions()
     GetAllVendorData()
     GetAllTransactionData()
 });
@@ -211,26 +210,27 @@ $(document).ready(function () {
         });
     });
 
-    function generatePdf(data) {
-
-        var pdf = new jsPDF();
-
-
-        var htmlContent = '<div class="col-lg-12"><div class="d-flex"><div class="flex-grow-1"><div class="mt-sm-5 mt-4"><h6 class="text-muted text-uppercase fw-semibold">Address</h6><p class="text-muted mb-1" id="address-details">California, United States</p></div></div><div class="flex-shrink-0 mt-sm-0 mt-3"><h6><span class="text-muted fw-normal">Legal Registration No:</span><span id="legal-register-no">987654</span></h6><h6><span class="text-muted fw-normal">Email:</span><span id="email">velzon@themesbrand.com</span></h6><h6 class="mb-0"><span class="text-muted fw-normal">Contact No: </span><span id="contact-no"> +(01) 234 6789</span></h6></div></div></div ></div >';
-        htmlContent += '<div class="col-lg-12"><div class="row g-3"><div class="col-lg-3 col-6"><p class="text-muted mb-2 text-uppercase fw-semibold">Invoice No</p><h5 class="fs-14 mb-0">#VL<span id="invoice-no">' + data.invoiceNo + '</span></h5></div><div class="col-lg-3 col-6"><p class="text-muted mb-2 text-uppercase fw-semibold">Date</p><h5 class="fs-14 mb-0"><span id="invoice-date">23 Nov, 2021</span> <small class="text-muted" id="invoice-time">' + data.date + '</small></h5></div><div class="col-lg-3 col-6"><p class="text-muted mb-2 text-uppercase fw-semibold">Payment Status</p><span class="badge bg-success-subtle text-success fs-11" id="payment-status">' + data.paymentStatus + '</span></div><div class="col-lg-3 col-6"><p class="text-muted mb-2 text-uppercase fw-semibold">Total Amount</p><h5 class="fs-14 mb-0">$<span id="total-amount">' + data.totalAmount + '</span></h5></div></div></div >';
-        // Add the HTML content to the PDF with styles
-        pdf.fromHTML(htmlContent, 15, 15, {
-            'width': 170,
-            'elementHandlers': {
-                '#ignorePDF': function (element, renderer) {
-                    return true;
-                }
-            }
-        });
-
-        pdf.save("generated_pdf.pdf");
-    }
 });
+
+function generatePdf(data) {
+
+    var pdf = new jsPDF();
+
+
+    var htmlContent = '<div class="col-lg-12"><div class="d-flex"><div class="flex-grow-1"><div class="mt-sm-5 mt-4"><h6 class="text-muted text-uppercase fw-semibold">Address</h6><p class="text-muted mb-1" id="address-details">California, United States</p></div></div><div class="flex-shrink-0 mt-sm-0 mt-3"><h6><span class="text-muted fw-normal">Legal Registration No:</span><span id="legal-register-no">987654</span></h6><h6><span class="text-muted fw-normal">Email:</span><span id="email">velzon@themesbrand.com</span></h6><h6 class="mb-0"><span class="text-muted fw-normal">Contact No: </span><span id="contact-no"> +(01) 234 6789</span></h6></div></div></div ></div >';
+    htmlContent += '<div class="col-lg-12"><div class="row g-3"><div class="col-lg-3 col-6"><p class="text-muted mb-2 text-uppercase fw-semibold">Invoice No</p><h5 class="fs-14 mb-0">#VL<span id="invoice-no">' + data.invoiceNo + '</span></h5></div><div class="col-lg-3 col-6"><p class="text-muted mb-2 text-uppercase fw-semibold">Date</p><h5 class="fs-14 mb-0"><span id="invoice-date">23 Nov, 2021</span> <small class="text-muted" id="invoice-time">' + data.date + '</small></h5></div><div class="col-lg-3 col-6"><p class="text-muted mb-2 text-uppercase fw-semibold">Payment Status</p><span class="badge bg-success-subtle text-success fs-11" id="payment-status">' + data.paymentStatus + '</span></div><div class="col-lg-3 col-6"><p class="text-muted mb-2 text-uppercase fw-semibold">Total Amount</p><h5 class="fs-14 mb-0">$<span id="total-amount">' + data.totalAmount + '</span></h5></div></div></div >';
+    // Add the HTML content to the PDF with styles
+    pdf.fromHTML(htmlContent, 15, 15, {
+        'width': 170,
+        'elementHandlers': {
+            '#ignorePDF': function (element, renderer) {
+                return true;
+            }
+        }
+    });
+
+    pdf.save("generated_pdf.pdf");
+}
 
 
 $('#idStatus').change(function () {
@@ -287,7 +287,7 @@ function downloadPDF() {
 
 function GetAllVendorData() {
 
-    
+
     $('#VendorTableData').DataTable({
         processing: true,
         serverSide: true,
@@ -322,28 +322,47 @@ function GetAllVendorData() {
     });
 }
 
-function getLastTransaction() {
-    
-    var Vid = $('#txtvendorid').val();
-
+function getLastTransaction(Vid) {
+    debugger
     $.ajax({
         url: '/Invoice/GetLastTransactionByVendorId',
         type: 'GET',
         dataType: 'html',
         data: { Vid: Vid },
         success: function (response) {
-
-
             $("#lasttenTransaction").html(response);
             $("#zoomInModal").modal('show');
         },
 
     });
 }
+function EditInvoceDetails() {
+    debugger
+    var Id = {
+        Id: document.getElementById("txtinvoiceid").innerText,
+    }
+    debugger
+    var form_data = new FormData();
+    form_data.append("ID", JSON.stringify(Id));
+    $.ajax({
+        url: '/Invoice/EditInvoceDetails',
+        type: 'Post',
+        data: form_data,
+        dataType: 'json',
+        contentType: false,
+        processData: false,
 
-function getAllTransactions() {
-
-    var Vid = $('#txtvendorid').val();
+        success: function (response) {
+            debugger
+            $('#EditInvoiceModel').modal('show');
+            $('#EditInvoiceNo').val(response.invoiceNo);
+            $('#EditVendorName').val(response.vendorName);
+            $('#EditProjectName').val(response.projectName);
+            $('#EditOrderId').val(response.orderId);
+            $('#Edittotalamount').val(response.totalAmount);
+        }
+    });
+}
 
     $.ajax({
         url: '/Invoice/GetAllTransactionPartial',
@@ -353,11 +372,13 @@ function getAllTransactions() {
         success: function (response) {
             $("#allCreditTransactions").html(response);
         },
-
+        //error: function () {
+        //    alert("Data not found");
+        //}
     });
 }
-function GetAllTransactionData() {
 
+function GetAllTransactionData() {
     $('#transactionTable').DataTable({
         processing: true,
         serverSide: true,
@@ -383,12 +404,34 @@ function GetAllTransactionData() {
             { "data": "pendingAmount", "name": "PendingAmount" },
             { "data": "vendorAddress", "name": "VendorAddress" },
         ],
-        columnDefs: [{
-            "defaultContent": "",
-            "targets": "_all",
-        }]
+        columnDefs: [
+            {
+                targets: 4,
+                render: function (data, type, row) {
+                    var amountClass = parseFloat(data) < 0 ? 'text-success' : 'text-success';
+                    return '<span class="' + amountClass + '">' + data + '</span>';
+                }
+            },
+            {
+                targets: 5,
+                render: function (data, type, row) {
+                    var amountClass = parseFloat(data) < 0 ? 'text-danger' : 'text-danger';
+                    return '<span class="' + amountClass + '">' + data + '</span>';
+                }
+            }
+        ],
+        createdRow: function (row, data, dataIndex) {
+            $(row).addClass('text-muted');
+            $('td:eq(0)', row).html('<div class="avatar-xs"><div class="avatar-title bg-danger-subtle text-danger rounded-circle fs-16"><i class="ri-arrow-right-up-fill"></i></div></div>');
+            $('td:eq(7)', row).html('<span class="badge bg-primary-subtle text-primary fs-11"><i class="ri-time-line align-bottom"></i> Processing</span>');
+        }
     });
 }
+
+
+
+
+
 
 
 
