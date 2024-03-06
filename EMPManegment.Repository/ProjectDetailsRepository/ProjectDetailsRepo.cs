@@ -95,7 +95,7 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
             var data = await (from a in Context.TblProjectMembers
                               join b in Context.TblProjectMasters
                               on a.ProjectId equals b.ProjectId
-                              where a.UserId == UserId
+                              where a.UserId == UserId && a.IsDeleted != false
                               select new
                               {
                                   a.Id,
@@ -173,8 +173,22 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
                 bool isMemberAlreadyExists = Context.TblProjectMembers.Any(x => x.UserId == AddMember.UserId && x.ProjectId == AddMember.ProjectId);
                 if (isMemberAlreadyExists == true)
                 {
-                    response.Message = "Member already exists";
-                    response.Code = 404;
+                    var projectDetail = await Context.TblProjectMembers.SingleOrDefaultAsync(x => x.UserId == AddMember.UserId && x.ProjectId == AddMember.ProjectId);
+                    if (projectDetail.IsDeleted == true)
+                    {
+                        response.Message = "Member already exists";
+                        response.Code = 404;
+                    }
+                    else
+                    {
+                        var GetUserdata = Context.TblProjectMembers.Where(a => a.UserId == AddMember.UserId && a.ProjectId == AddMember.ProjectId).FirstOrDefault();
+                        GetUserdata.IsDeleted = true;
+                        Context.TblProjectMembers.Update(GetUserdata);
+                        Context.SaveChanges();
+                        response.Code = 200;
+                        response.Data = AddMember;
+                        response.Message = "Project Member Is Added Succesfully!";
+                    }
                 }
                 else
                 {
@@ -188,6 +202,7 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
                         StartDate = AddMember.StartDate,
                         EndDate = AddMember.EndDate,
                         Status = AddMember.Status,
+                        IsDeleted = true,
                     };
                     response.Code = 200;
                     response.Message = "Member add successfully!";
@@ -205,19 +220,20 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
         {
             try
             {
-                var result = (from e in Context.TblProjectMembers
-                              where e.ProjectId == ProjectId
-                              join d in Context.TblUsers on e.UserId equals d.Id
-                              select new ProjectView
-                              {
-                                  Id = e.Id,
-                                  Fullname = d.FirstName + " " + d.LastName,
-                                  Image = d.Image,
-                                  //UserRole = e.UserRole,
-                                  Designation = d.Designation,
-                              }).ToList();
-                return result;
-            }
+                    var result = (from e in Context.TblProjectMembers
+                                  where e.ProjectId == ProjectId
+                              join d in Context.TblUsers on e.UserId equals d.Id where e.IsDeleted != false
+                                  select new ProjectView
+                                  {
+                                      Id = e.Id,
+                                      ProjectId = e.ProjectId,
+                                      Fullname = d.FirstName + " " + d.LastName,
+                                      Image = d.Image,
+                                      UserId = e.UserId,
+                                      Designation = d.Designation,
+                                  }).ToList();
+                    return result;
+                }       
             catch (Exception ex)
             {
                 throw ex;
@@ -252,7 +268,7 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
         public async Task<IEnumerable<ProjectDocumentView>> GetProjectDocument(Guid ProjectId)
         {
             try
-            {
+            { 
                 var result = (from e in Context.TblProjectDocuments
                               where e.ProjectId == ProjectId
                               join d in Context.TblUsers on e.UserId equals d.Id
@@ -276,9 +292,9 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
         {
             var UserData = new List<ProjectDetailView>();
             var data = await (from projectDetail in Context.TblProjectMembers
-                              join projectMaster in Context.TblProjectMasters
+                              join projectMaster in Context.TblProjectMasters 
                               on projectDetail.ProjectId equals projectMaster.ProjectId
-                              where projectDetail.UserId == UserId
+                              where projectDetail.UserId == UserId && projectDetail.IsDeleted != false
                               select new
                               {
                                   projectDetail.Id,
@@ -293,6 +309,7 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
                                   projectMaster.ProjectEndDate,
                                   projectMaster.ProjectDeadline,
                                   projectMaster.ProjectDescription,
+                                  projectDetail.IsDeleted,
                               }).ToListAsync();
 
             if (data != null)
@@ -361,6 +378,38 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
             {
                 throw ex;
             }
+        }
+        public async Task<UserResponceModel> MemberIsDeleted(ProjectMemberUpdate projectMember)
+        {
+            UserResponceModel response = new UserResponceModel();
+            var GetUserdata = Context.TblProjectMembers.Where(a => a.UserId == projectMember.UserId && a.ProjectId == projectMember.ProjectId).FirstOrDefault();
+
+            if (GetUserdata != null)
+            {
+
+                if (GetUserdata.IsDeleted == true)
+                {
+                    GetUserdata.IsDeleted = false;
+                    Context.TblProjectMembers.Update(GetUserdata);
+                    Context.SaveChanges();
+                    response.Code = 200;
+                    response.Data = GetUserdata;
+                    response.Message = "Project Member Is Deactive Succesfully";
+                }
+
+                else
+                {
+                    GetUserdata.IsDeleted = true;
+                    Context.TblProjectMembers.Update(GetUserdata);
+                    Context.SaveChanges();
+                    response.Code = 200;
+                    response.Data = GetUserdata;
+                    response.Message = "Project Member Is Active Succesfully";
+                }
+
+
+            }
+            return response;
         }
     }
 }

@@ -193,7 +193,7 @@ namespace EMPManegment.Web.Controllers
         public async Task<IActionResult> InviteMemberToProject()
         {
             try
-            {
+            { 
                 var membersinvited = HttpContext.Request.Form["InviteMember"];
                 var memberDetails = JsonConvert.DeserializeObject<ProjectView>(membersinvited);
                 ApiResponseModel postuser = await APIServices.PostAsync(memberDetails, "ProjectDetails/AddMemberToProject");
@@ -363,6 +363,32 @@ namespace EMPManegment.Web.Controllers
             var ContentType = "application/pdf";
             var fileName = Path.GetFileName(path);
             return File(memory, ContentType, fileName);
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> IsDeletedMember()
+        {
+            try
+            {
+                var membersinvited = HttpContext.Request.Form["InviteMember"];
+                var projectMember = JsonConvert.DeserializeObject<ProjectMemberUpdate>(membersinvited);
+                ApiResponseModel postuser = await APIServices.PostAsync(projectMember, "ProjectDetails/IsDeletedMember");
+                if (postuser.code == 200)
+                {
+
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
+
+                }
+                else
+                {
+                    return new JsonResult(new { Message = string.Format(postuser.message), Code = postuser.code });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }

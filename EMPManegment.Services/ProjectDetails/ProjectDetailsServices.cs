@@ -66,5 +66,10 @@ namespace EMPManegment.Services.ProjectDetails
         {
             return ProjectDetails.CheckProjectName();
         }
+
+        public async Task<UserResponceModel> MemberIsDeleted(ProjectMemberUpdate projectMember)
+        {
+            return await ProjectDetails.MemberIsDeleted(projectMember);
+        }
     }
 }

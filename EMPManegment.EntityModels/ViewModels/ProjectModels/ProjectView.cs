@@ -35,6 +35,12 @@ namespace EMPManegment.EntityModels.ViewModels.ProjectModels
         public string? Fullname { get; set; }
         public string? Image { get; set; }
         public string? Designation { get; set; }
-        public string? ProjectDescription { get; set; } = null!;
+        public string? ProjectDescription { get; set; } = null!; 
+         public bool? IsDeleted { get; set; }
+    }
+    public class ProjectMemberUpdate
+    {
+        public Guid? ProjectId { get; set; }
+        public Guid? UserId { get; set; }
     }
 }

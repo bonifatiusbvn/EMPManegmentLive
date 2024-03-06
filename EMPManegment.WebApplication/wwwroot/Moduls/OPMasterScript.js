@@ -3,7 +3,7 @@
 // Function to handle form submission
 function saveFormData(event) {
     event.preventDefault(); // Prevent the default form submission
-    debugger
+ 
     // Gather form data
     var formData = {
         companyAddress: document.getElementById('companyAddress').value,
