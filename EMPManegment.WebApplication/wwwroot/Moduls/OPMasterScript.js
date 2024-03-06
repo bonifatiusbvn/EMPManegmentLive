@@ -1,42 +1,65 @@
 ﻿
 
-// Function to handle form submission
-function saveFormData(event) {
-    event.preventDefault(); // Prevent the default form submission
-    debugger
-    // Gather form data
-    var formData = {
-        companyAddress: document.getElementById('companyAddress').value,
-        companyaddpostalcode: document.getElementById('companyaddpostalcode').value,
-        registrationNumber: document.getElementById('registrationNumber').value,
-        companyEmail: document.getElementById('companyEmail').value,
-        companyWebsite: document.getElementById('companyWebsite').value,
-        compnayContactno: document.getElementById('compnayContactno').value,
-        invoicenoInput: document.getElementById('invoicenoInput').value,
-        dateField: document.getElementById('date-field').value,
-        choicesPaymentStatus: document.getElementById('choices-payment-status').value,
-        totalamountInput: document.getElementById('totalamountInput').value,
-        billingName: document.getElementById('billingName').value,
-        billingAddress: document.getElementById('billingAddress').value,
-        billingPhoneno: document.getElementById('billingPhoneno').value,
-        billingTaxno: document.getElementById('billingTaxno').value,
-        shippingName: document.getElementById('shippingName').value,
-        shippingAddress: document.getElementById('shippingAddress').value,
-        shippingPhoneno: document.getElementById('shippingPhoneno').value,
-        shippingTaxno: document.getElementById('shippingTaxno').value,
-        // Add more fields as needed
-    };
+function CreatePurchaseOrder() {
 
-    // You can now use the formData object to perform further operations,
-    // such as sending it to a server via AJAX or processing it locally.
+    var orderDetails = [];
+    var numOrders = $(".product").length;
+    $(".product").each(function () {
+        var orderRow = $(this);
+        var objData = {
+            ProjectId: $("#txtProjectId").val(),
+            Type: $("#OrderType").val(),
+            OrderId: $("#orderId").val(),
+            PaymentStatus: $("#txtPaymentStatus").val(),
+            PaymentMethod: $("#paymenttype").val(),
+            OrderDate: $("#orderdate").val(),
+            DeliveryDate: $("#deliverydate").val(),
+            VendorId: $("#txtvendorname").val(),
+            CompanyName: $("#txtvendornameid").val(),
+            ProductId: orderRow.find("#Product_Id").val(),
+            ProductType: orderRow.find("#Product_TypeId").val(),
+            Quantity: orderRow.find("#txtproductquantity").val(),
+            TotalGst: orderRow.find("#txtproductamountwithGST").val(),
+            Amount: orderRow.find("#txtproductamount").val(),
+            Total: orderRow.find("#txtproducttotalamount").val(),
+            ProductShortDescription: orderRow.find("#txtproductDescription").val(),
+            ProductName: orderRow.find("#txtproductName").val(),
+        };
+        orderDetails.push(objData);
+    });
+    var form_data = new FormData();
+    form_data.append("ORDERDETAILS", JSON.stringify(orderDetails));
 
-    // For demonstration, log the formData object to the console
-    console.log(formData);
+    $.ajax({
+        url: '/OrderMaster/InsertMultipleOrders',
+        type: 'POST',
+        data: form_data,
+        dataType: 'json',
+        contentType: false,
+        processData: false,
+        success: function (result) {
+            if (result.message != null) {
+                Swal.fire({
+                    title: result.message,
+                    icon: 'success',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'OK',
+                }).then(function () {
+                    window.location = '/OrderMaster/CreateOrderView';
+                });
+            }
+        },
+        error: function (xhr, status, error) {
+            Swal.fire({
+                title: 'Error',
+                text: 'An error occurred while processing your request.',
+                icon: 'error',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'OK',
+            });
+        }
+    });
 }
-
-// Add form submission event listener
-var form = document.getElementById('invoice_form');
-form.addEventListener('submit', saveFormData);
 
 
 var paymentSign = "$";
@@ -435,4 +458,3 @@ document.addEventListener("DOMContentLoaded", function () {
         })), window.location.href = "apps-invoices-list.html")
     })
 });
-
