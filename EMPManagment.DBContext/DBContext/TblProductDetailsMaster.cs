@@ -38,4 +38,6 @@ public partial class TblProductDetailsMaster
     public Guid? UpdatedBy { get; set; }
 
     public virtual ICollection<TblOrderMaster> TblOrderMasters { get; set; } = new List<TblOrderMaster>();
+
+    public virtual ICollection<TblPurchaseOrder> TblPurchaseOrders { get; set; } = new List<TblPurchaseOrder>();
 }

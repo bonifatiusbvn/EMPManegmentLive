@@ -21,18 +21,7 @@
 
                     <div class="col-sm" id="empnamebox">
                         <div class="search-box">
-                            <select class="form-control" id="ddlusername" name="ddlusername">
-                                <option selected disabled value="">---Select Username---</option>
-                            </select>
-                            <input type="hidden" class="form-control" id="txtguserid">
-                        </div>
-                    </div>
-                    <div class="col-sm" id="departmentbox">
-                        <div class="search-box">
-                            <select class="form-control" id="ddlDepartmenrnt" name="ddlDepartmenrnt">
-                                <option selected disabled>--Select Department--</option>
-                            </select>
-                            <input type="hidden" class="form-control" id="txtdeptid" />
+                            <input name="searchfor" class="form-control" id="txtsearchfor" aria-label="Search" autocomplete="off" />
                         </div>
                     </div>
 
@@ -98,22 +87,5 @@
 
 </div>
 <!-- end card -->
-<script>
-    $('#searchEmployee').on('change', function (e) {
-        e.stopImmediatePropagation();
-        if ($("#searchEmployee").val() == "ByUsername") {
-            clearSelectedBox();
-            GetUsername()
-            $("#empnamebox").show();
-            $("#departmentbox").hide();
-        }
-        else if ($("#searchEmployee").val() == "ByDepartment") {
-            clearSelectedBox();
-            GetDepartment();
-            $("#empnamebox").hide();
-            $("#departmentbox").show();
-        }
-    });
-</script>
 
 
