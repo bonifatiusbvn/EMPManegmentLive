@@ -337,3 +337,48 @@ function searchproject() {
 
     GetAllUserProjectDetailsList(1);
 }
+function deleteProjectMember(Id) {
+    debugger
+    $('#deleteOrderModal').modal('show');
+
+    $('#delete-record').click(function () {
+        var proId = $('#projectid').val();
+        var userId = Id;
+
+        var MemberData = {
+            ProjectId: proId,
+            UserId: userId,
+        }
+        var form_data = new FormData();
+        form_data.append("InviteMember", JSON.stringify(MemberData));
+        $.ajax({
+            url: '/Project/IsDeletedMember',
+            type: 'POST', 
+            dataType: 'json',
+            data: form_data,
+            processData: false,
+            contentType: false,
+            success: function (Result) {
+                debugger
+                Swal.fire({
+                    title: Result.message,
+                    icon: 'success',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'OK'
+                }).then(function () {
+                    window.location = '/Project/GetProjectDetails/?Id=' + proId;
+                })
+            },
+            error: function () { 
+                Swal.fire({
+                    title: "Can't Remove Member!",
+                    icon: 'warning',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'OK',
+                }).then(function () {
+                    window.location = '/Project/GetProjectDetails/?Id=' + proId;
+                })
+            }
+        })
+    });
+}
