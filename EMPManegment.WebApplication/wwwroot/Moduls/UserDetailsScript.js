@@ -823,7 +823,7 @@ function GetActiveDeactiveList(page) {
     var searchBy = $("#searchEmployee").val();
     var searchFor = $('#txtsearchfor').val();
     $.get("/UserProfile/UserActiveDecativeList", { searchby: searchBy, searchfor: searchFor, page: page })
-        .done(function (result) {debugger
+        .done(function (result) {
 
             $("#activedeactivepartial").html(result);
         })

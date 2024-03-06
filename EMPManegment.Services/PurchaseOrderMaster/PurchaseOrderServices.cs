@@ -25,9 +25,9 @@ namespace EMPManegment.Services.PurchaseOrderMaster
             return PurchaseOrder.CheckOPNo(projectname);
         }
 
-        public Task<UserResponceModel> CreatePO(OPMasterView CreateProject)
+        public async Task<UserResponceModel> CreatePO(List<OPMasterView> CreatePO)
         {
-            return PurchaseOrder.CreatePO(CreateProject);
+            return await PurchaseOrder.CreatePO(CreatePO);
         }
     }
 }
