@@ -488,35 +488,6 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
             return response;
         }
 
-        public async Task<IEnumerable<CreditDebitView>> GetAllTransaction()
-        {
-            try
-            {
-                IEnumerable<CreditDebitView> CreditList = (from a in Context.TblCreditDebitMasters
-                                                           join b in Context.TblVendorMasters on a.VendorId equals b.Vid
-                                                           join c in Context.TblPaymentTypes on a.PaymentType equals c.Id
-                                                           join d in Context.TblPaymentMethodTypes on a.PaymentMethod equals d.Id
-                                                           orderby a.Date descending
-                                                           select new CreditDebitView
-                                                           {
-                                                               Id = a.Id,
-                                                               VendorName = b.VendorCompany,
-                                                               Date = a.Date,
-                                                               PaymentTypeName = c.Type,
-                                                               PaymentMethodName = d.PaymentMethod,
-                                                               PendingAmount = a.PendingAmount,
-                                                               CreditDebitAmount = a.CreditDebitAmount,
-                                                               TotalAmount = a.TotalAmount,
-                                                           });
-
-                return CreditList;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
         public async Task<jsonData> GetAllTransaction(DataTableRequstModel dataTable)
         {
             var allCreditList = from a in Context.TblCreditDebitMasters
