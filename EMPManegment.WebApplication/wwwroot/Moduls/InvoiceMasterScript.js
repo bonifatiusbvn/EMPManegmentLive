@@ -340,6 +340,34 @@ function getLastTransaction() {
 
     });
 }
+function EditInvoceDetails() {
+    debugger
+    var Id = {
+        Id: document.getElementById("txtinvoiceid").innerText,
+    }
+    debugger
+    var form_data = new FormData();
+    form_data.append("ID", JSON.stringify(Id));
+    $.ajax({
+        url: '/Invoice/EditInvoceDetails',
+        type: 'Post',
+        data: form_data,
+        dataType: 'json',
+        contentType: false,
+        processData: false,
+    //$.ajax({
+    //    url: '/ Invoice/EditInvoceDetails/?Id=' + Id,
+    //    type: "Get",
+    //    contentType: 'application/json;charset=utf-8;',
+    //    dataType: 'json',
+        success: function (response) {
+            debugger
+            $('#EditInvoiceModel').modal('show');
+            $('#EditInvoiceNo').val(response.invoiceNo);
+            $('#EditVendorName').val(response.vendorName);
+            $('#EditProjectName').val(response.projectName);
+            $('#EditOrderId').val(response.orderId);
+            $('#Edittotalamount').val(response.totalAmount);
 
 function getAllTransactions() {
 
@@ -353,6 +381,12 @@ function getAllTransactions() {
         success: function (response) {
             $("#allCreditTransactions").html(response);
         },
+        },
+        error: function () {
+            alert("Data not found");
+        }
+    });
+}
 
     });
 }
