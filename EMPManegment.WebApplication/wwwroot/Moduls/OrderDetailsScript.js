@@ -281,7 +281,8 @@ function InsertMultipleOrder() {
             AmountPerUnit: orderRow.find("#txtproductamount").val(),
             GstPerUnit: orderRow.find("#txtproductamountwithGST").val(),
             TotalGst: $("#totalgst").val(),
-            Total: $("#cart-total").val(),
+            TotalGst: $("#totalgst").val(),
+            TotalAmount: $("#cart-total").val(),
         };
         orderDetails.push(objData);
         debugger
