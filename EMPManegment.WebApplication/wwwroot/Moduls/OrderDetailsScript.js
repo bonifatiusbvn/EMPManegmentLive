@@ -411,7 +411,7 @@ function SerchProductDetailsById() {
 
     var GetProductId = {
         Id: $('#searchproductname').val(),
-        RowNumber: $('#addNewlink tr').length,
+
     }
     var form_data = new FormData();
     form_data.append("PRODUCTID", JSON.stringify(GetProductId));

@@ -122,47 +122,52 @@ function EditExpenseDetails(Id) {
 
 function UpdateExpenseDetails() {
 
-    debugger
-    if ($('#editexpensedetails').valid()) {
-        var formData = new FormData();
-        $('#Editexpensetype').val();
-        $('#EditDescription').val();
-        $('#Editbillno').val();
-        $('#Editdate').val();
-        $('#Edittotalamount').val();
-        $('#Editaccount').val();
-        $('#Editpaymenttype').val();
-        $('#EditIsPaid').val();
-        $('#EditIsApproved').val();
+    var updateExpense = {
 
-        $.ajax({
-            url: '/ExpenseMaster/UpdateExpenseDetails',
-            type: 'Post',
-            data: formData,
-            dataType: 'json',
-            contentType: false,
-            processData: false,
-            success: function (Result) {
+        ExpenseType: $('#Editexpensetype').val(),
+        Description: $('#EditDescription').val(),
+        BillNumber: $('#Editbillno').val(),
+        Date: $('#Editdate').val(),
+        TotalAmount: $('#Edittotalamount').val(),
+        Account: $('#Editaccount').val(),
+        PaymentType: $('#Editpaymenttype').val(),
+        IsPaid: $('#EditIsPaid').val(),
+        IsApproved: $('#EditIsApproved').val(),
+    }
+    var form_data = new FormData();
+    form_data.append("UPDATEEXPENSE", JSON.stringify(updateExpense));
 
-                if (Result.message != null) {
-                    Swal.fire({
-                        title: Result.message,
-                        icon: 'success',
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'OK',
-                    }).then(function () {
-                        window.location = '/ExpenseMaster/AllTaskDetails';
-                    });
-                }
+    var formData = new FormData();
+
+
+    $.ajax({
+        url: '/ExpenseMaster/UpdateExpenseDetails',
+        type: 'Post',
+        data: formData,
+        dataType: 'json',
+        contentType: false,
+        processData: false,
+        success: function (Result) {
+
+            if (Result.message != null) {
+                Swal.fire({
+                    title: Result.message,
+                    icon: 'success',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'OK',
+                }).then(function () {
+                    window.location = '/ExpenseMaster/AllTaskDetails';
+                });
             }
-        })
-    }
-    else {
-        Swal.fire({
-            title: "Kindly Fill All Datafield",
-            icon: 'warning',
-            confirmButtonColor: '#3085d6',
-            confirmButtonText: 'OK',
-        })
-    }
+            else {
+                Swal.fire({
+                    title: "Kindly Fill All Datafield",
+                    icon: 'warning',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'OK',
+                })
+            }
+        }
+    })
+
 }
