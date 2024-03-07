@@ -19,6 +19,7 @@ using Newtonsoft.Json.Converters;
 using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
 using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 using Microsoft.AspNetCore.Components;
+using EMPManegment.EntityModels.ViewModels.ProjectModels;
 
 
 
@@ -452,6 +453,26 @@ namespace EMPManegment.Web.Controllers
                     InvoiceDetails = JsonConvert.DeserializeObject<InvoiceViewModel>(response.data.ToString());
                 }
                 return new JsonResult(InvoiceDetails);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        [HttpPost]
+        public async Task<IActionResult> IsDeletedInvoice(string InvoiceNo)
+        {
+            try
+            {
+                ApiResponseModel postuser = await APIServices.PostAsync(null, "Invoice/IsDeletedInvoice?InvoiceNo=" + InvoiceNo);
+                if (postuser.code == 200)
+                {
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
+                }
+                else
+                {
+                    return new JsonResult(new { Message = string.Format(postuser.message), Code = postuser.code });
+                }
             }
             catch (Exception ex)
             {

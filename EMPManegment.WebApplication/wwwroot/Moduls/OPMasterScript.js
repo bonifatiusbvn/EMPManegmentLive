@@ -1,104 +1,103 @@
-﻿
-//$(document).ready(function () {
-//    GetVendorNameList();
-//    GetProducts();
-//    GetPaymentMethodList();
-//    AllPurchaseOrderList();
-//});
-//function GetVendorNameList() {
+﻿$(document).ready(function () {
+    GetVendorNameList();
+    GetProducts();
+    GetPaymentMethodList();
+    AllPurchaseOrderList();
+});
+function GetVendorNameList() {
 
-//    $.ajax({
-//        url: '/ProductMaster/GetVendorsNameList',
-//        success: function (result) {
-//            $.each(result, function (i, data) {
-//                $('#txtvendorname').append('<Option value=' + data.id + '>' + data.vendorCompany + '</Option>')
-//            });
-//        }
-//    });
-//}
-//function selectvendorId() {
-//    document.getElementById("txtvendorTypeid").value = document.getElementById("txtvendorname").value;
-//}
-//function GetProducts() {
-//    $.ajax({
-//        url: '/ProductMaster/GetProduct',
-//        success: function (result) {
-//            $.each(result, function (i, data) {
-//                $('#txtProducts').append('<Option value=' + data.id + '>' + data.productName + '</Option>')
-//            });
-//        }
-//    });
-//}
-//function GetPaymentTypeList() {
-//    $.ajax({
-//        url: '/ExpenseMaster/GetPaymentTypeList',
-//        success: function (result) {
-//            $.each(result, function (i, data) {
-//                $('#paymenttype').append('<Option value=' + data.id + '>' + data.type + '</Option>')
-//            });
-//        }
-//    });
-//}
-//function selectProductTypeId() {
-//    document.getElementById("txtProductTypeid").value = document.getElementById("txtProducts").value;
-//}
-//function GetPaymentMethodList() {
+    $.ajax({
+        url: '/ProductMaster/GetVendorsNameList',
+        success: function (result) {
+            $.each(result, function (i, data) {
+                $('#txtvendorname').append('<Option value=' + data.id + '>' + data.vendorCompany + '</Option>')
+            });
+        }
+    });
+}
+function selectvendorId() {
+    document.getElementById("txtvendorTypeid").value = document.getElementById("txtvendorname").value;
+}
+function GetProducts() {
+    $.ajax({
+        url: '/ProductMaster/GetProduct',
+        success: function (result) {
+            $.each(result, function (i, data) {
+                $('#txtProducts').append('<Option value=' + data.id + '>' + data.productName + '</Option>')
+            });
+        }
+    });
+}
+function GetPaymentTypeList() {
+    $.ajax({
+        url: '/ExpenseMaster/GetPaymentTypeList',
+        success: function (result) {
+            $.each(result, function (i, data) {
+                $('#paymenttype').append('<Option value=' + data.id + '>' + data.type + '</Option>')
+            });
+        }
+    });
+}
+function selectProductTypeId() {
+    document.getElementById("txtProductTypeid").value = document.getElementById("txtProducts").value;
+}
+function GetPaymentMethodList() {
 
-//    $.ajax({
-//        url: '/OrderMaster/GetPaymentMethodList',
-//        success: function (result) {
-//            $.each(result, function (i, data) {
-//                $('#txtpaymentmethod').append('<Option value=' + data.id + '>' + data.paymentMethod + '</Option>')
-//            });
-//        }
-//    });
-//}
-//$(document).ready(function () {
-//    $('#txtvendorname').change(function () {
-//        var Text = $("#txtvendorname Option:Selected").text();
-//        var ProductId = $(this).val();
-//        $("#txtvendornameid").val(Text);
-//        $('#productname').empty();
-//        $('#productname').append('<Option >--Select Product--</Option>');
-//        $.ajax({
-//            url: '/ProductMaster/GetProductById?ProductId=' + ProductId,
-//            success: function (result) {
+    $.ajax({
+        url: '/OrderMaster/GetPaymentMethodList',
+        success: function (result) {
+            $.each(result, function (i, data) {
+                $('#txtpaymentmethod').append('<Option value=' + data.id + '>' + data.paymentMethod + '</Option>')
+            });
+        }
+    });
+}
+$(document).ready(function () {
+    $('#txtvendorname').change(function () {
+        var Text = $("#txtvendorname Option:Selected").text();
+        var ProductId = $(this).val();
+        $("#txtvendornameid").val(Text);
+        $('#productname').empty();
+        $('#productname').append('<Option >--Select Product--</Option>');
+        $.ajax({
+            url: '/ProductMaster/GetProductById?ProductId=' + ProductId,
+            success: function (result) {
 
-//                $.each(result, function (i, data) {
-//                    $('#productname').append('<Option value=' + data.id + '>' + data.productType + '</Option>')
-//                });
-//            }
-//        });
-//    });
-//});
+                $.each(result, function (i, data) {
+                    $('#productname').append('<Option value=' + data.id + '>' + data.productType + '</Option>')
+                });
+            }
+        });
+    });
+});
 
-//$(document).ready(function () {
-//    $('#txtProducts').change(function () {
+$(document).ready(function () {
+    $('#txtProducts').change(function () {
 
 
-//        var Text = $("#txtProducts Option:Selected").text();
-//        var ProductTypeId = $(this).val();
-//        var VendorTypeId = $("#txtvendorname").val();
-//        var Productid = $("#txtProductid").val(ProductTypeId);
-//        $("#txtProductTypeid").val(Text);
-//        $('#searchproductname').empty();
-//        $('#searchproductname').append('<Option >--Select ProductName--</Option>');
-//        $.ajax({
-//            url: '/ProductMaster/SerchProductByVendor?ProductId=' + ProductTypeId + '&VendorId=' + VendorTypeId,
-//            type: 'Post',
-//            success: function (result) {
-//                $.each(result, function (i, data) {
-//                    $('#searchproductname').append('<Option value=' + data.id + '>' + data.productName + '</Option>');
-//                    $('#txtvendorname').prop('disabled', true);
-//                    $('#txtProducts').prop('disabled', true);
-//                });
-//            }
-//        });
-//    });
-//});
-//function searchProductTypeId() {
-//    document.getElementById("searchproductnameid").value = document.getElementById("searchproductname").value;
-//}
+        var Text = $("#txtProducts Option:Selected").text();
+        var ProductTypeId = $(this).val();
+        var VendorTypeId = $("#txtvendorname").val();
+        var Productid = $("#txtProductid").val(ProductTypeId);
+        $("#txtProductTypeid").val(Text);
+        $('#searchproductname').empty();
+        $('#searchproductname').append('<Option >--Select ProductName--</Option>');
+        $.ajax({
+            url: '/ProductMaster/SerchProductByVendor?ProductId=' + ProductTypeId + '&VendorId=' + VendorTypeId,
+            type: 'Post',
+            success: function (result) {
+                $.each(result, function (i, data) {
+                    $('#searchproductname').append('<Option value=' + data.id + '>' + data.productName + '</Option>');
+                    $('#txtvendorname').prop('disabled', true);
+                    $('#txtProducts').prop('disabled', true);
+                });
+            }
+        });
+    });
+});
+function searchProductTypeId() {
+    document.getElementById("searchproductnameid").value = document.getElementById("searchproductname").value;
+}
 
 function SerchProductDetailsById() {
 
@@ -109,32 +108,6 @@ function SerchProductDetailsById() {
     var form_data = new FormData();
     form_data.append("PRODUCTID", JSON.stringify(GetProductId));
 
-    // Function to handle form submission
-    function saveFormData(event) {
-        event.preventDefault(); // Prevent the default form submission
-
-        // Gather form data
-        var formData = {
-            companyAddress: document.getElementById('companyAddress').value,
-            companyaddpostalcode: document.getElementById('companyaddpostalcode').value,
-            registrationNumber: document.getElementById('registrationNumber').value,
-            companyEmail: document.getElementById('companyEmail').value,
-            companyWebsite: document.getElementById('companyWebsite').value,
-            compnayContactno: document.getElementById('compnayContactno').value,
-            invoicenoInput: document.getElementById('invoicenoInput').value,
-            dateField: document.getElementById('date-field').value,
-            choicesPaymentStatus: document.getElementById('choices-payment-status').value,
-            totalamountInput: document.getElementById('totalamountInput').value,
-            billingName: document.getElementById('billingName').value,
-            billingAddress: document.getElementById('billingAddress').value,
-            billingPhoneno: document.getElementById('billingPhoneno').value,
-            billingTaxno: document.getElementById('billingTaxno').value,
-            shippingName: document.getElementById('shippingName').value,
-            shippingAddress: document.getElementById('shippingAddress').value,
-            shippingPhoneno: document.getElementById('shippingPhoneno').value,
-            shippingTaxno: document.getElementById('shippingTaxno').value,
-            // Add more fields as needed
-        };
 
         $.ajax({
             url: '/ProductMaster/DisplayProductDetailsById',

@@ -3,9 +3,11 @@ using EMPManegment.EntityModels.ViewModels.Invoice;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.OrderModels;
 using EMPManegment.EntityModels.ViewModels.ProductMaster;
+using EMPManegment.EntityModels.ViewModels.ProjectModels;
 using EMPManegment.EntityModels.ViewModels.TaskModels;
 using EMPManegment.Inretface.Interface.OrderDetails;
 using EMPManegment.Inretface.Interface.ProductMaster;
+using EMPManegment.Inretface.Interface.ProjectDetails;
 using EMPManegment.Inretface.Services.InvoiceMaster;
 using EMPManegment.Inretface.Services.ProductMaster;
 using EMPManegment.Inretface.Services.TaskServices;
@@ -224,6 +226,31 @@ namespace EMPManagment.API.Controllers
                 throw ex;
             }
             return StatusCode(response.Code, response);
+        }
+        [HttpPost]
+        [Route("IsDeletedInvoice")]
+        public async Task<IActionResult> IsDeletedInvoice(string InvoiceNo)
+        {
+            UserResponceModel responseModel = new UserResponceModel();
+            var invoice = await InvoiceMaster.IsDeletedInvoice(InvoiceNo);
+            try
+            {
+                if (invoice != null)
+                {
+                    responseModel.Code = (int)HttpStatusCode.OK;
+                    responseModel.Message = invoice.Message;
+                }
+                else
+                {
+                    responseModel.Message = invoice.Message;
+                    responseModel.Code = (int)HttpStatusCode.NotFound;
+                }
+            }
+            catch (Exception ex)
+            {
+                responseModel.Code = (int)HttpStatusCode.InternalServerError;
+            }
+            return StatusCode(responseModel.Code, responseModel);
         }
     }
 }
