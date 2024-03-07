@@ -29,5 +29,7 @@ namespace EMPManegment.Inretface.Interface.InvoiceMaster
         Task<UserResponceModel> InsertCreditDebitDetails(CreditDebitView CreditDebit);
         Task<OrderResponseModel> DisplayInvoiceDetails(string OrderId);
         Task<UserResponceModel> IsDeletedInvoice(string InvoiceNo);
+        Task<UpdateInvoiceModel> EditInvoiceDetails(string InvoiceNo);
+        Task<UserResponceModel> UpdateInvoiceDetails(UpdateInvoiceModel UpdateInvoice);
     }
 }

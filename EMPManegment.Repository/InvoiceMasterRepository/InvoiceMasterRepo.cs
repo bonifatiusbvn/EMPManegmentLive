@@ -137,18 +137,13 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                 invoice = (from a in Context.TblInvoices.Where(x => x.Id == Id)
                            join b in Context.TblVendorMasters
                            on a.VandorId equals b.Vid
-                           //join d in Context.OrderMasters on a.VandorId equals d.VendorId
+
                            select new InvoiceViewModel
                            {
                                Id = a.Id,
                                InvoiceNo = a.InvoiceNo,
                                VendorName = b.VendorCompany,
                                VandorId = a.VandorId,
-                               //ProductName = c.ProductName,
-                               //ProductDetails = c.ProductShortDescription,
-                               //HSN = c.Hsn,
-                               //Price = c.PerUnitPrice,
-                               //TotalGst=c.Gst,
                                DispatchThrough = a.DispatchThrough,
                                Destination = a.Destination,
                                Cgst = a.Cgst,
@@ -161,11 +156,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                                CreatedBy = a.CreatedBy,
                                UpdatedOn = a.UpdatedOn,
                                UpdatedBy = a.UpdatedBy,
-                               //PerUnitPrice=c.PerUnitPrice,
-                               //PaymentMethod = d.PaymentMethod,
-                               //PaymentStatus = d.PaymentStatus,
-                               //Quantity = d.Quantity,
-                               //TotalAmountWithQuantity = d.Total,
+
 
                            }).First();
                 return invoice;
@@ -295,7 +286,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                                                             CreatedBy = a.CreatedBy,
                                                             UpdatedOn = a.UpdatedOn,
                                                             UpdatedBy = a.UpdatedBy,
-                                                            
+
                                                         };
             return InvoiceList;
         }
@@ -451,6 +442,8 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                         Igst = InsertInvoice.Igst,
                         TotalGst = InsertInvoice.TotalGst,
                         TotalAmount = InsertInvoice.TotalAmount,
+                        Status = "Pending",
+                        IsDeleted = true,
                         CreatedOn = DateTime.Now,
                         CreatedBy = InsertInvoice.CreatedBy,
                     };
@@ -557,75 +550,75 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
             OrderResponseModel response = new OrderResponseModel();
             try
             {
-                    var orderDetails = new List<OrderDetailView>();
-                    var data = await (from a in Context.TblOrderMasters
-                                      join c in Context.TblProductDetailsMasters on a.ProductId equals c.Id
-                                      join b in Context.TblVendorMasters on a.VendorId equals b.Vid
-                                      join d in Context.TblInvoices on a.OrderId equals d.OrderId
-                                      where a.OrderId == OrderId 
-                                      select new OrderDetailView
-                                      {
-                                          Id = a.Id,
-                                          OrderId = a.OrderId,
-                                          InvoiceNo=d.InvoiceNo,
-                                          VendorId = a.VendorId,
-                                          Type = a.Type,
-                                          CompanyName = a.CompanyName,
-                                          ProductId = a.ProductId,
-                                          VendorAddress = b.VendorAddress,
-                                          VendorContact = b.VendorContact,
-                                          VendorEmail = b.VendorCompanyEmail,
-                                          ProductImage = c.ProductImage,
-                                          ProductName = a.ProductName,
-                                          ProductShortDescription = a.ProductShortDescription,
-                                          Quantity = a.Quantity,
-                                          OrderDate = a.OrderDate,
-                                          PerUnitPrice = c.PerUnitPrice,
-                                          PerUnitWithGstprice = c.PerUnitWithGstprice,
-                                          TotalAmount = a.TotalAmount,
-                                          AmountPerUnit = a.AmountPerUnit,
-                                          PaymentMethod = a.PaymentMethod,
-                                          PaymentStatus = a.PaymentStatus,
-                                          DeliveryStatus = a.DeliveryStatus,
-                                          DeliveryDate = a.DeliveryDate,
-                                          CreatedOn = a.CreatedOn,
-                                      }).ToListAsync();
-                    if (data != null)
+                var orderDetails = new List<OrderDetailView>();
+                var data = await (from a in Context.TblOrderMasters
+                                  join c in Context.TblProductDetailsMasters on a.ProductId equals c.Id
+                                  join b in Context.TblVendorMasters on a.VendorId equals b.Vid
+                                  join d in Context.TblInvoices on a.OrderId equals d.OrderId
+                                  where a.OrderId == OrderId
+                                  select new OrderDetailView
+                                  {
+                                      Id = a.Id,
+                                      OrderId = a.OrderId,
+                                      InvoiceNo = d.InvoiceNo,
+                                      VendorId = a.VendorId,
+                                      Type = a.Type,
+                                      CompanyName = a.CompanyName,
+                                      ProductId = a.ProductId,
+                                      VendorAddress = b.VendorAddress,
+                                      VendorContact = b.VendorContact,
+                                      VendorEmail = b.VendorCompanyEmail,
+                                      ProductImage = c.ProductImage,
+                                      ProductName = a.ProductName,
+                                      ProductShortDescription = a.ProductShortDescription,
+                                      Quantity = a.Quantity,
+                                      OrderDate = a.OrderDate,
+                                      PerUnitPrice = c.PerUnitPrice,
+                                      PerUnitWithGstprice = c.PerUnitWithGstprice,
+                                      TotalAmount = a.TotalAmount,
+                                      AmountPerUnit = a.AmountPerUnit,
+                                      PaymentMethod = a.PaymentMethod,
+                                      PaymentStatus = a.PaymentStatus,
+                                      DeliveryStatus = a.DeliveryStatus,
+                                      DeliveryDate = a.DeliveryDate,
+                                      CreatedOn = a.CreatedOn,
+                                  }).ToListAsync();
+                if (data != null)
+                {
+                    foreach (var item in data)
                     {
-                        foreach (var item in data)
+                        orderDetails.Add(new OrderDetailView()
                         {
-                            orderDetails.Add(new OrderDetailView()
-                            {
-                                Id = item.Id,
-                                OrderId = item.OrderId,
-                                InvoiceNo = item.InvoiceNo,
-                                CompanyName = item.CompanyName,
-                                VendorId = item.VendorId,
-                                ProductId = item.ProductId,
-                                VendorEmail = item.VendorEmail,
-                                VendorContact = item.VendorContact,
-                                VendorAddress = item.VendorAddress,
-                                ProductName = item.ProductName,
-                                ProductImage = item.ProductImage,
-                                ProductShortDescription = item.ProductShortDescription,
-                                Quantity = item.Quantity,
-                                OrderDate = item.OrderDate,
-                                PerUnitPrice = item.PerUnitPrice,
-                                PerUnitWithGstprice = item.PerUnitWithGstprice,
-                                TotalAmount = item.TotalAmount,
-                                AmountPerUnit = item.AmountPerUnit,
-                                PaymentMethod = item.PaymentMethod,
-                                DeliveryStatus = item.DeliveryStatus,
-                                DeliveryDate = item.DeliveryDate,
-                                CreatedOn = item.CreatedOn,
-                                Type = item.Type,
-                                PaymentStatus = item.PaymentStatus,
-                            });
-                        }
-                        response.Data = orderDetails;
-                        response.Code = 200;
-                        response.Message = "Invoice Is Generated successfully";
+                            Id = item.Id,
+                            OrderId = item.OrderId,
+                            InvoiceNo = item.InvoiceNo,
+                            CompanyName = item.CompanyName,
+                            VendorId = item.VendorId,
+                            ProductId = item.ProductId,
+                            VendorEmail = item.VendorEmail,
+                            VendorContact = item.VendorContact,
+                            VendorAddress = item.VendorAddress,
+                            ProductName = item.ProductName,
+                            ProductImage = item.ProductImage,
+                            ProductShortDescription = item.ProductShortDescription,
+                            Quantity = item.Quantity,
+                            OrderDate = item.OrderDate,
+                            PerUnitPrice = item.PerUnitPrice,
+                            PerUnitWithGstprice = item.PerUnitWithGstprice,
+                            TotalAmount = item.TotalAmount,
+                            AmountPerUnit = item.AmountPerUnit,
+                            PaymentMethod = item.PaymentMethod,
+                            DeliveryStatus = item.DeliveryStatus,
+                            DeliveryDate = item.DeliveryDate,
+                            CreatedOn = item.CreatedOn,
+                            Type = item.Type,
+                            PaymentStatus = item.PaymentStatus,
+                        });
                     }
+                    response.Data = orderDetails;
+                    response.Code = 200;
+                    response.Message = "Invoice Is Generated successfully";
+                }
             }
             catch (Exception ex)
             {
@@ -641,14 +634,69 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
 
             if (GetInvoicedata != null)
             {
-                    GetInvoicedata.IsDeleted = false;
-                    Context.TblInvoices.Update(GetInvoicedata);
-                    Context.SaveChanges();
-                    response.Code = 200;
-                    response.Data = GetInvoicedata  ;
-                    response.Message = "Invoice is Deleted Successfully";
+                GetInvoicedata.IsDeleted = false;
+                Context.TblInvoices.Update(GetInvoicedata);
+                Context.SaveChanges();
+                response.Code = 200;
+                response.Data = GetInvoicedata;
+                response.Message = "Invoice is Deleted Successfully";
             }
             return response;
+        }
+
+        public async Task<UpdateInvoiceModel> EditInvoiceDetails(string InvoiceNo)
+        {
+            UpdateInvoiceModel invoice = new UpdateInvoiceModel();
+            try
+            {
+                invoice = (from a in Context.TblInvoices.Where(x => x.InvoiceNo == InvoiceNo)
+                           join b in Context.TblVendorMasters
+                           on a.VandorId equals b.Vid
+                           select new UpdateInvoiceModel
+                           {
+                               Id = a.Id,
+                               InvoiceNo = a.InvoiceNo,
+                               CompanyName = b.VendorCompany,
+                               TotalAmount = a.TotalAmount,
+                               PaymentMethod = a.PaymentMethod,
+                               Status = a.Status,
+                               InvoiceDate = a.InvoiceDate,
+
+                           }).First();
+                return invoice;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<UserResponceModel> UpdateInvoiceDetails(UpdateInvoiceModel UpdateInvoice)
+        {
+            UserResponceModel model = new UserResponceModel();
+            var invoicedetails = Context.TblInvoices.Where(e => e.Id == UpdateInvoice.Id).FirstOrDefault();
+            try
+            {
+                if (invoicedetails != null)
+                {
+                    invoicedetails.Id = UpdateInvoice.Id;
+                    invoicedetails.InvoiceDate = UpdateInvoice.InvoiceDate;
+                    invoicedetails.TotalAmount = UpdateInvoice.TotalAmount;
+                    invoicedetails.PaymentMethod = UpdateInvoice.PaymentMethod;
+                    invoicedetails.Status = UpdateInvoice.Status;
+                    invoicedetails.UpdatedOn=DateTime.Now;
+                    invoicedetails.UpdatedBy=UpdateInvoice.UpdatedBy;
+                }
+                Context.TblInvoices.Update(invoicedetails);
+                Context.SaveChanges();
+                model.Code = 200;
+                model.Message = "Invoice Details Updated Successfully!";
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return model;
         }
     }
 }

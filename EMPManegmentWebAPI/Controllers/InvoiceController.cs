@@ -252,5 +252,37 @@ namespace EMPManagment.API.Controllers
             }
             return StatusCode(responseModel.Code, responseModel);
         }
+        [HttpGet]
+        [Route("EditInvoiceDetails")]
+        public async Task<IActionResult> EditInvoiceDetails(string InvoiceNo)
+        {
+            var getinvoicedetails = await InvoiceMaster.EditInvoiceDetails(InvoiceNo);
+            return Ok(new { code = 200, data = getinvoicedetails });
+        }
+        [HttpPost]
+        [Route("UpdateInvoiceDetails")]
+        public async Task<IActionResult> UpdateInvoiceDetails(UpdateInvoiceModel invoiceDetails)
+        {
+            UserResponceModel response = new UserResponceModel();
+            try
+            {
+                var updateinvoice = InvoiceMaster.UpdateInvoiceDetails(invoiceDetails);
+                if (updateinvoice.Result.Code == 200)
+                {
+                    response.Code = (int)HttpStatusCode.OK;
+                    response.Message = updateinvoice.Result.Message;
+                }
+                else
+                {
+                    response.Message = updateinvoice.Result.Message;
+                    response.Code = (int)HttpStatusCode.NotFound;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return StatusCode(response.Code, response);
+        }
     }
 }

@@ -32,6 +32,11 @@ namespace EMPManegment.Services.InvoiceMaster
             return InvoiceMaster.DisplayInvoiceDetails(OrderId);
         }
 
+        public Task<UpdateInvoiceModel> EditInvoiceDetails(string InvoiceNo)
+        {
+            return InvoiceMaster.EditInvoiceDetails(InvoiceNo);
+        }
+
         public Task<jsonData> GetAllTransaction(DataTableRequstModel dataTable)
         {
             return InvoiceMaster.GetAllTransaction(dataTable);
@@ -85,6 +90,11 @@ namespace EMPManegment.Services.InvoiceMaster
         public async Task<UserResponceModel> IsDeletedInvoice(string InvoiceNo)
         {
             return await InvoiceMaster.IsDeletedInvoice(InvoiceNo);
+        }
+
+        public async Task<UserResponceModel> UpdateInvoiceDetails(UpdateInvoiceModel UpdateInvoice)
+        {
+            return await InvoiceMaster.UpdateInvoiceDetails(UpdateInvoice);
         }
     }
 }

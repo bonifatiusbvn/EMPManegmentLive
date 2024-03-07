@@ -439,20 +439,36 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
-        [HttpPost]
-        public async Task<JsonResult> EditInvoceDetails()
+        [HttpGet]
+        public async Task<JsonResult> EditInvoiceDetails(string InvoiceNo)
         {
             try
             {
-                var Id = HttpContext.Request.Form["ID"];
-                var InsertDetails = JsonConvert.DeserializeObject<InvoiceViewModel>(Id);
-                InvoiceViewModel InvoiceDetails = new InvoiceViewModel();
-                ApiResponseModel response = await APIServices.GetAsync("", "Invoice/GetInvoiceDetailsById?Id=" + InsertDetails.Id);
+                UpdateInvoiceModel invoice = new UpdateInvoiceModel();
+                ApiResponseModel response = await APIServices.GetAsync("", "Invoice/EditInvoiceDetails?InvoiceNo=" + InvoiceNo);
                 if (response.code == 200)
                 {
-                    InvoiceDetails = JsonConvert.DeserializeObject<InvoiceViewModel>(response.data.ToString());
+                    invoice = JsonConvert.DeserializeObject<UpdateInvoiceModel>(response.data.ToString());
                 }
-                return new JsonResult(InvoiceDetails);
+                return new JsonResult(invoice);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateInvoiceDetails(UpdateInvoiceModel invoiceDetails)
+        {
+            try
+            {
+                ApiResponseModel postuser = await APIServices.PostAsync(invoiceDetails, "Invoice/UpdateInvoiceDetails");
+                if (postuser.code == 200)
+                {
+                    return Ok(new { postuser.message });
+                }
+                return View(invoiceDetails);
             }
             catch (Exception ex)
             {

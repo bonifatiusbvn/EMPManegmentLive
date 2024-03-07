@@ -92,13 +92,14 @@ function populateDropdown(elementId, options) {
 }
 
 function EditExpenseDetails(Id) {
+
     $.ajax({
         url: '/ExpenseMaster/EditExpenseDetails?ExpenseId=' + Id,
         type: "Get",
         contentType: 'application/json;charset=utf-8;',
         dataType: 'json',
         success: function (response) {
-           
+
             $('#EditExpenseModel').modal('show');
             $('#Editexpensetype').val(response.expenseType);
             $('#EditDescription').val(response.description);
@@ -107,8 +108,8 @@ function EditExpenseDetails(Id) {
             $('#Edittotalamount').val(response.totalAmount);
             $('#Editaccount').val(response.account);
             $('#Editpaymenttype').val(response.paymentType);
-            $('#EditIsPaid').val(response.isPaid);
-            $('#EditIsApproved').val(response.isApproved);
+            $('#EditIsPaid').val(response.isPaid ? "True" : "False");
+            $('#EditIsApproved').val(response.isApproved ? "True" : "False");
 
         },
         error: function () {
@@ -119,48 +120,54 @@ function EditExpenseDetails(Id) {
 
 
 
-//function UpdateExpenseDetails() {
-//    if ($('#frmtaskdetails').valid()) {
-//        var formData = new FormData();
-//        formData.append("ExpenseType", $("#editexpensetypeid").val());
-//        formData.append("Description", $("#editDescription").val());
-//        formData.append("BillNumber", $("#editbillno").val());
-//        formData.append("Date", $("#editdate").val());
-//        formData.append("TotalAmount", $("#edittotalamount").val());
-//        formData.append("Image", $("#editimage").val());
-//        formData.append("Account", $("#editaccount").val());
-//        formData.append("PaymentType", $("#editpaymenttypeid").val());
-//        formData.append("IsPaid", $("#editispaid").val());
-//        formData.append("IsApproved", $("#editisapproved").val());
-//        $.ajax({
-//            url: '/ExpenseMaster/AddTaskDetails',
-//            type: 'Post',
-//            data: formData,
-//            dataType: 'json',
-//            contentType: false,
-//            processData: false,
-//            success: function (Result) {
+function UpdateExpenseDetails() {
 
-//                if (Result.message != null) {
-//                    Swal.fire({
-//                        title: Result.message,
-//                        icon: 'success',
-//                        confirmButtonColor: '#3085d6',
-//                        confirmButtonText: 'OK',
-//                    }).then(function () {
-//                        window.location = '/ExpenseMaster/AllTaskDetails';
-//                    });
-//                }
-//            }
-//        })
-//    }
-//    else {
-//        Swal.fire({
-//            title: "Kindly Fill All Datafield",
-//            icon: 'warning',
-//            confirmButtonColor: '#3085d6',
-//            confirmButtonText: 'OK',
-//        })
-//    }
-//}
-//}
+    var updateExpense = {
+
+        ExpenseType: $('#Editexpensetype').val(),
+        Description: $('#EditDescription').val(),
+        BillNumber: $('#Editbillno').val(),
+        Date: $('#Editdate').val(),
+        TotalAmount: $('#Edittotalamount').val(),
+        Account: $('#Editaccount').val(),
+        PaymentType: $('#Editpaymenttype').val(),
+        IsPaid: $('#EditIsPaid').val(),
+        IsApproved: $('#EditIsApproved').val(),
+    }
+    var form_data = new FormData();
+    form_data.append("UPDATEEXPENSE", JSON.stringify(updateExpense));
+
+    var formData = new FormData();
+
+
+    $.ajax({
+        url: '/ExpenseMaster/UpdateExpenseDetails',
+        type: 'Post',
+        data: formData,
+        dataType: 'json',
+        contentType: false,
+        processData: false,
+        success: function (Result) {
+
+            if (Result.message != null) {
+                Swal.fire({
+                    title: Result.message,
+                    icon: 'success',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'OK',
+                }).then(function () {
+                    window.location = '/ExpenseMaster/AllTaskDetails';
+                });
+            }
+            else {
+                Swal.fire({
+                    title: "Kindly Fill All Datafield",
+                    icon: 'warning',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'OK',
+                })
+            }
+        }
+    })
+
+}

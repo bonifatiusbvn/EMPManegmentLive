@@ -151,5 +151,30 @@ namespace EMPManagment.API.Controllers
             }
             return StatusCode(response.Code, response);
         }
+        [HttpPost]
+        [Route("DeleteOrderDetails")]
+        public async Task<IActionResult> DeleteOrderDetails(string OrderId)
+        {
+            UserResponceModel responseModel = new UserResponceModel();
+            var order = await OrderDetails.DeleteOrderDetails(OrderId);
+            try
+            {
+                if (order != null)
+                {
+                    responseModel.Code = (int)HttpStatusCode.OK;
+                    responseModel.Message = order.Message;
+                }
+                else
+                {
+                    responseModel.Message = order.Message;
+                    responseModel.Code = (int)HttpStatusCode.NotFound;
+                }
+            }
+            catch (Exception ex)
+            {
+                responseModel.Code = (int)HttpStatusCode.InternalServerError;
+            }
+            return StatusCode(responseModel.Code, responseModel);
+        }
     }
 }

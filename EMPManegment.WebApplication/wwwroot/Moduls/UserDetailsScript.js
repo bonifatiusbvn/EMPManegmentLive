@@ -40,7 +40,6 @@ function GetAllUserData() {
                     return '<div class="d-flex"><div class="flex-grow-1 tasks_name">' + full.departmentName + '</div><div class="flex-shrink-0 ms-4"><ul class="list-inline tasks-list-menu mb-0"><li class="list-inline-item"><a onclick="UserProfileDetails(\'' + full.id + '\')"><i class="ri-eye-fill align-bottom me-2 text-muted"></i></a></li><li class="list-inline-item"><a onclick="EditUserDetails(\'' + full.id + '\')"><i class="ri-pencil-fill align-bottom me-2 text-muted"></i></a></li></ul></div></div>';
                 }
             },
-
             { "data": "userName", "name": "UserName" },
             {
                 "data": "firstName",
@@ -51,12 +50,10 @@ function GetAllUserData() {
             {
                 "data": "isActive", "name": "IsActive",
                 "render": function (data, type, full) {
-
                     if (full.isActive == true) {
-                        return '<a class="badge bg-success text-uppercase">' + full.isActive + '</a>';
-                    }
-                    else {
-                        return '<a class="badge bg-danger text-uppercase">' + full.isActive + '</a>';
+                        return '<span class="badge bg-success text-uppercase">Active</span>';
+                    } else {
+                        return '<span class="badge bg-danger text-uppercase">Deactive</span>';
                     }
                 }
             },
@@ -80,8 +77,7 @@ function GetAllUserData() {
             { "data": "email", "name": "Email" },
             { "data": "phoneNumber", "name": "PhoneNumber" },
             { "data": "cityName", "name": "CityName" },
-            { "data": "address", "name": "Address" },
-
+            { "data": "address", "name": "Address" }
         ],
         columnDefs: [{
             "defaultContent": "",
@@ -90,61 +86,7 @@ function GetAllUserData() {
     });
 }
 
-//function ActiveUser(UserName) {
 
-//    const swalWithBootstrapButtons = Swal.mixin({
-//        customClass: {
-//            confirmButton: 'btn btn-success',
-//            cancelButton: 'btn btn-danger'
-//        },
-//        buttonsStyling: false
-//    })
-//    swalWithBootstrapButtons.fire({
-//        title: 'Are you sure?',
-//        text: "You won't to Active this User!",
-//        icon: 'warning',
-//        showCancelButton: true,
-//        confirmButtonText: 'Yes, Active it!',
-//        cancelButtonText: 'No, cancel!',
-//        reverseButtons: true
-//    }).then((result) => {
-//        if (result.isConfirmed) {
-
-//            $.ajax({
-//                url: '/UserProfile/UserActiveDecative?UserName=' + UserName,
-//                type: 'Post',
-//                contentType: 'application/json;charset=utf-8;',
-//                dataType: 'json',
-
-//                success: function (Result) {
-
-//                    swalWithBootstrapButtons.fire(
-//                        'Done!',
-//                        Result.message,
-//                        'success'
-//                    ).then(function () {
-//                        window.location = '/UserProfile/UserActiveDecative';
-//                    });
-
-//                },
-//                error: function () {
-//                    toastr.error('There is some problem in your request.');
-//                }
-//            })
-
-//        } else if (
-//            /* Read more about handling dismissals below */
-//            result.dismiss === Swal.DismissReason.cancel
-//        ) {
-//            swalWithBootstrapButtons.fire(
-//                'Cancelled',
-//                'User Have No Changes.!! :)',
-//                'error'
-//            )
-//        }
-//    })
-
-//}
 function ActiveUser(UserName) {
     Swal.fire({
         title: "Are you sure want to Active this User?",
@@ -239,61 +181,6 @@ function DeactiveUser(UserName) {
     });
 
 }
-//function DeactiveUser(UserName) {
-
-//    const swalWithBootstrapButtons = Swal.mixin({
-//        customClass: {
-//            confirmButton: 'btn btn-success',
-//            cancelButton: 'btn btn-danger'
-//        },
-//        buttonsStyling: false
-//    })
-//    swalWithBootstrapButtons.fire({
-//        title: 'Are you sure?',
-//        text: "You won't to DeActive this User!",
-//        icon: 'warning',
-//        showCancelButton: true,
-//        confirmButtonText: 'Yes, Deactive it!',
-//        cancelButtonText: 'No, cancel!',
-//        reverseButtons: true
-//    }).then((result) => {
-//        if (result.isConfirmed) {
-
-//            $.ajax({
-//                url: '/UserProfile/UserActiveDecative?UserName=' + UserName,
-//                type: 'Post',
-//                contentType: 'application/json;charset=utf-8;',
-//                dataType: 'json',
-
-//                success: function (Result) {
-
-//                    swalWithBootstrapButtons.fire(
-//                        'Done!',
-//                        Result.message,
-//                        'success'
-//                    ).then(function () {
-//                        window.location = '/UserProfile/UserActiveDecative';
-//                    });
-
-//                },
-//                error: function () {
-//                    toastr.error('There is some problem in your request.');
-//                }
-//            })
-
-//        } else if (
-//            /* Read more about handling dismissals below */
-//            result.dismiss === Swal.DismissReason.cancel
-//        ) {
-//            swalWithBootstrapButtons.fire(
-//                'Cancelled',
-//                'User Have No Changes.!! :)',
-//                'error'
-//            )
-//        }
-//    })
-
-//}
 
 function EnterInTime() {
 
@@ -544,7 +431,7 @@ function UserLogout() {
         confirmButtonText: 'Yes, logout'
     }).then((result) => {
         if (result.isConfirmed) {
-            // User confirmed, perform logout via AJAX request
+
             logout();
         }
     });
@@ -565,12 +452,12 @@ function logout() {
         body: ''
     })
         .then(response => {
-            // Handle response as needed, for example, redirect to the home page
+
             window.location.href = '/Authentication/Login';
         })
         .catch(error => {
             console.error('Error:', error);
-            // Handle errors if necessary
+
         });
 }
 
@@ -847,7 +734,7 @@ $(document).on("click", "#backbtn", function (e) {
 });
 
 function BtnSearchDetails() {
-    
+
 
     GetActiveDeactiveList(1);
 }
