@@ -1,4 +1,5 @@
-﻿using EMPManegment.EntityModels.ViewModels.Models;
+﻿using EMPManegment.EntityModels.ViewModels.DataTableParameters;
+using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.POMaster;
 using EMPManegment.EntityModels.ViewModels.ProjectModels;
 using System;
@@ -13,7 +14,6 @@ namespace EMPManegment.Inretface.Services.PurchaseOrderSevices
     {
         Task<UserResponceModel> CreatePO(List<OPMasterView> CreatePO);
         string CheckOPNo(string projectname);
-
-        Task<IEnumerable<OPMasterView>> GetPOList();
+        Task<jsonData> GetPOList(DataTableRequstModel POdataTable);
     }
 }

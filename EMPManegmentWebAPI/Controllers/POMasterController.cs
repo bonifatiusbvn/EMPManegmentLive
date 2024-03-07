@@ -1,12 +1,16 @@
-﻿using EMPManegment.EntityModels.ViewModels.Invoice;
+﻿using EMPManegment.EntityModels.ViewModels.DataTableParameters;
+using EMPManegment.EntityModels.ViewModels.Invoice;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.OrderModels;
 using EMPManegment.EntityModels.ViewModels.POMaster;
 using EMPManegment.Inretface.Interface.InvoiceMaster;
 using EMPManegment.Inretface.Interface.OrderDetails;
 using EMPManegment.Inretface.Services.PurchaseOrderSevices;
+using EMPManegment.Inretface.Services.TaskServices;
+using EMPManegment.Services.VendorDetails;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 using System.Net;
 
 namespace EMPManagment.API.Controllers
@@ -63,6 +67,12 @@ namespace EMPManagment.API.Controllers
             }
         }
 
-
+        [HttpPost]
+        [Route("GetPOList")]
+        public async Task<IActionResult> GetPOList(DataTableRequstModel POList)
+        {
+            var AllPOList = await POServices.GetPOList(POList);
+            return Ok(new { code = 200, data = AllPOList });
+        }
     }
 }

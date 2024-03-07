@@ -6,7 +6,7 @@
 });
 
 
-function showadddetails() { 
+function showadddetails() {
     ClearTextBox();
     GetTaskType();
     GetUsername();
@@ -26,8 +26,7 @@ function ClearTextBox() {
     $("#contactDescription").val('');
 }
 
-function ClearTaskDetails()
-{
+function ClearTaskDetails() {
     $("#txttaskStatus").val("");
 }
 
@@ -96,7 +95,7 @@ function GetUsername() {
         url: '/Task/GetUserName',
         success: function (result) {
             $.each(result, function (i, data) {
-                $('#ddlusername').append('<Option value=' + data.id + '>'  + data.firstName + " " + data.lastName + " " + "(" + data.userName + ")" + '</Option>')
+                $('#ddlusername').append('<Option value=' + data.id + '>' + data.firstName + " " + data.lastName + " " + "(" + data.userName + ")" + '</Option>')
             });
         }
     });
@@ -128,7 +127,7 @@ $(document).ready(function () {
     })
     $('#taskDetails').on('click', function () {
         TaskType1 = $('#taskType').val();
-        if (TaskType1 == "") { 
+        if (TaskType1 == "") {
             $('#taskType').attr("aria-invalid", "true");
             $("label[for='taskType']").addClass('failed');
         }
@@ -163,7 +162,7 @@ function btnStatusUpdate(Id) {
             Id: Id,
             UserId: $('#CreatedByid').val(),
 
-            
+
         }
         var form_data = new FormData();
         form_data.append("STATUSUPDATE", JSON.stringify(StausChange));
@@ -209,7 +208,7 @@ function btnStatusUpdate(Id) {
 }
 /*----ValidateMeassge----*/
 $(document).ready(function () {
-    
+
 
     $("#tasksListform").validate({
         rules: {
@@ -220,7 +219,7 @@ $(document).ready(function () {
         }
     })
     $('#StatusUpdate').on('click', function () {
-        
+
         $("#tasksListform").validate();
     });
 });
@@ -301,16 +300,16 @@ $(document).ready(function () {
 
 /*/-------MEDIUMPRIORITY------------*/
 function btnStatusUpdateMedium(Id) {
-    
+
 
     if ($("#tasksListMedium").valid()) {
-        
+
         var StausChange = {
             TaskStatus: $('#ddlStatusMedium' + Id).val(),
-            Role : $('#userrole').val(),
+            Role: $('#userrole').val(),
             Id: Id,
             UserId: UserId,
-           
+
         }
         var form_data = new FormData();
         form_data.append("STATUSUPDATE", JSON.stringify(StausChange));
@@ -323,10 +322,10 @@ function btnStatusUpdateMedium(Id) {
             contentType: false,
             processData: false,
             success: function (Result) {
-                
+
                 GetUserTaskDetails();
                 if (Result.code == 200) {
-                    
+
                     Swal.fire({
                         title: Result.message,
                         icon: 'success',
@@ -337,7 +336,7 @@ function btnStatusUpdateMedium(Id) {
                     });
                 }
                 else {
-                    
+
                     Swal.fire({
                         title: Result.message,
                         icon: 'warning',
@@ -350,9 +349,9 @@ function btnStatusUpdateMedium(Id) {
                 alert(error);
             }
         });
-      }
+    }
     else {
-        
+
         Swal.fire({
             title: "Kindly Select The Status",
             icon: 'warning',
@@ -454,7 +453,7 @@ $(document).ready(function () {
     });
 });
 
-function btnTaskDetails(Id){
+function btnTaskDetails(Id) {
     $.ajax({
         url: '/Task/GetTaskDetailsById?Id=' + Id,
         type: "get",
@@ -472,7 +471,7 @@ function btnTaskDetails(Id){
             //var EndDate = enddate.substr(0, 10);
             $('#taskenddate-field').text(response.taskEndDate);
             $('#taskpriority-field').text(response.taskTypeName);
-            $('#taskstatus-field').text(response.taskStatus); 
+            $('#taskstatus-field').text(response.taskStatus);
         },
         error: function () {
             alert('Data not found');
@@ -487,18 +486,17 @@ function GetAllUserTaskDetail() {
         type: 'Get',
         dataType: 'json',
         contentType: 'application/json;charset=utf-8;',
-        success: function (result)
-        {
+        success: function (result) {
             var object = '';
             var pendingTask = result.filter(function (obj) {
                 return (obj.taskStatus == "Pending");
             });
-            
+
             var nullTask = result.filter(function (obj) {
-                    return (obj.taskStatus == null);
+                return (obj.taskStatus == null);
             });
 
-            
+
             var totalPending = parseInt(pendingTask.length) + parseInt(nullTask.length);
 
             $("#Pendingtask").text(totalPending);
@@ -514,7 +512,7 @@ function GetAllUserTaskDetail() {
             $("#Completetask").text(completeTask.length);
 
             $("#Totaltask").text(result.length);
-        }, 
+        },
     });
 };
 
@@ -547,7 +545,17 @@ function AllTaskDetailsList() {
             {
                 "data": "taskTitle", "name": "TaskTitle"
             },
-            { "data": "taskDetails", "name": "TaskDetails" },
+            {
+                "data": "taskDetails",
+                "name": "TaskDetails",
+                "render": function (data, type, row) {
+                    if (type === 'display' && data.length > 50) {
+                        // Truncate the TaskDetails text and add a tooltip
+                        return '<span title="' + data + '">' + data.substr(0, 50) + '...</span>';
+                    }
+                    return data;
+                }
+            },
             {
                 "data": "taskType", "name": "TaskType",
                 "render": function (data, type, full) {
@@ -658,7 +666,7 @@ function EditTaskDetails(Id) {
 }
 
 function UpdateTaskDetails() {
-    
+
     var objData = {
         Id: $("#EditId").val(),
         UserName: $("#EditUserName").val(),
@@ -690,12 +698,12 @@ function UpdateTaskDetails() {
 
 $('#UpdateDetailsForm').on('change', function () {
     CheckValidation();
-}); 
+});
 
 //-----------------Validation-----------------//
 
 function CheckValidation() {
-    
+
     var isValid = true;
     taskTitle = $("#EditTaskTitle").val();
     taskDetails = $("#EditDescription").val();
