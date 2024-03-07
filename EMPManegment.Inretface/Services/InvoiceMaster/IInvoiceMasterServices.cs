@@ -27,5 +27,6 @@ namespace EMPManegment.Inretface.Services.InvoiceMaster
         Task<UserResponceModel> IsDeletedInvoice(string InvoiceNo);
         Task<UpdateInvoiceModel> EditInvoiceDetails(string InvoiceNo);
         Task<UserResponceModel> UpdateInvoiceDetails(UpdateInvoiceModel UpdateInvoice);
+        Task<OrderResponseModel> ShowInvoiceDetailsByOrderId(string OrderId);
     }
 }
