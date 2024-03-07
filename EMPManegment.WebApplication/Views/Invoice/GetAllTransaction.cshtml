@@ -29,22 +29,23 @@
                 <div class="card-body">
                     <div id="example_wrapper" class="dataTables_wrapper dt-bootstrap5 no-footer">
                         <div class="col-sm-12">
-                        <table id="transactionTable" class="table table-bordered dt-responsive nowrap table-striped align-middle dataTable no-footer dtr-inline" style="width: 100%;" aria-describedby="example_info">
-                            <thead>
-                                <tr>
-                                    <th>VendorName</th>
-                                    <th>Date</th>
-                                    <th>PaymentMethod</th>
-                                    <th>PaymentType</th>
-                                    <th>CreditDebitAmount</th>
-                                    <th>PendingAmount</th>
-                                    <th>VendorAddress</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            </tbody>
-                        </table>
-                        <!--end table-->
+                            <table id="transactionTable" class="table align-middle table-nowrap">
+                                <thead class="table-light text-muted">
+                                    <tr>
+                                        <th class="sort" data-sort="name" scope="col" style="width: 60px;"></th>
+                                        <th class="sort" data-sort="date" scope="col">VendorName</th>
+                                        <th class="sort" data-sort="currency_name" scope="col">Date</th>
+                                        <th class="sort" data-sort="form_name" scope="col">PaymentMethod</th>
+                                        <th class="sort" data-sort="to_name" scope="col">PaymentType</th>
+                                        <th class="sort" data-sort="transaction_id" scope="col">CreditDebitAmount</th>
+                                        <th class="sort" data-sort="transaction_id" scope="col">PendingAmount</th>
+                                        <th class="sort" data-sort="status" scope="col">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="list form-check-all">
+                                </tbody>
+                            </table>
+                            <!--end table-->
                         </div>
                         <div class="noresult" style="display: none">
                             <div class="text-center">
