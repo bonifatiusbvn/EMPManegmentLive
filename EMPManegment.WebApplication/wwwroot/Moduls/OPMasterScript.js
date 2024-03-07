@@ -1,5 +1,4 @@
-﻿
-$(document).ready(function () {
+﻿$(document).ready(function () {
     GetVendorNameList();
     GetProducts();
     GetPaymentMethodList();
@@ -108,32 +107,6 @@ function SerchProductDetailsById() {
     var form_data = new FormData();
     form_data.append("PRODUCTID", JSON.stringify(GetProductId));
 
-// Function to handle form submission
-function saveFormData(event) {
-    event.preventDefault(); // Prevent the default form submission
- 
-    // Gather form data
-    var formData = {
-        companyAddress: document.getElementById('companyAddress').value,
-        companyaddpostalcode: document.getElementById('companyaddpostalcode').value,
-        registrationNumber: document.getElementById('registrationNumber').value,
-        companyEmail: document.getElementById('companyEmail').value,
-        companyWebsite: document.getElementById('companyWebsite').value,
-        compnayContactno: document.getElementById('compnayContactno').value,
-        invoicenoInput: document.getElementById('invoicenoInput').value,
-        dateField: document.getElementById('date-field').value,
-        choicesPaymentStatus: document.getElementById('choices-payment-status').value,
-        totalamountInput: document.getElementById('totalamountInput').value,
-        billingName: document.getElementById('billingName').value,
-        billingAddress: document.getElementById('billingAddress').value,
-        billingPhoneno: document.getElementById('billingPhoneno').value,
-        billingTaxno: document.getElementById('billingTaxno').value,
-        shippingName: document.getElementById('shippingName').value,
-        shippingAddress: document.getElementById('shippingAddress').value,
-        shippingPhoneno: document.getElementById('shippingPhoneno').value,
-        shippingTaxno: document.getElementById('shippingTaxno').value,
-        // Add more fields as needed
-    };
 
     $.ajax({
         url: '/ProductMaster/DisplayProductDetailsById',

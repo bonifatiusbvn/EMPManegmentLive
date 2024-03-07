@@ -61,5 +61,10 @@ namespace EMPManegment.Services.OrderDetails
         {
             return await OrderDetails.UpdateOrderDetails(Updateorder);
         }
+
+        public Task<UserResponceModel> DeleteOrderDetails(string OrderId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

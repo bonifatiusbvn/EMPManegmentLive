@@ -81,5 +81,10 @@ namespace EMPManegment.Services.InvoiceMaster
         {
             return await InvoiceMaster.InsertInvoiceDetails(InsertInvoice);
         }
+
+        public async Task<UserResponceModel> IsDeletedInvoice(string InvoiceNo)
+        {
+            return await InvoiceMaster.IsDeletedInvoice(InvoiceNo);
+        }
     }
 }

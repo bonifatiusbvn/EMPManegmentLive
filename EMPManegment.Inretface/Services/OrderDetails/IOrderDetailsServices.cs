@@ -19,5 +19,6 @@ namespace EMPManegment.Inretface.Services.OrderDetails
         Task<IEnumerable<PaymentMethodView>> GetAllPaymentMethod();
         Task<UpdateOrderView> EditOrderDetails(Guid Id);
         Task<UserResponceModel> UpdateOrderDetails(UpdateOrderView Updateorder);
+        Task<UserResponceModel> DeleteOrderDetails(string OrderId);
     }
 }

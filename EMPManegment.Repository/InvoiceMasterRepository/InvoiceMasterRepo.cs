@@ -271,6 +271,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
             IEnumerable<InvoiceViewModel> InvoiceList = from a in Context.TblInvoices
                                                         join b in Context.TblVendorMasters on a.VandorId equals b.Vid
                                                         join c in Context.TblProjectMasters on a.ProjectId equals c.ProjectId
+                                                        where a.IsDeleted != false
                                                         select new InvoiceViewModel
                                                         {
                                                             Id = a.Id,
@@ -561,7 +562,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                                       join c in Context.TblProductDetailsMasters on a.ProductId equals c.Id
                                       join b in Context.TblVendorMasters on a.VendorId equals b.Vid
                                       join d in Context.TblInvoices on a.OrderId equals d.OrderId
-                                      where a.OrderId == OrderId
+                                      where a.OrderId == OrderId 
                                       select new OrderDetailView
                                       {
                                           Id = a.Id,
@@ -629,6 +630,23 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
             catch (Exception ex)
             {
                 throw ex;
+            }
+            return response;
+        }
+
+        public async Task<UserResponceModel> IsDeletedInvoice(string InvoiceNo)
+        {
+            UserResponceModel response = new UserResponceModel();
+            var GetInvoicedata = Context.TblInvoices.Where(a => a.InvoiceNo == InvoiceNo).FirstOrDefault();
+
+            if (GetInvoicedata != null)
+            {
+                    GetInvoicedata.IsDeleted = false;
+                    Context.TblInvoices.Update(GetInvoicedata);
+                    Context.SaveChanges();
+                    response.Code = 200;
+                    response.Data = GetInvoicedata  ;
+                    response.Message = "Invoice is Deleted Successfully";
             }
             return response;
         }

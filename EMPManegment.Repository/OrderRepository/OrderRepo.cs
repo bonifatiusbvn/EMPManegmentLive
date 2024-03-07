@@ -376,5 +376,10 @@ namespace EMPManegment.Repository.OrderRepository
             }
             return model;
         }
+
+        public Task<UserResponceModel> DeleteOrderDetails(string OrderId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

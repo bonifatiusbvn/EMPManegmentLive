@@ -243,6 +243,7 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.Property(e => e.Sgst)
                 .HasColumnType("numeric(18, 2)")
                 .HasColumnName("SGST");
+            entity.Property(e => e.Status).HasMaxLength(20);
             entity.Property(e => e.TotalAmount).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.TotalGst)
                 .HasColumnType("numeric(18, 2)")
