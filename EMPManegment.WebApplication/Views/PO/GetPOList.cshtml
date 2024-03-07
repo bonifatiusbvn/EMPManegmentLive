@@ -30,7 +30,7 @@
                     <div class="flex-shrink-0">
                         <div class="d-flex gap-2 flex-wrap">
                             <button class="btn btn-primary" id="remove-actions" onClick="deleteMultiple()"><i class="ri-delete-bin-2-line"></i></button>
-                            <a href="apps-invoices-create.html" class="btn btn-soft-primary"><i class="ri-add-line align-bottom me-1"></i> Create Invoice</a>
+                            <a href="/PO/CreateOP" class="btn btn-soft-primary"><i class="ri-add-line align-bottom me-1"></i> Create PO</a>
                         </div>
                     </div>
                 </div>
@@ -79,12 +79,11 @@
                         <table id="PurchaseOrderTable" class="table table-bordered dt-responsive nowrap table-striped align-middle dataTable no-footer dtr-inline">
                             <thead class="table-light text-muted text-center">
                                 <tr>
+                                    <th class="sort text-uppercase" data-sort="op_Id">OP Id</th>
                                     <th class="sort text-uppercase" data-sort="company_name">Company Name</th>
                                     <th class="sort text-uppercase" data-sort="product_name">
                                         Product Name
                                     </th>
-                                    <th class="sort text-uppercase" data-sort="product_description">Product Description</th>
-                                    <th class="sort text-uppercase" data-sort="product_type">Product Type</th>
                                     <th class="sort text-uppercase" data-sort="quantity">Quantity</th>
                                     <th class="sort text-uppercase" data-sort="total_amount">
                                         Total Amount
