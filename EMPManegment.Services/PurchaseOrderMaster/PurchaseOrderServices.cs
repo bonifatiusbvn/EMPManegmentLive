@@ -1,4 +1,5 @@
-﻿using EMPManegment.EntityModels.ViewModels.Models;
+﻿using EMPManegment.EntityModels.ViewModels.DataTableParameters;
+using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.POMaster;
 using EMPManegment.EntityModels.ViewModels.ProjectModels;
 using EMPManegment.Inretface.Interface.PurchaseOrder;
@@ -30,9 +31,9 @@ namespace EMPManegment.Services.PurchaseOrderMaster
             return await PurchaseOrder.CreatePO(CreatePO);
         }
 
-        public async Task<IEnumerable<OPMasterView>> GetPOList()
+        public async Task<jsonData> GetPOList(DataTableRequstModel POList)
         {
-            return await PurchaseOrder.GetPOList();
+            return await PurchaseOrder.GetPOList(POList);
         }
     }
 }

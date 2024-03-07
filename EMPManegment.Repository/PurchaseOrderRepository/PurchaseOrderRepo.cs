@@ -1,4 +1,5 @@
 ﻿using EMPManagment.API;
+using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.OrderModels;
 using EMPManegment.EntityModels.ViewModels.POMaster;
@@ -9,6 +10,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Linq.Dynamic.Core;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace EMPManegment.Repository.PurchaseOrderRepository
@@ -96,25 +99,48 @@ namespace EMPManegment.Repository.PurchaseOrderRepository
             return response;
         }
 
-        public async Task<IEnumerable<OPMasterView>> GetPOList()
+        public async Task<jsonData> GetPOList(DataTableRequstModel dataTable)
         {
-            IEnumerable<OPMasterView> data = from a in Context.TblPurchaseOrders
+            var POList = from a in Context.TblPurchaseOrders
                                              join b in Context.TblVendorMasters on a.VendorId equals b.Vid
                                              join c in Context.TblProductTypeMasters on a.ProductType equals c.Id
                                              select new OPMasterView
                                              {
                                                  Id = a.Id,
                                                  ProductId = a.ProductId,
+                                                 Opid = a.Opid,
                                                  CompanyName = b.VendorCompany,
                                                  VendorId = a.VendorId,
                                                  ProductName = c.Type,
+                                                 ProductShortDescription = a.ProductShortDescription,
                                                  Quantity = a.Quantity,
                                                  TotalAmount = a.TotalAmount,
                                                  OrderDate = a.OrderDate,
                                                  DeliveryDate = a.DeliveryDate,
-                                                 CreatedOn = a.CreatedOn
+                                                 CreatedOn = a.CreatedOn,
+                                                 ProductType = a.ProductType,
+                                                 Status = a.Status,
                                              };
-            return data;
+            if (!string.IsNullOrEmpty(dataTable.sortColumn) && !string.IsNullOrEmpty(dataTable.sortColumnDir))
+            {
+                POList = POList.OrderBy(dataTable.sortColumn + " " + dataTable.sortColumnDir);
+            }
+
+            if (!string.IsNullOrEmpty(dataTable.searchValue))
+            {
+                POList = POList.Where(e => e.CompanyName.Contains(dataTable.searchValue) || e.ProductName.Contains(dataTable.searchValue) || e.ProductShortDescription.Contains(dataTable.searchValue));
+            }
+            int totalRecord = POList.Count();
+            var cData = POList.Skip(dataTable.skip).Take(dataTable.pageSize).ToList();
+
+            jsonData jsonData = new jsonData
+            {
+                draw = dataTable.draw,
+                recordsFiltered = totalRecord,
+                recordsTotal = totalRecord,
+                data = cData
+            };
+            return jsonData;
         }
     }
 }
