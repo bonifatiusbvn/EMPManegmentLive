@@ -102,6 +102,7 @@ function EditExpenseDetails(Id) {
 
             $('#EditExpenseModel').modal('show');
             $('#Editexpensetype').val(response.expenseType);
+            $('#Editid').val(response.id);
             $('#EditDescription').val(response.description);
             $('#Editbillno').val(response.billNumber);
             $('#Editdate').val(response.date);
@@ -117,57 +118,66 @@ function EditExpenseDetails(Id) {
         }
     });
 }
-
-
-
 function UpdateExpenseDetails() {
+    if ($('#EditExpenseForm').valid()) {
+        var formData = new FormData();
+                formData.append("Id", $("#Editid").val());
+                formData.append("ExpenseType", $("#Editexpensetype").val());
+                formData.append("Description", $("#EditDescription").val());
+                formData.append("BillNumber", $("#Editbillno").val());
+                formData.append("Date", $("#Editdate").val());
+                formData.append("TotalAmount", $("#Edittotalamount").val());
+                formData.append("PaymentType", $("#Editpaymenttype").val());
+                formData.append("IsPaid", $("#EditIsPaid").val());
+                formData.append("IsApproved", $("#EditIsApproved").val());
+                formData.append("Account", $("#Editaccount").val());
 
-    var updateExpense = {
-
-        ExpenseType: $('#Editexpensetype').val(),
-        Description: $('#EditDescription').val(),
-        BillNumber: $('#Editbillno').val(),
-        Date: $('#Editdate').val(),
-        TotalAmount: $('#Edittotalamount').val(),
-        Account: $('#Editaccount').val(),
-        PaymentType: $('#Editpaymenttype').val(),
-        IsPaid: $('#EditIsPaid').val(),
-        IsApproved: $('#EditIsApproved').val(),
+        $.ajax({
+            url: '/ExpenseMaster/UpdateExpenseDetails',
+            type: 'Post',
+            data: formData,
+            dataType: 'json',
+            contentType: false,
+            processData: false,
+            success: function (Result) {
+                if (Result.message != null) {
+                    Swal.fire({
+                        title: Result.message,
+                        icon: 'success',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK',
+                    }).then(function () {
+                        window.location = '/ExpenseMaster/ExpenseList';
+                    });
+                }
+            }
+        })
     }
-    var form_data = new FormData();
-    form_data.append("UPDATEEXPENSE", JSON.stringify(updateExpense));
+    else {
+        Swal.fire({
+            title: "Kindly Fill All Details",
+            icon: 'warning',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'OK',
+        })
+    }
+}
 
-    var formData = new FormData();
-
-
-    $.ajax({
-        url: '/ExpenseMaster/UpdateExpenseDetails',
-        type: 'Post',
-        data: formData,
-        dataType: 'json',
-        contentType: false,
-        processData: false,
-        success: function (Result) {
-
-            if (Result.message != null) {
-                Swal.fire({
-                    title: Result.message,
-                    icon: 'success',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK',
-                }).then(function () {
-                    window.location = '/ExpenseMaster/AllTaskDetails';
-                });
-            }
-            else {
-                Swal.fire({
-                    title: "Kindly Fill All Datafield",
-                    icon: 'warning',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK',
-                })
-            }
+$(document).ready(function () {
+    $("#EditExpenseForm").validate({
+        rules: {
+            EditDescription: "required",
+            Editbillno: "required",
+            Edittotalamount: "required",
+        },
+        messages: {
+            EditDescription: "Please enter Description",
+            Editbillno: "Please enter bill no",
+            Edittotalamount: "please enter total amount",
         }
     })
+    $("#updatedetailbtn").on('click', function () {
+        $("#EditExpenseForm").validate();
+    });
+});
 
-}

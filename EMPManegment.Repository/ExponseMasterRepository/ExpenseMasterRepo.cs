@@ -283,21 +283,17 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                 if (GetExpenseDetail != null)
                 {
                     GetExpenseDetail.Id = ExpenseDetails.Id;
-                    GetExpenseDetail.UserId = ExpenseDetails.UserId;
                     GetExpenseDetail.ExpenseType = ExpenseDetails.ExpenseType;
                     GetExpenseDetail.PaymentType = ExpenseDetails.PaymentType;
                     GetExpenseDetail.BillNumber = ExpenseDetails.BillNumber;
                     GetExpenseDetail.Description = ExpenseDetails.Description;
                     GetExpenseDetail.Date = ExpenseDetails.Date;
                     GetExpenseDetail.TotalAmount = ExpenseDetails.TotalAmount;
-                    GetExpenseDetail.Image = ExpenseDetails.Image;
                     GetExpenseDetail.Account = ExpenseDetails.Account;
                     GetExpenseDetail.IsPaid = ExpenseDetails.IsPaid;
                     GetExpenseDetail.IsApproved = ExpenseDetails.IsApproved;
                     GetExpenseDetail.ApprovedBy = ExpenseDetails.ApprovedBy;
                     GetExpenseDetail.ApprovedByName = ExpenseDetails.ApprovedByName;
-                    GetExpenseDetail.CreatedBy = ExpenseDetails.CreatedBy;
-                    GetExpenseDetail.CreatedOn = ExpenseDetails.CreatedOn;
                 }
                 Context.TblExpenseMasters.Update(GetExpenseDetail);
                 Context.SaveChanges();
