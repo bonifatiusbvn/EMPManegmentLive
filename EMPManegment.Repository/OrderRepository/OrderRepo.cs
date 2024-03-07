@@ -378,9 +378,23 @@ namespace EMPManegment.Repository.OrderRepository
             return model;
         }
 
-        public Task<UserResponceModel> DeleteOrderDetails(string OrderId)
+        public async Task<UserResponceModel> DeleteOrderDetails(string OrderId)
         {
-            throw new NotImplementedException();
+            {
+                UserResponceModel response = new UserResponceModel();
+                var GetOrderdata = Context.TblOrderMasters.Where(a => a.OrderId == OrderId).FirstOrDefault();
+
+                //if (GetOrderdata != null)
+                //{
+                //    GetOrderdata.IsDeleted = false;
+                //    Context.TblInvoices.Update(GetInvoicedata);
+                //    Context.SaveChanges();
+                //    response.Code = 200;
+                //    response.Data = GetInvoicedata;
+                //    response.Message = "Invoice is Deleted Successfully";
+                //}
+                return response;
+            }
         }
     }
 }
