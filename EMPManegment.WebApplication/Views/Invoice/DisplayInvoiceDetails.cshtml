@@ -69,11 +69,11 @@
                         <div class="row g-3">
                             @if (firstItem != null)
                             {
+                                <input type="hidden" class="form-control" id="txtuserid" value="@_userSession.UserId" style="border:hidden;" />
+                                <input type="hidden" class="form-control" id="txtprojectid" value="@UserSession.ProjectId" style="border:hidden;" />
                                 <div class="col-lg-3 col-6">
                                     <p class="text-muted mb-2 text-uppercase fw-semibold">Invoice No</p>
-                                    <input type="text" class="form-control" id="txtinvoiceid" value="@firstItem.InvoiceNo" style="border:hidden;" />
-                                    <input type="hidden" class="form-control" id="txtuserid" value="@_userSession.UserId" style="border:hidden;" />
-                                    <input type="hidden" class="form-control" id="txtprojectid" value="@UserSession.ProjectId" style="border:hidden;" />
+                                    <h5 class="fs-14 mb-0" id="txtinvoiceid">@firstItem.InvoiceNo</h5>
                                 </div>
                                 <!--end col-->
                                 <div class="col-lg-3 col-6">
