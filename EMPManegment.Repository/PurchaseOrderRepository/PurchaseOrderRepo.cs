@@ -70,7 +70,7 @@ namespace EMPManegment.Repository.PurchaseOrderRepository
                     {
                         Id = Guid.NewGuid(),
                         VendorId = item.VendorId,
-                        Opid = item.Opid,
+                        Poid = item.Opid,
                         CompanyName = item.CompanyName,
                         ProductName = item.ProductName,
                         ProductShortDescription = item.ProductShortDescription,
@@ -108,7 +108,7 @@ namespace EMPManegment.Repository.PurchaseOrderRepository
                                              {
                                                  Id = a.Id,
                                                  ProductId = a.ProductId,
-                                                 Opid = a.Opid,
+                                                 Opid = a.Poid,
                                                  CompanyName = b.VendorCompany,
                                                  VendorId = a.VendorId,
                                                  ProductName = c.Type,

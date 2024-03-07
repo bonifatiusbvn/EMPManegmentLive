@@ -207,5 +207,25 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
+        [HttpPost]
+        public async Task<IActionResult> DeleteOrderDetails(string OrderId)
+        {
+            try
+            {
+                ApiResponseModel postuser = await APIServices.PostAsync(null, "OrderDetails/DeleteOrderDetails?OrderId=" + OrderId);
+                if (postuser.code == 200)
+                {
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
+                }
+                else
+                {
+                    return new JsonResult(new { Message = string.Format(postuser.message), Code = postuser.code });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

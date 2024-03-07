@@ -451,6 +451,8 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                         Igst = InsertInvoice.Igst,
                         TotalGst = InsertInvoice.TotalGst,
                         TotalAmount = InsertInvoice.TotalAmount,
+                        Status = "Pending",
+                        IsDeleted = true,
                         CreatedOn = DateTime.Now,
                         CreatedBy = InsertInvoice.CreatedBy,
                     };
@@ -649,6 +651,61 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                     response.Message = "Invoice is Deleted Successfully";
             }
             return response;
+        }
+
+        public async Task<UpdateInvoiceModel> EditInvoiceDetails(string InvoiceNo)
+        {
+            UpdateInvoiceModel invoice = new UpdateInvoiceModel();
+            try
+            {
+                invoice = (from a in Context.TblInvoices.Where(x => x.InvoiceNo == InvoiceNo)
+                           join b in Context.TblVendorMasters
+                           on a.VandorId equals b.Vid
+                           select new UpdateInvoiceModel
+                           {
+                               Id = a.Id,
+                               InvoiceNo = a.InvoiceNo,
+                               CompanyName = b.VendorCompany,
+                               TotalAmount = a.TotalAmount,
+                               PaymentMethod = a.PaymentMethod,
+                               Status = a.Status,
+                               InvoiceDate = a.InvoiceDate,
+
+                           }).First();
+                return invoice;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<UserResponceModel> UpdateInvoiceDetails(UpdateInvoiceModel UpdateInvoice)
+        {
+            UserResponceModel model = new UserResponceModel();
+            var invoicedetails = Context.TblInvoices.Where(e => e.Id == UpdateInvoice.Id).FirstOrDefault();
+            try
+            {
+                if (invoicedetails != null)
+                {
+                    invoicedetails.Id = UpdateInvoice.Id;
+                    invoicedetails.InvoiceDate = UpdateInvoice.InvoiceDate;
+                    invoicedetails.TotalAmount = UpdateInvoice.TotalAmount;
+                    invoicedetails.PaymentMethod = UpdateInvoice.PaymentMethod;
+                    invoicedetails.Status = UpdateInvoice.Status;
+                    invoicedetails.UpdatedOn=DateTime.Now;
+                    invoicedetails.UpdatedBy=UpdateInvoice.UpdatedBy;
+                }
+                Context.TblInvoices.Update(invoicedetails);
+                Context.SaveChanges();
+                model.Code = 200;
+                model.Message = "Invoice Details Updated Successfully!";
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return model;
         }
     }
 }
