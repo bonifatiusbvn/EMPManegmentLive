@@ -432,10 +432,10 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.Property(e => e.CompanyName).HasMaxLength(50);
             entity.Property(e => e.CreatedOn).HasColumnType("date");
             entity.Property(e => e.DeliveryDate).HasColumnType("date");
-            entity.Property(e => e.Opid)
-                .HasMaxLength(50)
-                .HasColumnName("OPId");
             entity.Property(e => e.OrderDate).HasColumnType("date");
+            entity.Property(e => e.Poid)
+                .HasMaxLength(50)
+                .HasColumnName("POId");
             entity.Property(e => e.ProductName).HasMaxLength(50);
             entity.Property(e => e.ProductShortDescription).HasMaxLength(50);
             entity.Property(e => e.Quantity).HasMaxLength(50);
