@@ -16,5 +16,6 @@ namespace EMPManegment.Inretface.Interface.PurchaseOrder
         string CheckOPNo(string projectname);
         Task<UserResponceModel> CreatePO(List<OPMasterView> CreatePO);
         Task<jsonData> GetPOList(DataTableRequstModel POdataTable);
+        Task<POResponseModel> DisplayPODetails(string POId);
     }
 }

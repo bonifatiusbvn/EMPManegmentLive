@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EMPManegment.EntityModels.ViewModels.OrderModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,7 +13,7 @@ namespace EMPManegment.EntityModels.ViewModels.POMaster
 
         public Guid? VendorId { get; set; }
 
-        public string? Opid { get; set; }
+        public string? POId { get; set; }
 
         public string? CompanyName { get; set; }
 
@@ -37,5 +38,15 @@ namespace EMPManegment.EntityModels.ViewModels.POMaster
         public DateTime? CreatedOn { get; set; }
 
         public Guid? CreatedBy { get; set; }
+        public string? VendorAddress { get; set; }
+        public string? ProductTypeName { get; set; }
+    }
+    public class POResponseModel
+    {
+        public string? Message { get; set; }
+
+        public int Code { get; set; }
+
+        public List<OPMasterView> Data { get; set; }
     }
 }

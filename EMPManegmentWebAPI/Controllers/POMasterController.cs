@@ -74,5 +74,31 @@ namespace EMPManagment.API.Controllers
             var AllPOList = await POServices.GetPOList(POList);
             return Ok(new { code = 200, data = AllPOList });
         }
+
+        [HttpGet]
+        [Route("DisplayPODetails")]
+        public async Task<IActionResult> DisplayPODetails(string POId)
+        {
+            POResponseModel response = new POResponseModel();
+            try
+            {
+                var POdetails = POServices.DisplayPODetails(POId);
+                if (POdetails.Result.Code == 400)
+                {
+                    response.Message = POdetails.Result.Message;
+                    response.Code = (int)HttpStatusCode.BadRequest;
+                }
+                else
+                {
+                    response.Data = POdetails.Result.Data;
+                    response.Code = (int)HttpStatusCode.OK;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return StatusCode(response.Code, response);
+        }
     }
 }

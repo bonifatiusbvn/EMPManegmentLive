@@ -338,7 +338,7 @@ function searchproject() {
     GetAllUserProjectDetailsList(1);
 }
 function deleteProjectMember(Id) {
-    debugger
+ 
     $('#deleteOrderModal').modal('show');
 
     $('#delete-record').click(function () {
@@ -359,7 +359,7 @@ function deleteProjectMember(Id) {
             processData: false,
             contentType: false,
             success: function (Result) {
-                debugger
+               
                 Swal.fire({
                     title: Result.message,
                     icon: 'success',

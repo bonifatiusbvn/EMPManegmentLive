@@ -602,7 +602,6 @@ function SerchProductDetailsById() {
 
 
 function AllPurchaseOrderList() {
-
     $('#PurchaseOrderTable').DataTable({
         processing: true,
         serverSide: true,
@@ -615,16 +614,15 @@ function AllPurchaseOrderList() {
         },
         columns: [
             {
+                "render": function (data, type, full) {
+                    return '<h5 class="fs-15"><a href="/PO/DisplayPODetails/?POId=' + full.poId + '" class="fw-medium link-primary">' + full.poId; '</a></h5>';
+                }
+            },
+            {
                 "data": "companyName", "name": "CompanyName",
             },
             {
                 "data": "productName", "name": "ProductName"
-            },
-            {
-                "data": "productShortDescription", "name": "ProductShortDescription"
-            },
-            {
-                "data": "productType", "name": "ProductType"
             },
             {
                 "data": "quantity", "name": "Quantity"
