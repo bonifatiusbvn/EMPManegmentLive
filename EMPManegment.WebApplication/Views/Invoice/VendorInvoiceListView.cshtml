@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<EMPManegment.EntityModels.ViewModels.Invoice.InvoiceViewModel>
 @using EMPManegment.Web.Models;
- @inject IHttpContextAccessor Accessor;
+@inject IHttpContextAccessor Accessor;
 @inject UserSession _userSession
 @{
     ViewData["Title"] = "VendorInvoiceListView";
@@ -10,7 +10,7 @@
 
 @{
     decimal? TotalAmount = 0;
-    Guid vendorid = Model.FirstOrDefault().VandorId;
+    Guid? vendorid = Model.FirstOrDefault()?.VandorId;
 }
 @foreach (var item in Model)
 {
