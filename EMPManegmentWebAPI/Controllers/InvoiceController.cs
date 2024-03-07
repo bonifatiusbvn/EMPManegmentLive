@@ -284,5 +284,31 @@ namespace EMPManagment.API.Controllers
             }
             return StatusCode(response.Code, response);
         }
+
+        [HttpGet]
+        [Route("ShowInvoiceDetailsByOrderId")]
+        public async Task<IActionResult> ShowInvoiceDetailsByOrderId(string OrderId)
+        {
+            OrderResponseModel response = new OrderResponseModel();
+            try
+            {
+                var orderdetails = InvoiceMaster.ShowInvoiceDetailsByOrderId(OrderId);
+                if (orderdetails.Result.Code == 400)
+                {
+                    response.Message = orderdetails.Result.Message;
+                    response.Code = (int)HttpStatusCode.BadRequest;
+                }
+                else
+                {
+                    response.Data = orderdetails.Result.Data;
+                    response.Code = (int)HttpStatusCode.OK;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return StatusCode(response.Code, response);
+        }
     }
 }
