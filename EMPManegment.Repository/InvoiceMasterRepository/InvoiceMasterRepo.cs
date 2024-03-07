@@ -780,9 +780,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                         }
                         response.Data = orderDetails;
                         response.Code = 200;
-                        response.Message = "Invoice Is Generated successfully";
                     }
-
                 }
             }
             catch (Exception ex)

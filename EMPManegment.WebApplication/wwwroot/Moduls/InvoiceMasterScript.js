@@ -72,8 +72,9 @@ function GetInvoiceDetailsByOrderId(OrderId) {
 }
 
 function ShowInvoiceDetailsByOrderId(OrderId) {
+    
     $.ajax({
-        url: '/Invoice/GetInvoiceDetailsByOrderId/?OrderId=' + OrderId,
+        url: '/Invoice/ShowInvoiceDetailsByOrderId/?OrderId=' + OrderId,
         type: 'GET',
         success: function (result) {
             if (result.code == 400) {
@@ -84,7 +85,7 @@ function ShowInvoiceDetailsByOrderId(OrderId) {
                     confirmButtonText: 'OK',
                 });
             } else {
-                window.location = '/Invoice/InvoiceDetails/?OrderId=' + OrderId;
+                window.location = '/Invoice/DisplayInvoiceDetails?OrderId=' + OrderId;
             }
         },
         error: function (xhr, status, error) {
