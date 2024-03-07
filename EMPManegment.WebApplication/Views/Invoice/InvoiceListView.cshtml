@@ -36,64 +36,6 @@
                     </div>
                 </div>
             </div>
-            <!--Edit Invoice Modal -->
-            <div class="modal fade zoomIn" id="EditInvoiceModel" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class=" modal-dialog modal-dialog-centered modal-lg">
-                    <div class="modal-content border-0">
-                        <div class="modal-header bg-primary-subtle p-3">
-                            <h5 class="modal-title" id="editModalLabel">Edit Invoice Details</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <form id="editinvoicedetails">
-
-                                <div class="row">
-                                    <div class="col-lg-6">
-                                        <div class="mb-3">
-                                            <label for="txtinvoice" class="form-label">InvoiceNo</label>
-                                            <input type="text" class="form-control" id="EditInvoiceNo" />
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">VendorName</label>
-                                            <input type="text" id="EditVendorName" class="form-control" />
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-lg-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">ProjectName</label>
-                                            <input type="text" id="EditProjectName" class="form-control" />
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">OrderId</label>
-                                            <input type="text" id="EditOrderId" class="form-control" />
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-lg-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">Total Amount</label>
-                                            <input type="text" id="Edittotalamount" class="form-control" />
-                                        </div>
-                                    </div>
-                                    </div>
-                            </form>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-light" id="close-modal" data-bs-dismiss="modal" onclick="ClearTextBox()">Close</button>
-                            <button class="btn btn-warning m-1" onclick="UpdateInvoiceDetails()" id="btnUpdate">Update</button>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!--end Edit Expense modal-->
             <div class="card-body bg-light-subtle border border-dashed border-start-0 border-end-0">
                 <form>
                     <div class="row g-3">
@@ -159,7 +101,7 @@
                                         <td>
                                             <ul class="list-inline hstack gap-2 mb-0">
                                                 <li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">
-                                                    <a  onclick="EditInvoceDetails()" data-bs-toggle="modal" class="text-primary d-inline-block edit-item-btn">
+                                                    <a onclick="EditInvoiceDetails('@item.InvoiceNo')" data-bs-toggle="modal" class="text-primary d-inline-block edit-item-btn">
                                                         <i class="ri-pencil-fill fs-16"></i>
                                                     </a>
                                                 </li>
@@ -199,25 +141,67 @@
                     </div>
                 </div>
 
-                <!-- Modal -->
-                <div class="modal fade flip" id="deleteOrder" tabindex="-1" aria-labelledby="deleteOrderLabel" aria-hidden="true">
+                <!--Update Invoice Modal -->
+                <div class="modal fade" id="UpdateInvoiceModel" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
-                            <div class="modal-body p-5 text-center">
-                                <lord-icon src="https://cdn.lordicon.com/gsqxdxog.json" trigger="loop" colors="primary:#25a0e2,secondary:#00bd9d" style="width:90px;height:90px">
-                                </lord-icon>
-                                <div class="mt-4 text-center">
-                                    <h4>You are about to delete a invoice ?</h4>
-                                    <p class="text-muted fs-15 mb-4">
-                                        Deleting your invoice will remove all of
-                                        your information from our database.
-                                    </p>
-                                    <div class="hstack gap-2 justify-content-center remove">
-                                        <button class="btn btn-link link-primary fw-medium text-decoration-none" id="deleteRecord-close" data-bs-dismiss="modal"><i class="ri-close-line me-1 align-middle"></i> Close</button>
-                                        <button class="btn btn-primary" id="delete-record">Yes, Delete It</button>
+                            <div class="modal-header bg-light p-3">
+                                <h5 class="modal-title" id="exampleModalLabel">Update Invoice</h5><h5 class="modal-title" id="txtinvoiceno" style="margin-left:10px;"></h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"></button>
+                            </div>
+                            <form class="tablelist-form" autocomplete="off" id="UpdateInvoiceDetailsForm">
+                                <div class="modal-body">
+
+                                    <div class="mb-3">
+                                        <label for="date-field" class="form-label">Invoice Date</label>
+                                        <input type="datetime-local" data-date-format="d M, Y" data-enable-time id="txtinvoicedate" name="txtinvoicedate" class="form-control" />
+                                        <input type="hidden" id="txtid" class="form-control" />
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="customername-field" class="form-label">Company Name</label>
+                                        <input type="text" id="txtcompanyname" name="txtcompanyname" class="form-control" placeholder="Enter Company name" />
+                                    </div>
+
+                                    <div class="row gy-4 mb-3">
+                                        <div class="col-md-6">
+                                            <div>
+                                                <label for="amount-field" class="form-label">Amount</label>
+                                                <input type="text" id="txtamount" name="txtamount" class="form-control" placeholder="Total amount" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div>
+                                                <label for="payment-field" class="form-label">Payment Method</label>
+                                                <select class="form-control" data-trigger name="txtpaymentmethod" id="txtpaymentmethod">
+                                                    <option selected disabled value="">---Select Payment Method---</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row gy-4 mb-3">
+                                        <div class="col-md-6">
+                                            <div>
+                                                <label for="payment-field" class="form-label">Status</label>
+                                                <select class="form-control" data-trigger name="txtstatus" id="txtstatus">
+                                                    <option selected disabled value="">Select Status</option>
+                                                    <option value="Pending">Pending</option>
+                                                    <option value="Confirm">Confirm</option>
+                                                    <option value="Complete">Complete</option>
+                                                    <option value="Cancel">Cancel</option>
+                                                </select>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                                <div class="modal-footer">
+                                    <div class="hstack gap-2 justify-content-end">
+                                        <button type="button" class="btn btn-light" id="close-modal" data-bs-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-success" onclick="UpdateInvoiceDetails()" id="updatedetailbtn">Update</button>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -229,6 +213,13 @@
     <!--end col-->
 </div> <!-- end row-->
 <!--end row-->
+<style>
+    #txtinvoicedate-error, #txtcompanyname-error, #txtamount-error,
+    #txtpaymentmethod-error, #txtstatus-error {
+        color: red;
+    }
+</style>
+
 <script src="~/lib/jquery/dist/jquery.js"></script>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/moduls/invoicemasterscript.js"></script>

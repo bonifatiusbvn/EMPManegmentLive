@@ -452,7 +452,7 @@ function SerchProductDetailsById() {
     });
 }
 
-function deleteOrderDetails(InvoiceNo) {
+function deleteOrderDetails(OrderId) {debugger
     Swal.fire({
         title: "Are you sure want to Delete This?",
         text: "You won't be able to revert this!",
@@ -467,27 +467,27 @@ function deleteOrderDetails(InvoiceNo) {
     }).then((result) => {
         if (result.isConfirmed) {
             $.ajax({
-                url: '/Invoice/IsDeletedInvoice?InvoiceNo=' + InvoiceNo,
+                url: '/OrderMaster/DeleteOrderDetails?OrderId=' + OrderId,
                 type: 'POST',
                 dataType: 'json',
-                success: function (Result) {
+                success: function (Result) {debugger
                     Swal.fire({
                         title: Result.message,
                         icon: 'success',
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'OK'
                     }).then(function () {
-                        window.location = '/Invoice/InvoiceListView';
+                        window.location = '/OrderMaster/CreateOrder';
                     })
                 },
                 error: function () {
                     Swal.fire({
-                        title: "Can't Delete Invoice!",
+                        title: "Can't Delete Order!",
                         icon: 'warning',
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'OK',
                     }).then(function () {
-                        window.location = '/Invoice/InvoiceListView';
+                        window.location = '/OrderMaster/CreateOrder';
                     })
                 }
             })
@@ -495,7 +495,7 @@ function deleteOrderDetails(InvoiceNo) {
 
             Swal.fire(
                 'Cancelled',
-                'Invoice Have No Changes.!!😊',
+                'Order Have No Changes.!!😊',
                 'error'
             );
         }

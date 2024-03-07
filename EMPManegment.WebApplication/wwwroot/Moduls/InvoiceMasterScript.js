@@ -384,33 +384,107 @@ function getLastTransaction(Vid) {
 
     });
 }
-function EditInvoceDetails() {
+$(document).ready(function () {
+    GetPaymentMethodList();
+});
+function GetPaymentMethodList() {
 
-    var Id = {
-        Id: document.getElementById("txtinvoiceid").innerText,
-    }
-
-    var form_data = new FormData();
-    form_data.append("ID", JSON.stringify(Id));
     $.ajax({
-        url: '/Invoice/EditInvoceDetails',
-        type: 'Post',
-        data: form_data,
-        dataType: 'json',
-        contentType: false,
-        processData: false,
-
-        success: function (response) {
-
-            $('#EditInvoiceModel').modal('show');
-            $('#EditInvoiceNo').val(response.invoiceNo);
-            $('#EditVendorName').val(response.vendorName);
-            $('#EditProjectName').val(response.projectName);
-            $('#EditOrderId').val(response.orderId);
-            $('#Edittotalamount').val(response.totalAmount);
+        url: '/OrderMaster/GetPaymentMethodList',
+        success: function (result) {
+            $.each(result, function (i, data) {
+                $('#txtpaymentmethod').append('<Option value=' + data.id + '>' + data.paymentMethod + '</Option>')
+            });
         }
     });
 }
+function EditInvoiceDetails(InvoiceNo) {
+    $.ajax({
+        url: '/Invoice/EditInvoiceDetails?InvoiceNo=' + InvoiceNo,
+        type: "Get",
+        contentType: 'application/json;charset=utf-8;',
+        dataType: 'json',
+        success: function (response) {
+            $('#UpdateInvoiceModel').modal('show');
+            $('#txtinvoiceno').html(response.invoiceNo);
+            $('#txtinvoicedate').val(response.invoiceDate);
+            $('#txtid').val(response.id);
+            $('#txtcompanyname').val(response.companyName);
+            $('#txtamount').val(response.totalAmount);
+            $('#txtpaymentmethod').val(response.paymentMethod);
+            $('#txtstatus').val(response.status);
+        },
+        error: function () {
+            alert('Data not found');
+        }
+    });
+}
+
+function UpdateInvoiceDetails() {
+    if ($('#UpdateInvoiceDetailsForm').valid()) {
+        var formData = new FormData();
+        formData.append("InvoiceNo", $("#txtinvoiceno").val());
+        formData.append("InvoiceDate", $("#txtinvoicedate").val());
+        formData.append("Id", $("#txtid").val());
+        formData.append("companyName", $("#txtcompanyname").val());
+        formData.append("TotalAmount", $("#txtamount").val());
+        formData.append("PaymentMethod", $("#txtpaymentmethod").val());
+        formData.append("Status", $("#txtstatus").val());
+
+        $.ajax({
+            url: '/Invoice/UpdateInvoiceDetails',
+            type: 'Post',
+            data: formData,
+            dataType: 'json',
+            contentType: false,
+            processData: false,
+            success: function (Result) {
+                if (Result.message != null) {
+                    Swal.fire({
+                        title: Result.message,
+                        icon: 'success',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK',
+                    }).then(function () {
+                        window.location = '/Invoice/InvoiceListView';
+                    });
+                }
+            }
+        })
+    }
+    else {
+        Swal.fire({
+            title: "Kindly Fill All Details",
+            icon: 'warning',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'OK',
+        })
+    }
+}
+
+$(document).ready(function () {
+
+    $("#UpdateInvoiceDetailsForm").validate({
+        rules: {
+            txtinvoicedate: "required",
+            txtamount: "required",
+            txtpaymentmethod: "required",
+            txtstatus: "required",
+            txtcompanyname: "required",
+        },
+        messages: {
+            txtinvoicedate: "Please emter invoice date",
+            txtamount: "Please enter invoice Amount",
+            txtpaymentmethod: "Please Enter Payment method",
+            txtstatus: "Plese enter status",
+            txtcompanyname: "Plese enter Company name",
+        }
+    })
+    $("#updatedetailbtn").on('click', function () {
+        $("#UpdateInvoiceDetailsForm").validate();
+    });
+});
+
 function GetAllTransactionData() {
     $('#transactionTable').DataTable({
         processing: true,

@@ -73,6 +73,7 @@ namespace EMPManegment.Repository.OrderRepository
                                   join b in Context.TblVendorMasters on a.VendorId equals b.Vid
                                   join c in Context.TblProductTypeMasters on a.ProductType equals c.Id
                                   join d in Context.TblPaymentMethodTypes on a.PaymentMethod equals d.Id
+                                  where a.IsDeleted != false
                                   select new
                                   {
                                       Order = a,
@@ -384,15 +385,15 @@ namespace EMPManegment.Repository.OrderRepository
                 UserResponceModel response = new UserResponceModel();
                 var GetOrderdata = Context.TblOrderMasters.Where(a => a.OrderId == OrderId).FirstOrDefault();
 
-                //if (GetOrderdata != null)
-                //{
-                //    GetOrderdata.IsDeleted = false;
-                //    Context.TblInvoices.Update(GetInvoicedata);
-                //    Context.SaveChanges();
-                //    response.Code = 200;
-                //    response.Data = GetInvoicedata;
-                //    response.Message = "Invoice is Deleted Successfully";
-                //}
+                if (GetOrderdata != null)
+                {
+                    GetOrderdata.IsDeleted = false;
+                    Context.TblOrderMasters.Update(GetOrderdata);
+                    Context.SaveChanges();
+                    response.Code = 200;
+                    response.Data = GetOrderdata;
+                    response.Message = "Order is Deleted Successfully";
+                }
                 return response;
             }
         }
