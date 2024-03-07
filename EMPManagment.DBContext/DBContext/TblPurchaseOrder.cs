@@ -9,7 +9,7 @@ public partial class TblPurchaseOrder
 
     public Guid? VendorId { get; set; }
 
-    public string? Opid { get; set; }
+    public string? Poid { get; set; }
 
     public string? CompanyName { get; set; }
 
