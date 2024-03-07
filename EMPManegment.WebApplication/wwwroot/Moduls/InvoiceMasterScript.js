@@ -97,9 +97,9 @@ function ShowInvoiceDetailsByOrderId(OrderId) {
 }
 
 function InsertInvoiceDetails() {
-
+    
     var objData = {
-        InvoiceNo: $("#txtinvoiceid").val(),
+        InvoiceNo: document.getElementById("txtinvoiceid").innerHTML,
         CreatedBy: $("#txtuserid").val(),
         ProjectId: $("#txtprojectid").val(),
         BuyesOrderDate: document.getElementById("txtdate").innerHTML,

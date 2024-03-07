@@ -47,7 +47,7 @@
                     <div class="card-header border-bottom-dashed p-4">
                         <div class="d-flex">
                             <div class="flex-grow-1">
-                                <img src="~/UserHome/minimal/assets/images/logo - bonifatius.jpeg" class="card-logo card-logo-dark user-profile-image img-fluid" alt="logo dark" style="width:350px;">
+                                <img src="~/UserHome/minimal/assets/images/logo - bonifatius.jpeg" class="card-logo card-logo-dark user-profile-image img-fluid" alt="logo dark" style="width:250px;">
                                 <div class="mt-sm-5 mt-4">
                                     <h6 class="text-muted text-uppercase fw-semibold">Address</h6>
                                     <h6><span class="text-muted fw-normal">Bonifatius Technologies Pvt. Ltd.</span></h6>
@@ -69,11 +69,11 @@
                         <div class="row g-3">
                             @if (firstItem != null)
                             {
+                                <input type="hidden" class="form-control" id="txtuserid" value="@_userSession.UserId" style="border:hidden;" />
+                                <input type="hidden" class="form-control" id="txtprojectid" value="@UserSession.ProjectId" style="border:hidden;" />
                                 <div class="col-lg-3 col-6">
                                     <p class="text-muted mb-2 text-uppercase fw-semibold">Invoice No</p>
-                                    <input type="text" class="form-control" id="txtinvoiceid" value="@firstItem.InvoiceNo" style="border:hidden;" />
-                                    <input type="hidden" class="form-control" id="txtuserid" value="@_userSession.UserId" style="border:hidden;" />
-                                    <input type="hidden" class="form-control" id="txtprojectid" value="@UserSession.ProjectId" style="border:hidden;" />
+                                    <h5 class="fs-14 mb-0" id="txtinvoiceid">@firstItem.InvoiceNo</h5>
                                 </div>
                                 <!--end col-->
                                 <div class="col-lg-3 col-6">
