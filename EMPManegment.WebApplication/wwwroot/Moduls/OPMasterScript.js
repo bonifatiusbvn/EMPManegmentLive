@@ -599,7 +599,7 @@ function SerchProductDetailsById() {
             })), window.location.href = "apps-invoices-list.html")
         })
     });
-}
+
 
 function AllPurchaseOrderList() {
 
