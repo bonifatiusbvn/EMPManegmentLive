@@ -174,7 +174,7 @@
                             @if (firstItem != null)
                             {
                                 <h6 class="text-muted text-uppercase fw-semibold mb-3">Payment Details:</h6>
-                                <p class="text-muted mb-1">Payment Method: <span class="fw-medium" id="txtpaymentmethod">@firstItem.PaymentMethod</span></p>
+                                <p class="text-muted mb-1">Payment Method: <span class="fw-medium">@firstItem.PaymentMethodName</span></p>
                                 <p class="text-muted mb-1">Card Holder: <span class="fw-medium" id="card-holder-name">@firstItem.CompanyName</span></p>
                                 <p class="text-muted mb-1">Card Number: <span class="fw-medium" id="card-number">xxx xxxx xxxx 1234</span></p>
                                 <p class="text-muted">Total Amount: <span class="fw-medium" id="">₹ </span><span id="card-total-amount">@totalAmount</span></p>

@@ -555,6 +555,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                                   join c in Context.TblProductDetailsMasters on a.ProductId equals c.Id
                                   join b in Context.TblVendorMasters on a.VendorId equals b.Vid
                                   join d in Context.TblInvoices on a.OrderId equals d.OrderId
+                                  join e in Context.TblPaymentMethodTypes on a.PaymentMethod equals e.Id
                                   where a.OrderId == OrderId
                                   select new OrderDetailView
                                   {
@@ -581,6 +582,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                                       PaymentStatus = a.PaymentStatus,
                                       DeliveryStatus = a.DeliveryStatus,
                                       DeliveryDate = a.DeliveryDate,
+                                      PaymentMethodName=e.PaymentMethod,
                                       CreatedOn = a.CreatedOn,
                                   }).ToListAsync();
                 if (data != null)
@@ -613,6 +615,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                             CreatedOn = item.CreatedOn,
                             Type = item.Type,
                             PaymentStatus = item.PaymentStatus,
+                            PaymentMethodName=item.PaymentMethodName,
                         });
                     }
                     response.Data = orderDetails;

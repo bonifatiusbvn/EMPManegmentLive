@@ -9,6 +9,7 @@ using EMPManegment.EntityModels.ViewModels.VendorModels;
 using EMPManegment.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace EMPManegment.Web.Controllers
 {
@@ -143,6 +144,7 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
+
         [HttpPost]
         public async Task<IActionResult> UpdateExpenseDetails(ExpenseDetailsView ExpenseDetails)
         {
@@ -151,12 +153,9 @@ namespace EMPManegment.Web.Controllers
                 ApiResponseModel postuser = await APIServices.PostAsync(ExpenseDetails, "ExpenseMaster/UpdateExpenseDetails");
                 if (postuser.code == 200)
                 {
-                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
+                    return Ok(new { postuser.message });
                 }
-                else
-                {
-                    return new JsonResult(new { Message = string.Format(postuser.message), Code = postuser.code });
-                }
+                return View(ExpenseDetails);
             }
             catch (Exception ex)
             {
