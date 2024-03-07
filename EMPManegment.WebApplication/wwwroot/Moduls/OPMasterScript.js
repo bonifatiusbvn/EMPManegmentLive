@@ -602,7 +602,6 @@ function SerchProductDetailsById() {
 
 
 function AllPurchaseOrderList() {
-    debugger
     $('#PurchaseOrderTable').DataTable({
         processing: true,
         serverSide: true,
@@ -615,7 +614,9 @@ function AllPurchaseOrderList() {
         },
         columns: [
             {
-                "data": "opid", "name": "Opid",
+                "render": function (data, type, full) {
+                    return '<h5 class="fs-15"><a href="/PO/DisplayPODetails/?POId=' + full.poId + '" class="fw-medium link-primary">' + full.poId; '</a></h5>';
+                }
             },
             {
                 "data": "companyName", "name": "CompanyName",

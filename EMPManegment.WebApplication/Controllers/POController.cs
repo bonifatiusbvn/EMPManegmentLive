@@ -79,7 +79,7 @@ namespace EMPManegment.Web.Controllers
                 var draw = Request.Form["draw"].FirstOrDefault();
                 var start = Request.Form["start"].FirstOrDefault();
                 var length = Request.Form["length"].FirstOrDefault();
-                var sortColumn = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
+                var sortColumn = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][POId]"].FirstOrDefault();
                 var sortColumnDir = Request.Form["order[0][dir]"].FirstOrDefault();
                 var searchValue = Request.Form["search[value]"].FirstOrDefault();
                 int pageSize = length != null ? Convert.ToInt32(length) : 0;
@@ -118,5 +118,25 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
+        public async Task<IActionResult> DisplayPODetails(string POId)
+        {
+            try
+            {
+                List<OPMasterView> PODetails = new List<OPMasterView>();
+                ApiResponseModel response = await APIServices.GetAsync("", "POMaster/DisplayPODetails?POId=" + POId);
+                if (response.code == 200)
+                {
+                    PODetails = JsonConvert.DeserializeObject<List<OPMasterView>>(response.data.ToString());
+                    response.data = PODetails;
+
+                }
+                return View(PODetails);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }
+

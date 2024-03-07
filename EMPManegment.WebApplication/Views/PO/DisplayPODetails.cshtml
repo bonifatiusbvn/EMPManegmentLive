@@ -1,10 +1,9 @@
-﻿@model List<EMPManegment.EntityModels.ViewModels.OrderModels.OrderDetailView>
+﻿@model List<EMPManegment.EntityModels.ViewModels.POMaster.OPMasterView>
 @using EMPManegment.Web.Models;
- @inject IHttpContextAccessor Accessor;
+@inject IHttpContextAccessor Accessor;
 @inject UserSession _userSession
-
 @{
-    ViewData["Title"] = "DisplayInvoiceDetails";
+    ViewData["Title"] = "DisplayPODetails";
     Layout = "~/Views/Shared/_UserHomeLayout.cshtml";
 }
 
@@ -14,23 +13,21 @@
 @{
     var firstItem = Model.FirstOrDefault();
     decimal? totalAmount = 0;
-    decimal? totalGst = 0;
 }
 @foreach (var item in Model)
 {
     totalAmount += item.TotalAmount;
-    totalGst += item.PerUnitWithGstprice;
 }
 
 <div class="row">
     <div class="col-12">
         <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-            <h4 class="mb-sm-0">Invoice Details</h4>
+            <h4 class="mb-sm-0">PO Details</h4>
 
             <div class="page-title-right">
                 <ol class="breadcrumb m-0">
-                    <li class="breadcrumb-item"><a href="javascript: void(0);">Invoices</a></li>
-                    <li class="breadcrumb-item active">Invoice Details</li>
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Purchase Order</a></li>
+                    <li class="breadcrumb-item active">PO Details</li>
                 </ol>
             </div>
 
@@ -70,28 +67,26 @@
                             @if (firstItem != null)
                             {
                                 <div class="col-lg-3 col-6">
-                                    <p class="text-muted mb-2 text-uppercase fw-semibold">Invoice No</p>
-                                    <input type="text" class="form-control" id="txtinvoiceid" value="@firstItem.InvoiceNo" style="border:hidden;" />
+                                    <p class="text-muted mb-2 text-uppercase fw-semibold">Purchase Order No</p>
+                                    <input type="text" class="form-control" id="txtPOid" value="@firstItem.POId" style="border:hidden;" />
                                     <input type="hidden" class="form-control" id="txtuserid" value="@_userSession.UserId" style="border:hidden;" />
                                     <input type="hidden" class="form-control" id="txtprojectid" value="@UserSession.ProjectId" style="border:hidden;" />
                                 </div>
                                 <!--end col-->
                                 <div class="col-lg-3 col-6">
                                     <p class="text-muted mb-2 text-uppercase fw-semibold">Date</p>
-                                    <h5 class="fs-14 mb-0" id="txtdate">@firstItem.OrderDate.ToString("dd/MM/yyyy")</h5>
-                                    <h5 class="fs-14 mb-0" id="txtinvoicetype" hidden>@firstItem.Type</h5>
-                                    <h5 class="fs-14 mb-0" id="txtorderid" hidden>@firstItem.OrderId</h5>
+                                    <h5 class="fs-14 mb-0" id="txtorderdate">@firstItem.OrderDate?.ToString("dd/MM/yyyy")</h5>
+                                    <h5 class="fs-14 mb-0" id="txtproducttype" hidden>@firstItem.ProductType</h5>
                                 </div>
                                 <!--end col-->
                                 <div class="col-lg-3 col-6">
                                     <p class="text-muted mb-2 text-uppercase fw-semibold">Payment Status</p>
-                                    <span class="badge bg-success-subtle text-success fs-11" id="txtpaymentstatus">@firstItem.PaymentStatus</span>
+                                    <span class="badge bg-success-subtle text-success fs-11" id="txtpaymentstatus">@firstItem.Status</span>
                                 </div>
                                 <!--end col-->
                                 <div class="col-lg-3 col-6">
                                     <p class="text-muted mb-2 text-uppercase fw-semibold">Total Amount</p>
                                     <h5 class="fs-14 mb-0">₹<span id="txttotalamount">@totalAmount</span></h5>
-                                    <h5 class="fs-14 mb-0" hidden>₹<span id="txttotalgst">@totalGst</span></h5>
                                 </div>
                                 <!--end col-->
                             }
@@ -106,20 +101,11 @@
                         {
                             <div class="row g-3">
                                 <div class="col-6">
-                                    <h6 class="text-muted text-uppercase fw-semibold mb-3">Billing Address</h6>
-                                    <p class="fw-medium mb-2" id="txtcompanyname">@firstItem.CompanyName</p>
-                                    <p class="fw-medium mb-2" id="txtvendorid" hidden>@firstItem.VendorId</p>
-                                    <p class="text-muted mb-1" id="txtaddress">@firstItem.VendorAddress</p>
-                                    <p class="text-muted mb-1"><span>Email: </span><span id="txtemail">@firstItem.VendorEmail</span></p>
-                                    <p class="text-muted mb-1"><span>Phone: +</span><span id="txtcontect">@firstItem.VendorContact</span></p>
-                                </div>
-                                <!--end col-->
-                                <div class="col-6">
                                     <h6 class="text-muted text-uppercase fw-semibold mb-3">Shipping Address</h6>
-                                    <p class="fw-medium mb-2" id="txtshippingcompany">@firstItem.CompanyName</p>
-                                    <p class="text-muted mb-1" id="txtshippingaddress">@firstItem.VendorAddress</p>
-                                    <p class="text-muted mb-1"><span>Email: </span><span id="txtshippingemail">@firstItem.VendorEmail</span></p>
-                                    <p class="text-muted mb-1"><span>Phone: +</span><span id="txtshippingcontect">@firstItem.VendorContact</span></p>
+                                    <p class="fw-medium mb-2">Bonifatius Technologies Pvt. Ltd.</p>
+                                   <span class="fw-medium mb-2">SF- 203, Peridot Complex, Urmi co-Operative scoiety Akota,</span>
+                                    <p><span class="fw-medium mb-2">Vadodara,Gujarat 390020</span></p>
+                                    
                                 </div>
                                 <!--end col-->
                             </div>
@@ -136,9 +122,7 @@
                                     <tr class="table-active">
                                         <th scope="col">#</th>
                                         <th scope="col">Product Details</th>
-                                        <th scope="col">Rate</th>
                                         <th scope="col">Quantity</th>
-                                        <th scope="col">RateWithGst</th>
                                         <th scope="col" class="text-end">Amount</th>
                                     </tr>
                                 </thead>
@@ -149,12 +133,9 @@
                                             <td>@(Model.IndexOf(item) + 1)</td>
                                             <td class="text-start">
                                                 <span class="fw-medium" id="txtproductname">@item.ProductName</span>
-                                                <span class="fw-medium" id="txtproductid" hidden>@item.ProductId</span>
-                                                <p class="text-muted mb-0" id="txtdescription">@item.ProductShortDescription</p>
+                                                <p class="text-muted mb-0" id="txtdescription">@item.ProductTypeName</p>
                                             </td>
-                                            <td id="txtperunitprice">@item.PerUnitPrice</td>
-                                            <td id="txtquantity">@item.Quantity</td>
-                                            <td id="txtperunitwithgstprice">@item.PerUnitWithGstprice</td>
+                                            <td class="text-center" id="txtquantity">@item.Quantity</td>
                                             <td class="text-end" id="txttotal">@item.TotalAmount</td>
                                         </tr>
                                     }
@@ -166,7 +147,7 @@
                                 <tbody>
                                     <tr class="border-top border-top-dashed fs-15">
                                         <th scope="row">Total Amount</th>
-                                        <th class="text-end" id="InsertInvoiceDetails">₹@totalAmount</th>
+                                        <th class="text-end" id="txtTotalAmount">₹@totalAmount</th>
                                     </tr>
                                 </tbody>
                             </table>
@@ -176,7 +157,6 @@
                             @if (firstItem != null)
                             {
                                 <h6 class="text-muted text-uppercase fw-semibold mb-3">Payment Details:</h6>
-                                <p class="text-muted mb-1">Payment Method: <span class="fw-medium" id="txtpaymentmethod">@firstItem.PaymentMethod</span></p>
                                 <p class="text-muted mb-1">Card Holder: <span class="fw-medium" id="card-holder-name">@firstItem.CompanyName</span></p>
                                 <p class="text-muted mb-1">Card Number: <span class="fw-medium" id="card-number">xxx xxxx xxxx 1234</span></p>
                                 <p class="text-muted">Total Amount: <span class="fw-medium" id="">₹ </span><span id="card-total-amount">@totalAmount</span></p>
@@ -198,8 +178,7 @@
                         <div class="hstack gap-2 justify-content-end d-print-none mt-4">
                             <a href="javascript:window.print()" class="btn btn-soft-primary"><i class="ri-printer-line align-bottom me-1"></i> Print</a>
                         </div>
-                    </div>
-                    <!--end card-body-->
+                    </div> <!--end card-body-->
                 </div><!--end col-->
             </div><!--end row-->
         </div>
@@ -209,9 +188,8 @@
 </div>
 <!--end row-->
 
-<script src="~/UserHome/minimal/assets/js/pages/invoicedetails.js"></script>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script src="~/moduls/invoicemasterscript.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.debug.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.min.js"></script>
-<script src="~/moduls/invoicemasterscript.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+<script src="~/moduls/opmasterscript.js"></script>
