@@ -495,7 +495,26 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
+
+        public async Task<IActionResult> ShowInvoiceDetailsByOrderId(string OrderId)
+        {
+            try
+            {
+                ApiResponseModel response = await APIServices.GetAsync("", "Invoice/ShowInvoiceDetailsByOrderId?OrderId=" + OrderId);
+                if (response.code == 200)
+                {
+                    return Ok(new { Code = response.code });
+                }
+                else
+                {
+                    return new JsonResult(new { Message = string.Format(response.message), Code = response.code, Icone = "warning" });
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
-
-
 }

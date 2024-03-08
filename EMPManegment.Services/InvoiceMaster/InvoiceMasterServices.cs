@@ -96,5 +96,10 @@ namespace EMPManegment.Services.InvoiceMaster
         {
             return await InvoiceMaster.UpdateInvoiceDetails(UpdateInvoice);
         }
+
+        public async Task<OrderResponseModel> ShowInvoiceDetailsByOrderId(string OrderId)
+        {
+            return await InvoiceMaster.ShowInvoiceDetailsByOrderId(OrderId);
+        }
     }
 }

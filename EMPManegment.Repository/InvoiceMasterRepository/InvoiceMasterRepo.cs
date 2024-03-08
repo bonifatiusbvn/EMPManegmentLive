@@ -36,7 +36,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
         {
             try
             {
-                var LastOrder = Context.TblOrderMasters.OrderByDescending(e => e.CreatedOn).FirstOrDefault();
+                var LastOrder = Context.TblInvoices.OrderByDescending(e => e.CreatedOn).FirstOrDefault();
                 var currentYear = DateTime.Now.Year;
                 var lastYear = currentYear - 1;
 
@@ -700,6 +700,94 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                 throw ex;
             }
             return model;
+        }
+
+        public async Task<OrderResponseModel> ShowInvoiceDetailsByOrderId(string OrderId)
+        {
+            OrderResponseModel response = new OrderResponseModel();
+            try
+            {
+                bool isInvoiceAlredyExists = Context.TblInvoices.Any(x => x.OrderId == OrderId);
+                if (isInvoiceAlredyExists == false)
+                {
+
+                    response.Message = "This Invoice Is Not Generated";
+                    response.Code = 400;
+                }
+                else
+                {
+                    var orderDetails = new List<OrderDetailView>();
+                    var data = await (from a in Context.TblOrderMasters
+                                      join c in Context.TblProductDetailsMasters on a.ProductId equals c.Id
+                                      join b in Context.TblVendorMasters on a.VendorId equals b.Vid
+                                      where a.OrderId == OrderId
+                                      select new OrderDetailView
+                                      {
+                                          Id = a.Id,
+                                          OrderId = a.OrderId,
+                                          VendorId = a.VendorId,
+                                          Type = a.Type,
+                                          CompanyName = a.CompanyName,
+                                          ProductId = a.ProductId,
+                                          VendorAddress = b.VendorAddress,
+                                          VendorContact = b.VendorContact,
+                                          VendorEmail = b.VendorCompanyEmail,
+                                          ProductImage = c.ProductImage,
+                                          ProductName = a.ProductName,
+                                          ProductShortDescription = a.ProductShortDescription,
+                                          Quantity = a.Quantity,
+                                          OrderDate = a.OrderDate,
+                                          PerUnitPrice = c.PerUnitPrice,
+                                          PerUnitWithGstprice = c.PerUnitWithGstprice,
+                                          TotalAmount = a.TotalAmount,
+                                          AmountPerUnit = a.AmountPerUnit,
+                                          PaymentMethod = a.PaymentMethod,
+                                          PaymentStatus = a.PaymentStatus,
+                                          DeliveryStatus = a.DeliveryStatus,
+                                          DeliveryDate = a.DeliveryDate,
+                                          CreatedOn = a.CreatedOn,
+                                      }).ToListAsync();
+                    if (data != null)
+                    {
+                        foreach (var item in data)
+                        {
+                            orderDetails.Add(new OrderDetailView()
+                            {
+                                Id = item.Id,
+                                OrderId = item.OrderId,
+                                CompanyName = item.CompanyName,
+                                VendorId = item.VendorId,
+                                ProductId = item.ProductId,
+                                VendorEmail = item.VendorEmail,
+                                VendorContact = item.VendorContact,
+                                VendorAddress = item.VendorAddress,
+                                ProductName = item.ProductName,
+                                ProductImage = item.ProductImage,
+                                ProductShortDescription = item.ProductShortDescription,
+                                Quantity = item.Quantity,
+                                OrderDate = item.OrderDate,
+                                PerUnitPrice = item.PerUnitPrice,
+                                PerUnitWithGstprice = item.PerUnitWithGstprice,
+                                TotalAmount = item.TotalAmount,
+                                AmountPerUnit = item.AmountPerUnit,
+                                PaymentMethod = item.PaymentMethod,
+                                DeliveryStatus = item.DeliveryStatus,
+                                DeliveryDate = item.DeliveryDate,
+                                CreatedOn = item.CreatedOn,
+                                Type = item.Type,
+                                PaymentStatus = item.PaymentStatus,
+                            });
+                        }
+                        response.Data = orderDetails;
+                        response.Code = 200;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return response;
         }
     }
 }
