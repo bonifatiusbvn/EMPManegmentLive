@@ -1,4 +1,5 @@
-﻿using EMPManegment.EntityModels.ViewModels.ExpenseMaster;
+﻿using EMPManegment.EntityModels.ViewModels.DataTableParameters;
+using EMPManegment.EntityModels.ViewModels.ExpenseMaster;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.ProductMaster;
 using EMPManegment.Inretface.Interface.ProductMaster;
@@ -44,12 +45,12 @@ namespace EMPManagment.API.Controllers
             }
             return StatusCode(response.Code, response);
         }
-        [HttpGet]
+        [HttpPost]
         [Route("GetExpenseDetailList")]
-        public async Task<IActionResult> GetExpenseDetailList()
+        public async Task<IActionResult> GetExpenseDetailList(DataTableRequstModel DataTable)
         {
-            IEnumerable<ExpenseDetailsView> getExpense = await expenseMaster.GetExpenseDetailList();
-            return Ok(new { code = 200, data = getExpense.ToList() });
+            var getExpense = await expenseMaster.GetExpenseDetailList(DataTable);
+            return Ok(new { code = 200, data = getExpense });
         }
         [HttpGet]
         [Route("GetExpenseDetailById")]
@@ -96,6 +97,21 @@ namespace EMPManagment.API.Controllers
         {
             IEnumerable<PaymentTypeView> getExpense = await expenseMaster.GetAllPaymentType();
             return Ok(new { code = 200, data = getExpense.ToList() });
+        }
+
+        [HttpPost]
+        [Route("GetUserExpenseDetail")]
+        public async Task<IActionResult> GetUserExpenseDetail(Guid UserId, DataTableRequstModel dataTable)
+        {
+            var getUserExpense = await expenseMaster.GetUserExpenseList(UserId, dataTable);
+            return Ok(new { code = 200, data = getUserExpense });
+        }
+        [HttpPost]
+        [Route("GetUserList")]
+        public async Task<IActionResult> GetUserList(DataTableRequstModel dataTable)
+        {
+            var getUserExpense = await expenseMaster.GetUserList(dataTable);
+            return Ok(new { code = 200, data = getUserExpense });
         }
     }
 }
