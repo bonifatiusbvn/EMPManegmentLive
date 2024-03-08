@@ -477,7 +477,5 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                 throw ex;
             }
         }
-
-
     }
 }
