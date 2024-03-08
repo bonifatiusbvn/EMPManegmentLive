@@ -5,6 +5,8 @@
 $(document).ready(function () {
     GetExpenseTypeList();
     GetPaymentTypeList();
+    GetUserExpenseList();
+    GetUserList();
 });
 function GetExpenseTypeList() {
 
@@ -121,16 +123,16 @@ function EditExpenseDetails(Id) {
 function UpdateExpenseDetails() {
     if ($('#EditExpenseForm').valid()) {
         var formData = new FormData();
-                formData.append("Id", $("#Editid").val());
-                formData.append("ExpenseType", $("#Editexpensetype").val());
-                formData.append("Description", $("#EditDescription").val());
-                formData.append("BillNumber", $("#Editbillno").val());
-                formData.append("Date", $("#Editdate").val());
-                formData.append("TotalAmount", $("#Edittotalamount").val());
-                formData.append("PaymentType", $("#Editpaymenttype").val());
-                formData.append("IsPaid", $("#EditIsPaid").val());
-                formData.append("IsApproved", $("#EditIsApproved").val());
-                formData.append("Account", $("#Editaccount").val());
+        formData.append("Id", $("#Editid").val());
+        formData.append("ExpenseType", $("#Editexpensetype").val());
+        formData.append("Description", $("#EditDescription").val());
+        formData.append("BillNumber", $("#Editbillno").val());
+        formData.append("Date", $("#Editdate").val());
+        formData.append("TotalAmount", $("#Edittotalamount").val());
+        formData.append("PaymentType", $("#Editpaymenttype").val());
+        formData.append("IsPaid", $("#EditIsPaid").val());
+        formData.append("IsApproved", $("#EditIsApproved").val());
+        formData.append("Account", $("#Editaccount").val());
 
         $.ajax({
             url: '/ExpenseMaster/UpdateExpenseDetails',
@@ -180,4 +182,101 @@ $(document).ready(function () {
         $("#EditExpenseForm").validate();
     });
 });
+
+function GetUserExpenseList() {
+
+    $('#UserExpenseTable').DataTable({
+        processing: true,
+        serverSide: true,
+        filter: true,
+        "bDestroy": true,
+        ajax: {
+            type: "Post",
+            url: '/ExpenseMaster/UserExpenseListTable',
+            dataType: 'json'
+        },
+
+        columns: [
+            { "data": "description", "name": "Description" },
+            { "data": "billNumber", "name": "BillNumber" },
+            {
+                "data": "date",
+                "name": "Date",
+                "render": function (data, type, full, meta) {
+                    return new Date(data).toLocaleDateString();
+                }
+            },
+            { "data": "totalAmount", "name": "TotalAmount" },
+            { "data": "account", "name": "Account" },
+            {
+                "data": null,
+                "name": "Action",
+                "render": function (data, type, full, meta) {
+                    return '<ul class="list-inline hstack gap-2 mb-0">' +
+                        '<li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="View">' +
+                        '<a class="text-primary d-inline-block" href="/Invoice/InvoiceDetails">' +
+                        '<i class="ri-eye-fill fs-16"></i>' +
+                        '</a>' +
+                        '</li>' +
+                        '<li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">' +
+                        '<a onclick="EditExpenseDetails(\'' + full.Id + '\')" data-bs-toggle="modal" class="text-primary d-inline-block edit-item-btn">' +
+                        '<i class="ri-pencil-fill fs-16"></i>' +
+                        '</a>' +
+                        '</li>' +
+                        '</ul>';
+                }
+            }
+        ],
+        columnDefs: [{
+            "defaultContent": "",
+            "targets": "_all",
+        }]
+    });
+}
+
+function GetUserList() {
+    debugger
+    $('#UserListTable').DataTable({
+        processing: true,
+        serverSide: true,
+        filter: true,
+        "bDestroy": true,
+        ajax: {
+            type: "Post",
+            url: '/ExpenseMaster/GetUserListTable',
+            dataType: 'json'
+        },
+        columns: [
+            { "data": "userId", "name": "UserID", "visible": false },
+            {
+                "data": "fullName",
+                "name": "FullName",
+                "render": function (data, type, full, meta) {
+                    var imageSrc = full.image ? '<img src="/' + full.image + '" class="avatar-xxs rounded-circle image_src object-fit-cover">' : '';
+                    return '<div class="d-flex align-items-center">' +
+                        '<div class="flex-shrink-0">' +
+                        imageSrc +
+                        '</div>' +
+                        '<div class="flex-grow-1 ms-2 name">' +
+                        '<h5 class="fs-15"><a href="/Invoice/VendorInvoiceListView/?Vid=' + full.userId + '" class="fw-medium link-primary">' + data + '</a></h5>' +
+                        '</div>' +
+                        '</div>';
+                }
+            },
+            { "data": "userName", "name": "UserName" },
+            {
+                "data": "date",
+                "name": "Date",
+                "render": function (data, type, full, meta) {
+                    return new Date(data).toLocaleDateString();
+                }
+            },
+            { "data": "totalAmount", "name": "TotalAmount" },
+        ],
+        columnDefs: [{
+            "defaultContent": "",
+            "targets": "_all",
+        }]
+    });
+}
 

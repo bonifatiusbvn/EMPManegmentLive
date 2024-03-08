@@ -1,4 +1,5 @@
-﻿using EMPManegment.EntityModels.ViewModels.ExpenseMaster;
+﻿using EMPManegment.EntityModels.ViewModels.DataTableParameters;
+using EMPManegment.EntityModels.ViewModels.ExpenseMaster;
 using EMPManegment.EntityModels.ViewModels.Models;
 using System;
 using System.Collections.Generic;
@@ -28,6 +29,8 @@ namespace EMPManegment.Inretface.Services.ExpenseMaster
 
         Task<UserResponceModel> AddExpenseDetails(ExpenseDetailsView ExpenseDetails);
         Task<IEnumerable<ExpenseDetailsView>> GetExpenseDetailList();
+        Task<jsonData> GetUserExpenseList(Guid UserId, DataTableRequstModel dataTable);
+        Task<jsonData> GetUserList(DataTableRequstModel dataTable);
         Task<ExpenseDetailsView> GetExpenseDetailById(Guid Id);
         Task<UserResponceModel> UpdateExpenseDetail(ExpenseDetailsView ExpenseDetails);
     }
