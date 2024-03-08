@@ -28,6 +28,9 @@ namespace EMPManegment.Inretface.Services.ExpenseMaster
         Task<UserResponceModel> UpdateExpenseType(ExpenseTypeView UpdateExpense);
 
         Task<UserResponceModel> AddExpenseDetails(ExpenseDetailsView ExpenseDetails);
+        Task<IEnumerable<ExpenseDetailsView>> GetExpenseDetailList();
+        Task<jsonData> GetUserExpenseList(Guid UserId, DataTableRequstModel dataTable);
+        Task<jsonData> GetUserList(DataTableRequstModel dataTable);
         Task<jsonData> GetExpenseDetailList(DataTableRequstModel dataTable);
         Task<ExpenseDetailsView> GetExpenseDetailById(Guid Id);
         Task<UserResponceModel> UpdateExpenseDetail(ExpenseDetailsView ExpenseDetails);
