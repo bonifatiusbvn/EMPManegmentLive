@@ -1,4 +1,5 @@
-﻿using EMPManegment.EntityModels.ViewModels.ExpenseMaster;
+﻿using EMPManegment.EntityModels.ViewModels.DataTableParameters;
+using EMPManegment.EntityModels.ViewModels.ExpenseMaster;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.Inretface.Interface.ExpenseMaster;
 using EMPManegment.Inretface.Interface.ProductMaster;
@@ -54,9 +55,9 @@ namespace EMPManegment.Services.ExpenseMaster
             return await expenseMaster.GetExpenseDetailById(Id);
         }
 
-        public async Task<IEnumerable<ExpenseDetailsView>> GetExpenseDetailList()
+        public async Task<jsonData> GetExpenseDetailList(DataTableRequstModel dataTable)
         {
-            return await expenseMaster.GetExpenseDetailList();
+            return await expenseMaster.GetExpenseDetailList(dataTable);
         }
 
         public async Task<PaymentTypeView> GetPaymentById(int PaymentId)

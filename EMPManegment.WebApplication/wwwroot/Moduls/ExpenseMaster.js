@@ -5,6 +5,7 @@
 $(document).ready(function () {
     GetExpenseTypeList();
     GetPaymentTypeList();
+    DisplayExpenseList();
 });
 function GetExpenseTypeList() {
 
@@ -181,3 +182,57 @@ $(document).ready(function () {
     });
 });
 
+function DisplayExpenseList() {
+    $('#ExpenseTable').DataTable({
+        processing: true,
+        serverSide: true,
+        filter: true,
+        "bDestroy": true,
+        ajax: {
+            type: "POST",
+            url: '/ExpenseMaster/GetExpenseDetailsList',
+            dataType: 'json',
+        },
+        columns: [
+            {
+                "data": "description", "name": "Description",
+            },
+            {
+                "data": "billNumber", "name": "BillNumber"
+            },
+            {
+                "data": "date", "name": "Date",
+                render: function (data, type, row) {
+                    var dateObj = new Date(data);
+                    var day = dateObj.getDate();
+                    var month = dateObj.getMonth() + 1;
+                    var year = dateObj.getFullYear();
+                    if (day < 10) {
+                        day = '0' + day;
+                    }
+                    if (month < 10) {
+                        month = '0' + month;
+                    }
+                    return day + '-' + month + '-' + year;
+                }
+            },
+            {
+                "data": "totalAmount", "name": "TotalAmount"
+            },
+            {
+                "data": "account", "name": "Account"
+            },
+           
+            {
+                "data": "Action", "name": "Action",
+                render: function (data, type, full) {
+                    return ('<ul class="list-inline hstack gap-2 mb-0"><li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="View"><a class="text-primary d-inline-block"><i class="ri-eye-fill fs-16"></i></a></li ><li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit"><a onclick="EditExpenseDetails(\'' + full.id + '\')" data-bs-toggle="modal" class="text-primary d-inline-block edit-item-btn"><i class="ri-pencil-fill fs-16"></i></a></li></ul >');
+                }
+            },
+        ],
+        columnDefs: [{
+            "defaultContent": "",
+            "targets": "_all",
+        }]
+    });
+}
