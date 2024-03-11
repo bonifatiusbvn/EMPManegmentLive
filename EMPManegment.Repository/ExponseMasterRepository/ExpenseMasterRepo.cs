@@ -294,7 +294,7 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                     data = cData
                 };
                 return jsonData;
-            }   
+            }
             catch (Exception ex)
             {
                 throw ex;
@@ -421,6 +421,7 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                                group a by new { a.UserId, b.Image, b.UserName, FullName = b.FirstName + " " + b.LastName } into userGroup
                                select new UserExpenseDetailsView
                                {
+                                   UserId = userGroup.Key.UserId,
                                    FullName = userGroup.Key.FullName,
                                    Image = userGroup.Key.Image,
                                    UserName = userGroup.Key.UserName,
@@ -477,5 +478,77 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                 throw ex;
             }
         }
+
+        public async Task<jsonData> GetAllUserExpenseList(Guid UserId, DataTableRequstModel dataTable)
+        {
+            try
+            {
+                var expenses = Context.TblExpenseMasters
+                    .Where(a => a.UserId == UserId && a.IsApproved == false)
+                    .Select(a => new ExpenseDetailsView
+                    {
+                        Id = a.Id,
+                        UserId = a.UserId,
+                        ExpenseType = a.ExpenseType,
+                        PaymentType = a.PaymentType,
+                        BillNumber = a.BillNumber,
+                        Description = a.Description,
+                        Date = a.Date,
+                        TotalAmount = a.TotalAmount,
+                        Image = a.Image,
+                        Account = a.Account,
+
+                    });
+
+
+                if (!string.IsNullOrEmpty(dataTable.sortColumn) && !string.IsNullOrEmpty(dataTable.sortColumnDir))
+                {
+                    switch (dataTable.sortColumn)
+                    {
+                        case "BillNumber":
+                            expenses = dataTable.sortColumnDir == "asc" ? expenses.OrderBy(e => e.BillNumber) : expenses.OrderByDescending(e => e.BillNumber);
+                            break;
+                        case "Date":
+                            expenses = dataTable.sortColumnDir == "asc" ? expenses.OrderBy(e => e.Date) : expenses.OrderByDescending(e => e.Date);
+                            break;
+                        case "Account":
+                            expenses = dataTable.sortColumnDir == "asc" ? expenses.OrderBy(e => e.Account) : expenses.OrderByDescending(e => e.Account);
+                            break;
+                        case "TotalAmount":
+                            expenses = dataTable.sortColumnDir == "asc" ? expenses.OrderBy(e => e.TotalAmount) : expenses.OrderByDescending(e => e.TotalAmount);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                if (!string.IsNullOrEmpty(dataTable.searchValue))
+                {
+                    string searchLower = dataTable.searchValue.ToLower();
+                    expenses = expenses.Where(e =>
+                        e.BillNumber.ToLower().Contains(searchLower) ||
+                        e.Date.ToString().Contains(searchLower) ||
+                        e.Account.ToLower().Contains(searchLower) ||
+                        e.TotalAmount.ToString().Contains(dataTable.searchValue));
+                }
+
+                int totalRecord = await expenses.CountAsync();
+
+                var cData = await expenses.Skip(dataTable.skip).Take(dataTable.pageSize).ToListAsync();
+
+                jsonData jsonData = new jsonData
+                {
+                    draw = dataTable.draw,
+                    recordsFiltered = totalRecord,
+                    recordsTotal = totalRecord,
+                    data = cData
+                };
+                return jsonData;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
     }
 }

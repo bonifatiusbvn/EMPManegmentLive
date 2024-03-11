@@ -113,5 +113,13 @@ namespace EMPManagment.API.Controllers
             var getUserExpense = await expenseMaster.GetUserList(dataTable);
             return Ok(new { code = 200, data = getUserExpense });
         }
+
+        [HttpPost]
+        [Route("GetAllUserExpenseDetail")]
+        public async Task<IActionResult> GetAllUserExpenseDetail(Guid UserId, DataTableRequstModel dataTable)
+        {
+            var getallUserExpense = await expenseMaster.GetAllUserExpenseList(UserId, dataTable);
+            return Ok(new { code = 200, data = getallUserExpense });
+        }
     }
 }
