@@ -58,7 +58,7 @@ namespace EMPManegment.Web.Controllers
                 {
                     orderList = JsonConvert.DeserializeObject<List<OrderDetailView>>(res.data.ToString());
                 }
-                return PartialView("~/Views/Invoice/_DeliveryStatusOrder.cshtml", orderList);
+                return PartialView("~/Views/OrderMaster/_DeliveryStatusOrder.cshtml", orderList);
             }
             catch (Exception ex)
             {

@@ -20,7 +20,7 @@ namespace EMPManegment.Inretface.Interface.InvoiceMaster
         Task<IEnumerable<CreditDebitView>> GetLastTransactionByVendorId(Guid Vid);
         Task<IEnumerable<CreditDebitView>> GetAllTransactionByVendorId(Guid Vid);
         Task<jsonData> GetAllTransaction(DataTableRequstModel dataTable);
-        Task<IEnumerable<InvoiceViewModel>> GetInvoiceDetailsList();
+        Task<jsonData> GetInvoiceDetailsList(DataTableRequstModel dataTable);
         Task<IEnumerable<CreditDebitView>> GetCreditDebitListView();
         string CheckInvoiceNo(string porjectname);
         Task<UserResponceModel> InsertInvoiceDetails(GenerateInvoiceModel InsertInvoice);

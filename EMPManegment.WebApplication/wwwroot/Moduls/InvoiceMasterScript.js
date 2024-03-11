@@ -3,6 +3,7 @@ $(document).ready(function () {
     GetVendorName()
     GetAllVendorData()
     GetAllTransactionData()
+    AllInvoiceList()
 });
 function GetVendorName() {
 
@@ -97,7 +98,7 @@ function ShowInvoiceDetailsByOrderId(OrderId) {
 }
 
 function InsertInvoiceDetails() {
-    
+
     var objData = {
         InvoiceNo: document.getElementById("txtinvoiceid").innerHTML,
         CreatedBy: $("#txtuserid").val(),
@@ -110,6 +111,7 @@ function InsertInvoiceDetails() {
         Destination: document.getElementById("txtshippingaddress").innerText,
         TotalAmount: document.getElementById("txttotalamount").innerText,
         TotalGst: document.getElementById("txttotalgst").innerText,
+        PaymentMethod:document.getElementById("methodofpayment").innerHTML,
     };
     var form_data = new FormData();
     form_data.append("INVOICEDETAILS", JSON.stringify(objData));
@@ -424,12 +426,14 @@ function GetPaymentMethodList() {
     });
 }
 function EditInvoiceDetails(InvoiceNo) {
+
     $.ajax({
         url: '/Invoice/EditInvoiceDetails?InvoiceNo=' + InvoiceNo,
         type: "Get",
         contentType: 'application/json;charset=utf-8;',
         dataType: 'json',
         success: function (response) {
+
             $('#UpdateInvoiceModel').modal('show');
             $('#txtinvoiceno').html(response.invoiceNo);
             $('#txtinvoicedate').val(response.invoiceDate);
@@ -567,6 +571,50 @@ function GetAllTransactionData() {
 
             $(row).html(htmlContent);
         }
+    });
+}
+
+function AllInvoiceList()
+{
+    $('#invoiceTable').DataTable({
+        processing: true,
+        serverSide: true,
+        filter: true,
+        "bDestroy": true,
+        ajax: {
+            type: "POST",
+            url: '/Invoice/GetInvoiceListView',
+            dataType: 'json',
+        },
+        columns: [
+            {
+                "render": function (data, type, full) {
+                    return '<h5 class="fs-15"><a href="/Invoice/DisplayInvoiceDetails?OrderId=' + full.orderId + '" class="fw-medium link-primary">' + full.invoiceNo; '</a></h5>';
+                }
+            },
+            {
+                "data": "vendorName", "name": "VendorName",
+            },
+            {
+                "data": "projectName", "name": "ProjectName"
+            },
+            {
+                "data": "orderId", "name": "OrderId"
+            },
+            {
+                "data": "totalAmount", "name": "TotalAmount"
+            },     
+            {
+                "data": "Action", "name": "Action",
+                render: function (data, type, full) {
+                    return ('<li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit"><a onclick="EditInvoiceDetails(\'' + full.invoiceNo + '\')"><i class="ri-pencil-fill fs-16"></i></a></li><li class="text-danger list-inline-item delete" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Delete" style="margin-left:12px;"><a onclick="deleteInvoice(\'' + full.invoiceNo + '\')"><i class="ri-delete-bin-5-fill fs-16"></i></a></li>');
+                }
+            },
+        ],
+        columnDefs: [{
+            "defaultContent": "",
+            "targets": "_all",
+        }]
     });
 }
 
