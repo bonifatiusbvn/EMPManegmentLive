@@ -11,7 +11,7 @@ public partial class TblExpenseMaster
 
     public int ExpenseType { get; set; }
 
-    public int PaymentType { get; set; }
+    public int? PaymentType { get; set; }
 
     public string BillNumber { get; set; } = null!;
 
@@ -39,7 +39,7 @@ public partial class TblExpenseMaster
 
     public virtual TblExpenseType ExpenseTypeNavigation { get; set; } = null!;
 
-    public virtual TblPaymentType PaymentTypeNavigation { get; set; } = null!;
+    public virtual TblPaymentType? PaymentTypeNavigation { get; set; }
 
     public virtual TblUser User { get; set; } = null!;
 }

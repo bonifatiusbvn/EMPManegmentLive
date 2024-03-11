@@ -5,6 +5,7 @@ using EMPManegment.EntityModels.ViewModels.ExpenseMaster;
 using EMPManegment.EntityModels.ViewModels.Invoice;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.OrderModels;
+using EMPManegment.EntityModels.ViewModels.POMaster;
 using EMPManegment.EntityModels.ViewModels.ProductMaster;
 using EMPManegment.EntityModels.ViewModels.TaskModels;
 using EMPManegment.EntityModels.ViewModels.VendorModels;
@@ -14,6 +15,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Dynamic.Core;
 using System.Net;
 using System.Security.Cryptography;
 using System.Text;
@@ -135,9 +137,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
             try
             {
                 invoice = (from a in Context.TblInvoices.Where(x => x.Id == Id)
-                           join b in Context.TblVendorMasters
-                           on a.VandorId equals b.Vid
-
+                           join b in Context.TblVendorMasters on a.VandorId equals b.Vid
                            select new InvoiceViewModel
                            {
                                Id = a.Id,
@@ -184,6 +184,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                     var orderDetails = new List<OrderDetailView>();
                     var data = await (from a in Context.TblOrderMasters
                                       join c in Context.TblProductDetailsMasters on a.ProductId equals c.Id
+                                      join d in Context.TblPaymentMethodTypes on a.PaymentMethod equals d.Id
                                       join b in Context.TblVendorMasters on a.VendorId equals b.Vid
                                       where a.OrderId == OrderId
                                       select new OrderDetailView
@@ -204,9 +205,12 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                                           OrderDate = a.OrderDate,
                                           PerUnitPrice = c.PerUnitPrice,
                                           PerUnitWithGstprice = c.PerUnitWithGstprice,
+                                          SubTotal=a.SubTotal,
+                                          GstPerUnit=a.GstPerUnit,
                                           TotalAmount = a.TotalAmount,
                                           AmountPerUnit = a.AmountPerUnit,
                                           PaymentMethod = a.PaymentMethod,
+                                          PaymentMethodName = d.PaymentMethod,
                                           PaymentStatus = a.PaymentStatus,
                                           DeliveryStatus = a.DeliveryStatus,
                                           DeliveryDate = a.DeliveryDate,
@@ -223,6 +227,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                                 CompanyName = item.CompanyName,
                                 VendorId = item.VendorId,
                                 ProductId = item.ProductId,
+                                PaymentMethod = item.PaymentMethod,
                                 VendorEmail = item.VendorEmail,
                                 VendorContact = item.VendorContact,
                                 VendorAddress = item.VendorAddress,
@@ -233,9 +238,11 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                                 OrderDate = item.OrderDate,
                                 PerUnitPrice = item.PerUnitPrice,
                                 PerUnitWithGstprice = item.PerUnitWithGstprice,
+                                SubTotal    =item.SubTotal,
+                                GstPerUnit=item.GstPerUnit,
                                 TotalAmount = item.TotalAmount,
                                 AmountPerUnit = item.AmountPerUnit,
-                                PaymentMethod = item.PaymentMethod,
+                                PaymentMethodName = item.PaymentMethodName,
                                 DeliveryStatus = item.DeliveryStatus,
                                 DeliveryDate = item.DeliveryDate,
                                 CreatedOn = item.CreatedOn,
@@ -257,38 +264,70 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
             return response;
         }
 
-        public async Task<IEnumerable<InvoiceViewModel>> GetInvoiceDetailsList()
+        public async Task<jsonData> GetInvoiceDetailsList(DataTableRequstModel dataTable)
         {
-            IEnumerable<InvoiceViewModel> InvoiceList = from a in Context.TblInvoices
-                                                        join b in Context.TblVendorMasters on a.VandorId equals b.Vid
-                                                        join c in Context.TblProjectMasters on a.ProjectId equals c.ProjectId
-                                                        where a.IsDeleted != false
-                                                        select new InvoiceViewModel
-                                                        {
-                                                            Id = a.Id,
-                                                            InvoiceNo = a.InvoiceNo,
-                                                            InvoiceType = a.InvoiceType,
-                                                            InvoiceDate = a.InvoiceDate,
-                                                            VendorName = b.VendorCompany,
-                                                            VandorId = a.VandorId,
-                                                            OrderId = a.OrderId,
-                                                            ProjectId = a.ProjectId,
-                                                            ProjectName = c.ProjectName,
-                                                            DispatchThrough = a.DispatchThrough,
-                                                            Destination = a.Destination,
-                                                            Cgst = a.Cgst,
-                                                            Igst = a.Igst,
-                                                            Sgst = a.Sgst,
-                                                            BuyesOrderNo = a.BuyesOrderNo,
-                                                            BuyesOrderDate = a.BuyesOrderDate,
-                                                            TotalAmount = a.TotalAmount,
-                                                            CreatedOn = a.CreatedOn,
-                                                            CreatedBy = a.CreatedBy,
-                                                            UpdatedOn = a.UpdatedOn,
-                                                            UpdatedBy = a.UpdatedBy,
+            try
+            {
+                var data = await (from a in Context.TblInvoices
+                                  join b in Context.TblVendorMasters on a.VandorId equals b.Vid
+                                  join c in Context.TblProjectMasters on a.ProjectId equals c.ProjectId
+                                  where a.IsDeleted != false
+                                  select new 
+                                  {
+                                      Invoice = a,
+                                      Vendor = b,
+                                      Project = c,
 
-                                                        };
-            return InvoiceList;
+                                  }).ToListAsync();
+
+                var groupedInvoiceList = data.GroupBy(x => x.Invoice.InvoiceNo)
+                                        .Select(group => group.First())
+                                        .Select(item => new InvoiceViewModel
+                                        {
+                                            Id = item.Invoice.Id,
+                                            InvoiceNo = item.Invoice.InvoiceNo,
+                                            InvoiceType = item.Invoice.InvoiceType,
+                                            InvoiceDate = item.Invoice.InvoiceDate,
+                                            VendorName = item.Vendor.VendorCompany,
+                                            VandorId = item.Invoice.VandorId,
+                                            OrderId = item.Invoice.OrderId,
+                                            ProjectId = item.Invoice.ProjectId,
+                                            ProjectName = item.Project.ProjectName,
+                                            DispatchThrough = item.Invoice.DispatchThrough,
+                                            Destination = item.Invoice.Destination,
+                                            Cgst = item.Invoice.Cgst,
+                                            Igst = item.Invoice.Igst,
+                                            Sgst = item.Invoice.Sgst,
+                                            BuyesOrderNo = item.Invoice.BuyesOrderNo,
+                                            BuyesOrderDate = item.Invoice.BuyesOrderDate,
+                                            TotalAmount = item.Invoice.TotalAmount,
+                                            CreatedOn = item.Invoice.CreatedOn,
+                                            CreatedBy = item.Invoice.CreatedBy,
+                                            UpdatedOn = item.Invoice.UpdatedOn,
+                                            UpdatedBy = item.Invoice.UpdatedBy,
+                                        });
+
+
+                var flattenedData = groupedInvoiceList.Skip(dataTable.skip)
+                                                  .Take(dataTable.pageSize)
+                                                  .ToList();
+
+                int totalRecord = groupedInvoiceList.Count();
+
+                jsonData jsonData = new jsonData
+                {
+                    draw = dataTable.draw,
+                    recordsFiltered = totalRecord,
+                    recordsTotal = totalRecord,
+                    data = flattenedData
+                };
+
+                return jsonData;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
 
         public async Task<IEnumerable<InvoiceViewModel>> GetInvoiceListByVendorId(Guid Vid)
@@ -432,6 +471,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                         VandorId = InsertInvoice.VandorId,
                         InvoiceNo = InsertInvoice.InvoiceNo,
                         ProjectId = InsertInvoice.ProjectId,
+                        PaymentMethod = InsertInvoice.PaymentMethod,
                         InvoiceDate = DateTime.Now,
                         BuyesOrderDate = InsertInvoice.BuyesOrderDate,
                         BuyesOrderNo = InsertInvoice.BuyesOrderNo,

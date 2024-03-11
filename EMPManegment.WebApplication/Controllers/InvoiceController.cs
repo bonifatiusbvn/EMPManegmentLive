@@ -151,21 +151,58 @@ namespace EMPManegment.Web.Controllers
 
         public async Task<IActionResult> InvoiceListView()
         {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> GetInvoiceListView()
+        {
             try
             {
-                List<InvoiceViewModel> invoice = new List<InvoiceViewModel>();
-                ApiResponseModel response = await APIServices.GetAsyncId(null, "Invoice/GetInvoiceDetailsList");
-                if (response.code == 200)
+                var draw = Request.Form["draw"].FirstOrDefault();
+                var start = Request.Form["start"].FirstOrDefault();
+                var length = Request.Form["length"].FirstOrDefault();
+                var sortColumn = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][InvoiceNo]"].FirstOrDefault();
+                var sortColumnDir = Request.Form["order[0][dir]"].FirstOrDefault();
+                var searchValue = Request.Form["search[value]"].FirstOrDefault();
+                int pageSize = length != null ? Convert.ToInt32(length) : 0;
+                int skip = start != null ? Convert.ToInt32(start) : 0;
+
+                var dataTable = new DataTableRequstModel
                 {
-                    invoice = JsonConvert.DeserializeObject<List<InvoiceViewModel>>(response.data.ToString());
+                    draw = draw,
+                    start = start,
+                    pageSize = pageSize,
+                    skip = skip,
+                    lenght = length,
+                    searchValue = searchValue,
+                    sortColumn = sortColumn,
+                    sortColumnDir = sortColumnDir
+                };
+                List<InvoiceViewModel> InvoiceList = new List<InvoiceViewModel>();
+                var data = new jsonData();
+                ApiResponseModel postuser = await APIServices.PostAsync(dataTable, "Invoice/GetInvoiceDetailsList");
+                if (postuser.data != null)
+                {
+                    data = JsonConvert.DeserializeObject<jsonData>(postuser.data.ToString());
+                    InvoiceList = JsonConvert.DeserializeObject<List<InvoiceViewModel>>(data.data.ToString());
                 }
-                return View(invoice);
+                var jsonData = new
+                {
+                    draw = data.draw,
+                    recordsFiltered = data.recordsFiltered,
+                    recordsTotal = data.recordsTotal,
+                    data = InvoiceList,
+                };
+                return new JsonResult(jsonData);
             }
             catch (Exception ex)
             {
                 throw ex;
             }
         }
+
+
         [HttpPost]
         public async Task<IActionResult> InsertInvoiceDetails()
         {

@@ -23,7 +23,7 @@ namespace EMPManegment.EntityModels.ViewModels.OrderModels
         public string? Quantity { get; set; }
 
         public decimal? AmountPerUnit { get; set; }
-
+        public decimal? SubTotal { get; set; }
         public decimal TotalAmount { get; set; }
 
         public DateTime OrderDate { get; set; }

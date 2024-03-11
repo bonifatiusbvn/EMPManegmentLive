@@ -13,6 +13,7 @@ using Newtonsoft.Json.Converters;
 using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 using EMPManegment.EntityModels.ViewModels.POMaster;
+using EMPManegment.EntityModels.ViewModels.OrderModels;
 
 namespace EMPManegment.Web.Controllers
 {
@@ -308,7 +309,26 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
-
+        [HttpPost]
+        public async Task<IActionResult> GetExpenseDetailsByUserId()
+        {
+            try
+            {
+                var ExpenseDetails = HttpContext.Request.Form["USERID"];
+                var InsertDetails = JsonConvert.DeserializeObject<ExpenseDetailsView>(ExpenseDetails);
+                List<ExpenseDetailsView> expense = new List<ExpenseDetailsView>();
+                ApiResponseModel response = await APIServices.PostAsync(null, "ExpenseMaster/GetExpenseDetailByUserId?UserId=" + InsertDetails.UserId);
+                if (response.code == 200)
+                {
+                    expense = JsonConvert.DeserializeObject<List<ExpenseDetailsView>>(response.data.ToString());
+                }
+                return new JsonResult(expense);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
 
         public IActionResult ApprovedExpense(Guid userId)
         {

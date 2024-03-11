@@ -16,7 +16,7 @@
 }
 @foreach (var item in Model)
 {
-    totalAmount += item.TotalAmount;
+    totalAmount = item.TotalAmount;
     totalGst += item.PerUnitWithGstprice;
 }
 
@@ -135,7 +135,7 @@
                                         <th scope="col">Product Details</th>
                                         <th scope="col">Rate</th>
                                         <th scope="col">Quantity</th>
-                                        <th scope="col">RateWithGst</th>
+                                        <th scope="col">GstPerUnit</th>
                                         <th scope="col" class="text-end">Amount</th>
                                     </tr>
                                 </thead>
@@ -150,8 +150,8 @@
                                             </td>
                                             <td id="txtperunitprice">@item.PerUnitPrice</td>
                                             <td id="txtquantity">@item.Quantity</td>
-                                            <td id="txtperunitwithgstprice">@item.PerUnitWithGstprice</td>
-                                            <td class="text-end" id="txttotal">@item.TotalAmount</td>
+                                            <td id="txtperunitwithgstprice">@item.GstPerUnit</td>
+                                            <td class="text-end" id="txttotal">@item.SubTotal</td>
                                         </tr>
                                     }
                                 </tbody>
@@ -172,6 +172,7 @@
                             @if (firstItem != null)
                             {
                                 <h6 class="text-muted text-uppercase fw-semibold mb-3">Payment Details:</h6>
+                                <p hidden><span class="fw-medium" id="methodofpayment">@firstItem.PaymentMethod</span></p>
                                 <p class="text-muted mb-1">Payment Method: <span class="fw-medium">@firstItem.PaymentMethodName</span></p>
                                 <p class="text-muted mb-1">Card Holder: <span class="fw-medium" id="card-holder-name">@firstItem.CompanyName</span></p>
                                 <p class="text-muted mb-1">Card Number: <span class="fw-medium" id="card-number">xxx xxxx xxxx 1234</span></p>

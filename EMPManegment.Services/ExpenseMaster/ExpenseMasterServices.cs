@@ -60,6 +60,11 @@ namespace EMPManegment.Services.ExpenseMaster
             return await expenseMaster.GetExpenseDetailById(Id);
         }
 
+        public async Task<List<ExpenseDetailsView>> GetExpenseDetailByUserId(Guid UserId)
+        {
+            return await expenseMaster.GetExpenseDetailByUserId(UserId);
+        }
+
         public async Task<jsonData> GetExpenseDetailList(DataTableRequstModel dataTable)
         {
             return await expenseMaster.GetExpenseDetailList(dataTable);

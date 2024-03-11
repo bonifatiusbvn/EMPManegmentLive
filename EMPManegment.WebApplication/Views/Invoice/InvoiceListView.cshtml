@@ -75,10 +75,10 @@
                 </form>
             </div>
             <div class="card-body">
-                <div>
-                    <div class="table-responsive table-card">
-                        <table class="table align-middle table-nowrap" id="invoiceTable">
-                            <thead class="text-muted">
+                <div class="listjs-table">
+                    <div class="table-responsive">
+                        <table id="invoiceTable" class="table table-bordered dt-responsive nowrap table-striped align-middle dataTable no-footer dtr-inline">
+                            <thead class="table-light text-muted text-center">
                                 <tr>
                                     <th class="sort text-uppercase" data-sort="isnvoiceNo">InvoiceNo</th>
                                     <th class="sort text-uppercase" data-sort="isnvoiceNo">VendorName</th>
@@ -88,127 +88,82 @@
                                     <th class="sort text-uppercase" data-sort="action">Action</th>
                                 </tr>
                             </thead>
-                            <tbody class="list form-check-all" id="invoice-list-data">
-                                @foreach (var item in Model)
-                                {
-                                    <tr>
-                                        <td class="fw-medium link-primary"><a href="/Invoice/DisplayInvoiceDetails?OrderId=@item.OrderId">@item.InvoiceNo</a></td>
-                                        <td>@item.VendorName</td>
-                                        <td>@item.ProjectName</td>
-                                        <td id="txtinvoiceid" hidden>@item.Id</td>
-                                        <td>@item.OrderId</td> 
-                                        <td>@item.TotalAmount</td>
-                                        <td>
-                                            <ul class="list-inline hstack gap-2 mb-0">
-                                                <li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">
-                                                    <a onclick="EditInvoiceDetails('@item.InvoiceNo')" data-bs-toggle="modal" class="text-primary d-inline-block edit-item-btn">
-                                                        <i class="ri-pencil-fill fs-16"></i>
-                                                    </a>
-                                                </li>
-                                                <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Remove">
-                                                    <a class="text-danger d-inline-block remove-item-btn" data-bs-toggle="modal" onclick="deleteInvoice('@item.InvoiceNo')">
-                                                        <i class="ri-delete-bin-5-fill fs-16"></i>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </td>
-                                    </tr>
-                                }
-                            </tbody>
+                            <tbody> </tbody>
                         </table>
-                        <div class="noresult" style="display: none">
-                            <div class="text-center">
-                                <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#25a0e2,secondary:#00bd9d" style="width:75px;height:75px">
-                                </lord-icon>
-                                <h5 class="mt-2">Sorry! No Result Found</h5>
-                                <p class="text-muted mb-0">
-                                    We've searched more than 150+ invoices We did not find any
-                                    invoices for you search.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="d-flex justify-content-end mt-3">
-                        <div class="pagination-wrap hstack gap-2">
-                            <a class="page-item pagination-prev disabled" href="#">
-                                Previous
-                            </a>
-                            <ul class="pagination listjs-pagination mb-0"></ul>
-                            <a class="page-item pagination-next" href="#">
-                                Next
-                            </a>
-                        </div>
+                        <!-- end table -->
                     </div>
                 </div>
-
-                <!--Update Invoice Modal -->
-                <div class="modal fade" id="UpdateInvoiceModel" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content">
-                            <div class="modal-header bg-light p-3">
-                                <h5 class="modal-title" id="exampleModalLabel">Update Invoice</h5><h5 class="modal-title" id="txtinvoiceno" style="margin-left:10px;"></h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"></button>
-                            </div>
-                            <form class="tablelist-form" autocomplete="off" id="UpdateInvoiceDetailsForm">
-                                <div class="modal-body">
-
-                                    <div class="mb-3">
-                                        <label for="date-field" class="form-label">Invoice Date</label>
-                                        <input type="datetime-local" data-date-format="d M, Y" data-enable-time id="txtinvoicedate" name="txtinvoicedate" class="form-control" />
-                                        <input type="hidden" id="txtid" class="form-control" />
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label for="customername-field" class="form-label">Company Name</label>
-                                        <input type="text" id="txtcompanyname" name="txtcompanyname" class="form-control" placeholder="Enter Company name" />
-                                    </div>
-
-                                    <div class="row gy-4 mb-3">
-                                        <div class="col-md-6">
-                                            <div>
-                                                <label for="amount-field" class="form-label">Amount</label>
-                                                <input type="text" id="txtamount" name="txtamount" class="form-control" placeholder="Total amount" />
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div>
-                                                <label for="payment-field" class="form-label">Payment Method</label>
-                                                <select class="form-control" data-trigger name="txtpaymentmethod" id="txtpaymentmethod">
-                                                    <option selected disabled value="">---Select Payment Method---</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="row gy-4 mb-3">
-                                        <div class="col-md-6">
-                                            <div>
-                                                <label for="payment-field" class="form-label">Status</label>
-                                                <select class="form-control" data-trigger name="txtstatus" id="txtstatus">
-                                                    <option selected disabled value="">Select Status</option>
-                                                    <option value="Pending">Pending</option>
-                                                    <option value="Confirm">Confirm</option>
-                                                    <option value="Complete">Complete</option>
-                                                    <option value="Cancel">Cancel</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <div class="hstack gap-2 justify-content-end">
-                                        <button type="button" class="btn btn-light" id="close-modal" data-bs-dismiss="modal">Close</button>
-                                        <button type="button" class="btn btn-success" onclick="UpdateInvoiceDetails()" id="updatedetailbtn">Update</button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-                <!--end modal -->
+                <!-- container-fluid -->
             </div>
         </div>
 
+        <!--Update Invoice Modal -->
+        <div class="modal fade" id="UpdateInvoiceModel" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header bg-light p-3">
+                        <h5 class="modal-title" id="exampleModalLabel">Update Invoice</h5><h5 class="modal-title" id="txtinvoiceno" style="margin-left:10px;"></h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"></button>
+                    </div>
+                    <form class="tablelist-form" autocomplete="off" id="UpdateInvoiceDetailsForm">
+                        <div class="modal-body">
+
+                            <div class="mb-3">
+                                <label for="date-field" class="form-label">Invoice Date</label>
+                                <input type="datetime-local" data-date-format="d M, Y" data-enable-time id="txtinvoicedate" name="txtinvoicedate" class="form-control" />
+                                <input type="hidden" id="txtid" class="form-control" />
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="customername-field" class="form-label">Company Name</label>
+                                <input type="text" id="txtcompanyname" name="txtcompanyname" class="form-control" placeholder="Enter Company name" />
+                            </div>
+
+                            <div class="row gy-4 mb-3">
+                                <div class="col-md-6">
+                                    <div>
+                                        <label for="amount-field" class="form-label">Amount</label>
+                                        <input type="text" id="txtamount" name="txtamount" class="form-control" placeholder="Total amount" />
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div>
+                                        <label for="payment-field" class="form-label">Payment Method</label>
+                                        <select class="form-control" data-trigger name="txtpaymentmethod" id="txtpaymentmethod">
+                                            <option selected disabled value="">---Select Payment Method---</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row gy-4 mb-3">
+                                <div class="col-md-6">
+                                    <div>
+                                        <label for="payment-field" class="form-label">Status</label>
+                                        <select class="form-control" data-trigger name="txtstatus" id="txtstatus">
+                                            <option selected disabled value="">Select Status</option>
+                                            <option value="Pending">Pending</option>
+                                            <option value="Confirm">Confirm</option>
+                                            <option value="Complete">Complete</option>
+                                            <option value="Cancel">Cancel</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <div class="hstack gap-2 justify-content-end">
+                                <button type="button" class="btn btn-light" id="close-modal" data-bs-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-success" onclick="UpdateInvoiceDetails()" id="updatedetailbtn">Update</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!--end modal -->
+    </div>
+</div>
     </div>
     <!--end col-->
 </div> <!-- end row-->

@@ -8,6 +8,7 @@ $(document).ready(function () {
     GetUserExpenseList();
     GetUserList();
     DisplayExpenseList();
+    GetExpenseTotalAmount();
     GetAllUserExpenseList();
 });
 function GetExpenseTypeList() {
@@ -72,7 +73,7 @@ function AddExpenseDetails() {
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'OK',
                     }).then(function () {
-                        window.location = '/ExpenseMaster/ExpenseList';
+                        window.location = '/ExpenseMaster/UserExpenseList';
                     });
                 }
             }
@@ -236,221 +237,264 @@ function GetUserExpenseList() {
     });
 }
 
+function GetUserList() {
 
-function GetParameterByName(name, url) {
-    debugger;
-    if (!url) url = window.location.href;
-    console.log("URL:", url); // Log the URL to verify its format
-    if (!name) {
-        console.error("Parameter name is not provided.");
-        return null;
+    function GetParameterByName(name, url) {
+        debugger;
+        if (!url) url = window.location.href;
+        console.log("URL:", url); // Log the URL to verify its format
+        if (!name) {
+            console.error("Parameter name is not provided.");
+            return null;
+        }
+        // Make the parameter name case-insensitive in the regular expression
+        var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)", "i");
+        var results = regex.exec(url);
+        console.log("Results:", results); // Log the results to see if the parameter is found
+        if (!results) {
+            console.error("Parameter not found in the URL.");
+            return null;
+        }
+        if (!results[2]) return '';
+        return decodeURIComponent(results[2].replace(/\+/g, " "));
     }
-    // Make the parameter name case-insensitive in the regular expression
-    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)", "i");
-    var results = regex.exec(url);
-    console.log("Results:", results); // Log the results to see if the parameter is found
-    if (!results) {
-        console.error("Parameter not found in the URL.");
-        return null;
-    }
-    if (!results[2]) return '';
-    return decodeURIComponent(results[2].replace(/\+/g, " "));
-}
 
 
 
 
-var isExpenseLoaded = false; // Flag to track if the expense is already loaded
+    var isExpenseLoaded = false; // Flag to track if the expense is already loaded
 
-function LoadApprovedExpense(userId) {
-    debugger
-    // Check if the expense is already loaded
-    if (isExpenseLoaded) {
+    function LoadApprovedExpense(userId) {
         debugger
-        console.log("Expense already loaded.");
-        return;
+        // Check if the expense is already loaded
+        if (isExpenseLoaded) {
+            debugger
+            console.log("Expense already loaded.");
+            return;
+        }
+
+        debugger
+        GetAllUserExpenseList(userId)
+            .then(() => {
+                // Set the flag to true to indicate that the expense is loaded
+                isExpenseLoaded = true;
+
+                // Append the userId parameter to the URL and navigate
+                window.location.href = '/ExpenseMaster/ApprovedExpense?UserId=' + userId;
+            })
+            .catch(error => {
+                console.error("Error loading expense:", error);
+            });
     }
 
-    debugger
-    GetAllUserExpenseList(userId)
-        .then(() => {
-            // Set the flag to true to indicate that the expense is loaded
-            isExpenseLoaded = true;
 
-            // Append the userId parameter to the URL and navigate
-            window.location.href = '/ExpenseMaster/ApprovedExpense?UserId=' + userId;
-        })
-        .catch(error => {
-            console.error("Error loading expense:", error);
+
+
+    $(document).ready(function () {
+        debugger
+        var userId = GetParameterByName('userId'); // Pass 'userId' as the parameter name
+
+        console.log('userId extracted from URL:', userId); // Log the userId to the console
+
+        if (userId) {
+            LoadApprovedExpense(userId);
+        }
+
+
+        $('#UserListTable').DataTable({
+            processing: true,
+            serverSide: true,
+            filter: true,
+            "bDestroy": true,
+            ajax: {
+                type: "Post",
+                url: '/ExpenseMaster/GetUserListTable',
+                dataType: 'json'
+            },
+            columns: [
+                { "data": "userId", "name": "UserID", "visible": false },
+                {
+                    "data": "fullName",
+                    "name": "FullName",
+                    "render": function (data, type, full, meta) {
+                        var imageSrc = full.image ? '<img src="/' + full.image + '" class="avatar-xxs rounded-circle image_src object-fit-cover">' : '';
+                        return '<div class="d-flex align-items-center">' +
+                            '<div class="flex-shrink-0">' +
+                            imageSrc +
+                            '</div>' +
+                            '<div class="flex-grow-1 ms-2 name">' +
+                            '<h5 class="fs-15"><a href="#" class="fw-medium link-primary view-details" data-userid="' + full.userId + '">' + data + '</a></h5>' +
+                            '</div>' +
+                            '</div>';
+                    }
+                },
+                { "data": "userName", "name": "UserName" },
+                {
+                    "data": "date",
+                    "name": "Date",
+                    "render": function (data, type, full, meta) {
+                        return new Date(data).toLocaleDateString();
+                    }
+                },
+                { "data": "totalAmount", "name": "TotalAmount" },
+            ],
+            columnDefs: [{
+                "defaultContent": "",
+                "targets": "_all",
+            }]
         });
-}
+
+        $('#UserListTable tbody').on('click', 'a.view-details', function (e) {
+            e.preventDefault();
+            var userId = $(this).data('userid');
+            LoadApprovedExpense(userId);
+        });
+    });
 
 
-
-
-$(document).ready(function () {
-    debugger
-    var userId = GetParameterByName('userId'); // Pass 'userId' as the parameter name
-
-    console.log('userId extracted from URL:', userId); // Log the userId to the console
-
-    if (userId) {
-        LoadApprovedExpense(userId);
+    function GetAllUserExpenseList(userId) {
+        debugger
+        $('#UserallExpenseTable').DataTable({
+            processing: true,
+            serverSide: true,
+            filter: true,
+            "bDestroy": true,
+            ajax: {
+                type: "POST",
+                url: '/ExpenseMaster/GetAllUserExpenseListTable?UserId=' + userId,
+                dataType: 'json',
+                success: function (data) {
+                    console.log("Data received:", data);
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error:", error);
+                }
+            },
+            columns: [
+                {
+                    "data": null,
+                    "render": function (data, type, full, meta) {
+                        return '<div class="form-check"><input class="form-check-input" type="checkbox" name="chk_child" value="option1"></div>';
+                    }
+                },
+                { "data": "id", "name": "Id", "visible": false },
+                { "data": "expenseType", "name": "ExpenseType" },
+                { "data": "paymentType", "name": "PaymentType" },
+                { "data": "billNumber", "name": "BillNumber" },
+                { "data": "description", "name": "Description" },
+                {
+                    "data": "date",
+                    "name": "Date",
+                    "render": function (data, type, full, meta) {
+                        return new Date(data).toLocaleDateString();
+                    }
+                },
+                { "data": "totalAmount", "name": "TotalAmount" },
+                { "data": "account", "name": "Account" },
+            ],
+            columnDefs: [{
+                "defaultContent": "",
+                "targets": "_all",
+            }]
+        });
     }
 
 
-    $('#UserListTable').DataTable({
-        processing: true,
-        serverSide: true,
-        filter: true,
-        "bDestroy": true,
-        ajax: {
-            type: "Post",
-            url: '/ExpenseMaster/GetUserListTable',
-            dataType: 'json'
-        },
-        columns: [
-            { "data": "userId", "name": "UserID", "visible": false },
-            {
-                "data": "fullName",
-                "name": "FullName",
-                "render": function (data, type, full, meta) {
-                    var imageSrc = full.image ? '<img src="/' + full.image + '" class="avatar-xxs rounded-circle image_src object-fit-cover">' : '';
-                    return '<div class="d-flex align-items-center">' +
-                        '<div class="flex-shrink-0">' +
-                        imageSrc +
-                        '</div>' +
-                        '<div class="flex-grow-1 ms-2 name">' +
-                        '<h5 class="fs-15"><a href="#" class="fw-medium link-primary view-details" data-userid="' + full.userId + '">' + data + '</a></h5>' +
-                        '</div>' +
-                        '</div>';
-                }
-            },
-            { "data": "userName", "name": "UserName" },
-            {
-                "data": "date",
-                "name": "Date",
-                "render": function (data, type, full, meta) {
-                    return new Date(data).toLocaleDateString();
-                }
-            },
-            { "data": "totalAmount", "name": "TotalAmount" },
-        ],
-        columnDefs: [{
-            "defaultContent": "",
-            "targets": "_all",
-        }]
-    });
-
-    $('#UserListTable tbody').on('click', 'a.view-details', function (e) {
-        e.preventDefault();
-        var userId = $(this).data('userid');
-        LoadApprovedExpense(userId);
-    });
-});
 
 
-function GetAllUserExpenseList(userId) {
-    debugger
-    $('#UserallExpenseTable').DataTable({
-        processing: true,
-        serverSide: true,
-        filter: true,
-        "bDestroy": true,
-        ajax: {
-            type: "POST",
-            url: '/ExpenseMaster/GetAllUserExpenseListTable?UserId=' + userId,
-            dataType: 'json',
-            success: function (data) {
-                console.log("Data received:", data);
+    function DisplayExpenseList() {
+        $('#ExpenseTable').DataTable({
+            processing: true,
+            serverSide: true,
+            filter: true,
+            "bDestroy": true,
+            ajax: {
+                type: "POST",
+                url: '/ExpenseMaster/GetExpenseDetailsList',
+                dataType: 'json',
             },
-            error: function (xhr, status, error) {
-                console.error("Error:", error);
-            }
-        },
-        columns: [
-            {
-                "data": null,
-                "render": function (data, type, full, meta) {
-                    return '<div class="form-check"><input class="form-check-input" type="checkbox" name="chk_child" value="option1"></div>';
-                }
-            },
-            { "data": "id", "name": "Id", "visible": false },
-            { "data": "expenseType", "name": "ExpenseType" },
-            { "data": "paymentType", "name": "PaymentType" },
-            { "data": "billNumber", "name": "BillNumber" },
-            { "data": "description", "name": "Description" },
-            {
-                "data": "date",
-                "name": "Date",
-                "render": function (data, type, full, meta) {
-                    return new Date(data).toLocaleDateString();
-                }
-            },
-            { "data": "totalAmount", "name": "TotalAmount" },
-            { "data": "account", "name": "Account" },
-        ],
-        columnDefs: [{
-            "defaultContent": "",
-            "targets": "_all",
-        }]
-    });
-}
-
-
-
-
-function DisplayExpenseList() {
-    $('#ExpenseTable').DataTable({
-        processing: true,
-        serverSide: true,
-        filter: true,
-        "bDestroy": true,
-        ajax: {
-            type: "POST",
-            url: '/ExpenseMaster/GetExpenseDetailsList',
-            dataType: 'json',
-        },
-        columns: [
-            {
-                "data": "description", "name": "Description",
-            },
-            {
-                "data": "billNumber", "name": "BillNumber"
-            },
-            {
-                "data": "date", "name": "Date",
-                render: function (data, type, row) {
-                    var dateObj = new Date(data);
-                    var day = dateObj.getDate();
-                    var month = dateObj.getMonth() + 1;
-                    var year = dateObj.getFullYear();
-                    if (day < 10) {
-                        day = '0' + day;
+            columns: [
+                {
+                    "data": "description", "name": "Description",
+                },
+                {
+                    "data": "billNumber", "name": "BillNumber"
+                },
+                {
+                    "data": "date", "name": "Date",
+                    render: function (data, type, row) {
+                        var dateObj = new Date(data);
+                        var day = dateObj.getDate();
+                        var month = dateObj.getMonth() + 1;
+                        var year = dateObj.getFullYear();
+                        if (day < 10) {
+                            day = '0' + day;
+                        }
+                        if (month < 10) {
+                            month = '0' + month;
+                        }
+                        return day + '-' + month + '-' + year;
                     }
-                    if (month < 10) {
-                        month = '0' + month;
-                    }
-                    return day + '-' + month + '-' + year;
-                }
-            },
-            {
-                "data": "totalAmount", "name": "TotalAmount"
-            },
-            {
-                "data": "account", "name": "Account"
-            },
+                },
+                {
+                    "data": "totalAmount", "name": "TotalAmount"
+                },
+                {
+                    "data": "account", "name": "Account"
+                },
 
-            {
-                "data": "Action", "name": "Action",
-                render: function (data, type, full) {
-                    return ('<ul class="list-inline hstack gap-2 mb-0"><li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="View"><a class="text-primary d-inline-block"><i class="ri-eye-fill fs-16"></i></a></li ><li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit"><a onclick="EditExpenseDetails(\'' + full.id + '\')" data-bs-toggle="modal" class="text-primary d-inline-block edit-item-btn"><i class="ri-pencil-fill fs-16"></i></a></li></ul >');
-                }
+                {
+                    "data": "Action", "name": "Action",
+                    render: function (data, type, full) {
+                        return ('<ul class="list-inline hstack gap-2 mb-0"><li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="View"><a class="text-primary d-inline-block"><i class="ri-eye-fill fs-16"></i></a></li ><li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit"><a onclick="EditExpenseDetails(\'' + full.id + '\')" data-bs-toggle="modal" class="text-primary d-inline-block edit-item-btn"><i class="ri-pencil-fill fs-16"></i></a></li></ul >');
+                    }
+                },
+            ],
+            columnDefs: [{
+                "defaultContent": "",
+                "targets": "_all",
+            }]
+        });
+    }
+
+    function GetExpenseTotalAmount() {
+
+        var userId = {
+            UserId: $("#txtuserid").val(),
+        }
+        var form_data = new FormData();
+        form_data.append("USERID", JSON.stringify(userId));
+        $.ajax({
+            url: '/ExpenseMaster/GetExpenseDetailsByUserId',
+            type: 'Post',
+            data: form_data,
+            dataType: 'json',
+            contentType: false,
+            processData: false,
+            success: function (result) {
+                var total = 0;
+                result.forEach(function (obj) {
+                    if (obj.totalAmount) {
+                        total += obj.totalAmount;
+                    }
+                });
+                $("#txtTotalAmount").text('₹' + total);
+
+                var creditamount = 0;
+                result.forEach(function (obj) {
+                    if (obj.account == "Credit") {
+                        creditamount += obj.totalAmount;
+                    }
+                });
+                $("#txttotalcreditamount").text('₹' + creditamount);
+
+                var Dabitamount = 0;
+                result.forEach(function (obj) {
+                    if (obj.account == "Dabit") {
+                        Dabitamount += obj.totalAmount;
+                    }
+                });
+                $("#txttotaldebitedamount").text('₹' + Dabitamount);
             },
-        ],
-        columnDefs: [{
-            "defaultContent": "",
-            "targets": "_all",
-        }]
-    });
-}
+        });
+    };

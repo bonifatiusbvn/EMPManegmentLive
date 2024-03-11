@@ -4,6 +4,7 @@ using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.OrderModels;
 using EMPManegment.Inretface.Interface.InvoiceMaster;
 using EMPManegment.Inretface.Interface.ProductMaster;
+using EMPManegment.Inretface.Interface.PurchaseOrder;
 using EMPManegment.Inretface.Services.InvoiceMaster;
 using System;
 using System.Collections.Generic;
@@ -61,10 +62,10 @@ namespace EMPManegment.Services.InvoiceMaster
         {
             return await InvoiceMaster.GetInvoiceDetailsByOrderId(OrderId);
         }
-
-        public async Task<IEnumerable<InvoiceViewModel>> GetInvoiceDetailsList()
+        
+        public async Task<jsonData> GetInvoiceDetailsList(DataTableRequstModel InvoiceList)
         {
-            return await InvoiceMaster.GetInvoiceDetailsList();
+            return await InvoiceMaster.GetInvoiceDetailsList(InvoiceList);
         }
 
         public async Task<IEnumerable<InvoiceViewModel>> GetInvoiceListByVendorId(Guid Vid)
