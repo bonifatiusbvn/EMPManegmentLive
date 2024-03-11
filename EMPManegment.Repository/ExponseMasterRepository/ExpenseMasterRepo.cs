@@ -16,6 +16,7 @@ using System.Linq.Dynamic.Core;
 using System.Text;
 using System.Threading.Tasks;
 using EMPManegment.EntityModels.ViewModels.OrderModels;
+using EMPManegment.EntityModels.ViewModels.Invoice;
 
 
 namespace EMPManegment.Repository.ExponseMasterRepository
@@ -514,23 +515,25 @@ namespace EMPManegment.Repository.ExponseMasterRepository
         {
             try
             {
-                var expenses = Context.TblExpenseMasters
-                    .Where(a => a.UserId == UserId && a.IsApproved == false)
-                    .Select(a => new ExpenseDetailsView
-                    {
-                        Id = a.Id,
-                        UserId = a.UserId,
-                        ExpenseType = a.ExpenseType,
-                        PaymentType = a.PaymentType,
-                        BillNumber = a.BillNumber,
-                        Description = a.Description,
-                        Date = a.Date,
-                        TotalAmount = a.TotalAmount,
-                        Image = a.Image,
-                        Account = a.Account,
-
-                    });
-
+                var expenses = (from a in Context.TblExpenseMasters
+                                join b in Context.TblExpenseTypes on a.ExpenseType equals b.Id
+                                join c in Context.TblPaymentTypes on a.PaymentType equals c.Id
+                                where a.UserId == UserId && a.IsApproved == false
+                                select new ExpenseDetailsView
+                                {
+                                    Id = a.Id,
+                                    UserId = a.UserId,
+                                    ExpenseType = a.ExpenseType,
+                                    PaymentType = a.PaymentType,
+                                    BillNumber = a.BillNumber,
+                                    Description = a.Description,
+                                    Date = a.Date,
+                                    TotalAmount = a.TotalAmount,
+                                    Image = a.Image,
+                                    Account = a.Account,
+                                    ExpenseTypeName = b.Type,
+                                    PaymentTypeName = c.Type,
+                                });
 
                 if (!string.IsNullOrEmpty(dataTable.sortColumn) && !string.IsNullOrEmpty(dataTable.sortColumnDir))
                 {

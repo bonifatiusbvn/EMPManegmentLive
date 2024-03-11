@@ -14,8 +14,10 @@ namespace EMPManegment.EntityModels.ViewModels.ExpenseMaster
         public Guid UserId { get; set; }
 
         public int ExpenseType { get; set; }
+        public string ExpenseTypeName { get; set; } = null!;
 
         public int? PaymentType { get; set; }
+        public string PaymentTypeName { get; set; } = null!;
 
         public string BillNumber { get; set; } = null!;
 

@@ -6,7 +6,6 @@ $(document).ready(function () {
     GetExpenseTypeList();
     GetPaymentTypeList();
     GetUserExpenseList();
-    GetUserList();
     DisplayExpenseList();
     GetExpenseTotalAmount();
     GetAllUserExpenseList();
@@ -238,7 +237,7 @@ function GetUserExpenseList() {
 }
 
 function GetParameterByName(name, url) {
-    debugger;
+
     if (!url) url = window.location.href;
     console.log("URL:", url); // Log the URL to verify its format
     if (!name) {
@@ -259,45 +258,42 @@ function GetParameterByName(name, url) {
 
 
 
+//var isExpenseLoaded = false; // Flag to track if the expense is already loaded
 
-var isExpenseLoaded = false; // Flag to track if the expense is already loaded
+//function LoadApprovedExpense(userId) {
+//    debugger
+//    // Check if the expense is already loaded
+//    if (isExpenseLoaded) {
+//        debugger
+//        console.log("Expense already loaded.");
+//        return;
+//    }
 
-function LoadApprovedExpense(userId) {
-    debugger
-    // Check if the expense is already loaded
-    if (isExpenseLoaded) {
-        debugger
-        console.log("Expense already loaded.");
-        return;
-    }
+//    debugger
+//    GetAllUserExpenseList(userId)
+//        .then(() => {
+//            // Set the flag to true to indicate that the expense is loaded
+//            isExpenseLoaded = true;
 
-    debugger
-    GetAllUserExpenseList(userId)
-        .then(() => {
-            // Set the flag to true to indicate that the expense is loaded
-            isExpenseLoaded = true;
-
-            // Append the userId parameter to the URL and navigate
-            window.location.href = '/ExpenseMaster/ApprovedExpense?UserId=' + userId;
-        })
-        .catch(error => {
-            console.error("Error loading expense:", error);
-        });
-}
-
+//            // Append the userId parameter to the URL and navigate
+//            window.location.href = '/ExpenseMaster/ApprovedExpense?UserId=' + userId;
+//        })
+//        .catch(error => {
+//            console.error("Error loading expense:", error);
+//        });
+//}
 
 
+//function LoadApprovedExpense(userId) {debugger
+//    GetAllUserExpenseList(userId)
+//}
 
 $(document).ready(function () {
-    debugger
+    
     var userId = GetParameterByName('userId'); // Pass 'userId' as the parameter name
-
-    console.log('userId extracted from URL:', userId); // Log the userId to the console
-
     if (userId) {
-        LoadApprovedExpense(userId);
+        GetAllUserExpenseList(userId); // Pass userId to the function
     }
-
 
     $('#UserListTable').DataTable({
         processing: true,
@@ -321,7 +317,7 @@ $(document).ready(function () {
                         imageSrc +
                         '</div>' +
                         '<div class="flex-grow-1 ms-2 name">' +
-                        '<h5 class="fs-15"><a href="#" class="fw-medium link-primary view-details" data-userid="' + full.userId + '">' + data + '</a></h5>' +
+                        '<h5 class="fs-15"><a href="/ExpenseMaster/ApprovedExpense?UserId=' + full.userId + '" class="fw-medium link-primary view-details" data-userid="' + full.userId + '">' + data + '</a></h5>' +
                         '</div>' +
                         '</div>';
                 }
@@ -341,17 +337,10 @@ $(document).ready(function () {
             "targets": "_all",
         }]
     });
-
-    $('#UserListTable tbody').on('click', 'a.view-details', function (e) {
-        e.preventDefault();
-        var userId = $(this).data('userid');
-        LoadApprovedExpense(userId);
-    });
 });
 
 
 function GetAllUserExpenseList(userId) {
-    debugger
     $('#UserallExpenseTable').DataTable({
         processing: true,
         serverSide: true,
@@ -361,12 +350,6 @@ function GetAllUserExpenseList(userId) {
             type: "POST",
             url: '/ExpenseMaster/GetAllUserExpenseListTable?UserId=' + userId,
             dataType: 'json',
-            success: function (data) {
-                console.log("Data received:", data);
-            },
-            error: function (xhr, status, error) {
-                console.error("Error:", error);
-            }
         },
         columns: [
             {
@@ -376,8 +359,8 @@ function GetAllUserExpenseList(userId) {
                 }
             },
             { "data": "id", "name": "Id", "visible": false },
-            { "data": "expenseType", "name": "ExpenseType" },
-            { "data": "paymentType", "name": "PaymentType" },
+            { "data": "expenseTypeName", "name": "ExpenseTypeName" },
+            { "data": "paymentTypeName", "name": "PaymentTypeName" },
             { "data": "billNumber", "name": "BillNumber" },
             { "data": "description", "name": "Description" },
             {
