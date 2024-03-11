@@ -16,7 +16,7 @@
 }
 @foreach (var item in Model)
 {
-    totalAmount += item.TotalAmount;
+    totalAmount = item.TotalAmount;
     totalGst += item.PerUnitWithGstprice;
 }
 
@@ -135,7 +135,7 @@
                                         <th scope="col">Product Details</th>
                                         <th scope="col">Rate</th>
                                         <th scope="col">Quantity</th>
-                                        <th scope="col">RateWithGst</th>
+                                        <th scope="col">GstPerUnit</th>
                                         <th scope="col" class="text-end">Amount</th>
                                     </tr>
                                 </thead>
@@ -150,8 +150,8 @@
                                             </td>
                                             <td id="txtperunitprice">@item.PerUnitPrice</td>
                                             <td id="txtquantity">@item.Quantity</td>
-                                            <td id="txtperunitwithgstprice">@item.PerUnitWithGstprice</td>
-                                            <td class="text-end" id="txttotal">@item.TotalAmount</td>
+                                            <td id="txtperunitwithgstprice">@item.GstPerUnit</td>
+                                            <td class="text-end" id="txttotal">@item.SubTotal</td>
                                         </tr>
                                     }
                                 </tbody>

@@ -201,7 +201,6 @@ public partial class BonifatiusEmployeesContext : DbContext
 
             entity.HasOne(d => d.PaymentTypeNavigation).WithMany(p => p.TblExpenseMasters)
                 .HasForeignKey(d => d.PaymentType)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_tblExpenseMaster_tblPaymentType");
 
             entity.HasOne(d => d.User).WithMany(p => p.TblExpenseMasters)

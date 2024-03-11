@@ -8,6 +8,7 @@ $(document).ready(function () {
     GetUserExpenseList();
     GetUserList();
     DisplayExpenseList();
+    GetExpenseTotalAmount();
 });
 function GetExpenseTypeList() {
 
@@ -71,7 +72,7 @@ function AddExpenseDetails() {
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'OK',
                     }).then(function () {
-                        window.location = '/ExpenseMaster/ExpenseList';
+                        window.location = '/ExpenseMaster/UserExpenseList';
                     });
                 }
             }
@@ -236,7 +237,6 @@ function GetUserExpenseList() {
 }
 
 function GetUserList() {
-    debugger
     $('#UserListTable').DataTable({
         processing: true,
         serverSide: true,
@@ -335,3 +335,45 @@ function DisplayExpenseList() {
         }]
     });
 }
+
+function GetExpenseTotalAmount() {
+
+    var userId = {
+        UserId: $("#txtuserid").val(),
+    }
+    var form_data = new FormData();
+    form_data.append("USERID", JSON.stringify(userId));
+    $.ajax({
+        url: '/ExpenseMaster/GetExpenseDetailsByUserId',
+        type: 'Post',
+        data: form_data,
+        dataType: 'json',
+        contentType: false,
+        processData: false,
+        success: function (result) {
+            var total = 0;
+            result.forEach(function (obj) {
+                if (obj.totalAmount) {
+                    total += obj.totalAmount;
+                }
+            });
+            $("#txtTotalAmount").text('₹' + total);
+
+            var creditamount = 0;
+            result.forEach(function (obj) {
+                if (obj.account == "Credit") {
+                    creditamount += obj.totalAmount;
+                }
+            });
+            $("#txttotalcreditamount").text('₹' + creditamount);
+
+            var Dabitamount = 0;
+            result.forEach(function (obj) {
+                if (obj.account == "Dabit") {
+                    Dabitamount += obj.totalAmount;
+                }
+            });
+            $("#txttotaldebitedamount").text('₹' + Dabitamount);
+        },
+    });
+};

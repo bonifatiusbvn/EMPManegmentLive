@@ -1,6 +1,7 @@
 ﻿using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 using EMPManegment.EntityModels.ViewModels.ExpenseMaster;
 using EMPManegment.EntityModels.ViewModels.Models;
+using EMPManegment.EntityModels.ViewModels.OrderModels;
 using EMPManegment.EntityModels.ViewModels.ProductMaster;
 using EMPManegment.Inretface.Interface.ProductMaster;
 using EMPManegment.Inretface.Services.ExpenseMaster;
@@ -112,6 +113,13 @@ namespace EMPManagment.API.Controllers
         {
             var getUserExpense = await expenseMaster.GetUserList(dataTable);
             return Ok(new { code = 200, data = getUserExpense });
+        }
+        [HttpPost]
+        [Route("GetExpenseDetailByUserId")]
+        public async Task<IActionResult> GetExpenseDetailByUserId(Guid UserId)
+        {
+            List<ExpenseDetailsView> getExpense = await expenseMaster.GetExpenseDetailByUserId(UserId);
+            return Ok(new { code = 200, data = getExpense.ToList() });
         }
     }
 }

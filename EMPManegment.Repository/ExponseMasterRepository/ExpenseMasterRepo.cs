@@ -15,6 +15,7 @@ using System.Net;
 using System.Linq.Dynamic.Core;
 using System.Text;
 using System.Threading.Tasks;
+using EMPManegment.EntityModels.ViewModels.OrderModels;
 
 
 namespace EMPManegment.Repository.ExponseMasterRepository
@@ -193,17 +194,14 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                     Id = Guid.NewGuid(),
                     UserId = ExpenseDetails.UserId,
                     ExpenseType = ExpenseDetails.ExpenseType,
-                    PaymentType = ExpenseDetails.PaymentType,
                     BillNumber = ExpenseDetails.BillNumber,
                     Description = ExpenseDetails.Description,
                     Date = ExpenseDetails.Date,
                     TotalAmount = ExpenseDetails.TotalAmount,
                     Image = ExpenseDetails.Image,
-                    Account = ExpenseDetails.Account,
-                    IsPaid = ExpenseDetails.IsPaid,
-                    IsApproved = ExpenseDetails.IsApproved,
-                    ApprovedBy = ExpenseDetails.ApprovedBy,
-                    ApprovedByName = ExpenseDetails.ApprovedByName,
+                    Account = "Dabit",
+                    IsPaid = false,
+                    IsApproved = false,
                     CreatedOn = DateTime.Today,
                     CreatedBy = ExpenseDetails.CreatedBy,
                 };
@@ -476,6 +474,39 @@ namespace EMPManegment.Repository.ExponseMasterRepository
             {
                 throw ex;
             }
+        }
+
+        public async Task<List<ExpenseDetailsView>> GetExpenseDetailByUserId(Guid UserId)
+        {
+            var ExpenseDetail = new List<ExpenseDetailsView>();
+            var data = await Context.TblExpenseMasters.Where(x => x.UserId == UserId).ToListAsync();
+            if (data != null)
+            {
+                foreach (var item in data)
+                {
+                    ExpenseDetail.Add(new ExpenseDetailsView()
+                    {
+                        Id = item.Id,
+                        UserId = item.UserId,
+                        ExpenseType = item.ExpenseType,
+                        PaymentType = item.PaymentType,
+                        BillNumber = item.BillNumber,
+                        Description = item.Description,
+                        Date = item.Date,
+                        TotalAmount = item.TotalAmount,
+                        Image = item.Image,
+                        Account = item.Account,
+                        IsPaid = item.IsPaid,
+                        IsApproved = item.IsApproved,
+                        ApprovedBy = item.ApprovedBy,
+                        ApprovedByName = item.ApprovedByName,
+                        CreatedBy = item.CreatedBy,
+                        CreatedOn = item.CreatedOn,
+
+                    });
+                }
+            }
+            return ExpenseDetail;
         }
     }
 }
