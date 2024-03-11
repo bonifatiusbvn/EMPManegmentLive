@@ -112,36 +112,51 @@ namespace EMPManegment.Repository.OrderRepository
             }
         }
 
-
-
-
         public async Task<List<OrderDetailView>> GetOrderDetailsByStatus(string DeliveryStatus)
         {
-            var orderDetails = new List<OrderDetailView>();
-            var data = await Context.TblOrderMasters.Where(x => x.DeliveryStatus == DeliveryStatus).ToListAsync();
-            if (data != null)
+            try
             {
-                foreach (var item in data)
+                var data = await (from a in Context.TblOrderMasters
+                                  join b in Context.TblVendorMasters on a.VendorId equals b.Vid
+                                  join c in Context.TblProductTypeMasters on a.ProductType equals c.Id
+                                  join d in Context.TblPaymentMethodTypes on a.PaymentMethod equals d.Id
+                                  where a.IsDeleted != false && a.DeliveryStatus == DeliveryStatus
+                                  select new
+                                  {
+                                      Order = a,
+                                      Vendor = b,
+                                      ProductType = c,
+                                      PaymentMethod = d
+                                  }).ToListAsync();
+
+                var orderList = data.Select(item => new OrderDetailView
                 {
-                    orderDetails.Add(new OrderDetailView()
-                    {
-                        ProductId = item.ProjectId,
-                        OrderId = item.OrderId,
-                        CompanyName = item.CompanyName,
-                        Product = item.ProductType,
-                        Quantity = item.Quantity,
-                        OrderDate = item.OrderDate,
-                        TotalAmount = item.TotalAmount,
-                        AmountPerUnit = item.AmountPerUnit,
-                        PaymentMethod = item.PaymentMethod,
-                        DeliveryStatus = item.DeliveryStatus,
-                        DeliveryDate = item.DeliveryDate,
-                        CreatedOn = item.CreatedOn,
-                    });
-                }
+                    Id = item.Order.Id,
+                    OrderId = item.Order.OrderId,
+                    ProductId = item.Order.ProductId,
+                    CompanyName = item.Vendor.VendorCompany,
+                    VendorId = item.Order.VendorId,
+                    ProductName = item.ProductType.Type,
+                    Quantity = item.Order.Quantity,
+                    OrderDate = item.Order.OrderDate,
+                    TotalAmount = item.Order.TotalAmount,
+                    AmountPerUnit = item.Order.AmountPerUnit,
+                    PaymentMethod = item.Order.PaymentMethod,
+                    PaymentMethodName = item.PaymentMethod.PaymentMethod,
+                    DeliveryStatus = item.Order.DeliveryStatus,
+                    DeliveryDate = item.Order.DeliveryDate,
+                    CreatedOn = item.Order.CreatedOn,
+                }).ToList();
+
+                return orderList;
             }
-            return orderDetails;
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
+
+
 
         public string CheckOrder(string projectname)
         {
@@ -154,14 +169,14 @@ namespace EMPManegment.Repository.OrderRepository
                 string UserOrderId;
                 if (LastOrder == null)
                 {
-                    UserOrderId = $"BTPL/ODR/{projectname}/{lastYear % 100}-{currentYear % 100}-01";
+                    UserOrderId = $"BTPL/PO/{projectname}/{lastYear % 100}-{currentYear % 100}-001";
                 }
                 else
                 {
                     if (LastOrder.OrderId.Length >= 25)
                     {
                         int orderNumber = int.Parse(LastOrder.OrderId.Substring(24)) + 1;
-                        UserOrderId = $"BTPL/ODR/{projectname}/{lastYear % 100}-{currentYear % 100}-" + orderNumber.ToString("D3");
+                        UserOrderId = $"BTPL/PO/{projectname}/{lastYear % 100}-{currentYear % 100}-" + orderNumber.ToString("D3");
                     }
                     else
                     {
@@ -248,8 +263,8 @@ namespace EMPManegment.Repository.OrderRepository
                                       VendorEmail = b.VendorCompanyEmail,
                                       ProductImage = c.ProductImage,
                                       ProductName = a.ProductName,
-                                      SubTotal=a.SubTotal,
-                                      TotalGst=a.TotalGst,
+                                      SubTotal = a.SubTotal,
+                                      TotalGst = a.TotalGst,
                                       ProductShortDescription = a.ProductShortDescription,
                                       Quantity = a.Quantity,
                                       OrderDate = a.OrderDate,
@@ -284,8 +299,8 @@ namespace EMPManegment.Repository.OrderRepository
                             OrderDate = item.OrderDate,
                             PerUnitPrice = item.PerUnitPrice,
                             PerUnitWithGstprice = item.PerUnitWithGstprice,
-                            SubTotal=item.SubTotal,
-                            TotalGst=item.TotalGst,
+                            SubTotal = item.SubTotal,
+                            TotalGst = item.TotalGst,
                             TotalAmount = item.TotalAmount,
                             AmountPerUnit = item.AmountPerUnit,
                             PaymentMethod = item.PaymentMethod,
@@ -401,5 +416,7 @@ namespace EMPManegment.Repository.OrderRepository
                 return response;
             }
         }
+
+
     }
 }

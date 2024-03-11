@@ -17,13 +17,9 @@
                     <div class="flex-shrink-0">
                         <div class="d-flex align-items-center gap-1">
                             <button type="button" class="btn btn-light btn-sm">Message</button>
-                            <ul class="list-inline hstack gap-2 mb-0">
-                                <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Remove">
-                                    <a class="text-danger d-inline-block remove-item-btn" data-bs-toggle="modal" onclick="deleteProjectMember('@item.UserId')">
-                                        <i class="ri-delete-bin-5-fill fs-16"></i>
-                                    </a>
-                                </li>
-                            </ul>
+                            <a class="btn text-danger d-inline-block remove-item-btn" data-bs-toggle="modal" onclick="deleteProjectMember('@item.UserId')">
+                                <i class="ri-delete-bin-5-fill fs-16"></i>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -60,4 +56,3 @@
     </div>
 </div>
 <!--end modal -->
-

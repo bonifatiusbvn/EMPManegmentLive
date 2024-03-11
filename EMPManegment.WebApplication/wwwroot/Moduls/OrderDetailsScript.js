@@ -261,6 +261,7 @@ function InsertMultipleOrder() {
     var orderDetails = [];
     var numOrders = $(".product").length;
     $(".product").each(function () {
+
         var orderRow = $(this);
         var objData = {
             ProjectId: $("#txtProjectId").val(),
@@ -279,13 +280,13 @@ function InsertMultipleOrder() {
             ProductShortDescription: orderRow.find("#txtproductDescription").val(),
             ProductName: orderRow.find("#txtproductName").val(),
             AmountPerUnit: orderRow.find("#txtproductamount").val(),
-            GstPerUnit: orderRow.find("#txtproductamountwithGST").val(),
+            GstPerUnit: orderRow.find("#txtgst").val(),
             SubTotal: orderRow.find("#txtproducttotalamount").val(),
             TotalGst: $("#totalgst").val(),
             TotalAmount: $("#cart-total").val(),
         };
         orderDetails.push(objData);
-
+        debugger
     });
     var form_data = new FormData();
     form_data.append("ORDERDETAILS", JSON.stringify(orderDetails));
@@ -452,7 +453,8 @@ function SerchProductDetailsById() {
     });
 }
 
-function deleteOrderDetails(OrderId) {debugger
+function deleteOrderDetails(OrderId) {
+
     Swal.fire({
         title: "Are you sure want to Delete This?",
         text: "You won't be able to revert this!",
@@ -470,7 +472,8 @@ function deleteOrderDetails(OrderId) {debugger
                 url: '/OrderMaster/DeleteOrderDetails?OrderId=' + OrderId,
                 type: 'POST',
                 dataType: 'json',
-                success: function (Result) {debugger
+                success: function (Result) {
+
                     Swal.fire({
                         title: Result.message,
                         icon: 'success',
