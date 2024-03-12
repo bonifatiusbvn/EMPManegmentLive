@@ -167,9 +167,9 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
             }
         }
 
-        public async Task<OrderResponseModel> GetInvoiceDetailsByOrderId(string OrderId)
+        public async Task<PurchaseOrderResponseModel> GetInvoiceDetailsByOrderId(string OrderId)
         {
-            OrderResponseModel response = new OrderResponseModel();
+            PurchaseOrderResponseModel response = new PurchaseOrderResponseModel();
             try
             {
                 bool isInvoiceAlredyExists = Context.TblInvoices.Any(x => x.OrderId == OrderId);
@@ -181,13 +181,13 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                 }
                 else
                 {
-                    var orderDetails = new List<OrderDetailView>();
-                    var data = await (from a in Context.TblOrderMasters
+                    var orderDetails = new List<PurchaseOrderDetailView>();
+                    var data = await (from a in Context.TblPurchaseOrderMasters
                                       join c in Context.TblProductDetailsMasters on a.ProductId equals c.Id
                                       join d in Context.TblPaymentMethodTypes on a.PaymentMethod equals d.Id
                                       join b in Context.TblVendorMasters on a.VendorId equals b.Vid
                                       where a.OrderId == OrderId
-                                      select new OrderDetailView
+                                      select new PurchaseOrderDetailView
                                       {
                                           Id = a.Id,
                                           OrderId = a.OrderId,
@@ -220,7 +220,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                     {
                         foreach (var item in data)
                         {
-                            orderDetails.Add(new OrderDetailView()
+                            orderDetails.Add(new PurchaseOrderDetailView()
                             {
                                 Id = item.Id,
                                 OrderId = item.OrderId,
@@ -585,19 +585,19 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
             return jsonData;
         }
 
-        public async Task<OrderResponseModel> DisplayInvoiceDetails(string OrderId)
+        public async Task<PurchaseOrderResponseModel> DisplayInvoiceDetails(string OrderId)
         {
-            OrderResponseModel response = new OrderResponseModel();
+            PurchaseOrderResponseModel response = new PurchaseOrderResponseModel();
             try
             {
-                var orderDetails = new List<OrderDetailView>();
-                var data = await (from a in Context.TblOrderMasters
+                var orderDetails = new List<PurchaseOrderDetailView>();
+                var data = await (from a in Context.TblPurchaseOrderMasters
                                   join c in Context.TblProductDetailsMasters on a.ProductId equals c.Id
                                   join b in Context.TblVendorMasters on a.VendorId equals b.Vid
                                   join d in Context.TblInvoices on a.OrderId equals d.OrderId
                                   join e in Context.TblPaymentMethodTypes on a.PaymentMethod equals e.Id
                                   where a.OrderId == OrderId
-                                  select new OrderDetailView
+                                  select new PurchaseOrderDetailView
                                   {
                                       Id = a.Id,
                                       OrderId = a.OrderId,
@@ -629,7 +629,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                 {
                     foreach (var item in data)
                     {
-                        orderDetails.Add(new OrderDetailView()
+                        orderDetails.Add(new PurchaseOrderDetailView()
                         {
                             Id = item.Id,
                             OrderId = item.OrderId,
@@ -742,9 +742,9 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
             return model;
         }
 
-        public async Task<OrderResponseModel> ShowInvoiceDetailsByOrderId(string OrderId)
+        public async Task<PurchaseOrderResponseModel> ShowInvoiceDetailsByOrderId(string OrderId)
         {
-            OrderResponseModel response = new OrderResponseModel();
+            PurchaseOrderResponseModel response = new PurchaseOrderResponseModel();
             try
             {
                 bool isInvoiceAlredyExists = Context.TblInvoices.Any(x => x.OrderId == OrderId);
@@ -756,12 +756,12 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                 }
                 else
                 {
-                    var orderDetails = new List<OrderDetailView>();
-                    var data = await (from a in Context.TblOrderMasters
+                    var orderDetails = new List<PurchaseOrderDetailView>();
+                    var data = await (from a in Context.TblPurchaseOrderMasters
                                       join c in Context.TblProductDetailsMasters on a.ProductId equals c.Id
                                       join b in Context.TblVendorMasters on a.VendorId equals b.Vid
                                       where a.OrderId == OrderId
-                                      select new OrderDetailView
+                                      select new PurchaseOrderDetailView
                                       {
                                           Id = a.Id,
                                           OrderId = a.OrderId,
@@ -791,7 +791,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                     {
                         foreach (var item in data)
                         {
-                            orderDetails.Add(new OrderDetailView()
+                            orderDetails.Add(new PurchaseOrderDetailView()
                             {
                                 Id = item.Id,
                                 OrderId = item.OrderId,

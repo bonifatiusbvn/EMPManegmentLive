@@ -37,8 +37,6 @@ public partial class BonifatiusEmployeesContext : DbContext
 
     public virtual DbSet<TblInvoiceTypeMaster> TblInvoiceTypeMasters { get; set; }
 
-    public virtual DbSet<TblOrderMaster> TblOrderMasters { get; set; }
-
     public virtual DbSet<TblPageMaster> TblPageMasters { get; set; }
 
     public virtual DbSet<TblPaymentMethodType> TblPaymentMethodTypes { get; set; }
@@ -55,7 +53,7 @@ public partial class BonifatiusEmployeesContext : DbContext
 
     public virtual DbSet<TblProjectMember> TblProjectMembers { get; set; }
 
-    public virtual DbSet<TblPurchaseOrder> TblPurchaseOrders { get; set; }
+    public virtual DbSet<TblPurchaseOrderMaster> TblPurchaseOrderMasters { get; set; }
 
     public virtual DbSet<TblQuestion> TblQuestions { get; set; }
 
@@ -187,6 +185,7 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.Account).HasMaxLength(20);
             entity.Property(e => e.ApprovedByName).HasMaxLength(50);
+            entity.Property(e => e.ApprovedDate).HasColumnType("datetime");
             entity.Property(e => e.BillNumber).HasMaxLength(50);
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
             entity.Property(e => e.Date).HasColumnType("datetime");
@@ -264,45 +263,6 @@ public partial class BonifatiusEmployeesContext : DbContext
 
             entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.InvoiceType).HasMaxLength(10);
-        });
-
-        modelBuilder.Entity<TblOrderMaster>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PK_OrderMaster");
-
-            entity.ToTable("tblOrderMaster");
-
-            entity.Property(e => e.Id).ValueGeneratedNever();
-            entity.Property(e => e.AmountPerUnit).HasColumnType("decimal(18, 0)");
-            entity.Property(e => e.CompanyName).HasMaxLength(50);
-            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
-            entity.Property(e => e.DeliveryDate).HasColumnType("date");
-            entity.Property(e => e.DeliveryStatus).HasMaxLength(50);
-            entity.Property(e => e.GstPerUnit).HasColumnType("decimal(18, 0)");
-            entity.Property(e => e.OrderDate).HasColumnType("date");
-            entity.Property(e => e.OrderId).HasMaxLength(50);
-            entity.Property(e => e.OrderStatus).HasMaxLength(20);
-            entity.Property(e => e.PaymentStatus).HasMaxLength(50);
-            entity.Property(e => e.ProductName).HasMaxLength(50);
-            entity.Property(e => e.ProductShortDescription).HasMaxLength(50);
-            entity.Property(e => e.Quantity).HasMaxLength(50);
-            entity.Property(e => e.SubTotal).HasColumnType("decimal(18, 0)");
-            entity.Property(e => e.TotalAmount).HasColumnType("decimal(18, 0)");
-            entity.Property(e => e.TotalGst).HasColumnType("decimal(18, 0)");
-            entity.Property(e => e.Type).HasMaxLength(20);
-
-            entity.HasOne(d => d.PaymentMethodNavigation).WithMany(p => p.TblOrderMasters)
-                .HasForeignKey(d => d.PaymentMethod)
-                .HasConstraintName("FK_tblOrderMaster_tblPaymentMethodType");
-
-            entity.HasOne(d => d.Product).WithMany(p => p.TblOrderMasters)
-                .HasForeignKey(d => d.ProductId)
-                .HasConstraintName("FK_OrderMaster_tblProductDetailsMaster");
-
-            entity.HasOne(d => d.ProductTypeNavigation).WithMany(p => p.TblOrderMasters)
-                .HasForeignKey(d => d.ProductType)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_tblOrderMaster_tblProductTypeMaster");
         });
 
         modelBuilder.Entity<TblPageMaster>(entity =>
@@ -423,31 +383,43 @@ public partial class BonifatiusEmployeesContext : DbContext
                 .HasConstraintName("FK_tblProjectDetails_tblUsers");
         });
 
-        modelBuilder.Entity<TblPurchaseOrder>(entity =>
+        modelBuilder.Entity<TblPurchaseOrderMaster>(entity =>
         {
-            entity.ToTable("tblPurchaseOrder");
+            entity.HasKey(e => e.Id).HasName("PK_OrderMaster");
+
+            entity.ToTable("tblPurchaseOrderMaster");
 
             entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.AmountPerUnit).HasColumnType("decimal(18, 0)");
             entity.Property(e => e.CompanyName).HasMaxLength(50);
-            entity.Property(e => e.CreatedOn).HasColumnType("date");
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
             entity.Property(e => e.DeliveryDate).HasColumnType("date");
+            entity.Property(e => e.DeliveryStatus).HasMaxLength(50);
+            entity.Property(e => e.GstPerUnit).HasColumnType("decimal(18, 0)");
             entity.Property(e => e.OrderDate).HasColumnType("date");
-            entity.Property(e => e.Poid)
-                .HasMaxLength(50)
-                .HasColumnName("POId");
+            entity.Property(e => e.OrderId).HasMaxLength(50);
+            entity.Property(e => e.OrderStatus).HasMaxLength(20);
+            entity.Property(e => e.PaymentStatus).HasMaxLength(50);
             entity.Property(e => e.ProductName).HasMaxLength(50);
             entity.Property(e => e.ProductShortDescription).HasMaxLength(50);
             entity.Property(e => e.Quantity).HasMaxLength(50);
-            entity.Property(e => e.Status).HasMaxLength(50);
-            entity.Property(e => e.TotalAmount).HasColumnType("numeric(18, 2)");
+            entity.Property(e => e.SubTotal).HasColumnType("decimal(18, 0)");
+            entity.Property(e => e.TotalAmount).HasColumnType("decimal(18, 0)");
+            entity.Property(e => e.TotalGst).HasColumnType("decimal(18, 0)");
+            entity.Property(e => e.Type).HasMaxLength(20);
 
-            entity.HasOne(d => d.Product).WithMany(p => p.TblPurchaseOrders)
+            entity.HasOne(d => d.PaymentMethodNavigation).WithMany(p => p.TblPurchaseOrderMasters)
+                .HasForeignKey(d => d.PaymentMethod)
+                .HasConstraintName("FK_tblOrderMaster_tblPaymentMethodType");
+
+            entity.HasOne(d => d.Product).WithMany(p => p.TblPurchaseOrderMasters)
                 .HasForeignKey(d => d.ProductId)
-                .HasConstraintName("FK_tblPurchaseOrder_tblProductDetailsMaster");
+                .HasConstraintName("FK_OrderMaster_tblProductDetailsMaster");
 
-            entity.HasOne(d => d.Vendor).WithMany(p => p.TblPurchaseOrders)
-                .HasForeignKey(d => d.VendorId)
-                .HasConstraintName("FK_tblPurchaseOrder_tblVendor_Master");
+            entity.HasOne(d => d.ProductTypeNavigation).WithMany(p => p.TblPurchaseOrderMasters)
+                .HasForeignKey(d => d.ProductType)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_tblOrderMaster_tblProductTypeMaster");
         });
 
         modelBuilder.Entity<TblQuestion>(entity =>

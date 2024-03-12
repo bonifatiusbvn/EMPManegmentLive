@@ -69,11 +69,11 @@ namespace EMPManegment.Web.Controllers
             {
                 string porjectname = UserSession.ProjectName;
                 ApiResponseModel Response = await APIServices.GetAsync("", "Invoice/CheckInvoiceNo?porjectname=" + porjectname);
-                List<OrderDetailView> order = new List<OrderDetailView>();
+                List<PurchaseOrderDetailView> order = new List<PurchaseOrderDetailView>();
                 ApiResponseModel response = await APIServices.GetAsync("", "Invoice/GetInvoiceDetailsByOrderId?OrderId=" + OrderId);
                 if (response.code == 200)
                 {
-                    order = JsonConvert.DeserializeObject<List<OrderDetailView>>(response.data.ToString());
+                    order = JsonConvert.DeserializeObject<List<PurchaseOrderDetailView>>(response.data.ToString());
                     response.data = order;
 
                 }
@@ -92,11 +92,11 @@ namespace EMPManegment.Web.Controllers
         {
             try
             {
-                List<OrderDetailView> order = new List<OrderDetailView>();
+                List<PurchaseOrderDetailView> order = new List<PurchaseOrderDetailView>();
                 ApiResponseModel response = await APIServices.GetAsync("", "Invoice/DisplayInvoiceDetails?OrderId=" + OrderId);
                 if (response.code == 200)
                 {
-                    order = JsonConvert.DeserializeObject<List<OrderDetailView>>(response.data.ToString());
+                    order = JsonConvert.DeserializeObject<List<PurchaseOrderDetailView>>(response.data.ToString());
                     response.data = order;
 
                 }

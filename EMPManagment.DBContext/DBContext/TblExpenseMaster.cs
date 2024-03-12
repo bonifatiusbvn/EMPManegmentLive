@@ -30,6 +30,8 @@ public partial class TblExpenseMaster
     public bool IsApproved { get; set; }
     public DateTime ApprovedDate { get; set; }
 
+    public DateTime? ApprovedDate { get; set; }
+
     public Guid? ApprovedBy { get; set; }
 
     public string? ApprovedByName { get; set; }

@@ -14,9 +14,9 @@ using System.Diagnostics;
 
 namespace EMPManegment.Web.Controllers
 {
-    public class OrderMasterController : Controller
+    public class PurchaseOrderMasterController : Controller
     {
-        public OrderMasterController(WebAPI webAPI, IWebHostEnvironment environment, APIServices aPIServices)
+        public PurchaseOrderMasterController(WebAPI webAPI, IWebHostEnvironment environment, APIServices aPIServices)
         {
             WebAPI = webAPI;
             Environment = environment;
@@ -28,15 +28,15 @@ namespace EMPManegment.Web.Controllers
         public APIServices APIServices { get; }
 
         [HttpGet]
-        public async Task<IActionResult> CreateOrder(int? page)
+        public async Task<IActionResult> CreatePurchaseOrder(int? page)
         {
             try
             {
-                List<OrderDetailView> orderList = new List<OrderDetailView>();
-                ApiResponseModel res = await APIServices.GetAsync("", "OrderDetails/GetOrderList");
+                List<PurchaseOrderDetailView> orderList = new List<PurchaseOrderDetailView>();
+                ApiResponseModel res = await APIServices.GetAsync("", "PurchaseOrderDetails/GetPurchaseOrderList");
                 if (res.code == 200)
                 {
-                    orderList = JsonConvert.DeserializeObject<List<OrderDetailView>>(res.data.ToString());
+                    orderList = JsonConvert.DeserializeObject<List<PurchaseOrderDetailView>>(res.data.ToString());
                     ViewBag.ordersList = orderList.Count;
                 }
                 return View(orderList);
@@ -48,17 +48,17 @@ namespace EMPManegment.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> GetOrderDetailsByStatus(string DeliveryStatus)
+        public async Task<IActionResult> GetPurchaseOrderDetailsByStatus(string DeliveryStatus)
         {
             try
             {
-                List<OrderDetailView> orderList = new List<OrderDetailView>();
-                ApiResponseModel res = await APIServices.PostAsync("", "OrderDetails/GetOrderDetailsByStatus?DeliveryStatus=" + DeliveryStatus);
+                List<PurchaseOrderDetailView> orderList = new List<PurchaseOrderDetailView>();
+                ApiResponseModel res = await APIServices.PostAsync("", "PurchaseOrderDetails/GetPurchaseOrderDetailsByStatus?DeliveryStatus=" + DeliveryStatus);
                 if (res.code == 200)
                 {
-                    orderList = JsonConvert.DeserializeObject<List<OrderDetailView>>(res.data.ToString());
+                    orderList = JsonConvert.DeserializeObject<List<PurchaseOrderDetailView>>(res.data.ToString());
                 }
-                return PartialView("~/Views/OrderMaster/_DeliveryStatusOrder.cshtml", orderList);
+                return PartialView("~/Views/PurchaseOrderMaster/_DeliveryStatusOrder.cshtml", orderList);
             }
             catch (Exception ex)
             {
@@ -69,11 +69,11 @@ namespace EMPManegment.Web.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> CreateOrder(OrderDetailView orderDetail)
+        public async Task<IActionResult> CreatePurchaseOrder(PurchaseOrderDetailView orderDetail)
         {
             try
             {
-                ApiResponseModel postuser = await APIServices.PostAsync(orderDetail, "OrderDetails/CreateOrder");
+                ApiResponseModel postuser = await APIServices.PostAsync(orderDetail, "PurchaseOrderDetails/CreatePurchaseOrder");
                 if (postuser.code == 200)
                 {
                     return Ok(new { postuser.message });
@@ -92,15 +92,15 @@ namespace EMPManegment.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetOrderDetailsById(string OrderId)
+        public async Task<IActionResult> GetPurchaseOrderDetailsById(string OrderId)
         {
             try
             {
-                List<OrderDetailView> order = new List<OrderDetailView>();
-                ApiResponseModel response = await APIServices.GetAsync("", "OrderDetails/GetOrderDetailsById?OrderId=" + OrderId);
+                List<PurchaseOrderDetailView> order = new List<PurchaseOrderDetailView>();
+                ApiResponseModel response = await APIServices.GetAsync("", "PurchaseOrderDetails/GetPurchaseOrderDetailsById?OrderId=" + OrderId);
                 if (response.code == 200)
                 {
-                    order = JsonConvert.DeserializeObject<List<OrderDetailView>>(response.data.ToString());
+                    order = JsonConvert.DeserializeObject<List<PurchaseOrderDetailView>>(response.data.ToString());
                 }
                 return View("ShowProductDetails", order);
             }
@@ -110,12 +110,12 @@ namespace EMPManegment.Web.Controllers
             }
         }
         [HttpGet]
-        public async Task<IActionResult> CreateOrderView()
+        public async Task<IActionResult> CreatePurchaseOrderView()
         {
             try
             {
                 string porjectname = UserSession.ProjectName;
-                ApiResponseModel Response = await APIServices.GetAsync("", "OrderDetails/CheckOrder?projectname=" + porjectname);
+                ApiResponseModel Response = await APIServices.GetAsync("", "PurchaseOrderDetails/CheckPurchaseOrder?projectname=" + porjectname);
                 if (Response.code == 200)
                 {
                     ViewBag.OrderId = Response.data;
@@ -128,13 +128,13 @@ namespace EMPManegment.Web.Controllers
             }
         }
         [HttpPost]
-        public async Task<IActionResult> InsertMultipleOrders()
+        public async Task<IActionResult> InsertMultiplePurchaseOrders()
         {
             try
             {
                 var OrderDetails = HttpContext.Request.Form["ORDERDETAILS"];
-                var InsertDetails = JsonConvert.DeserializeObject<List<OrderView>>(OrderDetails.ToString());
-                ApiResponseModel postuser = await APIServices.PostAsync(InsertDetails, "OrderDetails/InsertMultipleOrder");
+                var InsertDetails = JsonConvert.DeserializeObject<List<PurchaseOrderView>>(OrderDetails.ToString());
+                ApiResponseModel postuser = await APIServices.PostAsync(InsertDetails, "PurchaseOrderDetails/InsertMultiplePurchaseOrder");
                 if (postuser.code == 200)
                 {
                     return Ok(new { postuser.message });
@@ -155,7 +155,7 @@ namespace EMPManegment.Web.Controllers
             try
             {
                 List<PaymentMethodView> PaymentMethod = new List<PaymentMethodView>();
-                ApiResponseModel res = await APIServices.GetAsync("", "OrderDetails/GetAllPaymentMethod");
+                ApiResponseModel res = await APIServices.GetAsync("", "PurchaseOrderDetails/GetAllPaymentMethod");
                 if (res.code == 200)
                 {
                     PaymentMethod = JsonConvert.DeserializeObject<List<PaymentMethodView>>(res.data.ToString());
@@ -172,15 +172,15 @@ namespace EMPManegment.Web.Controllers
             return View();
         }
         [HttpGet]
-        public async Task<JsonResult> EditOrderDetails(Guid Id)
+        public async Task<JsonResult> EditPurchaseOrderDetails(Guid Id)
         {
             try
             {
-                UpdateOrderView order = new UpdateOrderView();
-                ApiResponseModel response = await APIServices.GetAsync("", "OrderDetails/EditOrderDetails?Id=" + Id);
+                UpdatePurchaseOrderView order = new UpdatePurchaseOrderView();
+                ApiResponseModel response = await APIServices.GetAsync("", "PurchaseOrderDetails/EditPurchaseOrderDetails?Id=" + Id);
                 if (response.code == 200)
                 {
-                    order = JsonConvert.DeserializeObject<UpdateOrderView>(response.data.ToString());
+                    order = JsonConvert.DeserializeObject<UpdatePurchaseOrderView>(response.data.ToString());
                 }
                 return new JsonResult(order);
             }
@@ -191,11 +191,11 @@ namespace EMPManegment.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateOrderDetails(UpdateOrderView orderDetail)
+        public async Task<IActionResult> UpdatePurchaseOrderDetails(UpdatePurchaseOrderView orderDetail)
         {
             try
             {
-                ApiResponseModel postuser = await APIServices.PostAsync(orderDetail, "OrderDetails/UpdateOrderDetails");
+                ApiResponseModel postuser = await APIServices.PostAsync(orderDetail, "PurchaseOrderDetails/UpdatePurchaseOrderDetails");
                 if (postuser.code == 200)
                 {
                     return Ok(new { postuser.message });
@@ -208,11 +208,11 @@ namespace EMPManegment.Web.Controllers
             }
         }
         [HttpPost]
-        public async Task<IActionResult> DeleteOrderDetails(string OrderId)
+        public async Task<IActionResult> DeletePurchaseOrderDetails(string OrderId)
         {
             try
             {
-                ApiResponseModel postuser = await APIServices.PostAsync(null, "OrderDetails/DeleteOrderDetails?OrderId=" + OrderId);
+                ApiResponseModel postuser = await APIServices.PostAsync(null, "PurchaseOrderDetails/DeletePurchaseOrderDetails?OrderId=" + OrderId);
                 if (postuser.code == 200)
                 {
                     return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });

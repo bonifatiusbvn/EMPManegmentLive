@@ -28,7 +28,7 @@ namespace EMPManegment.Services.InvoiceMaster
             return InvoiceMaster.CheckInvoiceNo(porjectname);
         }
 
-        public Task<OrderResponseModel> DisplayInvoiceDetails(string OrderId)
+        public Task<PurchaseOrderResponseModel> DisplayInvoiceDetails(string OrderId)
         {
             return InvoiceMaster.DisplayInvoiceDetails(OrderId);
         }
@@ -58,7 +58,7 @@ namespace EMPManegment.Services.InvoiceMaster
             return await InvoiceMaster.GetInvoiceDetailsById(Id);
         }
 
-        public async Task<OrderResponseModel> GetInvoiceDetailsByOrderId(string OrderId)
+        public async Task<PurchaseOrderResponseModel> GetInvoiceDetailsByOrderId(string OrderId)
         {
             return await InvoiceMaster.GetInvoiceDetailsByOrderId(OrderId);
         }
@@ -98,7 +98,7 @@ namespace EMPManegment.Services.InvoiceMaster
             return await InvoiceMaster.UpdateInvoiceDetails(UpdateInvoice);
         }
 
-        public async Task<OrderResponseModel> ShowInvoiceDetailsByOrderId(string OrderId)
+        public async Task<PurchaseOrderResponseModel> ShowInvoiceDetailsByOrderId(string OrderId)
         {
             return await InvoiceMaster.ShowInvoiceDetailsByOrderId(OrderId);
         }
