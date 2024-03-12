@@ -384,7 +384,6 @@ function GetAllUserExpenseList(userId) {
 
 
 $(document).ready(function () {
-
     function anyCheckboxChecked() {
         return $("input[name='chk_child']:checked").length > 0;
     }
@@ -395,17 +394,9 @@ $(document).ready(function () {
         } else {
             $('#remove-actions').hide();
         }
+        var allChecked = $('input[name="chk_child"]:checked').length === $('input[name="chk_child"]').length;
+        $('#checkedAll').prop('checked', allChecked);
     });
-
-
-    $('#checkedAll').on('change', function () {
-        if ($(this).prop('checked')) {
-            $('#remove-actions').show();
-        } else {
-            $('#remove-actions').hide();
-        }
-    });
-
 
     $('#checkedAll').on('change', function () {
         $('input[name="chk_child"]').prop('checked', $(this).prop('checked'));
@@ -416,11 +407,6 @@ $(document).ready(function () {
                 $('#remove-actions').hide();
             }
         }
-    });
-
-    $('#UserallExpenseTable').on('change', 'input[name="chk_child"]', function () {
-        var allChecked = $('input[name="chk_child"]:checked').length === $('input[name="chk_child"]').length;
-        $('#checkedAll').prop('checked', allChecked);
     });
 });
 
@@ -522,4 +508,23 @@ function GetExpenseTotalAmount() {
             $("#txttotaldebitedamount").text('₹' + Dabitamount);
         },
     });
-};
+}
+
+
+function ApproveExpense(expenseIds) {
+    debugger
+    $.ajax({
+        url: '/ExpenseMaster/ApproveExpense',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(expenseIds),
+        success: function (response) {
+
+            console.log(response);
+        },
+        error: function (xhr, textStatus, errorThrown) {
+
+            console.error(xhr.responseText);
+        }
+    });
+}

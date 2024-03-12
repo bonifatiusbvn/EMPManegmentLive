@@ -385,5 +385,28 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
+        [HttpPost]
+        public async Task<IActionResult> ApproveExpense()
+        {
+            try
+            {
+                var UpdateExpense = HttpContext.Request.Form["ApproveExpense"];
+                var UpdateExpenseDetails = JsonConvert.DeserializeObject<List<ApprovedExpense>>(UpdateExpense.ToString());
+                ApiResponseModel postuser = await APIServices.PostAsync(UpdateExpenseDetails, "ExpenseMaster/ApprovedExpense");
+                if (postuser.code == 200)
+                {
+                    return Ok(new { postuser.message });
+                }
+                else
+                {
+                    return Ok(new { postuser.message });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
     }
 }
