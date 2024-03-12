@@ -5,7 +5,7 @@ using EMPManegment.EntityModels.ViewModels.ExpenseMaster;
 using EMPManegment.EntityModels.ViewModels.Invoice;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.OrderModels;
-using EMPManegment.EntityModels.ViewModels.POMaster;
+
 using EMPManegment.EntityModels.ViewModels.ProductMaster;
 using EMPManegment.EntityModels.ViewModels.TaskModels;
 using EMPManegment.EntityModels.ViewModels.VendorModels;
@@ -205,8 +205,8 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                                           OrderDate = a.OrderDate,
                                           PerUnitPrice = c.PerUnitPrice,
                                           PerUnitWithGstprice = c.PerUnitWithGstprice,
-                                          SubTotal=a.SubTotal,
-                                          GstPerUnit=a.GstPerUnit,
+                                          SubTotal = a.SubTotal,
+                                          GstPerUnit = a.GstPerUnit,
                                           TotalAmount = a.TotalAmount,
                                           AmountPerUnit = a.AmountPerUnit,
                                           PaymentMethod = a.PaymentMethod,
@@ -238,8 +238,8 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                                 OrderDate = item.OrderDate,
                                 PerUnitPrice = item.PerUnitPrice,
                                 PerUnitWithGstprice = item.PerUnitWithGstprice,
-                                SubTotal    =item.SubTotal,
-                                GstPerUnit=item.GstPerUnit,
+                                SubTotal = item.SubTotal,
+                                GstPerUnit = item.GstPerUnit,
                                 TotalAmount = item.TotalAmount,
                                 AmountPerUnit = item.AmountPerUnit,
                                 PaymentMethodName = item.PaymentMethodName,
@@ -272,7 +272,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                                   join b in Context.TblVendorMasters on a.VandorId equals b.Vid
                                   join c in Context.TblProjectMasters on a.ProjectId equals c.ProjectId
                                   where a.IsDeleted != false
-                                  select new 
+                                  select new
                                   {
                                       Invoice = a,
                                       Vendor = b,
@@ -622,7 +622,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                                       PaymentStatus = a.PaymentStatus,
                                       DeliveryStatus = a.DeliveryStatus,
                                       DeliveryDate = a.DeliveryDate,
-                                      PaymentMethodName=e.PaymentMethod,
+                                      PaymentMethodName = e.PaymentMethod,
                                       CreatedOn = a.CreatedOn,
                                   }).ToListAsync();
                 if (data != null)
@@ -655,7 +655,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                             CreatedOn = item.CreatedOn,
                             Type = item.Type,
                             PaymentStatus = item.PaymentStatus,
-                            PaymentMethodName=item.PaymentMethodName,
+                            PaymentMethodName = item.PaymentMethodName,
                         });
                     }
                     response.Data = orderDetails;
@@ -727,8 +727,8 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                     invoicedetails.TotalAmount = UpdateInvoice.TotalAmount;
                     invoicedetails.PaymentMethod = UpdateInvoice.PaymentMethod;
                     invoicedetails.Status = UpdateInvoice.Status;
-                    invoicedetails.UpdatedOn=DateTime.Now;
-                    invoicedetails.UpdatedBy=UpdateInvoice.UpdatedBy;
+                    invoicedetails.UpdatedOn = DateTime.Now;
+                    invoicedetails.UpdatedBy = UpdateInvoice.UpdatedBy;
                 }
                 Context.TblInvoices.Update(invoicedetails);
                 Context.SaveChanges();

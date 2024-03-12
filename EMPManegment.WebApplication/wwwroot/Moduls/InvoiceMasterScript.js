@@ -73,7 +73,7 @@ function GetInvoiceDetailsByOrderId(OrderId) {
 }
 
 function ShowInvoiceDetailsByOrderId(OrderId) {
-    
+
     $.ajax({
         url: '/Invoice/ShowInvoiceDetailsByOrderId/?OrderId=' + OrderId,
         type: 'GET',
@@ -111,7 +111,7 @@ function InsertInvoiceDetails() {
         Destination: document.getElementById("txtshippingaddress").innerText,
         TotalAmount: document.getElementById("txttotalamount").innerText,
         TotalGst: document.getElementById("txttotalgst").innerText,
-        PaymentMethod:document.getElementById("methodofpayment").innerHTML,
+        PaymentMethod: document.getElementById("methodofpayment").innerHTML,
     };
     var form_data = new FormData();
     form_data.append("INVOICEDETAILS", JSON.stringify(objData));
@@ -574,8 +574,7 @@ function GetAllTransactionData() {
     });
 }
 
-function AllInvoiceList()
-{
+function AllInvoiceList() {
     $('#invoiceTable').DataTable({
         processing: true,
         serverSide: true,
@@ -594,20 +593,24 @@ function AllInvoiceList()
             },
             {
                 "data": "vendorName", "name": "VendorName",
+                "className": "text-center"
             },
             {
-                "data": "projectName", "name": "ProjectName"
+                "data": "projectName", "name": "ProjectName",
+                "className": "text-center"
             },
             {
-                "data": "orderId", "name": "OrderId"
+                "data": "orderId", "name": "OrderId",
+                "className": "text-center"
             },
             {
-                "data": "totalAmount", "name": "TotalAmount"
-            },     
+                "data": "totalAmount", "name": "TotalAmount",
+                "className": "text-center"
+            },
             {
                 "data": "Action", "name": "Action",
                 render: function (data, type, full) {
-                    return ('<li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit"><a onclick="EditInvoiceDetails(\'' + full.invoiceNo + '\')"><i class="ri-pencil-fill fs-16"></i></a></li><li class="text-danger list-inline-item delete" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Delete" style="margin-left:12px;"><a onclick="deleteInvoice(\'' + full.invoiceNo + '\')"><i class="ri-delete-bin-5-fill fs-16"></i></a></li>');
+                    return ('<li class="btn list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit"><a onclick="EditInvoiceDetails(\'' + full.invoiceNo + '\')"><i class="ri-pencil-fill fs-16"></i></a></li><li class="btn text-danger list-inline-item delete" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Delete" style="margin-left:12px;"><a onclick="deleteInvoice(\'' + full.invoiceNo + '\')"><i class="ri-delete-bin-5-fill fs-16"></i></a></li>');
                 }
             },
         ],
