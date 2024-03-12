@@ -33,7 +33,7 @@ namespace EMPManegment.EntityModels.ViewModels.ExpenseMaster
 
         public bool IsPaid { get; set; }
 
-        public bool IsApproved { get; set; }
+        public bool? IsApproved { get; set; }
 
         public Guid? ApprovedBy { get; set; }
 

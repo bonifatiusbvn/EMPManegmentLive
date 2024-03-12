@@ -355,7 +355,7 @@ function GetAllUserExpenseList(userId) {
             {
                 "data": null,
                 "render": function (data, type, full, meta) {
-                    return '<div class="form-check"><input class="form-check-input" type="checkbox" name="chk_child" value="option1"></div>';
+                    return '<div class="form-check"><input class="form-check-input" data-id="' + full.id + '" type="checkbox" name="chk_child" value="option1"></div>';
                 },
                 "orderable": false
             },
@@ -521,21 +521,59 @@ function GetExpenseTotalAmount() {
     });
 }
 
+function ApproveExpense(userId) {
+        Swal.fire({
+            title: "Are you sure want to Approve This?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes, Approve it!",
+            cancelButtonText: "No, cancel!",
+            confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
+            cancelButtonClass: "btn btn-danger w-xs mt-2",
+            buttonsStyling: false,
+            showCloseButton: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+            let val = [];
+            $("input[name=chk_child]:checked").each(function () {
+                val.push($(this).attr("data-id"));
+            });
+            if (val.length > 0) {
+                var form_data = new FormData();
+                form_data.append("EXPENSEID", val);
+                $.ajax({
+                    url: '/ExpenseMaster/ApproveExpense',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: form_data,
+                    processData: false,
+                    contentType: false,
+                    success: function (Result) {debugger
+                        if (Result.message != null) {
+                            Swal.fire({
+                                title: Result.message,
+                                icon: 'success',
+                                confirmButtonColor: '#3085d6',
+                                confirmButtonText: 'OK',
+                            }).then(function () {debugger
+                                window.location = '/ExpenseMaster/ApprovedExpense?UserId=' + userId;
+                            });
+                        }
+                    },
+                    error: function (xhr, textStatus, errorThrown) {
 
-function ApproveExpense(expenseIds) {
-    debugger
-    $.ajax({
-        url: '/ExpenseMaster/ApproveExpense',
-        type: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify(expenseIds),
-        success: function (response) {
+                        console.error(xhr.responseText);
+                    }
+                });
+                }
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
 
-            console.log(response);
-        },
-        error: function (xhr, textStatus, errorThrown) {
-
-            console.error(xhr.responseText);
-        }
-    });
+               Swal.fire(
+                   'Cancelled',
+                   'You Have No Changes.!!😊',
+                   'error'
+               );
+            }
+        });
 }

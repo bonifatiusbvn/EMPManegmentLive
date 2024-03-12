@@ -601,10 +601,10 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                     if (expense != null)
                     {
 
-                        expense.IsApproved = item.IsApproved;
+                        expense.IsApproved = true;
                         expense.ApprovedBy = item.ApprovedBy;
                         expense.ApprovedByName = item.ApprovedByName;
-                        expense.ApprovedDate = item.ApprovedDate;
+                        expense.ApprovedDate = DateTime.Now;
 
                         Context.Entry(expense).State = EntityState.Modified;
                     }
@@ -621,7 +621,7 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                 await Context.SaveChangesAsync();
 
                 response.Code = 200;
-                response.Message = "All Expenses updated successfully!";
+                response.Message = "All Expenses Approved successfully!";
             }
             catch (Exception ex)
             {

@@ -13,6 +13,7 @@ using Newtonsoft.Json.Converters;
 using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 using EMPManegment.EntityModels.ViewModels.OrderModels;
+using X.PagedList;
 
 namespace EMPManegment.Web.Controllers
 {
@@ -390,9 +391,29 @@ namespace EMPManegment.Web.Controllers
         {
             try
             {
-                var UpdateExpense = HttpContext.Request.Form["ApproveExpense"];
-                var UpdateExpenseDetails = JsonConvert.DeserializeObject<List<ApprovedExpense>>(UpdateExpense.ToString());
-                ApiResponseModel postuser = await APIServices.PostAsync(UpdateExpenseDetails, "ExpenseMaster/ApprovedExpense");
+                ApprovedExpense expense = new ApprovedExpense();
+                expense.ApprovedBy = _userSession.UserId;
+                expense.ApprovedByName = _userSession.FullName;
+                var ExpenseId = HttpContext.Request.Form["EXPENSEID"];
+                List<string> expenseIdList = ExpenseId.ToString().Split(',').ToList();
+                List<ApprovedExpense> UpdateExpense = new List<ApprovedExpense>();
+
+
+                foreach (string id in expenseIdList)
+                {
+                    Guid expenseId;
+                    if (!Guid.TryParse(id, out expenseId))
+                    {
+                        continue;
+                    }
+                    UpdateExpense.Add(new ApprovedExpense
+                    {
+                        Id = expenseId,
+                        ApprovedBy = expense.ApprovedBy,
+                        ApprovedByName = expense.ApprovedByName,
+                    });
+                }
+                ApiResponseModel postuser = await APIServices.PostAsync(UpdateExpense, "ExpenseMaster/ApprovedExpense");
                 if (postuser.code == 200)
                 {
                     return Ok(new { postuser.message });
@@ -407,6 +428,5 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
-
     }
 }
