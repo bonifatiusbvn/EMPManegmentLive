@@ -42,6 +42,7 @@ namespace EMPManegment.EntityModels.ViewModels.ExpenseMaster
         public DateTime CreatedOn { get; set; }
 
         public Guid? CreatedBy { get; set; }
+        public string? UserName { get; set; }
     }
 
     public class ExpenseRequestModel

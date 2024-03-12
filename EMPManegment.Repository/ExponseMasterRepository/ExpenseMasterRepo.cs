@@ -248,25 +248,29 @@ namespace EMPManegment.Repository.ExponseMasterRepository
         {
             try
             {
-                var Expense = Context.TblExpenseMasters.Select(a => new ExpenseDetailsView
-                {
-                    Id = a.Id,
-                    UserId = a.UserId,
-                    ExpenseType = a.ExpenseType,
-                    PaymentType = a.PaymentType,
-                    BillNumber = a.BillNumber,
-                    Description = a.Description,
-                    Date = a.Date,
-                    TotalAmount = a.TotalAmount,
-                    Image = a.Image,
-                    Account = a.Account,
-                    IsPaid = a.IsPaid,
-                    IsApproved = a.IsApproved,
-                    ApprovedBy = a.ApprovedBy,
-                    ApprovedByName = a.ApprovedByName,
-                    CreatedBy = a.CreatedBy,
-                    CreatedOn = a.CreatedOn,
-                });
+
+                var Expense = (from a in Context.TblExpenseMasters
+                               join b in Context.TblExpenseTypes on a.ExpenseType equals b.Id
+                               join c in Context.TblPaymentTypes on a.PaymentType equals c.Id
+                               join d in Context.TblUsers on a.UserId equals d.Id
+                               select new ExpenseDetailsView
+                               {
+                                   Id = a.Id,
+                                   UserId = a.UserId,
+                                   UserName = d.FirstName + " " + d.LastName,
+                                   ExpenseType = a.ExpenseType,
+                                   PaymentType = a.PaymentType,
+                                   BillNumber = a.BillNumber,
+                                   Description = a.Description,
+                                   Date = a.Date,
+                                   TotalAmount = a.TotalAmount,
+                                   Image = a.Image,
+                                   Account = a.Account,
+                                   ExpenseTypeName = b.Type,
+                                   PaymentTypeName = c.Type,
+                               });
+
+
                 if (!string.IsNullOrEmpty(dataTable.sortColumn) && !string.IsNullOrEmpty(dataTable.sortColumnDir))
                 {
                     Expense = Expense.OrderBy(dataTable.sortColumn + " " + dataTable.sortColumnDir);

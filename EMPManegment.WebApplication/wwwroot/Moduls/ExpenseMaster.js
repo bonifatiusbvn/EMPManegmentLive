@@ -239,15 +239,15 @@ function GetUserExpenseList() {
 function GetParameterByName(name, url) {
 
     if (!url) url = window.location.href;
-    console.log("URL:", url); // Log the URL to verify its format
+    console.log("URL:", url);
     if (!name) {
         console.error("Parameter name is not provided.");
         return null;
     }
-    // Make the parameter name case-insensitive in the regular expression
+
     var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)", "i");
     var results = regex.exec(url);
-    console.log("Results:", results); // Log the results to see if the parameter is found
+    console.log("Results:", results);
     if (!results) {
         console.error("Parameter not found in the URL.");
         return null;
@@ -410,9 +410,6 @@ $(document).ready(function () {
     });
 });
 
-
-
-
 function DisplayExpenseList() {
     $('#ExpenseTable').DataTable({
         processing: true,
@@ -426,14 +423,23 @@ function DisplayExpenseList() {
         },
         columns: [
             {
+                "data": "userName", "name": "UserName",
+                "className": "text-center"
+            },
+            {
                 "data": "description", "name": "Description",
+                "className": "text-center"
             },
             {
-                "data": "billNumber", "name": "BillNumber"
+                "data": "billNumber", "name": "BillNumber",
+                "className": "text-center"
             },
             {
-                "data": "date", "name": "Date",
-                render: function (data, type, row) {
+                "data": "date",
+                "name": "Date",
+                "className": "text-center",
+
+                "render": function (data, type, full, meta) {
                     var dateObj = new Date(data);
                     var day = dateObj.getDate();
                     var month = dateObj.getMonth() + 1;
@@ -448,16 +454,20 @@ function DisplayExpenseList() {
                 }
             },
             {
-                "data": "totalAmount", "name": "TotalAmount"
+                "data": "totalAmount", "name": "TotalAmount",
+                "className": "text-center"
             },
             {
-                "data": "account", "name": "Account"
+                "data": "account", "name": "Account",
+                "className": "text-center"
             },
-
             {
-                "data": "Action", "name": "Action",
-                render: function (data, type, full) {
-                    return ('<ul class="list-inline hstack gap-2 mb-0"><li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="View"><a class="text-primary d-inline-block"><i class="ri-eye-fill fs-16"></i></a></li ><li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit"><a onclick="EditExpenseDetails(\'' + full.id + '\')" data-bs-toggle="modal" class="text-primary d-inline-block edit-item-btn"><i class="ri-pencil-fill fs-16"></i></a></li></ul >');
+                "data": "Action",
+                "name": "Action",
+                "className": "text-center",
+                "orderable": false,
+                "render": function (data, type, full) {
+                    return '<a onclick="EditExpenseDetails(\'' + full.id + '\')" data-bs-toggle="modal" class="btn text-primary d-inline-block edit-item-btn"><i class="ri-pencil-fill fs-16"></i>';
                 }
             },
         ],
@@ -467,6 +477,7 @@ function DisplayExpenseList() {
         }]
     });
 }
+
 
 function GetExpenseTotalAmount() {
 
