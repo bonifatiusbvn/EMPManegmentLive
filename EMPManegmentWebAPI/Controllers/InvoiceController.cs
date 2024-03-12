@@ -84,7 +84,7 @@ namespace EMPManagment.API.Controllers
         [Route("GetInvoiceDetailsByOrderId")]
         public async Task<IActionResult> GetInvoiceDetailsByOrderId(string OrderId)
         {
-            OrderResponseModel response = new OrderResponseModel();
+            PurchaseOrderResponseModel response = new PurchaseOrderResponseModel();
             try
             {
                 var orderdetails = InvoiceMaster.GetInvoiceDetailsByOrderId(OrderId);
@@ -208,7 +208,7 @@ namespace EMPManagment.API.Controllers
         [Route("DisplayInvoiceDetails")]
         public async Task<IActionResult> DisplayInvoiceDetails(string OrderId)
         {
-            OrderResponseModel response = new OrderResponseModel();
+            PurchaseOrderResponseModel response = new PurchaseOrderResponseModel();
             try
             {
                 var orderdetails = InvoiceMaster.DisplayInvoiceDetails(OrderId);
@@ -291,7 +291,7 @@ namespace EMPManagment.API.Controllers
         [Route("ShowInvoiceDetailsByOrderId")]
         public async Task<IActionResult> ShowInvoiceDetailsByOrderId(string OrderId)
         {
-            OrderResponseModel response = new OrderResponseModel();
+            PurchaseOrderResponseModel response = new PurchaseOrderResponseModel();
             try
             {
                 var orderdetails = InvoiceMaster.ShowInvoiceDetailsByOrderId(OrderId);

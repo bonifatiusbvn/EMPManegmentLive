@@ -4,6 +4,7 @@ using EMPManegment.EntityModels.ViewModels.OrderModels;
 using EMPManegment.Inretface.EmployeesInterface.AddEmployee;
 using EMPManegment.Inretface.Interface.ExpenseMaster;
 using EMPManegment.Inretface.Interface.InvoiceMaster;
+using EMPManegment.Inretface.Interface.OrderDetails;
 using EMPManegment.Inretface.Interface.ProductMaster;
 using EMPManegment.Inretface.Services.OrderDetails;
 using Microsoft.AspNetCore.Http;
@@ -14,23 +15,23 @@ namespace EMPManagment.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class OrderDetailsController : ControllerBase
+    public class PurchaseOrderDetailsController : ControllerBase
     {
-        public OrderDetailsController(IOrderDetailsServices orderDetails)
+        public PurchaseOrderDetailsController(IPurchaseOrderDetailsServices purchaseOrderDetails)
         {
-            OrderDetails = orderDetails;
+            PurchaseOrderDetails = purchaseOrderDetails;
         }
 
-        public IOrderDetailsServices OrderDetails { get; }
+        public IPurchaseOrderDetailsServices PurchaseOrderDetails { get; }
 
         [HttpPost]
-        [Route("CreateOrder")]
-        public async Task<IActionResult> CreateOrder(OrderDetailView orderDetails)
+        [Route("CreatePurchaseOrder")]
+        public async Task<IActionResult> CreatePurchaseOrder(PurchaseOrderDetailView orderDetails)
         {
             UserResponceModel response = new UserResponceModel();
             try
             {
-                var createOrder = OrderDetails.CreateOrder(orderDetails);
+                var createOrder = PurchaseOrderDetails.CreatePurchaseOrder(orderDetails);
                 if (createOrder.Result.Code == 200)
                 {
                     response.Code = (int)HttpStatusCode.OK;
@@ -50,28 +51,28 @@ namespace EMPManagment.API.Controllers
         }
 
         [HttpGet]
-        [Route("GetOrderList")]
-        public async Task<IActionResult> GetOrderList()
+        [Route("GetPurchaseOrderList")]
+        public async Task<IActionResult> GetPurchaseOrderList()
         {
-            IEnumerable<OrderDetailView> orderlist = await OrderDetails.GetOrderList();
+            IEnumerable<PurchaseOrderDetailView> orderlist = await PurchaseOrderDetails.GetPurchaseOrderList();
             return Ok(new { code = 200, data = orderlist });
 
         }
         [HttpPost]
-        [Route("GetOrderDetailsByStatus")]
-        public async Task<IActionResult> GetOrderDetailsByStatus(string DeliveryStatus)
+        [Route("GetPurchaseOrderDetailsByStatus")]
+        public async Task<IActionResult> GetPurchaseOrderDetailsByStatus(string DeliveryStatus)
         {
-            List<OrderDetailView> orderdetails = await OrderDetails.GetOrderDetailsByStatus(DeliveryStatus);
+            List<PurchaseOrderDetailView> orderdetails = await PurchaseOrderDetails.GetPurchaseOrderDetailsByStatus(DeliveryStatus);
             return Ok(new { code = 200, data = orderdetails.ToList() });
         }
 
         [HttpGet]
-        [Route("CheckOrder")]
-        public async Task<IActionResult> CheckOrder(string projectname)
+        [Route("CheckPurchaseOrder")]
+        public async Task<IActionResult> CheckPurchaseOrder(string projectname)
         {
             try
             {
-                var checkOrder = OrderDetails.CheckOrder(projectname);
+                var checkOrder = PurchaseOrderDetails.CheckPurchaseOrder(projectname);
                 return Ok(new { code = 200, data = checkOrder });
             }
             catch (Exception ex)
@@ -81,20 +82,20 @@ namespace EMPManagment.API.Controllers
         }
 
         [HttpGet]
-        [Route("GetOrderDetailsById")]
-        public async Task<IActionResult> GetOrderDetailsById(string OrderId)
+        [Route("GetPurchaseOrderDetailsById")]
+        public async Task<IActionResult> GetPurchaseOrderDetailsById(string OrderId)
         {
-            List<OrderDetailView> orderdetails = await OrderDetails.GetOrderDetailsById(OrderId);
+            List<PurchaseOrderDetailView> orderdetails = await PurchaseOrderDetails.GetPurchaseOrderDetailsById(OrderId);
             return Ok(new { code = 200, data = orderdetails });
         }
         [HttpPost]
-        [Route("InsertMultipleOrder")]
-        public async Task<IActionResult> InsertMultipleOrder(List<OrderView> orderDetails)
+        [Route("InsertMultiplePurchaseOrder")]
+        public async Task<IActionResult> InsertMultiplePurchaseOrder(List<PurchaseOrderView> orderDetails)
         {
             UserResponceModel response = new UserResponceModel();
             try
             {
-                var createOrder = OrderDetails.InsertMultipleOrder(orderDetails);
+                var createOrder = PurchaseOrderDetails.InsertMultiplePurchaseOrder(orderDetails);
                 if (createOrder.Result.Code == 200)
                 {
                     response.Code = (int)HttpStatusCode.OK;
@@ -116,24 +117,24 @@ namespace EMPManagment.API.Controllers
         [Route("GetAllPaymentMethod")]
         public async Task<IActionResult> GetAllPaymentMethod()
         {
-            IEnumerable<PaymentMethodView> paymentmethod = await OrderDetails.GetAllPaymentMethod();
+            IEnumerable<PaymentMethodView> paymentmethod = await PurchaseOrderDetails.GetAllPaymentMethod();
             return Ok(new { code = 200, data = paymentmethod.ToList() });
         }
         [HttpGet]
-        [Route("EditOrderDetails")]
-        public async Task<IActionResult> EditOrderDetails(Guid Id)
+        [Route("EditPurchaseOrderDetails")]
+        public async Task<IActionResult> EditPurchaseOrderDetails(Guid Id)
         {
-            var getorderDetails = await OrderDetails.EditOrderDetails(Id);
+            var getorderDetails = await PurchaseOrderDetails.EditPurchaseOrderDetails(Id);
             return Ok(new { code = 200, data = getorderDetails });
         }
         [HttpPost]
-        [Route("UpdateOrderDetails")]
-        public async Task<IActionResult> UpdateOrderDetails(UpdateOrderView orderDetails)
+        [Route("UpdatePurchaseOrderDetails")]
+        public async Task<IActionResult> UpdatePurchaseOrderDetails(UpdatePurchaseOrderView PurchaseorderDetails)
         {
             UserResponceModel response = new UserResponceModel();
             try
             {
-                var updateorder = OrderDetails.UpdateOrderDetails(orderDetails);
+                var updateorder = PurchaseOrderDetails.UpdatePurchaseOrderDetails(PurchaseorderDetails);
                 if (updateorder.Result.Code == 200)
                 {
                     response.Code = (int)HttpStatusCode.OK;
@@ -152,11 +153,11 @@ namespace EMPManagment.API.Controllers
             return StatusCode(response.Code, response);
         }
         [HttpPost]
-        [Route("DeleteOrderDetails")]
-        public async Task<IActionResult> DeleteOrderDetails(string OrderId)
+        [Route("DeletePurchaseOrderDetails")]
+        public async Task<IActionResult> DeletePurchaseOrderDetails(string OrderId)
         {
             UserResponceModel responseModel = new UserResponceModel();
-            var order = await OrderDetails.DeleteOrderDetails(OrderId);
+            var order = await PurchaseOrderDetails.DeletePurchaseOrderDetails(OrderId);
             try
             {
                 if (order != null)

@@ -132,7 +132,7 @@ function InsertInvoiceDetails() {
                     confirmButtonColor: '#3085d6',
                     confirmButtonText: 'OK',
                 }).then(function () {
-                    window.location = '/OrderMaster/CreateOrder';
+                    window.location = '/PurchaseOrderMaster/CreatePurchaseOrder';
                 });
             }
             else {

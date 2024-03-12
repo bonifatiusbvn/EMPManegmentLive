@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace EMPManegment.EntityModels.ViewModels.OrderModels
 {
-    public class OrderView
+    public class PurchaseOrderView
     {
         public Guid Id { get; set; }
 
