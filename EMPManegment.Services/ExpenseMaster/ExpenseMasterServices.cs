@@ -35,6 +35,11 @@ namespace EMPManegment.Services.ExpenseMaster
             return await expenseMaster.AddPaymentType(AddPayment);
         }
 
+        public async Task<UserResponceModel> ApprovedExpense(List<ApprovedExpense> InsertOrder)
+        {
+            return await expenseMaster.ApprovedExpense(InsertOrder);
+        }
+
         public async Task<IEnumerable<ExpenseTypeView>> GetAllExpensType()
         {
             return await expenseMaster.GetAllExpensType();

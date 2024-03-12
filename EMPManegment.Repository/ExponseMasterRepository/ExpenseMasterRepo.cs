@@ -584,5 +584,48 @@ namespace EMPManegment.Repository.ExponseMasterRepository
             }
         }
 
+        public async Task<UserResponceModel> ApprovedExpense(List<ApprovedExpense> ApprovedallExpense)
+        {
+            UserResponceModel response = new UserResponceModel();
+            try
+            {
+                foreach (var item in ApprovedallExpense)
+                {
+
+                    var expense = await Context.TblExpenseMasters.FindAsync(item.Id);
+
+                    if (expense != null)
+                    {
+
+                        expense.IsApproved = item.IsApproved;
+                        expense.ApprovedBy = item.ApprovedBy;
+                        expense.ApprovedByName = item.ApprovedByName;
+                        expense.ApprovedDate = item.ApprovedDate;
+
+                        Context.Entry(expense).State = EntityState.Modified;
+                    }
+                    else
+                    {
+
+                        response.Code = 404;
+                        response.Message = "Expense not found for ID: " + item.Id;
+                        return response;
+                    }
+                }
+
+
+                await Context.SaveChangesAsync();
+
+                response.Code = 200;
+                response.Message = "All Expenses updated successfully!";
+            }
+            catch (Exception ex)
+            {
+                response.Code = 500;
+                response.Message = "Error updating expenses: " + ex.Message;
+            }
+            return response;
+        }
+
     }
 }

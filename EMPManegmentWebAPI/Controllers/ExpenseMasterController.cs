@@ -3,6 +3,7 @@ using EMPManegment.EntityModels.ViewModels.ExpenseMaster;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.OrderModels;
 using EMPManegment.EntityModels.ViewModels.ProductMaster;
+using EMPManegment.Inretface.Interface.OrderDetails;
 using EMPManegment.Inretface.Interface.ProductMaster;
 using EMPManegment.Inretface.Services.ExpenseMaster;
 using EMPManegment.Inretface.Services.ProductMaster;
@@ -129,5 +130,36 @@ namespace EMPManagment.API.Controllers
             var getallUserExpense = await expenseMaster.GetAllUserExpenseList(UserId, dataTable);
             return Ok(new { code = 200, data = getallUserExpense });
         }
+
+        [HttpPost]
+        [Route("ApprovedExpense")]
+        public async Task<IActionResult> ApprovedExpense(List<ApprovedExpense> ApprovedallExpense)
+        {
+            UserResponceModel response = new UserResponceModel();
+            try
+            {
+                var result = await expenseMaster.ApprovedExpense(ApprovedallExpense);
+
+                if (result.Code == 200)
+                {
+                    response.Code = (int)HttpStatusCode.OK;
+                    response.Message = result.Message;
+                }
+                else
+                {
+                    response.Message = result.Message;
+                    response.Code = (int)HttpStatusCode.NotFound;
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Code = (int)HttpStatusCode.InternalServerError;
+                response.Message = "An error occurred while processing the request.";
+
+            }
+
+            return StatusCode(response.Code, response);
+        }
+
     }
 }

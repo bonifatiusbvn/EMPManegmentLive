@@ -1,6 +1,7 @@
 ﻿using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 using EMPManegment.EntityModels.ViewModels.ExpenseMaster;
 using EMPManegment.EntityModels.ViewModels.Models;
+using EMPManegment.EntityModels.ViewModels.OrderModels;
 using EMPManegment.EntityModels.ViewModels.ProductMaster;
 using EMPManegment.EntityModels.ViewModels.TaskModels;
 using System;
@@ -37,5 +38,7 @@ namespace EMPManegment.Inretface.Interface.ExpenseMaster
         Task<ExpenseDetailsView> GetExpenseDetailById(Guid Id);
         Task<UserResponceModel> UpdateExpenseDetail(ExpenseDetailsView ExpenseDetails);
         Task<List<ExpenseDetailsView>> GetExpenseDetailByUserId(Guid UserId);
+
+        Task<UserResponceModel> ApprovedExpense(List<ApprovedExpense> InsertOrder);
     }
 }
