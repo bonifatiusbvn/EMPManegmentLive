@@ -27,7 +27,7 @@ $(document).ready(function () {
         var VendorTypeId = $("#txtvendorname").val();
         $.ajax({
             url: '/Vendor/GetVendorDetailsById?VendorId=' + VendorTypeId,
-            type: 'Post',
+            type: 'Get',
             success: function (result) {
                 $('#vendorcompanyaddress').empty();
                 $('#vendorcompanyaddress').append('<div><label>Vendor Company Address</label></div><div><div class="form-control"><h6 class="mb-0"><span class="text-muted fw-normal">' + result.vendorCompany + '</span></h6><h6 class="mb-0"><span class="text-muted fw-normal">Address : </span><span id="contact-no">' + result.vendorAddress + '</span></h6><h6 class="mb-0"><span class="text-muted fw-normal">Email: </span><span>' + result.vendorCompanyEmail + '</span></h6><h6 class="mb-0"><span class="text-muted fw-normal">Contact No: </span><span id="contact-no"> ' + result.vendorCompanyNumber + '</span></h6></div></div>');
@@ -39,7 +39,7 @@ $(document).ready(function () {
         var VendorTypeId = $("#txtvendorname1").val();
         $.ajax({
             url: '/Vendor/GetVendorDetailsById?VendorId=' + VendorTypeId,
-            type: 'Post',
+            type: 'Get',
             success: function (result) {
                 $('#vendorcompanyaddress1').empty();
                 $('#vendorcompanyaddress1').append('<div><label>Vendor Company Address</label></div><div><div class="form-control"><h6 class="mb-0"><span class="text-muted fw-normal">' + result.vendorCompany + '</span></h6><h6 class="mb-0"><span class="text-muted fw-normal">Address : </span><span id="contact-no">' + result.vendorAddress + '</span></h6><h6 class="mb-0"><span class="text-muted fw-normal">Email: </span><span>' + result.vendorCompanyEmail + '</span></h6><h6 class="mb-0"><span class="text-muted fw-normal">Contact No: </span><span id="contact-no"> ' + result.vendorCompanyNumber + '</span></h6></div></div>');

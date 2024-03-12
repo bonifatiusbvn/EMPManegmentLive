@@ -78,4 +78,17 @@ namespace EMPManegment.EntityModels.ViewModels.ExpenseMaster
 
         public Guid? CreatedBy { get; set; }
     }
+
+    public class ApprovedExpense
+    {
+        public Guid Id { get; set; }
+
+        public bool IsApproved { get; set; }
+
+        public Guid? ApprovedBy { get; set; }
+
+        public string? ApprovedByName { get; set; }
+        public DateTime ApprovedDate { get; set; }
+
+    }
 }

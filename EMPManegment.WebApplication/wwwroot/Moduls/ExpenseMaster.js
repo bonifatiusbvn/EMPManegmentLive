@@ -289,7 +289,7 @@ function GetParameterByName(name, url) {
 //}
 
 $(document).ready(function () {
-    
+
     var userId = GetParameterByName('userId'); // Pass 'userId' as the parameter name
     if (userId) {
         GetAllUserExpenseList(userId); // Pass userId to the function
@@ -356,7 +356,8 @@ function GetAllUserExpenseList(userId) {
                 "data": null,
                 "render": function (data, type, full, meta) {
                     return '<div class="form-check"><input class="form-check-input" type="checkbox" name="chk_child" value="option1"></div>';
-                }
+                },
+                "orderable": false
             },
             { "data": "id", "name": "Id", "visible": false },
             { "data": "expenseTypeName", "name": "ExpenseTypeName" },
@@ -381,99 +382,144 @@ function GetAllUserExpenseList(userId) {
 }
 
 
-    function DisplayExpenseList() {
-        $('#ExpenseTable').DataTable({
-            processing: true,
-            serverSide: true,
-            filter: true,
-            "bDestroy": true,
-            ajax: {
-                type: "POST",
-                url: '/ExpenseMaster/GetExpenseDetailsList',
-                dataType: 'json',
-            },
-            columns: [
-                {
-                    "data": "description", "name": "Description",
-                },
-                {
-                    "data": "billNumber", "name": "BillNumber"
-                },
-                {
-                    "data": "date", "name": "Date",
-                    render: function (data, type, row) {
-                        var dateObj = new Date(data);
-                        var day = dateObj.getDate();
-                        var month = dateObj.getMonth() + 1;
-                        var year = dateObj.getFullYear();
-                        if (day < 10) {
-                            day = '0' + day;
-                        }
-                        if (month < 10) {
-                            month = '0' + month;
-                        }
-                        return day + '-' + month + '-' + year;
-                    }
-                },
-                {
-                    "data": "totalAmount", "name": "TotalAmount"
-                },
-                {
-                    "data": "account", "name": "Account"
-                },
 
-                {
-                    "data": "Action", "name": "Action",
-                    render: function (data, type, full) {
-                        return ('<ul class="list-inline hstack gap-2 mb-0"><li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="View"><a class="text-primary d-inline-block"><i class="ri-eye-fill fs-16"></i></a></li ><li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit"><a onclick="EditExpenseDetails(\'' + full.id + '\')" data-bs-toggle="modal" class="text-primary d-inline-block edit-item-btn"><i class="ri-pencil-fill fs-16"></i></a></li></ul >');
-                    }
-                },
-            ],
-            columnDefs: [{
-                "defaultContent": "",
-                "targets": "_all",
-            }]
-        });
+$(document).ready(function () {
+
+    function anyCheckboxChecked() {
+        return $("input[name='chk_child']:checked").length > 0;
     }
 
-    function GetExpenseTotalAmount() {
-
-        var userId = {
-            UserId: $("#txtuserid").val(),
+    $('#UserallExpenseTable').on('change', 'input[name="chk_child"]', function () {
+        if (anyCheckboxChecked()) {
+            $('#remove-actions').show();
+        } else {
+            $('#remove-actions').hide();
         }
-        var form_data = new FormData();
-        form_data.append("USERID", JSON.stringify(userId));
-        $.ajax({
-            url: '/ExpenseMaster/GetExpenseDetailsByUserId',
-            type: 'Post',
-            data: form_data,
+    });
+
+
+    $('#checkedAll').on('change', function () {
+        if ($(this).prop('checked')) {
+            $('#remove-actions').show();
+        } else {
+            $('#remove-actions').hide();
+        }
+    });
+
+
+    $('#checkedAll').on('change', function () {
+        $('input[name="chk_child"]').prop('checked', $(this).prop('checked'));
+        if ($(this).prop('checked')) {
+            $('#remove-actions').show();
+        } else {
+            if (!anyCheckboxChecked()) {
+                $('#remove-actions').hide();
+            }
+        }
+    });
+
+    $('#UserallExpenseTable').on('change', 'input[name="chk_child"]', function () {
+        var allChecked = $('input[name="chk_child"]:checked').length === $('input[name="chk_child"]').length;
+        $('#checkedAll').prop('checked', allChecked);
+    });
+});
+
+
+
+
+function DisplayExpenseList() {
+    $('#ExpenseTable').DataTable({
+        processing: true,
+        serverSide: true,
+        filter: true,
+        "bDestroy": true,
+        ajax: {
+            type: "POST",
+            url: '/ExpenseMaster/GetExpenseDetailsList',
             dataType: 'json',
-            contentType: false,
-            processData: false,
-            success: function (result) {
-                var total = 0;
-                result.forEach(function (obj) {
-                    if (obj.totalAmount) {
-                        total += obj.totalAmount;
-                    }
-                });
-                $("#txtTotalAmount").text('₹' + total);
-
-                var creditamount = 0;
-                result.forEach(function (obj) {
-                    if (obj.account == "Credit") {
-                        creditamount += obj.totalAmount;
-                    }
-                });
-                $("#txttotalcreditamount").text('₹' + creditamount);
-
-                var Dabitamount = 0;
-                result.forEach(function (obj) {
-                    if (obj.account == "Dabit") {
-                        Dabitamount += obj.totalAmount;
-                    }
-                });
-                $("#txttotaldebitedamount").text('₹' + Dabitamount);
+        },
+        columns: [
+            {
+                "data": "description", "name": "Description",
             },
-        });
-    };
+            {
+                "data": "billNumber", "name": "BillNumber"
+            },
+            {
+                "data": "date", "name": "Date",
+                render: function (data, type, row) {
+                    var dateObj = new Date(data);
+                    var day = dateObj.getDate();
+                    var month = dateObj.getMonth() + 1;
+                    var year = dateObj.getFullYear();
+                    if (day < 10) {
+                        day = '0' + day;
+                    }
+                    if (month < 10) {
+                        month = '0' + month;
+                    }
+                    return day + '-' + month + '-' + year;
+                }
+            },
+            {
+                "data": "totalAmount", "name": "TotalAmount"
+            },
+            {
+                "data": "account", "name": "Account"
+            },
+
+            {
+                "data": "Action", "name": "Action",
+                render: function (data, type, full) {
+                    return ('<ul class="list-inline hstack gap-2 mb-0"><li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="View"><a class="text-primary d-inline-block"><i class="ri-eye-fill fs-16"></i></a></li ><li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit"><a onclick="EditExpenseDetails(\'' + full.id + '\')" data-bs-toggle="modal" class="text-primary d-inline-block edit-item-btn"><i class="ri-pencil-fill fs-16"></i></a></li></ul >');
+                }
+            },
+        ],
+        columnDefs: [{
+            "defaultContent": "",
+            "targets": "_all",
+        }]
+    });
+}
+
+function GetExpenseTotalAmount() {
+
+    var userId = {
+        UserId: $("#txtuserid").val(),
+    }
+    var form_data = new FormData();
+    form_data.append("USERID", JSON.stringify(userId));
+    $.ajax({
+        url: '/ExpenseMaster/GetExpenseDetailsByUserId',
+        type: 'Post',
+        data: form_data,
+        dataType: 'json',
+        contentType: false,
+        processData: false,
+        success: function (result) {
+            var total = 0;
+            result.forEach(function (obj) {
+                if (obj.totalAmount) {
+                    total += obj.totalAmount;
+                }
+            });
+            $("#txtTotalAmount").text('₹' + total);
+
+            var creditamount = 0;
+            result.forEach(function (obj) {
+                if (obj.account == "Credit") {
+                    creditamount += obj.totalAmount;
+                }
+            });
+            $("#txttotalcreditamount").text('₹' + creditamount);
+
+            var Dabitamount = 0;
+            result.forEach(function (obj) {
+                if (obj.account == "Dabit") {
+                    Dabitamount += obj.totalAmount;
+                }
+            });
+            $("#txttotaldebitedamount").text('₹' + Dabitamount);
+        },
+    });
+};
