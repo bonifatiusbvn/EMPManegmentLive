@@ -9,6 +9,8 @@ $(document).ready(function () {
     DisplayExpenseList();
     GetExpenseTotalAmount();
     GetAllUserExpenseList();
+    GetUserApprovedExpenseList();
+    GetUserUnApprovedExpenseList();
 });
 function GetExpenseTypeList() {
 
@@ -290,9 +292,12 @@ function GetParameterByName(name, url) {
 
 $(document).ready(function () {
 
-    var userId = GetParameterByName('userId'); // Pass 'userId' as the parameter name
+    var userId = GetParameterByName('userId');
     if (userId) {
-        GetAllUserExpenseList(userId); // Pass userId to the function
+        debugger
+        GetAllUserExpenseList(userId);
+        GetUserUnApprovedExpenseList(userId);
+        GetUserApprovedExpenseList(userId);
     }
 
     $('#UserListTable').DataTable({
@@ -380,6 +385,105 @@ function GetAllUserExpenseList(userId) {
         }]
     });
 }
+
+function GetUserUnApprovedExpenseList(userId) {
+    $('#UserallExpenseTable').DataTable({
+        processing: true,
+        serverSide: true,
+        filter: true,
+        "bDestroy": true,
+        ajax: {
+            type: "POST",
+            url: '/ExpenseMaster/GetUserUnApprovedExpenseList?UserId=' + userId,
+            dataType: 'json',
+        },
+        columns: [
+            {
+                "data": null,
+                "render": function (data, type, full, meta) {
+                    return '<div class="form-check"><input class="form-check-input" data-id="' + full.id + '" type="checkbox" name="chk_child" value="option1"></div>';
+                },
+                "orderable": false
+            },
+            { "data": "id", "name": "Id", "visible": false },
+            { "data": "expenseTypeName", "name": "ExpenseTypeName" },
+            { "data": "paymentTypeName", "name": "PaymentTypeName" },
+            { "data": "billNumber", "name": "BillNumber" },
+            { "data": "description", "name": "Description" },
+            {
+                "data": "date",
+                "name": "Date",
+                "render": function (data, type, full, meta) {
+                    return new Date(data).toLocaleDateString();
+                }
+            },
+            { "data": "totalAmount", "name": "TotalAmount" },
+            { "data": "account", "name": "Account" },
+        ],
+        columnDefs: [{
+            "defaultContent": "",
+            "targets": "_all",
+        }]
+    });
+}
+function GetUserApprovedExpenseList(userId) {
+    $('#UserallApprovedExpenseTable').DataTable({
+        processing: true,
+        serverSide: true,
+        filter: true,
+        "bDestroy": true,
+        ajax: {
+            type: "POST",
+            url: '/ExpenseMaster/GetUserApprovedExpenseList?UserId=' + userId,
+            dataType: 'json',
+        },
+        columns: [
+            {
+                "data": null,
+                "render": function (data, type, full, meta) {
+                    return '<div class="form-check"><input class="form-check-input" data-id="' + full.id + '" type="checkbox" name="chk_child" value="option1"></div>';
+                },
+                "orderable": false
+            },
+            { "data": "id", "name": "Id", "visible": false },
+            { "data": "expenseTypeName", "name": "ExpenseTypeName" },
+            { "data": "paymentTypeName", "name": "PaymentTypeName" },
+            { "data": "billNumber", "name": "BillNumber" },
+            { "data": "description", "name": "Description" },
+            {
+                "data": "date",
+                "name": "Date",
+                "render": function (data, type, full, meta) {
+                    return new Date(data).toLocaleDateString();
+                }
+            },
+            { "data": "totalAmount", "name": "TotalAmount" },
+            { "data": "account", "name": "Account" },
+        ],
+        columnDefs: [{
+            "defaultContent": "",
+            "targets": "_all",
+        }]
+    });
+}
+
+
+$(document).ready(function () {
+    $('.nav-link').click(function () {
+        var targetTab = $(this).attr('href');
+        $('.tab-pane').removeClass('show active');
+        $(targetTab).addClass('show active');
+
+        if (targetTab === '#allExpense') {
+            GetAllUserExpenseList(userId);
+        } else if (targetTab === '#allUnApprovedExpense') {
+            GetUserUnApprovedExpenseList(userId);
+        } else if (targetTab === '#allApprovedExpense') {
+            GetUserApprovedExpenseList(userId);
+        }
+    });
+});
+
 
 
 
@@ -522,19 +626,19 @@ function GetExpenseTotalAmount() {
 }
 
 function ApproveExpense(userId) {
-        Swal.fire({
-            title: "Are you sure want to Approve This?",
-            text: "You won't be able to revert this!",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonText: "Yes, Approve it!",
-            cancelButtonText: "No, cancel!",
-            confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
-            cancelButtonClass: "btn btn-danger w-xs mt-2",
-            buttonsStyling: false,
-            showCloseButton: true
-        }).then((result) => {
-            if (result.isConfirmed) {
+    Swal.fire({
+        title: "Are you sure want to Approve This?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, Approve it!",
+        cancelButtonText: "No, cancel!",
+        confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
+        cancelButtonClass: "btn btn-danger w-xs mt-2",
+        buttonsStyling: false,
+        showCloseButton: true
+    }).then((result) => {
+        if (result.isConfirmed) {
             let val = [];
             $("input[name=chk_child]:checked").each(function () {
                 val.push($(this).attr("data-id"));
@@ -549,14 +653,16 @@ function ApproveExpense(userId) {
                     data: form_data,
                     processData: false,
                     contentType: false,
-                    success: function (Result) {debugger
+                    success: function (Result) {
+                        debugger
                         if (Result.message != null) {
                             Swal.fire({
                                 title: Result.message,
                                 icon: 'success',
                                 confirmButtonColor: '#3085d6',
                                 confirmButtonText: 'OK',
-                            }).then(function () {debugger
+                            }).then(function () {
+                                debugger
                                 window.location = '/ExpenseMaster/ApprovedExpense?UserId=' + userId;
                             });
                         }
@@ -566,14 +672,14 @@ function ApproveExpense(userId) {
                         console.error(xhr.responseText);
                     }
                 });
-                }
-            } else if (result.dismiss === Swal.DismissReason.cancel) {
-
-               Swal.fire(
-                   'Cancelled',
-                   'You Have No Changes.!!😊',
-                   'error'
-               );
             }
-        });
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+
+            Swal.fire(
+                'Cancelled',
+                'You Have No Changes.!!😊',
+                'error'
+            );
+        }
+    });
 }

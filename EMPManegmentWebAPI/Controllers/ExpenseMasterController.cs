@@ -130,6 +130,20 @@ namespace EMPManagment.API.Controllers
             var getallUserExpense = await expenseMaster.GetAllUserExpenseList(UserId, dataTable);
             return Ok(new { code = 200, data = getallUserExpense });
         }
+        [HttpPost]
+        [Route("GetUserUnApprovedExpenseList")]
+        public async Task<IActionResult> GetUserUnApprovedExpenseList(Guid UserId, DataTableRequstModel dataTable)
+        {
+            var getallUserExpense = await expenseMaster.GetUserUnApprovedExpenseList(UserId, dataTable);
+            return Ok(new { code = 200, data = getallUserExpense });
+        }
+        [HttpPost]
+        [Route("GetUserApprovedExpenseList")]
+        public async Task<IActionResult> GetUserApprovedExpenseList(Guid UserId, DataTableRequstModel dataTable)
+        {
+            var getallUserExpense = await expenseMaster.GetUserApprovedExpenseList(UserId, dataTable);
+            return Ok(new { code = 200, data = getallUserExpense });
+        }
 
         [HttpPost]
         [Route("ApprovedExpense")]

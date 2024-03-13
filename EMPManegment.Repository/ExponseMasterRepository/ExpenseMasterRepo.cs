@@ -522,6 +522,82 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                 var expenses = (from a in Context.TblExpenseMasters
                                 join b in Context.TblExpenseTypes on a.ExpenseType equals b.Id
                                 join c in Context.TblPaymentTypes on a.PaymentType equals c.Id
+                                where a.UserId == UserId
+                                select new ExpenseDetailsView
+                                {
+                                    Id = a.Id,
+                                    UserId = a.UserId,
+                                    ExpenseType = a.ExpenseType,
+                                    PaymentType = a.PaymentType,
+                                    BillNumber = a.BillNumber,
+                                    Description = a.Description,
+                                    Date = a.Date,
+                                    TotalAmount = a.TotalAmount,
+                                    Image = a.Image,
+                                    Account = a.Account,
+                                    ExpenseTypeName = b.Type,
+                                    PaymentTypeName = c.Type,
+                                });
+
+                if (!string.IsNullOrEmpty(dataTable.sortColumn) && !string.IsNullOrEmpty(dataTable.sortColumnDir))
+                {
+                    switch (dataTable.sortColumn)
+                    {
+                        case "BillNumber":
+                            expenses = dataTable.sortColumnDir == "asc" ? expenses.OrderBy(e => e.BillNumber) : expenses.OrderByDescending(e => e.BillNumber);
+                            break;
+                        case "Date":
+                            expenses = dataTable.sortColumnDir == "asc" ? expenses.OrderBy(e => e.Date) : expenses.OrderByDescending(e => e.Date);
+                            break;
+                        case "Account":
+                            expenses = dataTable.sortColumnDir == "asc" ? expenses.OrderBy(e => e.Account) : expenses.OrderByDescending(e => e.Account);
+                            break;
+                        case "TotalAmount":
+                            expenses = dataTable.sortColumnDir == "asc" ? expenses.OrderBy(e => e.TotalAmount) : expenses.OrderByDescending(e => e.TotalAmount);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                if (!string.IsNullOrEmpty(dataTable.searchValue))
+                {
+                    string searchLower = dataTable.searchValue.ToLower();
+                    expenses = expenses.Where(e =>
+                        e.BillNumber.ToLower().Contains(searchLower) ||
+                        e.Date.ToString().Contains(searchLower) ||
+                        e.Account.ToLower().Contains(searchLower) ||
+                        e.TotalAmount.ToString().Contains(dataTable.searchValue));
+                }
+
+                int totalRecord = await expenses.CountAsync();
+
+                var cData = await expenses.Skip(dataTable.skip).Take(dataTable.pageSize).ToListAsync();
+
+                jsonData jsonData = new jsonData
+                {
+                    draw = dataTable.draw,
+                    recordsFiltered = totalRecord,
+                    recordsTotal = totalRecord,
+                    data = cData
+                };
+                return jsonData;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
+
+
+        public async Task<jsonData> GetUserUnApprovedExpenseList(Guid UserId, DataTableRequstModel dataTable)
+        {
+            try
+            {
+                var expenses = (from a in Context.TblExpenseMasters
+                                join b in Context.TblExpenseTypes on a.ExpenseType equals b.Id
+                                join c in Context.TblPaymentTypes on a.PaymentType equals c.Id
                                 where a.UserId == UserId && a.IsApproved == false
                                 select new ExpenseDetailsView
                                 {
@@ -587,6 +663,80 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                 throw ex;
             }
         }
+
+        public async Task<jsonData> GetUserApprovedExpenseList(Guid UserId, DataTableRequstModel dataTable)
+        {
+            try
+            {
+                var expenses = (from a in Context.TblExpenseMasters
+                                join b in Context.TblExpenseTypes on a.ExpenseType equals b.Id
+                                join c in Context.TblPaymentTypes on a.PaymentType equals c.Id
+                                where a.UserId == UserId && a.IsApproved == true
+                                select new ExpenseDetailsView
+                                {
+                                    Id = a.Id,
+                                    UserId = a.UserId,
+                                    ExpenseType = a.ExpenseType,
+                                    PaymentType = a.PaymentType,
+                                    BillNumber = a.BillNumber,
+                                    Description = a.Description,
+                                    Date = a.Date,
+                                    TotalAmount = a.TotalAmount,
+                                    Image = a.Image,
+                                    Account = a.Account,
+                                    ExpenseTypeName = b.Type,
+                                    PaymentTypeName = c.Type,
+                                });
+
+                if (!string.IsNullOrEmpty(dataTable.sortColumn) && !string.IsNullOrEmpty(dataTable.sortColumnDir))
+                {
+                    switch (dataTable.sortColumn)
+                    {
+                        case "BillNumber":
+                            expenses = dataTable.sortColumnDir == "asc" ? expenses.OrderBy(e => e.BillNumber) : expenses.OrderByDescending(e => e.BillNumber);
+                            break;
+                        case "Date":
+                            expenses = dataTable.sortColumnDir == "asc" ? expenses.OrderBy(e => e.Date) : expenses.OrderByDescending(e => e.Date);
+                            break;
+                        case "Account":
+                            expenses = dataTable.sortColumnDir == "asc" ? expenses.OrderBy(e => e.Account) : expenses.OrderByDescending(e => e.Account);
+                            break;
+                        case "TotalAmount":
+                            expenses = dataTable.sortColumnDir == "asc" ? expenses.OrderBy(e => e.TotalAmount) : expenses.OrderByDescending(e => e.TotalAmount);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                if (!string.IsNullOrEmpty(dataTable.searchValue))
+                {
+                    string searchLower = dataTable.searchValue.ToLower();
+                    expenses = expenses.Where(e =>
+                        e.BillNumber.ToLower().Contains(searchLower) ||
+                        e.Date.ToString().Contains(searchLower) ||
+                        e.Account.ToLower().Contains(searchLower) ||
+                        e.TotalAmount.ToString().Contains(dataTable.searchValue));
+                }
+
+                int totalRecord = await expenses.CountAsync();
+
+                var cData = await expenses.Skip(dataTable.skip).Take(dataTable.pageSize).ToListAsync();
+
+                jsonData jsonData = new jsonData
+                {
+                    draw = dataTable.draw,
+                    recordsFiltered = totalRecord,
+                    recordsTotal = totalRecord,
+                    data = cData
+                };
+                return jsonData;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
 
         public async Task<UserResponceModel> ApprovedExpense(List<ApprovedExpense> ApprovedallExpense)
         {

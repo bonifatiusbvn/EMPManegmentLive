@@ -23,84 +23,332 @@
 
 <div class="row">
     <div class="col-lg-12">
-        <div class="card" id="leadsList">
+        <div class="card" id="orderList">
             <div class="card-header border-0">
-
-                <div class="row g-4 align-items-center">
-                    <div class="col-sm-3">
-                        <div class="search-box">
-                            <input type="text" class="form-control search" placeholder="Search for...">
-                            <i class="ri-search-line search-icon"></i>
-                        </div>
+                <div class="row align-items-center gy-3">
+                    <div class="col-sm">
+                        <h5 class="card-title mb-0">Order History</h5>
                     </div>
-                    <div class="col-sm-auto ms-auto">
-                        <div class="hstack gap-2">
+                    <div class="col-sm-auto">
+                        <div class="d-flex gap-1 flex-wrap">
                             <button type="button" class="btn btn-primary" id="remove-actions" onclick="ApproveExpense()"><i class="ri-filter-3-line align-bottom me-1"></i>Approve All</button>
-                            <button type="button" class="btn btn-soft-success add-btn" data-bs-toggle="modal" id="create-btn" data-bs-target="#showModal"><i class="ri-add-line align-bottom me-1"></i> Add Leads</button>
+                            <a class="btn btn-soft-primary" onclick="DisplayAddExpenseModel()"><i class="ri-add-line align-bottom me-1"></i> Add Expense</a>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="card-body">
-                <div>
-                    <div class="dataTables_wrapper dt-bootstrap5 no-footer">
-                        <table class="table align-middle table-nowrap" id="UserallExpenseTable">
-                            <thead class="table-light text-muted">
-                                <tr>
-                                    <th scope="col" style="width: 50px;">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="checkedAll" value="option">
-                                        </div>
-                                    </th>
-
-                                    <th class="sort" data-sort="name">Id</th>
-                                    <th class="sort" data-sort="company_name">ExpenseType</th>
-                                    <th class="sort" data-sort="leads_score">PaymentType</th>
-                                    <th class="sort" data-sort="phone">BillNumber</th>
-                                    <th class="sort" data-sort="location">Description</th>
-                                    <th class="sort" data-sort="date">Date</th>
-                                    <th class="sort" data-sort="tags">TotalAmount</th>
-                                    <th class="sort" data-sort="tags">Account</th>
-
-                                </tr>
-                            </thead>
-                            <tbody class="list form-check-all">
-                            </tbody>
-                        </table>
-                        <div class="noresult" style="display: none">
-                            <div class="text-center">
-                                <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#25a0e2,secondary:#00bd9d" style="width:75px;height:75px">
-                                </lord-icon>
-                                <h5 class="mt-2">Sorry! No Result Found</h5>
-                                <p class="text-muted mb-0">
-                                    We've searched more than 150+ leads We
-                                    did not find any
-                                    leads for you search.
-                                </p>
+            <!--end Edit Expense modal-->
+            <div class="card-body bg-light-subtle border border-dashed border-start-0 border-end-0">
+                <form>
+                    <div class="row g-3">
+                        <div class="col-xxl-5 col-sm-12">
+                            <div class="search-box">
+                                <input type="text" class="form-control search bg-light border-light" placeholder="Search for customer, email, country, status or something...">
+                                <i class="ri-search-line search-icon"></i>
                             </div>
                         </div>
+                        <!--end col-->
+                        <div class="col-xxl-3 col-sm-4">
+                            <input type="text" class="form-control bg-light border-light" id="datepicker-range" placeholder="Select date">
+                        </div>
+                        <!--end col-->
+                        <div class="col-xxl-3 col-sm-4">
+                            <div class="input-light">
+                                <select class="form-control" data-choices data-choices-search-false name="choices-single-default" id="idStatus">
+                                    <option value="">Status</option>
+                                    <option value="all" selected>All</option>
+                                    <option value="Unpaid">Unpaid</option>
+                                    <option value="Paid">Paid</option>
+                                    <option value="Cancel">Cancel</option>
+                                    <option value="Refund">Refund</option>
+                                </select>
+                            </div>
+                        </div>
+                        <!--end col-->
+
+                        <div class="col-xxl-1 col-sm-4">
+                            <button type="button" class="btn btn-primary w-100" onclick="SearchData();">
+                                <i class="ri-equalizer-fill me-1 align-bottom"></i> Filters
+                            </button>
+                        </div>
+                        <!--end col-->
                     </div>
-
-                </div>
-
+                    <!--end row-->
+                </form>
             </div>
+            <!-- Modal -->
+            <div class="modal fade zoomIn" id="AddExpenseModel" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class=" modal-dialog modal-dialog-centered modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header bg-primary-subtle p-3">
+                            <h5 class="modal-title" id="exampleModalLabel">Add Expense Details</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="formexpensedetails">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label for="txtexpensetype" class="form-label">Expense Type</label>
+                                            <select class="form-control" id="txtexpensetype" name="txtexpensetype">
+                                                <option selected disabled value="">---Select Expense Type---</option>
+                                            </select>
+                                            <input type="hidden" class="text-muted text-uppercase fw-semibold" id="txtexpensetypeid">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">Description</label>
+                                            <input type="text" id="txtDescription" class="form-control" name="txtDescription" placeholder="Enter Description" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">Bill Number</label>
+                                            <input type="text" id="txtbillno" class="form-control" name="txtbillno" placeholder="Enter Bill Number" />
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">Date</label>
+                                            <input type="date" id="txtdate" class="form-control" name="txtdate" placeholder="Enter Date" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">Total Amount</label>
+                                            <input type="text" id="txttotalamount" class="form-control" name="txttotalamount" placeholder="Enter Amount" />
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">Image</label>
+                                            <input type="file" id="txtimage" class="form-control" name="txtimage" placeholder="Enter Image" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">Account</label>
+                                            <select class="form-control" id="txtaccount" name="txtaccount">
+                                                <option selected disabled value="">Select Account Type</option>
+                                                <option value="Credit">Credit</option>
+                                                <option value="Dabit">Dabit</option>
+                                            </select>
+                                            <input type="hidden" id="txtaccountid" class="form-control" placeholder="Enter Account" />
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label for="txtpaymenttype" class="form-label">Payment Type</label>
+                                            <select class="form-control" id="txtpaymenttype" name="txtpaymenttype">
+                                                <option selected disabled value="">---Select Payment Type---</option>
+                                            </select>
+                                            <input type="hidden" class="text-muted text-uppercase fw-semibold" id="txtpaymenttypeid">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">Is Paid?</label>
+                                            <select class="form-control" id="txtispaid" name="txtispaid">
+                                                <option selected disabled value="">Is Paid</option>
+                                                <option value="True">True</option>
+                                                <option value="False">False</option>
+                                            </select>
+                                            <input type="hidden" id="txtispaidid" class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">Is Approved?</label>
+                                            <select class="form-control" id="txtisapproved" name="txtisapproved">
+                                                <option selected disabled value="">Is Approved</option>
+                                                <option value="True">True</option>
+                                                <option value="False">False</option>
+                                            </select>
+                                            <input type="hidden" id="txtisapprovedid" class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger btn-default m-1" id="close-modal" data-bs-dismiss="modal" onclick="ClearTextBox()">Close</button>
+                            <button type="submit" class="btn btn-success" onclick="AddExpenseDetails();" id="taskDetails" value="Validate">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--end modal-->
+
+            <div class="card-body pt-0">
+                <div>
+                    <ul class="nav nav-tabs nav-tabs-custom nav-primary mb-3" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active All py-3" data-bs-toggle="tab" id="All" href="#allExpense" role="tab" aria-selected="true">
+                                <i class="ri-store-2-fill me-1 align-bottom"></i>All Expense
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link py-3 Delivered" data-bs-toggle="tab" id="Delivered" href="#allApprovedExpense" role="tab" aria-selected="false">
+                                <i class="ri-checkbox-circle-line me-1 align-bottom"></i>All UnApproved Expense
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link py-3 Returns" data-bs-toggle="tab" id="Returns" href="#allUnApprovedExpense" role="tab" aria-selected="false">
+                                <i class="ri-arrow-left-right-fill me-1 align-bottom"></i>All Approved Expense
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" id="allExpense" role="tabpanel">
+                            <table class="table table-bordered dt-responsive nowrap table-striped align-middle dataTable no-footer dtr-inline" id="UserallExpenseTable">
+                                <thead class="table-light text-muted">
+                                    <tr>
+                                        <th scope="col" style="width: 50px;">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="checkedAll" value="option">
+                                            </div>
+                                        </th>
+
+                                        <th class="sort" data-sort="name">Id</th>
+                                        <th class="sort" data-sort="company_name">ExpenseType</th>
+                                        <th class="sort" data-sort="leads_score">PaymentType</th>
+                                        <th class="sort" data-sort="phone">BillNumber</th>
+                                        <th class="sort" data-sort="location">Description</th>
+                                        <th class="sort" data-sort="date">Date</th>
+                                        <th class="sort" data-sort="tags">TotalAmount</th>
+                                        <th class="sort" data-sort="tags">Account</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody class="list form-check-all">
+                                </tbody>
+                            </table>
+
+                            <div class="noresult" style="display: none">
+                                <div class="text-center">
+                                    <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#25a0e2,secondary:#00bd9d" style="width:75px;height:75px">
+                                    </lord-icon>
+                                    <h5 class="mt-2">Sorry! No Result Found</h5>
+                                    <p class="text-muted mb-0">
+                                        We've searched more than 150+ invoices We did not find any
+                                        invoices for you search.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card-body tab-pane fade" id="allUnApprovedExpense" role="tabpanel">
+                            <div class="listjs-table">
+                                <div class="table-responsive">
+                                    <table id="UserallUnApprovedExpenseTable" class="table table-bordered dt-responsive nowrap table-striped align-middle dataTable no-footer dtr-inline">
+                                        <thead class="table-light text-muted text-center">
+                                            <tr>
+                                                <th scope="col" style="width: 50px;">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" id="checkedAll" value="option">
+                                                    </div>
+                                                </th>
+
+                                                <th class="sort" data-sort="name">Id</th>
+                                                <th class="sort" data-sort="company_name">ExpenseType</th>
+                                                <th class="sort" data-sort="leads_score">PaymentType</th>
+                                                <th class="sort" data-sort="phone">BillNumber</th>
+                                                <th class="sort" data-sort="location">Description</th>
+                                                <th class="sort" data-sort="date">Date</th>
+                                                <th class="sort" data-sort="tags">TotalAmount</th>
+                                                <th class="sort" data-sort="tags">Account</th>
+
+                                            </tr>
+                                        </thead>
+                                        <tbody> </tbody>
+                                    </table>
+                                    <!-- end table -->
+                                </div>
+                            </div>
+                            <div class="noresult" style="display: none">
+                                <div class="text-center">
+                                    <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#25a0e2,secondary:#00bd9d" style="width:75px;height:75px">
+                                    </lord-icon>
+                                    <h5 class="mt-2">Sorry! No Result Found</h5>
+                                    <p class="text-muted mb-0">
+                                        We've searched more than 150+ invoices We did not find any
+                                        invoices for you search.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card-body tab-pane fade" id="allApprovedExpense" role="tabpanel">
+                            <div class="listjs-table">
+                                <div class="table-responsive">
+                                    <table id="GetUserApprovedExpenseList" class="table table-bordered dt-responsive nowrap table-striped align-middle dataTable no-footer dtr-inline">
+                                        <thead class="table-light text-muted text-center">
+                                            <tr>
+                                                <th scope="col" style="width: 50px;">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" id="checkedAll" value="option">
+                                                    </div>
+                                                </th>
+
+                                                <th class="sort" data-sort="name">Id</th>
+                                                <th class="sort" data-sort="company_name">ExpenseType</th>
+                                                <th class="sort" data-sort="leads_score">PaymentType</th>
+                                                <th class="sort" data-sort="phone">BillNumber</th>
+                                                <th class="sort" data-sort="location">Description</th>
+                                                <th class="sort" data-sort="date">Date</th>
+                                                <th class="sort" data-sort="tags">TotalAmount</th>
+                                                <th class="sort" data-sort="tags">Account</th>
+
+                                            </tr>
+                                        </thead>
+                                        <tbody> </tbody>
+                                    </table>
+                                    <!-- end table -->
+                                </div>
+                            </div>
+                            <div class="noresult" style="display: none">
+                                <div class="text-center">
+                                    <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#25a0e2,secondary:#00bd9d" style="width:75px;height:75px">
+                                    </lord-icon>
+                                    <h5 class="mt-2">Sorry! No Result Found</h5>
+                                    <p class="text-muted mb-0">
+                                        We've searched more than 150+ invoices We did not find any
+                                        invoices for you search.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+
         </div>
-
+        <!--end col-->
     </div>
-    <!--end col-->
-</div>
-<!--end row-->
-<style>
-    #txtexpensetype-error, #txtDescription-error, #txtbillno-error,
-    #txtdate-error, #txttotalamount-error, #txtimage-error,
-    #txtaccount-error, #txtpaymenttype-error, #txtispaid-error, #txtisapproved-error {
-        color: red;
-    }
 
-    #EditDescription-error, #Editbillno-error, #Edittotalamount-error {
-        color: red;
-    }
+    <!--end row-->
+    <style>
+        #txtexpensetype-error, #txtDescription-error, #txtbillno-error,
+        #txtdate-error, #txttotalamount-error, #txtimage-error,
+        #txtaccount-error, #txtpaymenttype-error, #txtispaid-error, #txtisapproved-error {
+            color: red;
+        }
 
-</style>
+        #EditDescription-error, #Editbillno-error, #Edittotalamount-error {
+            color: red;
+        }
 
-<script src="~/moduls/expensemaster.js"></script>
+    </style>
+
+    <script src="~/moduls/expensemaster.js"></script>
