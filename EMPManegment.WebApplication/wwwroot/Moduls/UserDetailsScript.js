@@ -28,7 +28,7 @@ $(document).ready(function () {
             genderInput: "required",
             emailInput: "required",
             phonenumberInput: "required",
-            addressInput:"required",
+            addressInput: "required",
         },
         messages: {
             firstnameInput: "Please Enter FirstName",
@@ -37,7 +37,7 @@ $(document).ready(function () {
             genderInput: "Please Enter Gender",
             emailInput: "Please Enter Email",
             phonenumberInput: "Please Enter PhoneNumber",
-            addressInput :"Please Enter Address",
+            addressInput: "Please Enter Address",
         }
     })
     $('#btnUpdateDetails').on('click', function () {
@@ -45,24 +45,6 @@ $(document).ready(function () {
     });
 });
 
-
-function showIcons(event, element) {
-    var iconsContainer = element.nextElementSibling;
-    iconsContainer.style.visibility = "visible";
-}
-
-function hideIcons(event, element) {
-    var iconsContainer = element.nextElementSibling;
-    if (!isMouseOver(event, iconsContainer)) {
-        iconsContainer.style.visibility = "hidden";
-    }
-}
-
-function isMouseOver(event, element) {
-    var rect = element.getBoundingClientRect();
-    return (rect.left <= event.clientX && event.clientX <= rect.right &&
-        rect.top <= event.clientY && event.clientY <= rect.bottom);
-}
 
 function GetAllUserData() {
     $('#UserTableData').DataTable({
@@ -78,13 +60,13 @@ function GetAllUserData() {
         columns: [
             {
                 "render": function (data, type, full) {
-                    return '<h5 class="fs-15"><a href="/UserProfile/DisplayUserDetails/?Id=' + full.id + '" class="fw-medium link-primary">' + full.userName; '</a></h5>';
+                    return '<h5 class="fs-15"><a href="/UserProfile/DisplayUserDetails/?Id=' + full.id + '" class="fw-medium link-primary">' + full.userName + '</a></h5>';
                 }
             },
             {
                 "data": "departmentName",
                 "render": function (data, type, full) {
-                    return '<div class="d-flex"><div class="flex-grow-1 tasks_name">' + full.departmentName + '</div>'; 
+                    return '<div class="d-flex"><div class="flex-grow-1 tasks_name">' + full.departmentName + '</div>';
                 }
             },
             {
@@ -95,15 +77,6 @@ function GetAllUserData() {
                         '<img src="/' + full.image + '" style="height: 40px; width: 40px; border-radius: 50%;" ' +
                         'onmouseover="showIcons(event, this.parentElement)" onmouseout="hideIcons(event, this.parentElement)">' +
                         full['firstName'] + ' ' + full['lastName'] +
-                        '</div>' +
-                        '<div class="flex-shrink-0 ms-4 task-icons" style="visibility:hidden;" ' +
-                        'onmouseover="showIcons(event, this)" onmouseout="hideIcons(event, this)">' +
-                        '<ul class="list-inline tasks-list-menu mb-0">' +
-                        '<li class="list-inline-item"><a href="/UserProfile/DisplayUserDetails/?Id=' + full.id + '"><i class="ri-eye-fill align-bottom me-2 text-muted"></i></a></li>' +
-                        '<li class="list-inline-item"><a class="edit-item-btn" onclick="EditUserDetails(\'' + full.id + '\')"><i class="ri-pencil-fill align-bottom me-2 text-muted"></i></a></li>' +
-                        '<li class="list-inline-item"><a class="remove-item-btn" data-bs-toggle="modal" href="#deleteOrder"><i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i></a></li>' +
-                        '</ul>' +
-                        '</div>' +
                         '</div>';
                 }
 
@@ -524,7 +497,7 @@ function logout() {
 
 function UpdateUserDetails() {
     debugger
-        var objData = {
+    var objData = {
         Id: $('#Userid').val(),
         FirstName: $('#FirstName').val(),
         LastName: $('#LastName').val(),
@@ -537,24 +510,24 @@ function UpdateUserDetails() {
         DepartmentId: $('#deptid').val(),
         PhoneNumber: $('#PhoneNo').val(),
         Address: $('#Address').val(),
-        }
-        $.ajax({
-            url: '/UserProfile/UpdateUserDetails',
-            type: 'post',
-            data: objData,
-            datatype: 'json',
-            success: function (Result) {
+    }
+    $.ajax({
+        url: '/UserProfile/UpdateUserDetails',
+        type: 'post',
+        data: objData,
+        datatype: 'json',
+        success: function (Result) {
 
-                Swal.fire({
-                    title: Result.message,
-                    icon: 'success',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK'
-                }).then(function () {
+            Swal.fire({
+                title: Result.message,
+                icon: 'success',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'OK'
+            }).then(function () {
                 window.location = '/UserProfile/DisplayUserList';
-                });
-            },
-        })
+            });
+        },
+    })
 
 }
 
@@ -811,11 +784,11 @@ function EdituserDetails() {
     document.getElementById("birthdateInput").removeAttribute("readonly");
     document.getElementById("addressInput").removeAttribute("readonly");
     document.getElementById("genderInput").removeAttribute("readonly");
-    
-        //var inputs = document.querySelectorAll('input[readonly], textarea[readonly]');
-        //for (var i = 0; i < inputs.length; i++) {
-        //  inputs[i].removeAttribute('readonly');
-        //};        
+
+    //var inputs = document.querySelectorAll('input[readonly], textarea[readonly]');
+    //for (var i = 0; i < inputs.length; i++) {
+    //  inputs[i].removeAttribute('readonly');
+    //};        
 }
 
 function updateuserDetails() {
