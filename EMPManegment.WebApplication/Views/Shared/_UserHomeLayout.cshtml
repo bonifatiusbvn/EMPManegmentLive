@@ -65,7 +65,7 @@
                         <div class="navbar-brand-box horizontal-logo">
                             <a asp-action="UserHome" asp-controller="Home" class="logo logo-dark">
                                 <span class="logo-sm">
-                                    <img src="~/UserHome/minimal/assets/images/logo - bonifatius.jpeg" alt="" height="22">
+                                    <img src="~/UserHome/minimal/assets/images/bonifatiusicon.ico" height="22" alt="" />
                                 </span>
                                 <span class="logo-lg">
                                     <img src="~/UserHome/minimal/assets/images/logo - bonifatius.jpeg" alt="" height="17">
@@ -74,7 +74,7 @@
 
                             <a asp-action="UserHome" asp-controller="Home" class="logo logo-light">
                                 <span class="logo-sm">
-                                    <img src="~/UserHome/minimal/assets/images/logo-sm.png" alt="" height="22">
+                                    <img src="~/UserHome/minimal/assets/images/bonifatiusicon.ico" height="22" alt="" />
                                 </span>
                                 <span class="logo-lg">
                                     <img src="~/UserHome/minimal/assets/images/logo-light.png" alt="" height="17">
@@ -542,7 +542,7 @@
                 <!-- Dark Logo-->
                 <a asp-action="UserHome" asp-controller="Home" class="logo logo-dark">
                     <span class="logo-sm">
-                        <img src="~/UserHome/minimal/assets/images/logo - bonifatius.jpeg" alt="" height="22">
+                        <img src="~/UserHome/minimal/assets/images/bonifatiusicon.ico" height="22" alt="" />
                     </span>
                     <span class="logo-lg">
                         <img src="~/UserHome/minimal/assets/images/logo - bonifatius.jpeg" alt="" height="17">
@@ -551,7 +551,7 @@
                 <!-- Light Logo-->
                 <a asp-action="UserHome" asp-controller="Home" class="logo logo-light">
                     <span class="logo-sm">
-                        <img src="~/UserHome/minimal/assets/images/logo - bonifatius.jpeg" alt="" height="22">
+                        <img src="~/UserHome/minimal/assets/images/bonifatiusicon.ico" height="22" alt="" />
                     </span>
                     <span class="logo-lg">
                         <img src="~/UserHome/minimal/assets/images/logo - bonifatius.jpeg" alt="" height="17">
@@ -570,7 +570,9 @@
                     <ul class="navbar-nav" id="navbar-nav">
                         <li class="menu-title"><span data-key="t-menu">Menu</span></li>
                         <li class="nav-item">
-                            <a class="nav-link" data-key="t-dashboards" asp-action="UserHome" asp-controller="Home"><i data-feather="home" class="icon-dual"></i>Dashboards</a>
+                            <a class="nav-link menu-link" asp-action="UserHome" asp-controller="Home" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarDashboards">
+                                <i data-feather="home" class="icon-dual"></i> <span data-key="t-dashboards">Dashboards</span>
+                            </a>
                         </li>
                         <!-- end Dashboard Menu -->
                         <li class="nav-item">
@@ -864,6 +866,7 @@
     <script src="~/UserHome/minimal/assets/libs/node-waves/waves.min.js"></script>
     <script src="~/UserHome/minimal/assets/libs/feather-icons/feather.min.js"></script>
     <script src="~/UserHome/minimal/assets/js/pages/plugins/lord-icon-2.1.0.js"></script>
+    <script src="~/UserHome/minimal/assets/js/plugins.js"></script>
 
     @*  <script src="~/UserHome/minimal/assets/js/plugins.js"></script>  *@
 
