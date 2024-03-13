@@ -353,6 +353,32 @@ namespace EMPManegment.Repository.TaskRepository
             return TaskList;
         }
 
+        public async Task<UserResponceModel> UpdateTaskDetails(TaskDetailsView updatetask)
+        {
+            UserResponceModel model = new UserResponceModel();
+            var gettask = Context.TblTaskDetails.Where(e => e.Id == updatetask.Id).FirstOrDefault();
+            try
+            {
+                if (gettask != null)
+                {
+                    gettask.TaskStatus = updatetask.TaskStatus;
+                    gettask.TaskTitle = updatetask.TaskTitle;
+                    gettask.TaskDetails = updatetask.TaskDetails;
+                    gettask.TaskType = updatetask.TaskType;
+                    gettask.TaskDate = updatetask.TaskDate;
+                    gettask.TaskEndDate = updatetask.TaskEndDate;
+                }
+                Context.TblTaskDetails.Update(gettask);
+                Context.SaveChanges();
+                model.Code = 200;
+                model.Message = "Task Status Updated Successfully!";
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return model;
+        }
 
     }
 }

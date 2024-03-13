@@ -20,7 +20,49 @@ $(document).ready(function () {
     $('#searchEmployeeform').on('click', function () {
         $("#activeInactiveForm").validate();
     });
+    $("#frmuserDetails").validate({
+        rules: {
+            firstnameInput: "required",
+            lastnameInput: "required",
+            birthdateInput: "required",
+            genderInput: "required",
+            emailInput: "required",
+            phonenumberInput: "required",
+            addressInput:"required",
+        },
+        messages: {
+            firstnameInput: "Please Enter FirstName",
+            lastnameInput: "Please Enter LastName",
+            birthdateInput: "Please Enter DateOfBirth",
+            genderInput: "Please Enter Gender",
+            emailInput: "Please Enter Email",
+            phonenumberInput: "Please Enter PhoneNumber",
+            addressInput :"Please Enter Address",
+        }
+    })
+    $('#btnUpdateDetails').on('click', function () {
+        $("#frmuserDetails").validate();
+    });
 });
+
+
+function showIcons(event, element) {
+    var iconsContainer = element.nextElementSibling;
+    iconsContainer.style.visibility = "visible";
+}
+
+function hideIcons(event, element) {
+    var iconsContainer = element.nextElementSibling;
+    if (!isMouseOver(event, iconsContainer)) {
+        iconsContainer.style.visibility = "hidden";
+    }
+}
+
+function isMouseOver(event, element) {
+    var rect = element.getBoundingClientRect();
+    return (rect.left <= event.clientX && event.clientX <= rect.right &&
+        rect.top <= event.clientY && event.clientY <= rect.bottom);
+}
 
 function GetAllUserData() {
     $('#UserTableData').DataTable({
@@ -35,17 +77,37 @@ function GetAllUserData() {
         },
         columns: [
             {
-                "data": "departmentName",
                 "render": function (data, type, full) {
-                    return '<div class="d-flex"><div class="flex-grow-1 tasks_name">' + full.departmentName + '</div><div class="flex-shrink-0 ms-4"><ul class="list-inline tasks-list-menu mb-0"><li class="list-inline-item"><a onclick="UserProfileDetails(\'' + full.id + '\')"><i class="ri-eye-fill align-bottom me-2 text-muted"></i></a></li><li class="list-inline-item"><a onclick="EditUserDetails(\'' + full.id + '\')"><i class="ri-pencil-fill align-bottom me-2 text-muted"></i></a></li></ul></div></div>';
+                    return '<h5 class="fs-15"><a href="/UserProfile/DisplayUserDetails/?Id=' + full.id + '" class="fw-medium link-primary">' + full.userName; '</a></h5>';
                 }
             },
-            { "data": "userName", "name": "UserName" },
             {
-                "data": "firstName",
+                "data": "departmentName",
                 "render": function (data, type, full) {
-                    return '<div class="d-flex align-items-center fw-medium"><img src="/' + full.image + '" style="height: 40px; width: 40px; border-radius: 50%;">' + full['firstName'] + ' ' + full['lastName'] + '</div >';
+                    return '<div class="d-flex"><div class="flex-grow-1 tasks_name">' + full.departmentName + '</div>'; 
                 }
+            },
+            {
+
+                "render": function (data, type, full) {
+                    return '<div class="d-flex">' +
+                        '<div class="flex-grow-1 tasks_name">' +
+                        '<img src="/' + full.image + '" style="height: 40px; width: 40px; border-radius: 50%;" ' +
+                        'onmouseover="showIcons(event, this.parentElement)" onmouseout="hideIcons(event, this.parentElement)">' +
+                        full['firstName'] + ' ' + full['lastName'] +
+                        '</div>' +
+                        '<div class="flex-shrink-0 ms-4 task-icons" style="visibility:hidden;" ' +
+                        'onmouseover="showIcons(event, this)" onmouseout="hideIcons(event, this)">' +
+                        '<ul class="list-inline tasks-list-menu mb-0">' +
+                        '<li class="list-inline-item"><a href="/UserProfile/DisplayUserDetails/?Id=' + full.id + '"><i class="ri-eye-fill align-bottom me-2 text-muted"></i></a></li>' +
+                        '<li class="list-inline-item"><a class="edit-item-btn" onclick="EditUserDetails(\'' + full.id + '\')"><i class="ri-pencil-fill align-bottom me-2 text-muted"></i></a></li>' +
+                        '<li class="list-inline-item"><a class="remove-item-btn" data-bs-toggle="modal" href="#deleteOrder"><i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i></a></li>' +
+                        '</ul>' +
+                        '</div>' +
+                        '</div>';
+                }
+
+
             },
             {
                 "data": "isActive", "name": "IsActive",
@@ -398,7 +460,6 @@ function UserBirsthDayWish() {
 
 function EditUserDetails(EmpId) {
     $.ajax({
-
         url: '/UserProfile/EditUserDetails?Id=' + EmpId,
         type: 'Get',
         contentType: 'application/json;charset=utf-8 ',
@@ -462,7 +523,8 @@ function logout() {
 }
 
 function UpdateUserDetails() {
-    var objData = {
+    debugger
+        var objData = {
         Id: $('#Userid').val(),
         FirstName: $('#FirstName').val(),
         LastName: $('#LastName').val(),
@@ -475,24 +537,24 @@ function UpdateUserDetails() {
         DepartmentId: $('#deptid').val(),
         PhoneNumber: $('#PhoneNo').val(),
         Address: $('#Address').val(),
-    }
-    $.ajax({
-        url: '/UserProfile/UpdateUserDetails',
-        type: 'post',
-        data: objData,
-        datatype: 'json',
-        success: function (Result) {
+        }
+        $.ajax({
+            url: '/UserProfile/UpdateUserDetails',
+            type: 'post',
+            data: objData,
+            datatype: 'json',
+            success: function (Result) {
 
-            Swal.fire({
-                title: Result.message,
-                icon: 'success',
-                confirmButtonColor: '#3085d6',
-                confirmButtonText: 'OK'
-            }).then(function () {
+                Swal.fire({
+                    title: Result.message,
+                    icon: 'success',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'OK'
+                }).then(function () {
                 window.location = '/UserProfile/DisplayUserList';
-            });
-        },
-    })
+                });
+            },
+        })
 
 }
 
@@ -737,4 +799,63 @@ function BtnSearchDetails() {
 
 
     GetActiveDeactiveList(1);
+}
+
+
+function EdituserDetails() {
+
+    document.getElementById("firstnameInput").removeAttribute("readonly");
+    document.getElementById("lastnameInput").removeAttribute("readonly");
+    document.getElementById("phonenumberInput").removeAttribute("readonly");
+    document.getElementById("emailInput").removeAttribute("readonly");
+    document.getElementById("birthdateInput").removeAttribute("readonly");
+    document.getElementById("addressInput").removeAttribute("readonly");
+    document.getElementById("genderInput").removeAttribute("readonly");
+    
+        //var inputs = document.querySelectorAll('input[readonly], textarea[readonly]');
+        //for (var i = 0; i < inputs.length; i++) {
+        //  inputs[i].removeAttribute('readonly');
+        //};        
+}
+
+function updateuserDetails() {
+    if ($('#frmuserDetails').valid()) {
+        var UserId = $('#idInput').val()
+        var objData = {
+            Id: UserId,
+            FirstName: $('#firstnameInput').val(),
+            LastName: $('#lastnameInput').val(),
+            DepartmentId: $('#departmentIdInput').val(),
+            Email: $('#emailInput').val(),
+            Address: $('#addressInput').val(),
+            PhoneNumber: $('#phonenumberInput').val(),
+            DateOfBirth: $('#birthdateInput').val(),
+            Gender: $('#genderInput').val(),
+
+        }
+        $.ajax({
+            url: '/UserProfile/UpdateUserDetails',
+            type: 'post',
+            data: objData,
+            datatype: 'json',
+            success: function (Result) {
+
+                Swal.fire({
+                    title: Result.message,
+                    icon: 'success',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'OK'
+                }).then(function () {
+                    window.location = '/UserProfile/DisplayUserDetails/?Id=' + UserId;
+                });
+            },
+        })
+    } else {
+        Swal.fire({
+            title: 'Fill Empty the Details',
+            icon: 'warning',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'OK'
+        })
+    }
 }

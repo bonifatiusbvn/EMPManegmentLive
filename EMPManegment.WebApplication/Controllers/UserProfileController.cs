@@ -112,6 +112,24 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
+        public async Task<IActionResult> DisplayUserDetails(Guid Id)
+        {
+            try
+            {
+                EmpDetailsView UserDetails = new EmpDetailsView();
+                ApiResponseModel res = await APIServices.GetAsync("", "UserProfile/GetEmployeeById?id=" + Id);
+                if (res.code == 200)
+                {
+                    UserDetails = JsonConvert.DeserializeObject<EmpDetailsView>(res.data.ToString());
+                }
+                return View(UserDetails);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public async Task<IActionResult> UserEditList()
         {
             try
@@ -503,7 +521,7 @@ namespace EMPManegment.Web.Controllers
                     DateOfBirth = employee.DateOfBirth,
                     Gender = employee.Gender,
                 };
-                ApiResponseModel postUser = await APIServices.PostAsync(Updateuser, "UserProfile/Update");
+                ApiResponseModel postUser = await APIServices.PostAsync(Updateuser, "UserProfile/UpdateUserDetails");
                 if (postUser.code == 200)
                 {
                     return Ok(new { Message = postUser.message, Code = postUser.code });
