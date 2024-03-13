@@ -33,7 +33,7 @@ namespace EMPManegment.Web.Controllers
                 ApiResponseModel Response = await APIServices.GetAsync("", "POMaster/CheckOPNo?projectname=" + projectname);
                 if (Response.code == 200)
                 {
-                    ViewBag.OrderId = Response.data;
+                    ViewBag.POId = Response.data;
                 }
                 return View();
             }

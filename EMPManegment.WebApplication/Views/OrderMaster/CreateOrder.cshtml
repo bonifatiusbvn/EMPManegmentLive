@@ -266,13 +266,8 @@
                                             <td class="status" id="DeliveryStatus">@item.DeliveryStatus</td>
                                             <td>
                                                 <ul class="list-inline hstack gap-2 mb-0">
-                                                    <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="View">
-                                                        <a onclick="showPaymentDetails()" class="text-primary d-inline-block">
-                                                            <i class="ri-eye-fill fs-16"></i>
-                                                        </a>
-                                                    </li>
                                                     <li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">
-                                                        <a onclick="EditOrderDetails('@item.Id')" data-bs-toggle="modal" class="text-primary d-inline-block edit-item-btn">
+                                                        <a onclick="EditOrderDetails('@item.Id')" data-bs-toggle="modal" class="d-inline-block edit-item-btn">
                                                             <i class="ri-pencil-fill fs-16"></i>
                                                         </a>
                                                     </li>
@@ -356,7 +351,7 @@
                                                         <input class="form-check-input" type="checkbox" name="checkAll" value="option1">
                                                     </div>
                                                 </th>
-                                                <td class="id"><a href="apps-ecommerce-order-details.html" class="fw-medium link-primary">@item.OrderId</a></td>
+                                                <td class="id"><a href="/OrderMaster/GetOrderDetailsById/?OrderId=@item.OrderId" class="fw-medium link-primary">@item.OrderId</a></td>
                                                 <td class="company_name">@item.CompanyName</td>
                                                 <td class="product_name">@item.ProductName</td>
                                                 <td class="date">@item.OrderDate.ToString("dd/MM/yyyy")</td>
@@ -367,13 +362,8 @@
                                                 </td>
                                                 <td>
                                                     <ul class="list-inline hstack gap-2 mb-0">
-                                                        <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="View">
-                                                            <a href="apps-ecommerce-order-details.html" class="text-primary d-inline-block">
-                                                                <i class="ri-eye-fill fs-16"></i>
-                                                            </a>
-                                                        </li>
                                                         <li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">
-                                                            <a href="#showModal" data-bs-toggle="modal" class="text-primary d-inline-block edit-item-btn">
+                                                            <a href="#showModal" data-bs-toggle="modal" class="d-inline-block edit-item-btn">
                                                                 <i class="ri-pencil-fill fs-16"></i>
                                                             </a>
                                                         </li>
@@ -453,7 +443,7 @@
                                                         <input class="form-check-input" type="checkbox" name="checkAll" value="option1">
                                                     </div>
                                                 </th>
-                                                <td class="id"><a href="apps-ecommerce-order-details.html" class="fw-medium link-primary">@item.OrderId</a></td>
+                                                <td class="id"><a href="/OrderMaster/GetOrderDetailsById/?OrderId=@item.OrderId" class="fw-medium link-primary">@item.OrderId</a></td>
                                                 <td class="company_name">@item.CompanyName</td>
                                                 <td class="product_name">@item.ProductName</td>
                                                 <td class="date">@item.OrderDate.ToString("dd/MM/yyyy")</td>
@@ -464,13 +454,8 @@
                                                 </td>
                                                 <td>
                                                     <ul class="list-inline hstack gap-2 mb-0">
-                                                        <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="View">
-                                                            <a href="apps-ecommerce-order-details.html" class="text-primary d-inline-block">
-                                                                <i class="ri-eye-fill fs-16"></i>
-                                                            </a>
-                                                        </li>
                                                         <li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">
-                                                            <a href="#showModal" data-bs-toggle="modal" class="text-primary d-inline-block edit-item-btn">
+                                                            <a href="#showModal" data-bs-toggle="modal" class="d-inline-block edit-item-btn">
                                                                 <i class="ri-pencil-fill fs-16"></i>
                                                             </a>
                                                         </li>
@@ -550,7 +535,7 @@
                                                         <input class="form-check-input" type="checkbox" name="checkAll" value="option1">
                                                     </div>
                                                 </th>
-                                                <td class="id"><a href="apps-ecommerce-order-details.html" class="fw-medium link-primary">@item.OrderId</a></td>
+                                                <td class="id"><a href="/OrderMaster/GetOrderDetailsById/?OrderId=@item.OrderId" class="fw-medium link-primary">@item.OrderId</a></td>
                                                 <td class="company_name">@item.CompanyName</td>
                                                 <td class="product_name">@item.ProductName</td>
                                                 <td class="date">@item.OrderDate.ToString("dd/MM/yyyy")</td>
@@ -561,13 +546,8 @@
                                                 </td>
                                                 <td>
                                                     <ul class="list-inline hstack gap-2 mb-0">
-                                                        <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="View">
-                                                            <a href="apps-ecommerce-order-details.html" class="text-primary d-inline-block">
-                                                                <i class="ri-eye-fill fs-16"></i>
-                                                            </a>
-                                                        </li>
                                                         <li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">
-                                                            <a href="#showModal" data-bs-toggle="modal" class="text-primary d-inline-block edit-item-btn">
+                                                            <a href="#showModal" data-bs-toggle="modal" class="d-inline-block edit-item-btn">
                                                                 <i class="ri-pencil-fill fs-16"></i>
                                                             </a>
                                                         </li>
@@ -647,7 +627,7 @@
                                                         <input class="form-check-input" type="checkbox" name="checkAll" value="option1">
                                                     </div>
                                                 </th>
-                                                <td class="id"><a href="apps-ecommerce-order-details.html" class="fw-medium link-primary">@item.OrderId</a></td>
+                                                <td class="id"><a href="/OrderMaster/GetOrderDetailsById/?OrderId=@item.OrderId" class="fw-medium link-primary">@item.OrderId</a></td>
                                                 <td class="company_name">@item.CompanyName</td>
                                                 <td class="product_name">@item.ProductName</td>
                                                 <td class="date">@item.OrderDate.ToString("dd/MM/yyyy")</td>
@@ -658,13 +638,8 @@
                                                 </td>
                                                 <td>
                                                     <ul class="list-inline hstack gap-2 mb-0">
-                                                        <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="View">
-                                                            <a href="apps-ecommerce-order-details.html" class="text-primary d-inline-block">
-                                                                <i class="ri-eye-fill fs-16"></i>
-                                                            </a>
-                                                        </li>
                                                         <li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">
-                                                            <a href="#showModal" data-bs-toggle="modal" class="text-primary d-inline-block edit-item-btn">
+                                                            <a href="#showModal" data-bs-toggle="modal" class="d-inline-block edit-item-btn">
                                                                 <i class="ri-pencil-fill fs-16"></i>
                                                             </a>
                                                         </li>
@@ -744,7 +719,7 @@
                                                         <input class="form-check-input" type="checkbox" name="checkAll" value="option1">
                                                     </div>
                                                 </th>
-                                                <td class="id"><a href="apps-ecommerce-order-details.html" class="fw-medium link-primary">@item.OrderId</a></td>
+                                                <td class="id"><a href="/OrderMaster/GetOrderDetailsById/?OrderId=@item.OrderId" class="fw-medium link-primary">@item.OrderId</a></td>
                                                 <td class="company_name">@item.CompanyName</td>
                                                 <td class="product_name">@item.ProductName</td>
                                                 <td class="date">@item.OrderDate.ToString("dd/MM/yyyy")</td>
@@ -755,13 +730,8 @@
                                                 </td>
                                                 <td>
                                                     <ul class="list-inline hstack gap-2 mb-0">
-                                                        <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="View">
-                                                            <a href="apps-ecommerce-order-details.html" class="text-primary d-inline-block">
-                                                                <i class="ri-eye-fill fs-16"></i>
-                                                            </a>
-                                                        </li>
                                                         <li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">
-                                                            <a href="#showModal" data-bs-toggle="modal" class="text-primary d-inline-block edit-item-btn">
+                                                            <a href="#showModal" data-bs-toggle="modal" class="d-inline-block edit-item-btn">
                                                                 <i class="ri-pencil-fill fs-16"></i>
                                                             </a>
                                                         </li>
@@ -841,7 +811,7 @@
                                                         <input class="form-check-input" type="checkbox" name="checkAll" value="option1">
                                                     </div>
                                                 </th>
-                                                <td class="id"><a href="apps-ecommerce-order-details.html" class="fw-medium link-primary">@item.OrderId</a></td>
+                                                <td class="id"><a href="/OrderMaster/GetOrderDetailsById/?OrderId=@item.OrderId" class="fw-medium link-primary">@item.OrderId</a></td>
                                                 <td class="company_name">@item.CompanyName</td>
                                                 <td class="product_name">@item.ProductName</td>
                                                 <td class="date">@item.OrderDate.ToString("dd/MM/yyyy")</td>
@@ -852,13 +822,8 @@
                                                 </td>
                                                 <td>
                                                     <ul class="list-inline hstack gap-2 mb-0">
-                                                        <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="View">
-                                                            <a href="apps-ecommerce-order-details.html" class="text-primary d-inline-block">
-                                                                <i class="ri-eye-fill fs-16"></i>
-                                                            </a>
-                                                        </li>
                                                         <li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">
-                                                            <a href="#showModal" data-bs-toggle="modal" class="text-primary d-inline-block edit-item-btn">
+                                                            <a href="#showModal" data-bs-toggle="modal" class="d-inline-block edit-item-btn">
                                                                 <i class="ri-pencil-fill fs-16"></i>
                                                             </a>
                                                         </li>

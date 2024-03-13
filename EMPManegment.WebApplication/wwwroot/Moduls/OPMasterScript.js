@@ -145,14 +145,15 @@ function SerchProductDetailsById() {
     }
 
     function CreatePurchaseOrder() {
-
+        
+        var purchaseOrderId = $("#POId").val();
         var orderDetails = [];
         var numOrders = $(".product").length;
         $(".product").each(function () {
             var orderRow = $(this);
             var objData = {
                 ProjectId: $("#txtProjectId").val(),
-                Opid: $("#orderId").val(),
+                POId: purchaseOrderId,
                 Status: $("#txtPaymentStatus").val(),
                 OrderDate: $("#orderdate").val(),
                 DeliveryDate: $("#deliverydate").val(),

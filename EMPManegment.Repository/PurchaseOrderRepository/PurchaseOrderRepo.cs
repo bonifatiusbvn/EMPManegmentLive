@@ -30,21 +30,21 @@ namespace EMPManegment.Repository.PurchaseOrderRepository
         {
             try
             {
-                var LastOrder = Context.TblOrderMasters.OrderByDescending(e => e.CreatedOn).FirstOrDefault();
+                var LastOrder = Context.TblPurchaseOrders.OrderByDescending(e => e.CreatedOn).FirstOrDefault();
                 var currentYear = DateTime.Now.Year;
                 var lastYear = currentYear - 1;
 
                 string POId;
                 if (LastOrder == null)
                 {
-                    POId = $"BTPL/OP/{projectname}/{lastYear % 100}-{currentYear % 100}-01";
+                    POId = $"BTPL/PO/{projectname}/{lastYear % 100}-{currentYear % 100}-01";
                 }
                 else
                 {
-                    if (LastOrder.OrderId.Length >= 25)
+                    if (LastOrder.Poid.Length >= 24)
                     {
-                        int orderNumber = int.Parse(LastOrder.OrderId.Substring(24)) + 1;
-                        POId = $"BTPL/OP/{projectname}/{lastYear % 100}-{currentYear % 100}-" + orderNumber.ToString("D3");
+                        int purchaseOrderNumber = int.Parse(LastOrder.Poid.Substring(23)) + 1;
+                        POId = $"BTPL/PO/{projectname}/{lastYear % 100}-{currentYear % 100}-" + purchaseOrderNumber.ToString("D3");
                     }
                     else
                     {

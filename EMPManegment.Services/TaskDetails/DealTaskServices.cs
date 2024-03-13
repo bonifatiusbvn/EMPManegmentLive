@@ -69,5 +69,9 @@ namespace EMPManegment.Services.TaskDetails
         {
             return await TaskDetails.GetUserTotalTask(UserId);
         }
+       public async Task<UserResponceModel> UpdateTaskDetails(TaskDetailsView updateTaskDetails)
+        {
+            return await TaskDetails.UpdateTaskDetails(updateTaskDetails);
+        }
     }
 }

@@ -11,8 +11,6 @@ namespace EMPManegment.EntityModels.ViewModels
     {
         public Guid Id { get; set; }
         [Required]
-
-
         public string? FirstName { get; set; }
         [Required]
         public string? LastName { get; set; }
@@ -20,6 +18,8 @@ namespace EMPManegment.EntityModels.ViewModels
         public string? Gender { get; set; }
         [Required]
         public DateTime DateOfBirth { get; set; }
+        public DateTime? JoiningDate { get; set; }
+        public string? Designation { get; set; }
         [Required]
         public string? Email { get; set; }
         [Required]
@@ -33,8 +33,7 @@ namespace EMPManegment.EntityModels.ViewModels
         public int? DepartmentId { get; set; }
 
         public DateTime? CreatedOn { get; set; }
-
-        
+       
         public int? StateId { get; set; }
         
         public int? CountryId { get; set; }

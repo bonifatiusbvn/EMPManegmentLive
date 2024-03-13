@@ -679,7 +679,7 @@ function UpdateTaskDetails() {
         TaskStatus: $("#EditStatus").val(),
     }
     $.ajax({
-        url: '/Task/UpdateUserTaskDetails',
+        url: '/Task/UpdateTaskDetails',
         type: 'Post',
         data: objData,
         dataType: 'json',
