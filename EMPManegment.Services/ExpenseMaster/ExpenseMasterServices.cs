@@ -35,6 +35,11 @@ namespace EMPManegment.Services.ExpenseMaster
             return await expenseMaster.AddPaymentType(AddPayment);
         }
 
+        public async Task<UserResponceModel> ApprovedExpense(List<ApprovedExpense> InsertOrder)
+        {
+            return await expenseMaster.ApprovedExpense(InsertOrder);
+        }
+
         public async Task<IEnumerable<ExpenseTypeView>> GetAllExpensType()
         {
             return await expenseMaster.GetAllExpensType();
@@ -45,6 +50,11 @@ namespace EMPManegment.Services.ExpenseMaster
             return await expenseMaster.GetAllPaymentType();
         }
 
+        public async Task<jsonData> GetAllUserExpenseList(Guid UserId, DataTableRequstModel dataTable)
+        {
+            return await expenseMaster.GetAllUserExpenseList(UserId, dataTable);
+        }
+
         public async Task<ExpenseTypeView> GetExpenseById(int ExpenseId)
         {
             return await expenseMaster.GetExpenseById(ExpenseId);
@@ -53,6 +63,11 @@ namespace EMPManegment.Services.ExpenseMaster
         public async Task<ExpenseDetailsView> GetExpenseDetailById(Guid Id)
         {
             return await expenseMaster.GetExpenseDetailById(Id);
+        }
+
+        public async Task<List<ExpenseDetailsView>> GetExpenseDetailByUserId(Guid UserId)
+        {
+            return await expenseMaster.GetExpenseDetailByUserId(UserId);
         }
 
         public async Task<jsonData> GetExpenseDetailList(DataTableRequstModel dataTable)

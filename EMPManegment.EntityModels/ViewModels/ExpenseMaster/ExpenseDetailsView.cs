@@ -14,8 +14,10 @@ namespace EMPManegment.EntityModels.ViewModels.ExpenseMaster
         public Guid UserId { get; set; }
 
         public int ExpenseType { get; set; }
+        public string ExpenseTypeName { get; set; } = null!;
 
-        public int PaymentType { get; set; }
+        public int? PaymentType { get; set; }
+        public string PaymentTypeName { get; set; } = null!;
 
         public string BillNumber { get; set; } = null!;
 
@@ -31,7 +33,7 @@ namespace EMPManegment.EntityModels.ViewModels.ExpenseMaster
 
         public bool IsPaid { get; set; }
 
-        public bool IsApproved { get; set; }
+        public bool? IsApproved { get; set; }
 
         public Guid? ApprovedBy { get; set; }
 
@@ -40,6 +42,7 @@ namespace EMPManegment.EntityModels.ViewModels.ExpenseMaster
         public DateTime CreatedOn { get; set; }
 
         public Guid? CreatedBy { get; set; }
+        public string? UserName { get; set; }
     }
 
     public class ExpenseRequestModel
@@ -75,5 +78,18 @@ namespace EMPManegment.EntityModels.ViewModels.ExpenseMaster
         public DateTime CreatedOn { get; set; }
 
         public Guid? CreatedBy { get; set; }
+    }
+
+    public class ApprovedExpense
+    {
+        public Guid Id { get; set; }
+
+        public bool IsApproved { get; set; }
+
+        public Guid? ApprovedBy { get; set; }
+
+        public string? ApprovedByName { get; set; }
+        public DateTime ApprovedDate { get; set; }
+
     }
 }

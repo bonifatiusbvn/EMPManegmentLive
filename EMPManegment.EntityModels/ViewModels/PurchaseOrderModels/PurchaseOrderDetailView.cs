@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace EMPManegment.EntityModels.ViewModels.OrderModels
 {
-    public class OrderDetailView
+    public class PurchaseOrderDetailView
     {
         public Guid Id { get; set; }
 
@@ -23,7 +23,7 @@ namespace EMPManegment.EntityModels.ViewModels.OrderModels
         public string? Quantity { get; set; }
 
         public decimal? AmountPerUnit { get; set; }
-
+        public decimal? SubTotal { get; set; }
         public decimal TotalAmount { get; set; }
 
         public DateTime OrderDate { get; set; }
@@ -63,16 +63,16 @@ namespace EMPManegment.EntityModels.ViewModels.OrderModels
         public string? VendorAddress { get; set; }
         public string? InvoiceNo { get; set; }
     }
-    public class OrderResponseModel
+    public class PurchaseOrderResponseModel
     {
         public string? Message { get; set; }
 
         public int Code { get; set; }
 
-        public List<OrderDetailView> Data { get; set; }
+        public List<PurchaseOrderDetailView> Data { get; set; }
 
     }
-    public class UpdateOrderView
+    public class UpdatePurchaseOrderView
     {
         public Guid Id { get; set; }
         public string OrderId { get; set; }

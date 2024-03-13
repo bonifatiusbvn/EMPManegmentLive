@@ -12,7 +12,8 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 using EMPManegment.EntityModels.ViewModels.DataTableParameters;
-using EMPManegment.EntityModels.ViewModels.POMaster;
+using EMPManegment.EntityModels.ViewModels.OrderModels;
+using X.PagedList;
 
 namespace EMPManegment.Web.Controllers
 {
@@ -308,24 +309,124 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
+        [HttpPost]
+        public async Task<IActionResult> GetExpenseDetailsByUserId()
+        {
+            try
+            {
+                var ExpenseDetails = HttpContext.Request.Form["USERID"];
+                var InsertDetails = JsonConvert.DeserializeObject<ExpenseDetailsView>(ExpenseDetails);
+                List<ExpenseDetailsView> expense = new List<ExpenseDetailsView>();
+                ApiResponseModel response = await APIServices.PostAsync(null, "ExpenseMaster/GetExpenseDetailByUserId?UserId=" + InsertDetails.UserId);
+                if (response.code == 200)
+                {
+                    expense = JsonConvert.DeserializeObject<List<ExpenseDetailsView>>(response.data.ToString());
+                }
+                return new JsonResult(expense);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public IActionResult ApprovedExpense(Guid userId)
+        {
+
+            ViewData["UserId"] = userId;
+            return View();
+        }
 
 
-        //public async Task<IActionResult> ExpenseList()
-        //{
-        //    try
-        //    {
-        //        List<ExpenseDetailsView> Expense = new List<ExpenseDetailsView>();
-        //        ApiResponseModel response = await APIServices.GetAsyncId(null, "ExpenseMaster/GetExpenseDetailList");
-        //        if (response.code == 200)
-        //        {
-        //            Expense = JsonConvert.DeserializeObject<List<ExpenseDetailsView>>(response.data.ToString());
-        //        }
-        //        return View(Expense);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw ex;
-        //    }
-        //}
+        [HttpPost]
+        public async Task<IActionResult> GetAllUserExpenseListTable(Guid UserId)
+        {
+            try
+            {
+                var draw = Request.Form["draw"].FirstOrDefault();
+                var start = Request.Form["start"].FirstOrDefault();
+                var length = Request.Form["length"].FirstOrDefault();
+                var sortColumn = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
+                var sortColumnDir = Request.Form["order[0][dir]"].FirstOrDefault();
+                var searchValue = Request.Form["search[value]"].FirstOrDefault();
+                int pageSize = length != null ? Convert.ToInt32(length) : 0;
+                int skip = start != null ? Convert.ToInt32(start) : 0;
+
+                var dataTable = new DataTableRequstModel
+                {
+                    draw = draw,
+                    start = start,
+                    pageSize = pageSize,
+                    skip = skip,
+                    lenght = length,
+                    searchValue = searchValue,
+                    sortColumn = sortColumn,
+                    sortColumnDir = sortColumnDir
+                };
+                List<ExpenseDetailsView> Expense = new List<ExpenseDetailsView>();
+                var data = new jsonData();
+                ApiResponseModel response = await APIServices.PostAsync(dataTable, "ExpenseMaster/GetAllUserExpenseDetail?UserId=" + UserId);
+                if (response.code == 200)
+                {
+                    data = JsonConvert.DeserializeObject<jsonData>(response.data.ToString());
+                    Expense = JsonConvert.DeserializeObject<List<ExpenseDetailsView>>(data.data.ToString());
+                }
+                var jsonData = new
+                {
+                    draw = data.draw,
+                    recordsFiltered = data.recordsFiltered,
+                    recordsTotal = data.recordsTotal,
+                    data = Expense,
+                };
+                return new JsonResult(jsonData);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ApproveExpense()
+        {
+            try
+            {
+                ApprovedExpense expense = new ApprovedExpense();
+                expense.ApprovedBy = _userSession.UserId;
+                expense.ApprovedByName = _userSession.FullName;
+                var ExpenseId = HttpContext.Request.Form["EXPENSEID"];
+                List<string> expenseIdList = ExpenseId.ToString().Split(',').ToList();
+                List<ApprovedExpense> UpdateExpense = new List<ApprovedExpense>();
+
+
+                foreach (string id in expenseIdList)
+                {
+                    Guid expenseId;
+                    if (!Guid.TryParse(id, out expenseId))
+                    {
+                        continue;
+                    }
+                    UpdateExpense.Add(new ApprovedExpense
+                    {
+                        Id = expenseId,
+                        ApprovedBy = expense.ApprovedBy,
+                        ApprovedByName = expense.ApprovedByName,
+                    });
+                }
+                ApiResponseModel postuser = await APIServices.PostAsync(UpdateExpense, "ExpenseMaster/ApprovedExpense");
+                if (postuser.code == 200)
+                {
+                    return Ok(new { postuser.message });
+                }
+                else
+                {
+                    return Ok(new { postuser.message });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

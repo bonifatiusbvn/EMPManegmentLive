@@ -11,7 +11,7 @@ public partial class TblExpenseMaster
 
     public int ExpenseType { get; set; }
 
-    public int PaymentType { get; set; }
+    public int? PaymentType { get; set; }
 
     public string BillNumber { get; set; } = null!;
 
@@ -27,7 +27,9 @@ public partial class TblExpenseMaster
 
     public bool IsPaid { get; set; }
 
-    public bool IsApproved { get; set; }
+    public bool? IsApproved { get; set; }
+
+    public DateTime? ApprovedDate { get; set; }
 
     public Guid? ApprovedBy { get; set; }
 
@@ -39,7 +41,7 @@ public partial class TblExpenseMaster
 
     public virtual TblExpenseType ExpenseTypeNavigation { get; set; } = null!;
 
-    public virtual TblPaymentType PaymentTypeNavigation { get; set; } = null!;
+    public virtual TblPaymentType? PaymentTypeNavigation { get; set; }
 
     public virtual TblUser User { get; set; } = null!;
 }

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<EMPManegment.EntityModels.ViewModels.OrderModels.OrderDetailView>
+﻿@model IEnumerable<EMPManegment.EntityModels.ViewModels.OrderModels.PurchaseOrderDetailView>
 @{
     ViewData["Title"] = "ShowProductDetails";
     Layout = "~/Views/Shared/_UserHomeLayout.cshtml";
@@ -26,6 +26,7 @@
     var firstItem = Model.FirstOrDefault();
     decimal? subTotal = 0;
     decimal? totalAmount = 0;
+    decimal? totalGst = 0;
 }
 
 <div class="row">
@@ -65,8 +66,9 @@
 
                             @foreach (var item in Model)
                             {
-                                subTotal += item.AmountPerUnit;
-                                totalAmount += item.TotalAmount;
+                                subTotal += item.SubTotal;
+                                totalAmount = item.TotalAmount;
+                                totalGst = item.TotalGst;
                             }
                             <tr class="border-top border-top-dashed">
                                 <td colspan="3"></td>
@@ -78,8 +80,8 @@
                                                 <td class="text-end">@subTotal</td>
                                             </tr>
                                             <tr>
-                                                <td>Discount <span class="text-muted">(VELZON15)</span> : :</td>
-                                                <td class="text-end">-$53.99</td>
+                                                <td>Total GST :</td>
+                                                <td class="text-end">@totalGst</td>
                                             </tr>
                                             <tr>
                                                 <td>Shipping Charge :</td>

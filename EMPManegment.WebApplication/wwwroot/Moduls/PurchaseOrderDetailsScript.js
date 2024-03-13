@@ -86,7 +86,7 @@ function SearchData() {
             formData.append("DeliveryStatus", DeliveryStatus);
 
             $.ajax({
-                url: '/OrderMaster/GetOrderDetailsByStatus',
+                url: '/PurchaseOrderMaster/GetPurchaseOrderDetailsByStatus',
                 type: 'Post',
                 dataType: 'json',
                 data: formData,
@@ -131,7 +131,7 @@ $(document).ready(function () {
     });
 });
 
-function SaveCreateOrder() {
+function SaveCreatePurchaseOrder() {
 
     if ($('#createOrderForm').valid()) {
 
@@ -150,7 +150,7 @@ function SaveCreateOrder() {
         formData.append("DeliveryStatus", $("#deliveredstatus").val());
         formData.append("CreatedBy", $("#ddlusername").val());
         $.ajax({
-            url: '/OrderMaster/CreateOrder',
+            url: '/PurchaseOrderMaster/CreatePurchaseOrder',
             type: 'Post',
             data: formData,
             dataType: 'json',
@@ -165,7 +165,7 @@ function SaveCreateOrder() {
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'OK',
                     }).then(function () {
-                        window.location = '/OrderMaster/CreateOrder';
+                        window.location = '/PurchaseOrderMaster/CreatePurchaseOrder';
                     });
                 }
             }
@@ -256,11 +256,12 @@ $("#returnsactive").click(function () {
 });
 
 
-function InsertMultipleOrder() {
+function InsertMultiplePurchaseOrder() {
 
     var orderDetails = [];
     var numOrders = $(".product").length;
     $(".product").each(function () {
+
         var orderRow = $(this);
         var objData = {
             ProjectId: $("#txtProjectId").val(),
@@ -279,18 +280,18 @@ function InsertMultipleOrder() {
             ProductShortDescription: orderRow.find("#txtproductDescription").val(),
             ProductName: orderRow.find("#txtproductName").val(),
             AmountPerUnit: orderRow.find("#txtproductamount").val(),
-            GstPerUnit: orderRow.find("#txtproductamountwithGST").val(),
+            GstPerUnit: orderRow.find("#txtgst").val(),
             SubTotal: orderRow.find("#txtproducttotalamount").val(),
             TotalGst: $("#totalgst").val(),
             TotalAmount: $("#cart-total").val(),
         };
         orderDetails.push(objData);
-
+        debugger
     });
     var form_data = new FormData();
     form_data.append("ORDERDETAILS", JSON.stringify(orderDetails));
     $.ajax({
-        url: '/OrderMaster/InsertMultipleOrders',
+        url: '/PurchaseOrderMaster/InsertMultiplePurchaseOrders',
         type: 'POST',
         data: form_data,
         dataType: 'json',
@@ -304,7 +305,7 @@ function InsertMultipleOrder() {
                     confirmButtonColor: '#3085d6',
                     confirmButtonText: 'OK',
                 }).then(function () {
-                    window.location = '/OrderMaster/CreateOrderView';
+                    window.location = '/PurchaseOrderMaster/CreatePurchaseOrderView';
                 });
             }
         },
@@ -370,7 +371,7 @@ function selectProductTypeId() {
 function GetPaymentMethodList() {
 
     $.ajax({
-        url: '/OrderMaster/GetPaymentMethodList',
+        url: '/PurchaseOrderMaster/GetPaymentMethodList',
         success: function (result) {
             $.each(result, function (i, data) {
                 $('#txtpaymentmethod').append('<Option value=' + data.id + '>' + data.paymentMethod + '</Option>')
@@ -407,7 +408,7 @@ function searchProductTypeId() {
     document.getElementById("searchproductnameid").value = document.getElementById("searchproductname").value;
 }
 
-function SerchProductDetailsById() {
+function SerchProductDetailsById() {debugger
 
     var GetProductId = {
         Id: $('#searchproductname').val(),
@@ -424,12 +425,12 @@ function SerchProductDetailsById() {
         data: form_data,
         processData: false,
         contentType: false,
-        complete: function (Result) {
+        complete: function (Result) {debugger
 
             if (Result.statusText === "success") {
                 AddNewRow(Result.responseText);
             }
-            else {
+            else {debugger
                 var vendorname = $('#txtvendorname').val();
                 var productname = $('#txtProducts').val();
                 var serchproductname = $('#searchproductname').val();
@@ -452,7 +453,8 @@ function SerchProductDetailsById() {
     });
 }
 
-function deleteOrderDetails(OrderId) {debugger
+function deletePurchaseOrderDetails(OrderId) {
+
     Swal.fire({
         title: "Are you sure want to Delete This?",
         text: "You won't be able to revert this!",
@@ -467,17 +469,18 @@ function deleteOrderDetails(OrderId) {debugger
     }).then((result) => {
         if (result.isConfirmed) {
             $.ajax({
-                url: '/OrderMaster/DeleteOrderDetails?OrderId=' + OrderId,
+                url: '/PurchaseOrderMaster/DeletePurchaseOrderDetails?OrderId=' + OrderId,
                 type: 'POST',
                 dataType: 'json',
-                success: function (Result) {debugger
+                success: function (Result) {
+
                     Swal.fire({
                         title: Result.message,
                         icon: 'success',
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'OK'
                     }).then(function () {
-                        window.location = '/OrderMaster/CreateOrder';
+                        window.location = '/PurchaseOrderMaster/CreatePurchaseOrder';
                     })
                 },
                 error: function () {
@@ -487,7 +490,7 @@ function deleteOrderDetails(OrderId) {debugger
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'OK',
                     }).then(function () {
-                        window.location = '/OrderMaster/CreateOrder';
+                        window.location = '/PurchaseOrderMaster/CreatePurchaseOrder';
                     })
                 }
             })
@@ -501,9 +504,9 @@ function deleteOrderDetails(OrderId) {debugger
         }
     });
 }
-function EditOrderDetails(Id) {
+function EditPurchaseOrderDetails(Id) {
     $.ajax({
-        url: '/OrderMaster/EditOrderDetails?Id=' + Id,
+        url: '/PurchaseOrderMaster/EditPurchaseOrderDetails?Id=' + Id,
         type: "Get",
         contentType: 'application/json;charset=utf-8;',
         dataType: 'json',
@@ -515,7 +518,7 @@ function EditOrderDetails(Id) {
             $('#txtorderdate').val(response.orderDate);
             $('#txtcompanyname').val(response.companyName);
             $('#txtorderdetails').val(response.productName);
-            $('#txtamount').val(response.total);
+            $('#txtamount').val(response.totalAmount);
             $('#txtpaymentmethod').val(response.paymentMethod);
             $('#txtdeliverystatus').val(response.deliveryStatus);
             $('#txtorderstatus').val(response.orderStatus);
@@ -526,7 +529,7 @@ function EditOrderDetails(Id) {
     });
 }
 
-function UpdateOrderDetails() {
+function UpdatePurchaseOrderDetails() {
     if ($('#UpdateOrderDetailsForm').valid()) {
         var formData = new FormData();
         formData.append("Id", $("#txtorderid").val());
@@ -535,13 +538,13 @@ function UpdateOrderDetails() {
         formData.append("orderDate", $("#txtorderdate").val());
         formData.append("companyName", $("#txtcompanyname").val());
         formData.append("productName", $("#txtorderdetails").val());
-        formData.append("total", $("#txtamount").val());
+        formData.append("totalAmount", $("#txtamount").val());
         formData.append("paymentMethod", $("#txtpaymentmethod").val());
         formData.append("deliveryStatus", $("#txtdeliverystatus").val());
         formData.append("orderStatus", $("#txtorderstatus").val());
 
         $.ajax({
-            url: '/OrderMaster/UpdateOrderDetails',
+            url: '/PurchaseOrderMaster/UpdatePurchaseOrderDetails',
             type: 'Post',
             data: formData,
             dataType: 'json',
@@ -555,7 +558,7 @@ function UpdateOrderDetails() {
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'OK',
                     }).then(function () {
-                        window.location = '/OrderMaster/CreateOrder';
+                        window.location = '/PurchaseOrderMaster/CreatePurchaseOrder';
                     });
                 }
             }

@@ -273,7 +273,7 @@ namespace EMPManegment.Web.Controllers
                     products = JsonConvert.DeserializeObject<ProductDetailsView>(response.data.ToString());
                     products.RowNumber = GetProduct.RowNumber;
                 }
-                return PartialView("~/Views/OrderMaster/_DisplayProductDetailsById.cshtml", products);
+                return PartialView("~/Views/PurchaseOrderMaster/_DisplayProductDetailsById.cshtml", products);
             }
             catch (Exception ex)
             {

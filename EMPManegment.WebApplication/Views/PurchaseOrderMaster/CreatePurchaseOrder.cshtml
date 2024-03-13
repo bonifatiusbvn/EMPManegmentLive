@@ -1,5 +1,5 @@
 ﻿@using EMPManegment.Web.Models
-@model IEnumerable<EMPManegment.EntityModels.ViewModels.OrderModels.OrderDetailView>
+@model IEnumerable<EMPManegment.EntityModels.ViewModels.OrderModels.PurchaseOrderDetailView>
 @inject IHttpContextAccessor Accessor;
 @inject UserSession _userSession
 @*@using X.PagedList;
@@ -48,7 +48,7 @@
                         </div>
                         <div class="col-sm-auto">
                             <div class="d-flex gap-1 flex-wrap">
-                                <a class="btn btn-primary add-btn" id="create-btn" asp-action="CreateOrderView" asp-controller="OrderMaster"><i class="ri-add-line align-bottom me-1"></i> Create Order</a>
+                                <a class="btn btn-primary add-btn" id="create-btn" asp-action="CreatePurchaseOrderView" asp-controller="PurchaseOrderMaster"><i class="ri-add-line align-bottom me-1"></i> Create PO</a>
                                 <button type="button" class="btn btn-info"><i class="ri-file-download-line align-bottom me-1"></i> Import</button>
                                 <button class="btn btn-soft-danger" id="remove-actions" onClick="deleteMultiple()"><i class="ri-delete-bin-2-line"></i></button>
                             </div>
@@ -103,7 +103,7 @@
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
                             <div class="modal-header bg-light p-3">
-                                <h5 class="modal-title" id="exampleModalLabel">Update Order</h5><h5 class="modal-title" id="txtorderno" style="margin-left:10px;"></h5>
+                                <h5 class="modal-title" id="exampleModalLabel">Edit Order Details</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"></button>
                             </div>
                             <form class="tablelist-form" autocomplete="off" id="UpdateOrderDetailsForm">
@@ -171,8 +171,8 @@
                                 </div>
                                 <div class="modal-footer">
                                     <div class="hstack gap-2 justify-content-end">
-                                        <button type="button" class="btn btn-light" id="close-modal" data-bs-dismiss="modal">Close</button>
-                                        <button type="button" class="btn btn-success" onclick="UpdateOrderDetails()" id="updatedetailbtn">Update</button>
+                                        <button type="button" class="btn btn-danger btn-default m-1" id="close-modal" data-bs-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-success" onclick="UpdatePurchaseOrderDetails()" id="updatedetailbtn">Update</button>
                                     </div>
                                 </div>
                             </form>
@@ -257,22 +257,24 @@
                                                     <input class="form-check-input" type="checkbox" name="checkAll" value="option1">
                                                 </div>
                                             </th>
-                                            <td class="id"><a href="/OrderMaster/GetOrderDetailsById/?OrderId=@item.OrderId" class="fw-medium link-primary">@item.OrderId</a></td>
+                                            <td class="id"><a href="/PurchaseOrderMaster/GetPurchaseOrderDetailsById/?OrderId=@item.OrderId" class="fw-medium link-primary">@item.OrderId</a></td>
                                             <td class="company_name">@item.CompanyName</td>
                                             <td class="product_name">@item.ProductName</td>
                                             <td class="date">@item.OrderDate.ToString("dd/MM/yyyy")</td>
                                             <td class="total_amount">@item.TotalAmount</td>
                                             <td class="payment">@item.PaymentMethodName</td>
-                                            <td class="status" id="DeliveryStatus">@item.DeliveryStatus</td>
+                                            <td class="status" id="DeliveryStatus">
+                                                <span class="badge bg-warning-subtle text-warning text-uppercase">@item.DeliveryStatus</span>
+                                            </td>
                                             <td>
                                                 <ul class="list-inline hstack gap-2 mb-0">
                                                     <li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">
-                                                        <a onclick="EditOrderDetails('@item.Id')" data-bs-toggle="modal" class="d-inline-block edit-item-btn">
+                                                        <a onclick="EditPurchaseOrderDetails('@item.Id')" data-bs-toggle="modal" class="btn text-primary d-inline-block edit-item-btn">
                                                             <i class="ri-pencil-fill fs-16"></i>
                                                         </a>
                                                     </li>
                                                     <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Remove">
-                                                        <a class="text-danger d-inline-block remove-item-btn" data-bs-toggle="modal" onclick="deleteOrderDetails('@item.OrderId')">
+                                                        <a class="btn text-danger d-inline-block remove-item-btn" data-bs-toggle="modal" onclick="deletePurchaseOrderDetails('@item.OrderId')">
                                                             <i class="ri-delete-bin-5-fill fs-16"></i>
                                                         </a>
                                                     </li>
@@ -356,19 +358,19 @@
                                                 <td class="product_name">@item.ProductName</td>
                                                 <td class="date">@item.OrderDate.ToString("dd/MM/yyyy")</td>
                                                 <td class="total_amount">@item.TotalAmount</td>
-                                                <td class="payment">@item.PaymentMethod</td>
+                                                <td class="payment">@item.PaymentMethodName</td>
                                                 <td class="status" id="DeliveryStatus">
                                                     <span class="badge bg-warning-subtle text-warning text-uppercase">@item.DeliveryStatus</span>
                                                 </td>
                                                 <td>
                                                     <ul class="list-inline hstack gap-2 mb-0">
                                                         <li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">
-                                                            <a href="#showModal" data-bs-toggle="modal" class="d-inline-block edit-item-btn">
+                                                            <a href="#showModal" data-bs-toggle="modal" class="btn text-primary d-inline-block edit-item-btn">
                                                                 <i class="ri-pencil-fill fs-16"></i>
                                                             </a>
                                                         </li>
                                                         <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Remove">
-                                                            <a class="text-danger d-inline-block remove-item-btn" data-bs-toggle="modal" href="#deleteOrder">
+                                                            <a class="btn text-danger d-inline-block remove-item-btn" data-bs-toggle="modal" href="#deleteOrder">
                                                                 <i class="ri-delete-bin-5-fill fs-16"></i>
                                                             </a>
                                                         </li>
@@ -454,13 +456,14 @@
                                                 </td>
                                                 <td>
                                                     <ul class="list-inline hstack gap-2 mb-0">
+
                                                         <li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">
-                                                            <a href="#showModal" data-bs-toggle="modal" class="d-inline-block edit-item-btn">
+                                                            <a href="#showModal" data-bs-toggle="modal" class="btn text-primary d-inline-block edit-item-btn">
                                                                 <i class="ri-pencil-fill fs-16"></i>
                                                             </a>
                                                         </li>
                                                         <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Remove">
-                                                            <a class="text-danger d-inline-block remove-item-btn" data-bs-toggle="modal" href="#deleteOrder">
+                                                            <a class="btn text-danger d-inline-block remove-item-btn" data-bs-toggle="modal" href="#deleteOrder">
                                                                 <i class="ri-delete-bin-5-fill fs-16"></i>
                                                             </a>
                                                         </li>
@@ -546,13 +549,14 @@
                                                 </td>
                                                 <td>
                                                     <ul class="list-inline hstack gap-2 mb-0">
+
                                                         <li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">
-                                                            <a href="#showModal" data-bs-toggle="modal" class="d-inline-block edit-item-btn">
+                                                            <a href="#showModal" data-bs-toggle="modal" class="btn text-primary d-inline-block edit-item-btn">
                                                                 <i class="ri-pencil-fill fs-16"></i>
                                                             </a>
                                                         </li>
                                                         <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Remove">
-                                                            <a class="text-danger d-inline-block remove-item-btn" data-bs-toggle="modal" href="#deleteOrder">
+                                                            <a class="btn text-danger d-inline-block remove-item-btn" data-bs-toggle="modal" href="#deleteOrder">
                                                                 <i class="ri-delete-bin-5-fill fs-16"></i>
                                                             </a>
                                                         </li>
@@ -638,13 +642,14 @@
                                                 </td>
                                                 <td>
                                                     <ul class="list-inline hstack gap-2 mb-0">
+
                                                         <li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">
-                                                            <a href="#showModal" data-bs-toggle="modal" class="d-inline-block edit-item-btn">
+                                                            <a href="#showModal" data-bs-toggle="modal" class="btn text-primary d-inline-block edit-item-btn">
                                                                 <i class="ri-pencil-fill fs-16"></i>
                                                             </a>
                                                         </li>
                                                         <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Remove">
-                                                            <a class="text-danger d-inline-block remove-item-btn" data-bs-toggle="modal" href="#deleteOrder">
+                                                            <a class="btn text-danger d-inline-block remove-item-btn" data-bs-toggle="modal" href="#deleteOrder">
                                                                 <i class="ri-delete-bin-5-fill fs-16"></i>
                                                             </a>
                                                         </li>
@@ -724,19 +729,20 @@
                                                 <td class="product_name">@item.ProductName</td>
                                                 <td class="date">@item.OrderDate.ToString("dd/MM/yyyy")</td>
                                                 <td class="total_amount">@item.TotalAmount</td>
-                                                <td class="payment">@item.PaymentMethod</td>
+                                                <td class="payment">@item.PaymentMethodName</td>
                                                 <td class="status" id="DeliveryStatus">
                                                     <span class="badge bg-warning-subtle text-warning text-uppercase">@item.DeliveryStatus</span>
                                                 </td>
                                                 <td>
                                                     <ul class="list-inline hstack gap-2 mb-0">
+
                                                         <li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">
-                                                            <a href="#showModal" data-bs-toggle="modal" class="d-inline-block edit-item-btn">
+                                                            <a href="#showModal" data-bs-toggle="modal" class="btn text-primary d-inline-block edit-item-btn">
                                                                 <i class="ri-pencil-fill fs-16"></i>
                                                             </a>
                                                         </li>
                                                         <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Remove">
-                                                            <a class="text-danger d-inline-block remove-item-btn" data-bs-toggle="modal" href="#deleteOrder">
+                                                            <a class="btn text-danger d-inline-block remove-item-btn" data-bs-toggle="modal" href="#deleteOrder">
                                                                 <i class="ri-delete-bin-5-fill fs-16"></i>
                                                             </a>
                                                         </li>
@@ -822,13 +828,14 @@
                                                 </td>
                                                 <td>
                                                     <ul class="list-inline hstack gap-2 mb-0">
+
                                                         <li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">
-                                                            <a href="#showModal" data-bs-toggle="modal" class="d-inline-block edit-item-btn">
+                                                            <a href="#showModal" data-bs-toggle="modal" class="btn text-primary d-inline-block edit-item-btn">
                                                                 <i class="ri-pencil-fill fs-16"></i>
                                                             </a>
                                                         </li>
                                                         <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Remove">
-                                                            <a class="text-danger d-inline-block remove-item-btn" data-bs-toggle="modal" href="#deleteOrder">
+                                                            <a class="btn text-danger d-inline-block remove-item-btn" data-bs-toggle="modal" href="#deleteOrder">
                                                                 <i class="ri-delete-bin-5-fill fs-16"></i>
                                                             </a>
                                                         </li>
@@ -1011,5 +1018,5 @@ new X.PagedList.Web.Common.PagedListRenderOptions {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
 <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
-<script src="~/moduls/orderdetailsscript.js"></script>
+<script src="~/moduls/purchaseorderdetailsscript.js"></script>
 <script src="~/moduls/productmasterscript.js"></script>

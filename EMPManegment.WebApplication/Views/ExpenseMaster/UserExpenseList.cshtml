@@ -1,9 +1,13 @@
 ﻿@model List<EMPManegment.EntityModels.ViewModels.ExpenseMaster.ExpenseDetailsView>
+@using EMPManegment.Web.Models
+@inject IHttpContextAccessor Accessor;
+@inject UserSession _userSession
 @{
     ViewData["Title"] = "UserExpenseList";
     Layout = "~/Views/Shared/_UserHomeLayout.cshtml";
 }
 
+<input type="hidden" class="form-control" id="txtuserid" value="@_userSession.UserId" hidden>
 <div class="row" style="margin-top:20px;">
     <div class="col-12">
         <div class="page-title-box d-sm-flex align-items-center justify-content-between">
@@ -18,6 +22,126 @@
     </div>
 </div>
 <!-- end page title -->
+
+<!--New row-->
+<div class="row">
+    <div class="col-xxl-3 col-md-6">
+        <div class="card card-animate">
+            <div class="card-body">
+                <div class="d-flex mb-3">
+                    <div class="flex-grow-1">
+                        <lord-icon src="https://cdn.lordicon.com/fhtaantg.json" trigger="loop" colors="primary:#25a0e2,secondary:#00bd9d" style="width:55px;height:55px">
+                        </lord-icon>
+                    </div>
+                    <div class="flex-shrink-0">
+                    </div>
+                </div>
+                <h3 class="mb-2">$<span class="counter-value" data-target="74361">0</span><small class="text-muted fs-13">.34k</small></h3>
+                <h6 class="text-muted mb-0">Send (Previous Month)</h6>
+            </div>
+        </div>
+        <!--end card-->
+    </div>
+    <!--end col-->
+    <div class="col-xxl-3 col-md-6">
+        <div class="card card-animate">
+            <div class="card-body">
+                <div class="d-flex mb-3">
+                    <div class="flex-grow-1">
+                        <lord-icon src="https://cdn.lordicon.com/qhviklyi.json" trigger="loop" colors="primary:#25a0e2,secondary:#00bd9d" style="width:55px;height:55px"></lord-icon>
+                    </div>
+                    <div class="flex-shrink-0">
+                    </div>
+                </div>
+                <h3 class="mb-2" id="txttotalcreditamount"></h3>
+                <h6 class="text-muted mb-0">Credited Amount</h6>
+            </div>
+        </div>
+        <!--end card-->
+    </div>
+    <!--end col-->
+    <div class="col-xxl-3 col-md-6">
+        <div class="card card-animate">
+            <div class="card-body">
+                <div class="d-flex mb-3">
+                    <div class="flex-grow-1">
+                        <lord-icon src="https://cdn.lordicon.com/yeallgsa.json" trigger="loop" colors="primary:#25a0e2,secondary:#00bd9d" style="width:55px;height:55px">
+                        </lord-icon>
+                    </div>
+                    <div class="flex-shrink-0">
+                    </div>
+                </div>
+                <h3 class="mb-2" id="txttotaldebitedamount"></h3>
+                <h6 class="text-muted mb-0">Debited Amount</h6>
+            </div>
+        </div>
+        <!--end card-->
+    </div>
+    <!--end col-->
+    <div class="col-xxl-3 col-md-6">
+        <div class="swiper default-swiper rounded">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide">
+                    <div class="card card-animate border-0 overflow-hidden">
+                        <div class="card-body bg-primary-subtle">
+                            <div class="d-flex mb-3">
+                                <div class="flex-grow-1">
+                                    <lord-icon src="https://cdn.lordicon.com/vaeagfzc.json" trigger="loop" colors="primary:#25a0e2,secondary:#00bd9d" style="width:55px;height:55px">
+                                    </lord-icon>
+                                </div>
+                                <div class="flex-shrink-0">
+                                    <a href="javascript:void(0);" class="fw-medium">Total Outstanding</a>
+                                </div>
+                            </div>
+                            <h3 class="mb-2 text-success" id="txtTotalAmount"></h3>
+                            <h6 class="text-muted mb-0">Total Amount</h6>
+                        </div>
+                    </div>
+                    <!--end card-->
+                </div>
+                <div class="swiper-slide">
+                    <div class="card card-animate border-0 overflow-hidden">
+                        <div class="card-body bg-primary-subtle">
+                            <div class="d-flex mb-3">
+                                <div class="flex-grow-1">
+                                    <lord-icon src="https://cdn.lordicon.com/vaeagfzc.json" trigger="loop" colors="primary:#25a0e2,secondary:#00bd9d" style="width:55px;height:55px">
+                                    </lord-icon>
+                                </div>
+                                <div class="flex-shrink-0">
+                                    <a href="javascript:void(0);" class="fw-medium">Ethereum (ETH)</a>
+                                </div>
+                            </div>
+                            <h3 class="mb-2">$24<small class="text-muted fs-13">.74k</small></h3>
+                            <h6 class="text-muted mb-0">Send - Receive (Previous Month)</h6>
+                        </div>
+                    </div>
+                    <!--end card-->
+                </div>
+                <div class="swiper-slide">
+                    <div class="card card-animate border-0 overflow-hidden">
+                        <div class="card-body bg-primary-subtle">
+                            <div class="d-flex mb-3">
+                                <div class="flex-grow-1">
+                                    <lord-icon src="https://cdn.lordicon.com/vaeagfzc.json" trigger="loop" colors="primary:#25a0e2,secondary:#00bd9d" style="width:55px;height:55px">
+                                    </lord-icon>
+                                </div>
+                                <div class="flex-shrink-0">
+                                    <a href="javascript:void(0);" class="fw-medium">Monero (XMR)</a>
+                                </div>
+                            </div>
+                            <h3 class="mb-2">$124<small class="text-muted fs-13">.36k</small></h3>
+                            <h6 class="text-muted mb-0">Send - Receive (Previous Month)</h6>
+                        </div>
+                    </div>
+                    <!--end card-->
+                </div>
+            </div>
+        </div>
+        <!--end swiper-->
+    </div>
+    <!--end col-->
+</div>
+<!--end row-->
 
 <div class="col-lg-12">
     <div class="card" id="invoiceList">
@@ -267,52 +391,6 @@
                                 <div class="mb-3">
                                     <label class="form-label">Image</label>
                                     <input type="file" id="txtimage" class="form-control" name="txtimage" placeholder="Enter Image" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Account</label>
-                                    <select class="form-control" id="txtaccount" name="txtaccount">
-                                        <option selected disabled value="">Select Account Type</option>
-                                        <option value="Credit">Credit</option>
-                                        <option value="Dabit">Dabit</option>
-                                    </select>
-                                    <input type="hidden" id="txtaccountid" class="form-control" placeholder="Enter Account" />
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="mb-3">
-                                    <label for="txtpaymenttype" class="form-label">Payment Type</label>
-                                    <select class="form-control" id="txtpaymenttype" name="txtpaymenttype">
-                                        <option selected disabled value="">---Select Payment Type---</option>
-                                    </select>
-                                    <input type="hidden" class="text-muted text-uppercase fw-semibold" id="txtpaymenttypeid">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Is Paid?</label>
-                                    <select class="form-control" id="txtispaid" name="txtispaid">
-                                        <option selected disabled value="">Is Paid</option>
-                                        <option value="True">True</option>
-                                        <option value="False">False</option>
-                                    </select>
-                                    <input type="hidden" id="txtispaidid" class="form-control" />
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Is Approved?</label>
-                                    <select class="form-control" id="txtisapproved" name="txtisapproved">
-                                        <option selected disabled value="">Is Approved</option>
-                                        <option value="True">True</option>
-                                        <option value="False">False</option>
-                                    </select>
-                                    <input type="hidden" id="txtisapprovedid" class="form-control" />
                                 </div>
                             </div>
                         </div>

@@ -15,6 +15,8 @@ using System.Net;
 using System.Linq.Dynamic.Core;
 using System.Text;
 using System.Threading.Tasks;
+using EMPManegment.EntityModels.ViewModels.OrderModels;
+using EMPManegment.EntityModels.ViewModels.Invoice;
 
 
 namespace EMPManegment.Repository.ExponseMasterRepository
@@ -193,17 +195,14 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                     Id = Guid.NewGuid(),
                     UserId = ExpenseDetails.UserId,
                     ExpenseType = ExpenseDetails.ExpenseType,
-                    PaymentType = ExpenseDetails.PaymentType,
                     BillNumber = ExpenseDetails.BillNumber,
                     Description = ExpenseDetails.Description,
                     Date = ExpenseDetails.Date,
                     TotalAmount = ExpenseDetails.TotalAmount,
                     Image = ExpenseDetails.Image,
-                    Account = ExpenseDetails.Account,
-                    IsPaid = ExpenseDetails.IsPaid,
-                    IsApproved = ExpenseDetails.IsApproved,
-                    ApprovedBy = ExpenseDetails.ApprovedBy,
-                    ApprovedByName = ExpenseDetails.ApprovedByName,
+                    Account = "Dabit",
+                    IsPaid = false,
+                    IsApproved = false,
                     CreatedOn = DateTime.Today,
                     CreatedBy = ExpenseDetails.CreatedBy,
                 };
@@ -249,25 +248,29 @@ namespace EMPManegment.Repository.ExponseMasterRepository
         {
             try
             {
-                var Expense = Context.TblExpenseMasters.Select(a => new ExpenseDetailsView
-                {
-                    Id = a.Id,
-                    UserId = a.UserId,
-                    ExpenseType = a.ExpenseType,
-                    PaymentType = a.PaymentType,
-                    BillNumber = a.BillNumber,
-                    Description = a.Description,
-                    Date = a.Date,
-                    TotalAmount = a.TotalAmount,
-                    Image = a.Image,
-                    Account = a.Account,
-                    IsPaid = a.IsPaid,
-                    IsApproved = a.IsApproved,
-                    ApprovedBy = a.ApprovedBy,
-                    ApprovedByName = a.ApprovedByName,
-                    CreatedBy = a.CreatedBy,
-                    CreatedOn = a.CreatedOn,
-                });
+
+                var Expense = (from a in Context.TblExpenseMasters
+                               join b in Context.TblExpenseTypes on a.ExpenseType equals b.Id
+                               join c in Context.TblPaymentTypes on a.PaymentType equals c.Id
+                               join d in Context.TblUsers on a.UserId equals d.Id
+                               select new ExpenseDetailsView
+                               {
+                                   Id = a.Id,
+                                   UserId = a.UserId,
+                                   UserName = d.FirstName + " " + d.LastName,
+                                   ExpenseType = a.ExpenseType,
+                                   PaymentType = a.PaymentType,
+                                   BillNumber = a.BillNumber,
+                                   Description = a.Description,
+                                   Date = a.Date,
+                                   TotalAmount = a.TotalAmount,
+                                   Image = a.Image,
+                                   Account = a.Account,
+                                   ExpenseTypeName = b.Type,
+                                   PaymentTypeName = c.Type,
+                               });
+
+
                 if (!string.IsNullOrEmpty(dataTable.sortColumn) && !string.IsNullOrEmpty(dataTable.sortColumnDir))
                 {
                     Expense = Expense.OrderBy(dataTable.sortColumn + " " + dataTable.sortColumnDir);
@@ -294,7 +297,7 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                     data = cData
                 };
                 return jsonData;
-            }   
+            }
             catch (Exception ex)
             {
                 throw ex;
@@ -421,6 +424,7 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                                group a by new { a.UserId, b.Image, b.UserName, FullName = b.FirstName + " " + b.LastName } into userGroup
                                select new UserExpenseDetailsView
                                {
+                                   UserId = userGroup.Key.UserId,
                                    FullName = userGroup.Key.FullName,
                                    Image = userGroup.Key.Image,
                                    UserName = userGroup.Key.UserName,
@@ -477,5 +481,155 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                 throw ex;
             }
         }
+
+        public async Task<List<ExpenseDetailsView>> GetExpenseDetailByUserId(Guid UserId)
+        {
+            var ExpenseDetail = new List<ExpenseDetailsView>();
+            var data = await Context.TblExpenseMasters.Where(x => x.UserId == UserId).ToListAsync();
+            if (data != null)
+            {
+                foreach (var item in data)
+                {
+                    ExpenseDetail.Add(new ExpenseDetailsView()
+                    {
+                        Id = item.Id,
+                        UserId = item.UserId,
+                        ExpenseType = item.ExpenseType,
+                        PaymentType = item.PaymentType,
+                        BillNumber = item.BillNumber,
+                        Description = item.Description,
+                        Date = item.Date,
+                        TotalAmount = item.TotalAmount,
+                        Image = item.Image,
+                        Account = item.Account,
+                        IsPaid = item.IsPaid,
+                        IsApproved = item.IsApproved,
+                        ApprovedBy = item.ApprovedBy,
+                        ApprovedByName = item.ApprovedByName,
+                        CreatedBy = item.CreatedBy,
+                        CreatedOn = item.CreatedOn,
+
+                    });
+                }
+            }
+            return ExpenseDetail;
+        }
+
+        public async Task<jsonData> GetAllUserExpenseList(Guid UserId, DataTableRequstModel dataTable)
+        {
+            try
+            {
+                var expenses = (from a in Context.TblExpenseMasters
+                                join b in Context.TblExpenseTypes on a.ExpenseType equals b.Id
+                                join c in Context.TblPaymentTypes on a.PaymentType equals c.Id
+                                where a.UserId == UserId && a.IsApproved == false
+                                select new ExpenseDetailsView
+                                {
+                                    Id = a.Id,
+                                    UserId = a.UserId,
+                                    ExpenseType = a.ExpenseType,
+                                    PaymentType = a.PaymentType,
+                                    BillNumber = a.BillNumber,
+                                    Description = a.Description,
+                                    Date = a.Date,
+                                    TotalAmount = a.TotalAmount,
+                                    Image = a.Image,
+                                    Account = a.Account,
+                                    ExpenseTypeName = b.Type,
+                                    PaymentTypeName = c.Type,
+                                });
+
+                if (!string.IsNullOrEmpty(dataTable.sortColumn) && !string.IsNullOrEmpty(dataTable.sortColumnDir))
+                {
+                    switch (dataTable.sortColumn)
+                    {
+                        case "BillNumber":
+                            expenses = dataTable.sortColumnDir == "asc" ? expenses.OrderBy(e => e.BillNumber) : expenses.OrderByDescending(e => e.BillNumber);
+                            break;
+                        case "Date":
+                            expenses = dataTable.sortColumnDir == "asc" ? expenses.OrderBy(e => e.Date) : expenses.OrderByDescending(e => e.Date);
+                            break;
+                        case "Account":
+                            expenses = dataTable.sortColumnDir == "asc" ? expenses.OrderBy(e => e.Account) : expenses.OrderByDescending(e => e.Account);
+                            break;
+                        case "TotalAmount":
+                            expenses = dataTable.sortColumnDir == "asc" ? expenses.OrderBy(e => e.TotalAmount) : expenses.OrderByDescending(e => e.TotalAmount);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                if (!string.IsNullOrEmpty(dataTable.searchValue))
+                {
+                    string searchLower = dataTable.searchValue.ToLower();
+                    expenses = expenses.Where(e =>
+                        e.BillNumber.ToLower().Contains(searchLower) ||
+                        e.Date.ToString().Contains(searchLower) ||
+                        e.Account.ToLower().Contains(searchLower) ||
+                        e.TotalAmount.ToString().Contains(dataTable.searchValue));
+                }
+
+                int totalRecord = await expenses.CountAsync();
+
+                var cData = await expenses.Skip(dataTable.skip).Take(dataTable.pageSize).ToListAsync();
+
+                jsonData jsonData = new jsonData
+                {
+                    draw = dataTable.draw,
+                    recordsFiltered = totalRecord,
+                    recordsTotal = totalRecord,
+                    data = cData
+                };
+                return jsonData;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<UserResponceModel> ApprovedExpense(List<ApprovedExpense> ApprovedallExpense)
+        {
+            UserResponceModel response = new UserResponceModel();
+            try
+            {
+                foreach (var item in ApprovedallExpense)
+                {
+
+                    var expense = await Context.TblExpenseMasters.FindAsync(item.Id);
+
+                    if (expense != null)
+                    {
+
+                        expense.IsApproved = true;
+                        expense.ApprovedBy = item.ApprovedBy;
+                        expense.ApprovedByName = item.ApprovedByName;
+                        expense.ApprovedDate = DateTime.Now;
+
+                        Context.Entry(expense).State = EntityState.Modified;
+                    }
+                    else
+                    {
+
+                        response.Code = 404;
+                        response.Message = "Expense not found for ID: " + item.Id;
+                        return response;
+                    }
+                }
+
+
+                await Context.SaveChangesAsync();
+
+                response.Code = 200;
+                response.Message = "All Expenses Approved successfully!";
+            }
+            catch (Exception ex)
+            {
+                response.Code = 500;
+                response.Message = "Error updating expenses: " + ex.Message;
+            }
+            return response;
+        }
+
     }
 }

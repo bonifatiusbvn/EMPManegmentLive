@@ -5,7 +5,7 @@ using EMPManegment.EntityModels.ViewModels.ExpenseMaster;
 using EMPManegment.EntityModels.ViewModels.Invoice;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.OrderModels;
-using EMPManegment.EntityModels.ViewModels.POMaster;
+
 using EMPManegment.EntityModels.ViewModels.ProductMaster;
 using EMPManegment.EntityModels.ViewModels.TaskModels;
 using EMPManegment.EntityModels.ViewModels.VendorModels;
@@ -167,9 +167,9 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
             }
         }
 
-        public async Task<OrderResponseModel> GetInvoiceDetailsByOrderId(string OrderId)
+        public async Task<PurchaseOrderResponseModel> GetInvoiceDetailsByOrderId(string OrderId)
         {
-            OrderResponseModel response = new OrderResponseModel();
+            PurchaseOrderResponseModel response = new PurchaseOrderResponseModel();
             try
             {
                 bool isInvoiceAlredyExists = Context.TblInvoices.Any(x => x.OrderId == OrderId);
@@ -181,13 +181,13 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                 }
                 else
                 {
-                    var orderDetails = new List<OrderDetailView>();
-                    var data = await (from a in Context.TblOrderMasters
+                    var orderDetails = new List<PurchaseOrderDetailView>();
+                    var data = await (from a in Context.TblPurchaseOrderMasters
                                       join c in Context.TblProductDetailsMasters on a.ProductId equals c.Id
                                       join d in Context.TblPaymentMethodTypes on a.PaymentMethod equals d.Id
                                       join b in Context.TblVendorMasters on a.VendorId equals b.Vid
                                       where a.OrderId == OrderId
-                                      select new OrderDetailView
+                                      select new PurchaseOrderDetailView
                                       {
                                           Id = a.Id,
                                           OrderId = a.OrderId,
@@ -205,6 +205,8 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                                           OrderDate = a.OrderDate,
                                           PerUnitPrice = c.PerUnitPrice,
                                           PerUnitWithGstprice = c.PerUnitWithGstprice,
+                                          SubTotal = a.SubTotal,
+                                          GstPerUnit = a.GstPerUnit,
                                           TotalAmount = a.TotalAmount,
                                           AmountPerUnit = a.AmountPerUnit,
                                           PaymentMethod = a.PaymentMethod,
@@ -218,7 +220,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                     {
                         foreach (var item in data)
                         {
-                            orderDetails.Add(new OrderDetailView()
+                            orderDetails.Add(new PurchaseOrderDetailView()
                             {
                                 Id = item.Id,
                                 OrderId = item.OrderId,
@@ -236,6 +238,8 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                                 OrderDate = item.OrderDate,
                                 PerUnitPrice = item.PerUnitPrice,
                                 PerUnitWithGstprice = item.PerUnitWithGstprice,
+                                SubTotal = item.SubTotal,
+                                GstPerUnit = item.GstPerUnit,
                                 TotalAmount = item.TotalAmount,
                                 AmountPerUnit = item.AmountPerUnit,
                                 PaymentMethodName = item.PaymentMethodName,
@@ -268,7 +272,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                                   join b in Context.TblVendorMasters on a.VandorId equals b.Vid
                                   join c in Context.TblProjectMasters on a.ProjectId equals c.ProjectId
                                   where a.IsDeleted != false
-                                  select new 
+                                  select new
                                   {
                                       Invoice = a,
                                       Vendor = b,
@@ -581,19 +585,19 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
             return jsonData;
         }
 
-        public async Task<OrderResponseModel> DisplayInvoiceDetails(string OrderId)
+        public async Task<PurchaseOrderResponseModel> DisplayInvoiceDetails(string OrderId)
         {
-            OrderResponseModel response = new OrderResponseModel();
+            PurchaseOrderResponseModel response = new PurchaseOrderResponseModel();
             try
             {
-                var orderDetails = new List<OrderDetailView>();
-                var data = await (from a in Context.TblOrderMasters
+                var orderDetails = new List<PurchaseOrderDetailView>();
+                var data = await (from a in Context.TblPurchaseOrderMasters
                                   join c in Context.TblProductDetailsMasters on a.ProductId equals c.Id
                                   join b in Context.TblVendorMasters on a.VendorId equals b.Vid
                                   join d in Context.TblInvoices on a.OrderId equals d.OrderId
                                   join e in Context.TblPaymentMethodTypes on a.PaymentMethod equals e.Id
                                   where a.OrderId == OrderId
-                                  select new OrderDetailView
+                                  select new PurchaseOrderDetailView
                                   {
                                       Id = a.Id,
                                       OrderId = a.OrderId,
@@ -618,14 +622,14 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                                       PaymentStatus = a.PaymentStatus,
                                       DeliveryStatus = a.DeliveryStatus,
                                       DeliveryDate = a.DeliveryDate,
-                                      PaymentMethodName=e.PaymentMethod,
+                                      PaymentMethodName = e.PaymentMethod,
                                       CreatedOn = a.CreatedOn,
                                   }).ToListAsync();
                 if (data != null)
                 {
                     foreach (var item in data)
                     {
-                        orderDetails.Add(new OrderDetailView()
+                        orderDetails.Add(new PurchaseOrderDetailView()
                         {
                             Id = item.Id,
                             OrderId = item.OrderId,
@@ -651,7 +655,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                             CreatedOn = item.CreatedOn,
                             Type = item.Type,
                             PaymentStatus = item.PaymentStatus,
-                            PaymentMethodName=item.PaymentMethodName,
+                            PaymentMethodName = item.PaymentMethodName,
                         });
                     }
                     response.Data = orderDetails;
@@ -723,8 +727,8 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                     invoicedetails.TotalAmount = UpdateInvoice.TotalAmount;
                     invoicedetails.PaymentMethod = UpdateInvoice.PaymentMethod;
                     invoicedetails.Status = UpdateInvoice.Status;
-                    invoicedetails.UpdatedOn=DateTime.Now;
-                    invoicedetails.UpdatedBy=UpdateInvoice.UpdatedBy;
+                    invoicedetails.UpdatedOn = DateTime.Now;
+                    invoicedetails.UpdatedBy = UpdateInvoice.UpdatedBy;
                 }
                 Context.TblInvoices.Update(invoicedetails);
                 Context.SaveChanges();
@@ -738,9 +742,9 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
             return model;
         }
 
-        public async Task<OrderResponseModel> ShowInvoiceDetailsByOrderId(string OrderId)
+        public async Task<PurchaseOrderResponseModel> ShowInvoiceDetailsByOrderId(string OrderId)
         {
-            OrderResponseModel response = new OrderResponseModel();
+            PurchaseOrderResponseModel response = new PurchaseOrderResponseModel();
             try
             {
                 bool isInvoiceAlredyExists = Context.TblInvoices.Any(x => x.OrderId == OrderId);
@@ -752,12 +756,12 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                 }
                 else
                 {
-                    var orderDetails = new List<OrderDetailView>();
-                    var data = await (from a in Context.TblOrderMasters
+                    var orderDetails = new List<PurchaseOrderDetailView>();
+                    var data = await (from a in Context.TblPurchaseOrderMasters
                                       join c in Context.TblProductDetailsMasters on a.ProductId equals c.Id
                                       join b in Context.TblVendorMasters on a.VendorId equals b.Vid
                                       where a.OrderId == OrderId
-                                      select new OrderDetailView
+                                      select new PurchaseOrderDetailView
                                       {
                                           Id = a.Id,
                                           OrderId = a.OrderId,
@@ -787,7 +791,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                     {
                         foreach (var item in data)
                         {
-                            orderDetails.Add(new OrderDetailView()
+                            orderDetails.Add(new PurchaseOrderDetailView()
                             {
                                 Id = item.Id,
                                 OrderId = item.OrderId,
