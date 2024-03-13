@@ -477,8 +477,6 @@ $(document).ready(function () {
 
     $('.nav-link').click(function () {
         var targetTab = $(this).attr('href');
-        $('.tab-pane').removeClass('show active');
-        $(targetTab).addClass('show active');
 
         if (targetTab === '#allExpense') {
             GetAllUserExpenseList(userId);
