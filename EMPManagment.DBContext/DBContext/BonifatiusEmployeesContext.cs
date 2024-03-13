@@ -190,7 +190,6 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
             entity.Property(e => e.Date).HasColumnType("datetime");
             entity.Property(e => e.Description).HasMaxLength(500);
-            entity.Property(e => e.Image).HasMaxLength(50);
             entity.Property(e => e.TotalAmount).HasColumnType("numeric(18, 2)");
 
             entity.HasOne(d => d.ExpenseTypeNavigation).WithMany(p => p.TblExpenseMasters)
