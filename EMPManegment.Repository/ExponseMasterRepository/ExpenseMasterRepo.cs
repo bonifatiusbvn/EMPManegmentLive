@@ -200,11 +200,14 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                     Date = ExpenseDetails.Date,
                     TotalAmount = ExpenseDetails.TotalAmount,
                     Image = ExpenseDetails.Image,
-                    Account = "Dabit",
+                    Account = ExpenseDetails.Account,
+                    IsDeleted = true,
+                    CreatedBy = ExpenseDetails.CreatedBy,
                     IsPaid = false,
                     IsApproved = false,
                     CreatedOn = DateTime.Today,
-                    CreatedBy = ExpenseDetails.CreatedBy,
+                    PaymentType = 1,
+                  
                 };
                 response.Code = 200;
                 response.Message = "Expense add successfully!";
@@ -421,7 +424,7 @@ namespace EMPManegment.Repository.ExponseMasterRepository
             {
                 var UserList = from a in Context.TblExpenseMasters
                                join b in Context.TblUsers on a.UserId equals b.Id
-                               where a.Account == "Credit"
+                               where a.Account == "Dabit"
                                group a by new { a.UserId, b.Image, b.UserName, FullName = b.FirstName + " " + b.LastName } into userGroup
                                select new UserExpenseDetailsView
                                {

@@ -9,8 +9,6 @@ $(document).ready(function () {
     DisplayExpenseList();
     GetExpenseTotalAmount();
     GetAllUserExpenseList();
-    GetUserApprovedExpenseList();
-    GetUserUnApprovedExpenseList();
 });
 function GetExpenseTypeList() {
 
@@ -304,46 +302,11 @@ function GetParameterByName(name, url) {
     return decodeURIComponent(results[2].replace(/\+/g, " "));
 }
 
-
-
-//var isExpenseLoaded = false; // Flag to track if the expense is already loaded
-
-//function LoadApprovedExpense(userId) {
-//    debugger
-//    // Check if the expense is already loaded
-//    if (isExpenseLoaded) {
-//        debugger
-//        console.log("Expense already loaded.");
-//        return;
-//    }
-
-//    debugger
-//    GetAllUserExpenseList(userId)
-//        .then(() => {
-//            // Set the flag to true to indicate that the expense is loaded
-//            isExpenseLoaded = true;
-
-//            // Append the userId parameter to the URL and navigate
-//            window.location.href = '/ExpenseMaster/ApprovedExpense?UserId=' + userId;
-//        })
-//        .catch(error => {
-//            console.error("Error loading expense:", error);
-//        });
-//}
-
-
-//function LoadApprovedExpense(userId) {debugger
-//    GetAllUserExpenseList(userId)
-//}
-
 $(document).ready(function () {
 
     var userId = GetParameterByName('userId');
     if (userId) {
-        debugger
         GetAllUserExpenseList(userId);
-        GetUserUnApprovedExpenseList(userId);
-        GetUserApprovedExpenseList(userId);
     }
 
     $('#UserListTable').DataTable({
@@ -403,13 +366,7 @@ function GetAllUserExpenseList(userId) {
             dataType: 'json',
         },
         columns: [
-            {
-                "data": null,
-                "render": function (data, type, full, meta) {
-                    return '<div class="form-check"><input class="form-check-input" data-id="' + full.id + '" type="checkbox" name="chk_child" value="option1"></div>';
-                },
-                "orderable": false
-            },
+
             { "data": "id", "name": "Id", "visible": false },
             { "data": "expenseTypeName", "name": "ExpenseTypeName" },
             { "data": "paymentTypeName", "name": "PaymentTypeName" },
@@ -432,15 +389,15 @@ function GetAllUserExpenseList(userId) {
     });
 }
 
-function GetUserUnApprovedExpenseList(userId) {
-    $('#UserallExpenseTable').DataTable({
+function GetUserUnApprovedExpenseList(UserId) {
+    $('#UserallUnApprovedExpenseTable').DataTable({
         processing: true,
         serverSide: true,
         filter: true,
         "bDestroy": true,
         ajax: {
             type: "POST",
-            url: '/ExpenseMaster/GetUserUnApprovedExpenseList?UserId=' + userId,
+            url: '/ExpenseMaster/GetUserUnApprovedExpenseList?UserId=' + UserId,
             dataType: 'json',
         },
         columns: [
@@ -472,25 +429,19 @@ function GetUserUnApprovedExpenseList(userId) {
         }]
     });
 }
-function GetUserApprovedExpenseList(userId) {
-    $('#UserallApprovedExpenseTable').DataTable({
+function GetUserApprovedExpenseList(UserId) {
+    $('#GetUserApprovedExpenseList').DataTable({
         processing: true,
         serverSide: true,
         filter: true,
         "bDestroy": true,
         ajax: {
             type: "POST",
-            url: '/ExpenseMaster/GetUserApprovedExpenseList?UserId=' + userId,
+            url: '/ExpenseMaster/GetUserApprovedExpenseList?UserId=' + UserId,
             dataType: 'json',
         },
         columns: [
-            {
-                "data": null,
-                "render": function (data, type, full, meta) {
-                    return '<div class="form-check"><input class="form-check-input" data-id="' + full.id + '" type="checkbox" name="chk_child" value="option1"></div>';
-                },
-                "orderable": false
-            },
+
             { "data": "id", "name": "Id", "visible": false },
             { "data": "expenseTypeName", "name": "ExpenseTypeName" },
             { "data": "paymentTypeName", "name": "PaymentTypeName" },
@@ -515,6 +466,15 @@ function GetUserApprovedExpenseList(userId) {
 
 
 $(document).ready(function () {
+
+    var UserId = GetParameterByName('userId');
+
+    if (UserId) {
+        GetUserUnApprovedExpenseList(UserId);
+        GetUserApprovedExpenseList(UserId);
+        $("#getUserId").val(UserId);
+    }
+
     $('.nav-link').click(function () {
         var targetTab = $(this).attr('href');
         $('.tab-pane').removeClass('show active');
@@ -523,14 +483,12 @@ $(document).ready(function () {
         if (targetTab === '#allExpense') {
             GetAllUserExpenseList(userId);
         } else if (targetTab === '#allUnApprovedExpense') {
-            GetUserUnApprovedExpenseList(userId);
+            GetUserUnApprovedExpenseList(UserId);
         } else if (targetTab === '#allApprovedExpense') {
-            GetUserApprovedExpenseList(userId);
+            GetUserApprovedExpenseList(UserId);
         }
     });
 });
-
-
 
 
 $(document).ready(function () {
@@ -538,7 +496,7 @@ $(document).ready(function () {
         return $("input[name='chk_child']:checked").length > 0;
     }
 
-    $('#UserallExpenseTable').on('change', 'input[name="chk_child"]', function () {
+    $('#UserallUnApprovedExpenseTable').on('change', 'input[name="chk_child"]', function () {
         if (anyCheckboxChecked()) {
             $('#remove-actions').show();
         } else {
@@ -699,17 +657,15 @@ function ApproveExpense(userId) {
                     data: form_data,
                     processData: false,
                     contentType: false,
-                    success: function (Result) {
-                        debugger
+                    success: function (Result) {debugger
                         if (Result.message != null) {
                             Swal.fire({
                                 title: Result.message,
                                 icon: 'success',
                                 confirmButtonColor: '#3085d6',
                                 confirmButtonText: 'OK',
-                            }).then(function () {
-                                debugger
-                                window.location = '/ExpenseMaster/ApprovedExpense?UserId=' + userId;
+                            }).then(function () {debugger
+                                window.location = '/ExpenseMaster/ApprovedExpense?UserId=' + GetUserId;
                             });
                         }
                     },
