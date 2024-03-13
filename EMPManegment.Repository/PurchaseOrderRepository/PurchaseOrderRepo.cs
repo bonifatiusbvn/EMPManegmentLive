@@ -37,12 +37,6 @@ namespace EMPManegment.Repository.OrderRepository
             try
             {
                 var ordermodel = new TblPurchaseOrderMaster()
-                var LastOrder = Context.TblPurchaseOrders.OrderByDescending(e => e.CreatedOn).FirstOrDefault();
-                var currentYear = DateTime.Now.Year;
-                var lastYear = currentYear - 1;
-
-                string POId;
-                if (LastOrder == null)
                 {
                     Id = Guid.NewGuid(),
                     OrderId = "Order_" + CreatePurchaseOrder.OrderId,

@@ -48,6 +48,24 @@ namespace EMPManegment.Web.Controllers
         }
 
         [HttpPost]
+        public async Task<IActionResult> CreatePurchaseOrder(PurchaseOrderDetailView orderDetail)
+        {
+            try
+            {
+                ApiResponseModel postuser = await APIServices.PostAsync(orderDetail, "PurchaseOrderDetails/CreatePurchaseOrder");
+                if (postuser.code == 200)
+                {
+                    return Ok(new { postuser.message });
+                }
+                return View(orderDetail);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpPost]
         public async Task<IActionResult> GetPurchaseOrderDetailsByStatus(string DeliveryStatus)
         {
             try
@@ -59,26 +77,6 @@ namespace EMPManegment.Web.Controllers
                     orderList = JsonConvert.DeserializeObject<List<PurchaseOrderDetailView>>(res.data.ToString());
                 }
                 return PartialView("~/Views/PurchaseOrderMaster/_DeliveryStatusOrder.cshtml", orderList);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-
-
-        [HttpPost]
-        public async Task<IActionResult> CreatePurchaseOrder(PurchaseOrderDetailView orderDetail)
-        {
-            try
-            {
-                ApiResponseModel postuser = await APIServices.PostAsync(orderDetail, "PurchaseOrderDetails/CreatePurchaseOrder");
-                if (postuser.code == 200)
-                {
-                    return Ok(new { postuser.message });
-                }
-                return View(orderDetail);
             }
             catch (Exception ex)
             {
@@ -118,7 +116,7 @@ namespace EMPManegment.Web.Controllers
                 ApiResponseModel Response = await APIServices.GetAsync("", "PurchaseOrderDetails/CheckPurchaseOrder?projectname=" + porjectname);
                 if (Response.code == 200)
                 {
-                    ViewBag.OrderId = Response.data;
+                    ViewBag.PoId = Response.data;
                 }
                 return View();
             }
