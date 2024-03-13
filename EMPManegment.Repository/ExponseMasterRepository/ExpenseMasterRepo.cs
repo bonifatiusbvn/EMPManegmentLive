@@ -253,6 +253,7 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                                join b in Context.TblExpenseTypes on a.ExpenseType equals b.Id
                                join c in Context.TblPaymentTypes on a.PaymentType equals c.Id
                                join d in Context.TblUsers on a.UserId equals d.Id
+                               where a.IsDeleted != false
                                select new ExpenseDetailsView
                                {
                                    Id = a.Id,
@@ -781,5 +782,21 @@ namespace EMPManegment.Repository.ExponseMasterRepository
             return response;
         }
 
+        public async Task<UserResponceModel> DeleteExpense(Guid Id)
+        {
+            UserResponceModel response = new UserResponceModel();
+            var GetExpensedata = Context.TblExpenseMasters.Where(a => a.Id == Id).FirstOrDefault();
+
+            if (GetExpensedata != null)
+            {
+                GetExpensedata.IsDeleted = false;
+                Context.TblExpenseMasters.Update(GetExpensedata);
+                Context.SaveChanges();
+                response.Code = 200;
+                response.Data = GetExpensedata;
+                response.Message = "Expense is Deleted Successfully";
+            }
+            return response;
+        }
     }
 }

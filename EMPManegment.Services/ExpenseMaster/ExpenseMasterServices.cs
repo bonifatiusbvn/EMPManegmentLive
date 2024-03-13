@@ -40,6 +40,11 @@ namespace EMPManegment.Services.ExpenseMaster
             return await expenseMaster.ApprovedExpense(InsertOrder);
         }
 
+        public async Task<UserResponceModel> DeleteExpense(Guid Id)
+        {
+            return await expenseMaster.DeleteExpense(Id);
+        }
+
         public async Task<IEnumerable<ExpenseTypeView>> GetAllExpensType()
         {
             return await expenseMaster.GetAllExpensType();

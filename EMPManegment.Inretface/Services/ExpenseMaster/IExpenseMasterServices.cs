@@ -38,5 +38,6 @@ namespace EMPManegment.Inretface.Services.ExpenseMaster
         Task<UserResponceModel> UpdateExpenseDetail(ExpenseDetailsView ExpenseDetails);
         Task<List<ExpenseDetailsView>> GetExpenseDetailByUserId(Guid UserId);
         Task<UserResponceModel> ApprovedExpense(List<ApprovedExpense> InsertOrder);
+        Task<UserResponceModel> DeleteExpense(Guid Id);
     }
 }

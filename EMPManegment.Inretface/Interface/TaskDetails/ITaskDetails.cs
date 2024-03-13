@@ -22,6 +22,7 @@ namespace EMPManegment.Inretface.Interface.TaskDetails
         Task<jsonData> GetAllUserTaskDetails(DataTableRequstModel AllUserTaskDetails);
         Task<IEnumerable<TaskDetailsView>> GetTaskDetails(Guid Taskid, Guid ProjectId);
         Task<IEnumerable<TaskDetailsView>> GetUserTotalTask(Guid UserId);
+        Task<UserResponceModel> UpdateTaskDetails(TaskDetailsView updateTaskDetails);
 
     }
 }

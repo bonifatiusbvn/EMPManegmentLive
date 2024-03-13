@@ -292,13 +292,13 @@ namespace EMPManegment.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateUserTaskDetails(TaskDetailsView updateTaskDetails)
+        public async Task<IActionResult> UpdateTaskDetails(TaskDetailsView updateTaskDetails)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    ApiResponseModel postuser = await APIServices.PostAsync(updateTaskDetails, "UserHome/UpdateTaskStatus");
+                    ApiResponseModel postuser = await APIServices.PostAsync(updateTaskDetails, "UserHome/UpdateTaskDetails");
                     if (postuser.code == 200)
                     {
                         return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });

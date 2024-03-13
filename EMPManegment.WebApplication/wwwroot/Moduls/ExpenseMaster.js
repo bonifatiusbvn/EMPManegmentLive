@@ -55,10 +55,6 @@ function AddExpenseDetails() {
         formData.append("Date", $("#txtdate").val());
         formData.append("TotalAmount", $("#txttotalamount").val());
         formData.append("Image", $("#txtimage")[0].files[0]);
-        formData.append("Account", $("#txtaccount").val());
-        formData.append("PaymentType", $("#txtpaymenttype").val());
-        formData.append("IsPaid", $("#txtispaid").val());
-        formData.append("IsApproved", $("#txtisapproved").val());
         $.ajax({
             url: '/ExpenseMaster/AddexpenseDetails',
             type: 'Post',
@@ -186,6 +182,56 @@ $(document).ready(function () {
         $("#EditExpenseForm").validate();
     });
 });
+
+function deleteExpense(Id) {
+    Swal.fire({
+        title: "Are you sure want to Delete This?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, Delete it!",
+        cancelButtonText: "No, cancel!",
+        confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
+        cancelButtonClass: "btn btn-danger w-xs mt-2",
+        buttonsStyling: false,
+        showCloseButton: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: '/ExpenseMaster/DeleteExpense?Id=' + Id,
+                type: 'POST',
+                dataType: 'json',
+                success: function (Result) {
+                    Swal.fire({
+                        title: Result.message,
+                        icon: 'success',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK'
+                    }).then(function () {
+                        window.location = '/ExpenseMaster/ExpenseList';
+                    })
+                },
+                error: function () {
+                    Swal.fire({
+                        title: "Can't Delete Expense!",
+                        icon: 'warning',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK',
+                    }).then(function () {
+                        window.location = '/ExpenseMaster/ExpenseList';
+                    })
+                }
+            })
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+
+            Swal.fire(
+                'Cancelled',
+                'Expense Have No Changes.!!😊',
+                'error'
+            );
+        }
+    });
+}
 
 function GetUserExpenseList() {
 
@@ -571,7 +617,7 @@ function DisplayExpenseList() {
                 "className": "text-center",
                 "orderable": false,
                 "render": function (data, type, full) {
-                    return '<a onclick="EditExpenseDetails(\'' + full.id + '\')" data-bs-toggle="modal" class="btn text-primary d-inline-block edit-item-btn"><i class="ri-pencil-fill fs-16"></i>';
+                    return ('<li class="btn list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit"><a onclick="EditExpenseDetails(\'' + full.id + '\')"><i class="ri-pencil-fill fs-16"></i></a></li><li class="btn text-danger list-inline-item delete" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Delete" style="margin-left:12px;"><a onclick="deleteExpense(\'' + full.id + '\')"><i class="ri-delete-bin-5-fill fs-16"></i></a></li>');
                 }
             },
         ],

@@ -3,6 +3,7 @@ using EMPManegment.EntityModels.ViewModels.ExpenseMaster;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.OrderModels;
 using EMPManegment.EntityModels.ViewModels.ProductMaster;
+using EMPManegment.Inretface.Interface.InvoiceMaster;
 using EMPManegment.Inretface.Interface.OrderDetails;
 using EMPManegment.Inretface.Interface.ProductMaster;
 using EMPManegment.Inretface.Services.ExpenseMaster;
@@ -174,6 +175,30 @@ namespace EMPManagment.API.Controllers
 
             return StatusCode(response.Code, response);
         }
-
+        [HttpPost]
+        [Route("DeleteExpense")]
+        public async Task<IActionResult> DeleteExpense(Guid Id)
+        {
+            UserResponceModel responseModel = new UserResponceModel();
+            var expense = await expenseMaster.DeleteExpense(Id);
+            try
+            {
+                if (expense != null)
+                {
+                    responseModel.Code = (int)HttpStatusCode.OK;
+                    responseModel.Message = expense.Message;
+                }
+                else
+                {
+                    responseModel.Message = expense.Message;
+                    responseModel.Code = (int)HttpStatusCode.NotFound;
+                }
+            }
+            catch (Exception ex)
+            {
+                responseModel.Code = (int)HttpStatusCode.InternalServerError;
+            }
+            return StatusCode(responseModel.Code, responseModel);
+        }
     }
 }
