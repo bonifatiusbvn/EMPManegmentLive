@@ -246,10 +246,8 @@ namespace EMPManegment.Web.Controllers
                     Date = Addexpense.Date,
                     TotalAmount = Addexpense.TotalAmount,
                     Image = filepath,
-                    Account = Addexpense.Account,
-                    IsPaid = Addexpense.IsPaid,
-                    IsApproved = Addexpense.IsApproved,
                     CreatedBy = _userSession.UserId,
+                    Account = "Dabit",
                 };
                 ApiResponseModel postuser = await APIServices.PostAsync(ExpenseDetails, "ExpenseMaster/AddExpenseDetails");
                 UserResponceModel responseModel = new UserResponceModel();
