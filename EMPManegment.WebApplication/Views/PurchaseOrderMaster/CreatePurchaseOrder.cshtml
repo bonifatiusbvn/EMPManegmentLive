@@ -56,48 +56,6 @@
                     </div>
                 </div>
                 <div class="card-body border border-dashed border-end-0 border-start-0">
-                    <form id="statusform">
-                        <div class="row g-3">
-                            <div class="col-xxl-5 col-sm-6">
-                                <div class="search-box">
-                                    <input type="text" class="form-control search" placeholder="Search for order ID, customer, order status or something...">
-                                    <i class="ri-search-line search-icon"></i>
-                                </div>
-                            </div>
-                            <!--end col-->
-                            <div class="col-xxl-2 col-sm-6">
-                                <div>
-                                    <input type="text" class="form-control flatpickr-input active" data-provider="flatpickr" data-date-format="d M, Y" data-range-date="true" id="demo-datepicker" placeholder="Select date" readonly="readonly">
-                                </div>
-                            </div>
-                            <!--end col-->
-                            <div class="col-xxl-2 col-sm-4">
-                                <div>
-                                    <select class="form-control" data-choices data-choices-search-false id="idStatus" name="idStatus">
-                                        <option selected value=" ">Status</option>
-                                        <option value="All">All</option>
-                                        <option value="Delivered">Delivered</option>
-                                        <option value="Pickups">Pickups</option>
-                                        <option value="Returns">Returns</option>
-                                        <option value="Cancelled">Cancelled</option>
-                                        <option value="Pending">Pending</option>
-                                        <option value="Inprogress">Inprogress</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <!--end col-->
-                            <div class="col-xxl-1 col-sm-4">
-                                <div>
-                                    <button type="button" class="btn btn-secondary w-100" onclick="SearchData();" id="statussearch" value="Validate">
-                                        <i class="ri-equalizer-fill me-1 align-bottom"></i>
-                                        Filters
-                                    </button>
-                                </div>
-                            </div>
-                            <!--end col-->
-                        </div>
-                        <!--end row-->
-                    </form>
                 </div>
                 <div class="modal fade" id="UpdateOrderModel" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">
@@ -218,656 +176,655 @@
                                 </a>
                             </li>
                         </ul>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="tab-content text-muted">
-                <div class="tab-pane fade show active" id="project-overview" role="tabpanel">
-                    <div class="tab-pane" id="status-all" role="tabpanel">
-                        <div class="table-responsive table-card mb-1">
-                            <table class="table table-nowrap align-middle" id="orderTable">
-                                <thead class="text-muted table-light">
-                                    <tr class="text-uppercase">
-                                        <th scope="col" style="width: 25px;">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" id="checkAll" value="option">
-                                            </div>
-                                        </th>
-                                        <th class="sort" data-sort="id">Order ID</th>
-                                        <th class="sort" data-sort="company_name">Company</th>
-                                        <th class="sort" data-sort="product_name">Product</th>
-                                        <th class="sort" data-sort="date">Order Date</th>
-                                        <th class="sort" data-sort="total_amount">Amount</th>
-                                        <th class="sort" data-sort="payment">Payment Method</th>
-                                        <th class="sort" data-sort="status">Delivery Status</th>
-                                        <th class="sort" data-sort="city">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="list form-check-all">
-                                    @foreach (var item in Model)
-                                    {
-                                        <tr>
-                                            <th scope="row">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" name="checkAll" value="option1">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="tab-content text-muted">
+                                    <div class="tab-pane fade show active" id="project-overview" role="tabpanel">
+                                        <div class="tab-pane" id="status-all" role="tabpanel">
+                                            <div class="table-responsive table-card mb-1">
+                                                <table class="table table-nowrap align-middle" id="orderTable">
+                                                    <thead class="text-muted table-light">
+                                                        <tr class="text-uppercase">
+                                                            <th scope="col" style="width: 25px;">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input" type="checkbox" id="checkAll" value="option">
+                                                                </div>
+                                                            </th>
+                                                            <th class="sort" data-sort="id">Order ID</th>
+                                                            <th class="sort" data-sort="company_name">Company</th>
+                                                            <th class="sort" data-sort="product_name">Product</th>
+                                                            <th class="sort" data-sort="date">Order Date</th>
+                                                            <th class="sort" data-sort="total_amount">Amount</th>
+                                                            <th class="sort" data-sort="payment">Payment Method</th>
+                                                            <th class="sort" data-sort="status">Delivery Status</th>
+                                                            <th class="sort" data-sort="city">Action</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody class="list form-check-all">
+                                                        @foreach (var item in Model)
+                                                        {
+                                                            <tr>
+                                                                <th scope="row">
+                                                                    <div class="form-check">
+                                                                        <input class="form-check-input" type="checkbox" name="checkAll" value="option1">
+                                                                    </div>
+                                                                </th>
+                                                                <td class="id"><a href="/PurchaseOrderMaster/GetPurchaseOrderDetailsById/?OrderId=@item.OrderId" class="fw-medium link-primary">@item.OrderId</a></td>
+                                                                <td class="company_name">@item.CompanyName</td>
+                                                                <td class="product_name">@item.ProductName</td>
+                                                                <td class="date">@item.OrderDate.ToString("dd/MM/yyyy")</td>
+                                                                <td class="total_amount">@item.TotalAmount</td>
+                                                                <td class="payment">@item.PaymentMethodName</td>
+                                                                <td class="status" id="DeliveryStatus">
+                                                                    <span class="badge bg-warning-subtle text-warning text-uppercase">@item.DeliveryStatus</span>
+                                                                </td>
+                                                                <td>
+                                                                    <ul class="list-inline hstack gap-2 mb-0">
+                                                                        <li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">
+                                                                            <a onclick="EditPurchaseOrderDetails('@item.Id')" data-bs-toggle="modal" class="btn text-primary d-inline-block edit-item-btn">
+                                                                                <i class="ri-pencil-fill fs-16"></i>
+                                                                            </a>
+                                                                        </li>
+                                                                        <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Remove">
+                                                                            <a class="btn text-danger d-inline-block remove-item-btn" data-bs-toggle="modal" onclick="deletePurchaseOrderDetails('@item.OrderId')">
+                                                                                <i class="ri-delete-bin-5-fill fs-16"></i>
+                                                                            </a>
+                                                                        </li>
+                                                                    </ul>
+                                                                </td>
+                                                            </tr>
+                                                        }
+                                                        @*<div id="OrderPartialBody">
+                                                        @Html.Partial("_OrderDetailsPartial")
+                                                        </div>*@
+                                                    </tbody>
+                                                </table>
+                                                <div class="noresult" style="display: none">
+                                                    <div class="text-center">
+                                                        <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#25a0e2,secondary:#0ab39c" style="width:75px;height:75px">
+                                                        </lord-icon>
+                                                        <h5 class="mt-2">Sorry! No Result Found</h5>
+                                                        <p class="text-muted">
+                                                            We've searched more than 150+ Orders We did
+                                                            not find any
+                                                            orders for you search.
+                                                        </p>
+                                                    </div>
                                                 </div>
-                                            </th>
-                                            <td class="id"><a href="/PurchaseOrderMaster/GetPurchaseOrderDetailsById/?OrderId=@item.OrderId" class="fw-medium link-primary">@item.OrderId</a></td>
-                                            <td class="company_name">@item.CompanyName</td>
-                                            <td class="product_name">@item.ProductName</td>
-                                            <td class="date">@item.OrderDate.ToString("dd/MM/yyyy")</td>
-                                            <td class="total_amount">@item.TotalAmount</td>
-                                            <td class="payment">@item.PaymentMethodName</td>
-                                            <td class="status" id="DeliveryStatus">
-                                                <span class="badge bg-warning-subtle text-warning text-uppercase">@item.DeliveryStatus</span>
-                                            </td>
-                                            <td>
-                                                <ul class="list-inline hstack gap-2 mb-0">
-                                                    <li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">
-                                                        <a onclick="EditPurchaseOrderDetails('@item.Id')" data-bs-toggle="modal" class="btn text-primary d-inline-block edit-item-btn">
-                                                            <i class="ri-pencil-fill fs-16"></i>
-                                                        </a>
-                                                    </li>
-                                                    <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Remove">
-                                                        <a class="btn text-danger d-inline-block remove-item-btn" data-bs-toggle="modal" onclick="deletePurchaseOrderDetails('@item.OrderId')">
-                                                            <i class="ri-delete-bin-5-fill fs-16"></i>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </td>
-                                        </tr>
-                                    }
-                                    @*<div id="OrderPartialBody">
-                                    @Html.Partial("_OrderDetailsPartial")
-                                    </div>*@
-                                </tbody>
-                            </table>
-                            <div class="noresult" style="display: none">
-                                <div class="text-center">
-                                    <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#25a0e2,secondary:#0ab39c" style="width:75px;height:75px">
-                                    </lord-icon>
-                                    <h5 class="mt-2">Sorry! No Result Found</h5>
-                                    <p class="text-muted">
-                                        We've searched more than 150+ Orders We did
-                                        not find any
-                                        orders for you search.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="d-flex justify-content-end">
-                            <div class="pagination-wrap hstack gap-2">
-                                <a class="page-item pagination-prev disabled" href="#">
-                                    Previous
-                                </a>
-                                <ul class="pagination listjs-pagination mb-0"></ul>
-                                <a class="page-item pagination-next" href="#">
-                                    Next
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-        <!--end col-->
-    </div>
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="tab-content text-muted">
-                <div class="tab-pane" id="status-delivered" role="tabpanel">
-                    <div class="tab-pane" id="status-all" role="tabpanel">
-                        <div class="table-responsive table-card mb-1">
-                            <table class="table table-nowrap align-middle" id="orderTable">
-                                <thead class="text-muted table-light">
-                                    <tr class="text-uppercase">
-                                        <th scope="col" style="width: 25px;">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" id="checkAll" value="option">
                                             </div>
-                                        </th>
-                                        <th class="sort" data-sort="id">Order ID</th>
-                                        <th class="sort" data-sort="company_name">Company</th>
-                                        <th class="sort" data-sort="product_name">Product</th>
-                                        <th class="sort" data-sort="date">Order Date</th>
-                                        <th class="sort" data-sort="total_amount">Amount</th>
-                                        <th class="sort" data-sort="payment">Payment Method</th>
-                                        <th class="sort" data-sort="status">Delivery Status</th>
-                                        <th class="sort" data-sort="city">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="list form-check-all">
-                                    @foreach (var item in Model)
-                                    {
-                                        if (item.DeliveryStatus == "Delivered")
-                                        {
-                                            <tr>
-                                                <th scope="row">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" name="checkAll" value="option1">
-                                                    </div>
-                                                </th>
-                                                <td class="id"><a href="/OrderMaster/GetOrderDetailsById/?OrderId=@item.OrderId" class="fw-medium link-primary">@item.OrderId</a></td>
-                                                <td class="company_name">@item.CompanyName</td>
-                                                <td class="product_name">@item.ProductName</td>
-                                                <td class="date">@item.OrderDate.ToString("dd/MM/yyyy")</td>
-                                                <td class="total_amount">@item.TotalAmount</td>
-                                                <td class="payment">@item.PaymentMethodName</td>
-                                                <td class="status" id="DeliveryStatus">
-                                                    <span class="badge bg-warning-subtle text-warning text-uppercase">@item.DeliveryStatus</span>
-                                                </td>
-                                                <td>
-                                                    <ul class="list-inline hstack gap-2 mb-0">
-                                                        <li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">
-                                                            <a href="#showModal" data-bs-toggle="modal" class="btn text-primary d-inline-block edit-item-btn">
-                                                                <i class="ri-pencil-fill fs-16"></i>
-                                                            </a>
-                                                        </li>
-                                                        <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Remove">
-                                                            <a class="btn text-danger d-inline-block remove-item-btn" data-bs-toggle="modal" href="#deleteOrder">
-                                                                <i class="ri-delete-bin-5-fill fs-16"></i>
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </td>
-                                            </tr>
-                                        }
-                                    }
-                                </tbody>
-                            </table>
-                            <div class="noresult" style="display: none">
-                                <div class="text-center">
-                                    <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#25a0e2,secondary:#0ab39c" style="width:75px;height:75px">
-                                    </lord-icon>
-                                    <h5 class="mt-2">Sorry! No Result Found</h5>
-                                    <p class="text-muted">
-                                        We've searched more than 150+ Orders We did
-                                        not find any
-                                        orders for you search.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="d-flex justify-content-end">
-                            <div class="pagination-wrap hstack gap-2">
-                                <a class="page-item pagination-prev disabled" href="#">
-                                    Previous
-                                </a>
-                                <ul class="pagination listjs-pagination mb-0"></ul>
-                                <a class="page-item pagination-next" href="#">
-                                    Next
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="tab-content text-muted">
-                <div class="tab-pane" id="status-pickups" role="tabpanel">
-                    <div class="tab-pane" id="status-all" role="tabpanel">
-                        <div class="table-responsive table-card mb-1">
-                            <table class="table table-nowrap align-middle" id="orderTable">
-                                <thead class="text-muted table-light">
-                                    <tr class="text-uppercase">
-                                        <th scope="col" style="width: 25px;">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" id="checkAll" value="option">
+                                            <div class="d-flex justify-content-end">
+                                                <div class="pagination-wrap hstack gap-2">
+                                                    <a class="page-item pagination-prev disabled" href="#">
+                                                        Previous
+                                                    </a>
+                                                    <ul class="pagination listjs-pagination mb-0"></ul>
+                                                    <a class="page-item pagination-next" href="#">
+                                                        Next
+                                                    </a>
+                                                </div>
                                             </div>
-                                        </th>
-                                        <th class="sort" data-sort="id">Order ID</th>
-                                        <th class="sort" data-sort="company_name">Company</th>
-                                        <th class="sort" data-sort="product_name">Product</th>
-                                        <th class="sort" data-sort="date">Order Date</th>
-                                        <th class="sort" data-sort="total_amount">Amount</th>
-                                        <th class="sort" data-sort="payment">Payment Method</th>
-                                        <th class="sort" data-sort="status">Delivery Status</th>
-                                        <th class="sort" data-sort="city">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="list form-check-all">
-                                    @foreach (var item in Model)
-                                    {
-                                        if (item.DeliveryStatus == "Pickups")
-                                        {
-                                            <tr>
-                                                <th scope="row">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" name="checkAll" value="option1">
-                                                    </div>
-                                                </th>
-                                                <td class="id"><a href="/OrderMaster/GetOrderDetailsById/?OrderId=@item.OrderId" class="fw-medium link-primary">@item.OrderId</a></td>
-                                                <td class="company_name">@item.CompanyName</td>
-                                                <td class="product_name">@item.ProductName</td>
-                                                <td class="date">@item.OrderDate.ToString("dd/MM/yyyy")</td>
-                                                <td class="total_amount">@item.TotalAmount</td>
-                                                <td class="payment">@item.PaymentMethod</td>
-                                                <td class="status" id="DeliveryStatus">
-                                                    <span class="badge bg-warning-subtle text-warning text-uppercase">@item.DeliveryStatus</span>
-                                                </td>
-                                                <td>
-                                                    <ul class="list-inline hstack gap-2 mb-0">
-
-                                                        <li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">
-                                                            <a href="#showModal" data-bs-toggle="modal" class="btn text-primary d-inline-block edit-item-btn">
-                                                                <i class="ri-pencil-fill fs-16"></i>
-                                                            </a>
-                                                        </li>
-                                                        <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Remove">
-                                                            <a class="btn text-danger d-inline-block remove-item-btn" data-bs-toggle="modal" href="#deleteOrder">
-                                                                <i class="ri-delete-bin-5-fill fs-16"></i>
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </td>
-                                            </tr>
-                                        }
-                                    }
-                                </tbody>
-                            </table>
-                            <div class="noresult" style="display: none">
-                                <div class="text-center">
-                                    <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#25a0e2,secondary:#0ab39c" style="width:75px;height:75px">
-                                    </lord-icon>
-                                    <h5 class="mt-2">Sorry! No Result Found</h5>
-                                    <p class="text-muted">
-                                        We've searched more than 150+ Orders We did
-                                        not find any
-                                        orders for you search.
-                                    </p>
+                                        </div>
+                                    </div>
                                 </div>
+
                             </div>
+                            <!--end col-->
                         </div>
-                        <div class="d-flex justify-content-end">
-                            <div class="pagination-wrap hstack gap-2">
-                                <a class="page-item pagination-prev disabled" href="#">
-                                    Previous
-                                </a>
-                                <ul class="pagination listjs-pagination mb-0"></ul>
-                                <a class="page-item pagination-next" href="#">
-                                    Next
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="tab-content text-muted">
-                <div class="tab-pane" id="status-returns" role="tabpanel">
-                    <div class="tab-pane" id="status-all" role="tabpanel">
-                        <div class="table-responsive table-card mb-1">
-                            <table class="table table-nowrap align-middle" id="orderTable">
-                                <thead class="text-muted table-light">
-                                    <tr class="text-uppercase">
-                                        <th scope="col" style="width: 25px;">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" id="checkAll" value="option">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="tab-content text-muted">
+                                    <div class="tab-pane" id="status-delivered" role="tabpanel">
+                                        <div class="tab-pane" id="status-all" role="tabpanel">
+                                            <div class="table-responsive table-card mb-1">
+                                                <table class="table table-nowrap align-middle" id="orderTable">
+                                                    <thead class="text-muted table-light">
+                                                        <tr class="text-uppercase">
+                                                            <th scope="col" style="width: 25px;">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input" type="checkbox" id="checkAll" value="option">
+                                                                </div>
+                                                            </th>
+                                                            <th class="sort" data-sort="id">Order ID</th>
+                                                            <th class="sort" data-sort="company_name">Company</th>
+                                                            <th class="sort" data-sort="product_name">Product</th>
+                                                            <th class="sort" data-sort="date">Order Date</th>
+                                                            <th class="sort" data-sort="total_amount">Amount</th>
+                                                            <th class="sort" data-sort="payment">Payment Method</th>
+                                                            <th class="sort" data-sort="status">Delivery Status</th>
+                                                            <th class="sort" data-sort="city">Action</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody class="list form-check-all">
+                                                        @foreach (var item in Model)
+                                                        {
+                                                            if (item.DeliveryStatus == "Delivered")
+                                                            {
+                                                                <tr>
+                                                                    <th scope="row">
+                                                                        <div class="form-check">
+                                                                            <input class="form-check-input" type="checkbox" name="checkAll" value="option1">
+                                                                        </div>
+                                                                    </th>
+                                                                    <td class="id"><a href="/OrderMaster/GetOrderDetailsById/?OrderId=@item.OrderId" class="fw-medium link-primary">@item.OrderId</a></td>
+                                                                    <td class="company_name">@item.CompanyName</td>
+                                                                    <td class="product_name">@item.ProductName</td>
+                                                                    <td class="date">@item.OrderDate.ToString("dd/MM/yyyy")</td>
+                                                                    <td class="total_amount">@item.TotalAmount</td>
+                                                                    <td class="payment">@item.PaymentMethodName</td>
+                                                                    <td class="status" id="DeliveryStatus">
+                                                                        <span class="badge bg-warning-subtle text-warning text-uppercase">@item.DeliveryStatus</span>
+                                                                    </td>
+                                                                    <td>
+                                                                        <ul class="list-inline hstack gap-2 mb-0">
+                                                                            <li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">
+                                                                                <a href="#showModal" data-bs-toggle="modal" class="btn text-primary d-inline-block edit-item-btn">
+                                                                                    <i class="ri-pencil-fill fs-16"></i>
+                                                                                </a>
+                                                                            </li>
+                                                                            <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Remove">
+                                                                                <a class="btn text-danger d-inline-block remove-item-btn" data-bs-toggle="modal" href="#deleteOrder">
+                                                                                    <i class="ri-delete-bin-5-fill fs-16"></i>
+                                                                                </a>
+                                                                            </li>
+                                                                        </ul>
+                                                                    </td>
+                                                                </tr>
+                                                            }
+                                                        }
+                                                    </tbody>
+                                                </table>
+                                                <div class="noresult" style="display: none">
+                                                    <div class="text-center">
+                                                        <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#25a0e2,secondary:#0ab39c" style="width:75px;height:75px">
+                                                        </lord-icon>
+                                                        <h5 class="mt-2">Sorry! No Result Found</h5>
+                                                        <p class="text-muted">
+                                                            We've searched more than 150+ Orders We did
+                                                            not find any
+                                                            orders for you search.
+                                                        </p>
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </th>
-                                        <th class="sort" data-sort="id">Order ID</th>
-                                        <th class="sort" data-sort="company_name">Company</th>
-                                        <th class="sort" data-sort="product_name">Product</th>
-                                        <th class="sort" data-sort="date">Order Date</th>
-                                        <th class="sort" data-sort="total_amount">Amount</th>
-                                        <th class="sort" data-sort="payment">Payment Method</th>
-                                        <th class="sort" data-sort="status">Delivery Status</th>
-                                        <th class="sort" data-sort="city">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="list form-check-all">
-                                    @foreach (var item in Model)
-                                    {
-                                        if (item.DeliveryStatus == "Returns")
-                                        {
-                                            <tr>
-                                                <th scope="row">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" name="checkAll" value="option1">
-                                                    </div>
-                                                </th>
-                                                <td class="id"><a href="/OrderMaster/GetOrderDetailsById/?OrderId=@item.OrderId" class="fw-medium link-primary">@item.OrderId</a></td>
-                                                <td class="company_name">@item.CompanyName</td>
-                                                <td class="product_name">@item.ProductName</td>
-                                                <td class="date">@item.OrderDate.ToString("dd/MM/yyyy")</td>
-                                                <td class="total_amount">@item.TotalAmount</td>
-                                                <td class="payment">@item.PaymentMethod</td>
-                                                <td class="status" id="DeliveryStatus">
-                                                    <span class="badge bg-warning-subtle text-warning text-uppercase">@item.DeliveryStatus</span>
-                                                </td>
-                                                <td>
-                                                    <ul class="list-inline hstack gap-2 mb-0">
-
-                                                        <li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">
-                                                            <a href="#showModal" data-bs-toggle="modal" class="btn text-primary d-inline-block edit-item-btn">
-                                                                <i class="ri-pencil-fill fs-16"></i>
-                                                            </a>
-                                                        </li>
-                                                        <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Remove">
-                                                            <a class="btn text-danger d-inline-block remove-item-btn" data-bs-toggle="modal" href="#deleteOrder">
-                                                                <i class="ri-delete-bin-5-fill fs-16"></i>
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </td>
-                                            </tr>
-                                        }
-                                    }
-                                </tbody>
-                            </table>
-                            <div class="noresult" style="display: none">
-                                <div class="text-center">
-                                    <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#25a0e2,secondary:#0ab39c" style="width:75px;height:75px">
-                                    </lord-icon>
-                                    <h5 class="mt-2">Sorry! No Result Found</h5>
-                                    <p class="text-muted">
-                                        We've searched more than 150+ Orders We did
-                                        not find any
-                                        orders for you search.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="d-flex justify-content-end">
-                            <div class="pagination-wrap hstack gap-2">
-                                <a class="page-item pagination-prev disabled" href="#">
-                                    Previous
-                                </a>
-                                <ul class="pagination listjs-pagination mb-0"></ul>
-                                <a class="page-item pagination-next" href="#">
-                                    Next
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="tab-content text-muted">
-                <div class="tab-pane" id="status-cancelled" role="tabpanel">
-                    <div class="tab-pane" id="status-all" role="tabpanel">
-                        <div class="table-responsive table-card mb-1">
-                            <table class="table table-nowrap align-middle" id="orderTable">
-                                <thead class="text-muted table-light">
-                                    <tr class="text-uppercase">
-                                        <th scope="col" style="width: 25px;">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" id="checkAll" value="option">
+                                            <div class="d-flex justify-content-end">
+                                                <div class="pagination-wrap hstack gap-2">
+                                                    <a class="page-item pagination-prev disabled" href="#">
+                                                        Previous
+                                                    </a>
+                                                    <ul class="pagination listjs-pagination mb-0"></ul>
+                                                    <a class="page-item pagination-next" href="#">
+                                                        Next
+                                                    </a>
+                                                </div>
                                             </div>
-                                        </th>
-                                        <th class="sort" data-sort="id">Order ID</th>
-                                        <th class="sort" data-sort="company_name">Company</th>
-                                        <th class="sort" data-sort="product_name">Product</th>
-                                        <th class="sort" data-sort="date">Order Date</th>
-                                        <th class="sort" data-sort="total_amount">Amount</th>
-                                        <th class="sort" data-sort="payment">Payment Method</th>
-                                        <th class="sort" data-sort="status">Delivery Status</th>
-                                        <th class="sort" data-sort="city">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="list form-check-all">
-                                    @foreach (var item in Model)
-                                    {
-                                        if (item.DeliveryStatus == "Cancelled")
-                                        {
-                                            <tr>
-                                                <th scope="row">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" name="checkAll" value="option1">
-                                                    </div>
-                                                </th>
-                                                <td class="id"><a href="/OrderMaster/GetOrderDetailsById/?OrderId=@item.OrderId" class="fw-medium link-primary">@item.OrderId</a></td>
-                                                <td class="company_name">@item.CompanyName</td>
-                                                <td class="product_name">@item.ProductName</td>
-                                                <td class="date">@item.OrderDate.ToString("dd/MM/yyyy")</td>
-                                                <td class="total_amount">@item.TotalAmount</td>
-                                                <td class="payment">@item.PaymentMethod</td>
-                                                <td class="status" id="DeliveryStatus">
-                                                    <span class="badge bg-warning-subtle text-warning text-uppercase">@item.DeliveryStatus</span>
-                                                </td>
-                                                <td>
-                                                    <ul class="list-inline hstack gap-2 mb-0">
-
-                                                        <li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">
-                                                            <a href="#showModal" data-bs-toggle="modal" class="btn text-primary d-inline-block edit-item-btn">
-                                                                <i class="ri-pencil-fill fs-16"></i>
-                                                            </a>
-                                                        </li>
-                                                        <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Remove">
-                                                            <a class="btn text-danger d-inline-block remove-item-btn" data-bs-toggle="modal" href="#deleteOrder">
-                                                                <i class="ri-delete-bin-5-fill fs-16"></i>
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </td>
-                                            </tr>
-                                        }
-                                    }
-                                </tbody>
-                            </table>
-                            <div class="noresult" style="display: none">
-                                <div class="text-center">
-                                    <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#25a0e2,secondary:#0ab39c" style="width:75px;height:75px">
-                                    </lord-icon>
-                                    <h5 class="mt-2">Sorry! No Result Found</h5>
-                                    <p class="text-muted">
-                                        We've searched more than 150+ Orders We did
-                                        not find any
-                                        orders for you search.
-                                    </p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="d-flex justify-content-end">
-                            <div class="pagination-wrap hstack gap-2">
-                                <a class="page-item pagination-prev disabled" href="#">
-                                    Previous
-                                </a>
-                                <ul class="pagination listjs-pagination mb-0"></ul>
-                                <a class="page-item pagination-next" href="#">
-                                    Next
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="tab-content text-muted">
-                <div class="tab-pane" id="status-pending" role="tabpanel">
-                    <div class="tab-pane" id="status-all" role="tabpanel">
-                        <div class="table-responsive table-card mb-1">
-                            <table class="table table-nowrap align-middle" id="orderTable">
-                                <thead class="text-muted table-light">
-                                    <tr class="text-uppercase">
-                                        <th scope="col" style="width: 25px;">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" id="checkAll" value="option">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="tab-content text-muted">
+                                    <div class="tab-pane" id="status-pickups" role="tabpanel">
+                                        <div class="tab-pane" id="status-all" role="tabpanel">
+                                            <div class="table-responsive table-card mb-1">
+                                                <table class="table table-nowrap align-middle" id="orderTable">
+                                                    <thead class="text-muted table-light">
+                                                        <tr class="text-uppercase">
+                                                            <th scope="col" style="width: 25px;">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input" type="checkbox" id="checkAll" value="option">
+                                                                </div>
+                                                            </th>
+                                                            <th class="sort" data-sort="id">Order ID</th>
+                                                            <th class="sort" data-sort="company_name">Company</th>
+                                                            <th class="sort" data-sort="product_name">Product</th>
+                                                            <th class="sort" data-sort="date">Order Date</th>
+                                                            <th class="sort" data-sort="total_amount">Amount</th>
+                                                            <th class="sort" data-sort="payment">Payment Method</th>
+                                                            <th class="sort" data-sort="status">Delivery Status</th>
+                                                            <th class="sort" data-sort="city">Action</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody class="list form-check-all">
+                                                        @foreach (var item in Model)
+                                                        {
+                                                            if (item.DeliveryStatus == "Pickups")
+                                                            {
+                                                                <tr>
+                                                                    <th scope="row">
+                                                                        <div class="form-check">
+                                                                            <input class="form-check-input" type="checkbox" name="checkAll" value="option1">
+                                                                        </div>
+                                                                    </th>
+                                                                    <td class="id"><a href="/OrderMaster/GetOrderDetailsById/?OrderId=@item.OrderId" class="fw-medium link-primary">@item.OrderId</a></td>
+                                                                    <td class="company_name">@item.CompanyName</td>
+                                                                    <td class="product_name">@item.ProductName</td>
+                                                                    <td class="date">@item.OrderDate.ToString("dd/MM/yyyy")</td>
+                                                                    <td class="total_amount">@item.TotalAmount</td>
+                                                                    <td class="payment">@item.PaymentMethod</td>
+                                                                    <td class="status" id="DeliveryStatus">
+                                                                        <span class="badge bg-warning-subtle text-warning text-uppercase">@item.DeliveryStatus</span>
+                                                                    </td>
+                                                                    <td>
+                                                                        <ul class="list-inline hstack gap-2 mb-0">
+
+                                                                            <li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">
+                                                                                <a href="#showModal" data-bs-toggle="modal" class="btn text-primary d-inline-block edit-item-btn">
+                                                                                    <i class="ri-pencil-fill fs-16"></i>
+                                                                                </a>
+                                                                            </li>
+                                                                            <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Remove">
+                                                                                <a class="btn text-danger d-inline-block remove-item-btn" data-bs-toggle="modal" href="#deleteOrder">
+                                                                                    <i class="ri-delete-bin-5-fill fs-16"></i>
+                                                                                </a>
+                                                                            </li>
+                                                                        </ul>
+                                                                    </td>
+                                                                </tr>
+                                                            }
+                                                        }
+                                                    </tbody>
+                                                </table>
+                                                <div class="noresult" style="display: none">
+                                                    <div class="text-center">
+                                                        <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#25a0e2,secondary:#0ab39c" style="width:75px;height:75px">
+                                                        </lord-icon>
+                                                        <h5 class="mt-2">Sorry! No Result Found</h5>
+                                                        <p class="text-muted">
+                                                            We've searched more than 150+ Orders We did
+                                                            not find any
+                                                            orders for you search.
+                                                        </p>
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </th>
-                                        <th class="sort" data-sort="id">Order ID</th>
-                                        <th class="sort" data-sort="company_name">Company</th>
-                                        <th class="sort" data-sort="product_name">Product</th>
-                                        <th class="sort" data-sort="date">Order Date</th>
-                                        <th class="sort" data-sort="total_amount">Amount</th>
-                                        <th class="sort" data-sort="payment">Payment Method</th>
-                                        <th class="sort" data-sort="status">Delivery Status</th>
-                                        <th class="sort" data-sort="city">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="list form-check-all">
-                                    @foreach (var item in Model)
-                                    {
-                                        if (item.DeliveryStatus == "Pending")
-                                        {
-                                            <tr>
-                                                <th scope="row">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" name="checkAll" value="option1">
-                                                    </div>
-                                                </th>
-                                                <td class="id"><a href="/OrderMaster/GetOrderDetailsById/?OrderId=@item.OrderId" class="fw-medium link-primary">@item.OrderId</a></td>
-                                                <td class="company_name">@item.CompanyName</td>
-                                                <td class="product_name">@item.ProductName</td>
-                                                <td class="date">@item.OrderDate.ToString("dd/MM/yyyy")</td>
-                                                <td class="total_amount">@item.TotalAmount</td>
-                                                <td class="payment">@item.PaymentMethodName</td>
-                                                <td class="status" id="DeliveryStatus">
-                                                    <span class="badge bg-warning-subtle text-warning text-uppercase">@item.DeliveryStatus</span>
-                                                </td>
-                                                <td>
-                                                    <ul class="list-inline hstack gap-2 mb-0">
-
-                                                        <li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">
-                                                            <a href="#showModal" data-bs-toggle="modal" class="btn text-primary d-inline-block edit-item-btn">
-                                                                <i class="ri-pencil-fill fs-16"></i>
-                                                            </a>
-                                                        </li>
-                                                        <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Remove">
-                                                            <a class="btn text-danger d-inline-block remove-item-btn" data-bs-toggle="modal" href="#deleteOrder">
-                                                                <i class="ri-delete-bin-5-fill fs-16"></i>
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </td>
-                                            </tr>
-                                        }
-                                    }
-                                </tbody>
-                            </table>
-                            <div class="noresult" style="display: none">
-                                <div class="text-center">
-                                    <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#25a0e2,secondary:#0ab39c" style="width:75px;height:75px">
-                                    </lord-icon>
-                                    <h5 class="mt-2">Sorry! No Result Found</h5>
-                                    <p class="text-muted">
-                                        We've searched more than 150+ Orders We did
-                                        not find any
-                                        orders for you search.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="d-flex justify-content-end">
-                            <div class="pagination-wrap hstack gap-2">
-                                <a class="page-item pagination-prev disabled" href="#">
-                                    Previous
-                                </a>
-                                <ul class="pagination listjs-pagination mb-0"></ul>
-                                <a class="page-item pagination-next" href="#">
-                                    Next
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="tab-content text-muted">
-                <div class="tab-pane" id="status-inprogress" role="tabpanel">
-                    <div class="tab-pane" id="status-all" role="tabpanel">
-                        <div class="table-responsive table-card mb-1">
-                            <table class="table table-nowrap align-middle" id="orderTable">
-                                <thead class="text-muted table-light">
-                                    <tr class="text-uppercase">
-                                        <th scope="col" style="width: 25px;">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" id="checkAll" value="option">
+                                            <div class="d-flex justify-content-end">
+                                                <div class="pagination-wrap hstack gap-2">
+                                                    <a class="page-item pagination-prev disabled" href="#">
+                                                        Previous
+                                                    </a>
+                                                    <ul class="pagination listjs-pagination mb-0"></ul>
+                                                    <a class="page-item pagination-next" href="#">
+                                                        Next
+                                                    </a>
+                                                </div>
                                             </div>
-                                        </th>
-                                        <th class="sort" data-sort="id">Order ID</th>
-                                        <th class="sort" data-sort="company_name">Company</th>
-                                        <th class="sort" data-sort="product_name">Product</th>
-                                        <th class="sort" data-sort="date">Order Date</th>
-                                        <th class="sort" data-sort="total_amount">Amount</th>
-                                        <th class="sort" data-sort="payment">Payment Method</th>
-                                        <th class="sort" data-sort="status">Delivery Status</th>
-                                        <th class="sort" data-sort="city">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="list form-check-all">
-                                    @foreach (var item in Model)
-                                    {
-                                        if (item.DeliveryStatus == "Inprogress")
-                                        {
-                                            <tr>
-                                                <th scope="row">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" name="checkAll" value="option1">
-                                                    </div>
-                                                </th>
-                                                <td class="id"><a href="/OrderMaster/GetOrderDetailsById/?OrderId=@item.OrderId" class="fw-medium link-primary">@item.OrderId</a></td>
-                                                <td class="company_name">@item.CompanyName</td>
-                                                <td class="product_name">@item.ProductName</td>
-                                                <td class="date">@item.OrderDate.ToString("dd/MM/yyyy")</td>
-                                                <td class="total_amount">@item.TotalAmount</td>
-                                                <td class="payment">@item.PaymentMethod</td>
-                                                <td class="status" id="DeliveryStatus">
-                                                    <span class="badge bg-warning-subtle text-warning text-uppercase">@item.DeliveryStatus</span>
-                                                </td>
-                                                <td>
-                                                    <ul class="list-inline hstack gap-2 mb-0">
-
-                                                        <li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">
-                                                            <a href="#showModal" data-bs-toggle="modal" class="btn text-primary d-inline-block edit-item-btn">
-                                                                <i class="ri-pencil-fill fs-16"></i>
-                                                            </a>
-                                                        </li>
-                                                        <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Remove">
-                                                            <a class="btn text-danger d-inline-block remove-item-btn" data-bs-toggle="modal" href="#deleteOrder">
-                                                                <i class="ri-delete-bin-5-fill fs-16"></i>
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </td>
-                                            </tr>
-                                        }
-                                    }
-                                </tbody>
-                            </table>
-                            <div class="noresult" style="display: none">
-                                <div class="text-center">
-                                    <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#25a0e2,secondary:#0ab39c" style="width:75px;height:75px">
-                                    </lord-icon>
-                                    <h5 class="mt-2">Sorry! No Result Found</h5>
-                                    <p class="text-muted">
-                                        We've searched more than 150+ Orders We did
-                                        not find any
-                                        orders for you search.
-                                    </p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="d-flex justify-content-end">
-                            <div class="pagination-wrap hstack gap-2">
-                                <a class="page-item pagination-prev disabled" href="#">
-                                    Previous
-                                </a>
-                                <ul class="pagination listjs-pagination mb-0"></ul>
-                                <a class="page-item pagination-next" href="#">
-                                    Next
-                                </a>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="tab-content text-muted">
+                                    <div class="tab-pane" id="status-returns" role="tabpanel">
+                                        <div class="tab-pane" id="status-all" role="tabpanel">
+                                            <div class="table-responsive table-card mb-1">
+                                                <table class="table table-nowrap align-middle" id="orderTable">
+                                                    <thead class="text-muted table-light">
+                                                        <tr class="text-uppercase">
+                                                            <th scope="col" style="width: 25px;">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input" type="checkbox" id="checkAll" value="option">
+                                                                </div>
+                                                            </th>
+                                                            <th class="sort" data-sort="id">Order ID</th>
+                                                            <th class="sort" data-sort="company_name">Company</th>
+                                                            <th class="sort" data-sort="product_name">Product</th>
+                                                            <th class="sort" data-sort="date">Order Date</th>
+                                                            <th class="sort" data-sort="total_amount">Amount</th>
+                                                            <th class="sort" data-sort="payment">Payment Method</th>
+                                                            <th class="sort" data-sort="status">Delivery Status</th>
+                                                            <th class="sort" data-sort="city">Action</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody class="list form-check-all">
+                                                        @foreach (var item in Model)
+                                                        {
+                                                            if (item.DeliveryStatus == "Returns")
+                                                            {
+                                                                <tr>
+                                                                    <th scope="row">
+                                                                        <div class="form-check">
+                                                                            <input class="form-check-input" type="checkbox" name="checkAll" value="option1">
+                                                                        </div>
+                                                                    </th>
+                                                                    <td class="id"><a href="/OrderMaster/GetOrderDetailsById/?OrderId=@item.OrderId" class="fw-medium link-primary">@item.OrderId</a></td>
+                                                                    <td class="company_name">@item.CompanyName</td>
+                                                                    <td class="product_name">@item.ProductName</td>
+                                                                    <td class="date">@item.OrderDate.ToString("dd/MM/yyyy")</td>
+                                                                    <td class="total_amount">@item.TotalAmount</td>
+                                                                    <td class="payment">@item.PaymentMethod</td>
+                                                                    <td class="status" id="DeliveryStatus">
+                                                                        <span class="badge bg-warning-subtle text-warning text-uppercase">@item.DeliveryStatus</span>
+                                                                    </td>
+                                                                    <td>
+                                                                        <ul class="list-inline hstack gap-2 mb-0">
+
+                                                                            <li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">
+                                                                                <a href="#showModal" data-bs-toggle="modal" class="btn text-primary d-inline-block edit-item-btn">
+                                                                                    <i class="ri-pencil-fill fs-16"></i>
+                                                                                </a>
+                                                                            </li>
+                                                                            <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Remove">
+                                                                                <a class="btn text-danger d-inline-block remove-item-btn" data-bs-toggle="modal" href="#deleteOrder">
+                                                                                    <i class="ri-delete-bin-5-fill fs-16"></i>
+                                                                                </a>
+                                                                            </li>
+                                                                        </ul>
+                                                                    </td>
+                                                                </tr>
+                                                            }
+                                                        }
+                                                    </tbody>
+                                                </table>
+                                                <div class="noresult" style="display: none">
+                                                    <div class="text-center">
+                                                        <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#25a0e2,secondary:#0ab39c" style="width:75px;height:75px">
+                                                        </lord-icon>
+                                                        <h5 class="mt-2">Sorry! No Result Found</h5>
+                                                        <p class="text-muted">
+                                                            We've searched more than 150+ Orders We did
+                                                            not find any
+                                                            orders for you search.
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex justify-content-end">
+                                                <div class="pagination-wrap hstack gap-2">
+                                                    <a class="page-item pagination-prev disabled" href="#">
+                                                        Previous
+                                                    </a>
+                                                    <ul class="pagination listjs-pagination mb-0"></ul>
+                                                    <a class="page-item pagination-next" href="#">
+                                                        Next
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="tab-content text-muted">
+                                    <div class="tab-pane" id="status-cancelled" role="tabpanel">
+                                        <div class="tab-pane" id="status-all" role="tabpanel">
+                                            <div class="table-responsive table-card mb-1">
+                                                <table class="table table-nowrap align-middle" id="orderTable">
+                                                    <thead class="text-muted table-light">
+                                                        <tr class="text-uppercase">
+                                                            <th scope="col" style="width: 25px;">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input" type="checkbox" id="checkAll" value="option">
+                                                                </div>
+                                                            </th>
+                                                            <th class="sort" data-sort="id">Order ID</th>
+                                                            <th class="sort" data-sort="company_name">Company</th>
+                                                            <th class="sort" data-sort="product_name">Product</th>
+                                                            <th class="sort" data-sort="date">Order Date</th>
+                                                            <th class="sort" data-sort="total_amount">Amount</th>
+                                                            <th class="sort" data-sort="payment">Payment Method</th>
+                                                            <th class="sort" data-sort="status">Delivery Status</th>
+                                                            <th class="sort" data-sort="city">Action</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody class="list form-check-all">
+                                                        @foreach (var item in Model)
+                                                        {
+                                                            if (item.DeliveryStatus == "Cancelled")
+                                                            {
+                                                                <tr>
+                                                                    <th scope="row">
+                                                                        <div class="form-check">
+                                                                            <input class="form-check-input" type="checkbox" name="checkAll" value="option1">
+                                                                        </div>
+                                                                    </th>
+                                                                    <td class="id"><a href="/OrderMaster/GetOrderDetailsById/?OrderId=@item.OrderId" class="fw-medium link-primary">@item.OrderId</a></td>
+                                                                    <td class="company_name">@item.CompanyName</td>
+                                                                    <td class="product_name">@item.ProductName</td>
+                                                                    <td class="date">@item.OrderDate.ToString("dd/MM/yyyy")</td>
+                                                                    <td class="total_amount">@item.TotalAmount</td>
+                                                                    <td class="payment">@item.PaymentMethod</td>
+                                                                    <td class="status" id="DeliveryStatus">
+                                                                        <span class="badge bg-warning-subtle text-warning text-uppercase">@item.DeliveryStatus</span>
+                                                                    </td>
+                                                                    <td>
+                                                                        <ul class="list-inline hstack gap-2 mb-0">
+
+                                                                            <li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">
+                                                                                <a href="#showModal" data-bs-toggle="modal" class="btn text-primary d-inline-block edit-item-btn">
+                                                                                    <i class="ri-pencil-fill fs-16"></i>
+                                                                                </a>
+                                                                            </li>
+                                                                            <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Remove">
+                                                                                <a class="btn text-danger d-inline-block remove-item-btn" data-bs-toggle="modal" href="#deleteOrder">
+                                                                                    <i class="ri-delete-bin-5-fill fs-16"></i>
+                                                                                </a>
+                                                                            </li>
+                                                                        </ul>
+                                                                    </td>
+                                                                </tr>
+                                                            }
+                                                        }
+                                                    </tbody>
+                                                </table>
+                                                <div class="noresult" style="display: none">
+                                                    <div class="text-center">
+                                                        <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#25a0e2,secondary:#0ab39c" style="width:75px;height:75px">
+                                                        </lord-icon>
+                                                        <h5 class="mt-2">Sorry! No Result Found</h5>
+                                                        <p class="text-muted">
+                                                            We've searched more than 150+ Orders We did
+                                                            not find any
+                                                            orders for you search.
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex justify-content-end">
+                                                <div class="pagination-wrap hstack gap-2">
+                                                    <a class="page-item pagination-prev disabled" href="#">
+                                                        Previous
+                                                    </a>
+                                                    <ul class="pagination listjs-pagination mb-0"></ul>
+                                                    <a class="page-item pagination-next" href="#">
+                                                        Next
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="tab-content text-muted">
+                                    <div class="tab-pane" id="status-pending" role="tabpanel">
+                                        <div class="tab-pane" id="status-all" role="tabpanel">
+                                            <div class="table-responsive table-card mb-1">
+                                                <table class="table table-nowrap align-middle" id="orderTable">
+                                                    <thead class="text-muted table-light">
+                                                        <tr class="text-uppercase">
+                                                            <th scope="col" style="width: 25px;">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input" type="checkbox" id="checkAll" value="option">
+                                                                </div>
+                                                            </th>
+                                                            <th class="sort" data-sort="id">Order ID</th>
+                                                            <th class="sort" data-sort="company_name">Company</th>
+                                                            <th class="sort" data-sort="product_name">Product</th>
+                                                            <th class="sort" data-sort="date">Order Date</th>
+                                                            <th class="sort" data-sort="total_amount">Amount</th>
+                                                            <th class="sort" data-sort="payment">Payment Method</th>
+                                                            <th class="sort" data-sort="status">Delivery Status</th>
+                                                            <th class="sort" data-sort="city">Action</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody class="list form-check-all">
+                                                        @foreach (var item in Model)
+                                                        {
+                                                            if (item.DeliveryStatus == "Pending")
+                                                            {
+                                                                <tr>
+                                                                    <th scope="row">
+                                                                        <div class="form-check">
+                                                                            <input class="form-check-input" type="checkbox" name="checkAll" value="option1">
+                                                                        </div>
+                                                                    </th>
+                                                                    <td class="id"><a href="/OrderMaster/GetOrderDetailsById/?OrderId=@item.OrderId" class="fw-medium link-primary">@item.OrderId</a></td>
+                                                                    <td class="company_name">@item.CompanyName</td>
+                                                                    <td class="product_name">@item.ProductName</td>
+                                                                    <td class="date">@item.OrderDate.ToString("dd/MM/yyyy")</td>
+                                                                    <td class="total_amount">@item.TotalAmount</td>
+                                                                    <td class="payment">@item.PaymentMethodName</td>
+                                                                    <td class="status" id="DeliveryStatus">
+                                                                        <span class="badge bg-warning-subtle text-warning text-uppercase">@item.DeliveryStatus</span>
+                                                                    </td>
+                                                                    <td>
+                                                                        <ul class="list-inline hstack gap-2 mb-0">
+
+                                                                            <li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">
+                                                                                <a href="#showModal" data-bs-toggle="modal" class="btn text-primary d-inline-block edit-item-btn">
+                                                                                    <i class="ri-pencil-fill fs-16"></i>
+                                                                                </a>
+                                                                            </li>
+                                                                            <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Remove">
+                                                                                <a class="btn text-danger d-inline-block remove-item-btn" data-bs-toggle="modal" href="#deleteOrder">
+                                                                                    <i class="ri-delete-bin-5-fill fs-16"></i>
+                                                                                </a>
+                                                                            </li>
+                                                                        </ul>
+                                                                    </td>
+                                                                </tr>
+                                                            }
+                                                        }
+                                                    </tbody>
+                                                </table>
+                                                <div class="noresult" style="display: none">
+                                                    <div class="text-center">
+                                                        <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#25a0e2,secondary:#0ab39c" style="width:75px;height:75px">
+                                                        </lord-icon>
+                                                        <h5 class="mt-2">Sorry! No Result Found</h5>
+                                                        <p class="text-muted">
+                                                            We've searched more than 150+ Orders We did
+                                                            not find any
+                                                            orders for you search.
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex justify-content-end">
+                                                <div class="pagination-wrap hstack gap-2">
+                                                    <a class="page-item pagination-prev disabled" href="#">
+                                                        Previous
+                                                    </a>
+                                                    <ul class="pagination listjs-pagination mb-0"></ul>
+                                                    <a class="page-item pagination-next" href="#">
+                                                        Next
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="tab-content text-muted">
+                                    <div class="tab-pane" id="status-inprogress" role="tabpanel">
+                                        <div class="tab-pane" id="status-all" role="tabpanel">
+                                            <div class="table-responsive table-card mb-1">
+                                                <table class="table table-nowrap align-middle" id="orderTable">
+                                                    <thead class="text-muted table-light">
+                                                        <tr class="text-uppercase">
+                                                            <th scope="col" style="width: 25px;">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input" type="checkbox" id="checkAll" value="option">
+                                                                </div>
+                                                            </th>
+                                                            <th class="sort" data-sort="id">Order ID</th>
+                                                            <th class="sort" data-sort="company_name">Company</th>
+                                                            <th class="sort" data-sort="product_name">Product</th>
+                                                            <th class="sort" data-sort="date">Order Date</th>
+                                                            <th class="sort" data-sort="total_amount">Amount</th>
+                                                            <th class="sort" data-sort="payment">Payment Method</th>
+                                                            <th class="sort" data-sort="status">Delivery Status</th>
+                                                            <th class="sort" data-sort="city">Action</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody class="list form-check-all">
+                                                        @foreach (var item in Model)
+                                                        {
+                                                            if (item.DeliveryStatus == "Inprogress")
+                                                            {
+                                                                <tr>
+                                                                    <th scope="row">
+                                                                        <div class="form-check">
+                                                                            <input class="form-check-input" type="checkbox" name="checkAll" value="option1">
+                                                                        </div>
+                                                                    </th>
+                                                                    <td class="id"><a href="/OrderMaster/GetOrderDetailsById/?OrderId=@item.OrderId" class="fw-medium link-primary">@item.OrderId</a></td>
+                                                                    <td class="company_name">@item.CompanyName</td>
+                                                                    <td class="product_name">@item.ProductName</td>
+                                                                    <td class="date">@item.OrderDate.ToString("dd/MM/yyyy")</td>
+                                                                    <td class="total_amount">@item.TotalAmount</td>
+                                                                    <td class="payment">@item.PaymentMethod</td>
+                                                                    <td class="status" id="DeliveryStatus">
+                                                                        <span class="badge bg-warning-subtle text-warning text-uppercase">@item.DeliveryStatus</span>
+                                                                    </td>
+                                                                    <td>
+                                                                        <ul class="list-inline hstack gap-2 mb-0">
+
+                                                                            <li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">
+                                                                                <a href="#showModal" data-bs-toggle="modal" class="btn text-primary d-inline-block edit-item-btn">
+                                                                                    <i class="ri-pencil-fill fs-16"></i>
+                                                                                </a>
+                                                                            </li>
+                                                                            <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Remove">
+                                                                                <a class="btn text-danger d-inline-block remove-item-btn" data-bs-toggle="modal" href="#deleteOrder">
+                                                                                    <i class="ri-delete-bin-5-fill fs-16"></i>
+                                                                                </a>
+                                                                            </li>
+                                                                        </ul>
+                                                                    </td>
+                                                                </tr>
+                                                            }
+                                                        }
+                                                    </tbody>
+                                                </table>
+                                                <div class="noresult" style="display: none">
+                                                    <div class="text-center">
+                                                        <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#25a0e2,secondary:#0ab39c" style="width:75px;height:75px">
+                                                        </lord-icon>
+                                                        <h5 class="mt-2">Sorry! No Result Found</h5>
+                                                        <p class="text-muted">
+                                                            We've searched more than 150+ Orders We did
+                                                            not find any
+                                                            orders for you search.
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex justify-content-end">
+                                                <div class="pagination-wrap hstack gap-2">
+                                                    <a class="page-item pagination-prev disabled" href="#">
+                                                        Previous
+                                                    </a>
+                                                    <ul class="pagination listjs-pagination mb-0"></ul>
+                                                    <a class="page-item pagination-next" href="#">
+                                                        Next
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -877,146 +834,12 @@
     </div>
 
     <!--Partail View-->
-    <div id="dvdeliveredstatus"></div>
-    <!---------Create Order Modal-------->
-    @* <div class="modal fade" id="createOrderModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-    <div class="modal-header bg-light p-3">
-    <h5 class="modal-title" id="exampleModalLabel">&nbsp;</h5>
-    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"></button>
-    </div>
-    <form class="tablelist-form" autocomplete="off" id="createOrderForm">
-    <div class="modal-body">
-    <input type="hidden" id="id-field" />
-    <div class="mb-3">
-    <label for="companyname" class="form-label">Order Type</label>
-    <select class="form-control" data-trigger name="OrderType" id="OrderType">
-    <option selected disabled value="">--Order Type--</option>
-    <option value="Sale">Sale</option>
-    <option value="Purchase">Purchase</option>
-    </select>
+    <div id="dvdeliveredstatus">
     </div>
 
-    <div class="mb-3">
-    <label for="companyname" class="form-label">Vendor Name</label>
-    <select class="form-control" id="txtvendorname" name="txtvendorname">
-    <option selected disabled value="">----Select Vendor Name---</option>
-    </select>
-    <input type="hidden" class="form-control" id="txtvendornameid">
-    </div>
-
-    <div class="mb-3" id="modal-id">
-    <label for="orderId" class="form-label">Order ID</label>
-    <input type="text" id="orderId" class="form-control" placeholder="ID" name="orderId" value="@ViewBag.OrderId" readonly />
-    </div>
-
-    <div class="mb-3">
-    <label for="productname" class="form-label">Product</label>
-    <select id="productname" class="form-control bg-transparent">
-    <option>--Select Product--</option>
-    </select>
-    </div>
-
-    <div class="row gy-4 mb-3">
-    <div class="col-md-6">
-    <div>
-    <label for="amount" class="form-label">Amount</label>
-    <input type="text" id="amount" class="form-control" placeholder="Enter amount" name="amount" />
-    </div>
-    </div>
-
-    <div class="col-md-6">
-    <div>
-    <label for="productquantity" class="form-label">Product Quantity</label>
-    <input type="text" id="productquantity" class="form-control" placeholder="Enter quantity" name="productquantity" />
-    </div>
-    </div>
-    </div>
-
-    <div class="row gy-4 mb-3">
-    <div class="col-md-6">
-    <div>
-    <label for="totalamount" class="form-label">Total Amount</label>
-    <input type="text" id="totalamount" class="form-control" placeholder="Enter total Amount" name="totalamount" />
-    </div>
-    </div>
-    <div class="col-md-6">
-    <div>
-    <label for="payment" class="form-label">Payment Method</label>
-    <select class="form-control" data-trigger name="payment" id="payment">
-    <option selected disabled value="">Payment Method</option>
-    <option value="Mastercard">Mastercard</option>
-    <option value="Visa">Visa</option>
-    <option value="COD">COD</option>
-    <option value="Paypal">Paypal</option>
-    </select>
-    </div>
-    </div>
-    </div>
-
-    <div class="row gy-4 mb-3">
-    <div class="col-md-6">
-    <div>
-    <label for="orderdate" class="form-label">Order Date</label>
-    <input type="date" id="orderdate" class="form-control" name="orderdate" data-provider="flatpickr" data-date-format="d M, Y" data-enable-time placeholder="Select date" />
-    </div>
-    </div>
-    <div class="col-md-6">
-    <div>
-    <label for="deliverydate" class="form-label">Delivery Date</label>
-    <input type="date" id="deliverydate" class="form-control" name="deliverydate" data-provider="flatpickr" data-date-format="d M, Y" data-enable-time placeholder="Select date" />
-    </div>
-    </div>
-    </div>
-
-    <div class="row gy-4 mb-3">
-    <div class="col-md-6">
-    <div>
-    <label for="deliveredstatus" class="form-label">Delivery Status</label>
-    <select class="form-control" data-trigger name="deliveredstatus" id="deliveredstatus">
-    <option selected disabled value="">Delivery Status</option>
-    <option value="Pending">Pending</option>
-    <option value="Inprogress">Inprogress</option>
-    <option value="Cancelled">Cancelled</option>
-    <option value="Pickups">Pickups</option>
-    <option value="Delivered">Delivered</option>
-    <option value="Returns">Returns</option>
-    </select>
-    </div>
-    </div>
-    <div class="col-md-6">
-    <div>
-    <label for="ddlusername" class="form-label" hidden>Created By</label>
-    <input type="text" class="form-control" id="ddlusername" value="@_userSession.UserId" hidden>
-    </div>
-    </div>
-    </div>
-    </div>
-    <div class="modal-footer">
-    <div class="hstack gap-2 justify-content-end">
-    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
-    <button type="button" class="btn btn-success" onclick="SaveCreateOrder();" id="createorder" value="Validate">Add Order</button>
-    <!-- <button type="button" class="btn btn-success" id="edit-btn">Update</button> -->
-    </div>
-    </div>
-    </form>
-    </div>
-    </div>
-    </div> *@
-    <!------End of Create Order Modal------->
-</div>
-@*@Html.PagedListPager((IPagedList)Model,page => Url.Action("ProjectList",new{page = page,
-searchfor = @Context.Request.Query["searchfor"],searchby =@Context.Request.Query["searchby"]}),
-new X.PagedList.Web.Common.PagedListRenderOptions {
-    LiElementClasses = new string[]{"page-item"},
-    PageClasses = new string[] {"page-link"}
-})*@
-
-
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
-<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
-<script src="~/moduls/purchaseorderdetailsscript.js"></script>
-<script src="~/moduls/productmasterscript.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+    <script src="~/moduls/purchaseorderdetailsscript.js"></script>
+    <script src="~/moduls/productmasterscript.js"></script>
