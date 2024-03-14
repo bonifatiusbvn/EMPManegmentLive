@@ -472,13 +472,10 @@ $(document).ready(function () {
     if (UserId) {
         GetUserUnApprovedExpenseList(UserId);
         GetUserApprovedExpenseList(UserId);
-        $("#getUserId").val(UserId);
     }
 
     $('.nav-link').click(function () {
         var targetTab = $(this).attr('href');
-        $('.tab-pane').removeClass('show active');
-        $(targetTab).addClass('show active');
 
         if (targetTab === '#allExpense') {
             GetAllUserExpenseList(userId);
@@ -637,7 +634,8 @@ function GetExpenseTotalAmount() {
     });
 }
 
-function ApproveExpense(userId) {
+function ApproveExpense() {
+    var userId = $("#txtgetUserId").val();
     Swal.fire({
         title: "Are you sure want to Approve This?",
         text: "You won't be able to revert this!",
@@ -673,7 +671,7 @@ function ApproveExpense(userId) {
                                 confirmButtonColor: '#3085d6',
                                 confirmButtonText: 'OK',
                             }).then(function () {debugger
-                                window.location = '/ExpenseMaster/ApprovedExpense?UserId=' + GetUserId;
+                                window.location = '/ExpenseMaster/ApprovedExpense?UserId=' + userId;
                             });
                         }
                     },

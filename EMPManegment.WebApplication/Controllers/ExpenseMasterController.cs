@@ -14,6 +14,8 @@ using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 using EMPManegment.EntityModels.ViewModels.OrderModels;
 using X.PagedList;
+using DocumentFormat.OpenXml.Spreadsheet;
+using Microsoft.AspNetCore.Http;
 using Aspose.Pdf.Operators;
 
 namespace EMPManegment.Web.Controllers
@@ -330,9 +332,10 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
-        public IActionResult ApprovedExpense()
+        public IActionResult ApprovedExpense(Guid UserId)
         {
-          
+            HttpContext.Session.SetString("UserId", UserId.ToString());
+            ViewBag.UserId = HttpContext.Session.GetString("UserId");
             return View();
         }
 
@@ -342,6 +345,8 @@ namespace EMPManegment.Web.Controllers
         {
             try
             {
+
+
                 var draw = Request.Form["draw"].FirstOrDefault();
                 var start = Request.Form["start"].FirstOrDefault();
                 var length = Request.Form["length"].FirstOrDefault();
@@ -390,6 +395,8 @@ namespace EMPManegment.Web.Controllers
         {
             try
             {
+
+
                 var draw = Request.Form["draw"].FirstOrDefault();
                 var start = Request.Form["start"].FirstOrDefault();
                 var length = Request.Form["length"].FirstOrDefault();
@@ -438,6 +445,8 @@ namespace EMPManegment.Web.Controllers
         {
             try
             {
+
+
                 var draw = Request.Form["draw"].FirstOrDefault();
                 var start = Request.Form["start"].FirstOrDefault();
                 var length = Request.Form["length"].FirstOrDefault();
@@ -480,9 +489,6 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
-
-
-
 
         [HttpPost]
         public async Task<IActionResult> ApproveExpense()
@@ -545,6 +551,12 @@ namespace EMPManegment.Web.Controllers
             {
                 throw ex;
             }
+        }
+
+
+        public async Task<IActionResult> GetPayExpense()
+        {
+            return View();
         }
 
         [HttpGet]
