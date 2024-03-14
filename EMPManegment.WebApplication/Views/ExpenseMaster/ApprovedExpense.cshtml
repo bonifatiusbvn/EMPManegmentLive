@@ -1,17 +1,17 @@
 ﻿@{
     ViewData["Title"] = "ApprovedExpense";
     Layout = "~/Views/Shared/_UserHomeLayout.cshtml";
-} 
+}
 
 <div class="row">
     <div class="col-12">
         <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-            <h4 class="mb-sm-0">Leads</h4>
+            <h4 class="mb-sm-0">Expense</h4>
 
             <div class="page-title-right">
                 <ol class="breadcrumb m-0">
-                    <li class="breadcrumb-item"><a href="javascript: void(0);">CRM</a></li>
-                    <li class="breadcrumb-item active">Leads</li>
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Expense</a></li>
+                    <li class="breadcrumb-item active">Approve Expense</li>
                 </ol>
             </div>
 
@@ -26,55 +26,18 @@
             <div class="card-header border-0">
                 <div class="row align-items-center gy-3">
                     <div class="col-sm">
-                        <h5 class="card-title mb-0">Order History</h5>
+                        <h5 class="card-title mb-0">Expense History</h5>
                     </div>
                     <div class="col-sm-auto">
                         <div class="d-flex gap-1 flex-wrap">
                             <button type="button" class="btn btn-primary" id="remove-actions" onclick="ApproveExpense()"><i class="ri-filter-3-line align-bottom me-1"></i>Approve All</button>
                             <a class="btn btn-soft-primary" onclick="DisplayAddExpenseModel()"><i class="ri-add-line align-bottom me-1"></i> Add Expense</a>
+                            <a class="btn btn-soft-primary" asp-action="GetPayExpense" asp-controller="ExpenseMaster"><i class="ri-add-line align-bottom me-1"></i> Get Pay</a>
                         </div>
                     </div>
                 </div>
             </div>
             <!--end Edit Expense modal-->
-            <div class="card-body bg-light-subtle border border-dashed border-start-0 border-end-0">
-                <form>
-                    <div class="row g-3">
-                        <div class="col-xxl-5 col-sm-12">
-                            <div class="search-box">
-                                <input type="text" class="form-control search bg-light border-light" placeholder="Search for customer, email, country, status or something...">
-                                <i class="ri-search-line search-icon"></i>
-                            </div>
-                        </div>
-                        <!--end col-->
-                        <div class="col-xxl-3 col-sm-4">
-                            <input type="text" class="form-control bg-light border-light" id="datepicker-range" placeholder="Select date">
-                        </div>
-                        <!--end col-->
-                        <div class="col-xxl-3 col-sm-4">
-                            <div class="input-light">
-                                <select class="form-control" data-choices data-choices-search-false name="choices-single-default" id="idStatus">
-                                    <option value="">Status</option>
-                                    <option value="all" selected>All</option>
-                                    <option value="Unpaid">Unpaid</option>
-                                    <option value="Paid">Paid</option>
-                                    <option value="Cancel">Cancel</option>
-                                    <option value="Refund">Refund</option>
-                                </select>
-                            </div>
-                        </div>
-                        <!--end col-->
-
-                        <div class="col-xxl-1 col-sm-4">
-                            <button type="button" class="btn btn-primary w-100" onclick="SearchData();">
-                                <i class="ri-equalizer-fill me-1 align-bottom"></i> Filters
-                            </button>
-                        </div>
-                        <!--end col-->
-                    </div>
-                    <!--end row-->
-                </form>
-            </div>
             <!-- Modal -->
             <div class="modal fade zoomIn" id="AddExpenseModel" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class=" modal-dialog modal-dialog-centered modal-lg">
@@ -140,7 +103,7 @@
                 </div>
             </div>
             <!--end modal-->
-            <input type="hidden" id="txtgetUserId" value="@ViewBag.UserId"/>
+            <input type="hidden" id="txtgetUserId" value="@ViewBag.UserId" />
             <div class="card-body pt-0">
                 <div>
                     <ul class="nav nav-tabs nav-tabs-custom nav-primary mb-3" role="tablist">
