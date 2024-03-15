@@ -190,29 +190,61 @@ namespace EMPManegment.Repository.ExponseMasterRepository
             UserResponceModel response = new UserResponceModel();
             try
             {
-                var expense = new TblExpenseMaster()
+                if (ExpenseDetails.Account == "Dabit")
                 {
-                    Id = Guid.NewGuid(),
-                    UserId = ExpenseDetails.UserId,
-                    ExpenseType = ExpenseDetails.ExpenseType,
-                    BillNumber = ExpenseDetails.BillNumber,
-                    Description = ExpenseDetails.Description,
-                    Date = ExpenseDetails.Date,
-                    TotalAmount = ExpenseDetails.TotalAmount,
-                    Image = ExpenseDetails.Image,
-                    Account = ExpenseDetails.Account,
-                    IsDeleted = true,
-                    CreatedBy = ExpenseDetails.CreatedBy,
-                    IsPaid = false,
-                    IsApproved = false,
-                    CreatedOn = DateTime.Today,
-                    PaymentType = 1,
-                  
+                    var expense = new TblExpenseMaster()
+                    {
+                        Id = Guid.NewGuid(),
+                        UserId = ExpenseDetails.UserId,
+                        ExpenseType = ExpenseDetails.ExpenseType,
+                        BillNumber = ExpenseDetails.BillNumber,
+                        Description = ExpenseDetails.Description,
+                        Date = ExpenseDetails.Date,
+                        TotalAmount = ExpenseDetails.TotalAmount,
+                        Image = ExpenseDetails.Image,
+                        Account = ExpenseDetails.Account,
+                        IsDeleted = false,
+                        CreatedBy = ExpenseDetails.CreatedBy,
+                        IsPaid = false,
+                        IsApproved = false,
+                        CreatedOn = DateTime.Today,
+                        PaymentType = 1,
+
+                    };
+                    response.Code = 200;
+                    response.Message = "Expense add successfully!";
+                    Context.TblExpenseMasters.Add(expense);
+                    Context.SaveChanges();
+                }
+                else
+                {
+                    var expense = new TblExpenseMaster()
+                    {
+                        Id = Guid.NewGuid(),
+                        UserId = ExpenseDetails.UserId,
+                        ExpenseType = ExpenseDetails.ExpenseType,
+                        Description = "Expense Paid",
+                        BillNumber = "BTPLBILL",
+                        Date = DateTime.Today,
+                        TotalAmount = ExpenseDetails.TotalAmount,
+                        Account = ExpenseDetails.Account,
+                        PaymentType= ExpenseDetails.PaymentType,
+                        IsDeleted = false,
+                        CreatedBy = ExpenseDetails.CreatedBy,
+                        IsPaid = false,
+                        CreatedOn = DateTime.Today,
+                        IsApproved = true,
+                        ApprovedBy = ExpenseDetails.ApprovedBy,
+                        ApprovedByName = ExpenseDetails.ApprovedByName,
+                        ApprovedDate = DateTime.Now,
                 };
-                response.Code = 200;
-                response.Message = "Expense add successfully!";
-                Context.TblExpenseMasters.Add(expense);
-                Context.SaveChanges();
+                    response.Code = 200;
+                    response.Message = "Expense add successfully!";
+                    Context.TblExpenseMasters.Add(expense);
+                    Context.SaveChanges();
+
+                }
+               
             }
             catch (Exception ex)
             {
@@ -256,7 +288,7 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                                join b in Context.TblExpenseTypes on a.ExpenseType equals b.Id
                                join c in Context.TblPaymentTypes on a.PaymentType equals c.Id
                                join d in Context.TblUsers on a.UserId equals d.Id
-                               where a.IsDeleted != false
+                               where a.IsDeleted != true
                                select new ExpenseDetailsView
                                {
                                    Id = a.Id,
@@ -792,7 +824,7 @@ namespace EMPManegment.Repository.ExponseMasterRepository
 
             if (GetExpensedata != null)
             {
-                GetExpensedata.IsDeleted = false;
+                GetExpensedata.IsDeleted = true;
                 Context.TblExpenseMasters.Update(GetExpensedata);
                 Context.SaveChanges();
                 response.Code = 200;

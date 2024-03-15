@@ -9,6 +9,7 @@ $(document).ready(function () {
     DisplayExpenseList();
     GetExpenseTotalAmount();
     GetAllUserExpenseList();
+    ApprovedExpenseList();
 });
 function GetExpenseTypeList() {
 
@@ -35,6 +36,9 @@ function GetPaymentTypeList() {
                 $('#txtpaymenttype').append('<Option value=' + data.id + '>' + data.type + '</Option>')
                 $('#Editpaymenttype').append('<Option value=' + data.id + '>' + data.type + '</Option>')
             });
+            var firstPaymentMethod = result[0];
+
+            $('#txtpaymenttype').val(firstPaymentMethod.id);
         }
     });
 }
@@ -51,6 +55,7 @@ function AddExpenseDetails() {
         formData.append("Description", $("#txtDescription").val());
         formData.append("BillNumber", $("#txtbillno").val());
         formData.append("Date", $("#txtdate").val());
+        formData.append("Account", $("#txtaccount").val());
         formData.append("TotalAmount", $("#txttotalamount").val());
         formData.append("Image", $("#txtimage")[0].files[0]);
         $.ajax({
@@ -605,7 +610,7 @@ function GetExpenseTotalAmount() {
                     total += obj.totalAmount;
                 }
             });
-            $("#txtTotalAmount").text('₹' + total);
+
 
             var creditamount = 0;
             result.forEach(function (obj) {
@@ -621,7 +626,27 @@ function GetExpenseTotalAmount() {
                     Dabitamount += obj.totalAmount;
                 }
             });
-            $("#txttotaldebitedamount").text('₹' + Dabitamount);
+            $("#txtTotalAmount").text('₹' + Dabitamount);
+            var PendingAmount = Dabitamount - creditamount;
+            $("#pendingamount").text('₹' + PendingAmount);
+            $("#txttotaldebitedamount").text('₹' + PendingAmount);
+            $('#txtcreditamount').on('input', function () {
+                var enteredAmount = parseFloat($(this).val());
+
+                if (!isNaN(enteredAmount)) {
+                    var pendingAmount = PendingAmount - enteredAmount;
+
+                    if (enteredAmount > PendingAmount) {
+                        $('#warningMessage').text('Entered amount cannot exceed pending amount.');
+                    } else {
+                        $('#txtpendingamount').val(pendingAmount.toFixed(2));
+                    }
+                } else {
+                    $('#warningMessage').text('');
+                    $('#txtpendingamount').val('');
+                }
+            });
+
         },
     });
 }
@@ -655,14 +680,14 @@ function ApproveExpense() {
                     data: form_data,
                     processData: false,
                     contentType: false,
-                    success: function (Result) {debugger
+                    success: function (Result) {
                         if (Result.message != null) {
                             Swal.fire({
                                 title: Result.message,
                                 icon: 'success',
                                 confirmButtonColor: '#3085d6',
                                 confirmButtonText: 'OK',
-                            }).then(function () {debugger
+                            }).then(function () {
                                 window.location = '/ExpenseMaster/ApprovedExpense?UserId=' + userId;
                             });
                         }
@@ -681,5 +706,165 @@ function ApproveExpense() {
                 'error'
             );
         }
+    });
+}
+
+function ApprovedExpenseList() {
+    var UserId = $("#txtuserid").val();
+    $('#GetUserApprovedExpenseList').DataTable({
+        processing: true,
+        serverSide: true,
+        filter: true,
+        "bDestroy": true,
+        ajax: {
+            type: "POST",
+            url: '/ExpenseMaster/GetUserApprovedExpenseList?UserId=' + UserId,
+            dataType: 'json',
+        },
+        columns: [
+
+            { "data": "id", "name": "Id", "visible": false },
+            { "data": "expenseTypeName", "name": "ExpenseTypeName" },
+            { "data": "paymentTypeName", "name": "PaymentTypeName" },
+            { "data": "billNumber", "name": "BillNumber" },
+            { "data": "description", "name": "Description" },
+            {
+                "data": "date",
+                "name": "Date",
+                "render": function (data, type, full, meta) {
+                    return new Date(data).toLocaleDateString();
+                }
+            },
+            { "data": "totalAmount", "name": "TotalAmount" },
+            { "data": "account", "name": "Account" },
+        ],
+        columnDefs: [{
+            "defaultContent": "",
+            "targets": "_all",
+        }]
+    });
+}
+function GetPayExpense() {
+        var formData = new FormData();
+        formData.append("ExpenseType", $("#txtexpensetype").val());
+        formData.append("Account", $("#txtAccount").val());
+        formData.append("UserId", $("#txtuserid").val());
+        formData.append("ApprovedBy", $("#txtuseraproveid").val());
+        formData.append("ApprovedByName", $("#txtuseraprovename").val());
+        formData.append("TotalAmount", $("#txtcreditamount").val());
+        formData.append("PaymentType", $("#txtpaymenttype").val());
+        formData.append("CreatedBy", $("#txtuseraproveid").val());
+        $.ajax({
+            url: '/ExpenseMaster/GetPayExpense',
+            type: 'Post',
+            data: formData,
+            dataType: 'json',
+            contentType: false,
+            processData: false,
+            success: function (Result) {
+                if (Result.message != null) {
+                    Swal.fire({
+                        title: Result.message,
+                        icon: 'success',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK',
+                    }).then(function () {
+                        window.location = '/ExpenseMaster/GetPayExpense';
+                    });
+                }
+            }
+        })
+}
+
+$(document).ready(function () {
+
+    var UserId = $("#txtuserid").val();
+
+    if (UserId) {
+        GetAllUserExpenseList(UserId);
+        UserDebitExpenseList(UserId);
+        UserCreditExpenseList(UserId);
+    }
+
+    $('.nav-link').click(function () {
+        var targetTab = $(this).attr('href');
+
+        var UserId = $("#txtuserid").val();
+
+        if (targetTab === '#GetallExpense') {
+            GetAllUserExpenseList(UserId);
+        } else if (targetTab === '#GetallUnApprovedExpense') {
+            UserDebitExpenseList(UserId);
+        } else if (targetTab === '#GetallApprovedExpense') {
+            UserCreditExpenseList(UserId);
+        }
+    });
+});
+function UserDebitExpenseList(UserId) {
+    var Account = "Dabit";
+    $('#UserallUnApprovedExpenseTable').DataTable({
+        processing: true,
+        serverSide: true,
+        filter: true,
+        "bDestroy": true,
+        ajax: {
+            type: "POST",
+            url: '/ExpenseMaster/GetCreditDebitExpenseListTable?UserId=' + UserId + '&Account=' + Account,
+            dataType: 'json',
+        },
+        columns: [
+            { "data": "id", "name": "Id", "visible": false },
+            { "data": "expenseTypeName", "name": "ExpenseTypeName" },
+            { "data": "paymentTypeName", "name": "PaymentTypeName" },
+            { "data": "billNumber", "name": "BillNumber" },
+            { "data": "description", "name": "Description" },
+            {
+                "data": "date",
+                "name": "Date",
+                "render": function (data, type, full, meta) {
+                    return new Date(data).toLocaleDateString();
+                }
+            },
+            { "data": "totalAmount", "name": "TotalAmount" },
+            { "data": "account", "name": "Account" },
+        ],
+        columnDefs: [{
+            "defaultContent": "",
+            "targets": "_all",
+        }]
+    });
+}
+function UserCreditExpenseList(UserId) {
+    var Account = "Credit";
+    $('#GetUserApprovedExpenseList').DataTable({
+        processing: true,
+        serverSide: true,
+        filter: true,
+        "bDestroy": true,
+        ajax: {
+            type: "POST",
+            url: '/ExpenseMaster/GetCreditDebitExpenseListTable?UserId=' + UserId + '&Account=' + Account,
+            dataType: 'json',
+        },
+        columns: [
+            { "data": "id", "name": "Id", "visible": false },
+            { "data": "expenseTypeName", "name": "ExpenseTypeName" },
+            { "data": "paymentTypeName", "name": "PaymentTypeName" },
+            { "data": "billNumber", "name": "BillNumber" },
+            { "data": "description", "name": "Description" },
+            {
+                "data": "date",
+                "name": "Date",
+                "render": function (data, type, full, meta) {
+                    return new Date(data).toLocaleDateString();
+                }
+            },
+            { "data": "totalAmount", "name": "TotalAmount" },
+            { "data": "account", "name": "Account" },
+        ],
+        columnDefs: [{
+            "defaultContent": "",
+            "targets": "_all",
+        }]
     });
 }

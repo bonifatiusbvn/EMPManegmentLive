@@ -1,8 +1,15 @@
-﻿@{
+﻿@using EMPManegment.Web.Models
+@inject IHttpContextAccessor Accessor;
+@inject UserSession _userSession
+
+@{
     ViewData["Title"] = "GetPayExpense";
     Layout = "~/Views/Shared/_UserHomeLayout.cshtml";
 }
 
+<input type="hidden" class="form-control" id="txtuseraproveid" value="@_userSession.UserId" hidden>
+<input type="hidden" class="form-control" id="txtuseraprovename" value="@_userSession.FullName" hidden>
+<input type="hidden" class="form-control" id="txtexpensetype" value="11" hidden>
 <div class="row">
     <div class="col-12">
         <div class="page-title-box d-sm-flex align-items-center justify-content-between">
@@ -19,81 +26,122 @@
     </div>
 </div>
 <!-- end page title -->
+<input type="hidden" id="txtuserid" value="@ViewBag.UserId" />
+<!--New row-->
 <div class="row">
-    <div class="col-xl-3 col-sm-6">
+    <div class="col-xxl-3 col-md-6">
         <div class="card card-animate">
             <div class="card-body">
-                <div class="d-flex">
+                <div class="d-flex mb-3">
                     <div class="flex-grow-1">
-                        <h6 class="text-muted mb-3">Total Buy</h6>
-                        <h2 class="mb-0">$<span class="counter-value" data-target="243"></span><small class="text-muted fs-13">.10k</small></h2>
+                        <lord-icon src="https://cdn.lordicon.com/fhtaantg.json" trigger="loop" colors="primary:#25a0e2,secondary:#00bd9d" style="width:55px;height:55px">
+                        </lord-icon>
                     </div>
-                    <div class="flex-shrink-0 avatar-sm">
-                        <div class="avatar-title bg-primary-subtle text-primary fs-22 rounded">
-                            <i class="ri-shopping-bag-line"></i>
-                        </div>
+                    <div class="flex-shrink-0">
                     </div>
                 </div>
+                <h3 class="mb-2">₹<span class="counter-value" data-target="74361">0</span><small class="text-muted fs-13">.34k</small></h3>
+                <h6 class="text-muted mb-0">Send (Previous Month)</h6>
             </div>
         </div>
         <!--end card-->
     </div>
     <!--end col-->
-    <div class="col-xl-3 col-sm-6">
+    <div class="col-xxl-3 col-md-6">
         <div class="card card-animate">
             <div class="card-body">
-                <div class="d-flex">
+                <div class="d-flex mb-3">
                     <div class="flex-grow-1">
-                        <h6 class="text-muted mb-3">Total Sell</h6>
-                        <h2 class="mb-0">$<span class="counter-value" data-target="658"></span><small class="text-muted fs-13">.00k</small></h2>
+                        <lord-icon src="https://cdn.lordicon.com/qhviklyi.json" trigger="loop" colors="primary:#25a0e2,secondary:#00bd9d" style="width:55px;height:55px"></lord-icon>
                     </div>
-                    <div class="flex-shrink-0 avatar-sm">
-                        <div class="avatar-title bg-primary-subtle text-primary fs-22 rounded">
-                            <i class="ri-funds-line"></i>
-                        </div>
+                    <div class="flex-shrink-0">
                     </div>
                 </div>
+                <h3 class="mb-2" id="txttotalcreditamount"></h3>
+                <h6 class="text-muted mb-0">Credited Amount</h6>
             </div>
         </div>
         <!--end card-->
     </div>
     <!--end col-->
-    <div class="col-xl-3 col-sm-6">
+    <div class="col-xxl-3 col-md-6">
         <div class="card card-animate">
             <div class="card-body">
-                <div class="d-flex">
+                <div class="d-flex mb-3">
                     <div class="flex-grow-1">
-                        <h6 class="text-muted mb-3">Today's Buy</h6>
-                        <h2 class="mb-0">$<span class="counter-value" data-target="104"></span><small class="text-muted fs-13">.85k</small></h2>
+                        <lord-icon src="https://cdn.lordicon.com/yeallgsa.json" trigger="loop" colors="primary:#25a0e2,secondary:#00bd9d" style="width:55px;height:55px">
+                        </lord-icon>
                     </div>
-                    <div class="flex-shrink-0 avatar-sm">
-                        <div class="avatar-title bg-primary-subtle text-primary fs-22 rounded">
-                            <i class="ri-arrow-left-down-fill"></i>
-                        </div>
+                    <div class="flex-shrink-0">
                     </div>
                 </div>
+                <h3 class="mb-2" id="txttotaldebitedamount"></h3>
+                <h6 class="text-muted mb-0">Pending Amount</h6>
             </div>
         </div>
         <!--end card-->
     </div>
     <!--end col-->
-    <div class="col-xl-3 col-sm-6">
-        <div class="card card-animate">
-            <div class="card-body">
-                <div class="d-flex">
-                    <div class="flex-grow-1">
-                        <h6 class="text-muted mb-3">Today's Sell</h6>
-                        <h2 class="mb-0">$<span class="counter-value" data-target="87"></span><small class="text-muted fs-13">.35k</small></h2>
-                    </div>
-                    <div class="flex-shrink-0 avatar-sm">
-                        <div class="avatar-title bg-primary-subtle text-primary fs-22 rounded">
-                            <i class="ri-arrow-right-up-fill"></i>
+    <div class="col-xxl-3 col-md-6">
+        <div class="swiper default-swiper rounded">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide">
+                    <div class="card card-animate border-0 overflow-hidden">
+                        <div class="card-body bg-primary-subtle">
+                            <div class="d-flex mb-3">
+                                <div class="flex-grow-1">
+                                    <lord-icon src="https://cdn.lordicon.com/vaeagfzc.json" trigger="loop" colors="primary:#25a0e2,secondary:#00bd9d" style="width:55px;height:55px">
+                                    </lord-icon>
+                                </div>
+                                <div class="flex-shrink-0">
+                                    <a href="javascript:void(0);" class="fw-medium">Total Outstanding</a>
+                                </div>
+                            </div>
+                            <h3 class="mb-2 text-success" id="txtTotalAmount"></h3>
+                            <h6 class="text-muted mb-0">Total Amount</h6>
                         </div>
                     </div>
+                    <!--end card-->
+                </div>
+                <div class="swiper-slide">
+                    <div class="card card-animate border-0 overflow-hidden">
+                        <div class="card-body bg-primary-subtle">
+                            <div class="d-flex mb-3">
+                                <div class="flex-grow-1">
+                                    <lord-icon src="https://cdn.lordicon.com/vaeagfzc.json" trigger="loop" colors="primary:#25a0e2,secondary:#00bd9d" style="width:55px;height:55px">
+                                    </lord-icon>
+                                </div>
+                                <div class="flex-shrink-0">
+                                    <a href="javascript:void(0);" class="fw-medium">Ethereum (ETH)</a>
+                                </div>
+                            </div>
+                            <h3 class="mb-2">₹24<small class="text-muted fs-13">.74k</small></h3>
+                            <h6 class="text-muted mb-0">Send - Receive (Previous Month)</h6>
+                        </div>
+                    </div>
+                    <!--end card-->
+                </div>
+                <div class="swiper-slide">
+                    <div class="card card-animate border-0 overflow-hidden">
+                        <div class="card-body bg-primary-subtle">
+                            <div class="d-flex mb-3">
+                                <div class="flex-grow-1">
+                                    <lord-icon src="https://cdn.lordicon.com/vaeagfzc.json" trigger="loop" colors="primary:#25a0e2,secondary:#00bd9d" style="width:55px;height:55px">
+                                    </lord-icon>
+                                </div>
+                                <div class="flex-shrink-0">
+                                    <a href="javascript:void(0);" class="fw-medium">Monero (XMR)</a>
+                                </div>
+                            </div>
+                            <h3 class="mb-2">₹124<small class="text-muted fs-13">.36k</small></h3>
+                            <h6 class="text-muted mb-0">Send - Receive (Previous Month)</h6>
+                        </div>
+                    </div>
+                    <!--end card-->
                 </div>
             </div>
         </div>
-        <!--end card-->
+        <!--end swiper-->
     </div>
     <!--end col-->
 </div>
@@ -102,67 +150,109 @@
 <div class="row">
     <div class="col-xxl-9">
         <div class="card card-height-100">
-            <div class="card-header border-0 align-items-center d-flex">
-                <h4 class="card-title mb-0 flex-grow-1">Market Graph</h4>
-            </div><!-- end card header -->
-            <div class="card-body p-0">
-                <div class="bg-light-subtle border-top-dashed border border-start-0 border-end-0 border-bottom-dashed py-3 px-4">
-                    <div class="card-body tab-pane fade" id="allApprovedExpense" role="tabpanel">
-                        <div class="listjs-table">
-                            <div class="table-responsive">
-                                <table id="GetUserApprovedExpenseList" class="table table-bordered dt-responsive nowrap table-striped align-middle dataTable no-footer dtr-inline">
-                                    <thead class="table-light text-muted text-center">
-                                        <tr>
+            <ul class="nav nav-tabs nav-tabs-custom nav-primary mb-3" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active All py-3" data-bs-toggle="tab" id="All" href="#GetallExpense" role="tab" aria-selected="true">
+                        <i class="ri-store-2-fill me-1 align-bottom"></i>All Expense
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link py-3 Delivered" data-bs-toggle="tab" id="Delivered" href="#GetallUnApprovedExpense" role="tab" aria-selected="false">
+                        <i class="ri-checkbox-circle-line me-1 align-bottom"></i>Dabit Expense
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link py-3 Returns" data-bs-toggle="tab" id="Returns" href="#GetallApprovedExpense" role="tab" aria-selected="false">
+                        <i class="ri-arrow-left-right-fill me-1 align-bottom"></i>Credit Expense
+                    </a>
+                </li>
+            </ul>
+            <div class="tab-content">
 
-                                            <th class="sort" data-sort="name">Id</th>
-                                            <th class="sort" data-sort="company_name">ExpenseType</th>
-                                            <th class="sort" data-sort="leads_score">PaymentType</th>
-                                            <th class="sort" data-sort="phone">BillNumber</th>
-                                            <th class="sort" data-sort="location">Description</th>
-                                            <th class="sort" data-sort="date">Date</th>
-                                            <th class="sort" data-sort="tags">TotalAmount</th>
-                                            <th class="sort" data-sort="tags">Account</th>
+                <div class="card-body tab-pane fade show active" id="GetallExpense" role="tabpanel">
+                    <div class="listjs-table">
+                        <div class="table-responsive">
+                            <table id="UserallExpenseTable" class="table table-bordered dt-responsive nowrap table-striped align-middle dataTable no-footer dtr-inline" style="width: 1150px;margin-left: 12px;">
+                                <thead class="table-light text-muted">
+                                    <tr>
+                                        <th class="sort" data-sort="name">Id</th>
+                                        <th class="sort" data-sort="company_name">ExpenseType</th>
+                                        <th class="sort" data-sort="leads_score">PaymentType</th>
+                                        <th class="sort" data-sort="phone">BillNumber</th>
+                                        <th class="sort" data-sort="location">Description</th>
+                                        <th class="sort" data-sort="date">Date</th>
+                                        <th class="sort" data-sort="tags">TotalAmount</th>
+                                        <th class="sort" data-sort="tags">Account</th>
 
-                                        </tr>
-                                    </thead>
-                                    <tbody> </tbody>
-                                </table>
-                                <!-- end table -->
-                            </div>
-                        </div>
-                        <div class="noresult" style="display: none">
-                            <div class="text-center">
-                                <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#25a0e2,secondary:#00bd9d" style="width:75px;height:75px">
-                                </lord-icon>
-                                <h5 class="mt-2">Sorry! No Result Found</h5>
-                                <p class="text-muted mb-0">
-                                    We've searched more than 150+ invoices We did not find any
-                                    invoices for you search.
-                                </p>
-                            </div>
+                                    </tr>
+                                </thead>
+                                <tbody class="list form-check-all">
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
-            </div><!-- end cardbody -->
-            <div class="card-body p-0 pb-3">
-                <div id="Market_chart" data-colors='["--vz-primary", "--vz-success"]' class="apex-charts" dir="ltr"></div>
-            </div><!-- end cardbody -->
+                <div class="card-body tab-pane fade" id="GetallUnApprovedExpense" role="tabpanel">
+                    <div class="listjs-table">
+                        <div class="table-responsive">
+                            <table id="UserallUnApprovedExpenseTable" class="table table-bordered dt-responsive nowrap table-striped align-middle dataTable no-footer dtr-inline" style=" width: 1150px;">
+                                <thead class="table-light text-muted text-center">
+                                    <tr>
+                                        <th class="sort" data-sort="name">Id</th>
+                                        <th class="sort" data-sort="company_name">ExpenseType</th>
+                                        <th class="sort" data-sort="leads_score">PaymentType</th>
+                                        <th class="sort" data-sort="phone">BillNumber</th>
+                                        <th class="sort" data-sort="location">Description</th>
+                                        <th class="sort" data-sort="date">Date</th>
+                                        <th class="sort" data-sort="tags">TotalAmount</th>
+                                        <th class="sort" data-sort="tags">Account</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody> </tbody>
+                            </table>
+                            <!-- end table -->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body tab-pane fade" id="GetallApprovedExpense" role="tabpanel">
+                    <div class="listjs-table">
+                        <div class="table-responsive">
+                            <table id="GetUserApprovedExpenseList" class="table table-bordered dt-responsive nowrap table-striped align-middle dataTable no-footer dtr-inline" style=" width: 1150px;">
+                                <thead class="table-light text-muted text-center">
+                                    <tr>
+
+                                        <th class="sort" data-sort="name">Id</th>
+                                        <th class="sort" data-sort="company_name">ExpenseType</th>
+                                        <th class="sort" data-sort="leads_score">PaymentType</th>
+                                        <th class="sort" data-sort="phone">BillNumber</th>
+                                        <th class="sort" data-sort="location">Description</th>
+                                        <th class="sort" data-sort="date">Date</th>
+                                        <th class="sort" data-sort="tags">TotalAmount</th>
+                                        <th class="sort" data-sort="tags">Account</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody> </tbody>
+                            </table>
+                            <!-- end table -->
+                        </div>
+                    </div>
+                </div>
+
         </div><!-- end card -->
+        </div>
     </div>
     <!--end col-->
     <div class="col-xxl-3">
         <div class="card card-height-100">
             <div class="card-header">
                 <ul class="nav nav-tabs-custom rounded card-header-tabs nav-justified border-bottom-0 mx-n3" role="tablist">
-                    <li class="nav-item">
-                        <a class="nav-link active" data-bs-toggle="tab" href="#cryptoBuy" role="tab">
-                            Buy
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" data-bs-toggle="tab" href="#cryptoSell" role="tab">
-                            Sell
-                        </a>
+                    <li class="nav-item ">
+                        <h6 class="text-primary p-3 bg-primary-subtle">
+                            Get PAY
+                        </h6>
                     </li>
                 </ul>
             </div>
@@ -171,164 +261,46 @@
                     <div class="tab-pane active" id="cryptoBuy" role="tabpanel">
                         <div class="p-3 bg-primary-subtle">
                             <div class="float-end ms-2">
-                                <h6 class="text-primary mb-0">USD Balance : <span class="text-body">$12,426.07</span></h6>
+                                <h6 class="text-primary mb-0" id="pendingamount"></h6>
                             </div>
-                            <h6 class="mb-0 text-primary">Buy Coin</h6>
+                            <h6 class="mb-0">Pending Amount</h6>
                         </div>
                         <div class="p-3">
                             <div class="row">
                                 <div class="col-6">
                                     <div class="mb-3">
-                                        <label>Currency :</label>
-                                        <select class="form-select">
-                                            <option>BTC</option>
-                                            <option>ETH</option>
-                                            <option>LTC</option>
+                                        <label>Payment Type</label>
+                                        <select class="form-select" id="txtpaymenttype">
+                                            <option selected disabled value=""></option>
                                         </select>
                                     </div>
                                 </div><!-- end col -->
                                 <div class="col-6">
                                     <div class="mb-3">
-                                        <label>Payment Method :</label>
-                                        <select class="form-select">
-                                            <option>Wallet Balance</option>
-                                            <option>Credit / Debit Card</option>
-                                            <option>PayPal</option>
-                                            <option>Payoneer</option>
-                                        </select>
+                                        <label>Account</label>
+                                        <input type="text" class="form-control" id="txtAccount" value="Credit" readonly>
                                     </div>
                                 </div><!-- end col -->
                             </div><!-- end row -->
                             <div>
                                 <div class="input-group mb-3">
-                                    <label class="input-group-text">Amount</label>
-                                    <input type="text" class="form-control" placeholder="0">
+                                    <label class="input-group-text" for="txtcreditamount">Amount</label>
+                                    <input type="text" class="form-control" id="txtcreditamount">
+                                    <span id="warningMessage" style="color: red;"></span>
                                 </div>
 
                                 <div class="input-group mb-3">
-                                    <label class="input-group-text">Price</label>
-                                    <input type="text" class="form-control" placeholder="2.045585">
-                                    <label class="input-group-text">$</label>
-                                </div>
-
-                                <div class="input-group mb-0">
-                                    <label class="input-group-text">Total</label>
-                                    <input type="text" class="form-control" placeholder="2700.16">
+                                    <label class="input-group-text">Pending Amount</label>
+                                    <input type="text" class="form-control" id="txtpendingamount">
+                                    <label class="input-group-text">₹</label>
                                 </div>
                             </div>
                             <div class="mt-3 pt-2">
-                                <div class="d-flex mb-2">
-                                    <div class="flex-grow-1">
-                                        <p class="fs-13 mb-0">Transaction Fees<span class="text-muted ms-1 fs-11">(0.05%)</span></p>
-                                    </div>
-                                    <div class="flex-shrink-0">
-                                        <h6 class="mb-0">$1.08</h6>
-                                    </div>
-                                </div>
-                                <div class="d-flex mb-2">
-                                    <div class="flex-grow-1">
-                                        <p class="fs-13 mb-0">Minimum Received<span class="text-muted ms-1 fs-11">(2%)</span></p>
-                                    </div>
-                                    <div class="flex-shrink-0">
-                                        <h6 class="mb-0">$7.85</h6>
-                                    </div>
-                                </div>
-                                <div class="d-flex">
-                                    <div class="flex-grow-1">
-                                        <p class="fs-13 mb-0">Estimated Rate</p>
-                                    </div>
-                                    <div class="flex-shrink-0">
-                                        <h6 class="mb-0">1 BTC ~ $46982.70</h6>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="mt-3 pt-2">
-                                <button type="button" class="btn btn-primary w-100">Buy Coin</button>
+                                <button type="button" class="btn btn-primary w-100" id="creditdebitsubmitbtn" onclick="GetPayExpense()">Submit</button>
                             </div>
                         </div>
                     </div>
                     <!--end tab-pane-->
-                    <div class="tab-pane" id="cryptoSell" role="tabpanel">
-                        <div class="p-3 bg-primary-subtle">
-                            <div class="float-end ms-2">
-                                <h6 class="text-primary mb-0">USD Balance : <span class="text-body">$12,426.07</span></h6>
-                            </div>
-                            <h6 class="mb-0 text-primary">Sell Coin</h6>
-                        </div>
-                        <div class="p-3">
-                            <div class="row">
-                                <div class="col-6">
-                                    <div class="mb-3">
-                                        <label for="currencySelect">Currency :</label>
-                                        <select class="form-select" id="currencySelect">
-                                            <option value="BTC" selected>BTC</option>
-                                            <option value="ETH">ETH</option>
-                                            <option value="EUR">EUR</option>
-                                            <option value="JPY">JPY</option>
-                                            <option value="LTC">LTC</option>
-                                        </select>
-                                    </div>
-                                </div><!-- end col -->
-                                <div class="col-6">
-                                    <div class="mb-3">
-                                        <div class="mb-3">
-                                            <label for="paymentMethod">Payment Method :</label>
-                                            <select class="form-select" id="paymentMethod">
-                                                <option>Wallet Balance</option>
-                                                <option>Credit / Debit Card</option>
-                                                <option>PayPal</option>
-                                                <option>Payoneer</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div><!-- end col -->
-                            </div><!-- end row -->
-                            <div>
-                                <div class="input-group mb-3">
-                                    <label class="input-group-text">Amount</label>
-                                    <input type="text" class="form-control" placeholder="0">
-                                </div>
-                                <div class="input-group mb-3">
-                                    <label class="input-group-text">Price</label>
-                                    <input type="text" class="form-control" placeholder="2.045585">
-                                    <label class="input-group-text">$</label>
-                                </div>
-                                <div class="input-group mb-0">
-                                    <label class="input-group-text">Total</label>
-                                    <input type="text" class="form-control" placeholder="2700.16">
-                                </div>
-                            </div>
-                            <div class="mt-3 pt-2">
-                                <div class="d-flex mb-2">
-                                    <div class="flex-grow-1">
-                                        <p class="fs-13 mb-0">Transaction Fees<span class="text-muted ms-1 fs-11">(0.05%)</span></p>
-                                    </div>
-                                    <div class="flex-shrink-0">
-                                        <h6 class="mb-0">$1.08</h6>
-                                    </div>
-                                </div>
-                                <div class="d-flex mb-2">
-                                    <div class="flex-grow-1">
-                                        <p class="fs-13 mb-0">Minimum Received<span class="text-muted ms-1 fs-11">(2%)</span></p>
-                                    </div>
-                                    <div class="flex-shrink-0">
-                                        <h6 class="mb-0">$7.85</h6>
-                                    </div>
-                                </div>
-                                <div class="d-flex">
-                                    <div class="flex-grow-1">
-                                        <p class="fs-13 mb-0">Estimated Rate</p>
-                                    </div>
-                                    <div class="flex-shrink-0">
-                                        <h6 class="mb-0">1 BTC ~ $46982.70</h6>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="mt-3 pt-2">
-                                <button type="button" class="btn btn-primary w-100">Sell Coin</button>
-                            </div>
-                        </div>
-                    </div>
                     <!--end tab-pane-->
                 </div>
             </div>
@@ -338,3 +310,5 @@
 </div>
 <!--end row-->
 <!--end card-->
+
+<script src="~/moduls/expensemaster.js"></script>
