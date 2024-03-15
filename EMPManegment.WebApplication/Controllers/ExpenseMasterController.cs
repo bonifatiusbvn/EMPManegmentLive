@@ -309,7 +309,7 @@ namespace EMPManegment.Web.Controllers
                 return new JsonResult(ExpenseDetails);
             }
             catch (Exception ex)
-            {
+            {  
                 throw ex;
             }
         }

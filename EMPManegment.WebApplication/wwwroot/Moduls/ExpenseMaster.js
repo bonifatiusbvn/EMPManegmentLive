@@ -152,7 +152,7 @@ function EditExpenseDetails(Id) {
             $('#Editdate').val(response.date);
             $('#Edittotalamount').val(response.totalAmount);
             $('#Editaccount').val(response.account);
-            $('#Editpaymenttype').val(response.paymentType);
+            $('#Editpaymenttype').val(response.paymentTypeName);
             $('#EditIsPaid').val(response.isPaid ? "True" : "False");
             $('#EditIsApproved').val(response.isApproved ? "True" : "False");
 
@@ -311,7 +311,7 @@ function GetUserExpenseList() {
                         '</a>' +
                         '</li>' +
                         '<li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">' +
-                        '<a onclick="EditExpenseDetails(\'' + full.Id + '\')" data-bs-toggle="modal" class="text-primary d-inline-block edit-item-btn">' +
+                        '<a onclick="EditExpenseDetails(\'' + full.id + '\')" data-bs-toggle="modal" class="text-primary d-inline-block edit-item-btn">' +
                         '<i class="ri-pencil-fill fs-16"></i>' +
                         '</a>' +
                         '</li>' +

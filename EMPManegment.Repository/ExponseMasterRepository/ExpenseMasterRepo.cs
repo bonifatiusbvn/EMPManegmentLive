@@ -229,7 +229,7 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                         TotalAmount = ExpenseDetails.TotalAmount,
                         Account = ExpenseDetails.Account,
                         PaymentType= ExpenseDetails.PaymentType,
-                        IsDeleted = false,
+                        IsDeleted = true,
                         CreatedBy = ExpenseDetails.CreatedBy,
                         IsPaid = false,
                         CreatedOn = DateTime.Today,
@@ -255,28 +255,39 @@ namespace EMPManegment.Repository.ExponseMasterRepository
 
         public async Task<ExpenseDetailsView> GetExpenseDetailById(Guid Id)
         {
-            var ExpenseDetail = await Context.TblExpenseMasters.SingleOrDefaultAsync(x => x.Id == Id);
-            ExpenseDetailsView model = new ExpenseDetailsView
+           
+            ExpenseDetailsView ExpenseDetail = new ExpenseDetailsView();
+            try
             {
-                Id = ExpenseDetail.Id,
-                UserId = ExpenseDetail.UserId,
-                ExpenseType = ExpenseDetail.ExpenseType,
-                PaymentType = ExpenseDetail.PaymentType,
-                BillNumber = ExpenseDetail.BillNumber,
-                Description = ExpenseDetail.Description,
-                Date = ExpenseDetail.Date,
-                TotalAmount = ExpenseDetail.TotalAmount,
-                Image = ExpenseDetail.Image,
-                Account = ExpenseDetail.Account,
-                IsPaid = ExpenseDetail.IsPaid,
-                IsApproved = ExpenseDetail.IsApproved,
-                ApprovedBy = ExpenseDetail.ApprovedBy,
-                ApprovedByName = ExpenseDetail.ApprovedByName,
-                CreatedBy = ExpenseDetail.CreatedBy,
-                CreatedOn = ExpenseDetail.CreatedOn,
-
-            };
-            return model;
+                ExpenseDetail = (from a in Context.TblExpenseMasters.Where(x => x.Id == Id)
+                           join b in Context.TblPaymentTypes
+                           on a.PaymentType equals b.Id
+                           select new ExpenseDetailsView
+                           {
+                               Id = a.Id,
+                               UserId = a.UserId,
+                               ExpenseType = a.ExpenseType,
+                               PaymentType = a.PaymentType,
+                               PaymentTypeName=b.Type,
+                               BillNumber = a.BillNumber,
+                               Description = a.Description,
+                               Date = a.Date,
+                               TotalAmount = a.TotalAmount,
+                               Image = a.Image,
+                               Account = a.Account,
+                               IsPaid = a.IsPaid,
+                               IsApproved = a.IsApproved,
+                               ApprovedBy = a.ApprovedBy,
+                               ApprovedByName = a.ApprovedByName,
+                               CreatedBy = a.CreatedBy,
+                               CreatedOn = a.CreatedOn,
+                           }).First();
+                return ExpenseDetail;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         public async Task<jsonData> GetExpenseDetailList(DataTableRequstModel dataTable)

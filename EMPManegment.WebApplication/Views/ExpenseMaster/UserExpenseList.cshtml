@@ -208,12 +208,7 @@
                                 <div class="col-lg-6">
                                     <div class="mb-3">
                                         <label class="form-label">Account</label>
-                                        <select class="form-control" id="Editaccount" name="Editaccount">
-                                            <option selected disabled value="">Select Account Type</option>
-                                            <option value="Credit">Credit</option>
-                                            <option value="Dabit">Dabit</option>
-                                        </select>
-                                        <input type="hidden" id="Editaccountid" class="form-control" />
+                                        <input class="form-control" id="Editaccount" name="Editaccount" readonly />
                                     </div>
                                 </div>
                             </div>
@@ -221,40 +216,29 @@
                                 <div class="col-lg-6">
                                     <div class="mb-3">
                                         <label for="txtpaymenttype" class="form-label">Payment Type</label>
-                                        <select class="form-control" id="Editpaymenttype" name="Editpaymenttype">
-                                            <option selected disabled value="">---Select Payment Type---</option>
-                                        </select>
-                                        <input type="hidden" class="text-muted text-uppercase fw-semibold" id="Editpaymenttypeid" />
+                                        <input class="form-control" id="Editpaymenttype" name="Editpaymenttype" readonly />
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="mb-3">
                                         <label class="form-label">IsPaid</label>
-                                        <select class="form-control" id="EditIsPaid" name="EditIsPaid">
-                                            <option selected disabled value="">Select Paid Type</option>
-                                            <option value="True">True</option>
-                                            <option value="False">False</option>
-                                        </select>
+                                        <input class="form-control" id="EditIsPaid" name="EditIsPaid" readonly />  
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-lg-6">
                                     <div class="mb-3">
-                                        <label class="form-label">Account</label>
-                                        <select class="form-control" id="EditIsApproved" name="EditIsApproved">
-                                            <option selected disabled value="">Select Approved Type</option>
-                                            <option value="True">True</option>
-                                            <option value="False">False</option>
-                                        </select>
+                                        <label class="form-label">IsApproved</label>
+                                        <input class="form-control" id="EditIsApproved" name="EditIsApproved" readonly /> 
                                     </div>
                                 </div>
                             </div>
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-light" id="close-modal" data-bs-dismiss="modal" onclick="ClearTextBox()">Close</button>
-                        <button type="button" class="btn btn-warning m-1" onclick="UpdateExpenseDetails()" id="updatedetailbtn">Update</button>
+                        <button type="button" class="btn btn-danger btn-default m-1" id="close-modal" data-bs-dismiss="modal" onclick="ClearTextBox()">Close</button>
+                        <button type="button" class="btn btn-success m-1" onclick="UpdateExpenseDetails()" id="updatedetailbtn">Update</button>
 
                     </div>
                 </div>
@@ -360,7 +344,7 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-light" id="close-modal" data-bs-dismiss="modal" onclick="ClearTextBox()">Close</button>
+                    <button type="button" class="btn btn-danger btn-default m-1" id="close-modal" data-bs-dismiss="modal" onclick="ClearTextBox()">Close</button>
                     <button type="submit" class="btn btn-success" onclick="AddUserExpenseDetails();" id="taskDetails" value="Validate">Save</button>
                 </div>
             </div>
