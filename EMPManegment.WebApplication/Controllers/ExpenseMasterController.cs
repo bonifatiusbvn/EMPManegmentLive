@@ -16,6 +16,7 @@ using EMPManegment.EntityModels.ViewModels.OrderModels;
 using X.PagedList;
 using DocumentFormat.OpenXml.Spreadsheet;
 using Microsoft.AspNetCore.Http;
+using Aspose.Pdf.Operators;
 
 namespace EMPManegment.Web.Controllers
 {
@@ -234,8 +235,9 @@ namespace EMPManegment.Web.Controllers
         {
             try
             {
+                var ExpenseImg = Guid.NewGuid() + "_" + Addexpense.Image.FileName;
                 var path = Environment.WebRootPath;
-                var filepath = "Content/Image/" + Addexpense.Image.FileName;
+                var filepath = "Content/Image/" + ExpenseImg;
                 var fullpath = Path.Combine(path, filepath);
                 UploadFile(Addexpense.Image, fullpath);
                 var ExpenseDetails = new ExpenseDetailsView
@@ -640,6 +642,22 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         
+        }
+
+        [HttpGet]
+        public async Task<FileResult> DownloadBill(string BillName)
+        {
+            var filepath = BillName;
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", filepath);
+            var memory = new MemoryStream();
+            using (var stream = new FileStream(path, FileMode.Open))
+            {
+                await stream.CopyToAsync(memory);
+            }
+            memory.Position = 0;
+            var ContentType = "application/pdf";
+            var fileName = Path.GetFileName(path);
+            return File(memory, ContentType, fileName);
         }
     }
 }
