@@ -190,29 +190,61 @@ namespace EMPManegment.Repository.ExponseMasterRepository
             UserResponceModel response = new UserResponceModel();
             try
             {
-                var expense = new TblExpenseMaster()
+                if (ExpenseDetails.Account == "Dabit")
                 {
-                    Id = Guid.NewGuid(),
-                    UserId = ExpenseDetails.UserId,
-                    ExpenseType = ExpenseDetails.ExpenseType,
-                    BillNumber = ExpenseDetails.BillNumber,
-                    Description = ExpenseDetails.Description,
-                    Date = ExpenseDetails.Date,
-                    TotalAmount = ExpenseDetails.TotalAmount,
-                    Image = ExpenseDetails.Image,
-                    Account = ExpenseDetails.Account,
-                    IsDeleted = true,
-                    CreatedBy = ExpenseDetails.CreatedBy,
-                    IsPaid = false,
-                    IsApproved = false,
-                    CreatedOn = DateTime.Today,
-                    PaymentType = 1,
-                  
+                    var expense = new TblExpenseMaster()
+                    {
+                        Id = Guid.NewGuid(),
+                        UserId = ExpenseDetails.UserId,
+                        ExpenseType = ExpenseDetails.ExpenseType,
+                        BillNumber = ExpenseDetails.BillNumber,
+                        Description = ExpenseDetails.Description,
+                        Date = ExpenseDetails.Date,
+                        TotalAmount = ExpenseDetails.TotalAmount,
+                        Image = ExpenseDetails.Image,
+                        Account = ExpenseDetails.Account,
+                        IsDeleted = false,
+                        CreatedBy = ExpenseDetails.CreatedBy,
+                        IsPaid = false,
+                        IsApproved = false,
+                        CreatedOn = DateTime.Today,
+                        PaymentType = 1,
+
+                    };
+                    response.Code = 200;
+                    response.Message = "Expense add successfully!";
+                    Context.TblExpenseMasters.Add(expense);
+                    Context.SaveChanges();
+                }
+                else
+                {
+                    var expense = new TblExpenseMaster()
+                    {
+                        Id = Guid.NewGuid(),
+                        UserId = ExpenseDetails.UserId,
+                        ExpenseType = ExpenseDetails.ExpenseType,
+                        Description = "Expense Paid",
+                        BillNumber = "BTPLBILL",
+                        Date = DateTime.Today,
+                        TotalAmount = ExpenseDetails.TotalAmount,
+                        Account = ExpenseDetails.Account,
+                        PaymentType= ExpenseDetails.PaymentType,
+                        IsDeleted = true,
+                        CreatedBy = ExpenseDetails.CreatedBy,
+                        IsPaid = false,
+                        CreatedOn = DateTime.Today,
+                        IsApproved = true,
+                        ApprovedBy = ExpenseDetails.ApprovedBy,
+                        ApprovedByName = ExpenseDetails.ApprovedByName,
+                        ApprovedDate = DateTime.Now,
                 };
-                response.Code = 200;
-                response.Message = "Expense add successfully!";
-                Context.TblExpenseMasters.Add(expense);
-                Context.SaveChanges();
+                    response.Code = 200;
+                    response.Message = "Expense add successfully!";
+                    Context.TblExpenseMasters.Add(expense);
+                    Context.SaveChanges();
+
+                }
+               
             }
             catch (Exception ex)
             {
@@ -223,28 +255,39 @@ namespace EMPManegment.Repository.ExponseMasterRepository
 
         public async Task<ExpenseDetailsView> GetExpenseDetailById(Guid Id)
         {
-            var ExpenseDetail = await Context.TblExpenseMasters.SingleOrDefaultAsync(x => x.Id == Id);
-            ExpenseDetailsView model = new ExpenseDetailsView
+           
+            ExpenseDetailsView ExpenseDetail = new ExpenseDetailsView();
+            try
             {
-                Id = ExpenseDetail.Id,
-                UserId = ExpenseDetail.UserId,
-                ExpenseType = ExpenseDetail.ExpenseType,
-                PaymentType = ExpenseDetail.PaymentType,
-                BillNumber = ExpenseDetail.BillNumber,
-                Description = ExpenseDetail.Description,
-                Date = ExpenseDetail.Date,
-                TotalAmount = ExpenseDetail.TotalAmount,
-                Image = ExpenseDetail.Image,
-                Account = ExpenseDetail.Account,
-                IsPaid = ExpenseDetail.IsPaid,
-                IsApproved = ExpenseDetail.IsApproved,
-                ApprovedBy = ExpenseDetail.ApprovedBy,
-                ApprovedByName = ExpenseDetail.ApprovedByName,
-                CreatedBy = ExpenseDetail.CreatedBy,
-                CreatedOn = ExpenseDetail.CreatedOn,
-
-            };
-            return model;
+                ExpenseDetail = (from a in Context.TblExpenseMasters.Where(x => x.Id == Id)
+                           join b in Context.TblPaymentTypes
+                           on a.PaymentType equals b.Id
+                           select new ExpenseDetailsView
+                           {
+                               Id = a.Id,
+                               UserId = a.UserId,
+                               ExpenseType = a.ExpenseType,
+                               PaymentType = a.PaymentType,
+                               PaymentTypeName=b.Type,
+                               BillNumber = a.BillNumber,
+                               Description = a.Description,
+                               Date = a.Date,
+                               TotalAmount = a.TotalAmount,
+                               Image = a.Image,
+                               Account = a.Account,
+                               IsPaid = a.IsPaid,
+                               IsApproved = a.IsApproved,
+                               ApprovedBy = a.ApprovedBy,
+                               ApprovedByName = a.ApprovedByName,
+                               CreatedBy = a.CreatedBy,
+                               CreatedOn = a.CreatedOn,
+                           }).First();
+                return ExpenseDetail;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         public async Task<jsonData> GetExpenseDetailList(DataTableRequstModel dataTable)
@@ -256,7 +299,7 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                                join b in Context.TblExpenseTypes on a.ExpenseType equals b.Id
                                join c in Context.TblPaymentTypes on a.PaymentType equals c.Id
                                join d in Context.TblUsers on a.UserId equals d.Id
-                               where a.IsDeleted != false
+                               where a.IsDeleted != true
                                select new ExpenseDetailsView
                                {
                                    Id = a.Id,
@@ -792,7 +835,7 @@ namespace EMPManegment.Repository.ExponseMasterRepository
 
             if (GetExpensedata != null)
             {
-                GetExpensedata.IsDeleted = false;
+                GetExpensedata.IsDeleted = true;
                 Context.TblExpenseMasters.Update(GetExpensedata);
                 Context.SaveChanges();
                 response.Code = 200;

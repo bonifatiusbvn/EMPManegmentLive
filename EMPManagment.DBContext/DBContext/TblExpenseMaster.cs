@@ -13,7 +13,7 @@ public partial class TblExpenseMaster
 
     public int? PaymentType { get; set; }
 
-    public string BillNumber { get; set; } = null!;
+    public string? BillNumber { get; set; }
 
     public string? Description { get; set; }
 

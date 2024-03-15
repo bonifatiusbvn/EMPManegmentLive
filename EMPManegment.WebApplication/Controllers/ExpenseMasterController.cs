@@ -251,7 +251,7 @@ namespace EMPManegment.Web.Controllers
                     TotalAmount = Addexpense.TotalAmount,
                     Image = filepath,
                     CreatedBy = _userSession.UserId,
-                    Account = "Dabit",
+                    Account=Addexpense.Account,
                 };
                 ApiResponseModel postuser = await APIServices.PostAsync(ExpenseDetails, "ExpenseMaster/AddExpenseDetails");
                 UserResponceModel responseModel = new UserResponceModel();
@@ -262,6 +262,26 @@ namespace EMPManegment.Web.Controllers
                 else
                 {
 
+                    return Ok(new { postuser.code });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        [HttpPost]
+        public async Task<IActionResult> GetPayExpense(ExpenseDetailsView Addexpense)
+        {
+            try
+            {
+                ApiResponseModel postuser = await APIServices.PostAsync(Addexpense, "ExpenseMaster/AddExpenseDetails");
+                if (postuser.code == 200)
+                {
+                    return Ok(new { postuser.message });
+                }
+                else
+                {
                     return Ok(new { postuser.code });
                 }
             }
@@ -289,7 +309,7 @@ namespace EMPManegment.Web.Controllers
                 return new JsonResult(ExpenseDetails);
             }
             catch (Exception ex)
-            {
+            {  
                 throw ex;
             }
         }
@@ -556,7 +576,72 @@ namespace EMPManegment.Web.Controllers
 
         public async Task<IActionResult> GetPayExpense()
         {
+            ViewBag.UserId = HttpContext.Session.GetString("UserId");
             return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> GetCreditDebitExpenseListTable(Guid UserId,string Account)
+        {
+            try
+            {
+                var draw = Request.Form["draw"].FirstOrDefault();
+                var start = Request.Form["start"].FirstOrDefault();
+                var length = Request.Form["length"].FirstOrDefault();
+                var sortColumn = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
+                var sortColumnDir = Request.Form["order[0][dir]"].FirstOrDefault();
+                var searchValue = Request.Form["search[value]"].FirstOrDefault();
+                int pageSize = length != null ? Convert.ToInt32(length) : 0;
+                int skip = start != null ? Convert.ToInt32(start) : 0;
+
+                var dataTable = new DataTableRequstModel
+                {
+                    draw = draw,
+                    start = start,
+                    pageSize = pageSize,
+                    skip = skip,
+                    lenght = length,
+                    searchValue = searchValue,
+                    sortColumn = sortColumn,
+                    sortColumnDir = sortColumnDir
+                };
+
+                // Fetching data from the API
+                List<ExpenseDetailsView> Expense = new List<ExpenseDetailsView>();
+                var data = new jsonData();
+                ApiResponseModel response = await APIServices.PostAsync(dataTable, "ExpenseMaster/GetAllUserExpenseDetail?UserId=" + UserId);
+                if (response.code == 200)
+                {
+                    data = JsonConvert.DeserializeObject<jsonData>(response.data.ToString());
+                    Expense = JsonConvert.DeserializeObject<List<ExpenseDetailsView>>(data.data.ToString());
+                }
+
+                // Filtering data based on account type
+                List<ExpenseDetailsView> filteredExpense = new List<ExpenseDetailsView>();
+                foreach (var item in Expense)
+                {
+                    if (item.Account == Account)
+                    {
+                        filteredExpense.Add(item);
+                    }
+                }
+
+                // Constructing JSON response
+                var jsonData = new
+                {
+                    draw = data.draw,
+                    recordsFiltered = filteredExpense.Count,
+                    recordsTotal = data.recordsTotal,
+                    data = filteredExpense,
+                };
+
+                return new JsonResult(jsonData);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        
         }
 
         [HttpGet]

@@ -271,7 +271,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                 var data = await (from a in Context.TblInvoices
                                   join b in Context.TblVendorMasters on a.VandorId equals b.Vid
                                   join c in Context.TblProjectMasters on a.ProjectId equals c.ProjectId
-                                  where a.IsDeleted != false
+                                  where a.IsDeleted != true
                                   select new
                                   {
                                       Invoice = a,
@@ -483,7 +483,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                         TotalGst = InsertInvoice.TotalGst,
                         TotalAmount = InsertInvoice.TotalAmount,
                         Status = "Pending",
-                        IsDeleted = true,
+                        IsDeleted = false,
                         CreatedOn = DateTime.Now,
                         CreatedBy = InsertInvoice.CreatedBy,
                     };
@@ -677,7 +677,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
 
             if (GetInvoicedata != null)
             {
-                GetInvoicedata.IsDeleted = false;
+                GetInvoicedata.IsDeleted = true;
                 Context.TblInvoices.Update(GetInvoicedata);
                 Context.SaveChanges();
                 response.Code = 200;
