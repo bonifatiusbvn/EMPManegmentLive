@@ -1,11 +1,11 @@
 ﻿
 $(document).ready(function () {
-    GetVendorName()
+    GetVendorNameList()
     GetAllVendorData()
     GetAllTransactionData()
     AllInvoiceList()
 });
-function GetVendorName() {
+function GetVendorNameList() {
 
     $.ajax({
         url: '/ProductMaster/GetVendorsNameList',
@@ -21,28 +21,34 @@ function selectvendorId() {
     document.getElementById("txtvendorTypeid").value = document.getElementById("txtvendorname").value;
     document.getElementById("txtvendorTypeid1").value = document.getElementById("txtvendorname1").value;
 }
-
 $(document).ready(function () {
-    $('#txtvendorname').change(function () {
+    $('#txtvendorname').change(function () {    
         var VendorTypeId = $("#txtvendorname").val();
         $.ajax({
-            url: '/Vendor/GetVendorDetailsById?VendorId=' + VendorTypeId,
+            url: '/Vendor/GetVendorDetailsById/?VendorId=' + VendorTypeId,
             type: 'Get',
             success: function (result) {
                 $('#vendorcompanyaddress').empty();
-                $('#vendorcompanyaddress').append('<div><label>Vendor Company Address</label></div><div><div class="form-control"><h6 class="mb-0"><span class="text-muted fw-normal">' + result.vendorCompany + '</span></h6><h6 class="mb-0"><span class="text-muted fw-normal">Address : </span><span id="contact-no">' + result.vendorAddress + '</span></h6><h6 class="mb-0"><span class="text-muted fw-normal">Email: </span><span>' + result.vendorCompanyEmail + '</span></h6><h6 class="mb-0"><span class="text-muted fw-normal">Contact No: </span><span id="contact-no"> ' + result.vendorCompanyNumber + '</span></h6></div></div>');
+                $('#vendorcompanyaddress').append(
+                    '<div class="mb-2"><input type="text" class="form-control bg-light border-0" value="' + result.vendorCompany + '" readonly /></div>' +
+                    '<div class="mb-2"><textarea class="form-control bg-light border-0" readonly style="height: 76px;">' + result.vendorAddress + '</textarea></div>' +
+                    '<div class="mb-2"><input type="text" class="form-control bg-light border-0" value="' + result.vendorCompanyEmail + '" readonly /></div>' +
+                    '<div><input type="text" class="form-control bg-light border-0" value="' + result.vendorCompanyNumber + '" readonly /></div>');
             }
         });
     });
-
     $('#txtvendorname1').change(function () {
         var VendorTypeId = $("#txtvendorname1").val();
         $.ajax({
-            url: '/Vendor/GetVendorDetailsById?VendorId=' + VendorTypeId,
+            url: '/Vendor/GetVendorDetailsById/?VendorId=' + VendorTypeId,
             type: 'Get',
             success: function (result) {
-                $('#vendorcompanyaddress1').empty();
-                $('#vendorcompanyaddress1').append('<div><label>Vendor Company Address</label></div><div><div class="form-control"><h6 class="mb-0"><span class="text-muted fw-normal">' + result.vendorCompany + '</span></h6><h6 class="mb-0"><span class="text-muted fw-normal">Address : </span><span id="contact-no">' + result.vendorAddress + '</span></h6><h6 class="mb-0"><span class="text-muted fw-normal">Email: </span><span>' + result.vendorCompanyEmail + '</span></h6><h6 class="mb-0"><span class="text-muted fw-normal">Contact No: </span><span id="contact-no"> ' + result.vendorCompanyNumber + '</span></h6></div></div>');
+                $('#vendorcompanyaddress').empty();
+                $('#vendorcompanyaddress').append(
+                    '<div class="mb-2"><input type="text" class="form-control bg-light border-0" value="' + result.vendorCompany + '" readonly /></div>' +
+                    '<div class="mb-2"><textarea class="form-control bg-light border-0" readonly style="height: 76px;">' + result.vendorAddress + '</textarea></div>' +
+                    '<div class="mb-2"><input type="text" class="form-control bg-light border-0" value="' + result.vendorCompanyEmail + '" readonly /></div>' +
+                    '<div><input type="text" class="form-control bg-light border-0" value="' + result.vendorCompanyNumber + '" readonly /></div>');
             }
         });
     });
@@ -311,26 +317,20 @@ function generatePdf(data) {
 
 $('#idStatus').change(function () {
     if ($("#idStatus").val() == "Selse") {
-        $("#idStatusCompany").show();
-        $("#Companyname").show();
-        $("#idCompany").hide();
-        $("#CompanCCP").hide();
-        $("#vender").hide();
+        $("#companyaddress").show();
+        $("#fullcompanyaddress").show();
         $("#txtvendorname1").show();
-        $("#vendorcompanyaddress1").show();
-        $("#vendorcompanyaddress").hide();
-        cleartextBox();
+        $("#vendername").hide();
+        $("#CompanyAddress1").hide();
+        $("#fullcompanyaddress1").hide();
     }
     if ($("#idStatus").val() == "Purchase") {
-        $("#idCompany").show();
-        $("#CompanCCP").show();
-        $("#idStatusCompany").hide();
-        $("#Companyname").hide();
+        $("#vendername").show();
+        $("#CompanyAddress1").show();
+        $("#fullcompanyaddress1").show();
+        $("#companyaddress").hide();
+        $("#fullcompanyaddress").hide();
         $("#txtvendorname1").hide();
-        $("#vender").show();
-        $("#vendorcompanyaddress").show();
-        $("#vendorcompanyaddress1").hide();
-        cleartextBox();
     }
 });
 
@@ -417,7 +417,7 @@ $(document).ready(function () {
 function GetPaymentMethodList() {
 
     $.ajax({
-        url: '/OrderMaster/GetPaymentMethodList',
+        url: '/PurchaseOrderMaster/GetPaymentMethodList',
         success: function (result) {
             $.each(result, function (i, data) {
                 $('#txtpaymentmethod').append('<Option value=' + data.id + '>' + data.paymentMethod + '</Option>')

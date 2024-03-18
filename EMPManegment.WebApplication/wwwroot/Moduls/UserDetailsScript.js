@@ -402,6 +402,10 @@ function GetUserAttendanceInTime() {
 }
 
 function UserBirsthDayWish() {
+    if (sessionStorage.getItem('birthdayWishSent')) {
+        return; 
+    }
+
     $.ajax({
         url: '/Home/UserBirsthDayWish',
         type: 'Get',
@@ -409,8 +413,6 @@ function UserBirsthDayWish() {
         processData: false,
         contentType: false,
         success: function (Result) {
-            
-
             if (Result.message != null) {
                 Swal.fire(
                     {
@@ -421,15 +423,14 @@ function UserBirsthDayWish() {
                         cancelButtonText: "Thank You",
                         buttonsStyling: !1,
                         showCloseButton: !0
-                    })
+                    }
+                );
+                sessionStorage.setItem('birthdayWishSent', true);
             }
-            else {
-
-            }
-        },
-
-    })
+        }
+    });
 }
+
 
 function EditUserDetails(EmpId) {
     $.ajax({
@@ -496,7 +497,6 @@ function logout() {
 }
 
 function UpdateUserDetails() {
-    debugger
     var objData = {
         Id: $('#Userid').val(),
         FirstName: $('#FirstName').val(),

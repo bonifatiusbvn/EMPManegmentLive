@@ -266,7 +266,7 @@ function InsertMultiplePurchaseOrder() {
         var objData = {
             ProjectId: $("#txtProjectId").val(),
             Type: $("#OrderType").val(),
-            OrderId: $("#orderId").val(),
+            OrderId: $("#POId").val(),
             PaymentStatus: $("#txtPaymentStatus").val(),
             PaymentType: $("#paymenttype").val(),
             PaymentMethod: $("#txtpaymentmethod").val(),
