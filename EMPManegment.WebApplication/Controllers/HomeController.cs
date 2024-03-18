@@ -134,7 +134,7 @@ namespace EMPManegment.Web.Controllers
             {
 
                 Guid UserId = _userSession.UserId;
-                ApiResponseModel postuser = await APIServices.GetAsyncId(UserId, "UserHome/UserBirsthDayWish");
+                ApiResponseModel postuser = await APIServices.GetAsync("", "UserHome/UserBirsthDayWish?UserId=" + UserId);
                 UserAttendanceResponseModel responseModel = new UserAttendanceResponseModel();
                 if (postuser.message != null)
                 {
