@@ -23,7 +23,7 @@
                       
                             @if(item.OutTime != null)
                             {
-                            <td>@item.OutTime</td>
+                            <td>@item.OutTime?.ToLongTimeString()</td>
                             }
                             else if(item.OutTime == null && item.Date == DateTime.Today )
                             {
@@ -33,10 +33,13 @@
                             {
                             <td>Missing</td>
                             }
-                        
-                            @if(item.TotalHours != null)
+
+                            @if (item.TotalHours != null)
                             {
-                            <td>@item.TotalHours</td>
+                            TimeSpan totalDuration = item.TotalHours.Value;
+                            string formattedDuration = $"{totalDuration.Hours:00}:{totalDuration.Minutes:00}:{totalDuration.Seconds:00}hr";
+
+                            <td>@formattedDuration</td>
                             }
                             else if (item.TotalHours == null && item.Date == DateTime.Today)
                             {

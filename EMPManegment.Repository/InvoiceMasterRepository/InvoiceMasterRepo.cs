@@ -348,6 +348,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                                                                  Date = a.InvoiceDate,
                                                                  TotalGst = a.TotalGst,
                                                                  TotalAmount = a.TotalAmount,
+                                                                 InvoiceNo = a.InvoiceNo,
                                                              });
                 return invoiceList;
             }

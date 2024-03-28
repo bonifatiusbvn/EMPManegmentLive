@@ -113,19 +113,7 @@ function GetUserAttendance() {
             {
                 "data": "outTime", "name": "OutTime",
                 "render": function (data, type, full) {
-                    var userdate = new Date(full.date).toLocaleDateString('en-GB');
-                    var todate = new Date().toLocaleDateString('en-GB');
-                    
-                     if (full.outTime != null) {
-                        return (new Date(full.outTime)).toLocaleTimeString('en-GB');
-                    }
-                    else if (full.outTime == null && userdate == todate)
-                    {
-                       return ("Pending..");
-                    }
-                    else  {
-                         return ("Missing");
-                    }
+                    return (new Date(full.outTime)).toLocaleTimeString('en-GB');
                 }
             },
             {
