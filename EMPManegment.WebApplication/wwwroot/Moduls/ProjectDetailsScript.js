@@ -110,6 +110,45 @@ function showMember() {
         }
     })
 }
+function ProjectHeadMemberList() {
+    $.ajax({
+        url: '/Project/ProjectHeadMemberList',
+        type: 'Post',
+        dataType: 'json',
+        processData: false,
+        contentType: false,
+        complete: function (Result) {
+            $('#dvinvitemember').html(Result.responseText);
+        },
+        Error: function () {
+            Swal.fire({
+                title: "Can't get data!",
+                icon: 'warning',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'OK',
+            })
+        }
+    })
+}
+function SelectProjectHead(button) {debugger
+    var memberName = $(button).closest('.mx-n4').find('.fs-13').text().trim();
+    $('#projectHead').val(memberName);
+    document.getElementById("closebtn").click()
+}
+
+
+$('#SearchBtn').keyup(function () {
+    var typeValue = $(this).val().toLowerCase();
+    $('.vstack1').each(function () {
+        if ($(this).text().toLowerCase().indexOf(typeValue) < 0) {
+            $(this).parent().fadeOut();
+        }
+        else {
+            $(this).parent().fadeIn();
+        }
+    });
+});
+
 function invitemember(Id) {
 
     var protitel = document.getElementById("projecttitle").textContent;

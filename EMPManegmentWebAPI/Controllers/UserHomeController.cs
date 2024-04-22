@@ -125,11 +125,11 @@ namespace EMPManagment.API.Controllers
 
         [HttpGet]
         [Route("UserBirsthDayWish")]
-        public async Task<IActionResult> UserBirsthDayWish(Guid Userid)
+        public async Task<IActionResult> UserBirsthDayWish(Guid UserId)
         {
             UserResponceModel responsemodel = new UserResponceModel();
 
-            var user = await UserDetails.UserBirsthDayWish(Userid);
+            var user = await UserDetails.UserBirsthDayWish(UserId);
             try
             {
 

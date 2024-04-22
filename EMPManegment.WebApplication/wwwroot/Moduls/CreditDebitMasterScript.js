@@ -5,11 +5,11 @@ $(document).ready(function () {
     GetCreditDebitTotalAmount();
 });
 
-function GetPaymentMethodList() {
+function GetPaymentMethodList() {debugger
 
     $.ajax({
-        url: '/OrderMaster/GetPaymentMethodList',
-        success: function (result) {
+        url: '/PurchaseOrderMaster/GetPaymentMethodList',
+        success: function (result) {debugger
             $.each(result, function (i, data) {
                 $('#txtpaymentmethod').append('<Option value=' + data.id + '>' + data.paymentMethod + '</Option>')
             });
@@ -55,7 +55,6 @@ function InsertCreditDebitDetails() {
         };
         var form_data = new FormData();
         form_data.append("CREDITDEBITDETAILS", JSON.stringify(objData));
-
         $.ajax({
             url: '/Invoice/InsertCreditDebitDetails',
             type: 'POST',
