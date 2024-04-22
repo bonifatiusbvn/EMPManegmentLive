@@ -19,7 +19,6 @@ namespace EMPManegment.Inretface.Services.AddEmployeeServies
         Task<UserResponceModel> UserSingUp(EmpDetailsView AddEmployee);
         Task<LoginResponseModel> LoginUser(LoginRequest loginUser);
         Task<bool> EmailSendAsync(string Email, string Subject, string Message);
-        Task<UserResponceModel> ForgetPassword(SendEmailModel resetemppass);
-
+        Task<UserResponceModel> FindByEmailAsync(SendEmailModel Email);
     }
 }

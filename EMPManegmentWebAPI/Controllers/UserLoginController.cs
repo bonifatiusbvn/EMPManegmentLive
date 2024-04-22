@@ -11,6 +11,8 @@ using System.Reflection;
 using EMPManagment.Web.Models.API;
 using EMPManegment.EntityModels.ViewModels.ForgetPasswordModels;
 using EMPManegment.Inretface.EmployeesInterface.AddEmployee;
+using System.Linq.Dynamic.Core.Tokenizer;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace EMPManagment.API.Controllers
 {
@@ -18,14 +20,16 @@ namespace EMPManagment.API.Controllers
     [ApiController]
     public class UserLoginController : ControllerBase
     {
-        public UserLoginController(IUserLoginServices userLogin,IAuthentication authentication)
+        public UserLoginController(IUserLoginServices userLogin,IAuthentication authentication, IWebHostEnvironment webHostEnvironment)
         {
             UserLogin = userLogin;
             Authentication = authentication;
+            WebHostEnvironment = webHostEnvironment;
         }
 
         public IUserLoginServices UserLogin { get; }
         public IAuthentication Authentication { get; }
+        public IWebHostEnvironment WebHostEnvironment { get; }
 
         [AllowAnonymous]
         [HttpPost("Login")]
@@ -62,13 +66,20 @@ namespace EMPManagment.API.Controllers
         public async Task<IActionResult> ForgetPassword(SendEmailModel ForgetPassword)
         {
             ApiResponseModel responseModel = new ApiResponseModel();
-            var forgetPassword = await Authentication.ForgetPassword(ForgetPassword);
+            var forgetPassword = await Authentication.FindByEmailAsync(ForgetPassword);
             try
             {
 
                 if (forgetPassword.Code == 200)
                 {
-                    bool status = await Authentication.EmailSendAsync(ForgetPassword.Email, "Click Here to Reset Your Password ", "https://localhost:7204/UserProfile/ResetUserPassword");
+                    string path = "F:/BonifatiusLive/EMPManegment.WebApplication/Views/Authentication/PasswordResetTemplate.cshtml";
+                    string htmlString = System.IO.File.ReadAllText(path);
+                    htmlString = htmlString.Replace("{{title}}", "Reset Password");
+                    htmlString = htmlString.Replace("{{UserName}}",forgetPassword.Data.UserName);
+                    htmlString = htmlString.Replace("{{FirstName}}", forgetPassword.Data.FirstName);
+                    htmlString = htmlString.Replace("{{LastName}}", forgetPassword.Data.LastName);
+                    htmlString = htmlString.Replace("{{url}}", "https://localhost:7204/UserProfile/ResetUserPassword");
+                    bool status = await Authentication.EmailSendAsync(ForgetPassword.Email, "Click Here to Reset Your Password ", htmlString);
                     responseModel.code = (int)HttpStatusCode.OK;
                     responseModel.message = forgetPassword.Message;
                 }

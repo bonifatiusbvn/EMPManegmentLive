@@ -19,6 +19,6 @@ namespace EMPManegment.Inretface.EmployeesInterface.AddEmployee
         Task<LoginResponseModel> LoginUser(LoginRequest LoginUserRequest);
         public bool GetUserName(string Username);
         Task<bool> EmailSendAsync(string Email,string Subject, string Message);
-        Task<UserResponceModel> ForgetPassword(SendEmailModel resetemppass);
+        Task<UserResponceModel> FindByEmailAsync(SendEmailModel Email);
     }
 }

@@ -1,5 +1,5 @@
 ﻿$(document).ready(function () {
-
+    GetAllProductDetailsList()
     GetVendorNameList()
     GetProducts()
 });
@@ -207,6 +207,7 @@ function ProductDetails() {
         contentType: false,
         complete: function (Result) {
             $("#table-product-list-all").hide();
+            $("#getallproductlist").hide();
             $("#dvproductdetails").html(Result.responseText);
         }
     });
@@ -340,3 +341,22 @@ function SearchProductName() {
         }
     });
 } 
+
+function GetAllProductDetailsList(page) {
+
+    $.get("/ProductMaster/GetAllProductList", { page: page })
+       .done(function (result) {
+
+           $("#getallproductlist").html(result);
+        })
+        .fail(function (error) {
+            console.error(error);
+        });
+}
+GetAllProductDetailsList(1)
+$(document).on("click", ".pagination a", function (e) {
+  
+    e.preventDefault();
+    var page = $(this).text();
+    GetAllProductDetailsList(page);
+});

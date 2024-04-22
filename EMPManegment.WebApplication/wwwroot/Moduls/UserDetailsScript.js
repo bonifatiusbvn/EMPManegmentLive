@@ -59,18 +59,19 @@ function GetAllUserData() {
         },
         columns: [
             {
+                "data": "userName", "name": "UserName",
                 "render": function (data, type, full) {
                     return '<h5 class="fs-15"><a href="/UserProfile/DisplayUserDetails/?Id=' + full.id + '" class="fw-medium link-primary">' + full.userName + '</a></h5>';
                 }
             },
             {
-                "data": "departmentName",
+                "data": "departmentId", "name": "DepartmentName",
                 "render": function (data, type, full) {
                     return '<div class="d-flex"><div class="flex-grow-1 tasks_name">' + full.departmentName + '</div>';
                 }
             },
             {
-
+                "data": "firstName", "name": "FirstName",
                 "render": function (data, type, full) {
                     return '<div class="d-flex">' +
                         '<div class="flex-grow-1 tasks_name">' +

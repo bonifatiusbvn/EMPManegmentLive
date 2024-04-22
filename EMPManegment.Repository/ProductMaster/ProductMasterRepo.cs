@@ -114,7 +114,7 @@ namespace EMPManegment.Repository.ProductMaster
                 IEnumerable<ProductTypeView> Product = Context.TblProductTypeMasters.ToList().Select(a => new ProductTypeView
                 {
                     Id = a.Id,
-                    ProductName = a.Type
+                    ProductName = a.Type,
                 });
                 return Product;
             }
@@ -142,6 +142,7 @@ namespace EMPManegment.Repository.ProductMaster
                                       a.PerUnitPrice,
                                       a.ProductName,
                                       b.Type,
+                                      a.ProductShortDescription,
                                   }).ToListAsync();
                 if (data != null)
                 {
@@ -155,6 +156,7 @@ namespace EMPManegment.Repository.ProductMaster
                             ProductName = item.ProductName,
                             ProductStocks = item.ProductStocks,
                             PerUnitPrice = item.PerUnitPrice,
+                            ProductShortDescription = item.ProductShortDescription,
                             ProductTypeName = item.Type,
                         });
                     }
@@ -402,6 +404,28 @@ namespace EMPManegment.Repository.ProductMaster
                 }
 
                 return ProductDetails;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<IEnumerable<ProductDetailsView>> GetAllProductList()
+        {
+            try
+            {
+                IEnumerable<ProductDetailsView> Product = Context.TblProductDetailsMasters.ToList().Select(a => new ProductDetailsView
+                {
+                    Id = a.Id,
+                    ProductDescription = a.ProductDescription,
+                    ProductShortDescription = a.ProductShortDescription,
+                    ProductImage = a.ProductImage,
+                    ProductName = a.ProductName,
+                    ProductStocks = a.ProductStocks,
+                    PerUnitPrice = a.PerUnitPrice
+                });
+                return Product;
             }
             catch (Exception ex)
             {
