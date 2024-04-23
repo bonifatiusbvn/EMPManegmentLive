@@ -39,10 +39,9 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
                     ProjectId = Guid.NewGuid(),
                     ProjectType = createproject.ProjectType,
                     ProjectTitle = createproject.ProjectTitle,
-                    ProjectName = createproject.ProjectName,
+                    ShortName = createproject.ProjectName,
                     ProjectHead = createproject.ProjectHead,
                     ProjectDescription = createproject.ProjectDescription,
-                    ProjectLocation = createproject.ProjectLocation,
                     ProjectPriority = createproject.ProjectPriority,
                     ProjectStatus = createproject.ProjectStatus,
                     ProjectStartDate = createproject.ProjectStartDate,
@@ -70,7 +69,6 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
                 ProjectTitle = a.ProjectTitle,
                 ProjectHead = a.ProjectHead,
                 ProjectDescription = a.ProjectDescription,
-                ProjectLocation = a.ProjectLocation,
                 ProjectPriority = a.ProjectPriority,
                 ProjectStatus = a.ProjectStatus,
                 ProjectStartDate = a.ProjectStartDate,
@@ -141,7 +139,7 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
             {
                 ProjectId = projectDetail.ProjectId,
                 ProjectTitle = projectDetail.ProjectTitle,
-                ProjectName = projectDetail.ProjectName,
+                ProjectName = projectDetail.ShortName,
                 CreatedOn = projectDetail.CreatedOn,
                 ProjectEndDate = projectDetail.ProjectEndDate,
                 ProjectStatus = projectDetail.ProjectStatus,
@@ -354,9 +352,9 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
                 }
                 else
                 {
-                    if (LastProject.ProjectName.Length >= 7)
+                    if (LastProject.ShortName.Length >= 7)
                     {
-                        string projectNumberStr = LastProject.ProjectName.Substring(5);
+                        string projectNumberStr = LastProject.ShortName.Substring(5);
                         if (int.TryParse(projectNumberStr, out int projectNumber))
                         {
                             int incrementedProjectNumber = projectNumber + 1;
