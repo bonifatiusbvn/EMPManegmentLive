@@ -22,7 +22,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Interface\PurchaseRequest\" />
     <Folder Include="Interface\TaskDetails\" />
+    <Folder Include="Services\PurchaseRequestServices\" />
   </ItemGroup>
 
 </Project>
