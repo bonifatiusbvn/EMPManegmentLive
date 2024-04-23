@@ -16,6 +16,7 @@ using System.Linq.Dynamic.Core;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using X.PagedList;
 
 namespace EMPManegment.Repository.VendorDetailsRepository
 {
@@ -80,37 +81,19 @@ namespace EMPManegment.Repository.VendorDetailsRepository
         }
         public async Task<jsonData> GetVendorsList(DataTableRequstModel dataTable)
         {
-            var vendorlist = Context.TblVendorMasters.Select(a => new VendorDetailsView
-            {
-                Id = a.Vid,
-                VendorFirstName = a.VendorFirstName,
-                VendorLastName = a.VendorLastName,
-                VendorEmail = a.VendorEmail,
-                VendorPhone = a.VendorPhone,
-                VendorAddress = a.VendorAddress,
-                VendorCompany = a.VendorCompany,
-                VendorCompanyType = a.VendorCompanyType,
-                VendorCompanyLogo = a.VendorCompanyLogo,
-                VendorCompanyEmail = a.VendorCompanyEmail,
-                VendorCompanyNumber = a.VendorCompanyNumber,
-                VendorBankAccountNo = a.VendorBankAccountNo,
-                VendorBankName = a.VendorBankName,
-                VendorBankIfsc = a.VendorBankIfsc,
-                VendorGstnumber = a.VendorGstnumber,
-                CreatedOn = DateTime.Now,
-                CreatedBy = a.CreatedBy,
-            });
-            if (!string.IsNullOrEmpty(dataTable.sortColumn) && !string.IsNullOrEmpty(dataTable.sortColumnDir))
-            {
-                vendorlist = vendorlist.OrderBy(dataTable.sortColumn + " " + dataTable.sortColumnDir);
-            }
+            var vendorlist = await Context.TblVendorMasters.FromSqlRaw("EXEC spGetAllVendorList").ToListAsync();
 
             if (!string.IsNullOrEmpty(dataTable.searchValue))
             {
-                vendorlist = vendorlist.Where(e => e.VendorFirstName.Contains(dataTable.searchValue) || e.VendorPhone.Contains(dataTable.searchValue) || e.VendorEmail.Contains(dataTable.searchValue));
+                vendorlist = vendorlist.Where(e => e.VendorFirstName.Contains(dataTable.searchValue) || e.VendorPhone.Contains(dataTable.searchValue) || e.VendorEmail.Contains(dataTable.searchValue) || e.VendorCompany.Contains(dataTable.searchValue)).ToList();
             }
 
-            int totalRecord = vendorlist.Count();
+            int totalRecord = vendorlist.Count;
+
+            if (!string.IsNullOrEmpty(dataTable.sortColumn) && !string.IsNullOrEmpty(dataTable.sortColumnDir))
+            {
+                vendorlist = SortVendorList(vendorlist, dataTable.sortColumn, dataTable.sortColumnDir);
+            }
 
             var cData = vendorlist.Skip(dataTable.skip).Take(dataTable.pageSize).ToList();
 
@@ -121,8 +104,49 @@ namespace EMPManegment.Repository.VendorDetailsRepository
                 recordsTotal = totalRecord,
                 data = cData
             };
+
             return jsonData;
         }
+
+        private List<TblVendorMaster> SortVendorList(List<TblVendorMaster> vendorlist, string sortColumn, string sortColumnDir)
+        {
+            Func<TblVendorMaster, object> sortExpression = null;
+
+            switch (sortColumn)
+            {
+                case "VendorFirstName":
+                    sortExpression = v => v.VendorFirstName;
+                    break;
+                case "VendorLastName":
+                    sortExpression = v => v.VendorLastName;
+                    break;
+                case "VendorEmail":
+                    sortExpression = v => v.VendorEmail;
+                    break;
+                case "VendorPhone":
+                    sortExpression = v => v.VendorPhone;
+                    break;
+                case "VendorCompany":
+                    sortExpression = v => v.VendorCompany;
+                    break;
+                default:
+                    sortExpression = v => v.VendorFirstName;
+                    break;
+            }
+
+            if (sortColumnDir == "asc")
+            {
+                vendorlist = vendorlist.OrderBy(sortExpression).ToList();
+            }
+            else
+            {
+                vendorlist = vendorlist.OrderByDescending(sortExpression).ToList();
+            }
+
+            return vendorlist;
+        }
+
+
 
         public async Task<IEnumerable<VendorTypeView>> GetVendorType()
         {
@@ -153,7 +177,7 @@ namespace EMPManegment.Repository.VendorDetailsRepository
                               join t in Context.TblVendorTypes on d.VendorTypeId equals t.Id
                               select new VendorDetailsView
                               {
-                                  Id = d.Vid,
+                                  Vid = d.Vid,
                                   VendorFirstName = d.VendorFirstName,
                                   VendorLastName = d.VendorLastName,
                                   VendorEmail = d.VendorEmail,
@@ -205,11 +229,11 @@ namespace EMPManegment.Repository.VendorDetailsRepository
         public async Task<UserResponceModel> UpdateVendorDetails(VendorDetailsView updateVendor)
         {
             UserResponceModel response = new UserResponceModel();
-            var Vendordata = await Context.TblVendorMasters.FirstOrDefaultAsync(a => a.Vid == updateVendor.Id);
+            var Vendordata = await Context.TblVendorMasters.FirstOrDefaultAsync(a => a.Vid == updateVendor.Vid);
             if (Vendordata.Vid != null)
             {
                                   
-                Vendordata.Vid = updateVendor.Id;
+                Vendordata.Vid = updateVendor.Vid;
                 Vendordata.VendorFirstName = updateVendor.VendorFirstName;
                 Vendordata.VendorLastName = updateVendor.VendorLastName;
                 Vendordata.VendorEmail = updateVendor.VendorEmail;

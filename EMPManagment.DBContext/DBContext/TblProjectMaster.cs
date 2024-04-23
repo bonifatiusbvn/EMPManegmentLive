@@ -11,13 +11,23 @@ public partial class TblProjectMaster
 
     public string? ProjectTitle { get; set; }
 
-    public string? ProjectName { get; set; }
+    public string? ShortName { get; set; }
 
     public string? ProjectHead { get; set; }
 
     public string? ProjectDescription { get; set; }
 
-    public string? ProjectLocation { get; set; }
+    public string? BuildingName { get; set; }
+
+    public string? Area { get; set; }
+
+    public int? State { get; set; }
+
+    public int? City { get; set; }
+
+    public int? Country { get; set; }
+
+    public string? PinCode { get; set; }
 
     public string? ProjectPriority { get; set; }
 
@@ -29,17 +39,25 @@ public partial class TblProjectMaster
 
     public DateTime ProjectDeadline { get; set; }
 
+    public string? ProjectImage { get; set; }
+
+    public string? ProjectPath { get; set; }
+
     public DateTime? CreatedOn { get; set; }
 
     public string? CreatedBy { get; set; }
 
-    public string? ProjectImage { get; set; }
+    public Guid? UpdatedBy { get; set; }
+
+    public DateTime? UpdatedOn { get; set; }
 
     public virtual ICollection<TblInvoice> TblInvoices { get; set; } = new List<TblInvoice>();
 
     public virtual ICollection<TblProjectDocument> TblProjectDocuments { get; set; } = new List<TblProjectDocument>();
 
     public virtual ICollection<TblProjectMember> TblProjectMembers { get; set; } = new List<TblProjectMember>();
+
+    public virtual ICollection<TblPurchaseRequest> TblPurchaseRequests { get; set; } = new List<TblPurchaseRequest>();
 
     public virtual ICollection<TblTaskDetail> TblTaskDetails { get; set; } = new List<TblTaskDetail>();
 }

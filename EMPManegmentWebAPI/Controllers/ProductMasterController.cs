@@ -169,11 +169,11 @@ namespace EMPManagment.API.Controllers
             return Ok(new { code = 200, data = ProductList });
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("GetAllProductList")]
-        public async Task<IActionResult> GetProductsList()
+        public async Task<IActionResult> GetProductsList(string? searchText)
         {
-            IEnumerable<ProductDetailsView> getProductList = await productMaster.GetAllProductList();
+            IEnumerable<ProductDetailsView> getProductList = await productMaster.GetAllProductList(searchText);
             return Ok(new { code = 200, data = getProductList.ToList() });
         }
     }
