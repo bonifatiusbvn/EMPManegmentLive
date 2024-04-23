@@ -83,6 +83,8 @@ public partial class TblUser
 
     public virtual ICollection<TblProjectMember> TblProjectMembers { get; set; } = new List<TblProjectMember>();
 
+    public virtual ICollection<TblPurchaseRequest> TblPurchaseRequests { get; set; } = new List<TblPurchaseRequest>();
+
     public virtual ICollection<TblTaskDetail> TblTaskDetails { get; set; } = new List<TblTaskDetail>();
 
     public virtual ICollection<TblUserDocument> TblUserDocuments { get; set; } = new List<TblUserDocument>();

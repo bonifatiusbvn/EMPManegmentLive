@@ -7,6 +7,8 @@ public partial class TblPurchaseRequest
 {
     public Guid PrId { get; set; }
 
+    public Guid UserId { get; set; }
+
     public Guid ProjectId { get; set; }
 
     public Guid? ProductId { get; set; }
@@ -34,4 +36,6 @@ public partial class TblPurchaseRequest
     public virtual TblProductTypeMaster ProductType { get; set; } = null!;
 
     public virtual TblProjectMaster Project { get; set; } = null!;
+
+    public virtual TblUser User { get; set; } = null!;
 }
