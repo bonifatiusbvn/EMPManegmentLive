@@ -23,7 +23,7 @@ namespace EMPManegment.EntityModels.ViewModels.ProductMaster
 
         public string ProductImage { get; set; }
 
-        public decimal ProductStocks { get; set; }
+        public decimal? ProductStocks { get; set; }
 
         public decimal PerUnitPrice { get; set; }
 
