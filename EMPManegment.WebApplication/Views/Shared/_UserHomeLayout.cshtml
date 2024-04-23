@@ -616,6 +616,21 @@
                                         </div>
                                     </li>
                                     <li class="nav-item">
+                                        <a href="#PurchaseRequest" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarInvoices" data-key="t-invoices">
+                                            Purchase Request
+                                        </a>
+                                        <div class="collapse menu-dropdown" id="PurchaseRequest">
+                                            <ul class="nav nav-sm flex-column">
+                                                <li class="nav-item">
+                                                    <a asp-action="CreatePurchaseOrder" asp-controller="PurchaseOrderMaster" class="nav-link" data-key="t-products"> List View</a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a asp-action="CreatePurchaseRequest" asp-controller="PurchaseRequest" class="nav-link" data-key="t-orders"> Create PR </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                    <li class="nav-item">
                                         <a href="#sidebarOrder" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarInvoices" data-key="t-invoices">
                                             Purchase Order
                                         </a>
