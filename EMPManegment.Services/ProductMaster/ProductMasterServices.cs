@@ -68,9 +68,9 @@ namespace EMPManegment.Services.ProductMaster
         {
             return await productMaster.SearchProductName(ProductName);
         }
-        public async Task<IEnumerable<ProductDetailsView>> GetAllProductList()
+        public async Task<IEnumerable<ProductDetailsView>> GetAllProductList(string? searchText)
         {
-            return await productMaster.GetAllProductList();
+            return await productMaster.GetAllProductList(searchText);
         }
     }
 }

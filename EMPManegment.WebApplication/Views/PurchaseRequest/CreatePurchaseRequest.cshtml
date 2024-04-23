@@ -32,7 +32,7 @@
                     <div class="row g-4">
                         <div class="col-sm-auto">
                             <div>
-                                <a href="apps-ecommerce-add-product.html" class="btn btn-primary" id="addproduct-btn"><i class="ri-add-line align-bottom me-1"></i> Add Product</a>
+                                <a class="btn btn-primary" onclick="fn_OpenAddproductmodal()"><i class="ri-add-line align-bottom me-1"></i> Add Product</a>
                             </div>
                         </div>
                         <div class="col-sm">
@@ -156,7 +156,24 @@
                         <!-- end tab pane -->
                     </div>
                     <!-- end tab content -->
+                    <div class="modal fade show" id="mdPoproductModal" tabindex="-1" aria-modal="true" role="dialog">
+                        <div class="modal-dialog modal-dialog-scrollable">
+                            <div class="modal-content">
 
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Select Product</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-header">
+                                    <label class="form-label">Search Product</label>
+                                    <input class="form-control" id="mdProductSearch" onkeyup="filterallItemTable()" />
+                                </div>
+
+                                <div class="modal-body" id="mdlistofItem" style="overflow-x: hidden">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <!-- end card body -->
             </div>
@@ -166,8 +183,18 @@
     <!-- end col -->
 </div>
 <!-- end row -->
+
+
+<script>
+    function fn_OpenAddproductmodal() {
+        $('#mdProductSearch').val('');
+        $('#mdPoproductModal').modal('show');
+    }
+</script>
 <!-- input step init -->
 <script src="~/assets/js/pages/form-input-spin.init.js"></script>
 
 <!-- ecommerce cart js -->
 <script src="~/assets/js/pages/ecommerce-cart.init.js"></script>
+
+<script src="~/moduls/purchaserequestscript.js"></script>
