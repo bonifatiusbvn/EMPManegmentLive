@@ -1,6 +1,6 @@
 ﻿
 $(document).ready(function () {
-    
+
     GetDepartment();
     GetCountry();
     GetQuestion();
@@ -13,7 +13,7 @@ $(document).ready(function () {
         $.ajax({
             url: '/Authentication/GetState?StateId=' + StateId,
             success: function (result) {
-                
+
                 $.each(result, function (i, data) {
                     $('#ddlState').append('<Option value=' + data.id + '>' + data.stateName + '</Option>')
                 });
@@ -23,10 +23,10 @@ $(document).ready(function () {
 
 
     $('#ddlState').change(function () {
-        
+
         var Text = $("#ddlState Option:Selected").text();
         var CityId = $(this).val();
-        $("#txtstate").val(Text);
+        $("#txtstate").val(CityId);
         $('#ddlCity').empty();
         $('#ddlCity').append('<Option >--Select City--</Option>');
         $.ajax({
@@ -44,7 +44,7 @@ $(document).ready(function () {
 
 
 function GetCountry() {
-    
+
     $.ajax({
         url: '/Authentication/GetCountrys',
         success: function (result) {
@@ -62,7 +62,7 @@ function Citytext(sel) {
 
 
 function Departmenttext(sel) {
-    
+
     $("#txtdeptid").val((sel.options[sel.selectedIndex].text));
 }
 
@@ -71,7 +71,7 @@ function Questiontext(sel) {
     $("#txtquestionid").val((sel.options[sel.selectedIndex].text));
 }
 function GetDepartment() {
-    
+
     $.ajax({
         url: '/Authentication/GetDepartment',
         success: function (result) {
@@ -88,7 +88,7 @@ function GetQuestion() {
     $.ajax({
         url: '/Authentication/GetQuestion',
         success: function (result) {
-            
+
             $.each(result, function (i, data) {
                 $('#ddlQuestion').append('<Option value=' + data.id + '>' + data.questions + '</Option>')
 

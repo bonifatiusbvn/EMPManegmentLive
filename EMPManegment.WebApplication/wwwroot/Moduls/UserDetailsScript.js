@@ -414,6 +414,8 @@ function UserBirsthDayWish() {
         processData: false,
         contentType: false,
         success: function (Result) {
+
+
             if (Result.message != null) {
                 Swal.fire(
                     {
@@ -471,9 +473,6 @@ function UserLogout() {
             logout();
         }
     });
-
-
-
 }
 
 function logout() {

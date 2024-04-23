@@ -7,7 +7,7 @@
 @*
     For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 *@
-<link href="~/UserHome/minimal/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+<link href="~/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
 <style>
     span.deleteicon {
         position: relative;
@@ -115,7 +115,7 @@
                                 <div class="flex-shrink-0 me-3">
                                     <div class="avatar-sm">
                                         <span class="avatar-title bg-primary-subtle rounded p-2">
-                                            <img src="~/UserHome/minimal/assets/images/brands/mail_chimp.png" alt="" class="img-fluid p-1">
+                                            <img src="~/assets/images/brands/mail_chimp.png" alt="" class="img-fluid p-1">
                                         </span>
                                     </div>
                                 </div>
@@ -213,15 +213,15 @@
         searchfor = @Context.Request.Query["searchfor"],
         searchby = @Context.Request.Query["searchby"]
     }),
-                      new X.PagedList.Web.Common.PagedListRenderOptions
-                  {
-                      LiElementClasses = new string[] { "page-item" },
-                      PageClasses = new string[] { "page-link" }
-                  })
+                                      new X.PagedList.Web.Common.PagedListRenderOptions
+                                  {
+                                      LiElementClasses = new string[] { "page-item" },
+                                      PageClasses = new string[] { "page-link" }
+                                  })
 
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
 <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
-<script src="~/UserHome/minimal/assets/js/pages/project-list.init.js"></script>
+<script src="~/assets/js/pages/project-list.init.js"></script>
