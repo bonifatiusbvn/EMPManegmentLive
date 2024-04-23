@@ -12,20 +12,31 @@ namespace EMPManegment.EntityModels.ViewModels.ProjectModels
     {
         public Guid? ProjectId { get; set; }
 
-        public string? ProjectType { get; set; } = null!;
+        public string? ProjectType { get; set; }
 
-        public string? ProjectTitle { get; set; } = null!;
-        public string? ProjectName { get; set; }
+        public string? ProjectTitle { get; set; }
 
-        public string? ProjectHead { get; set; } = null!;
+        public string? ShortName { get; set; }
 
-        public string? ProjectDescription { get; set; } = null!;
+        public string? ProjectHead { get; set; }
 
-        public string? ProjectLocation { get; set; } = null!;
+        public string? ProjectDescription { get; set; }
 
-        public string? ProjectPriority { get; set; } = null!;
+        public string? BuildingName { get; set; }
 
-        public string? ProjectStatus { get; set; } = null!;
+        public string? Area { get; set; }
+
+        public int? State { get; set; }
+
+        public int? City { get; set; }
+
+        public int? Country { get; set; }
+
+        public string? PinCode { get; set; }
+
+        public string? ProjectPriority { get; set; }
+
+        public string? ProjectStatus { get; set; }
 
         public DateTime ProjectStartDate { get; set; }
 
@@ -33,31 +44,49 @@ namespace EMPManegment.EntityModels.ViewModels.ProjectModels
 
         public DateTime ProjectDeadline { get; set; }
 
+        public string? ProjectImage { get; set; }
+
+        public string? ProjectPath { get; set; }
+
         public DateTime? CreatedOn { get; set; }
 
         public string? CreatedBy { get; set; }
+
+        public Guid? UpdatedBy { get; set; }
+
+        public DateTime? UpdatedOn { get; set; }
         public Guid? UserId { get; set; }
         public Guid? Id { get; set; }
-        public string? ProjectImage { get; set; }
     }
     public class ProjectDetailRequestModel
     {
-        public Guid? ProjectId { get; set; }
+        public Guid ProjectId { get; set; }
 
-        public string? ProjectType { get; set; } = null!;
+        public string? ProjectType { get; set; }
 
-        public string? ProjectTitle { get; set; } = null!;
-        public string? ProjectName { get; set; }
+        public string? ProjectTitle { get; set; }
 
-        public string? ProjectHead { get; set; } = null!;
+        public string? ShortName { get; set; }
 
-        public string? ProjectDescription { get; set; } = null!;
+        public string? ProjectHead { get; set; }
 
-        public string? ProjectLocation { get; set; } = null!;
+        public string? ProjectDescription { get; set; }
 
-        public string? ProjectPriority { get; set; } = null!;
+        public string? BuildingName { get; set; }
 
-        public string? ProjectStatus { get; set; } = null!;
+        public string? Area { get; set; }
+
+        public int? State { get; set; }
+
+        public int? City { get; set; }
+
+        public int? Country { get; set; }
+
+        public string? PinCode { get; set; }
+
+        public string? ProjectPriority { get; set; }
+
+        public string? ProjectStatus { get; set; }
 
         public DateTime ProjectStartDate { get; set; }
 
@@ -65,9 +94,15 @@ namespace EMPManegment.EntityModels.ViewModels.ProjectModels
 
         public DateTime ProjectDeadline { get; set; }
 
+        public string? ProjectPath { get; set; }
+
         public DateTime? CreatedOn { get; set; }
 
         public string? CreatedBy { get; set; }
+
+        public Guid? UpdatedBy { get; set; }
+
+        public DateTime? UpdatedOn { get; set; }
         public Guid? UserId { get; set; }
 
         public Guid? Id { get; set; }

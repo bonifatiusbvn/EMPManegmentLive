@@ -16,12 +16,18 @@ function btnCreateProjectDetail() {
         formData.append("ProjectStatus", $("#projectStatus").val());
         formData.append("ProjectDeadline", $("#projectdeadline").val());
         formData.append("ProjectType", $("#projectType").val());
-        formData.append("ProjectName", $("#projectname").val());
+        formData.append("ShortName", $("#projectname").val());
         formData.append("ProjectHead", $("#projectHead").val());
-        formData.append("ProjectLocation", $("#projectLocation").val());
         formData.append("ProjectStartDate", $("#projectStartDate").val());
         formData.append("ProjectEndDate", $("#projectEndDate").val());
         formData.append("ProjectImage", $("#projectImage")[0].files[0]);
+        formData.append("Area", $("#txtProjectArea").val());
+        formData.append("BuildingName", $("#txtBuildingName").val());
+        formData.append("State", $("#ProjectState").val());
+        formData.append("City", $("#ProjectCity").val());
+        formData.append("Country", $("#projectCountry").val());
+        formData.append("Pincode", $("#txtProjectPincode").val());
+        formData.append("ProjectPath", $("#projectPath").val());
         $.ajax({
             url: '/Project/CreateProject',
             type: 'Post',
@@ -61,6 +67,17 @@ $(document).ready(function () {
             projectDescription: "required",
             projectStatus: "required",
             projectdeadline: "required",
+            txtBuildingName: "required",
+            txtProjectArea: "required",
+            txtProjectPincode: {
+                required: true,
+                digits: true,
+                minlength: 6,
+                maxlength: 6
+            },
+            projectCountry: "required",
+            ProjectState: "required",
+            ProjectCity: "required",
         },
         messages: {
             projectPriority: "Please Select Project Priority",
@@ -68,6 +85,17 @@ $(document).ready(function () {
             projectDescription: "Please Enter Project Description",
             projectStatus: "Please Enter Project Status",
             projectdeadline: "Please Enter Deadline Date",
+            txtBuildingName: "Please Enter Building Name",
+            txtProjectArea: "Please Enter Project Area",
+            txtProjectPincode: {
+                required: "Please Enter Pin Code",
+                digits: "Pin code must contain only digits",
+                minlength: "Pin code must be 6 digits long",
+                maxlength: "Pin code must be 6 digits long"
+            },
+            projectCountry: "Please Enter Project Country",
+            ProjectState: "Please Enter Project State",
+            ProjectCity: "Please Enter Project City",
         }
     });
     $("#frmprojectdetails").validate({
@@ -76,14 +104,12 @@ $(document).ready(function () {
             projectHead: "required",
             projectLocation: "required",
             projectStartDate: "required",
-            projectEndDate: "required",
         },
         messages: {
             projectType: "Please Enter Project Type",
             projectHead: "Please Select Project Head",
             projectLocation: "Please Enter Location",
             projectStartDate: "Please Enter Start Date",
-            projectEndDate: "Please Enter End Date",
         }
     });
     $('#projectDetails').on('click', function () {
@@ -420,5 +446,80 @@ function deleteProjectMember(Id) {
                 })
             }
         })
+    });
+}
+
+$(document).ready(function () {
+
+    GetProjectCountry();
+
+    $('#dropProjectState').change(function () {
+
+        var Text = $("#dropProjectState Option:Selected").text();
+        var txtProjectid = $(this).val();
+        $("#txtProjectstate").val(txtProjectid);
+    });
+
+    $('#ProjectCity').change(function () {
+
+        var Text = $("#projectCity Option:Selected").text();
+        var txtProjectcity = $(this).val();
+        $("#txtProjectCity").val(txtProjectcity);
+    });
+
+});
+
+function fn_getProjectState(drpProjectstate, countryId, that) {
+    var cid = countryId;
+    if (cid == undefined || cid == null) {
+        var cid = $(that).val();
+    }
+
+
+    $('#' + drpProjectstate).empty();
+    $('#' + drpProjectstate).append('<Option >--Select State--</Option>');
+    $.ajax({
+        url: '/Authentication/GetState?StateId=' + cid,
+        success: function (result) {
+
+            $.each(result, function (i, data) {
+                $('#' + drpProjectstate).append('<Option value=' + data.id + '>' + data.stateName + '</Option>')
+            });
+        }
+    });
+}
+
+function fn_getProjectcitiesbystateId(drpProjectcity, stateid, that) {
+
+    var sid = stateid;
+    if (sid == undefined || sid == null) {
+        var sid = $(that).val();
+    }
+
+
+    $('#' + drpProjectcity).empty();
+    $('#' + drpProjectcity).append('<Option >--Select City--</Option>');
+    $.ajax({
+        url: '/Authentication/GetCity?CityId=' + sid,
+        success: function (result) {
+
+            $.each(result, function (i, data) {
+                $('#' + drpProjectcity).append('<Option value=' + data.id + '>' + data.cityName + '</Option>');
+
+            });
+        }
+    });
+}
+
+function GetProjectCountry() {
+    $.ajax({
+        url: '/Authentication/GetCountrys',
+        success: function (result) {
+            $.each(result, function (i, data) {
+                debugger
+                $('#projectCountry').append('<Option value=' + data.id + ' Selected>' + data.countryName + '</Option>')
+
+            });
+        }
     });
 }

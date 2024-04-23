@@ -6,7 +6,9 @@
 <style>
     #projectTitle-error, #projectPriority-error, #projectDescription-error,
     #projectStatus-error, #projectdeadline-error, #projectType-error,
-    #projectHead-error, #projectLocation-error, #projectStartDate-error, #projectEndDate-error {
+    #projectHead-error, #txtProjectAddress-error, #projectStartDate-error, 
+    #txtProjectArea-error, #txtProjectPincode-error, #projectCountry-error,
+    #ProjectState-error, #ProjectCity-error {
         color: red;
     }
 </style>
@@ -93,33 +95,48 @@
             </div>
             <!-- end card -->
 
-           @* <div class="card">
-                <div class="card-header">
-                    <h5 class="card-title mb-0">Attached files</h5>
-                </div>
+            <div class="card">
                 <div class="card-body">
-                    <div>
-                        <p class="text-muted">Add Attached files here.</p>
-
-                        <div class="dropzone">
-                            <div class="fallback">
-                                <input name="file" type="file" multiple="multiple">
-                            </div>
-                            <div class="dz-message needsclick">
-                                <div class="mb-3">
-                                    <i class="display-4 text-muted ri-upload-cloud-2-fill"></i>
-                                </div>
-
-                                <h5>Drop files here or click to upload.</h5>
-                            </div>
+                    <div class="col-12 mb-3">
+                        <label class="form-label">BuildingName</label> <br />
+                        <textarea type="text" class="form-control" rows="3" placeholder="BuildingName" id="txtBuildingName" name="txtBuildingName"></textarea>
+                    </div>
+                    <div class="row">
+                        <div class="col-6 mb-3">
+                            <label class="form-label">Area</label>
+                            <input type="text" class="form-control" placeholder="Area" id="txtProjectArea" name="txtProjectArea">
                         </div>
-
-
-                        <!-- end dropzon-preview -->
+                        <div class="col-6 mb-3">
+                            <label class="form-label">Pincode</label>
+                            <input type="number" class="form-control" placeholder="Pincode" id="txtProjectPincode" name="txtProjectPincode">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4 mb-3">
+                            <label class="form-label">Country</label>
+                            <select id="projectCountry" name="projectCountry" class="form-select" onchange="fn_getProjectState('ProjectState',null,this)">
+                                <option selected>--Select Country--</option>
+                            </select>
+                            <input type="hidden" id="txtprojectCountry" value="" />
+                        </div>
+                        <div class="col-4 mb-3">
+                            <label class="form-label">State</label>
+                            <select id="ProjectState" name="ProjectState" class="form-select" onchange="fn_getProjectcitiesbystateId('ProjectCity', null, this)">
+                                <option>--Select State--</option>
+                            </select>
+                            <input type="hidden" id="txtProjectState" value="" />
+                        </div>
+                        <div class="col-4 mb-3">
+                            <label class="form-label">City</label>
+                            <select id="ProjectCity" name="ProjectCity" class="form-select">
+                                <option>--Select City--</option>
+                            </select>
+                            <input type="hidden" id="txtProjectCity" value="" />
+                        </div>
                     </div>
                 </div>
             </div>
-            <!-- end card -->*@
+            <!-- end card -->
             <div class="text-end mb-4">
                 <button type="submit" class="btn btn-danger btn-default m-1">Delete</button>
                 <button type="submit" class="btn btn-primary w-sm">Draft</button>
@@ -132,21 +149,7 @@
         <form id="frmprojectdetails">
             <div class="card">
                 <div class="card-header">
-                    <h5 class="card-title mb-0">Privacy</h5>
-                </div>
-                <div class="card-body">
-                    <div>
-                        <label for="projectLocation" class="form-label">Location</label>
-                        <input type="text" class="form-control" id="projectLocation" placeholder="Enter project location" name="projectLocation">
-                    </div>
-                </div>
-                <!-- end card body -->
-            </div>
-            <!-- end card -->
-
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="card-title mb-0">Tags</h5>
+                    <h5 class="card-title mb-0">Project Details</h5>
                 </div>
                 <div class="card-body">
                     <div class="mb-3">

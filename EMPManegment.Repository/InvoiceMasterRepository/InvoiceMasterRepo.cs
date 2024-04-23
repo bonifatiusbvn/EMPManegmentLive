@@ -292,7 +292,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                                             VandorId = item.Invoice.VandorId,
                                             OrderId = item.Invoice.OrderId,
                                             ProjectId = item.Invoice.ProjectId,
-                                            ProjectName = item.Project.ProjectName,
+                                            ProjectName = item.Project.ShortName,
                                             DispatchThrough = item.Invoice.DispatchThrough,
                                             Destination = item.Invoice.Destination,
                                             Cgst = item.Invoice.Cgst,

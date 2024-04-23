@@ -137,15 +137,22 @@ namespace EMPManegment.Web.Controllers
                     ProjectType = project.ProjectType,
                     ProjectDeadline = project.ProjectDeadline,
                     ProjectTitle = project.ProjectTitle,
-                    ProjectName = project.ProjectName,
+                    ShortName = project.ShortName,
                     ProjectEndDate = project.ProjectEndDate,
                     ProjectDescription = project.ProjectDescription,
                     ProjectHead = project.ProjectHead,
-                    ProjectLocation = project.ProjectLocation,
+                    BuildingName = project.BuildingName,
+                    Area = project.Area,
+                    City = project.City,
+                    State = project.State,
+                    PinCode = project.PinCode,
+                    Country = project.Country,
+                    ProjectPath = project.ProjectPath,
                     ProjectPriority = project.ProjectPriority,
                     ProjectStartDate = project.ProjectStartDate,
                     ProjectStatus = project.ProjectStatus,
                     ProjectImage = filepath,
+                    CreatedBy = _userSession.FullName,
                 };
                 ApiResponseModel postuser = await APIServices.PostAsync(ProjectDetails, "ProjectDetails/CreateProject");
                 UserResponceModel responseModel = new UserResponceModel();
@@ -172,7 +179,7 @@ namespace EMPManegment.Web.Controllers
                 {
                     projectDetails = JsonConvert.DeserializeObject<ProjectDetailView>(response.data.ToString());
                     UserSession.ProjectId = projectDetails.ProjectId.ToString();
-                    UserSession.ProjectName = projectDetails.ProjectName.ToString();
+                    UserSession.ProjectName = projectDetails.ShortName.ToString();
 
                 }
                 return View(projectDetails);
@@ -242,7 +249,7 @@ namespace EMPManegment.Web.Controllers
         public async Task<IActionResult> InviteMemberToProject()
         {
             try
-            { 
+            {
                 var membersinvited = HttpContext.Request.Form["InviteMember"];
                 var memberDetails = JsonConvert.DeserializeObject<ProjectView>(membersinvited);
                 ApiResponseModel postuser = await APIServices.PostAsync(memberDetails, "ProjectDetails/AddMemberToProject");
