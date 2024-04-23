@@ -19,7 +19,7 @@ public partial class TblProductDetailsMaster
 
     public string? ProductImage { get; set; }
 
-    public decimal ProductStocks { get; set; }
+    public decimal? ProductStocks { get; set; }
 
     public decimal PerUnitPrice { get; set; }
 
@@ -38,4 +38,6 @@ public partial class TblProductDetailsMaster
     public Guid? UpdatedBy { get; set; }
 
     public virtual ICollection<TblPurchaseOrderMaster> TblPurchaseOrderMasters { get; set; } = new List<TblPurchaseOrderMaster>();
+
+    public virtual ICollection<TblPurchaseRequest> TblPurchaseRequests { get; set; } = new List<TblPurchaseRequest>();
 }

@@ -55,6 +55,8 @@ public partial class BonifatiusEmployeesContext : DbContext
 
     public virtual DbSet<TblPurchaseOrderMaster> TblPurchaseOrderMasters { get; set; }
 
+    public virtual DbSet<TblPurchaseRequest> TblPurchaseRequests { get; set; }
+
     public virtual DbSet<TblQuestion> TblQuestions { get; set; }
 
     public virtual DbSet<TblRoleMaster> TblRoleMasters { get; set; }
@@ -75,7 +77,7 @@ public partial class BonifatiusEmployeesContext : DbContext
 
     public virtual DbSet<TblVendorType> TblVendorTypes { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder){ }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<TblAttendance>(entity =>
@@ -419,6 +421,33 @@ public partial class BonifatiusEmployeesContext : DbContext
                 .HasForeignKey(d => d.ProductType)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_tblOrderMaster_tblProductTypeMaster");
+        });
+
+        modelBuilder.Entity<TblPurchaseRequest>(entity =>
+        {
+            entity.HasKey(e => e.PrId);
+
+            entity.ToTable("tblPurchaseRequest");
+
+            entity.Property(e => e.PrId).ValueGeneratedNever();
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.ProductName).HasMaxLength(250);
+            entity.Property(e => e.Quantity).HasColumnType("numeric(18, 2)");
+            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+
+            entity.HasOne(d => d.Product).WithMany(p => p.TblPurchaseRequests)
+                .HasForeignKey(d => d.ProductId)
+                .HasConstraintName("FK_tblPurchaseRequest_tblProductDetailsMaster");
+
+            entity.HasOne(d => d.ProductType).WithMany(p => p.TblPurchaseRequests)
+                .HasForeignKey(d => d.ProductTypeId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_tblPurchaseRequest_tblProductTypeMaster");
+
+            entity.HasOne(d => d.Project).WithMany(p => p.TblPurchaseRequests)
+                .HasForeignKey(d => d.ProjectId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_tblPurchaseRequest_tblProjectMaster");
         });
 
         modelBuilder.Entity<TblQuestion>(entity =>
