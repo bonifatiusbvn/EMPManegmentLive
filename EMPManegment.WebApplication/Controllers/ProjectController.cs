@@ -122,11 +122,32 @@ namespace EMPManegment.Web.Controllers
             }
         }
         [HttpPost]
-        public async Task<IActionResult> CreateProject(ProjectDetailView project)
+        public async Task<IActionResult> CreateProject(ProjectDetailRequestModel project)
         {
             try
             {
-                ApiResponseModel postuser = await APIServices.PostAsync(project, "ProjectDetails/CreateProject");
+                var ProjectImg = Guid.NewGuid() + "_" + project.ProjectImage.FileName;
+                var path = Environment.WebRootPath;
+                var filepath = "Content/Image/" + ProjectImg;
+                var fullpath = Path.Combine(path, filepath);
+                UploadFile(project.ProjectImage, fullpath);
+                var ProjectDetails = new ProjectDetailView()
+                {
+                    ProjectId = Guid.NewGuid(),
+                    ProjectType = project.ProjectType,
+                    ProjectDeadline = project.ProjectDeadline,
+                    ProjectTitle = project.ProjectTitle,
+                    ProjectName = project.ProjectName,
+                    ProjectEndDate = project.ProjectEndDate,
+                    ProjectDescription = project.ProjectDescription,
+                    ProjectHead = project.ProjectHead,
+                    ProjectLocation = project.ProjectLocation,
+                    ProjectPriority = project.ProjectPriority,
+                    ProjectStartDate = project.ProjectStartDate,
+                    ProjectStatus = project.ProjectStatus,
+                    ProjectImage = filepath,
+                };
+                ApiResponseModel postuser = await APIServices.PostAsync(ProjectDetails, "ProjectDetails/CreateProject");
                 UserResponceModel responseModel = new UserResponceModel();
                 if (postuser.code == 200)
                 {

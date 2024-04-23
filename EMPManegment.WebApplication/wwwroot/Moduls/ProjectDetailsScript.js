@@ -21,6 +21,7 @@ function btnCreateProjectDetail() {
         formData.append("ProjectLocation", $("#projectLocation").val());
         formData.append("ProjectStartDate", $("#projectStartDate").val());
         formData.append("ProjectEndDate", $("#projectEndDate").val());
+        formData.append("ProjectImage", $("#projectImage")[0].files[0]);
         $.ajax({
             url: '/Project/CreateProject',
             type: 'Post',

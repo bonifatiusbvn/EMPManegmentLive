@@ -33,6 +33,8 @@ public partial class TblProjectMaster
 
     public string? CreatedBy { get; set; }
 
+    public string? ProjectImage { get; set; }
+
     public virtual ICollection<TblInvoice> TblInvoices { get; set; } = new List<TblInvoice>();
 
     public virtual ICollection<TblProjectDocument> TblProjectDocuments { get; set; } = new List<TblProjectDocument>();

@@ -363,3 +363,8 @@ $(document).on("click", ".pagination a", function (e) {
     var page = $(this).text();
     GetAllProductDetailsList(page);
 });
+
+function clearProductImage() {
+    document.getElementById('txtproductimage').value = '';
+    document.getElementById('imgPreview').src="/assets/images/no-preview.png";
+}

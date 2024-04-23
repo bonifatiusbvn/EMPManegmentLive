@@ -48,6 +48,7 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
                     ProjectStartDate = createproject.ProjectStartDate,
                     ProjectEndDate = createproject.ProjectEndDate,
                     ProjectDeadline = createproject.ProjectDeadline,
+                    ProjectImage = createproject.ProjectImage,
                     CreatedOn = DateTime.Now
                 };
                 response.Code = 200;
@@ -149,6 +150,7 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
                 ProjectStartDate = projectDetail.ProjectStartDate,
                 ProjectDescription = projectDetail.ProjectDescription,
                 ProjectType = projectDetail.ProjectType,
+                ProjectImage = projectDetail.ProjectImage,
             };
             return model;
         }
