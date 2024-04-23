@@ -10,7 +10,8 @@ namespace EMPManegment.EntityModels.ViewModels.VendorModels
 {
     public class VendorDetailsView
     {
-        public Guid Id { get; set; }
+
+        public Guid Vid { get; set; }
         public string VendorFirstName { get; set; } = null!;
         public string VendorLastName { get; set; } = null!;
         public string? VendorEmail { get; set; }

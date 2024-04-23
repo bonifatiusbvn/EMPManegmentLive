@@ -22,8 +22,8 @@ function GetAllVendorData() {
             { "data": "vendorCompanyEmail", "name": "VendorCompanyEmail"},
             { "data": "vendorAddress", "name": "VendorAddress" },
             {
-                "render": function (data, type, full) {      
-                    return '<div class="flex-shrink-0 ms-4"><ul class="list-inline tasks-list-menu mb-0"><li class="list-inline-item"><a onclick="VendorDetails(\'' + full.id + '\')"><i class="ri-eye-fill align-bottom me-2 text-muted"></i></a><li class="list-inline-item"><a onclick="EditVendorDetails(\'' + full.id + '\')"><i class="ri-pencil-fill align-bottom me-2 text-muted"></i></a></li></ul></div>';
+                "render": function (data, type, full) { 
+                    return '<div class="flex-shrink-0 ms-4"><ul class="list-inline tasks-list-menu mb-0"><li class="list-inline-item"><a onclick="VendorDetails(\'' + full.vid + '\')"><i class="ri-eye-fill align-bottom me-2 text-muted"></i></a><li class="list-inline-item"><a onclick="EditVendorDetails(\'' + full.vid + '\')"><i class="ri-pencil-fill align-bottom me-2 text-muted"></i></a></li></ul></div>';
                 }
             },
         ],
@@ -44,7 +44,7 @@ function VendorDetails(Id) {
             $('#VendorDetailsModel').modal('show');
             $('#VendorFirstName').text(response.vendorFirstName);
             $('#VendorLastName').text(response.vendorLastName);
-            $('#VendorEmail').text(response.vendorEmail);
+            $('#VendorEmail').text(response.vendorCompanyEmail);
             $('#VendorPhone').text(response.vendorPhone);
             $('#VendorContectNo').text(response.vendorContectNo);
             $('#VendorType').text(response.vendorTypeName);
@@ -55,7 +55,7 @@ function VendorDetails(Id) {
             $('#VendorAddress').text(response.vendorAddress);
             $('#VendorCompany').text(response.vendorCompany);
             $('#VendorCompanyType').text(response.vendorCompanyType);
-            $('#VendorCompanyEmail').text(response.vendorCompanyEmail);
+            $('#VendorCompanyEmail').text(response.vendorEmail);
             $('#VendorCompanyNumber').text(response.vendorCompanyNumber);
             $('#VendorBankAccountNo').text(response.vendorBankAccountNo);
             $('#VendorBankName').text(response.vendorBankName);
@@ -80,10 +80,10 @@ function EditVendorDetails(Id)
         type: "Get",
         contentType: 'application/json;charset=utf-8;',
         dataType: 'json',
-        success: function (response) {
+        success: function (response) {debugger
             
             $('#UpdateVendorModel').modal('show');
-            $('#vendorId').val(response.id);
+            $('#vendorId').val(response.vid);
             $('#EditfirstnameInput').val(response.vendorFirstName);
             $('#EditlastnameInput').val(response.vendorLastName);
             $('#EditemailidInput').val(response.vendorEmail);
@@ -121,7 +121,7 @@ function UpdateVendorDetails()
     $("#editBankDetailsModel").prop("disabled", true);
     if ($("#editVendorbankDetails").valid()) {
         var fromData = {
-            "Id": $("#vendorId").val(),
+            "Vid": $("#vendorId").val(),
             "VendorFirstName": $("#EditfirstnameInput").val(),
             "VendorLastName": $("#EditlastnameInput").val(),
             "VendorEmail": $("#EditemailidInput").val(),
@@ -224,7 +224,6 @@ function AddVendorDetails() {
             "VendorBankAccountNo": $("#accountnumberInput").val(),
             "VendorBankIfsc": $("#ifscInput").val(),
             "VendorGstnumber": $("#GSTNumberInput").val()
-
         };
 
         
