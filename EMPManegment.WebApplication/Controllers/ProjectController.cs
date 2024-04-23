@@ -122,11 +122,39 @@ namespace EMPManegment.Web.Controllers
             }
         }
         [HttpPost]
-        public async Task<IActionResult> CreateProject(ProjectDetailView project)
+        public async Task<IActionResult> CreateProject(ProjectDetailRequestModel project)
         {
             try
             {
-                ApiResponseModel postuser = await APIServices.PostAsync(project, "ProjectDetails/CreateProject");
+                var ProjectImg = Guid.NewGuid() + "_" + project.ProjectImage.FileName;
+                var path = Environment.WebRootPath;
+                var filepath = "Content/Image/" + ProjectImg;
+                var fullpath = Path.Combine(path, filepath);
+                UploadFile(project.ProjectImage, fullpath);
+                var ProjectDetails = new ProjectDetailView()
+                {
+                    ProjectId = Guid.NewGuid(),
+                    ProjectType = project.ProjectType,
+                    ProjectDeadline = project.ProjectDeadline,
+                    ProjectTitle = project.ProjectTitle,
+                    ShortName = project.ShortName,
+                    ProjectEndDate = project.ProjectEndDate,
+                    ProjectDescription = project.ProjectDescription,
+                    ProjectHead = project.ProjectHead,
+                    BuildingName = project.BuildingName,
+                    Area = project.Area,
+                    City = project.City,
+                    State = project.State,
+                    PinCode = project.PinCode,
+                    Country = project.Country,
+                    ProjectPath = project.ProjectPath,
+                    ProjectPriority = project.ProjectPriority,
+                    ProjectStartDate = project.ProjectStartDate,
+                    ProjectStatus = project.ProjectStatus,
+                    ProjectImage = filepath,
+                    CreatedBy = _userSession.FullName,
+                };
+                ApiResponseModel postuser = await APIServices.PostAsync(ProjectDetails, "ProjectDetails/CreateProject");
                 UserResponceModel responseModel = new UserResponceModel();
                 if (postuser.code == 200)
                 {
@@ -151,7 +179,7 @@ namespace EMPManegment.Web.Controllers
                 {
                     projectDetails = JsonConvert.DeserializeObject<ProjectDetailView>(response.data.ToString());
                     UserSession.ProjectId = projectDetails.ProjectId.ToString();
-                    UserSession.ProjectName = projectDetails.ProjectName.ToString();
+                    UserSession.ProjectName = projectDetails.ShortName.ToString();
 
                 }
                 return View(projectDetails);
@@ -221,7 +249,7 @@ namespace EMPManegment.Web.Controllers
         public async Task<IActionResult> InviteMemberToProject()
         {
             try
-            { 
+            {
                 var membersinvited = HttpContext.Request.Form["InviteMember"];
                 var memberDetails = JsonConvert.DeserializeObject<ProjectView>(membersinvited);
                 ApiResponseModel postuser = await APIServices.PostAsync(memberDetails, "ProjectDetails/AddMemberToProject");

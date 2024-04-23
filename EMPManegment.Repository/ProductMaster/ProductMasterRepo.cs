@@ -411,7 +411,7 @@ namespace EMPManegment.Repository.ProductMaster
             }
         }
 
-        public async Task<IEnumerable<ProductDetailsView>> GetAllProductList()
+        public async Task<IEnumerable<ProductDetailsView>> GetAllProductList(string? searchText)
         {
             try
             {
@@ -425,6 +425,15 @@ namespace EMPManegment.Repository.ProductMaster
                     ProductStocks = a.ProductStocks,
                     PerUnitPrice = a.PerUnitPrice
                 });
+
+                if (!string.IsNullOrEmpty(searchText))
+                {
+                    searchText = searchText.ToLower();
+                    Product = Product.Where(u =>
+                        u.ProductName.ToLower().Contains(searchText)
+                    );
+                }
+
                 return Product;
             }
             catch (Exception ex)

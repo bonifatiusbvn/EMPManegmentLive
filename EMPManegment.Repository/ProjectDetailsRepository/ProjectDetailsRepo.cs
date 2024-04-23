@@ -39,16 +39,24 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
                     ProjectId = Guid.NewGuid(),
                     ProjectType = createproject.ProjectType,
                     ProjectTitle = createproject.ProjectTitle,
-                    ProjectName = createproject.ProjectName,
+                    ShortName = createproject.ShortName,
                     ProjectHead = createproject.ProjectHead,
                     ProjectDescription = createproject.ProjectDescription,
-                    ProjectLocation = createproject.ProjectLocation,
+                    BuildingName = createproject.BuildingName,
+                    Area = createproject.Area,
+                    State = createproject.State,
+                    City = createproject.City,
+                    Country = createproject.Country,
+                    PinCode = createproject.PinCode,
+                    ProjectPath = createproject.ProjectPath,
                     ProjectPriority = createproject.ProjectPriority,
                     ProjectStatus = createproject.ProjectStatus,
                     ProjectStartDate = createproject.ProjectStartDate,
                     ProjectEndDate = createproject.ProjectEndDate,
                     ProjectDeadline = createproject.ProjectDeadline,
-                    CreatedOn = DateTime.Now
+                    ProjectImage = createproject.ProjectImage,
+                    CreatedOn = DateTime.Now,
+                    CreatedBy = createproject.CreatedBy,
                 };
                 response.Code = 200;
                 response.Message = "Project add successfully!";
@@ -70,7 +78,14 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
                 ProjectTitle = a.ProjectTitle,
                 ProjectHead = a.ProjectHead,
                 ProjectDescription = a.ProjectDescription,
-                ProjectLocation = a.ProjectLocation,
+                BuildingName = a.BuildingName,
+                Area = a.Area,
+                City = a.City,
+                State = a.State,
+                Country =a.Country,
+                ProjectImage = a.ProjectImage,
+                PinCode = a.PinCode,
+                ProjectPath = a.ProjectPath,
                 ProjectPriority = a.ProjectPriority,
                 ProjectStatus = a.ProjectStatus,
                 ProjectStartDate = a.ProjectStartDate,
@@ -141,7 +156,16 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
             {
                 ProjectId = projectDetail.ProjectId,
                 ProjectTitle = projectDetail.ProjectTitle,
-                ProjectName = projectDetail.ProjectName,
+                ShortName = projectDetail.ShortName,
+                BuildingName = projectDetail.BuildingName,
+                Area = projectDetail.Area,
+                Country = projectDetail.Country,
+                State = projectDetail.State,
+                City = projectDetail.City,
+                PinCode = projectDetail.PinCode,
+                ProjectPath = projectDetail.ProjectPath,
+                ProjectDeadline = projectDetail.ProjectDeadline,
+                ProjectHead = projectDetail.ProjectHead,
                 CreatedOn = projectDetail.CreatedOn,
                 ProjectEndDate = projectDetail.ProjectEndDate,
                 ProjectStatus = projectDetail.ProjectStatus,
@@ -149,6 +173,7 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
                 ProjectStartDate = projectDetail.ProjectStartDate,
                 ProjectDescription = projectDetail.ProjectDescription,
                 ProjectType = projectDetail.ProjectType,
+                ProjectImage = projectDetail.ProjectImage,
             };
             return model;
         }
@@ -354,9 +379,9 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
                 }
                 else
                 {
-                    if (LastProject.ProjectName.Length >= 7)
+                    if (LastProject.ShortName.Length >= 7)
                     {
-                        string projectNumberStr = LastProject.ProjectName.Substring(5);
+                        string projectNumberStr = LastProject.ShortName.Substring(5);
                         if (int.TryParse(projectNumberStr, out int projectNumber))
                         {
                             int incrementedProjectNumber = projectNumber + 1;

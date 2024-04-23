@@ -346,18 +346,23 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.ToTable("tblProjectMaster");
 
             entity.Property(e => e.ProjectId).ValueGeneratedNever();
+            entity.Property(e => e.Area).HasMaxLength(250);
+            entity.Property(e => e.BuildingName).HasMaxLength(100);
             entity.Property(e => e.CreatedBy).HasMaxLength(50);
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.PinCode).HasMaxLength(7);
             entity.Property(e => e.ProjectDeadline).HasColumnType("date");
             entity.Property(e => e.ProjectEndDate).HasColumnType("date");
             entity.Property(e => e.ProjectHead).HasMaxLength(50);
-            entity.Property(e => e.ProjectLocation).HasMaxLength(50);
-            entity.Property(e => e.ProjectName).HasMaxLength(50);
+            entity.Property(e => e.ProjectImage).HasMaxLength(500);
+            entity.Property(e => e.ProjectPath).HasMaxLength(500);
             entity.Property(e => e.ProjectPriority).HasMaxLength(10);
             entity.Property(e => e.ProjectStartDate).HasColumnType("date");
             entity.Property(e => e.ProjectStatus).HasMaxLength(10);
             entity.Property(e => e.ProjectTitle).HasMaxLength(50);
             entity.Property(e => e.ProjectType).HasMaxLength(20);
+            entity.Property(e => e.ShortName).HasMaxLength(50);
+            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
         });
 
         modelBuilder.Entity<TblProjectMember>(entity =>
