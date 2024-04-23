@@ -37,6 +37,14 @@ namespace EMPManegment.Web.Controllers
         }
         public async Task<IActionResult> Login()
         {
+            if (Request.Cookies["UserName"] != null && Request.Cookies["Password"] != null)
+            {
+                ViewBag.UserName = (Request.Cookies["UserName"].ToString());
+                var pwd = Request.Cookies["Password"].ToString();
+                ViewBag.Password = pwd;
+                ViewBag.checkRememberMe = true;
+
+            }
             return View();
         }
         public async Task<IActionResult> ForgetPassword()
@@ -72,10 +80,8 @@ namespace EMPManegment.Web.Controllers
             {
                 if (ModelState.IsValid)
                 {
-
                     ApiResponseModel responsemodel = await APIServices.PostAsync(login, "UserLogin/Login");
                     LoginResponseModel userlogin = new LoginResponseModel();
-
 
                     if (responsemodel.code != (int)HttpStatusCode.OK)
                     {
@@ -104,15 +110,16 @@ namespace EMPManegment.Web.Controllers
                                 new Claim("IsAdmin", userlogin.Data.Role),
 
                               };
+                        var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                        var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
 
-
-                        if (login.RememberMe == true)
+                        if (login.RememberMe)
                         {
                             CookieOptions cookie = new CookieOptions();
-                            cookie.Expires = DateTime.Now.AddYears(1);
-                            Response.Cookies.Append("UserName", Common.EncryptStrSALT(userlogin.Data.UserName), cookie);
-                            Response.Cookies.Append("Password", Common.EncryptStrSALT(login.Password), cookie);
-
+                            cookie.Expires = DateTime.UtcNow.AddDays(7);
+                            Response.Cookies.Append("UserName", (userlogin.Data.UserName), cookie);
+                            Response.Cookies.Append("Password", (login.Password), cookie);
+                            ViewBag.checkRememberMe = true;
                         }
                         else
                         {
@@ -120,8 +127,6 @@ namespace EMPManegment.Web.Controllers
                             Response.Cookies.Delete("Password");
                         }
                         UserSession.ProfilePhoto = userlogin.Data.ProfileImage;
-                        var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-                        var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
                         await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
                         return RedirectToAction("UserHome", "Home");
                     }
