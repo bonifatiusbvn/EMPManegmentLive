@@ -469,9 +469,6 @@ function UserLogout() {
             logout();
         }
     });
-
-
-
 }
 
 function logout() {
@@ -496,7 +493,7 @@ function logout() {
 }
 
 function UpdateUserDetails() {
-    debugger
+
     var objData = {
         Id: $('#Userid').val(),
         FirstName: $('#FirstName').val(),

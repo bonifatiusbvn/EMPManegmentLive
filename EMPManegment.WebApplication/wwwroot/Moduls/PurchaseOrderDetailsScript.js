@@ -408,7 +408,7 @@ function searchProductTypeId() {
     document.getElementById("searchproductnameid").value = document.getElementById("searchproductname").value;
 }
 
-function SerchProductDetailsById() {debugger
+function SerchProductDetailsById() {
 
     var GetProductId = {
         Id: $('#searchproductname').val(),
@@ -425,12 +425,12 @@ function SerchProductDetailsById() {debugger
         data: form_data,
         processData: false,
         contentType: false,
-        complete: function (Result) {debugger
+        complete: function (Result) {
 
             if (Result.statusText === "success") {
                 AddNewRow(Result.responseText);
             }
-            else {debugger
+            else {
                 var vendorname = $('#txtvendorname').val();
                 var productname = $('#txtProducts').val();
                 var serchproductname = $('#searchproductname').val();
