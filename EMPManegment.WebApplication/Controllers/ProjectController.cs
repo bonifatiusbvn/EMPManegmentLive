@@ -96,6 +96,7 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
+
         [HttpGet]
         public async Task<IActionResult> ShowUserProjectList(string? searchby, string? searchfor, int? page)
         {
@@ -181,7 +182,34 @@ namespace EMPManegment.Web.Controllers
                     MembersList = new List<EmpDetailsView>();
                     ViewBag.Error = "note found";
                 }
+                MembersList = MembersList.Take(10).ToList();
                 return PartialView("~/Views/Project/_inviteprojectmember.cshtml", MembersList);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ProjectHeadMemberList()
+        {
+            try
+            {
+                List<EmpDetailsView> MembersList = new List<EmpDetailsView>();
+                ApiResponseModel postuser = await APIServices.PostAsync("", "ProjectDetails/GetMemberList");
+                if (postuser.data != null)
+                {
+                    MembersList = JsonConvert.DeserializeObject<List<EmpDetailsView>>(postuser.data.ToString());
+
+                }
+                else
+                {
+                    MembersList = new List<EmpDetailsView>();
+                    ViewBag.Error = "note found";
+                }
+                MembersList = MembersList.Take(10).ToList();
+                return PartialView("~/Views/Project/_AddProjectHeadPartial.cshtml", MembersList);
             }
             catch (Exception ex)
             {

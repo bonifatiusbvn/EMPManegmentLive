@@ -305,11 +305,12 @@ namespace EMPManegment.Web.Controllers
                 ApiResponseModel postuser = await APIServices.PostAsync(uploadDocument, "UserProfile/UploadDocument");
                 if (postuser.code == 200)
                 {
-                    var identity = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, doc.UserId.ToString()) }, CookieAuthenticationDefaults.AuthenticationScheme);
-                    var principal = new ClaimsPrincipal(identity);
-                    HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+                    return new JsonResult(postuser.message = "Document Uploaded Successfully!");
                 }
-                return new JsonResult(uploadDocument);
+                else
+                {
+                    return new JsonResult(postuser.message);
+                }
             }
             catch (Exception ex)
             {

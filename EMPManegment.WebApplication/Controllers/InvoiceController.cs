@@ -47,8 +47,14 @@ namespace EMPManegment.Web.Controllers
             return View();
         }
 
-        public IActionResult CreateInvoice()
+        public async Task<IActionResult> CreateInvoice()
         {
+            string porjectname = UserSession.ProjectName;
+            ApiResponseModel Response = await APIServices.GetAsync("", "Invoice/CheckInvoiceNo?porjectname=" + porjectname);
+            if (Response.code == 200)
+            {
+                ViewBag.InvoiceNo = Response.data;
+            }
             return View();
         }
 

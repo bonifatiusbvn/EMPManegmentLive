@@ -137,7 +137,7 @@ function SaveCreatePurchaseOrder() {
 
         var formData = new FormData();
         formData.append("Type", $("#OrderType").val());
-        formData.append("OrderId", $("#orderId").val());
+        formData.append("OrderId", $("#POId").val());
         formData.append("VendorId", $("#txtvendorname").val());
         formData.append("CompanyName", $("#txtvendorname").val());
         formData.append("Product", $("#productname").val());
@@ -256,7 +256,7 @@ $("#returnsactive").click(function () {
 });
 
 
-function InsertMultiplePurchaseOrder() {
+function InsertMultiplePurchaseOrder() {debugger
 
     var orderDetails = [];
     var numOrders = $(".product").length;
@@ -266,7 +266,7 @@ function InsertMultiplePurchaseOrder() {
         var objData = {
             ProjectId: $("#txtProjectId").val(),
             Type: $("#OrderType").val(),
-            OrderId: $("#orderId").val(),
+            OrderId: $("#POId").val(),
             PaymentStatus: $("#txtPaymentStatus").val(),
             PaymentType: $("#paymenttype").val(),
             PaymentMethod: $("#txtpaymentmethod").val(),
@@ -512,7 +512,7 @@ function EditPurchaseOrderDetails(Id) {
         dataType: 'json',
         success: function (response) {
             $('#UpdateOrderModel').modal('show');
-            $('#txtorderid').val(response.id);
+            $('#POId').val(response.id);
             $('#txtproduct').val(response.product);
             $('#txtorderno').html(response.orderId);
             $('#txtorderdate').val(response.orderDate);
@@ -532,7 +532,7 @@ function EditPurchaseOrderDetails(Id) {
 function UpdatePurchaseOrderDetails() {
     if ($('#UpdateOrderDetailsForm').valid()) {
         var formData = new FormData();
-        formData.append("Id", $("#txtorderid").val());
+        formData.append("Id", $("#POId").val());
         formData.append("Product", $("#txtproduct").val());
         formData.append("orderId", $("#txtorderno").val());
         formData.append("orderDate", $("#txtorderdate").val());

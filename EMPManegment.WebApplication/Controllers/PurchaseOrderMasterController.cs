@@ -147,6 +147,7 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
+
         [HttpGet]
         public async Task<JsonResult> GetPaymentMethodList()
         {

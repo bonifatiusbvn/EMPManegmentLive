@@ -59,18 +59,19 @@ function GetAllUserData() {
         },
         columns: [
             {
+                "data": "userName", "name": "UserName",
                 "render": function (data, type, full) {
                     return '<h5 class="fs-15"><a href="/UserProfile/DisplayUserDetails/?Id=' + full.id + '" class="fw-medium link-primary">' + full.userName + '</a></h5>';
                 }
             },
             {
-                "data": "departmentName",
+                "data": "departmentId", "name": "DepartmentName",
                 "render": function (data, type, full) {
                     return '<div class="d-flex"><div class="flex-grow-1 tasks_name">' + full.departmentName + '</div>';
                 }
             },
             {
-
+                "data": "firstName", "name": "FirstName",
                 "render": function (data, type, full) {
                     return '<div class="d-flex">' +
                         '<div class="flex-grow-1 tasks_name">' +
@@ -402,6 +403,9 @@ function GetUserAttendanceInTime() {
 }
 
 function UserBirsthDayWish() {
+    if (sessionStorage.getItem('birthdayWishSent')) {
+        return; 
+    }
 
     $.ajax({
         url: '/Home/UserBirsthDayWish',
@@ -410,8 +414,9 @@ function UserBirsthDayWish() {
         processData: false,
         contentType: false,
         success: function (Result) {
-            var Userdata = Result.data;
-            if (Userdata != null) {
+
+
+            if (Result.message != null) {
                 Swal.fire(
                     {
                         html: '<div class="mt-3"><lord-icon src="https://cdn.lordicon.com/lupuorrc.json" trigger="loop" colors="primary:#0ab39c,secondary:#405189" style="width:120px;height:120px"></lord-icon><div class="mt-4 pt-2 fs-15"><h4>' + Result.message + '</h4></div></div>',
@@ -421,15 +426,14 @@ function UserBirsthDayWish() {
                         cancelButtonText: "Thank You",
                         buttonsStyling: !1,
                         showCloseButton: !0
-                    })
+                    }
+                );
+                sessionStorage.setItem('birthdayWishSent', true);
             }
-            else {
-
-            }
-        },
-
-    })
+        }
+    });
 }
+
 
 function EditUserDetails(EmpId) {
     $.ajax({
@@ -493,7 +497,6 @@ function logout() {
 }
 
 function UpdateUserDetails() {
-
     var objData = {
         Id: $('#Userid').val(),
         FirstName: $('#FirstName').val(),

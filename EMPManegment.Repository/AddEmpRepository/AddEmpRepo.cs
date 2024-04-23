@@ -1,4 +1,5 @@
 ﻿
+using Azure;
 using EMPManagment.API;
 using EMPManegment.EntityModels.Crypto;
 using EMPManegment.EntityModels.View_Model;
@@ -15,6 +16,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Mail;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
@@ -181,7 +183,9 @@ namespace EMPManegment.Repository.AddEmpRepository
                 {
                     From = new MailAddress(emailSettingView.From),
                     Subject = Subject,
-                    Body = message
+                    Body = message,
+                    BodyEncoding = System.Text.Encoding.ASCII,
+                    IsBodyHtml = true
                 };
                 mailMessage.To.Add(email);
                 SmtpClient smtpClient = new SmtpClient(emailSettingView.SmtpServer)
@@ -200,28 +204,62 @@ namespace EMPManegment.Repository.AddEmpRepository
             return status;
         }
 
-        public async Task<UserResponceModel> ForgetPassword(SendEmailModel forgetpass)
+        public async Task<UserResponceModel> FindByEmailAsync(SendEmailModel Email)
         {
-            UserResponceModel response = new UserResponceModel();
+            EmpDetailsView Userdata = new EmpDetailsView();
+            UserResponceModel responceModel = new UserResponceModel();
             try
             {
-                var userdata = Context.TblUsers.FirstOrDefault(x => x.Email == forgetpass.Email);
+                var userdata = Context.TblUsers.FirstOrDefault(x => x.Email == Email.Email);
                 if (userdata != null)
                 {
-                    response.Code = 200;
-                    response.Message = "Reset Link send on your Registered Email";
+                    Userdata = (from e in Context.TblUsers.Where(x => x.Email == Email.Email)
+                                join d in Context.TblDepartments on e.DepartmentId equals d.Id
+                                join c in Context.TblCountries on e.CountryId equals c.Id
+                                join s in Context.TblStates on e.StateId equals s.Id
+                                join ct in Context.TblCities on e.CityId equals ct.Id
+                                select new EmpDetailsView
+                                {
+                                    Id = e.Id,
+                                    IsActive = e.IsActive,
+                                    UserName = e.UserName,
+                                    FirstName = e.FirstName,
+                                    LastName = e.LastName,
+                                    Image = e.Image,
+                                    Gender = e.Gender,
+                                    DateOfBirth = e.DateOfBirth,
+                                    Email = e.Email,
+                                    PhoneNumber = e.PhoneNumber,
+                                    Address = e.Address,
+                                    CityName = ct.City,
+                                    StateName = s.State,
+                                    CountryName = c.Country,
+                                    DepartmentName = d.Department,
+                                    JoiningDate = e.JoiningDate,
+                                    Pincode = e.Pincode,
+                                    Designation = e.Designation,
+                                    DepartmentId = e.DepartmentId,
+                                    CityId = e.CityId,
+                                    StateId = e.StateId,
+                                    CountryId = e.CountryId,
+                                }).First();
+
+                        responceModel.Data = Userdata;
+                        responceModel.Code = 200;
+                        responceModel.Message = "Reset Link send on your Registered Email";
+
                 }
                 else
                 {
-                    response.Code = 400;
-                    response.Message = "Invalid Email Id!";
+                    responceModel.Code = 400;
+                    responceModel.Message = "Invalid Email Id!";
                 }
+                return responceModel;
             }
-            catch (Exception ex)
+            catch (Exception ex) 
             {
                 throw ex;
             }
-            return response;
         }
     }   
 }

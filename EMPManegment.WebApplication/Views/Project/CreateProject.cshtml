@@ -178,6 +178,7 @@
                 <div class="card-body">
                     <div class="mb-3">
                         <label for="projectHead" class="form-label">Project Head</label>
+                        <button type="button" class="btn btn-soft-primary btn-sm" style="margin-left:73px;" data-bs-toggle="modal" data-bs-target="#ProjectHeadModal" onclick="ProjectHeadMemberList()"><i class="ri-share-line me-1 align-bottom"></i> Select Head</button>
                         <input type="text" class="form-control material_blue" id="projectHead" name="projectHead" placeholder="Enter Project Head" />
                     </div>
                     <div class="mb-3">
@@ -226,6 +227,33 @@
             </div>
             <!-- end card -->
         </form>
+        <div class="modal fade" id="ProjectHeadModal" tabindex="-1" aria-labelledby="ProjectHeadModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content border-0">
+                    <div class="modal-header p-3 ps-4 bg-primary-subtle">
+                        <h5 class="modal-title" id="ProjectHeadModalLabel">Members</h5>
+                        <button type="button" class="btn-close" id="closebtn" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body p-4">
+                        <div class="search-box mb-3">
+                            <input type="text" class="form-control bg-light border-light" id="SearchBtn" placeholder="Search here...">
+                            <i class="ri-search-line search-icon"></i>
+                        </div>
+
+                        <div class="mb-4 d-flex align-items-center">
+                            <div class="me-2">
+                                <h5 class="mb-0 fs-13">Add Members :</h5>
+                            </div>
+                        </div>
+                        <div id="dvinvitemember"></div>
+                    </div>
+                </div>
+
+                <!-- end modal-content -->
+            </div>
+            <!-- modal-dialog -->
+        </div>
+        <!-- end modal -->
     </div>
     <!-- end col -->
 </div>

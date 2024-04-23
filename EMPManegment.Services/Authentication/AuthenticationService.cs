@@ -51,11 +51,10 @@ namespace EMPManegment.Services.AddEmployee
         public async Task<bool> EmailSendAsync(string Email, string Subject, string Message)
         {
             return await Authentication.EmailSendAsync(Email, Subject, Message);
-        }
-
-        public async Task<UserResponceModel> ForgetPassword(SendEmailModel forgetpass)
+        }   
+        public async Task<UserResponceModel> FindByEmailAsync(SendEmailModel Email)
         {
-            return await Authentication.ForgetPassword(forgetpass);
+            return await Authentication.FindByEmailAsync(Email);
         }        
     }
 }

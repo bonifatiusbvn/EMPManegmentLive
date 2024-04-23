@@ -74,7 +74,7 @@ namespace EMPManegment.Repository.OrderRepository
                                   join b in Context.TblVendorMasters on a.VendorId equals b.Vid
                                   join c in Context.TblProductTypeMasters on a.ProductType equals c.Id
                                   join d in Context.TblPaymentMethodTypes on a.PaymentMethod equals d.Id
-                                  where a.IsDeleted != false
+                                  where a.IsDeleted != true
                                   select new
                                   {
                                       Order = a,
@@ -121,7 +121,7 @@ namespace EMPManegment.Repository.OrderRepository
                                   join b in Context.TblVendorMasters on a.VendorId equals b.Vid
                                   join c in Context.TblProductTypeMasters on a.ProductType equals c.Id
                                   join d in Context.TblPaymentMethodTypes on a.PaymentMethod equals d.Id
-                                  where a.IsDeleted != false && a.DeliveryStatus == DeliveryStatus
+                                  where a.IsDeleted != true && a.DeliveryStatus == DeliveryStatus
                                   select new
                                   {
                                       Order = a,
@@ -226,6 +226,7 @@ namespace EMPManegment.Repository.OrderRepository
                         ProjectId = item.ProjectId,
                         ProductName = item.ProductName,
                         ProductShortDescription = item.ProductShortDescription,
+                        IsDeleted = false,
                     };
                     Context.TblPurchaseOrderMasters.Add(ordermodel);
                 }
@@ -406,7 +407,7 @@ namespace EMPManegment.Repository.OrderRepository
 
                 if (GetOrderdata != null)
                 {
-                    GetOrderdata.IsDeleted = false;
+                    GetOrderdata.IsDeleted = true;
                     Context.TblPurchaseOrderMasters.Update(GetOrderdata);
                     Context.SaveChanges();
                     response.Code = 200;

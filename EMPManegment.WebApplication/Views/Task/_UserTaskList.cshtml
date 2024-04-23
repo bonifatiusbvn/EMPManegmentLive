@@ -18,14 +18,15 @@
             </div>
         </div>
     </div>
-    <!--end card-->
-    @if (Model.Count > 0)
-    {
-        foreach (var item in Model)
+            <!--end card-->
+       
+        @if (Model.Count > 0)
         {
-            @if (item.TaskType == 1 && item.TaskStatus != "Completed")
-            {
-                <div class="collapse show" id="lowPriority">
+                foreach (var item in Model)
+                {
+                    @if (item.TaskType == 1 && item.TaskStatus != "Completed")
+                    {
+                        <div class="collapse show" id="lowPriority">
 
                     <div class="card mb-1">
                         <div class="card-body">
@@ -79,19 +80,19 @@
                             </div>
                             <div class="card-footer hstack gap-2">
                                 <button class="btn btn-success btn-sm w-100" onclick="btnStatusUpdate('@item.Id')" id="StatusUpdate" value="Validate"><i class="bi bi-pencil-fill m-1"></i>Status Update</button>
-                                <button class="btn btn-primary btn-sm w-100" data-bs-toggle="modal" onclick="btnTaskDetails('@item.Id')">
-                                    <i class="bi bi-chat-right-dots m-1"></i>
-                                    Details
-                                </button>
+                                        <button class="btn btn-primary btn-sm w-100" data-bs-toggle="modal" onclick="btnTaskDetails('@item.Id')">
+                                            <i class="bi bi-chat-right-dots m-1"></i>
+                                            Details
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-            }
+                    }
+                }
         }
-    }
-
-
+      
+  
 
     <!--end col-->
 

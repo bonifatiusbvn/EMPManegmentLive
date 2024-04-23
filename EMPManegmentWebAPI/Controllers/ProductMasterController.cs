@@ -168,5 +168,13 @@ namespace EMPManagment.API.Controllers
             ProductDetailsView ProductList = await productMaster.DisplayProductDetailsById(ProductId);
             return Ok(new { code = 200, data = ProductList });
         }
+
+        [HttpGet]
+        [Route("GetAllProductList")]
+        public async Task<IActionResult> GetProductsList()
+        {
+            IEnumerable<ProductDetailsView> getProductList = await productMaster.GetAllProductList();
+            return Ok(new { code = 200, data = getProductList.ToList() });
+        }
     }
 }

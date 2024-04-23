@@ -19,7 +19,7 @@ namespace EMPManegment.EntityModels.ViewModels.ExpenseMaster
         public int? PaymentType { get; set; }
         public string? PaymentTypeName { get; set; } = null!;
 
-        public string BillNumber { get; set; } = null!;
+        public string? BillNumber { get; set; }
 
         public string? Description { get; set; }
 
@@ -55,7 +55,7 @@ namespace EMPManegment.EntityModels.ViewModels.ExpenseMaster
 
         public int PaymentType { get; set; }
 
-        public string BillNumber { get; set; } = null!;
+        public string? BillNumber { get; set; }
 
         public string? Description { get; set; }
 

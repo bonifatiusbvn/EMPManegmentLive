@@ -5,11 +5,13 @@ using EMPManegment.EntityModels.Crypto;
 using EMPManegment.EntityModels.View_Model;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.ProductMaster;
+using EMPManegment.EntityModels.ViewModels.ProjectModels;
 using EMPManegment.EntityModels.ViewModels.TaskModels;
 using EMPManegment.EntityModels.ViewModels.VendorModels;
 using EMPManegment.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using X.PagedList;
 
 namespace EMPManegment.Web.Controllers
 {
@@ -169,6 +171,27 @@ namespace EMPManegment.Web.Controllers
         {
             return View();
         }
+        public async Task<IActionResult> GetAllProductList(int? page)
+        {
+            try
+            {
+                List<ProductDetailsView> productlist = new List<ProductDetailsView>();
+                ApiResponseModel response = await APIServices.GetAsync("", "ProductMaster/GetAllProductList");
+                if (response.code == 200)
+                {
+                    productlist = JsonConvert.DeserializeObject<List<ProductDetailsView>>(response.data.ToString());
+                }
+                int pageSize = 5;
+                var pageNumber = page ?? 1;
+
+                var pagedList = productlist.ToPagedList(pageNumber, pageSize);
+                return PartialView("~/Views/ProductMaster/_GetAllProductList.cshtml", pagedList);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
 
         [HttpGet]
         public async Task<IActionResult> GetProductDetailsByVendorId(Guid VendorId)
@@ -193,6 +216,7 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
+
         [HttpPost]
         public async Task<IActionResult> DisplayProductDetailsByVendorId()
         {
