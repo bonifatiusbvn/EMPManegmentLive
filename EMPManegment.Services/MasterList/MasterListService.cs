@@ -1,4 +1,5 @@
 ﻿using EMPManegment.EntityModels.ViewModels;
+using EMPManegment.EntityModels.ViewModels.UserModels;
 using EMPManegment.Inretface.Interface.CSC;
 using EMPManegment.Inretface.Services.CSC;
 using System;
@@ -75,6 +76,19 @@ namespace EMPManegment.Services.CSC
         public async Task<IEnumerable<Department>> GetDepartment()
         {
             return await MasterList.GetDepartment();
+        }
+
+        public async Task<IEnumerable<UserRoleModel>> GetUserRole()
+        {
+            try
+            {
+                return await MasterList.GetUserRole();
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
         }
     }
 }

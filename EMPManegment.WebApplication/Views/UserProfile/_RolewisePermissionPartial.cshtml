@@ -1,0 +1,15 @@
+﻿@model IEnumerable<EMPManegment.EntityModels.ViewModels.UserModels.UserRoleModel>
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+@foreach (var item in Model)
+{
+
+    <tr id="siteCard_@item.Id">
+        <td>@item.Role</td>
+        <td>
+            <a class="btn text-primary" title="Edit" aria-label="Edit" onclick="EditRoleWiseFormDetails('@item.Id')"><i class="fadeIn animated bx bx-edit"></i></a>
+        </td>
+    </tr>
+}
