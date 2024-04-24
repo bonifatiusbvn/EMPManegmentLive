@@ -167,6 +167,25 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
+
+        public async Task<IActionResult> DisplayProductDetils(Guid ProductId)
+        {
+            try
+            {
+                ProductDetailsView products = new ProductDetailsView();
+                ApiResponseModel response = await APIServices.PostAsync("", "ProductMaster/DisplayProductDetailsById?ProductId=" + ProductId);
+                if (response.code == 200)
+                {
+                    products = JsonConvert.DeserializeObject<ProductDetailsView>(response.data.ToString());
+                }
+                return PartialView("~/Views/PurchaseRequest/_DisplayProductDetailPartial.cshtml", products);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public IActionResult ProductList()
         {
             return View();

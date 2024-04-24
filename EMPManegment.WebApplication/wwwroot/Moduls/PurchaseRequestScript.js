@@ -1,5 +1,5 @@
 ﻿GetAllItemDetailsList();
-
+updateTotals();
 function GetAllItemDetailsList() {
     var searchText = $('#mdProductSearch').val();
 
@@ -21,5 +21,54 @@ function filterallItemTable() {
         success: function (result) {
             $("#mdlistofItem").html(result);
         },
+    });
+}
+
+function SerchItemDetailsById(Id) {debugger
+
+    $.ajax({
+        url: '/ProductMaster/DisplayProductDetils?ProductId=' + Id,
+        type: 'Post',
+        datatype: 'json',
+        complete: function (Result) {debugger
+            $("#displayProductDetail").append(Result.responseText);
+        }
+    });
+}
+
+
+$(document).ready(function () {
+    $(document).on('input', '.product-quantity', function () {
+        updateTotals()
+    });
+
+    $(document).on('keydown', '.product-quantity', function (event) {
+        if (event.key === 'Enter') {
+            $(this).blur();
+        }
+    });
+
+
+    $(document).on('keydown', '#txtproductamount', function (event) {
+        if (event.key === 'Enter') {
+            $(this).blur();
+        }
+    });
+
+    $(document).on('focusout', '.product-quantity', function () {
+        $(this).trigger('input');
+    });
+});
+
+function updateTotals() {debugger
+
+    $(".product").each(function () {
+        var row = $(this);
+        var subtotal = parseFloat(row.find("#dspperunitprice").text().replace('₹', ''));
+        var totalquantity = parseFloat(row.find("#txtproductquantity").val());
+        debugger
+        var totalAmount = subtotal * totalquantity;
+
+        row.find("#dsptotalAmount").text(totalAmount.toFixed(2));
     });
 }
