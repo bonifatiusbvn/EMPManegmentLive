@@ -118,6 +118,7 @@ $(document).ready(function () {
 });
 
 function showMember() {
+
     $.ajax({
         url: '/Project/GetMemberList',
         type: 'Post',
@@ -125,6 +126,7 @@ function showMember() {
         processData: false,
         contentType: false,
         complete: function (Result) {
+
             $('#dvinvitemember').html(Result.responseText);
         },
         Error: function () {
@@ -157,7 +159,8 @@ function ProjectHeadMemberList() {
         }
     })
 }
-function SelectProjectHead(button) {debugger
+function SelectProjectHead(button) {
+
     var memberName = $(button).closest('.mx-n4').find('.fs-13').text().trim();
     $('#projectHead').val(memberName);
     document.getElementById("closebtn").click()
@@ -237,6 +240,7 @@ function invitemember(Id) {
 }
 
 function showProjectMembers(ProjectId) {
+
     var formData = new FormData();
     formData.append("ProjectId", ProjectId);
     $.ajax({
@@ -247,6 +251,7 @@ function showProjectMembers(ProjectId) {
         processData: false,
         contentType: false,
         complete: function (Result) {
+
             $('#dvshowmembers').html(Result.responseText);
         },
         Error: function () {
@@ -404,8 +409,8 @@ function searchproject() {
     GetAllUserProjectDetailsList(1);
 }
 function deleteProjectMember(Id) {
- 
-    $('#deleteOrderModal').modal('show');
+    debugger
+    $("#deleteOrderModal").modal('show');
 
     $('#delete-record').click(function () {
         var proId = $('#projectid').val();
@@ -419,13 +424,13 @@ function deleteProjectMember(Id) {
         form_data.append("InviteMember", JSON.stringify(MemberData));
         $.ajax({
             url: '/Project/IsDeletedMember',
-            type: 'POST', 
+            type: 'POST',
             dataType: 'json',
             data: form_data,
             processData: false,
             contentType: false,
             success: function (Result) {
-               
+
                 Swal.fire({
                     title: Result.message,
                     icon: 'success',
@@ -435,7 +440,7 @@ function deleteProjectMember(Id) {
                     window.location = '/Project/GetProjectDetails/?Id=' + proId;
                 })
             },
-            error: function () { 
+            error: function () {
                 Swal.fire({
                     title: "Can't Remove Member!",
                     icon: 'warning',
@@ -516,7 +521,7 @@ function GetProjectCountry() {
         url: '/Authentication/GetCountrys',
         success: function (result) {
             $.each(result, function (i, data) {
-                debugger
+
                 $('#projectCountry').append('<Option value=' + data.id + ' Selected>' + data.countryName + '</Option>')
 
             });

@@ -7,21 +7,28 @@
         <div style="height: 40px;" class="mx-n3 px-3">
             <div class="vstack gap-3">
                 <div class="d-flex align-items-center">
-                    <div class="avatar-xs flex-shrink-0 me-3">
-                        <img src="~/@item.Image" alt="" class="img-fluid rounded-circle">
-                        <input type="text" id="projectid" value="@item.ProjectId" hidden />
-                    </div>
-                    <div class="flex-grow-1">
-                        <h5 class="fs-13 mb-0"><a href="#" class="text-body d-block">@item.Fullname</a></h5>
-                    </div>
-                    <div class="flex-shrink-0">
-                        <div class="d-flex align-items-center gap-1">
-                            <button type="button" class="btn btn-light btn-sm">Message</button>
-                            <a class="btn text-danger d-inline-block remove-item-btn" data-bs-toggle="modal" onclick="deleteProjectMember('@item.UserId')">
-                                <i class="ri-delete-bin-5-fill fs-16"></i>
-                            </a>
+                    <div class="post">
+                        <div class="user-block">
+                            <img class="img-circle img-bordered-sm" src="~/@item.Image" alt="user image">
+                            <input type="text" id="projectid" value="@item.ProjectId" hidden />
+                            <a href="#">@item.Fullname</a>
+                            <span class="float-right">
+                                <a class="btn text-danger" data-toggle="modal" onclick="deleteProjectMember('@item.UserId')"><i class="fas fa-trash"></i></a>
+                            </span>
+
                         </div>
+
+                        <p>
+
+                        </p>
+
+                        <p>
+
+                        </p>
+
+
                     </div>
+
                 </div>
                 <!-- end member item -->
             </div>
@@ -30,7 +37,7 @@
     }
 }
 <!-- Modal -->
-<div class="modal fade flip" id="deleteOrderModal" tabindex="-1" aria-hidden="true">
+@* <div class="modal fade" id="deleteOrderModal">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-body p-5 text-center">
@@ -54,5 +61,28 @@
             </div>
         </div>
     </div>
+</div> *@
+<div class="modal fade" id="deleteOrderModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Default Modal</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>One fine body&hellip;</p>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
 </div>
-<!--end modal -->
+<!-- end modal -->
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+
