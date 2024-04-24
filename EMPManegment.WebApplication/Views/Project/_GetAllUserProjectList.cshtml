@@ -115,7 +115,7 @@
                                 <div class="flex-shrink-0 me-3">
                                     <div class="avatar-sm">
                                         <span class="avatar-title bg-primary-subtle rounded p-2">
-                                            <img src="~/assets/images/brands/mail_chimp.png" alt="" class="img-fluid p-1">
+                                            <img src="~/assets/images/brands/mail_chimp.png" alt="" class="direct-chat-img">
                                         </span>
                                     </div>
                                 </div>
@@ -176,7 +176,7 @@
                             <div class="avatar-group">
                                 <a href="javascript: void(0);" class="avatar-group-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="@Accessor.HttpContext.Session.GetString("FullName")">
                                     <div class="avatar-xxs">
-                                        <img src="~/@UserSession.ProfilePhoto" alt="" class="avatar-xs rounded-circle">
+                                        <img src="~/@UserSession.ProfilePhoto" alt="" class="direct-chat-img">
                                     </div>
                                 </a>
                                 <a class="avatar-group-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="@item.ProjectId">
@@ -213,15 +213,11 @@
         searchfor = @Context.Request.Query["searchfor"],
         searchby = @Context.Request.Query["searchby"]
     }),
-                                      new X.PagedList.Web.Common.PagedListRenderOptions
-                                  {
-                                      LiElementClasses = new string[] { "page-item" },
-                                      PageClasses = new string[] { "page-link" }
-                                  })
+                                          new X.PagedList.Web.Common.PagedListRenderOptions
+                                      {
+                                          LiElementClasses = new string[] { "page-item" },
+                                          PageClasses = new string[] { "page-link" }
+                                      })
 
 
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
-<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
-<script src="~/assets/js/pages/project-list.init.js"></script>
+

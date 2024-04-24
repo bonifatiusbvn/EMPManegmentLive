@@ -3,7 +3,7 @@
 @using X.PagedList;
 @using X.PagedList.Mvc.Core;
 
-                                
+
 <div class="team-list list-view-filter">
     @foreach (var item in Model)
     {
@@ -35,13 +35,12 @@
                     <div class="col-lg-4 col">
                         <div class="team-profile-img">
                             <div class="avatar-lg img-thumbnail rounded-circle">
-                                <img src="~/@item.Image" alt="" class="img-fluid d-block rounded-circle" style="height: 55px;" />
                             </div>
                             <div class="team-content">
                                 <a href="#" class="d-block">
                                     <h5 class="fs-16 mb-1">@item.Fullname</h5>
                                 </a>
-                               @*  <p class="text-muted mb-0">@item.UserRole</p> *@
+                                @*  <p class="text-muted mb-0">@item.UserRole</p> *@
                                 <p class="text-muted mb-0">@item.Designation</p>
                             </div>
                         </div>
@@ -65,8 +64,10 @@
     }
 </div>
 <!---Start Pagination--->
-@Html.PagedListPager((IPagedList)Model,page => Url.Action("ShowTeam",new{page = page}),
-new X.PagedList.Web.Common.PagedListRenderOptions {
-    LiElementClasses = new string[]{"page-item"},
-    PageClasses = new string[] {"page-link"}
-})
+@Html.PagedListPager((IPagedList)Model, page => Url.Action("ShowTeam", new { page = page }),
+                                new X.PagedList.Web.Common.PagedListRenderOptions
+                            {
+                                LiElementClasses = new string[] { "page-item" },
+                                PageClasses = new string[] { "page-link" }
+                            })
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
