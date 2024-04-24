@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="~/lteassets/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="~/lteassets/dist/css/adminlte.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 </head>
 <body class="hold-transition dark-mode sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
     <div class="wrapper">
@@ -352,7 +353,7 @@
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fas fa-copy"></i>
                                 <p>
-                                    User Expenses
+                                   Expense
                                     <i class="right fas fa-angle-left"></i>
                                 </p>
                             </a>
@@ -381,7 +382,26 @@
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fas fa-copy"></i>
                                 <p>
-                                    Transactions
+                                    Vendor
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a asp-action="DisplayVendorList" asp-controller="Vendor" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>
+                                            Vendor List
+                                        </p>
+                                    </a>
+                                </li>                                
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-copy"></i>
+                                <p>
+                                    Payment Transaction
                                     <i class="right fas fa-angle-left"></i>
                                 </p>
                             </a>
@@ -407,7 +427,7 @@
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fas fa-copy"></i>
                                 <p>
-                                    Password
+                                    Authentication
                                     <i class="right fas fa-angle-left"></i>
                                 </p>
                             </a>
@@ -451,6 +471,12 @@
                                             <p>GetUserAttendance</p>
                                         </a>
                                     </li>
+                                    <li class="nav-item">
+                                        <a asp-action="RolewisePermission" asp-controller="UserProfile" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>RolewiseFormPermission</p>
+                                        </a>
+                                    </li>
                                 }
                             </ul>
                         </li>
@@ -458,7 +484,7 @@
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fas fa-copy"></i>
                                 <p>
-                                    Users Pages
+                                    Attendance
                                     <i class="right fas fa-angle-left"></i>
                                 </p>
                             </a>
@@ -470,15 +496,7 @@
                                             GetAttendance
                                         </p>
                                     </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a asp-action="DisplayVendorList" asp-controller="Vendor" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>
-                                            Vendor List
-                                        </p>
-                                    </a>
-                                </li>
+                                </li>                               
                             </ul>
                         </li>
                     </ul>
@@ -544,6 +562,7 @@
 
     <!-- PAGE PLUGINS -->
     <!-- jQuery Mapael -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="~/lteassets/plugins/jquery-mousewheel/jquery.mousewheel.js"></script>
     <script src="~/lteassets/plugins/raphael/raphael.min.js"></script>
     <script src="~/lteassets/plugins/jquery-mapael/jquery.mapael.min.js"></script>

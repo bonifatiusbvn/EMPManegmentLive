@@ -4,7 +4,9 @@ using EMPManagment.API;
 using EMPManegment.Inretface.EmployeesInterface.AddEmployee;
 using EMPManegment.Inretface.Interface.CSC;
 using EMPManegment.Inretface.Interface.ExpenseMaster;
+using EMPManegment.Inretface.Interface.FormPermissionMaster;
 using EMPManegment.Inretface.Interface.InvoiceMaster;
+using EMPManegment.Inretface.Interface.MasterList;
 using EMPManegment.Inretface.Interface.OrderDetails;
 using EMPManegment.Inretface.Interface.ProductMaster;
 using EMPManegment.Inretface.Interface.ProjectDetails;
@@ -17,7 +19,9 @@ using EMPManegment.Inretface.Interface.VendorDetails;
 using EMPManegment.Inretface.Services.AddEmployeeServies;
 using EMPManegment.Inretface.Services.CSC;
 using EMPManegment.Inretface.Services.ExpenseMaster;
+using EMPManegment.Inretface.Services.FormPermissionMasterServices;
 using EMPManegment.Inretface.Services.InvoiceMaster;
+using EMPManegment.Inretface.Services.MasterList;
 using EMPManegment.Inretface.Services.OrderDetails;
 using EMPManegment.Inretface.Services.ProductMaster;
 using EMPManegment.Inretface.Services.ProjectDetailsServices;
@@ -30,7 +34,9 @@ using EMPManegment.Inretface.Services.VendorDetailsServices;
 using EMPManegment.Repository.AddEmpRepository;
 using EMPManegment.Repository.CSCRepository;
 using EMPManegment.Repository.ExponseMasterRepository;
+using EMPManegment.Repository.FormPermissionMasterRepository;
 using EMPManegment.Repository.InvoiceMasterRepository;
+using EMPManegment.Repository.MasterListRepository;
 using EMPManegment.Repository.OrderRepository;
 using EMPManegment.Repository.ProductMaster;
 using EMPManegment.Repository.ProjectDetailsRepository;
@@ -43,7 +49,9 @@ using EMPManegment.Repository.VendorDetailsRepository;
 using EMPManegment.Services.AddEmployee;
 using EMPManegment.Services.CSC;
 using EMPManegment.Services.ExpenseMaster;
+using EMPManegment.Services.FormPermissionMaster;
 using EMPManegment.Services.InvoiceMaster;
+using EMPManegment.Services.MasterList;
 using EMPManegment.Services.OrderDetails;
 using EMPManegment.Services.ProductMaster;
 using EMPManegment.Services.ProjectDetails;
@@ -78,6 +86,8 @@ builder.Services.AddScoped<IPurchaseOrderDetails, PurchaseOrderRepo>();
 builder.Services.AddScoped<IProductMaster, ProductMasterRepo>();
 builder.Services.AddScoped<IInvoiceMaster, InvoiceMasterRepo>();
 builder.Services.AddScoped<IExpenseMaster, ExpenseMasterRepo>();
+builder.Services.AddScoped<IFormMaster, FormMasterRepo>();
+builder.Services.AddScoped<IFormPermissionMaster, FormPermissionMasterRepo>();
 
 
 builder.Services.AddScoped<IAuthenticationServices, AuthenticationService>();
@@ -92,6 +102,8 @@ builder.Services.AddScoped<IPurchaseOrderDetailsServices, PurchaseOrderDetailsSe
 builder.Services.AddScoped<IProductMasterServices, ProductMasterServices>();
 builder.Services.AddScoped<IInvoiceMasterServices, InvoiceMasterServices>();
 builder.Services.AddScoped<IExpenseMasterServices, ExpenseMasterServices>();
+builder.Services.AddScoped<IFormMasterServices, FormMasterService>();
+builder.Services.AddScoped<IFormPermissionMasterServices, FormPermissionMasterService>();
 
 
 

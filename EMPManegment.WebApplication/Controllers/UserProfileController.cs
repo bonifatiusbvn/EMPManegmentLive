@@ -541,7 +541,6 @@ namespace EMPManegment.Web.Controllers
 
         public async Task<IActionResult> GetAttendance()
         {
-
             return View();
         }
 
@@ -763,7 +762,7 @@ namespace EMPManegment.Web.Controllers
                 if (res.code == 200)
                 {
                     List<UserRoleModel> GetUserRoleList = JsonConvert.DeserializeObject<List<UserRoleModel>>(res.data.ToString());
-                    return PartialView("~/Views/UserProfile/_RolewisePermissionPartial.cshtml", GetUserRoleList);
+                    return new JsonResult(GetUserRoleList);
                 }
                 else
                 {

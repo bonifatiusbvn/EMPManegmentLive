@@ -1,18 +1,33 @@
-﻿AllRolewiseFormUserTable();
+﻿GetUserRoleList();
+
+function GetUserRoleList() {
+   
+    $.ajax({
+        url: '/UserProfile/RolewisePermissionListAction',
+        success: function (result) {
+            $.each(result, function (i, data) {
+             
+                $('#txtUserRole').append('<Option value=' + data.id + '>' + data.role + '</Option>')
+            });
+        }
+    });
+}
 
 function AllRolewiseFormUserTable() {
+
     $.get("/UserProfile/RolewisePermissionListAction")
         .done(function (result) {
-            debugger
-            $("#UserRoletbody").html(result);
+       
+            $("#UserRoletbody").html(result).show();
+            $('#dveditRolePermissionForm').hide();
         })
         .fail(function (error) {
             console.error(error);
         });
 }
 
-function EditRoleWiseFormDetails(RoleId) {
-    debugger
+function EditRoleWiseFormDetails() {
+    RoleId = $('#txtUserRole').val();
     $.ajax({
         url: '/UserProfile/GetRolewiseFormListById?RoleId=' + RoleId,
         type: 'post',
@@ -20,8 +35,9 @@ function EditRoleWiseFormDetails(RoleId) {
         processData: false,
         contentType: false,
         complete: function (Result) {
-            debugger
-            $('#dveditRolePermissionForm').html(Result.responseText);
+            document.getElementById("backbtn").style.display = "block";
+            document.getElementById("updatebtn").style.display = "block";
+            $('#dveditRolePermissionForm').html(Result.responseText).show();
         },
         Error: function () {
 
@@ -36,7 +52,7 @@ function EditRoleWiseFormDetails(RoleId) {
 }
 
 function UpdateRolewiseFormPermission() {
-    debugger
+ 
     var formPermissions = [];
     $(".forms").each(function () {
 
@@ -64,7 +80,7 @@ function UpdateRolewiseFormPermission() {
         contentType: false,
         dataType: 'json',
         success: function (Result) {
-            debugger
+          
             if (Result.code == 200) {
                 Swal.fire({
                     title: Result.message,
@@ -87,4 +103,8 @@ function UpdateRolewiseFormPermission() {
             console.error(error);
         }
     });
+}
+
+function backBtn() {
+    window.location = '/UserProfile/RolewisePermission';
 }
