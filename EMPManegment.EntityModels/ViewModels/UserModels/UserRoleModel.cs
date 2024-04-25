@@ -8,7 +8,7 @@ namespace EMPManegment.EntityModels.ViewModels.UserModels
 {
     public class UserRoleModel
     {
-        public int Id { get; set; }
+        public Guid RoleId { get; set; }
 
         public string? Role { get; set; }
 

@@ -11,7 +11,7 @@ namespace EMPManegment.Inretface.Interface.FormPermissionMaster
 {
     public interface IFormPermissionMaster
     {
-        Task<List<RolewiseFormPermissionModel>> GetRolewiseFormListById(int RoleId);
+        Task<List<RolewiseFormPermissionModel>> GetRolewiseFormListById(Guid RoleId);
         Task<ApiResponseModel> UpdateMultipleRolewiseFormPermission(List<RolewiseFormPermissionModel> UpdatedRolewiseFormPermissions);
         Task<ApiResponseModel> CreateUserRole(UserRoleModel roleDetails);
     }

@@ -775,7 +775,9 @@ namespace EMPManegment.Web.Controllers
                 return new JsonResult(new { Message = $"An error occurred: {ex.Message}" });
             }
         }
-        public async Task<IActionResult> GetRolewiseFormListById(int RoleId)
+
+        [HttpPost]
+        public async Task<IActionResult> GetRolewiseFormListById(Guid RoleId)
         {
             try
             {

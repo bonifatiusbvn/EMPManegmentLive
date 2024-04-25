@@ -110,7 +110,7 @@ namespace EMPManegment.Repository.CSCRepository
                     .Where(a => a.IsDelete == false)
                     .Select(a => new UserRoleModel
                     {
-                        Id = a.Id,
+                        RoleId = a.RoleId,
                         Role = a.Role,
                     })
                     .ToList(); 

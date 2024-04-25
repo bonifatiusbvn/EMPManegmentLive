@@ -6,28 +6,15 @@ function GetUserRoleList() {
         url: '/UserProfile/RolewisePermissionListAction',
         success: function (result) {
             $.each(result, function (i, data) {
-
-                $('#txtUserRole').append('<Option value=' + data.id + '>' + data.role + '</Option>')
+                debugger
+                $('#txtUserRole').append('<Option value=' + data.roleId + '>' + data.role + '</Option>')
             });
         }
     });
 }
 
-function AllRolewiseFormUserTable() {
-
-    $.get("/UserProfile/RolewisePermissionListAction")
-        .done(function (result) {
-
-            $("#UserRoletbody").html(result).show();
-            $('#dveditRolePermissionForm').hide();
-        })
-        .fail(function (error) {
-            console.error(error);
-        });
-}
-
 function EditRoleWiseFormDetails() {
-    RoleId = $('#txtUserRole').val();
+    var RoleId = document.getElementById('txtUserRole').value;
     $.ajax({
         url: '/UserProfile/GetRolewiseFormListById?RoleId=' + RoleId,
         type: 'post',

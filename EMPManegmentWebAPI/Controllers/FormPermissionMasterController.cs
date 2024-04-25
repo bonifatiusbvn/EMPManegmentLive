@@ -24,7 +24,7 @@ namespace EMPManagment.API.Controllers
 
         [HttpPost]
         [Route("GetRolewiseFormListById")]
-        public async Task<IActionResult> GetRolewiseFormListById(int RoleId)
+        public async Task<IActionResult> GetRolewiseFormListById(Guid RoleId)
         {
             ApiResponseModel response = new ApiResponseModel();
             List<RolewiseFormPermissionModel> RolewiseFormList = await RolewisePermissionMaster.GetRolewiseFormListById(RoleId);

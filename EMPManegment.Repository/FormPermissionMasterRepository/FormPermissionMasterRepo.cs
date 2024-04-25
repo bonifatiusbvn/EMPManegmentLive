@@ -22,12 +22,12 @@ namespace EMPManegment.Repository.FormPermissionMasterRepository
 
         public BonifatiusEmployeesContext Context { get; }
 
-        public async Task<List<RolewiseFormPermissionModel>> GetRolewiseFormListById(int RoleId)
+        public async Task<List<RolewiseFormPermissionModel>> GetRolewiseFormListById(Guid RoleId)
         {
             var UserData = new List<RolewiseFormPermissionModel>();
             var data = await (from e in Context.TblRolewiseFormPermissions.Where(x => x.RoleId == RoleId)
                               join f in Context.TblForms on e.FormId equals f.FormId
-                              join r in Context.TblRoleMasters on e.RoleId equals r.Id
+                              join r in Context.TblRoleMasters on e.RoleId equals r.RoleId
                               where f.IsActive == true
                               select new RolewiseFormPermissionModel
                               {
@@ -124,12 +124,34 @@ namespace EMPManegment.Repository.FormPermissionMasterRepository
                 {
                     var rolemodel = new TblRoleMaster()
                     {
+                       RoleId = Guid.NewGuid(),
                        Role = roleDetails.Role,
                        IsActive = true,
                        IsDelete = false,
                        CreatedBy = roleDetails.CreatedBy,
                        CreatedOn = DateTime.Now,
-                    };
+                    };          
+
+                    var forms = Context.TblForms.ToList();
+                    var roleWiseFormPermissions = new List<TblRolewiseFormPermission>();
+
+                    foreach (var form in forms)
+                    {
+                        var permissions = new TblRolewiseFormPermission
+                        {
+                            RoleId = rolemodel.RoleId,
+                            FormId = form.FormId,
+                            IsAddAllow = true,
+                            IsViewAllow = true,
+                            IsEditAllow = true,
+                            IsDeleteAllow = true,
+                            CreatedOn = DateTime.Now,
+                        };
+                        roleWiseFormPermissions.Add(permissions);
+                    }
+                    Context.TblRolewiseFormPermissions.AddRange(roleWiseFormPermissions);
+                    Context.SaveChanges();
+
                     response.code = 200;
                     response.message = "Role add successfully!";
                     Context.TblRoleMasters.Add(rolemodel);

@@ -21,7 +21,7 @@ namespace EMPManegment.Services.FormPermissionMaster
         }
 
         public IFormPermissionMaster FormPermissionMaster { get; }
-        public async Task<List<RolewiseFormPermissionModel>> GetRolewiseFormListById(int RoleId)
+        public async Task<List<RolewiseFormPermissionModel>> GetRolewiseFormListById(Guid RoleId)
         {
             return await FormPermissionMaster.GetRolewiseFormListById(RoleId);
         }
