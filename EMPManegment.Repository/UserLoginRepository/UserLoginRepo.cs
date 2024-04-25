@@ -40,7 +40,7 @@ namespace EMPManegment.Repository.UserLoginRepository
             {
                 var tblUser = await (from a in Context.TblUsers
                                      where a.UserName == loginRequest.UserName
-                                     join b in Context.TblRoleMasters on a.Role equals b.Id into roles
+                                     join b in Context.TblRoleMasters on a.RoleId equals b.RoleId into roles
                                      from role in roles.DefaultIfEmpty()
                                      select new { User = a, Role = role }).FirstOrDefaultAsync();
 
