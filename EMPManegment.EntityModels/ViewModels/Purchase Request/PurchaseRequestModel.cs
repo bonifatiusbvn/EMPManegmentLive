@@ -33,5 +33,7 @@ namespace EMPManegment.EntityModels.ViewModels.Purchase_Request
         public Guid? UpdatedBy { get; set; }
 
         public DateTime? UpdatedOn { get; set; }
+
+        public string? UserName { get; set; }
     }
 }

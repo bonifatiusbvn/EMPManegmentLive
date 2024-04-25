@@ -1,4 +1,8 @@
-﻿@{
+﻿@using EMPManegment.Web.Models;
+@* @model IEnumerable<EMPManegment.EntityModels.ViewModels.Purchase_Request.PurchaseRequestModel>
+@inject IHttpContextAccessor Accessor;
+@inject UserSession _userSession *@
+@{
     ViewData["Title"] = "CreatePurchaseRequest";
     Layout = "~/Views/Shared/_UserHomeLayout.cshtml";
 }
@@ -32,7 +36,7 @@
                     <div class="row g-4">
                         <div class="col-sm-auto">
                             <div>
-                                <a class="btn btn-primary" onclick="fn_OpenAddproductmodal()"><i class="ri-add-line align-bottom me-1"></i> Add Product</a>
+                                <a class="btn btn-primary" ><i class="ri-add-line align-bottom me-1"></i> Add Product</a>
                             </div>
                         </div>
                         <div class="col-sm">
@@ -84,13 +88,13 @@
                                 </div>
                                 <div class="card product">
                                     <!--- Partial View --->
-                                    <div id="displayProductDetail"></div>
+                                    <div id="displayPurchaseRequest"></div>
                                     <!---->
                                     
                                 </div>
                             </div>
                             <div class="text-end mb-4">
-                                <a href="apps-ecommerce-checkout.html" class="btn btn-primary btn-label right ms-auto"><i class="ri-arrow-right-line label-icon align-bottom fs-16 ms-2"></i> Save</a>
+                                <a href="apps-ecommerce-checkout.html" class="btn btn-primary btn-label right ms-auto"><i class="ri-arrow-right-line label-icon align-bottom fs-16 ms-2" onclick="validateAndRequest()" id="btnpurchaserequest"></i> Save</a>
                             </div>
                         </div>
                         <!-- end tab pane -->
@@ -152,3 +156,4 @@
 <script src="~/assets/js/pages/ecommerce-cart.init.js"></script>
 
 <script src="~/moduls/purchaserequestscript.js"></script>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>

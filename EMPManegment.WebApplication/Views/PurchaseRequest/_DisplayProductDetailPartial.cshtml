@@ -1,4 +1,7 @@
-﻿@model EMPManegment.EntityModels.ViewModels.ProductMaster.ProductDetailsView
+﻿@using EMPManegment.Web.Models;
+@model EMPManegment.EntityModels.ViewModels.ProductMaster.ProductDetailsView
+@inject IHttpContextAccessor Accessor;
+@inject UserSession _userSession
 
 <div class="product card-body">
     <div class="row gy-3">
@@ -44,3 +47,6 @@
     <!-- end card footer -->
 </div>
 <!-- card body -->
+
+<script src="~/moduls/purchaserequestscript.js"></script>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
