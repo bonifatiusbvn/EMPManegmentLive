@@ -1,5 +1,6 @@
-﻿$(document).ready(function () { 
-    GetAllVendorData();  
+﻿$(document).ready(function () {
+    GetAllVendorData();
+    GetVendorType()
 });
 function GetAllVendorData() {
 
@@ -14,15 +15,15 @@ function GetAllVendorData() {
             dataType: 'json'
         },
         columns: [
-            { "data": "vendorCompany", "name": "VendorCompany"},
+            { "data": "vendorCompany", "name": "VendorCompany" },
             { "data": "vendorFirstName", "name": "VendorFirstName" },
             { "data": "vendorEmail", "name": "VendorEmail" },
-            { "data": "vendorPhone", "name": "VendorPhone"},
-            { "data": "vendorCompanyNumber", "name": "VendorCompanyNumber"},
-            { "data": "vendorCompanyEmail", "name": "VendorCompanyEmail"},
+            { "data": "vendorPhone", "name": "VendorPhone" },
+            { "data": "vendorCompanyNumber", "name": "VendorCompanyNumber" },
+            { "data": "vendorCompanyEmail", "name": "VendorCompanyEmail" },
             { "data": "vendorAddress", "name": "VendorAddress" },
             {
-                "render": function (data, type, full) { 
+                "render": function (data, type, full) {
                     return '<div class="flex-shrink-0 ms-4"><ul class="list-inline tasks-list-menu mb-0"><li class="list-inline-item"><a onclick="VendorDetails(\'' + full.vid + '\')"><i class="ri-eye-fill align-bottom me-2 text-muted"></i></a><li class="list-inline-item"><a onclick="EditVendorDetails(\'' + full.vid + '\')"><i class="ri-pencil-fill align-bottom me-2 text-muted"></i></a></li></ul></div>';
                 }
             },
@@ -70,18 +71,18 @@ function VendorDetails(Id) {
     });
 }
 
-function EditVendorDetails(Id)
-{
+function EditVendorDetails(Id) {
     $("#editPersonalDetailsModel").prop("disabled", true);
     $("#editBankDetailsModel").prop("disabled", true);
-    
+
     $.ajax({
         url: '/Vendor/GetVendorDetailsById?VendorId=' + Id,
         type: "Get",
         contentType: 'application/json;charset=utf-8;',
         dataType: 'json',
-        success: function (response) {debugger
-            
+        success: function (response) {
+            debugger
+
             $('#UpdateVendorModel').modal('show');
             $('#vendorId').val(response.vid);
             $('#EditfirstnameInput').val(response.vendorFirstName);
@@ -103,10 +104,10 @@ function EditVendorDetails(Id)
             $('#EditifscInput').val(response.vendorBankIfsc);
             $('#EditGSTNumberInput').val(response.vendorGstnumber);
             $("#ddlVendorType").val(response.vendorTypeId),
-            $("#ddlCountry").val(response.vendorCountry),
-            $("#ddlState").val(response.vendorState),
-            $("#ddlCity").val(response.vendorCity),
-            CheckValidation();
+                $("#ddlCountry").val(response.vendorCountry),
+                $("#ddlState").val(response.vendorState),
+                $("#ddlCity").val(response.vendorCity),
+                CheckValidation();
         },
         error: function () {
             alert('Data not found');
@@ -114,9 +115,8 @@ function EditVendorDetails(Id)
     });
 }
 
-function UpdateVendorDetails()
-{
-   
+function UpdateVendorDetails() {
+
     $("#editPersonalDetailsModel").prop("disabled", true);
     $("#editBankDetailsModel").prop("disabled", true);
     if ($("#editVendorbankDetails").valid()) {
@@ -200,8 +200,7 @@ function ClearTextBox() {
 }
 function AddVendorDetails() {
 
-    if ($("#VendorbankDetails").valid())
-    {
+    if ($("#VendorbankDetails").valid()) {
         var fromData = {
             "VendorFirstName": $("#firstnameInput").val(),
             "VendorLastName": $("#lastnameInput").val(),
@@ -226,10 +225,10 @@ function AddVendorDetails() {
             "VendorGstnumber": $("#GSTNumberInput").val()
         };
 
-        
+
         var from_Data = new FormData();
         from_Data.append("ADDVENDOR", JSON.stringify(fromData));
-        
+
 
         $.ajax({
             url: '/Vendor/AddVandorDetail',
@@ -239,7 +238,7 @@ function AddVendorDetails() {
             processData: false,
             contentType: false,
             success: function (Result) {
-                
+
                 Swal.fire({
                     title: Result.message,
                     icon: 'success',
@@ -263,7 +262,7 @@ function AddVendorDetails() {
 }
 
 function GetVendorType() {
-
+    debugger
     $.ajax({
         url: '/Vendor/GetVendorType',
         success: function (result) {
@@ -274,27 +273,25 @@ function GetVendorType() {
         }
     });
 }
-$(document).ready(function () {
-    GetVendorType();
-});
+
 
 $('#CloseButton').click(function () {
     window.location = '/Vendor/AddVandorDetails';
 });
 
 function openvendormodel() {
-    
+
     $("#PersonalDetailsModel").prop("disabled", true);
     $("#BankDetailsModel").prop("disabled", true);
     $("#addSeller").modal('show');
-  
+
 }
 
 
 //-----------------Validation-----------------//
 
 function nexttoPersonalDetails() {
-    
+
     if ($('#VendorFormId').valid()) {
         $("#PersonalDetailsModel").prop("disabled", false);
         document.getElementById("PersonalDetailsModel").click()
@@ -309,7 +306,7 @@ function nexttoPersonalDetails() {
     }
 }
 function nexttoBankDetails() {
-    
+
     if ($('#VendorPersonalDetails').valid()) {
         $("#BankDetailsModel").prop("disabled", false);
         document.getElementById("BankDetailsModel").click()
@@ -325,9 +322,9 @@ function nexttoBankDetails() {
 }
 
 $(document).ready(function () {
-    
+
     $("#VendorFormId").validate({
-        
+
         rules: {
 
             companynameInput: "required",
@@ -474,7 +471,7 @@ $(document).ready(function () {
             EditGSTNumberInput: "Please Enter Gstnumber",
         }
     })
-   
+
 });
 
 function editnexttoPersonalDetails() {

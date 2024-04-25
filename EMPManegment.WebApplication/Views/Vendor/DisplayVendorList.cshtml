@@ -205,7 +205,7 @@
                                                     <div class="col-lg-6">
                                                         <div class="mb-3">
                                                             <label for="CompanyType" class="form-label">Company Type</label>
-                                                            <select class="form-control" id="CompanyType" name="CompanyType">
+                                                            <select class="form-control form-select valid" id="CompanyType" name="CompanyType">
                                                                 <option value="">Select type</option>
                                                                 @* <option value="All" selected>All</option>*@
                                                                 <option value="Merchandising">Merchandising</option>
@@ -226,7 +226,7 @@
                                                     <div class="col-lg-6">
                                                         <div class="mb-3">
                                                             <label for="ddlVendorType" class="form-label">VendorType</label>
-                                                            <select id="ddlVendorType" name="ddlVendorType" class="form-control bg-transparent">
+                                                            <select id="ddlVendorType" name="ddlVendorType" class="form-control form-select valid">
                                                                 <option>--Select Type--</option>
                                                             </select>
                                                             <input type="hidden" id="VendorTypeInput" name="VendorTypeInput" value="" />
@@ -251,7 +251,7 @@
                                                     <div class="col-lg-4">
                                                         <div class="mb-3">
                                                             <label for="ddlCountry" class="form-label">Country</label>
-                                                            <select id="ddlCountry" name="ddlCountry" class="form-control bg-transparent">
+                                                            <select id="ddlCountry" name="ddlCountry" class="form-control form-select valid">
                                                                 <option>--Select Country--</option>
                                                             </select>
                                                             <input type="hidden" id="txtcountry" name="txtcountry" value="" />
@@ -261,7 +261,7 @@
                                                     <div class="col-lg-4">
                                                         <div class="mb-3">
                                                             <label for="ddlState" class="form-label">State</label>
-                                                            <select id="ddlState" name="ddlState" class="form-control bg-transparent">
+                                                            <select id="ddlState" name="ddlState" class="form-control form-select valid">
                                                                 <option>--Select State--</option>
                                                             </select>
                                                             <input type="hidden" id="txtstate" name="txtstate" value="" />
@@ -271,7 +271,7 @@
                                                     <div class="col-lg-4">
                                                         <div class="mb-3">
                                                             <label for="ddlCity" class="form-label">City</label>
-                                                            <select id="ddlCity" name="ddlCity" class="form-control bg-transparent">
+                                                            <select id="ddlCity" name="ddlCity" class="form-control form-select valid">
                                                                 <option>--Select City--</option>
                                                             </select>
                                                             <input type="hidden" id="txtcity" name="txtcity" value="" />
@@ -465,8 +465,8 @@
                                                     <div class="col-lg-6">
                                                         <div class="mb-3">
                                                             <label for="CompanyType" class="form-label">Company Type</label>
-                                                            <select class="form-control" id="EditCompanyType" name="EditCompanyType">
-                                                                <option value="">Select type</option>
+                                                            <select class="form-control form-select valid" id="EditCompanyType" name="EditCompanyType">
+                                                                <option value="" selected>Select type</option>
                                                                 @* <option value="All" selected>All</option>*@
                                                                 <option value="Merchandising">Merchandising</option>
                                                                 <option value="Manufacturing">Manufacturing</option>
@@ -486,8 +486,8 @@
                                                     <div class="col-lg-6">
                                                         <div class="mb-3">
                                                             <label for="ddlVendorType" class="form-label">VendorType</label>
-                                                            <select id="ddlVendorType" name="ddlVendorType" class="form-control bg-transparent">
-                                                                <option>--Select Type--</option>
+                                                            <select id="ddlVendorType" name="ddlVendorType" class="form-control form-select valid">
+                                                                <option selected>--Select Type--</option>
                                                             </select>
                                                             <input type="hidden" id="VendorTypeInput" name="VendorTypeInput" value="" />
                                                         </div>
@@ -511,8 +511,8 @@
                                                     <div class="col-lg-4">
                                                         <div class="mb-3">
                                                             <label for="ddlCountry" class="form-label">Country</label>
-                                                            <select id="ddlCountry" name="ddlCountry" class="form-control bg-transparent">
-                                                                <option>--Select Country--</option>
+                                                            <select id="ddlCountry" name="ddlCountry" class="form-control form-select valid">
+                                                                <option selected>--Select Country--</option>
                                                             </select>
                                                             <input type="hidden" id="txtcountry" name="txtcountry" value="" />
                                                         </div>
@@ -521,8 +521,8 @@
                                                     <div class="col-lg-4">
                                                         <div class="mb-3">
                                                             <label for="ddlState" class="form-label">State</label>
-                                                            <select id="ddlState" name="ddlState" class="form-control bg-transparent">
-                                                                <option>--Select State--</option>
+                                                            <select id="ddlState" name="ddlState" class="form-control form-select valid">
+                                                                <option selected>--Select State--</option>
                                                             </select>
                                                             <input type="hidden" id="txtstate" name="txtstate" value="" />
                                                         </div>
@@ -531,8 +531,8 @@
                                                     <div class="col-lg-4">
                                                         <div class="mb-3">
                                                             <label for="ddlCity" class="form-label">City</label>
-                                                            <select id="ddlCity" name="ddlCity" class="form-control bg-transparent">
-                                                                <option>--Select City--</option>
+                                                            <select id="ddlCity" name="ddlCity" class="form-control form-select valid">
+                                                                <option selected>--Select City--</option>
                                                             </select>
                                                             <input type="hidden" id="txtcity" name="txtcity" value="" />
                                                         </div>
@@ -741,7 +741,7 @@
     var today = new Date().toISOString().split('T')[0];
     document.getElementById("CreatedOn").setAttribute("max", today);
 </script>
-
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/moduls/taskscript.js"></script>
 <script src="~/moduls/vendordetailsscript.js"></script>
 <script src="~/moduls/masterlistscript.js"></script>
