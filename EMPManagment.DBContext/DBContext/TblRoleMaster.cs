@@ -5,11 +5,11 @@ namespace EMPManagment.API;
 
 public partial class TblRoleMaster
 {
-    public int Id { get; set; }
+    public Guid RoleId { get; set; }
 
     public string? Role { get; set; }
 
-    public  bool? IsActive { get; set; }
+    public bool? IsActive { get; set; }
 
     public bool? IsDelete { get; set; }
 

@@ -47,7 +47,7 @@ public partial class TblUser
 
     public DateTime? LastLoginDate { get; set; }
 
-    public int? Role { get; set; }
+    public Guid? RoleId { get; set; }
 
     public int? QuestionId { get; set; }
 
@@ -69,7 +69,7 @@ public partial class TblUser
 
     public virtual TblQuestion? Question { get; set; }
 
-    public virtual TblRoleMaster? RoleNavigation { get; set; }
+    public virtual TblRoleMaster? Role { get; set; }
 
     public virtual TblState? State { get; set; }
 
