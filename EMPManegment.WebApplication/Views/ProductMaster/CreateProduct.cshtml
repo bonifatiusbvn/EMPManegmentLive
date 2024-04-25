@@ -7,8 +7,8 @@
 <style>
     #txtproductname-error, #txtproductdescription-error,
     #txtstocks-error, #txtPerUnitPrice-error,
-    #txtGST-error, #txtPerUnitWithGSTPrice-error, #txtProductType-error,
-    #txtvendornamed-error {
+    #txtGST-error, #txtPerUnitWithGSTPrice-error, #txtProductType-error
+    {
         color: red;
     }
 </style>
@@ -83,7 +83,7 @@
             </div>
             <!-- end card -->
 
-            <div class="card">
+            @*<div class="card">
                 <div class="card-header">
                     <ul class="nav nav-tabs-custom card-header-tabs border-bottom-0" role="tablist">
                         <li class="nav-item">
@@ -143,7 +143,8 @@
                 </div>
                 <!-- end card body -->
             </div>
-            <!-- end card -->
+            <!-- end card *@
+
             <div class="text-end mb-3">
                 <button type="button" class="btn btn-primary w-sm" onclick="SaveProductDetails()" id="saveproductdetails" value="Validation">Submit</button>
             </div>
@@ -170,26 +171,8 @@
                 </div>
                 <!-- end card body -->
             </div>
-
             <!-- end card -->
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="card-title mb-0">Add Vendor</h5>
-                </div>
-                <div class="card-body">
-                    <div class="hstack gap-3 align-items-start">
-                        <div class="flex-grow-1">
-                            <label for="VendorId" class="form-label">Vendor Name</label>
-                            <select class="form-control" id="txtvendornamed" name="txtvendornamed">
-                                <option selected disabled value="">----Select Vendor Name---</option>
-                            </select>
-                            <input type="hidden" class="form-control" id="txtvendornameid">
-                        </div>
-                    </div>
-                </div>
-                <!-- end card body -->
-            </div>
-            <!-- end card -->
+            
             <div class="card">
                 <div class="card-header">
                     <h5 class="card-title mb-0">Product Short Description</h5>
@@ -197,6 +180,64 @@
                 <div class="card-body">
                     <p class="text-muted mb-2">Add short description for product</p>
                     <textarea class="form-control" id="txtshortdescription" name="txtshortdescription" placeholder="Must enter maximum of a 50 characters" rows="3"></textarea>
+                </div>
+                <!-- end card body -->
+            </div>
+            <!-- end card -->
+
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">General Info</h5>
+                </div>
+                <div class="card-body">
+                    <div class="card-body">
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="addproduct-general-info" role="tabpanel">
+                                <div class="row">
+                                    <div class="col-lg-4">
+                                        <div class="mb-3">
+                                            <label class="form-label" for="PerUnitPrice">Per Unit Price</label>
+                                            <input type="text" class="form-control" id="txtPerUnitPrice" name="txtPerUnitPrice" placeholder="Enter PerUnitPrice" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="mb-3">
+                                            <label class="form-label" for="GST">GST</label>
+                                            <input type="text" class="form-control" id="txtGST" name="txtGST" placeholder="Enter GST" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="mb-3">
+                                            <label class="form-label" for="HSN">HSN</label>
+                                            <input type="text" class="form-control" id="txtHSN" name="txtHSN" placeholder="Enter HSN">
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- end row -->
+
+                                <div class="row">
+                                    <div class="col-lg-6 col-sm-6">
+                                        <div class="mb-3">
+                                            <label class="form-label" for="PerUnitWithGSTPrice">Per Unit With GST Price</label>
+                                            <input type="text" class="form-control" id="txtPerUnitWithGSTPrice" name="txtPerUnitWithGSTPrice" placeholder="Enter price" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-sm-6">
+                                        <div class="mb-3">
+                                            <label class="form-label" for="stocks">Stocks</label>
+                                            <input type="text" class="form-control" id="txtstocks" name="txtstocks" placeholder="Stocks" required>
+                                        </div>
+                                    </div>
+                                    <!-- end col -->
+                                </div>
+                                <!-- end row -->
+                            </div>
+                            <!-- end tab-pane -->
+                            <!-- end tab pane -->
+                        </div>
+                        <!-- end tab content -->
+                    </div>
+                    <!-- end card body -->
                 </div>
                 <!-- end card body -->
             </div>

@@ -1,6 +1,7 @@
 ﻿using EMPManagment.API;
 using EMPManegment.EntityModels.Crypto;
 using EMPManegment.EntityModels.ViewModels;
+using EMPManegment.EntityModels.ViewModels.UserModels;
 using EMPManegment.Inretface.Interface.UsersLogin;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -57,11 +58,33 @@ namespace EMPManegment.Repository.UserLoginRepository
                                 FullName = $"{tblUser.User.FirstName} {tblUser.User.LastName}",
                                 FirstName = tblUser.User.FirstName,
                                 ProfileImage = tblUser.User.Image,
-                                Role = tblUser.Role.Role
+                                Role = tblUser.Role.Role,
+                                RoleId = tblUser.Role.RoleId,
                             };
 
                             response.Data = userModel;
                             response.Code = (int)HttpStatusCode.OK;
+
+
+                            List<FromPermission> FromPermissionData = (from u in Context.TblRolewiseFormPermissions
+                                                                       join s in Context.TblForms on u.FormId equals s.FormId
+                                                                       where u.RoleId == userModel.RoleId && s.IsActive == true
+                                                                       orderby s.OrderId ascending
+                                                                       select new FromPermission
+                                                                       {
+                                                                           FormName = s.FormName,
+                                                                           GroupName = s.FormGroup,
+                                                                           Controller = s.Controller,
+                                                                           Action = s.Action,
+                                                                           Add = u.IsAddAllow,
+                                                                           View = u.IsViewAllow,
+                                                                           Edit = u.IsEditAllow,
+                                                                           Delete = u.IsDeleteAllow,
+
+                                                                       }).ToList();
+
+
+                            userModel.FromPermissionData = FromPermissionData;
 
                             tblUser.User.LastLoginDate = DateTime.Now;
                             Context.TblUsers.Update(tblUser.User);

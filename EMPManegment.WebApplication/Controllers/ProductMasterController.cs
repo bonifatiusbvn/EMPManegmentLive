@@ -255,6 +255,7 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
+
         [HttpGet]
         public async Task<IActionResult> GetProductDetailsById(Guid ProductId)
         {
@@ -301,6 +302,7 @@ namespace EMPManegment.Web.Controllers
         {
             return View();
         }
+
         [HttpPost]
         public async Task<IActionResult> DisplayProductDetailsById()
         {

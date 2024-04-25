@@ -12,7 +12,7 @@
     #txtProductName-error, #txtProductDescription-error, #txtshortdescription-error,
     #txtproductImage-error, #txtstocks-error, #txtPerUnitPrice-error,
     #txtHSN-error, #txtGST-error, #txtPerUnitWithGSTPrice-error, #txtProductType-error,
-    #txtvendornamed-error, #txtProducts-error {
+    #txtProducts-error, #txtsearch-error {
         color: red;
     }
 </style>
@@ -98,41 +98,15 @@
                             </div>
                         </div>
                         <div class="card-body border border-dashed border-end-0 border-start-0">
-                            <form>
+                            <form id="productsearchvalidateform">
                                 <div class="row g-3">
                                     <div class="col-xxl-5 col-sm-6">
-                                        <div>
+                                        <div class="input-group">
+                                            <input type="text" placeholder="Search here...." id="txtsearch" name="txtsearch" class="form-control" />
+                                            <button class="btn btn-success" type="button" onclick="SearchProductName()" id="searchproductname" value="Validate">Search</button>
                                         </div>
                                     </div>
-                                    <!--end col-->
-                                    <div class="col-xxl-2 col-sm-6">
-                                        <div>
-                                        </div>
-                                    </div>
-                                    <!--end col-->
-                                    <div class="col-xxl-2 col-sm-4">
-                                        <div>
-                                            <select class="form-control mb-1 float-end" id="txtvendorname">
-                                                <option selected disabled value="">--Select Vendor--</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <!--end col-->
-                                    <div class="col-xxl-2 col-sm-4">
-                                        <div>
-                                            <label for="ProductId" class="form-label"></label>
-                                            <input type="text" placeholder="Search here...." id="txtsearch" class="form-control mb-1 float-end" />
-                                        </div>
-                                    </div>
-                                    <!--end col-->
-                                    <div class="col-xxl-1 col-sm-4">
-                                        <div>
-                                            <button class="btn btn-success float-md-end" type="button" onclick="SearchProductName()" id="searchproductname" value="Validate"> Search </button>
-                                        </div>
-                                    </div>
-                                    <!--end col-->
                                 </div>
-                                <!--end row-->
                             </form>
                         </div>
                         <div class="card-header">
