@@ -47,14 +47,14 @@
     <div class="col-sm offset-6">
         <form class="mx-2 my-2">
             <div class="input-group">
-                <select class="form-select" id="inputSearch" name="searchby">
+                <select class="form-control form-select valid" id="inputSearch" name="searchby">
                     <option selected disabled value="">SearchBy...</option>
                     <option value="ProjectTitle">ProjectTitle</option>
                     <option value="ProjectStatus">ProjectStatus</option>
                 </select>
                 <span class="deleteicon col-sm offset-6">
                     <input name="searchfor" class="form-control" id="inputsearch" area-describedby="inputSearchProjectTitle" aria-label="Search" autocomplete="off" />
-                    <span onclick="var input = this.previousElementSibling; input.value = ''; input.focus();">x</span>
+                    <span onclick="var input = this.previousElementSibling; input.value = ''; input.focus();" style="margin-top:0px;margin-left:-24px;position:relative;">x</span>
                 </span>
                 <button type="button" class="btn btn-outline-secondary rounded" onclick="searchproject()">Search</button>
             </div>
@@ -213,11 +213,11 @@
         searchfor = @Context.Request.Query["searchfor"],
         searchby = @Context.Request.Query["searchby"]
     }),
-                                          new X.PagedList.Web.Common.PagedListRenderOptions
-                                      {
-                                          LiElementClasses = new string[] { "page-item" },
-                                          PageClasses = new string[] { "page-link" }
-                                      })
+                                                      new X.PagedList.Web.Common.PagedListRenderOptions
+                                                  {
+                                                      LiElementClasses = new string[] { "page-item" },
+                                                      PageClasses = new string[] { "page-link" }
+                                                  })
 
 
 

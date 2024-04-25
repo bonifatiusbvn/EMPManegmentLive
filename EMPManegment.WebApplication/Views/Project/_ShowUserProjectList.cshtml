@@ -46,14 +46,14 @@
                 <div class="col-sm offset-6">
                     <form class="mx-2 my-2">
                         <div class="input-group">
-                            <select class="form-select" id="idinputSearch" name="searchby" style="height:40px;">
+                            <select class="form-control form-select valid" id="idinputSearch" name="searchby" style="height:40px;">
                                 <option selected disabled value="">SearchBy...</option>
                                 <option value="ProjectTitle">ProjectTitle</option>
                                 <option value="ProjectStatus">ProjectStatus</option>
                             </select>
                             <span class="deleteicon col-sm offset-6">
                                 <input name="searchfor" class="form-control" id="txtinputSearch" area-describedby="inputSearchProjectTitle" aria-label="Search" autocomplete="off" style="height:40px;" />
-                                <span onclick="var input = this.previousElementSibling; input.value = ''; input.focus();">x</span>
+                                <span onclick="var input = this.previousElementSibling; input.value = ''; input.focus();" style="margin-top:0px;margin-left:-24px;position:relative;">x</span>
                             </span>
                             <button type="button" class="btn btn-outline-secondary rounded" onclick="btnserrchproject()" style="width:100px; height:40px;">Search</button>
                         </div>
