@@ -33,6 +33,8 @@ public partial class BonifatiusEmployeesContext : DbContext
 
     public virtual DbSet<TblExpenseType> TblExpenseTypes { get; set; }
 
+    public virtual DbSet<TblForm> TblForms { get; set; }
+
     public virtual DbSet<TblInvoice> TblInvoices { get; set; }
 
     public virtual DbSet<TblInvoiceTypeMaster> TblInvoiceTypeMasters { get; set; }
@@ -60,6 +62,8 @@ public partial class BonifatiusEmployeesContext : DbContext
     public virtual DbSet<TblQuestion> TblQuestions { get; set; }
 
     public virtual DbSet<TblRoleMaster> TblRoleMasters { get; set; }
+
+    public virtual DbSet<TblRolewiseFormPermission> TblRolewiseFormPermissions { get; set; }
 
     public virtual DbSet<TblSalarySlip> TblSalarySlips { get; set; }
 
@@ -217,6 +221,18 @@ public partial class BonifatiusEmployeesContext : DbContext
 
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
             entity.Property(e => e.Type).HasMaxLength(30);
+        });
+
+        modelBuilder.Entity<TblForm>(entity =>
+        {
+            entity.HasKey(e => e.FormId);
+
+            entity.ToTable("tblForm");
+
+            entity.Property(e => e.Action).HasMaxLength(50);
+            entity.Property(e => e.Controller).HasMaxLength(50);
+            entity.Property(e => e.FormGroup).HasMaxLength(50);
+            entity.Property(e => e.FormName).HasMaxLength(50);
         });
 
         modelBuilder.Entity<TblInvoice>(entity =>
@@ -467,9 +483,29 @@ public partial class BonifatiusEmployeesContext : DbContext
 
         modelBuilder.Entity<TblRoleMaster>(entity =>
         {
+            entity.HasKey(e => e.RoleId).HasName("PK_tblRoleMaster_1");
+
             entity.ToTable("tblRoleMaster");
 
+            entity.Property(e => e.RoleId).ValueGeneratedNever();
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
             entity.Property(e => e.Role).HasMaxLength(20);
+            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+        });
+
+        modelBuilder.Entity<TblRolewiseFormPermission>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK_RolewiseFormPermission");
+
+            entity.ToTable("tblRolewiseFormPermission");
+
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+
+            entity.HasOne(d => d.Form).WithMany(p => p.TblRolewiseFormPermissions)
+                .HasForeignKey(d => d.FormId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_tblRolewiseFormPermission_tblForm");
         });
 
         modelBuilder.Entity<TblSalarySlip>(entity =>
@@ -576,8 +612,8 @@ public partial class BonifatiusEmployeesContext : DbContext
                 .HasForeignKey(d => d.QuestionId)
                 .HasConstraintName("FK_tblUsers_tblQuestion");
 
-            entity.HasOne(d => d.RoleNavigation).WithMany(p => p.TblUsers)
-                .HasForeignKey(d => d.Role)
+            entity.HasOne(d => d.Role).WithMany(p => p.TblUsers)
+                .HasForeignKey(d => d.RoleId)
                 .HasConstraintName("FK_tblUsers_tblRoleMaster");
 
             entity.HasOne(d => d.State).WithMany(p => p.TblUsers)
