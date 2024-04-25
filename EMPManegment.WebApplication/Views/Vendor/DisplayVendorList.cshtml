@@ -421,7 +421,6 @@
                         </div>
                     </div>
                     <!--end modal-->
-
                     <!---Edit Vendor Modal--->
                     <div class="modal fade zoomIn" id="UpdateVendorModel" tabindex="-1" aria-labelledby="EditSellerLabel" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered modal-lg">
@@ -458,7 +457,7 @@
                                                     <div class="col-lg-6">
                                                         <div class="mb-3">
                                                             <label for="companynameInput" class="form-label">Company Name</label>
-                                                             <input type="hidden" class="form-control" autocomplete="off" id="vendorId" name="vendorId">
+                                                            <input type="hidden" class="form-control" autocomplete="off" id="vendorId" name="vendorId">
                                                             <input type="text" class="form-control" autocomplete="off" id="EditcompanynameInput" name="EditcompanynameInput" placeholder="Enter your company name">
                                                         </div>
                                                     </div>
@@ -721,15 +720,14 @@
     #CompanyType-error, #companyemailInput-error, #worknumberInput-error.error,
     #companylogoInput-error, #banknameInput-error, #branchInput-error, #accountnameInput-error,
     #accountnumberInput-error, #ifscInput-error.error,
-    #GSTNumberInput-error ,
-     #EditfirstnameInput-error, #EditlastnameInput-error, #EditcontactnumberInput-error.error,
-     #EditphonenumberInput-error, #EditemailidInput-error,
+    #GSTNumberInput-error,
+    #EditfirstnameInput-error, #EditlastnameInput-error, #EditcontactnumberInput-error.error,
+    #EditphonenumberInput-error, #EditemailidInput-error,
     #EditAddressidInput-error, #EditpincodeidInput-error, #EditcompanynameInput-error,
     #EditCompanyType-error, #EditcompanyemailInput-error, #EditworknumberInput-error.error,
     #EditcompanylogoInput-error, #EditbanknameInput-error, #EditbranchInput-error, #EditaccountnameInput-error,
     #EditaccountnumberInput-error, #EditifscInput-error.error,
-    #EditGSTNumberInput-error
-    {
+    #EditGSTNumberInput-error {
         color: red;
     }
 
@@ -745,9 +743,5 @@
 </script>
 
 <script src="~/moduls/taskscript.js"></script>
-
-<!--Vendor Details Script-->
-<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
-<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
 <script src="~/moduls/vendordetailsscript.js"></script>
 <script src="~/moduls/masterlistscript.js"></script>

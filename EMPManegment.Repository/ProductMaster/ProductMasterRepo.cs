@@ -78,7 +78,6 @@ namespace EMPManegment.Repository.ProductMaster
                     var productdetails = new TblProductDetailsMaster()
                     {
                         Id = Guid.NewGuid(),
-                        VendorId = AddProduct.VendorId,
                         ProductType = AddProduct.ProductType,
                         ProductName = AddProduct.ProductName,
                         ProductDescription = AddProduct.ProductDescription,
@@ -131,11 +130,10 @@ namespace EMPManegment.Repository.ProductMaster
                 var data = await (from a in Context.TblProductDetailsMasters
                                   join b in Context.TblProductTypeMasters
                                   on a.ProductType equals b.Id
-                                  where a.VendorId == VendorId
+
                                   select new
                                   {
                                       a.Id,
-                                      a.VendorId,
                                       a.ProductImage,
                                       a.ProductStocks,
                                       a.ProductType,
@@ -151,7 +149,6 @@ namespace EMPManegment.Repository.ProductMaster
                         vendorDetails.Add(new ProductDetailsView()
                         {
                             Id = item.Id,
-                            VendorId = item.VendorId,
                             ProductImage = item.ProductImage,
                             ProductName = item.ProductName,
                             ProductStocks = item.ProductStocks,
@@ -177,11 +174,11 @@ namespace EMPManegment.Repository.ProductMaster
                 var data = await (from a in Context.TblProductDetailsMasters
                                   join b in Context.TblProductTypeMasters
                                   on a.ProductType equals b.Id
-                                  where a.VendorId == VendorId
+
                                   select new
                                   {
                                       a.Id,
-                                      a.VendorId,
+
                                       a.ProductImage,
                                       a.ProductStocks,
                                       a.ProductType,
@@ -196,7 +193,6 @@ namespace EMPManegment.Repository.ProductMaster
                         vendorDetails.Add(new ProductDetailsView()
                         {
                             Id = item.Id,
-                            VendorId = item.VendorId,
                             ProductImage = item.ProductImage,
                             ProductName = item.ProductName,
                             ProductStocks = item.ProductStocks,
@@ -221,13 +217,10 @@ namespace EMPManegment.Repository.ProductMaster
                 Product = (from a in Context.TblProductDetailsMasters.Where(x => x.Id == ProductId)
                            join b in Context.TblProductTypeMasters
                            on a.ProductType equals b.Id
-                           join c in Context.TblVendorMasters
-                           on a.VendorId equals c.Vid
+
                            select new ProductDetailsView
                            {
                                Id = a.Id,
-                               VendorName = c.VendorCompany,
-                               VendorId = a.VendorId,
                                ProductType = a.ProductType,
                                ProductTypeName = b.Type,
                                ProductName = a.ProductName,
@@ -268,7 +261,7 @@ namespace EMPManegment.Repository.ProductMaster
                     getProduct.Id = UpdateProduct.Id;
                     getProduct.PerUnitWithGstprice = UpdateProduct.PerUnitWithGstprice;
                     getProduct.ProductStocks = UpdateProduct.ProductStocks;
-                    getProduct.VendorId = UpdateProduct.VendorId;
+
                 }
                 Context.TblProductDetailsMasters.Update(getProduct);
                 Context.SaveChanges();
@@ -295,7 +288,7 @@ namespace EMPManegment.Repository.ProductMaster
                         productDetails.Add(new ProductDetailsView()
                         {
                             Id = item.Id,
-                            VendorId = item.VendorId,
+
                             ProductImage = item.ProductImage,
                             ProductName = item.ProductName,
                             ProductStocks = item.ProductStocks,
@@ -324,7 +317,7 @@ namespace EMPManegment.Repository.ProductMaster
                         productDetails.Add(new ProductDetailsView()
                         {
                             Id = item.Id,
-                            VendorId = item.VendorId,
+
                             ProductImage = item.ProductImage,
                             ProductName = item.ProductName,
                             ProductStocks = item.ProductStocks,
@@ -346,7 +339,7 @@ namespace EMPManegment.Repository.ProductMaster
             try
             {
                 var productDetails = new List<ProductDetailsView>();
-                var data = await Context.TblProductDetailsMasters.Where(x => x.ProductType == ProductId && x.VendorId == VendorId).ToListAsync();
+                var data = await Context.TblProductDetailsMasters.Where(x => x.ProductType == ProductId).ToListAsync();
                 if (data != null)
                 {
                     foreach (var item in data)
@@ -354,7 +347,7 @@ namespace EMPManegment.Repository.ProductMaster
                         productDetails.Add(new ProductDetailsView()
                         {
                             Id = item.Id,
-                            VendorId = item.VendorId,
+
                             ProductImage = item.ProductImage,
                             ProductName = item.ProductName,
                             ProductStocks = item.ProductStocks,
@@ -387,7 +380,7 @@ namespace EMPManegment.Repository.ProductMaster
                     ProductDetails = new ProductDetailsView()
                     {
                         Id = data.Id,
-                        VendorId = data.VendorId,
+
                         ProductType = data.ProductType,
                         ProductId = data.Id,
                         ProductName = data.ProductName,

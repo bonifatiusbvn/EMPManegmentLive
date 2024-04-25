@@ -7,8 +7,6 @@ public partial class TblProductDetailsMaster
 {
     public Guid Id { get; set; }
 
-    public Guid VendorId { get; set; }
-
     public int? ProductType { get; set; }
 
     public string ProductName { get; set; } = null!;

@@ -343,14 +343,14 @@ function SearchProductName() {
             $("#dvproductdetails").html(Result.responseText);
         }
     });
-} 
+}
 
 function GetAllProductDetailsList(page) {
-
+    debugger
     $.get("/ProductMaster/GetAllProductList", { page: page })
-       .done(function (result) {
+        .done(function (result) {
 
-           $("#getallproductlist").html(result);
+            $("#getallproductlist").html(result);
         })
         .fail(function (error) {
             console.error(error);
@@ -358,7 +358,7 @@ function GetAllProductDetailsList(page) {
 }
 GetAllProductDetailsList(1)
 $(document).on("click", ".pagination a", function (e) {
-  
+
     e.preventDefault();
     var page = $(this).text();
     GetAllProductDetailsList(page);
@@ -366,5 +366,5 @@ $(document).on("click", ".pagination a", function (e) {
 
 function clearProductImage() {
     document.getElementById('txtproductimage').value = '';
-    document.getElementById('imgPreview').src="/assets/images/no-preview.png";
+    document.getElementById('imgPreview').src = "/assets/images/no-preview.png";
 }

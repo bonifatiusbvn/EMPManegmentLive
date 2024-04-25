@@ -12,23 +12,12 @@
                             <img class="img-circle img-bordered-sm" src="~/@item.Image" alt="user image">
                             <input type="text" id="projectid" value="@item.ProjectId" hidden />
                             <a href="#">@item.Fullname</a>
-                            <span class="float-right">
-                                <a class="btn text-danger" data-toggle="modal" onclick="deleteProjectMember('@item.UserId')"><i class="fas fa-trash"></i></a>
-                            </span>
-
+                            <div class="float-right btn-tool">
+                                <a class="btn text-danger" onclick="deleteProjectMember('@item.UserId')"><i class="fas fa-trash"></i></a>
+                            </div>
                         </div>
-
-                        <p>
-
-                        </p>
-
-                        <p>
-
-                        </p>
-
-
+                        <p></p><p></p>
                     </div>
-
                 </div>
                 <!-- end member item -->
             </div>
@@ -37,7 +26,7 @@
     }
 }
 <!-- Modal -->
-@* <div class="modal fade" id="deleteOrderModal">
+<div class="modal fade" id="deleteOrderModal">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-body p-5 text-center">
@@ -61,28 +50,6 @@
             </div>
         </div>
     </div>
-</div> *@
-<div class="modal fade" id="deleteOrderModal">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">Default Modal</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p>One fine body&hellip;</p>
-            </div>
-            <div class="modal-footer justify-content-between">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
-            </div>
-        </div>
-        <!-- /.modal-content -->
-    </div>
-    <!-- /.modal-dialog -->
 </div>
-<!-- end modal -->
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
 
+<!-- end modal -->

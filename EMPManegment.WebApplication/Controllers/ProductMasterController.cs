@@ -50,7 +50,7 @@ namespace EMPManegment.Web.Controllers
                 UploadFile(AddProduct.ProductImage, fullpath);
                 var ProductDetails = new ProductDetailsView
                 {
-                    VendorId = AddProduct.VendorId,
+
                     CreatedBy = _userSession.UserId,
                     ProductType = AddProduct.ProductType,
                     ProductName = AddProduct.ProductName,
@@ -190,12 +190,12 @@ namespace EMPManegment.Web.Controllers
         {
             return View();
         }
-        public async Task<IActionResult> GetAllProductList(int? page)
+        public async Task<IActionResult> GetAllProductList(int? page, string? searchText)
         {
             try
             {
                 List<ProductDetailsView> productlist = new List<ProductDetailsView>();
-                ApiResponseModel response = await APIServices.GetAsync("", "ProductMaster/GetAllProductList");
+                ApiResponseModel response = await APIServices.PostAsync(searchText, "ProductMaster/GetAllProductList");
                 if (response.code == 200)
                 {
                     productlist = JsonConvert.DeserializeObject<List<ProductDetailsView>>(response.data.ToString());
@@ -237,14 +237,13 @@ namespace EMPManegment.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> DisplayProductDetailsByVendorId()
+        public async Task<IActionResult> DisplayProductDetailsByVendorId(string GetVendorId)
         {
             try
             {
-                string Vendorstatus = HttpContext.Request.Form["VendorId"];
-                var GetVendorId = Newtonsoft.Json.JsonConvert.DeserializeObject<ProductDetailsView>(Vendorstatus.ToString());
+
                 List<ProductDetailsView> ProductList = new List<ProductDetailsView>();
-                ApiResponseModel response = await APIServices.PostAsync("", "ProductMaster/GetProductDetailsByVendorId?VendorId=" + GetVendorId.VendorId);
+                ApiResponseModel response = await APIServices.PostAsync("", "ProductMaster/GetProductDetailsByVendorId?VendorId=" + GetVendorId);
                 if (response.code == 200)
                 {
                     ProductList = JsonConvert.DeserializeObject<List<ProductDetailsView>>(response.data.ToString());

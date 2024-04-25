@@ -10,8 +10,7 @@ namespace EMPManegment.EntityModels.ViewModels.ProductMaster
     public class ProductDetailsView
     {
         public Guid Id { get; set; }
-        public Guid VendorId { get; set; }
-        public string? VendorName { get; set; }
+
         public int? ProductType { get; set; }
         public string? ProductTypeName { get; set; }
 
@@ -48,7 +47,6 @@ namespace EMPManegment.EntityModels.ViewModels.ProductMaster
     public class ProductRequestModel
     {
         public Guid Id { get; set; }
-        public Guid VendorId { get; set; }
         public int? ProductType { get; set; }
         public string ProductName { get; set; } = null!;
         public string ProductDescription { get; set; } = null!;

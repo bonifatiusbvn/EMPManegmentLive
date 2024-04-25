@@ -22,7 +22,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
         {
             options.LoginPath = "/Authentication/Login";
-            options.LogoutPath = "/Authentication/Logout";
+            options.LogoutPath = "/Authentication/Login";
             options.Cookie.HttpOnly = true;
             //options.Cookie.Name = "localhost:7204";
             options.Cookie.SecurePolicy = CookieSecurePolicy.None;
