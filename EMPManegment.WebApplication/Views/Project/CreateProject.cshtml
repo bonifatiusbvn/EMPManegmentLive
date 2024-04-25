@@ -54,7 +54,7 @@
                         <div class="col-lg-4">
                             <div class="mb-3 mb-lg-0">
                                 <label for="projectPriority" class="form-label">Priority</label>
-                                <select class="form-select" data-choices data-choices-search-false id="projectPriority" name="projectPriority">
+                                <select class="form-control form-select valid" data-choices data-choices-search-false id="projectPriority" name="projectPriority">
                                     <option value="" selected disabled>---Select Project Priority---</option>
                                     <option value="High">High</option>
                                     <option value="Medium">Medium</option>
@@ -65,7 +65,7 @@
                         <div class="col-lg-4">
                             <div class="mb-3 mb-lg-0">
                                 <label for="projectStatus" class="form-label">Status</label>
-                                <select class="form-select" data-choices data-choices-search-false id="projectStatus" name="projectStatus">
+                                <select class="form-control form-select valid" data-choices data-choices-search-false id="projectStatus" name="projectStatus">
                                     <option value="" selected disabled>---Select Project Status---</option>
                                     <option value="Inprogress">Inprogress</option>
                                     <option value="Completed">Completed</option>
@@ -103,21 +103,21 @@
                     <div class="row">
                         <div class="col-4 mb-3">
                             <label class="form-label">Country</label>
-                            <select id="projectCountry" name="projectCountry" class="form-select" onchange="fn_getProjectState('ProjectState',null,this)">
+                            <select id="projectCountry" name="projectCountry" class="form-control form-select valid" onchange="fn_getProjectState('ProjectState',null,this)">
                                 <option selected>--Select Country--</option>
                             </select>
                             <input type="hidden" id="txtprojectCountry" value="" />
                         </div>
                         <div class="col-4 mb-3">
                             <label class="form-label">State</label>
-                            <select id="ProjectState" name="ProjectState" class="form-select" onchange="fn_getProjectcitiesbystateId('ProjectCity', null, this)">
+                            <select id="ProjectState" name="ProjectState" class="form-control form-select valid" onchange="fn_getProjectcitiesbystateId('ProjectCity', null, this)">
                                 <option>--Select State--</option>
                             </select>
                             <input type="hidden" id="txtProjectState" value="" />
                         </div>
                         <div class="col-4 mb-3">
                             <label class="form-label">City</label>
-                            <select id="ProjectCity" name="ProjectCity" class="form-select">
+                            <select id="ProjectCity" name="ProjectCity" class="form-control form-select valid">
                                 <option>--Select City--</option>
                             </select>
                             <input type="hidden" id="txtProjectCity" value="" />
@@ -127,9 +127,8 @@
             </div>
             <!-- end card -->
             <div class="text-end mb-4">
-                <button type="submit" class="btn btn-danger btn-default m-1">Delete</button>
-                <button type="submit" class="btn btn-primary w-sm">Draft</button>
-                <button type="button" class="btn btn-success w-sm" onclick="btnCreateProjectDetail()" id="projectDetails" value="Validate">Create</button>
+
+                <button type="button" class="btn btn-block btn-success btn-lg" onclick="btnCreateProjectDetail()" id="projectDetails" value="Validate">Create</button>
             </div>
         </form>
     </div>
@@ -164,18 +163,18 @@
             <!-- end card -->
 
             <div class="card">
-                <div class="card-header">
+                <div class="card-header align-items-center d-flex border-bottom-dashed">
                     <h5 class="card-title mb-0">Members</h5>
+                    <button type="button" class="btn btn-block btn-warning" style="margin-left:240px;" data-bs-toggle="modal" data-bs-target="#ProjectHeadModal" onclick="ProjectHeadMemberList()"><i class="ri-share-line me-1 align-bottom"></i> Select Head</button>
                 </div>
                 <div class="card-body">
                     <div class="mb-3">
                         <label for="projectHead" class="form-label">Project Head</label>
-                        <button type="button" class="btn btn-soft-primary btn-sm" style="margin-left:73px;" data-bs-toggle="modal" data-bs-target="#ProjectHeadModal" onclick="ProjectHeadMemberList()"><i class="ri-share-line me-1 align-bottom"></i> Select Head</button>
                         <input type="text" class="form-control material_blue" id="projectHead" name="projectHead" placeholder="Enter Project Head" />
                     </div>
                     <div class="mb-3">
                         <label for="choices-lead-input" class="form-label">Team Lead</label>
-                        <select class="form-select" data-choices data-choices-search-false id="choices-lead-input">
+                        <select class="form-control form-select valid" data-choices data-choices-search-false id="choices-lead-input">
                             <option value="Brent Gonzalez" selected>Brent Gonzalez</option>
                             <option value="Darline Williams">Darline Williams</option>
                             <option value="Sylvia Wright">Sylvia Wright</option>
@@ -188,27 +187,9 @@
                     <div>
                         <label class="form-label">Team Members</label>
                         <div class="avatar-group">
-                            <a href="javascript: void(0);" class="avatar-group-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Brent Gonzalez">
-                                <div class="avatar-xs">
-                                    <img src="~/assets/images/users/avatar-3.jpg" alt="" class="rounded-circle img-fluid">
-                                </div>
-                            </a>
-                            <a href="javascript: void(0);" class="avatar-group-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Sylvia Wright">
-                                <div class="avatar-xs">
-                                    <div class="avatar-title rounded-circle bg-primary">
-                                        S
-                                    </div>
-                                </div>
-                            </a>
-                            <a href="javascript: void(0);" class="avatar-group-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Ellen Smith">
-                                <div class="avatar-xs">
-                                    <img src="~/assets/images/users/avatar-4.jpg" alt="" class="rounded-circle img-fluid">
-                                </div>
-                            </a>
                             <a href="javascript: void(0);" class="avatar-group-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Add Members">
                                 <div class="avatar-xs" data-bs-toggle="modal" data-bs-target="#inviteMembersModal">
                                     <div class="avatar-title fs-16 rounded-circle bg-light border-dashed border text-primary">
-                                        +
                                     </div>
                                 </div>
                             </a>
