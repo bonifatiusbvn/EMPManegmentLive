@@ -128,7 +128,6 @@ $(document).ready(function () {
             txtPerUnitPrice: "required",
             txtGST: "required",
             txtPerUnitWithGSTPrice: "required",
-            txtvendornamed: "required"
         },
         messages: {
             txtproductname: "Please Enter Product Name",
@@ -137,7 +136,6 @@ $(document).ready(function () {
             txtPerUnitPrice: "Please Enter Per Unit Price of the Product",
             txtGST: "Please Enter GST",
             txtPerUnitWithGSTPrice: "Please Enter Per Unit With GST Price of the Product",
-            txtvendornamed: "Please Select Vendor Name"
         }
     })
     $("#saveproductdetails").on('click', function () {
@@ -152,7 +150,6 @@ function SaveProductDetails() {
         var formData = new FormData();
         formData.append("ProductName", $("#txtproductname").val());
         formData.append("ProductType", $("#txtProductTypeid").val());
-        formData.append("VendorId", $("#txtvendornamed").val());
         formData.append("ProductDescription", $("#txtproductdescription").val());
         formData.append("ProductShortDescription", $("#txtshortdescription").val());
         formData.append("ProductImage", $("#txtproductimage")[0].files[0]);
@@ -209,7 +206,6 @@ function ProductDetails() {
         processData: false,
         contentType: false,
         complete: function (Result) {
-            $("#table-product-list-all").hide();
             $("#getallproductlist").hide();
             $("#dvproductdetails").html(Result.responseText);
         }
@@ -234,7 +230,6 @@ function EditProductDetails(Id) {
             $('#txtstocks').val(response.productStocks);
             $('#txtProducts').val(response.productType);
             $('#txtshortdescription').val(response.productShortDescription);
-            $('#txtvendornamed').val(response.vendorId);
             $('#txtproductImage').val(response.productImage);
         },
         error: function () {
@@ -303,7 +298,6 @@ $(document).ready(function () {
             txtHSN: "required",
             txtGST: "required",
             txtPerUnitWithGSTPrice: "required",
-            txtvendornamed: "required",
             txtProducts: "required"
         },
         messages: {
@@ -316,7 +310,6 @@ $(document).ready(function () {
             txtHSN: "Please Enter HSN",
             txtGST: "Please Enter GST",
             txtPerUnitWithGSTPrice: "Please Enter Per Unit With GST Price of the Product",
-            txtvendornamed: "Please Select Vendor Name",
             txtProducts: "Please Select Product Type"
         }
     })
@@ -325,24 +318,45 @@ $(document).ready(function () {
     });
 });
 
+$(document).ready(function () {
+    $('#productsearchvalidateform').validate({
+        rules: {
+            txtsearch: "required",
+        },
+        messages: {
+            txtsearch: "Enter the Product Name"
+        }
+    })
+});
+
 //$("#txtvendorname").change(function () {
 //    SearchProductName()
 //})
 function SearchProductName() {
-    var form_data = new FormData();
-    form_data.append("ProductName", $('#txtsearch').val());
-    $.ajax({
-        url: '/ProductMaster/SearchProductName',
-        type: 'Post',
-        datatype: 'json',
-        data: form_data,
-        processData: false,
-        contentType: false,
-        complete: function (Result) {
-            $("#table-product-list-all").hide();
-            $("#dvproductdetails").html(Result.responseText);
-        }
-    });
+    if ($("#productsearchvalidateform").valid()) {
+        var form_data = new FormData();
+        form_data.append("ProductName", $('#txtsearch').val());
+        $.ajax({
+            url: '/ProductMaster/SearchProductName',
+            type: 'Post',
+            datatype: 'json',
+            data: form_data,
+            processData: false,
+            contentType: false,
+            complete: function (Result) {
+                $("#getallproductlist").hide();
+                $("#dvproductdetails").html(Result.responseText);
+            }
+        });
+    }
+    else {
+        Swal.fire({
+            title: "Kindly Fill All Details",
+            icon: 'warning',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'OK',
+        })
+    }
 }
 
 function GetAllProductDetailsList(page) {

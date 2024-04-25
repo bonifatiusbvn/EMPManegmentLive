@@ -23,7 +23,6 @@ function EditRoleWiseFormDetails() {
         contentType: false,
         complete: function (Result) {
             if (Result.responseText != "{\"code\":400}") {
-                document.getElementById("backbtn").style.display = "block";
                 document.getElementById("updatebtn").style.display = "block";
                 $('#dveditRolePermissionForm').html(Result.responseText).show();
             }
@@ -92,10 +91,6 @@ function UpdateRolewiseFormPermission() {
     });
 }
 
-function backBtn() {
-    window.location = '/UserProfile/RolewisePermission';
-}
-
 function createRole() {
     if ($("#addUserRole").valid()) {
         var formData = new FormData();
@@ -157,3 +152,10 @@ function validateAndCreateRole() {
         createRole();
     }
 }
+
+function clearTextRoleName() {
+    document.getElementById("textRoleName").value = ""; 
+}
+
+       
+  

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using EMPManegment.EntityModels.ViewModels.FormMaster;
+using EMPManegment.EntityModels.ViewModels.UserModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,6 +23,9 @@ namespace EMPManegment.EntityModels.ViewModels
 
         public string FullName { get; set; }
         public string Role { get; set; }
+
+        public Guid RoleId { get; set; }
+        public List<FromPermission> FromPermissionData { get; set; }
     }
     public class LoginResponseModel
     {

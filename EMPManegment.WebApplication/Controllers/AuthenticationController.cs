@@ -127,6 +127,7 @@ namespace EMPManegment.Web.Controllers
                             Response.Cookies.Delete("Password");
                         }
                         UserSession.ProfilePhoto = userlogin.Data.ProfileImage;
+                        UserSession.FormPermisionData = userlogin.Data.FromPermissionData;
                         await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
                         return RedirectToAction("UserHome", "Home");
                     }
