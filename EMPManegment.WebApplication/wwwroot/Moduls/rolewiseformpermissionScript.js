@@ -1,12 +1,12 @@
 ﻿GetUserRoleList();
 
 function GetUserRoleList() {
-   
+
     $.ajax({
         url: '/UserProfile/RolewisePermissionListAction',
         success: function (result) {
             $.each(result, function (i, data) {
-             
+
                 $('#txtUserRole').append('<Option value=' + data.id + '>' + data.role + '</Option>')
             });
         }
@@ -17,7 +17,7 @@ function AllRolewiseFormUserTable() {
 
     $.get("/UserProfile/RolewisePermissionListAction")
         .done(function (result) {
-       
+
             $("#UserRoletbody").html(result).show();
             $('#dveditRolePermissionForm').hide();
         })
@@ -35,9 +35,11 @@ function EditRoleWiseFormDetails() {
         processData: false,
         contentType: false,
         complete: function (Result) {
-            document.getElementById("backbtn").style.display = "block";
-            document.getElementById("updatebtn").style.display = "block";
-            $('#dveditRolePermissionForm').html(Result.responseText).show();
+            if (Result.responseText != "{\"code\":400}") {
+                document.getElementById("backbtn").style.display = "block";
+                document.getElementById("updatebtn").style.display = "block";
+                $('#dveditRolePermissionForm').html(Result.responseText).show();
+            }
         },
         Error: function () {
 
@@ -52,7 +54,7 @@ function EditRoleWiseFormDetails() {
 }
 
 function UpdateRolewiseFormPermission() {
- 
+
     var formPermissions = [];
     $(".forms").each(function () {
 
@@ -80,16 +82,14 @@ function UpdateRolewiseFormPermission() {
         contentType: false,
         dataType: 'json',
         success: function (Result) {
-          
+
             if (Result.code == 200) {
                 Swal.fire({
                     title: Result.message,
                     icon: 'success',
                     confirmButtonColor: '#3085d6',
                     confirmButtonText: 'OK'
-                }).then(function () {
-                    window.location = '/UserProfile/RolewisePermission';
-                });
+                })
             } else {
                 Swal.fire({
                     title: Result.message,
@@ -107,4 +107,66 @@ function UpdateRolewiseFormPermission() {
 
 function backBtn() {
     window.location = '/UserProfile/RolewisePermission';
+}
+
+function createRole() {
+    if ($("#addUserRole").valid()) {
+        var formData = new FormData();
+        formData.append("Role", $("#textRoleName").val());
+
+        $.ajax({
+            url: '/UserProfile/CreateUserRole',
+            type: 'Post',
+            data: formData,
+            dataType: 'json',
+            contentType: false,
+            processData: false,
+            success: function (Result) {
+                if (Result.code == 200) {
+                    Swal.fire({
+                        title: Result.message,
+                        icon: 'success',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK'
+                    }).then(function () {
+                        window.location = '/UserProfile/RolewisePermission';
+                    });
+                }
+                else {
+                    Swal.fire({
+                        title: Result.message,
+                        icon: 'warning',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK'
+                    })
+                }
+            }
+        });
+    }
+    else {
+        Swal.fire({
+            title: "Kindly fill role",
+            icon: 'warning',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'OK',
+        })
+    }
+}
+
+var UserRoleForm;
+
+function validateAndCreateRole() {
+    UserRoleForm = $("#addUserRole").validate({
+        rules: {
+            textRoleName: "required",
+        },
+        messages: {
+            textRoleName: "Please Enter Role",
+        }
+    })
+    var isValid = true;
+
+    if (isValid) {
+        createRole();
+    }
 }

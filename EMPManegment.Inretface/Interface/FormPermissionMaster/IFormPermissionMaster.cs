@@ -1,5 +1,6 @@
 ﻿using EMPManagment.Web.Models.API;
 using EMPManegment.EntityModels.ViewModels.FormPermissionMaster;
+using EMPManegment.EntityModels.ViewModels.UserModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,5 +13,6 @@ namespace EMPManegment.Inretface.Interface.FormPermissionMaster
     {
         Task<List<RolewiseFormPermissionModel>> GetRolewiseFormListById(int RoleId);
         Task<ApiResponseModel> UpdateMultipleRolewiseFormPermission(List<RolewiseFormPermissionModel> UpdatedRolewiseFormPermissions);
+        Task<ApiResponseModel> CreateUserRole(UserRoleModel roleDetails);
     }
 }

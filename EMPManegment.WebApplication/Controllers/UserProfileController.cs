@@ -820,6 +820,27 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateUserRole(UserRoleModel roleDetails)
+        {
+            try
+            {
+                ApiResponseModel postuser = await APIServices.PostAsync(roleDetails, "FormPermissionMaster/CreateUserRole");
+                if (postuser.code == 200)
+                {
+                    return Ok(new { postuser.message, postuser.code });
+                }
+                else
+                {
+                    return Ok(new { postuser.message, postuser.code });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }
 

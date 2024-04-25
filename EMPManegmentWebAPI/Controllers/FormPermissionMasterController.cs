@@ -1,5 +1,6 @@
 ﻿using EMPManagment.Web.Models.API;
 using EMPManegment.EntityModels.ViewModels.FormPermissionMaster;
+using EMPManegment.EntityModels.ViewModels.UserModels;
 using EMPManegment.Inretface.Interface.FormPermissionMaster;
 using EMPManegment.Inretface.Interface.MasterList;
 using Microsoft.AspNetCore.Http;
@@ -61,6 +62,32 @@ namespace EMPManagment.API.Controllers
                 }
             }
             catch (Exception ex)
+            {
+                throw ex;
+            }
+            return StatusCode(response.code, response);
+        }
+
+        [HttpPost]
+        [Route("CreateUserRole")]
+        public async Task<IActionResult> CreateUserRole(UserRoleModel roleDetails)
+        {
+            ApiResponseModel response = new ApiResponseModel();
+            try
+            {
+                var RoleData = RolewisePermissionMaster.CreateUserRole(roleDetails);
+                if (RoleData.Result.code == 200)
+                {
+                    response.code = (int)HttpStatusCode.OK;
+                    response.message = RoleData.Result.message;
+                }
+                else
+                {
+                    response.message = RoleData.Result.message;
+                    response.code = (int)HttpStatusCode.NotFound;
+                }
+            }
+            catch (Exception ex) 
             {
                 throw ex;
             }

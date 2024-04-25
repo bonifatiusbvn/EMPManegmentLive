@@ -104,14 +104,16 @@ namespace EMPManegment.Repository.CSCRepository
         }
         public async Task<IEnumerable<UserRoleModel>> GetUserRole()
         {
-
             try
             {
-                IEnumerable<UserRoleModel> role = Context.TblRoleMasters.ToList().Select(a => new UserRoleModel
-                {
-                    Id = a.Id,
-                    Role = a.Role,
-                });
+                IEnumerable<UserRoleModel> role = Context.TblRoleMasters
+                    .Where(a => a.IsDelete == false)
+                    .Select(a => new UserRoleModel
+                    {
+                        Id = a.Id,
+                        Role = a.Role,
+                    })
+                    .ToList(); 
                 return role;
             }
             catch (Exception ex)

@@ -82,6 +82,7 @@ public partial class BonifatiusEmployeesContext : DbContext
     public virtual DbSet<TblVendorType> TblVendorTypes { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<TblAttendance>(entity =>

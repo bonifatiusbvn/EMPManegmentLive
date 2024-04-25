@@ -1,6 +1,8 @@
 ﻿using EMPManagment.API;
 using EMPManagment.Web.Models.API;
 using EMPManegment.EntityModels.ViewModels.FormPermissionMaster;
+using EMPManegment.EntityModels.ViewModels.Models;
+using EMPManegment.EntityModels.ViewModels.UserModels;
 using EMPManegment.Inretface.Interface.FormPermissionMaster;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -88,6 +90,56 @@ namespace EMPManegment.Repository.FormPermissionMasterRepository
             {
                 response.code = 400;
                 response.message = "Error updating Rolewise Permissions";
+            }
+            return response;
+        }
+
+        public async Task<ApiResponseModel> CreateUserRole(UserRoleModel roleDetails)
+        {
+            ApiResponseModel response = new ApiResponseModel();
+            try
+            {
+                bool isRoleAlreadyExists = Context.TblRoleMasters.Any(x => x.Role == roleDetails.Role);
+                if (isRoleAlreadyExists == true)
+                {
+                    var RoleDetail = await Context.TblRoleMasters.SingleOrDefaultAsync(x => x.Role == roleDetails.Role);
+                    if (RoleDetail.IsDelete == null || RoleDetail.IsDelete == false)
+                    {
+                        response.message = "Role already exists";
+                        response.code = 404;
+                    }
+                    else
+                    {
+
+                        var GetRoledata = Context.TblRoleMasters.Where(a => a.Role == roleDetails.Role).FirstOrDefault();
+                        GetRoledata.IsDelete = false;
+                        Context.TblRoleMasters.Update(GetRoledata);
+                        Context.SaveChanges();
+                        response.code = 200;
+                        response.data = roleDetails;
+                        response.message = "Role add successfully!";
+                    }
+                }
+                else
+                {
+                    var rolemodel = new TblRoleMaster()
+                    {
+                       Role = roleDetails.Role,
+                       IsActive = true,
+                       IsDelete = false,
+                       CreatedBy = roleDetails.CreatedBy,
+                       CreatedOn = DateTime.Now,
+                    };
+                    response.code = 200;
+                    response.message = "Role add successfully!";
+                    Context.TblRoleMasters.Add(rolemodel);
+                    Context.SaveChanges();
+                }
+            }
+            catch(Exception ex)
+            {
+                response.code = 400;
+                response.message = "Error in creating role";
             }
             return response;
         }
