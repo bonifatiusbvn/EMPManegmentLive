@@ -1,5 +1,6 @@
 ﻿using EMPManagment.API;
 using EMPManegment.EntityModels.ViewModels;
+using EMPManegment.EntityModels.ViewModels.UserModels;
 using EMPManegment.Inretface.Interface.CSC;
 using System;
 using System.Collections.Generic;
@@ -95,6 +96,25 @@ namespace EMPManegment.Repository.CSCRepository
                     Departments = a.Department
                 });
                 return dept;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public async Task<IEnumerable<UserRoleModel>> GetUserRole()
+        {
+            try
+            {
+                IEnumerable<UserRoleModel> role = Context.TblRoleMasters
+                    .Where(a => a.IsDelete == false)
+                    .Select(a => new UserRoleModel
+                    {
+                        RoleId = a.RoleId,
+                        Role = a.Role,
+                    })
+                    .ToList(); 
+                return role;
             }
             catch (Exception ex)
             {

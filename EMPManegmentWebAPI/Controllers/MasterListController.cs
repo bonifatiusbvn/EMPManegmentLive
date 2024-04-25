@@ -1,4 +1,5 @@
 ﻿using EMPManegment.EntityModels.ViewModels;
+using EMPManegment.EntityModels.ViewModels.UserModels;
 using EMPManegment.Inretface.Interface.CSC;
 using EMPManegment.Services.CSC;
 using Microsoft.AspNetCore.Http;
@@ -59,6 +60,13 @@ namespace EMPManagment.API.Controllers
             return Ok(new { code = 200, data = getDepartment.ToList() });
         }
 
-        
+        [HttpPost]
+        [Route("GetUserRoleList")]
+        public async Task<IActionResult> GetUserRoleList()
+        {
+            IEnumerable<UserRoleModel> userRole = await CSC.GetUserRole();
+            return Ok(new { code = 200, data = userRole.ToList() });
+        }
+
     }
 }

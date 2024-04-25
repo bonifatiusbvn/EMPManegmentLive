@@ -37,6 +37,7 @@ using Aspose.Pdf;
 using Aspose.Pdf.Text;
 using System.IO;
 using EMPManegment.EntityModels.ViewModels.ProjectModels;
+using EMPManegment.EntityModels.ViewModels.FormPermissionMaster;
 
 namespace EMPManegment.Web.Controllers
 {
@@ -540,7 +541,6 @@ namespace EMPManegment.Web.Controllers
 
         public async Task<IActionResult> GetAttendance()
         {
-
             return View();
         }
 
@@ -740,6 +740,102 @@ namespace EMPManegment.Web.Controllers
                 else
                 {
                     return new JsonResult(new { Code = 400 });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        [HttpGet]
+        public IActionResult RolewisePermission()
+        {
+            return View();
+        }
+
+        public async Task<IActionResult> RolewisePermissionListAction()
+        {
+            try
+            {
+                ApiResponseModel res = await APIServices.PostAsync("", "MasterList/GetUserRoleList");
+
+                if (res.code == 200)
+                {
+                    List<UserRoleModel> GetUserRoleList = JsonConvert.DeserializeObject<List<UserRoleModel>>(res.data.ToString());
+                    return new JsonResult(GetUserRoleList);
+                }
+                else
+                {
+                    return new JsonResult(new { Message = "Failed to retrieve user role list." });
+                }
+            }
+            catch (Exception ex)
+            {
+
+                return new JsonResult(new { Message = $"An error occurred: {ex.Message}" });
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> GetRolewiseFormListById(Guid RoleId)
+        {
+            try
+            {
+                List<RolewiseFormPermissionModel> RolewiseFormList = new List<RolewiseFormPermissionModel>();
+                ApiResponseModel response = await APIServices.PostAsync("", "FormPermissionMaster/GetRolewiseFormListById?RoleId=" + RoleId);
+                if (response.code == 200)
+                {
+                    RolewiseFormList = JsonConvert.DeserializeObject<List<RolewiseFormPermissionModel>>(response.data.ToString());
+                    return PartialView("~/Views/UserProfile/_editRolewiseFormPartial.cshtml", RolewiseFormList);
+                }
+                else
+                {
+                    return Ok(new { response.code });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateMultipleRolewiseFormPermission()
+        {
+            try
+            {
+                var rolewisePermissionDetails = HttpContext.Request.Form["RolewisePermissionDetails"];
+                var UpdateDetails = JsonConvert.DeserializeObject<List<RolewiseFormPermissionModel>>(rolewisePermissionDetails.ToString());
+
+                ApiResponseModel postuser = await APIServices.PostAsync(UpdateDetails, "FormPermissionMaster/UpdateMultipleRolewiseFormPermission");
+                if (postuser.code == 200)
+                {
+                    return Ok(new { postuser.message, postuser.code });
+                }
+                else
+                {
+                    return Ok(new { postuser.message, postuser.code });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateUserRole(UserRoleModel roleDetails)
+        {
+            try
+            {
+                ApiResponseModel postuser = await APIServices.PostAsync(roleDetails, "FormPermissionMaster/CreateUserRole");
+                if (postuser.code == 200)
+                {
+                    return Ok(new { postuser.message, postuser.code });
+                }
+                else
+                {
+                    return Ok(new { postuser.message, postuser.code });
                 }
             }
             catch (Exception ex)

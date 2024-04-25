@@ -1,4 +1,5 @@
 ﻿using EMPManegment.EntityModels.ViewModels;
+using EMPManegment.EntityModels.ViewModels.UserModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,5 +15,6 @@ namespace EMPManegment.Inretface.Services.CSC
         Task<IEnumerable<CityView>> GetCities(int CityId);
         Task<IEnumerable<QuestionView>> GetQuestion();
         Task<IEnumerable<Department>> GetDepartment();
+        Task<IEnumerable<UserRoleModel>> GetUserRole();
     }
 }

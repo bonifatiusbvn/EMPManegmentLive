@@ -496,6 +496,21 @@ public partial class BonifatiusEmployeesContext : DbContext
 
         modelBuilder.Entity<TblRolewiseFormPermission>(entity =>
         {
+            entity.HasKey(e => e.Id).HasName("PK_RolewiseFormPermission");
+
+            entity.ToTable("tblRolewiseFormPermission");
+
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+
+            entity.HasOne(d => d.Form).WithMany(p => p.TblRolewiseFormPermissions)
+                .HasForeignKey(d => d.FormId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_tblRolewiseFormPermission_tblForm");
+        });
+
+        modelBuilder.Entity<TblRolewiseFormPermission>(entity =>
+        {
             entity.ToTable("tblRolewiseFormPermission");
 
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
