@@ -7,7 +7,7 @@ public partial class TblRolewiseFormPermission
 {
     public int Id { get; set; }
 
-    public int RoleId { get; set; }
+    public Guid RoleId { get; set; }
 
     public int FormId { get; set; }
 

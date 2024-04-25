@@ -7,7 +7,7 @@ public partial class TblRoleMaster
 {
     public Guid RoleId { get; set; }
 
-    public string? Role { get; set; }
+    public string Role { get; set; } = null!;
 
     public bool? IsActive { get; set; }
 
