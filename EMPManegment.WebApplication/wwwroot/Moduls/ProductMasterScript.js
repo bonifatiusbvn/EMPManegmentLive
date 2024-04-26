@@ -82,7 +82,7 @@ function GetProducts() {
 }
 
 function selectProductId() {
-    debugger
+    
     $("#table-product-list-all").hide();
     $("#getallproductlist").hide();
     document.getElementById("txtProductListId").value = document.getElementById("txtProductList").value;
@@ -360,7 +360,7 @@ function SearchProductName() {
 }
 
 function GetAllProductDetailsList(page) {
-    debugger
+    
     $.get("/ProductMaster/GetAllProductList", { page: page })
         .done(function (result) {
 

@@ -5,11 +5,11 @@ $(document).ready(function () {
     GetCreditDebitTotalAmount();
 });
 
-function GetPaymentMethodList() {debugger
+function GetPaymentMethodList() {
 
     $.ajax({
         url: '/PurchaseOrderMaster/GetPaymentMethodList',
-        success: function (result) {debugger
+        success: function (result) {
             $.each(result, function (i, data) {
                 $('#txtpaymentmethod').append('<Option value=' + data.id + '>' + data.paymentMethod + '</Option>')
             });

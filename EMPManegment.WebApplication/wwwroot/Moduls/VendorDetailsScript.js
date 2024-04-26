@@ -81,7 +81,7 @@ function EditVendorDetails(Id) {
         contentType: 'application/json;charset=utf-8;',
         dataType: 'json',
         success: function (response) {
-            debugger
+            
 
             $('#UpdateVendorModel').modal('show');
             $('#vendorId').val(response.vid);
@@ -262,7 +262,7 @@ function AddVendorDetails() {
 }
 
 function GetVendorType() {
-    debugger
+    
     $.ajax({
         url: '/Vendor/GetVendorType',
         success: function (result) {

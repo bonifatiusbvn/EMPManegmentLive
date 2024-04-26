@@ -135,14 +135,14 @@ function populateDropdown(elementId, options) {
     });
 }
 
-function EditExpenseDetails(Id) {debugger
+function EditExpenseDetails(Id) {
 
     $.ajax({
         url: '/ExpenseMaster/EditExpenseDetails?ExpenseId=' + Id,
         type: "Get",
         contentType: 'application/json;charset=utf-8;',
         dataType: 'json',
-        success: function (response) {debugger
+        success: function (response) {
 
             $('#EditExpenseModel').modal('show');
             $('#Editexpensetype').val(response.expenseType);

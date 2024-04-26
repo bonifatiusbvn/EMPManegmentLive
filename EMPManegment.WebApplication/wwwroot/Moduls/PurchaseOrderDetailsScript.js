@@ -256,7 +256,7 @@ $("#returnsactive").click(function () {
 });
 
 
-function InsertMultiplePurchaseOrder() {debugger
+function InsertMultiplePurchaseOrder() {
 
     var orderDetails = [];
     var numOrders = $(".product").length;
@@ -286,7 +286,7 @@ function InsertMultiplePurchaseOrder() {debugger
             TotalAmount: $("#cart-total").val(),
         };
         orderDetails.push(objData);
-        debugger
+        
     });
     var form_data = new FormData();
     form_data.append("ORDERDETAILS", JSON.stringify(orderDetails));
