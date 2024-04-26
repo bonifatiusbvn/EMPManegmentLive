@@ -81,7 +81,7 @@ function EditVendorDetails(Id) {
         contentType: 'application/json;charset=utf-8;',
         dataType: 'json',
         success: function (response) {
-            debugger
+            
 
             $('#UpdateVendorModel').modal('show');
             $('#vendorId').val(response.vid);
@@ -181,10 +181,10 @@ function ClearTextBox() {
     $("#contactnumberInput").val('');
     $("#phonenumberInput").val('');
     $("#emailidInput").val('');
-    $("#ddlVendorType").val('');
-    $("#ddlCountry").val('');
-    $("#ddlState").val('');
-    $("#ddlCity").val('');
+    $("#ddlVendorType").val('--Select Type--');
+    $("#ddlCountry").val('--Select Country--');
+    $("#ddlState").val('--Select State--');
+    $("#ddlCity").val('--Select City--');
     $("#AddressidInput").val('');
     $("#pincodeidInput").val('');
     $("#companynameInput").val('');
@@ -262,7 +262,7 @@ function AddVendorDetails() {
 }
 
 function GetVendorType() {
-    debugger
+    
     $.ajax({
         url: '/Vendor/GetVendorType',
         success: function (result) {

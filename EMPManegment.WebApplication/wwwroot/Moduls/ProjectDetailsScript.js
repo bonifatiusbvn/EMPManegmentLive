@@ -409,7 +409,7 @@ function searchproject() {
     GetAllUserProjectDetailsList(1);
 }
 function deleteProjectMember(Id) {
-    debugger
+    
     $("#deleteOrderModal").modal('show');
 
     $('#delete-record').click(function () {

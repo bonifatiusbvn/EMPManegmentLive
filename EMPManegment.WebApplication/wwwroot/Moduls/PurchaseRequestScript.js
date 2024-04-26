@@ -24,13 +24,13 @@ function filterallItemTable() {
     });
 }
 
-function SerchItemDetailsById(Id) {debugger
+function SerchItemDetailsById(Id) {
 
     $.ajax({
         url: '/ProductMaster/DisplayProductDetils?ProductId=' + Id,
         type: 'Post',
         datatype: 'json',
-        complete: function (Result) {debugger
+        complete: function (Result) {
             $("#displayProductDetail").append(Result.responseText);
         }
     });
@@ -60,13 +60,13 @@ $(document).ready(function () {
     });
 });
 
-function updateTotals() {debugger
+function updateTotals() {
 
     $(".product").each(function () {
         var row = $(this);
         var subtotal = parseFloat(row.find("#dspperunitprice").text().replace('₹', ''));
         var totalquantity = parseFloat(row.find("#txtproductquantity").val());
-        debugger
+        
         var totalAmount = subtotal * totalquantity;
 
         row.find("#dsptotalAmount").text(totalAmount.toFixed(2));

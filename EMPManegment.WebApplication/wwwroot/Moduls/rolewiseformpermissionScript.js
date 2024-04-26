@@ -6,7 +6,7 @@ function GetUserRoleList() {
         url: '/UserProfile/RolewisePermissionListAction',
         success: function (result) {
             $.each(result, function (i, data) {
-                debugger
+                
                 $('#txtUserRole').append('<Option value=' + data.roleId + '>' + data.role + '</Option>')
             });
         }
