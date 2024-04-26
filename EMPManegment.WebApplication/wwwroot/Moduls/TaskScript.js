@@ -155,18 +155,17 @@ function GetUserTaskDetails() {
 }
 /*---------InReview------------*/
 function btnStatusUpdate(Id) {
+    debugger
     if ($("#tasksListform").valid()) {
         var StausChange = {
             TaskStatus: $('#ddlStatusReview' + Id).val(),
             Role: $('#userrole').val(),
             Id: Id,
-            UserId: $('#CreatedByid').val(),
-
-
+            UserId: $('#userid').val(),
         }
         var form_data = new FormData();
         form_data.append("STATUSUPDATE", JSON.stringify(StausChange));
-
+        debugger
         $.ajax({
             url: '/Task/UpdateUserTaskStatus',
             type: 'Post',
