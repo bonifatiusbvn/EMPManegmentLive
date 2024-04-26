@@ -404,7 +404,7 @@ function GetUserAttendanceInTime() {
 
 function UserBirsthDayWish() {
     if (sessionStorage.getItem('birthdayWishSent')) {
-        return; 
+        return;
     }
 
     $.ajax({
