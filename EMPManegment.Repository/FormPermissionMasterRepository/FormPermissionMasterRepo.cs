@@ -29,6 +29,7 @@ namespace EMPManegment.Repository.FormPermissionMasterRepository
                               join f in Context.TblForms on e.FormId equals f.FormId
                               join r in Context.TblRoleMasters on e.RoleId equals r.RoleId
                               where f.IsActive == true
+                              orderby f.OrderId ascending
                               select new RolewiseFormPermissionModel
                               {
                                   Id = e.Id,
@@ -146,6 +147,7 @@ namespace EMPManegment.Repository.FormPermissionMasterRepository
                             IsEditAllow = true,
                             IsDeleteAllow = true,
                             CreatedOn = DateTime.Now,
+                            CreatedBy = roleDetails.CreatedBy,
                         };
                         roleWiseFormPermissions.Add(permissions);
                     }

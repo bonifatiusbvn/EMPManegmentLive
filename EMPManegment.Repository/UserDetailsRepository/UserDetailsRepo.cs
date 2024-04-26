@@ -154,6 +154,7 @@ namespace EMPManegment.Repository.UserListRepository
                         tblAttendance.UserId = userAttendance.UserId;
                         tblAttendance.Intime = DateTime.Now;
                         tblAttendance.Date = DateTime.Today;
+                        tblAttendance.CreatedBy = userAttendance.CreatedBy;
                         tblAttendance.CreatedOn = DateTime.Now;
                         tblAttendance.OutTime = null;
                         Context.TblAttendances.Add(tblAttendance);
@@ -174,6 +175,7 @@ namespace EMPManegment.Repository.UserListRepository
                 tblAttendance.Intime = DateTime.Now;
                 tblAttendance.Date = DateTime.Today;
                 tblAttendance.CreatedOn = DateTime.Now;
+                tblAttendance.CreatedBy = userAttendance.CreatedBy;
                 tblAttendance.OutTime = null;
                 Context.TblAttendances.Add(tblAttendance);
                 Context.SaveChanges();

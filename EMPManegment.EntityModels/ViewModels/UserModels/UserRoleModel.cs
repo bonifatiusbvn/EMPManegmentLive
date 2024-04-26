@@ -16,7 +16,7 @@ namespace EMPManegment.EntityModels.ViewModels.UserModels
 
         public bool? IsDelete { get; set; }
 
-        public Guid? CreatedBy { get; set; }
+        public Guid CreatedBy { get; set; }
 
         public DateTime? CreatedOn { get; set; }
 

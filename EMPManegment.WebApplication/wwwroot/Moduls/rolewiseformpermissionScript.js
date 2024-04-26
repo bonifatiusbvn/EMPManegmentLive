@@ -95,6 +95,7 @@ function createRole() {
     if ($("#addUserRole").valid()) {
         var formData = new FormData();
         formData.append("Role", $("#textRoleName").val());
+        formData.append("CreatedBy", $("#txtUserId").val());
 
         $.ajax({
             url: '/UserProfile/CreateUserRole',

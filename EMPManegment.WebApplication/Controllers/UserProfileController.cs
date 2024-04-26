@@ -300,7 +300,8 @@ namespace EMPManegment.Web.Controllers
                     UserId = doc.UserId,
                     DocumentTypeId = doc.DocumentTypeId,
                     DocumentName = DocName,
-                    CreatedBy = doc.CreatedBy,
+                    CreatedBy = _userSession.FullName,
+                    CreatedOn = DateTime.Now,
                 };
 
                 ApiResponseModel postuser = await APIServices.PostAsync(uploadDocument, "UserProfile/UploadDocument");
