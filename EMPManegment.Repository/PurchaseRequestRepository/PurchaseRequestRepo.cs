@@ -59,6 +59,7 @@ namespace EMPManegment.Repository.PurchaseRequestRepository
             {
                 purchaseRequestList = (from a in Context.TblPurchaseRequests.Where(x => x.PrId == PrId)
                                        join b in Context.TblUsers on a.UserId equals b.Id
+                                       join c in Context.TblProjectMasters on a.ProjectId equals c.ProjectId
                                        select new PurchaseRequestModel
                                        {
                                            PrId = a.PrId,
@@ -66,6 +67,7 @@ namespace EMPManegment.Repository.PurchaseRequestRepository
                                            UserName = b.UserName,
                                            ProjectId = a.ProjectId,
                                            ProductId = a.ProductId,
+                                           ProjectName = c.ProjectTitle,
                                            ProductName = a.ProductName,
                                            ProductTypeId = a.ProductTypeId,
                                            Quantity = a.Quantity,
@@ -86,26 +88,31 @@ namespace EMPManegment.Repository.PurchaseRequestRepository
         {
             try
             {
-                IEnumerable<PurchaseRequestModel> purchaseRequest = Context.TblPurchaseRequests.ToList().Select(a => new PurchaseRequestModel
-                {
-                    PrId = a.PrId,
-                    UserId = a.UserId,
-                    ProjectId = a.ProjectId,
-                    ProductId = a.ProductId,
-                    ProductName = a.ProductName,
-                    ProductTypeId = a.ProductTypeId,
-                    Quantity = a.Quantity,
-                    IsApproved = a.IsApproved,
-                    IsDeleted = a.IsDeleted,
-                    CreatedBy = a.CreatedBy,
-                    CreatedOn = a.CreatedOn,
-                });
+                var purchaseRequest = from a in Context.TblPurchaseRequests
+                                          join b in Context.TblUsers on a.UserId equals b.Id
+                                          join c in Context.TblProjectMasters on a.ProjectId equals c.ProjectId
+                                          select new PurchaseRequestModel
+                                          {
+                                              PrId = a.PrId,
+                                              UserId = a.UserId,
+                                              UserName = b.UserName,
+                                              ProjectId = a.ProjectId,
+                                              ProjectName = c.ProjectTitle,
+                                              ProductId = a.ProductId,
+                                              ProductName = a.ProductName,
+                                              ProductTypeId = a.ProductTypeId,
+                                              Quantity = a.Quantity,
+                                              IsApproved = a.IsApproved,
+                                              IsDeleted = a.IsDeleted,
+                                              CreatedBy = a.CreatedBy,
+                                              CreatedOn = a.CreatedOn,
+                                          };
                 return purchaseRequest;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
-                throw ex;
+                throw;
             }
         }
     }

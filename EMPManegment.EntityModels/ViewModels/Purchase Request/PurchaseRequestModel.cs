@@ -35,5 +35,8 @@ namespace EMPManegment.EntityModels.ViewModels.Purchase_Request
         public DateTime? UpdatedOn { get; set; }
 
         public string? UserName { get; set; }
+
+        public string? ProjectName { get; set; }
+
     }
 }

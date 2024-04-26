@@ -26,12 +26,14 @@ function filterallItemTable() {
 }
 
 function SerchItemDetailsById(Id) {
+    debugger
 
     $.ajax({
         url: '/ProductMaster/DisplayProductDetils?ProductId=' + Id,
         type: 'Post',
         datatype: 'json',
         complete: function (Result) {
+            debugger
             $("#displayProductDetail").append(Result.responseText);
         }
     });
@@ -74,15 +76,14 @@ function updateTotals() {
 }
 
 function GetPurchaseRequestList() {
-    debugger
     $.ajax({
         url: '/PurchaseRequest/GetPurchaseRequestList',
         type: 'Post',
         dataType: 'json',
         processData: false,
         contentType: false,
-        complete: function (result) {debugger
-            $('#mdlistofItem').html(result.responseText);
+        complete: function (result) {
+            $('#addNewlink').html(result.responseText);
         },
         Error: function () {
             Swal.fire({
@@ -95,34 +96,64 @@ function GetPurchaseRequestList() {
     })
 }
 
-function GetPurchaseRequestDetailsById(PrId) {
+function CreatePurchaseRequestDetails() {
 
-    $.ajax({
-        url: '/PurchaseRequest/GetPurchaseRequestDetailsById?PrId=' + PrId,
-        type: 'GET',
-        contentType: 'application/json;charset=utf-8',
-        dataType: 'json',
-        success: function (response) {
+    if ($("#UpdatePurchaseRequestDetailsForm").valid()) {
 
-            $('#txtPrId').val(response.prId);
-            $('#txtusername').val(response.userId);
-            $('#txtprojectId').val(response.projectId);
-            $('#txtProductId').val(response.productId);
-            $('#txtproductName').val(response.productName);
-            $('#txtProductTypeId').val(response.productTypeId);
-            $('#txtquantity').val(response.quantity);
-            $('#txtIsApproved').val(response.isApproved);
-
-            var button = document.getElementById("btnpurchaserequest");
-            if ($('#txtPrId').val() != '') {
-                button.textContent = "Update";
-            }
-            var offcanvas = new bootstrap.Offcanvas(document.getElementById('create-btn'));
-            resetCompanyForm();
-            offcanvas.show();
-        },
-        error: function (xhr, status, error) {
-            console.error(xhr.responseText);
+        var objData = {
+            UserName: $('#txtusername').val(),
+            ProjectName: $('#txtprojectId').val(),
+            ProductName: $('#txtproductName').val(),
+            Quantity: $('#txtquantity').val(),
         }
-    });
-}
+        $.ajax({
+            url: '/PurchaseRequest/AddPurchaseRequestDetails',
+            type: 'post',
+            data: objData,
+            datatype: 'json',
+            success: function (Result) {
+
+                Swal.fire({
+                    title: Result.message,
+                    icon: 'success',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'OK'
+                }).then(function () {
+                    window.location = '/PurchaseRequest/UpdateOrderModel';
+                });
+            },
+
+        })
+    }
+    else {
+            Swal.fire({
+                title: "Kindly Fill All Datafield",
+                icon: 'warning',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'OK',
+            })
+        }
+    }
+    function GetPurchaseRequestDetailsById(PrId) {
+
+        $.ajax({
+            url: '/PurchaseRequest/GetPurchaseRequestDetailsById?PrId=' + PrId,
+            type: 'GET',
+            contentType: 'application/json;charset=utf-8',
+            dataType: 'json',
+            success: function (response) {
+
+                $('#txtPrId').val(response.prId);
+                $('#txtusername').val(response.userId);
+                $('#txtprojectId').val(response.projectId);
+                $('#txtProductId').val(response.productId);
+                $('#txtproductName').val(response.productName);
+                $('#txtProductTypeId').val(response.productTypeId);
+                $('#txtquantity').val(response.quantity);
+                $('#txtIsApproved').val(response.isApproved);
+            },
+            error: function () {
+                alert('Data not found');
+            }
+        });
+    }

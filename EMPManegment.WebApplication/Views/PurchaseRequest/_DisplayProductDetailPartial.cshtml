@@ -1,52 +1,36 @@
 ﻿@using EMPManegment.Web.Models;
-@model EMPManegment.EntityModels.ViewModels.ProductMaster.ProductDetailsView
+@model IEnumerable<EMPManegment.EntityModels.ViewModels.Purchase_Request.PurchaseRequestModel>
 @inject IHttpContextAccessor Accessor;
 @inject UserSession _userSession
 
-<div class="product card-body">
-    <div class="row gy-3">
-        <div class="col-sm-auto">
-            <div class="avatar-lg bg-light rounded p-1">
-                <img src="~/@Model.ProductImage" alt="" class="img-fluid d-block">
-            </div>
-        </div>
-        <div class="col-sm">
-            <h5 class="fs-14 text-truncate"><a href="ecommerce-product-detail.html" class="text-body">@Model.ProductName</a></h5>
-
-            <div class="input-step">
-                <input type="number" class="product-quantity form-control" id="txtproductquantity" value="1" min="1" style="width:80px;">
-            </div>
-        </div>
-        <div class="col-sm-auto">
-            <div class="text-lg-end">
-                <p class="text-muted mb-1">Item Price:</p>
-                <h5 class="fs-14" id="dspperunitprice">₹<span class="product-price">@Model.PerUnitPrice</span></h5>
-            </div>
-        </div>
-    </div>
-    <div class="card-footer">
-        <div class="row align-items-center gy-3">
-            <div class="col-sm">
-                <div class="d-flex flex-wrap my-n1">
-                    <div>
-                        <a href="#" class="d-block text-body p-1 px-2" data-bs-toggle="modal" data-bs-target="#removeItemModal"><i class="ri-delete-bin-fill text-muted align-bottom me-1"></i> Remove</a>
-                    </div>
-                    <div>
-                        <a href="#" class="d-block text-body p-1 px-2"><i class="ri-star-fill text-muted align-bottom me-1"></i> Add Wishlist</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-auto">
-                <div class="d-flex align-items-center gap-2 text-muted">
-                    <div>Total :</div>
-                    <h5 class="fs-14 mb-0" id="dsptotalAmount">₹</h5>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- end card footer -->
-</div>
-<!-- card body -->
-
+@foreach (var item in Model)
+{
+    <tr>
+        <th scope="row">
+        </th>
+        <td class="id" hidden><a href="/OrderMaster/GetOrderDetailsById/?OrderId=@item.PrId" class="fw-medium link-primary">@item.PrId</a></td>
+        <td class="user_name">@item.UserName</td>
+        <td class="project_name">@item.ProjectName</td>
+        <td class="product_name">@item.ProductName</td>
+        <td class="quantity">@item.Quantity</td>
+        <td class="isApproved">@item.IsApproved</td>
+        <td>
+            <ul class="list-inline hstack gap-2 mb-0">
+                <li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">
+                    <a onclick="showPurchaseRequest()" class="btn text-primary d-inline-block edit-item-btn">
+                        <i class="ri-pencil-fill fs-16"></i>
+                    </a>
+                </li>
+                <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Remove">
+                    <a class="btn text-danger d-inline-block remove-item-btn" data-bs-toggle="modal" href="#deleteOrder">
+                        <i class="ri-delete-bin-5-fill fs-16"></i>
+                    </a>
+                </li>
+            </ul>
+        </td>
+    </tr>
+}
+@section Scripts {
 <script src="~/moduls/purchaserequestscript.js"></script>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
+}

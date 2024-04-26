@@ -97,7 +97,7 @@ namespace EMPManegment.Web.Controllers
                     ViewBag.Error = "note found";
                 }
                 purchaseRequest = purchaseRequest.Take(10).ToList();
-                return PartialView("~/Views/PurchaseRequest/_showAllProductPartial.cshtml", purchaseRequest);
+                return PartialView("~/Views/PurchaseRequest/_DisplayProductDetailPartial.cshtml", purchaseRequest);
             }
             catch (Exception ex)
             {
