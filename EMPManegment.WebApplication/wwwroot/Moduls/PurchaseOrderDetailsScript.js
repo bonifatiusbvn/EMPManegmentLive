@@ -148,7 +148,7 @@ function SaveCreatePurchaseOrder() {
         formData.append("DeliveryDate", $("#deliverydate").val());
         formData.append("paymenttype", $("#payment").val());
         formData.append("DeliveryStatus", $("#deliveredstatus").val());
-        formData.append("CreatedBy", $("#ddlusername").val());
+        formData.append("CreatedBy", $("#txtuserid").val());
         $.ajax({
             url: '/PurchaseOrderMaster/CreatePurchaseOrder',
             type: 'Post',
@@ -284,6 +284,7 @@ function InsertMultiplePurchaseOrder() {debugger
             SubTotal: orderRow.find("#txtproducttotalamount").val(),
             TotalGst: $("#totalgst").val(),
             TotalAmount: $("#cart-total").val(),
+            CreatedBy : $("#txtuserid").val(),
         };
         orderDetails.push(objData);
         debugger

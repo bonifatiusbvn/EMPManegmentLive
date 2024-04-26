@@ -147,6 +147,7 @@ namespace EMPManegment.Repository.FormPermissionMasterRepository
                             IsEditAllow = true,
                             IsDeleteAllow = true,
                             CreatedOn = DateTime.Now,
+                            CreatedBy = roleDetails.CreatedBy,
                         };
                         roleWiseFormPermissions.Add(permissions);
                     }

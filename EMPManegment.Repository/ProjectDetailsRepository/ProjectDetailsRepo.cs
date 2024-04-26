@@ -276,7 +276,8 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
                     ProjectId = AddDocument.ProjectId,
                     UserId = AddDocument.UserId,
                     Date = DateTime.Today,
-                    DocumentName = AddDocument.DocumentName
+                    DocumentName = AddDocument.DocumentName,
+                    CreatdBy = AddDocument.CreatdBy,
                 };
                 response.Code = 200;
                 response.Message = "Document uploaded successfully!";

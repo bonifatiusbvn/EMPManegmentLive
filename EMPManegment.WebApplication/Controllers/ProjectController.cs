@@ -335,6 +335,7 @@ namespace EMPManegment.Web.Controllers
                     ProjectId = projectDocument.ProjectId,
                     UserId = _userSession.UserId,
                     DocumentName = DocName,
+                    CreatdBy = _userSession.UserId,
                 };
 
                 ApiResponseModel postuser = await APIServices.PostAsync(uploadDocument, "ProjectDetails/AddDocumentToProject");

@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Identity;
 using EMPManegment.EntityModels.ViewModels.TaskModels;
 using Microsoft.AspNetCore.Authorization;
 using EMPManegment.EntityModels.ViewModels.Models;
+using EMPManegment.Web.Models;
 
 namespace EMPManegment.Web.Controllers
 {
@@ -23,12 +24,14 @@ namespace EMPManegment.Web.Controllers
         public WebAPI WebAPI { get; }
         public IWebHostEnvironment Environment { get; }
         public APIServices APIServices { get; }
+        public UserSession _userSession { get; }
 
-        public VendorController(WebAPI webAPI, IWebHostEnvironment environment, APIServices aPIServices)
+        public VendorController(WebAPI webAPI, IWebHostEnvironment environment, APIServices aPIServices,UserSession userSession)
         {
             WebAPI = webAPI;
             Environment = environment;
             APIServices = aPIServices;
+            _userSession = userSession;
         }
         public IActionResult Index()
         {
@@ -74,6 +77,7 @@ namespace EMPManegment.Web.Controllers
                     VendorGstnumber = addVandorDetails.VendorGstnumber,
                     VendorBankIfsc = addVandorDetails.VendorBankIfsc,
                     VendorTypeId = addVandorDetails.VendorTypeId,
+                    CreatedBy = _userSession.FullName,
                 };
                 ApiResponseModel postuser = await APIServices.PostAsync(addVandor, "Vendor/CreateVendors");
                 if (postuser.code == 200)

@@ -1,4 +1,7 @@
-﻿@{
+﻿@using EMPManegment.Web.Models;
+@inject IHttpContextAccessor Accessor;
+@inject UserSession _userSession
+@{
     ViewData["Title"] = "RolewisePermission";
     Layout = "~/Views/Shared/_UserHomeLayout.cshtml";
 }
@@ -81,6 +84,7 @@
                 <div class="modal-body">
                     <div class="col-lg-12">
                         <label for="textRoleName" class="form-label">Role</label>
+                        <input type="text" value="@_userSession.UserId" id="txtUserId" hidden />
                         <input type="text" class="form-control" id="textRoleName" name="textRoleName" />
                         <input type="text" class="form-control" id="textRoleId" name="textRoleId" hidden />
                     </div>

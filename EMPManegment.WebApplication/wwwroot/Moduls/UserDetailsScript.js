@@ -223,6 +223,7 @@ function EnterInTime() {
     var fromData = new FormData();
     fromData.append("UserId", $("#txtuserid").val());
     fromData.append("Date", $("#txttodayDate").val());
+    fromData.append("CreatedBy", $("#txtuserid").val());
     $.ajax({
         url: '/Home/EnterUserInTime',
         type: 'Post',
