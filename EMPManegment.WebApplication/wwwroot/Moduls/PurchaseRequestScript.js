@@ -34,7 +34,7 @@ function SerchItemDetailsById(Id) {
         datatype: 'json',
         complete: function (Result) {
             debugger
-            $("#displayProductDetail").append(Result.responseText);
+            $("#displayPurchaseRequest").append(Result.responseText);
         }
     });
 }
@@ -126,34 +126,34 @@ function CreatePurchaseRequestDetails() {
         })
     }
     else {
-            Swal.fire({
-                title: "Kindly Fill All Datafield",
-                icon: 'warning',
-                confirmButtonColor: '#3085d6',
-                confirmButtonText: 'OK',
-            })
+        Swal.fire({
+            title: "Kindly Fill All Datafield",
+            icon: 'warning',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'OK',
+        })
+    }
+}
+function GetPurchaseRequestDetailsById(PrId) {
+
+    $.ajax({
+        url: '/PurchaseRequest/GetPurchaseRequestDetailsById?PrId=' + PrId,
+        type: 'GET',
+        contentType: 'application/json;charset=utf-8',
+        dataType: 'json',
+        success: function (response) {
+
+            $('#txtPrId').val(response.prId);
+            $('#txtusername').val(response.userId);
+            $('#txtprojectId').val(response.projectId);
+            $('#txtProductId').val(response.productId);
+            $('#txtproductName').val(response.productName);
+            $('#txtProductTypeId').val(response.productTypeId);
+            $('#txtquantity').val(response.quantity);
+            $('#txtIsApproved').val(response.isApproved);
+        },
+        error: function () {
+            alert('Data not found');
         }
-    }
-    function GetPurchaseRequestDetailsById(PrId) {
-
-        $.ajax({
-            url: '/PurchaseRequest/GetPurchaseRequestDetailsById?PrId=' + PrId,
-            type: 'GET',
-            contentType: 'application/json;charset=utf-8',
-            dataType: 'json',
-            success: function (response) {
-
-                $('#txtPrId').val(response.prId);
-                $('#txtusername').val(response.userId);
-                $('#txtprojectId').val(response.projectId);
-                $('#txtProductId').val(response.productId);
-                $('#txtproductName').val(response.productName);
-                $('#txtProductTypeId').val(response.productTypeId);
-                $('#txtquantity').val(response.quantity);
-                $('#txtIsApproved').val(response.isApproved);
-            },
-            error: function () {
-                alert('Data not found');
-            }
-        });
-    }
+    });
+}
