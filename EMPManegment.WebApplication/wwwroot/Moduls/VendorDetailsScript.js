@@ -181,10 +181,10 @@ function ClearTextBox() {
     $("#contactnumberInput").val('');
     $("#phonenumberInput").val('');
     $("#emailidInput").val('');
-    $("#ddlVendorType").val('');
-    $("#ddlCountry").val('');
-    $("#ddlState").val('');
-    $("#ddlCity").val('');
+    $("#ddlVendorType").val('--Select Type--');
+    $("#ddlCountry").val('--Select Country--');
+    $("#ddlState").val('--Select State--');
+    $("#ddlCity").val('--Select City--');
     $("#AddressidInput").val('');
     $("#pincodeidInput").val('');
     $("#companynameInput").val('');
