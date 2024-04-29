@@ -1,37 +1,46 @@
-﻿@model EMPManegment.EntityModels.ViewModels.ProductMaster.ProductDetailsView
+﻿@model List<EMPManegment.EntityModels.ViewModels.ProductMaster.ProductDetailsView>
 
-
-<tr id="templateRow_@Convert.ToInt64(Model.RowNumber + 1)" class="product" data-product-id="@Model.Id">
-    <th scope="row" class="product-id">@Convert.ToInt64(Model.RowNumber + 1)</th>
-    <td class="text-start">
-        <input type="text" class="form-control bg-light border-0" id="txtproductName" value="@Model.ProductName" readonly />
-        <input type="hidden" class="form-control bg-light border-0" id="Product_Id" readonly value="@Model.ProductId" />
-        <input type="hidden" class="form-control bg-light border-0" id="Product_TypeId" readonly value="@Model.ProductType" />
-        <input class="form-control bg-light border-0" id="txtproductDescription" rows="2" value="@Model.ProductShortDescription" readonly />
-    </td>
-    <td class="text-start">
-        <input type="number" class="form-control bg-light border-0" id="txtproductamount" value="@Model.PerUnitPrice" readonly />
-    </td>
-    <td class="text-start">
-        <input type="number" class="form-control bg-light border-0" id="txtgst" value="@Model.Gst" readonly />
-    </td>
-    <td class="text-start">
-        <input type="number" class="form-control bg-light border-0" id="txtproductamountwithGST" readonly />
-        <input type="hidden" class="form-control bg-light border-0" id="txtperunitGST" readonly />
-    </td>
-    <td class="text-start">
-        <div class="input-step">
-            <button type="button" class='minus' id="minusbtn">–</button>
-            <input type="number" class="product-quantity" id="txtproductquantity" value="1">
-            <button type="button" class='plus' id="plusbtn">+</button>
-        </div>
-    </td>
-    <td class="text-start">
-        <div>
-            <input type="text" class="form-control bg-light border-0" id="txtproducttotalamount" readonly />
-        </div>
-    </td>
-    <td class="product-removal">
-        <a onclick="remove()"><i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i></a>
-    </td>
-</tr>
+@foreach (var item in Model)
+{
+    <tr id="templateRow_@Convert.ToInt64(item.RowNumber + 1)" class="product" data-product-id="@item.Id">
+        <td scope="row" class="product-id">@Convert.ToInt64(item.RowNumber + 1)</td>
+        <td class="text-start">
+            <p id="txtItemName" style="padding-top:5px !important;">@item.ProductName</p>
+            <input type="hidden" class="form-control bg-light border-0" id="txtItemId" readonly value="@item.Id" />
+            <input type="hidden" class="form-control bg-light border-0" id="UnitTypeId" readonly value="@item.ProductType" />
+        </td>
+        <td class="text-start">
+            <input type="text" class="form-control bg-light border-0" id="txtHSNcode" value="@item.Hsn" readonly />
+        </td>
+        <td class="text-start">
+            <div class="">
+                  <input type="text" class="product-quantity form-control" id="txtproductquantity" value="1"  oninput="preventEmptyValue(this)" style="width:80px;">
+            </div>
+        </td>
+        <td class="text-start">
+            <div class="">
+                <select class="form-control" id="#txtPOProductType_@item.Id" style="width: 151px;">
+                    <option value="@item.ProductType">@item.ProductTypeName</option>
+                </select>
+            </div>
+        </td>
+        <td class="text-start">
+            <input type="text" class="form-control" id="txtproductamount" value="@item.PerUnitPrice" oninput="preventEmptyValue(this)" />
+        </td>
+        <td class="text-start">
+            <input type="text" class="form-control" id="txtgst" max="99" value="@item.Gst" maxlength="4" oninput="preventEmptyValue(this)" />
+        </td>
+        <td class="text-start">
+            <input type="number" class="form-control" id="txtgstAmount" value="@item.PerUnitWithGstprice" readonly />
+        </td>
+        <td class="text-start">
+            <div>
+                <input type="text" class="form-control" id="txtproducttotalamount" value="@item.TotalAmount" readonly />
+            </div>
+        </td>
+        <td class="product-removal">
+            <a class="btn text-danger remove-btn" onclick="removeItem(this)"><i class="fas fa-trash"></i></a>
+        </td>
+    </tr>
+}
+<script src="~/lib/jquery/dist/jquery.min.js"></script>

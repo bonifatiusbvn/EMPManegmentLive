@@ -5,6 +5,7 @@ using EMPManegment.EntityModels.ViewModels.ExpenseMaster;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.OrderModels;
 using EMPManegment.EntityModels.ViewModels.ProductMaster;
+using EMPManegment.EntityModels.ViewModels.PurchaseOrderModels;
 using EMPManegment.EntityModels.ViewModels.TaskModels;
 using EMPManegment.Web.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -131,7 +132,7 @@ namespace EMPManegment.Web.Controllers
             try
             {
                 var OrderDetails = HttpContext.Request.Form["ORDERDETAILS"];
-                var InsertDetails = JsonConvert.DeserializeObject<List<PurchaseOrderView>>(OrderDetails.ToString());
+                var InsertDetails = JsonConvert.DeserializeObject<List<PurchaseOrderMasterView>>(OrderDetails.ToString());
                 ApiResponseModel postuser = await APIServices.PostAsync(InsertDetails, "PurchaseOrderDetails/InsertMultiplePurchaseOrder");
                 if (postuser.code == 200)
                 {
@@ -219,6 +220,28 @@ namespace EMPManegment.Web.Controllers
                 else
                 {
                     return new JsonResult(new { Message = string.Format(postuser.message), Code = postuser.code });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<IActionResult> GetAllProductList(string? searchText)
+        {
+            try
+            {
+                string apiUrl = $"ProductMaster/GetAllProductList?searchText={searchText}";
+                ApiResponseModel response = await APIServices.PostAsync("", apiUrl);
+                if (response.code == 200)
+                {
+                    List<ProductDetailsView> Items = JsonConvert.DeserializeObject<List<ProductDetailsView>>(response.data.ToString());
+                    return PartialView("~/Views/PurchaseOrderMaster/_showAllProductsPartial.cshtml", Items);
+                }
+                else
+                {
+                    return new JsonResult(new { Message = "Failed to retrieve Product list" });
                 }
             }
             catch (Exception ex)

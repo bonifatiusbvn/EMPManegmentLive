@@ -2,6 +2,7 @@
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.OrderModels;
 using EMPManegment.EntityModels.ViewModels.ProjectModels;
+using EMPManegment.EntityModels.ViewModels.PurchaseOrderModels;
 using EMPManegment.EntityModels.ViewModels.TaskModels;
 using System;
 using System.Collections.Generic;
@@ -18,7 +19,7 @@ namespace EMPManegment.Inretface.Interface.OrderDetails
         Task<List<PurchaseOrderDetailView>> GetPurchaseOrderDetailsByStatus(string DeliveryStatus);
         string CheckPurchaseOrder(string projectname);
         Task<List<PurchaseOrderDetailView>> GetPurchaseOrderDetailsById(string OrderId);
-        Task<UserResponceModel> InsertMultiplePurchaseOrder(List<PurchaseOrderView> InsertPurchaseOrder);
+        Task<UserResponceModel> InsertMultiplePurchaseOrder(PurchaseOrderMasterView InsertPurchaseOrder);
         Task<IEnumerable<PaymentMethodView>> GetAllPaymentMethod();
         Task<UpdatePurchaseOrderView> EditPurchaseOrderDetails(Guid Id);
         Task<UserResponceModel> UpdatePurchaseOrderDetails(UpdatePurchaseOrderView UpdatePurchaseorder);

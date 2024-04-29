@@ -60,4 +60,6 @@ public partial class TblPurchaseOrderMaster
     public virtual TblProductDetailsMaster? Product { get; set; }
 
     public virtual TblProductTypeMaster ProductTypeNavigation { get; set; } = null!;
+
+    public virtual ICollection<TblPurchaseOrderDetail> TblPurchaseOrderDetails { get; set; } = new List<TblPurchaseOrderDetail>();
 }

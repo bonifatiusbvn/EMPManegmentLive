@@ -1,263 +1,353 @@
-﻿@using EMPManegment.Web.Models;
+﻿@model EMPManegment.EntityModels.ViewModels.PurchaseOrderModels.PurchaseOrderMasterView
+@using EMPManegment.Web.Models;
 @inject IHttpContextAccessor Accessor;
 @inject UserSession _userSession
 @{
     ViewData["Title"] = "CreateOrderView";
     Layout = "~/Views/Shared/_UserHomeLayout.cshtml";
 }
+<div class="row" style="margin-top:20px;">
+    <div class="col-12">
+        <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+            <h4 class="mb-sm-0">Create Purchase Order</h4>
 
-<div class="row justify-content-center">
-    <div class="col-xxl-9">
-        <div class="card">
-            <form id="createproductform" autocomplete="off">
-                <div class="card-body border-bottom border-bottom-dashed p-4">
-                    <div class="row">
-                        <div class="col-lg-4">
-                            <div class="profile-user mx-auto  mb-3">
-                                <input id="profile-img-file-input" type="file" class="profile-img-file-input" />
-                                <input type="text" value="@_userSession.UserId" id="txtuserid" hidden />
-                                <label for="profile-img-file-input" class="d-block" tabindex="0">
-                                    <span class="overflow-hidden border border-dashed d-flex align-items-center justify-content-center rounded" style="height: 60px; width: 256px;">
-                                        <img src="~/assets/images/logo - bonifatius.jpeg" class="card-logo card-logo-dark user-profile-image img-fluid" alt="logo dark">
-                                        <img src="~/assets/images/logo - bonifatius.jpeg" class="card-logo card-logo-light user-profile-image img-fluid" alt="logo light">
-                                    </span>
-                                </label>
-                            </div>
-                        </div>
-                        <!--end col-->
-                        <div class="col-lg-4 ms-auto">
-                            <div class="mb-2">
-                                <div class="input-light">
-                                    <select class="form-control bg-light border-0" data-choices data-choices-search-false name="OrderType" id="OrderType">
-                                        <option selected disabled value="">--Order Type--</option>
-                                        <option value="Sale">Sale</option>
-                                        <option value="Purchase">Purchase</option>
-                                    </select>
-                                    <input type="hidden" class="form-control bg-light border-0" id="OrderTypeId" />
-                                    <input type="hidden" class="form-control bg-light border-0" id="txtProjectId" value="@UserSession.ProjectId" />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!--end row-->
-                </div>
-                <div class="card-body p-4">
-                    <div class="row g-3">
-                        <div class="col-lg-4 col-sm-6">
-                            <label for="orderId" class="text-muted text-uppercase fw-semibold">Order ID</label>
-                            <input type="text" id="POId" class="form-control bg-light border-0" name="POId" value="@ViewBag.PoId" readonly />
-                        </div>
-                        <!--end col-->
-                        <div class="col-lg-4 col-sm-6">
-                            <label for="choices-payment-status" class="text-muted text-uppercase fw-semibold">Payment Status</label>
-                            <div class="input-light">
-                                <select class="form-control bg-light border-0" id="txtPaymentStatus" data-choices data-choices-search-false>
-                                    <option selected disabled value="">Select Payment Status</option>
-                                    <option value="Paid">Paid</option>
-                                    <option value="Unpaid">Unpaid</option>
-                                    <option value="Refund">Refund</option>
-                                </select>
-                            </div>
-                        </div>
-                        <!--end col-->
-                        <div class="col-lg-4 col-sm-6">
-                            <div>
-                                <label for="payment" class="text-muted text-uppercase fw-semibold">Payment Type</label>
-                                <input type="text" id="paymenttype" class="form-control bg-light border-0" name="payment" value="Credit" readonly />
-                            </div>
-                        </div>
-                        <!--end col-->
-                    </div>
-                    <!--end row-->
-                </div>
-                <div class="card-body p-4 border-top border-top-dashed">
-                    <div class="row">
-                        <div class="col-lg-4 col-sm-6">
-                            <div>
-                                <label for="orderdate" class="text-muted text-uppercase fw-semibold">Order Date</label>
-                            </div>
-                            <div class="mb-2">
-                                <input type="date" id="orderdate" class="form-control" name="orderdate" data-provider="flatpickr" data-date-format="d M, Y" data-enable-time data-time="true" placeholder="Select Order-Date" />
-                            </div>
-                        </div>
-                        <!--end col-->
-                        <div class="col-sm-6 ms-auto">
-                            <div class="row">
-                                <div class="col-lg-8">
-                                    <div>
-                                        <label for="deliverydate" class="text-muted text-uppercase fw-semibold">Delivery Date</label>
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Purchase Order</a></li>
+                    <li class="breadcrumb-item active">Create Purchase Order</li>
+                </ol>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="" id="invoiceList">
+            <form id="CreatePOForm">
+                <div class="">
+                    <div>
+                        <div class="row justify-content-center">
+                            <div class="col-xxl-12">
+                                <div class="">
+                                    <div class=" border-bottom border-bottom-dashed">
+                                        <div class="row">
+                                            <div class="col-6 col-lg-6">
+                                                <div class=" card">
+                                                    <h5 class="card-header">Supplier Details</h5>
+                                                    <div class="card-body">
+                                                        <div class="row">
+                                                            <div class="col-6 col-lg-6 ">
+                                                                <label for="textVendorName" class="form-label">Vendor Name</label>
+                                                                <select class="form-select" id="textVendorName" name="textVendorName">
+                                                                    <option selected value="">--Select Vendor--</option>
+                                                                </select>
+                                                            </div>
+                                                            <div class="col-6 col-lg-6 ">
+                                                                <label for="textVendorMobile" class="form-label ">Mobile No</label>
+                                                                <input type="text" id="textVendorMobile" class="form-control" placeholder="Mobile No" readonly />
+                                                            </div>
+                                                        </div>
+                                                        <div class="row mt-3">
+                                                            <div class="col-6 col-lg-6">
+                                                                <label for="textVendorAddress" class="form-label ">Address</label>
+                                                                <input type="text" id="textVendorAddress" class="form-control" placeholder="Address" readonly />
+                                                            </div>
+                                                            <div class="col-6 col-lg-6">
+                                                                <label for="textVendorGSTNumber" class="form-label ">GST NO</label>
+                                                                <input type="text" id="textVendorGSTNumber" class="form-control" placeholder="GST No" readonly />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-6 col-lg-6">
+                                                <div class=" card">
+                                                    <h5 class="card-header">Purchase Order Details</h5>
+                                                    <div class="card-body">
+                                                        <div class="row">
+                                                            <div class="col-md-4">
+                                                                <div>
+                                                                    <label for="textCompanyName" class="form-label">Company Name</label>
+                                                                </div>
+                                                                <div class="ms-auto">
+                                                                    <select class="form-select" id="textCompanyName" name="textCompanyName">
+                                                                        <option selected value="">--Select Company--</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-5 col-lg-5">
+                                                                <label for="textPoId " class="form-label">Order No</label>
+                                                                <input type="text" class="form-control" id="textPoId" value="@ViewBag.PoId" readonly />
+                                                            </div>
+                                                            <div class="col-3 col-lg-3 ">
+                                                                <label for="textOrderDate" class="form-label">Order Date</label>
+                                                                <input type="date" id="textOrderDate" class="form-control" name="textOrderDate" placeholder="Select Order-Date">
+                                                            </div>
+                                                        </div>
+                                                        <div class="row mt-3">
+                                                            <div class="col-6 col-lg-6">
+                                                                <label for="textCompanyBillingAddress" class="form-label ">Billing Address</label>
+                                                                <input type="text" id="textCompanyBillingAddress" name="textCompanyBillingAddress" class="form-control" placeholder="Billing Address" readonly />
+                                                            </div>
+                                                            <div class="col-6 col-lg-6">
+                                                                <label class="form-label ">GST NO</label>
+                                                                <input type="text" id="textCompanyGstNo" class="form-control" placeholder="GST No" readonly />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="mb-2">
-                                        <input type="date" id="deliverydate" class="form-control" name="deliverydate" data-provider="flatpickr" data-date-format="d M, Y" data-enable-time data-time="true" placeholder="Select Delivery-Date" />
+                                    <!--end row-->
+                                </div>
+
+                                <!---- Product Details ---->
+                                <div class="row">
+                                </div>
+                                <div class="card">
+                                    <div class="row p-3">
+
+                                        <h5 class="card-header">
+                                            Purchase Details
+                                            <a class="font-22" onclick="fn_OpenAddproductmodal()">
+                                                <i class="fa-solid fa-plus"></i>
+                                            </a>
+                                            <span id="spnitembutton" class="text-danger"></span>
+                                        </h5>
+
+                                    </div>
+
+                                    <div class="card-body pt-0">
+                                        <div class="table-responsive" style="height:350px">
+                                            <table class="table align-middle mb-0">
+                                                <thead class="table-secondary">
+                                                    <tr class="text-uppercase">
+                                                        <th>#</th>
+                                                        <th>Product Details</th>
+                                                        <th>HSN Code</th>
+                                                        <th>Quantity</th>
+                                                        <th>Qty Type</th>
+                                                        <th>Price</th>
+                                                        <th>GST (%)</th>
+                                                        <th>GST Amt (₹)</th>
+                                                        <th>Amount (₹)</th>
+                                                        <th>Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="addnewproductlink">
+                                                </tbody>
+                                            </table>
+
+                                        </div>
+                                        <div class="card-footer">
+                                            <table class="table align-middle mb-0">
+                                                <thead class="table align-middle mb-0">
+                                                    <tr>
+                                                        <th>#</th>
+                                                        <th colspan="2">Total</th>
+                                                        <th></th>
+                                                        <th></th>
+                                                        <th id="TotalProductQuantity"></th>
+                                                        <th></th>
+                                                        <th></th>
+                                                        <th></th>
+                                                        <th id="TotalProductPrice"></th>
+                                                        <th></th>
+                                                        <th></th>
+                                                        <th></th>
+                                                        <th id="TotalProductGST"></th>
+                                                        <th></th>
+                                                        <th></th>
+                                                        <th id="TotalProductAmount"></th>
+                                                        <th></th>
+                                                        <th></th>
+                                                        <th></th>
+                                                        <th></th>
+                                                        <th></th>
+                                                        <th></th>
+                                                        <th></th>
+                                                    </tr>
+                                                </thead>
+                                            </table>
+                                        </div>
+                                        <div class=" card">
+                                            <div class="row card-body">
+                                                <div class="col-lg-6 col-sm-12">
+                                                    <div class="row">
+                                                        <div class="col-lg-12 col-sm-12">
+                                                            <div class="input-group mb-3">
+                                                                <label class="input-group-text" for="txtdelivryschedule">Delivery Schedule</label>
+                                                                <input type="text" class="form-control" id="txtDeliverySchedule" name="txtDeliverySchedule" placeholder="Enter Delivery Schedule">
+                                                            </div>
+                                                            <span id="spnDeliverySchedule" class="text-danger"></span>
+                                                        </div>
+                                                        <div class="col-lg-12 col-sm-12 mt-2">
+                                                            <div class="mb-2">
+                                                                <div class="input-group mb-3">
+                                                                    <label class="input-group-text" for="textDescription">Product Short Description</label>
+                                                                    <textarea type="text" id="textShortDescription" rows="3" class="form-control" placeholder="Enter Product Short Description" name="textDescription"></textarea>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-12 col-sm-12 mt-2">
+                                                            <div class="mb-2">
+                                                                <div class="input-group mb-3">
+                                                                    <label class="input-group-text" for="txtdelivryschedule">Mobile No</label>
+                                                                    <input type="text" id="txtMobileNo" name="txtMobileNo" class="form-control" placeholder="Mobile No">
+                                                                </div>
+                                                                <span id="spnMobileNo" class="text-danger"></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="col-lg-6 col-sm-12 ac-invoice-total">
+                                                    <div class="table">
+                                                        <table class="table table-borderless table-sm table-nowrap align-middle mb-0">
+                                                            <tbody>
+                                                                <tr>
+                                                                    <th scope="row">Sub Total</th>
+                                                                    <td style="width:150px;">
+                                                                        <input type="text" class="form-control bg-light border-0" id="cart-subtotal" placeholder="₹0.00" readonly />
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th scope="row">Total GST</th>
+                                                                    <td>
+                                                                        <input type="text" class="form-control bg-light border-0" id="totalgst" placeholder="₹0.00" readonly />
+                                                                    </td>
+                                                                </tr>
+                                                                <tr class="border-top border-top-dashed">
+                                                                    <th scope="row">Total Amount</th>
+                                                                    <td>
+                                                                        <input type="text" class="form-control bg-light border-0" id="cart-total" placeholder="₹0.00" readonly />
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-6 col-sm-6">
+                                        <div class="card">
+                                            <h5 class="card-header">
+                                                Shipping Addresses
+                                                <a class="font-22" onclick="fn_OpenShippingModal()">
+                                                    <i class="bi bi-plus-circle"></i>
+                                                </a>
+                                                <span id="spnshipping" style="color:red;"></span>
+                                            </h5>
+                                            <div class="card-body Address" id="dvshippingAdd">
+                                                @*                                                @if (Model.AddressList != null)
+                                                {
+                                                @Html.Partial("_EditShippingDetailsPartial", Model.AddressList)
+                                                }*@
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div id="dvshipping" class="col-lg-6">
+                                    <div class="row">
+                                    </div>
+                                </div>
+                                <!--end row-->
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="hstack gap-2 justify-content-end d-print-none mt-4">
+                                            @*                                            @if (Model.Id == Guid.Empty)
+                                            {
+
+                                            <button type="button" class="btn btn-lg btn-primary px-5" id="SavePOButton" onclick="InsertMultiplePurchaseOrderDetails()"><i class="ri-printer-line align-bottom me-1"></i> Add Purchase Order</button>
+                                            }
+                                            else
+                                            {
+                                            <button type="button" class="btn btn-lg btn-primary px-5" id="UpdatePOButton" onclick="UpdateMultiplePurchaseOrderDetails()"><i class="ri-printer-line align-bottom me-1"></i> Update</button>
+                                            }*@
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <!--end col-->
                     </div>
-                    <!--end row-->
-                </div>
-                <div class="card-body border border-dashed border-end-0 border-start-0">
-                    <form id="dropdownValidationForm">
-                        <div class="row g-3">
-                            <div class="col-sm-4">
-                                <div>
-                                    <label for="txtvendorname" class="text-muted text-uppercase fw-semibold">Vendor Name</label>
-                                </div>
-                                <select class="text-muted text-uppercase fw-semibold" id="txtvendorname" name="txtvendorname" style="border:hidden;">
-                                    <option selected disabled value="">---Select Vendor Name---</option>
-                                </select>
-                                <input type="hidden" class="text-muted text-uppercase fw-semibold" id="txtvendornameid">
-                                <div id="vendorvalidationMessage" class="text-danger"></div>
-                            </div>
-                            <!--end col-->
-
-                            <div class="col-sm-4">
-                                <div>
-                                    <label for="ProductType" class="text-muted text-uppercase fw-semibold">Product Type</label>
-                                </div><select id="txtProducts" class="text-muted text-uppercase fw-semibold" onchange="selectProductTypeId()" style="border:hidden;">
-                                    <option selected disabled value="">----Select Product Type---</option>
-                                </select>
-                                <input type="hidden" class="form-control" id="txtProductTypeid">
-                                <input type="hidden" class="form-control" id="txtProductid">
-                                <div id="productvalidationMessage" class="text-danger"></div>
-                            </div>
-                            <!--end col-->
-
-                            <div class="col-sm-4">
-                                <div class="input-light">
-                                    <div>
-                                        <label for="searchproductname" class="text-muted text-uppercase fw-semibold">Product Names</label>
-                                    </div> <select id="searchproductname" class="text-muted text-uppercase fw-semibold" style="border:hidden;">
-                                        <option selected disabled value="">--Select ProductName--</option>
-                                    </select>
-                                    <input type="hidden" class="text-muted text-uppercase fw-semibold" id="searchproductnameid">
-                                    <div id="searchvalidationMessage" class="text-danger"></div>
-
-                                </div>
-                            </div>
-                            <!--end col-->
-                            <div class="input-light">
-                                <div>
-                                    <div class="col-sm-2">
-                                        <a id="addItemButton" class="btn btn-secondary fw-small" onclick="SerchProductDetailsById()">Add Product</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--end col-->
-                        </div>
-                        <!--end row-->
-                    </form>
                 </div>
 
-                <!---- Product Details ---->
-
-                <div class="card-body p-4">
-                    <div class="table-responsive">
-                        <table class="invoice-table table table-bordered table-striped mb-0">
-                            <thead>
-                                <tr>
-                                    <th class="text-start">#</th>
-                                    <th class="text-start">Product Details</th>
-                                    <th class="text-start">Rate</th>
-                                    <th class="text-start">GST (%)</th>
-                                    <th class="text-start">GST Price</th>
-                                    <th class="text-start">Quantity</th>
-                                    <th class="text-start">Amount</th>
-                                    <th class="text-end">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody id="addNewlink">
-                            </tbody>
-
-
-                        </table>
-                    </div>
-                    <tbody>
-                        <tr id="newForm" style="display: none;"><td class="d-none" colspan="5"></td></tr>
-                        <tr class="border-top border-top-dashed mt-2">
-                            <td colspan="3"></td>
-                            <td colspan="2" class="p-0">
-                                <table class="table table-borderless table-sm table-nowrap align-middle mb-0">
-                                    <tbody>
-                                        <tr>
-                                            <th scope="row">Sub Total</th>
-                                            <td style="width:150px;">
-                                                <input type="text" class="form-control bg-light border-0" id="cart-subtotal" placeholder="₹0.00" readonly />
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">Estimated Tax (12.5%)</th>
-                                            <td>
-                                                <input type="text" class="form-control bg-light border-0" id="cart-tax" placeholder="₹0.00" readonly />
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">Total Gst(18%)</th>
-                                            <td>
-                                                <input type="text" class="form-control bg-light border-0" id="totalgst" placeholder="₹0.00" readonly />
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">Discount <small class="text-muted">()</small></th>
-                                            <td>
-                                                <input type="text" class="form-control bg-light border-0" id="cart-discount" placeholder="₹0.00" readonly />
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">Shipping Charge</th>
-                                            <td>
-                                                <input type="text" class="form-control bg-light border-0" id="cart-shipping" placeholder="₹0.00" readonly />
-                                            </td>
-                                        </tr>
-                                        <tr class="border-top border-top-dashed">
-                                            <th scope="row">Total Amount</th>
-                                            <td>
-                                                <input type="text" class="form-control bg-light border-0" id="cart-total" placeholder="₹0.00" readonly />
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                <!--end table-->
-                            </td>
-                        </tr>
-                    </tbody>
-                    <div class="row mt-3">
-                        <div class="col-lg-4">
-                            <div class="mb-2">
-                                <label for="choices-payment-type" class="form-label text-muted text-uppercase fw-semibold">Payment Details</label>
-                                <div class="input-light">
-                                    <select class="form-control bg-light border-0" id="txtpaymentmethod">
-                                        <option selected disabled value="">---Select Payment Method---</option>
-                                    </select>
-                                    <input type="hidden" class="text-muted text-uppercase fw-semibold" id="txtpaymentmethodid">
-                                </div>
-                            </div>
-                            <div>
-                                <input class="form-control  bg-light border-0" type="text" id="amountTotalPay" placeholder="₹0.00" readonly />
-                            </div>
-                        </div>
-                        <!--end col-->
-                    </div>
-                    <!--end row-->
-                    <div class="mt-4">
-                        <label for="exampleFormControlTextarea1" class="form-label text-muted text-uppercase fw-semibold">NOTES</label>
-                        <textarea class="form-control alert alert-info" id="exampleFormControlTextarea1" placeholder="Notes" rows="2" required>All accounts are to be paid within 7 days from receipt of invoice. To be paid by cheque or credit card or direct payment online. If account is not paid within 7 days the credits details supplied as confirmation of work undertaken will be charged the agreed quoted fee noted above.</textarea>
-                    </div>
-                    <div class="hstack gap-2 justify-content-end d-print-none mt-4">
-                        <button type="button" class="btn btn-success" onclick="InsertMultiplePurchaseOrder()"><i class="ri-printer-line align-bottom me-1"></i> Save</button>
-                        <a href="javascript:void(0);" class="btn btn-primary"><i class="ri-download-2-line align-bottom me-1"></i> Download Invoice</a>
-                        <a href="javascript:void(0);" class="btn btn-danger"><i class="ri-send-plane-fill align-bottom me-1"></i> Send Invoice</a>
-                    </div>
-                </div>
             </form>
         </div>
     </div>
-    <!--end col-->
 </div>
+<div class="modal fade" id="mdShippingAdd" tabindex="-1" aria-labelledby="mdShippingAddlLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="mdShippingAddlLabel">Shipping Address</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="ShippingAddressForm">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-10 col-sm-10 ">
+                                <label class="form-lable">Select Site</label>
+                                <select class="form-select form-control" id="txtPoSiteName" name="txtPoSiteName" required>
+                                    <option selected value="">--Select Site--</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-9 col-sm-9">
+                                <label class="form-lable">Address</label>
+                                <textarea class="form-control" id="txtmdAddress" style="height:90px;"></textarea>
+                                <span id="spnSiteAddress" style="color:red;"></span>
+                            </div>
+                            <div class="col-3 col-sm-3">
+                                <label class="form-lable">Qty</label>
+                                <input class="form-control" id="txtmdqty" name="txtmdqty" value="" required />
+                                <span id="spnShippingQuantity" style="color:red;"></span>
+                            </div>
+                        </div>
 
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary add-address" id="AddShippingBtn" onclick="AddShippingAddress()">Add</button>
+                <span id="spnaddressbutton" style="color:red;"></span>
+                @* <button type="button" class="btn btn-primary" onclick="fn_mdAddAddress()">Add</button> *@
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade show" id="mdPoproductModal" tabindex="-1" aria-modal="true" role="dialog">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title">Select Product</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-header">
+                <label class="form-label">Search Product</label>
+                <input class="form-control" id="mdProductSearch" onkeyup="filterallItemTable()" />
+            </div>
+
+            <div class="modal-body" id="mdlistofItem" style="overflow-x: hidden">
+            </div>
+        </div>
+    </div>
+</div>
+<!--end col-->
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
-<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
 <script src="~/moduls/purchaseorderdetailsscript.js"></script>
+

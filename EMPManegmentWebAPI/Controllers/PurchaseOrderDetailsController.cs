@@ -1,6 +1,7 @@
 ﻿using EMPManegment.EntityModels.ViewModels.ExpenseMaster;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.OrderModels;
+using EMPManegment.EntityModels.ViewModels.PurchaseOrderModels;
 using EMPManegment.Inretface.EmployeesInterface.AddEmployee;
 using EMPManegment.Inretface.Interface.ExpenseMaster;
 using EMPManegment.Inretface.Interface.InvoiceMaster;
@@ -90,7 +91,7 @@ namespace EMPManagment.API.Controllers
         }
         [HttpPost]
         [Route("InsertMultiplePurchaseOrder")]
-        public async Task<IActionResult> InsertMultiplePurchaseOrder(List<PurchaseOrderView> orderDetails)
+        public async Task<IActionResult> InsertMultiplePurchaseOrder(PurchaseOrderMasterView orderDetails)
         {
             UserResponceModel response = new UserResponceModel();
             try

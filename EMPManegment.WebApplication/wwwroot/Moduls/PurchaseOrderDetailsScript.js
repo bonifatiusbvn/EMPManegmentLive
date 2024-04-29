@@ -1,6 +1,12 @@
 ﻿$(document).ready(function () {
     GetPaymentTypeList();
 });
+
+GetVendorNameList();
+GetCompanyNameList();
+GetProductDetailsList();
+GetProducts();
+GetPaymentMethodList();
 function SearchData() {
     if ($('#statusform').valid()) {
         if ($("#idStatus").val() != "All") {
@@ -326,26 +332,105 @@ function showPaymentDetails() {
     $("#PaymentDetails").modal("show")
 }
 
+function GetProductDetailsList() {
+    var searchText = $('#mdProductSearch').val();
+
+    $.get("/PurchaseOrderMaster/GetAllProductList", { searchText: searchText })
+        .done(function (result) {
+            $("#mdlistofItem").html(result);
+        })
+        .fail(function (xhr, status, error) {
+            console.error("Error:", error);
+        });
+}
 
 $(document).ready(function () {
-    GetVendorNameList();
-    GetProducts();
-    GetPaymentMethodList();
-});
-function GetVendorNameList() {
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0');
+    var yyyy = today.getFullYear();
 
+    today = yyyy + '-' + mm + '-' + dd;
+    $("#textOrderDate").val(today);
+    $("#textOrderDate").prop("disabled", true);
+});
+
+function GetVendorNameList() {
     $.ajax({
         url: '/ProductMaster/GetVendorsNameList',
         success: function (result) {
             $.each(result, function (i, data) {
-                $('#txtvendorname').append('<Option value=' + data.id + '>' + data.vendorCompany + '</Option>')
+                $('#textVendorName').append('<Option value=' + data.id + '>' + data.vendorCompany + '</Option>')
             });
         }
     });
 }
+
+$(document).ready(function () {
+    $('#textVendorName').change(function () {
+        getVendorDetail($(this).val());
+    });
+});
+
+
+function getVendorDetail(VendorId) {
+    $.ajax({
+        url: '/Vendor/GetVendorDetailsById?vendorId=' + VendorId,
+        type: 'GET',
+        contentType: 'application/json;charset=utf-8',
+        dataType: 'json',
+        success: function (response) {       
+            if (response) {
+                $('#textVendorMobile').val(response.vendorPhone);
+                $('#textVendorGSTNumber').val(response.vendorGstnumber);
+                $('#textVendorAddress').val(response.vendorAddress);
+            } else {
+                console.log('Empty response received.');
+            }
+        },
+    });
+}
+
 function selectvendorId() {
     document.getElementById("txtvendorTypeid").value = document.getElementById("txtvendorname").value;
 }
+
+function GetCompanyNameList() {
+    $.ajax({
+        url: '/Company/GetCompanyNameList',
+        success: function (result) {
+            $.each(result, function (i, data) {
+                $('#textCompanyName').append('<Option value=' + data.id + '>' + data.compnyName + '</Option>')
+            });
+        }
+    });
+}
+
+$(document).ready(function () {
+    $('#textCompanyName').change(function () {
+        getCompanyDetail($(this).val());
+    });
+});
+
+
+function getCompanyDetail(CompanyId) {
+    $.ajax({
+        url: '/Company/GetCompanyDetailsById',
+        type: 'GET',
+        contentType: 'application/json;charset=utf-8',
+        dataType: 'json',
+        data: { CompanyId: CompanyId },
+        success: function (response) {
+            if (response) {
+                $('#textCompanyGstNo').val(response.gst);
+                $('#textCompanyBillingAddress').val(response.fullAddress);
+            } else {
+                console.log('Empty response received.');
+            }
+        },
+    });
+}
+
 function GetProducts() {
     $.ajax({
         url: '/ProductMaster/GetProduct',
@@ -380,6 +465,19 @@ function GetPaymentMethodList() {
         }
     });
 }
+
+function ProductTypeDropdown(productId) {
+    $.ajax({
+        url: '/ProductMaster/GetProduct',
+        success: function (result) {
+            $.each(result, function (i, data) {
+                $('#txtPOProductType_' + productId).append('<option value=' + data.id + '>' + data.productName + '</option>');
+            });
+        }
+    });
+}
+
+
 $(document).ready(function () {
     $('#txtProducts').change(function () {
 
@@ -405,48 +503,37 @@ $(document).ready(function () {
         });
     });
 });
+
 function searchProductTypeId() {
     document.getElementById("searchproductnameid").value = document.getElementById("searchproductname").value;
 }
 
-function SerchProductDetailsById() {
-
+function SearchProductDetailsById(ProductId) {
     var GetProductId = {
-        Id: $('#searchproductname').val(),
-
+        Id: ProductId,
     }
     var form_data = new FormData();
-    form_data.append("PRODUCTID", JSON.stringify(GetProductId));
+    form_data.append("ProductId", JSON.stringify(GetProductId));
 
 
     $.ajax({
-        url: '/ProductMaster/DisplayProductDetailsById',
+        url: '/ProductMaster/DisplayProductDetailsListById',
         type: 'Post',
         datatype: 'json',
         data: form_data,
         processData: false,
         contentType: false,
         complete: function (Result) {
-
+        
             if (Result.statusText === "success") {
                 AddNewRow(Result.responseText);
             }
             else {
-                var vendorname = $('#txtvendorname').val();
-                var productname = $('#txtProducts').val();
-                var serchproductname = $('#searchproductname').val();
-                if (vendorname === '' || vendorname === null) {
-                    $('#vendorvalidationMessage').text('Please select Vendor!!');
-                }
-                if (productname === "--Select Product--" || productname === null) {
-                    $('#productvalidationMessage').text('Please select ProductType!!');
-                }
-                if (serchproductname === "--Select ProductName--" || serchproductname === null) {
+                var GetProductId = $('#searchProductname').val();
+                if (GetProductId === "Select ProductName" || GetProductId === null) {
                     $('#searchvalidationMessage').text('Please select ProductName!!');
                 }
                 else {
-                    $('#vendorvalidationMessage').text('');
-                    $('#productvalidationMessage').text('');
                     $('#searchvalidationMessage').text('');
                 }
             }
@@ -665,16 +752,18 @@ document.querySelector("#profile-img-file-input").addEventListener("change", fun
         e.src = n.result
     }, !1), t && n.readAsDataURL(t)
 }), isData();
-var count = 1;
 
+
+var count = 0;
 function AddNewRow(Result) {
-
+    
     var newProductRow = $(Result);
+    var productId = newProductRow.data('product-id');
+    ProductTypeDropdown(productId);
     var newProductId = newProductRow.attr('data-product-id');
     var isDuplicate = false;
 
-    $('#addNewlink .product').each(function () {
-
+    $('#addnewproductlink .product').each(function () {
         var existingProductRow = $(this);
         var existingProductId = existingProductRow.attr('data-product-id');
         if (existingProductId === newProductId) {
@@ -685,9 +774,10 @@ function AddNewRow(Result) {
 
     if (!isDuplicate) {
         count++;
-        $("#addNewlink").append(Result);
+        $("#addnewproductlink").append(Result);
         updateProductTotalAmount();
         updateTotals();
+        updateRowNumbers();
     } else {
         Swal.fire({
             title: "Product already added!",
@@ -699,15 +789,13 @@ function AddNewRow(Result) {
     }
 }
 
-$(document).on("click", ".plus", function () {
-    updateProductQuantity($(this).closest(".product"), 1);
-    return
-});
 
-$(document).on("click", ".minus", function () {
-    updateProductQuantity($(this).closest(".product"), -1);
-    return
-});
+
+function updateRowNumbers() {
+    $(".product-id").each(function (index) {
+        $(this).text(index + 1);
+    });
+}
 function bindEventListeners() {
 
     document.querySelectorAll(".product-removal a").forEach(function (e) {
@@ -735,74 +823,71 @@ function bindEventListeners() {
 }
 
 function updateProductTotalAmount() {
-
     $(".product").each(function () {
         var row = $(this);
         var productPrice = parseFloat(row.find("#txtproductamount").val());
         var quantity = parseInt(row.find("#txtproductquantity").val());
         var gst = parseFloat(row.find("#txtgst").val());
         var totalGst = (productPrice * quantity * gst) / 100;
-        var totalAmount = productPrice * quantity;
+        var totalAmount = productPrice * quantity + totalGst;
 
-        row.find("#txtproductamountwithGST").val(totalGst.toFixed(2));
+        row.find("#txtgstAmount").val(totalGst.toFixed(2));
         row.find("#txtproducttotalamount").val(totalAmount.toFixed(2));
     });
 }
 
+
+
 function updateProductQuantity(row, increment) {
-
-    var quantityInput = row.find(".product-quantity").val();
-    var currentQuantity = parseInt(quantityInput);
-    var newQuantity = currentQuantity + increment;
+    var quantityInput = parseInt(row.find(".product-quantity").val());
+    var newQuantity = quantityInput + increment;
     if (newQuantity >= 0) {
-        row.find(".product-quantity").val(newQuantity.toFixed(2));;
-        updateProductTotalAmount();
+        row.find(".product-quantity").val(newQuantity);
+        updateProductTotalAmount(row);
         updateTotals();
-
     }
 }
 
-function updateTotals() {
 
+function updateTotals() {
+    debugger
     var totalSubtotal = 0;
     var totalGst = 0;
     var totalAmount = 0;
+    var TotalItemQuantity = 0;
 
     $(".product").each(function () {
+        debugger
         var row = $(this);
-        var subtotal = parseFloat(row.find("#txtproducttotalamount").val());
-        var gst = parseFloat(row.find("#txtproductamountwithGST").val());
+        var subtotal = parseFloat(row.find("#txtproductamount").val());
+        var gst = parseFloat(row.find("#txtgstAmount").val());
+        var totalquantity = parseFloat(row.find("#txtproductquantity").val());
 
-        totalSubtotal += subtotal;
+        totalSubtotal += subtotal * totalquantity;
         totalGst += gst;
-        totalAmount += subtotal + gst;
+        totalAmount = totalSubtotal + totalGst;
+        TotalItemQuantity += totalquantity;
     });
 
     $("#cart-subtotal").val(totalSubtotal.toFixed(2));
     $("#totalgst").val(totalGst.toFixed(2));
     $("#cart-total").val(totalAmount.toFixed(2));
+    $("#TotalProductQuantity").text(TotalItemQuantity);
+    $("#TotalProductPrice").html(totalSubtotal);
+    $("#TotalProductGST").html(totalGst.toFixed(2));
+    $("#TotalProductAmount").html(totalAmount.toFixed(2));
+}
+function removeItem(btn) {
+    $(btn).closest("tr").remove();
+    updateRowNumbers();
+    updateTotals();
 }
 
-remove();
+
 var taxRate = .125,
     shippingRate = 65,
     discountRate = .15,
     gst = 18;
-
-function remove() {
-    Array.from(document.querySelectorAll(".product-removal a")).forEach(function (e) {
-        e.addEventListener("click", function (e) {
-            removeItem(e), resetRow()
-        })
-    })
-}
-
-function resetRow() {
-    Array.from(document.getElementById("addNewlink").querySelectorAll("tr")).forEach(function (e, t) {
-        t += 1;
-        e.querySelector("#product-id").innerHTML = t
-    })
-}
 
 function recalculateCart() {
     var t = 0,
@@ -833,9 +918,7 @@ function updateQuantity(e, t, n) {
     n.value = paymentSign + e, recalculateCart()
 }
 
-function removeItem(e) {
-    e.target.closest("tr").remove(), recalculateCart()
-}
+
 amountKeyup();
 var genericExamples = document.querySelectorAll("[data-trigger]");
 
@@ -848,11 +931,7 @@ Array.from(genericExamples).forEach(function (e) {
         searchPlaceholderValue: "This is a search placeholder"
     })
 });
-//var cleaveBlocks = new Cleave("#cardNumber", {
-//    blocks: [4, 4, 4, 4],
-//    uppercase: !0
-//}),
-//    genericExamples = document.querySelectorAll('[data-plugin="cleave-phone"]');
+
 Array.from(genericExamples).forEach(function (e) {
     new Cleave(e, {
         delimiters: ["(", ")", "-"],
@@ -933,6 +1012,7 @@ document.addEventListener("DOMContentLoaded", function () {
             var t = e.querySelector("#txtproductName-" + N).value,
                 n = e.querySelector("#txtproductDescription-" + N).value,
                 o = parseInt(e.querySelector("#txtproductamount-" + N).value),
+                o = parseInt(e.querySelector("#txtdiscountamount-" + N).value),
                 p = parseInt(e.querySelector("#txtgst-" + N).value),
                 q = parseInt(e.querySelector("#txtproductamountwithGST-" + N).value),
                 a = parseInt(e.querySelector("#product-qty-" + N).value),
@@ -1021,3 +1101,99 @@ document.addEventListener("DOMContentLoaded", function () {
         })), window.location.href = "apps-invoices-list.html")
     })
 });
+
+$(document).on("click", ".plus", function () {
+
+    updateProductQuantity($(this).closest(".product"), 1);
+    return
+});
+
+$(document).on("click", ".minus", function () {
+
+    updateProductQuantity($(this).closest(".product"), -1);
+    return
+});
+function preventEmptyValue(input) {
+
+    if (input.value === "") {
+
+        input.value = 1;
+    }
+}
+
+
+$(document).ready(function () {
+
+    bindEventListeners();
+
+    $(document).on('input', '.product-quantity', function () {
+        var row = $(this).closest('.product');
+        updateProductTotalAmount(row);
+        updateTotals();
+    });
+
+
+    $(document).on('keydown', '.product-quantity', function (event) {
+        if (event.key === 'Enter') {
+            $(this).blur();
+        }
+    });
+
+
+    $(document).on('input', '#txtproductamount', function () {
+        var row = $(this).closest('.product');
+        updateProductTotalAmount(row);
+        updateTotals();
+    });
+
+
+    $(document).on('keydown', '#txtproductamount', function (event) {
+        if (event.key === 'Enter') {
+            $(this).blur();
+        }
+    });
+
+    $(document).on('input', '#txtgst', function () {
+        var row = $(this).closest('.product');
+        updateProductTotalAmount(row);
+        updateTotals();
+    });
+
+    $(document).on('keydown', '#txtgst', function (event) {
+        if (event.key === 'Enter') {
+            $(this).blur();
+        }
+    });  
+
+    $(document).on('focusout', '.product-quantity', function () {
+        $(this).trigger('input');
+    });
+});
+
+function fn_OpenShippingModal() {
+    $('#textmdAddress').val('');
+    $('#textmdQty').val('');
+    $('#mdShippingAdd').modal('show');
+}
+
+function fn_mdAddAddress() {
+    var rowcount = $('#dvShippingAddress .row.ac-invoice-shippingadd').length + 1
+    if ($('#textmdAddress').val() != null && $('#textmdAddress').val().trim() != "") {
+        var html = `<div class="row ac-invoice-shippingadd">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                </div>`
+        $('#dvShippingAddress').append(html);
+    } else {
+        tostar.error('Please select address!');
+        $('#textmdAddress').focus();
+    }
+
+}
+function fn_removeShippingAdd(that) {
+    $(that).closest('.ac-invoice-shippingadd').remove();
+}
+
+function fn_OpenAddproductmodal() {
+    debugger
+    $('#mdProductSearch').val('');
+    $('#mdPoproductModal').modal('show');
+}

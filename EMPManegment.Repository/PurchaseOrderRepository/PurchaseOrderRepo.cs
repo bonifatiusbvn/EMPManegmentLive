@@ -6,6 +6,7 @@ using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.OrderModels;
 using EMPManegment.EntityModels.ViewModels.ProductMaster;
 using EMPManegment.EntityModels.ViewModels.ProjectModels;
+using EMPManegment.EntityModels.ViewModels.PurchaseOrderModels;
 using EMPManegment.EntityModels.ViewModels.TaskModels;
 using EMPManegment.EntityModels.ViewModels.VendorModels;
 using EMPManegment.Inretface.Interface.OrderDetails;
@@ -193,47 +194,76 @@ namespace EMPManegment.Repository.OrderRepository
         }
 
 
-        public async Task<UserResponceModel> InsertMultiplePurchaseOrder(List<PurchaseOrderView> InsertPurchaseOrder)
+        public async Task<UserResponceModel> InsertMultiplePurchaseOrder(PurchaseOrderMasterView InsertPurchaseOrder)
         {
             UserResponceModel response = new UserResponceModel();
             try
             {
-                foreach (var item in InsertPurchaseOrder)
+                var PurchaseOrder = new TblPurchaseOrderMaster()
                 {
-                    var ordermodel = new TblPurchaseOrderMaster()
+                    Id = Guid.NewGuid(),
+                    ProductId = InsertPurchaseOrder.ProductId,
+                    OrderId = InsertPurchaseOrder.OrderId,
+                    Type = InsertPurchaseOrder.Type,
+                    VendorId = InsertPurchaseOrder.VendorId,
+                    CompanyName = InsertPurchaseOrder.CompanyName,
+                    ProductName = InsertPurchaseOrder.ProductName,
+                    ProductShortDescription = InsertPurchaseOrder.ProductShortDescription,
+                    ProjectId = InsertPurchaseOrder.ProjectId,
+                    ProductType = InsertPurchaseOrder.ProductType,
+                    Quantity = InsertPurchaseOrder.Quantity,
+                    GstPerUnit = InsertPurchaseOrder.GstPerUnit,
+                    TotalGst = InsertPurchaseOrder.TotalGst,
+                    AmountPerUnit = InsertPurchaseOrder.AmountPerUnit,
+                    SubTotal = InsertPurchaseOrder.SubTotal,
+                    TotalAmount = InsertPurchaseOrder.TotalAmount,
+                    DeliveryDate = InsertPurchaseOrder.DeliveryDate,
+                    OrderDate = InsertPurchaseOrder.OrderDate,
+                    OrderStatus = InsertPurchaseOrder.OrderStatus,
+                    PaymentMethod = InsertPurchaseOrder.PaymentMethod,
+                    PaymentStatus = InsertPurchaseOrder.PaymentStatus,
+                    DeliveryStatus = InsertPurchaseOrder.DeliveryStatus,
+                    IsDeleted = false,
+                    CreatedBy = InsertPurchaseOrder.CreatedBy,
+                    CreatedOn = DateTime.Now,                   
+                };
+                Context.TblPurchaseOrderMasters.Add(PurchaseOrder);
+
+                foreach (var item in InsertPurchaseOrder.ProductList)
+                {
+                    var PurchaseOrderDetail = new TblPurchaseOrderDetail()
                     {
-                        Id = Guid.NewGuid(),
-                        OrderId = item.OrderId,
-                        Type = item.Type,
-                        CompanyName = item.CompanyName,
-                        VendorId = item.VendorId,
-                        ProductType = item.ProductType,
+                        PorefId = PurchaseOrder.Id,
                         ProductId = item.ProductId,
+                        Product = item.Product,
+                        ProductType = item.ProductType,
                         Quantity = item.Quantity,
-                        AmountPerUnit = item.AmountPerUnit,
-                        TotalGst = item.TotalGst,
-                        GstPerUnit = item.GstPerUnit,
-                        SubTotal = item.SubTotal,
-                        TotalAmount = item.TotalAmount,
-                        OrderDate = item.OrderDate,
-                        DeliveryDate = item.DeliveryDate,
-                        PaymentMethod = item.PaymentMethod,
-                        PaymentStatus = item.PaymentStatus,
-                        DeliveryStatus = "Pending",
-                        OrderStatus = "Confirmed",
-                        CreatedOn = DateTime.Now,
-                        CreatedBy = item.CreatedBy,
-                        ProjectId = item.ProjectId,
-                        ProductName = item.ProductName,
-                        ProductShortDescription = item.ProductShortDescription,
+                        Price = item.Price,
+                        Discount = item.Discount,
+                        Gst = item.Gst,
+                        ProductTotal = item.ProductTotal,
                         IsDeleted = false,
+                        CreatedBy = InsertPurchaseOrder.CreatedBy,
+                        CreatedOn = DateTime.Now,
                     };
-                    Context.TblPurchaseOrderMasters.Add(ordermodel);
+                    Context.TblPurchaseOrderDetails.Add(PurchaseOrderDetail);
+                }
+                foreach (var item in InsertPurchaseOrder.AddressList)
+                {
+                    var PurchaseAddress = new TblPodeliveryAddress()
+                    {
+                        Poid = PurchaseOrder.Id,
+                        Address = item.Address,
+                        IsDeleted = false,
+                        ProductType = InsertPurchaseOrder.ProductType,
+                        Quantity = item.Quantity,
+                    };
+                    Context.TblPodeliveryAddresses.Add(PurchaseAddress);
                 }
 
                 await Context.SaveChangesAsync();
-                response.Code = 200;
-                response.Message = "Orders Created successfully!";
+                response.Code = (int)HttpStatusCode.OK;
+                response.Message = "Purchase order successfully inserted.";
             }
             catch (Exception ex)
             {

@@ -45,6 +45,8 @@ public partial class BonifatiusEmployeesContext : DbContext
 
     public virtual DbSet<TblPaymentType> TblPaymentTypes { get; set; }
 
+    public virtual DbSet<TblPodeliveryAddress> TblPodeliveryAddresses { get; set; }
+
     public virtual DbSet<TblProductDetailsMaster> TblProductDetailsMasters { get; set; }
 
     public virtual DbSet<TblProductTypeMaster> TblProductTypeMasters { get; set; }
@@ -54,6 +56,8 @@ public partial class BonifatiusEmployeesContext : DbContext
     public virtual DbSet<TblProjectMaster> TblProjectMasters { get; set; }
 
     public virtual DbSet<TblProjectMember> TblProjectMembers { get; set; }
+
+    public virtual DbSet<TblPurchaseOrderDetail> TblPurchaseOrderDetails { get; set; }
 
     public virtual DbSet<TblPurchaseOrderMaster> TblPurchaseOrderMasters { get; set; }
 
@@ -81,8 +85,8 @@ public partial class BonifatiusEmployeesContext : DbContext
 
     public virtual DbSet<TblVendorType> TblVendorTypes { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-{}
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<TblAttendance>(entity =>
@@ -124,7 +128,7 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.ToTable("tblCompanyMaster");
 
             entity.Property(e => e.Id).ValueGeneratedNever();
-            entity.Property(e => e.Address).HasMaxLength(50);
+            entity.Property(e => e.Address).HasMaxLength(500);
             entity.Property(e => e.CompnyName).HasMaxLength(50);
             entity.Property(e => e.CreatedOn).HasColumnType("date");
             entity.Property(e => e.Gst)
@@ -309,6 +313,17 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.Property(e => e.Type).HasMaxLength(30);
         });
 
+        modelBuilder.Entity<TblPodeliveryAddress>(entity =>
+        {
+            entity.HasKey(e => e.Aid).HasName("PK_PODeliveryAddress");
+
+            entity.ToTable("tblPODeliveryAddress");
+
+            entity.Property(e => e.Aid).HasColumnName("AId");
+            entity.Property(e => e.Address).HasMaxLength(500);
+            entity.Property(e => e.Poid).HasColumnName("POId");
+        });
+
         modelBuilder.Entity<TblProductDetailsMaster>(entity =>
         {
             entity.ToTable("tblProductDetailsMaster");
@@ -406,6 +421,33 @@ public partial class BonifatiusEmployeesContext : DbContext
                 .HasConstraintName("FK_tblProjectDetails_tblUsers");
         });
 
+        modelBuilder.Entity<TblPurchaseOrderDetail>(entity =>
+        {
+            entity.ToTable("tblPurchaseOrderDetails");
+
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.Discount).HasColumnType("numeric(18, 2)");
+            entity.Property(e => e.Gst)
+                .HasColumnType("numeric(18, 2)")
+                .HasColumnName("GST");
+            entity.Property(e => e.PorefId).HasColumnName("PORefId");
+            entity.Property(e => e.Price).HasColumnType("numeric(18, 2)");
+            entity.Property(e => e.Product).HasMaxLength(100);
+            entity.Property(e => e.ProductTotal).HasColumnType("numeric(18, 2)");
+            entity.Property(e => e.Quantity).HasColumnType("numeric(18, 2)");
+            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+
+            entity.HasOne(d => d.Poref).WithMany(p => p.TblPurchaseOrderDetails)
+                .HasForeignKey(d => d.PorefId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_tblPurchaseOrderDetails_tblPurchaseOrderMaster");
+
+            entity.HasOne(d => d.ProductNavigation).WithMany(p => p.TblPurchaseOrderDetails)
+                .HasForeignKey(d => d.ProductId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_tblPurchaseOrderDetails_tblProductDetailsMaster");
+        });
+
         modelBuilder.Entity<TblPurchaseOrderMaster>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK_OrderMaster");
@@ -492,21 +534,6 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
             entity.Property(e => e.Role).HasMaxLength(20);
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
-        });
-
-        modelBuilder.Entity<TblRolewiseFormPermission>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PK_RolewiseFormPermission");
-
-            entity.ToTable("tblRolewiseFormPermission");
-
-            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
-            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
-
-            entity.HasOne(d => d.Form).WithMany(p => p.TblRolewiseFormPermissions)
-                .HasForeignKey(d => d.FormId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_tblRolewiseFormPermission_tblForm");
         });
 
         modelBuilder.Entity<TblRolewiseFormPermission>(entity =>

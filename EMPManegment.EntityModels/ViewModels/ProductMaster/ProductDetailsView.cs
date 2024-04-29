@@ -12,6 +12,7 @@ namespace EMPManegment.EntityModels.ViewModels.ProductMaster
         public Guid Id { get; set; }
 
         public int? ProductType { get; set; }
+
         public string? ProductTypeName { get; set; }
 
         public string ProductName { get; set; }
@@ -31,6 +32,7 @@ namespace EMPManegment.EntityModels.ViewModels.ProductMaster
         public decimal Gst { get; set; }
 
         public decimal PerUnitWithGstprice { get; set; }
+
         public decimal? Quantity { get; set; }
 
         public DateTime? CreatedOn { get; set; }
@@ -43,6 +45,7 @@ namespace EMPManegment.EntityModels.ViewModels.ProductMaster
         public Guid? ProductId { get; set; }
 
         public int RowNumber { get; set; }
+        public decimal? TotalAmount { get; set; }
     }
     public class ProductRequestModel
     {

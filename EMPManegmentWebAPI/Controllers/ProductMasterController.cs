@@ -86,6 +86,7 @@ namespace EMPManagment.API.Controllers
             IEnumerable<ProductTypeView> getProduct = await productMaster.GetProduct();
             return Ok(new { code = 200, data = getProduct.ToList() });
         }
+
         [HttpGet]
         [Route("GetProductById")]
         public async Task<IActionResult> GetProductById(Guid ProductId)
@@ -161,6 +162,7 @@ namespace EMPManagment.API.Controllers
             List<ProductDetailsView> ProductList = await productMaster.SerchProductByVendor(ProductId, VendorId);
             return Ok(new { code = 200, data = ProductList.ToList() });
         }
+
         [HttpPost]
         [Route("DisplayProductDetailsById")]
         public async Task<IActionResult> DisplayProductDetailsById(Guid ProductId)
@@ -171,7 +173,7 @@ namespace EMPManagment.API.Controllers
 
         [HttpPost]
         [Route("GetAllProductList")]
-        public async Task<IActionResult> GetProductsList(string? searchText)
+        public async Task<IActionResult> GetAllProductList(string? searchText)
         {
             IEnumerable<ProductDetailsView> getProductList = await productMaster.GetAllProductList(searchText);
             return Ok(new { code = 200, data = getProductList.ToList() });

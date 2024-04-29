@@ -1,5 +1,6 @@
 ﻿using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.OrderModels;
+using EMPManegment.EntityModels.ViewModels.PurchaseOrderModels;
 using EMPManegment.Inretface.Interface.OrderDetails;
 using EMPManegment.Inretface.Services.OrderDetails;
 using System;
@@ -42,7 +43,7 @@ namespace EMPManegment.Services.OrderDetails
             return await PurchaseOrderDetails.GetPurchaseOrderDetailsById(OrderId);
         }
 
-        public async Task<UserResponceModel> InsertMultiplePurchaseOrder(List<PurchaseOrderView> InsertPurchaseOrder)
+        public async Task<UserResponceModel> InsertMultiplePurchaseOrder(PurchaseOrderMasterView InsertPurchaseOrder)
         {
             return await PurchaseOrderDetails.InsertMultiplePurchaseOrder(InsertPurchaseOrder);
         }

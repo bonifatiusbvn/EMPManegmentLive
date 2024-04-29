@@ -91,11 +91,11 @@ namespace EMPManegment.Web.Controllers
         {
             try
             {
-                List<VendorDetailsView> VendorNameList = new List<VendorDetailsView>();
+                List<VendorListDetailsView> VendorNameList = new List<VendorListDetailsView>();
                 ApiResponseModel res = await APIServices.GetAsync("", "Vendor/GetVendorsNameList");
                 if (res.code == 200)
                 {
-                    VendorNameList = JsonConvert.DeserializeObject<List<VendorDetailsView>>(res.data.ToString());
+                    VendorNameList = JsonConvert.DeserializeObject<List<VendorListDetailsView>>(res.data.ToString());
                 }
                 return new JsonResult(VendorNameList);
             }
@@ -408,5 +408,49 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
+
+        [HttpPost]
+        public async Task<IActionResult> DisplayProductDetailsListById()
+        {
+            try
+            {
+                string ProductId = HttpContext.Request.Form["ProductId"];
+                var GetProduct = JsonConvert.DeserializeObject<ProductDetailsView>(ProductId.ToString());
+                List<ProductDetailsView> Product = new List<ProductDetailsView>();
+                ApiResponseModel response = await APIServices.GetAsync("", "ProductMaster/GetProductById?ProductId=" + GetProduct.Id);
+                if (response.code == 200)
+                {
+                    Product = JsonConvert.DeserializeObject<List<ProductDetailsView>>(response.data.ToString());
+                }
+                return PartialView("~/Views/PurchaseOrderMaster/_DisplayProductDetailsById.cshtml", Product);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DisplayProductDetailById()
+        {
+            try
+            {
+                string ProductId = HttpContext.Request.Form["ProductId"];
+                var GetProduct = JsonConvert.DeserializeObject<ProductDetailsView>(ProductId.ToString());
+                ProductDetailsView Product = new ProductDetailsView();
+                ApiResponseModel response = await APIServices.GetAsync("", "ProductMaster/GetProductDetailsById?ProductId=" + GetProduct.Id);
+                if (response.code == 200)
+                {
+                    Product = JsonConvert.DeserializeObject<ProductDetailsView>(response.data.ToString());
+                    Product.RowNumber = Product.RowNumber;
+                }
+                return PartialView("~/Views/PurchaseOrderMaster/_DisplayProductDetailsById.cshtml", Product);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
     }
 }

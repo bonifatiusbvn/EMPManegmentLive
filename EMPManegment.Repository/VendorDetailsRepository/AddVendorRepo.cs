@@ -204,6 +204,7 @@ namespace EMPManegment.Repository.VendorDetailsRepository
                                   VendorGstnumber = d.VendorGstnumber,
                                   VendorTypeId = d.VendorTypeId,
                                   VendorTypeName = t.VendorName,
+                                  FullAddress = d.VendorAddress + "," + ct.City + "," + s.State + "-" + d.VendorPinCode,
                               }).First();
             }
             catch (Exception ex)
@@ -221,6 +222,7 @@ namespace EMPManegment.Repository.VendorDetailsRepository
             {
                 Id = a.Vid,
                 VendorCompany = a.VendorCompany,
+                
 
             }).ToList();
             return GetVendorList;
