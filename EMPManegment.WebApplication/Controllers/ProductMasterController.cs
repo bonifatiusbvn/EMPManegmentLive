@@ -178,7 +178,7 @@ namespace EMPManegment.Web.Controllers
                 {
                     products = JsonConvert.DeserializeObject<ProductDetailsView>(response.data.ToString());
                 }
-                return PartialView("~/Views/PurchaseRequest/_DisplayProductDetailPartial.cshtml", products);
+                return PartialView("~/Views/PurchaseRequest/_AddProductPRPartial.cshtml", products);
             }
             catch (Exception ex)
             {

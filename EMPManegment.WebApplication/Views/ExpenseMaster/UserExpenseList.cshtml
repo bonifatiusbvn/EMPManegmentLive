@@ -110,21 +110,10 @@
 <div class="row">
     <div class="col-lg-12">
         <div class="card" id="invoiceList">
+
             <div class="card-header">
-                <div class="row g-2">
-                    <div class="col-lg-6">
-                    </div>
-                    <div class="col-lg-6">
-                        <button class="btn btn-primary" id="remove-actions" style="margin-left:-34px;">
-                            <i class="ri-delete-bin-2-line"></i>
-                        </button>
-                        <a class="btn btn-block btn-warning" onclick="DisplayAddExpenseModel()"><i class="ri-add-line align-bottom me-1"></i> Add Expense</a>
-                    </div>
-                </div>
-            </div>
-            <div class="card-header border-0">
                 <div class="d-flex align-items-center">
-                    <h5 class="card-title mb-0 flex-grow-1"></h5>
+                    <h5 class="card-title mb-0 flex-grow-1">My Expense-List</h5>
                     <div class="flex-shrink-0">
                         <div class="d-flex gap-2 flex-wrap">
                             <button class="btn btn-primary" id="remove-actions" style="margin-left:-34px;">
@@ -150,7 +139,7 @@
                                     <div class="col-lg-6">
                                         <div class="mb-3">
                                             <label for="txtexpensetype" class="form-label">Expense Type</label>
-                                            <select class="form-control" id="Editexpensetype" name="Editexpensetype">
+                                            <select class="form-control form-select valid" id="Editexpensetype" name="Editexpensetype">
                                                 <option selected disabled value="">---Select Expense Type---</option>
                                             </select>
                                             <input type="hidden" class="text-muted text-uppercase fw-semibold" id="Editexpensetypeid" />
@@ -279,7 +268,7 @@
                                 <div class="col-lg-6">
                                     <div class="mb-3">
                                         <label for="txtexpensetype" class="form-label">Expense Type</label>
-                                        <select class="form-control" id="txtexpensetype" name="txtexpensetype">
+                                        <select class="form-control form-select valid" id="txtexpensetype" name="txtexpensetype">
                                             <option selected disabled value="">---Select Expense Type---</option>
                                         </select>
                                         <input type="hidden" class="text-muted text-uppercase fw-semibold" id="txtexpensetypeid">

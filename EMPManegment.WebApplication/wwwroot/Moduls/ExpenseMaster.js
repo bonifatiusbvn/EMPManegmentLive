@@ -63,7 +63,7 @@ function AddExpenseDetails() {
             data: formData,
             dataType: 'json',
             contentType: false,
-            processData: false, 
+            processData: false,
             success: function (Result) {
                 if (Result.message != null) {
                     Swal.fire({
@@ -295,6 +295,7 @@ function GetUserExpenseList() {
                 "data": "date",
                 "name": "Date",
                 "render": function (data, type, full, meta) {
+
                     return new Date(data).toLocaleDateString();
                 }
             },
@@ -329,17 +330,15 @@ function GetUserExpenseList() {
 function GetParameterByName(name, url) {
 
     if (!url) url = window.location.href;
-    console.log("URL:", url);
+
     if (!name) {
-        console.error("Parameter name is not provided.");
         return null;
     }
 
     var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)", "i");
     var results = regex.exec(url);
-    console.log("Results:", results);
+
     if (!results) {
-        console.error("Parameter not found in the URL.");
         return null;
     }
     if (!results[2]) return '';
@@ -369,7 +368,7 @@ $(document).ready(function () {
                 "data": "fullName",
                 "name": "FullName",
                 "render": function (data, type, full, meta) {
-                    var imageSrc = full.image ? '<img src="/' + full.image + '" class="avatar-xxs rounded-circle image_src object-fit-cover">' : '';
+                    var imageSrc = full.image ? '<img src="/' + full.image + '" class="direct-chat-img">' : '';
                     return '<div class="d-flex align-items-center">' +
                         '<div class="flex-shrink-0">' +
                         imageSrc +
@@ -586,9 +585,9 @@ function DisplayExpenseList() {
                         '<div class="flex-shrink-0 ms-4 task-icons">' +
                         '<ul class="list-inline tasks-list-menu mb-0">' +
                         '<li class="list-inline-item"><a href="/ExpenseMaster/DownloadBill/?BillName=' + full.image + '"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M13 12h3l-4 4l-4-4h3V8h2v4Zm2-8H5v16h14V8h-4V4ZM3 2.992C3 2.444 3.447 2 3.999 2H16l5 5v13.993A1 1 0 0 1 20.007 22H3.993A1 1 0 0 1 3 21.008V2.992Z" /></svg></a></li>'; +
-                        '</ul>'+
-                        '</div>' +
-                        '</div>';
+                            '</ul>' +
+                            '</div>' +
+                            '</div>';
                 }
             },
             {
@@ -792,35 +791,35 @@ function ApprovedExpenseList() {
     });
 }
 function GetPayExpense() {
-        var formData = new FormData();
-        formData.append("ExpenseType", $("#txtexpensetype").val());
-        formData.append("Account", $("#txtAccount").val());
-        formData.append("UserId", $("#txtuserid").val());
-        formData.append("ApprovedBy", $("#txtuseraproveid").val());
-        formData.append("ApprovedByName", $("#txtuseraprovename").val());
-        formData.append("TotalAmount", $("#txtcreditamount").val());
-        formData.append("PaymentType", $("#txtpaymenttype").val());
-        formData.append("CreatedBy", $("#txtuseraproveid").val());
-        $.ajax({
-            url: '/ExpenseMaster/GetPayExpense',
-            type: 'Post',
-            data: formData,
-            dataType: 'json',
-            contentType: false,
-            processData: false,
-            success: function (Result) {
-                if (Result.message != null) {
-                    Swal.fire({
-                        title: Result.message,
-                        icon: 'success',
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'OK',
-                    }).then(function () {
-                        window.location = '/ExpenseMaster/GetPayExpense';
-                    });
-                }
+    var formData = new FormData();
+    formData.append("ExpenseType", $("#txtexpensetype").val());
+    formData.append("Account", $("#txtAccount").val());
+    formData.append("UserId", $("#txtuserid").val());
+    formData.append("ApprovedBy", $("#txtuseraproveid").val());
+    formData.append("ApprovedByName", $("#txtuseraprovename").val());
+    formData.append("TotalAmount", $("#txtcreditamount").val());
+    formData.append("PaymentType", $("#txtpaymenttype").val());
+    formData.append("CreatedBy", $("#txtuseraproveid").val());
+    $.ajax({
+        url: '/ExpenseMaster/GetPayExpense',
+        type: 'Post',
+        data: formData,
+        dataType: 'json',
+        contentType: false,
+        processData: false,
+        success: function (Result) {
+            if (Result.message != null) {
+                Swal.fire({
+                    title: Result.message,
+                    icon: 'success',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'OK',
+                }).then(function () {
+                    window.location = '/ExpenseMaster/GetPayExpense';
+                });
             }
-        })
+        }
+    })
 }
 
 $(document).ready(function () {
