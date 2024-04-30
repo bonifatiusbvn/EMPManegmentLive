@@ -12,10 +12,6 @@ namespace EMPManegment.EntityModels.ViewModels.PurchaseOrderModels
 
         public Guid Poid { get; set; }
 
-        public int? Quantity { get; set; }
-
-        public int? ProductType { get; set; }
-
         public string Address { get; set; } = null!;
 
         public bool? IsDeleted { get; set; }

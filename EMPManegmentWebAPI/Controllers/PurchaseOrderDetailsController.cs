@@ -1,4 +1,5 @@
-﻿using EMPManegment.EntityModels.ViewModels.ExpenseMaster;
+﻿using EMPManagment.Web.Models.API;
+using EMPManegment.EntityModels.ViewModels.ExpenseMaster;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.OrderModels;
 using EMPManegment.EntityModels.ViewModels.PurchaseOrderModels;
@@ -89,31 +90,33 @@ namespace EMPManagment.API.Controllers
             List<PurchaseOrderDetailView> orderdetails = await PurchaseOrderDetails.GetPurchaseOrderDetailsById(OrderId);
             return Ok(new { code = 200, data = orderdetails });
         }
+
         [HttpPost]
         [Route("InsertMultiplePurchaseOrder")]
-        public async Task<IActionResult> InsertMultiplePurchaseOrder(PurchaseOrderMasterView orderDetails)
+        public async Task<IActionResult> InsertMultiplePurchaseOrder(PurchaseOrderMasterView PODetails)
         {
-            UserResponceModel response = new UserResponceModel();
+            ApiResponseModel response = new ApiResponseModel();
             try
             {
-                var createOrder = PurchaseOrderDetails.InsertMultiplePurchaseOrder(orderDetails);
-                if (createOrder.Result.Code == 200)
+                var createOrder = await PurchaseOrderDetails.InsertMultiplePurchaseOrder(PODetails);
+                if (createOrder.code == 200)
                 {
-                    response.Code = (int)HttpStatusCode.OK;
-                    response.Message = createOrder.Result.Message;
+                    response.code = (int)HttpStatusCode.OK;
+                    response.message = createOrder.message;
                 }
                 else
                 {
-                    response.Message = createOrder.Result.Message;
-                    response.Code = (int)HttpStatusCode.NotFound;
+                    response.message = createOrder.message;
+                    response.code = (int)HttpStatusCode.NotFound;
                 }
             }
             catch (Exception ex)
             {
                 throw ex;
             }
-            return StatusCode(response.Code, response);
+            return StatusCode(response.code, response);
         }
+
         [HttpGet]
         [Route("GetAllPaymentMethod")]
         public async Task<IActionResult> GetAllPaymentMethod()

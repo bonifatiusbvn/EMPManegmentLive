@@ -59,8 +59,11 @@ namespace EMPManegment.EntityModels.ViewModels.PurchaseOrderModels
 
         public Guid CreatedBy { get; set; }
 
+        public Guid Poid { get; set; }
+
+        public string Address { get; set; } = null!;
+
         public List<PurchaseOrderDetailsModel>? ProductList { get; set; }
-        public List<PODeliveryAddressModel>? AddressList { get; set; }
 
     }
 }

@@ -6,6 +6,14 @@
     ViewData["Title"] = "CreateOrderView";
     Layout = "~/Views/Shared/_UserHomeLayout.cshtml";
 }
+
+<style>
+    #textVendorName-error, #textCompanyName-error, #textDeliveryStatus-error, #textShortDescription-error,
+    #textPaymentMethod-error{
+        color:red;
+    }
+</style>
+
 <div class="row" style="margin-top:20px;">
     <div class="col-12">
         <div class="page-title-box d-sm-flex align-items-center justify-content-between">
@@ -34,7 +42,7 @@
                                         <div class="row">
                                             <div class="col-6 col-lg-6">
                                                 <div class=" card">
-                                                    <h5 class="card-header">Supplier Details</h5>
+                                                    <h5 class="card-header">Vendor Details</h5>
                                                     <div class="card-body">
                                                         <div class="row">
                                                             <div class="col-6 col-lg-6 ">
@@ -57,6 +65,8 @@
                                                                 <label for="textVendorGSTNumber" class="form-label ">GST NO</label>
                                                                 <input type="text" id="textVendorGSTNumber" class="form-control" placeholder="GST No" readonly />
                                                             </div>
+                                                            <input type="text" id="textProjectId" class="form-control" hidden value="@UserSession.ProjectId" />
+                                                            <input type="text" id="textCreatedById" class="form-control" hidden value="@_userSession.UserId" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -152,22 +162,11 @@
                                                         <th></th>
                                                         <th id="TotalProductQuantity"></th>
                                                         <th></th>
-                                                        <th></th>
-                                                        <th></th>
                                                         <th id="TotalProductPrice"></th>
                                                         <th></th>
                                                         <th></th>
-                                                        <th></th>
                                                         <th id="TotalProductGST"></th>
-                                                        <th></th>
-                                                        <th></th>
                                                         <th id="TotalProductAmount"></th>
-                                                        <th></th>
-                                                        <th></th>
-                                                        <th></th>
-                                                        <th></th>
-                                                        <th></th>
-                                                        <th></th>
                                                         <th></th>
                                                     </tr>
                                                 </thead>
@@ -179,8 +178,8 @@
                                                     <div class="row">
                                                         <div class="col-lg-12 col-sm-12">
                                                             <div class="input-group mb-3">
-                                                                <label class="input-group-text" for="txtdelivryschedule">Delivery Schedule</label>
-                                                                <input type="text" class="form-control" id="txtDeliverySchedule" name="txtDeliverySchedule" placeholder="Enter Delivery Schedule">
+                                                                <label class="input-group-text" for="textDeliveryStatus">Delivery Status</label>
+                                                                <input type="text" class="form-control" id="textDeliveryStatus" name="textDeliveryStatus" placeholder="Enter Delivery Status">
                                                             </div>
                                                             <span id="spnDeliverySchedule" class="text-danger"></span>
                                                         </div>
@@ -195,10 +194,30 @@
                                                         <div class="col-lg-12 col-sm-12 mt-2">
                                                             <div class="mb-2">
                                                                 <div class="input-group mb-3">
-                                                                    <label class="input-group-text" for="txtdelivryschedule">Mobile No</label>
-                                                                    <input type="text" id="txtMobileNo" name="txtMobileNo" class="form-control" placeholder="Mobile No">
+                                                                    <label class="input-group-text">Payment Status</label>
+                                                                    <div class="form-check form-check-inline">
+                                                                        <input class="form-check-input" style="margin-left:2px;" type="radio" id="unpaidRadio" value="unpaid" name="paymentStatus" checked>
+                                                                        <label class="form-check-label" for="unpaidRadio">Unpaid</label>
+                                                                    </div>
+                                                                    <div class="form-check form-check-inline">
+                                                                        <input class="form-check-input" style="margin-left:2px;" type="radio" id="paidRadio" value="paid" name="paymentStatus">
+                                                                        <label class="form-check-label" for="paidRadio">Paid</label>
+                                                                    </div>
+                                                                    <div class="form-check form-check-inline">
+                                                                        <input class="form-check-input" style="margin-left:2px;" type="radio" id="cashRadio" value="cash" name="paymentStatus">
+                                                                        <label class="form-check-label" for="cashRadio">Cash</label>
+                                                                    </div>
                                                                 </div>
-                                                                <span id="spnMobileNo" class="text-danger"></span>
+                                                            </div>
+                                                            <div class="col-lg-12 col-sm-12 mt-2">
+                                                                <div class="mb-2">
+                                                                    <div class="input-group mb-3">
+                                                                        <label for="textPaymentMethod" class="input-group-text">Payment Method </label>
+                                                                        <select class="form-select" id="textPaymentMethod" name="textPaymentMethod">
+                                                                            <option selected value="">--Select Payment Method--</option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -237,20 +256,20 @@
                                 </div>
 
                                 <div class="row">
-                                    <div class="col-6 col-sm-6">
+                                    <div class="col-lg-6 col-sm-12">
                                         <div class="card">
                                             <h5 class="card-header">
                                                 Shipping Addresses
                                                 <a class="font-22" onclick="fn_OpenShippingModal()">
                                                     <i class="bi bi-plus-circle"></i>
                                                 </a>
-                                                <span id="spnshipping" style="color:red;"></span>
                                             </h5>
-                                            <div class="card-body Address" id="dvshippingAdd">
-                                                @*                                                @if (Model.AddressList != null)
-                                                {
-                                                @Html.Partial("_EditShippingDetailsPartial", Model.AddressList)
-                                                }*@
+                                            <div class="card-body">
+                                                <input type="checkbox" id="hideShippingAddress" name="hideShippingAddress" onchange="toggleShippingAddress()" checked>
+                                                <label for="hideShippingAddress"><b>Is Your Billing Address is same as Shipping Address?</b></label>
+                                                <div id="shippingAddressFields" style="display:none;">
+                                                    <textarea type="text" id="textShippingAddress" name="textShippingAddress" class="form-control" placeholder="Shipping Address"></textarea>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -264,6 +283,7 @@
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="hstack gap-2 justify-content-end d-print-none mt-4">
+                                            <button type="button" class="btn btn-lg btn-primary px-5" id="SavePOButton" onclick="InsertMultiplePurchaseOrderDetails()"><i class="ri-printer-line align-bottom me-1"></i> Add Purchase Order</button>
                                             @*                                            @if (Model.Id == Guid.Empty)
                                             {
 
@@ -281,7 +301,6 @@
                         <!--end col-->
                     </div>
                 </div>
-
             </form>
         </div>
     </div>
@@ -329,10 +348,9 @@
         </div>
     </div>
 </div>
-<div class="modal fade show" id="mdPoproductModal" tabindex="-1" aria-modal="true" role="dialog">
-    <div class="modal-dialog modal-dialog-scrollable">
+<div class="modal fade show" tabindex="-1" id="mdPoproductModal" role="dialog" aria-labelledby="myLargeModalLabel" aria-modal="true" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
-
             <div class="modal-header">
                 <h5 class="modal-title">Select Product</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>

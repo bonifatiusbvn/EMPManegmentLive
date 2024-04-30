@@ -1,5 +1,6 @@
 ﻿using Azure;
 using EMPManagment.API;
+using EMPManagment.Web.Models.API;
 using EMPManegment.EntityModels.ViewModels;
 using EMPManegment.EntityModels.ViewModels.ExpenseMaster;
 using EMPManegment.EntityModels.ViewModels.Models;
@@ -194,9 +195,9 @@ namespace EMPManegment.Repository.OrderRepository
         }
 
 
-        public async Task<UserResponceModel> InsertMultiplePurchaseOrder(PurchaseOrderMasterView InsertPurchaseOrder)
+        public async Task<ApiResponseModel> InsertMultiplePurchaseOrder(PurchaseOrderMasterView InsertPurchaseOrder)
         {
-            UserResponceModel response = new UserResponceModel();
+            ApiResponseModel response = new ApiResponseModel();
             try
             {
                 var PurchaseOrder = new TblPurchaseOrderMaster()
@@ -248,27 +249,24 @@ namespace EMPManegment.Repository.OrderRepository
                     };
                     Context.TblPurchaseOrderDetails.Add(PurchaseOrderDetail);
                 }
-                foreach (var item in InsertPurchaseOrder.AddressList)
-                {
+                
                     var PurchaseAddress = new TblPodeliveryAddress()
                     {
                         Poid = PurchaseOrder.Id,
-                        Address = item.Address,
-                        IsDeleted = false,
-                        ProductType = InsertPurchaseOrder.ProductType,
-                        Quantity = item.Quantity,
+                        Address = InsertPurchaseOrder.Address,
+                        IsDeleted = false
                     };
+
                     Context.TblPodeliveryAddresses.Add(PurchaseAddress);
-                }
 
                 await Context.SaveChangesAsync();
-                response.Code = (int)HttpStatusCode.OK;
-                response.Message = "Purchase order successfully inserted.";
+                response.code = (int)HttpStatusCode.OK;
+                response.message = "Purchase order successfully inserted.";
             }
             catch (Exception ex)
             {
-                response.Code = 500;
-                response.Message = "Error creating orders: " + ex.Message;
+                response.code = 500;
+                response.message = "Error creating orders: " + ex.Message;
             }
             return response;
         }

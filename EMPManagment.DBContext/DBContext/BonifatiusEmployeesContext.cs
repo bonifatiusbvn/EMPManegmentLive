@@ -86,7 +86,6 @@ public partial class BonifatiusEmployeesContext : DbContext
     public virtual DbSet<TblVendorType> TblVendorTypes { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<TblAttendance>(entity =>
@@ -440,10 +439,15 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.HasOne(d => d.Poref).WithMany(p => p.TblPurchaseOrderDetails)
                 .HasForeignKey(d => d.PorefId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_tblPurchaseOrderDetails_tblPurchaseOrderMaster");
+                .HasConstraintName("FK_tblPurchaseOrderDetails_tblPurchaseOrderMaster1");
 
             entity.HasOne(d => d.ProductNavigation).WithMany(p => p.TblPurchaseOrderDetails)
                 .HasForeignKey(d => d.ProductId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_tblPurchaseOrderDetails_tblPurchaseOrderMaster");
+
+            entity.HasOne(d => d.ProductTypeNavigation).WithMany(p => p.TblPurchaseOrderDetails)
+                .HasForeignKey(d => d.ProductType)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_tblPurchaseOrderDetails_tblProductDetailsMaster");
         });

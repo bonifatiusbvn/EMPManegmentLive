@@ -38,4 +38,6 @@ public partial class TblPurchaseOrderDetail
     public virtual TblPurchaseOrderMaster Poref { get; set; } = null!;
 
     public virtual TblProductDetailsMaster ProductNavigation { get; set; } = null!;
+
+    public virtual TblProductTypeMaster ProductTypeNavigation { get; set; } = null!;
 }

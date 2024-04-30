@@ -5,9 +5,9 @@
     <tr id="templateRow_@Convert.ToInt64(item.RowNumber + 1)" class="product" data-product-id="@item.Id">
         <td scope="row" class="product-id">@Convert.ToInt64(item.RowNumber + 1)</td>
         <td class="text-start">
-            <p id="txtItemName" style="padding-top:5px !important;">@item.ProductName</p>
-            <input type="hidden" class="form-control bg-light border-0" id="txtItemId" readonly value="@item.Id" />
-            <input type="hidden" class="form-control bg-light border-0" id="UnitTypeId" readonly value="@item.ProductType" />
+            <p id="textProductName" style="padding-top:5px !important;">@item.ProductName</p>
+            <input type="hidden" class="form-control bg-light border-0" id="textProductId" readonly value="@item.Id" />
+            <input type="hidden" class="form-control bg-light border-0" id="textProductType" readonly value="@item.ProductType" />
         </td>
         <td class="text-start">
             <input type="text" class="form-control bg-light border-0" id="txtHSNcode" value="@item.Hsn" readonly />
@@ -43,4 +43,4 @@
         </td>
     </tr>
 }
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
+

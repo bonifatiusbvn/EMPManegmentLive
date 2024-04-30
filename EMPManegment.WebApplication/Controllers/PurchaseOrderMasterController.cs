@@ -126,21 +126,22 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
+
         [HttpPost]
-        public async Task<IActionResult> InsertMultiplePurchaseOrders()
+        public async Task<IActionResult> InsertMultiplePurchaseOrderDetails()
         {
             try
             {
-                var OrderDetails = HttpContext.Request.Form["ORDERDETAILS"];
-                var InsertDetails = JsonConvert.DeserializeObject<List<PurchaseOrderMasterView>>(OrderDetails.ToString());
-                ApiResponseModel postuser = await APIServices.PostAsync(InsertDetails, "PurchaseOrderDetails/InsertMultiplePurchaseOrder");
+                var OrderDetails = HttpContext.Request.Form["PurchaseOrder"];
+                var PODetails = JsonConvert.DeserializeObject<PurchaseOrderMasterView>(OrderDetails.ToString());
+                ApiResponseModel postuser = await APIServices.PostAsync(PODetails, "PurchaseOrderDetails/InsertMultiplePurchaseOrder");
                 if (postuser.code == 200)
                 {
-                    return Ok(new { postuser.message });
+                    return Ok(new { postuser.message, postuser.code });
                 }
                 else
                 {
-                    return Ok(new { postuser.message });
+                    return Ok(new { postuser.message, postuser.code });
                 }
             }
             catch (Exception ex)
