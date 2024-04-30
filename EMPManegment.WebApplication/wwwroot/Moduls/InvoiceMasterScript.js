@@ -22,7 +22,7 @@ function selectvendorId() {
     document.getElementById("txtvendorTypeid1").value = document.getElementById("txtvendorname1").value;
 }
 $(document).ready(function () {
-    $('#txtvendorname').change(function () {    
+    $('#txtvendorname').change(function () {
         var VendorTypeId = $("#txtvendorname").val();
         $.ajax({
             url: '/Vendor/GetVendorDetailsById/?VendorId=' + VendorTypeId,
@@ -62,7 +62,7 @@ $(document).ready(function () {
             type: 'Get',
             success: function (result) {
                 $('#companybillingaddressDetails').empty().append(
-                    '<div class="mb-2"><input type="text" class="form-control bg-light border-0" id="billingName" name="data[#].BillingName" value='+result.companyName+' placeholder="Full Name" required /></div>'+ 
+                    '<div class="mb-2"><input type="text" class="form-control bg-light border-0" id="billingName" name="data[#].BillingName" value=' + result.companyName + ' placeholder="Full Name" required /></div>' +
                     '<div class="mb-2"><textarea class="form-control bg-light border-0" id="billingAddress" name="data[#].BillingAddress" rows="3" placeholder="Address" required>' + result.fullname + ', ' + result.address + ', ' + result.email + ', ' + result.contectno + ', ' + '</textarea></div>'
                 );
             },
@@ -70,7 +70,7 @@ $(document).ready(function () {
                 console.error("Error fetching company details:", error);
             }
         });
-    });                                          
+    });
 });
 function GetInvoiceDetailsByOrderId(OrderId) {
     $.ajax({

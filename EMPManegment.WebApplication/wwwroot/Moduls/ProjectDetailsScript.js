@@ -116,9 +116,13 @@ $(document).ready(function () {
         $('#frmprojectdetails').valid();
     });
 });
+function openmemberpop() {
+    showMember()
+    $("#inviteMembersModal").modal('show');
 
+}
 function showMember() {
-
+    debugger
     $.ajax({
         url: '/Project/GetMemberList',
         type: 'Post',
@@ -408,51 +412,63 @@ function searchproject() {
 
     GetAllUserProjectDetailsList(1);
 }
-function deleteProjectMember(Id) {
-    
-    $("#deleteOrderModal").modal('show');
-
-    $('#delete-record').click(function () {
-        var proId = $('#projectid').val();
-        var userId = Id;
-
-        var MemberData = {
-            ProjectId: proId,
-            UserId: userId,
-        }
-        var form_data = new FormData();
-        form_data.append("InviteMember", JSON.stringify(MemberData));
-        $.ajax({
-            url: '/Project/IsDeletedMember',
-            type: 'POST',
-            dataType: 'json',
-            data: form_data,
-            processData: false,
-            contentType: false,
-            success: function (Result) {
-
-                Swal.fire({
-                    title: Result.message,
-                    icon: 'success',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK'
-                }).then(function () {
-                    window.location = '/Project/GetProjectDetails/?Id=' + proId;
-                })
-            },
-            error: function () {
-                Swal.fire({
-                    title: "Can't Remove Member!",
-                    icon: 'warning',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK',
-                }).then(function () {
-                    window.location = '/Project/GetProjectDetails/?Id=' + proId;
-                })
-            }
-        })
+$(document).ready(function () {
+    $(document).on('click', '.btndeletedoc', function () {
+        var userId = $(this).data("user-id");
+        opendeletpop(userId);
     });
+
+    $("#delete-product").click(function () {
+        var userId = $(this).data("user-id");
+        deleteProjectMember(userId);
+    });
+});
+
+
+function opendeletpop(userId) {
+    $("#delete-product").data("user-id", userId); // Set the data attribute
+    $("#deleteOrderModal").modal('show');
 }
+
+function docmodalopen() {
+    $("#documentUploadModal").modal('show');
+}
+function deleteProjectMember(userId) {
+    var proId = $('#projectid').val();
+    var MemberData = {
+        ProjectId: proId,
+        UserId: userId,
+    }
+    var form_data = new FormData();
+    form_data.append("InviteMember", JSON.stringify(MemberData));
+    $.ajax({
+        url: '/Project/IsDeletedMember',
+        type: 'POST',
+        dataType: 'json',
+        data: form_data,
+        processData: false,
+        contentType: false,
+        success: function (Result) {
+            Swal.fire({
+                title: Result.message,
+                icon: 'success',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'OK'
+            }).then(function () {
+                window.location = '/Project/GetProjectDetails/?Id=' + proId;
+            })
+        },
+        error: function () {
+            Swal.fire({
+                title: "Can't Remove Member!",
+                icon: 'warning',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'OK',
+            })
+        }
+    })
+}
+
 
 $(document).ready(function () {
 

@@ -5,7 +5,7 @@
     Layout = "~/Views/Shared/_UserHomeLayout.cshtml";
 }
 
-<div class="row" style="margin-top:20px;">
+<div class="row" style="margin-top:80px;">
     <div class="col-12">
         <div class="page-title-box d-sm-flex align-items-center justify-content-between">
             <h4 class="mb-sm-0">Project</h4>
@@ -13,7 +13,7 @@
             <div class="page-title-right">
                 <ol class="breadcrumb m-0">
                     <li class="breadcrumb-item"><a href="javascript: void(0);">Project</a></li>
-                    <li class="breadcrumb-item active">Add Member</li>
+                    <li class="breadcrumb-item active">Project Overview</li>
                 </ol>
             </div>
 
@@ -32,7 +32,7 @@
                                     <div class="col-md-auto">
                                         <div class="avatar-md">
                                             <div class="avatar-title bg-white rounded-circle">
-                                                <img src="~/assets/images/1644562059131.jpg" alt="" class="direct-chat-img">
+                                                <img src="~/@Model.ProjectImage" alt="" class="direct-chat-img">
                                             </div>
                                         </div>
                                     </div>
@@ -56,39 +56,27 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-auto">
-                                <div class="hstack gap-1 flex-wrap">
-                                    <button type="button" class="btn py-0 fs-16 favourite-btn active">
-                                        <i class="ri-star-fill"></i>
-                                    </button>
-                                    <button type="button" class="btn py-0 fs-16 text-body">
-                                        <i class="ri-share-line"></i>
-                                    </button>
-                                    <button type="button" class="btn py-0 fs-16 text-body">
-                                        <i class="ri-flag-line"></i>
-                                    </button>
-                                </div>
-                            </div>
+
                         </div>
                         <div class="card-header p-2">
                             <ul class="nav nav-pills">
                                 <li class="nav-item">
-                                    <a class="nav-link active" data-toggle="tab" href="#project-overview" data-toggle="tab">
+                                    <a class="nav-link active" data-bs-toggle="tab" href="#project-overview">
                                         Overview
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" data-toggle="tab" href="#project-documents" data-toggle="tab" onclick="showuploadDocuments('@Model.ProjectId')">
+                                    <a class="nav-link" data-bs-toggle="tab" href="#project-documents" onclick="showuploadDocuments('@Model.ProjectId')">
                                         Documents
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" data-toggle="tab" href="#project-activities" data-toggle="tab">
+                                    <a class="nav-link" data-bs-toggle="tab" href="#project-activities">
                                         Activities
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" data-toggle="tab" href="#project-teams" onclick="showTeams('@Model.ProjectId');">
+                                    <a class="nav-link" data-bs-toggle="tab" href="#project-teams" onclick="showTeams('@Model.ProjectId');">
                                         Team
                                     </a>
                                 </li>
@@ -172,18 +160,13 @@
                                 </div><!-- end card header -->
 
                                 <div class="card-body">
-
                                     <div data-simplebar style="height: 300px;" class="px-3 mx-n3 mb-2">
                                         <div class="d-flex mb-4">
                                             <div class="flex-shrink-0">
                                                 <img src="~/assets/images/users/avatar-8.jpg" alt="" class="direct-chat-img" />
                                             </div>
-
                                         </div>
-
-
                                     </div>
-
                                 </div>
                                 <!-- end card body -->
                             </div>
@@ -203,11 +186,21 @@
                                         <h3 class="card-title" id="showProjectMembers" onclick="showProjectMembers('@Model.ProjectId')">Show Project Members</h3>
                                     </div>
                                     <div class="flex-shrink-0">
-                                        <button type="button" class="btn btn-block btn-primary" style="margin-left:30px;" data-toggle="modal" data-target="#inviteMembersModal" onclick="showMember()"><i class="ri-share-line me-1 align-bottom"></i> Invite Member</button>
+                                        <button type="button" class="btn btn-block btn-primary" style="margin-left:10px;" onclick="openmemberpop()"><i class="ri-share-line me-1 align-bottom"></i> Invite Member</button>
                                     </div>
                                 </div>
                                 <div class="card-body">
-                                    <div id="dvshowmembers"></div>
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th style="width: 10px"></th>
+                                                <th></th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="dvshowmembers">
+                                        </tbody>
+                                    </table>
                                 </div>
                                 <!-- end card body -->
                             </div>
@@ -219,7 +212,7 @@
                                         <h3 class="card-title" id="showProjectDocuments">Attachments</h3>
                                     </div>
                                     <div class="flex-shrink-0">
-                                        <button type="button" class="btn btn-block btn-warning" style="margin-left:90px;" data-toggle="modal" data-target="#documentUploadModal"><i class="ri-upload-2-fill me-1 align-bottom"></i> Upload</button>
+                                        <button type="button" class="btn btn-block btn-warning" style="margin-left:70px;" onclick="docmodalopen()"><i class="ri-upload-2-fill me-1 align-bottom"></i> Upload</button>
                                     </div>
                                 </div>
                                 <div class="card-body">
@@ -394,9 +387,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title">Members</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div class="search-box mb-3">
@@ -480,9 +471,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title">Upload Document</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form>
@@ -494,36 +483,42 @@
 
             </div>
             <div class="modal-footer justify-content-between">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-danger btn-default m-1" id="close-modal" data-bs-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-primary" onclick="addProjectDocument()">Upload</button>
             </div>
         </div>
         <!-- /.modal-content -->
     </div>
 </div>
-<!-- /.modal-dialog -->
-@* <div class="modal fade" id="deleteOrderModal">
-    <div class="modal-dialog">
+
+<!-- Modal -->
+<div class="modal fade" id="deleteOrderModal">
+    <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">Default Modal</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p>One fine body&hellip;</p>
-            </div>
-            <div class="modal-footer justify-content-between">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+            <div class="modal-body p-5 text-center">
+                <img src="~/lteassets/icons/delete.png" style="height:150px;width:150px" />
+                <div class="mt-4 text-center">
+                    <h4>You are about to delete a Member ?</h4>
+                    <p class="text-muted fs-15 mb-4">
+                        Deleting your project member will remove him form this current Project.
+                    </p>
+                    <div class="hstack gap-2 justify-content-center remove">
+                        <button class="btn btn-link link-primary fw-medium text-decoration-none" id="deleteRecord-close" data-bs-dismiss="modal">
+                            <i class="ri-close-line me-1 align-middle"></i>
+                            Close
+                        </button>
+                        <button class="btn btn-primary" id="delete-product" oncllick="deleteProjectMember(Id)">
+                            Yes,
+                            Delete It
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
-        <!-- /.modal-content -->
     </div>
+</div>
 
-</div> *@
-
+<!-- end modal -->
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/moduls/projectdetailsscript.js"></script>

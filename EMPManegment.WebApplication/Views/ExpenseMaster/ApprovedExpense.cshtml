@@ -3,7 +3,7 @@
     Layout = "~/Views/Shared/_UserHomeLayout.cshtml";
 }
 
-<div class="row">
+<div class="row" style="margin-top:80px;">
     <div class="col-12">
         <div class="page-title-box d-sm-flex align-items-center justify-content-between">
             <h4 class="mb-sm-0">Expense</h4>
@@ -31,8 +31,8 @@
                     <div class="col-sm-auto">
                         <div class="d-flex gap-1 flex-wrap">
                             <button type="button" class="btn btn-primary" id="remove-actions" onclick="ApproveExpense()"><i class="ri-filter-3-line align-bottom me-1"></i>Approve All</button>
-                            <a class="btn btn-soft-primary" onclick="DisplayAddExpenseModel()"><i class="ri-add-line align-bottom me-1"></i> Add Expense</a>
-                            <a class="btn btn-soft-primary" asp-action="GetPayExpense" asp-controller="ExpenseMaster"><i class="ri-add-line align-bottom me-1"></i> Get Pay</a>
+                            <button class="btn btn-warning" onclick="DisplayAddExpenseModel()" style="width: 115px;">Add Expense</button>
+                            <button class="btn btn-success" asp-action="GetPayExpense" asp-controller="ExpenseMaster" style="width: 115px;">Get Pay</button>
                         </div>
                     </div>
                 </div>
