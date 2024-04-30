@@ -2,16 +2,14 @@
 @model EMPManegment.EntityModels.ViewModels.ProductMaster.ProductDetailsView
 @inject IHttpContextAccessor Accessor;
 @inject UserSession _userSession
-@{
-    ViewData["Title"] = "_AddProductPRPartial";
-    Layout = "~/Views/Shared/_UserHomeLayout.cshtml";
-}
-
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
 <div class="product card-body">
     <div class="row gy-3">
         <div class="col-sm-auto">
             <div class="avatar-lg bg-light rounded p-1">
-                <img src="~/@Model.ProductImage" alt="" class="img-fluid d-block">
+                <img src="~/@Model.ProductImage" alt="" class="img-fluid d-block" style="width: 100px;height: 100px;">
             </div>
         </div>
         <div class="col-sm">
@@ -50,6 +48,3 @@
     </div>
     <!-- end card footer -->
 </div>
-<!-- card body -->
-
-
