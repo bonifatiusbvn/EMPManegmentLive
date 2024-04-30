@@ -82,7 +82,7 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
                 Area = a.Area,
                 City = a.City,
                 State = a.State,
-                Country =a.Country,
+                Country = a.Country,
                 ProjectImage = a.ProjectImage,
                 PinCode = a.PinCode,
                 ProjectPath = a.ProjectPath,
@@ -124,6 +124,7 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
                                   a.StartDate,
                                   a.EndDate,
                                   b.ProjectDescription,
+                                  b.ProjectImage,
                               }).ToListAsync();
 
             if (data != null)
@@ -156,6 +157,7 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
             {
                 ProjectId = projectDetail.ProjectId,
                 ProjectTitle = projectDetail.ProjectTitle,
+                ProjectImage = projectDetail.ProjectImage,
                 ShortName = projectDetail.ShortName,
                 BuildingName = projectDetail.BuildingName,
                 Area = projectDetail.Area,
@@ -173,7 +175,7 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
                 ProjectStartDate = projectDetail.ProjectStartDate,
                 ProjectDescription = projectDetail.ProjectDescription,
                 ProjectType = projectDetail.ProjectType,
-                ProjectImage = projectDetail.ProjectImage,
+
             };
             return model;
         }
@@ -245,20 +247,21 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
         {
             try
             {
-                    var result = (from e in Context.TblProjectMembers
-                                  where e.ProjectId == ProjectId
-                              join d in Context.TblUsers on e.UserId equals d.Id where e.IsDeleted != false
-                                  select new ProjectView
-                                  {
-                                      Id = e.Id,
-                                      ProjectId = e.ProjectId,
-                                      Fullname = d.FirstName + " " + d.LastName,
-                                      Image = d.Image,
-                                      UserId = e.UserId,
-                                      Designation = d.Designation,
-                                  }).ToList();
-                    return result;
-                }       
+                var result = (from e in Context.TblProjectMembers
+                              where e.ProjectId == ProjectId
+                              join d in Context.TblUsers on e.UserId equals d.Id
+                              where e.IsDeleted != false
+                              select new ProjectView
+                              {
+                                  Id = e.Id,
+                                  ProjectId = e.ProjectId,
+                                  Fullname = d.FirstName + " " + d.LastName,
+                                  Image = d.Image,
+                                  UserId = e.UserId,
+                                  Designation = d.Designation,
+                              }).ToList();
+                return result;
+            }
             catch (Exception ex)
             {
                 throw ex;
@@ -294,7 +297,7 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
         public async Task<IEnumerable<ProjectDocumentView>> GetProjectDocument(Guid ProjectId)
         {
             try
-            { 
+            {
                 var result = (from e in Context.TblProjectDocuments
                               where e.ProjectId == ProjectId
                               join d in Context.TblUsers on e.UserId equals d.Id
@@ -318,7 +321,7 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
         {
             var UserData = new List<ProjectDetailView>();
             var data = await (from projectDetail in Context.TblProjectMembers
-                              join projectMaster in Context.TblProjectMasters 
+                              join projectMaster in Context.TblProjectMasters
                               on projectDetail.ProjectId equals projectMaster.ProjectId
                               where projectDetail.UserId == UserId && projectDetail.IsDeleted != false
                               select new
@@ -336,6 +339,7 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
                                   projectMaster.ProjectDeadline,
                                   projectMaster.ProjectDescription,
                                   projectDetail.IsDeleted,
+                                  projectMaster.ProjectImage,
                               }).ToListAsync();
 
             if (data != null)

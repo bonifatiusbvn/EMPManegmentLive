@@ -128,7 +128,7 @@ namespace EMPManegment.Web.Controllers
             {
                 var ProjectImg = Guid.NewGuid() + "_" + project.ProjectImage.FileName;
                 var path = Environment.WebRootPath;
-                var filepath = "Content/Image/" + ProjectImg;
+                var filepath = "Content/Projects/" + ProjectImg;
                 var fullpath = Path.Combine(path, filepath);
                 UploadFile(project.ProjectImage, fullpath);
                 var ProjectDetails = new ProjectDetailView()

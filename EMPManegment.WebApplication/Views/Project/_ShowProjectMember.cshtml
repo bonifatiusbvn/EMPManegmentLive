@@ -4,52 +4,14 @@
 {
     foreach (var item in Model)
     {
-        <div style="height: 40px;" class="mx-n3 px-3">
-            <div class="vstack gap-3">
-                <div class="d-flex align-items-center">
-                    <div class="post">
-                        <div class="user-block">
-                            <img class="img-circle img-bordered-sm" src="~/@item.Image" alt="user image">
-                            <input type="text" id="projectid" value="@item.ProjectId" hidden />
-                            <a href="#">@item.Fullname</a>
-                            <div class="float-right btn-tool">
-                                <a class="btn text-danger" onclick="deleteProjectMember('@item.UserId')"><i class="fas fa-trash"></i></a>
-                            </div>
-                        </div>
-                        <p></p><p></p>
-                    </div>
-                </div>
-                <!-- end member item -->
-            </div>
-            <!-- end list -->
-        </div>
+        <tr>
+            <td><img class="direct-chat-img" src="~/@item.Image" alt="user image"></td>
+            <td>@item.Fullname</td>
+            <td>
+                <a class="btn text-danger btndeletedoc" data-user-id="@item.UserId"><i class="fas fa-trash"></i></a>
+            </td>
+        </tr>
     }
 }
-<!-- Modal -->
-<div class="modal fade" id="deleteOrderModal">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-body p-5 text-center">
-                <lord-icon src="https://cdn.lordicon.com/gsqxdxog.json" trigger="loop" colors="primary:#25a0e2,secondary:#00bd9d" style="width:90px;height:90px"></lord-icon>
-                <div class="mt-4 text-center">
-                    <h4>You are about to delete a Member ?</h4>
-                    <p class="text-muted fs-15 mb-4">
-                        Deleting your project member will remove him form this current Project.
-                    </p>
-                    <div class="hstack gap-2 justify-content-center remove">
-                        <button class="btn btn-link link-primary fw-medium text-decoration-none" id="deleteRecord-close" data-bs-dismiss="modal">
-                            <i class="ri-close-line me-1 align-middle"></i>
-                            Close
-                        </button>
-                        <button class="btn btn-primary" id="delete-record">
-                            Yes,
-                            Delete It
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
-<!-- end modal -->
+
