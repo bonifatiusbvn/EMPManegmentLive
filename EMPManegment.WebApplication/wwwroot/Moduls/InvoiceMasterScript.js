@@ -1,7 +1,10 @@
 ﻿
 $(document).ready(function () {
+
+    GetAllVendorData()
     GetAllTransactionData()
     AllInvoiceList()
+
 });
 $(document).ready(function () {
     $("#CreateInvoiceForm").validate({
@@ -96,88 +99,90 @@ function ShowInvoiceDetailsByOrderId(OrderId) {
         }
     });
 }
-function InsertInvoiceDetails() {debugger
+function InsertInvoiceDetails() {
+    debugger
     if ($("#CreateInvoiceForm").valid()) {
         if ($('#addnewproductlink tr').length >= 1) {
 
-        var ProductDetails = [];
-        $(".product").each(function () {
-            var orderRow = $(this);
-            var productName = orderRow.find("#textProductName").text().trim();
-            var productId = orderRow.find("#textProductId").val().trim();
-            var objData = {
-                Product: productName,
-                ProductId: productId,
-                ProductType: orderRow.find("#textProductType").val(),
-                Quantity: orderRow.find("#txtproductquantity").val(),
-                Price: orderRow.find("#txtproductamount").val(),
-                GSTamount: orderRow.find("#txtgstAmount").val(),
-                Gst: orderRow.find("#txtgst").val(),
-                ProductTotal: orderRow.find("#txtproducttotalamount").val(),
-            };
-            ProductDetails.push(objData);
-        });
-        var Invoicedetails = {
-            ProjectId: $("#textProjectId").val(),
-            InvoiceNo: $("#textInvoiceNo").val(),
-            VandorId: $("#textVendorName").val(),
-            CompanyName: $("#textCompanyName").val(),
-            TotalGst: $("#totalgst").val(),
-            Cgst: $("#textCGst").val(),
-            Sgst: $("#textSGst").val(),
-            Igst: $("#textIGst").val(),
-            SubTotal: $("#cart-subtotal").val(),
-            TotalAmount: $("#cart-total").val(),
-            DispatchThrough: $("#textDispatchThrough").val(),
-            BuyesOrderNo: $("#textBuysOrderNo").val(),
-            BuyesOrderDate: $("#textBuysOrderDate").val(),
-            InvoiceDate: $("#textInvoiceDate").val(),
-            OrderStatus: $("#UnitTypeId").val(),
-            PaymentMethod: $("#textPaymentMethod").val(),
-            CreatedBy: $("#textCreatedById").val(),
-            ShippingAddress: $('#hideShippingAddress').is(':checked') ? $('#textCompanyBillingAddress').val() : $('#textShippingAddress').val(),
-            InvoiceDetails: ProductDetails,
-        }
-        var form_data = new FormData();
-        form_data.append("INVOICEDETAILS", JSON.stringify(Invoicedetails));
-        debugger
-        $.ajax({
-            url: '/Invoice/InsertInvoiceDetails',
-            type: 'POST',
-            data: form_data,
-            dataType: 'json',
-            contentType: false,
-            processData: false,
-            success: function (Result) {debugger
-                if (Result.code == 200) {
-                    Swal.fire({
-                        title: Result.message,
-                        icon: 'success',
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'OK'
-                    }).then(function () {
-                        window.location = '/Invoice/InvoiceListView';
-                    });
-                }
-                else {
-                    Swal.fire({
-                        title: Result.message,
-                        icon: 'warning',
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'OK'
-                    });
-                }
-            },
-            error: function (xhr, status, error) {
-                Swal.fire({
-                    title: 'Error',
-                    text: 'An error occurred while processing your request.',
-                    icon: 'error',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK',
-                });
+            var ProductDetails = [];
+            $(".product").each(function () {
+                var orderRow = $(this);
+                var productName = orderRow.find("#textProductName").text().trim();
+                var productId = orderRow.find("#textProductId").val().trim();
+                var objData = {
+                    Product: productName,
+                    ProductId: productId,
+                    ProductType: orderRow.find("#textProductType").val(),
+                    Quantity: orderRow.find("#txtproductquantity").val(),
+                    Price: orderRow.find("#txtproductamount").val(),
+                    GSTamount: orderRow.find("#txtgstAmount").val(),
+                    Gst: orderRow.find("#txtgst").val(),
+                    ProductTotal: orderRow.find("#txtproducttotalamount").val(),
+                };
+                ProductDetails.push(objData);
+            });
+            var Invoicedetails = {
+                ProjectId: $("#textProjectId").val(),
+                InvoiceNo: $("#textInvoiceNo").val(),
+                VandorId: $("#textVendorName").val(),
+                CompanyName: $("#textCompanyName").val(),
+                TotalGst: $("#totalgst").val(),
+                Cgst: $("#textCGst").val(),
+                Sgst: $("#textSGst").val(),
+                Igst: $("#textIGst").val(),
+                SubTotal: $("#cart-subtotal").val(),
+                TotalAmount: $("#cart-total").val(),
+                DispatchThrough: $("#textDispatchThrough").val(),
+                BuyesOrderNo: $("#textBuysOrderNo").val(),
+                BuyesOrderDate: $("#textBuysOrderDate").val(),
+                InvoiceDate: $("#textInvoiceDate").val(),
+                OrderStatus: $("#UnitTypeId").val(),
+                PaymentMethod: $("#textPaymentMethod").val(),
+                CreatedBy: $("#textCreatedById").val(),
+                ShippingAddress: $('#hideShippingAddress').is(':checked') ? $('#textCompanyBillingAddress').val() : $('#textShippingAddress').val(),
+                InvoiceDetails: ProductDetails,
             }
-        });
+            var form_data = new FormData();
+            form_data.append("INVOICEDETAILS", JSON.stringify(Invoicedetails));
+            debugger
+            $.ajax({
+                url: '/Invoice/InsertInvoiceDetails',
+                type: 'POST',
+                data: form_data,
+                dataType: 'json',
+                contentType: false,
+                processData: false,
+                success: function (Result) {
+                    debugger
+                    if (Result.code == 200) {
+                        Swal.fire({
+                            title: Result.message,
+                            icon: 'success',
+                            confirmButtonColor: '#3085d6',
+                            confirmButtonText: 'OK'
+                        }).then(function () {
+                            window.location = '/Invoice/InvoiceListView';
+                        });
+                    }
+                    else {
+                        Swal.fire({
+                            title: Result.message,
+                            icon: 'warning',
+                            confirmButtonColor: '#3085d6',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                },
+                error: function (xhr, status, error) {
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'An error occurred while processing your request.',
+                        icon: 'error',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK',
+                    });
+                }
+            });
         } else {
             if ($('#addnewproductlink tr').length == 0) {
                 $("#spnitembutton").text("Please Select Product!");
@@ -412,7 +417,8 @@ function GetAllVendorData() {
         columns: [
             {
                 "render": function (data, type, full) {
-                    return '<h5 class="fs-15"><a href="/Invoice/VendorInvoiceListView/?Vid=' + full.id + '" class="fw-medium link-primary">' + full.vendorCompany; '</a></h5>';
+                    debugger
+                    return '<h5 class="fs-15"><a href="/Invoice/VendorInvoiceListView/?Vid=' + full.vid + '" class="fw-medium link-primary">' + full.vendorCompany; '</a></h5>';
                 }
             },
             {
