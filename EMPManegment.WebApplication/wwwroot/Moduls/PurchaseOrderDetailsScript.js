@@ -54,7 +54,7 @@ $(document).ready(function () {
         if (event.key === 'Enter') {
             $(this).blur();
         }
-    }); 
+    });
 
     $(document).on('focusout', '.product-quantity', function () {
         $(this).trigger('input');
@@ -328,14 +328,14 @@ $(document).ready(function () {
         rules: {
             textVendorName: "required",
             textCompanyName: "required",
-            textPaymentMethod: "required",
+            txtpaymentmethod: "required",
             textDescription: "required",
             textDeliveryStatus: "required",
         },
         messages: {
             textVendorName: "Select Vendor Name",
             textCompanyName: "Select Company Name",
-            textPaymentMethod: "Select Payment Method",
+            txtpaymentmethod: "Select Payment Method",
             textDescription: "Please Enter Description",
             textDeliveryStatus: "Please Enter Delivery Status",
         }
@@ -393,7 +393,7 @@ function getVendorDetail(VendorId) {
         type: 'GET',
         contentType: 'application/json;charset=utf-8',
         dataType: 'json',
-        success: function (response) {       
+        success: function (response) {
             if (response) {
                 $('#textVendorMobile').val(response.vendorPhone);
                 $('#textVendorGSTNumber').val(response.vendorGstnumber);
@@ -409,12 +409,14 @@ function selectvendorId() {
     document.getElementById("txtvendorTypeid").value = document.getElementById("txtvendorname").value;
 }
 
+var companyMap = {};
 function GetCompanyNameList() {
     $.ajax({
         url: '/Company/GetCompanyNameList',
         success: function (result) {
             $.each(result, function (i, data) {
-                $('#textCompanyName').append('<Option value=' + data.id + '>' + data.compnyName + '</Option>')
+                $('#textCompanyName').append('<Option value=' + data.compnyName + '>' + data.compnyName + '</Option>')
+                companyMap[data.compnyName] = data.id;
             });
         }
     });
@@ -427,7 +429,8 @@ $(document).ready(function () {
 });
 
 
-function getCompanyDetail(CompanyId) {
+function getCompanyDetail(CompanyName) {
+    var CompanyId = companyMap[CompanyName];
     $.ajax({
         url: '/Company/GetCompanyDetailsById',
         type: 'GET',
@@ -538,7 +541,7 @@ function SearchProductDetailsById(ProductId) {
         processData: false,
         contentType: false,
         complete: function (Result) {
-        
+
             if (Result.statusText === "success") {
                 AddNewRow(Result.responseText);
             }
@@ -555,8 +558,7 @@ function SearchProductDetailsById(ProductId) {
     });
 }
 
-function deletePurchaseOrderDetails(OrderId) {
-
+function deletePurchaseOrderDetails(Id) {
     Swal.fire({
         title: "Are you sure want to Delete This?",
         text: "You won't be able to revert this!",
@@ -571,11 +573,11 @@ function deletePurchaseOrderDetails(OrderId) {
     }).then((result) => {
         if (result.isConfirmed) {
             $.ajax({
-                url: '/PurchaseOrderMaster/DeletePurchaseOrderDetails?OrderId=' + OrderId,
+                url: '/PurchaseOrderMaster/DeletePurchaseOrderDetails?Id=' + Id,
                 type: 'POST',
                 dataType: 'json',
                 success: function (Result) {
-
+                 
                     Swal.fire({
                         title: Result.message,
                         icon: 'success',
@@ -770,7 +772,7 @@ document.querySelector("#profile-img-file-input").addEventListener("change", fun
 
 var count = 0;
 function AddNewRow(Result) {
-    
+
     var newProductRow = $(Result);
     var productId = newProductRow.data('product-id');
     ProductTypeDropdown(productId);
@@ -834,11 +836,11 @@ function bindEventListeners() {
         });
     });
 
-    
+
 }
 
 function updateProductTotalAmount() {
-    debugger
+
     $(".product").each(function () {
         var row = $(this);
         var productPrice = parseFloat(row.find("#txtproductamount").val());
@@ -866,14 +868,14 @@ function updateProductQuantity(row, increment) {
 
 
 function updateTotals() {
-    debugger
+ 
     var totalSubtotal = 0;
     var totalGst = 0;
     var totalAmount = 0;
     var TotalItemQuantity = 0;
 
     $(".product").each(function () {
-        debugger
+     
         var row = $(this);
         var subtotal = parseFloat(row.find("#txtproductamount").val());
         var gst = parseFloat(row.find("#txtgstAmount").val());
@@ -886,7 +888,6 @@ function updateTotals() {
     });
 
     $("#cart-subtotal").val(totalSubtotal.toFixed(2));
-    debugger
     $("#totalgst").val(totalGst.toFixed(2));
     $("#cart-total").val(totalAmount.toFixed(2));
     $("#TotalProductQuantity").text(TotalItemQuantity);
@@ -1143,7 +1144,7 @@ function fn_removeShippingAdd(that) {
 }
 
 function fn_OpenAddproductmodal() {
-    
+
     $('#mdProductSearch').val('');
     $('#mdPoproductModal').modal('show');
 }
@@ -1160,6 +1161,7 @@ function toggleShippingAddress() {
 }
 
 function InsertMultiplePurchaseOrderDetails() {
+   
     if ($("#CreatePOForm").valid()) {
 
         var ProductDetails = [];
@@ -1173,14 +1175,12 @@ function InsertMultiplePurchaseOrderDetails() {
                 ProductType: orderRow.find("#textProductType").val(),
                 Quantity: orderRow.find("#txtproductquantity").val(),
                 Price: orderRow.find("#txtproductamount").val(),
-                GSTamount: orderRow.find("#txtgstAmount").val(),
-                Gst: orderRow.find("#txtgst").val(),
+                Gst: orderRow.find("#txtgstAmount").val(),
                 ProductTotal: orderRow.find("#txtproducttotalamount").val(),
             };
             ProductDetails.push(objData);
         });
-
-        var PONumber = $("#textPoId").val()
+        var PONumber = $("#textPoId").val();
         var PODetails = {
             ProjectId: $("#textProjectId").val(),
             OrderId: $("#textPoId").val(),
@@ -1198,7 +1198,7 @@ function InsertMultiplePurchaseOrderDetails() {
             DeliveryDate: $("#UnitTypeId").val(),
             OrderDate: $("#textOrderDate").val(),
             OrderStatus: $("#UnitTypeId").val(),
-            PaymentMethod: $("#textPaymentMethod").val(),
+            PaymentMethod: $("#txtpaymentmethod").val(),
             PaymentStatus: $("input[name='paymentStatus']:checked").val(),
             DeliveryStatus: $("#textDeliveryStatus").val(),
             CreatedBy: $("#textCreatedById").val(),
@@ -1223,7 +1223,7 @@ function InsertMultiplePurchaseOrderDetails() {
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'OK'
                     }).then(function () {
-                        window.location = '/PurchaseOrderMaster/GetPurchaseOrderDetailsById/?OrderId=' + PONumber;
+                        window.location = '/PurchaseOrderMaster/GetPurchaseOrderDetailsByOrderId/?OrderId=' + PONumber;
                     });
                 }
                 else {

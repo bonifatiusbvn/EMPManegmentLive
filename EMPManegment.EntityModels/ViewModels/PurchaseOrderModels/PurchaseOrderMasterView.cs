@@ -63,6 +63,24 @@ namespace EMPManegment.EntityModels.ViewModels.PurchaseOrderModels
 
         public string Address { get; set; } = null!;
 
+        public string? CompanyFullAddress { get; set; }
+
+        public string? CompanyGstNumber { get; set; }
+
+        public string? VendorName { get; set; }
+
+        public string? VendorFullAddress { get; set; }
+
+        public string? VendorContact { get; set; }
+
+        public string? VendorEmail { get; set; }
+
+        public string? VendorAccountHolderName { get; set; }
+
+        public string? VendorBankAccountNo { get; set; }
+
+        public string? PaymentMethodName { get; set; }
+
         public List<PurchaseOrderDetailsModel>? ProductList { get; set; }
 
     }

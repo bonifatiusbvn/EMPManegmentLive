@@ -2,19 +2,20 @@
 
 @foreach (var item in Model)
 {
-    <div class="row ac-item border-2 text-sm-center p-2">
-        <div class="col-5 col-sm-5 order1">
-            <p id="ptimeName">@item.ProductName</p>
-        </div>
-        <div class="col-3 col-sm-3 order2">
-            <p id="pQtyType">@item.PerUnitPrice</p>
-        </div>
-        <div class="col-4 col-sm-4 font-22 order3">
-            <div class="font-22">
-                <a id="addItemButton" class="" onclick="SearchProductDetailsById('@item.Id')" style=""><i class="fa-solid fa-plus"></i></a>
+    <tr>
+        <td>
+            <div class="avatar-md bg-light rounded p-1">
+                <img src="~/@item.ProductImage" alt="" class="img-fluid d-block">
             </div>
-        </div>
-    </div>
-}
+        </td>
+        <td>
+            <h5 class="fs-14">
+                <a href="apps-ecommerce-product-details.html" class="text-body">@item.ProductName</a>
+            </h5>
+            <p class="text-muted mb-0">@item.PerUnitPrice</p>
+        </td>
+        <td class="text-end"><a id="addItemButton" class="" onclick="SearchProductDetailsById('@item.Id')" style=""><i class="fa-solid fa-plus"></i></a></td>
+    </tr>
 
-<script src="~/moduls/purchaseorderdetailsscript.js"></script>
+
+}

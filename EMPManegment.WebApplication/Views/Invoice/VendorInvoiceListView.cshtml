@@ -17,15 +17,15 @@
     TotalAmount += item.TotalAmount;
 }
 <!-- start page title -->
-<div class="row">
+<div class="row" style="margin-top:80px;">
     <div class="col-12">
         <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-            <h4 class="mb-sm-0">Transactions</h4>
+            <h4 class="mb-sm-0">Vendor</h4>
 
             <div class="page-title-right">
                 <ol class="breadcrumb m-0">
-                    <li class="breadcrumb-item"><a href="javascript: void(0);">Crypto</a></li>
-                    <li class="breadcrumb-item active">Transactions</li>
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Vendor</a></li>
+                    <li class="breadcrumb-item active">Vendor List</li>
                 </ol>
             </div>
 
@@ -46,8 +46,8 @@
                     <div class="flex-shrink-0">
                     </div>
                 </div>
-                <h3 class="mb-2">₹<span class="counter-value" data-target="74361">0</span><small class="text-muted fs-13">.34k</small></h3>
-                <h6 class="text-muted mb-0">Send (Previous Month)</h6>
+                <h3 class="mb-2">₹<span class="counter-value">0</span><small class="text-muted fs-13">.34k</small></h3>
+                <h6 class="text-muted mb-0"></h6>
             </div>
         </div>
         <!--end card-->
@@ -63,7 +63,7 @@
                     <div class="flex-shrink-0">
                     </div>
                 </div>
-                <h3 class="mb-2" id="txttotalcreditamount"></h3>
+                <h3 class="mb-2" id="txttotalcreditamount">₹0</h3>
                 <h6 class="text-muted mb-0">Credited Amount</h6>
             </div>
         </div>
@@ -81,7 +81,7 @@
                     <div class="flex-shrink-0">
                     </div>
                 </div>
-                <h3 class="mb-2" id="txttotalpendingamount"></h3>
+                <h3 class="mb-2" id="txttotalpendingamount">₹0</h3>
                 <h6 class="text-muted mb-0">Pending Amount</h6>
             </div>
         </div>
@@ -109,42 +109,8 @@
                     </div>
                     <!--end card-->
                 </div>
-                <div class="swiper-slide">
-                    <div class="card card-animate border-0 overflow-hidden">
-                        <div class="card-body bg-primary-subtle">
-                            <div class="d-flex mb-3">
-                                <div class="flex-grow-1">
-                                    <lord-icon src="https://cdn.lordicon.com/vaeagfzc.json" trigger="loop" colors="primary:#25a0e2,secondary:#00bd9d" style="width:55px;height:55px">
-                                    </lord-icon>
-                                </div>
-                                <div class="flex-shrink-0">
-                                    <a href="javascript:void(0);" class="fw-medium">Ethereum (ETH)</a>
-                                </div>
-                            </div>
-                            <h3 class="mb-2">₹24<small class="text-muted fs-13">.74k</small></h3>
-                            <h6 class="text-muted mb-0">Send - Receive (Previous Month)</h6>
-                        </div>
-                    </div>
-                    <!--end card-->
-                </div>
-                <div class="swiper-slide">
-                    <div class="card card-animate border-0 overflow-hidden">
-                        <div class="card-body bg-primary-subtle">
-                            <div class="d-flex mb-3">
-                                <div class="flex-grow-1">
-                                    <lord-icon src="https://cdn.lordicon.com/vaeagfzc.json" trigger="loop" colors="primary:#25a0e2,secondary:#00bd9d" style="width:55px;height:55px">
-                                    </lord-icon>
-                                </div>
-                                <div class="flex-shrink-0">
-                                    <a href="javascript:void(0);" class="fw-medium">Monero (XMR)</a>
-                                </div>
-                            </div>
-                            <h3 class="mb-2">₹124<small class="text-muted fs-13">.36k</small></h3>
-                            <h6 class="text-muted mb-0">Send - Receive (Previous Month)</h6>
-                        </div>
-                    </div>
-                    <!--end card-->
-                </div>
+
+
             </div>
         </div>
         <!--end swiper-->
@@ -331,14 +297,7 @@
                                         <h6 class="mb-0">₹7.85</h6>
                                     </div>
                                 </div>
-                                <div class="d-flex">
-                                    <div class="flex-grow-1">
-                                        <p class="fs-13 mb-0">Estimated Rate</p>
-                                    </div>
-                                    <div class="flex-shrink-0">
-                                        <h6 class="mb-0">1 BTC ~ ₹46982.70</h6>
-                                    </div>
-                                </div>
+
                             </div>
                             <div class="mt-3 pt-2">
                                 <button type="button" class="btn btn-primary w-100" id="creditdebitsubmitbtn" onclick="InsertCreditDebitDetails()">Submit</button>

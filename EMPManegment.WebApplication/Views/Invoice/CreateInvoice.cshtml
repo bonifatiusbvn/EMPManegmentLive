@@ -6,17 +6,75 @@
     ViewData["Title"] = "CreateInvoice";
     Layout = "~/Views/Shared/_UserHomeLayout.cshtml";
 }
-<style>
-    #textVendorName-error, #textCompanyName-error, #textDispatchThrough-error,
-    #textPaymentMethod-error {
-        color: red;
-    }
-</style>
 
-<div class="row" style="margin-top:20px;">
+<div class="row" style="margin-top:80px;">
     <div class="col-12">
         <div class="page-title-box d-sm-flex align-items-center justify-content-between">
             <h4 class="mb-sm-0">Create Invoice</h4>
+
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Invoices</a></li>
+                    <li class="breadcrumb-item active">Create Invoice</li>
+                </ol>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- end page title -->
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card" id="invoiceList">
+            <div class="card-header border-0">
+                <div class="d-flex align-items-center">
+                    <h5 class="card-title mb-0 flex-grow-1">Invoices</h5>
+                    <div class="flex-shrink-0">
+                        <div class="d-flex gap-2 flex-wrap">
+                            <select class="form-control" data-choices data-choices-search-false id="idStatus">
+                                <option selected disabled value=" ">Type</option>
+                                <option value="Selse">Selse</option>
+                                <option value="Purchase">Purchase</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body bg-light-subtle border border-dashed border-start-0 border-end-0">
+            </div>
+            <div class="card-body">
+                <div>
+                    <div class="row justify-content-center">
+                        <div class="col-xxl-9">
+                            <div class="card">
+                                <form id="CreateInvoiceForm">
+                                    <div class="card-body border-bottom border-bottom-dashed p-4">
+                                        <div class="row">
+                                            <div class="col-lg-4">
+                                                <div class="profile-user mx-auto  mb-3">
+                                                    <input id="profile-img-file-input" type="file" class="profile-img-file-input" />
+                                                    <input type="text" value="@_userSession.UserId" id="txtuserid" hidden />
+                                                    <label for="profile-img-file-input" class="d-block" tabindex="0">
+                                                        <span class="overflow-hidden border border-dashed d-flex align-items-center justify-content-center rounded" style="height: 60px; width: 256px;">
+                                                            <img src="~/UserHome/minimal/assets/images/logo - bonifatius.jpeg" class="card-logo card-logo-dark user-profile-image img-fluid" alt="logo dark">
+                                                            <img src="~/UserHome/minimal/assets/images/logo - bonifatius.jpeg" class="card-logo card-logo-light user-profile-image img-fluid" alt="logo light">
+                                                        </span>
+                                                    </label>
+                                                </div>
+                                                <div id="companyaddress" style="display:none;">
+                                                    <label>CompanyAddress</label>
+                                                </div>
+                                                <div class="mb-2" style="display:none;" id="fullcompanyaddress">
+                                                    <h6><span class="fw-normal">Bonifatius Technologies Pvt. Ltd.</span></h6>
+                                                    <h6><span class="text-muted fw-normal">SF- 203, Peridot Complex, Urmi co-Operative scoiety Akota,</span></h6>
+                                                    <h6><span class="text-muted fw-normal">Vadodara,Gujarat 390020</span></h6>
+                                                </div>
+                                                <div class="col-lg-12 ms-auto" id="vendername" style="display:none;">
+                                                    <select class="form-control" id="txtvendorname" name="txtvendorname">
+                                                        <option selected disabled value="">---Select Vendor Name---</option>
+                                                    </select>
+                                                    <input type="hidden" class="text-muted text-uppercase fw-semibold" id="txtvendornameid">
+                                                </div>
             <div class="page-title-right">
                 <ol class="breadcrumb m-0">
                     <li class="breadcrumb-item"><a href="javascript: void(0);">Invoices</a></li>
