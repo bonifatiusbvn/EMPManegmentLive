@@ -10,11 +10,11 @@
         </td>
         <td>
             <h5 class="fs-14">
-                <a href="apps-ecommerce-product-details.html" class="text-body">@item.ProductName</a>
+                @item.ProductName
             </h5>
             <p class="text-muted mb-0">@item.PerUnitPrice</p>
         </td>
-        <td class="text-end"><a id="addItemButton" class="" onclick="SearchProductDetailsById('@item.Id')" style=""><i class="fa-solid fa-plus"></i></a></td>
+        <td class="text-end"><a id="addItemButton" class="btn btn-success" onclick="SearchProductDetailsById('@item.Id')">Add</a></td>
     </tr>
 
 
