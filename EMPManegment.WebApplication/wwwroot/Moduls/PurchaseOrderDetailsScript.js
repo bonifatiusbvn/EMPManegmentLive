@@ -328,14 +328,14 @@ $(document).ready(function () {
         rules: {
             textVendorName: "required",
             textCompanyName: "required",
-            textPaymentMethod: "required",
+            txtpaymentmethod: "required",
             textDescription: "required",
             textDeliveryStatus: "required",
         },
         messages: {
             textVendorName: "Select Vendor Name",
             textCompanyName: "Select Company Name",
-            textPaymentMethod: "Select Payment Method",
+            txtpaymentmethod: "Select Payment Method",
             textDescription: "Please Enter Description",
             textDeliveryStatus: "Please Enter Delivery Status",
         }
@@ -1198,7 +1198,7 @@ function InsertMultiplePurchaseOrderDetails() {
             DeliveryDate: $("#UnitTypeId").val(),
             OrderDate: $("#textOrderDate").val(),
             OrderStatus: $("#UnitTypeId").val(),
-            PaymentMethod: $("#textPaymentMethod").val(),
+            PaymentMethod: $("#txtpaymentmethod").val(),
             PaymentStatus: $("input[name='paymentStatus']:checked").val(),
             DeliveryStatus: $("#textDeliveryStatus").val(),
             CreatedBy: $("#textCreatedById").val(),
