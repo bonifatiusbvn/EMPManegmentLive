@@ -43,7 +43,7 @@
                     </div>
                     <div>
                         <label class="form-label" for="ProductDescription">Product Description</label>
-                        <textarea rows="10" class="form-control" id="txtproductdescription" name="txtproductdescription" placeholder="Enter product description" required></textarea>
+                        <textarea rows="10" class="form-control" id="txtproductdescription" name="txtproductdescription" placeholder="Enter product description" required style="height:100px"></textarea>
                     </div>
                 </div>
             </div>
@@ -81,76 +81,75 @@
                 </div>
             </div>
             <!-- end card -->
-            @*<div class="card">
-            <div class="card-header">
-            <ul class="nav nav-tabs-custom card-header-tabs border-bottom-0" role="tablist">
-            <li class="nav-item">
-            <a class="nav-link active" data-bs-toggle="tab" href="#addproduct-general-info" role="tab">
-            General Info
-            </a>
-            </li>
-            </ul>
-            </div>
-            <!-- end card header -->
-            <div class="card-body">
-            <div class="tab-content">
-            <div class="tab-pane active" id="addproduct-general-info" role="tabpanel">
-            <div class="row">
-            <div class="col-lg-4">
-            <div class="mb-3">
-            <label class="form-label" for="PerUnitPrice">Per Unit Price</label>
-            <input type="text" class="form-control" id="txtPerUnitPrice" name="txtPerUnitPrice" placeholder="Enter PerUnitPrice" required>
-            </div>
-            </div>
-            <div class="col-lg-4">
-            <div class="mb-3">
-            <label class="form-label" for="GST">GST</label>
-            <input type="text" class="form-control" id="txtGST" name="txtGST" placeholder="Enter GST" required>
-            </div>
-            </div>
-            <div class="col-lg-4">
-            <div class="mb-3">
-            <label class="form-label" for="PerUnitWithGSTPrice">Per Unit With GST Price</label>
-            <input type="text" class="form-control" id="txtPerUnitWithGSTPrice" name="txtPerUnitWithGSTPrice" placeholder="Enter price" required>
-            </div>
-            </div>
-            </div>
-            <!-- end row -->
+            <div class="card">
+                <div class="card-header">
+                    <ul class="nav nav-tabs-custom card-header-tabs border-bottom-0" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-bs-toggle="tab" href="#addproduct-general-info" role="tab">
+                                General Info
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <!-- end card header -->
+                <div class="card-body">
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="addproduct-general-info" role="tabpanel">
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="PerUnitPrice">Per Unit Price</label>
+                                        <input type="text" class="form-control" id="txtPerUnitPrice" name="txtPerUnitPrice" placeholder="Enter PerUnitPrice" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="GST">GST</label>
+                                        <input type="text" class="form-control" id="txtGST" name="txtGST" placeholder="Enter GST" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="PerUnitWithGSTPrice">Per Unit With GST Price</label>
+                                        <input type="text" class="form-control" id="txtPerUnitWithGSTPrice" name="txtPerUnitWithGSTPrice" placeholder="Enter price" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- end row -->
 
-            <div class="row">
-            <div class="col-lg-3 col-sm-6">
-            <div class="mb-3">
-            <label class="form-label" for="HSN">HSN</label>
-            <input type="text" class="form-control" id="txtHSN" name="txtHSN" placeholder="Enter HSN">
+                            <div class="row">
+                                <div class="col-lg-3 col-sm-6">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="HSN">HSN</label>
+                                        <input type="text" class="form-control" id="txtHSN" name="txtHSN" placeholder="Enter HSN">
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-sm-6">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="stocks">Stocks</label>
+                                        <input type="text" class="form-control" id="txtstocks" name="txtstocks" placeholder="Stocks" required>
+                                    </div>
+                                </div>
+                                <!-- end col -->
+                            </div>
+                            <!-- end row -->
+                        </div>
+                        <!-- end tab-pane -->
+                        <!-- end tab pane -->
+                    </div>
+                    <!-- end tab content -->
+                </div>
+                <!-- end card body -->
             </div>
-            </div>
-            <div class="col-lg-3 col-sm-6">
-            <div class="mb-3">
-            <label class="form-label" for="stocks">Stocks</label>
-            <input type="text" class="form-control" id="txtstocks" name="txtstocks" placeholder="Stocks" required>
-            </div>
-            </div>
-            <!-- end col -->
-            </div>
-            <!-- end row -->
-            </div>
-            <!-- end tab-pane -->
-            <!-- end tab pane -->
-            </div>
-            <!-- end tab content -->
-            </div>
-            <!-- end card body -->
-            </div>
-            <!-- end card *@
+            <!-- end card -->
 
             <div class="text-end mb-3">
-                <button type="button" class="btn btn-primary w-sm" onclick="SaveProductDetails()" id="saveproductdetails" value="Validation">Submit</button>
+                <button type="button" class="btn btn-primary w-sm" onclick="SaveProductDetails()" id="saveproductdetails" value="Validation" style="height:50px;width:225px;">Submit</button>
             </div>
         </div>
         <!-- end col -->
 
         <div class="col-lg-4">
-
             <div class="card">
                 <div class="card-header">
                     <h5 class="card-title mb-0">Product Categories</h5>
@@ -158,7 +157,7 @@
                 <div class="card-body">
                     <p class="text-muted mb-2">
                         <button type="button" data-bs-toggle="modal" data-bs-target="#flipModal" class="float-end text-decoration-underline btn btn-link waves-effect">
-                            Add New
+                            Add New-Type
                         </button>
                     </p>
                     <label for="ProductType" class="form-label">Product Type</label>
@@ -182,63 +181,6 @@
                 <!-- end card body -->
             </div>
             <!-- end card -->
-
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="card-title mb-0">General Info</h5>
-                </div>
-                <div class="card-body">
-                    <div class="card-body">
-                        <div class="tab-content">
-                            <div class="tab-pane active" id="addproduct-general-info" role="tabpanel">
-                                <div class="row">
-                                    <div class="col-lg-4">
-                                        <div class="mb-3">
-                                            <label class="form-label" for="PerUnitPrice">Per Unit Price</label>
-                                            <input type="text" class="form-control" id="txtPerUnitPrice" name="txtPerUnitPrice" placeholder="Enter PerUnitPrice" required>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4">
-                                        <div class="mb-3">
-                                            <label class="form-label" for="GST">GST</label>
-                                            <input type="text" class="form-control" id="txtGST" name="txtGST" placeholder="Enter GST" required>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4">
-                                        <div class="mb-3">
-                                            <label class="form-label" for="HSN">HSN</label>
-                                            <input type="text" class="form-control" id="txtHSN" name="txtHSN" placeholder="Enter HSN">
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- end row -->
-
-                                <div class="row">
-                                    <div class="col-lg-6 col-sm-6">
-                                        <div class="mb-3">
-                                            <label class="form-label" for="PerUnitWithGSTPrice">Per Unit With GST Price</label>
-                                            <input type="text" class="form-control" id="txtPerUnitWithGSTPrice" name="txtPerUnitWithGSTPrice" placeholder="Enter price" required>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-3 col-sm-6">
-                                        <div class="mb-3">
-                                            <label class="form-label" for="stocks">Stocks</label>
-                                            <input type="text" class="form-control" id="txtstocks" name="txtstocks" placeholder="Stocks" required>
-                                        </div>
-                                    </div>
-                                    <!-- end col -->
-                                </div>
-                                <!-- end row -->
-                            </div>
-                            <!-- end tab-pane -->
-                            <!-- end tab pane -->
-                        </div>
-                        <!-- end tab content -->
-                    </div>
-                    <!-- end card body -->
-                </div>
-                <!-- end card body -->
-            </div>
             <!-- end card -->
         </div>
         <!-- end col -->
@@ -273,23 +215,7 @@
 </form>
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
-<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
-
 <script src="~/moduls/productmasterscript.js"></script>
-<script src="~/assets/libs/%40ckeditor/ckeditor5-build-classic/build/ckeditor.js"></script>
 
-<!-- dropzone js -->
-<script src="~/assets/libs/dropzone/dropzone-min.js"></script>
-
-@* <script src="~/UserHome/minimal/assets/js/pages/ecommerce-product-create.init.js"></script> *@
-<script src="~/assets/libs/prismjs/prism.js"></script>
-
-<!-- Lord Icon -->
-@* <script src="~/UserHome/minimal/cdn.lordicon.com/mssddfmo.js"></script> *@
-
-<!-- Modal Js -->
-<script src="~/assets/js/pages/modal.init.js"></script>
 
 
