@@ -508,6 +508,23 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                     };
                     Context.TblInvoiceDetails.Add(InvoiceDetails);
                 }
+
+                var craditdebit = new TblCreditDebitMaster()
+                {
+                    VendorId = InsertInvoice.VandorId,
+                    Type = InsertInvoice.InvoiceType,
+                    InvoiceNo = InsertInvoice.InvoiceNo,
+                    Date = DateTime.Now,
+                    PaymentType = InsertInvoice.PaymentType,
+                    CreditDebitAmount = InsertInvoice.CreditDebitAmount,
+                    PendingAmount = InsertInvoice.PendingAmount,
+                    TotalAmount = InsertInvoice.TotalAmount,
+                    CreatedOn = DateTime.Now,
+                    CreatedBy = InsertInvoice.CreatedBy,
+                };
+                Context.TblCreditDebitMasters.Add(craditdebit);
+
+
                 await Context.SaveChangesAsync();
                 response.Code = (int)HttpStatusCode.OK;
                 response.Message = "Invoice successfully inserted.";

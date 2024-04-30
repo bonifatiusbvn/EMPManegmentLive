@@ -45,6 +45,11 @@ namespace EMPManegment.EntityModels.ViewModels.Invoice
         public string? Status { get; set; }
 
         public bool? IsDeleted { get; set; }
+        public int? PaymentType { get; set; }
+
+        public decimal? CreditDebitAmount { get; set; }
+
+        public decimal? PendingAmount { get; set; }
 
         public DateTime CreatedOn { get; set; }
 
