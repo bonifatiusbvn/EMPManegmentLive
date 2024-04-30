@@ -37,6 +37,8 @@ public partial class BonifatiusEmployeesContext : DbContext
 
     public virtual DbSet<TblInvoice> TblInvoices { get; set; }
 
+    public virtual DbSet<TblInvoiceDetail> TblInvoiceDetails { get; set; }
+
     public virtual DbSet<TblInvoiceTypeMaster> TblInvoiceTypeMasters { get; set; }
 
     public virtual DbSet<TblPageMaster> TblPageMasters { get; set; }
@@ -86,6 +88,7 @@ public partial class BonifatiusEmployeesContext : DbContext
     public virtual DbSet<TblVendorType> TblVendorTypes { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<TblAttendance>(entity =>
@@ -250,7 +253,6 @@ public partial class BonifatiusEmployeesContext : DbContext
                 .HasColumnType("numeric(18, 2)")
                 .HasColumnName("CGST");
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
-            entity.Property(e => e.Destination).HasMaxLength(50);
             entity.Property(e => e.DispatchThrough).HasMaxLength(20);
             entity.Property(e => e.Igst)
                 .HasColumnType("numeric(18, 2)")
@@ -276,6 +278,25 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.HasOne(d => d.Project).WithMany(p => p.TblInvoices)
                 .HasForeignKey(d => d.ProjectId)
                 .HasConstraintName("FK_tblInvoices_tblProjectMaster");
+        });
+
+        modelBuilder.Entity<TblInvoiceDetail>(entity =>
+        {
+            entity.ToTable("tblInvoiceDetails");
+
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.Discount).HasColumnType("numeric(18, 2)");
+            entity.Property(e => e.Gst).HasColumnType("numeric(18, 2)");
+            entity.Property(e => e.Price).HasColumnType("numeric(18, 2)");
+            entity.Property(e => e.Product).HasMaxLength(100);
+            entity.Property(e => e.ProductTotal).HasColumnType("numeric(18, 2)");
+            entity.Property(e => e.Quantity).HasColumnType("numeric(18, 2)");
+            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+
+            entity.HasOne(d => d.InvoiceRef).WithMany(p => p.TblInvoiceDetails)
+                .HasForeignKey(d => d.InvoiceRefId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_tblInvoiceDetails_tblInvoices");
         });
 
         modelBuilder.Entity<TblInvoiceTypeMaster>(entity =>

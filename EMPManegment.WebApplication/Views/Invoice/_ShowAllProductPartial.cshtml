@@ -1,0 +1,18 @@
+﻿@model IEnumerable<EMPManegment.EntityModels.ViewModels.ProductMaster.ProductDetailsView>
+
+@foreach (var item in Model)
+{
+    <div class="row ac-item border-2 text-sm-center p-2">
+        <div class="col-5 col-sm-5 order1">
+            <p id="ptimeName">@item.ProductName</p>
+        </div>
+        <div class="col-3 col-sm-3 order2">
+            <p id="pQtyType">@item.PerUnitPrice</p>
+        </div>
+        <div class="col-4 col-sm-4 font-22 order3">
+            <div class="font-22">
+                <a id="addItemButton" class="" onclick="SearchProductDetailsById('@item.Id')" style=""><i class="fa-solid fa-plus"></i></a>
+            </div>
+        </div>
+    </div>
+}

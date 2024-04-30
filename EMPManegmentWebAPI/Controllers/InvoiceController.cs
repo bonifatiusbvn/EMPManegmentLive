@@ -56,7 +56,7 @@ namespace EMPManagment.API.Controllers
         }
         [HttpPost]
         [Route("InsertInvoiceDetails")]
-        public async Task<IActionResult> InsertInvoiceDetails(GenerateInvoiceModel InvoiceList)
+        public async Task<IActionResult> InsertInvoiceDetails(InvoiceMasterModel InvoiceList)
         {
             UserResponceModel response = new UserResponceModel();
             try
@@ -231,10 +231,10 @@ namespace EMPManagment.API.Controllers
         }
         [HttpPost]
         [Route("IsDeletedInvoice")]
-        public async Task<IActionResult> IsDeletedInvoice(string InvoiceNo)
+        public async Task<IActionResult> IsDeletedInvoice(Guid InvoiceId)
         {
             UserResponceModel responseModel = new UserResponceModel();
-            var invoice = await InvoiceMaster.IsDeletedInvoice(InvoiceNo);
+            var invoice = await InvoiceMaster.IsDeletedInvoice(InvoiceId);
             try
             {
                 if (invoice != null)

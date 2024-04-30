@@ -6,367 +6,314 @@
     ViewData["Title"] = "CreateInvoice";
     Layout = "~/Views/Shared/_UserHomeLayout.cshtml";
 }
+<style>
+    #textVendorName-error, #textCompanyName-error, #textDispatchThrough-error,
+    #textPaymentMethod-error {
+        color: red;
+    }
+</style>
 
-
-<!-- dropzone css -->
-<link rel="stylesheet" href="~/assets/libs/dropzone/dropzone.css" type="text/css" />
-<!-- start page title -->
 <div class="row" style="margin-top:20px;">
     <div class="col-12">
         <div class="page-title-box d-sm-flex align-items-center justify-content-between">
             <h4 class="mb-sm-0">Create Invoice</h4>
-
-                    <div class="page-title-right">
-                        <ol class="breadcrumb m-0">
-                            <li class="breadcrumb-item"><a href="javascript: void(0);">Invoices</a></li>
-                            <li class="breadcrumb-item active">Create Invoice</li>
-                        </ol>
-                    </div>
-
-                </div>
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Invoices</a></li>
+                    <li class="breadcrumb-item active">Create Invoice</li>
+                </ol>
             </div>
         </div>
-        <!-- end page title -->
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="card" id="invoiceList">
-                    <div class="card-header border-0">
-                        <div class="d-flex align-items-center">
-                            <h5 class="card-title mb-0 flex-grow-1">Invoices</h5>
-                            <div class="flex-shrink-0">
-                                <div class="d-flex gap-2 flex-wrap">
-                                    <select class="form-control" data-choices data-choices-search-false id="idStatus">
-                                        <option selected disabled value=" ">Type</option>
-                                        <option value="Selse">Selse</option>
-                                        <option value="Purchase">Purchase</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-body bg-light-subtle border border-dashed border-start-0 border-end-0">
-                    </div>
-                    <div class="card-body">
-                        <div>
-                            <div class="row justify-content-center">
-                                <div class="col-xxl-9">
-                                    <div class="card">
-                                        <form id="CreateInvoiceForm">
-                                            <div class="card-body border-bottom border-bottom-dashed p-4">
-                                                <div class="row">
-                                                    <div class="col-lg-4">
-                                                        <div class="profile-user mx-auto  mb-3">
-                                                            <input id="profile-img-file-input" type="file" class="profile-img-file-input" />
-                                                            <input type="text" value="@_userSession.UserId" id="txtuserid" hidden />
-                                                            <label for="profile-img-file-input" class="d-block" tabindex="0">
-                                                                <span class="overflow-hidden border border-dashed d-flex align-items-center justify-content-center rounded" style="height: 60px; width: 256px;">
-                                                                    <img src="~/UserHome/minimal/assets/images/logo - bonifatius.jpeg" class="card-logo card-logo-dark user-profile-image img-fluid" alt="logo dark">
-                                                                    <img src="~/UserHome/minimal/assets/images/logo - bonifatius.jpeg" class="card-logo card-logo-light user-profile-image img-fluid" alt="logo light">
-                                                                </span>
-                                                            </label>
-                                                        </div>
-                                                        <div id="companyaddress" style="display:none;">
-                                                            <label>CompanyAddress</label>
-                                                        </div>
-                                                        <div class="mb-2" style="display:none;" id="fullcompanyaddress">
-                                                            <h6><span class="fw-normal">Bonifatius Technologies Pvt. Ltd.</span></h6>
-                                                            <h6><span class="text-muted fw-normal">SF- 203, Peridot Complex, Urmi co-Operative scoiety Akota,</span></h6>
-                                                            <h6><span class="text-muted fw-normal">Vadodara,Gujarat 390020</span></h6>
-                                                        </div>
-                                                        <div class="col-lg-12 ms-auto" id="vendername" style="display:none;">
-                                                            <select class="form-control" id="txtvendorname" name="txtvendorname">
-                                                                <option selected disabled value="">---Select Vendor Name---</option>
-                                                            </select>
-                                                            <input type="hidden" class="text-muted text-uppercase fw-semibold" id="txtvendornameid">
-                                                        </div>
-
-                                                    </div>
-                                                    <!--end col-->
-                                                    <div class="col-lg-4 ms-auto">
-                                                        <select class="form-control" id="txtvendorname1" name="txtvendorname1">
-                                                            <option selected disabled value="">---Select Vendor Name---</option>
-                                                        </select>
-                                                        <input type="hidden" class="text-muted text-uppercase fw-semibold" id="txtvendornameid1">
-                                                        <div id="CompanyAddress1" style="display:none;">
-                                                            <label>CompanyAddress</label>
-                                                        </div>
-                                                        <div class="mb-2" style="display:none;" id="fullcompanyaddress1">
-                                                            <h6><span class="fw-normal">Bonifatius Technologies Pvt. Ltd.</span></h6>
-                                                            <h6><span class="text-muted fw-normal">SF- 203, Peridot Complex, Urmi co-Operative scoiety Akota,</span></h6>
-                                                            <h6><span class="text-muted fw-normal">Vadodara,Gujarat 390020</span></h6>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <!--end row-->
-                                            </div>
-                                            <div class="card-body p-4">
-                                                <div class="row g-3 ">
-                                                    <div class="col-lg-3 col-sm-6">
-                                                        <label for="invoicenoInput" id="InvoiceNo">Invoice No</label>
-                                                <input type="text" class="form-control bg-light border-0" id="invoicenoInput" value="@ViewBag.InvoiceNo" readonly/>
-                                                    </div>
-                                                    <!--end col-->
-                                                    <div class="col-lg-3 col-sm-6">
-                                                        <div>
-                                                            <label for="date-field">Date</label>
-                                                            <input type="date" class="form-control bg-light border-0" id="date-field" name="data[#].Date" data-provider="flatpickr" data-time="true" placeholder="Select Date-time">
-                                                        </div>
-                                                    </div>
-                                                    <!--end col-->
-                                                    <div class="col-lg-3 col-sm-6">
-                                                        <label for="choices-payment-status">Payment Status</label>
-                                                        <div class="input-light">
-                                                            <select class="form-control bg-light border-0" name="data[#].PaymentStatus" data-choices data-choices-search-false id="choices-payment-status" required>
-                                                                <option value="">Select Payment Status</option>
-                                                                <option value="Paid">Paid</option>
-                                                                <option value="Unpaid">Unpaid</option>
-                                                                <option value="Refund">Refund</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <!--end col-->
-                                                    <div class="col-lg-3 col-sm-6">
-                                                        <div>
-                                                            <label for="totalamountInput">Total Amount</label>
-                                                    <input type="text" class="form-control bg-light border-0" name="data[#].TotalAmount" id="totalamountInput" placeholder="₹0.00" />
-                                                        </div>
-                                                    </div>
-                                                    <!--end col-->
-                                                </div>
-                                                <!--end row-->
-                                            </div>
-                                            <div class="card-body p-4 border-top border-top-dashed">
-                                                <div class="row">
-                                                    <div class="col-lg-4 col-sm-6">
-                                                        <div>
-                                                            <label for="billingName" class="text-uppercase fw-semibold">Billing Address</label>
-                                                        </div>
-                                                        <div class="mb-2" id="vendorcompanyaddress"></div>
-                                                    </div>
-                                                    <!--end col-->
-                                                    <div class="col-sm-6 ms-auto">
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="" id="invoiceList">
+            <form id="CreateInvoiceForm">
+                <div class="">
+                    <div>
+                        <div class="row justify-content-center">
+                            <div class="col-xxl-12">
+                                <div class="">
+                                    <div class=" border-bottom border-bottom-dashed">
+                                        <div class="row">
+                                            <div class="col-6 col-lg-6">
+                                                <div class=" card">
+                                                    <h5 class="card-header">Vendor Details</h5>
+                                                    <div class="card-body">
                                                         <div class="row">
-                                                            <div class="col-lg-8">
-                                                                <div>
-                                                                    <label for="shippingName" class="text-uppercase fw-semibold">Shipping Address</label>
-                                                                </div>
-                                                                <div class="mb-2">
-                                                                    <input type="text" class="form-control bg-light border-0" name="data[#].ShippingName" id="shippingName" placeholder="Full Name" required />
-                                                                    <div class="invalid-feedback">
-                                                                        Please enter a full name
-                                                                    </div>
-                                                                </div>
-                                                                <div class="mb-2">
-                                                                    <textarea class="form-control bg-light border-0" id="shippingAddress" name="data[#].ShippingAddress" rows="3" placeholder="Address" required></textarea>
-                                                                    <div class="invalid-feedback">
-                                                                        Please enter a address
-                                                                    </div>
-                                                                </div>
-                                                                <div class="mb-2">
-                                                                    <input type="text" class="form-control bg-light border-0" name="data[#].ShippingNumber" data-plugin="cleave-phone" id="shippingPhoneno" placeholder="(123)456-7890" required />
-                                                                    <div class="invalid-feedback">
-                                                                        Please enter a phone number
-                                                                    </div>
-                                                                </div>
-                                                                <div>
-                                                                    <input type="text" class="form-control bg-light border-0" name="data[#].ShippingTaxNumber" id="shippingTaxno" placeholder="Tax Number" required />
-                                                                    <div class="invalid-feedback">
-                                                                        Please enter a tax number
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <!--end col-->
-                                                </div>
-                                                <!--end row-->
-                                            </div>
-                                            <div class="card-body p-4">
-                                                <div class="table-responsive ">
-                                                    <table class="invoice-table table table-borderless table-nowrap mb-0">
-                                                        <thead class="align-middle">
-                                                            <tr class="table-active">
-                                                                <th scope="col" style="width: 50px;">#</th>
-                                                                <th scope="col">
-                                                                    Product Details
-                                                                </th>
-                                                                <th scope="col">
-                                                                    HSN/SAC
-                                                                </th>
-                                                                <th scope="col" style="width: 120px;">
-                                                                    <div class="d-flex currency-select input-light align-items-center">
-                                                                        Rate
-                                                                        <select class="form-selectborder-0 bg-light" data-choices data-choices-search-false id="choices-payment-currency" onchange="otherPayment()">
-                                                                            <option value="$">($)</option>
-                                                                            <option value="£">(£)</option>
-                                                                            <option value="₹">(₹)</option>
-                                                                            <option value="€">(€)</option>
-                                                                        </select>
-                                                                    </div>
-                                                                </th>
-                                                                <th scope="col" style="width: 120px;">Quantity</th>
-                                                                <th scope="col" class="text-end" style="width: 150px;">Amount</th>
-                                                                <th scope="col" class="text-end" style="width: 105px;"></th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody id="invoiceItems">
-                                                            <tr class="product invoice-item">
-                                                                <th scope="row" class="product-id">1</th>
-                                                                <td class="text-start">
-                                                                    <div class="mb-2">
-                                                                        <input type="text" class="form-control bg-light border-0" name="data[#].ProductName" id="productName-1" placeholder="Product Name" required />
-                                                                        <div class="invalid-feedback">
-                                                                            Please enter a product name
-                                                                        </div>
-                                                                    </div>
-                                                                    <textarea class="form-control bg-light border-0" id="productDetails-1" name="data[#].ProductDetails" rows="2" placeholder="Product Details"></textarea>
-                                                                </td>
-                                                                <td>
-                                                                    <input type="number" class="form-control product-price bg-light border-0" id="productHsn-1" name="data[#].HSN" step="0.01" placeholder="HSN" required />
-                                                                    <div class="invalid-feedback">
-                                                                        Please enter a HSN
-                                                                    </div>
-                                                                </td>
-                                                                <td>
-                                                                    <input type="number" class="form-control product-price bg-light border-0" id="productRate-1" name="data[#].Price" step="0.01" placeholder="0.00" required />
-                                                                    <div class="invalid-feedback">
-                                                                        Please enter a rate
-                                                                    </div>
-                                                                </td>
-                                                                <td>
-                                                                    <div class="input-step">
-                                                                        <button type="button" class='minus'>–</button>
-                                                                        <input type="number" class="product-quantity" id="product-qty-1" name="data[#].Quantity" value="0">
-                                                                        <button type="button" class='plus'>+</button>
-                                                                    </div>
-                                                                </td>
-                                                                <td class="text-end">
-                                                                    <div>
-                                                                <input type="text" class="form-control bg-light border-0 product-line-price" name="data[#].TotalAmount" id="productPrice-1" placeholder="₹0.00" readonly />
-                                                                    </div>
-                                                                </td>
-                                                                <td class="product-removal">
-                                                                    <a href="javascript:void(0)" class="btn btn-success">Delete</a>
-                                                                </td>
-                                                            </tr>
-                                                        </tbody>
-                                                        <tbody>
-                                                            <tr id="newForm" style="display: none;"><td class="d-none" colspan="5"><p>Add New Form</p></td></tr>
-                                                            <tr>
-                                                                <td colspan="5">
-                                                                    @* <a href="javascript:new_link()" id="add-item" class="btn btn-soft-secondary fw-medium"><i class="ri-add-fill me-1 align-bottom"></i> Add Item</a> *@
-                                                                    <button type="button" class="btn btn-secondary fw-medium" id="addItemBtn">Add Item</button>
-                                                                </td>
-                                                            </tr>
-                                                            <tr class="border-top border-top-dashed mt-2">
-                                                                <td colspan="3"></td>
-                                                                <td colspan="2" class="p-0">
-                                                                    <table class="table table-borderless table-sm table-nowrap align-middle mb-0">
-                                                                        <tbody>
-                                                                            <tr>
-                                                                                <th scope="row">CGST</th>
-                                                                                <td style="width:150px;">
-                                                                            <input type="text" class="form-control bg-light border-0" id="cart-subtotal" placeholder="₹0.00" readonly />
-                                                                                </td>
-                                                                            </tr>
-                                                                            <tr>
-                                                                                <th scope="row">SGST</th>
-                                                                                <td>
-                                                                            <input type="text" class="form-control bg-light border-0" id="cart-tax" placeholder="₹0.00" readonly />
-                                                                                </td>
-                                                                            </tr>
-                                                                            <tr>
-                                                                                <th scope="row">IGST</th>
-                                                                                <td>
-                                                                            <input type="text" class="form-control bg-light border-0" id="cart-tax" placeholder="₹0.00" readonly />
-                                                                                </td>
-                                                                            </tr>
-                                                                            <tr>
-                                                                                <th scope="row">Discount <small class="text-muted">(VELZON15)</small></th>
-                                                                                <td>
-                                                                            <input type="text" class="form-control bg-light border-0" id="cart-discount" placeholder="₹0.00" readonly />
-                                                                                </td>
-                                                                            </tr>
-                                                                            <tr>
-                                                                                <th scope="row">Total GST</th>
-                                                                                <td>
-                                                                            <input type="text" class="form-control bg-light border-0" id="cart-tax" placeholder="₹0.00" readonly />
-                                                                                </td>
-                                                                            </tr>
-                                                                            <tr>
-                                                                                <th scope="row">Shipping Charge</th>
-                                                                                <td>
-                                                                            <input type="text" class="form-control bg-light border-0" id="cart-shipping" placeholder="₹0.00" readonly />
-                                                                                </td>
-                                                                            </tr>
-                                                                            <tr class="border-top border-top-dashed">
-                                                                                <th scope="row">Total Amount</th>
-                                                                                <td>
-                                                                            <input type="text" class="form-control bg-light border-0" id="cart-total" placeholder="₹0.00" readonly />
-                                                                                </td>
-                                                                            </tr>
-                                                                        </tbody>
-                                                                    </table>
-                                                                    <!--end table-->
-                                                                </td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                    <!--end table-->
-                                                </div>
-                                                <div class="row mt-3">
-                                                    <div class="col-lg-4">
-                                                        <div class="mb-2">
-                                                            <label for="choices-payment-type" class="form-label text-muted text-uppercase fw-semibold">Payment Details</label>
-                                                            <div class="input-light">
-                                                                <select class="form-control bg-light border-0" id="txtpaymentmethod">
-                                                                    <option selected disabled value="">---Select Payment Method---</option>
+                                                            <div class="col-6 col-lg-6 ">
+                                                                <label for="textVendorName" class="form-label">Vendor Name</label>
+                                                                <select class="form-control form-select valid" id="textVendorName" name="textVendorName">
+                                                                    <option selected value="">--Select Vendor--</option>
                                                                 </select>
                                                             </div>
+                                                            <div class="col-6 col-lg-6 ">
+                                                                <label for="textVendorMobile" class="form-label ">Mobile No</label>
+                                                                <input type="text" id="textVendorMobile" class="form-control" placeholder="Mobile No" readonly />
+                                                            </div>
                                                         </div>
-                                                        <div class="mb-2">
-                                                            <input class="form-control bg-light border-0" type="text" name="data[#].CardHolderName" id="cardholderName" placeholder="Card Holder Name">
-                                                        </div>
-                                                        <div class="mb-2">
-                                                            <input class="form-control bg-light border-0" type="text" name="data[#].CardNumber" id="cardNumber" placeholder="xxxx xxxx xxxx xxxx">
-                                                        </div>
-                                                        <div>
-                                                    <input class="form-control  bg-light border-0" type="text" id="amountTotalPay" placeholder="₹0.00" readonly />
+                                                        <div class="row mt-3">
+                                                            <div class="col-6 col-lg-6">
+                                                                <label for="textVendorAddress" class="form-label ">Address</label>
+                                                                <input type="text" id="textVendorAddress" class="form-control" placeholder="Address" readonly />
+                                                            </div>
+                                                            <div class="col-6 col-lg-6">
+                                                                <label for="textVendorGSTNumber" class="form-label ">GST NO</label>
+                                                                <input type="text" id="textVendorGSTNumber" class="form-control" placeholder="GST No" readonly />
+                                                            </div>
+                                                            <input type="text" id="textProjectId" class="form-control" hidden value="@UserSession.ProjectId" />
+                                                            <input type="text" id="textCreatedById" class="form-control" hidden value="@_userSession.UserId" />
                                                         </div>
                                                     </div>
-                                                    <!--end col-->
-                                                </div>
-                                                <!--end row-->
-                                                <div class="mt-4">
-                                                    <label for="exampleFormControlTextarea1" class="form-label text-muted text-uppercase fw-semibold">NOTES</label>
-                                                    <textarea class="form-control alert alert-info" id="exampleFormControlTextarea1" placeholder="Notes" rows="2" required>All accounts are to be paid within 7 days from receipt of invoice. To be paid by cheque or credit card or direct payment online. If account is not paid within 7 days the credits details supplied as confirmation of work undertaken will be charged the agreed quoted fee noted above.</textarea>
-                                                </div>
-                                                <div class="hstack gap-2 justify-content-end d-print-none mt-4">
-                                                    <button type="submit" id="SubmitInvoiceBtn" class="btn btn-success"><i class="ri-printer-line align-bottom me-1"></i> Save</button>
-                                                    <a href="javascript:void(0);" id="generatePDF" class="btn btn-primary"><i class="ri-download-2-line align-bottom me-1"></i> Download Invoice</a>
-                                                    <a href="javascript:window.print()" class="btn btn-soft-primary"><i class="ri-printer-line align-bottom me-1"></i> Print</a>
-                                                    <a href="javascript:void(0);" class="btn btn-danger"><i class="ri-send-plane-fill align-bottom me-1"></i> Send Invoice</a>
                                                 </div>
                                             </div>
-                                        </form>
+
+                                            <div class="col-6 col-lg-6">
+                                                <div class=" card">
+                                                    <h5 class="card-header">Invoice Details</h5>
+                                                    <div class="card-body">
+                                                        <div class="row">
+                                                            <div class="col-md-4">
+                                                                <div>
+                                                                    <label for="textCompanyName" class="form-label">Company Name</label>
+                                                                </div>
+                                                                <div class="ms-auto">
+                                                                    <select class="form-control form-select valid" id="textCompanyName" name="textCompanyName">
+                                                                        <option selected value="">--Select Company--</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-5 col-lg-5">
+                                                                <label for="textPoId " class="form-label">Invoice No</label>
+                                                                <input type="text" class="form-control" id="textInvoiceNo" value="@ViewBag.InvoiceNo" readonly />
+                                                            </div>
+                                                            <div class="col-3 col-lg-3 ">
+                                                                <label for="textInvoiceDate" class="form-label">Invoice Date</label>
+                                                                <input type="date" id="textInvoiceDate" class="form-control" name="textInvoiceDate" placeholder="Select Order-Date">
+                                                            </div>
+                                                        </div>
+                                                        <div class="row mt-3">
+                                                            <div class="col-6 col-lg-6">
+                                                                <label for="textCompanyBillingAddress" class="form-label ">Billing Address</label>
+                                                                <input type="text" id="textCompanyBillingAddress" name="textCompanyBillingAddress" class="form-control" placeholder="Billing Address" readonly />
+                                                            </div>
+                                                            <div class="col-6 col-lg-6">
+                                                                <label class="form-label ">GST NO</label>
+                                                                <input type="text" id="textCompanyGstNo" class="form-control" placeholder="GST No" readonly />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--end row-->
+                                </div>
+
+                                <!---- Product Details ---->
+                                <div class="row">
+                                </div>
+                                <div class="card">
+                                    <div class="row p-3">
+                                        <h5 class="card-header">
+                                            Purchase Details
+                                            <a class="font-22" onclick="fn_OpenAddproductmodal()">
+                                                <i class="fa-solid fa-plus"></i>
+                                            </a>
+                                            <span id="spnitembutton" style="color:red;"></span>
+                                        </h5>
+                                    </div>
+                                    <div class="card-body pt-0">
+                                        <div class="table-responsive" style="height:350px">
+                                            <table class="table align-middle mb-0">
+                                                <thead class="table-secondary">
+                                                    <tr class="text-uppercase">
+                                                        <th>#</th>
+                                                        <th>Product Details</th>
+                                                        <th>HSN Code</th>
+                                                        <th>Quantity</th>
+                                                        <th>Qty Type</th>
+                                                        <th>Price</th>
+                                                        <th>GST (%)</th>
+                                                        <th>GST Amt (₹)</th>
+                                                        <th>Amount (₹)</th>
+                                                        <th>Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="addnewproductlink">
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="card-footer">
+                                            <table class="table align-middle mb-0">
+                                                <thead class="table align-middle mb-0">
+                                                    <tr>
+                                                        <th>#</th>
+                                                        <th colspan="2">Total</th>
+                                                        <th></th>
+                                                        <th></th>
+                                                        <th id="TotalProductQuantity"></th>
+                                                        <th></th>
+                                                        <th></th>
+                                                        <th id="TotalProductPrice"></th>
+                                                        <th></th>
+                                                        <th></th>
+                                                        <th></th>
+                                                        <th></th>
+                                                        <th id="TotalProductGST"></th>
+                                                        <th id="TotalProductAmount"></th>
+                                                        <th></th>
+                                                    </tr>
+                                                </thead>
+                                            </table>
+                                        </div>
+                                        <div class=" card">
+                                            <div class="row card-body">
+                                                <div class="col-lg-6 col-sm-12">
+                                                    <div class="row">
+                                                        <div class="col-lg-12 col-sm-12">
+                                                            <div class="input-group mb-3">
+                                                                <label class="input-group-text" for="textDispatchThrough">Dispatch Through</label>
+                                                                <input type="text" class="form-control" id="textDispatchThrough" name="textDispatchThrough" placeholder="Dispatch Through">
+                                                            </div>
+                                                            <span id="spnDeliverySchedule" class="text-danger"></span>
+                                                        </div>
+                                                        <div class="col-lg-12 col-sm-12 mt-2">
+                                                            <div class="mb-2">
+                                                                <div class="input-group mb-3">
+                                                                    <label class="input-group-text" for="textBuysOrderNo">Buys OrderNo</label>
+                                                                    <input type="text" id="textBuysOrderNo" rows="3" class="form-control" placeholder="Buys OrderNo" name="textBuysOrderNo" />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-12 col-sm-12 mt-2">
+                                                            <div class="mb-2">
+                                                                <div class="input-group mb-3">
+                                                                    <label class="input-group-text" for="textBuysOrderDate">Buys OrderDate</label>
+                                                                    <input type="date" id="textBuysOrderDate" rows="3" class="form-control" placeholder="Buys OrderDate" name="textBuysOrderDate" />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-12 col-sm-12 mt-2">
+                                                            <div class="col-lg-12 col-sm-12 mt-2">
+                                                                <div class="mb-2">
+                                                                    <div class="input-group mb-3">
+                                                                        <label for="textPaymentMethod" class="input-group-text">Payment Method </label>
+                                                                        <select class="form-control form-select valid" id="textPaymentMethod" name="textPaymentMethod">
+                                                                            <option selected value="">--Select Payment Method--</option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-lg-6 col-sm-12 ac-invoice-total">
+                                                    <div class="table">
+                                                        <table class="table table-borderless table-sm table-nowrap align-middle mb-0">
+                                                            <tbody>
+                                                                <tr>
+                                                                    <th scope="row">Sub Total</th>
+                                                                    <td style="width:150px;">
+                                                                        <input type="text" class="form-control bg-light border-0" id="cart-subtotal" placeholder="₹0.00" readonly />
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th scope="row">CGST</th>
+                                                                    <td>
+                                                                        <input type="text" class="form-control bg-light border-0" id="textCGst" placeholder="₹0.00"/>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th scope="row">SGST</th>
+                                                                    <td>
+                                                                        <input type="text" class="form-control bg-light border-0" id="textSGst" placeholder="₹0.00" />
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th scope="row">IGST</th>
+                                                                    <td>
+                                                                        <input type="text" class="form-control bg-light border-0" id="textIGst" placeholder="₹0.00" />
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th scope="row">Total GST</th>
+                                                                    <td>
+                                                                        <input type="text" class="form-control bg-light border-0" id="totalgst" placeholder="₹0.00" readonly />
+                                                                    </td>
+                                                                </tr>
+                                                                <tr class="border-top border-top-dashed">
+                                                                    <th scope="row">Total Amount</th>
+                                                                    <td>
+                                                                        <input type="text" class="form-control bg-light border-0" id="cart-total" placeholder="₹0.00" readonly />
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                                <!--end col-->
+
+                                <div class="row">
+                                    <div class="col-lg-6 col-sm-12">
+                                        <div class="card">
+                                            <h5 class="card-header">
+                                                Shipping Addresses
+                                            </h5>
+                                            <div class="card-body">
+                                                <input type="checkbox" id="hideShippingAddress" name="hideShippingAddress" onchange="toggleShippingAddress()" checked>
+                                                <label for="hideShippingAddress"><b>Is Your Billing Address is same as Shipping Address?</b></label>
+                                                <div id="shippingAddressFields" style="display:none;">
+                                                    <textarea type="text" id="textShippingAddress" name="textShippingAddress" class="form-control" placeholder="Shipping Address"></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div id="dvshipping" class="col-lg-6">
+                                    <div class="row">
+                                    </div>
+                                </div>
+                                <!--end row-->
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="hstack gap-2 justify-content-end d-print-none mt-4">
+                                            <button type="button" class="btn btn-lg btn-primary px-5" id="SavePOButton" onclick="InsertInvoiceDetails()"><i class="ri-printer-line align-bottom me-1"></i> Add Invoice</button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-
-
+                        <!--end col-->
                     </div>
                 </div>
-
-            </div>
-            <!--end col-->
+            </form>
         </div>
-        <!--end row-->
-<!-- End Page-content -->
+    </div>
+</div>
+<div class="modal fade show" tabindex="-1" id="mdPoproductModal" role="dialog" aria-labelledby="myLargeModalLabel" aria-modal="true" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Select Product</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-header">
+                <label class="form-label">Search Product</label>
+                <input class="form-control" id="mdProductSearch" onkeyup="filterallItemTable()" />
+            </div>
+            <div class="modal-body" id="mdlistofItem" style="overflow-x: hidden">
+            </div>
+        </div>
+    </div>
+</div>
+<!--end col-->
 <!--Invoice create init js-->
-@* <script src="~/UserHome/minimal/assets/js/pages/invoicecreate.init.js"></script> *@
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/moduls/invoicemasterscript.js"></script>
-<!-- JAVASCRIPT -->
-<!--jsPDF-->
