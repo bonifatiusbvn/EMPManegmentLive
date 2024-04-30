@@ -54,7 +54,7 @@ $(document).ready(function () {
         if (event.key === 'Enter') {
             $(this).blur();
         }
-    }); 
+    });
 
     $(document).on('focusout', '.product-quantity', function () {
         $(this).trigger('input');
@@ -393,7 +393,7 @@ function getVendorDetail(VendorId) {
         type: 'GET',
         contentType: 'application/json;charset=utf-8',
         dataType: 'json',
-        success: function (response) {       
+        success: function (response) {
             if (response) {
                 $('#textVendorMobile').val(response.vendorPhone);
                 $('#textVendorGSTNumber').val(response.vendorGstnumber);
@@ -538,7 +538,7 @@ function SearchProductDetailsById(ProductId) {
         processData: false,
         contentType: false,
         complete: function (Result) {
-        
+
             if (Result.statusText === "success") {
                 AddNewRow(Result.responseText);
             }
@@ -770,7 +770,7 @@ document.querySelector("#profile-img-file-input").addEventListener("change", fun
 
 var count = 0;
 function AddNewRow(Result) {
-    
+
     var newProductRow = $(Result);
     var productId = newProductRow.data('product-id');
     ProductTypeDropdown(productId);
@@ -834,7 +834,7 @@ function bindEventListeners() {
         });
     });
 
-    
+
 }
 
 function updateProductTotalAmount() {
@@ -1143,7 +1143,7 @@ function fn_removeShippingAdd(that) {
 }
 
 function fn_OpenAddproductmodal() {
-    
+
     $('#mdProductSearch').val('');
     $('#mdPoproductModal').modal('show');
 }

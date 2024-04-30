@@ -122,7 +122,7 @@ function openmemberpop() {
 
 }
 function showMember() {
-    debugger
+
     $.ajax({
         url: '/Project/GetMemberList',
         type: 'Post',
