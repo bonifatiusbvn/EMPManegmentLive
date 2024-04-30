@@ -1,4 +1,4 @@
-﻿@model IEnumerable<EMPManegment.EntityModels.ViewModels.OrderModels.PurchaseOrderDetailView>
+﻿@model EMPManegment.EntityModels.ViewModels.PurchaseOrderModels.PurchaseOrderMasterView
 @{
     ViewData["Title"] = "ShowProductDetails";
     Layout = "~/Views/Shared/_UserHomeLayout.cshtml";
@@ -9,12 +9,12 @@
 <div class="row" style="margin-top:80px;">
     <div class="col-12">
         <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-            <h4 class="mb-sm-0">Order Details</h4>
+            <h4 class="mb-sm-0">Purchase Order Details</h4>
 
             <div class="page-title-right">
                 <ol class="breadcrumb m-0">
-                    <li class="breadcrumb-item"><a href="javascript: void(0);">Ecommerce</a></li>
-                    <li class="breadcrumb-item active">Order Details</li>
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Purchase Order</a></li>
+                    <li class="breadcrumb-item active">Purchase Order Details</li>
                 </ol>
             </div>
 
@@ -23,343 +23,181 @@
 </div>
 <!-- end page title -->
 @{
-    var firstItem = Model.FirstOrDefault();
+    var firstItem = Model;
     decimal? subTotal = 0;
     decimal? totalAmount = 0;
     decimal? totalGst = 0;
 }
 
-<div class="row">
-    <div class="col-xl-9">
-        <div class="card">
-
-            <div class="card-header">
-                @if (firstItem != null)
-                {
-                    <div class="d-flex align-items-center">
-                        <h5 class="card-title flex-grow-1 mb-0">@firstItem.OrderId</h5>
-                        <div class="flex-shrink-0">
-                            <a class="btn btn-primary btn-sm" onclick="GetInvoiceDetailsByOrderId('@firstItem.OrderId')"><i class="ri-download-2-fill align-middle me-1"></i> Generate Invoice</a>
-                            <a class="btn btn-secondary btn-sm" onclick="ShowInvoiceDetailsByOrderId('@firstItem.OrderId')"><i class="ri-download-2-fill align-middle me-1"></i> Show Invoice</a>
+<div class="row justify-content-center">
+    <div class="col-xxl-9">
+        <div class="card" id="demo">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card-header border-bottom-dashed p-4">
+                        <div class="d-flex">
+                            <div class="flex-grow-1">
+                                <img src="assets/images/logo-dark.png" class="card-logo card-logo-dark" alt="logo dark" height="17">
+                                <img src="assets/images/logo-light.png" class="card-logo card-logo-light" alt="logo light" height="17">
+                                <div class="mt-sm-5 mt-4">
+                                    <h6 class="text-muted text-uppercase fw-semibold">Address</h6>
+                                    <p class="text-muted mb-1" id="address-details">SF- 203, Peridot Complex, Urmi co-Operative scoiety, Swami Shivanand Marg,</p>
+                                    <p class="text-muted mb-1"><span>Ajit Nagar Society, Akota, Vadodara, Gujarat </span></p>
+                                    <p class="text-muted mb-0" id="Postal-code"><span>Postal-code:</span>390020</p>
+                                </div>
+                            </div>
+                            <div class="flex-shrink-0 mt-sm-0 mt-3">
+                                <h6><span class="text-muted fw-normal">Legal Registration No:</span><span id="legal-register-no">124597</span></h6>
+                                <h6><span class="text-muted fw-normal">Email:</span><span id="email">info@bonifatius.net</span></h6>
+                                <h6><span class="text-muted fw-normal">Website:</span> <a href="https://bonifatius.net/" class="link-primary" target="_blank" id="website">bonifatius.net</a></h6>
+                                <h6 class="mb-0"><span class="text-muted fw-normal">Contact No: </span><span id="contact-no">+91 265-7965687</span></h6>
+                            </div>
                         </div>
                     </div>
-                }
-            </div>
-
-            <div class="card-body">
-                <div class="table-responsive table-card">
-                    <table class="table table-nowrap align-middle table-borderless mb-0">
-                        <thead class="table-light text-muted">
-                            <tr>
-                                <th scope="col">Product Details</th>
-                                <th scope="col">Item Price</th>
-                                <th scope="col">Quantity</th>
-                                <th scope="col">Price With Gst</th>
-                                <th scope="col" class="text-end">Total Amount</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-
-                            <!----Partial View----->
-                            @Html.Partial("_DisplayOrderDetails")
-
-
-                            @foreach (var item in Model)
+                    <!--end card-header-->
+                </div><!--end col-->
+                <div class="col-lg-12">
+                    <div class="card-body p-4">
+                        <div class="row g-3">
+                            @if (firstItem != null)
                             {
-                                subTotal += item.SubTotal;
-                                totalAmount = item.TotalAmount;
-                                totalGst = item.TotalGst;
+                                <div class="col-lg-3 col-6">
+                                    <p class="text-muted mb-2 text-uppercase fw-semibold">Purchase Order No</p>
+                                    <h5 class="fs-14 mb-0"><span id="invoice-no">@firstItem.OrderId</span></h5>
+                                </div>
+                                <!--end col-->
+                                <div class="col-lg-3 col-6">
+                                    <p class="text-muted mb-2 text-uppercase fw-semibold">Date</p>
+                                    <h5 class="fs-14 mb-0"><span id="invoice-date">@firstItem.OrderDate.ToString("dd/MM/yyyy")</span></h5>
+                                </div>
+                                <!--end col-->
+                                <div class="col-lg-3 col-6">
+                                    <p class="text-muted mb-2 text-uppercase fw-semibold">Payment Status</p>
+                                    <span class="badge bg-success-subtle text-success fs-11" id="payment-status" style="width: 100px;height: 18px;">@firstItem.PaymentStatus</span>
+                                </div>
+                                <!--end col-->
+                                <div class="col-lg-3 col-6">
+                                    <p class="text-muted mb-2 text-uppercase fw-semibold">Total Amount</p>
+                                    <h5 class="fs-14 mb-0">₹<span id="total-amount">@firstItem.TotalAmount</span></h5>
+                                </div>
+                                <!--end col-->
                             }
-                            <tr class="border-top border-top-dashed">
-                                <td colspan="3"></td>
-                                <td colspan="2" class="fw-medium p-0">
-                                    <table class="table table-borderless mb-0">
-                                        <tbody>
-                                            <tr>
-                                                <td>Sub Total :</td>
-                                                <td class="text-end">@subTotal</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Total GST :</td>
-                                                <td class="text-end">@totalGst</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Shipping Charge :</td>
-                                                <td class="text-end">$65.00</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Estimated Tax :</td>
-                                                <td class="text-end">$44.99</td>
-                                            </tr>
-                                            <tr class="border-top border-top-dashed">
-                                                <th scope="row">Total (USD) :</th>
-                                                <th class="text-end">@totalAmount</th>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-        <!--end card-->
-        <div class="card">
-            <div class="card-header">
-                <div class="d-sm-flex align-items-center">
-                    <h5 class="card-title flex-grow-1 mb-0">Order Status</h5>
-                    <div class="flex-shrink-0 mt-2 mt-sm-0">
-                        <a href="javasccript:void(0;)" class="btn btn-soft-primary btn-sm mt-2 mt-sm-0"><i class="ri-map-pin-line align-middle me-1"></i> Change Address</a>
-                        <a href="javasccript:void(0;)" class="btn btn-soft-secondary btn-sm mt-2 mt-sm-0"><i class="mdi mdi-archive-remove-outline align-middle me-1"></i> Cancel Order</a>
+                        </div>
+                        <!--end row-->
                     </div>
-                </div>
-            </div>
-            <div class="card-body">
-                <div class="profile-timeline">
-                    <div class="accordion accordion-flush" id="accordionFlushExample">
-                        <div class="accordion-item border-0">
-                            <div class="accordion-header" id="headingOne">
-                                <a class="accordion-button p-2 shadow-none" data-bs-toggle="collapse" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                    <div class="d-flex align-items-center">
-                                        <div class="flex-shrink-0 avatar-xs">
-                                            <div class="avatar-title bg-primary rounded-circle">
-                                                <i class="ri-shopping-bag-line"></i>
-                                            </div>
-                                        </div>
-                                        <div class="flex-grow-1 ms-3">
-                                            <h6 class="fs-15 mb-0 fw-semibold">Order Placed - <span class="fw-normal">Wed, 15 Dec 2021</span></h6>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                            <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-                                <div class="accordion-body ms-2 ps-5 pt-0">
-                                    <h6 class="mb-1">An order has been placed.</h6>
-                                    <p class="text-muted">Wed, 15 Dec 2021 - 05:34PM</p>
-
-                                    <h6 class="mb-1">Seller has processed your order.</h6>
-                                    <p class="text-muted mb-0">Thu, 16 Dec 2021 - 5:48AM</p>
+                    <!--end card-body-->
+                </div><!--end col-->
+                <div class="col-lg-12">
+                    <div class="card-body p-4 border-top border-top-dashed">
+                        <div class="row g-3">
+                            @if (firstItem.Address != firstItem.CompanyFullAddress)
+                            {
+                                <div class="col-6">
+                                    <h6 class="text-muted text-uppercase fw-semibold mb-3">Billing Address</h6>
+                                    <p class="fw-medium mb-2" id="billing-name">@firstItem.CompanyName</p>
+                                    <p class="text-muted mb-1" id="billing-address-line-1">@firstItem.CompanyFullAddress</p>
+                                    @*  <p class="text-muted mb-1"><span>Phone: +</span><span id="billing-phone-no">(123) 456-7890</span></p>*@
+                                     <p class="text-muted mb-0"><span>Tax: </span><span id="billing-tax-no">@firstItem.CompanyGstNumber</span> </p>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="accordion-item border-0">
-                            <div class="accordion-header" id="headingTwo">
-                                <a class="accordion-button p-2 shadow-none" data-bs-toggle="collapse" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                    <div class="d-flex align-items-center">
-                                        <div class="flex-shrink-0 avatar-xs">
-                                            <div class="avatar-title bg-primary rounded-circle">
-                                                <i class="mdi mdi-gift-outline"></i>
-                                            </div>
-                                        </div>
-                                        <div class="flex-grow-1 ms-3">
-                                            <h6 class="fs-15 mb-1 fw-semibold">Packed - <span class="fw-normal">Thu, 16 Dec 2021</span></h6>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                            <div id="collapseTwo" class="accordion-collapse collapse show" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
-                                <div class="accordion-body ms-2 ps-5 pt-0">
-                                    <h6 class="mb-1">Your Item has been picked up by courier partner</h6>
-                                    <p class="text-muted mb-0">Fri, 17 Dec 2021 - 9:45AM</p>
+                                <!--end col-->
+                                <div class="col-6">
+                                    <h6 class="text-muted text-uppercase fw-semibold mb-3">Shipping Address</h6>
+                                    <p class="fw-medium mb-2" id="shipping-name">@firstItem.Address</p>
+                                    @* <p class="text-muted mb-1" id="shipping-address-line-1"></p>
+                                       <p class="text-muted mb-1"><span>Phone: </span><span id="shipping-phone-no"></span></p>*@
                                 </div>
-                            </div>
-                        </div>
-                        <div class="accordion-item border-0">
-                            <div class="accordion-header" id="headingThree">
-                                <a class="accordion-button p-2 shadow-none" data-bs-toggle="collapse" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                    <div class="d-flex align-items-center">
-                                        <div class="flex-shrink-0 avatar-xs">
-                                            <div class="avatar-title bg-primary rounded-circle">
-                                                <i class="ri-truck-line"></i>
-                                            </div>
-                                        </div>
-                                        <div class="flex-grow-1 ms-3">
-                                            <h6 class="fs-15 mb-1 fw-semibold">Shipping - <span class="fw-normal">Thu, 16 Dec 2021</span></h6>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                            <div id="collapseThree" class="accordion-collapse collapse show" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
-                                <div class="accordion-body ms-2 ps-5 pt-0">
-                                    <h6 class="fs-14">RQK Logistics - MFDS1400457854</h6>
-                                    <h6 class="mb-1">Your item has been shipped.</h6>
-                                    <p class="text-muted mb-0">Sat, 18 Dec 2021 - 4.54PM</p>
+                                <!--end col-->
+                            }
+                            else
+                            {
+                                <div class="col-6">
+                                    <h6 class="text-muted text-uppercase fw-semibold mb-3">Billing Address</h6>
+                                    <p class="fw-medium mb-2" id="billing-name">@firstItem.CompanyName</p>
+                                    <p class="text-muted mb-1" id="billing-address-line-1">@firstItem.CompanyFullAddress</p>
+                                    @*  <p class="text-muted mb-1"><span>Phone: +</span><span id="billing-phone-no">(123) 456-7890</span></p>*@
+                                    <p class="text-muted mb-0"><span>Tax: </span><span id="billing-tax-no">@firstItem.CompanyGstNumber</span> </p>
                                 </div>
-                            </div>
+                                <!--end col-->
+                            }
                         </div>
-                        <div class="accordion-item border-0">
-                            <div class="accordion-header" id="headingFour">
-                                <a class="accordion-button p-2 shadow-none" data-bs-toggle="collapse" href="#collapseFour" aria-expanded="false">
-                                    <div class="d-flex align-items-center">
-                                        <div class="flex-shrink-0 avatar-xs">
-                                            <div class="avatar-title bg-light text-primary rounded-circle">
-                                                <i class="ri-takeaway-fill"></i>
-                                            </div>
-                                        </div>
-                                        <div class="flex-grow-1 ms-3">
-                                            <h6 class="fs-14 mb-0 fw-semibold">Out For Delivery</h6>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="accordion-item border-0">
-                            <div class="accordion-header" id="headingFive">
-                                <a class="accordion-button p-2 shadow-none" data-bs-toggle="collapse" href="#collapseFile" aria-expanded="false">
-                                    <div class="d-flex align-items-center">
-                                        <div class="flex-shrink-0 avatar-xs">
-                                            <div class="avatar-title bg-light text-primary rounded-circle">
-                                                <i class="mdi mdi-package-variant"></i>
-                                            </div>
-                                        </div>
-                                        <div class="flex-grow-1 ms-3">
-                                            <h6 class="fs-14 mb-0 fw-semibold">Delivered</h6>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
+                        <!--end row-->
                     </div>
-                    <!--end accordion-->
-                </div>
-            </div>
-        </div>
-        <!--end card-->
-    </div>
-    <!--end col-->
-    <div class="col-xl-3">
-        <div class="card">
-            <div class="card-header">
-                <div class="d-flex">
-                    <h5 class="card-title flex-grow-1 mb-0"><i class="mdi mdi-truck-fast-outline align-middle me-1 text-muted"></i> Logistics Details</h5>
-                    <div class="flex-shrink-0">
-                        <a href="javascript:void(0);" class="badge bg-primary-subtle text-primary fs-11">Track Order</a>
-                    </div>
-                </div>
-            </div>
-            <div class="card-body">
-                <div class="text-center">
-                    <lord-icon src="https://cdn.lordicon.com/uetqnvvg.json" trigger="loop" colors="primary:#25a0e2,secondary:#00bd9d" style="width:80px;height:80px"></lord-icon>
-                    <h5 class="fs-16 mt-2">RQK Logistics</h5>
-                    <p class="text-muted mb-0">ID: MFDS1400457854</p>
-                    <p class="text-muted mb-0">Payment Mode : Debit Card</p>
-                </div>
-            </div>
-        </div>
-        <!--end card-->
+                    <!--end card-body-->
+                </div><!--end col-->
+                <div class="col-lg-12">
+                    <div class="card-body p-4">
+                        <div class="table-responsive">
+                            <table class="table table-borderless text-center table-nowrap align-middle mb-0">
+                                <thead>
+                                    <tr class="table-active">
+                                        <th scope="col" style="width: 50px;">#</th>
+                                        <th scope="col" class="text-start">Product Details</th>
+                                        <th scope="col">Quantity</th>
+                                        <th scope="col">GST</th>
+                                        <th scope="col">Price</th>
+                                        <th scope="col" class="text-end">Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="products-list">
+                                    @{
+                                        int index = 1;
+                                        decimal subtotal = 0;
+                                    }
+                                    @foreach (var item in Model.ProductList)
+                                    {
+                                        <tr>
 
-        <div class="card">
-            <div class="card-header">
-                <div class="d-flex">
-                    <h5 class="card-title flex-grow-1 mb-0">Customer Details</h5>
-                    <div class="flex-shrink-0">
-                        <a href="javascript:void(0);" class="link-secondary">View Profile</a>
-                    </div>
-                </div>
-            </div>
-            <div class="card-body">
-                <ul class="list-unstyled mb-0 vstack gap-3">
-                    <li>
-                        <div class="d-flex align-items-center">
-                            <div class="flex-shrink-0">
-                                <img src="~/UserHome/minimal/assets/images/users/avatar-3.jpg" alt="" class="avatar-sm rounded">
-                            </div>
-                            <div class="flex-grow-1 ms-3">
-                                <h6 class="fs-14 mb-1">Joseph Parkers</h6>
-                                <p class="text-muted mb-0">Customer</p>
-                            </div>
+                                            <th scope="row">@index</th>
+                                            <td class="text-start">@item.Product</td>
+                                            <td>@item.Quantity</td>
+                                            <td>@item.Gst</td>
+                                            <td>@item.Price</td>
+                                            <td class="text-end">@item.ProductTotal</td>
+                                        </tr>
+                                        index++;
+                                    }
+                                </tbody>
+                            </table><!--end table-->
                         </div>
-                    </li>
-                    <li><i class="ri-mail-line me-2 align-middle text-muted fs-16"></i>josephparker@gmail.com</li>
-                    <li><i class="ri-phone-line me-2 align-middle text-muted fs-16"></i>+(256) 245451 441</li>
-                </ul>
-            </div>
-        </div>
-        <!--end card-->
-        <div class="card">
-            <div class="card-header">
-                <h5 class="card-title mb-0"><i class="ri-map-pin-line align-middle me-1 text-muted"></i> Billing Address</h5>
-            </div>
-            <div class="card-body">
-                <ul class="list-unstyled vstack gap-2 fs-13 mb-0">
-                    <li class="fw-medium fs-14">Joseph Parker</li>
-                    <li>+(256) 245451 451</li>
-                    <li>2186 Joyce Street Rocky Mount</li>
-                    <li>New York - 25645</li>
-                    <li>United States</li>
-                </ul>
-            </div>
-        </div>
-        <!--end card-->
-        <div class="card">
-            <div class="card-header">
-                <h5 class="card-title mb-0"><i class="ri-map-pin-line align-middle me-1 text-muted"></i> Shipping Address</h5>
-            </div>
-            <div class="card-body">
-                <ul class="list-unstyled vstack gap-2 fs-13 mb-0">
-                    <li class="fw-medium fs-14">Joseph Parker</li>
-                    <li>+(256) 245451 451</li>
-                    <li>2186 Joyce Street Rocky Mount</li>
-                    <li>California - 24567</li>
-                    <li>United States</li>
-                </ul>
-            </div>
-        </div>
-        <!--end card-->
-
-        <div class="card">
-            <div class="card-header">
-                <h5 class="card-title mb-0"><i class="ri-secure-payment-line align-bottom me-1 text-muted"></i> Payment Details</h5>
-            </div>
-            <div class="card-body">
-                <div class="d-flex align-items-center mb-2">
-                    <div class="flex-shrink-0">
-                        <p class="text-muted mb-0">Transactions:</p>
+                        <div class="border-top border-top-dashed mt-2">
+                            <table class="table table-borderless table-nowrap align-middle mb-0 ms-auto" style="width:250px">
+                                <tbody>
+                                    <tr>
+                                        <td>Sub Total</td>
+                                        <td class="text-end">₹@firstItem.SubTotal</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Total GST</td>
+                                        <td class="text-end">₹@firstItem.TotalGst</td>
+                                    </tr>
+                                    <tr class="border-top border-top-dashed fs-15">
+                                        <th scope="row">Total Amount</th>
+                                        <th class="text-end">₹@firstItem.TotalAmount</th>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <!--end table-->
+                        </div>
+                        <div class="mt-3">
+                            <h6 class="text-muted text-uppercase fw-semibold mb-3">Payment Details:</h6>
+                            <p class="text-muted mb-1">Payment Method: <span class="fw-medium" id="payment-method">@firstItem.PaymentMethodName</span></p>
+                            <p class="text-muted mb-1">User Name: <span class="fw-medium" id="card-holder-name">@firstItem.VendorAccountHolderName</span></p>
+                            <p class="text-muted">Total Amount: <span class="fw-medium" id="">₹ </span><span id="card-total-amount">@firstItem.TotalAmount</span></p>
+                        </div>
+                        <div class="hstack gap-2 justify-content-end d-print-none mt-4">
+                            <a href="javascript:window.print()" class="btn btn-block btn-success"><i class="fa-duotone fa-print"></i>Print</a>
+                        </div>
                     </div>
-                    <div class="flex-grow-1 ms-2">
-                        <h6 class="mb-0">#VLZ124561278124</h6>
-                    </div>
-                </div>
-                <div class="d-flex align-items-center mb-2">
-                    <div class="flex-shrink-0">
-                        <p class="text-muted mb-0">Payment Method:</p>
-                    </div>
-                    <div class="flex-grow-1 ms-2">
-                        <h6 class="mb-0">Debit Card</h6>
-                    </div>
-                </div>
-                <div class="d-flex align-items-center mb-2">
-                    <div class="flex-shrink-0">
-                        <p class="text-muted mb-0">Card Holder Name:</p>
-                    </div>
-                    <div class="flex-grow-1 ms-2">
-                        <h6 class="mb-0">Joseph Parker</h6>
-                    </div>
-                </div>
-                <div class="d-flex align-items-center mb-2">
-                    <div class="flex-shrink-0">
-                        <p class="text-muted mb-0">Card Number:</p>
-                    </div>
-                    <div class="flex-grow-1 ms-2">
-                        <h6 class="mb-0">xxxx xxxx xxxx 2456</h6>
-                    </div>
-                </div>
-                <div class="d-flex align-items-center">
-                    <div class="flex-shrink-0">
-                        <p class="text-muted mb-0">Total Amount:</p>
-                    </div>
-                    <div class="flex-grow-1 ms-2">
-                        <h6 class="mb-0">$415.96</h6>
-                    </div>
-                </div>
-            </div>
+                    <!--end card-body-->
+                </div><!--end col-->
+            </div><!--end row-->
         </div>
         <!--end card-->
     </div>
     <!--end col-->
 </div>
 <!--end row-->
+
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/moduls/invoicemasterscript.js"></script>

@@ -84,10 +84,10 @@ namespace EMPManagment.API.Controllers
         }
 
         [HttpGet]
-        [Route("GetPurchaseOrderDetailsById")]
-        public async Task<IActionResult> GetPurchaseOrderDetailsById(string OrderId)
+        [Route("GetPurchaseOrderDetailsByOrderId")]
+        public async Task<IActionResult> GetPurchaseOrderDetailsByOrderId(string OrderId)
         {
-            List<PurchaseOrderDetailView> orderdetails = await PurchaseOrderDetails.GetPurchaseOrderDetailsById(OrderId);
+            var orderdetails = await PurchaseOrderDetails.GetPurchaseOrderDetailsByOrderId(OrderId);
             return Ok(new { code = 200, data = orderdetails });
         }
 
@@ -158,10 +158,10 @@ namespace EMPManagment.API.Controllers
         }
         [HttpPost]
         [Route("DeletePurchaseOrderDetails")]
-        public async Task<IActionResult> DeletePurchaseOrderDetails(string OrderId)
+        public async Task<IActionResult> DeletePurchaseOrderDetails(Guid Id)
         {
             UserResponceModel responseModel = new UserResponceModel();
-            var order = await PurchaseOrderDetails.DeletePurchaseOrderDetails(OrderId);
+            var order = await PurchaseOrderDetails.DeletePurchaseOrderDetails(Id);
             try
             {
                 if (order != null)

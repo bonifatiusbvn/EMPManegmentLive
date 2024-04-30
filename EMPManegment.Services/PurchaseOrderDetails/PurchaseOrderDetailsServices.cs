@@ -39,9 +39,9 @@ namespace EMPManegment.Services.OrderDetails
             return PurchaseOrderDetails.CheckPurchaseOrder(projectname);
         }
 
-        public async Task<List<PurchaseOrderDetailView>> GetPurchaseOrderDetailsById(string OrderId)
+        public async Task<PurchaseOrderMasterView> GetPurchaseOrderDetailsByOrderId(string OrderId)
         {
-            return await PurchaseOrderDetails.GetPurchaseOrderDetailsById(OrderId);
+            return await PurchaseOrderDetails.GetPurchaseOrderDetailsByOrderId(OrderId);
         }
 
         public async Task<ApiResponseModel> InsertMultiplePurchaseOrder(PurchaseOrderMasterView InsertPurchaseOrder)
@@ -64,9 +64,9 @@ namespace EMPManegment.Services.OrderDetails
             return await PurchaseOrderDetails.UpdatePurchaseOrderDetails(UpdatePurchaseorder);
         }
 
-        public async Task<UserResponceModel> DeletePurchaseOrderDetails(string OrderId)
+        public async Task<UserResponceModel> DeletePurchaseOrderDetails(Guid Id)
         {
-            return await PurchaseOrderDetails.DeletePurchaseOrderDetails(OrderId);
+            return await PurchaseOrderDetails.DeletePurchaseOrderDetails(Id);
         }
     }
 }

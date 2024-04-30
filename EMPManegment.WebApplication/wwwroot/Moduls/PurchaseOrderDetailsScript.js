@@ -409,12 +409,14 @@ function selectvendorId() {
     document.getElementById("txtvendorTypeid").value = document.getElementById("txtvendorname").value;
 }
 
+var companyMap = {};
 function GetCompanyNameList() {
     $.ajax({
         url: '/Company/GetCompanyNameList',
         success: function (result) {
             $.each(result, function (i, data) {
-                $('#textCompanyName').append('<Option value=' + data.id + '>' + data.compnyName + '</Option>')
+                $('#textCompanyName').append('<Option value=' + data.compnyName + '>' + data.compnyName + '</Option>')
+                companyMap[data.compnyName] = data.id;
             });
         }
     });
@@ -427,7 +429,8 @@ $(document).ready(function () {
 });
 
 
-function getCompanyDetail(CompanyId) {
+function getCompanyDetail(CompanyName) {
+    var CompanyId = companyMap[CompanyName];
     $.ajax({
         url: '/Company/GetCompanyDetailsById',
         type: 'GET',
@@ -555,8 +558,7 @@ function SearchProductDetailsById(ProductId) {
     });
 }
 
-function deletePurchaseOrderDetails(OrderId) {
-
+function deletePurchaseOrderDetails(Id) {
     Swal.fire({
         title: "Are you sure want to Delete This?",
         text: "You won't be able to revert this!",
@@ -571,11 +573,11 @@ function deletePurchaseOrderDetails(OrderId) {
     }).then((result) => {
         if (result.isConfirmed) {
             $.ajax({
-                url: '/PurchaseOrderMaster/DeletePurchaseOrderDetails?OrderId=' + OrderId,
+                url: '/PurchaseOrderMaster/DeletePurchaseOrderDetails?Id=' + Id,
                 type: 'POST',
                 dataType: 'json',
                 success: function (Result) {
-
+                 
                     Swal.fire({
                         title: Result.message,
                         icon: 'success',
@@ -838,7 +840,7 @@ function bindEventListeners() {
 }
 
 function updateProductTotalAmount() {
-    debugger
+
     $(".product").each(function () {
         var row = $(this);
         var productPrice = parseFloat(row.find("#txtproductamount").val());
@@ -866,14 +868,14 @@ function updateProductQuantity(row, increment) {
 
 
 function updateTotals() {
-    debugger
+ 
     var totalSubtotal = 0;
     var totalGst = 0;
     var totalAmount = 0;
     var TotalItemQuantity = 0;
 
     $(".product").each(function () {
-        debugger
+     
         var row = $(this);
         var subtotal = parseFloat(row.find("#txtproductamount").val());
         var gst = parseFloat(row.find("#txtgstAmount").val());
@@ -886,7 +888,6 @@ function updateTotals() {
     });
 
     $("#cart-subtotal").val(totalSubtotal.toFixed(2));
-    debugger
     $("#totalgst").val(totalGst.toFixed(2));
     $("#cart-total").val(totalAmount.toFixed(2));
     $("#TotalProductQuantity").text(TotalItemQuantity);
@@ -1160,6 +1161,7 @@ function toggleShippingAddress() {
 }
 
 function InsertMultiplePurchaseOrderDetails() {
+   
     if ($("#CreatePOForm").valid()) {
 
         var ProductDetails = [];
@@ -1173,14 +1175,12 @@ function InsertMultiplePurchaseOrderDetails() {
                 ProductType: orderRow.find("#textProductType").val(),
                 Quantity: orderRow.find("#txtproductquantity").val(),
                 Price: orderRow.find("#txtproductamount").val(),
-                GSTamount: orderRow.find("#txtgstAmount").val(),
-                Gst: orderRow.find("#txtgst").val(),
+                Gst: orderRow.find("#txtgstAmount").val(),
                 ProductTotal: orderRow.find("#txtproducttotalamount").val(),
             };
             ProductDetails.push(objData);
         });
-
-        var PONumber = $("#textPoId").val()
+        var PONumber = $("#textPoId").val();
         var PODetails = {
             ProjectId: $("#textProjectId").val(),
             OrderId: $("#textPoId").val(),
@@ -1223,7 +1223,7 @@ function InsertMultiplePurchaseOrderDetails() {
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'OK'
                     }).then(function () {
-                        window.location = '/PurchaseOrderMaster/GetPurchaseOrderDetailsById/?OrderId=' + PONumber;
+                        window.location = '/PurchaseOrderMaster/GetPurchaseOrderDetailsByOrderId/?OrderId=' + PONumber;
                     });
                 }
                 else {
