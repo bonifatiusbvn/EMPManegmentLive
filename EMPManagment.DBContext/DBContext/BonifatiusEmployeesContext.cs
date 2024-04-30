@@ -253,7 +253,6 @@ public partial class BonifatiusEmployeesContext : DbContext
                 .HasColumnType("numeric(18, 2)")
                 .HasColumnName("CGST");
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
-            entity.Property(e => e.Destination).HasMaxLength(50);
             entity.Property(e => e.DispatchThrough).HasMaxLength(20);
             entity.Property(e => e.Igst)
                 .HasColumnType("numeric(18, 2)")
@@ -285,7 +284,6 @@ public partial class BonifatiusEmployeesContext : DbContext
         {
             entity.ToTable("tblInvoiceDetails");
 
-            entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
             entity.Property(e => e.Discount).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.Gst).HasColumnType("numeric(18, 2)");

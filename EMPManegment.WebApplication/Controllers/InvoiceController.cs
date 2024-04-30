@@ -215,9 +215,7 @@ namespace EMPManegment.Web.Controllers
             try
             {
                 var InvoiceDetails = HttpContext.Request.Form["INVOICEDETAILS"];
-                var format = "dd/MM/yyyy";
-                var dateTimeConverter = new IsoDateTimeConverter { DateTimeFormat = format };
-                var InsertDetails = JsonConvert.DeserializeObject<GenerateInvoiceModel>(InvoiceDetails, dateTimeConverter);
+                var InsertDetails = JsonConvert.DeserializeObject<InvoiceMasterModel>(InvoiceDetails);
 
                 ApiResponseModel postuser = await APIServices.PostAsync(InsertDetails, "Invoice/InsertInvoiceDetails");
                 if (postuser.code == 200)
@@ -519,11 +517,11 @@ namespace EMPManegment.Web.Controllers
             }
         }
         [HttpPost]
-        public async Task<IActionResult> IsDeletedInvoice(string InvoiceNo)
+        public async Task<IActionResult> IsDeletedInvoice(Guid InvoiceId)
         {
             try
             {
-                ApiResponseModel postuser = await APIServices.PostAsync(null, "Invoice/IsDeletedInvoice?InvoiceNo=" + InvoiceNo);
+                ApiResponseModel postuser = await APIServices.PostAsync(null, "Invoice/IsDeletedInvoice?InvoiceId=" + InvoiceId);
                 if (postuser.code == 200)
                 {
                     return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
@@ -553,6 +551,48 @@ namespace EMPManegment.Web.Controllers
                     return new JsonResult(new { Message = string.Format(response.message), Code = response.code, Icone = "warning" });
                 }
 
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public async Task<IActionResult> GetAllProductList(string? searchText)
+        {
+            try
+            {
+                string apiUrl = $"ProductMaster/GetAllProductList?searchText={searchText}";
+                ApiResponseModel response = await APIServices.PostAsync("", apiUrl);
+                if (response.code == 200)
+                {
+                    List<ProductDetailsView> Items = JsonConvert.DeserializeObject<List<ProductDetailsView>>(response.data.ToString());
+                    return PartialView("~/Views/Invoice/_ShowAllProductPartial.cshtml", Items);
+                }
+                else
+                {
+                    return new JsonResult(new { Message = "Failed to retrieve Product list" });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DisplayProductDetailsListById()
+        {
+            try
+            {
+                string ProductId = HttpContext.Request.Form["ProductId"];
+                var GetProduct = JsonConvert.DeserializeObject<ProductDetailsView>(ProductId.ToString());
+                List<ProductDetailsView> Product = new List<ProductDetailsView>();
+                ApiResponseModel response = await APIServices.GetAsync("", "ProductMaster/GetProductById?ProductId=" + GetProduct.Id);
+                if (response.code == 200)
+                {
+                    Product = JsonConvert.DeserializeObject<List<ProductDetailsView>>(response.data.ToString());
+                }
+                return PartialView("~/Views/Invoice/_ShowProductDetailPartial.cshtml", Product);
             }
             catch (Exception ex)
             {

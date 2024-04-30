@@ -4,6 +4,31 @@ $(document).ready(function () {
     GetAllVendorData()
     GetAllTransactionData()
     AllInvoiceList()
+    GetCompanyNameList()
+    GetProductDetailsList()
+    GetPaymentTypeList()
+});
+$(document).ready(function () {
+    $("#CreateInvoiceForm").validate({
+        rules: {
+            textVendorName: "required",
+            textCompanyName: "required",
+            textPaymentMethod: "required",
+            textDispatchThrough: "required",
+        },
+        messages: {
+            textVendorName: "Select Vendor Name",
+            textCompanyName: "Select Company Name",
+            textPaymentMethod: "Select Payment Method",
+            textDispatchThrough: "Please Enter DispatchThrough",
+        }
+    });
+});
+function clearItemErrorMessage() {
+    $("#spnitembutton").text("");
+}
+$(document).on("click", "#addItemButton", function () {
+    clearItemErrorMessage();
 });
 function GetVendorNameList() {
 
@@ -11,17 +36,38 @@ function GetVendorNameList() {
         url: '/ProductMaster/GetVendorsNameList',
         success: function (result) {
             $.each(result, function (i, data) {
-                $('#txtvendorname').append('<Option value=' + data.id + '>' + data.vendorCompany + '</Option>')
-                $('#txtvendorname1').append('<Option value=' + data.id + '>' + data.vendorCompany + '</Option>')
+                //$('#txtvendorname').append('<Option value=' + data.id + '>' + data.vendorCompany + '</Option>')
+                //$('#txtvendorname1').append('<Option value=' + data.id + '>' + data.vendorCompany + '</Option>')
+                $('#textVendorName').append('<Option value=' + data.id + '>' + data.vendorCompany + '</Option>')
             });
         }
     });
 }
 function selectvendorId() {
+    //document.getElementById("txtvendorTypeid").value = document.getElementById("txtvendorname").value;
+    //document.getElementById("txtvendorTypeid1").value = document.getElementById("txtvendorname1").value;
     document.getElementById("txtvendorTypeid").value = document.getElementById("txtvendorname").value;
-    document.getElementById("txtvendorTypeid1").value = document.getElementById("txtvendorname1").value;
 }
 $(document).ready(function () {
+    $('#textVendorName').change(function () {
+        getVendorDetail($(this).val());
+    });
+});
+
+function GetCompanyNameList() {
+    $.ajax({
+        url: '/Company/GetCompanyNameList',
+        success: function (result) {
+            $.each(result, function (i, data) {
+                $('#textCompanyName').append('<Option value=' + data.id + '>' + data.compnyName + '</Option>')
+            });
+        }
+    });
+}
+
+$(document).ready(function () {
+    $('#textCompanyName').change(function () {
+        getCompanyDetail($(this).val());
     $('#txtvendorname').change(function () {
         var VendorTypeId = $("#txtvendorname").val();
         $.ajax({
@@ -37,21 +83,66 @@ $(document).ready(function () {
             }
         });
     });
-    $('#txtvendorname1').change(function () {
-        var VendorTypeId = $("#txtvendorname1").val();
-        $.ajax({
-            url: '/Vendor/GetVendorDetailsById/?VendorId=' + VendorTypeId,
-            type: 'Get',
-            success: function (result) {
-                $('#vendorcompanyaddress').empty();
-                $('#vendorcompanyaddress').append(
-                    '<div class="mb-2"><input type="text" class="form-control bg-light border-0" value="' + result.vendorCompany + '" readonly /></div>' +
-                    '<div class="mb-2"><textarea class="form-control bg-light border-0" readonly style="height: 76px;">' + result.vendorAddress + '</textarea></div>' +
-                    '<div class="mb-2"><input type="text" class="form-control bg-light border-0" value="' + result.vendorCompanyEmail + '" readonly /></div>' +
-                    '<div><input type="text" class="form-control bg-light border-0" value="' + result.vendorCompanyNumber + '" readonly /></div>');
+});
+
+
+function getCompanyDetail(CompanyId) {
+    $.ajax({
+        url: '/Company/GetCompanyDetailsById',
+        type: 'GET',
+        contentType: 'application/json;charset=utf-8',
+        dataType: 'json',
+        data: { CompanyId: CompanyId },
+        success: function (response) {
+            if (response) {
+                $('#textCompanyGstNo').val(response.gst);
+                $('#textCompanyBillingAddress').val(response.fullAddress);
+            } else {
+                console.log('Empty response received.');
             }
-        });
+        },
     });
+}
+
+function GetPaymentTypeList() {
+    $.ajax({
+        url: '/ExpenseMaster/GetPaymentTypeList',
+        success: function (result) {
+            $.each(result, function (i, data) {
+                $('#textPaymentMethod').append('<Option value=' + data.id + '>' + data.type + '</Option>')
+            });
+        }
+    });
+}
+function selectProductTypeId() {
+    document.getElementById("txtProductTypeid").value = document.getElementById("txtProducts").value;
+}
+function getVendorDetail(VendorId) {
+    $.ajax({
+        url: '/Vendor/GetVendorDetailsById?vendorId=' + VendorId,
+        type: 'GET',
+        contentType: 'application/json;charset=utf-8',
+        dataType: 'json',
+        success: function (response) {
+            if (response) {
+                $('#textVendorMobile').val(response.vendorPhone);
+                $('#textVendorGSTNumber').val(response.vendorGstnumber);
+                $('#textVendorAddress').val(response.vendorAddress);
+            } else {
+                console.log('Empty response received.');
+            }
+        },
+    });
+}
+$(document).ready(function () {
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0');
+    var yyyy = today.getFullYear();
+
+    today = yyyy + '-' + mm + '-' + dd;
+    $("#textInvoiceDate").val(today);
+    $("#textInvoiceDate").prop("disabled", true);
 });
 
 $(document).ready(function () {
@@ -72,6 +163,47 @@ $(document).ready(function () {
         });
     });
 });
+
+
+function fn_OpenShippingModal() {
+    $('#textmdAddress').val('');
+    $('#textmdQty').val('');
+    $('#mdShippingAdd').modal('show');
+}
+
+function fn_mdAddAddress() {
+    var rowcount = $('#dvShippingAddress .row.ac-invoice-shippingadd').length + 1
+    if ($('#textmdAddress').val() != null && $('#textmdAddress').val().trim() != "") {
+        var html = `<div class="row ac-invoice-shippingadd">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                </div>`
+        $('#dvShippingAddress').append(html);
+    } else {
+        tostar.error('Please select address!');
+        $('#textmdAddress').focus();
+    }
+
+}
+function fn_removeShippingAdd(that) {
+    $(that).closest('.ac-invoice-shippingadd').remove();
+}
+
+function fn_OpenAddproductmodal() {
+
+    $('#mdProductSearch').val('');
+    $('#mdPoproductModal').modal('show');
+}
+
+function toggleShippingAddress() {
+    var checkbox = document.getElementById("hideShippingAddress");
+    var shippingFields = document.getElementById("shippingAddressFields");
+
+    if (checkbox.checked) {
+        shippingFields.style.display = "none";
+    } else {
+        shippingFields.style.display = "block";
+    }
+}
+
 function GetInvoiceDetailsByOrderId(OrderId) {
     $.ajax({
         url: '/Invoice/GetInvoiceDetailsByOrderId/?OrderId=' + OrderId,
@@ -120,66 +252,108 @@ function ShowInvoiceDetailsByOrderId(OrderId) {
         }
     });
 }
+function InsertInvoiceDetails() {debugger
+    if ($("#CreateInvoiceForm").valid()) {
+        if ($('#addnewproductlink tr').length >= 1) {
 
-function InsertInvoiceDetails() {
-
-    var objData = {
-        InvoiceNo: document.getElementById("txtinvoiceid").innerHTML,
-        CreatedBy: $("#txtuserid").val(),
-        ProjectId: $("#txtprojectid").val(),
-        BuyesOrderDate: document.getElementById("txtdate").innerHTML,
-        OrderId: document.getElementById("txtorderid").innerHTML,
-        InvoiceType: document.getElementById("txtinvoicetype").innerHTML,
-        VandorId: document.getElementById("txtvendorid").innerText,
-        DispatchThrough: document.getElementById("txtshippingcompany").innerText,
-        Destination: document.getElementById("txtshippingaddress").innerText,
-        TotalAmount: document.getElementById("txttotalamount").innerText,
-        TotalGst: document.getElementById("txttotalgst").innerText,
-        PaymentMethod: document.getElementById("methodofpayment").innerHTML,
-    };
-    var form_data = new FormData();
-    form_data.append("INVOICEDETAILS", JSON.stringify(objData));
-
-    $.ajax({
-        url: '/Invoice/InsertInvoiceDetails',
-        type: 'POST',
-        data: form_data,
-        dataType: 'json',
-        contentType: false,
-        processData: false,
-        success: function (result) {
-
-            if (result.message == "Invoice Generated successfully!") {
+        var ProductDetails = [];
+        $(".product").each(function () {
+            var orderRow = $(this);
+            var productName = orderRow.find("#textProductName").text().trim();
+            var productId = orderRow.find("#textProductId").val().trim();
+            var objData = {
+                Product: productName,
+                ProductId: productId,
+                ProductType: orderRow.find("#textProductType").val(),
+                Quantity: orderRow.find("#txtproductquantity").val(),
+                Price: orderRow.find("#txtproductamount").val(),
+                GSTamount: orderRow.find("#txtgstAmount").val(),
+                Gst: orderRow.find("#txtgst").val(),
+                ProductTotal: orderRow.find("#txtproducttotalamount").val(),
+            };
+            ProductDetails.push(objData);
+        });
+        var Invoicedetails = {
+            ProjectId: $("#textProjectId").val(),
+            InvoiceNo: $("#textInvoiceNo").val(),
+            VandorId: $("#textVendorName").val(),
+            CompanyName: $("#textCompanyName").val(),
+            TotalGst: $("#totalgst").val(),
+            Cgst: $("#textCGst").val(),
+            Sgst: $("#textSGst").val(),
+            Igst: $("#textIGst").val(),
+            SubTotal: $("#cart-subtotal").val(),
+            TotalAmount: $("#cart-total").val(),
+            DispatchThrough: $("#textDispatchThrough").val(),
+            BuyesOrderNo: $("#textBuysOrderNo").val(),
+            BuyesOrderDate: $("#textBuysOrderDate").val(),
+            InvoiceDate: $("#textInvoiceDate").val(),
+            OrderStatus: $("#UnitTypeId").val(),
+            PaymentMethod: $("#textPaymentMethod").val(),
+            CreatedBy: $("#textCreatedById").val(),
+            ShippingAddress: $('#hideShippingAddress').is(':checked') ? $('#textCompanyBillingAddress').val() : $('#textShippingAddress').val(),
+            InvoiceDetails: ProductDetails,
+        }
+        var form_data = new FormData();
+        form_data.append("INVOICEDETAILS", JSON.stringify(Invoicedetails));
+        debugger
+        $.ajax({
+            url: '/Invoice/InsertInvoiceDetails',
+            type: 'POST',
+            data: form_data,
+            dataType: 'json',
+            contentType: false,
+            processData: false,
+            success: function (Result) {debugger
+                if (Result.code == 200) {
+                    Swal.fire({
+                        title: Result.message,
+                        icon: 'success',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK'
+                    }).then(function () {
+                        window.location = '/Invoice/InvoiceListView';
+                    });
+                }
+                else {
+                    Swal.fire({
+                        title: Result.message,
+                        icon: 'warning',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK'
+                    });
+                }
+            },
+            error: function (xhr, status, error) {
                 Swal.fire({
-                    title: result.message,
-                    icon: 'success',
+                    title: 'Error',
+                    text: 'An error occurred while processing your request.',
+                    icon: 'error',
                     confirmButtonColor: '#3085d6',
                     confirmButtonText: 'OK',
-                }).then(function () {
-                    window.location = '/PurchaseOrderMaster/CreatePurchaseOrder';
                 });
             }
-            else {
-
-                Swal.fire({
-                    title: result.message,
-                    icon: result.icone,
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK',
-                })
+        });
+        } else {
+            if ($('#addnewproductlink tr').length == 0) {
+                $("#spnitembutton").text("Please Select Product!");
+            } else {
+                $("#spnitembutton").text("");
             }
-        },
-        error: function (xhr, status, error) {
-            Swal.fire({
-                title: 'Error',
-                text: 'An error occurred while processing your request.',
-                icon: 'error',
-                confirmButtonColor: '#3085d6',
-                confirmButtonText: 'OK',
-            });
         }
-    });
+    }
+    else {
+        Swal.fire({
+            title: "Kindly fill all data fields",
+            icon: 'warning',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'OK',
+        })
+    }
 }
+
+
+
 $(document).ready(function () {
     $("#generatePDF").click(function () {
 
@@ -262,7 +436,7 @@ $(document).ready(function () {
     });
 
 });
-function deleteInvoice(InvoiceNo) {
+function deleteInvoice(InvoiceId) {
     Swal.fire({
         title: "Are you sure want to Delete This?",
         text: "You won't be able to revert this!",
@@ -277,7 +451,7 @@ function deleteInvoice(InvoiceNo) {
     }).then((result) => {
         if (result.isConfirmed) {
             $.ajax({
-                url: '/Invoice/IsDeletedInvoice?InvoiceNo=' + InvoiceNo,
+                url: '/Invoice/IsDeletedInvoice?InvoiceId=' + InvoiceId,
                 type: 'POST',
                 dataType: 'json',
                 success: function (Result) {
@@ -628,7 +802,7 @@ function AllInvoiceList() {
             {
                 "data": "Action", "name": "Action",
                 render: function (data, type, full) {
-                    return ('<li class="btn list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit"><a onclick="EditInvoiceDetails(\'' + full.invoiceNo + '\')"><i class="ri-pencil-fill fs-16"></i></a></li><li class="btn text-danger list-inline-item delete" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Delete" style="margin-left:12px;"><a onclick="deleteInvoice(\'' + full.invoiceNo + '\')"><i class="ri-delete-bin-5-fill fs-16"></i></a></li>');
+                    return ('<li class="btn list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit"><a onclick="EditInvoiceDetails(\'' + full.invoiceNo + '\')"><i class="ri-pencil-fill fs-16"></i></a></li><li class="btn text-danger list-inline-item delete" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Delete" style="margin-left:12px;"><a onclick="deleteInvoice(\'' + full.id + '\')"><i class="fas fa-trash"></i></a></li>');
                 }
             },
         ],

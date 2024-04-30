@@ -83,14 +83,14 @@ namespace EMPManegment.Services.InvoiceMaster
             return await InvoiceMaster.InsertCreditDebitDetails(CreditDebit);
         }
 
-        public async Task<UserResponceModel> InsertInvoiceDetails(GenerateInvoiceModel InsertInvoice)
+        public async Task<UserResponceModel> InsertInvoiceDetails(InvoiceMasterModel InsertInvoice)
         {
             return await InvoiceMaster.InsertInvoiceDetails(InsertInvoice);
         }
 
-        public async Task<UserResponceModel> IsDeletedInvoice(string InvoiceNo)
+        public async Task<UserResponceModel> IsDeletedInvoice(Guid InvoiceId)
         {
-            return await InvoiceMaster.IsDeletedInvoice(InvoiceNo);
+            return await InvoiceMaster.IsDeletedInvoice(InvoiceId);
         }
 
         public async Task<UserResponceModel> UpdateInvoiceDetails(UpdateInvoiceModel UpdateInvoice)
