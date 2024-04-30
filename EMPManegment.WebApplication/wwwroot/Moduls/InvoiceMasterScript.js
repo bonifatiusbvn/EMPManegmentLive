@@ -1,12 +1,7 @@
 ﻿
 $(document).ready(function () {
-    GetVendorNameList()
-    GetAllVendorData()
     GetAllTransactionData()
     AllInvoiceList()
-    GetCompanyNameList()
-    GetProductDetailsList()
-    GetPaymentTypeList()
 });
 $(document).ready(function () {
     $("#CreateInvoiceForm").validate({
@@ -30,79 +25,6 @@ function clearItemErrorMessage() {
 $(document).on("click", "#addItemButton", function () {
     clearItemErrorMessage();
 });
-function GetVendorNameList() {
-
-    $.ajax({
-        url: '/ProductMaster/GetVendorsNameList',
-        success: function (result) {
-            $.each(result, function (i, data) {
-                //$('#txtvendorname').append('<Option value=' + data.id + '>' + data.vendorCompany + '</Option>')
-                //$('#txtvendorname1').append('<Option value=' + data.id + '>' + data.vendorCompany + '</Option>')
-                $('#textVendorName').append('<Option value=' + data.id + '>' + data.vendorCompany + '</Option>')
-            });
-        }
-    });
-}
-function selectvendorId() {
-    //document.getElementById("txtvendorTypeid").value = document.getElementById("txtvendorname").value;
-    //document.getElementById("txtvendorTypeid1").value = document.getElementById("txtvendorname1").value;
-    document.getElementById("txtvendorTypeid").value = document.getElementById("txtvendorname").value;
-}
-$(document).ready(function () {
-    $('#textVendorName').change(function () {
-        getVendorDetail($(this).val());
-    });
-});
-
-function GetCompanyNameList() {
-    $.ajax({
-        url: '/Company/GetCompanyNameList',
-        success: function (result) {
-            $.each(result, function (i, data) {
-                $('#textCompanyName').append('<Option value=' + data.id + '>' + data.compnyName + '</Option>')
-            });
-        }
-    });
-}
-
-$(document).ready(function () {
-    $('#textCompanyName').change(function () {
-        getCompanyDetail($(this).val());
-    $('#txtvendorname').change(function () {
-        var VendorTypeId = $("#txtvendorname").val();
-        $.ajax({
-            url: '/Vendor/GetVendorDetailsById/?VendorId=' + VendorTypeId,
-            type: 'Get',
-            success: function (result) {
-                $('#vendorcompanyaddress').empty();
-                $('#vendorcompanyaddress').append(
-                    '<div class="mb-2"><input type="text" class="form-control bg-light border-0" value="' + result.vendorCompany + '" readonly /></div>' +
-                    '<div class="mb-2"><textarea class="form-control bg-light border-0" readonly style="height: 76px;">' + result.vendorAddress + '</textarea></div>' +
-                    '<div class="mb-2"><input type="text" class="form-control bg-light border-0" value="' + result.vendorCompanyEmail + '" readonly /></div>' +
-                    '<div><input type="text" class="form-control bg-light border-0" value="' + result.vendorCompanyNumber + '" readonly /></div>');
-            }
-        });
-    });
-});
-
-
-function getCompanyDetail(CompanyId) {
-    $.ajax({
-        url: '/Company/GetCompanyDetailsById',
-        type: 'GET',
-        contentType: 'application/json;charset=utf-8',
-        dataType: 'json',
-        data: { CompanyId: CompanyId },
-        success: function (response) {
-            if (response) {
-                $('#textCompanyGstNo').val(response.gst);
-                $('#textCompanyBillingAddress').val(response.fullAddress);
-            } else {
-                console.log('Empty response received.');
-            }
-        },
-    });
-}
 
 function GetPaymentTypeList() {
     $.ajax({
@@ -112,26 +34,6 @@ function GetPaymentTypeList() {
                 $('#textPaymentMethod').append('<Option value=' + data.id + '>' + data.type + '</Option>')
             });
         }
-    });
-}
-function selectProductTypeId() {
-    document.getElementById("txtProductTypeid").value = document.getElementById("txtProducts").value;
-}
-function getVendorDetail(VendorId) {
-    $.ajax({
-        url: '/Vendor/GetVendorDetailsById?vendorId=' + VendorId,
-        type: 'GET',
-        contentType: 'application/json;charset=utf-8',
-        dataType: 'json',
-        success: function (response) {
-            if (response) {
-                $('#textVendorMobile').val(response.vendorPhone);
-                $('#textVendorGSTNumber').val(response.vendorGstnumber);
-                $('#textVendorAddress').val(response.vendorAddress);
-            } else {
-                console.log('Empty response received.');
-            }
-        },
     });
 }
 $(document).ready(function () {
@@ -145,64 +47,6 @@ $(document).ready(function () {
     $("#textInvoiceDate").prop("disabled", true);
 });
 
-$(document).ready(function () {
-    $('#txtvendorname1').change(function () {
-        var VendorTypeId = $("#txtvendorname1").val();
-        $.ajax({
-            url: '/Vendor/GetVendorDetailsById?VendorId=' + VendorTypeId,
-            type: 'Get',
-            success: function (result) {
-                $('#companybillingaddressDetails').empty().append(
-                    '<div class="mb-2"><input type="text" class="form-control bg-light border-0" id="billingName" name="data[#].BillingName" value=' + result.companyName + ' placeholder="Full Name" required /></div>' +
-                    '<div class="mb-2"><textarea class="form-control bg-light border-0" id="billingAddress" name="data[#].BillingAddress" rows="3" placeholder="Address" required>' + result.fullname + ', ' + result.address + ', ' + result.email + ', ' + result.contectno + ', ' + '</textarea></div>'
-                );
-            },
-            error: function (xhr, status, error) {
-                console.error("Error fetching company details:", error);
-            }
-        });
-    });
-});
-
-
-function fn_OpenShippingModal() {
-    $('#textmdAddress').val('');
-    $('#textmdQty').val('');
-    $('#mdShippingAdd').modal('show');
-}
-
-function fn_mdAddAddress() {
-    var rowcount = $('#dvShippingAddress .row.ac-invoice-shippingadd').length + 1
-    if ($('#textmdAddress').val() != null && $('#textmdAddress').val().trim() != "") {
-        var html = `<div class="row ac-invoice-shippingadd">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                </div>`
-        $('#dvShippingAddress').append(html);
-    } else {
-        tostar.error('Please select address!');
-        $('#textmdAddress').focus();
-    }
-
-}
-function fn_removeShippingAdd(that) {
-    $(that).closest('.ac-invoice-shippingadd').remove();
-}
-
-function fn_OpenAddproductmodal() {
-
-    $('#mdProductSearch').val('');
-    $('#mdPoproductModal').modal('show');
-}
-
-function toggleShippingAddress() {
-    var checkbox = document.getElementById("hideShippingAddress");
-    var shippingFields = document.getElementById("shippingAddressFields");
-
-    if (checkbox.checked) {
-        shippingFields.style.display = "none";
-    } else {
-        shippingFields.style.display = "block";
-    }
-}
 
 function GetInvoiceDetailsByOrderId(OrderId) {
     $.ajax({

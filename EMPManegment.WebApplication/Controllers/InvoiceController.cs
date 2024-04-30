@@ -557,47 +557,5 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
-        public async Task<IActionResult> GetAllProductList(string? searchText)
-        {
-            try
-            {
-                string apiUrl = $"ProductMaster/GetAllProductList?searchText={searchText}";
-                ApiResponseModel response = await APIServices.PostAsync("", apiUrl);
-                if (response.code == 200)
-                {
-                    List<ProductDetailsView> Items = JsonConvert.DeserializeObject<List<ProductDetailsView>>(response.data.ToString());
-                    return PartialView("~/Views/Invoice/_ShowAllProductPartial.cshtml", Items);
-                }
-                else
-                {
-                    return new JsonResult(new { Message = "Failed to retrieve Product list" });
-                }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> DisplayProductDetailsListById()
-        {
-            try
-            {
-                string ProductId = HttpContext.Request.Form["ProductId"];
-                var GetProduct = JsonConvert.DeserializeObject<ProductDetailsView>(ProductId.ToString());
-                List<ProductDetailsView> Product = new List<ProductDetailsView>();
-                ApiResponseModel response = await APIServices.GetAsync("", "ProductMaster/GetProductById?ProductId=" + GetProduct.Id);
-                if (response.code == 200)
-                {
-                    Product = JsonConvert.DeserializeObject<List<ProductDetailsView>>(response.data.ToString());
-                }
-                return PartialView("~/Views/Invoice/_ShowProductDetailPartial.cshtml", Product);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
     }
 }
