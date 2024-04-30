@@ -54,4 +54,6 @@ public partial class TblInvoice
     public virtual TblPaymentMethodType? PaymentMethodNavigation { get; set; }
 
     public virtual TblProjectMaster? Project { get; set; }
+
+    public virtual ICollection<TblInvoiceDetail> TblInvoiceDetails { get; set; } = new List<TblInvoiceDetail>();
 }

@@ -19,11 +19,11 @@ namespace EMPManegment.Inretface.Interface.OrderDetails
         Task<IEnumerable<PurchaseOrderDetailView>> GetPurchaseOrderList();
         Task<List<PurchaseOrderDetailView>> GetPurchaseOrderDetailsByStatus(string DeliveryStatus);
         string CheckPurchaseOrder(string projectname);
-        Task<List<PurchaseOrderDetailView>> GetPurchaseOrderDetailsById(string OrderId);
+        Task<PurchaseOrderMasterView> GetPurchaseOrderDetailsByOrderId(string OrderId);
         Task<ApiResponseModel> InsertMultiplePurchaseOrder(PurchaseOrderMasterView InsertPurchaseOrder);
         Task<IEnumerable<PaymentMethodView>> GetAllPaymentMethod();
         Task<UpdatePurchaseOrderView> EditPurchaseOrderDetails(Guid Id);
         Task<UserResponceModel> UpdatePurchaseOrderDetails(UpdatePurchaseOrderView UpdatePurchaseorder);
-        Task<UserResponceModel> DeletePurchaseOrderDetails(string OrderId);
+        Task<UserResponceModel> DeletePurchaseOrderDetails(Guid Id);
     }
 }
