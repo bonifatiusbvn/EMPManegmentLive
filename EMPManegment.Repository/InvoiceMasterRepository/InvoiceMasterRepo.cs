@@ -347,6 +347,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                 IEnumerable<InvoiceViewModel> invoiceList = (from a in Context.TblInvoices.Where(x => x.VandorId == Vid)
                                                              join b in Context.TblVendorMasters
                                                              on a.VandorId equals b.Vid
+                                                             where a.PaymentStatus == 8
                                                              select new InvoiceViewModel
                                                              {
                                                                  Id = a.Id,
@@ -483,6 +484,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                     TotalAmount = InsertInvoice.TotalAmount,
                     PaymentMethod = InsertInvoice.PaymentMethod,
                     Status = InsertInvoice.Status,
+                    PaymentStatus=InsertInvoice.PaymentStatus,
                     IsDeleted = false,
                     CreatedBy = InsertInvoice.CreatedBy,
                     CreatedOn = DateTime.Now,

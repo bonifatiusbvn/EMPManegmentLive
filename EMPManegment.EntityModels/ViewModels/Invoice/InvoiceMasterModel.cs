@@ -42,7 +42,9 @@ namespace EMPManegment.EntityModels.ViewModels.Invoice
 
         public int? PaymentMethod { get; set; }
 
-        public int? Status { get; set; }
+        public int? PaymentStatus { get; set; }
+
+        public string? Status { get; set; }
 
         public bool? IsDeleted { get; set; }
         public int? PaymentType { get; set; }
