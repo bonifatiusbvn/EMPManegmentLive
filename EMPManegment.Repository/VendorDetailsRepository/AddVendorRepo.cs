@@ -66,6 +66,8 @@ namespace EMPManegment.Repository.VendorDetailsRepository
                         VendorGstnumber = vendor.VendorGstnumber,
                         VendorBankIfsc = vendor.VendorBankIfsc,
                         VendorTypeId = vendor.VendorTypeId,
+                        CreatedBy = vendor.CreatedBy,
+                        CreatedOn = DateTime.Now,
                     };
                     response.Code = (int)HttpStatusCode.OK;
                     response.Message = "Vendor Data Successfully Inserted";
@@ -253,6 +255,10 @@ namespace EMPManegment.Repository.VendorDetailsRepository
                 Vendordata.VendorAccountHolderName = updateVendor.VendorAccountHolderName;
                 Vendordata.VendorBankIfsc = updateVendor.VendorBankIfsc;
                 Vendordata.VendorGstnumber = updateVendor.VendorGstnumber;
+                Vendordata.VendorCity = updateVendor.VendorCity;
+                Vendordata.VendorCountry = updateVendor.VendorCountry;
+                Vendordata.VendorState =  updateVendor.VendorState;
+                Vendordata.VendorTypeId = updateVendor.VendorTypeId;
                 Context.TblVendorMasters.Update(Vendordata);
                 await Context.SaveChangesAsync();
             }

@@ -48,7 +48,6 @@
                                     <th>VendorMobileNo</th>
                                     <th>CompanyContac</th>
                                     <th>CompanyEmail</th>
-                                    <th>Address</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
@@ -163,7 +162,7 @@
                             </div><!-- /.modal-content -->
                         </div><!-- /.modal-dialog -->
                     </div><!-- /.modal -->
-                    <!-- Modal -->
+                    <!-- Add Vendor Modal -->
                     <div class="modal fade zoomIn" id="addSeller" tabindex="-1" aria-labelledby="addSellerLabel" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered modal-lg">
                             <div class="modal-content">
@@ -486,8 +485,8 @@
                                                     <!--end col-->
                                                     <div class="col-lg-6">
                                                         <div class="mb-3">
-                                                            <label for="ddlVendorType" class="form-label">VendorType</label>
-                                                            <select id="ddlVendorType" name="ddlVendorType" class="form-control form-select valid">
+                                                            <label for="textVendorType" class="form-label">VendorType</label>
+                                                            <select id="textVendorType" name="textVendorType" class="form-control form-select valid">
                                                                 <option>--Select Type--</option>
                                                             </select>
                                                             <input type="hidden" id="VendorTypeInput" name="VendorTypeInput" value="" />
@@ -511,31 +510,33 @@
 
                                                     <div class="col-lg-4">
                                                         <div class="mb-3">
-                                                            <label for="ddlCountry" class="form-label">Country</label>
-                                                            <select id="ddlCountry" name="ddlCountry" class="form-control form-select valid">
+                                                            <label class="form-label">Country</label>
+                                                            <select id="textCountry" class="form-select bg-transparent" onchange="fn_getState('dropState',null,this)">
                                                                 <option>--Select Country--</option>
                                                             </select>
-                                                            <input type="hidden" id="txtcountry" name="txtcountry" value="" />
+                                                            <span class="text-danger"></span>
                                                         </div>
                                                     </div>
                                                     <!--end col-->
                                                     <div class="col-lg-4">
                                                         <div class="mb-3">
-                                                            <label for="ddlState" class="form-label">State</label>
-                                                            <select id="ddlState" name="ddlState" class="form-control form-select valid">
-                                                                <option>--Select State--</option>
+                                                            <label class="form-label">State</label>
+                                                            <select id="dropState" class="form-select bg-transparent" onclick="fn_getcitiesbystateId('dropCity',null,this)">
+                                                                <option value="0" selected>--Select State--</option>
                                                             </select>
-                                                            <input type="hidden" id="txtstate" name="txtstate" value="" />
+                                                            <input type="hidden" id="txtstate" value="" />
+                                                            <span class="text-danger"></span>
                                                         </div>
                                                     </div>
                                                     <!--end col-->
                                                     <div class="col-lg-4">
                                                         <div class="mb-3">
-                                                            <label for="ddlCity" class="form-label">City</label>
-                                                            <select id="ddlCity" name="ddlCity" class="form-control form-select valid">
-                                                                <option>--Select City--</option>
+                                                            <label class="form-label">City</label>
+                                                            <select id="dropCity" class="form-select bg-transparent">
+                                                                <option value="0">--Select City--</option>
                                                             </select>
-                                                            <input type="hidden" id="txtcity" name="txtcity" value="" />
+                                                            <input type="hidden" id="txtcity" value="" />
+                                                            <span class="text-danger"></span>
                                                         </div>
                                                     </div>
                                                     <!--end col-->
@@ -687,7 +688,7 @@
     .box-1, .box-2 {
         background-color: lightgrey;
         width: 350px;
-        height: 250px;
+        height: 300px;
         border: 5px solid gray;
         padding: 20px;
         float: left;
@@ -697,17 +698,17 @@
     .box-3 {
         background-color: lightgrey;
         width: 720px;
-        height: 180px;
+        height: 200px;
         border: 5px solid gray;
         padding: 20px;
-        margin-top: 270px;
+        margin-top: 320px;
         margin-left: 20px;
     }
 
     .box-4 {
         background-color: lightgrey;
         width: 720px;
-        height: 180px;
+        height: 200px;
         border: 5px solid gray;
         padding: 20px;
         margin-top: 20px;

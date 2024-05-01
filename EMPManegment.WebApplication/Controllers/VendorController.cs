@@ -77,7 +77,7 @@ namespace EMPManegment.Web.Controllers
                     VendorGstnumber = addVandorDetails.VendorGstnumber,
                     VendorBankIfsc = addVandorDetails.VendorBankIfsc,
                     VendorTypeId = addVandorDetails.VendorTypeId,
-                    CreatedBy = _userSession.FullName,
+                    CreatedBy = _userSession.FirstName,
                 };
                 ApiResponseModel postuser = await APIServices.PostAsync(addVandor, "Vendor/CreateVendors");
                 if (postuser.code == 200)

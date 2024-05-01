@@ -1,6 +1,7 @@
 ﻿$(document).ready(function () {
     GetAllVendorData();
     GetVendorType()
+    fn_getState('dropState', 1);
 });
 function GetAllVendorData() {
 
@@ -21,10 +22,9 @@ function GetAllVendorData() {
             { "data": "vendorPhone", "name": "VendorPhone" },
             { "data": "vendorCompanyNumber", "name": "VendorCompanyNumber" },
             { "data": "vendorCompanyEmail", "name": "VendorCompanyEmail" },
-            { "data": "vendorAddress", "name": "VendorAddress" },
             {
                 "render": function (data, type, full) {
-                    return '<div class="flex-shrink-0 ms-4"><ul class="list-inline tasks-list-menu mb-0"><li class="list-inline-item"><a onclick="VendorDetails(\'' + full.vid + '\')"><i class="ri-eye-fill align-bottom me-2 text-muted"></i></a><li class="list-inline-item"><a onclick="EditVendorDetails(\'' + full.vid + '\')"><i class="ri-pencil-fill align-bottom me-2 text-muted"></i></a></li></ul></div>';
+                    return '<div class="flex-shrink-0 ms-4"><ul class="list-inline tasks-list-menu mb-0"><li class="list-inline-item"><a onclick="VendorDetails(\'' + full.vid + '\')"><i class="fa-solid fa-eye""></i></a><li class="list-inline-item"><a onclick="EditVendorDetails(\'' + full.vid + '\')"><i class="fas fa-edit"></i></a></li></ul></div>';
                 }
             },
         ],
@@ -72,6 +72,8 @@ function VendorDetails(Id) {
 }
 
 function EditVendorDetails(Id) {
+    debugger
+    var editing = true;
     $("#editPersonalDetailsModel").prop("disabled", true);
     $("#editBankDetailsModel").prop("disabled", true);
 
@@ -81,8 +83,7 @@ function EditVendorDetails(Id) {
         contentType: 'application/json;charset=utf-8;',
         dataType: 'json',
         success: function (response) {
-            
-
+            debugger
             $('#UpdateVendorModel').modal('show');
             $('#vendorId').val(response.vid);
             $('#EditfirstnameInput').val(response.vendorFirstName);
@@ -103,10 +104,13 @@ function EditVendorDetails(Id) {
             $('#EditaccountnameInput').val(response.vendorAccountHolderName);
             $('#EditifscInput').val(response.vendorBankIfsc);
             $('#EditGSTNumberInput').val(response.vendorGstnumber);
-            $("#ddlVendorType").val(response.vendorTypeId),
-                $("#ddlCountry").val(response.vendorCountry),
-                $("#ddlState").val(response.vendorState),
-                $("#ddlCity").val(response.vendorCity),
+            $("#textVendorType").val(response.vendorTypeId);
+
+            fn_getcitiesbystateId('dropCity', response.vendorState);
+            $('#dropState').val(response.vendorState);
+            $("#textCountry").val(response.vendorCountry);
+            CheckValidation();
+            setTimeout(function () { $('#dropCity').val(response.vendorCity); }, 100)
                 CheckValidation();
         },
         error: function () {
@@ -127,10 +131,10 @@ function UpdateVendorDetails() {
             "VendorEmail": $("#EditemailidInput").val(),
             "VendorPhone": $("#EditphonenumberInput").val(),
             "VendorContectNo": $('#EditworknumberInput').val(),
-            //"VendorTypeId": $("#ddlVendorType").val(),
-            //"VendorCountry": $("#ddlCountry").val(),
-            //"VendorState": $("#ddlState").val(),
-            //"VendorCity": $("#ddlCity").val(),
+            "VendorTypeId": $("#textVendorType").val(),
+            "VendorCountry": $("#textCountry").val(),
+            "VendorState": $("#dropState").val(),
+            "VendorCity": $("#dropCity").val(),
             "VendorAddress": $("#EditAddressidInput").val(),
             "VendorPinCode": $("#EditpincodeidInput").val(),
             "VendorCompany": $("#EditcompanynameInput").val(),
@@ -197,6 +201,9 @@ function ClearTextBox() {
     $("#accountnumberInput").val('');
     $("#ifscInput").val('');
     $("#GSTNumberInput").val('');
+    $('#dropCity').val('');
+    $('#dropState').val('');
+    $('#textVendorType').val('');
 }
 function AddVendorDetails() {
 
@@ -506,9 +513,94 @@ function editnexttoBankDetails() {
 }
 
 
+$(document).ready(function () {
 
+    GetVendorCountry();
+    GetVendorTypes();
+    $('#dropState').change(function () {
 
+        var Text = $("#dropState Option:Selected").text();
+        var txtstateid = $(this).val();
+        $("#txtstate").val(txtstateid);
+    });
 
+    $('#dropCity').change(function () {
+
+        var Text = $("#dropCity Option:Selected").text();
+        var txtcityid = $(this).val();
+        $("#txtcity").val(txtcityid);
+    });
+
+});
+
+function fn_getState(drpstate, countryId, that) {
+    debugger
+    var cid = countryId;
+    if (cid == undefined || cid == null) {
+        var cid = $(that).val();
+    }
+
+    $('#' + drpstate).empty();
+    $('#' + drpstate).append('<Option >--Select State--</Option>');
+    $.ajax({
+        url: '/Authentication/GetState?StateId=' + cid,
+        success: function (result) {
+
+            $.each(result, function (i, data) {
+                debugger
+                $('#' + drpstate).append('<Option value=' + data.id + '>' + data.stateName + '</Option>')
+            });
+        }
+    });
+}
+
+function fn_getcitiesbystateId(drpcity, stateid, that) {
+    debugger
+    var sid = stateid;
+    if (sid == undefined || sid == null) {
+        var sid = $(that).val();
+    }
+    $('#' + drpcity).empty();
+    $('#' + drpcity).append('<Option >--Select City--</Option>');
+    $.ajax({
+        url: '/Authentication/GetCity?CityId=' + sid,
+        success: function (result) {
+
+            $.each(result, function (i, data) {
+                debugger
+                $('#' + drpcity).append('<Option value=' + data.id + '>' + data.cityName + '</Option>');
+
+            });
+        }
+    });
+}
+
+function GetVendorCountry() {
+    debugger
+    $.ajax({
+        url: '/Authentication/GetCountrys',
+        success: function (result) {
+            $.each(result, function (i, data) {
+                debugger
+                $('#textCountry').append('<Option value=' + data.id + ' Selected>' + data.countryName + '</Option>')
+
+            });
+        }
+    });
+}
+
+function GetVendorTypes() {
+
+    $.ajax({
+        url: '/Vendor/GetVendorType',
+        success: function (result) {
+            $.each(result, function (i, data) {
+                $('#textVendorType').append('<Option value=' + data.id + '>' + data.vendorType + '</Option>')
+
+            });
+        }
+    });
+}
 
 
 

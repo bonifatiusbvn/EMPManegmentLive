@@ -26,7 +26,7 @@ namespace EMPManegment.EntityModels.ViewModels.VendorModels
         public string? VendorCompany { get; set; }
         public string? VendorCompanyEmail { get; set; }
         public string? VendorCompanyNumber { get; set; }
-        //public IFormFile VendorCompanyLogo { get; set; }
+        public IFormFile VendorCompanyLogo { get; set; }
         public string? VendorBankAccountNo { get; set; }
         public string? VendorBankName { get; set; }
         public string VendorBankBranch { get; set; } = null!;
