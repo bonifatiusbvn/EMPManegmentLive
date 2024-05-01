@@ -37,7 +37,7 @@ public partial class TblInvoice
 
     public int? PaymentMethod { get; set; }
 
-    public string? Status { get; set; }
+    public int? Status { get; set; }
 
     public string? ShippingAddress { get; set; }
 
@@ -54,6 +54,8 @@ public partial class TblInvoice
     public virtual TblPaymentMethodType? PaymentMethodNavigation { get; set; }
 
     public virtual TblProjectMaster? Project { get; set; }
+
+    public virtual TblPaymentType? StatusNavigation { get; set; }
 
     public virtual ICollection<TblInvoiceDetail> TblInvoiceDetails { get; set; } = new List<TblInvoiceDetail>();
 }

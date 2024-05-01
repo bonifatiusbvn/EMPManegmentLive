@@ -167,7 +167,6 @@
                                 <tr>
                                     <th class="sort" data-sort="name" scope="col" style="width: 60px;"></th>
                                     <th class="sort" data-sort="date" scope="col">VendorName</th>
-                                    <th class="sort" data-sort="currency_name" scope="col">Type</th>
                                     <th class="sort" data-sort="form_name" scope="col">InvoiceNo</th>
                                     <th class="sort" data-sort="to_name" scope="col">Date</th>
                                     <th class="sort" data-sort="transaction_id" scope="col">TotalAmount</th>
@@ -188,9 +187,8 @@
                                         </td>
                                         <td class="date">@item.VendorName<small class="text-muted"></small></td>
                                         <td class="form_name" id="txtvendorid" hidden>@item.VandorId</td>
-                                        <td class="form_name" id="txtinvoicetype">@item.InvoiceType</td>
-                                        <td class="form_name" id="txtinvoiceno" hidden>@item.InvoiceNo</td>
-                                        <td class="to_name" id="txtorderid">@item.OrderId</td>
+                                        <td class="form_name" id="txtinvoiceno">@item.InvoiceNo</td>
+                                        <td class="to_name" id="txtorderid" hidden>@item.OrderId</td>
                                         <td class="details" id="txtdate">@item.Date.ToString("dd/MM/yyyy")</td>
                                         <td>
                                             <h6 class="text-success mb-1 amount">@item.TotalAmount</h6>

@@ -61,7 +61,7 @@ namespace EMPManegment.EntityModels.ViewModels.Invoice
         public DateTime InvoiceDate { get; set; }
         public decimal? TotalAmount { get; set; }
         public int? PaymentMethod { get; set; }
-        public string? Status { get; set; }
+        public int? Status { get; set; }
         public string? CompanyName { get; set; }
         public DateTime? UpdatedOn { get; set; }
         public Guid? UpdatedBy { get; set; }

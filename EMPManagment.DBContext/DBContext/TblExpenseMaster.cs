@@ -41,6 +41,10 @@ public partial class TblExpenseMaster
 
     public Guid? CreatedBy { get; set; }
 
+    public Guid? UpdatedBy { get; set; }
+
+    public DateTime? UpdatedOn { get; set; }
+
     public virtual TblExpenseType ExpenseTypeNavigation { get; set; } = null!;
 
     public virtual TblPaymentType? PaymentTypeNavigation { get; set; }

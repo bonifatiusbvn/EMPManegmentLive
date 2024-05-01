@@ -287,6 +287,7 @@ namespace EMPManegment.Repository.OrderRepository
                                 join Vct in Context.TblCities on b.VendorCity equals Vct.Id
                                 join g in Context.TblPodeliveryAddresses on a.Id equals g.Poid
                                 join h in Context.TblPaymentMethodTypes on a.PaymentMethod equals h.Id
+                                join i in Context.TblPaymentTypes on a.PaymentStatus equals i.Id
                                 select new PurchaseOrderMasterView
                                 {
                                     Id = a.Id,
@@ -311,6 +312,7 @@ namespace EMPManegment.Repository.OrderRepository
                                     PaymentMethod = a.PaymentMethod,
                                     PaymentMethodName = h.PaymentMethod,
                                     PaymentStatus = a.PaymentStatus,
+                                    PaymentStatusName=i.Type,
                                     DeliveryStatus = a.DeliveryStatus,
                                     DeliveryDate = a.DeliveryDate,
                                     CreatedOn = a.CreatedOn,

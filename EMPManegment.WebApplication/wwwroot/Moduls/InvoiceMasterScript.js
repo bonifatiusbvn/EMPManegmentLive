@@ -11,13 +11,13 @@ $(document).ready(function () {
         rules: {
             textVendorName: "required",
             textCompanyName: "required",
-            textPaymentMethod: "required",
+            txtpaymentmethod: "required",
             textDispatchThrough: "required",
         },
         messages: {
             textVendorName: "Select Vendor Name",
             textCompanyName: "Select Company Name",
-            textPaymentMethod: "Select Payment Method",
+            txtpaymentmethod: "Select Payment Method",
             textDispatchThrough: "Please Enter DispatchThrough",
         }
     });
@@ -29,16 +29,6 @@ $(document).on("click", "#addItemButton", function () {
     clearItemErrorMessage();
 });
 
-function GetPaymentTypeList() {
-    $.ajax({
-        url: '/ExpenseMaster/GetPaymentTypeList',
-        success: function (result) {
-            $.each(result, function (i, data) {
-                $('#textPaymentMethod').append('<Option value=' + data.id + '>' + data.type + '</Option>')
-            });
-        }
-    });
-}
 $(document).ready(function () {
     var today = new Date();
     var dd = String(today.getDate()).padStart(2, '0');
@@ -137,7 +127,8 @@ function InsertInvoiceDetails() {
                 BuyesOrderDate: $("#textBuysOrderDate").val(),
                 InvoiceDate: $("#textInvoiceDate").val(),
                 OrderStatus: $("#UnitTypeId").val(),
-                PaymentMethod: $("#textPaymentMethod").val(),
+                PaymentMethod: $("#txtpaymentmethod").val(),
+                Status: $("#txtpaymenttype").val(),
                 CreatedBy: $("#textCreatedById").val(),
                 ShippingAddress: $('#hideShippingAddress').is(':checked') ? $('#textCompanyBillingAddress').val() : $('#textShippingAddress').val(),
                 InvoiceDetails: ProductDetails,
@@ -451,20 +442,6 @@ function getLastTransaction(Vid) {
             $("#zoomInModal").modal('show');
         },
 
-    });
-}
-$(document).ready(function () {
-    GetPaymentMethodList();
-});
-function GetPaymentMethodList() {
-
-    $.ajax({
-        url: '/PurchaseOrderMaster/GetPaymentMethodList',
-        success: function (result) {
-            $.each(result, function (i, data) {
-                $('#txtpaymentmethod').append('<Option value=' + data.id + '>' + data.paymentMethod + '</Option>')
-            });
-        }
     });
 }
 function EditInvoiceDetails(InvoiceNo) {

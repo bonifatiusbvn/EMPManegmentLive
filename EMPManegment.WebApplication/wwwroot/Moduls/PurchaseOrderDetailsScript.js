@@ -464,6 +464,7 @@ function GetPaymentTypeList() {
         success: function (result) {
             $.each(result, function (i, data) {
                 $('#textPaymentMethod').append('<Option value=' + data.id + '>' + data.type + '</Option>')
+                $('#txtpaymenttype').append('<Option value=' + data.id + '>' + data.type + '</Option>')
             });
         }
     });
@@ -1199,7 +1200,7 @@ function InsertMultiplePurchaseOrderDetails() {
             OrderDate: $("#textOrderDate").val(),
             OrderStatus: $("#UnitTypeId").val(),
             PaymentMethod: $("#txtpaymentmethod").val(),
-            PaymentStatus: $("input[name='paymentStatus']:checked").val(),
+            PaymentStatus: $("#txtpaymenttype").val(),
             DeliveryStatus: $("#textDeliveryStatus").val(),
             CreatedBy: $("#textCreatedById").val(),
             Address: $('#hideShippingAddress').is(':checked') ? $('#textCompanyBillingAddress').val() : $('#textShippingAddress').val(),

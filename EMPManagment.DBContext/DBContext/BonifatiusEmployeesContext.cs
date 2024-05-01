@@ -88,7 +88,6 @@ public partial class BonifatiusEmployeesContext : DbContext
     public virtual DbSet<TblVendorType> TblVendorTypes { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<TblAttendance>(entity =>
@@ -104,6 +103,7 @@ public partial class BonifatiusEmployeesContext : DbContext
                 .HasColumnType("datetime")
                 .HasColumnName("INTime");
             entity.Property(e => e.OutTime).HasColumnType("datetime");
+            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
 
             entity.HasOne(d => d.User).WithMany(p => p.TblAttendances)
                 .HasForeignKey(d => d.UserId)
@@ -136,6 +136,7 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.Property(e => e.Gst)
                 .HasMaxLength(20)
                 .HasColumnName("GST");
+            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
         });
 
         modelBuilder.Entity<TblCountry>(entity =>
@@ -189,6 +190,7 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.ToTable("tblDocumentMaster");
 
             entity.Property(e => e.DocumentType).HasMaxLength(20);
+            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
         });
 
         modelBuilder.Entity<TblExpenseMaster>(entity =>
@@ -204,6 +206,7 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.Property(e => e.Date).HasColumnType("datetime");
             entity.Property(e => e.Description).HasMaxLength(500);
             entity.Property(e => e.TotalAmount).HasColumnType("numeric(18, 2)");
+            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
 
             entity.HasOne(d => d.ExpenseTypeNavigation).WithMany(p => p.TblExpenseMasters)
                 .HasForeignKey(d => d.ExpenseType)
@@ -228,6 +231,7 @@ public partial class BonifatiusEmployeesContext : DbContext
 
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
             entity.Property(e => e.Type).HasMaxLength(30);
+            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
         });
 
         modelBuilder.Entity<TblForm>(entity =>
@@ -240,6 +244,7 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.Property(e => e.Controller).HasMaxLength(50);
             entity.Property(e => e.FormGroup).HasMaxLength(50);
             entity.Property(e => e.FormName).HasMaxLength(50);
+            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
         });
 
         modelBuilder.Entity<TblInvoice>(entity =>
@@ -264,7 +269,6 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.Property(e => e.Sgst)
                 .HasColumnType("numeric(18, 2)")
                 .HasColumnName("SGST");
-            entity.Property(e => e.Status).HasMaxLength(20);
             entity.Property(e => e.TotalAmount).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.TotalGst)
                 .HasColumnType("numeric(18, 2)")
@@ -278,6 +282,10 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.HasOne(d => d.Project).WithMany(p => p.TblInvoices)
                 .HasForeignKey(d => d.ProjectId)
                 .HasConstraintName("FK_tblInvoices_tblProjectMaster");
+
+            entity.HasOne(d => d.StatusNavigation).WithMany(p => p.TblInvoices)
+                .HasForeignKey(d => d.Status)
+                .HasConstraintName("FK_tblInvoices_tblPaymentType");
         });
 
         modelBuilder.Entity<TblInvoiceDetail>(entity =>
@@ -379,6 +387,7 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.CreadetOn).HasColumnType("datetime");
             entity.Property(e => e.Date).HasColumnType("date");
+            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
 
             entity.HasOne(d => d.Project).WithMany(p => p.TblProjectDocuments)
                 .HasForeignKey(d => d.ProjectId)
@@ -430,6 +439,7 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.Property(e => e.ProjectType).HasMaxLength(20);
             entity.Property(e => e.StartDate).HasColumnType("date");
             entity.Property(e => e.Status).HasMaxLength(20);
+            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
             entity.Property(e => e.UserRole).HasMaxLength(20);
 
             entity.HasOne(d => d.Project).WithMany(p => p.TblProjectMembers)
@@ -489,7 +499,6 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.Property(e => e.OrderDate).HasColumnType("date");
             entity.Property(e => e.OrderId).HasMaxLength(50);
             entity.Property(e => e.OrderStatus).HasMaxLength(20);
-            entity.Property(e => e.PaymentStatus).HasMaxLength(50);
             entity.Property(e => e.ProductName).HasMaxLength(50);
             entity.Property(e => e.ProductShortDescription).HasMaxLength(50);
             entity.Property(e => e.Quantity).HasMaxLength(50);
@@ -497,10 +506,15 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.Property(e => e.TotalAmount).HasColumnType("decimal(18, 0)");
             entity.Property(e => e.TotalGst).HasColumnType("decimal(18, 0)");
             entity.Property(e => e.Type).HasMaxLength(20);
+            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
 
             entity.HasOne(d => d.PaymentMethodNavigation).WithMany(p => p.TblPurchaseOrderMasters)
                 .HasForeignKey(d => d.PaymentMethod)
                 .HasConstraintName("FK_tblOrderMaster_tblPaymentMethodType");
+
+            entity.HasOne(d => d.PaymentStatusNavigation).WithMany(p => p.TblPurchaseOrderMasters)
+                .HasForeignKey(d => d.PaymentStatus)
+                .HasConstraintName("FK_tblPurchaseOrderMaster_tblPaymentType");
 
             entity.HasOne(d => d.Product).WithMany(p => p.TblPurchaseOrderMasters)
                 .HasForeignKey(d => d.ProductId)
@@ -614,6 +628,7 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.Property(e => e.TaskEndDate).HasColumnType("datetime");
             entity.Property(e => e.TaskStatus).HasMaxLength(20);
             entity.Property(e => e.TaskTitle).HasMaxLength(50);
+            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
 
             entity.HasOne(d => d.Project).WithMany(p => p.TblTaskDetails)
                 .HasForeignKey(d => d.ProjectId)
@@ -660,6 +675,7 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.Property(e => e.LastName).HasMaxLength(30);
             entity.Property(e => e.PhoneNumber).HasMaxLength(15);
             entity.Property(e => e.Pincode).HasMaxLength(20);
+            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
             entity.Property(e => e.UserName).HasMaxLength(20);
 
             entity.HasOne(d => d.City).WithMany(p => p.TblUsers)
@@ -693,6 +709,7 @@ public partial class BonifatiusEmployeesContext : DbContext
 
             entity.Property(e => e.CreatedBy).HasMaxLength(20);
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
 
             entity.HasOne(d => d.DocumentType).WithMany(p => p.TblUserDocuments)
                 .HasForeignKey(d => d.DocumentTypeId)
@@ -714,6 +731,7 @@ public partial class BonifatiusEmployeesContext : DbContext
                 .HasColumnName("VId");
             entity.Property(e => e.CreatedBy).HasMaxLength(10);
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
             entity.Property(e => e.VendorAccountHolderName).HasMaxLength(20);
             entity.Property(e => e.VendorAddress).HasMaxLength(100);
             entity.Property(e => e.VendorBankAccountNo).HasMaxLength(50);
