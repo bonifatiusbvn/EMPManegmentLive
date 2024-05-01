@@ -72,7 +72,7 @@
                                 </div>
                             </div>
                             <div class="text-end mb-4">
-                                <a href="apps-ecommerce-checkout.html" class="btn btn-primary btn-label right ms-auto"><i class="ri-arrow-right-line label-icon align-bottom fs-16 ms-2" onclick="validateAndRequest()" id="btnpurchaserequest"></i> Save</a>
+                                <a class="btn btn-primary btn-label right ms-auto" id="btnpurchaserequest" onclick="CreatePurchaseRequest()"> Save</a>
                             </div>
                         </div>
                         <!-- end tab pane -->
@@ -92,10 +92,9 @@
                         <!-- end tab pane -->
                     </div>
                     <!-- end tab content -->
-                    <div class="modal fade show" id="mdPoproductModal" tabindex="-1" aria-modal="true" role="dialog">
-                        <div class="modal-dialog modal-dialog-scrollable">
+                    <div class="modal fade show" tabindex="-1" id="mdPoproductModal" role="dialog" aria-labelledby="myLargeModalLabel" aria-modal="true" aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
                             <div class="modal-content">
-
                                 <div class="modal-header">
                                     <h5 class="modal-title">Select Product</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -150,11 +149,8 @@
     }
 </script>
 <!-- input step init -->
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
-@* <script src="~/assets/js/pages/form-input-spin.init.js"></script>
-
-<!-- ecommerce cart js -->
-<script src="~/assets/js/pages/ecommerce-cart.init.js"></script> *@
-
 <script src="~/moduls/purchaserequestscript.js"></script>
 

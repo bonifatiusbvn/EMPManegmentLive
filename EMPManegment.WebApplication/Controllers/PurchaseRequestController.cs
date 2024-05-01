@@ -1,6 +1,7 @@
 ﻿using EMPManagment.Web.Helper;
 using EMPManagment.Web.Models.API;
 using EMPManegment.EntityModels.View_Model;
+using EMPManegment.EntityModels.ViewModels.OrderModels;
 using EMPManegment.EntityModels.ViewModels.ProductMaster;
 using EMPManegment.EntityModels.ViewModels.Purchase_Request;
 using EMPManegment.Web.Models;
@@ -47,24 +48,28 @@ namespace EMPManegment.Web.Controllers
             }
         }
         [HttpPost]
-        public async Task<IActionResult> CreatePurchaseRequest(PurchaseRequestModel PurchaseRequestDetails)
+        public async Task<IActionResult> CreatePurchaseRequest(PurchaseRequestModel AddPurchaseRequest)
         {
             try
             {
-                var PurchaseRequest = new PurchaseRequestModel()
+                var purchaseRequest = new PurchaseRequestModel()
                 {
                     PrId = Guid.NewGuid(),
-                    UserId = PurchaseRequestDetails.UserId,
-                    ProjectId = PurchaseRequestDetails.ProjectId,
-                    ProductId = PurchaseRequestDetails.ProductId,
-                    ProductName = PurchaseRequestDetails.ProductName,
-                    ProductTypeId = PurchaseRequestDetails.ProductTypeId,
-                    Quantity = PurchaseRequestDetails.Quantity,
+                    UserId = AddPurchaseRequest.UserId,
+                    UserName = AddPurchaseRequest.UserName,
+                    ProjectId = AddPurchaseRequest.ProjectId,
+                    ProjectName = AddPurchaseRequest.ProjectName,
+                    ProductId = AddPurchaseRequest.ProductId,
+                    ProductName = AddPurchaseRequest.ProductName,
+                    ProductTypeId = AddPurchaseRequest.ProductTypeId,
+                    Quantity = AddPurchaseRequest.Quantity,
                     IsApproved = false,
                     IsDeleted = false,
+                    CreatedBy = AddPurchaseRequest.CreatedBy,
+                    CreatedOn=DateTime.Now,
                 };
 
-                ApiResponseModel postUser = await APIServices.PostAsync(PurchaseRequest, "PurchaseRequest/AddPurchaseRequestDetails");
+                ApiResponseModel postUser = await APIServices.PostAsync(purchaseRequest, "PurchaseRequest/CreatePurchaseRequest");
                 if (postUser.code == 200)
                 {
                     return Ok(new { Message = postUser.message, Code = postUser.code });
@@ -110,17 +115,54 @@ namespace EMPManegment.Web.Controllers
             return View();
         }
         [HttpGet]
-        public async Task<JsonResult> GetPurchaseRequestDetailsById(Guid PrId)
+        public async Task<JsonResult> EditPurchaseRequestDetails(Guid PrId)
         {
             try
             {
                 PurchaseRequestModel purchaseRequest = new PurchaseRequestModel();
-                ApiResponseModel res = await APIServices.GetAsync("", "PurchaseRequest/GetPurchaseRequestDetailsById?PrId=" + PrId);
+                ApiResponseModel res = await APIServices.GetAsync("", "PurchaseRequest/EditPurchaseRequestDetails?PrId=" + PrId);
                 if (res.code == 200)
                 {
                     purchaseRequest = JsonConvert.DeserializeObject<PurchaseRequestModel>(res.data.ToString());
                 }
                 return new JsonResult(purchaseRequest);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        [HttpPost]
+        public async Task<IActionResult> UpdatePurchaseRequestDetails(PurchaseRequestModel UpdatePurchaseRequest)
+        {
+            try
+            {
+                ApiResponseModel postuser = await APIServices.PostAsync(UpdatePurchaseRequest, "PurchaseRequest/UpdatePurchaseRequestDetails");
+                if (postuser.code == 200)
+                {
+                    return Ok(new { postuser.message });
+                }
+                return View(UpdatePurchaseRequest);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        [HttpPost]
+        public async Task<IActionResult> DeletePurchaseRequestDetails(Guid PrId)
+        {
+            try
+            {
+                ApiResponseModel purchaseRequest = await APIServices.PostAsync(null, "PurchaseRequest/DeletePurchaseRequestDetails?PrId=" + PrId);
+                if (purchaseRequest.code == 200)
+                {
+                    return Ok(new { Message = string.Format(purchaseRequest.message), Code = purchaseRequest.code });
+                }
+                else
+                {
+                    return new JsonResult(new { Message = string.Format(purchaseRequest.message), Code = purchaseRequest.code });
+                }
             }
             catch (Exception ex)
             {
