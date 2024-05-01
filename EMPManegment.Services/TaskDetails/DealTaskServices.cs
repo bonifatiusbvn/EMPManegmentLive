@@ -47,10 +47,10 @@ namespace EMPManegment.Services.TaskDetails
         }
         public async Task<TaskDetailsView> GetTaskDetailsById(Guid Taskid)
         {
-            return await TaskDetails. GetTaskDetailsById(Taskid);
+            return await TaskDetails.GetTaskDetailsById(Taskid);
         }
 
-        public async Task<IEnumerable<TaskDetailsView>> GetTaskDetails(Guid Taskid,Guid ProjectId)
+        public async Task<IEnumerable<TaskDetailsView>> GetTaskDetails(Guid Taskid, Guid ProjectId)
         {
             return await TaskDetails.GetTaskDetails(Taskid, ProjectId);
         }
@@ -69,9 +69,14 @@ namespace EMPManegment.Services.TaskDetails
         {
             return await TaskDetails.GetUserTotalTask(UserId);
         }
-       public async Task<UserResponceModel> UpdateTaskDetails(TaskDetailsView updateTaskDetails)
+        public async Task<UserResponceModel> UpdateTaskDetails(TaskDetailsView updateTaskDetails)
         {
             return await TaskDetails.UpdateTaskDetails(updateTaskDetails);
+        }
+
+        public async Task<IEnumerable<TaskDetailsView>> ProjectActivity(Guid ProId)
+        {
+            return await TaskDetails.ProjectActivity(ProId);
         }
     }
 }

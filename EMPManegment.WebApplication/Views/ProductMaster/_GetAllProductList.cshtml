@@ -3,7 +3,7 @@
 @using X.PagedList;
 @using X.PagedList.Mvc.Core;
 
-<div class="card">
+@* <div class="card">
     <div class="card-body">
         <div class="table-responsive table-card mb-1">
             <table class="table table-nowrap align-middle">
@@ -48,7 +48,48 @@
             </table>
         </div>
     </div>
+</div> *@
+
+
+<div class="card-body">
+    <div class="table-responsive table-card mb-1">
+        <table class="table table-nowrap align-middle">
+            <thead class="text-muted table-light">
+                <tr class="text-uppercase">
+                    <th data-sort="Products">Products</th>
+                    <th data-sort="Price">Price</th>
+                    <th data-sort="Action">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            <div class="d-flex">
+                                <div class="flex-shrink-0 avatar-md bg-light rounded p-1">
+                                    <img src="~/@item.ProductImage" alt="" class="img-fluid d-block">
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h5 class="fs-15"><a href="/ProductMaster/GetProductDetailsById/?ProductId=@item.Id" class="fw-medium link-primary">@item.ProductName</a></h5>
+                                    <p class="text-muted mb-0">Description: <span class="fw-medium">@item.ProductShortDescription</span></p>
+                                </div>
+                            </div>
+                        </td>
+                        <td>@item.PerUnitPrice</td>
+                        <td>
+                            <a href="#showModal" onclick="EditProductDetails('@item.Id')" data-bs-toggle="modal" class="text-primary d-inline-block edit-item-btn">
+                                <i class="fas fa-edit"></i>
+                            </a>
+
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 </div>
+
 
 @Html.PagedListPager((IPagedList)Model, page => Url.Action("GetAllProductList", new
     {
@@ -56,8 +97,8 @@
         searchfor = @Context.Request.Query["searchfor"],
         searchby = @Context.Request.Query["searchby"]
     }),
-                                                          new X.PagedList.Web.Common.PagedListRenderOptions
-                                                      {
-                                                          LiElementClasses = new string[] { "page-item" },
-                                                          PageClasses = new string[] { "page-link" }
-                                                      })
+    new X.PagedList.Web.Common.PagedListRenderOptions
+{
+    LiElementClasses = new string[] { "page-item" },
+    PageClasses = new string[] { "page-link" }
+})

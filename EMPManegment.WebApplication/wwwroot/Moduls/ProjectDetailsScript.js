@@ -544,3 +544,26 @@ function GetProjectCountry() {
         }
     });
 }
+
+function projectActivity(ProId) {
+
+    $.ajax({
+        url: '/Task/GetProjectActivity?ProId=' + ProId,
+        type: 'Get',
+        dataType: 'json',
+        processData: false,
+        contentType: false,
+        complete: function (Result) {
+
+            $('#projectActivity').html(Result.responseText);
+        },
+        Error: function () {
+            Swal.fire({
+                title: "Can't get data!",
+                icon: 'warning',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'OK',
+            })
+        }
+    })
+}

@@ -24,7 +24,7 @@ namespace EMPManagment.API.Controllers
     [ApiController]
     public class UserHomeController : ControllerBase
     {
-        public UserHomeController(IUserDetailsServices userDetails,IUserAttendanceServices attendanceServices,ITaskServices taskServices) 
+        public UserHomeController(IUserDetailsServices userDetails, IUserAttendanceServices attendanceServices, ITaskServices taskServices)
         {
             UserDetails = userDetails;
             AttendanceServices = attendanceServices;
@@ -107,13 +107,13 @@ namespace EMPManagment.API.Controllers
                 {
                     userresponseModel.Data = user.Data;
                     userresponseModel.Code = (int)HttpStatusCode.OK;
-                   
+
                 }
                 else
                 {
                     userresponseModel.Code = user.Code;
-                    
-                   
+
+
                 }
             }
             catch (Exception ex)
@@ -249,7 +249,7 @@ namespace EMPManagment.API.Controllers
         [Route("GetTaskDetails")]
         public async Task<IActionResult> GetTaskDetails(Guid Taskid, Guid ProjectId)
         {
-            IEnumerable<TaskDetailsView> userTaskDetails = await TaskServices.GetTaskDetails(Taskid,ProjectId);
+            IEnumerable<TaskDetailsView> userTaskDetails = await TaskServices.GetTaskDetails(Taskid, ProjectId);
             return Ok(new { code = 200, data = userTaskDetails.ToList() });
         }
 
@@ -285,6 +285,14 @@ namespace EMPManagment.API.Controllers
                 throw ex;
             }
             return StatusCode(updateresponsemodel.Code, updateresponsemodel);
+        }
+
+        [HttpGet]
+        [Route("ProjectActivity")]
+        public async Task<IActionResult> ProjectActivity(Guid ProId)
+        {
+            IEnumerable<TaskDetailsView> UserTask = await TaskServices.ProjectActivity(ProId);
+            return Ok(new { code = 200, data = UserTask.ToList() });
         }
     }
 }

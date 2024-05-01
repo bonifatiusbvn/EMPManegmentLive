@@ -22,5 +22,6 @@ namespace EMPManegment.Inretface.Services.TaskServices
         Task<IEnumerable<TaskDetailsView>> GetTaskDetails(Guid Taskid, Guid ProjectId);
         Task<IEnumerable<TaskDetailsView>> GetUserTotalTask(Guid UserId);
         Task<UserResponceModel> UpdateTaskDetails(TaskDetailsView updateTaskDetails);
+        Task<IEnumerable<TaskDetailsView>> ProjectActivity(Guid ProId);
     }
 }

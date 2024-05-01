@@ -96,7 +96,7 @@ namespace EMPManegment.Web.Controllers
                     TaskDetails = task.TaskDetails,
                     UserId = _userSession.UserId,
                     TaskTitle = task.TaskTitle,
-                    ProjectId=task.ProjectId,
+                    ProjectId = task.ProjectId,
                 };
                 ApiResponseModel postuser = await APIServices.PostAsync(TaskDetails, "UserHome/AddTaskDetails");
                 UserResponceModel responseModel = new UserResponceModel();
@@ -312,6 +312,32 @@ namespace EMPManegment.Web.Controllers
                 {
                     return View(updateTaskDetails);
                 }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetProjectActivity(Guid ProId)
+        {
+            try
+            {
+
+                List<TaskDetailsView> activity = new List<TaskDetailsView>();
+                ApiResponseModel postuser = await APIServices.GetAsync("", "UserHome/ProjectActivity?ProId=" + ProId);
+                if (postuser.data != null)
+                {
+                    activity = JsonConvert.DeserializeObject<List<TaskDetailsView>>(postuser.data.ToString());
+
+                }
+                else
+                {
+                    activity = new List<TaskDetailsView>();
+                    ViewBag.Error = "note found";
+                }
+                return PartialView("~/Views/Project/_ProjectActivityPartial.cshtml", activity);
             }
             catch (Exception ex)
             {
