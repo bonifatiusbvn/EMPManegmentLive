@@ -2,6 +2,7 @@
 using EMPManagment.Web.Models.API;
 using EMPManegment.EntityModels.ViewModels.ExpenseMaster;
 using EMPManegment.EntityModels.ViewModels.Invoice;
+using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.Purchase_Request;
 using EMPManegment.Inretface.Interface.PurchaseRequest;
 using System;
@@ -21,28 +22,28 @@ namespace EMPManegment.Repository.PurchaseRequestRepository
         }
         public BonifatiusEmployeesContext Context { get; }
 
-        public async Task<ApiResponseModel> AddPurchaseRequestDetails(PurchaseRequestModel PurchaseRequestDetails)
+        public async Task<ApiResponseModel> AddPurchaseRequestDetails(PurchaseRequestModel AddPurchaseRequest)
         {
             ApiResponseModel response = new ApiResponseModel();
             try
             {
-                var PurchaseRequest = new TblPurchaseRequest()
+                var purchaseRequest = new TblPurchaseRequest()
                 {
                     PrId = Guid.NewGuid(),
-                    UserId = PurchaseRequestDetails.UserId,
-                    ProjectId = PurchaseRequestDetails.ProjectId,
-                    ProductId = PurchaseRequestDetails.ProductId,
-                    ProductName = PurchaseRequestDetails.ProductName,
-                    ProductTypeId = PurchaseRequestDetails.ProductTypeId,
-                    Quantity = PurchaseRequestDetails.Quantity,
-                    IsApproved = PurchaseRequestDetails.IsApproved,
+                    UserId = AddPurchaseRequest.UserId,
+                    ProjectId = AddPurchaseRequest.ProjectId,
+                    ProductId = AddPurchaseRequest.ProductId,
+                    ProductName = AddPurchaseRequest.ProductName,
+                    ProductTypeId = AddPurchaseRequest.ProductTypeId,
+                    Quantity = AddPurchaseRequest.Quantity,
+                    IsApproved = AddPurchaseRequest.IsApproved,
                     IsDeleted = false,
-                    CreatedBy = PurchaseRequestDetails.CreatedBy,
+                    CreatedBy = AddPurchaseRequest.CreatedBy,
                     CreatedOn = DateTime.Now,
                 };
                 response.code = (int)HttpStatusCode.OK;
                 response.message = "PurchaseRequest successfully created..!";
-                Context.TblPurchaseRequests.Add(PurchaseRequest);
+                Context.TblPurchaseRequests.Add(purchaseRequest);
                 Context.SaveChanges();
             }
             catch (Exception)
@@ -50,6 +51,25 @@ namespace EMPManegment.Repository.PurchaseRequestRepository
                 throw;
             }
             return response;
+        }
+
+        public async Task<ApiResponseModel> DeletePurchaseRequestDetails(Guid PrId)
+        {
+            {
+                ApiResponseModel response = new ApiResponseModel();
+                var PurchaseRequest = Context.TblPurchaseRequests.Where(a => a.PrId == PrId).FirstOrDefault();
+
+                if (PurchaseRequest != null)
+                {
+                    PurchaseRequest.IsDeleted = true;
+                    Context.TblPurchaseRequests.Update(PurchaseRequest);
+                    Context.SaveChanges();
+                    response.code = 200;
+                    response.data = PurchaseRequest;
+                    response.message = "PurchaseRequest is Deleted Successfully";
+                }
+                return response;
+            }
         }
 
         public async Task<PurchaseRequestModel> GetPurchaseRequestDetailsById(Guid PrId)
@@ -114,6 +134,35 @@ namespace EMPManegment.Repository.PurchaseRequestRepository
 
                 throw;
             }
+        }
+
+        public async Task<ApiResponseModel> UpdatePurchaseRequestDetails(PurchaseRequestModel UpdatePurchaseRequest)
+        {
+            ApiResponseModel model = new ApiResponseModel();
+            var purchaseRequest = Context.TblPurchaseRequests.Where(e => e.PrId == UpdatePurchaseRequest.PrId).FirstOrDefault();
+            try
+            {
+                if (purchaseRequest != null)
+                {
+                    purchaseRequest.PrId = UpdatePurchaseRequest.PrId;
+                    purchaseRequest.UserId = UpdatePurchaseRequest.UserId;
+                    purchaseRequest.ProjectId = UpdatePurchaseRequest.ProjectId;
+                    purchaseRequest.ProductId = UpdatePurchaseRequest.ProductId;
+                    purchaseRequest.ProductName = UpdatePurchaseRequest.ProductName;
+                    purchaseRequest.ProductTypeId = UpdatePurchaseRequest.ProductTypeId;
+                    purchaseRequest.Quantity = UpdatePurchaseRequest.Quantity;
+                    purchaseRequest.IsApproved = UpdatePurchaseRequest.IsApproved;
+                }
+                Context.TblPurchaseRequests.Update(purchaseRequest);
+                Context.SaveChanges();
+                model.code = 200;
+                model.message = "Purchase Request Updated Successfully!";
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return model;
         }
     }
 }

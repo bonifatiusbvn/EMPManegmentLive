@@ -1,12 +1,16 @@
 ﻿using EMPManagment.Web.Models.API;
 using EMPManegment.EntityModels.View_Model;
+using EMPManegment.EntityModels.ViewModels.Models;
+using EMPManegment.EntityModels.ViewModels.OrderModels;
 using EMPManegment.EntityModels.ViewModels.Purchase_Request;
+using EMPManegment.Inretface.Interface.OrderDetails;
 using EMPManegment.Inretface.Interface.ProjectDetails;
 using EMPManegment.Inretface.Interface.PurchaseRequest;
 using EMPManegment.Inretface.Services.OrderDetails;
 using EMPManegment.Inretface.Services.PurchaseRequestServices;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace EMPManagment.API.Controllers
 {
@@ -21,11 +25,11 @@ namespace EMPManagment.API.Controllers
         public IPurchaseRequestServices purchaseRequest { get; }
 
         [HttpPost]
-        [Route("AddPurchaseRequestDetails")]
-        public async Task<IActionResult> AddPurchaseRequestDetails(PurchaseRequestModel PuchaseRequestDetails)
+        [Route("CreatePurchaseRequest")]
+        public async Task<IActionResult> CreatePurchaseRequest(PurchaseRequestModel AddPurchaseRequest)
         {
             ApiResponseModel response = new ApiResponseModel();
-            var PurchaseRequest = await purchaseRequest.AddPurchaseRequestDetails(PuchaseRequestDetails);
+            var PurchaseRequest = await purchaseRequest.AddPurchaseRequestDetails(AddPurchaseRequest);
             if (PurchaseRequest.code == 200)
             {
                 response.code = PurchaseRequest.code;
@@ -42,11 +46,61 @@ namespace EMPManagment.API.Controllers
         }
 
         [HttpGet]
-        [Route("GetPurchaseRequestDetailsById")]
-        public async Task<IActionResult> GetPurchaseRequestDetailsById(Guid PrId)
+        [Route("EditPurchaseRequestDetails")]
+        public async Task<IActionResult> EditPurchaseRequestDetails(Guid PrId)
         {
             var purchaseRequestDetails = await purchaseRequest.GetPurchaseRequestDetailsById(PrId);
             return Ok(new { code = 200, data = purchaseRequestDetails });
+        }
+        [HttpPost]
+        [Route("UpdatePurchaseRequestDetails")]
+        public async Task<IActionResult> UpdatePurchaseRequestDetails(PurchaseRequestModel PurchaseRequestDetails)
+        {
+            ApiResponseModel response = new ApiResponseModel();
+            try
+            {
+                var updatePR = purchaseRequest.UpdatePurchaseRequestDetails(PurchaseRequestDetails);
+                if (updatePR.Result.code == 200)
+                {
+                    response.code = (int)HttpStatusCode.OK;
+                    response.message = updatePR.Result.message;
+                }
+                else
+                {
+                    response.message = updatePR.Result.message;
+                    response.code = (int)HttpStatusCode.NotFound;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return StatusCode(response.code, response);
+        }
+        [HttpPost]
+        [Route("DeletePurchaseRequestDetails")]
+        public async Task<IActionResult> DeletePurchaseRequestDetails(Guid PrId)
+        {
+            ApiResponseModel responseModel = new ApiResponseModel();
+            var PurchaseRequest = await purchaseRequest.DeletePurchaseRequestDetails(PrId);
+            try
+            {
+                if (PurchaseRequest != null)
+                {
+                    responseModel.code = (int)HttpStatusCode.OK;
+                    responseModel.message = PurchaseRequest.message;
+                }
+                else
+                {
+                    responseModel.message = PurchaseRequest.message;
+                    responseModel.code = (int)HttpStatusCode.NotFound;
+                }
+            }
+            catch (Exception ex)
+            {
+                responseModel.code = (int)HttpStatusCode.InternalServerError;
+            }
+            return StatusCode(responseModel.code, responseModel);
         }
     }
 }

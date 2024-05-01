@@ -33,7 +33,7 @@
                         </div>
                         <div class="col-sm-auto">
                             <div class="d-flex gap-1 flex-wrap">
-                                <a class="btn btn-primary add-btn" id="create-btn" asp-action="CreatePurchaseRequestView" asp-controller="PurchaseRequestMaster"><i class="ri-add-line align-bottom me-1"></i> Create PR</a>
+                                <a class="btn btn-primary add-btn" id="create-btn" asp-action="CreatePurchaseRequest" asp-controller="PurchaseRequest"><i class="ri-add-line align-bottom me-1"></i> Create PR</a>
                                 <button type="button" class="btn btn-info"><i class="ri-file-download-line align-bottom me-1"></i> Import</button>
                                 <button class="btn btn-soft-danger" id="remove-actions" onClick="deleteMultiple()"><i class="ri-delete-bin-2-line"></i></button>
                             </div>
@@ -123,7 +123,7 @@
                                                     <th class="sort" data-sort="product_name">ProductName</th>
                                                     <th class="sort" data-sort="quantity">Quantity</th>
                                                     <th class="sort" data-sort="isApproved">IsApproved</th>
-                                                    <th class="sort" data-sort="city">Action</th>
+                                                    <th class="sort" data-sort="action">Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody id="addNewlink">
@@ -164,6 +164,16 @@
         </div>
     </div>
 </div>
+<style>
+    #txtusername-error, #txtprojectId-error, #txtProductId-error, #txtproductName-error,
+    #txtProductTypeId-error {
+        color: red;
+    }
+
+    label.failed {
+        color: red;
+    }
+</style>
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/moduls/purchaserequestscript.js"></script>
