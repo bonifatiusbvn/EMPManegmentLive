@@ -8,7 +8,7 @@
     <tr>
         <th scope="row">
         </th>
-        <td class="id" hidden><a href="/OrderMaster/GetOrderDetailsById/?OrderId=@item.PrId" class="fw-medium link-primary">@item.PrId</a></td>
+        <td class="id" hidden><a href="/PurchaseRequest/GetPurchaseRequestDetailsById/?PrId=@item.PrId" class="fw-medium link-primary">@item.PrId</a></td>
         <td class="user_name">@item.UserName</td>
         <td class="project_name">@item.ProjectName</td>
         <td class="product_name">@item.ProductName</td>
@@ -17,12 +17,12 @@
         <td>
             <ul class="list-inline hstack gap-2 mb-0">
                 <li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">
-                    <a onclick="showPurchaseRequest()" class="btn text-primary d-inline-block edit-item-btn">
+                    <a onclick="EditPurchaseRequestDetails('@item.PrId')" data-bs-toggle="modal" class="btn text-primary d-inline-block edit-item-btn">
                         <i class="ri-pencil-fill fs-16"></i>
                     </a>
                 </li>
                 <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Remove">
-                    <a class="btn text-danger d-inline-block remove-item-btn" data-bs-toggle="modal" href="#deleteOrder">
+                    <a class="btn text-danger d-inline-block remove-item-btn" data-bs-toggle="modal" onclick="DeletePurchaseRequestDetails('@item.PrId')">
                         <i class="ri-delete-bin-5-fill fs-16"></i>
                     </a>
                 </li>
@@ -31,6 +31,6 @@
     </tr>
 }
 @section Scripts {
-<script src="~/moduls/purchaserequestscript.js"></script>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/moduls/purchaserequestscript.js"></script>
 }

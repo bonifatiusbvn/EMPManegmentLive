@@ -13,10 +13,14 @@
             </div>
         </div>
         <div class="col-sm">
-            <h5 class="fs-14 text-truncate"><a href="ecommerce-product-detail.html" class="text-body">@Model.ProductName</a></h5>
+            <h5 class="fs-14 text-truncate"><a href="ecommerce-product-detail.html" id="txtProductName" class="text-body">@Model.ProductName</a></h5>
 
-            <div class="input-step">
-                <input type="number" class="product-quantity form-control" id="txtproductquantity" value="1" min="1" style="width:80px;">
+            <div class="">
+                <input type="text" class="product-quantity form-control" id="txtproductquantity" value="1" oninput="preventEmptyValue(this)" style="width:80px;">
+                <input type="hidden" class="product-quantity form-control" id="txtproducttype" value="@Model.ProductType" oninput="preventEmptyValue(this)" style="width:80px;">
+                <input type="hidden" class="product-quantity form-control" id="txtproductId" value="@Model.ProductId" oninput="preventEmptyValue(this)" style="width:80px;">
+                <input type="hidden" value="@UserSession.ProjectId" id="txtprojectId"/>
+                <input type="hidden" value="@_userSession.UserId" id="txtuserId"/>
             </div>
         </div>
         <div class="col-sm-auto">
