@@ -1,4 +1,5 @@
-﻿using EMPManegment.EntityModels.ViewModels.DataTableParameters;
+﻿using EMPManegment.EntityModels.View_Model;
+using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 using EMPManegment.EntityModels.ViewModels.Invoice;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.OrderModels;
@@ -311,6 +312,14 @@ namespace EMPManagment.API.Controllers
                 throw ex;
             }
             return StatusCode(response.Code, response);
+        }
+
+        [HttpGet]
+        [Route("InvoiceActivity")]
+        public async Task<IActionResult> InvoiceActivity(Guid ProId)
+        {
+            IEnumerable<InvoiceViewModel> emplist = await InvoiceMaster.InvoicActivity(ProId);
+            return Ok(new { code = 200, data = emplist.ToList() });
         }
     }
 }

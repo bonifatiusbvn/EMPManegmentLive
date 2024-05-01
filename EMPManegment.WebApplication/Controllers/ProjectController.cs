@@ -14,6 +14,7 @@ using Newtonsoft.Json;
 using System.Security.Claims;
 using X.PagedList;
 using X.PagedList.Mvc;
+using EMPManegment.EntityModels.ViewModels.Invoice;
 
 namespace EMPManegment.Web.Controllers
 {
@@ -441,6 +442,32 @@ namespace EMPManegment.Web.Controllers
                 {
                     return new JsonResult(new { Message = string.Format(postuser.message), Code = postuser.code });
                 }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetInvoiceActivity(Guid ProId)
+        {
+            try
+            {
+
+                List<InvoiceViewModel> activity = new List<InvoiceViewModel>();
+                ApiResponseModel postuser = await APIServices.GetAsync("", "Invoice/InvoiceActivity?ProId=" + ProId);
+                if (postuser.data != null)
+                {
+                    activity = JsonConvert.DeserializeObject<List<InvoiceViewModel>>(postuser.data.ToString());
+
+                }
+                else
+                {
+                    activity = new List<InvoiceViewModel>();
+                    ViewBag.Error = "note found";
+                }
+                return PartialView("~/Views/Project/_InvoiceActivityPartial.cshtml", activity);
             }
             catch (Exception ex)
             {

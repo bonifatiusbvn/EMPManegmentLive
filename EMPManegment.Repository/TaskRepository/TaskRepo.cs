@@ -248,7 +248,7 @@ namespace EMPManegment.Repository.TaskRepository
                                     CreatedBy = a.CreatedBy,
                                     UpdatedOn = a.UpdatedOn,
 
-                                }).Take(5);
+                                }).Take(3);
 
                 return await activity.ToListAsync();
             }

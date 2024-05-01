@@ -548,7 +548,7 @@ function GetProjectCountry() {
 function projectActivity(ProId) {
 
     $.ajax({
-        url: '/Task/GetProjectActivity?ProId=' + ProId,
+        url: '/Project/GetInvoiceActivity?ProId=' + ProId,
         type: 'Get',
         dataType: 'json',
         processData: false,
@@ -556,6 +556,30 @@ function projectActivity(ProId) {
         complete: function (Result) {
 
             $('#projectActivity').html(Result.responseText);
+            projectinvoiceActivity(ProId)
+        },
+        Error: function () {
+            Swal.fire({
+                title: "Can't get data!",
+                icon: 'warning',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'OK',
+            })
+        }
+    })
+}
+
+function projectinvoiceActivity(ProId) {
+
+    $.ajax({
+        url: '/Task/GetProjectActivity?ProId=' + ProId,
+        type: 'Get',
+        dataType: 'json',
+        processData: false,
+        contentType: false,
+        complete: function (Result) {
+
+            $('#invoiceactivity').html(Result.responseText);
         },
         Error: function () {
             Swal.fire({

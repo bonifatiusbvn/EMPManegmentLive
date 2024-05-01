@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Net;
@@ -279,7 +280,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
             try
             {
                 var data = await (from a in Context.TblInvoices
-                                  join b in Context.TblVendorMasters  on a.VandorId equals b.Vid
+                                  join b in Context.TblVendorMasters on a.VandorId equals b.Vid
                                   join c in Context.TblProjectMasters on a.ProjectId equals c.ProjectId
                                   where a.IsDeleted != true
                                   select new
@@ -461,7 +462,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
         }
         public async Task<UserResponceModel> InsertInvoiceDetails(InvoiceMasterModel InsertInvoice)
         {
-            UserResponceModel response= new UserResponceModel();
+            UserResponceModel response = new UserResponceModel();
             try
             {
                 var invoice = new TblInvoice()
@@ -476,7 +477,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                     BuyesOrderNo = InsertInvoice.BuyesOrderNo,
                     BuyesOrderDate = InsertInvoice.BuyesOrderDate,
                     DispatchThrough = InsertInvoice.DispatchThrough,
-                    ShippingAddress= InsertInvoice.ShippingAddress,
+                    ShippingAddress = InsertInvoice.ShippingAddress,
                     Cgst = InsertInvoice.Cgst,
                     Sgst = InsertInvoice.Sgst,
                     Igst = InsertInvoice.Igst,
@@ -484,14 +485,14 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                     TotalAmount = InsertInvoice.TotalAmount,
                     PaymentMethod = InsertInvoice.PaymentMethod,
                     Status = InsertInvoice.Status,
-                    PaymentStatus=InsertInvoice.PaymentStatus,
+                    PaymentStatus = InsertInvoice.PaymentStatus,
                     IsDeleted = false,
                     CreatedBy = InsertInvoice.CreatedBy,
                     CreatedOn = DateTime.Now,
                 };
                 Context.TblInvoices.Add(invoice);
 
-                foreach(var item in InsertInvoice.InvoiceDetails)
+                foreach (var item in InsertInvoice.InvoiceDetails)
                 {
                     var InvoiceDetails = new TblInvoiceDetail()
                     {
@@ -704,7 +705,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
 
             if (GetInvoiceDetails.Any())
             {
-                foreach(var invoice in GetInvoiceDetails)
+                foreach (var invoice in GetInvoiceDetails)
                 {
                     invoice.IsDeleted = true;
                     Context.TblInvoiceDetails.Update(invoice);
@@ -865,6 +866,42 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                 throw ex;
             }
             return response;
+        }
+
+        public async Task<IEnumerable<InvoiceViewModel>> InvoicActivity(Guid ProId)
+        {
+            try
+            {
+                var invoices = (from a in Context.TblInvoices
+                                join b in Context.TblVendorMasters on a.VandorId equals b.Vid
+                                join u in Context.TblUsers on a.CreatedBy equals u.Id
+                                where a.ProjectId == ProId
+                                orderby a.UpdatedOn ascending
+                                select new InvoiceViewModel
+                                {
+                                    Id = a.Id,
+                                    InvoiceNo = a.InvoiceNo,
+                                    VendorName = b.VendorCompany,
+                                    VandorId = a.VandorId,
+                                    UserName = u.UserName,
+                                    UserImage = u.Image,
+                                    Status = a.Status,
+                                    ShippingAddress = a.ShippingAddress,
+                                    TotalAmount = a.TotalAmount,
+                                    CreatedOn = a.CreatedOn,
+                                    CreatedBy = a.CreatedBy,
+                                    UpdatedOn = a.UpdatedOn,
+                                    UpdatedBy = a.UpdatedBy
+                                }).Take(3);
+
+                return await invoices.ToListAsync();
+            }
+
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
         }
     }
 }
