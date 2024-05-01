@@ -128,7 +128,7 @@ function InsertInvoiceDetails() {
                 InvoiceDate: $("#textInvoiceDate").val(),
                 OrderStatus: $("#UnitTypeId").val(),
                 PaymentMethod: $("#txtpaymentmethod").val(),
-                Status: $("#txtpaymenttype").val(),
+                PaymentStatus: $("#txtpaymenttype").val(),
                 CreatedBy: $("#textCreatedById").val(),
                 ShippingAddress: $('#hideShippingAddress').is(':checked') ? $('#textCompanyBillingAddress').val() : $('#textShippingAddress').val(),
                 InvoiceDetails: ProductDetails,

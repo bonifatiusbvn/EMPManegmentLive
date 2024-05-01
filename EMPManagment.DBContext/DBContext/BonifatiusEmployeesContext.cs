@@ -269,6 +269,7 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.Property(e => e.Sgst)
                 .HasColumnType("numeric(18, 2)")
                 .HasColumnName("SGST");
+            entity.Property(e => e.Status).HasMaxLength(50);
             entity.Property(e => e.TotalAmount).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.TotalGst)
                 .HasColumnType("numeric(18, 2)")
@@ -279,13 +280,13 @@ public partial class BonifatiusEmployeesContext : DbContext
                 .HasForeignKey(d => d.PaymentMethod)
                 .HasConstraintName("FK_tblInvoices_tblPaymentMethodType");
 
+            entity.HasOne(d => d.PaymentStatusNavigation).WithMany(p => p.TblInvoices)
+                .HasForeignKey(d => d.PaymentStatus)
+                .HasConstraintName("FK_tblInvoices_tblPaymentType");
+
             entity.HasOne(d => d.Project).WithMany(p => p.TblInvoices)
                 .HasForeignKey(d => d.ProjectId)
                 .HasConstraintName("FK_tblInvoices_tblProjectMaster");
-
-            entity.HasOne(d => d.StatusNavigation).WithMany(p => p.TblInvoices)
-                .HasForeignKey(d => d.Status)
-                .HasConstraintName("FK_tblInvoices_tblPaymentType");
         });
 
         modelBuilder.Entity<TblInvoiceDetail>(entity =>
@@ -337,6 +338,7 @@ public partial class BonifatiusEmployeesContext : DbContext
         {
             entity.ToTable("tblPaymentType");
 
+            entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
             entity.Property(e => e.Type).HasMaxLength(30);
         });
