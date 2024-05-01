@@ -61,6 +61,10 @@ public partial class TblUser
 
     public string? CreatedBy { get; set; }
 
+    public Guid? UpdatedBy { get; set; }
+
+    public DateTime? UpdatedOn { get; set; }
+
     public virtual TblCity? City { get; set; }
 
     public virtual TblCountry? Country { get; set; }

@@ -11,5 +11,9 @@ public partial class TblExpenseType
 
     public DateTime CreatedOn { get; set; }
 
+    public Guid? UpdatedBy { get; set; }
+
+    public DateTime? UpdatedOn { get; set; }
+
     public virtual ICollection<TblExpenseMaster> TblExpenseMasters { get; set; } = new List<TblExpenseMaster>();
 }

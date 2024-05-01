@@ -495,6 +495,10 @@
 <div class="modal fade" id="deleteOrderModal">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Delete Member</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
             <div class="modal-body p-5 text-center">
                 <img src="~/lteassets/icons/delete.png" style="height:150px;width:150px" />
                 <div class="mt-4 text-center">
@@ -503,13 +507,11 @@
                         Deleting your project member will remove him form this current Project.
                     </p>
                     <div class="hstack gap-2 justify-content-center remove">
-                        <button class="btn btn-link link-primary fw-medium text-decoration-none" id="deleteRecord-close" data-bs-dismiss="modal">
-                            <i class="ri-close-line me-1 align-middle"></i>
+                        <button class="btn btn-secondary" id="deleteRecord-close" data-bs-dismiss="modal">
                             Close
                         </button>
                         <button class="btn btn-primary" id="delete-product" oncllick="deleteProjectMember(Id)">
-                            Yes,
-                            Delete It
+                            Yes,Delete It
                         </button>
                     </div>
                 </div>

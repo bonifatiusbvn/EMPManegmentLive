@@ -17,6 +17,10 @@ public partial class TblUserDocument
 
     public string? CreatedBy { get; set; }
 
+    public Guid? UpdatedBy { get; set; }
+
+    public DateTime? UpdatedOn { get; set; }
+
     public virtual TblDocumentMaster? DocumentType { get; set; }
 
     public virtual TblUser? User { get; set; }

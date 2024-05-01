@@ -31,6 +31,10 @@ public partial class TblProjectMember
 
     public Guid? CreatedBy { get; set; }
 
+    public Guid? UpdatedBy { get; set; }
+
+    public DateTime? UpdatedOn { get; set; }
+
     public virtual TblProjectMaster? Project { get; set; }
 
     public virtual TblUser? User { get; set; }

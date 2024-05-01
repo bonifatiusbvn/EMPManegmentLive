@@ -215,9 +215,7 @@ namespace EMPManegment.Web.Controllers
             try
             {
                 var InvoiceDetails = HttpContext.Request.Form["INVOICEDETAILS"];
-                var format = "dd/MM/yyyy";
-                var dateTimeConverter = new IsoDateTimeConverter { DateTimeFormat = format };
-                var InsertDetails = JsonConvert.DeserializeObject<GenerateInvoiceModel>(InvoiceDetails, dateTimeConverter);
+                var InsertDetails = JsonConvert.DeserializeObject<InvoiceMasterModel>(InvoiceDetails);
 
                 ApiResponseModel postuser = await APIServices.PostAsync(InsertDetails, "Invoice/InsertInvoiceDetails");
                 if (postuser.code == 200)
@@ -519,11 +517,11 @@ namespace EMPManegment.Web.Controllers
             }
         }
         [HttpPost]
-        public async Task<IActionResult> IsDeletedInvoice(string InvoiceNo)
+        public async Task<IActionResult> IsDeletedInvoice(Guid InvoiceId)
         {
             try
             {
-                ApiResponseModel postuser = await APIServices.PostAsync(null, "Invoice/IsDeletedInvoice?InvoiceNo=" + InvoiceNo);
+                ApiResponseModel postuser = await APIServices.PostAsync(null, "Invoice/IsDeletedInvoice?InvoiceId=" + InvoiceId);
                 if (postuser.code == 200)
                 {
                     return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });

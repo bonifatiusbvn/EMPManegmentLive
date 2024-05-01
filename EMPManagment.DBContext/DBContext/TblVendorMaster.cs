@@ -55,6 +55,10 @@ public partial class TblVendorMaster
 
     public string? CreatedBy { get; set; }
 
+    public Guid? UpdatedBy { get; set; }
+
+    public DateTime? UpdatedOn { get; set; }
+
     public virtual ICollection<TblCreditDebitMaster> TblCreditDebitMasters { get; set; } = new List<TblCreditDebitMaster>();
 
     public virtual TblCity VendorCityNavigation { get; set; } = null!;

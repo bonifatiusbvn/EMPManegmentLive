@@ -49,14 +49,24 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                 }
                 else
                 {
-                    if (LastOrder.OrderId.Length >= 25)
+                    string[] parts = LastOrder.InvoiceNo.Split('/');
+                    if (parts.Length >= 4)
                     {
-                        int orderNumber = int.Parse(LastOrder.OrderId.Substring(24)) + 1;
-                        INVOICEId = $"BTPL/INVOICE/{projectname}/{lastYear % 100}-{currentYear % 100}-" + orderNumber.ToString("D3");
+                        string lastPart = parts[parts.Length - 1];
+                        string[] subparts = lastPart.Split('-');
+                        if (subparts.Length == 3)
+                        {
+                            int orderNumber = int.Parse(subparts[2]) + 1;
+                            INVOICEId = $"BTPL/INVOICE/{projectname}/{lastYear % 100}-{currentYear % 100}-" + orderNumber.ToString("D3");
+                        }
+                        else
+                        {
+                            throw new Exception("Last invoice number does not have the expected format.");
+                        }
                     }
                     else
                     {
-                        throw new Exception("OrderId does not have the expected format.");
+                        throw new Exception("Last invoice number does not have the expected format.");
                     }
                 }
                 return INVOICEId;
@@ -66,6 +76,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                 throw ex;
             }
         }
+
 
         public async Task<IEnumerable<CreditDebitView>> GetCreditDebitListView()
         {
@@ -145,7 +156,6 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                                VendorName = b.VendorCompany,
                                VandorId = a.VandorId,
                                DispatchThrough = a.DispatchThrough,
-                               Destination = a.Destination,
                                Cgst = a.Cgst,
                                Igst = a.Igst,
                                Sgst = a.Sgst,
@@ -269,7 +279,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
             try
             {
                 var data = await (from a in Context.TblInvoices
-                                  join b in Context.TblVendorMasters on a.VandorId equals b.Vid
+                                  join b in Context.TblVendorMasters  on a.VandorId equals b.Vid
                                   join c in Context.TblProjectMasters on a.ProjectId equals c.ProjectId
                                   where a.IsDeleted != true
                                   select new
@@ -294,7 +304,6 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                                             ProjectId = item.Invoice.ProjectId,
                                             ProjectName = item.Project.ShortName,
                                             DispatchThrough = item.Invoice.DispatchThrough,
-                                            Destination = item.Invoice.Destination,
                                             Cgst = item.Invoice.Cgst,
                                             Igst = item.Invoice.Igst,
                                             Sgst = item.Invoice.Sgst,
@@ -338,6 +347,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                 IEnumerable<InvoiceViewModel> invoiceList = (from a in Context.TblInvoices.Where(x => x.VandorId == Vid)
                                                              join b in Context.TblVendorMasters
                                                              on a.VandorId equals b.Vid
+                                                             where a.PaymentStatus == 8
                                                              select new InvoiceViewModel
                                                              {
                                                                  Id = a.Id,
@@ -449,71 +459,83 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                 throw ex;
             }
         }
-        public async Task<UserResponceModel> InsertInvoiceDetails(GenerateInvoiceModel InsertInvoice)
+        public async Task<UserResponceModel> InsertInvoiceDetails(InvoiceMasterModel InsertInvoice)
         {
-            UserResponceModel response = new UserResponceModel();
+            UserResponceModel response= new UserResponceModel();
             try
             {
-                bool isInvoiceAlredyExists = Context.TblInvoices.Any(x => x.OrderId == InsertInvoice.OrderId);
-                if (isInvoiceAlredyExists == true)
+                var invoice = new TblInvoice()
                 {
-                    response.Message = "This Invoice Is already Generated";
-                    response.Data = InsertInvoice;
-                    response.Code = (int)HttpStatusCode.NotFound;
-                    response.Icone = "warning";
-                }
-                else
-                {
-                    var invoicemodel = new TblInvoice()
-                    {
-                        Id = Guid.NewGuid(),
-                        OrderId = InsertInvoice.OrderId,
-                        InvoiceType = InsertInvoice.InvoiceType,
-                        VandorId = InsertInvoice.VandorId,
-                        InvoiceNo = InsertInvoice.InvoiceNo,
-                        ProjectId = InsertInvoice.ProjectId,
-                        PaymentMethod = InsertInvoice.PaymentMethod,
-                        InvoiceDate = DateTime.Now,
-                        BuyesOrderDate = InsertInvoice.BuyesOrderDate,
-                        BuyesOrderNo = InsertInvoice.BuyesOrderNo,
-                        DispatchThrough = InsertInvoice.DispatchThrough,
-                        Destination = InsertInvoice.Destination,
-                        Cgst = InsertInvoice.Cgst,
-                        Sgst = InsertInvoice.Sgst,
-                        Igst = InsertInvoice.Igst,
-                        TotalGst = InsertInvoice.TotalGst,
-                        TotalAmount = InsertInvoice.TotalAmount,
-                        Status = "Pending",
-                        IsDeleted = false,
-                        CreatedOn = DateTime.Now,
-                        CreatedBy = InsertInvoice.CreatedBy,
-                    };
-                    var craditdebit = new TblCreditDebitMaster()
-                    {
-                        VendorId = InsertInvoice.VandorId,
-                        Type = InsertInvoice.InvoiceType,
-                        InvoiceNo = InsertInvoice.InvoiceNo,
-                        Date = DateTime.Now,
-                        PaymentType = InsertInvoice.PaymentType,
-                        CreditDebitAmount = InsertInvoice.CreditDebitAmount,
-                        PendingAmount = InsertInvoice.PendingAmount,
-                        TotalAmount = InsertInvoice.TotalAmount,
-                        CreatedOn = DateTime.Now,
-                        CreatedBy = InsertInvoice.CreatedBy,
-                    };
+                    Id = Guid.NewGuid(),
+                    InvoiceType = InsertInvoice.InvoiceType,
+                    VandorId = InsertInvoice.VandorId,
+                    InvoiceNo = InsertInvoice.InvoiceNo,
+                    ProjectId = InsertInvoice.ProjectId,
+                    OrderId = InsertInvoice.OrderId,
+                    InvoiceDate = InsertInvoice.InvoiceDate,
+                    BuyesOrderNo = InsertInvoice.BuyesOrderNo,
+                    BuyesOrderDate = InsertInvoice.BuyesOrderDate,
+                    DispatchThrough = InsertInvoice.DispatchThrough,
+                    ShippingAddress= InsertInvoice.ShippingAddress,
+                    Cgst = InsertInvoice.Cgst,
+                    Sgst = InsertInvoice.Sgst,
+                    Igst = InsertInvoice.Igst,
+                    TotalGst = InsertInvoice.TotalGst,
+                    TotalAmount = InsertInvoice.TotalAmount,
+                    PaymentMethod = InsertInvoice.PaymentMethod,
+                    Status = InsertInvoice.Status,
+                    PaymentStatus=InsertInvoice.PaymentStatus,
+                    IsDeleted = false,
+                    CreatedBy = InsertInvoice.CreatedBy,
+                    CreatedOn = DateTime.Now,
+                };
+                Context.TblInvoices.Add(invoice);
 
-                    Context.TblInvoices.Add(invoicemodel);
-                    Context.TblCreditDebitMasters.Add(craditdebit);
-                    await Context.SaveChangesAsync();
-                    response.Code = 200;
-                    response.Message = "Invoice Generated successfully!";
+                foreach(var item in InsertInvoice.InvoiceDetails)
+                {
+                    var InvoiceDetails = new TblInvoiceDetail()
+                    {
+                        InvoiceRefId = invoice.Id,
+                        ProductId = item.ProductId,
+                        Product = item.Product,
+                        ProductType = item.ProductType,
+                        Quantity = item.Quantity,
+                        Price = item.Price,
+                        Discount = item.Discount,
+                        Gst = item.Gst,
+                        ProductTotal = item.ProductTotal,
+                        IsDeleted = false,
+                        CreatedBy = InsertInvoice.CreatedBy,
+                        CreatedOn = DateTime.Now,
+                    };
+                    Context.TblInvoiceDetails.Add(InvoiceDetails);
                 }
+
+                var craditdebit = new TblCreditDebitMaster()
+                {
+                    VendorId = InsertInvoice.VandorId,
+                    Type = InsertInvoice.InvoiceType,
+                    InvoiceNo = InsertInvoice.InvoiceNo,
+                    Date = DateTime.Now,
+                    PaymentType = InsertInvoice.PaymentType,
+                    CreditDebitAmount = InsertInvoice.CreditDebitAmount,
+                    PendingAmount = InsertInvoice.PendingAmount,
+                    TotalAmount = InsertInvoice.TotalAmount,
+                    CreatedOn = DateTime.Now,
+                    CreatedBy = InsertInvoice.CreatedBy,
+                };
+                Context.TblCreditDebitMasters.Add(craditdebit);
+
+
+                await Context.SaveChangesAsync();
+                response.Code = (int)HttpStatusCode.OK;
+                response.Message = "Invoice successfully inserted.";
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                response.Code = 500;
-                response.Message = "Error creating Invoice: " + ex.Message;
+                throw;
             }
+
             return response;
         }
 
@@ -671,20 +693,34 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
             return response;
         }
 
-        public async Task<UserResponceModel> IsDeletedInvoice(string InvoiceNo)
+        public async Task<UserResponceModel> IsDeletedInvoice(Guid InvoiceId)
         {
             UserResponceModel response = new UserResponceModel();
-            var GetInvoicedata = Context.TblInvoices.Where(a => a.InvoiceNo == InvoiceNo).FirstOrDefault();
+            var GetInvoicedata = Context.TblInvoices.Where(a => a.Id == InvoiceId).FirstOrDefault();
+            var GetInvoiceDetails = Context.TblInvoiceDetails.Where(a => a.InvoiceRefId == InvoiceId).ToList();
 
-            if (GetInvoicedata != null)
+            GetInvoicedata.IsDeleted = true;
+            Context.TblInvoices.Update(GetInvoicedata);
+
+            if (GetInvoiceDetails.Any())
             {
-                GetInvoicedata.IsDeleted = true;
-                Context.TblInvoices.Update(GetInvoicedata);
+                foreach(var invoice in GetInvoiceDetails)
+                {
+                    invoice.IsDeleted = true;
+                    Context.TblInvoiceDetails.Update(invoice);
+                }
+
                 Context.SaveChanges();
+
                 response.Code = 200;
-                response.Data = GetInvoicedata;
-                response.Message = "Invoice is Deleted Successfully";
+                response.Message = "Invoice details are successfully deleted.";
             }
+            else
+            {
+                response.Code = 404;
+                response.Message = "No related records found to delete";
+            }
+
             return response;
         }
 

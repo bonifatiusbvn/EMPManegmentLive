@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace EMPManegment.EntityModels.ViewModels.Invoice
 {
-    public class GenerateInvoiceModel
+    public class InvoiceMasterModel
     {
         public Guid Id { get; set; }
 
-        public string InvoiceType { get; set; } = null!;
+        public string? InvoiceType { get; set; }
 
         public Guid VandorId { get; set; }
 
@@ -28,7 +28,7 @@ namespace EMPManegment.EntityModels.ViewModels.Invoice
 
         public string DispatchThrough { get; set; } = null!;
 
-        public string Destination { get; set; } = null!;
+        public string? ShippingAddress { get; set; }
 
         public decimal? Cgst { get; set; }
 
@@ -40,32 +40,23 @@ namespace EMPManegment.EntityModels.ViewModels.Invoice
 
         public decimal? TotalAmount { get; set; }
 
+        public int? PaymentMethod { get; set; }
+
+        public int? PaymentStatus { get; set; }
+
+        public string? Status { get; set; }
+
+        public bool? IsDeleted { get; set; }
+        public int? PaymentType { get; set; }
+
+        public decimal? CreditDebitAmount { get; set; }
+
+        public decimal? PendingAmount { get; set; }
+
         public DateTime CreatedOn { get; set; }
 
         public Guid CreatedBy { get; set; }
 
-        public DateTime? UpdatedOn { get; set; }
-
-        public Guid? UpdatedBy { get; set; }
-        public int? PaymentType { get; set; }
-        public int? PaymentMethod { get; set; }
-        public string? Status { get; set; }
-        public string? CompanyName { get; set; }
-        public decimal? CreditDebitAmount { get; set; }
-        public decimal? PendingAmount { get; set; }
-    }
-    public class UpdateInvoiceModel
-    {
-        public Guid Id { get; set; }
-        public string? InvoiceNo { get; set; }
-        public DateTime InvoiceDate { get; set; }
-        public decimal? TotalAmount { get; set; }
-        public int? PaymentMethod { get; set; }
-        public int? PaymentStatus { get; set; }
-
-        public string? Status { get; set; }
-        public string? CompanyName { get; set; }
-        public DateTime? UpdatedOn { get; set; }
-        public Guid? UpdatedBy { get; set; }
+        public List<InvoiceDetailsViewModel>? InvoiceDetails { get; set; }
     }
 }

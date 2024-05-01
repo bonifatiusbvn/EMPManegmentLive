@@ -49,7 +49,7 @@ namespace EMPManegment.EntityModels.ViewModels.PurchaseOrderModels
 
         public int? PaymentMethod { get; set; }
 
-        public string? PaymentStatus { get; set; }
+        public int? PaymentStatus { get; set; }
 
         public string? DeliveryStatus { get; set; }
 
@@ -80,6 +80,7 @@ namespace EMPManegment.EntityModels.ViewModels.PurchaseOrderModels
         public string? VendorBankAccountNo { get; set; }
 
         public string? PaymentMethodName { get; set; }
+        public string? PaymentStatusName { get; set; }
 
         public List<PurchaseOrderDetailsModel>? ProductList { get; set; }
 

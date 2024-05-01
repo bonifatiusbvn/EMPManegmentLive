@@ -19,5 +19,9 @@ public partial class TblForm
 
     public bool IsActive { get; set; }
 
+    public Guid? UpdatedBy { get; set; }
+
+    public DateTime? UpdatedOn { get; set; }
+
     public virtual ICollection<TblRolewiseFormPermission> TblRolewiseFormPermissions { get; set; } = new List<TblRolewiseFormPermission>();
 }

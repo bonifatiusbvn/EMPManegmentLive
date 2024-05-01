@@ -7,7 +7,7 @@ public partial class TblInvoice
 {
     public Guid Id { get; set; }
 
-    public string InvoiceType { get; set; } = null!;
+    public string? InvoiceType { get; set; }
 
     public Guid VandorId { get; set; }
 
@@ -25,8 +25,6 @@ public partial class TblInvoice
 
     public string DispatchThrough { get; set; } = null!;
 
-    public string Destination { get; set; } = null!;
-
     public decimal? Cgst { get; set; }
 
     public decimal? Sgst { get; set; }
@@ -39,7 +37,11 @@ public partial class TblInvoice
 
     public int? PaymentMethod { get; set; }
 
+    public int? PaymentStatus { get; set; }
+
     public string? Status { get; set; }
+
+    public string? ShippingAddress { get; set; }
 
     public bool? IsDeleted { get; set; }
 
@@ -52,6 +54,8 @@ public partial class TblInvoice
     public Guid? UpdatedBy { get; set; }
 
     public virtual TblPaymentMethodType? PaymentMethodNavigation { get; set; }
+
+    public virtual TblPaymentType? PaymentStatusNavigation { get; set; }
 
     public virtual TblProjectMaster? Project { get; set; }
 

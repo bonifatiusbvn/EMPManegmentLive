@@ -21,5 +21,9 @@ public partial class TblAttendance
 
     public DateTime? CreatedOn { get; set; }
 
+    public Guid? UpdatedBy { get; set; }
+
+    public DateTime? UpdatedOn { get; set; }
+
     public virtual TblUser User { get; set; } = null!;
 }

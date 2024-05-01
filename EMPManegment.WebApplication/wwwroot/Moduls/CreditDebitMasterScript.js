@@ -44,7 +44,6 @@ function InsertCreditDebitDetails() {
     else {
         var objData = {
             VendorId: document.getElementById("txtvendorid").innerText,
-            Type: document.getElementById("txtinvoicetype").innerText,
             InvoiceNo: document.getElementById("txtinvoiceno").innerText,
             PaymentType: $("#paymenttype").val(),
             PaymentMethod: $("#txtpaymentmethod").val(),

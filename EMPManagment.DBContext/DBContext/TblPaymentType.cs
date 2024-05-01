@@ -14,4 +14,8 @@ public partial class TblPaymentType
     public virtual ICollection<TblCreditDebitMaster> TblCreditDebitMasters { get; set; } = new List<TblCreditDebitMaster>();
 
     public virtual ICollection<TblExpenseMaster> TblExpenseMasters { get; set; } = new List<TblExpenseMaster>();
+
+    public virtual ICollection<TblInvoice> TblInvoices { get; set; } = new List<TblInvoice>();
+
+    public virtual ICollection<TblPurchaseOrderMaster> TblPurchaseOrderMasters { get; set; } = new List<TblPurchaseOrderMaster>();
 }
