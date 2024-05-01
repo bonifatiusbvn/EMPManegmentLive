@@ -218,7 +218,7 @@ function EditProductDetails(Id) {
         type: "Get",
         contentType: 'application/json;charset=utf-8;',
         dataType: 'json',
-        success: function (response) {
+        success: function (response) {debugger
             $('#UpdateProductDetails').modal('show');
             $('#txtProductId').val(response.id);
             $('#txtProductName').val(response.productName);
@@ -244,7 +244,6 @@ function UpdateProductDetails() {
         formData.append("Id", $("#txtProductId").val());
         formData.append("ProductName", $("#txtProductName").val());
         formData.append("ProductType", $("#txtProducts").val());
-        formData.append("VendorId", $("#txtvendornamed").val());
         formData.append("ProductDescription", $("#txtProductDescription").val());
         formData.append("ProductShortDescription", $("#txtshortdescription").val());
         formData.append("ProductStocks", $("#txtstocks").val());

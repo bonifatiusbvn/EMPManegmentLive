@@ -15,6 +15,7 @@ using System.Security.Claims;
 using X.PagedList;
 using X.PagedList.Mvc;
 using EMPManegment.EntityModels.ViewModels.Invoice;
+using System.Linq;
 
 namespace EMPManegment.Web.Controllers
 {
@@ -62,17 +63,67 @@ namespace EMPManegment.Web.Controllers
         {
             try
             {
-                List<ProjectDetailView> projectlist = new List<ProjectDetailView>();
+                ApiResponseModel postuser = await APIServices.GetAsync("", "UserHome/GetAllUserTaskDetails");
+                List<TaskDetailsView> TaskList = JsonConvert.DeserializeObject<List<TaskDetailsView>>(postuser.data.ToString());
+
                 ApiResponseModel response = await APIServices.GetAsync("", "ProjectDetails/GetProjectList?searchby=" + searchby + "&searchfor=" + searchfor);
-                if (response.code == 200)
+                List<ProjectDetailView> projectlist = JsonConvert.DeserializeObject<List<ProjectDetailView>>(response.data.ToString());
+
+                Dictionary<Guid?, int> taskCountByProject = new Dictionary<Guid?, int>();
+
+                foreach (var project in projectlist)
                 {
-                    projectlist = JsonConvert.DeserializeObject<List<ProjectDetailView>>(response.data.ToString());
+                    var totaltask = TaskList.Count(e => e.ProjectId == project.ProjectId);
+
+                    taskCountByProject.Add(project.ProjectId, totaltask);
                 }
-                int pageSize = 4;
+
+                List<ProjectDetailView> projectViews = projectlist.Select(p => new ProjectDetailView
+                {
+                    ProjectTitle = p.ProjectTitle,
+                    TaskCount = taskCountByProject.ContainsKey(p.ProjectId) ? taskCountByProject[p.ProjectId] : 0,
+                    ProjectDescription = p.ProjectDescription,
+                    ProjectStatus = p.ProjectStatus,
+                    ProjectDeadline = p.ProjectDeadline,
+                    ProjectStartDate = p.ProjectStartDate,
+                }).ToList();
+
+                int pageSize = 6;
                 var pageNumber = page ?? 1;
 
-                var pagedList = projectlist.ToPagedList(pageNumber, pageSize);
+                var pagedList = projectViews.ToPagedList(pageNumber, pageSize);
                 return PartialView("~/Views/Project/_GetAllUserProjectList.cshtml", pagedList);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
+
+
+        public async Task<IActionResult> GetTaskTotal()
+        {
+            int total;
+            try
+            {
+                string projectIdString = UserSession.ProjectId;
+                Guid projectIdGuid = new Guid(projectIdString);
+
+                List<TaskDetailsView> TaskList = new List<TaskDetailsView>();
+                ApiResponseModel postuser = await APIServices.GetAsync("", "UserHome/GetAllUserTaskDetails");
+                if (postuser.data != null)
+                {
+                    TaskList = JsonConvert.DeserializeObject<List<TaskDetailsView>>(postuser.data.ToString());
+                }
+                else
+                {
+                    TaskList = new List<TaskDetailsView>();
+                    ViewBag.Error = "not found";
+                }
+                total=TaskList.Count();
+                return new JsonResult(TaskList.Where(e=>e.ProjectId == projectIdGuid).Count());
             }
             catch (Exception ex)
             {
@@ -190,9 +241,6 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
-
-
-
 
         [HttpPost]
         public async Task<IActionResult> GetMemberList()

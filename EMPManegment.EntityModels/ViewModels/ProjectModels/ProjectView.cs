@@ -37,6 +37,8 @@ namespace EMPManegment.EntityModels.ViewModels.ProjectModels
         public string? Designation { get; set; }
         public string? ProjectDescription { get; set; } = null!; 
          public bool? IsDeleted { get; set; }
+
+        public int TotalTask { get; set; }
     }
     public class ProjectMemberUpdate
     {

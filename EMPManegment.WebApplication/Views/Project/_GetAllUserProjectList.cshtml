@@ -22,7 +22,7 @@
                             </div>
                             <div class="flex-shrink-0">
                                 <div class="d-flex gap-1 align-items-center my-n2">
-                                    <a class="dropdown-item" href="/Project/GetProjectDetails/Id=@item.ProjectId">
+                                    <a class="dropdown-item" href="/Project/GetProjectDetails/?Id=@item.ProjectId">
                                         <i class="fa-solid fa-eye"></i>
                                     </a>
                                 </div>
@@ -67,7 +67,7 @@
                                 <div class="flex-shrink-0">
                                     <div>
                                         <i class="ri-list-check align-bottom me-1 text-muted"></i>
-                                        18/42
+                                        @item.TaskCount
                                     </div>
                                 </div>
                             </div>
@@ -118,7 +118,7 @@
 
 
 
-@* @Html.PagedListPager((IPagedList)Model, page => Url.Action("GetHomeProjectListPartial", new
+@Html.PagedListPager((IPagedList)Model, page => Url.Action("GetHomeProjectListPartial", new
     {
         page = page,
         searchfor = @Context.Request.Query["searchfor"],
@@ -128,7 +128,7 @@
                         {
                             LiElementClasses = new string[] { "page-item" },
                             PageClasses = new string[] { "page-link" }
-                        }) *@
+                        })
 
 
 

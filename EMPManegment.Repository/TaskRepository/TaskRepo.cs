@@ -187,7 +187,8 @@ namespace EMPManegment.Repository.TaskRepository
                                                               TaskTitle = a.TaskTitle,
                                                               UserProfile = b.Image,
                                                               UserName = b.UserName,
-                                                              TaskTypeName = c.TaskType
+                                                              TaskTypeName = c.TaskType,
+                                                              ProjectId = a.ProjectId,
                                                           };
             return AllTaskDetails;
         }
@@ -310,7 +311,7 @@ namespace EMPManegment.Repository.TaskRepository
                                               TaskTitle = a.TaskTitle,
                                               UserProfile = b.Image,
                                               UserName = b.UserName,
-                                              TaskTypeName = c.TaskType
+                                              TaskTypeName = c.TaskType,
                                           };
             if (!string.IsNullOrEmpty(AllUserTaskDetails.sortColumn) && !string.IsNullOrEmpty(AllUserTaskDetails.sortColumnDir))
             {
