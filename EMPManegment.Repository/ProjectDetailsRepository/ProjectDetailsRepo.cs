@@ -185,7 +185,7 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
 
         public async Task<IEnumerable<EmpDetailsView>> GetAllMembers()
         {
-            IEnumerable<EmpDetailsView> data = Context.TblUsers.ToList().Select(a => new EmpDetailsView
+            IEnumerable<EmpDetailsView> data = Context.TblUsers.Where(a=>a.IsActive == true).ToList().Select(a => new EmpDetailsView
             {
                 Id = a.Id,
                 FirstName = a.FirstName,

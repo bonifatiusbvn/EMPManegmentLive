@@ -14,6 +14,8 @@ namespace EMPManegment.EntityModels.ViewModels.Purchase_Request
 
         public Guid ProjectId { get; set; }
 
+        public string PrNo { get; set; } = null!;
+
         public Guid? ProductId { get; set; }
 
         public string ProductName { get; set; } = null!;
@@ -38,5 +40,11 @@ namespace EMPManegment.EntityModels.ViewModels.Purchase_Request
 
         public string? ProjectName { get; set; }
 
+        public int RowNumber {get; set; }
+
+    }
+    public class PurchaseRequestMasterView
+    {
+        public List<PurchaseRequestModel>? PRList { get; set; }
     }
 }

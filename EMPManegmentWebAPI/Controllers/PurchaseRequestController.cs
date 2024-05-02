@@ -1,5 +1,6 @@
 ﻿using EMPManagment.Web.Models.API;
 using EMPManegment.EntityModels.View_Model;
+using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.OrderModels;
 using EMPManegment.EntityModels.ViewModels.Purchase_Request;
@@ -26,11 +27,16 @@ namespace EMPManagment.API.Controllers
 
         [HttpPost]
         [Route("CreatePurchaseRequest")]
-        public async Task<IActionResult> CreatePurchaseRequest(PurchaseRequestModel AddPurchaseRequest)
+        public async Task<IActionResult> CreatePurchaseRequest(PurchaseRequestMasterView AddPurchaseRequest)
         {
             ApiResponseModel response = new ApiResponseModel();
-            var PurchaseRequest = await purchaseRequest.AddPurchaseRequestDetails(AddPurchaseRequest);
+            var PurchaseRequest = await purchaseRequest.CreatePurchaseRequest(AddPurchaseRequest);
             if (PurchaseRequest.code == 200)
+            {
+                response.code = PurchaseRequest.code;
+                response.message = PurchaseRequest.message;
+            }
+            else
             {
                 response.code = PurchaseRequest.code;
                 response.message = PurchaseRequest.message;
@@ -101,6 +107,23 @@ namespace EMPManagment.API.Controllers
                 responseModel.code = (int)HttpStatusCode.InternalServerError;
             }
             return StatusCode(responseModel.code, responseModel);
+        }
+
+
+        [HttpGet]
+        [Route("CheckPRNo")]
+        public IActionResult CheckPRNo()
+        {
+            var checkPRNo = purchaseRequest.CheckPRNo();
+            return Ok(new { code = 200, data = checkPRNo.ToString() });
+        }
+
+        [HttpPost]
+        [Route("GetPRList")]
+        public async Task<IActionResult> GetPRList(DataTableRequstModel PRdataTable)
+        {
+            var purchaseRequestList = await purchaseRequest.GetPRList(PRdataTable);
+            return Ok(new { code = 200, data = purchaseRequestList });
         }
     }
 }
