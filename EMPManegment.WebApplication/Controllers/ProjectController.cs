@@ -80,6 +80,8 @@ namespace EMPManegment.Web.Controllers
 
                 List<ProjectDetailView> projectViews = projectlist.Select(p => new ProjectDetailView
                 {
+                    ProjectId = p.ProjectId,
+                    ProjectImage = p.ProjectImage,
                     ProjectTitle = p.ProjectTitle,
                     TaskCount = taskCountByProject.ContainsKey(p.ProjectId) ? taskCountByProject[p.ProjectId] : 0,
                     ProjectDescription = p.ProjectDescription,
@@ -122,8 +124,8 @@ namespace EMPManegment.Web.Controllers
                     TaskList = new List<TaskDetailsView>();
                     ViewBag.Error = "not found";
                 }
-                total=TaskList.Count();
-                return new JsonResult(TaskList.Where(e=>e.ProjectId == projectIdGuid).Count());
+                total = TaskList.Count();
+                return new JsonResult(TaskList.Where(e => e.ProjectId == projectIdGuid).Count());
             }
             catch (Exception ex)
             {
