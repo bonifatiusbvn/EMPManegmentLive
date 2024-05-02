@@ -276,7 +276,6 @@ function deleteExpense(Id) {
 }
 
 function GetUserExpenseList() {
-
     $('#UserExpenseTable').DataTable({
         processing: true,
         serverSide: true,
@@ -287,45 +286,84 @@ function GetUserExpenseList() {
             url: '/ExpenseMaster/UserExpenseListTable',
             dataType: 'json'
         },
-
         columns: [
+            {
+                "data": null,
+                "render": function (data, type, full, meta) {
+                    var account = full.account.toLowerCase();
+                    if (account === "credit") {
+                        return '<div class="avatar-xs"><div class="avatar-title bg-success-subtle text-success rounded-circle fs-16"><i class="ri-arrow-left-down-fill"></i></div></div>';
+                    } else if (account === "dabit") {
+                        return '<div class="avatar-xs"><div class="avatar-title bg-danger-subtle text-danger rounded-circle fs-16"><i class="ri-arrow-right-up-fill"></i></div></div>';
+                    } else {
+                        return '';
+                    }
+                },
+                "orderable": false
+            },
             { "data": "description", "name": "Description" },
             { "data": "billNumber", "name": "BillNumber" },
             {
                 "data": "date",
                 "name": "Date",
                 "render": function (data, type, full, meta) {
-
                     return new Date(data).toLocaleDateString();
                 }
             },
-            { "data": "totalAmount", "name": "TotalAmount" },
-            { "data": "account", "name": "Account" },
+            {
+                "data": "totalAmount",
+                "name": "TotalAmount",
+                "render": function (data, type, full, meta) {
+
+                    var color = full.account.toLowerCase() === "credit" ? "green" : "red";
+                    return '<span style="color: ' + color + ';">' + data + '</span>';
+                }
+            },
+            {
+                "data": "account",
+                "name": "Account",
+                "render": function (data, type, full, meta) {
+
+                    var color = data.toLowerCase() === "credit" ? "green" : "red";
+                    return '<span style="color: ' + color + ';">' + data + '</span>';
+                },
+
+            },
             {
                 "data": null,
                 "name": "Action",
                 "render": function (data, type, full, meta) {
-                    return '<ul class="list-inline hstack gap-2 mb-0">' +
-                        '<li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="View">' +
-                        '<a class="text-primary d-inline-block" href="/Invoice/InvoiceDetails">' +
-                        '<i class="ri-eye-fill fs-16"></i>' +
-                        '</a>' +
-                        '</li>' +
+                    return '<div class="d-flex justify-content-center">' +
+                        '<ul class="list-inline hstack gap-2 mb-0">' +
                         '<li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">' +
                         '<a onclick="EditExpenseDetails(\'' + full.id + '\')" data-bs-toggle="modal" class="text-primary d-inline-block edit-item-btn">' +
                         '<i class="ri-pencil-fill fs-16"></i>' +
                         '</a>' +
                         '</li>' +
-                        '</ul>';
-                }
+                        '<li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Delete">' +
+                        '<a class="btn text-danger btndeletedoc" href="/Invoice/InvoiceDetails">' +
+                        '<i class="fas fa-trash"></i>' +
+                        '</a>' +
+                        '</li>' +
+                        '</ul>' +
+                        '</div>';
+                },
+                "orderable": false
             }
         ],
-        columnDefs: [{
-            "defaultContent": "",
-            "targets": "_all",
-        }]
+        columnDefs: [
+            {
+                "targets": [0, -1],
+                "orderable": false
+            }
+        ]
     });
 }
+
+
+
+
+
 
 function GetParameterByName(name, url) {
 
