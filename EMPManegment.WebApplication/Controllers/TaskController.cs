@@ -94,7 +94,7 @@ namespace EMPManegment.Web.Controllers
                     TaskDate = task.TaskDate,
                     TaskEndDate = task.TaskEndDate,
                     TaskDetails = task.TaskDetails,
-                    UserId = _userSession.UserId,
+                    UserId = task.UserId,
                     TaskTitle = task.TaskTitle,
                     ProjectId = task.ProjectId,
                 };

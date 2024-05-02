@@ -17,6 +17,7 @@
     <!-- overlayScrollbars -->
     <link rel="stylesheet" href="~/lteassets/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
     <!-- Theme style -->
+    <link href="~/lteassets/dist/css/site.css" rel="stylesheet" />
     <link rel="stylesheet" href="~/lteassets/dist/css/adminlte.min.css">
     <link href="~/assets/css/app.min.css" rel="stylesheet" />
     <link href="~/assets/css/custom.min.css" rel="stylesheet" type="text/css" />
@@ -33,10 +34,6 @@
 <body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed accent-info">
     <div class="wrapper">
 
-        <!-- Preloader -->
-        <div class="preloader flex-column justify-content-center align-items-center">
-            <img class="animation__wobble" src="~/assets/images/bonifatiusicon.ico" alt="AdminLTELogo" height="60" width="60">
-        </div>
 
         <!-- Navbar -->
         <nav class="main-header navbar navbar-expand navbar-white navbar-light navbar-auto" style="height:50px;">
@@ -464,6 +461,7 @@
             <!-- Main content -->
             <section class="content">
                 <div class="container-fluid">
+                    <partial name="_Loader" />
                     @RenderBody()
                 </div>
             </section><!-- end .h-100-->
@@ -531,6 +529,7 @@
     <script src="~/lteassets/plugins/toastr/toastr.min.js"></script>
     <!-- App js -->
     <!-- moduls -->
+    <script src="~/js/loader.js"></script>
     <script src="~/moduls/userdetailsscript.js"></script>
     <script src="~/moduls/userprofile.js"></script>
     <script src="~/moduls/layoutscript.js"></script>

@@ -97,33 +97,33 @@ function GetPurchaseRequestList() {
 function CreatePurchaseRequest() {
     /*if ($("#UpdatePurchaseRequestDetailsForm").valid()) {*/
 
-        var objData = {
-            UserId: $('#txtuserId').val(),
-            ProjectId: $('#txtprojectId').val(),
-            ProductId: $('#txtproductId').val(),
-            ProductName: $('#txtProductName').text(),
-            ProductTypeId: $('#txtproducttype').val(),
-            Quantity: $('#txtproductquantity').val(),
-            CreatedBy: $('#txtuserId').val(),
-        }
-        $.ajax({
-            url: '/PurchaseRequest/CreatePurchaseRequest',
-            type: 'post',
-            data: objData,
-            datatype: 'json',
-            success: function (Result) {
+    var objData = {
+        UserId: $('#txtuserId').val(),
+        ProjectId: $('#txtprojectId').val(),
+        ProductId: $('#txtproductId').val(),
+        ProductName: $('#txtProductName').text(),
+        ProductTypeId: $('#txtproducttype').val(),
+        Quantity: $('#txtproductquantity').val(),
+        CreatedBy: $('#txtuserId').val(),
+    }
+    $.ajax({
+        url: '/PurchaseRequest/CreatePurchaseRequest',
+        type: 'post',
+        data: objData,
+        datatype: 'json',
+        success: function (Result) {
 
-                Swal.fire({
-                    title: Result.message,
-                    icon: 'success',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK'
-                }).then(function () {
-                    window.location = '/PurchaseRequest/PurchaseRequestList';
-                });
-            },
+            Swal.fire({
+                title: Result.message,
+                icon: 'success',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'OK'
+            }).then(function () {
+                window.location = '/PurchaseRequest/PurchaseRequestList';
+            });
+        },
 
-        })
+    })
     //}
     //else {
     //    Swal.fire({
@@ -158,36 +158,36 @@ function EditPurchaseRequestDetails(PrId) {
 }
 
 function UpdatePurchaseRequestDetails() {
-    debugger
+
     //if ($('#UpdatePurchaseRequestDetailsForm').valid())
     //{
-        var objData = {
-            UserName: $('#txtusername').val(),
-            ProjectName: $('#txtprojectId').val(),
-            ProductName: $('#txtproductName').val(),
-            Quantity: $('#txtquantity').val(),
-        }
+    var objData = {
+        UserName: $('#txtusername').val(),
+        ProjectName: $('#txtprojectId').val(),
+        ProductName: $('#txtproductName').val(),
+        Quantity: $('#txtquantity').val(),
+    }
 
-        $.ajax({
-            url: '/PurchaseRequest/UpdatePurchaseRequestDetails',
-            type: 'Post',
-            data: objData,
-            dataType: 'json',
-            contentType: false,
-            processData: false,
-            success: function (Result) {debugger
-                if (Result.message != null) {
-                    Swal.fire({
-                        title: Result.message,
-                        icon: 'success',
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'OK',
-                    }).then(function () {
-                        window.location = '/PurchaseRequest/PurchaseRequestList';
-                    });
-                }
+    $.ajax({
+        url: '/PurchaseRequest/UpdatePurchaseRequestDetails',
+        type: 'Post',
+        data: objData,
+        dataType: 'json',
+        contentType: false,
+        processData: false,
+        success: function (Result) {
+            if (Result.message != null) {
+                Swal.fire({
+                    title: Result.message,
+                    icon: 'success',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'OK',
+                }).then(function () {
+                    window.location = '/PurchaseRequest/PurchaseRequestList';
+                });
             }
-        })
+        }
+    })
     //}
     //else {
     //    Swal.fire({
@@ -198,7 +198,7 @@ function UpdatePurchaseRequestDetails() {
     //    })
     //}
 }
-function DeletePurchaseRequestDetails(PrId) {debugger
+function DeletePurchaseRequestDetails(PrId) {
 
     Swal.fire({
         title: "Are you sure want to Delete This?",
@@ -217,7 +217,7 @@ function DeletePurchaseRequestDetails(PrId) {debugger
                 url: '/PurchaseRequest/DeletePurchaseRequestDetails?PrId=' + PrId,
                 type: 'POST',
                 dataType: 'json',
-                success: function (Result) {debugger
+                success: function (Result) {
 
                     Swal.fire({
                         title: Result.message,

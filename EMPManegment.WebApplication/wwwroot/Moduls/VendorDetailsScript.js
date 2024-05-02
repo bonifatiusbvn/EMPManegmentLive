@@ -72,7 +72,7 @@ function VendorDetails(Id) {
 }
 
 function EditVendorDetails(Id) {
-    debugger
+
     var editing = true;
     $("#editPersonalDetailsModel").prop("disabled", true);
     $("#editBankDetailsModel").prop("disabled", true);
@@ -83,7 +83,7 @@ function EditVendorDetails(Id) {
         contentType: 'application/json;charset=utf-8;',
         dataType: 'json',
         success: function (response) {
-            debugger
+
             $('#UpdateVendorModel').modal('show');
             $('#vendorId').val(response.vid);
             $('#EditfirstnameInput').val(response.vendorFirstName);
@@ -111,7 +111,7 @@ function EditVendorDetails(Id) {
             $("#textCountry").val(response.vendorCountry);
             CheckValidation();
             setTimeout(function () { $('#dropCity').val(response.vendorCity); }, 100)
-                CheckValidation();
+            CheckValidation();
         },
         error: function () {
             alert('Data not found');
@@ -269,7 +269,7 @@ function AddVendorDetails() {
 }
 
 function GetVendorType() {
-    
+
     $.ajax({
         url: '/Vendor/GetVendorType',
         success: function (result) {
@@ -534,7 +534,7 @@ $(document).ready(function () {
 });
 
 function fn_getState(drpstate, countryId, that) {
-    debugger
+
     var cid = countryId;
     if (cid == undefined || cid == null) {
         var cid = $(that).val();
@@ -547,7 +547,7 @@ function fn_getState(drpstate, countryId, that) {
         success: function (result) {
 
             $.each(result, function (i, data) {
-                debugger
+
                 $('#' + drpstate).append('<Option value=' + data.id + '>' + data.stateName + '</Option>')
             });
         }
@@ -555,7 +555,7 @@ function fn_getState(drpstate, countryId, that) {
 }
 
 function fn_getcitiesbystateId(drpcity, stateid, that) {
-    debugger
+
     var sid = stateid;
     if (sid == undefined || sid == null) {
         var sid = $(that).val();
@@ -567,7 +567,7 @@ function fn_getcitiesbystateId(drpcity, stateid, that) {
         success: function (result) {
 
             $.each(result, function (i, data) {
-                debugger
+
                 $('#' + drpcity).append('<Option value=' + data.id + '>' + data.cityName + '</Option>');
 
             });
@@ -576,12 +576,12 @@ function fn_getcitiesbystateId(drpcity, stateid, that) {
 }
 
 function GetVendorCountry() {
-    debugger
+
     $.ajax({
         url: '/Authentication/GetCountrys',
         success: function (result) {
             $.each(result, function (i, data) {
-                debugger
+
                 $('#textCountry').append('<Option value=' + data.id + ' Selected>' + data.countryName + '</Option>')
 
             });
