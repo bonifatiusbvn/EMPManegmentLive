@@ -13,11 +13,14 @@
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="~/lteassets/plugins/fontawesome-free/css/all.min.css">
+    <link href="~/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
     <!-- overlayScrollbars -->
     <link rel="stylesheet" href="~/lteassets/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
     <!-- Theme style -->
+    <link href="~/lteassets/dist/css/site.css" rel="stylesheet" />
     <link rel="stylesheet" href="~/lteassets/dist/css/adminlte.min.css">
     <link href="~/assets/css/app.min.css" rel="stylesheet" />
+    <link href="~/assets/css/custom.min.css" rel="stylesheet" type="text/css" />
     <link href="~/assets/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet" />
     <!-- Toastr -->
     <!-- Ekko Lightbox -->
@@ -31,10 +34,6 @@
 <body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed accent-info">
     <div class="wrapper">
 
-        <!-- Preloader -->
-        <div class="preloader flex-column justify-content-center align-items-center">
-            <img class="animation__wobble" src="~/assets/images/bonifatiusicon.ico" alt="AdminLTELogo" height="60" width="60">
-        </div>
 
         <!-- Navbar -->
         <nav class="main-header navbar navbar-expand navbar-white navbar-light navbar-auto" style="height:50px;">
@@ -73,7 +72,7 @@
                                 <i class="fa-solid fa-list-check"></i> Taskboard
                             </a>
                             @* <a class="dropdown-item" href="pages-profile-settings.html"><span class="badge bg-success-subtle text-success mt-1 float-end">New</span><i class="mdi mdi-cog-outline text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Settings</span></a> *@
-                            <a asp-action="UserProfile" asp-controller="LockScreen" class="dropdown-item">
+                            <a asp-action="LockScreen" asp-controller="UserProfile" class="dropdown-item">
                                 <i class="fa-solid fa-user-lock"></i> Lock screen
                             </a>
                             <button onclick="UserLogout()" class="dropdown-item">
@@ -462,6 +461,7 @@
             <!-- Main content -->
             <section class="content">
                 <div class="container-fluid">
+                    <partial name="_Loader" />
                     @RenderBody()
                 </div>
             </section><!-- end .h-100-->
@@ -529,6 +529,7 @@
     <script src="~/lteassets/plugins/toastr/toastr.min.js"></script>
     <!-- App js -->
     <!-- moduls -->
+    <script src="~/js/loader.js"></script>
     <script src="~/moduls/userdetailsscript.js"></script>
     <script src="~/moduls/userprofile.js"></script>
     <script src="~/moduls/layoutscript.js"></script>

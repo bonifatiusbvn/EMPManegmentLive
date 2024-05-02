@@ -22,7 +22,7 @@ namespace EMPManegment.EntityModels.ViewModels.Invoice
 
         public DateTime? InvoiceDate { get; set; }
 
-        public string? BuyesOrderNo { get; set; } 
+        public string? BuyesOrderNo { get; set; }
 
         public DateTime? BuyesOrderDate { get; set; }
 
@@ -73,5 +73,8 @@ namespace EMPManegment.EntityModels.ViewModels.Invoice
         public decimal? CardNumber { get; set; }
         public string? CompanyAddress { get; set; }
         public string? VendorCompanyEmail { get; set; }
+        public string? UserImage { get; set; }
+        public string? UserName { get; set; }
+        public string? Status { get; set; }
     }
 }

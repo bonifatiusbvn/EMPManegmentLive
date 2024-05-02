@@ -57,6 +57,8 @@ namespace EMPManegment.EntityModels.ViewModels.ProjectModels
         public DateTime? UpdatedOn { get; set; }
         public Guid? UserId { get; set; }
         public Guid? Id { get; set; }
+
+        public int? TaskCount { get; set; }
     }
     public class ProjectDetailRequestModel
     {

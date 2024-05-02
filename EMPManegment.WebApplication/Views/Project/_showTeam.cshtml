@@ -14,7 +14,7 @@
                     <h5 class="card-title mb-0">Team Members</h5>
                 </div>
                 <div class="col-lg-6">
-                    <button class="btn btn-block btn-warning" style="margin-left: 580px;width: 115px;" onclick="openmemberpop()"><i class="ri-upload-2-fill me-1 align-bottom"></i>Add Member</button>
+                    <button class="btn btn-block btn-warning" style="margin-left: 551px;width: 141px;" onclick="openmemberpop()"><i class="ri-upload-2-fill me-1 align-bottom"></i>Add Member</button>
                 </div>
             </div>
         </div>
@@ -58,8 +58,8 @@
 </div>
 <!---Start Pagination--->
 @Html.PagedListPager((IPagedList)Model, page => Url.Action("ShowTeam", new { page = page }),
-                            new X.PagedList.Web.Common.PagedListRenderOptions
-                        {
-                            LiElementClasses = new string[] { "page-item" },
-                            PageClasses = new string[] { "page-link" }
-                        })
+                                                new X.PagedList.Web.Common.PagedListRenderOptions
+                                            {
+                                                LiElementClasses = new string[] { "page-item" },
+                                                PageClasses = new string[] { "page-link" }
+                                            })

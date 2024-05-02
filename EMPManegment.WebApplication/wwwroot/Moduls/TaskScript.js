@@ -49,6 +49,8 @@ function TaskTypetext(sel) {
 }
 
 function btnSaveTaskDetail() {
+
+    siteloadershow()
     if ($('#frmtaskdetails').valid()) {
         var formData = new FormData();
         formData.append("TaskType", $("#taskType").val());
@@ -66,6 +68,7 @@ function btnSaveTaskDetail() {
             contentType: false,
             processData: false,
             success: function (Result) {
+                siteloaderhide()
 
                 if (Result.message != null) {
                     Swal.fire({
@@ -81,6 +84,7 @@ function btnSaveTaskDetail() {
         })
     }
     else {
+        siteloaderhide()
         Swal.fire({
             title: "Kindly Fill All Datafield",
             icon: 'warning',
@@ -155,7 +159,7 @@ function GetUserTaskDetails() {
 }
 /*---------InReview------------*/
 function btnStatusUpdate(Id) {
-    debugger
+
     if ($("#tasksListform").valid()) {
         var StausChange = {
             TaskStatus: $('#ddlStatusReview' + Id).val(),
@@ -165,7 +169,7 @@ function btnStatusUpdate(Id) {
         }
         var form_data = new FormData();
         form_data.append("STATUSUPDATE", JSON.stringify(StausChange));
-        debugger
+
         $.ajax({
             url: '/Task/UpdateUserTaskStatus',
             type: 'Post',

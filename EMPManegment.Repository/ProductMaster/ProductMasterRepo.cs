@@ -67,7 +67,7 @@ namespace EMPManegment.Repository.ProductMaster
                 bool isProductAlredyExists = Context.TblProductDetailsMasters.Any(x => x.ProductName == AddProduct.ProductName);
                 if (isProductAlredyExists == true)
                 {
-                    response.Message = " this product Is already exists";
+                    response.Message = "This product Is already exists";
                     response.Data = AddProduct;
                     response.Code = (int)HttpStatusCode.NotFound;
                     response.Icone = "warning";
@@ -95,6 +95,7 @@ namespace EMPManegment.Repository.ProductMaster
                     };
                     response.Code = 200;
                     response.Message = "Product add successfully!";
+                    response.Icone = "success";
                     Context.TblProductDetailsMasters.Add(productdetails);
                     Context.SaveChanges();
                 }

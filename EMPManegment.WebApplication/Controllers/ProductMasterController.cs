@@ -45,12 +45,11 @@ namespace EMPManegment.Web.Controllers
             try
             {
                 var path = Environment.WebRootPath;
-                var filepath = "Content/Image/" + AddProduct.ProductImage.FileName;
+                var filepath = "Content/Product/" + Guid.NewGuid() + "_" + AddProduct.ProductImage.FileName;
                 var fullpath = Path.Combine(path, filepath);
                 UploadFile(AddProduct.ProductImage, fullpath);
                 var ProductDetails = new ProductDetailsView
                 {
-
                     CreatedBy = _userSession.UserId,
                     ProductType = AddProduct.ProductType,
                     ProductName = AddProduct.ProductName,
@@ -67,12 +66,12 @@ namespace EMPManegment.Web.Controllers
                 UserResponceModel responseModel = new UserResponceModel();
                 if (postuser.code == 200)
                 {
-                    return Ok(new { postuser.message });
+                    return Ok(new { postuser.message, postuser.Icone, postuser.code });
                 }
                 else
                 {
 
-                    return Ok(new { postuser.code });
+                    return Ok(new { postuser.message, postuser.Icone, postuser.code });
                 }
             }
             catch (Exception ex)

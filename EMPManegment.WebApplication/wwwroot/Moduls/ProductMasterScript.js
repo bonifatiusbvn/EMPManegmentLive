@@ -82,7 +82,7 @@ function GetProducts() {
 }
 
 function selectProductId() {
-    
+
     $("#table-product-list-all").hide();
     $("#getallproductlist").hide();
     document.getElementById("txtProductListId").value = document.getElementById("txtProductList").value;
@@ -144,7 +144,8 @@ $(document).ready(function () {
 });
 
 function SaveProductDetails() {
-
+    debugger
+    siteloadershow()
     if ($('#createproductform').valid()) {
 
         var formData = new FormData();
@@ -166,20 +167,33 @@ function SaveProductDetails() {
             contentType: false,
             processData: false,
             success: function (Result) {
-                if (Result.message != null) {
+
+                if (Result.code == 200) {
+                    siteloaderhide()
                     Swal.fire({
                         title: Result.message,
-                        icon: 'success',
+                        icon: Result.icone,
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'OK',
                     }).then(function () {
                         window.location = '/ProductMaster/CreateProduct';
                     });
                 }
+                else {
+
+                    Swal.fire({
+                        title: Result.message,
+                        icon: Result.icone,
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK',
+                    })
+
+                }
             }
         })
     }
     else {
+        siteloaderhide()
         Swal.fire({
             title: "Kindly Fill All Details",
             icon: 'warning',
@@ -244,7 +258,6 @@ function UpdateProductDetails() {
         formData.append("Id", $("#txtProductId").val());
         formData.append("ProductName", $("#txtProductName").val());
         formData.append("ProductType", $("#txtProducts").val());
-        formData.append("VendorId", $("#txtvendornamed").val());
         formData.append("ProductDescription", $("#txtProductDescription").val());
         formData.append("ProductShortDescription", $("#txtshortdescription").val());
         formData.append("ProductStocks", $("#txtstocks").val());
@@ -360,7 +373,7 @@ function SearchProductName() {
 }
 
 function GetAllProductDetailsList(page) {
-    
+
     $.get("/ProductMaster/GetAllProductList", { page: page })
         .done(function (result) {
 

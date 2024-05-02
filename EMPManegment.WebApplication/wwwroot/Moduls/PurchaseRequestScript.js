@@ -171,7 +171,6 @@ function GetPurchaseRequestList() {
 }
 
 function CreatePurchaseRequest() {
-    debugger
     var purchaseRequests = [];
     $(".products").each(function () {
         debugger
@@ -264,7 +263,6 @@ function EditPurchaseRequestDetails(PrId) {
 }
 
 function UpdatePurchaseRequestDetails() {
- 
     //if ($('#UpdatePurchaseRequestDetailsForm').valid())
     //{
     var objData = {
@@ -282,7 +280,6 @@ function UpdatePurchaseRequestDetails() {
         contentType: false,
         processData: false,
         success: function (Result) {
-          
             if (Result.message != null) {
                 Swal.fire({
                     title: Result.message,
@@ -306,7 +303,6 @@ function UpdatePurchaseRequestDetails() {
     //}
 }
 function DeletePurchaseRequestDetails(PrId) {
-   
 
     Swal.fire({
         title: "Are you sure want to Delete This?",
@@ -325,7 +321,7 @@ function DeletePurchaseRequestDetails(PrId) {
                 url: '/PurchaseRequest/DeletePurchaseRequestDetails?PrId=' + PrId,
                 type: 'POST',
                 dataType: 'json',
-                success: function (Result) {  
+                success: function (Result) {
 
                     Swal.fire({
                         title: Result.message,
