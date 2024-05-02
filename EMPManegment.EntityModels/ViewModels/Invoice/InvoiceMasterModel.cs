@@ -56,6 +56,22 @@ namespace EMPManegment.EntityModels.ViewModels.Invoice
         public DateTime CreatedOn { get; set; }
 
         public Guid CreatedBy { get; set; }
+        public string? VendorName { get; set; }
+        public string? VendorFullAddress { get; set; }
+        public string? VendorGstnumber { get; set; }
+
+        public string? VendorEmail {  get; set; }
+        public string? ProjectName {  get; set; }
+        public string? VendorCompanyName {  get; set; }
+        public string? VendorBankName { get; set; }
+
+        public string? VendorBankBranch { get; set; }
+
+        public string? VendorAccountHolderName { get; set; }
+
+        public string? VendorBankAccountNo { get; set; } 
+
+        public string? VendorBankIfsc { get; set; }
 
         public List<InvoiceDetailsViewModel>? InvoiceDetails { get; set; }
     }
