@@ -90,7 +90,7 @@ function ShowInvoiceDetailsByOrderId(OrderId) {
     });
 }
 function InsertInvoiceDetails() {
-    debugger
+
     if ($("#CreateInvoiceForm").valid()) {
         if ($('#addnewproductlink tr').length >= 1) {
 
@@ -135,7 +135,7 @@ function InsertInvoiceDetails() {
             }
             var form_data = new FormData();
             form_data.append("INVOICEDETAILS", JSON.stringify(Invoicedetails));
-            debugger
+
             $.ajax({
                 url: '/Invoice/InsertInvoiceDetails',
                 type: 'POST',
@@ -144,7 +144,7 @@ function InsertInvoiceDetails() {
                 contentType: false,
                 processData: false,
                 success: function (Result) {
-                    debugger
+
                     if (Result.code == 200) {
                         Swal.fire({
                             title: Result.message,
@@ -408,7 +408,7 @@ function GetAllVendorData() {
         columns: [
             {
                 "render": function (data, type, full) {
-                    debugger
+
                     return '<h5 class="fs-15"><a href="/Invoice/VendorInvoiceListView/?Vid=' + full.vid + '" class="fw-medium link-primary">' + full.vendorCompany; '</a></h5>';
                 }
             },

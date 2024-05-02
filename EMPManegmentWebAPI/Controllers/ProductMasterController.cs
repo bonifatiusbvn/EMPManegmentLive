@@ -38,11 +38,13 @@ namespace EMPManagment.API.Controllers
                 {
                     response.Code = (int)HttpStatusCode.OK;
                     response.Message = result.Result.Message;
+                    response.Icone = result.Result.Icone;
                 }
                 else
                 {
                     response.Message = result.Result.Message;
                     response.Code = (int)HttpStatusCode.NotFound;
+                    response.Icone = result.Result.Icone;
                 }
             }
             catch (Exception ex)

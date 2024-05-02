@@ -1,4 +1,5 @@
 ﻿using EMPManagment.Web.Models.API;
+using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 using EMPManegment.EntityModels.ViewModels.Purchase_Request;
 using System;
 using System.Collections.Generic;
@@ -10,12 +11,12 @@ namespace EMPManegment.Inretface.Services.PurchaseRequestServices
 {
     public interface IPurchaseRequestServices
     {
-        Task<ApiResponseModel> AddPurchaseRequestDetails(PurchaseRequestModel AddPurchaseRequest);
-
+        Task<ApiResponseModel> CreatePurchaseRequest(PurchaseRequestMasterView AddPurchaseRequest);
+        Task<jsonData> GetPRList(DataTableRequstModel PRdataTable);
         Task<IEnumerable<PurchaseRequestModel>> GetPurchaseRequestList();
-
         Task<PurchaseRequestModel> GetPurchaseRequestDetailsById(Guid PrId);
         Task<ApiResponseModel> UpdatePurchaseRequestDetails(PurchaseRequestModel UpdatePurchaseRequest);
         Task<ApiResponseModel> DeletePurchaseRequestDetails(Guid PrId);
+        string CheckPRNo();
     }
 }

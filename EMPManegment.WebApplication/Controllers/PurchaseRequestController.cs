@@ -1,9 +1,12 @@
 ﻿using EMPManagment.Web.Helper;
 using EMPManagment.Web.Models.API;
 using EMPManegment.EntityModels.View_Model;
+using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 using EMPManegment.EntityModels.ViewModels.OrderModels;
 using EMPManegment.EntityModels.ViewModels.ProductMaster;
 using EMPManegment.EntityModels.ViewModels.Purchase_Request;
+using EMPManegment.EntityModels.ViewModels.PurchaseOrderModels;
+using EMPManegment.EntityModels.ViewModels.UserModels;
 using EMPManegment.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -22,10 +25,25 @@ namespace EMPManegment.Web.Controllers
         public IWebHostEnvironment Environment { get; }
         public APIServices APIServices { get; }
 
-        public IActionResult CreatePurchaseRequest()
+        public async Task<IActionResult> CreatePurchaseRequest()
         {
-            return View();
+            try
+            {
+                ApiResponseModel Response = await APIServices.GetAsync("", "PurchaseRequest/CheckPRNo");
+
+                if (Response.code == 200)
+                {
+                    ViewData["PrNo"] = JsonConvert.DeserializeObject<string>(JsonConvert.SerializeObject(Response.data));
+                }
+                return View();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+
+            }
         }
+
         public async Task<IActionResult> GetAllProductDetailsList(string? searchText)
         {
             try
@@ -47,36 +65,22 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
+
         [HttpPost]
-        public async Task<IActionResult> CreatePurchaseRequest(PurchaseRequestModel AddPurchaseRequest)
+        public async Task<IActionResult> CreateMutiplePurchaseRequest()
         {
             try
             {
-                var purchaseRequest = new PurchaseRequestModel()
-                {
-                    PrId = Guid.NewGuid(),
-                    UserId = AddPurchaseRequest.UserId,
-                    UserName = AddPurchaseRequest.UserName,
-                    ProjectId = AddPurchaseRequest.ProjectId,
-                    ProjectName = AddPurchaseRequest.ProjectName,
-                    ProductId = AddPurchaseRequest.ProductId,
-                    ProductName = AddPurchaseRequest.ProductName,
-                    ProductTypeId = AddPurchaseRequest.ProductTypeId,
-                    Quantity = AddPurchaseRequest.Quantity,
-                    IsApproved = false,
-                    IsDeleted = false,
-                    CreatedBy = AddPurchaseRequest.CreatedBy,
-                    CreatedOn=DateTime.Now,
-                };
-
-                ApiResponseModel postUser = await APIServices.PostAsync(purchaseRequest, "PurchaseRequest/CreatePurchaseRequest");
+                var PurchaseRequestDetails = HttpContext.Request.Form["InsertPRDetails"];
+                var PRDetails = JsonConvert.DeserializeObject<PurchaseRequestMasterView>(PurchaseRequestDetails.ToString());
+                ApiResponseModel postUser = await APIServices.PostAsync(PRDetails, "PurchaseRequest/CreatePurchaseRequest");
                 if (postUser.code == 200)
                 {
                     return Ok(new { Message = postUser.message, Code = postUser.code });
                 }
                 else
                 {
-                    return new JsonResult(new { Message = string.Format(postUser.message), Code = postUser.code });
+                    return Ok(new { Message = postUser.message, Code = postUser.code });
                 }
             }
             catch (Exception ex)
@@ -84,6 +88,7 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
+
         [HttpPost]
         public async Task<IActionResult> GetPurchaseRequestList()
         {
@@ -163,6 +168,54 @@ namespace EMPManegment.Web.Controllers
                 {
                     return new JsonResult(new { Message = string.Format(purchaseRequest.message), Code = purchaseRequest.code });
                 }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> GetPRList()
+        {
+            try
+            {
+                var draw = Request.Form["draw"].FirstOrDefault();
+                var start = Request.Form["start"].FirstOrDefault();
+                var length = Request.Form["length"].FirstOrDefault();
+                var sortColumn = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
+                var sortColumnDir = Request.Form["order[0][dir]"].FirstOrDefault();
+                var searchValue = Request.Form["search[value]"].FirstOrDefault();
+                int pageSize = length != null ? Convert.ToInt32(length) : 0;
+                int skip = start != null ? Convert.ToInt32(start) : 0;
+
+                var dataTable = new DataTableRequstModel
+                {
+                    draw = draw,
+                    start = start,
+                    pageSize = pageSize,
+                    skip = skip,
+                    lenght = length,
+                    searchValue = searchValue,
+                    sortColumn = sortColumn,
+                    sortColumnDir = sortColumnDir
+                };
+                List<PurchaseRequestModel> purchaseRequestList = new List<PurchaseRequestModel>();
+                var data = new jsonData();
+                ApiResponseModel res = await APIServices.PostAsync(dataTable, "PurchaseRequest/GetPRList");
+                if (res.code == 200)
+                {
+                    data = JsonConvert.DeserializeObject<jsonData>(res.data.ToString());
+                    purchaseRequestList = JsonConvert.DeserializeObject<List<PurchaseRequestModel>>(data.data.ToString());
+                }
+                var jsonData = new
+                {
+                    draw = data.draw,
+                    recordsFiltered = data.recordsFiltered,
+                    recordsTotal = data.recordsTotal,
+                    data = purchaseRequestList,
+                };
+                return new JsonResult(jsonData);
             }
             catch (Exception ex)
             {

@@ -1,4 +1,5 @@
 ﻿using EMPManagment.Web.Models.API;
+using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 using EMPManegment.EntityModels.ViewModels.Purchase_Request;
 using EMPManegment.Inretface.Interface.OrderDetails;
 using EMPManegment.Inretface.Interface.PurchaseRequest;
@@ -20,9 +21,9 @@ namespace EMPManegment.Services.PurchaseRequest
         }
         public IPurchaseRequest purchaseRequest { get; }
 
-        public async Task<ApiResponseModel> AddPurchaseRequestDetails(PurchaseRequestModel AddPurchaseRequest)
+        public async Task<ApiResponseModel> CreatePurchaseRequest(PurchaseRequestMasterView AddPurchaseRequest)
         {
-            return await purchaseRequest.AddPurchaseRequestDetails(AddPurchaseRequest);
+            return await purchaseRequest.CreatePurchaseRequest(AddPurchaseRequest);
         }
 
         public async Task<ApiResponseModel> DeletePurchaseRequestDetails(Guid PrId)
@@ -43,6 +44,15 @@ namespace EMPManegment.Services.PurchaseRequest
         public async Task<ApiResponseModel> UpdatePurchaseRequestDetails(PurchaseRequestModel UpdatePurchaseRequest)
         {
             return await purchaseRequest.UpdatePurchaseRequestDetails(UpdatePurchaseRequest);
+        }
+        public string CheckPRNo()
+        {
+            return purchaseRequest.CheckPRNo();
+        }
+
+        public async Task<jsonData> GetPRList(DataTableRequstModel PRdataTable)
+        {
+            return await purchaseRequest.GetPRList(PRdataTable);
         }
     }
 }

@@ -82,7 +82,7 @@ function GetProducts() {
 }
 
 function selectProductId() {
-    
+
     $("#table-product-list-all").hide();
     $("#getallproductlist").hide();
     document.getElementById("txtProductListId").value = document.getElementById("txtProductList").value;
@@ -144,7 +144,8 @@ $(document).ready(function () {
 });
 
 function SaveProductDetails() {
-
+    debugger
+    siteloadershow()
     if ($('#createproductform').valid()) {
 
         var formData = new FormData();
@@ -166,20 +167,33 @@ function SaveProductDetails() {
             contentType: false,
             processData: false,
             success: function (Result) {
-                if (Result.message != null) {
+
+                if (Result.code == 200) {
+                    siteloaderhide()
                     Swal.fire({
                         title: Result.message,
-                        icon: 'success',
+                        icon: Result.icone,
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'OK',
                     }).then(function () {
                         window.location = '/ProductMaster/CreateProduct';
                     });
                 }
+                else {
+
+                    Swal.fire({
+                        title: Result.message,
+                        icon: Result.icone,
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK',
+                    })
+
+                }
             }
         })
     }
     else {
+        siteloaderhide()
         Swal.fire({
             title: "Kindly Fill All Details",
             icon: 'warning',
@@ -218,7 +232,7 @@ function EditProductDetails(Id) {
         type: "Get",
         contentType: 'application/json;charset=utf-8;',
         dataType: 'json',
-        success: function (response) {debugger
+        success: function (response) {
             $('#UpdateProductDetails').modal('show');
             $('#txtProductId').val(response.id);
             $('#txtProductName').val(response.productName);
@@ -359,7 +373,7 @@ function SearchProductName() {
 }
 
 function GetAllProductDetailsList(page) {
-    
+
     $.get("/ProductMaster/GetAllProductList", { page: page })
         .done(function (result) {
 

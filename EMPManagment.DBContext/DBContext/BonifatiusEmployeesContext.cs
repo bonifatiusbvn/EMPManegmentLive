@@ -87,7 +87,8 @@ public partial class BonifatiusEmployeesContext : DbContext
 
     public virtual DbSet<TblVendorType> TblVendorTypes { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    { }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<TblAttendance>(entity =>
@@ -361,16 +362,15 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
             entity.Property(e => e.Gst)
-                .HasColumnType("numeric(3, 2)")
+                .HasColumnType("decimal(18, 2)")
                 .HasColumnName("GST");
             entity.Property(e => e.Hsn).HasColumnName("HSN");
-            entity.Property(e => e.PerUnitPrice).HasColumnType("numeric(18, 2)");
+            entity.Property(e => e.PerUnitPrice).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.PerUnitWithGstprice)
-                .HasColumnType("numeric(18, 2)")
+                .HasColumnType("decimal(18, 2)")
                 .HasColumnName("PerUnitWithGSTPrice");
-            entity.Property(e => e.ProductImage).HasMaxLength(50);
-            entity.Property(e => e.ProductName).HasMaxLength(50);
-            entity.Property(e => e.ProductShortDescription).HasMaxLength(50);
+            entity.Property(e => e.ProductName).HasMaxLength(100);
+            entity.Property(e => e.ProductShortDescription).HasMaxLength(100);
             entity.Property(e => e.ProductStocks).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
         });
@@ -536,6 +536,7 @@ public partial class BonifatiusEmployeesContext : DbContext
 
             entity.Property(e => e.PrId).ValueGeneratedNever();
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.PrNo).HasMaxLength(50);
             entity.Property(e => e.ProductName).HasMaxLength(250);
             entity.Property(e => e.Quantity).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");

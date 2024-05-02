@@ -45,12 +45,11 @@ namespace EMPManegment.Web.Controllers
             try
             {
                 var path = Environment.WebRootPath;
-                var filepath = "Content/Image/" + AddProduct.ProductImage.FileName;
+                var filepath = "Content/Product/" + Guid.NewGuid() + "_" + AddProduct.ProductImage.FileName;
                 var fullpath = Path.Combine(path, filepath);
                 UploadFile(AddProduct.ProductImage, fullpath);
                 var ProductDetails = new ProductDetailsView
                 {
-
                     CreatedBy = _userSession.UserId,
                     ProductType = AddProduct.ProductType,
                     ProductName = AddProduct.ProductName,
@@ -67,12 +66,12 @@ namespace EMPManegment.Web.Controllers
                 UserResponceModel responseModel = new UserResponceModel();
                 if (postuser.code == 200)
                 {
-                    return Ok(new { postuser.message });
+                    return Ok(new { postuser.message, postuser.Icone, postuser.code });
                 }
                 else
                 {
 
-                    return Ok(new { postuser.code });
+                    return Ok(new { postuser.message, postuser.Icone, postuser.code });
                 }
             }
             catch (Exception ex)
@@ -161,24 +160,6 @@ namespace EMPManegment.Web.Controllers
                     products = JsonConvert.DeserializeObject<List<ProductDetailsView>>(response.data.ToString());
                 }
                 return new JsonResult(products);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        public async Task<IActionResult> DisplayProductDetils(Guid ProductId)
-        {
-            try
-            {
-                ProductDetailsView products = new ProductDetailsView();
-                ApiResponseModel response = await APIServices.PostAsync("", "ProductMaster/DisplayProductDetailsById?ProductId=" + ProductId);
-                if (response.code == 200)
-                {
-                    products = JsonConvert.DeserializeObject<ProductDetailsView>(response.data.ToString());
-                }
-                return PartialView("~/Views/PurchaseRequest/_AddProductPRPartial.cshtml", products);
             }
             catch (Exception ex)
             {
@@ -452,5 +433,43 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
+        [HttpPost]
+        public async Task<IActionResult> DisplayProductDetilsListById(Guid ProductId)
+        {
+            try
+            {
+                List<ProductDetailsView> products = new List<ProductDetailsView>();
+                ApiResponseModel response = await APIServices.GetAsync("", "ProductMaster/GetProductById?ProductId=" + ProductId);
+                if (response.code == 200)
+                {
+                    products = JsonConvert.DeserializeObject<List<ProductDetailsView>>(response.data.ToString());
+                }
+                return PartialView("~/Views/PurchaseRequest/_AddProductPRPartial.cshtml", products);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DisplayProductDetilsById(Guid ProductId)
+        {
+            try
+            {
+                ProductDetailsView Product = new ProductDetailsView();
+                ApiResponseModel response = await APIServices.GetAsync("", "ProductMaster/GetProductDetailsById?ProductId=" + ProductId);
+                if (response.code == 200)
+                {
+                    Product = JsonConvert.DeserializeObject<ProductDetailsView>(response.data.ToString());
+                    Product.RowNumber = Product.RowNumber;
+                }
+                return PartialView("~/Views/PurchaseRequest/_AddProductPRPartial.cshtml", Product);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }
