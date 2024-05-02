@@ -9,6 +9,8 @@ public partial class TblPurchaseRequest
 
     public Guid UserId { get; set; }
 
+    public string PrNo { get; set; } = null!;
+
     public Guid ProjectId { get; set; }
 
     public Guid? ProductId { get; set; }

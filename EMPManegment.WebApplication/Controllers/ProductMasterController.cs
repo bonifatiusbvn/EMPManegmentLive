@@ -168,24 +168,6 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
-        public async Task<IActionResult> DisplayProductDetils(Guid ProductId)
-        {
-            try
-            {
-                ProductDetailsView products = new ProductDetailsView();
-                ApiResponseModel response = await APIServices.PostAsync("", "ProductMaster/DisplayProductDetailsById?ProductId=" + ProductId);
-                if (response.code == 200)
-                {
-                    products = JsonConvert.DeserializeObject<ProductDetailsView>(response.data.ToString());
-                }
-                return PartialView("~/Views/PurchaseRequest/_AddProductPRPartial.cshtml", products);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
         public IActionResult ProductList()
         {
             return View();
@@ -452,5 +434,43 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
+        [HttpPost]
+        public async Task<IActionResult> DisplayProductDetilsListById(Guid ProductId)
+        {
+            try
+            {
+                List<ProductDetailsView> products = new List<ProductDetailsView>();
+                ApiResponseModel response = await APIServices.GetAsync("", "ProductMaster/GetProductById?ProductId=" + ProductId);
+                if (response.code == 200)
+                {
+                    products = JsonConvert.DeserializeObject<List<ProductDetailsView>>(response.data.ToString());
+                }
+                return PartialView("~/Views/PurchaseRequest/_AddProductPRPartial.cshtml", products);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DisplayProductDetilsById(Guid ProductId)
+        {
+            try
+            {
+                ProductDetailsView Product = new ProductDetailsView();
+                ApiResponseModel response = await APIServices.GetAsync("", "ProductMaster/GetProductDetailsById?ProductId=" + ProductId);
+                if (response.code == 200)
+                {
+                    Product = JsonConvert.DeserializeObject<ProductDetailsView>(response.data.ToString());
+                    Product.RowNumber = Product.RowNumber;
+                }
+                return PartialView("~/Views/PurchaseRequest/_AddProductPRPartial.cshtml", Product);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

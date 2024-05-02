@@ -9,6 +9,7 @@
         <th scope="row">
         </th>
         <td class="id" hidden><a href="/PurchaseRequest/GetPurchaseRequestDetailsById/?PrId=@item.PrId" class="fw-medium link-primary">@item.PrId</a></td>
+        <td class="Pr_No">@item.PrNo</td>
         <td class="user_name">@item.UserName</td>
         <td class="project_name">@item.ProjectName</td>
         <td class="product_name">@item.ProductName</td>
@@ -29,8 +30,4 @@
             </ul>
         </td>
     </tr>
-}
-@section Scripts {
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script src="~/moduls/purchaserequestscript.js"></script>
 }

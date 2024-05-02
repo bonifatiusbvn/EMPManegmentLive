@@ -279,6 +279,7 @@ namespace EMPManegment.Web.Controllers
                 if (postuser.data != null)
                 {
                     ProjectMembersList = JsonConvert.DeserializeObject<List<ProjectView>>(postuser.data.ToString());
+                    ProjectMembersList = ProjectMembersList.Take(5).ToList();
                 }
                 else
                 {
@@ -368,6 +369,7 @@ namespace EMPManegment.Web.Controllers
                 if (postuser.data != null)
                 {
                     ProjectDocumentsList = JsonConvert.DeserializeObject<List<ProjectDocumentView>>(postuser.data.ToString());
+                    ProjectDocumentsList = ProjectDocumentsList.Take(5).ToList();
                 }
                 else
                 {
