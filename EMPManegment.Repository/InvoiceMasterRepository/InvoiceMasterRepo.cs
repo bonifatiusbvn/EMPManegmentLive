@@ -12,6 +12,7 @@ using EMPManegment.EntityModels.ViewModels.VendorModels;
 using EMPManegment.Inretface.Interface.InvoiceMaster;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileSystemGlobbing.Internal.PatternContexts;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -21,6 +22,7 @@ using System.Net;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading.Tasks.Dataflow;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace EMPManegment.Repository.InvoiceMasterRepository
@@ -143,14 +145,18 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
             }
         }
 
-        public async Task<InvoiceViewModel> GetInvoiceDetailsById(Guid Id)
+        public async Task<InvoiceMasterModel> GetInvoiceDetailsById(Guid Id)
         {
-            InvoiceViewModel invoice = new InvoiceViewModel();
+            InvoiceMasterModel invoice = new InvoiceMasterModel();
             try
             {
                 invoice = (from a in Context.TblInvoices.Where(x => x.Id == Id)
                            join b in Context.TblVendorMasters on a.VandorId equals b.Vid
-                           select new InvoiceViewModel
+                           join c in Context.TblCities on b.VendorCity equals c.Id
+                           join d in Context.TblCountries on b.VendorCountry equals d.Id
+                           join e in Context.TblStates on b.VendorState equals e.Id
+                           join f in Context.TblProjectMasters on a.ProjectId equals f.ProjectId
+                           select new InvoiceMasterModel
                            {
                                Id = a.Id,
                                InvoiceNo = a.InvoiceNo,
@@ -163,13 +169,36 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                                BuyesOrderNo = a.BuyesOrderNo,
                                BuyesOrderDate = a.BuyesOrderDate,
                                TotalAmount = a.TotalAmount,
-                               CreatedOn = a.CreatedOn,
-                               CreatedBy = a.CreatedBy,
-                               UpdatedOn = a.UpdatedOn,
-                               UpdatedBy = a.UpdatedBy,
-
-
+                               VendorFullAddress=b.VendorAddress + "-" + c.City + "-" + e.State + "-" + d.Country,
+                               VendorGstnumber = b.VendorGstnumber,
+                               VendorEmail=b.VendorEmail,
+                               ProjectName=f.ProjectTitle,
+                               VendorCompanyName=b.VendorCompany,
+                               VendorBankAccountNo=b.VendorBankAccountNo,
+                               VendorBankIfsc=b.VendorBankIfsc,
+                               VendorBankBranch=b.VendorBankBranch,
+                               VendorAccountHolderName=b.VendorAccountHolderName,
+                               VendorBankName=b.VendorBankName,
+                               TotalGst=a.TotalGst,
+                               InvoiceDate=a.InvoiceDate,
                            }).First();
+                List<InvoiceDetailsViewModel> Itemlist = (from a in Context.TblInvoiceDetails.Where(a=>a.InvoiceRefId == invoice.Id)
+                                                         join b in Context.TblProductTypeMasters on a.ProductType equals b.Id
+                                                         join c in Context.TblProductDetailsMasters on a.ProductId equals c.Id
+                                                         select new InvoiceDetailsViewModel
+                                                         { 
+                                                            Product=a.Product,
+                                                            Quantity=a.Quantity,
+                                                            ProductTypeName = b.Type,
+                                                            ProductTotal=a.ProductTotal,
+                                                            Gst=a.Gst,
+                                                            ProductType=a.ProductType,
+                                                            Hsn=c.Hsn,
+                                                            PerUnitPrice=c.PerUnitPrice,
+                                                            PerUnitWithGstprice=c.PerUnitWithGstprice,
+                                                            Price=a.Price,
+                                                         }).ToList();
+                invoice.InvoiceDetails = Itemlist;
                 return invoice;
             }
             catch (Exception ex)

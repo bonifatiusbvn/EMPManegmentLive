@@ -15,7 +15,7 @@ namespace EMPManegment.Inretface.Interface.InvoiceMaster
 {
     public interface IInvoiceMaster
     {
-        Task<InvoiceViewModel> GetInvoiceDetailsById(Guid Id);
+        Task<InvoiceMasterModel> GetInvoiceDetailsById(Guid Id);
         Task<IEnumerable<InvoiceViewModel>> GetInvoiceListByVendorId(Guid Vid);
         Task<IEnumerable<CreditDebitView>> GetLastTransactionByVendorId(Guid Vid);
         Task<IEnumerable<CreditDebitView>> GetAllTransactionByVendorId(Guid Vid);
@@ -34,7 +34,5 @@ namespace EMPManegment.Inretface.Interface.InvoiceMaster
         Task<PurchaseOrderResponseModel> ShowInvoiceDetailsByOrderId(string OrderId);
 
         Task<IEnumerable<InvoiceViewModel>> InvoicActivity(Guid ProId);
-
-
     }
 }
