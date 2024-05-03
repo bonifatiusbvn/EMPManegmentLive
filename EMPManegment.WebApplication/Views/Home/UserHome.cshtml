@@ -6,20 +6,20 @@
     Layout = "~/Views/Shared/_HomeLayout.cshtml";
 }
 
-<div class="content-header">
-    <div class="container-fluid">
-        <div class="row mb-2">
-            <div class="col-sm-6">
-                <h1 class="m-0">Dashboard </h1>
-            </div><!-- /.col -->
-            <div class="col-sm-6">
-                <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="#">Home</a></li>
-                    <li class="breadcrumb-item active">Dashboard</li>
+<div class="row" style="margin-top:80px;">
+    <div class="col-12">
+        <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+            <h4 class="mb-sm-0">Dasbord</h4>
+
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Dasbord</a></li>
+                    <li class="breadcrumb-item active">User Home</li>
                 </ol>
-            </div><!-- /.col -->
-        </div><!-- /.row -->
-    </div><!-- /.container-fluid -->
+            </div>
+
+        </div>
+    </div>
 </div>
 
 <div class="row">
@@ -27,7 +27,7 @@
         <!-- card -->
         <div class="card card-animate">
             <div class="card-body">
-                <input type="text" value="@_userSession.UserId" id="txtuserid" hidden/>
+                <input type="text" value="@_userSession.UserId" id="txtuserid" hidden />
                 <input type="text" class="form-control border dash-filter-picker" id="txttodayDate" value="@DateTime.Today.ToShortDateString()" hidden>
                 <div class="d-flex align-items-center">
                     <div class="flex-grow-1 overflow-hidden">
