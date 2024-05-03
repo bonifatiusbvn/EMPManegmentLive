@@ -68,7 +68,7 @@ namespace EMPManegment.Repository.UserLoginRepository
 
                             List<FromPermission> FromPermissionData = (from u in Context.TblRolewiseFormPermissions
                                                                        join s in Context.TblForms on u.FormId equals s.FormId
-                                                                       where u.RoleId == userModel.RoleId && s.IsActive == true
+                                                                       where u.RoleId == userModel.RoleId 
                                                                        orderby s.OrderId ascending
                                                                        select new FromPermission
                                                                        {
@@ -80,6 +80,7 @@ namespace EMPManegment.Repository.UserLoginRepository
                                                                            View = u.IsViewAllow,
                                                                            Edit = u.IsEditAllow,
                                                                            Delete = u.IsDeleteAllow,
+                                                                           isActive = s.IsActive,
 
                                                                        }).ToList();
 

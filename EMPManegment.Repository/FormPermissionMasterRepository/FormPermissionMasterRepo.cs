@@ -28,7 +28,6 @@ namespace EMPManegment.Repository.FormPermissionMasterRepository
             var data = await (from e in Context.TblRolewiseFormPermissions.Where(x => x.RoleId == RoleId)
                               join f in Context.TblForms on e.FormId equals f.FormId
                               join r in Context.TblRoleMasters on e.RoleId equals r.RoleId
-                              where f.IsActive == true
                               orderby f.OrderId ascending
                               select new RolewiseFormPermissionModel
                               {

@@ -155,8 +155,15 @@ function validateAndCreateRole() {
 }
 
 function clearTextRoleName() {
+    ResetUserRoleForm();
     document.getElementById("textRoleName").value = ""; 
+    $('#createRoleModal').modal('show');
 }
 
+function ResetUserRoleForm() {
+    if (UserRoleForm) {
+        UserRoleForm.resetForm();
+    }
+}
        
   

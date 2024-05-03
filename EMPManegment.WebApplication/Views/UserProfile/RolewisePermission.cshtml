@@ -41,7 +41,14 @@
                             </div>
                         </div>
                         <div class="col-lg-auto">
-                            <button type="button" class="btn btn-block btn-warning btn-md" data-toggle="modal" data-target="#createRoleModal" onclick="clearTextRoleName()"><i class="ri-add-line align-bottom me-1"></i>Create Role</button>
+                            <form class="position-relative">
+                                @if (UserSession.FormPermisionData.Any(a => a.FormName == "RolewiseFormPermission" && (a.Add == true)))
+                                {
+
+                                    <button type="button" class="btn btn-block btn-warning btn-md" data-toggle="modal" data-target="#createRoleModal" onclick="clearTextRoleName()"><i class="ri-add-line align-bottom me-1"></i>Create Role</button>
+                                }
+                            </form>
+                           
                         </div>
                     </div>
 
@@ -76,9 +83,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="createRoleModalLabel">Create Role</h5>
-                <button type="button" class="close" id="closebtn" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form id="addUserRole" autocomplete="off">
                 <div class="modal-body">
@@ -90,7 +95,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" id="closebtn" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-danger btn-default m-1" id="close-modal" data-bs-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-primary" onclick="validateAndCreateRole()">Create</button>
                 </div>
             </form>

@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Identity;
 using EMPManegment.EntityModels.ViewModels.ForgetPasswordModels;
 using DocumentFormat.OpenXml.Spreadsheet;
 using EMPManegment.EntityModels.Common;
+using EMPManegment.Web.Helper;
 
 namespace EMPManegment.Web.Controllers
 {
@@ -177,6 +178,7 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
+        [FormPermissionAttribute("Create User-Add")]
         [HttpPost]
         public async Task<IActionResult> UserSingUp(LoginDetailsView AddEmployee)
         {

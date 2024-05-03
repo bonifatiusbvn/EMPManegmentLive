@@ -38,9 +38,12 @@ using Aspose.Pdf.Text;
 using System.IO;
 using EMPManegment.EntityModels.ViewModels.ProjectModels;
 using EMPManegment.EntityModels.ViewModels.FormPermissionMaster;
+using Microsoft.AspNetCore.Authorization;
+using EMPManegment.Web.Helper;
 
 namespace EMPManegment.Web.Controllers
 {
+    [Authorize]
     public class UserProfileController : Controller
     {
 
@@ -61,6 +64,9 @@ namespace EMPManegment.Web.Controllers
         {
             return View();
         }
+
+
+        [FormPermissionAttribute("User List-View")]
         public async Task<IActionResult> DisplayUserList()
         {
             return View();
@@ -152,6 +158,8 @@ namespace EMPManegment.Web.Controllers
         {
             return View();
         }
+
+
         [HttpGet]
         public async Task<IActionResult> UserActiveDecativeList(string? searchby, string? searchfor, int? page)
         {
@@ -748,6 +756,8 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
+
+        [FormPermissionAttribute("RolewiseFormPermission-View")]
         [HttpGet]
         public IActionResult RolewisePermission()
         {
@@ -824,6 +834,8 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
+
+        [FormPermissionAttribute("RolewiseFormPermission-Add")]
         [HttpPost]
         public async Task<IActionResult> CreateUserRole(UserRoleModel roleDetails)
         {
