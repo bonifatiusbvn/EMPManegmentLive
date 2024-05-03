@@ -747,13 +747,13 @@ namespace EMPManegment.Web.Controllers
                 List<ExpenseDetailsView> Expense = new List<ExpenseDetailsView>();
                 var data = new jsonData();
                 ApiResponseModel response = await APIServices.PostAsync(dataTable, "ExpenseMaster/GetAllUserExpenseDetail?UserId=" + UserId);
-
                 if (response.code == 200)
                 {
                     data = JsonConvert.DeserializeObject<jsonData>(response.data.ToString());
                     Expense = JsonConvert.DeserializeObject<List<ExpenseDetailsView>>(data.data.ToString());
-                    Expense = Expense.FindAll(expense => expense.Account.ToLower() == "debit");
+                    Expense = Expense.FindAll(expense => expense.Account.ToLower() == "debit" && expense.IsApproved == true);
                 }
+
 
                 var jsonData = new
                 {
