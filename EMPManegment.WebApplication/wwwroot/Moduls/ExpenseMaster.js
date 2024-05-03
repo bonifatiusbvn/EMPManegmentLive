@@ -398,16 +398,16 @@ function GetUserExpenseList() {
                     return '<span style="color: ' + color + ';">' + data + '</span>';
                 }
             },
-            {
-                "data": "account",
-                "name": "Account",
-                "render": function (data, type, full, meta) {
+            //{
+            //    "data": "account",
+            //    "name": "Account",
+            //    "render": function (data, type, full, meta) {
 
-                    var color = data.toLowerCase() === "credit" ? "green" : "red";
-                    return '<span style="color: ' + color + ';">' + data + '</span>';
-                },
+            //        var color = data.toLowerCase() === "credit" ? "green" : "red";
+            //        return '<span style="color: ' + color + ';">' + data + '</span>';
+            //    },
 
-            },
+            //},
             {
                 "data": null,
                 "name": "Action",
@@ -818,7 +818,7 @@ function GetExpenseTotalAmount() {
         dataType: 'json',
         contentType: false,
         processData: false,
-        success: function (result) {
+        success: function (result) {debugger
             var total = 0;
             result.forEach(function (obj) {
                 if (obj.totalAmount) {
@@ -826,7 +826,7 @@ function GetExpenseTotalAmount() {
                 }
             });
 
-
+            debugger
             var creditamount = 0;
             result.forEach(function (obj) {
                 if (obj.account == "Credit") {
@@ -834,17 +834,17 @@ function GetExpenseTotalAmount() {
                 }
             });
             $("#txttotalcreditamount").text('₹' + creditamount);
-
+            debugger
             var Dabitamount = 0;
             result.forEach(function (obj) {
                 if (obj.account == "Debit") {
                     Dabitamount += obj.totalAmount;
                 }
             });
-            $("#txtTotalAmount").text('₹' + Dabitamount);
+            $("#txtTotalAmount").text('₹' + total);
             var PendingAmount = Dabitamount - creditamount;
             $("#pendingamount").text('₹' + PendingAmount);
-            $("#txttotaldebitedamount").text('₹' + PendingAmount);
+            $("#txttotaldebitedamount").text('₹' + Dabitamount);
             $('#txtcreditamount').on('input', function () {
                 var enteredAmount = parseFloat($(this).val());
 
@@ -1083,5 +1083,242 @@ function UserCreditExpenseList(UserId) {
             "defaultContent": "",
             "targets": "_all",
         }]
+    });
+}
+
+$(document).ready(function () {
+    GetAllUserUnapproveExpenseList()
+
+    $('.nav-link').click(function () {
+        var targetTab = $(this).attr('href');
+        if (targetTab === '#GetAllUnApprovedExpenseList') {
+
+            GetAllUserUnapproveExpenseList();
+        } else if (targetTab === '#GetAllApprovedExpenseList') {
+
+            GetAllUserApproveExpenseList();
+        } else if (targetTab === '#GetAllCreditExpenseList') {
+
+            GetAllUserCreditExpenseList();
+        }
+    });
+});
+function GetAllUserUnapproveExpenseList() {
+    var IsApprove = false;
+    $('#GetUserUnapprovedExpenseList').DataTable({
+        processing: true,
+        serverSide: true,
+        filter: true,
+        "bDestroy": true,
+        ajax: {
+            type: "Post",
+            url: '/ExpenseMaster/GetAllUserUnapproveExpenseList?Unapprove='+ IsApprove,
+            dataType: 'json'
+        },
+        columns: [
+            {
+                "data": null,
+                "render": function (data, type, full, meta) {
+                    var account = full.account.toLowerCase();
+                    return '<div class="avatar-xs"><div class="avatar-title bg-danger-subtle text-danger rounded-circle fs-16"><i class="ri-arrow-right-up-fill"></i></div></div>';
+                },
+                "orderable": false
+            },
+            { "data": "description", "name": "Description" },
+            { "data": "billNumber", "name": "BillNumber" },
+            {
+                "data": "date",
+                "name": "Date",
+                "render": function (data, type, full, meta) {
+                    return new Date(data).toLocaleDateString();
+                }
+            },
+            {
+                "data": "totalAmount",
+                "name": "TotalAmount",
+                "render": function (data, type, full, meta) {
+
+                    var color = full.account.toLowerCase() === "credit" ? "green" : "red";
+                    return '<span style="color: ' + color + ';">' + data + '</span>';
+                }
+            },
+            {
+                "data": null,
+                "name": "Action",
+                "render": function (data, type, full, meta) {
+                    return '<div class="d-flex justify-content-center">' +
+                        '<ul class="list-inline hstack gap-2 mb-0">' +
+                        '<li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">' +
+                        '<a onclick="EditExpenseDetails(\'' + full.id + '\')" data-bs-toggle="modal" class="text-primary d-inline-block edit-item-btn">' +
+                        '<i class="ri-pencil-fill fs-16"></i>' +
+                        '</a>' +
+                        '</li>' +
+                        '<li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Delete">' +
+                        '<a class="btn text-danger btndeletedoc" href="/Invoice/InvoiceDetails">' +
+                        '<i class="fas fa-trash"></i>' +
+                        '</a>' +
+                        '</li>' +
+                        '</ul>' +
+                        '</div>';
+                },
+                "orderable": false
+            }
+        ],
+        columnDefs: [
+            {
+                "targets": [0, -1],
+                "orderable": false
+            }
+        ]
+    });
+}
+function GetAllUserApproveExpenseList() {
+    var IsApprove = true;
+    $('#GetAllUserApprovedExpenseList').DataTable({
+        processing: true,
+        serverSide: true,
+        filter: true,
+        "bDestroy": true,
+        ajax: {
+            type: "Post",
+            url: '/ExpenseMaster/GetAllApproveExpenseList?Approve=' + IsApprove,
+            dataType: 'json'
+        },
+        columns: [
+            {
+                "data": null,
+                "render": function (data, type, full, meta) {
+                    var account = full.account.toLowerCase();
+                    if (account === "credit") {
+                        return '<div class="avatar-xs"><div class="avatar-title bg-success-subtle text-success rounded-circle fs-16"><i class="ri-arrow-left-down-fill"></i></div></div>';
+                    } else if (account === "debit") {
+                        return '<div class="avatar-xs"><div class="avatar-title bg-danger-subtle text-danger rounded-circle fs-16"><i class="ri-arrow-right-up-fill"></i></div></div>';
+                    } else {
+                        return '';
+                    }
+                },
+                "orderable": false
+            },
+            { "data": "description", "name": "Description" },
+            { "data": "billNumber", "name": "BillNumber" },
+            {
+                "data": "date",
+                "name": "Date",
+                "render": function (data, type, full, meta) {
+                    return new Date(data).toLocaleDateString();
+                }
+            },
+            {
+                "data": "totalAmount",
+                "name": "TotalAmount",
+                "render": function (data, type, full, meta) {
+                    var color = full.account && full.account.toLowerCase() === "credit" ? "green" : "red";
+                    return '<span style="color: ' + color + ';">' + data + '</span>';
+                }
+            },
+            {
+                "data": null,
+                "name": "Action",
+                "render": function (data, type, full, meta) {
+                    return '<div class="d-flex justify-content-center">' +
+                        '<ul class="list-inline hstack gap-2 mb-0">' +
+                        '<li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">' +
+                        '<a onclick="EditExpenseDetails(\'' + full.id + '\')" data-bs-toggle="modal" class="text-primary d-inline-block edit-item-btn">' +
+                        '<i class="ri-pencil-fill fs-16"></i>' +
+                        '</a>' +
+                        '</li>' +
+                        '<li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Delete">' +
+                        '<a class="btn text-danger btndeletedoc" href="/Invoice/InvoiceDetails">' +
+                        '<i class="fas fa-trash"></i>' +
+                        '</a>' +
+                        '</li>' +
+                        '</ul>' +
+                        '</div>';
+                },
+                "orderable": false
+            }
+        ],
+        columnDefs: [
+            {
+                "targets": [0, -1],
+                "orderable": false
+            }
+        ]
+    });
+}
+
+function GetAllUserCreditExpenseList() {
+    var Account = "Credit";
+    $('#UserallCreditExpenseTable').DataTable({
+        processing: true,
+        serverSide: true,
+        filter: true,
+        "bDestroy": true,
+        ajax: {
+            type: "Post",
+            url: '/ExpenseMaster/GetAllUserCreditExpenseList?Credit=' + Account,
+            dataType: 'json'
+        },
+        columns: [
+            {
+                "data": null,
+                "render": function (data, type, full, meta) {
+                    var account = full.account.toLowerCase();
+                    if (account === "credit") {
+                        return '<div class="avatar-xs"><div class="avatar-title bg-success-subtle text-success rounded-circle fs-16"><i class="ri-arrow-left-down-fill"></i></div></div>';
+                    } else if (account === "debit") {
+                        return '<div class="avatar-xs"><div class="avatar-title bg-danger-subtle text-danger rounded-circle fs-16"><i class="ri-arrow-right-up-fill"></i></div></div>';
+                    } else {
+                        return '';
+                    }
+                },
+                "orderable": false
+            },
+            { "data": "description", "name": "Description" },
+            { "data": "billNumber", "name": "BillNumber" },
+            {
+                "data": "date",
+                "name": "Date",
+                "render": function (data, type, full, meta) {
+                    return new Date(data).toLocaleDateString();
+                }
+            },
+            {
+                "data": "totalAmount",
+                "name": "TotalAmount",
+                "render": function (data, type, full, meta) {
+
+                    var color = full.account.toLowerCase() === "credit" ? "green" : "red";
+                    return '<span style="color: ' + color + ';">' + data + '</span>';
+                }
+            },
+            {
+                "data": null,
+                "name": "Action",
+                "render": function (data, type, full, meta) {
+                    return '<div class="d-flex justify-content-center">' +
+                        '<ul class="list-inline hstack gap-2 mb-0">' +
+                        '<li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">' +
+                        '<a onclick="EditExpenseDetails(\'' + full.id + '\')" data-bs-toggle="modal" class="text-primary d-inline-block edit-item-btn">' +
+                        '<i class="ri-pencil-fill fs-16"></i>' +
+                        '</a>' +
+                        '</li>' +
+                        '<li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Delete">' +
+                        '<a class="btn text-danger btndeletedoc" href="/Invoice/InvoiceDetails">' +
+                        '<i class="fas fa-trash"></i>' +
+                        '</a>' +
+                        '</li>' +
+                        '</ul>' +
+                        '</div>';
+                },
+                "orderable": false
+            }
+        ],
+        columnDefs: [
+            {
+                "targets": [0, -1],
+                "orderable": false
+            }
+        ]
     });
 }

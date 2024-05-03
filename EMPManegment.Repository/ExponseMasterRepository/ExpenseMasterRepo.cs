@@ -315,6 +315,7 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                                    Account = a.Account,
                                    ExpenseTypeName = b.Type,
                                    PaymentTypeName = c.Type,
+                                   IsApproved=a.IsApproved,
                                });
 
 
