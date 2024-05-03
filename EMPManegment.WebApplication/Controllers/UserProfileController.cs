@@ -60,7 +60,7 @@ namespace EMPManegment.Web.Controllers
             _userSession = userSession;
         }
 
-        [FormPermissionAttribute("Create User-Add")]
+        [FormPermissionAttribute("Create User-View")]
         public async Task<IActionResult> UserSingUp()
         {
             try

@@ -40,7 +40,6 @@ namespace EMPManegment.Web.Controllers
         public APIServices APIServices { get; }
         public IActionResult UserHome()
         {
-
             return View();
         }
 
