@@ -9,12 +9,12 @@
 <div class="row" style="margin-top:80px;">
     <div class="col-12">
         <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-            <h4 class="mb-sm-0">All User Expenses</h4>
+            <h4 class="mb-sm-0">User Profile</h4>
 
             <div class="page-title-right">
                 <ol class="breadcrumb m-0">
-                    <li class="breadcrumb-item"><a href="javascript: void(0);">Expense</a></li>
-                    <li class="breadcrumb-item active">All User Expenses</li>
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">User</a></li>
+                    <li class="breadcrumb-item active">User Profile</li>
                 </ol>
             </div>
 
@@ -86,9 +86,9 @@
                                 </a>
                             </li>
                         </ul>
-                        <div class="flex-shrink-0">
+                        @*<div class="flex-shrink-0">
                             <a href="pages-profile-settings.html" class="btn btn-success"><i class="ri-edit-box-line align-bottom"></i> Edit Profile</a>
-                        </div>
+                        </div> *@
                     </div>
                     <!-- Tab panes -->
                     <div class="tab-content pt-4 text-muted">
@@ -185,30 +185,16 @@
                                                     </div>
                                                 </div>
                                                 <!--end col-->
-                                                <div class="col-3 col-md-3">
+                                                <div class="col-6 col-md-6">
                                                     <div class="d-flex mt-4">
                                                         <div class="flex-shrink-0 avatar-xs align-self-center me-3">
                                                             <div class="avatar-title bg-light rounded-circle fs-16 text-primary">
-                                                                <i class="ri-global-line"></i>
+                                                                <i class="fa fa-map-marker"></i>
                                                             </div>
                                                         </div>
                                                         <div class="flex-grow-1 overflow-hidden">
-                                                            <p class="mb-1">Website :</p>
-                                                            <a href="#" class="fw-semibold">Bonifatius</a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <!--end col-->
-                                                <div class="col-3 col-md-3">
-                                                    <div class="d-flex mt-4">
-                                                        <div class="flex-shrink-0 avatar-xs align-self-center me-3">
-                                                            <div class="avatar-title bg-light rounded-circle fs-16 text-primary">
-                                                                <i class="ri-global-line"></i>
-                                                            </div>
-                                                        </div>
-                                                        <div class="flex-grow-1 overflow-hidden">
-                                                            <p class="mb-1">Website :</p>
-                                                            <a href="#" class="fw-semibold">Bonifatius</a>
+                                                            <p class="mb-1">Address :</p>
+                                                            SF- 203, Peridot Complex, Urmi co-Operative scoiety, Swami Shivanand Marg, Ajit Nagar Society, Akota, Vadodara, Gujarat 390020
                                                         </div>
                                                     </div>
                                                 </div>
@@ -462,32 +448,39 @@
                         <div class="tab-pane fade" id="documents" role="tabpanel">
                             <div class="card">
                                 <div class="card-body">
-                                    <div class="d-flex align-items-center mb-4">
-                                        <select asp-for="DocumentType" id="Documents" class="form-control">
-                                            <option>-- Select Document --</option>
-                                        </select>
+                                    <div class="card-header">
+                                        <div class="row g-2">
+                                            <div class="col-lg-6">
+                                                <h5 class="card-title mb-0">User Documents</h5>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="d-flex align-items-center mb-4">
+                                                    <select asp-for="DocumentType" id="Documents" class="form-control">
+                                                        <option>-- Select Document --</option>
+                                                    </select>
+                                                    <div class="flex-shrink-0">
+                                                        <input class="form-control d-none" id="UserID" value="@Model.Id" hidden>
+                                                        <input class="form-control d-none" id="CreatedBy" value="@Model.FirstName @Model.LastName" hidden>
+                                                        <input class="form-control d-none" type="file" id="formFile" accept="pdf">
+                                                        <label for="formFile" class="btn btn-primary">
+                                                            <i class="ri-upload-2-fill me-1 align-bottom"></i> Upload
+                                                            File
+                                                        </label>
 
-                                        <div class="flex-shrink-0">
-                                            <input class="form-control d-none" id="UserID" value="@Model.Id" hidden>
-                                            <input class="form-control d-none" id="CreatedBy" value="@Model.FirstName @Model.LastName" hidden>
-                                            <input class="form-control d-none" type="file" id="formFile" accept="pdf">
-                                            <label for="formFile" class="btn btn-primary">
-                                                <i class="ri-upload-2-fill me-1 align-bottom"></i> Upload
-                                                File
-                                            </label>
-
-                                            <label type="submit" class="btn btn-secondary" id="SubmitButton" onclick="UploadDocument()">
-                                                <i class="ri-save-2-fill me-1 align-bottom"></i> Save
-                                                File
-                                            </label>
+                                                        <label type="submit" class="btn btn-secondary" id="SubmitButton" onclick="UploadDocument()">
+                                                            <i class="ri-save-2-fill me-1 align-bottom"></i> Save
+                                                            File
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
-
                                     </div>
                                     <div class="row">
                                         <div class="col-lg-12">
                                             <div class="table-responsive">
-                                                <table class="table">
-                                                    <thead class="table-light">
+                                                <table class="table table-bordered dt-responsive nowrap table-striped align-middle dataTable no-footer dtr-inline">
+                                                    <thead class="table-light text-muted text-center">
                                                         <tr class="text-center">
                                                             <th scope="col">DocumentType</th>
                                                             <th scope="col">DocumentName</th>

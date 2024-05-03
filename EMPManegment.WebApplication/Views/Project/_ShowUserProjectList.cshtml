@@ -7,11 +7,38 @@
 
 <link href="~/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
 
+<style>
+    span.deleteicon {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+    }
+
+        span.deleteicon span {
+            position: absolute;
+            display: block;
+            right: 3px;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            color: red;
+            background-color: #ccc;
+            font: 13px monospace;
+            text-align: center;
+            line-height: 1em;
+            cursor: pointer;
+        }
+
+        span.deleteicon input {
+            padding-right: 18px;
+            box-sizing: border-box;
+        }
+</style>
+
 <div class="tab-pane" role="tabpanel">
     <div class="card">
         <div class="card-body">
             <!-- ... your existing form content ... -->
-
             <div class="row g-4 mb-3">
                 <div class="col-sm-auto">
                     <a id="btnbackButton" class="btn btn-outline-success rounded"><i class="ri-arrow-left-line m-2"></i>Back</a>
@@ -20,22 +47,21 @@
                 <div class="col-sm offset-6">
                     <form class="mx-2 my-2">
                         <div class="input-group">
-                            <select class="form-control form-select valid" id="idinputSearch" name="searchby" style="height:40px;">
+                            <select class="form-control form-select valid" id="idinputSearch" name="searchby">
                                 <option selected disabled value="">SearchBy...</option>
                                 <option value="ProjectTitle">ProjectTitle</option>
                                 <option value="ProjectStatus">ProjectStatus</option>
                             </select>
                             <span class="deleteicon col-sm offset-6">
-                                <input name="searchfor" class="form-control" id="txtinputSearch" area-describedby="inputSearchProjectTitle" aria-label="Search" autocomplete="off" style="height:40px;" />
+                                <input name="searchfor" class="form-control" id="txtinputSearch" area-describedby="inputSearchProjectTitle" aria-label="Search" autocomplete="off" />
                                 <span onclick="var input = this.previousElementSibling; input.value = ''; input.focus();" style="margin-top:0px;margin-left:-24px;position:relative;">x</span>
                             </span>
-                            <button type="button" class="btn btn-outline-secondary rounded" onclick="btnserrchproject()" style="width:100px; height:40px;">Search</button>
+                            <button type="button" class="btn btn-outline-secondary rounded" onclick="btnserrchproject()">Search</button>
                         </div>
                     </form>
 
                 </div>
-            </div>
-            <!-- end row -->
+            </div><!-- end row -->
             <div class="row">
                 @foreach (var item in Model)
                 {

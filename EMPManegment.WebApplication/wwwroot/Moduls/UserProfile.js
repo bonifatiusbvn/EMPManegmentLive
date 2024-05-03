@@ -63,7 +63,14 @@ function UploadDocument() {
         processData: false,
         contentType: false,
         success: function () {
-            GetDocumentList();
+            Swal.fire({
+                title: 'Document successfully uploaded.',
+                icon: 'success',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'OK',
+            }).then(function () {
+                GetDocumentList();
+            });
         }
     });
 }
