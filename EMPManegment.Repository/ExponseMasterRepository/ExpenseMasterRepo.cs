@@ -229,7 +229,7 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                         TotalAmount = ExpenseDetails.TotalAmount,
                         Account = ExpenseDetails.Account,
                         PaymentType = ExpenseDetails.PaymentType,
-                        IsDeleted = true,
+                        IsDeleted = false,
                         CreatedBy = ExpenseDetails.CreatedBy,
                         IsPaid = false,
                         CreatedOn = DateTime.Today,
@@ -468,6 +468,7 @@ namespace EMPManegment.Repository.ExponseMasterRepository
             {
                 var UserList = from a in Context.TblExpenseMasters
                                join b in Context.TblUsers on a.UserId equals b.Id
+                               where a.IsDeleted == false
                                group new { a, b } by new { a.UserId, b.Image, b.UserName, FullName = b.FirstName + " " + b.LastName } into userGroup
                                select new UserExpenseDetailsView
                                {
@@ -535,7 +536,7 @@ namespace EMPManegment.Repository.ExponseMasterRepository
         public async Task<List<ExpenseDetailsView>> GetExpenseDetailByUserId(Guid UserId)
         {
             var ExpenseDetail = new List<ExpenseDetailsView>();
-            var data = await Context.TblExpenseMasters.Where(x => x.UserId == UserId).ToListAsync();
+            var data = await Context.TblExpenseMasters.Where(x => x.UserId == UserId && x.IsDeleted == false).ToListAsync();
             if (data != null)
             {
                 foreach (var item in data)
@@ -572,7 +573,7 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                 var expenses = (from a in Context.TblExpenseMasters
                                 join b in Context.TblExpenseTypes on a.ExpenseType equals b.Id
                                 join c in Context.TblPaymentTypes on a.PaymentType equals c.Id
-                                where a.UserId == UserId
+                                where a.UserId == UserId && a.IsDeleted == false
                                 select new ExpenseDetailsView
                                 {
                                     Id = a.Id,
@@ -649,7 +650,7 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                 var expenses = (from a in Context.TblExpenseMasters
                                 join b in Context.TblExpenseTypes on a.ExpenseType equals b.Id
                                 join c in Context.TblPaymentTypes on a.PaymentType equals c.Id
-                                where a.UserId == UserId && a.IsApproved == false
+                                where a.UserId == UserId && a.IsApproved == false && a.IsDeleted == false
                                 select new ExpenseDetailsView
                                 {
                                     Id = a.Id,
@@ -722,7 +723,7 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                 var expenses = (from a in Context.TblExpenseMasters
                                 join b in Context.TblExpenseTypes on a.ExpenseType equals b.Id
                                 join c in Context.TblPaymentTypes on a.PaymentType equals c.Id
-                                where a.UserId == UserId && a.IsApproved == true
+                                where a.UserId == UserId && a.IsApproved == true && a.IsDeleted == false
                                 select new ExpenseDetailsView
                                 {
                                     Id = a.Id,
