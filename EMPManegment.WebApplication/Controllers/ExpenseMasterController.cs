@@ -237,11 +237,6 @@ namespace EMPManegment.Web.Controllers
         {
             try
             {
-                var ExpenseImg = Guid.NewGuid() + "_" + Addexpense.Image.FileName;
-                var path = Environment.WebRootPath;
-                var filepath = "Content/Image/" + ExpenseImg;
-                var fullpath = Path.Combine(path, filepath);
-                UploadFile(Addexpense.Image, fullpath);
                 var ExpenseDetails = new ExpenseDetailsView
                 {
                     UserId = _userSession.UserId,
@@ -251,10 +246,22 @@ namespace EMPManegment.Web.Controllers
                     Description = Addexpense.Description,
                     Date = Addexpense.Date,
                     TotalAmount = Addexpense.TotalAmount,
-                    Image = filepath,
                     CreatedBy = _userSession.UserId,
                     Account = Addexpense.Account,
                 };
+                if (Addexpense.Image != null)
+                {
+                    var ExpenseImg = Guid.NewGuid() + "_" + Addexpense.Image.FileName;
+                    var path = Environment.WebRootPath;
+                    var filepath = "Content/Image/" + ExpenseImg;
+                    var fullpath = Path.Combine(path, filepath);
+                    UploadFile(Addexpense.Image, fullpath);
+                    ExpenseDetails.Image = ExpenseImg;
+                }
+                else
+                {
+                    ExpenseDetails.Image = null;
+                }
                 ApiResponseModel postuser = await APIServices.PostAsync(ExpenseDetails, "ExpenseMaster/AddExpenseDetails");
                 UserResponceModel responseModel = new UserResponceModel();
                 if (postuser.code == 200)
