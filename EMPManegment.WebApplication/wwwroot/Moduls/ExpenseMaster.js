@@ -959,14 +959,14 @@ function GetExpenseTotalAmount() {
         dataType: 'json',
         contentType: false,
         processData: false,
-        success: function (result) {
+        success: function (result) {debugger
             var total = 0;
             result.forEach(function (obj) {
                 if (obj.totalAmount) {
                     total += obj.totalAmount;
                 }
             });
-
+            debugger
             var creditamount = 0;
             result.forEach(function (obj) {
                 if (obj.account == "Credit") {
@@ -980,10 +980,10 @@ function GetExpenseTotalAmount() {
                     Dabitamount += obj.totalAmount;
                 }
             });
-            $("#txtTotalAmount").text('₹' + total);
+            $("#txtTotalAmount").text('₹' + Dabitamount);
             var PendingAmount = Dabitamount - creditamount;
             $("#pendingamount").text('₹' + PendingAmount);
-            $("#txttotaldebitedamount").text('₹' + Dabitamount);
+            $("#txttotaldebitedamount").text('₹' + PendingAmount);
             $('#txtcreditamount').on('input', function () {
                 var enteredAmount = parseFloat($(this).val());
 
