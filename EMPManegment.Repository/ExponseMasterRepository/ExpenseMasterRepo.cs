@@ -228,7 +228,7 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                         Date = DateTime.Today,
                         TotalAmount = ExpenseDetails.TotalAmount,
                         Account = ExpenseDetails.Account,
-                        PaymentType= ExpenseDetails.PaymentType,
+                        PaymentType = ExpenseDetails.PaymentType,
                         IsDeleted = true,
                         CreatedBy = ExpenseDetails.CreatedBy,
                         IsPaid = false,
@@ -237,14 +237,14 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                         ApprovedBy = ExpenseDetails.ApprovedBy,
                         ApprovedByName = ExpenseDetails.ApprovedByName,
                         ApprovedDate = DateTime.Now,
-                };
+                    };
                     response.Code = 200;
                     response.Message = "Expense add successfully!";
                     Context.TblExpenseMasters.Add(expense);
                     Context.SaveChanges();
 
                 }
-               
+
             }
             catch (Exception ex)
             {
@@ -255,33 +255,33 @@ namespace EMPManegment.Repository.ExponseMasterRepository
 
         public async Task<ExpenseDetailsView> GetExpenseDetailById(Guid Id)
         {
-           
+
             ExpenseDetailsView ExpenseDetail = new ExpenseDetailsView();
             try
             {
                 ExpenseDetail = (from a in Context.TblExpenseMasters.Where(x => x.Id == Id)
-                           join b in Context.TblPaymentTypes
-                           on a.PaymentType equals b.Id
-                           select new ExpenseDetailsView
-                           {
-                               Id = a.Id,
-                               UserId = a.UserId,
-                               ExpenseType = a.ExpenseType,
-                               PaymentType = a.PaymentType,
-                               PaymentTypeName=b.Type,
-                               BillNumber = a.BillNumber,
-                               Description = a.Description,
-                               Date = a.Date,
-                               TotalAmount = a.TotalAmount,
-                               Image = a.Image,
-                               Account = a.Account,
-                               IsPaid = a.IsPaid,
-                               IsApproved = a.IsApproved,
-                               ApprovedBy = a.ApprovedBy,
-                               ApprovedByName = a.ApprovedByName,
-                               CreatedBy = a.CreatedBy,
-                               CreatedOn = a.CreatedOn,
-                           }).First();
+                                 join b in Context.TblPaymentTypes
+                                 on a.PaymentType equals b.Id
+                                 select new ExpenseDetailsView
+                                 {
+                                     Id = a.Id,
+                                     UserId = a.UserId,
+                                     ExpenseType = a.ExpenseType,
+                                     PaymentType = a.PaymentType,
+                                     PaymentTypeName = b.Type,
+                                     BillNumber = a.BillNumber,
+                                     Description = a.Description,
+                                     Date = a.Date,
+                                     TotalAmount = a.TotalAmount,
+                                     Image = a.Image,
+                                     Account = a.Account,
+                                     IsPaid = a.IsPaid,
+                                     IsApproved = a.IsApproved,
+                                     ApprovedBy = a.ApprovedBy,
+                                     ApprovedByName = a.ApprovedByName,
+                                     CreatedBy = a.CreatedBy,
+                                     CreatedOn = a.CreatedOn,
+                                 }).First();
                 return ExpenseDetail;
             }
             catch (Exception ex)
@@ -468,7 +468,7 @@ namespace EMPManegment.Repository.ExponseMasterRepository
             {
                 var UserList = from a in Context.TblExpenseMasters
                                join b in Context.TblUsers on a.UserId equals b.Id
-                               where a.Account == "Dabit"
+                               where a.Account == "Debit"
                                group a by new { a.UserId, b.Image, b.UserName, FullName = b.FirstName + " " + b.LastName } into userGroup
                                select new UserExpenseDetailsView
                                {
