@@ -253,7 +253,7 @@ namespace EMPManegment.Web.Controllers
                     TotalAmount = Addexpense.TotalAmount,
                     Image = filepath,
                     CreatedBy = _userSession.UserId,
-                    Account=Addexpense.Account,
+                    Account = Addexpense.Account,
                 };
                 ApiResponseModel postuser = await APIServices.PostAsync(ExpenseDetails, "ExpenseMaster/AddExpenseDetails");
                 UserResponceModel responseModel = new UserResponceModel();
@@ -311,7 +311,7 @@ namespace EMPManegment.Web.Controllers
                 return new JsonResult(ExpenseDetails);
             }
             catch (Exception ex)
-            {  
+            {
                 throw ex;
             }
         }
@@ -583,7 +583,7 @@ namespace EMPManegment.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> GetCreditDebitExpenseListTable(Guid UserId,string Account)
+        public async Task<IActionResult> GetCreditDebitExpenseListTable(Guid UserId, string Account)
         {
             try
             {
@@ -643,7 +643,7 @@ namespace EMPManegment.Web.Controllers
             {
                 throw ex;
             }
-        
+
         }
 
         [HttpGet]
@@ -660,6 +660,116 @@ namespace EMPManegment.Web.Controllers
             var ContentType = "application/pdf";
             var fileName = Path.GetFileName(path);
             return File(memory, ContentType, fileName);
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> GetPayCreditExpenseListTable(Guid UserId)
+        {
+            try
+            {
+                var draw = Request.Form["draw"].FirstOrDefault();
+                var start = Request.Form["start"].FirstOrDefault();
+                var length = Request.Form["length"].FirstOrDefault();
+                var sortColumn = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
+                var sortColumnDir = Request.Form["order[0][dir]"].FirstOrDefault();
+                var searchValue = Request.Form["search[value]"].FirstOrDefault();
+                int pageSize = length != null ? Convert.ToInt32(length) : 0;
+                int skip = start != null ? Convert.ToInt32(start) : 0;
+
+                var dataTable = new DataTableRequstModel
+                {
+                    draw = draw,
+                    start = start,
+                    pageSize = pageSize,
+                    skip = skip,
+                    lenght = length,
+                    searchValue = searchValue,
+                    sortColumn = sortColumn,
+                    sortColumnDir = sortColumnDir
+                };
+
+                List<ExpenseDetailsView> Expense = new List<ExpenseDetailsView>();
+                var data = new jsonData();
+                ApiResponseModel response = await APIServices.PostAsync(dataTable, "ExpenseMaster/GetAllUserExpenseDetail?UserId=" + UserId);
+
+                if (response.code == 200)
+                {
+                    data = JsonConvert.DeserializeObject<jsonData>(response.data.ToString());
+                    Expense = JsonConvert.DeserializeObject<List<ExpenseDetailsView>>(data.data.ToString());
+                    Expense = Expense.FindAll(expense => expense.Account.ToLower() == "credit");
+                }
+
+                var jsonData = new
+                {
+                    draw = data.draw,
+                    recordsFiltered = data.recordsFiltered,
+                    recordsTotal = data.recordsTotal,
+                    data = Expense,
+                };
+
+                return new JsonResult(jsonData);
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> GetPayDebitExpenseListTable(Guid UserId)
+        {
+            try
+            {
+                var draw = Request.Form["draw"].FirstOrDefault();
+                var start = Request.Form["start"].FirstOrDefault();
+                var length = Request.Form["length"].FirstOrDefault();
+                var sortColumn = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
+                var sortColumnDir = Request.Form["order[0][dir]"].FirstOrDefault();
+                var searchValue = Request.Form["search[value]"].FirstOrDefault();
+                int pageSize = length != null ? Convert.ToInt32(length) : 0;
+                int skip = start != null ? Convert.ToInt32(start) : 0;
+
+                var dataTable = new DataTableRequstModel
+                {
+                    draw = draw,
+                    start = start,
+                    pageSize = pageSize,
+                    skip = skip,
+                    lenght = length,
+                    searchValue = searchValue,
+                    sortColumn = sortColumn,
+                    sortColumnDir = sortColumnDir
+                };
+
+                List<ExpenseDetailsView> Expense = new List<ExpenseDetailsView>();
+                var data = new jsonData();
+                ApiResponseModel response = await APIServices.PostAsync(dataTable, "ExpenseMaster/GetAllUserExpenseDetail?UserId=" + UserId);
+
+                if (response.code == 200)
+                {
+                    data = JsonConvert.DeserializeObject<jsonData>(response.data.ToString());
+                    Expense = JsonConvert.DeserializeObject<List<ExpenseDetailsView>>(data.data.ToString());
+                    Expense = Expense.FindAll(expense => expense.Account.ToLower() == "debit");
+                }
+
+                var jsonData = new
+                {
+                    draw = data.draw,
+                    recordsFiltered = data.recordsFiltered,
+                    recordsTotal = data.recordsTotal,
+                    data = Expense,
+                };
+
+                return new JsonResult(jsonData);
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
         }
     }
 }
