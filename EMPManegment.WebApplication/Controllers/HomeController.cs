@@ -201,5 +201,9 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
+        public IActionResult UnAuthorised()
+        {
+            return View();
+        }
     }
 }
