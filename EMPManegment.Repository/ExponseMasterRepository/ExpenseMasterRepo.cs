@@ -315,7 +315,7 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                                    Account = a.Account,
                                    ExpenseTypeName = b.Type,
                                    PaymentTypeName = c.Type,
-                                   IsApproved=a.IsApproved,
+                                   IsApproved = a.IsApproved,
                                });
 
 
@@ -580,6 +580,7 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                                     ExpenseType = a.ExpenseType,
                                     PaymentType = a.PaymentType,
                                     BillNumber = a.BillNumber,
+                                    IsApproved = a.IsApproved,
                                     Description = a.Description,
                                     Date = a.Date,
                                     TotalAmount = a.TotalAmount,
