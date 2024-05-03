@@ -105,7 +105,7 @@
                         {
                             @if (group == "Dashboard" && UserSession.FormPermisionData.Count(e => e.GroupName == group) > 0)
                             {
-                                @foreach (var item in UserSession.FormPermisionData.Where(e => e.GroupName == group))
+                                @foreach (var item in UserSession.FormPermisionData.Where(e => e.GroupName == group && e.isActive == true))
                                 {
                                     <li class="nav-item">
                                         <a asp-action="@item.Action" asp-controller="@item.Controller" class="nav-link active">
@@ -129,7 +129,7 @@
                                         </p>
                                     </a>
                                     <ul class="nav nav-treeview">
-                                        @foreach (var item in UserSession.FormPermisionData.Where(e => e.GroupName == group))
+                                        @foreach (var item in UserSession.FormPermisionData.Where(e => e.GroupName == group && e.isActive == true))
                                         {
                                             @if (item.View)
                                             {
@@ -156,7 +156,7 @@
                                         </p>
                                     </a>
                                     <ul class="nav nav-treeview">
-                                        @foreach (var item in UserSession.FormPermisionData.Where(e => e.GroupName == group))
+                                        @foreach (var item in UserSession.FormPermisionData.Where(e => e.GroupName == group && e.isActive == true))
                                         {
                                             @if (item.View)
                                             {
@@ -183,7 +183,7 @@
                                         </p>
                                     </a>
                                     <ul class="nav nav-treeview">
-                                        @foreach (var item in UserSession.FormPermisionData.Where(e => e.GroupName == group))
+                                        @foreach (var item in UserSession.FormPermisionData.Where(e => e.GroupName == group && e.isActive == true))
                                         {
                                             @if (item.View)
                                             {
@@ -209,7 +209,7 @@
                                         </p>
                                     </a>
                                     <ul class="nav nav-treeview">
-                                        @foreach (var item in UserSession.FormPermisionData.Where(e => e.GroupName == group))
+                                        @foreach (var item in UserSession.FormPermisionData.Where(e => e.GroupName == group && e.isActive == true))
                                         {
                                             @if (item.View)
                                             {
@@ -235,7 +235,7 @@
                                         </p>
                                     </a>
                                     <ul class="nav nav-treeview">
-                                        @foreach (var item in UserSession.FormPermisionData.Where(e => e.GroupName == group))
+                                        @foreach (var item in UserSession.FormPermisionData.Where(e => e.GroupName == group && e.isActive == true))
                                         {
                                             @if (item.View)
                                             {
@@ -263,7 +263,7 @@
                                         </p>
                                     </a>
                                     <ul class="nav nav-treeview">
-                                        @foreach (var item in UserSession.FormPermisionData.Where(e => e.GroupName == group))
+                                        @foreach (var item in UserSession.FormPermisionData.Where(e => e.GroupName == group && e.isActive == true))
                                         {
                                             @if (item.View)
                                             {
@@ -290,7 +290,7 @@
                                         </p>
                                     </a>
                                     <ul class="nav nav-treeview">
-                                        @foreach (var item in UserSession.FormPermisionData.Where(e => e.GroupName == group))
+                                        @foreach (var item in UserSession.FormPermisionData.Where(e => e.GroupName == group && e.isActive == true))
                                         {
                                             @if (item.View)
                                             {
@@ -316,7 +316,7 @@
                                         </p>
                                     </a>
                                     <ul class="nav nav-treeview">
-                                        @foreach (var item in UserSession.FormPermisionData.Where(e => e.GroupName == group))
+                                        @foreach (var item in UserSession.FormPermisionData.Where(e => e.GroupName == group && e.isActive == true))
                                         {
                                             @if (item.View)
                                             {
@@ -344,7 +344,7 @@
                                         </p>
                                     </a>
                                     <ul class="nav nav-treeview">
-                                        @foreach (var item in UserSession.FormPermisionData.Where(e => e.GroupName == group))
+                                        @foreach (var item in UserSession.FormPermisionData.Where(e => e.GroupName == group && e.isActive == true))
                                         {
                                             @if (item.View)
                                             {
@@ -371,7 +371,7 @@
                                         </p>
                                     </a>
                                     <ul class="nav nav-treeview">
-                                        @foreach (var item in UserSession.FormPermisionData.Where(e => e.GroupName == group))
+                                        @foreach (var item in UserSession.FormPermisionData.Where(e => e.GroupName == group && e.isActive == true))
                                         {
                                             @if (item.View)
                                             {
@@ -400,7 +400,7 @@
                                         </p>
                                     </a>
                                     <ul class="nav nav-treeview">
-                                        @foreach (var item in UserSession.FormPermisionData.Where(e => e.GroupName == group))
+                                        @foreach (var item in UserSession.FormPermisionData.Where(e => e.GroupName == group && e.isActive == true))
                                         {
                                             @if (item.View)
                                             {
@@ -427,7 +427,7 @@
                                         </p>
                                     </a>
                                     <ul class="nav nav-treeview">
-                                        @foreach (var item in UserSession.FormPermisionData.Where(e => e.GroupName == group))
+                                        @foreach (var item in UserSession.FormPermisionData.Where(e => e.GroupName == group && e.isActive == true))
                                         {
                                             @if (item.View)
                                             {

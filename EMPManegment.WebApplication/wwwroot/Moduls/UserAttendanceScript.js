@@ -35,22 +35,29 @@ $('#selectSearchAttandanceOption').change(function () {
         GetUsername();
         $("#usernamebox").show();
         $("#datesbox").hide();
+        $("#startdatebox").hide();
+        $("#enddatebox").hide();
               cleartextBox();
     }
     if ($("#selectSearchAttandanceOption").val() == "ByDate") {
         $("#usernamebox").hide();
         $("#datesbox").show();
+        $("#startdatebox").hide();
+        $("#enddatebox").hide();
         cleartextBox();
     }
     if ($("#selectSearchAttandanceOption").val() == "ByDate&ByUsername") {
         GetUsername();
         $("#usernamebox").show();
         $("#datesbox").show();
+        $("#startdatebox").hide();
+        $("#enddatebox").hide();
         cleartextBox();
     }
     if ($("#selectSearchAttandanceOption").val() == "ByBetweenDates&ByUsername") {
         GetUsername();
         $("#usernamebox").show();
+        $("#datesbox").hide();
         $("#startdatebox").show();
         $("#enddatebox").show();
         cleartextBox();
