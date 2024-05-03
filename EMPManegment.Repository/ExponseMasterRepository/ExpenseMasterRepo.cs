@@ -190,7 +190,7 @@ namespace EMPManegment.Repository.ExponseMasterRepository
             UserResponceModel response = new UserResponceModel();
             try
             {
-                if (ExpenseDetails.Account == "Dabit")
+                if (ExpenseDetails.Account == "Debit")
                 {
                     var expense = new TblExpenseMaster()
                     {
