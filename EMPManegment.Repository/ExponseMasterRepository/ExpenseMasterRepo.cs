@@ -390,7 +390,7 @@ namespace EMPManegment.Repository.ExponseMasterRepository
             try
             {
                 var expenses = Context.TblExpenseMasters
-                    .Where(a => a.UserId == UserId)
+                    .Where(a => a.UserId == UserId && a.IsDeleted == false)
                     .Select(a => new ExpenseDetailsView
                     {
                         Id = a.Id,

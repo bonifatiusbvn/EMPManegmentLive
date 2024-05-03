@@ -48,7 +48,6 @@ function SelectPaymentTypeId() {
     document.getElementById("Editpaymenttypeid").value = document.getElementById("Editpaymenttype").value;
 }
 function GetParameterByName(name, url) {
-    debugger
 
     if (!url) url = window.location.href;
 
@@ -153,14 +152,14 @@ function populateDropdown(elementId, options) {
     });
 }
 
-function EditExpenseDetails(Id) {
+function EditExpenseDetails(Id) {debugger
 
     $.ajax({
         url: '/ExpenseMaster/EditExpenseDetails?ExpenseId=' + Id,
         type: "Get",
         contentType: 'application/json;charset=utf-8;',
         dataType: 'json',
-        success: function (response) {
+        success: function (response) {debugger
 
             $('#EditExpenseModel').modal('show');
             $('#Editexpensetype').val(response.expenseType);
@@ -209,7 +208,7 @@ function UpdateExpenseDetails() {
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'OK',
                     }).then(function () {
-                        window.location = '/ExpenseMaster/ExpenseList';
+                        window.location = '/ExpenseMaster/UserExpenseList';
                     });
                 }
             }
@@ -268,7 +267,7 @@ function deleteExpense(Id) {
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'OK'
                     }).then(function () {
-                        window.location = '/ExpenseMaster/ExpenseList';
+                        window.location = '/ExpenseMaster/UserExpenseList';
                     })
                 },
                 error: function () {
@@ -278,7 +277,7 @@ function deleteExpense(Id) {
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'OK',
                     }).then(function () {
-                        window.location = '/ExpenseMaster/ExpenseList';
+                        window.location = '/ExpenseMaster/UserExpenseList';
                     })
                 }
             })
@@ -753,7 +752,7 @@ function GetExpenseTotalAmount() {
         dataType: 'json',
         contentType: false,
         processData: false,
-        success: function (result) {debugger
+        success: function (result) {
             var total = 0;
             result.forEach(function (obj) {
                 if (obj.totalAmount) {
@@ -761,7 +760,6 @@ function GetExpenseTotalAmount() {
                 }
             });
 
-            debugger
             var creditamount = 0;
             result.forEach(function (obj) {
                 if (obj.account == "Credit") {
@@ -769,7 +767,6 @@ function GetExpenseTotalAmount() {
                 }
             });
             $("#txttotalcreditamount").text('₹' + creditamount);
-            debugger
             var Dabitamount = 0;
             result.forEach(function (obj) {
                 if (obj.account == "Debit") {
@@ -1089,7 +1086,7 @@ function GetAllUserUnapproveExpenseList() {
                         '</a>' +
                         '</li>' +
                         '<li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Delete">' +
-                        '<a class="btn text-danger btndeletedoc" href="/Invoice/InvoiceDetails">' +
+                        '<a class="btn text-danger btndeletedoc" onclick="deleteExpense(\'' + full.id + '\')">' +
                         '<i class="fas fa-trash"></i>' +
                         '</a>' +
                         '</li>' +
@@ -1151,27 +1148,6 @@ function GetAllUserApproveExpenseList() {
                     return '<span style="color: ' + color + ';">' + data + '</span>';
                 }
             },
-            {
-                "data": null,
-                "name": "Action",
-                "render": function (data, type, full, meta) {
-                    return '<div class="d-flex justify-content-center">' +
-                        '<ul class="list-inline hstack gap-2 mb-0">' +
-                        '<li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">' +
-                        '<a onclick="EditExpenseDetails(\'' + full.id + '\')" data-bs-toggle="modal" class="text-primary d-inline-block edit-item-btn">' +
-                        '<i class="ri-pencil-fill fs-16"></i>' +
-                        '</a>' +
-                        '</li>' +
-                        '<li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Delete">' +
-                        '<a class="btn text-danger btndeletedoc" href="/Invoice/InvoiceDetails">' +
-                        '<i class="fas fa-trash"></i>' +
-                        '</a>' +
-                        '</li>' +
-                        '</ul>' +
-                        '</div>';
-                },
-                "orderable": false
-            }
         ],
         columnDefs: [
             {
@@ -1227,27 +1203,6 @@ function GetAllUserCreditExpenseList() {
                     return '<span style="color: ' + color + ';">' + data + '</span>';
                 }
             },
-            {
-                "data": null,
-                "name": "Action",
-                "render": function (data, type, full, meta) {
-                    return '<div class="d-flex justify-content-center">' +
-                        '<ul class="list-inline hstack gap-2 mb-0">' +
-                        '<li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">' +
-                        '<a onclick="EditExpenseDetails(\'' + full.id + '\')" data-bs-toggle="modal" class="text-primary d-inline-block edit-item-btn">' +
-                        '<i class="ri-pencil-fill fs-16"></i>' +
-                        '</a>' +
-                        '</li>' +
-                        '<li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Delete">' +
-                        '<a class="btn text-danger btndeletedoc" href="/Invoice/InvoiceDetails">' +
-                        '<i class="fas fa-trash"></i>' +
-                        '</a>' +
-                        '</li>' +
-                        '</ul>' +
-                        '</div>';
-                },
-                "orderable": false
-            }
         ],
         columnDefs: [
             {
