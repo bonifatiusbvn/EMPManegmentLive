@@ -11,6 +11,12 @@ function cleartextBox() {
         '<option selected value = "">--Select Username--</option>');
     $("#txtdate").val('');
 }
+
+function CleartextBox() {
+    $("#txtmonth").val('');
+    $("#txtstartdate").val('');
+    $("#txtenddate").val('');
+}
 $(document).ready(function () {
     GetUserAttendance(); 
     GetAttendance();
@@ -68,16 +74,19 @@ $('#SelectAttandance').change(function () {
         $("#monthbox").show();
         $("#datebox").hide();
         $("#datebox1").hide();
+        CleartextBox();
     }
     if ($("#SelectAttandance").val() == "BetweenDates") {
         $("#monthbox").hide();
         $("#datebox").show();
         $("#datebox1").show();
+        CleartextBox();
     }
     if ($("#SelectAttandance").val() == "") {
         $("#monthbox").show();
         $("#datebox").hide();
         $("#datebox1").hide();
+        CleartextBox();
     }
 })
 
