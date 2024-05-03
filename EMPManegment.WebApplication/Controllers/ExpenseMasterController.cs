@@ -933,6 +933,7 @@ namespace EMPManegment.Web.Controllers
                     data = JsonConvert.DeserializeObject<jsonData>(response.data.ToString());
                     Expense = JsonConvert.DeserializeObject<List<ExpenseDetailsView>>(data.data.ToString());
                     Expense = Expense.FindAll(expense => expense.Account.ToLower() == "debit" && expense.IsApproved == true);
+
                 }
 
 

@@ -9,7 +9,7 @@ $(document).ready(function () {
     GetExpenseTotalAmount();
     GetAllUserExpenseList();
     ApprovedExpenseList();
-/*    GetPayUserExpenseList();*/
+    /*    GetPayUserExpenseList();*/
     UserExpensesDetails();
 });
 
@@ -439,7 +439,6 @@ function GetUserExpenseList() {
     });
 }
 function GetPayUserExpenseCreditList(userId) {
-
     $('#UserPayExpenseTableCredit').DataTable({
         processing: true,
         serverSide: true,
@@ -451,7 +450,13 @@ function GetPayUserExpenseCreditList(userId) {
             dataType: 'json',
         },
         columns: [
-
+            {
+                "data": null,
+                "render": function (data, type, full, meta) {
+                    return '<div class="avatar-xs"><div class="avatar-title bg-danger-subtle text-danger rounded-circle fs-16"><i class="ri-arrow-right-up-fill"></i></div></div>';
+                },
+                "orderable": false
+            },
             { "data": "id", "name": "Id", "visible": false },
             { "data": "description", "name": "Description" },
             {
@@ -461,18 +466,49 @@ function GetPayUserExpenseCreditList(userId) {
                     return new Date(data).toLocaleDateString();
                 }
             },
-            { "data": "totalAmount", "name": "TotalAmount" },
+            {
+                "data": "totalAmount",
+                "name": "TotalAmount",
+                "render": function (data, type, full, meta) {
+                    var color = full.account.toLowerCase() === "debit" ? "green" : "red";
+                    return '<span style="color: ' + color + ';">' + data + '</span>';
+                }
+            },
             { "data": "account", "name": "Account", "visible": false },
         ],
         columnDefs: [{
-            "defaultContent": "",
-            "targets": "_all",
-        }]
+            "targets": [0],
+            "orderable": false
+        }],
+        "footerCallback": function (row, data, start, end, display) {
+            var api = this.api(), data;
+
+            // Remove the formatting to get integer data for summation
+            var intVal = function (i) {
+                return typeof i === 'string' ?
+                    i.replace(/[\$,]/g, '') * 1 :
+                    typeof i === 'number' ?
+                        i : 0;
+            };
+
+            // Total over all pages
+            total = api
+                .column(4)
+                .data()
+                .reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0);
+
+            // Update footer
+            $(api.column(4).footer()).html(
+                '<span style="color: black;">Total: ' + total + '</span>'
+            );
+        }
     });
 }
 
-function GetPayUserExpenseDebitList(userId) {
 
+function GetPayUserExpenseDebitList(userId) {
     $('#UserPayExpenseTableDebit').DataTable({
         processing: true,
         serverSide: true,
@@ -484,7 +520,13 @@ function GetPayUserExpenseDebitList(userId) {
             dataType: 'json',
         },
         columns: [
-
+            {
+                "data": null,
+                "render": function (data, type, full, meta) {
+                    return '<div class="avatar-xs"><div class="avatar-title bg-success-subtle text-success rounded-circle fs-16"><i class="ri-arrow-right-down-fill"></i></div></div>';
+                },
+                "orderable": false
+            },
             { "data": "id", "name": "Id", "visible": false },
             { "data": "description", "name": "Description" },
             {
@@ -494,15 +536,47 @@ function GetPayUserExpenseDebitList(userId) {
                     return new Date(data).toLocaleDateString();
                 }
             },
-            { "data": "totalAmount", "name": "TotalAmount" },
+            {
+                "data": "totalAmount",
+                "name": "TotalAmount",
+                "render": function (data, type, full, meta) {
+                    var color = full.account.toLowerCase() === "credit" ? "red" : "green";
+                    return '<span style="color: ' + color + ';">' + data + '</span>';
+                }
+            },
             { "data": "account", "name": "Account", "visible": false },
         ],
         columnDefs: [{
-            "defaultContent": "",
-            "targets": "_all",
-        }]
+            "targets": [0],
+            "orderable": false
+        }],
+        "footerCallback": function (row, data, start, end, display) {
+            var api = this.api(), data;
+
+            // Remove the formatting to get integer data for summation
+            var intVal = function (i) {
+                return typeof i === 'string' ?
+                    i.replace(/[\$,]/g, '') * 1 :
+                    typeof i === 'number' ?
+                        i : 0;
+            };
+
+            // Total over all pages
+            total = api
+                .column(4)
+                .data()
+                .reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0);
+
+            // Update footer
+            $(api.column(4).footer()).html(
+                '<span style="color: black;">Total: ' + total + '</span>'
+            );
+        }
     });
 }
+
 
 
 
@@ -515,7 +589,7 @@ $(document).ready(function () {
         GetAllUserExpenseList(userId);
     }
 });
-function UserExpensesDetails() { 
+function UserExpensesDetails() {
     debugger
     $('#UserListTable').DataTable({
         processing: true,
@@ -818,7 +892,8 @@ function GetExpenseTotalAmount() {
         dataType: 'json',
         contentType: false,
         processData: false,
-        success: function (result) {debugger
+        success: function (result) {
+            debugger
             var total = 0;
             result.forEach(function (obj) {
                 if (obj.totalAmount) {
@@ -1112,7 +1187,7 @@ function GetAllUserUnapproveExpenseList() {
         "bDestroy": true,
         ajax: {
             type: "Post",
-            url: '/ExpenseMaster/GetAllUserUnapproveExpenseList?Unapprove='+ IsApprove,
+            url: '/ExpenseMaster/GetAllUserUnapproveExpenseList?Unapprove=' + IsApprove,
             dataType: 'json'
         },
         columns: [
