@@ -199,7 +199,111 @@
             <!--end Edit Expense modal-->
 
             <div class="card-body p-0">
-                <div class="card-body">
+                <div>
+                    <ul class="nav nav-tabs nav-tabs-custom nav-primary mb-3" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active All py-3" data-bs-toggle="tab" id="All" href="#GetAllUnApprovedExpenseList" role="tab">
+                                <i class="ri-checkbox-circle-line me-1 align-bottom"></i>UnApproved Expense
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link py-3 Returns" data-bs-toggle="tab" href="#GetAllApprovedExpenseList" role="tab">
+                                <i class="ri-arrow-left-right-fill me-1 align-bottom"></i>Approved Expense
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link py-3 Returns" data-bs-toggle="tab" href="#GetAllCreditExpenseList" role="tab">
+                                <i class="ri-store-2-fill me-1 align-bottom"></i>Credit Expense
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+
+                        <div class="tab-pane fade show active" id="GetAllUnApprovedExpenseList" role="tabpanel">
+                            <table class ="table table-bordered dt-responsive table-striped align-middle dataTable no-footer dtr-inline" id="GetUserUnapprovedExpenseList">
+                                <thead class="table-light text-muted">
+                                    <tr>
+                                        <th data-sort="name" scope="col" style="width: 60px;"></th>
+                                        <th class="sort text-uppercase" data-sort="Description">Description</th>
+                                        <th class="sort text-uppercase" data-sort="BillNo">BillNo</th>
+                                        <th class="sort text-uppercase" data-sort="Date">Date</th>
+                                        <th class="sort text-uppercase" data-sort="TotalAmount">TotalAmount</th>
+                                        <th class="sort text-uppercase" data-sort="action">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="list form-check-all"> </tbody>
+                            </table>
+                            <!-- end table -->
+                            <div class="noresult" style="display: none">
+                                <div class="text-center">
+                                    <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#25a0e2,secondary:#00bd9d" style="width:75px;height:75px">
+                                    </lord-icon>
+                                    <h5 class="mt-2">Sorry! No Result Found</h5>
+                                    <p class="text-muted mb-0">
+                                        We've searched more than 150+ invoices We did not find any
+                                        invoices for you search.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class ="tab-pane fade" id="GetAllApprovedExpenseList" role="tabpanel">
+                            <table class="table table-bordered dt-responsive table-striped align-middle dataTable no-footer dtr-inline" id="GetAllUserApprovedExpenseList">
+                                <thead class="table-light text-muted">
+                                    <tr>
+                                        <th data-sort="name" scope="col" style="width: 60px;"></th>
+                                        <th class="sort text-uppercase" data-sort="Description">Description</th>
+                                        <th class="sort text-uppercase" data-sort="BillNo">BillNo</th>
+                                        <th class="sort text-uppercase" data-sort="Date">Date</th>
+                                        <th class="sort text-uppercase" data-sort="TotalAmount">TotalAmount</th>
+                                        <th class="sort text-uppercase" data-sort="action">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="list form-check-all"> </tbody>
+                            </table>
+                            <!-- end table -->
+                            <div class="noresult" style="display: none">
+                                <div class="text-center">
+                                    <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#25a0e2,secondary:#00bd9d" style="width:75px;height:75px">
+                                    </lord-icon>
+                                    <h5 class="mt-2">Sorry! No Result Found</h5>
+                                    <p class="text-muted mb-0">
+                                        We've searched more than 150+ invoices We did not find any
+                                        invoices for you search.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="GetAllCreditExpenseList" role="tabpanel">
+                            <table class="table table-bordered dt-responsive table-striped align-middle dataTable no-footer dtr-inline" id="UserallCreditExpenseTable">
+                                <thead class="table-light text-muted">
+                                    <tr>
+                                        <th data-sort="name" scope="col" style="width: 60px;"></th>
+                                        <th class="sort text-uppercase" data-sort="Description">Description</th>
+                                        <th class="sort text-uppercase" data-sort="BillNo">BillNo</th>
+                                        <th class="sort text-uppercase" data-sort="Date">Date</th>
+                                        <th class="sort text-uppercase" data-sort="TotalAmount">TotalAmount</th>
+                                        <th class="sort text-uppercase" data-sort="action">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="list form-check-all">
+                                </tbody>
+                            </table>
+                            <div class="noresult" style="display: none">
+                                <div class="text-center">
+                                    <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#25a0e2,secondary:#00bd9d" style="width:75px;height:75px">
+                                    </lord-icon>
+                                    <h5 class="mt-2">Sorry! No Result Found</h5>
+                                    <p class="text-muted mb-0">
+                                        We've searched more than 150+ invoices We did not find any
+                                        invoices for you search.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+ @*                <div class="card-body">
                     <div id="example_wrapper" class="dataTables_wrapper dt-bootstrap5 no-footer">
                         <div class="col-sm-12">
                             <table id="UserExpenseTable" class="table table-bordered dt-responsive table-striped align-middle dataTable no-footer dtr-inline">
@@ -211,11 +315,11 @@
                                         </th>
                                         <th class="sort text-uppercase" data-sort="BillNo">BillNo</th>
                                         <th class="sort text-uppercase" data-sort="Date">Date</th>
-                                        <th class="sort text-uppercase" data-sort="TotalAmount">TotalAmount</th>
-                                        <th class="sort text-uppercase" data-sort="Account">
+                                        <th class="sort text-uppercase" data-sort="TotalAmount">TotalAmount</th> *@
+                                        @* <th class="sort text-uppercase" data-sort="Account" >
                                             Account
-                                        </th>
-                                        <th class="sort text-uppercase" data-sort="action">Action</th>
+                                        </th> *@
+                                        @* <th class="sort text-uppercase" data-sort="action">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody class="list form-check-all text-center">
@@ -235,7 +339,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> *@
             </div>
         </div>
         <!-- Modal -->
