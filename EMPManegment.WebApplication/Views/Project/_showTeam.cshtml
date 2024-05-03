@@ -19,7 +19,7 @@
             </div>
         </div>
         <div class="card-body table-responsive p-0">
-            <table class="table table-striped table-valign-middle">
+            <table class="table table-bordered dt-responsive nowrap table-striped align-middle dataTable no-footer dtr-inline">
                 <thead>
                     <tr>
                         <th>FullName</th>
@@ -58,8 +58,8 @@
 </div>
 <!---Start Pagination--->
 @Html.PagedListPager((IPagedList)Model, page => Url.Action("ShowTeam", new { page = page }),
-                                                new X.PagedList.Web.Common.PagedListRenderOptions
-                                            {
-                                                LiElementClasses = new string[] { "page-item" },
-                                                PageClasses = new string[] { "page-link" }
-                                            })
+                                                                            new X.PagedList.Web.Common.PagedListRenderOptions
+                                                                        {
+                                                                            LiElementClasses = new string[] { "page-item" },
+                                                                            PageClasses = new string[] { "page-link" }
+                                                                        })
