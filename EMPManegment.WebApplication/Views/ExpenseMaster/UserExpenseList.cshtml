@@ -169,6 +169,7 @@
                                         <div class="mb-3">
                                             <label for="txtpaymenttype" class="form-label">Payment Type</label>
                                             <input class="form-control" id="Editpaymenttype" name="Editpaymenttype" readonly />
+                                            <input type="hidden" class="form-control" id="Editpaymenttypeid" name="Editpaymenttypeid" readonly />
                                         </div>
                                     </div>
                                     <div class="col-lg-6">
@@ -221,7 +222,7 @@
 
                         <div class="tab-pane fade show active" id="GetAllUnApprovedExpenseList" role="tabpanel">
                             <table class ="table table-bordered dt-responsive table-striped align-middle dataTable no-footer dtr-inline" id="GetUserUnapprovedExpenseList">
-                                <thead class="table-light text-muted">
+                                <thead class="table-light text-muted text-center">
                                     <tr>
                                         <th data-sort="name" scope="col" style="width: 60px;"></th>
                                         <th class="sort text-uppercase" data-sort="Description">Description</th>
@@ -231,7 +232,7 @@
                                         <th class="sort text-uppercase" data-sort="action">Action</th>
                                     </tr>
                                 </thead>
-                                <tbody class="list form-check-all"> </tbody>
+                                <tbody class="list form-check-all text-center"> </tbody>
                             </table>
                             <!-- end table -->
                             <div class="noresult" style="display: none">
@@ -249,7 +250,7 @@
 
                         <div class ="tab-pane fade" id="GetAllApprovedExpenseList" role="tabpanel">
                             <table class="table table-bordered dt-responsive table-striped align-middle dataTable no-footer dtr-inline" id="GetAllUserApprovedExpenseList">
-                                <thead class="table-light text-muted">
+                                <thead class="table-light text-muted text-center">
                                     <tr>
                                         <th data-sort="name" scope="col" style="width: 60px;"></th>
                                         <th class="sort text-uppercase" data-sort="Description">Description</th>
@@ -258,7 +259,7 @@
                                         <th class="sort text-uppercase" data-sort="TotalAmount">TotalAmount</th>
                                     </tr>
                                 </thead>
-                                <tbody class="list form-check-all"> </tbody>
+                                <tbody class="list form-check-all text-center"> </tbody>
                             </table>
                             <!-- end table -->
                             <div class="noresult" style="display: none">
@@ -275,7 +276,7 @@
                         </div>
                         <div class="tab-pane fade" id="GetAllCreditExpenseList" role="tabpanel">
                             <table class="table table-bordered dt-responsive table-striped align-middle dataTable no-footer dtr-inline" id="UserallCreditExpenseTable">
-                                <thead class="table-light text-muted">
+                                <thead class="table-light text-muted text-center">
                                     <tr>
                                         <th data-sort="name" scope="col" style="width: 60px;"></th>
                                         <th class="sort text-uppercase" data-sort="Description">Description</th>
@@ -284,7 +285,7 @@
                                         <th class="sort text-uppercase" data-sort="TotalAmount">TotalAmount</th>
                                     </tr>
                                 </thead>
-                                <tbody class="list form-check-all">
+                                <tbody class="list form-check-all text-center">
                                 </tbody>
                             </table>
                             <div class="noresult" style="display: none">
