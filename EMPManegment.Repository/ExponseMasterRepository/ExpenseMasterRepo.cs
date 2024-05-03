@@ -17,7 +17,7 @@ using System.Text;
 using System.Threading.Tasks;
 using EMPManegment.EntityModels.ViewModels.OrderModels;
 using EMPManegment.EntityModels.ViewModels.Invoice;
-
+using Microsoft.Extensions.Configuration;
 
 namespace EMPManegment.Repository.ExponseMasterRepository
 {
@@ -468,17 +468,19 @@ namespace EMPManegment.Repository.ExponseMasterRepository
             {
                 var UserList = from a in Context.TblExpenseMasters
                                join b in Context.TblUsers on a.UserId equals b.Id
-                               where a.Account == "Debit"
-                               group a by new { a.UserId, b.Image, b.UserName, FullName = b.FirstName + " " + b.LastName } into userGroup
+                               group new { a, b } by new { a.UserId, b.Image, b.UserName, FullName = b.FirstName + " " + b.LastName } into userGroup
                                select new UserExpenseDetailsView
                                {
                                    UserId = userGroup.Key.UserId,
                                    FullName = userGroup.Key.FullName,
                                    Image = userGroup.Key.Image,
                                    UserName = userGroup.Key.UserName,
-                                   Date = userGroup.Max(e => e.Date),
-                                   TotalAmount = userGroup.Sum(e => e.TotalAmount)
+                                   Date = userGroup.Max(e => e.a.Date),
+                                   TotalAmount = userGroup.Sum(e => e.a.TotalAmount),
+                                   UnapprovedPendingAmount = userGroup.Where(e => e.a.IsApproved == true && e.a.Account == "Debit").Sum(e => e.a.TotalAmount),
+                                   TotalPendingAmount = userGroup.Where(e => e.a.Account == "Debit").Sum(e => e.a.TotalAmount)
                                };
+
 
                 if (!string.IsNullOrEmpty(dataTable.sortColumn) && !string.IsNullOrEmpty(dataTable.sortColumnDir))
                 {

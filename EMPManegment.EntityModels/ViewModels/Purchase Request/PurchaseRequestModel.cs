@@ -41,6 +41,7 @@ namespace EMPManegment.EntityModels.ViewModels.Purchase_Request
         public string? ProjectName { get; set; }
 
         public int RowNumber {get; set; }
+        public string? FullName {get; set; }
 
     }
     public class PurchaseRequestMasterView
