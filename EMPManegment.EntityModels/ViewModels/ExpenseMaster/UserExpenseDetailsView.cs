@@ -17,6 +17,8 @@ namespace EMPManegment.EntityModels.ViewModels.ExpenseMaster
         public string Image { get; set; }
         public DateTime Date { get; set; }
         public decimal TotalAmount { get; set; }
+        public decimal UnapprovedPendingAmount { get; set; }
+        public decimal TotalPendingAmount { get; set; }
 
 
     }
