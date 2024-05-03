@@ -9,7 +9,7 @@ $(document).ready(function () {
     GetExpenseTotalAmount();
     GetAllUserExpenseList();
     ApprovedExpenseList();
-    GetPayUserExpenseList()
+/*    GetPayUserExpenseList();*/
     UserExpensesDetails();
 });
 
@@ -552,6 +552,8 @@ function UserExpensesDetails() {
                     return new Date(data).toLocaleDateString();
                 }
             },
+            { "data": "unapprovedPendingAmount", "name": "UnapprovedPendingAmount" },
+            { "data": "totalPendingAmount", "name": "TotalPendingAmount" },
             { "data": "totalAmount", "name": "TotalAmount" },
         ],
         columnDefs: [{
