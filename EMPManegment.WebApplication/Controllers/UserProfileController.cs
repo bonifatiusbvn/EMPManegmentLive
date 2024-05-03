@@ -60,9 +60,87 @@ namespace EMPManegment.Web.Controllers
             _userSession = userSession;
         }
 
-        public IActionResult Index()
+        [FormPermissionAttribute("Create User-View")]
+        public async Task<IActionResult> UserSingUp()
         {
-            return View();
+            try
+            {
+                ApiResponseModel AddUserResponse = await APIServices.GetAsync("", "User/CheckUser");
+                if (AddUserResponse.code == 200)
+                {
+                    ViewBag.EmpId = AddUserResponse.data;
+                }
+
+                return View();
+
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+
+        [FormPermissionAttribute("Create User-Add")]
+        [HttpPost]
+        public async Task<IActionResult> UserSingUp(LoginDetailsView AddEmployee)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var path = Environment.WebRootPath;
+                    var filepath = "Content/Image/" + AddEmployee.Image.FileName;
+                    var fullpath = Path.Combine(path, filepath);
+                    UploadFile(AddEmployee.Image, fullpath);
+                    Crypto.Hash(AddEmployee.Password,
+                        out byte[] passwordHash,
+                        out byte[] passwordSalt);
+                    var AddUser = new EmpDetailsView()
+                    {
+                        UserName = AddEmployee.UserName,
+                        DepartmentId = AddEmployee.DepartmentId,
+                        FirstName = AddEmployee.FirstName,
+                        LastName = AddEmployee.LastName,
+                        Address = AddEmployee.Address,
+                        CityId = AddEmployee.CityId,
+                        StateId = AddEmployee.StateId,
+                        CountryId = AddEmployee.CountryId,
+                        DateOfBirth = AddEmployee.DateOfBirth,
+                        Email = AddEmployee.Email,
+                        Gender = AddEmployee.Gender,
+                        PhoneNumber = AddEmployee.PhoneNumber,
+                        CreatedOn = DateTime.Now,
+                        PasswordHash = passwordHash,
+                        PasswordSalt = passwordSalt,
+                        Image = filepath,
+                        IsActive = AddEmployee.IsActive,
+                    };
+                    ApiResponseModel postuser = await APIServices.PostAsync(AddUser, "User/UserSingUp");
+                    if (postuser.code == 200)
+                    {
+                        var identity = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, AddEmployee.UserName) }, CookieAuthenticationDefaults.AuthenticationScheme);
+                        var principal = new ClaimsPrincipal(identity);
+                        HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+                        return RedirectToAction("Login", "Authentication");
+                    }
+                    else
+                    {
+                        TempData["ErrorMessage"] = postuser.message;
+                        return View();
+                    }
+                }
+                ApiResponseModel addEmpResponse = await APIServices.GetAsync("", "User/CheckUser");
+                if (addEmpResponse.code == 200)
+                {
+                    ViewBag.EmpId = addEmpResponse.data;
+                }
+                return View();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
 

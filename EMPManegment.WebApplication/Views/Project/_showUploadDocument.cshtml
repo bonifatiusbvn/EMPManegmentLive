@@ -14,7 +14,7 @@
     <div class="card">
 
         <div class="card-body p-0">
-            <table class="table table-striped">
+            <table class="table table-bordered dt-responsive nowrap table-striped align-middle dataTable no-footer dtr-inline">
                 <thead>
                     <tr>
                         <th>#</th>
@@ -24,9 +24,10 @@
                         <th style="width: 120px">Action</th>
                     </tr>
                 </thead>
-                @foreach (var item in Model)
-                {
-                    <tbody>
+
+                <tbody>
+                    @foreach (var item in Model)
+                    {
                         <tr>
                             <td>1.</td>
                             <td>@item.DocumentName.Substring(37)</td>
@@ -41,8 +42,9 @@
                                 </div>
                             </td>
                         </tr>
-                    </tbody>
-                }
+                    }
+                </tbody>
+
             </table>
         </div>
         <!-- /.card-body -->

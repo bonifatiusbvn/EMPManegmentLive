@@ -3,7 +3,7 @@
 @inject UserSession _userSession
 @{
     ViewData["Title"] = "DisplayUserList";
-    Layout = "~/Views/Shared/_USerHomeLayout.cshtml";
+    Layout = "~/Views/Shared/_UserHomeLayout.cshtml";
 }
 
 
@@ -34,7 +34,7 @@
                             @if (UserSession.FormPermisionData.Any(a => a.FormName == "Create User" && (a.Add == true)))
                             {
                                 <div class="d-flex flex-wrap gap-2">
-                                    <a href="/Authentication/UserSingUp" class="btn btn-block btn-warning btn-md"><i class="ri-add-line align-bottom me-1"></i>Create User</a>
+                                    <a href="/UserProfile/UserSingUp" class="btn btn-block btn-warning btn-md"><i class="ri-add-line align-bottom me-1"></i>Create User</a>
                                 </div>
                             }
                         </form>
