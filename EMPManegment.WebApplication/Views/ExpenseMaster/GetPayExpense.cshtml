@@ -200,39 +200,41 @@
             <div class="card-body p-0">
                 <div class="tab-content text-muted">
                     <div class="tab-pane active" id="cryptoBuy" role="tabpanel">
-                        <div class="p-3 bg-primary-subtle">
-                            <div class="float-end ms-2">
-                                <h6 class="text-primary mb-0" id="pendingamount"></h6>
-                            </div>
-                            <h6 class="mb-0">Pending Amount</h6>
-                        </div>
-                        <div class="p-3">
-                            <div>
-                                <div class="input-group mb-3">
-                                    <select class="form-control form-select valid" id="txtpaymenttype">
-                                        <option selected value="">--Select Type--</option>
-                                    </select>
-                                    <input type="hidden" class="form-control" id="txtAccount" value="Credit" readonly>
+                        <form id="GetPayForm" >
+                            <div class="p-3 bg-primary-subtle">
+                                <div class="float-end ms-2">
+                                    <h6 class="text-primary mb-0" id="pendingamount"></h6>
                                 </div>
-                            </div><!-- end col -->
+                                <h6 class="mb-0">Pending Amount</h6>
+                            </div>
+                            <div class="p-3">
+                                <div>
+                                    <div class="input-group mb-3">
+                                        <select class="form-control form-select valid" id="txtpaymenttype" name="txtpaymenttype">
+                                            <option selected value="">--Select Type--</option>
+                                        </select>
+                                        <input type="hidden" class="form-control" id="txtAccount" value="Credit" readonly>
+                                    </div>
+                                </div><!-- end col -->
 
-                            <div>
-                                <div class="input-group mb-3">
-                                    <label class="input-group-text" for="txtcreditamount">Amount</label>
-                                    <input type="text" class="form-control" id="txtcreditamount">
-                                    <span id="warningMessage" style="color: red;"></span>
-                                </div>
+                                <div>
+                                    <div class="input-group mb-3">
+                                        <label class="input-group-text" for="txtcreditamount">Amount</label>
+                                        <input type="number" class="form-control" id="txtcreditamount" name="txtcreditamount" oninput="preventEmptyValue(this)">
+                                        <span id="warningMessage" style="color: red;"></span>
+                                    </div>
 
-                                <div class="input-group mb-3">
-                                    <label class="input-group-text">Pending Amount</label>
-                                    <input type="text" class="form-control" id="txtpendingamount">
-                                    <label class="input-group-text">₹</label>
+                                    <div class="input-group mb-3">
+                                        <label class="input-group-text">Pending Amount</label>
+                                        <input type="text" class="form-control" id="txtpendingamount" readonly>
+                                        <label class="input-group-text">₹</label>
+                                    </div>
+                                </div>
+                                <div class="mt-3 pt-2">
+                                    <button type="button" class="btn btn-primary w-100" id="creditdebitsubmitbtn" onclick="GetPayExpense()">Submit</button>
                                 </div>
                             </div>
-                            <div class="mt-3 pt-2">
-                                <button type="button" class="btn btn-primary w-100" id="creditdebitsubmitbtn" onclick="GetPayExpense()">Submit</button>
-                            </div>
-                        </div>
+                        </form>
                     </div>
                     <!--end tab-pane-->
                     <!--end tab-pane-->
@@ -243,5 +245,11 @@
     <!--end row-->
     <!--end card-->
 </div>
+<style>
+    #txtcreditamount-error, #txtpaymenttype-error
+    {
+        color: red;
+    }
+</style>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/moduls/expensemaster.js"></script>
