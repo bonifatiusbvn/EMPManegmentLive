@@ -1,0 +1,179 @@
+﻿@using EMPManegment.Web.Models;
+@inject IHttpContextAccessor Accessor;
+@inject UserSession _userSession
+
+@model EMPManegment.EntityModels.View_Model.LoginDetailsView
+@{
+    ViewData["Title"] = "RolewisePermission";
+    Layout = "~/Views/Shared/_UserHomeLayout.cshtml";
+}
+
+<div class="row" style="margin-top:80px;">
+    <div class="col-12">
+        <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+            <h4 class="mb-sm-0">User List</h4>
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">User</a></li>
+                    <li class="breadcrumb-item active">User List</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- auth page content -->
+<div class="row">
+    <div class="col-lg-12">
+        <div class="row justify-content-center">
+            <div class="row justify-content-center">
+                <div class="card mt-4">
+                    <div class="card-body p-4">
+                        <div class="text-center mt-2">
+                            <h5 class="text-primary">Create New Account</h5>
+                        </div>
+                        <div class="p-2 mt-4">
+                            <form class="form w-150 h-100" id="empaddDetails" asp-action="UserSingUp" method="post" enctype="multipart/form-data">
+                                <div class="fv-row mb-4">
+                                    <select asp-for=DepartmentId id="ddlDepartmenrnt" class="form-control">
+                                        <option>--Select Department--</option>
+                                    </select>
+                                    <input type="hidden" asp-for="DepartmentId" id="txtdeptid" value="" />
+                                    <span asp-validation-for="DepartmentId" class="text-danger"></span>
+                                </div>
+                                <div class="fv-row mb-4">
+                                    <input type="text" asp-for="UserName" readonly id="EmpId" autocomplete="off" class="form-control" value="@ViewBag.EmpId" />
+                                </div>
+                                <div class="row">
+
+                                    <div class="col-6">
+                                        <div class="fv-row mb-4">
+                                            <input type="text" asp-for="FirstName" placeholder="First Name" name="FirstName" class="form-control" />
+                                            <span asp-validation-for="FirstName" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="fv-row mb-4">
+                                            <input type="text" asp-for="LastName" placeholder="Last Name" name="LastName" class="form-control" />
+                                            <span asp-validation-for="LastName" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="fv-row mb-6" data-kt-password-meter="true">
+                                    <div class="mb-1">
+                                        <div class="position-relative mb-3">
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <div class="fv-row mb-4">
+                                                        <input type="date" asp-for="DateOfBirth" placeholder="DOB" itemid="DOB" max="" autocomplete="off" class="form-control bg-transparent" />
+                                                        <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <div class="fv-row mb-4">
+                                                        <select asp-for="Gender" id="Gender" class="form-control">
+                                                            <option>--Select Gender--</option>
+                                                            <option value="Male">Male</option>
+                                                            <option value="Female">Female</option>
+                                                            <option value="Other">Other</option>
+                                                        </select>
+                                                        <span asp-validation-for="Gender" class="text-danger"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="fv-row mb-4">
+                                                <input type="text" asp-for="Email" placeholder="Email" id="email" autocomplete="off" class="form-control bg-transparent" />
+                                                <span asp-validation-for="Email" class="text-danger"></span>
+                                                <span class="text-danger">@TempData["ErrorMessage"]</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="fv-row mb-4">
+                                            <select asp-for=CountryId id="ddlCountry" class="form-control bg-transparent">
+                                                <option>--Select Country--</option>
+                                            </select>
+                                            <input type="hidden" asp-for="CountryId" id="txtcountry" value="" />
+                                            <span asp-validation-for="CountryId" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="fv-row mb-4">
+                                            <select asp-for=StateId id="ddlState" class="form-control bg-transparent">
+                                                <option>--Select State--</option>
+                                            </select>
+                                            <input type="hidden" asp-for="StateId" id="txtstate" value="" />
+                                            <span asp-validation-for="StateId" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="fv-row mb-4">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <div class="fv-row mb-4">
+                                                <select asp-for=CityId id="ddlCity" class="form-control bg-transparent">
+                                                    <option>--Select City--</option>
+                                                </select>
+                                                <input type="hidden" asp-for="CityId" id="txtcity" value="" />
+                                                <span asp-validation-for="CityId" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="fv-row mb-4">
+                                                <input type="text" asp-for="PhoneNumber" placeholder="Mobile.NO" id="PhoneNumber" autocomplete="off" class="form-control bg-transparent" />
+                                                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="fv-row mb-6">
+                                            <input type="text" asp-for="Address" class="form-control bg-transparent" placeholder="Address" id="Address" style="height: 75px;" />
+                                            <span asp-validation-for="Address" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="mb-3">
+
+                                            <div class="position-relative auth-pass-inputgroup">
+                                                <input type="password" class="form-control pe-5 password-input" onpaste="return false" placeholder="Enter password" id="password-input" aria-describedby="passwordInput" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" asp-for="Password">
+                                                <button class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon" type="button" id="password-addon"><i class="ri-eye-fill align-middle"></i></button>
+                                            </div>
+                                        </div>
+                                        <div id="password-contain" class="p-3 bg-light mb-2 rounded">
+                                            <h5 class="fs-13 fw-semibold">Password must contain:</h5>
+                                            <p id="pass-length" class="invalid fs-12 mb-2">Minimum <b>8 characters</b></p>
+                                            <p id="pass-lower" class="invalid fs-12 mb-2">At <b>lowercase</b> letter (a-z)</p>
+                                            <p id="pass-upper" class="invalid fs-12 mb-2">At least <b>uppercase</b> letter (A-Z)</p>
+                                            <p id="pass-number" class="invalid fs-12 mb-0">A least <b>number</b> (0-9)</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+
+                                        <div class="fv-row mb-2">
+                                            <input type="password" placeholder="Confirm Password" asp-for="ConfirmPassword" autocomplete="off" class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="fv-row mb-2">
+                                    <label class="fs-6 fw-semibold form-label mt-1">Upload Image</label>
+                                    <input type="file" asp-for="Image" autocomplete="off" class="form-control bg-transparent" />
+                                </div>
+                                <div class="mt-4">
+                                    <button class="btn btn-success w-100" type="submit">Sign Up</button>
+                                </div>
+
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
