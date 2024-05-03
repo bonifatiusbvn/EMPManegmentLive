@@ -1,7 +1,6 @@
 ﻿function DisplayAddExpenseModel() {
     $('#AddExpenseModel').modal('show');
 }
-
 $(document).ready(function () {
     GetExpenseTypeList();
     GetPaymentTypeList();
@@ -10,7 +9,31 @@ $(document).ready(function () {
     GetExpenseTotalAmount();
     GetAllUserExpenseList();
     ApprovedExpenseList();
+    UserExpensesDetails();
 });
+
+function clearText() {
+    resetForm();
+    $("#txtexpensetype").val('');
+    $("#txtDescription").val('');
+    $("#txtbillno").val('');
+    $("#txtdate").val('');
+    $("#txttotalamount").val('');
+    $("#txtimage").val('');
+}
+
+function resetForm() {
+    if (EditExpensesForm) {
+        EditExpensesForm.resetForm();
+    }
+    if (UserExpenseForm) {
+        UserExpenseForm.resetForm();
+    }
+    if (FormExpenseDetails) {
+        FormExpenseDetails.resetForm();
+    }
+}
+
 function GetExpenseTypeList() {
 
     $.ajax({
@@ -88,7 +111,7 @@ function AddExpenseDetails() {
     }
 }
 function AddUserExpenseDetails() {
-    if ($('#formexpensedetails').valid()) {
+    if ($('#userexpenseform').valid()) {
         var formData = new FormData();
         formData.append("ExpenseType", $("#txtexpensetype").val());
         formData.append("Description", $("#txtDescription").val());
@@ -207,8 +230,9 @@ function UpdateExpenseDetails() {
     }
 }
 
+var EditExpensesForm;
 $(document).ready(function () {
-    $("#EditExpenseForm").validate({
+    EditExpensesForm = $("#EditExpenseForm").validate({
         rules: {
             EditDescription: "required",
             Editbillno: "required",
@@ -223,7 +247,44 @@ $(document).ready(function () {
     $("#updatedetailbtn").on('click', function () {
         $("#EditExpenseForm").validate();
     });
+})
+
+var UserExpenseForm;
+$(document).ready(function () {
+    UserExpenseForm = $("#userexpenseform").validate({
+        rules: {
+            txtexpensetype: "required",
+            txtDescription: "required",
+            txtdate: "required",
+            txttotalamount: "required",
+        },
+        messages: {
+            txtexpensetype: "Please Select Expense Type",
+            txtDescription: "Please Enter Description",
+            txtdate: "Please Select the Date",
+            txttotalamount: "Please Enter Total Amount",
+        }
+    })
 });
+
+var FormExpenseDetails;
+$(document).ready(function () {
+    FormExpenseDetails = $("#formexpensedetails").validate({
+        rules: {
+            txtexpensetype: "required",
+            txtDescription: "required",
+            txtdate: "required",
+            txttotalamount: "required",
+        },
+        messages: {
+            txtexpensetype: "Please Select Expense Type",
+            txtDescription: "Please Enter Description",
+            txtdate: "Please Select the Date",
+            txttotalamount: "Please Enter Total Amount",
+        }
+    })
+});
+
 
 function deleteExpense(Id) {
     Swal.fire({
@@ -351,7 +412,9 @@ $(document).ready(function () {
     if (userId) {
         GetAllUserExpenseList(userId);
     }
-
+});
+function UserExpensesDetails() { 
+    debugger
     $('#UserListTable').DataTable({
         processing: true,
         serverSide: true,
@@ -394,7 +457,7 @@ $(document).ready(function () {
             "targets": "_all",
         }]
     });
-});
+}
 
 
 function GetAllUserExpenseList(userId) {
