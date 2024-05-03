@@ -12,7 +12,7 @@ namespace EMPManegment.Inretface.Services.InvoiceMaster
 {
     public interface IInvoiceMasterServices
     {
-        Task<InvoiceViewModel> GetInvoiceDetailsById(Guid Id);
+        Task<InvoiceMasterModel> GetInvoiceDetailsById(Guid Id);
         Task<IEnumerable<InvoiceViewModel>> GetInvoiceListByVendorId(Guid Vid);
         Task<IEnumerable<CreditDebitView>> GetLastTransactionByVendorId(Guid Vid);
         Task<IEnumerable<CreditDebitView>> GetAllTransactionByVendorId(Guid Vid);

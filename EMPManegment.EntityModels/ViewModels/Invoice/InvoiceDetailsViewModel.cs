@@ -30,6 +30,13 @@ namespace EMPManegment.EntityModels.ViewModels.Invoice
 
         public bool? IsDeleted { get; set; }
 
+        public decimal? PerUnitPrice { get; set; }
+
+        public int? Hsn { get; set; }
+
+        public decimal? PerUnitWithGstprice { get; set; }
+        public string? ProductTypeName { get; set; }
+
         public Guid CreatedBy { get; set; }
 
         public DateTime CreatedOn { get; set; }

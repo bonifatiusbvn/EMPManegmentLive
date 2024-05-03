@@ -607,7 +607,7 @@ function AllInvoiceList() {
         columns: [
             {
                 "render": function (data, type, full) {
-                    return '<h5 class="fs-15"><a href="/Invoice/DisplayInvoiceDetails?OrderId=' + full.orderId + '" class="fw-medium link-primary">' + full.invoiceNo; '</a></h5>';
+                    return '<h5 class="fs-15"><a href="/Invoice/DisplayInvoiceDetails?InvoiceId=' + full.id + '" class="fw-medium link-primary">' + full.invoiceNo; '</a></h5>';
                 }
             },
             {

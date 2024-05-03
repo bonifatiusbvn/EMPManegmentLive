@@ -53,7 +53,7 @@ namespace EMPManegment.Services.InvoiceMaster
             return await InvoiceMaster.GetCreditDebitListByVendorId(Vid);
         }
 
-        public async Task<InvoiceViewModel> GetInvoiceDetailsById(Guid Id)
+        public async Task<InvoiceMasterModel> GetInvoiceDetailsById(Guid Id)
         {
             return await InvoiceMaster.GetInvoiceDetailsById(Id);
         }

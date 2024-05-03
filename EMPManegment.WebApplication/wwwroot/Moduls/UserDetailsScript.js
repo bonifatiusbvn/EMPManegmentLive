@@ -122,101 +122,54 @@ function GetAllUserData() {
     });
 }
 
+$(document).ready(function () {
+    $('.user-action-btn').on('click', function (e) {
+        e.preventDefault();
+        var username = $(this).data('username');
+        var isActive = $(this).hasClass('active');
+        var action = isActive ? 'active' : 'deactive';
+        var confirmationMessage = isActive ? "Are you sure you want to activate this user?" : "Are you sure you want to deactivate this user?";
 
-function ActiveUser(UserName) {
-    Swal.fire({
-        title: "Are you sure want to Active this User?",
-        text: "You won't be able to revert this!",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonText: "Yes, Enter it!",
-        cancelButtonText: "No, cancel!",
-        confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
-        cancelButtonClass: "btn btn-danger w-xs mt-2",
-        buttonsStyling: false,
-        showCloseButton: true
-    }).then((result) => {
-
-        if (result.isConfirmed) {
-            var formData = new FormData();
-            formData.append("UserId", $("#txtuserid").val());
-
-            $.ajax({
-                url: '/UserProfile/UserActiveDecative?UserName=' + UserName,
-                type: 'Post',
-                contentType: 'application/json;charset=utf-8;',
-                dataType: 'json',
-                success: function (Result) {
-                    Swal.fire({
-                        title: "Active!",
-                        text: Result.message,
-                        icon: "success",
-                        confirmButtonClass: "btn btn-primary w-xs mt-2",
-                        buttonsStyling: false
-                    }).then(function () {
-                        window.location = '/UserProfile/UserActiveDecative';
-                    });
-
-                }
-            });
-        } else if (result.dismiss === Swal.DismissReason.cancel) {
-            Swal.fire(
-                'Cancelled',
-                'User Have No Changes.!!😊',
-                'error'
-            );
-        }
+        Swal.fire({
+            title: confirmationMessage,
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes, proceed!",
+            cancelButtonText: "No, cancel!",
+            confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
+            cancelButtonClass: "btn btn-danger w-xs mt-2",
+            buttonsStyling: false,
+            showCloseButton: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: '/UserProfile/UserActiveDecative?UserName=' + username + '&Action=' + action,
+                    type: 'Post',
+                    contentType: 'application/json;charset=utf-8;',
+                    dataType: 'json',
+                    success: function (Result) {
+                        Swal.fire({
+                            title: "Success!",
+                            text: Result.message,
+                            icon: "success",
+                            confirmButtonClass: "btn btn-primary w-xs mt-2",
+                            buttonsStyling: false
+                        }).then(function () {
+                            location.reload();
+                        });
+                    }
+                });
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                Swal.fire(
+                    'Cancelled',
+                    'No changes made.',
+                    'error'
+                );
+            }
+        });
     });
-
-}
-function DeactiveUser(UserName) {
-
-    Swal.fire({
-        title: "Are you sure want to DeActive this User?",
-        text: "You won't be able to revert this!",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonText: "Yes, Enter it!",
-        cancelButtonText: "No, cancel!",
-        confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
-        cancelButtonClass: "btn btn-danger w-xs mt-2",
-        buttonsStyling: false,
-        showCloseButton: true
-    }).then((result) => {
-        if (result.isConfirmed) {
-
-            var formData = new FormData();
-            formData.append("UserId", $("#txtuserid").val());
-
-            $.ajax({
-                url: '/UserProfile/UserActiveDecative?UserName=' + UserName,
-                type: 'Post',
-                contentType: 'application/json;charset=utf-8;',
-                dataType: 'json',
-                success: function (Result) {
-
-                    Swal.fire({
-                        title: "DeActive!",
-                        text: Result.message,
-                        icon: "success",
-                        confirmButtonClass: "btn btn-primary w-xs mt-2",
-                        buttonsStyling: false
-                    }).then(function () {
-                        window.location = '/UserProfile/UserActiveDecative';
-                    });
-                }
-            });
-        } else if (result.dismiss === Swal.DismissReason.cancel) {
-
-            Swal.fire(
-                'Cancelled',
-                'User Have No Changes.!!😊',
-                'error'
-            );
-        }
-    });
-
-}
+});
 
 function EnterInTime() {
 
