@@ -1,6 +1,8 @@
 ﻿function DisplayAddExpenseModel() {
+    clearText();
     $('#AddExpenseModel').modal('show');
 }
+
 $(document).ready(function () {
     GetExpenseTypeList();
     GetPaymentTypeList();
@@ -181,8 +183,8 @@ function populateDropdown(elementId, options) {
     });
 }
 
-function EditExpenseDetails(Id) {debugger
-
+function EditExpenseDetails(Id) {
+    resetForm();
     $.ajax({
         url: '/ExpenseMaster/EditExpenseDetails?ExpenseId=' + Id,
         type: "Get",
@@ -265,8 +267,8 @@ $(document).ready(function () {
         messages: {
             EditDescription: "Please enter Description",
             Editbillno: "Please enter bill no",
-            Edittotalamount: "please enter total amount",
-        }
+            Edittotalamount: "please enter Correct total amount",
+            }
     })
     $("#updatedetailbtn").on('click', function () {
         $("#EditExpenseForm").validate();
@@ -286,7 +288,7 @@ $(document).ready(function () {
             txtexpensetype: "Please Select Expense Type",
             txtDescription: "Please Enter Description",
             txtdate: "Please Select the Date",
-            txttotalamount: "Please Enter Total Amount",
+            txttotalamount: "Please Enter Correct Total Amount",
         }
     })
 });
@@ -304,7 +306,7 @@ $(document).ready(function () {
             txtexpensetype: "Please Select Expense Type",
             txtDescription: "Please Enter Description",
             txtdate: "Please Select the Date",
-            txttotalamount: "Please Enter Total Amount",
+            txttotalamount: "Please Enter Correct Total Amount",
         }
     })
 });
