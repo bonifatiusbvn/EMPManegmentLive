@@ -361,10 +361,12 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
-        public IActionResult ApprovedExpense(Guid UserId)
+        public IActionResult ApprovedExpense(Guid UserId,string UserName)
         {
             HttpContext.Session.SetString("UserId", UserId.ToString());
+            HttpContext.Session.SetString("UserName", UserName.ToString());
             ViewBag.UserId = HttpContext.Session.GetString("UserId");
+            ViewBag.UserName = HttpContext.Session.GetString("UserName");
             return View();
         }
 
@@ -586,6 +588,7 @@ namespace EMPManegment.Web.Controllers
         public async Task<IActionResult> GetPayExpense()
         {
             ViewBag.UserId = HttpContext.Session.GetString("UserId");
+            ViewBag.UserName = HttpContext.Session.GetString("UserName");
             return View();
         }
 

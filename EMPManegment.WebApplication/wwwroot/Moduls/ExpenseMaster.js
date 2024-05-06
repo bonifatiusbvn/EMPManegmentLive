@@ -181,14 +181,14 @@ function populateDropdown(elementId, options) {
     });
 }
 
-function EditExpenseDetails(Id) {debugger
+function EditExpenseDetails(Id) {
 
     $.ajax({
         url: '/ExpenseMaster/EditExpenseDetails?ExpenseId=' + Id,
         type: "Get",
         contentType: 'application/json;charset=utf-8;',
         dataType: 'json',
-        success: function (response) {debugger
+        success: function (response) {
 
             $('#EditExpenseModel').modal('show');
             $('#Editexpensetype').val(response.expenseType);
@@ -596,7 +596,6 @@ $(document).ready(function () {
     }
 });
 function UserExpensesDetails() {
-    debugger
     $('#UserListTable').DataTable({
         processing: true,
         serverSide: true,
@@ -619,7 +618,7 @@ function UserExpensesDetails() {
                         imageSrc +
                         '</div>' +
                         '<div class="flex-grow-1 ms-2 name">' +
-                        '<h5 class="fs-15"><a href="/ExpenseMaster/ApprovedExpense?UserId=' + full.userId + '" class="fw-medium link-primary view-details" data-userid="' + full.userId + '">' + data + '</a></h5>' +
+                        '<h5 class="fs-15"><a href="/ExpenseMaster/ApprovedExpense?UserId=' + full.userId + '&UserName=' + full.fullName + '" class="fw-medium link-primary view-details" data-userid="' + full.userId + '">' + data + '</a></h5>' +
                         '</div>' +
                         '</div>';
                 }
@@ -959,14 +958,13 @@ function GetExpenseTotalAmount() {
         dataType: 'json',
         contentType: false,
         processData: false,
-        success: function (result) {debugger
+        success: function (result) {
             var total = 0;
             result.forEach(function (obj) {
                 if (obj.totalAmount) {
                     total += obj.totalAmount;
                 }
             });
-            debugger
             var creditamount = 0;
             result.forEach(function (obj) {
                 if (obj.account == "Credit") {
@@ -1005,8 +1003,9 @@ function GetExpenseTotalAmount() {
     });
 }
 
-function ApproveExpense() {
+function ApproveExpense() {debugger
     var userId = $("#txtgetUserId").val();
+    var userName = $('#txtgetUserName').val();
     Swal.fire({
         title: "Are you sure want to Approve This?",
         text: "You won't be able to revert this!",
@@ -1042,7 +1041,7 @@ function ApproveExpense() {
                                 confirmButtonColor: '#3085d6',
                                 confirmButtonText: 'OK',
                             }).then(function () {
-                                window.location = '/ExpenseMaster/ApprovedExpense?UserId=' + userId;
+                                window.location = '/ExpenseMaster/ApprovedExpense?UserId=' + userId + '&UserName=' + userName;
                             });
                         }
                     },
