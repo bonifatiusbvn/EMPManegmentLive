@@ -154,7 +154,7 @@
                                     <div class="col-lg-6">
                                         <div class="mb-3">
                                             <label class="form-label">Total Amount</label>
-                                            <input type="text" id="Edittotalamount" name="Edittotalamount" class="form-control" />
+                                            <input type="number" id="Edittotalamount" name="Edittotalamount" class="form-control" oninput="preventEmptyValue(this)" min="1" />
                                         </div>
                                     </div>
                                     <div class="col-lg-6">
@@ -350,7 +350,7 @@
                                 <div class="col-lg-6">
                                     <div class="mb-3">
                                         <label class="form-label">Total Amount</label>
-                                        <input type="text" id="txttotalamount" class="form-control" name="txttotalamount" placeholder="Enter Amount" />
+                                        <input type="number" id="txttotalamount" class="form-control" name="txttotalamount" placeholder="Enter Amount" oninput="preventEmptyValue(this)" min="1" value="1" />
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
