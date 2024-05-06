@@ -190,7 +190,7 @@
                                     <div class="col-lg-6">
                                         <div class="mb-3">
                                             <label class="form-label">Total Amount</label>
-                                            <input type="text" id="txttotalamount" class="form-control" name="txttotalamount" placeholder="Enter Amount" oninput="preventEmptyValue(this)" min="1" value="1" />
+                                            <input type="number" id="txttotalamount" class="form-control" name="txttotalamount" placeholder="Enter Amount" oninput="preventEmptyValue(this)" min="1" value="1" />
                                         </div>
                                     </div>
                                     <div class="col-lg-6">
@@ -204,7 +204,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-danger btn-default m-1" id="close-modal" data-bs-dismiss="modal" onclick="ClearTextBox()">Close</button>
-                            <button type="submit" class="btn btn-success" onclick="AddExpenseDetails();" id="taskDetails" value="Validate">Save</button>
+                            <button type="submit" class="btn btn-success" onclick="AddExpenseDetails();">Save</button>
                         </div>
                     </div>
                 </div>

@@ -103,6 +103,7 @@ function AddExpenseDetails() {
         formData.append("Description", $("#txtDescription").val());
         formData.append("BillNumber", $("#txtbillno").val());
         formData.append("Date", $("#txtdate").val());
+        formData.append("Account", $("#txtaccount").val());
         formData.append("TotalAmount", $("#txttotalamount").val());
         formData.append("Image", $("#txtimage")[0].files[0]);
         $.ajax({
@@ -190,7 +191,8 @@ function EditExpenseDetails(Id) {
         type: "Get",
         contentType: 'application/json;charset=utf-8;',
         dataType: 'json',
-        success: function (response) {debugger
+        success: function (response) {
+            debugger
 
             $('#EditExpenseModel').modal('show');
             $('#Editexpensetype').val(response.expenseType);
@@ -268,7 +270,7 @@ $(document).ready(function () {
             EditDescription: "Please enter Description",
             Editbillno: "Please enter bill no",
             Edittotalamount: "please enter Correct total amount",
-            }
+        }
     })
     $("#updatedetailbtn").on('click', function () {
         $("#EditExpenseForm").validate();
@@ -961,7 +963,8 @@ function GetExpenseTotalAmount() {
         dataType: 'json',
         contentType: false,
         processData: false,
-        success: function (result) {debugger
+        success: function (result) {
+            debugger
             var total = 0;
             result.forEach(function (obj) {
                 if (obj.totalAmount) {
