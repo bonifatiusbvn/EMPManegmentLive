@@ -231,6 +231,7 @@ namespace EMPManegment.Repository.PurchaseRequestRepository
             var purchaseRequestList = from a in Context.TblPurchaseRequests
                                       join b in Context.TblUsers on a.UserId equals b.Id
                                       join c in Context.TblProjectMasters on a.ProjectId equals c.ProjectId
+                                      orderby a.CreatedOn descending
                                       select new PurchaseRequestModel
                                       {
                                           PrId = a.PrId,

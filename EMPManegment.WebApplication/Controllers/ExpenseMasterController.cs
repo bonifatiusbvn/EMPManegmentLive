@@ -830,7 +830,7 @@ namespace EMPManegment.Web.Controllers
         [HttpGet]
         public async Task<FileResult> DownloadBill(string BillName)
         {
-            var filepath = BillName;
+            var filepath = "Content/Image/" + BillName;
             var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", filepath);
             var memory = new MemoryStream();
             using (var stream = new FileStream(path, FileMode.Open))

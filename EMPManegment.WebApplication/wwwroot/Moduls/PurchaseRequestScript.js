@@ -118,7 +118,6 @@ function updateTotals() {
 }
 
 function GetPRData() {
-    debugger
     $('#PRListTable').DataTable({
         processing: true,
         serverSide: true,

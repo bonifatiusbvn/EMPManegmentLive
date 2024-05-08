@@ -312,6 +312,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                                   join b in Context.TblVendorMasters on a.VandorId equals b.Vid
                                   join c in Context.TblProjectMasters on a.ProjectId equals c.ProjectId
                                   where a.IsDeleted != true
+                                  orderby a.CreatedOn descending
                                   select new
                                   {
                                       Invoice = a,

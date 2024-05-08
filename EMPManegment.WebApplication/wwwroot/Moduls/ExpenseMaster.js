@@ -202,7 +202,7 @@ function EditExpenseDetails(Id) {
             $('#Editdate').val(response.date);
             $('#Edittotalamount').val(response.totalAmount);
             $('#Editaccount').val(response.account);
-            $('#Editpaymenttype').val(response.paymentTypeName);
+            $('#Editpaymenttype').val(response.paymentType);
             $('#Editpaymenttypeid').val(response.paymentType);
             $('#EditIsPaid').val(response.isPaid ? "True" : "False");
             $('#EditIsApproved').val(response.isApproved ? "True" : "False");
@@ -222,7 +222,7 @@ function UpdateExpenseDetails() {
         formData.append("BillNumber", $("#Editbillno").val());
         formData.append("Date", $("#Editdate").val());
         formData.append("TotalAmount", $("#Edittotalamount").val());
-        formData.append("PaymentType", $("#Editpaymenttypeid").val());
+        formData.append("PaymentType", $("#Editpaymenttype").val());
         formData.append("IsPaid", $("#EditIsPaid").val());
         formData.append("IsApproved", $("#EditIsApproved").val());
         formData.append("Account", $("#Editaccount").val());
@@ -243,6 +243,51 @@ function UpdateExpenseDetails() {
                         confirmButtonText: 'OK',
                     }).then(function () {
                         window.location = '/ExpenseMaster/UserExpenseList';
+                    });
+                }
+            }
+        })
+    }
+    else {
+        Swal.fire({
+            title: "Kindly Fill All Details",
+            icon: 'warning',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'OK',
+        })
+    }
+}
+
+function UpdateExpenseListDetails() {
+    if ($('#EditExpenseForm').valid()) {
+        var formData = new FormData();
+        formData.append("Id", $("#Editid").val());
+        formData.append("ExpenseType", $("#Editexpensetype").val());
+        formData.append("Description", $("#EditDescription").val());
+        formData.append("BillNumber", $("#Editbillno").val());
+        formData.append("Date", $("#Editdate").val());
+        formData.append("TotalAmount", $("#Edittotalamount").val());
+        formData.append("PaymentType", $("#Editpaymenttype").val());
+        formData.append("IsPaid", $("#EditIsPaid").val());
+        formData.append("IsApproved", $("#EditIsApproved").val());
+        formData.append("Account", $("#Editaccount").val());
+
+        $.ajax({
+            url: '/ExpenseMaster/UpdateExpenseDetails',
+            type: 'Post',
+            data: formData,
+            dataType: 'json',
+            contentType: false,
+            processData: false,
+            success: function (Result) {
+                if (Result.message != null) {
+                    Swal.fire({
+                        title: Result.message,
+                        icon: 'success',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK',
+                    }).then(function () {
+                        window.location = '/ExpenseMaster/ExpenseList';
                     });
                 }
             }
