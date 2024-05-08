@@ -2,7 +2,7 @@
     ViewData["Title"] = "ApprovedExpense";
     Layout = "~/Views/Shared/_UserHomeLayout.cshtml";
 }
-
+<input type="hidden" id="txtgetUserName" value="@ViewBag.UserName" hidden />
 <div class="row" style="margin-top:80px;">
     <div class="col-12">
         <div class="page-title-box d-sm-flex align-items-center justify-content-between">
@@ -122,6 +122,9 @@
                             <a class="nav-link py-3 Returns" data-bs-toggle="tab" id="Returns" href="#allApprovedExpense" role="tab" aria-selected="false">
                                 <i class="ri-arrow-left-right-fill me-1 align-bottom"></i>Approved Expense
                             </a>
+                        </li>
+                        <li>
+                            <a class="nav-link All py-3" style="margin-left:835px; width:250px;">@ViewBag.UserName-Expense</a>
                         </li>
                     </ul>
                     <div class="tab-content">
