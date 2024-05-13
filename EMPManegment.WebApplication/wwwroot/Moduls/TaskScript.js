@@ -86,7 +86,7 @@ function btnSaveTaskDetail() {
     else {
         siteloaderhide()
         Swal.fire({
-            title: "Kindly Fill All Datafield",
+            title: "Kindly fill all datafield",
             icon: 'warning',
             confirmButtonColor: '#3085d6',
             confirmButtonText: 'OK',
@@ -202,7 +202,7 @@ function btnStatusUpdate(Id) {
     }
     else {
         Swal.fire({
-            title: "Kindly Select The Status",
+            title: "Kindly select the status",
             icon: 'warning',
             confirmButtonColor: '#3085d6',
             confirmButtonText: 'OK',
@@ -218,7 +218,7 @@ $(document).ready(function () {
             ddlStatusReview: "required"
         },
         messages: {
-            ddlStatusReview: "Please Enter Status"
+            ddlStatusReview: "Please enter status"
         }
     })
     $('#StatusUpdate').on('click', function () {
@@ -276,7 +276,7 @@ function btnStatusUpdateLow(Id) {
     else {
 
         Swal.fire({
-            title: "Kindly Select The Status",
+            title: "Kindly select the status",
             icon: 'warning',
             confirmButtonColor: '#3085d6',
             confirmButtonText: 'OK',
@@ -292,7 +292,7 @@ $(document).ready(function () {
             ddlStatus: "required"
         },
         messages: {
-            ddlStatus: "Please Enter Status"
+            ddlStatus: "Please enter status"
         }
     })
     $('#StatusUpdate').on('click', function () {
@@ -356,7 +356,7 @@ function btnStatusUpdateMedium(Id) {
     else {
 
         Swal.fire({
-            title: "Kindly Select The Status",
+            title: "Kindly select the status",
             icon: 'warning',
             confirmButtonColor: '#3085d6',
             confirmButtonText: 'OK',
@@ -372,7 +372,7 @@ $(document).ready(function () {
             ddlStatusMedium: "required"
         },
         messages: {
-            ddlStatusMedium: "Please Enter Status"
+            ddlStatusMedium: "Please enter status"
         }
     })
     $('#StatusUpdate').on('click', function () {
@@ -433,7 +433,7 @@ function btnStatusUpdateHigh(Id) {
     else {
 
         Swal.fire({
-            title: "Kindly Select The Status",
+            title: "Kindly select the status",
             icon: 'warning',
             confirmButtonColor: '#3085d6',
             confirmButtonText: 'OK',
@@ -447,7 +447,7 @@ $(document).ready(function () {
             ddlStatusHigh: "required"
         },
         messages: {
-            ddlStatusHigh: "Please Enter Status"
+            ddlStatusHigh: "Please enter status"
         }
     })
     $('#StatusUpdate').on('click', function () {
@@ -532,7 +532,7 @@ function GetUserTotalTask() {
 };
 function AllTaskDetailsList() {
     $('#tasksTableData').DataTable({
-        processing: true,
+        processing: false,
         serverSide: true,
         filter: true,
         "bDestroy": true,

@@ -100,7 +100,7 @@ namespace EMPManegment.Repository.UserLoginRepository
                     else
                     {
                         response.Code = (int)HttpStatusCode.Forbidden;
-                        response.Message = "Your account is deactivated.Contact your administrator.";
+                        response.Message = "Your account is deactivated.contact your administrator.";
                     }
                 }
                 else

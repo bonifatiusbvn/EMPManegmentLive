@@ -70,7 +70,7 @@ namespace EMPManegment.Repository.VendorDetailsRepository
                         CreatedOn = DateTime.Now,
                     };
                     response.Code = (int)HttpStatusCode.OK;
-                    response.Message = "Vendor Data Successfully Inserted";
+                    response.Message = "Vendor data successfully inserted";
                     Context.TblVendorMasters.Add(vendormodel);
                     Context.SaveChanges();
                 }
@@ -263,7 +263,7 @@ namespace EMPManegment.Repository.VendorDetailsRepository
                 await Context.SaveChangesAsync();
             }
             response.Code = 200;
-            response.Message = "Vendor Data Updated Successfully!";
+            response.Message = "Vendor data updated successfully!";
             return response;
 
         }

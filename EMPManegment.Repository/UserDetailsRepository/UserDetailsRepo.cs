@@ -135,7 +135,7 @@ namespace EMPManegment.Repository.UserListRepository
             {
                 if (Intimedata.OutTime == null && Intimedata.Date != DateTime.Today)
                 {
-                    response.Message = "You Missed Out-Time of " + Intimedata.Date.ToString("dd/MM/yyyy") + " " + "Kindly Contact Your Admin";
+                    response.Message = "You missed out-time of " + Intimedata.Date.ToString("dd/MM/yyyy") + " " + "Kindly contact your admin";
                     response.Icone = "warning";
                 } 
                 
@@ -144,7 +144,7 @@ namespace EMPManegment.Repository.UserListRepository
                 {
                     if (Intimedata.Date == DateTime.Today && Intimedata.Intime != null)
                     {
-                        response.Message = "Your Already Enter IN-Time";
+                        response.Message = "Your already enter in-time";
                         response.Icone = "warning";
                     }
 
@@ -160,7 +160,7 @@ namespace EMPManegment.Repository.UserListRepository
                         Context.TblAttendances.Add(tblAttendance);
                         Context.SaveChanges();
                         response.Code = 200;
-                        response.Message = "In-Time Enter Successfully";
+                        response.Message = "In-time enter successfully";
                         response.Icone = "success";
 
                     }
@@ -180,7 +180,7 @@ namespace EMPManegment.Repository.UserListRepository
                 Context.TblAttendances.Add(tblAttendance);
                 Context.SaveChanges();
                 response.Code = 200;
-                response.Message = "In-Time Enter Successfully";
+                response.Message = "In-time enter successfully";
                 response.Icone = "success";
 
             }
@@ -194,7 +194,7 @@ namespace EMPManegment.Repository.UserListRepository
             var Outtimedata = Context.TblAttendances.Where(a => a.UserId == userAttendance.UserId).OrderByDescending(a => a.Date).FirstOrDefault();;
             if (Outtimedata.OutTime == null && Outtimedata.Date != DateTime.Today)
             {
-                response.Message = "You Missed Out-Time of " + Outtimedata.Date.ToString("dd/MM/yyyy") + " " + "Kindly Contact Your Admin";
+                response.Message = "You missed out-time of " + Outtimedata.Date.ToString("dd/MM/yyyy") + " " + "Kindly contact your admin";
                 response.Icone = "warning";
 
             }
@@ -203,7 +203,7 @@ namespace EMPManegment.Repository.UserListRepository
             {
                if(Outtimedata.Date != DateTime.Today)
                 {
-                    response.Message = "Please Enter In-Time First";
+                    response.Message = "Please enter in-time first";
                     response.Icone = "warning";
                 }
 
@@ -219,13 +219,13 @@ namespace EMPManegment.Repository.UserListRepository
                         Context.TblAttendances.Update(outtime);
                         Context.SaveChanges();
                         response.Code = 200;
-                        response.Message = "Out-Time Enter Successfully";
+                        response.Message = "Out-time enter successfully";
                         response.Icone = "success";
 
                     }
                     else
                     {
-                        response.Message = "Your Already Enter Out-Time";
+                        response.Message = "Your already enter out-time";
                         response.Icone = "warning";
 
                     }
@@ -253,7 +253,7 @@ namespace EMPManegment.Repository.UserListRepository
                 Context.TblUsers.Update(userdata);
                 Context.SaveChanges();
                 response.Code=200;
-                response.Message = "Password Updated!";
+                response.Message = "Password updated!";
             }
             catch (Exception ex) 
             {
@@ -334,7 +334,7 @@ namespace EMPManegment.Repository.UserListRepository
                     }
                     else
                     {
-                        response.Message = "Your Password is Wrong";
+                        response.Message = "Your password is wrong";
                     }
                 }
             }catch (Exception ex)
@@ -358,7 +358,7 @@ namespace EMPManegment.Repository.UserListRepository
                     string checkdate = userdata.DateOfBirth.ToString("dd/MM");
                     if (today == checkdate)
                     {
-                        response.Message = "Bonifatius Wish You a Very Happy Birthday.." +" " + userdata.FirstName + " " + userdata.LastName +" "+ "Enjoy Your Day";
+                        response.Message = "Bonifatius wish you a very happy birthday.." +" " + userdata.FirstName + " " + userdata.LastName +" "+ "Enjoy your day";
                         response.Code = (int)HttpStatusCode.OK; 
                     }
                     else
@@ -473,7 +473,7 @@ namespace EMPManegment.Repository.UserListRepository
                     await Context.SaveChangesAsync();
                 }
                 response.Code = (int)HttpStatusCode.OK;
-                response.Message = "User Data Updated Successfully";
+                response.Message = "User data updated successfully";
                 return response;
                 
             }

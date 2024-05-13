@@ -104,7 +104,7 @@ namespace EMPManegment.Repository.TaskRepository
                             Context.TblTaskDetails.Update(taskstatusupdate);
                             Context.SaveChanges();
                             responcemodel.Code = 200;
-                            responcemodel.Message = "Task Status Updated Successfully!";
+                            responcemodel.Message = "Task status updated successfully!";
                         }
                         catch (Exception ex)
                         {
@@ -113,7 +113,7 @@ namespace EMPManegment.Repository.TaskRepository
                     }
                     else
                     {
-                        responcemodel.Message = "You aren't Authorize!!";
+                        responcemodel.Message = "You aren't authorize!!";
                         responcemodel.Icone = "warning";
                     }
                 }
@@ -136,7 +136,7 @@ namespace EMPManegment.Repository.TaskRepository
                     Context.TblTaskDetails.Update(gettask);
                     Context.SaveChanges();
                     responcemodel.Code = 200;
-                    responcemodel.Message = "Task Status Updated Successfully!";
+                    responcemodel.Message = "Task status updated successfully!";
                 }
                 catch (Exception ex)
                 {
@@ -377,7 +377,7 @@ namespace EMPManegment.Repository.TaskRepository
                 Context.TblTaskDetails.Update(gettask);
                 Context.SaveChanges();
                 model.Code = 200;
-                model.Message = "Task Status Updated Successfully!";
+                model.Message = "Task status updated successfully!";
             }
             catch (Exception ex)
             {
