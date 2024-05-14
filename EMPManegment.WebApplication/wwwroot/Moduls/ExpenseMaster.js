@@ -9,7 +9,6 @@ $(document).ready(function () {
     GetExpenseTotalAmount();
     GetAllUserExpenseList();
     ApprovedExpenseList();
-    /*    GetPayUserExpenseList();*/
     UserExpensesDetails();
 });
 
@@ -181,14 +180,16 @@ function populateDropdown(elementId, options) {
     });
 }
 
-function EditExpenseDetails(Id) {debugger
+function EditExpenseDetails(Id) {
+    debugger
 
     $.ajax({
         url: '/ExpenseMaster/EditExpenseDetails?ExpenseId=' + Id,
         type: "Get",
         contentType: 'application/json;charset=utf-8;',
         dataType: 'json',
-        success: function (response) {debugger
+        success: function (response) {
+            debugger
 
             $('#EditExpenseModel').modal('show');
             $('#Editexpensetype').val(response.expenseType);
@@ -959,7 +960,8 @@ function GetExpenseTotalAmount() {
         dataType: 'json',
         contentType: false,
         processData: false,
-        success: function (result) {debugger
+        success: function (result) {
+            debugger
             var total = 0;
             result.forEach(function (obj) {
                 if (obj.totalAmount) {
