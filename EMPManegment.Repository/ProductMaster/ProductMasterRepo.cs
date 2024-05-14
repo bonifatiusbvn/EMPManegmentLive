@@ -34,7 +34,7 @@ namespace EMPManegment.Repository.ProductMaster
                 bool isProductAlredyExists = Context.TblProductTypeMasters.Any(x => x.Type == AddProduct.ProductName);
                 if (isProductAlredyExists == true)
                 {
-                    response.Message = "This Product Is already exists";
+                    response.Message = "This product is already exists";
                     response.Data = AddProduct;
                     response.Code = (int)HttpStatusCode.NotFound;
                     response.Icone = "warning";
@@ -46,7 +46,7 @@ namespace EMPManegment.Repository.ProductMaster
                         Type = AddProduct.ProductName,
                     };
                     response.Code = (int)HttpStatusCode.OK;
-                    response.Message = "Product Successfully Inserted";
+                    response.Message = "Product successfully inserted";
                     response.Icone = "success";
                     Context.TblProductTypeMasters.Add(Product);
                     Context.SaveChanges();
@@ -67,7 +67,7 @@ namespace EMPManegment.Repository.ProductMaster
                 bool isProductAlredyExists = Context.TblProductDetailsMasters.Any(x => x.ProductName == AddProduct.ProductName);
                 if (isProductAlredyExists == true)
                 {
-                    response.Message = "This product Is already exists";
+                    response.Message = "This product is already exists";
                     response.Data = AddProduct;
                     response.Code = (int)HttpStatusCode.NotFound;
                     response.Icone = "warning";
@@ -273,7 +273,7 @@ namespace EMPManegment.Repository.ProductMaster
                 Context.TblProductDetailsMasters.Update(getProduct);
                 Context.SaveChanges();
                 model.Code = 200;
-                model.Message = "Product Details Updated Successfully!";
+                model.Message = "Product details updated successfully!";
             }
             catch (Exception ex)
             {

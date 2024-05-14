@@ -170,7 +170,7 @@ function SearchData() {
     }
     else {
         Swal.fire({
-            title: "Kindly Fill the Status",
+            title: "Kindly fill the status",
             icon: 'warning',
             confirmButtonColor: '#3085d6',
             confirmButtonText: 'OK',
@@ -239,7 +239,7 @@ function SaveCreatePurchaseOrder() {
     }
     else {
         Swal.fire({
-            title: "Kindly Fill All Datafield",
+            title: "Kindly fill all datafield",
             icon: 'warning',
             confirmButtonColor: '#3085d6',
             confirmButtonText: 'OK',
@@ -284,7 +284,7 @@ $(document).ready(function () {
             idStatus: "required"
         },
         messages: {
-            idStatus: "Please Enter Delivered Status"
+            idStatus: "Please enter delivered status"
         }
     })
     $('#statussearch').on('click', function () {
@@ -561,11 +561,11 @@ function SearchProductDetailsById(ProductId) {
 
 function deletePurchaseOrderDetails(Id) {
     Swal.fire({
-        title: "Are you sure want to Delete This?",
+        title: "Are you sure want to delete this?",
         text: "You won't be able to revert this!",
         icon: "warning",
         showCancelButton: true,
-        confirmButtonText: "Yes, Delete it!",
+        confirmButtonText: "Yes, delete it!",
         cancelButtonText: "No, cancel!",
         confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
         cancelButtonClass: "btn btn-danger w-xs mt-2",
@@ -590,7 +590,7 @@ function deletePurchaseOrderDetails(Id) {
                 },
                 error: function () {
                     Swal.fire({
-                        title: "Can't Delete Order!",
+                        title: "Can't delete order!",
                         icon: 'warning',
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'OK',
@@ -603,7 +603,7 @@ function deletePurchaseOrderDetails(Id) {
 
             Swal.fire(
                 'Cancelled',
-                'Order Have No Changes.!!😊',
+                'Order have no changes.!!😊',
                 'error'
             );
         }
@@ -671,7 +671,7 @@ function UpdatePurchaseOrderDetails() {
     }
     else {
         Swal.fire({
-            title: "Kindly Fill All Details",
+            title: "Kindly fill all details",
             icon: 'warning',
             confirmButtonColor: '#3085d6',
             confirmButtonText: 'OK',

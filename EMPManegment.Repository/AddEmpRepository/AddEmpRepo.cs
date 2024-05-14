@@ -116,19 +116,19 @@ namespace EMPManegment.Repository.AddEmpRepository
                         }
                         else
                         {
-                            response.Message = "Your Password Is Wrong";
+                            response.Message = "Your password is wrong";
                         }
                     }
                     else
                     {
                         response.Code = (int)HttpStatusCode.Forbidden;
-                        response.Message = "Your Deactive Contact Your Admin";
+                        response.Message = "Your deactive contact your admin";
                         return response;
                     }
                 }
                 else
                 {
-                    response.Message = "User Not Exist";
+                    response.Message = "User not exist";
                     response.Code = (int)HttpStatusCode.NotFound;
                     response.Data = null;
                 }
@@ -246,13 +246,13 @@ namespace EMPManegment.Repository.AddEmpRepository
 
                         responceModel.Data = Userdata;
                         responceModel.Code = 200;
-                        responceModel.Message = "Reset Link send on your Registered Email";
+                        responceModel.Message = "Reset link send on your registered email";
 
                 }
                 else
                 {
                     responceModel.Code = 400;
-                    responceModel.Message = "Invalid Email Id!";
+                    responceModel.Message = "Invalid email id!";
                 }
                 return responceModel;
             }

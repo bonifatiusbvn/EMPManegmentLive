@@ -6,7 +6,7 @@
 function GetAllVendorData() {
 
     $('#VendorTableData').DataTable({
-        processing: true,
+        processing: false,
         serverSide: true,
         filter: true,
         "bDestroy": true,
@@ -168,7 +168,7 @@ function UpdateVendorDetails() {
     }
     else {
         Swal.fire({
-            title: "Kindly Fill All Datafield",
+            title: "Kindly fill all datafield",
             icon: 'warning',
             confirmButtonColor: '#3085d6',
             confirmButtonText: 'OK',
@@ -260,7 +260,7 @@ function AddVendorDetails() {
     }
     else {
         Swal.fire({
-            title: "Kindly Fill All Datafield",
+            title: "Kindly fill all datafield",
             icon: 'warning',
             confirmButtonColor: '#3085d6',
             confirmButtonText: 'OK',
@@ -305,7 +305,7 @@ function nexttoPersonalDetails() {
     }
     else {
         Swal.fire({
-            title: "Kindly Fill All Datafield",
+            title: "Kindly fill all datafield",
             icon: 'warning',
             confirmButtonColor: '#3085d6',
             confirmButtonText: 'OK',
@@ -320,7 +320,7 @@ function nexttoBankDetails() {
     }
     else {
         Swal.fire({
-            title: "Kindly Fill All Datafield",
+            title: "Kindly fill all datafield",
             icon: 'warning',
             confirmButtonColor: '#3085d6',
             confirmButtonText: 'OK',
@@ -489,7 +489,7 @@ function editnexttoPersonalDetails() {
     }
     else {
         Swal.fire({
-            title: "Kindly Fill Remaining Datafield",
+            title: "Kindly fill remaining datafield",
             icon: 'warning',
             confirmButtonColor: '#3085d6',
             confirmButtonText: 'OK',
@@ -504,7 +504,7 @@ function editnexttoBankDetails() {
     }
     else {
         Swal.fire({
-            title: "Kindly Fill Remaining Datafield",
+            title: "Kindly fill remaining datafield",
             icon: 'warning',
             confirmButtonColor: '#3085d6',
             confirmButtonText: 'OK',

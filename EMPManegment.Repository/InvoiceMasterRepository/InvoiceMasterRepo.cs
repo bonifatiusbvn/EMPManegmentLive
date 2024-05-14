@@ -216,7 +216,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                 if (isInvoiceAlredyExists == true)
                 {
 
-                    response.Message = "This Invoice Is already Generated";
+                    response.Message = "This invoice is already generated";
                     response.Code = 400;
                 }
                 else
@@ -292,7 +292,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                         }
                         response.Data = orderDetails;
                         response.Code = 200;
-                        response.Message = "Invoice Is Generated successfully";
+                        response.Message = "Invoice is generated successfully";
                     }
 
                 }
@@ -312,6 +312,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                                   join b in Context.TblVendorMasters on a.VandorId equals b.Vid
                                   join c in Context.TblProjectMasters on a.ProjectId equals c.ProjectId
                                   where a.IsDeleted != true
+                                  orderby a.CreatedOn descending
                                   select new
                                   {
                                       Invoice = a,
@@ -451,7 +452,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                 Context.TblCreditDebitMasters.Add(insertcraditdebit);
                 await Context.SaveChangesAsync();
                 response.Code = 200;
-                response.Message = "Details Inserted successfully!";
+                response.Message = "Details inserted successfully!";
             }
             catch (Exception ex)
             {
@@ -713,7 +714,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                     }
                     response.Data = orderDetails;
                     response.Code = 200;
-                    response.Message = "Invoice Is Generated successfully";
+                    response.Message = "Invoice is generated successfully";
                 }
             }
             catch (Exception ex)
@@ -800,7 +801,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                 Context.TblInvoices.Update(invoicedetails);
                 Context.SaveChanges();
                 model.Code = 200;
-                model.Message = "Invoice Details Updated Successfully!";
+                model.Message = "Invoice details updated successfully!";
             }
             catch (Exception ex)
             {
@@ -818,7 +819,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                 if (isInvoiceAlredyExists == false)
                 {
 
-                    response.Message = "This Invoice Is Not Generated";
+                    response.Message = "This invoice is not generated";
                     response.Code = 400;
                 }
                 else

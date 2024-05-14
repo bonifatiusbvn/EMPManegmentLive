@@ -40,7 +40,7 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                     CreatedOn = DateTime.Now,
                 };
                 response.Code = (int)HttpStatusCode.OK;
-                response.Message = "ExpenseType Successfully Inserted";
+                response.Message = "Expensetype cuccessfully inserted";
                 response.Icone = "success";
                 Context.TblExpenseTypes.Add(Expense);
                 Context.SaveChanges();
@@ -64,7 +64,7 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                     CreatedOn = DateTime.Now,
                 };
                 response.Code = (int)HttpStatusCode.OK;
-                response.Message = "PaymentType Successfully Inserted";
+                response.Message = "PaymentType successfully inserted";
                 response.Icone = "success";
                 Context.TblPaymentTypes.Add(Payment);
                 Context.SaveChanges();
@@ -152,7 +152,7 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                 Context.TblExpenseTypes.Update(ExpenseType);
                 Context.SaveChanges();
                 model.Code = 200;
-                model.Message = "ExpenseType Updated Successfully!";
+                model.Message = "ExpenseType updated successfully!";
             }
             catch (Exception ex)
             {
@@ -176,7 +176,7 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                 Context.TblPaymentTypes.Update(paymentType);
                 Context.SaveChanges();
                 model.Code = 200;
-                model.Message = "PaymentType Updated Successfully!";
+                model.Message = "PaymentType updated successfully!";
             }
             catch (Exception ex)
             {
@@ -376,7 +376,7 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                 Context.TblExpenseMasters.Update(GetExpenseDetail);
                 Context.SaveChanges();
                 model.Code = 200;
-                model.Message = "Expense Details Updated Successfully!";
+                model.Message = "Expense details updated successfully!";
             }
             catch (Exception ex)
             {
@@ -823,7 +823,7 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                 await Context.SaveChangesAsync();
 
                 response.Code = 200;
-                response.Message = "All Expenses Approved successfully!";
+                response.Message = "All expenses approved successfully!";
             }
             catch (Exception ex)
             {
@@ -845,7 +845,7 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                 Context.SaveChanges();
                 response.Code = 200;
                 response.Data = GetExpensedata;
-                response.Message = "Expense is Deleted Successfully";
+                response.Message = "Expense is deleted successfully";
             }
             return response;
         }

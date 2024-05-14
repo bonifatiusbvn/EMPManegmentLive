@@ -144,7 +144,7 @@ function validateAndCreateRole() {
             textRoleName: "required",
         },
         messages: {
-            textRoleName: "Please Enter Role",
+            textRoleName: "Please enter role",
         }
     })
     var isValid = true;

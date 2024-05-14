@@ -6,7 +6,13 @@
     ViewData["Title"] = "GetPayExpense";
     Layout = "~/Views/Shared/_UserHomeLayout.cshtml";
 }
+<style>
+        .table-responsive {
+            height: 100%;
+            overflow-y: auto;
+        }
 
+</style>
 <input type="hidden" class="form-control" id="txtuseraproveid" value="@_userSession.UserId" hidden>
 <input type="hidden" class="form-control" id="txtuseraprovename" value="@_userSession.FullName" hidden>
 <input type="hidden" class="form-control" id="txtexpensetype" value="11" hidden>
@@ -106,17 +112,17 @@
                         <i class="ri-store-2-fill me-1 align-bottom"></i>All Expense
                     </a>
                 </li>
-
+                <li>
+                    <a class="nav-link All py-3" style="margin-left:835px; width:250px;">@ViewBag.UserName-Expense</a>
+                </li>
             </ul>
             <div class="row">
                 <div class="col-lg-12">
                     <div class="card">
-
                         <div class="card-body">
-
                             <div class="live-preview">
                                 <div class="row">
-                                    <div class="col-xl-6">
+                                    <div class="col-xl-6 ">
                                         <div class="table-responsive">
                                             <table id="UserPayExpenseTableCredit" class="table table-bordered table-striped">
                                                 <thead>
@@ -140,13 +146,11 @@
                                                     </tr>
                                                 </tfoot>
                                             </table>
-
                                         </div>
                                     </div>
                                     <!--end col-->
-
-                                    <div class="col-xl-6">
-                                        <div class="table-responsive mt-4 mt-xl-0">
+                                    <div class="col-xl-6 ">
+                                        <div class="table-responsive">
                                             <table id="UserPayExpenseTableDebit" class="table table-bordered table-striped">
                                                 <thead>
                                                     <tr>
@@ -175,13 +179,11 @@
                                 </div>
                                 <!--end row-->
                             </div>
-
                         </div><!-- end card-body -->
                     </div><!-- end card -->
                 </div>
                 <!-- end col -->
             </div>
-
         </div>
         <!--end col-->
         <!--end col-->

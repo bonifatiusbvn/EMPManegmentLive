@@ -50,7 +50,7 @@ function btnCreateProjectDetail() {
     }
     else {
         Swal.fire({
-            title: "Kindly Fill All Datafield",
+            title: "Kindly fill all datafield",
             icon: 'warning',
             confirmButtonColor: '#3085d6',
             confirmButtonText: 'OK',
@@ -460,7 +460,7 @@ function deleteProjectMember(userId) {
         },
         error: function () {
             Swal.fire({
-                title: "Can't Remove Member!",
+                title: "Can't remove member!",
                 icon: 'warning',
                 confirmButtonColor: '#3085d6',
                 confirmButtonText: 'OK',

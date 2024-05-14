@@ -59,7 +59,7 @@ namespace EMPManegment.Repository.PurchaseRequestRepository
             catch (Exception ex)
             {
                 response.code = 500;
-                response.message = "Error creating PurchaseRequest ";
+                response.message = "Error creating purchaseRequest ";
             }
             return response;
         }
@@ -77,7 +77,7 @@ namespace EMPManegment.Repository.PurchaseRequestRepository
                     Context.SaveChanges();
                     response.code = 200;
                     response.data = PurchaseRequest;
-                    response.message = "PurchaseRequest is Deleted Successfully";
+                    response.message = "PurchaseRequest is deleted successfully";
                 }
                 return response;
             }
@@ -168,7 +168,7 @@ namespace EMPManegment.Repository.PurchaseRequestRepository
                 Context.TblPurchaseRequests.Update(purchaseRequest);
                 Context.SaveChanges();
                 model.code = 200;
-                model.message = "Purchase Request Updated Successfully!";
+                model.message = "Purchase request updated successfully!";
             }
             catch (Exception ex)
             {
@@ -215,7 +215,7 @@ namespace EMPManegment.Repository.PurchaseRequestRepository
                     }
                     else
                     {
-                        throw new Exception("PurchaseRequest Id does not have the expected format.");
+                        throw new Exception("PurchaseRequest id does not have the expected format.");
                     }
                 }
                 return PurchaseRequestId;
@@ -231,6 +231,7 @@ namespace EMPManegment.Repository.PurchaseRequestRepository
             var purchaseRequestList = from a in Context.TblPurchaseRequests
                                       join b in Context.TblUsers on a.UserId equals b.Id
                                       join c in Context.TblProjectMasters on a.ProjectId equals c.ProjectId
+                                      orderby a.CreatedOn descending
                                       select new PurchaseRequestModel
                                       {
                                           PrId = a.PrId,

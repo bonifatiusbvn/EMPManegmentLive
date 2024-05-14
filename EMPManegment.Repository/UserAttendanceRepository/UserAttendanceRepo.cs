@@ -133,7 +133,7 @@ namespace EMPManegment.Repository.UserAttendanceRepository
                         UserAttendance.TotalHours = UserAttendance.OutTime - UserAttendance.Intime;
                         UserAttendance.CreatedOn = DateTime.Today;
                         response.Code = (int)HttpStatusCode.OK;
-                        response.Message = "User OutTime Successfully Updated";
+                        response.Message = "User outTime successfully updated";
                         response.Icone = "success";
                         Context.TblAttendances.Update(UserAttendance);
                         Context.SaveChanges();
@@ -141,14 +141,14 @@ namespace EMPManegment.Repository.UserAttendanceRepository
                     else
                     {
                         response.Code = (int)HttpStatusCode.OK;
-                        response.Message = "Pleas Select Valid Date!!";
+                        response.Message = "Pleas select valid date!!";
                         response.Icone = "warning";
                     }
 
                 }
                 else
                 {
-                    response.Message = "Pleas Select Valid Date!!";
+                    response.Message = "Pleas select valid date!!";
                     response.Icone = "warning";
                 }
             }

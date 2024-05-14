@@ -137,7 +137,7 @@
                         </div>
                     </div>
                 </div>
-                <table id="attendanceTableData" class="table table-bordered dt-responsive nowrap table-striped align-middle dataTable dtr-inline">
+                <table id="attendanceTableData" class="table table-bordered dt-responsive table-striped align-middle dataTable no-footer dtr-inline">
                     <thead class="table-light text-muted text-center">
                         <tr class="text-uppercase">
                             <th class="sort" data-sort="UserName">UserName</th>
@@ -163,7 +163,21 @@
     </h4>
 </div>
 
+<script>
+    var today = new Date();
+    var month = today.getMonth() + 1;
+    var year = today.getFullYear();
 
+    if (month < 10) {
+        month = '0' + month;
+    }
+
+    var maxDate = today.toISOString().split('T')[0];
+
+    document.getElementById("txtstartdatebox").setAttribute("max", maxDate);
+    document.getElementById("txtenddatebox").setAttribute("max", maxDate);
+    document.getElementById("txtdate").setAttribute("max", maxDate);
+</script>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/moduls/userattendancescript.js"></script>
 <script src="~/moduls/taskscript.js" asp-append-version="true"></script>

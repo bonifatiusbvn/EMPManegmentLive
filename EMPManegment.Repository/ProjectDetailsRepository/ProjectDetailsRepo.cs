@@ -217,7 +217,7 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
                         Context.SaveChanges();
                         response.Code = 200;
                         response.Data = AddMember;
-                        response.Message = "Project Member Is Added Succesfully!";
+                        response.Message = "Project member is added succesfully!";
                     }
                 }
                 else
@@ -427,7 +427,7 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
                     Context.SaveChanges();
                     response.Code = 200;
                     response.Data = GetUserdata;
-                    response.Message = "Project Member Is Deactive Succesfully";
+                    response.Message = "Project member is deactive succesfully";
                 }
 
                 else
@@ -437,7 +437,7 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
                     Context.SaveChanges();
                     response.Code = 200;
                     response.Data = GetUserdata;
-                    response.Message = "Project Member Is Active Succesfully";
+                    response.Message = "Project member is active succesfully";
                 }
 
 
