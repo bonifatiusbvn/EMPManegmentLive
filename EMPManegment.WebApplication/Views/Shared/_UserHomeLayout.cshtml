@@ -30,10 +30,21 @@
     <link rel="stylesheet" href="~/lteassets/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="~/lteassets/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
     <link rel="stylesheet" href="~/lteassets/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+    <style>
+        .icon {
+            margin-right: 6px;
+        }
+
+        .text {
+            display: inline;
+            margin: 0;
+        }
+
+    </style>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed accent-info">
     <div class="wrapper">
-
+        
 
         <!-- Navbar -->
         <nav class="main-header navbar navbar-expand navbar-white navbar-light navbar-auto" style="height:60px;">
@@ -109,8 +120,8 @@
                                 {
                                     <li class="nav-item">
                                         <a asp-action="@item.Action" asp-controller="@item.Controller" class="nav-link active">
-                                            <i class="nav-icon fas fa-tachometer-alt"></i>
-                                            <p>
+                                            <i class="nav-icon fas fa-tachometer-alt icon"></i>
+                                            <p class="text">
                                                 Dashboard
                                                 <i class="right fas fa-angle-left"></i>
                                             </p>
@@ -122,12 +133,13 @@
                             {
                                 <li class="nav-item">
                                     <a href="#" class="nav-link">
-                                        <i class="nav-icon fas fa-copy"></i>
-                                        <p>
+                                        <i class="fa-regular fa-file-lines icon"></i>
+                                        <p class="text">
                                             Projects
                                             <i class="right fas fa-angle-left"></i>
                                         </p>
                                     </a>
+
                                     <ul class="nav nav-treeview">
                                         @foreach (var item in UserSession.FormPermisionData.Where(e => e.GroupName == group && e.isActive == true))
                                         {
@@ -149,8 +161,8 @@
                             {
                                 <li class="nav-item">
                                     <a href="#" class="nav-link">
-                                        <i class="nav-icon fas fa-copy"></i>
-                                        <p>
+                                        <i class="fa-solid fa-cart-shopping icon"></i>
+                                        <p class="text">
                                             Product Master
                                             <i class="right fas fa-angle-left"></i>
                                         </p>
@@ -176,8 +188,8 @@
                             {
                                 <li class="nav-item">
                                     <a href="#" class="nav-link">
-                                        <i class="nav-icon fas fa-copy"></i>
-                                        <p>
+                                        <i class="fa-solid fa-bag-shopping icon"></i>
+                                        <p class="text">
                                             Purchase Request
                                             <i class="right fas fa-angle-left"></i>
                                         </p>
@@ -202,8 +214,8 @@
                             {
                                 <li class="nav-item">
                                     <a href="#" class="nav-link">
-                                        <i class="nav-icon fas fa-copy"></i>
-                                        <p>
+                                        <i class="fa-regular fa-clipboard icon"></i>
+                                        <p class="text">
                                             Purchase Order
                                             <i class="right fas fa-angle-left"></i>
                                         </p>
@@ -228,8 +240,8 @@
                             {
                                 <li class="nav-item">
                                     <a href="#" class="nav-link">
-                                        <i class="nav-icon fas fa-copy"></i>
-                                        <p>
+                                        <i class="fa-solid fa-newspaper icon"></i>
+                                        <p class="text">
                                             Invoices
                                             <i class="right fas fa-angle-left"></i>
                                         </p>
@@ -256,8 +268,8 @@
 
                                 <li class="nav-item">
                                     <a href="#" class="nav-link">
-                                        <i class="nav-icon fas fa-copy"></i>
-                                        <p>
+                                        <i class="fas fa-tasks icon"></i>
+                                        <p class="text">
                                             Tasks
                                             <i class="right fas fa-angle-left"></i>
                                         </p>
@@ -283,8 +295,8 @@
                             {
                                 <li class="nav-item">
                                     <a href="#" class="nav-link">
-                                        <i class="nav-icon fas fa-copy"></i>
-                                        <p>
+                                        <i class="fa-solid fa-coins icon"></i>
+                                        <p class="text">
                                             Expense
                                             <i class="right fas fa-angle-left"></i>
                                         </p>
@@ -309,8 +321,8 @@
                             {
                                 <li class="nav-item">
                                     <a href="#" class="nav-link">
-                                        <i class="nav-icon fas fa-copy"></i>
-                                        <p>
+                                        <i class="fa-solid fa-truck icon"></i>
+                                        <p class="text">
                                             Vendor
                                             <i class="right fas fa-angle-left"></i>
                                         </p>
@@ -337,8 +349,8 @@
                             {
                                 <li class="nav-item">
                                     <a href="#" class="nav-link">
-                                        <i class="nav-icon fas fa-copy"></i>
-                                        <p>
+                                        <i class="fa-regular fa-credit-card icon"></i>
+                                        <p class="text">
                                             Payment Transaction
                                             <i class="right fas fa-angle-left"></i>
                                         </p>
@@ -364,8 +376,8 @@
 
                                 <li class="nav-item">
                                     <a href="#" class="nav-link">
-                                        <i class="nav-icon fas fa-copy"></i>
-                                        <p>
+                                        <i class="fa-solid fa-key icon"></i>
+                                        <p class="text">
                                             Authentication
                                             <i class="right fas fa-angle-left"></i>
                                         </p>
@@ -393,8 +405,8 @@
                             {
                                 <li class="nav-item">
                                     <a href="#" class="nav-link">
-                                        <i class="nav-icon fas fa-copy"></i>
-                                        <p>
+                                        <i class="fa-solid fa-user icon"></i>
+                                        <p class="text">
                                             User
                                             <i class="right fas fa-angle-left"></i>
                                         </p>
@@ -420,8 +432,8 @@
                             {
                                 <li class="nav-item">
                                     <a href="#" class="nav-link">
-                                        <i class="nav-icon fas fa-copy"></i>
-                                        <p>
+                                        <i class="fa-solid fa-clipboard-user icon"></i>
+                                        <p class="text">
                                             Attendance
                                             <i class="right fas fa-angle-left"></i>
                                         </p>
