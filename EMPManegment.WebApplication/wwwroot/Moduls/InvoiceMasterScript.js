@@ -407,13 +407,13 @@ function GetAllVendorData() {
         },
         columns: [
             {
+                "data": "vendorCompany", "name": "VendorCompany",
                 "render": function (data, type, full) {
 
                     return '<h5 class="fs-15"><a href="/Invoice/VendorInvoiceListView/?Vid=' + full.vid + '" class="fw-medium link-primary">' + full.vendorCompany; '</a></h5>';
                 }
             },
             {
-                "data": null,
                 "name": "VendorFullName",
                 "render": function (data, type, full, meta) {
                     return full.vendorFirstName + ' ' + full.vendorLastName;
@@ -606,6 +606,7 @@ function AllInvoiceList() {
         },
         columns: [
             {
+                "data": "invoiceNo", "name": "InvoiceNo",
                 "render": function (data, type, full) {
                     return '<h5 class="fs-15"><a href="/Invoice/DisplayInvoiceDetails?InvoiceId=' + full.id + '" class="fw-medium link-primary">' + full.invoiceNo; '</a></h5>';
                 }
@@ -616,10 +617,6 @@ function AllInvoiceList() {
             },
             {
                 "data": "projectName", "name": "ProjectName",
-                "className": "text-center"
-            },
-            {
-                "data": "orderId", "name": "OrderId",
                 "className": "text-center"
             },
             {

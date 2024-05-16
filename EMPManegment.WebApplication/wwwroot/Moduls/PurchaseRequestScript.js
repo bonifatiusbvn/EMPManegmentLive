@@ -130,6 +130,7 @@ function GetPRData() {
         columns: [
             { "data": "prNo", "name": "PRNo" },
             {
+                "data": "userName", "name": "UserName",
                 "render": function (data, type, full) {
                     return full.fullName + ' ( ' + full.userName + ')';
                 },
@@ -141,7 +142,7 @@ function GetPRData() {
             { "data": "isApproved", "name": "IsApproved" },
             {
                 "render": function (data, type, full) {
-                    return '<div class="flex-shrink-0 ms-4"><ul class="list-inline tasks-list-menu mb-0"><li class="list-inline-item"><a onclick="PRDetails(\'' + full.prId + '\')"><i class="fa-solid fa-eye""></i></a><li class="list-inline-item"><a onclick="EditPurchaseRequestDetails(\'' + full.prId + '\')"><i class="fas fa-edit"></i></a></li></ul></div>';
+                    return '<div class="flex-shrink-0 ms-4"><ul class="list-inline tasks-list-menu mb-0"><li class="list-inline-item"><a onclick="PRDetails(\'' + full.prId + '\')" style="margin-left:-20px;"><i class="fa-solid fa-eye""></i></a><li class="list-inline-item"><a onclick="EditPurchaseRequestDetails(\'' + full.prId + '\')"><i class="fas fa-edit"></i></a></li></ul></div>';
                 }
             },
         ],

@@ -48,8 +48,7 @@
                         </div>
                         <div class="col-sm-auto">
                             <div class="d-flex gap-1 flex-wrap">
-                                <a class="btn btn-warning add-btn" id="create-btn" asp-action="CreatePurchaseOrderView" asp-controller="PurchaseOrderMaster"><i class="ri-add-line align-bottom me-1"></i> Create PO</a>
-                                <button type="button" class="btn btn-info"><i class="ri-file-download-line align-bottom me-1"></i> Import</button>
+                                <a class="btn btn-warning add-btn" id="create-btn" asp-action="CreatePurchaseOrderView" asp-controller="PurchaseOrderMaster"><i class="ri-add-line align-bottom me-1"></i>Purchase Order</a>
                                 <button class="btn btn-soft-danger" id="remove-actions" onClick="deleteMultiple()"><i class="ri-delete-bin-2-line"></i></button>
                             </div>
                         </div>
@@ -182,14 +181,14 @@
                                     <div class="tab-pane fade show active" id="project-overview" role="tabpanel">
                                         <div class="tab-pane" id="status-all" role="tabpanel">
                                             <div class="table-responsive table-card mb-1">
-                                                <table class="table table-nowrap align-middle" id="orderTable">
+                                                <table class="table table-bordered dt-responsive nowrap table-striped align-middle dataTable no-footer dtr-inline" id="orderTable">
                                                     <thead class="text-muted table-light">
                                                         <tr class="text-uppercase">
-                                                            <th scope="col" style="width: 25px;">
+                                                           @*  <th scope="col" style="width: 25px;">
                                                                 <div class="form-check">
                                                                     <input class="form-check-input" type="checkbox" id="checkAll" value="option">
                                                                 </div>
-                                                            </th>
+                                                            </th> *@
                                                             <th class="sort" data-sort="id">Order ID</th>
                                                             <th class="sort" data-sort="company_name">Company</th>
                                                             <th class="sort" data-sort="product_name">Product</th>
@@ -204,11 +203,11 @@
                                                         @foreach (var item in Model)
                                                         {
                                                             <tr>
-                                                                <th scope="row">
+                                                                @* <th scope="row">
                                                                     <div class="form-check">
                                                                         <input class="form-check-input" type="checkbox" name="checkAll" value="option1">
                                                                     </div>
-                                                                </th>
+                                                                </th> *@
                                                                 <td class="id"><a href="/PurchaseOrderMaster/GetPurchaseOrderDetailsByOrderId/?OrderId=@item.OrderId" class="fw-medium link-primary">@item.OrderId</a></td>
                                                                 <td class="company_name">@item.CompanyName</td>
                                                                 <td class="product_name">@item.ProductName</td>
@@ -274,14 +273,14 @@
                                     <div class="tab-pane" id="status-delivered" role="tabpanel">
                                         <div class="tab-pane" id="status-all" role="tabpanel">
                                             <div class="table-responsive table-card mb-1">
-                                                <table class="table table-nowrap align-middle" id="orderTable">
+                                                <table class="table table-bordered dt-responsive nowrap table-striped align-middle dataTable no-footer dtr-inline" id="orderTable">
                                                     <thead class="text-muted table-light">
                                                         <tr class="text-uppercase">
-                                                            <th scope="col" style="width: 25px;">
+                                                            @* <th scope="col" style="width: 25px;">
                                                                 <div class="form-check">
                                                                     <input class="form-check-input" type="checkbox" id="checkAll" value="option">
                                                                 </div>
-                                                            </th>
+                                                            </th> *@
                                                             <th class="sort" data-sort="id">Order ID</th>
                                                             <th class="sort" data-sort="company_name">Company</th>
                                                             <th class="sort" data-sort="product_name">Product</th>
@@ -298,11 +297,11 @@
                                                             if (item.DeliveryStatus == "Delivered")
                                                             {
                                                                 <tr>
-                                                                    <th scope="row">
+                                                                    @* <th scope="row">
                                                                         <div class="form-check">
                                                                             <input class="form-check-input" type="checkbox" name="checkAll" value="option1">
                                                                         </div>
-                                                                    </th>
+                                                                    </th> *@
                                                                     <td class="id"><a href="/OrderMaster/GetPurchaseOrderDetailsByOrderId/?OrderId=@item.OrderId" class="fw-medium link-primary">@item.OrderId</a></td>
                                                                     <td class="company_name">@item.CompanyName</td>
                                                                     <td class="product_name">@item.ProductName</td>
@@ -366,14 +365,14 @@
                                     <div class="tab-pane" id="status-pickups" role="tabpanel">
                                         <div class="tab-pane" id="status-all" role="tabpanel">
                                             <div class="table-responsive table-card mb-1">
-                                                <table class="table table-nowrap align-middle" id="orderTable">
+                                                <table class="table table-bordered dt-responsive nowrap table-striped align-middle dataTable no-footer dtr-inline" id="orderTable">
                                                     <thead class="text-muted table-light">
                                                         <tr class="text-uppercase">
-                                                            <th scope="col" style="width: 25px;">
+                                                           @*  <th scope="col" style="width: 25px;">
                                                                 <div class="form-check">
                                                                     <input class="form-check-input" type="checkbox" id="checkAll" value="option">
                                                                 </div>
-                                                            </th>
+                                                            </th> *@
                                                             <th class="sort" data-sort="id">Order ID</th>
                                                             <th class="sort" data-sort="company_name">Company</th>
                                                             <th class="sort" data-sort="product_name">Product</th>
@@ -390,11 +389,11 @@
                                                             if (item.DeliveryStatus == "Pickups")
                                                             {
                                                                 <tr>
-                                                                    <th scope="row">
+                                                                    @* <th scope="row">
                                                                         <div class="form-check">
                                                                             <input class="form-check-input" type="checkbox" name="checkAll" value="option1">
                                                                         </div>
-                                                                    </th>
+                                                                    </th> *@
                                                                     <td class="id"><a href="/OrderMaster/GetPurchaseOrderDetailsByOrderId/?OrderId=@item.OrderId" class="fw-medium link-primary">@item.OrderId</a></td>
                                                                     <td class="company_name">@item.CompanyName</td>
                                                                     <td class="product_name">@item.ProductName</td>
@@ -459,14 +458,14 @@
                                     <div class="tab-pane" id="status-returns" role="tabpanel">
                                         <div class="tab-pane" id="status-all" role="tabpanel">
                                             <div class="table-responsive table-card mb-1">
-                                                <table class="table table-nowrap align-middle" id="orderTable">
+                                                <table class="table table-bordered dt-responsive nowrap table-striped align-middle dataTable no-footer dtr-inline" id="orderTable">
                                                     <thead class="text-muted table-light">
                                                         <tr class="text-uppercase">
-                                                            <th scope="col" style="width: 25px;">
+                                                            @* <th scope="col" style="width: 25px;">
                                                                 <div class="form-check">
                                                                     <input class="form-check-input" type="checkbox" id="checkAll" value="option">
                                                                 </div>
-                                                            </th>
+                                                            </th> *@
                                                             <th class="sort" data-sort="id">Order ID</th>
                                                             <th class="sort" data-sort="company_name">Company</th>
                                                             <th class="sort" data-sort="product_name">Product</th>
@@ -483,11 +482,11 @@
                                                             if (item.DeliveryStatus == "Returns")
                                                             {
                                                                 <tr>
-                                                                    <th scope="row">
+                                                                    @* <th scope="row">
                                                                         <div class="form-check">
                                                                             <input class="form-check-input" type="checkbox" name="checkAll" value="option1">
                                                                         </div>
-                                                                    </th>
+                                                                    </th> *@
                                                                     <td class="id"><a href="/OrderMaster/GetPurchaseOrderDetailsByOrderId/?OrderId=@item.OrderId" class="fw-medium link-primary">@item.OrderId</a></td>
                                                                     <td class="company_name">@item.CompanyName</td>
                                                                     <td class="product_name">@item.ProductName</td>
@@ -552,14 +551,14 @@
                                     <div class="tab-pane" id="status-cancelled" role="tabpanel">
                                         <div class="tab-pane" id="status-all" role="tabpanel">
                                             <div class="table-responsive table-card mb-1">
-                                                <table class="table table-nowrap align-middle" id="orderTable">
+                                                <table class="table table-bordered dt-responsive nowrap table-striped align-middle dataTable no-footer dtr-inline" id="orderTable">
                                                     <thead class="text-muted table-light">
                                                         <tr class="text-uppercase">
-                                                            <th scope="col" style="width: 25px;">
+                                                            @* <th scope="col" style="width: 25px;">
                                                                 <div class="form-check">
                                                                     <input class="form-check-input" type="checkbox" id="checkAll" value="option">
                                                                 </div>
-                                                            </th>
+                                                            </th> *@
                                                             <th class="sort" data-sort="id">Order ID</th>
                                                             <th class="sort" data-sort="company_name">Company</th>
                                                             <th class="sort" data-sort="product_name">Product</th>
@@ -576,11 +575,11 @@
                                                             if (item.DeliveryStatus == "Cancelled")
                                                             {
                                                                 <tr>
-                                                                    <th scope="row">
+                                                                   @*  <th scope="row">
                                                                         <div class="form-check">
                                                                             <input class="form-check-input" type="checkbox" name="checkAll" value="option1">
                                                                         </div>
-                                                                    </th>
+                                                                    </th> *@
                                                                     <td class="id"><a href="/OrderMaster/GetPurchaseOrderDetailsByOrderId/?OrderId=@item.OrderId" class="fw-medium link-primary">@item.OrderId</a></td>
                                                                     <td class="company_name">@item.CompanyName</td>
                                                                     <td class="product_name">@item.ProductName</td>
@@ -645,14 +644,14 @@
                                     <div class="tab-pane" id="status-pending" role="tabpanel">
                                         <div class="tab-pane" id="status-all" role="tabpanel">
                                             <div class="table-responsive table-card mb-1">
-                                                <table class="table table-nowrap align-middle" id="orderTable">
+                                                <table class="table table-bordered dt-responsive nowrap table-striped align-middle dataTable no-footer dtr-inline" id="orderTable">
                                                     <thead class="text-muted table-light">
                                                         <tr class="text-uppercase">
-                                                            <th scope="col" style="width: 25px;">
+                                                            @* <th scope="col" style="width: 25px;">
                                                                 <div class="form-check">
                                                                     <input class="form-check-input" type="checkbox" id="checkAll" value="option">
                                                                 </div>
-                                                            </th>
+                                                            </th> *@
                                                             <th class="sort" data-sort="id">Order ID</th>
                                                             <th class="sort" data-sort="company_name">Company</th>
                                                             <th class="sort" data-sort="product_name">Product</th>
@@ -669,11 +668,11 @@
                                                             if (item.DeliveryStatus == "Pending")
                                                             {
                                                                 <tr>
-                                                                    <th scope="row">
+                                                                   @*  <th scope="row">
                                                                         <div class="form-check">
                                                                             <input class="form-check-input" type="checkbox" name="checkAll" value="option1">
                                                                         </div>
-                                                                    </th>
+                                                                    </th> *@
                                                                     <td class="id"><a href="/OrderMaster/GetPurchaseOrderDetailsByOrderId/?OrderId=@item.OrderId" class="fw-medium link-primary">@item.OrderId</a></td>
                                                                     <td class="company_name">@item.CompanyName</td>
                                                                     <td class="product_name">@item.ProductName</td>
@@ -738,14 +737,14 @@
                                     <div class="tab-pane" id="status-inprogress" role="tabpanel">
                                         <div class="tab-pane" id="status-all" role="tabpanel">
                                             <div class="table-responsive table-card mb-1">
-                                                <table class="table table-nowrap align-middle" id="orderTable">
+                                                <table class="table table-bordered dt-responsive nowrap table-striped align-middle dataTable no-footer dtr-inline" id="orderTable">
                                                     <thead class="text-muted table-light">
                                                         <tr class="text-uppercase">
-                                                            <th scope="col" style="width: 25px;">
+                                                            @* <th scope="col" style="width: 25px;">
                                                                 <div class="form-check">
                                                                     <input class="form-check-input" type="checkbox" id="checkAll" value="option">
                                                                 </div>
-                                                            </th>
+                                                            </th> *@
                                                             <th class="sort" data-sort="id">Order ID</th>
                                                             <th class="sort" data-sort="company_name">Company</th>
                                                             <th class="sort" data-sort="product_name">Product</th>
@@ -762,11 +761,11 @@
                                                             if (item.DeliveryStatus == "Inprogress")
                                                             {
                                                                 <tr>
-                                                                    <th scope="row">
+                                                                    @* <th scope="row">
                                                                         <div class="form-check">
                                                                             <input class="form-check-input" type="checkbox" name="checkAll" value="option1">
                                                                         </div>
-                                                                    </th>
+                                                                    </th> *@
                                                                     <td class="id"><a href="/OrderMaster/GetPurchaseOrderDetailsByOrderId/?OrderId=@item.OrderId" class="fw-medium link-primary">@item.OrderId</a></td>
                                                                     <td class="company_name">@item.CompanyName</td>
                                                                     <td class="product_name">@item.ProductName</td>

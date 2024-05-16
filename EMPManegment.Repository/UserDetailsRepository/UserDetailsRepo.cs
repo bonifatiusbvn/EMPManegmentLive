@@ -72,7 +72,7 @@ namespace EMPManegment.Repository.UserListRepository
 
             if (!string.IsNullOrEmpty(dataTable.searchValue))
             {
-                GetUsersList = GetUsersList.Where(e=>e.UserName.Contains(dataTable.searchValue) || e.DepartmentName.Contains(dataTable.searchValue) || e.Gender.Contains(dataTable.searchValue));
+                GetUsersList = GetUsersList.Where(e=>e.UserName.Contains(dataTable.searchValue) || e.DepartmentName.Contains(dataTable.searchValue) || e.Gender.Contains(dataTable.searchValue) || e.Email.Contains(dataTable.searchValue));
             }
 
             int totalRecord = GetUsersList.Count();

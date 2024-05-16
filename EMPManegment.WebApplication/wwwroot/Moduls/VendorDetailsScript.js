@@ -24,7 +24,7 @@ function GetAllVendorData() {
             { "data": "vendorCompanyEmail", "name": "VendorCompanyEmail" },
             {
                 "render": function (data, type, full) {
-                    return '<div class="flex-shrink-0 ms-4"><ul class="list-inline tasks-list-menu mb-0"><li class="list-inline-item"><a onclick="VendorDetails(\'' + full.vid + '\')"><i class="fa-solid fa-eye""></i></a><li class="list-inline-item"><a onclick="EditVendorDetails(\'' + full.vid + '\')"><i class="fas fa-edit"></i></a></li></ul></div>';
+                    return '<div class="flex-shrink-0 ms-4"><ul class="list-inline tasks-list-menu mb-0"><li class="list-inline-item"><a onclick="VendorDetails(\'' + full.vid + '\')" style=" margin-left: -22px;"><i class="fa-solid fa-eye""></i></a><li class="list-inline-item"><a onclick="EditVendorDetails(\'' + full.vid + '\')"><i class="fas fa-edit"></i></a></li></ul></div>';
                 }
             },
         ],

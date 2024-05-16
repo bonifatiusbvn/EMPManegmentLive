@@ -257,7 +257,7 @@ namespace EMPManegment.Repository.PurchaseRequestRepository
             }
             if (!string.IsNullOrEmpty(PRdataTable.searchValue))
             {
-                purchaseRequestList = purchaseRequestList.Where(e => e.ProjectName.Contains(PRdataTable.searchValue) || e.PrNo.Contains(PRdataTable.searchValue) || e.ProductName.Contains(PRdataTable.searchValue));
+                purchaseRequestList = purchaseRequestList.Where(e => e.ProjectName.Contains(PRdataTable.searchValue) || e.PrNo.Contains(PRdataTable.searchValue) || e.ProductName.Contains(PRdataTable.searchValue) || e.FullName.Contains(PRdataTable.searchValue));
             }
             int totalRecord = purchaseRequestList.Count();
             var cData = purchaseRequestList.Skip(PRdataTable.skip).Take(PRdataTable.pageSize).ToList();

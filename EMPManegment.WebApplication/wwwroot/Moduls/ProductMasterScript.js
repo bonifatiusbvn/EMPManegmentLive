@@ -391,6 +391,31 @@ $(document).on("click", ".pagination a", function (e) {
 });
 
 function clearProductImage() {
-    document.getElementById('txtproductimage').value = '';
-    document.getElementById('imgPreview').src = "/assets/images/no-preview.png";
+    var inputFile = document.getElementById('txtproductimage');
+    var previewImage = document.getElementById('imgPreview');
+    var clearButton = document.querySelector('.btn-danger');
+
+    inputFile.value = '';
+    previewImage.src = "/assets/images/no-preview.png";
+
+    clearButton.style.display = 'none';
 }
+
+document.getElementById('txtproductimage').addEventListener('change', function () {
+    var clearButton = document.querySelector('.btn-danger');
+    if (this.files && this.files[0]) {
+        var previewImage = document.getElementById('imgPreview');
+        var reader = new FileReader();
+
+        reader.onload = function (e) {
+            previewImage.src = e.target.result;
+        }
+
+        reader.readAsDataURL(this.files[0]);
+
+        clearButton.style.display = 'block';
+    } else {
+        clearButton.style.display = 'none';
+    }
+});
+
