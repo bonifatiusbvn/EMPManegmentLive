@@ -15,10 +15,11 @@ namespace EMPManegment.Inretface.EmployeesInterface.AddEmployee
     public interface IAuthentication
     {
         string CheckEmloyess();
-        Task <UserResponceModel> UserSingUp(EmpDetailsView AddEmployee);
+        Task<UserResponceModel> UserSingUp(EmpDetailsView AddEmployee);
         Task<LoginResponseModel> LoginUser(LoginRequest LoginUserRequest);
         public bool GetUserName(string Username);
-        Task<bool> EmailSendAsync(string Email,string Subject, string Message);
+        Task<bool> EmailSendAsync(string Email, string Subject, string Message);
         Task<UserResponceModel> FindByEmailAsync(SendEmailModel Email);
+
     }
 }
