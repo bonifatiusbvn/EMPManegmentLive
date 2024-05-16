@@ -16,8 +16,8 @@ namespace EMPManegment.EntityModels.ViewModels
         public string LastName { get; set; }
 
         public string ProfileImage { get; set; }
-        public string UserName { get; set;}
-        public string Password { get; set;}
+        public string UserName { get; set; }
+        public string Password { get; set; }
 
         public DateTime LastLoginDate { get; set; }
 
@@ -25,6 +25,8 @@ namespace EMPManegment.EntityModels.ViewModels
         public string Role { get; set; }
 
         public Guid RoleId { get; set; }
+        public string? Token { get; set; }
+
         public List<FromPermission> FromPermissionData { get; set; }
     }
     public class LoginResponseModel

@@ -129,7 +129,7 @@
                                     </li>
                                 }
                             }
-                            @if (group == "Projects" && UserSession.FormPermisionData.Count(e => e.GroupName == group) > 0)
+                            @if (group == "Projects" && UserSession.FormPermisionData.Count(e => e.GroupName == group) > 0 && UserSession.FormPermisionData.Any(e => e.GroupName == group && e.isViewAllow == true))
                             {
                                 <li class="nav-item">
                                     <a href="#" class="nav-link">
@@ -157,7 +157,7 @@
                                     </ul>
                                 </li>
                             }
-                            @if (group == "Product Master" && UserSession.FormPermisionData.Count(e => e.GroupName == group) > 0)
+                            @if (group == "Product Master" && UserSession.FormPermisionData.Count(e => e.GroupName == group) > 0 && UserSession.FormPermisionData.Any(e => e.GroupName == group && e.isViewAllow == true))
                             {
                                 <li class="nav-item">
                                     <a href="#" class="nav-link">
@@ -184,7 +184,7 @@
                                     </ul>
                                 </li>
                             }
-                            @if (group == "Purchase Request" && UserSession.FormPermisionData.Count(e => e.GroupName == group) > 0)
+                            @if (group == "Purchase Request" && UserSession.FormPermisionData.Count(e => e.GroupName == group) > 0 && UserSession.FormPermisionData.Any(e => e.GroupName == group && e.isViewAllow == true))
                             {
                                 <li class="nav-item">
                                     <a href="#" class="nav-link">
@@ -210,7 +210,7 @@
                                     </ul>
                                 </li>
                             }
-                            @if (group == "Purchase Order" && UserSession.FormPermisionData.Count(e => e.GroupName == group) > 0)
+                            @if (group == "Purchase Order" && UserSession.FormPermisionData.Count(e => e.GroupName == group) > 0 && UserSession.FormPermisionData.Any(e => e.GroupName == group && e.isViewAllow == true))
                             {
                                 <li class="nav-item">
                                     <a href="#" class="nav-link">
@@ -236,7 +236,7 @@
                                     </ul>
                                 </li>
                             }
-                            @if (group == "Invoices" && UserSession.FormPermisionData.Count(e => e.GroupName == group) > 0)
+                            @if (group == "Invoices" && UserSession.FormPermisionData.Count(e => e.GroupName == group) > 0 && UserSession.FormPermisionData.Any(e => e.GroupName == group && e.isViewAllow == true))
                             {
                                 <li class="nav-item">
                                     <a href="#" class="nav-link">
@@ -263,7 +263,7 @@
                                     </ul>
                                 </li>
                             }
-                            @if (group == "Tasks" && UserSession.FormPermisionData.Count(e => e.GroupName == group) > 0)
+                            @if (group == "Tasks" && UserSession.FormPermisionData.Count(e => e.GroupName == group) > 0 && UserSession.FormPermisionData.Any(e => e.GroupName == group && e.isViewAllow == true))
                             {
 
                                 <li class="nav-item">
@@ -291,7 +291,7 @@
                                     </ul>
                                 </li>
                             }
-                            @if (group == "Expense" && UserSession.FormPermisionData.Count(e => e.GroupName == group) > 0)
+                            @if (group == "Expense" && UserSession.FormPermisionData.Count(e => e.GroupName == group) > 0 && UserSession.FormPermisionData.Any(e => e.GroupName == group && e.isViewAllow == true))
                             {
                                 <li class="nav-item">
                                     <a href="#" class="nav-link">
@@ -317,7 +317,7 @@
                                     </ul>
                                 </li>
                             }
-                            @if (group == "Vendor" && UserSession.FormPermisionData.Count(e => e.GroupName == group) > 0)
+                            @if (group == "Vendor" && UserSession.FormPermisionData.Count(e => e.GroupName == group) > 0 && UserSession.FormPermisionData.Any(e => e.GroupName == group && e.isViewAllow == true))
                             {
                                 <li class="nav-item">
                                     <a href="#" class="nav-link">
@@ -345,7 +345,7 @@
                                     </ul>
                                 </li>
                             }
-                            @if (group == "Payment Transaction" && UserSession.FormPermisionData.Count(e => e.GroupName == group) > 0)
+                            @if (group == "Payment Transaction" && UserSession.FormPermisionData.Count(e => e.GroupName == group) > 0 && UserSession.FormPermisionData.Any(e => e.GroupName == group && e.isViewAllow == true))
                             {
                                 <li class="nav-item">
                                     <a href="#" class="nav-link">
@@ -371,7 +371,7 @@
                                     </ul>
                                 </li>
                             }
-                            @if (group == "Authentication" && UserSession.FormPermisionData.Count(e => e.GroupName == group) > 0)
+                            @if (group == "Authentication" && UserSession.FormPermisionData.Count(e => e.GroupName == group) > 0 && UserSession.FormPermisionData.Any(e => e.GroupName == group && e.isViewAllow == true))
                             {
 
                                 <li class="nav-item">
@@ -401,7 +401,7 @@
                                     </ul>
                                 </li>
                             }
-                            @if (group == "User" && UserSession.FormPermisionData.Count(e => e.GroupName == group) > 0)
+                            @if (group == "User" && UserSession.FormPermisionData.Count(e => e.GroupName == group) > 0 && UserSession.FormPermisionData.Any(e => e.GroupName == group && e.isViewAllow == true))
                             {
                                 <li class="nav-item">
                                     <a href="#" class="nav-link">
@@ -428,7 +428,7 @@
                                     </ul>
                                 </li>
                             }
-                            @if (group == "Attendance" && UserSession.FormPermisionData.Count(e => e.GroupName == group) > 0)
+                            @if (group == "Attendance" && UserSession.FormPermisionData.Count(e => e.GroupName == group) > 0 && UserSession.FormPermisionData.Any(e => e.GroupName == group && e.isViewAllow == true))
                             {
                                 <li class="nav-item">
                                     <a href="#" class="nav-link">

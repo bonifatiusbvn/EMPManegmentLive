@@ -1,5 +1,6 @@
 ﻿
 using EMPManegment.EntityModels.ViewModels;
+using EMPManegment.Inretface.EmployeesInterface.AddEmployee;
 using EMPManegment.Inretface.Interface.UsersLogin;
 using EMPManegment.Inretface.Services.UserLoginServices;
 using System;
@@ -22,6 +23,15 @@ namespace EMPManegment.Services.UserLogin
         public async Task<LoginResponseModel> LoginUser(LoginRequest LoginUser)
         {
             return await UserLogin.LoginUser(LoginUser);
+        }
+        public async Task<string> AuthenticateUser(LoginRequest login)
+        {
+            return await UserLogin.AuthenticateUser(login);
+        }
+
+        public string GenerateToken(LoginRequest model)
+        {
+            return UserLogin.GenerateToken(model);
         }
     }
 }

@@ -11,5 +11,7 @@ namespace EMPManegment.Inretface.Services.UserLoginServices
     public interface IUserLoginServices
     {
         Task<LoginResponseModel> LoginUser(LoginRequest loginUser);
+        Task<string> AuthenticateUser(LoginRequest login);
+        string GenerateToken(LoginRequest model);
     }
 }

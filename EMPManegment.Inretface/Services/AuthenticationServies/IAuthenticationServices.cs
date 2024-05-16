@@ -20,5 +20,6 @@ namespace EMPManegment.Inretface.Services.AddEmployeeServies
         Task<LoginResponseModel> LoginUser(LoginRequest loginUser);
         Task<bool> EmailSendAsync(string Email, string Subject, string Message);
         Task<UserResponceModel> FindByEmailAsync(SendEmailModel Email);
+
     }
 }
