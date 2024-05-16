@@ -6,15 +6,19 @@ using EMPManegment.EntityModels.View_Model;
 using EMPManegment.EntityModels.ViewModels;
 using EMPManegment.EntityModels.ViewModels.ForgetPasswordModels;
 using EMPManegment.EntityModels.ViewModels.Models;
+using EMPManegment.EntityModels.ViewModels.UserModels;
 using EMPManegment.Inretface.EmployeesInterface.AddEmployee;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
+using System.Security.Claims;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -87,56 +91,110 @@ namespace EMPManegment.Repository.AddEmpRepository
             return response;
         }
 
+        public string GenerateToken(LoginRequest model)
+        {
+            var claims = new List<Claim>();
+            claims.Add(new Claim(JwtRegisteredClaimNames.Sub, model.UserName));
+            claims.Add(new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()));
+            claims.Add(new Claim("UserName", model.UserName));
+            claims.Add(new Claim("Password", model.Password));
+
+            var securitykey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]));
+            var credentials = new SigningCredentials(securitykey, SecurityAlgorithms.HmacSha256);
+            var token = new JwtSecurityToken(Configuration["Jwt:Issuer"], Configuration["Jwt:Audience"], claims: claims.ToArray(),
+                expires: DateTime.Now.AddMinutes(30), signingCredentials: credentials);
+            return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
         public async Task<LoginResponseModel> LoginUser(LoginRequest Loginrequest)
         {
             LoginResponseModel response = new LoginResponseModel();
             try
             {
-                var tblUser = Context.TblUsers.Where(p => p.UserName == Loginrequest.UserName).SingleOrDefault();
+                var tblUser = await (from a in Context.TblUsers
+                                     where a.UserName == Loginrequest.UserName
+                                     join b in Context.TblRoleMasters on a.RoleId equals b.RoleId into roles
+                                     from role in roles.DefaultIfEmpty()
+                                     select new { User = a, Role = role }).FirstOrDefaultAsync();
+
                 if (tblUser != null)
                 {
-                    if (tblUser.IsActive == true)
+                    if (tblUser.User.IsActive == true)
                     {
-                        if (tblUser.UserName == Loginrequest.UserName && Crypto.VarifyHash(Loginrequest.Password, tblUser.PasswordHash, tblUser.PasswordSalt))
+                        LoginRequest user = new LoginRequest()
                         {
+                            UserName = tblUser.User.UserName,
+                            Password = Loginrequest.Password,
+                        };
+                        var authToken = GenerateToken(user);
 
-                            LoginView userModel = new LoginView();
-                            userModel.UserName = tblUser.UserName;
-                            userModel.Id = tblUser.Id;
-                            userModel.FullName = tblUser.FirstName + " " + tblUser.LastName;
-                            userModel.FirstName = tblUser.FirstName;
-                            userModel.ProfileImage = tblUser.Image;
-                            //userModel.Role = tblUser.Role;
+
+                        if (Crypto.VarifyHash(Loginrequest.Password, tblUser.User.PasswordHash, tblUser.User.PasswordSalt))
+                        {
+                            LoginView userModel = new LoginView
+                            {
+                                UserName = tblUser.User.UserName,
+                                Id = tblUser.User.Id,
+                                FullName = $"{tblUser.User.FirstName} {tblUser.User.LastName}",
+                                FirstName = tblUser.User.FirstName,
+                                ProfileImage = tblUser.User.Image,
+                                Role = tblUser.Role.Role,
+                                RoleId = tblUser.Role.RoleId,
+                                Token = authToken,
+                            };
+
                             response.Data = userModel;
                             response.Code = (int)HttpStatusCode.OK;
 
-                            tblUser.LastLoginDate = DateTime.Now;
-                            Context.TblUsers.Update(tblUser);
-                            Context.SaveChanges();
+
+                            List<FromPermission> FromPermissionData = (from u in Context.TblRolewiseFormPermissions
+                                                                       join s in Context.TblForms on u.FormId equals s.FormId
+                                                                       where u.RoleId == userModel.RoleId
+                                                                       orderby s.OrderId ascending
+                                                                       select new FromPermission
+                                                                       {
+                                                                           FormName = s.FormName,
+                                                                           GroupName = s.FormGroup,
+                                                                           Controller = s.Controller,
+                                                                           Action = s.Action,
+                                                                           Add = u.IsAddAllow,
+                                                                           View = u.IsViewAllow,
+                                                                           Edit = u.IsEditAllow,
+                                                                           Delete = u.IsDeleteAllow,
+                                                                           isActive = s.IsActive,
+                                                                           isViewAllow = u.IsViewAllow,
+                                                                       }).ToList();
+
+
+                            userModel.FromPermissionData = FromPermissionData;
+
+                            tblUser.User.LastLoginDate = DateTime.Now;
+                            Context.TblUsers.Update(tblUser.User);
+                            await Context.SaveChangesAsync();
                         }
                         else
                         {
-                            response.Message = "Your password is wrong";
+                            response.Message = "Invalid credentials";
+                            response.Code = (int)HttpStatusCode.Unauthorized;
                         }
                     }
                     else
                     {
                         response.Code = (int)HttpStatusCode.Forbidden;
-                        response.Message = "Your deactive contact your admin";
-                        return response;
+                        response.Message = "Your account is deactivated.contact your administrator.";
                     }
                 }
                 else
                 {
-                    response.Message = "User not exist";
+                    response.Message = "User not found";
                     response.Code = (int)HttpStatusCode.NotFound;
-                    response.Data = null;
                 }
             }
             catch (Exception ex)
             {
                 throw ex;
             }
+
             return response;
         }
         public string CheckEmloyess()
@@ -261,5 +319,6 @@ namespace EMPManegment.Repository.AddEmpRepository
                 throw ex;
             }
         }
+
     }   
 }

@@ -20,6 +20,6 @@ namespace EMPManegment.Inretface.EmployeesInterface.AddEmployee
         public bool GetUserName(string Username);
         Task<bool> EmailSendAsync(string Email, string Subject, string Message);
         Task<UserResponceModel> FindByEmailAsync(SendEmailModel Email);
-
+        string GenerateToken(LoginRequest model);
     }
 }

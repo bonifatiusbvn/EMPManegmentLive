@@ -57,6 +57,9 @@ namespace EMPManegment.Services.AddEmployee
             return await Authentication.FindByEmailAsync(Email);
         }
 
-
+        public string GenerateToken(LoginRequest model)
+        {
+            return Authentication.GenerateToken(model);
+        }
     }
 }

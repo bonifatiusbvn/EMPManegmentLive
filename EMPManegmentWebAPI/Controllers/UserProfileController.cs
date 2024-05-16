@@ -40,6 +40,7 @@ namespace EMPManagment.API.Controllers
 
         [HttpGet]
         [Route("GetAllUsersDetails")]
+        [Authorize]
         public async Task<IActionResult> GetAllUsersDetails()
         {
             var userList = await UserListServices.GetUsersDetails();

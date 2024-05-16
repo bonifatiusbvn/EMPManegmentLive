@@ -14,6 +14,7 @@
     <PackageReference Include="DotNetCorePdf" Version="1.0.3" />
     <PackageReference Include="HtmlToPdfConverter.Core" Version="2.0.0" />
     <PackageReference Include="LibWkHtmlToX-32" Version="0.12.6.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.17" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="7.0.12" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="RestSharp" Version="110.2.0" />
