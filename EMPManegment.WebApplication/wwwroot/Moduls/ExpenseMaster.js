@@ -11,7 +11,6 @@ $(document).ready(function () {
     GetExpenseTotalAmount();
     GetAllUserExpenseList();
     ApprovedExpenseList();
-    /*    GetPayUserExpenseList();*/
     UserExpensesDetails();
 });
 
@@ -129,7 +128,7 @@ function AddExpenseDetails() {
     }
     else {
         Swal.fire({
-            title: "Kindly Fill All Datafield",
+            title: "Kindly fill all datafield",
             icon: 'warning',
             confirmButtonColor: '#3085d6',
             confirmButtonText: 'OK',
@@ -169,7 +168,7 @@ function AddUserExpenseDetails() {
     }
     else {
         Swal.fire({
-            title: "Kindly Fill All Datafield",
+            title: "Kindly fill all datafield",
             icon: 'warning',
             confirmButtonColor: '#3085d6',
             confirmButtonText: 'OK',
@@ -249,7 +248,7 @@ function UpdateExpenseDetails() {
     }
     else {
         Swal.fire({
-            title: "Kindly Fill All Details",
+            title: "Kindly fill all details",
             icon: 'warning',
             confirmButtonColor: '#3085d6',
             confirmButtonText: 'OK',
@@ -294,7 +293,7 @@ function UpdateExpenseListDetails() {
     }
     else {
         Swal.fire({
-            title: "Kindly Fill All Details",
+            title: "Kindly fill all details",
             icon: 'warning',
             confirmButtonColor: '#3085d6',
             confirmButtonText: 'OK',
@@ -311,9 +310,9 @@ $(document).ready(function () {
             Edittotalamount: "required",
         },
         messages: {
-            EditDescription: "Please enter Description",
+            EditDescription: "Please enter description",
             Editbillno: "Please enter bill no",
-            Edittotalamount: "please enter Correct total amount",
+            Edittotalamount: "please enter correct total amount",
         }
     })
     $("#updatedetailbtn").on('click', function () {
@@ -388,7 +387,7 @@ function deleteExpense(Id) {
                 },
                 error: function () {
                     Swal.fire({
-                        title: "Can't Delete Expense!",
+                        title: "Can't delete expense!",
                         icon: 'warning',
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'OK',
@@ -401,7 +400,7 @@ function deleteExpense(Id) {
 
             Swal.fire(
                 'Cancelled',
-                'Expense Have No Changes.!!😊',
+                'Expense have no changes.!!😊',
                 'error'
             );
         }
@@ -410,7 +409,7 @@ function deleteExpense(Id) {
 
 function GetUserExpenseList() {
     $('#UserExpenseTable').DataTable({
-        processing: true,
+        processing: false,
         serverSide: true,
         filter: true,
         "bDestroy": true,
@@ -494,7 +493,7 @@ function GetUserExpenseList() {
 }
 function GetPayUserExpenseCreditList(userId) {
     $('#UserPayExpenseTableCredit').DataTable({
-        processing: true,
+        processing: false,
         serverSide: true,
         filter: true,
         "bDestroy": true,
@@ -564,7 +563,7 @@ function GetPayUserExpenseCreditList(userId) {
 
 function GetPayUserExpenseDebitList(userId) {
     $('#UserPayExpenseTableDebit').DataTable({
-        processing: true,
+        processing: false,
         serverSide: true,
         filter: true,
         "bDestroy": true,
@@ -645,7 +644,7 @@ $(document).ready(function () {
 });
 function UserExpensesDetails() {
     $('#UserListTable').DataTable({
-        processing: true,
+        processing: false,
         serverSide: true,
         filter: true,
         "bDestroy": true,
@@ -693,7 +692,7 @@ function UserExpensesDetails() {
 
 function GetAllUserExpenseList(userId) {
     $('#UserallExpenseTable').DataTable({
-        processing: true,
+        processing: false,
         serverSide: true,
         filter: true,
         "bDestroy": true,
@@ -748,7 +747,7 @@ function GetAllUserExpenseList(userId) {
 
 function GetUserUnApprovedExpenseList(UserId) {
     $('#UserallUnApprovedExpenseTable').DataTable({
-        processing: true,
+        processing: false,
         serverSide: true,
         filter: true,
         "bDestroy": true,
@@ -809,7 +808,7 @@ function GetUserUnApprovedExpenseList(UserId) {
 }
 function GetUserApprovedExpenseList(UserId) {
     $('#GetUserApprovedExpenseList').DataTable({
-        processing: true,
+        processing: false,
         serverSide: true,
         filter: true,
         "bDestroy": true,
@@ -917,7 +916,7 @@ $(document).ready(function () {
 
 function DisplayExpenseList() {
     $('#ExpenseTable').DataTable({
-        processing: true,
+        processing: false,
         serverSide: true,
         filter: true,
         "bDestroy": true,
@@ -1051,15 +1050,15 @@ function GetExpenseTotalAmount() {
     });
 }
 
-function ApproveExpense() {debugger
+function ApproveExpense() {
     var userId = $("#txtgetUserId").val();
     var userName = $('#txtgetUserName').val();
     Swal.fire({
-        title: "Are you sure want to Approve This?",
+        title: "Are you sure want to approve this?",
         text: "You won't be able to revert this!",
         icon: "warning",
         showCancelButton: true,
-        confirmButtonText: "Yes, Approve it!",
+        confirmButtonText: "Yes, approve it!",
         cancelButtonText: "No, cancel!",
         confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
         cancelButtonClass: "btn btn-danger w-xs mt-2",
@@ -1103,7 +1102,7 @@ function ApproveExpense() {debugger
 
             Swal.fire(
                 'Cancelled',
-                'You Have No Changes.!!😊',
+                'You have no changes.!!😊',
                 'error'
             );
         }
@@ -1113,7 +1112,7 @@ function ApproveExpense() {debugger
 function ApprovedExpenseList() {
     var UserId = $("#txtuserid").val();
     $('#GetUserApprovedExpenseList').DataTable({
-        processing: true,
+        processing: false,
         serverSide: true,
         filter: true,
         "bDestroy": true,
@@ -1228,7 +1227,7 @@ $(document).ready(function () {
 function UserDebitExpenseList(UserId) {
     var Account = "Debit";
     $('#UserallUnApprovedExpenseTable').DataTable({
-        processing: true,
+        processing: false,
         serverSide: true,
         filter: true,
         "bDestroy": true,
@@ -1262,7 +1261,7 @@ function UserDebitExpenseList(UserId) {
 function UserCreditExpenseList(UserId) {
     var Account = "Credit";
     $('#GetUserApprovedExpenseList').DataTable({
-        processing: true,
+        processing: false,
         serverSide: true,
         filter: true,
         "bDestroy": true,
@@ -1314,7 +1313,7 @@ $(document).ready(function () {
 function GetAllUserUnapproveExpenseList() {
     var IsApprove = false;
     $('#GetUserUnapprovedExpenseList').DataTable({
-        processing: true,
+        processing: false,
         serverSide: true,
         filter: true,
         "bDestroy": true,
@@ -1383,7 +1382,7 @@ function GetAllUserUnapproveExpenseList() {
 function GetAllUserApproveExpenseList() {
     var IsApprove = true;
     $('#GetAllUserApprovedExpenseList').DataTable({
-        processing: true,
+        processing: false,
         serverSide: true,
         filter: true,
         "bDestroy": true,
@@ -1437,7 +1436,7 @@ function GetAllUserApproveExpenseList() {
 function GetAllUserCreditExpenseList() {
     var Account = "Credit";
     $('#UserallCreditExpenseTable').DataTable({
-        processing: true,
+        processing: false,
         serverSide: true,
         filter: true,
         "bDestroy": true,

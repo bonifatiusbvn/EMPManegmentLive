@@ -43,7 +43,6 @@ function SerchItemDetailsById(Id) {
 
 var count = 0;
 function AddNewRow(Result) {
-    debugger
     var newProductRow = $(Result);
     var productId = newProductRow.data('product-id');
     var newProductId = newProductRow.attr('data-product-id');
@@ -119,7 +118,7 @@ function updateTotals() {
 
 function GetPRData() {
     $('#PRListTable').DataTable({
-        processing: true,
+        processing: false,
         serverSide: true,
         filter: true,
         "bDestroy": true,
@@ -177,7 +176,6 @@ function GetPurchaseRequestList() {
 function CreatePurchaseRequest() {
     var purchaseRequests = [];
     $(".products").each(function () {
-        debugger
         var orderRow = $(this);
         var objData = {
             UserId: orderRow.find("#txtuserId").val(),
@@ -207,7 +205,6 @@ function CreatePurchaseRequest() {
         contentType: false,
         processData: false,
         success: function (Result) {
-            debugger
             if (Result.code == 200) {
                 Swal.fire({
                     title: Result.message,
@@ -309,11 +306,11 @@ function UpdatePurchaseRequestDetails() {
 function DeletePurchaseRequestDetails(PrId) {
 
     Swal.fire({
-        title: "Are you sure want to Delete This?",
+        title: "Are you sure want to delete this?",
         text: "You won't be able to revert this!",
         icon: "warning",
         showCancelButton: true,
-        confirmButtonText: "Yes, Delete it!",
+        confirmButtonText: "Yes, delete it!",
         cancelButtonText: "No, cancel!",
         confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
         cancelButtonClass: "btn btn-danger w-xs mt-2",
@@ -338,7 +335,7 @@ function DeletePurchaseRequestDetails(PrId) {
                 },
                 error: function () {
                     Swal.fire({
-                        title: "Can't Delete Order!",
+                        title: "Can't delete order!",
                         icon: 'warning',
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'OK',
@@ -351,7 +348,7 @@ function DeletePurchaseRequestDetails(PrId) {
 
             Swal.fire(
                 'Cancelled',
-                'Order Have No Changes.!!😊',
+                'Order have no changes.!!😊',
                 'error'
             );
         }

@@ -48,7 +48,7 @@ $(document).ready(function () {
 
 function GetAllUserData() {
     $('#UserTableData').DataTable({
-        processing: true,
+        processing: false,
         serverSide: true,
         filter: true,
         "bDestroy": true,
@@ -202,11 +202,11 @@ function EnterOutTime() {
     if ($("#todayouttime").text() == "Pending") {
 
         Swal.fire({
-            title: "Are you sure want to Enter OUT-TIME..?",
+            title: "Are you sure want to enter out-time..?",
             text: "You won't be able to revert this!",
             icon: "warning",
             showCancelButton: true,
-            confirmButtonText: "Yes, Enter it!",
+            confirmButtonText: "Yes, enter it!",
             cancelButtonText: "No, cancel!",
             confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
             cancelButtonClass: "btn btn-danger w-xs mt-2",
@@ -240,7 +240,7 @@ function EnterOutTime() {
 
                 Swal.fire(
                     'Cancelled',
-                    'User Have No Changes.!!😊',
+                    'User have no changes.!!😊',
                     'error'
                 );
             }
@@ -414,7 +414,7 @@ function EditUserDetails(EmpId) {
 
 function UserLogout() {
     Swal.fire({
-        title: 'Logout Confirmation',
+        title: 'Logout confirmation',
         text: 'Are you sure you want to logout?',
         icon: 'warning',
         showCancelButton: true,
@@ -684,7 +684,7 @@ function GetSearchEmpList() {
         });
     } else {
         Swal.fire({
-            title: "Kindly Fill the Status",
+            title: "Kindly fill the status",
             icon: 'warning',
             confirmButtonColor: '#3085d6',
             confirmButtonText: 'OK',
@@ -779,7 +779,7 @@ function updateuserDetails() {
         })
     } else {
         Swal.fire({
-            title: 'Fill Empty the Details',
+            title: 'Fill empty the details',
             icon: 'warning',
             confirmButtonColor: '#3085d6',
             confirmButtonText: 'OK'

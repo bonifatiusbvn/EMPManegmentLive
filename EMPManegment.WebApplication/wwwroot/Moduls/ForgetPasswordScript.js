@@ -33,7 +33,7 @@
     } else {
         $("#invalidmessage").hide();
         Swal.fire({
-            title: "Enter Email Id",
+            title: "Enter email id",
             icon: 'warning',
             confirmButtonColor: '#3085d6',
             confirmButtonText: 'OK',
@@ -48,7 +48,7 @@ $(document).ready(function () {
             Email: "required",
         },
         messages: {
-            Email: "Please Enter Registered Email",
+            Email: "Please enter registered email",
         }
     });
 });

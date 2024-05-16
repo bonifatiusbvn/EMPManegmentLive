@@ -57,7 +57,7 @@ namespace EMPManegment.Repository.OrderRepository
                     CreatedBy = CreatePurchaseOrder.CreatedBy,
                 };
                 response.Code = 200;
-                response.Message = "Order Created successfully!";
+                response.Message = "Order created successfully!";
                 Context.TblPurchaseOrderMasters.Add(ordermodel);
                 Context.SaveChanges();
             }
@@ -408,7 +408,7 @@ namespace EMPManegment.Repository.OrderRepository
                 Context.TblPurchaseOrderMasters.Update(orderdetails);
                 Context.SaveChanges();
                 model.Code = 200;
-                model.Message = "Order Details Updated Successfully!";
+                model.Message = "Order details updated successfully!";
             }
             catch (Exception ex)
             {

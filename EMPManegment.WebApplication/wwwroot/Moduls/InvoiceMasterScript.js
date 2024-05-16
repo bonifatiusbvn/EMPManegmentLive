@@ -176,7 +176,7 @@ function InsertInvoiceDetails() {
             });
         } else {
             if ($('#addnewproductlink tr').length == 0) {
-                $("#spnitembutton").text("Please Select Product!");
+                $("#spnitembutton").text("Please select product!");
             } else {
                 $("#spnitembutton").text("");
             }
@@ -266,11 +266,11 @@ $(document).ready(function () {
                 if (response) {
                     generatePdf(response);
                 } else {
-                    alert("Error generating invoice. Please try again.");
+                    alert("Error generating invoice. please try again.");
                 }
             },
             error: function () {
-                alert("An error occurred. Please try again.");
+                alert("An error occurred. please try again.");
             }
         });
     });
@@ -278,11 +278,11 @@ $(document).ready(function () {
 });
 function deleteInvoice(InvoiceId) {
     Swal.fire({
-        title: "Are you sure want to Delete This?",
+        title: "Are you sure want to delete this?",
         text: "You won't be able to revert this!",
         icon: "warning",
         showCancelButton: true,
-        confirmButtonText: "Yes, Delete it!",
+        confirmButtonText: "Yes, delete it!",
         cancelButtonText: "No, cancel!",
         confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
         cancelButtonClass: "btn btn-danger w-xs mt-2",
@@ -306,7 +306,7 @@ function deleteInvoice(InvoiceId) {
                 },
                 error: function () {
                     Swal.fire({
-                        title: "Can't Delete Invoice!",
+                        title: "Can't delete invoice!",
                         icon: 'warning',
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'OK',
@@ -319,7 +319,7 @@ function deleteInvoice(InvoiceId) {
 
             Swal.fire(
                 'Cancelled',
-                'Invoice Have No Changes.!!😊',
+                'Invoice have no changes.!!😊',
                 'error'
             );
         }
@@ -396,7 +396,7 @@ function downloadPDF() {
 function GetAllVendorData() {
 
     $('#VendorTableData').DataTable({
-        processing: true,
+        processing: false,
         serverSide: true,
         filter: true,
         "bDestroy": true,
@@ -502,7 +502,7 @@ function UpdateInvoiceDetails() {
     }
     else {
         Swal.fire({
-            title: "Kindly Fill All Details",
+            title: "Kindly fill all details",
             icon: 'warning',
             confirmButtonColor: '#3085d6',
             confirmButtonText: 'OK',
@@ -535,7 +535,7 @@ $(document).ready(function () {
 
 function GetAllTransactionData() {
     $('#transactionTable').DataTable({
-        processing: true,
+        processing: false,
         serverSide: true,
         filter: true,
         "bDestroy": true,
@@ -595,7 +595,7 @@ function GetAllTransactionData() {
 
 function AllInvoiceList() {
     $('#invoiceTable').DataTable({
-        processing: true,
+        processing: false,
         serverSide: true,
         filter: true,
         "bDestroy": true,
@@ -639,12 +639,3 @@ function AllInvoiceList() {
         }]
     });
 }
-
-
-
-
-
-
-
-
-

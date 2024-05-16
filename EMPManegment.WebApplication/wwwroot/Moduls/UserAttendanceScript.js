@@ -93,7 +93,7 @@ $('#SelectAttandance').change(function () {
 function GetUserAttendance() {
 
      $('#attendanceTableData').DataTable({
-        processing: true,
+        processing: false,
         serverSide: true,
         filter: true,
         "bDestroy": true,
@@ -185,7 +185,7 @@ function EditUserAttendance(attandenceId) {
             });
         },
         error: function () {
-            alert('Data not Found');
+            alert('Data not found');
         }
     })
 }
@@ -354,7 +354,7 @@ function GetSearchAttendanceList() {
         });
     } else {
         Swal.fire({
-            title: "Kindly Fill the Status",
+            title: "Kindly fill the status",
             icon: 'warning',
             confirmButtonColor: '#3085d6',
             confirmButtonText: 'OK',
@@ -385,7 +385,7 @@ function editUserAttendanceSrc(attandenceId) {
             $('#editTimeModelsearch').modal('show');
         },
         error: function () {
-            alert('Data not Found');
+            alert('Data not found');
         }
     })
 }

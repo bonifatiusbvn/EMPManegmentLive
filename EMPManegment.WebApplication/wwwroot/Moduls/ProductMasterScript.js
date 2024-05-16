@@ -43,7 +43,7 @@ function AddProductType() {
         contentType: false,
         processData: false,
         success: function (Result) {
-            if (Result.message == "Product Successfully Inserted") {
+            if (Result.message == "Product successfully inserted") {
                 Swal.fire({
                     title: Result.message,
                     icon: Result.icone,
@@ -144,7 +144,6 @@ $(document).ready(function () {
 });
 
 function SaveProductDetails() {
-    debugger
     siteloadershow()
     if ($('#createproductform').valid()) {
 
@@ -195,7 +194,7 @@ function SaveProductDetails() {
     else {
         siteloaderhide()
         Swal.fire({
-            title: "Kindly Fill All Details",
+            title: "Kindly fill all details",
             icon: 'warning',
             confirmButtonColor: '#3085d6',
             confirmButtonText: 'OK',
@@ -290,7 +289,7 @@ function UpdateProductDetails() {
     }
     else {
         Swal.fire({
-            title: "Kindly Fill All Details",
+            title: "Kindly fill all details",
             icon: 'warning',
             confirmButtonColor: '#3085d6',
             confirmButtonText: 'OK',
@@ -364,7 +363,7 @@ function SearchProductName() {
     }
     else {
         Swal.fire({
-            title: "Kindly Fill All Details",
+            title: "Kindly fill all details",
             icon: 'warning',
             confirmButtonColor: '#3085d6',
             confirmButtonText: 'OK',

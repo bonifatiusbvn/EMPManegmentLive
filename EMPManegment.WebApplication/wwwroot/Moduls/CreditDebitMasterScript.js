@@ -38,7 +38,7 @@ function InsertCreditDebitDetails() {
     var value = $('#txtcreditdebitamount').val();
     if (value.trim() === '') {
 
-        $('#warningMessage').text('Please Enter value for credit amount!!');
+        $('#warningMessage').text('Please enter value for credit amount!!');
         return;
     }
     else {
