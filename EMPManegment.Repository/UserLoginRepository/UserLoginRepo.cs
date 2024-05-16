@@ -131,7 +131,7 @@ namespace EMPManegment.Repository.UserLoginRepository
                                                                            Edit = u.IsEditAllow,
                                                                            Delete = u.IsDeleteAllow,
                                                                            isActive = s.IsActive,
-
+                                                                           isViewAllow = u.IsViewAllow,
                                                                        }).ToList();
 
 

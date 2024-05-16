@@ -17,5 +17,6 @@ namespace EMPManegment.EntityModels.ViewModels.UserModels
         public bool Edit { get; set; }
         public bool Delete { get; set; }
         public bool isActive { get; set; }
+        public bool isViewAllow { get; set; }
     }
 }
