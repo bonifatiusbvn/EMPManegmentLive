@@ -121,55 +121,66 @@ function GetAllUserData() {
         }]
     });
 }
+function UserActiveDeactive(UserId) {debugger
 
-$(document).ready(function () {
-    $('.user-action-btn').on('click', function (e) {
-        e.preventDefault();
-        var username = $(this).data('username');
-        var isActive = $(this).hasClass('active');
-        var action = isActive ? 'active' : 'deactive';
-        var confirmationMessage = isActive ? "Are you sure you want to activate this user?" : "Are you sure you want to deactivate this user?";
+    var isActive = $(this).hasClass('active');
+    var action = isActive ? 'deactivate' : 'activate'; // Corrected action
+    var confirmationMessage = isActive ? "Are you sure you want to deactivate this user?" : "Are you sure you want to activate this user?"; // Corrected messages
 
-        Swal.fire({
-            title: confirmationMessage,
-            text: "You won't be able to revert this!",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonText: "Yes, proceed!",
-            cancelButtonText: "No, cancel!",
-            confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
-            cancelButtonClass: "btn btn-danger w-xs mt-2",
-            buttonsStyling: false,
-            showCloseButton: true
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $.ajax({
-                    url: '/UserProfile/UserActiveDecative?UserName=' + username + '&Action=' + action,
-                    type: 'Post',
-                    contentType: 'application/json;charset=utf-8;',
-                    dataType: 'json',
-                    success: function (Result) {
-                        Swal.fire({
-                            title: "Success!",
-                            text: Result.message,
-                            icon: "success",
-                            confirmButtonClass: "btn btn-primary w-xs mt-2",
-                            buttonsStyling: false
-                        }).then(function () {
-                            location.reload();
-                        });
-                    }
-                });
-            } else if (result.dismiss === Swal.DismissReason.cancel) {
-                Swal.fire(
-                    'Cancelled',
-                    'No changes made.',
-                    'error'
-                );
-            }
-        });
+    Swal.fire({
+        title: confirmationMessage,
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, proceed!",
+        cancelButtonText: "No, cancel!",
+        confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
+        cancelButtonClass: "btn btn-danger w-xs mt-2",
+        buttonsStyling: false,
+        showCloseButton: true
+    }).then((result) => {
+        debugger
+        if (result.isConfirmed) {
+            $.ajax({
+                url: '/UserProfile/UserActiveDecative?UserName=' + UserId,
+                type: 'POST',
+                contentType: 'application/json;charset=utf-8',
+                dataType: 'json',
+                success: function (result) {debugger
+                    Swal.fire({
+                        title: "Success!",
+                        text: result.message,
+                        icon: "success",
+                        confirmButtonClass: "btn btn-primary w-xs mt-2",
+                        buttonsStyling: false
+                    }).then(function () {
+                        location.reload(); // Reload the page to reflect changes
+                    });
+                },
+                error: function (xhr, status, error) {
+                    Swal.fire(
+                        'Error',
+                        'An error occurred while processing your request. Please try again later.',
+                        'error'
+                    );
+                }
+            });
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+            Swal.fire(
+                'Cancelled',
+                'No changes were made.',
+                'error'
+            );
+        }
     });
-});
+}
+
+//$(document).ready(function () {
+
+//    $('.user-action-btn').on('click', function (e) {debugger
+       
+//});
+
 
 function EnterInTime() {
 

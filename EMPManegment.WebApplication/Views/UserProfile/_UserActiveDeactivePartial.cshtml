@@ -53,12 +53,11 @@
                                 <form asp-action="" asp-controller="" method="post">
                                     @if (item.IsActive == true)
                                     {
-                                        <a href="javascript:void(0)" class="btn btn-block btn-success btn-lg" onclick="DeactiveUser('@item.UserName')">Active</a>
-
+                                        <a href="#" class="btn btn-block btn-success btn-lg active" onclick="UserActiveDeactive('@item.UserName')">Active</a>
                                     }
-                                    @if (item.IsActive == false)
+                                    else
                                     {
-                                        <a href="javascript:void(0)" class="btn btn-block btn-danger btn-lg" onclick="ActiveUser('@item.UserName')">Deactive</a>
+                                        <a href="#" class="btn btn-block btn-danger btn-lg deactive" onclick="UserActiveDeactive('@item.UserName')">Deactive</a>
                                     }
                                 </form>
                             </div>
