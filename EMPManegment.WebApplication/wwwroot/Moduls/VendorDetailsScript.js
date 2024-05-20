@@ -18,8 +18,6 @@ function GetAllVendorData() {
         columns: [
             { "data": "vendorCompany", "name": "VendorCompany" },
             { "data": "vendorFirstName", "name": "VendorFirstName" },
-            { "data": "vendorEmail", "name": "VendorEmail" },
-            { "data": "vendorPhone", "name": "VendorPhone" },
             { "data": "vendorCompanyNumber", "name": "VendorCompanyNumber" },
             { "data": "vendorCompanyEmail", "name": "VendorCompanyEmail" },
             {
