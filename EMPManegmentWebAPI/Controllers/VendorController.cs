@@ -8,6 +8,7 @@ using EMPManegment.Inretface.Interface.ProductMaster;
 using EMPManegment.Inretface.Interface.UserAttendance;
 using EMPManegment.Inretface.Interface.VendorDetails;
 using EMPManegment.Inretface.Services.VendorDetailsServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -16,6 +17,7 @@ namespace EMPManagment.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class VendorController : ControllerBase
     {
         private readonly IAddVendorDetailsServices vendorServices;

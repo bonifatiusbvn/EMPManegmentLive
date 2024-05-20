@@ -12,6 +12,7 @@ namespace EMPManagment.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class UserController : ControllerBase
     {
         public IAuthenticationServices Authentication { get; }
@@ -21,7 +22,7 @@ namespace EMPManagment.API.Controllers
             Authentication = authentication;
         }
 
-       
+
 
         [AllowAnonymous]
         [HttpPost("Login")]
@@ -62,7 +63,7 @@ namespace EMPManagment.API.Controllers
         }
 
 
-       
+
 
         [HttpPost]
         [Route("UserSingUp")]

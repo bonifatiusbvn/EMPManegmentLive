@@ -13,6 +13,7 @@ using EMPManegment.Inretface.Services.InvoiceMaster;
 using EMPManegment.Inretface.Services.ProductMaster;
 using EMPManegment.Inretface.Services.TaskServices;
 using EMPManegment.Services.VendorDetails;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PdfSharpCore;
@@ -24,6 +25,7 @@ namespace EMPManagment.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class InvoiceController : ControllerBase
     {
         private readonly IInvoiceMasterServices InvoiceMaster;

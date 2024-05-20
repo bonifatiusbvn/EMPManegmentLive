@@ -10,6 +10,7 @@ using EMPManegment.Inretface.Services.ProductMaster;
 using EMPManegment.Inretface.Services.TaskServices;
 using EMPManegment.Services.ProductMaster;
 using EMPManegment.Services.VendorDetails;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -18,6 +19,7 @@ namespace EMPManagment.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ProductMasterController : ControllerBase
     {
         private readonly IProductMasterServices productMaster;

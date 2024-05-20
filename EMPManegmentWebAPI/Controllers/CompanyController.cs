@@ -2,6 +2,7 @@
 using EMPManegment.EntityModels.ViewModels.Company;
 using EMPManegment.Inretface.Services.CompanyServices;
 using EMPManegment.Services.Company;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -10,6 +11,7 @@ namespace EMPManagment.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class CompanyController : ControllerBase
     {
         public CompanyController(ICompanyServices company)
