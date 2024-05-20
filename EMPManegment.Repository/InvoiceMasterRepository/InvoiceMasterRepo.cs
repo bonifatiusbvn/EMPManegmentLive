@@ -169,35 +169,35 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                                BuyesOrderNo = a.BuyesOrderNo,
                                BuyesOrderDate = a.BuyesOrderDate,
                                TotalAmount = a.TotalAmount,
-                               VendorFullAddress=b.VendorAddress + "-" + c.City + "-" + e.State + "-" + d.Country,
+                               VendorFullAddress = b.VendorAddress + "-" + c.City + "-" + e.State + "-" + d.Country,
                                VendorGstnumber = b.VendorGstnumber,
-                               VendorEmail=b.VendorEmail,
-                               ProjectName=f.ProjectTitle,
-                               VendorCompanyName=b.VendorCompany,
-                               VendorBankAccountNo=b.VendorBankAccountNo,
-                               VendorBankIfsc=b.VendorBankIfsc,
-                               VendorBankBranch=b.VendorBankBranch,
-                               VendorAccountHolderName=b.VendorAccountHolderName,
-                               VendorBankName=b.VendorBankName,
-                               TotalGst=a.TotalGst,
-                               InvoiceDate=a.InvoiceDate,
+                               VendorEmail = b.VendorEmail,
+                               ProjectName = f.ProjectTitle,
+                               VendorCompanyName = b.VendorCompany,
+                               VendorBankAccountNo = b.VendorBankAccountNo,
+                               VendorBankIfsc = b.VendorBankIfsc,
+                               VendorBankBranch = b.VendorBankBranch,
+                               VendorAccountHolderName = b.VendorAccountHolderName,
+                               VendorBankName = b.VendorBankName,
+                               TotalGst = a.TotalGst,
+                               InvoiceDate = a.InvoiceDate,
                            }).First();
-                List<InvoiceDetailsViewModel> Itemlist = (from a in Context.TblInvoiceDetails.Where(a=>a.InvoiceRefId == invoice.Id)
-                                                         join b in Context.TblProductTypeMasters on a.ProductType equals b.Id
-                                                         join c in Context.TblProductDetailsMasters on a.ProductId equals c.Id
-                                                         select new InvoiceDetailsViewModel
-                                                         { 
-                                                            Product=a.Product,
-                                                            Quantity=a.Quantity,
-                                                            ProductTypeName = b.Type,
-                                                            ProductTotal=a.ProductTotal,
-                                                            Gst=a.Gst,
-                                                            ProductType=a.ProductType,
-                                                            Hsn=c.Hsn,
-                                                            PerUnitPrice=c.PerUnitPrice,
-                                                            PerUnitWithGstprice=c.PerUnitWithGstprice,
-                                                            Price=a.Price,
-                                                         }).ToList();
+                List<InvoiceDetailsViewModel> Itemlist = (from a in Context.TblInvoiceDetails.Where(a => a.InvoiceRefId == invoice.Id)
+                                                          join b in Context.TblProductTypeMasters on a.ProductType equals b.Id
+                                                          join c in Context.TblProductDetailsMasters on a.ProductId equals c.Id
+                                                          select new InvoiceDetailsViewModel
+                                                          {
+                                                              Product = a.Product,
+                                                              Quantity = a.Quantity,
+                                                              ProductTypeName = b.Type,
+                                                              ProductTotal = a.ProductTotal,
+                                                              Gst = a.Gst,
+                                                              ProductType = a.ProductType,
+                                                              Hsn = c.Hsn,
+                                                              PerUnitPrice = c.PerUnitPrice,
+                                                              PerUnitWithGstprice = c.PerUnitWithGstprice,
+                                                              Price = a.Price,
+                                                          }).ToList();
                 invoice.InvoiceDetails = Itemlist;
                 return invoice;
             }
@@ -308,67 +308,75 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
         {
             try
             {
-                var data = await (from a in Context.TblInvoices
-                                  join b in Context.TblVendorMasters on a.VandorId equals b.Vid
-                                  join c in Context.TblProjectMasters on a.ProjectId equals c.ProjectId
-                                  where a.IsDeleted != true
-                                  orderby a.CreatedOn descending
-                                  select new
-                                  {
-                                      Invoice = a,
-                                      Vendor = b,
-                                      Project = c,
+                var invoicelist = from a in Context.TblInvoices
+                            join b in Context.TblVendorMasters on a.VandorId equals b.Vid
+                            join c in Context.TblProjectMasters on a.ProjectId equals c.ProjectId
+                            where a.IsDeleted != true
+                            orderby a.CreatedOn descending
+                            select new InvoiceViewModel
+                            {
+                                Id = a.Id,
+                                InvoiceNo = a.InvoiceNo,
+                                InvoiceType = a.InvoiceType,
+                                InvoiceDate = a.InvoiceDate,
+                                VendorName = b.VendorCompany,
+                                VandorId = a.VandorId,
+                                OrderId = a.OrderId,
+                                ProjectId = a.ProjectId,
+                                ProjectName = c.ShortName,
+                                DispatchThrough = a.DispatchThrough,
+                                Cgst = a.Cgst,
+                                Igst = a.Igst,
+                                Sgst = a.Sgst,
+                                BuyesOrderNo = a.BuyesOrderNo,
+                                BuyesOrderDate = a.BuyesOrderDate,
+                                TotalAmount = a.TotalAmount,
+                                CreatedOn = a.CreatedOn,
+                                CreatedBy = a.CreatedBy,
+                                UpdatedOn = a.UpdatedOn,
+                                UpdatedBy = a.UpdatedBy
+                            };
 
-                                  }).ToListAsync();
+                if (!string.IsNullOrEmpty(dataTable.searchValue))
+                {
+                    invoicelist = invoicelist.Where(e =>
+                        e.VendorName.Contains(dataTable.searchValue) ||
+                        e.InvoiceNo.Contains(dataTable.searchValue) ||
+                        e.ProjectName.Contains(dataTable.searchValue) ||
+                        e.TotalAmount.ToString().Contains(dataTable.searchValue)
+                    );
+                }
 
-                var groupedInvoiceList = data.GroupBy(x => x.Invoice.InvoiceNo)
-                                        .Select(group => group.First())
-                                        .Select(item => new InvoiceViewModel
-                                        {
-                                            Id = item.Invoice.Id,
-                                            InvoiceNo = item.Invoice.InvoiceNo,
-                                            InvoiceType = item.Invoice.InvoiceType,
-                                            InvoiceDate = item.Invoice.InvoiceDate,
-                                            VendorName = item.Vendor.VendorCompany,
-                                            VandorId = item.Invoice.VandorId,
-                                            OrderId = item.Invoice.OrderId,
-                                            ProjectId = item.Invoice.ProjectId,
-                                            ProjectName = item.Project.ShortName,
-                                            DispatchThrough = item.Invoice.DispatchThrough,
-                                            Cgst = item.Invoice.Cgst,
-                                            Igst = item.Invoice.Igst,
-                                            Sgst = item.Invoice.Sgst,
-                                            BuyesOrderNo = item.Invoice.BuyesOrderNo,
-                                            BuyesOrderDate = item.Invoice.BuyesOrderDate,
-                                            TotalAmount = item.Invoice.TotalAmount,
-                                            CreatedOn = item.Invoice.CreatedOn,
-                                            CreatedBy = item.Invoice.CreatedBy,
-                                            UpdatedOn = item.Invoice.UpdatedOn,
-                                            UpdatedBy = item.Invoice.UpdatedBy,
-                                        });
+                if (!string.IsNullOrEmpty(dataTable.sortColumn) && !string.IsNullOrEmpty(dataTable.sortColumnDir))
+                {
+                    invoicelist = dataTable.sortColumnDir == "asc"
+                        ? invoicelist.OrderBy(e => EF.Property<object>(e, dataTable.sortColumn))
+                        : invoicelist.OrderByDescending(e => EF.Property<object>(e, dataTable.sortColumn));
+                }
+
+                var filteredData = await invoicelist
+                .ToListAsync();
+
+                var totalRecord = filteredData.Count; 
 
 
-                var flattenedData = groupedInvoiceList.Skip(dataTable.skip)
-                                                  .Take(dataTable.pageSize)
-                                                  .ToList();
-
-                int totalRecord = groupedInvoiceList.Count();
-
-                jsonData jsonData = new jsonData
+                var jsonData = new jsonData
                 {
                     draw = dataTable.draw,
                     recordsFiltered = totalRecord,
                     recordsTotal = totalRecord,
-                    data = flattenedData
+                    data = filteredData
                 };
 
                 return jsonData;
             }
             catch (Exception ex)
             {
-                return null;
+                Console.WriteLine(ex.Message);
+                return new jsonData { };
             }
         }
+
 
         public async Task<IEnumerable<InvoiceViewModel>> GetInvoiceListByVendorId(Guid Vid)
         {

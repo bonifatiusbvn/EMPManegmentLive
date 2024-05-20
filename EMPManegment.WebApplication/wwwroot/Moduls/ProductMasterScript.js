@@ -296,6 +296,56 @@ function UpdateProductDetails() {
         })
     }
 }
+function DeleteProductDetails(ProductId) {
+    Swal.fire({
+        title: "Are you sure want to delete this product?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, delete it!",
+        cancelButtonText: "No, cancel!",
+        confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
+        cancelButtonClass: "btn btn-danger w-xs mt-2",
+        buttonsStyling: false,
+        showCloseButton: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: '/ProductMaster/DeleteProductDetails?ProductId=' + ProductId,
+                type: 'POST',
+                dataType: 'json',
+                success: function (Result) {
+
+                    Swal.fire({
+                        title: Result.message,
+                        icon: 'success',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK'
+                    }).then(function () {
+                        window.location = '/ProductMaster/ProductList';
+                    })
+                },
+                error: function () {
+                    Swal.fire({
+                        title: "Can't delete product!",
+                        icon: 'warning',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK',
+                    }).then(function () {
+                        window.location = '/ProductMaster/ProductList';
+                    })
+                }
+            })
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+
+            Swal.fire(
+                'Cancelled',
+                'Product have no changes.!!😊',
+                'error'
+            );
+        }
+    });
+}
 
 $(document).ready(function () {
 
@@ -391,6 +441,31 @@ $(document).on("click", ".pagination a", function (e) {
 });
 
 function clearProductImage() {
-    document.getElementById('txtproductimage').value = '';
-    document.getElementById('imgPreview').src = "/assets/images/no-preview.png";
+    var inputFile = document.getElementById('txtproductimage');
+    var previewImage = document.getElementById('imgPreview');
+    var clearButton = document.querySelector('.btn-danger');
+
+    inputFile.value = '';
+    previewImage.src = "/assets/images/no-preview.png";
+
+    clearButton.style.display = 'none';
 }
+
+document.getElementById('txtproductimage').addEventListener('change', function () {
+    var clearButton = document.querySelector('.btn-danger');
+    if (this.files && this.files[0]) {
+        var previewImage = document.getElementById('imgPreview');
+        var reader = new FileReader();
+
+        reader.onload = function (e) {
+            previewImage.src = e.target.result;
+        }
+
+        reader.readAsDataURL(this.files[0]);
+
+        clearButton.style.display = 'block';
+    } else {
+        clearButton.style.display = 'none';
+    }
+});
+

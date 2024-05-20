@@ -1,4 +1,7 @@
 ﻿@model IEnumerable<EMPManegment.EntityModels.ViewModels.ProjectModels.ProjectDocumentView>
+@{
+    var counter = 1;
+}
 @using EMPManegment.Web.Models
 @inject IHttpContextAccessor Accessor;
 @inject UserSession _userSession
@@ -10,7 +13,7 @@
                 <h5 class="card-title mb-0">Project Documents</h5>
             </div>
             <div class="col-lg-6">
-                <button class="btn btn-block btn-warning" style="margin-left: 570px;width: 105px;" onclick="docmodalopen()"><i class="ri-upload-2-fill me-1 align-bottom"></i> Upload</button>
+                <button class="btn btn-block btn-warning" style="margin-left: 670px;width: 105px;" onclick="docmodalopen()"><i class="ri-upload-2-fill me-1 align-bottom"></i> Upload</button>
             </div>
         </div>
     </div>
@@ -32,7 +35,7 @@
                     @foreach (var item in Model)
                     {
                         <tr>
-                            <td>1.</td>
+                            <td>@counter</td>
                             <td>@item.DocumentName.Substring(37)</td>
                             <td>
                                 @item.FullName
@@ -48,6 +51,7 @@
                                 </div>
                             </td>
                         </tr>
+                        counter++;
                     }
                 </tbody>
 

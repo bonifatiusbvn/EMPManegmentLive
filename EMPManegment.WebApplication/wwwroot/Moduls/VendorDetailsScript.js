@@ -18,8 +18,6 @@ function GetAllVendorData() {
         columns: [
             { "data": "vendorCompany", "name": "VendorCompany" },
             { "data": "vendorFirstName", "name": "VendorFirstName" },
-            { "data": "vendorEmail", "name": "VendorEmail" },
-            { "data": "vendorPhone", "name": "VendorPhone" },
             { "data": "vendorCompanyNumber", "name": "VendorCompanyNumber" },
             { "data": "vendorCompanyEmail", "name": "VendorCompanyEmail" },
             {
@@ -54,8 +52,7 @@ function VendorDetails(Id) {
         dataType: 'json',
         success: function (response) {
             $('#VendorDetailsModel').modal('show');
-            $('#VendorFirstName').text(response.vendorFirstName);
-            $('#VendorLastName').text(response.vendorLastName);
+            $('#VendorFirstName').text(response.vendorFirstName + " " + response.vendorLastName);
             $('#VendorEmail').text(response.vendorCompanyEmail);
             $('#VendorPhone').text(response.vendorPhone);
             $('#VendorContectNo').text(response.vendorContectNo);
@@ -81,6 +78,21 @@ function VendorDetails(Id) {
         }
     });
 }
+
+//function showCard(cardId) {
+
+//    document.querySelectorAll('.card-body').forEach(function (card) {
+//        card.style.display = 'none';
+//    });
+//    // Show the selected card-body
+//    var selectedCard = document.getElementById(cardId);
+//    if (selectedCard) {
+//        selectedCard.style.display = 'block';
+
+//    }
+//}
+
+
 
 function EditVendorDetails(Id) {
 
@@ -354,7 +366,12 @@ $(document).ready(function () {
             ddlState: "required",
             ddlCity: "required",
             AddressidInput: "required",
-            pincodeidInput: "required",
+            pincodeidInput: {
+                required: true,
+                digits: true,
+                minlength: 6,
+                maxlength: 6
+}
         },
         messages: {
             companynameInput: "Please Enter Company",
@@ -366,7 +383,12 @@ $(document).ready(function () {
             ddlState: "Please Enter State",
             ddlCity: "Please Enter City",
             AddressidInput: "Please Enter Address",
-            pincodeidInput: "Please Enter PinCode",
+            pincodeidInput: {
+                required: "Please Enter Pincode",
+                digits: "Pin code must contain only digits",
+                minlength: "Pin code must be 6 digits long",
+                maxlength: "Pin code must be 6 digits long"
+            },
         }
     })
     $("#VendorPersonalDetails").validate({

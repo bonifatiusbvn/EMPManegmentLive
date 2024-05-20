@@ -110,6 +110,7 @@ namespace EMPManegment.Web.Controllers
                                 new Claim("UserName", userlogin.Data.UserName),
                                 new Claim("ProfileImage", userlogin.Data.ProfileImage),
                                 new Claim("IsAdmin", userlogin.Data.Role),
+                                new Claim("AccessToken", userlogin.Data.Token),
 
                               };
                         var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);

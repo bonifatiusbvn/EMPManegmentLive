@@ -28,5 +28,7 @@ namespace EMPManegment.EntityModels.ViewModels.UserModels
         public string? StateName { get; set; }
         public string? CityName { get; set; }
         public string? DepartmentName { get; set; }
+        public Guid? RoleId { get; set; }
+        public string? RoleName { get; set; }
     }
 }

@@ -9,6 +9,7 @@ using EMPManegment.Inretface.Interface.InvoiceMaster;
 using EMPManegment.Inretface.Interface.OrderDetails;
 using EMPManegment.Inretface.Interface.ProductMaster;
 using EMPManegment.Inretface.Services.OrderDetails;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -17,6 +18,7 @@ namespace EMPManagment.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class PurchaseOrderDetailsController : ControllerBase
     {
         public PurchaseOrderDetailsController(IPurchaseOrderDetailsServices purchaseOrderDetails)

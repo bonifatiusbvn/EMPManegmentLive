@@ -4,12 +4,14 @@ using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.ProductMaster;
 using EMPManegment.EntityModels.ViewModels.TaskModels;
 using EMPManegment.EntityModels.ViewModels.VendorModels;
+using EMPManegment.Inretface.Interface.OrderDetails;
 using EMPManegment.Inretface.Interface.ProductMaster;
 using EMPManegment.Inretface.Interface.ProjectDetails;
 using EMPManegment.Inretface.Services.ProductMaster;
 using EMPManegment.Inretface.Services.TaskServices;
 using EMPManegment.Services.ProductMaster;
 using EMPManegment.Services.VendorDetails;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -18,6 +20,7 @@ namespace EMPManagment.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ProductMasterController : ControllerBase
     {
         private readonly IProductMasterServices productMaster;
@@ -138,6 +141,31 @@ namespace EMPManagment.API.Controllers
                 throw ex;
             }
             return StatusCode(updateresponsemodel.Code, updateresponsemodel);
+        }
+        [HttpPost]
+        [Route("DeleteProductDetails")]
+        public async Task<IActionResult> DeleteProductDetails(Guid ProductId)
+        {
+            UserResponceModel responseModel = new UserResponceModel();
+            var order = await productMaster.DeleteProductDetails(ProductId);
+            try
+            {
+                if (order != null)
+                {
+                    responseModel.Code = (int)HttpStatusCode.OK;
+                    responseModel.Message = order.Message;
+                }
+                else
+                {
+                    responseModel.Message = order.Message;
+                    responseModel.Code = (int)HttpStatusCode.NotFound;
+                }
+            }
+            catch (Exception ex)
+            {
+                responseModel.Code = (int)HttpStatusCode.InternalServerError;
+            }
+            return StatusCode(responseModel.Code, responseModel);
         }
         [HttpPost]
         [Route("GetProductDetailsByProductId")]

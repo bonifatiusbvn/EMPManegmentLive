@@ -39,7 +39,7 @@ namespace EMPManegment.Services.AddEmployee
             return Authentication.CheckEmloyess();
         }
 
-        
+
         public async Task<EmpDetailsView> GetById(Guid userId)
         {
             return await UserDetails.GetById(userId);
@@ -51,10 +51,15 @@ namespace EMPManegment.Services.AddEmployee
         public async Task<bool> EmailSendAsync(string Email, string Subject, string Message)
         {
             return await Authentication.EmailSendAsync(Email, Subject, Message);
-        }   
+        }
         public async Task<UserResponceModel> FindByEmailAsync(SendEmailModel Email)
         {
             return await Authentication.FindByEmailAsync(Email);
-        }        
+        }
+
+        public string GenerateToken(LoginRequest model)
+        {
+            return Authentication.GenerateToken(model);
+        }
     }
 }

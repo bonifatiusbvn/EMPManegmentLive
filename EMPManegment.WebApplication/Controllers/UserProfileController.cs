@@ -638,6 +638,31 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
+        [HttpPost]
+        public async Task<IActionResult> UpdateUserRoleAndDepartment()
+        {
+            try
+            {
+                var userstausres = HttpContext.Request.Form["USERUPDATE"];
+                var statusRequest = JsonConvert.DeserializeObject<UserEditViewModel>(userstausres);
+                ApiResponseModel postUser = await APIServices.PostAsync(statusRequest, "UserProfile/UpdateUserDetails");
+                if (postUser.code == 200)
+                {
+                    return Ok(new { Message = postUser.message, Code = postUser.code });
+                }
+                else
+                {
+                    return new JsonResult(new { Message = postUser.message, Code = postUser.code });
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = "An error occurred while updating user details.", Details = ex.Message });
+            }
+        }
+
+
+
         [FormPermissionAttribute("GetAttendance-View")]
         public async Task<IActionResult> GetAttendance()
         {

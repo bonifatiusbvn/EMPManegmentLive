@@ -111,7 +111,13 @@ namespace EMPManegment.Web.Models
                 StaticHttpContext.Session.SetString("ProjectName", value);
             }
         }
-
+        public string AccessToken
+        {
+            get
+            {
+                return HttpContext.User.Claims.FirstOrDefault(x => string.Compare(x.Type, "AccessToken", true) == 0)?.Value;
+            }
+        }
         public static List<FromPermission> FormPermisionData
         {
             get

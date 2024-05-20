@@ -13,5 +13,7 @@ namespace EMPManegment.Inretface.Interface.UsersLogin
         Task<LoginResponseModel> LoginUser(LoginRequest LoginUserRequest);
 
         public bool GetUserName(string Username);
+        Task<string> AuthenticateUser(LoginRequest login);
+        string GenerateToken(LoginRequest model);
     }
 }

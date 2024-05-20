@@ -4,6 +4,7 @@ using EMPManegment.EntityModels.ViewModels;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.Inretface.EmployeesInterface.AddEmployee;
 using EMPManegment.Inretface.Services.AddEmployeeServies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -12,6 +13,7 @@ namespace EMPManagment.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class AddEmpController : ControllerBase
     {
         public IAuthenticationServices Authentication { get; }
@@ -21,7 +23,7 @@ namespace EMPManagment.API.Controllers
             Authentication = authentication;
         }
 
-       
+
 
         [HttpGet]
         [Route("CheckUser")]
@@ -42,7 +44,7 @@ namespace EMPManagment.API.Controllers
                 if (addEmployee.Result.Code == 200)
                 {
                     response.Code = (int)HttpStatusCode.OK;
-                  
+
                 }
                 else
                 {
@@ -56,6 +58,6 @@ namespace EMPManagment.API.Controllers
             return StatusCode(response.Code, response);
         }
 
-       
+
     }
 }

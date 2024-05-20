@@ -65,6 +65,9 @@ namespace EMPManegment.EntityModels.View_Model
         public string? DepartmentName { get; set; }
 
         public string? DocumentType { get; set; }
+        public Guid? ProjectId { get; set; }
+        public Guid? RoleId { get; set; }
+        public string? RoleName { get; set; }
     }
     public class EmpDetailsModel
     {

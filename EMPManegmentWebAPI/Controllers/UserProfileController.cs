@@ -26,6 +26,7 @@ namespace EMPManagment.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class UserProfileController : ControllerBase
     {
         public IUserDetailsServices UserListServices { get; }
@@ -40,6 +41,7 @@ namespace EMPManagment.API.Controllers
 
         [HttpGet]
         [Route("GetAllUsersDetails")]
+        [Authorize]
         public async Task<IActionResult> GetAllUsersDetails()
         {
             var userList = await UserListServices.GetUsersDetails();
