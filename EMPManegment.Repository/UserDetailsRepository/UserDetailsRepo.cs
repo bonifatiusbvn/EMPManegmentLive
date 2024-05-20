@@ -46,6 +46,7 @@ namespace EMPManegment.Repository.UserListRepository
                                                  join c in Context.TblCountries on e.CountryId equals c.Id
                                                  join s in Context.TblStates on e.StateId equals s.Id
                                                  join ct in Context.TblCities on e.CityId equals ct.Id
+                                                 join r in Context.TblRoleMasters on e.RoleId equals r.RoleId
                                                  select new UserDataTblModel
                                                  {
                                                      Id = e.Id,
@@ -62,7 +63,9 @@ namespace EMPManegment.Repository.UserListRepository
                                                      CityName = ct.City,
                                                      StateName = s.State,
                                                      CountryName = c.Country,
-                                                     DepartmentName = d.Department
+                                                     DepartmentName = d.Department,
+                                                     RoleId = e.RoleId,
+                                                     RoleName = r.Role,
                                                  };
 
             if(!string.IsNullOrEmpty(dataTable.sortColumn) && !string.IsNullOrEmpty(dataTable.sortColumnDir))
@@ -468,6 +471,7 @@ namespace EMPManegment.Repository.UserListRepository
                     Userdata.PhoneNumber = employee.PhoneNumber;
                     Userdata.Address = employee.Address;
                     Userdata.DepartmentId = employee.DepartmentId;
+                    Userdata.RoleId = employee.RoleId;
 
                     Context.TblUsers.Update(Userdata);
                     await Context.SaveChangesAsync();
@@ -611,6 +615,7 @@ namespace EMPManegment.Repository.UserListRepository
                                                        join c in Context.TblCountries on e.CountryId equals c.Id
                                                        join s in Context.TblStates on e.StateId equals s.Id
                                                        join ct in Context.TblCities on e.CityId equals ct.Id
+                                                       join r in Context.TblRoleMasters on e.RoleId equals r.RoleId
                                                        select new EmpDetailsView
                                                        {
                                                            Id = e.Id,
@@ -627,7 +632,10 @@ namespace EMPManegment.Repository.UserListRepository
                                                            CityName = ct.City,
                                                            StateName = s.State,
                                                            CountryName = c.Country,
-                                                           DepartmentName = d.Department
+                                                           DepartmentName = d.Department,
+                                                           DepartmentId=e.DepartmentId,
+                                                           RoleId = e.RoleId,
+                                                           RoleName = r.Role,
                                                        };
             if (searchby == "ByUsername" && searchfor != null)
             {
