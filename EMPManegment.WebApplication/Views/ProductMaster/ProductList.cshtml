@@ -1,4 +1,8 @@
-﻿@{
+﻿@using EMPManegment.Web.Models
+@inject IHttpContextAccessor Accessor;
+@inject UserSession _userSession
+
+@{
     ViewData["Title"] = "ProductList";
     Layout = "~/Views/Shared/_UserHomeLayout.cshtml";
 }
@@ -87,14 +91,17 @@
                                 <div class="col-sm">
                                     <h5 class="card-title mb-0">Search Products</h5>
                                 </div>
-                                <div class="col-sm-auto">
-                                    <div class="d-flex gap-1 flex-wrap">
-                                        <a asp-action="CreateProduct" asp-controller="ProductMaster" class="btn btn-warning">
-                                            <i class="ri-add-line align-bottom me-1 "></i>
-                                            Add Product
-                                        </a>
+                                @if (UserSession.FormPermisionData.Any(a => a.FormName == "Create Product" && (a.Add == true)))
+                                {
+                                    <div class="col-sm-auto">
+                                        <div class="d-flex gap-1 flex-wrap">
+                                            <a asp-action="CreateProduct" asp-controller="ProductMaster" class="btn btn-warning">
+                                                <i class="ri-add-line align-bottom me-1 "></i>
+                                                Add Product
+                                            </a>
+                                        </div>
                                     </div>
-                                </div>
+                                }
                             </div>
                         </div>
                         <div class="card-body border border-dashed border-end-0 border-start-0">

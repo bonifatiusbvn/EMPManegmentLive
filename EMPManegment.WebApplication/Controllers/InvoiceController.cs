@@ -20,6 +20,8 @@ using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
 using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 using Microsoft.AspNetCore.Components;
 using EMPManegment.EntityModels.ViewModels.ProjectModels;
+using EMPManegment.Web.Helper;
+using Microsoft.AspNetCore.Authorization;
 
 
 
@@ -46,6 +48,7 @@ namespace EMPManegment.Web.Controllers
             return View();
         }
 
+        [FormPermissionAttribute("Create Invoice-View")]
         public async Task<IActionResult> CreateInvoice()
         {
             string porjectname = UserSession.ProjectName;
@@ -68,6 +71,7 @@ namespace EMPManegment.Web.Controllers
             return View();
         }
 
+        [FormPermissionAttribute("InvoiceDetails-View")]
         public async Task<IActionResult> InvoiceDetails(string OrderId)
         {
             try
@@ -93,6 +97,8 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
+
+        [FormPermissionAttribute("DisplayInvoiceDetails-View")]
         public async Task<IActionResult> DisplayInvoiceDetails(Guid InvoiceId)
         {
             try
@@ -204,6 +210,7 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
+        [FormPermissionAttribute("InvoiceListView-View")]
         public async Task<IActionResult> InvoiceListView()
         {
             return View();
@@ -257,7 +264,7 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
-
+        [FormPermissionAttribute("Create Invoice-Add")]
         [HttpPost]
         public async Task<IActionResult> InsertInvoiceDetails()
         {
@@ -282,6 +289,7 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
+        [FormPermissionAttribute("VendorInvoiceListView-Add")]        
         [HttpPost]
         public async Task<IActionResult> InsertCreditDebitDetails()
         {
@@ -338,6 +346,7 @@ namespace EMPManegment.Web.Controllers
             return File(fileContent, "application/pdf", "document.pdf");
         }
 
+        [FormPermissionAttribute("CreditDebitListView-View")]
         [HttpGet]
         public async Task<IActionResult> CreditDebitListView()
         {
@@ -393,7 +402,7 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
-
+        [FormPermissionAttribute("VendorInvoiceListView-View")]
         [HttpGet]
         public async Task<IActionResult> VendorInvoiceListView(Guid Vid)
         {
@@ -433,6 +442,7 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
+        [FormPermissionAttribute("GetAllTransactionByVendorId-View")]
         [HttpGet]
         public async Task<IActionResult> GetAllTransactionByVendorId(Guid Vid)
         {
@@ -451,6 +461,8 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
+
+        [FormPermissionAttribute("GetAllTransaction-View")]
         [HttpGet]
         public async Task<IActionResult> GetAllTransaction()
         {
@@ -529,6 +541,7 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
+
         [HttpGet]
         public async Task<JsonResult> EditInvoiceDetails(string InvoiceNo)
         {
@@ -548,6 +561,7 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
+        [FormPermissionAttribute("InvoiceListView-Edit")]
         [HttpPost]
         public async Task<IActionResult> UpdateInvoiceDetails(UpdateInvoiceModel invoiceDetails)
         {
@@ -565,6 +579,8 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
+
+        [FormPermissionAttribute("InvoiceListView-Delete")]
         [HttpPost]
         public async Task<IActionResult> IsDeletedInvoice(Guid InvoiceId)
         {

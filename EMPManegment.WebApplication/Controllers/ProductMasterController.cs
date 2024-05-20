@@ -8,6 +8,7 @@ using EMPManegment.EntityModels.ViewModels.ProductMaster;
 using EMPManegment.EntityModels.ViewModels.ProjectModels;
 using EMPManegment.EntityModels.ViewModels.TaskModels;
 using EMPManegment.EntityModels.ViewModels.VendorModels;
+using EMPManegment.Web.Helper;
 using EMPManegment.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -34,11 +35,13 @@ namespace EMPManegment.Web.Controllers
             return View();
         }
 
+        [FormPermissionAttribute("Create Product-View")]
         public IActionResult CreateProduct()
         {
             return View();
         }
 
+        [FormPermissionAttribute("Create Product-Add")]
         [HttpPost]
         public async Task<IActionResult> AddProductDetails(ProductRequestModel AddProduct)
         {
@@ -131,6 +134,7 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
+
         public async Task<JsonResult> GetProduct()
         {
             try
@@ -167,6 +171,7 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
+        [FormPermissionAttribute("Product List-View")]
         public IActionResult ProductList()
         {
             return View();
@@ -255,6 +260,7 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
+
         [HttpPost]
         public async Task<IActionResult> SearchProductName(string ProductName)
         {
@@ -279,6 +285,7 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
+        [FormPermissionAttribute("Product Details-View")]
         public IActionResult ProductDetails()
         {
             return View();
@@ -323,6 +330,8 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
+
+        [FormPermissionAttribute("Product List-Edit")]
         [HttpPost]
         public async Task<IActionResult> UpdateProductDetails(ProductDetailsView UpdateProduct)
         {

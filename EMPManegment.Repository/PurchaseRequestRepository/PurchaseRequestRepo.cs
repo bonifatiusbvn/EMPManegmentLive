@@ -15,6 +15,10 @@ using System.Net;
 using System.Linq.Dynamic.Core;
 using System.Text;
 using System.Threading.Tasks;
+using X.PagedList;
+using Microsoft.AspNetCore.Mvc;
+using EMPManegment.EntityModels.ViewModels.PurchaseOrderModels;
+#nullable disable
 
 namespace EMPManegment.Repository.PurchaseRequestRepository
 {
@@ -64,22 +68,33 @@ namespace EMPManegment.Repository.PurchaseRequestRepository
             return response;
         }
 
-        public async Task<ApiResponseModel> DeletePurchaseRequestDetails(Guid PrId)
+        public async Task<ApiResponseModel> DeletePurchaseRequest(string PrNo)
         {
             {
                 ApiResponseModel response = new ApiResponseModel();
-                var PurchaseRequest = Context.TblPurchaseRequests.Where(a => a.PrId == PrId).FirstOrDefault();
+                var GetPRdata = Context.TblPurchaseRequests.Where(a => a.PrNo == PrNo).ToList();
 
-                if (PurchaseRequest != null)
+                if (GetPRdata.Any())
                 {
-                    PurchaseRequest.IsDeleted = true;
-                    Context.TblPurchaseRequests.Update(PurchaseRequest);
-                    Context.SaveChanges();
+                    foreach (var pr in GetPRdata)
+                    {
+                            pr.IsDeleted = true;
+                            response.message = "Purchase request with PR No. " + PrNo + " is deleted successfully."; 
+                    }
+
+                    Context.TblPurchaseRequests.UpdateRange(GetPRdata);
+                    await Context.SaveChangesAsync();
+
                     response.code = 200;
-                    response.data = PurchaseRequest;
-                    response.message = "PurchaseRequest is deleted successfully";
+                    response.data = GetPRdata;
                 }
-                return response;
+                else
+                {
+                    response.code = 404;
+                    response.message = "Purchase request with PR No. " + PrNo + " not found.";
+                }
+
+                return response;   
             }
         }
 
@@ -232,23 +247,25 @@ namespace EMPManegment.Repository.PurchaseRequestRepository
                                       join b in Context.TblUsers on a.UserId equals b.Id
                                       join c in Context.TblProjectMasters on a.ProjectId equals c.ProjectId
                                       orderby a.CreatedOn descending
+                                      where a.IsDeleted == false
+                                      group new { a, b, c } by new { a.UserId, b.Image, b.UserName, FullName = b.FirstName + " " + b.LastName, a.PrNo } into userGroup
                                       select new PurchaseRequestModel
                                       {
-                                          PrId = a.PrId,
-                                          UserId = a.UserId,
-                                          UserName = b.UserName,
-                                          FullName = b.FirstName + " " + b.LastName,
-                                          ProjectId = a.ProjectId,
-                                          ProjectName = c.ProjectTitle,
-                                          ProductId = a.ProductId,
-                                          ProductName = a.ProductName,
-                                          ProductTypeId = a.ProductTypeId,
-                                          Quantity = a.Quantity,
-                                          IsApproved = a.IsApproved,
-                                          IsDeleted = a.IsDeleted,
-                                          CreatedBy = a.CreatedBy,
-                                          CreatedOn = a.CreatedOn,
-                                          PrNo = a.PrNo,
+                                          PrId = userGroup.Select(x => x.a.PrId).FirstOrDefault(),
+                                          UserId = userGroup.Key.UserId,
+                                          UserName = userGroup.Key.UserName,
+                                          FullName = userGroup.Key.FullName,
+                                          ProjectId = userGroup.Select(x => x.a.ProjectId).FirstOrDefault(),
+                                          ProjectName = userGroup.Select(x => x.c.ProjectTitle).FirstOrDefault(),
+                                          ProductId = userGroup.Select(x => x.a.ProductId).FirstOrDefault(),
+                                          ProductName = userGroup.Select(x => x.a.ProductName).FirstOrDefault(),
+                                          ProductTypeId = userGroup.Select(x => x.a.ProductTypeId).FirstOrDefault(),
+                                          Quantity = userGroup.Select(x => x.a.Quantity).FirstOrDefault(),
+                                          IsApproved = userGroup.Select(x => x.a.IsApproved).FirstOrDefault(),
+                                          IsDeleted = userGroup.Select(x => x.a.IsDeleted).FirstOrDefault(),
+                                          CreatedBy = userGroup.Select(x => x.a.CreatedBy).FirstOrDefault(),
+                                          CreatedOn = userGroup.Select(x => x.a.CreatedOn).FirstOrDefault(),
+                                          PrNo = userGroup.Key.PrNo,
                                       };
 
             if (!string.IsNullOrEmpty(PRdataTable.sortColumn) && !string.IsNullOrEmpty(PRdataTable.sortColumnDir))
@@ -270,6 +287,81 @@ namespace EMPManegment.Repository.PurchaseRequestRepository
                 data = cData
             };
             return jsonData;
+        }
+
+        public async Task<PurchaseRequestMasterView> PurchaseRequestDetailsByPrNo(string PrNo)
+        {
+            PurchaseRequestMasterView PRDetails = new PurchaseRequestMasterView();
+            try
+            {
+                PRDetails = (from a in Context.TblPurchaseRequests.Where(a => a.PrNo == PrNo)
+                                                     select new PurchaseRequestMasterView
+                                                     {
+                                                         PrNo = PrNo,
+                                                     }).FirstOrDefault();
+                List<PurchaseRequestModel> PRList = (from a in Context.TblPurchaseRequests.Where(a => a.PrNo == PRDetails.PrNo)
+                                                               join b in Context.TblProductDetailsMasters on a.ProductId equals b.Id
+                                                               join c in Context.TblProductTypeMasters on a.ProductTypeId equals c.Id
+                                                               join d in Context.TblUsers on a.UserId equals d.Id
+                                                               join e in Context.TblProjectMasters on a.ProjectId equals e.ProjectId
+                                                               select new PurchaseRequestModel
+                                                               {
+                                                                   ProductTypeId = a.ProductTypeId,
+                                                                   ProductName = a.ProductName,
+                                                                   ProductId = a.ProductId,
+                                                                   ProductTypeName = c.Type,
+                                                                   UserId = a.UserId,
+                                                                   FullName = d.FirstName + " " + d.LastName,
+                                                                   ProjectId = a.ProjectId,
+                                                                   ProjectName = e.ProjectTitle,
+                                                                   Quantity = a.Quantity,
+                                                                   Price = b.PerUnitPrice,
+                                                                   PerUnitWithGstprice = b.PerUnitWithGstprice,
+                                                                   ProductImage = b.ProductImage,
+                                                                   ProductTotal = b.PerUnitPrice * a.Quantity,
+                                                               }).ToList();
+                PRDetails.PRList = PRList; 
+                return PRDetails;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public async Task<UserResponceModel> ApproveUnapprovePR(string PrNo)
+        {
+            UserResponceModel response = new UserResponceModel();
+            var GetPRdata = Context.TblPurchaseRequests.Where(a => a.PrNo == PrNo).ToList();
+
+            if (GetPRdata.Any())
+            {
+                foreach (var pr in GetPRdata)
+                {
+                    if (pr.IsApproved == true)
+                    {
+                        pr.IsApproved = false;
+                        response.Message = "Purchase request with PR No. " + PrNo + " is deactivated successfully.";
+                    }
+                    else
+                    {
+                        pr.IsApproved = true;
+                        response.Message = "Purchase request with PR No. " + PrNo + " is activated successfully.";
+                    }
+                }
+
+                Context.TblPurchaseRequests.UpdateRange(GetPRdata);
+                await Context.SaveChangesAsync();
+
+                response.Code = 200;
+                response.Data = GetPRdata;
+            }
+            else
+            {
+                response.Code = 404;
+                response.Message = "Purchase request with PR No. " + PrNo + " not found.";
+            }
+
+            return response;
         }
     }
 }

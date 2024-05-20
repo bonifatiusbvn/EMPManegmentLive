@@ -2,7 +2,7 @@
 @using EMPManegment.Web.Models
 @using X.PagedList;
 @using X.PagedList.Mvc.Core;
- @inject IHttpContextAccessor Accessor;
+@inject IHttpContextAccessor Accessor;
 @inject UserSession _userSession
 
 <div class="team-list list-view-filter">
@@ -14,7 +14,10 @@
                     <h5 class="card-title mb-0">Team Members</h5>
                 </div>
                 <div class="col-lg-6">
-                    <button class="btn btn-block btn-warning" style="margin-left: 540px;width: 141px;" onclick="openmemberpop()"><i class="ri-add-line align-bottom me-1"></i>Add Member</button>
+                    @if (UserSession.FormPermisionData.Any(a => a.FormName == "GetProjectDetails" && (a.Add == true)))
+                    {
+                        <button class="btn btn-block btn-warning" style="margin-left: 540px;width: 141px;" onclick="openmemberpop()"><i class="ri-add-line align-bottom me-1"></i>Add Member</button>
+                    }
                 </div>
             </div>
         </div>
@@ -25,7 +28,10 @@
                         <th>FullName</th>
                         <th>Designation</th>
                         <th>Projects</th>
-                        <th>Action</th>
+                        @if (UserSession.FormPermisionData.Any(a => a.FormName == "GetProjectDetails" && (a.Delete == true)))
+                        {
+                            <th>Action</th>
+                        }
                     </tr>
                 </thead>
                 <tbody>
@@ -45,9 +51,14 @@
                                 @UserSession.ProjectName
 
                             </td>
-                            <td>
-                                <a class="btn text-danger btndeletedoc" data-user-id="@item.UserId"><i class="fas fa-trash"></i></a>
-                            </td>
+
+                            @if (UserSession.FormPermisionData.Any(a => a.FormName == "GetProjectDetails" && (a.Delete == true)))
+                            {
+                                <td>
+                                    <a class="btn text-danger btndeletedoc" data-user-id="@item.UserId"><i class="fas fa-trash"></i></a>
+                                </td>
+                            }
+
                         </tr>
                     }
                 </tbody>
@@ -57,9 +68,12 @@
 
 </div>
 <!---Start Pagination--->
-@Html.PagedListPager((IPagedList)Model, page => Url.Action("ShowTeam", new { page = page }),
-                                                                                new X.PagedList.Web.Common.PagedListRenderOptions
-                                                                            {
-                                                                                LiElementClasses = new string[] { "page-item" },
-                                                                                PageClasses = new string[] { "page-link" }
-                                                                            })
+@Html.PagedListPager((IPagedList)Model, page => Url.Action("ShowTeam", new
+    {
+        page = page,
+    }),
+                new X.PagedList.Web.Common.PagedListRenderOptions
+            {
+                LiElementClasses = new string[] { "page-item" },
+                PageClasses = new string[] { "page-link" }
+            })

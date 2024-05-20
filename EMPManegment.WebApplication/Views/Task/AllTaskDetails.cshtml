@@ -1,6 +1,6 @@
 ﻿@model List<EMPManegment.EntityModels.ViewModels.TaskModels.TaskDetailsView>
 @using EMPManegment.Web.Models;
- @inject IHttpContextAccessor Accessor;
+@inject IHttpContextAccessor Accessor;
 @inject UserSession _userSession
 @{
     ViewData["Title"] = "AllTaskDetails";
@@ -154,12 +154,16 @@
     <div class="card-header">
         <div class="d-flex align-items-center">
             <h5 class="card-title mb-0 flex-grow-1">All Tasks</h5>
-            <div class="flex-shrink-0">
-                <div class="d-flex flex-wrap gap-2">
-                    <button class="btn btn-block btn-warning btn-md" data-bs-toggle="modal" onclick="showadddetails()"><i class="ri-add-line align-bottom me-1"></i> Create Task</button>
-                    <button class="btn text-danger" id="remove-actions" onClick="deleteMultiple()"><i class="fas fa-trash"></i></button>
+            @if (UserSession.FormPermisionData.Any(a => a.FormName == "Tasks List" && (a.Add == true)))
+            {
+
+                <div class="flex-shrink-0">
+                    <div class="d-flex flex-wrap gap-2">
+                        <button class="btn btn-block btn-warning btn-md" data-bs-toggle="modal" onclick="showadddetails()"><i class="ri-add-line align-bottom me-1"></i> Create Task</button>
+                        <button class="btn text-danger" id="remove-actions" onClick="deleteMultiple()"><i class="fas fa-trash"></i></button>
+                    </div>
                 </div>
-            </div>
+            }
         </div>
     </div>
     <div class="card-body">

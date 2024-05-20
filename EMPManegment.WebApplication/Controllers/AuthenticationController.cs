@@ -54,6 +54,7 @@ namespace EMPManegment.Web.Controllers
         }
 
         [HttpPost]
+
         public async Task<IActionResult> ForgetPassword(SendEmailModel forgetpass)
         {
             try

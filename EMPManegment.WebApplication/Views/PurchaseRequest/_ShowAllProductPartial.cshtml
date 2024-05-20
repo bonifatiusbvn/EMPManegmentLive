@@ -1,18 +1,41 @@
 ﻿@model IEnumerable<EMPManegment.EntityModels.ViewModels.ProductMaster.ProductDetailsView>
+@using EMPManegment.Web.Models
+@using X.PagedList;
+@using X.PagedList.Mvc.Core;
+@inject IHttpContextAccessor Accessor
+@inject UserSession _userSession
 
 @foreach (var item in Model)
 {
-    <div class="row ac-item border-2 text-sm-center p-2">
-        <div class="col-5 col-sm-5 order1">
-            <p id="ptimeName">@item.ProductName</p>
-        </div>
-        <div class="col-3 col-sm-3 order2">
-            <p id="pQtyType">@item.PerUnitPrice</p>
-        </div>
-        <div class="col-4 col-sm-4 font-22 order3">
-            <div class="font-22">
-                <a id="addItemButton" class="btn btn-sm btn-warning" onclick="SerchItemDetailsById('@item.Id')"><i class="ri-add-line align-bottom me-1"></i>Add</a>
+    <div class="product-item-container">
+        <div class="row ac-item border-2 text-sm-center p-2">
+            <div class="col-2 col-sm-2 order1">
+                <img src="~/@item.ProductImage" alt="" class="img-fluid d-block" style="width: 65px;height: 65px;">
             </div>
+            <div class="col-5 col-sm-5 order1">
+                <p id="ptimeName">@item.ProductName</p>
+            </div>
+            <div class="col-3 col-sm-3 order2">
+                <p id="pQtyType">@item.PerUnitPrice</p>
+            </div>
+            <div class="col-2 col-sm-2 order3">
+                <div class="font-22">
+                    <a id="addItemButton" class="btn btn-sm btn-warning" onclick="SerchItemDetailsById('@item.Id')"><i class="ri-add-line align-bottom me-1"></i>Add</a>
+                </div>
+            </div>
+            <div class="border-bottom"></div>
         </div>
     </div>
 }
+
+
+@Html.PagedListPager((IPagedList)Model, page => Url.Action("GetAllProductDetailsList", new
+    {
+        page = page,
+        searchfor = @Context.Request.Query["searchfor"]
+    }),
+                new X.PagedList.Web.Common.PagedListRenderOptions
+            {
+                LiElementClasses = new string[] { "page-item" },
+                PageClasses = new string[] { "page-link" }
+            })

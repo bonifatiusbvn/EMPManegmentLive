@@ -3,14 +3,37 @@
     updateTotals();
     GetPurchaseRequestList();
     GetPRData();
+    showHidebtn();
 });
-function GetAllItemDetailsList() {
+
+function GetAllItemDetailsList(page) {
     var searchText = $('#mdProductSearch').val();
 
-    $.get("/PurchaseRequest/GetAllProductDetailsList", { searchText: searchText })
+    $.get("/PurchaseRequest/GetAllProductDetailsList", { searchText: searchText, page: page })
         .done(function (result) {
             $("#mdlistofItem").html(result);
         })
+}
+
+GetAllItemDetailsList(1);
+
+
+$(document).on("click", ".pagination a", function (e) {
+    e.preventDefault();
+    var page = $(this).text();
+    GetAllItemDetailsList(page);
+});
+
+$(document).on("click", "#backButton", function (e) {
+    e.preventDefault();
+    var page = $(this).text();
+    GetAllItemDetailsList(page);
+});
+
+
+function clearsearchtext() {
+    $('#mdProductSearch').val('');
+    GetAllItemDetailsList();
 }
 
 function filterallItemTable() {
@@ -70,16 +93,24 @@ function AddNewRow(Result) {
             confirmButtonText: "OK"
         });
     }
+    updateTotals();
+    showHidebtn();
 }
 
 function updateRowNumbers() {
- 
+
     $(".product-id").each(function (index) {
         $(this).text(index + 1);
     });
 }
 
+function preventEmptyValue(input) {
 
+    if (input.value === "") {
+
+        input.value = 1;
+    }
+}
 
 $(document).ready(function () {
     $(document).on('input', '.product-quantity', function () {
@@ -105,18 +136,34 @@ $(document).ready(function () {
 });
 
 function updateTotals() {
-
     $(".products").each(function () {
         var row = $(this);
         var subtotal = parseFloat(row.find("#dspperunitprice").text().replace('₹', ''));
         var totalquantity = parseFloat(row.find("#txtproductquantity").val());
         var totalAmount = subtotal * totalquantity;
-
         row.find("#dsptotalAmount").text(totalAmount.toFixed(2));
     });
 }
 
+function removeProduct(btn) {
+    var cardBody = btn.closest('.card-body');
+    if (cardBody) {
+        cardBody.remove();
+    }
+    updateTotals();
+    showHidebtn();
+}
+function showHidebtn() {
+    var totalAmount = $("#dsptotalAmount").text();
+    if (totalAmount != "") {
+        $("#btnpurchaserequest").show();
+    } else {
+        $("#btnpurchaserequest").hide();
+    }
+}
+
 function GetPRData() {
+    
     $('#PRListTable').DataTable({
         processing: false,
         serverSide: true,
@@ -128,7 +175,13 @@ function GetPRData() {
             dataType: 'json'
         },
         columns: [
-            { "data": "prNo", "name": "PRNo" },
+            {
+                "data": "prNo", "name": "PRNo",
+                "render": function (data, type, full) {
+
+                    return '<h5 class="fs-15"><a href="/PurchaseRequest/PurchaseRequestDetails?prNo=' + full.prNo + '" class="fw-medium link-primary">' + full.prNo; '</a></h5>';
+                }
+            },
             {
                 "render": function (data, type, full) {
                     return full.fullName + ' ( ' + full.userName + ')';
@@ -138,10 +191,37 @@ function GetPRData() {
             { "data": "projectName", "name": "ProjectName" },
             { "data": "productName", "name": "ProductName" },
             { "data": "quantity", "name": "Quantity" },
-            { "data": "isApproved", "name": "IsApproved" },
+            {
+                "data": "isApproved", "name": "IsApproved",
+                "render": function (data, type, full) {
+                    return '<input type="checkbox" ' + (full.isApproved ? 'checked' : '') + ' onclick="ApproveUnapprovePR(this,\'' + full.prNo + '\')">';
+                }
+            },
             {
                 "render": function (data, type, full) {
-                    return '<div class="flex-shrink-0 ms-4"><ul class="list-inline tasks-list-menu mb-0"><li class="list-inline-item"><a onclick="PRDetails(\'' + full.prId + '\')"><i class="fa-solid fa-eye""></i></a><li class="list-inline-item"><a onclick="EditPurchaseRequestDetails(\'' + full.prId + '\')"><i class="fas fa-edit"></i></a></li></ul></div>';
+                    var canEdit = userPermissions.some(function (permission) {
+                        return permission.FormName == "Purchase Request List" && permission.Edit == true;
+                    });
+                    var canDelete = userPermissions.some(function (permission) {
+                        return permission.FormName == "Purchase Request List" && permission.Delete == true;
+                    });
+                    var buttons = '<ul class="list-inline hstack gap-2 mb-0">';
+
+                    if (canEdit) {
+                        buttons += '<li class="btn list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">' +
+                            '<a onclick="EditPurchaseRequestDetails(\'' + full.prId + '\')">' +
+                            '<i class="ri-pencil-fill fs-16"></i></a></li>';
+                    }
+
+                    if (canDelete) {
+                        buttons += '<li class="btn text-danger list-inline-item delete" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Delete" style="margin-left:12px;">' +
+                            '<a onclick="DeletePurchaseRequest(\'' + full.prNo + '\')">' +
+                            '<i class="fas fa-trash"></i></a></li>';
+                    }
+
+                    buttons += '</ul>';
+                    return buttons;
+                   /* return ('<li class="btn list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit"><a onclick="EditPurchaseRequestDetails(\'' + full.prId + '\')"><i class="ri-pencil-fill fs-16"></i></a></li><li class="btn text-danger list-inline-item delete" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Delete" style="margin-left:12px;"><a onclick="DeletePurchaseRequest(\'' + full.prNo + '\')"><i class="fas fa-trash"></i></a></li>');*/
                 }
             },
         ],
@@ -149,6 +229,62 @@ function GetPRData() {
             "defaultContent": "",
             "targets": "_all",
         }]
+    });
+}
+
+function ApproveUnapprovePR(checkbox,PrNo) {
+    
+    var isChecked = $(checkbox).is(':checked');
+    var confirmationMessage = isChecked ? "Are you sure you want to approve this purchase request?" : "Are you sure you want to unapprove this purchase request?";
+
+    Swal.fire({
+        title: confirmationMessage,
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, enter it!",
+        cancelButtonText: "No, cancel!",
+        confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
+        cancelButtonClass: "btn btn-danger w-xs mt-2",
+        buttonsStyling: false,
+        showCloseButton: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            var formData = new FormData();
+            formData.append("PrNo", PrNo);
+
+            $.ajax({
+                url: '/PurchaseRequest/ApproveUnapprovePR?PrNo=' + PrNo,
+                type: 'Post',
+                contentType: 'application/json;charset=utf-8;',
+                dataType: 'json',
+                success: function (Result) {
+                    if (Result.code == 200) {
+                        Swal.fire({
+                            title: isChecked ? "Approve!" : "Unapprove!",
+                            text: Result.message,
+                            icon: "success",
+                            confirmButtonClass: "btn btn-primary w-xs mt-2",
+                            buttonsStyling: false
+                        }).then(function () {
+                            GetPRData();
+                        });
+                    } else {
+                        GetPRData();
+                    }
+
+                }
+            });
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+
+            Swal.fire(
+                'Cancelled',
+                'User have no changes.!!😊',
+                'error'
+            ).then(function () {
+                GetPRData();
+            });;
+        }
     });
 }
 
@@ -173,68 +309,79 @@ function GetPurchaseRequestList() {
     })
 }
 
+
 function CreatePurchaseRequest() {
-    var purchaseRequests = [];
-    $(".products").each(function () {
-        var orderRow = $(this);
-        var objData = {
-            UserId: orderRow.find("#txtuserId").val(),
-            ProjectId: orderRow.find("#txtprojectId").val(),
-            ProductId: orderRow.find("#txtproductId").val(),
-            ProductName: orderRow.find("#txtProductName").val(),
-            ProductTypeId: orderRow.find("#txtproducttype").val(),
-            Quantity: orderRow.find("#txtproductquantity").val(),
-            CreatedBy: $('#txtuserId').val(),
-            PrNo: $('#prNo').val(),
-        };
-        purchaseRequests.push(objData);
-    });  
+    var TotalAmount = $("#dsptotalAmount").text();
+    if (TotalAmount != "") {
+        var purchaseRequests = [];
+        $(".products").each(function () {
+            var orderRow = $(this);
+            var objData = {
+                UserId: orderRow.find("#txtuserId").val(),
+                ProjectId: orderRow.find("#txtprojectId").val(),
+                ProductId: orderRow.find("#txtproductId").val(),
+                ProductName: orderRow.find("#txtProductName").val(),
+                ProductTypeId: orderRow.find("#txtproducttype").val(),
+                Quantity: orderRow.find("#txtproductquantity").val(),
+                CreatedBy: $('#txtuserId').val(),
+                PrNo: $('#prNo').val(),
+            };
+            purchaseRequests.push(objData);
+        });
 
-    var data = {
-        PRList: purchaseRequests,
-    }
-
-    var form_data = new FormData();
-    form_data.append("InsertPRDetails", JSON.stringify(data));
-
-    $.ajax({
-        url: '/PurchaseRequest/CreateMutiplePurchaseRequest',
-        type: 'POST',
-        data: form_data,
-        dataType: 'json',
-        contentType: false,
-        processData: false,
-        success: function (Result) {
-            if (Result.code == 200) {
-                Swal.fire({
-                    title: Result.message,
-                    icon: 'success',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK'
-                }).then(function () {
-                    window.location = '/PurchaseRequest/PurchaseRequestList';
-                });
-            }
-            else {
-                Swal.fire({
-                    title: Result.message,
-                    icon: 'warning',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK'
-                });
-            }
-        },
-        error: function (xhr, status, error) {
-            console.error(xhr.responseText);
-            Swal.fire({
-                title: "Error",
-                text: "An error occurred while creating the purchase request.",
-                icon: "error",
-                confirmButtonColor: "#3085d6",
-                confirmButtonText: "OK"
-            });
+        var data = {
+            PRList: purchaseRequests,
         }
-    });
+
+        var form_data = new FormData();
+        form_data.append("InsertPRDetails", JSON.stringify(data));
+
+        $.ajax({
+            url: '/PurchaseRequest/CreateMutiplePurchaseRequest',
+            type: 'POST',
+            data: form_data,
+            dataType: 'json',
+            contentType: false,
+            processData: false,
+            success: function (Result) {
+                if (Result.code == 200) {
+                    Swal.fire({
+                        title: Result.message,
+                        icon: 'success',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK'
+                    }).then(function () {
+                        window.location = '/PurchaseRequest/PurchaseRequestList';
+                    });
+                }
+                else {
+                    Swal.fire({
+                        title: Result.message,
+                        icon: 'warning',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK'
+                    });
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error(xhr.responseText);
+                Swal.fire({
+                    title: "Error",
+                    text: "An error occurred while creating the purchase request.",
+                    icon: "error",
+                    confirmButtonColor: "#3085d6",
+                    confirmButtonText: "OK"
+                });
+            }
+        });
+    } else {
+        Swal.fire({
+            title: "Kindly add products!",
+            icon: 'warning',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'OK',
+        })
+    }
 }
 
 
@@ -303,7 +450,7 @@ function UpdatePurchaseRequestDetails() {
     //    })
     //}
 }
-function DeletePurchaseRequestDetails(PrId) {
+function DeletePurchaseRequest(PrNo) {
 
     Swal.fire({
         title: "Are you sure want to delete this?",
@@ -319,18 +466,17 @@ function DeletePurchaseRequestDetails(PrId) {
     }).then((result) => {
         if (result.isConfirmed) {
             $.ajax({
-                url: '/PurchaseRequest/DeletePurchaseRequestDetails?PrId=' + PrId,
+                url: '/PurchaseRequest/DeletePurchaseRequest?PrNo=' + PrNo,
                 type: 'POST',
                 dataType: 'json',
                 success: function (Result) {
-
                     Swal.fire({
                         title: Result.message,
                         icon: 'success',
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'OK'
                     }).then(function () {
-                        window.location = '/PurchaseRequest/PurchaseRequestList';
+                        GetPRData();
                     })
                 },
                 error: function () {
@@ -340,7 +486,7 @@ function DeletePurchaseRequestDetails(PrId) {
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'OK',
                     }).then(function () {
-                        window.location = '/PurchaseRequest/PurchaseRequestList';
+                        GetPRData();
                     })
                 }
             })
@@ -383,3 +529,5 @@ function DeletePurchaseRequestDetails(PrId) {
 //        }
 //    }
 //}
+
+

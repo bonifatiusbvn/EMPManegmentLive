@@ -98,12 +98,15 @@
                 <div class="d-flex align-items-center">
                     <h5 class="card-title mb-0 flex-grow-1">My Expense-List</h5>
                     <div class="flex-shrink-0">
-                        <div class="d-flex gap-2 flex-wrap">
-                            <button class="btn btn-primary" id="remove-actions" style="margin-left:-34px;">
-                                <i class="ri-delete-bin-2-line"></i>
-                            </button>
-                            <a class="btn btn-block btn-warning" onclick="DisplayAddExpenseModel()"><i class="ri-add-line align-bottom me-1"></i> Add Expense</a>
-                        </div>
+                        @if (UserSession.FormPermisionData.Any(a => a.FormName == "Expenses" && (a.Add == true)))
+                        {
+                            <div class="d-flex gap-2 flex-wrap">
+                                <button class="btn btn-primary" id="remove-actions" style="margin-left:-34px;">
+                                    <i class="ri-delete-bin-2-line"></i>
+                                </button>
+                                <a class="btn btn-block btn-warning" onclick="DisplayAddExpenseModel()"><i class="ri-add-line align-bottom me-1"></i> Add Expense</a>
+                            </div>
+                        }
                     </div>
                 </div>
             </div>

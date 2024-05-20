@@ -34,7 +34,7 @@
                         <div class="col-sm-auto">
                             <div class="d-flex gap-1 flex-wrap">
                                 <a class="btn btn-warning add-btn btn-md" id="create-btn" asp-action="CreatePurchaseRequest" asp-controller="PurchaseRequest"><i class="ri-add-line align-bottom me-1"></i> Create PR</a>
-@*                                <button type="button" class="btn btn-info"><i class="ri-file-download-line align-bottom me-1"></i> Import</button>*@
+                                @*                                <button type="button" class="btn btn-info"><i class="ri-file-download-line align-bottom me-1"></i> Import</button>*@
                                 <button class="btn btn-soft-danger" id="remove-actions" onClick="deleteMultiple()"><i class="ri-delete-bin-2-line"></i></button>
                             </div>
                         </div>
@@ -52,7 +52,10 @@
                                         <th>ProductName</th>
                                         <th>Quantity</th>
                                         <th>IsApproved</th>
-                                        <th>Action</th>
+                                        @if (UserSession.FormPermisionData.Any(a => a.FormName == "Purchase Request List" && (a.Edit == true || a.Delete == true)))
+                                        {
+                                            <th>Action</th>
+                                        }
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -192,6 +195,8 @@
         color: red;
     }
 </style>
-
+<script type="text/javascript">
+    var userPermissions = @Html.Raw(Json.Serialize(UserSession.FormPermisionData));
+</script>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/moduls/purchaserequestscript.js"></script>

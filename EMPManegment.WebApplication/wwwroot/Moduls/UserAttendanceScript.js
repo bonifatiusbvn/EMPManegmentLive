@@ -234,7 +234,7 @@ function UpdateUserAttendance() {
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'OK'
                     }).then(function () {
-                        window.location = '/UserProfile/GetUsersListById';
+                        window.location = '/UserProfile/GetAllUsersAttendanceList';
                     });
                 }                
             },
@@ -435,7 +435,7 @@ function UpdateUserAttendanceSrc() {
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'OK'
                     }).then(function () {
-                        window.location = '/UserProfile/GetUsersListById';
+                        window.location = '/UserProfile/GetAllUsersAttendanceList';
                     });
                 }
             },
@@ -482,7 +482,7 @@ function updateUserAttendance() {
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'OK'
                     }).then(function () {
-                        window.location = '/UserProfile/GetUsersListById';
+                        window.location = '/UserProfile/GetAllUsersAttendanceList';
                     });
 
                 }

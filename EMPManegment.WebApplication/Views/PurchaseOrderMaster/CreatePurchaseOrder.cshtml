@@ -218,20 +218,29 @@
                                                                 <td class="status" id="DeliveryStatus">
                                                                     <span class="badge bg-warning-subtle text-warning text-uppercase">@item.DeliveryStatus</span>
                                                                 </td>
-                                                                <td>
-                                                                    <ul class="list-inline hstack gap-2 mb-0">
-                                                                        <li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">
-                                                                            <a onclick="EditPurchaseOrderDetails('@item.Id')" data-bs-toggle="modal" class="btn text-primary d-inline-block edit-item-btn">
-                                                                                <i class="fa-regular fa-pen-to-square"></i>
-                                                                            </a>
-                                                                        </li>
-                                                                        <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Remove">
-                                                                            <a class="btn text-danger d-inline-block remove-item-btn" data-bs-toggle="modal" onclick="deletePurchaseOrderDetails('@item.Id')">
-                                                                                <i class="fas fa-trash"></i>
-                                                                            </a>
-                                                                        </li>
-                                                                    </ul>
-                                                                </td>
+                                                                @if (UserSession.FormPermisionData.Any(a => a.FormName == "Create Purchase Order" && (a.Edit == true || a.Delete == true)))
+                                                                {
+                                                                    <td>
+                                                                        <ul class="list-inline hstack gap-2 mb-0">
+                                                                            @if (UserSession.FormPermisionData.Any(a => a.FormName == "Create Purchase Order" && (a.Edit == true)))
+                                                                            {
+                                                                                <li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">
+                                                                                    <a onclick="EditPurchaseOrderDetails('@item.Id')" data-bs-toggle="modal" class="btn text-primary d-inline-block edit-item-btn">
+                                                                                        <i class="fa-regular fa-pen-to-square"></i>
+                                                                                    </a>
+                                                                                </li>
+                                                                            }
+                                                                            @if (UserSession.FormPermisionData.Any(a => a.FormName == "Create Purchase Order" && (a.Delete == true)))
+                                                                            {
+                                                                                <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Remove">
+                                                                                    <a class="btn text-danger d-inline-block remove-item-btn" data-bs-toggle="modal" onclick="deletePurchaseOrderDetails('@item.Id')">
+                                                                                        <i class="fas fa-trash"></i>
+                                                                                    </a>
+                                                                                </li>
+                                                                            }
+                                                                        </ul>
+                                                                    </td>
+                                                                }
                                                             </tr>
                                                         }
 
