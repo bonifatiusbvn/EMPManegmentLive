@@ -28,7 +28,6 @@ public partial class TblProductDetailsMaster
     public decimal PerUnitWithGstprice { get; set; }
     public bool? IsDeleted { get; set; }
 
-    public bool? IsDeleted { get; set; }
 
     public DateTime CreatedOn { get; set; }
 
