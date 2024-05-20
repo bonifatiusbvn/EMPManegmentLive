@@ -6,7 +6,10 @@ $(document).ready(function () {
     GetUserAttendanceInTime();
     UserBirsthDayWish();
     GetAllUserData();
-    clearSelectedBox()
+    clearSelectedBox();
+    //GetUserRoleList();
+    //GetDepartment();
+
     $("#activeInactiveForm").validate({
         rules: {
             ddlusername: "required",
@@ -70,6 +73,7 @@ function GetAllUserData() {
                     return '<div class="d-flex"><div class="flex-grow-1 tasks_name">' + full.departmentName + '</div>';
                 }
             },
+            { "data": "roleName", "name": "RoleName" },
             {
                 "data": "firstName", "name": "FirstName",
                 "render": function (data, type, full) {
@@ -112,7 +116,6 @@ function GetAllUserData() {
             },
             { "data": "email", "name": "Email" },
             { "data": "phoneNumber", "name": "PhoneNumber" },
-            { "data": "cityName", "name": "CityName" },
             { "data": "address", "name": "Address" }
         ],
         columnDefs: [{
@@ -121,11 +124,38 @@ function GetAllUserData() {
         }]
     });
 }
-function UserActiveDeactive(UserId) {debugger
+function GetUserRoleList(itemId, selectedRoleId) {
+    $.ajax({
+        url: '/UserProfile/RolewisePermissionListAction',
+        success: function (result) {
+            var roleDropdown = $('#ddlUserRole_' + itemId);
+            roleDropdown.empty();
+            $.each(result, function (i, data) {
+                var selected = data.roleId == selectedRoleId ? 'selected' : '';
+                roleDropdown.append('<option value=' + data.roleId + ' ' + selected + '>' + data.role + '</option>');
+            });
+        }
+    });
+}
 
-    var isActive = $(this).hasClass('active');
-    var action = isActive ? 'deactivate' : 'activate'; // Corrected action
-    var confirmationMessage = isActive ? "Are you sure you want to deactivate this user?" : "Are you sure you want to activate this user?"; // Corrected messages
+function GetDepartmentList(itemId, selectedDepartmentId) {
+    $.ajax({
+        url: '/Authentication/GetDepartment',
+        success: function (result) {
+            var departmentDropdown = $('#ddlDepartment_' + itemId);
+            departmentDropdown.empty();
+            $.each(result, function (i, data) {
+                var selected = data.id == selectedDepartmentId ? 'selected' : '';
+                departmentDropdown.append('<option value=' + data.id + ' ' + selected + '>' + data.departments + '</option>');
+            });
+        }
+    });
+}
+
+function UserActiveDeactive(UserId, checkboxElement) {
+    var isActive = checkboxElement.checked;
+    var action = isActive ? 'activate' : 'deactivate';
+    var confirmationMessage = isActive ? "Are you sure you want to activate this user?" : "Are you sure you want to deactivate this user?";
 
     Swal.fire({
         title: confirmationMessage,
@@ -139,14 +169,13 @@ function UserActiveDeactive(UserId) {debugger
         buttonsStyling: false,
         showCloseButton: true
     }).then((result) => {
-        debugger
         if (result.isConfirmed) {
             $.ajax({
                 url: '/UserProfile/UserActiveDecative?UserName=' + UserId,
                 type: 'POST',
                 contentType: 'application/json;charset=utf-8',
                 dataType: 'json',
-                success: function (result) {debugger
+                success: function (result) {
                     Swal.fire({
                         title: "Success!",
                         text: result.message,
@@ -154,7 +183,7 @@ function UserActiveDeactive(UserId) {debugger
                         confirmButtonClass: "btn btn-primary w-xs mt-2",
                         buttonsStyling: false
                     }).then(function () {
-                        location.reload(); // Reload the page to reflect changes
+                        location.reload();
                     });
                 },
                 error: function (xhr, status, error) {
@@ -171,9 +200,62 @@ function UserActiveDeactive(UserId) {debugger
                 'No changes were made.',
                 'error'
             );
+            checkboxElement.checked = !isActive;
         }
     });
 }
+function UpdateUserRoleAndDept(userId) {
+    var objData = {
+        Id: $('#txtUserId').val(),
+        RoleId: $('#ddlUserRole_' + userId).val(),
+        DepartmentId: $('#ddlDepartment_' + userId).val(),
+        DateOfBirth: $('#txtDateOfBirth').val(),
+        Gender: $('#txtGender').val(),
+        FirstName: $('#txtFirstName').val(),
+        LastName: $('#txtLastName').val(),
+        Email: $('#txtEmail').val(),
+        PhoneNumber: $('#txtPhoneNumber').val(),
+        Address: $('#txtAddress').val()
+    };
+    var form_data = new FormData();
+    form_data.append("USERUPDATE", JSON.stringify(objData));
+    $.ajax({
+        url: '/UserProfile/UpdateUserRoleAndDepartment',
+        type: 'post',
+        data: form_data,
+        dataType: 'json',
+        contentType: false,
+        processData: false,
+        success: function (result) {
+            if (result.code == 200) {
+                Swal.fire({
+                    title: result.message,
+                    icon: 'success',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'OK'
+                }).then(function () {
+                    window.location = '/UserProfile/UserActiveDecative';
+                });
+            } else {
+                Swal.fire({
+                    title: result.message,
+                    icon: 'warning',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'OK'
+                });
+            }
+        },
+        error: function (xhr, status, error) {
+            Swal.fire(
+                'Error',
+                'An error occurred while updating user details. Please try again later.',
+                'error'
+            );
+        }
+    });
+}
+
+
 
 //$(document).ready(function () {
 
@@ -615,52 +697,51 @@ $('#txtserch').keyup(function () {
 
 function clearSelectedBox() {
     $("#ddlusername").find("option").remove().end().append(
-        '<option selected disabled value = "">--Select Username--</option>');
+        '<option selected disabled value="">--Select Username--</option>');
 
     $("#ddlDepartmenrnt").find("option").remove().end().append(
-        '<option selected disabled value = "">--Select Department--</option>');
+        '<option selected disabled value="">--Select Department--</option>');
 }
 
-$('#searchEmployee').on('change', function (e) {
-    e.stopImmediatePropagation();
+function SearchEmployeeList() {debugger
     if ($("#searchEmployee").val() == "ByUsername") {
         clearSelectedBox();
-        GetUsername()
+        GetUsername();
         $("#empnamebox").show();
-        $("#departmentbox").hide();
-    }
-    else if ($("#searchEmployee").val() == "ByDepartment") {
+    } else if ($("#searchEmployee").val() == "ByDepartment") {
         clearSelectedBox();
         GetDepartment();
-        $("#empnamebox").hide();
-        $("#departmentbox").show();
+        $("#empnamebox").show();
     }
-});
+}
 
 function GetUsername() {
     $.ajax({
         url: '/Task/GetUserName',
         success: function (result) {
             $.each(result, function (i, data) {
-                $('#ddlusername').append('<Option value=' + data.id + '>' + data.firstName + " " + data.lastName + " " + "(" + data.userName + ")" + '</Option>')
+                $('#ddlusername').append('<option value=' + data.id + '>' + data.firstName + ' ' + data.lastName + ' (' + data.userName + ')</option>');
             });
         }
     });
 }
 
-
 function GetDepartment() {
-
     $.ajax({
         url: '/Authentication/GetDepartment',
         success: function (result) {
             $.each(result, function (i, data) {
-                $('#ddlDepartmenrnt').append('<Option value=' + data.id + '>' + data.departments + '</Option>')
-
+                $('#ddlDepartmenrnt').append('<option value=' + data.id + '>' + data.departments + '</option>');
             });
         }
     });
 }
+
+$(document).ready(function () {
+    $("#searchEmployee").change(SearchEmployeeList);
+    $("#empnamebox").hide();
+});
+
 
 function GetSearchEmpList() {
 

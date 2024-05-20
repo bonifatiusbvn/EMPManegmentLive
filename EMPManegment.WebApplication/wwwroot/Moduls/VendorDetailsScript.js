@@ -355,7 +355,12 @@ $(document).ready(function () {
             ddlState: "required",
             ddlCity: "required",
             AddressidInput: "required",
-            pincodeidInput: "required",
+            pincodeidInput: {
+                required: true,
+                digits: true,
+                minlength: 6,
+                maxlength: 6
+}
         },
         messages: {
             companynameInput: "Please Enter Company",
@@ -367,7 +372,12 @@ $(document).ready(function () {
             ddlState: "Please Enter State",
             ddlCity: "Please Enter City",
             AddressidInput: "Please Enter Address",
-            pincodeidInput: "Please Enter PinCode",
+            pincodeidInput: {
+                required: "Please Enter Pincode",
+                digits: "Pin code must contain only digits",
+                minlength: "Pin code must be 6 digits long",
+                maxlength: "Pin code must be 6 digits long"
+            },
         }
     })
     $("#VendorPersonalDetails").validate({
