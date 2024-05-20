@@ -345,5 +345,31 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
+        [HttpGet]
+        public async Task<IActionResult> ProjectActivityByUserId(Guid ProId)
+        {
+            try
+            {
+                Guid UserId = _userSession.UserId;
+                List<TaskDetailsView> activity = new List<TaskDetailsView>();
+                ApiResponseModel postuser = await APIServices.GetAsync("", "UserHome/ProjectActivityByUserId?ProId=" + ProId + "&UserId=" + UserId);
+                if (postuser.data != null)
+                {
+                    activity = JsonConvert.DeserializeObject<List<TaskDetailsView>>(postuser.data.ToString());
+
+                }
+                else
+                {
+                    activity = new List<TaskDetailsView>();
+                    ViewBag.Error = "note found";
+                }
+                return PartialView("~/Views/UserProfile/_UserActivityPartial.cshtml", activity);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
     }
 }

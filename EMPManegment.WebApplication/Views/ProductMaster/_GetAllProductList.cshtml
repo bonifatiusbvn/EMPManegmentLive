@@ -81,7 +81,9 @@
                             <a href="#showModal" onclick="EditProductDetails('@item.Id')" data-bs-toggle="modal" class="text-primary d-inline-block edit-item-btn">
                                 <i class="fas fa-edit"></i>
                             </a>
-
+                            <a href="#showModal" onclick="DeleteProductDetails('@item.Id')" data-bs-toggle="modal" class="btn text-danger d-inline-block remove-item-btn">
+                                <i class="fas fa-trash"></i>
+                            </a>
                         </td>
                     </tr>
                 }

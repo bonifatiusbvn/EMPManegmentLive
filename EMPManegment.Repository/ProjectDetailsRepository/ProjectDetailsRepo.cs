@@ -361,6 +361,7 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
                         ProjectStartDate = item.ProjectStartDate,
                         ProjectDeadline = item.ProjectDeadline,
                         ProjectDescription = item.ProjectDescription,
+                        ProjectImage= item.ProjectImage,
                     });
                 }
             }

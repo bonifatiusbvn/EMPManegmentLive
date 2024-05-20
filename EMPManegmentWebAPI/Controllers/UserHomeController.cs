@@ -295,5 +295,12 @@ namespace EMPManagment.API.Controllers
             IEnumerable<TaskDetailsView> UserTask = await TaskServices.ProjectActivity(ProId);
             return Ok(new { code = 200, data = UserTask.ToList() });
         }
+        [HttpGet]
+        [Route("ProjectActivityByUserId")]
+        public async Task<IActionResult> ProjectActivityByUserId(Guid ProId,Guid UserId)
+        {
+            IEnumerable<TaskDetailsView> UserTask = await TaskServices.ProjectActivityByUserId(ProId, UserId);
+            return Ok(new { code = 200, data = UserTask.ToList() });
+        }
     }
 }

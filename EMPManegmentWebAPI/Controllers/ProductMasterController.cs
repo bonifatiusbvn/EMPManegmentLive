@@ -4,6 +4,7 @@ using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.ProductMaster;
 using EMPManegment.EntityModels.ViewModels.TaskModels;
 using EMPManegment.EntityModels.ViewModels.VendorModels;
+using EMPManegment.Inretface.Interface.OrderDetails;
 using EMPManegment.Inretface.Interface.ProductMaster;
 using EMPManegment.Inretface.Interface.ProjectDetails;
 using EMPManegment.Inretface.Services.ProductMaster;
@@ -140,6 +141,31 @@ namespace EMPManagment.API.Controllers
                 throw ex;
             }
             return StatusCode(updateresponsemodel.Code, updateresponsemodel);
+        }
+        [HttpPost]
+        [Route("DeleteProductDetails")]
+        public async Task<IActionResult> DeleteProductDetails(Guid ProductId)
+        {
+            UserResponceModel responseModel = new UserResponceModel();
+            var order = await productMaster.DeleteProductDetails(ProductId);
+            try
+            {
+                if (order != null)
+                {
+                    responseModel.Code = (int)HttpStatusCode.OK;
+                    responseModel.Message = order.Message;
+                }
+                else
+                {
+                    responseModel.Message = order.Message;
+                    responseModel.Code = (int)HttpStatusCode.NotFound;
+                }
+            }
+            catch (Exception ex)
+            {
+                responseModel.Code = (int)HttpStatusCode.InternalServerError;
+            }
+            return StatusCode(responseModel.Code, responseModel);
         }
         [HttpPost]
         [Route("GetProductDetailsByProductId")]

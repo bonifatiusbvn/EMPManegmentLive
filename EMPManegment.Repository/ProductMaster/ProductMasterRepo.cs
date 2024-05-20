@@ -1,5 +1,6 @@
 ﻿using Azure;
 using EMPManagment.API;
+using EMPManagment.Web.Models.API;
 using EMPManegment.EntityModels.ViewModels;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.ProductMaster;
@@ -9,6 +10,7 @@ using EMPManegment.Inretface.Interface.ProductMaster;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Linq;
 using System.Net;
 using System.Numerics;
@@ -92,6 +94,7 @@ namespace EMPManegment.Repository.ProductMaster
                         CreatedOn = DateTime.Today,
                         UpdatedBy = AddProduct.UpdatedBy,
                         UpdatedOn = AddProduct.UpdatedOn,
+                        
                     };
                     response.Code = 200;
                     response.Message = "Product add successfully!";
@@ -415,7 +418,7 @@ namespace EMPManegment.Repository.ProductMaster
         {
             try
             {
-                IEnumerable<ProductDetailsView> Product = Context.TblProductDetailsMasters.ToList().Select(a => new ProductDetailsView
+                IEnumerable<ProductDetailsView> Product = Context.TblProductDetailsMasters.Where(a=>a.IsDeleted==false).ToList().Select(a => new ProductDetailsView
                 {
                     Id = a.Id,
                     ProductDescription = a.ProductDescription,
@@ -443,6 +446,28 @@ namespace EMPManegment.Repository.ProductMaster
             {
                 throw ex;
             }
+        }
+
+        public async Task<UserResponceModel> DeleteProductDetails(Guid ProductId)
+        {
+            UserResponceModel response = new UserResponceModel();
+            var Product = Context.TblProductDetailsMasters.Where(a => a.Id == ProductId).FirstOrDefault();
+
+            if (Product != null)
+            {
+
+                Product.IsDeleted = true;
+                Context.TblProductDetailsMasters.Update(Product);
+                Context.SaveChanges();
+                response.Code = 200;
+                response.Message = "Product is successfully deleted.";
+            }
+            else
+            {
+                response.Code = 400;
+                response.Message = "Error in deleting product.";
+            }
+            return response;
         }
     }
 }

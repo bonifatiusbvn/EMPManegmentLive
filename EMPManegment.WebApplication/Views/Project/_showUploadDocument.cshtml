@@ -1,5 +1,7 @@
 ﻿@model IEnumerable<EMPManegment.EntityModels.ViewModels.ProjectModels.ProjectDocumentView>
-
+@{
+    var counter = 1;
+}
 <div class="card">
     <div class="card-header">
         <div class="row g-2">
@@ -29,7 +31,7 @@
                     @foreach (var item in Model)
                     {
                         <tr>
-                            <td>1.</td>
+                            <td>@counter</td>
                             <td>@item.DocumentName.Substring(37)</td>
                             <td>
                                 @item.FullName
@@ -42,6 +44,7 @@
                                 </div>
                             </td>
                         </tr>
+                        counter++;
                     }
                 </tbody>
 
