@@ -41,8 +41,7 @@ function VendorDetails(Id) {
         dataType: 'json',
         success: function (response) {
             $('#VendorDetailsModel').modal('show');
-            $('#VendorFirstName').text(response.vendorFirstName);
-            $('#VendorLastName').text(response.vendorLastName);
+            $('#VendorFirstName').text(response.vendorFirstName + " " + response.vendorLastName);
             $('#VendorEmail').text(response.vendorCompanyEmail);
             $('#VendorPhone').text(response.vendorPhone);
             $('#VendorContectNo').text(response.vendorContectNo);
@@ -68,6 +67,21 @@ function VendorDetails(Id) {
         }
     });
 }
+
+//function showCard(cardId) {
+
+//    document.querySelectorAll('.card-body').forEach(function (card) {
+//        card.style.display = 'none';
+//    });
+//    // Show the selected card-body
+//    var selectedCard = document.getElementById(cardId);
+//    if (selectedCard) {
+//        selectedCard.style.display = 'block';
+
+//    }
+//}
+
+
 
 function EditVendorDetails(Id) {
 

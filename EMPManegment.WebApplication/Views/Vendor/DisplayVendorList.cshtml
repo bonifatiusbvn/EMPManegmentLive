@@ -2,7 +2,72 @@
     ViewData["Title"] = "DisplayVendorList";
     Layout = "~/Views/Shared/_UserHomeLayout.cshtml";
 }
+<style>
 
+
+    .box-1, .box-2, .box-3, .box-4 {
+        background-color: lightgrey;
+        border: 5px solid gray;
+        padding: 5px;
+        margin-left: 20px;
+        box-sizing: border-box;
+    }
+
+    .box-1, .box-2 {
+        width: 350px;
+        height: 300px;
+        float: left;
+        margin-bottom: 20px;
+    }
+
+    .box-3 {
+        width: 720px;
+        height: 210px;
+        margin-top: 320px;
+    }
+
+    .box-4 {
+        width: 720px;
+        height: 210px;
+        margin-top: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+        word-wrap: break-word;
+    }
+
+        .form-group label {
+            display: inline-block;
+            max-width: 100%;
+        }
+
+    .modal-body {
+        overflow: hidden;
+    }
+
+    #firstnameInput-error, #lastnameInput-error, #contactnumberInput-error.error,
+    #phonenumberInput-error, #emailidInput-error, #ddlVendorType-error,
+    #ddlCountry-error, #ddlState-error, #ddlCity-error.error,
+    #AddressidInput-error, #pincodeidInput-error, #companynameInput-error,
+    #CompanyType-error, #companyemailInput-error, #worknumberInput-error.error,
+    #companylogoInput-error, #banknameInput-error, #branchInput-error, #accountnameInput-error,
+    #accountnumberInput-error, #ifscInput-error.error,
+    #GSTNumberInput-error,
+    #EditfirstnameInput-error, #EditlastnameInput-error, #EditcontactnumberInput-error.error,
+    #EditphonenumberInput-error, #EditemailidInput-error,
+    #EditAddressidInput-error, #EditpincodeidInput-error, #EditcompanynameInput-error,
+    #EditCompanyType-error, #EditcompanyemailInput-error, #EditworknumberInput-error.error,
+    #EditcompanylogoInput-error, #EditbanknameInput-error, #EditbranchInput-error, #EditaccountnameInput-error,
+    #EditaccountnumberInput-error, #EditifscInput-error.error,
+    #EditGSTNumberInput-error {
+        color: red;
+    }
+
+    label.failed {
+        color: red;
+    }
+</style>
 
 
 <!-- start page title -->
@@ -341,114 +406,6 @@
                 </div>
                 <!--end modal-->
                 <!--end add modal-->
-
-                <div class="modal fade bs-example-modal-lg" id="VendorDetailsModel" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-lg">
-                        <div class="modal-content">
-                            <div class="modal-body">
-                                <div class="form-group">
-                                    <!-- Company Details -->
-                                    <div class="box-1">
-                                        <div>
-                                            <h5 class="text-center" style="padding-bottom:10px; color: black;">Company Details</h5>
-                                        </div>
-                                        <div class="form-group control-label">
-                                            <label style="color: teal;font-weight: 500;">Name:</label>
-                                            <label style="color: black;font-weight: 500; margin-left: 68px" id="VendorCompany"></label>
-                                        </div>
-                                        <div class="form-group">
-                                            <label style="color: teal;font-weight: 500;">CompanyType:</label>
-                                            <label style="color: black;font-weight: 500; margin-left: 12px" id="VendorCompanyType"></label>
-                                        </div>
-                                        <div class="form-group">
-                                            <label style="color: teal;font-weight: 500;">Email:</label>
-                                            <label style="color: black;font-weight: 500; margin-left: 70px" id="VendorCompanyEmail"></label>
-                                        </div>
-                                        <div class="form-group">
-                                            <label style="color: teal;font-weight: 500;">ContactNumber:</label>
-                                            <label style="color: black;font-weight: 500;" id="VendorCompanyNumber"></label>
-                                        </div>
-                                    </div>
-                                    <!-- Vendor Details -->
-                                    <div class="box-2">
-                                        <div>
-                                            <h5 class="text-center" style="padding-bottom:10px; color: black;">Vendor Details</h5>
-                                        </div>
-                                        <div class="form-group">
-                                            <label style="color: teal;font-weight: 500;">Name:</label>
-                                            <label style="color: black;font-weight: 500; margin-left: 31px" id="VendorFirstName"></label>
-                                        </div>
-                                        <div class="form-group">
-                                            <label style="color: teal;font-weight: 500;">Email:</label>
-                                            <label style="color: black;font-weight: 500; margin-left: 34px;" id="VendorEmail"></label>
-                                        </div>
-                                        <div class="form-group">
-                                            <label style="color: teal;font-weight: 500;">Phone:</label>
-                                            <label style="color: black;font-weight: 500; margin-left: 28px;" id="VendorPhone"></label>
-                                        </div>
-                                        <div class="form-group">
-                                            <label style="color: teal;font-weight: 500;">ContectNo:</label>
-                                            <label style="color: black;font-weight: 500;" id="VendorContectNo"></label>
-                                        </div>
-                                        <div class="form-group">
-                                            <label style="color: teal;font-weight: 500;">Type:</label>
-                                            <label style="color: black;font-weight: 500; margin-left: 40px" id="VendorType"></label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- Address Details -->
-                                <div class="box-3">
-                                    <div>
-                                        <h5 class="text-center" style="color: black; padding-bottom:10px;">Address</h5>
-                                    </div>
-                                    <div class="form-group">
-                                        <label style="color: teal;font-weight: 500; margin-left:80px;">Country:</label>
-                                        <label style="color: black;font-weight: 500;" id="VendorCountry"></label>
-                                        <label style="color: teal;font-weight: 500; margin-left:60px;">State:</label>
-                                        <label style="color: black;font-weight: 500;" id="VendorState"></label>
-                                        <label style="color: teal;font-weight: 500; margin-left:60px;">City:</label>
-                                        <label style="color: black;font-weight: 500;" id="VendorCity"></label>
-                                    </div>
-                                    <div class="form-group">
-                                        <label style="color: teal;font-weight: 500; margin-left:80px;">PinCode:</label>
-                                        <label style="color: black;font-weight: 500;" id="VendorPinCode"></label>
-                                    </div>
-                                    <div class="form-group">
-                                        <label style="color: teal;font-weight: 500; margin-left:80px;">Address:</label>
-                                        <label style="color: black;font-weight: 500;" id="VendorAddress"></label>
-                                    </div>
-                                </div>
-                                <!-- Bank Details -->
-                                <div class="box-4">
-                                    <div>
-                                        <h5 class="text-center" style="padding-bottom:10px; color: black;">Bank Details</h5>
-                                    </div>
-                                    <div class="form-group">
-                                        <label style="color: teal;font-weight: 500; margin-left:30px;">BankName:</label>
-                                        <label style="color: black;font-weight: 500;" id="VendorBankName"></label>
-                                        <label style="color: teal;font-weight: 500; margin-left:195px;">AccountNo:</label>
-                                        <label style="color: black;font-weight: 500;" id="VendorBankAccountNo"></label>
-                                    </div>
-                                    <div class="form-group">
-                                        <label style="color: teal;font-weight: 500; margin-left:30px;">BankBranch:</label>
-                                        <label style="color: black;font-weight: 500;" id="VendorBankBranch"></label>
-                                        <label style="color: teal;font-weight: 500; margin-left:185px;">Ifsc Code:</label>
-                                        <label style="color: black;font-weight: 500;" id="VendorBankIfsc"></label>
-                                    </div>
-                                    <div class="form-group">
-                                        <label style="color: teal;font-weight: 500; margin-left:30px;">AccountHolderName:</label>
-                                        <label style="color: black;font-weight: 500;" id="VendorAccountHolderName"></label>
-                                        <label style="color: teal;font-weight: 500; margin-left:80px;">Gstnumber:</label>
-                                        <label style="color: black;font-weight: 500;" id="VendorGstnumber"></label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button class="btn btn-danger btn-default m-1" data-bs-dismiss="modal"><i class="ri-close-line me-1 align-middle"></i> Close</button>
-                            </div>
-                        </div><!-- /.modal-content -->
-                    </div><!-- /.modal-dialog -->
-                </div><!-- /.modal -->
                 <!--end delete modal -->
                 <div class="modal fade zoomIn" id="UpdateVendorModel" tabindex="-1" aria-labelledby="EditSellerLabel" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered modal-lg">
@@ -716,37 +673,99 @@
                     <img src="assets/images/users/avatar-10.jpg" alt="" class="avatar-lg rounded-circle img-thumbnail">
                     <span class="contact-active position-absolute rounded-circle bg-success"><span class="visually-hidden"></span>
                 </div>
-                <h5 class="mt-4 mb-1">Tonya Noble</h5>
-                <p class="text-muted">Nesta Technologies</p>
+                <h5 class="mt-4 mb-1" id="VendorFirstName"></h5>
+                <p class="text-muted" id="VendorCompany"></p>
 
                 <ul class="list-inline mb-0">
                     <li class="list-inline-item avatar-xs">
-                        <a href="javascript:void(0);" class="avatar-title bg-success-subtle text-success fs-15 rounded">
-                            <i class="ri-phone-line"></i>
+                        <a href="#" class="avatar-title bg-success-subtle text-success fs-15 rounded" onclick="showCard('vndPersonal')">
+                            <i class="bx bxs-user-detail"></i>
                         </a>
                     </li>
                     <li class="list-inline-item avatar-xs">
-                        <a href="javascript:void(0);" class="avatar-title bg-danger-subtle text-danger fs-15 rounded">
-                            <i class="ri-mail-line"></i>
+                        <a href="#" class="avatar-title bg-danger-subtle text-danger fs-15 rounded" onclick="showCard('vndCompany')">
+                            <i class="bx bxs-city"></i>
                         </a>
                     </li>
                     <li class="list-inline-item avatar-xs">
-                        <a href="javascript:void(0);" class="avatar-title bg-primary-subtle text-primary fs-15 rounded">
-                            <i class="ri-question-answer-line"></i>
+                        <a href="#" class="avatar-title bg-primary-subtle text-primary fs-15 rounded" onclick="showCard('vndBank')">
+                            <i class="bx bxs-bank"></i>
                         </a>
                     </li>
                 </ul>
             </div>
-            <div class="card-body">
+            <div class="card-body" id="vndpersonal">
                 <h6 class="text-muted text-uppercase fw-semibold mb-3">Personal Information</h6>
-                <p class="text-muted mb-4">Hello, I'm Tonya Noble, The most effective objective is one that is tailored to the job you are applying for. It states what kind of career you are seeking, and what skills and experiences.</p>
                 <div class="table-responsive table-card">
                     <table class="table table-borderless mb-0">
                         <tbody>
+
                             <tr>
-                                <td class="fw-medium" scope="row">Designation</td>
-                                <td>Lead Designer / Developer</td>
+                                <td class="fw-medium" scope="row">Email ID</td>
+                                <td>tonyanoble@velzon.com</td>
                             </tr>
+                            <tr>
+                                <td class="fw-medium" scope="row">Phone No</td>
+                                <td>414-453-5725</td>
+                            </tr>
+                            <tr>
+                                <td class="fw-medium" scope="row">Lead Score</td>
+                                <td>154</td>
+                            </tr>
+                            <tr>
+                                <td class="fw-medium" scope="row">Tags</td>
+                                <td>
+                                    <span class="badge bg-secondary-subtle text-secondary">Lead</span>
+                                    <span class="badge bg-secondary-subtle text-secondary">Partner</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="fw-medium" scope="row">Last Contacted</td>
+                                <td>15 Dec, 2021 <small class="text-muted">08:58AM</small></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card-body" id="vndCompany">
+                <h6 class="text-muted text-uppercase fw-semibold mb-3">Company Information</h6>
+                <div class="table-responsive table-card">
+                    <table class="table table-borderless mb-0">
+                        <tbody>
+
+                            <tr>
+                                <td class="fw-medium" scope="row">Email ID</td>
+                                <td>tonyanoble@velzon.com</td>
+                            </tr>
+                            <tr>
+                                <td class="fw-medium" scope="row">Phone No</td>
+                                <td>414-453-5725</td>
+                            </tr>
+                            <tr>
+                                <td class="fw-medium" scope="row">Lead Score</td>
+                                <td>154</td>
+                            </tr>
+                            <tr>
+                                <td class="fw-medium" scope="row">Tags</td>
+                                <td>
+                                    <span class="badge bg-secondary-subtle text-secondary">Lead</span>
+                                    <span class="badge bg-secondary-subtle text-secondary">Partner</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="fw-medium" scope="row">Last Contacted</td>
+                                <td>15 Dec, 2021 <small class="text-muted">08:58AM</small></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card-body" id="vndBank">
+                <h6 class="text-muted text-uppercase fw-semibold mb-3">Bank Information</h6>
+                <div class="table-responsive table-card">
+                    <table class="table table-borderless mb-0">
+                        <tbody>
+
                             <tr>
                                 <td class="fw-medium" scope="row">Email ID</td>
                                 <td>tonyanoble@velzon.com</td>
@@ -781,76 +800,9 @@
 </div>
 
 
-<style>
-    .box-1, .box-2, .box-3, .box-4 {
-        background-color: lightgrey;
-        border: 5px solid gray;
-        padding: 5px;
-        margin-left: 20px;
-        box-sizing: border-box;
-    }
 
-    .box-1, .box-2 {
-        width: 350px;
-        height: 300px;
-        float: left;
-        margin-bottom: 20px;
-    }
 
-    .box-3 {
-        width: 720px;
-        height: 210px;
-        margin-top: 320px;
-    }
 
-    .box-4 {
-        width: 720px;
-        height: 210px;
-        margin-top: 20px;
-    }
-
-    .form-group {
-        margin-bottom: 15px;
-        word-wrap: break-word;
-    }
-
-        .form-group label {
-            display: inline-block;
-            max-width: 100%;
-        }
-
-    .modal-body {
-        overflow: hidden;
-    }
-
-    #firstnameInput-error, #lastnameInput-error, #contactnumberInput-error.error,
-    #phonenumberInput-error, #emailidInput-error, #ddlVendorType-error,
-    #ddlCountry-error, #ddlState-error, #ddlCity-error.error,
-    #AddressidInput-error, #pincodeidInput-error, #companynameInput-error,
-    #CompanyType-error, #companyemailInput-error, #worknumberInput-error.error,
-    #companylogoInput-error, #banknameInput-error, #branchInput-error, #accountnameInput-error,
-    #accountnumberInput-error, #ifscInput-error.error,
-    #GSTNumberInput-error,
-    #EditfirstnameInput-error, #EditlastnameInput-error, #EditcontactnumberInput-error.error,
-    #EditphonenumberInput-error, #EditemailidInput-error,
-    #EditAddressidInput-error, #EditpincodeidInput-error, #EditcompanynameInput-error,
-    #EditCompanyType-error, #EditcompanyemailInput-error, #EditworknumberInput-error.error,
-    #EditcompanylogoInput-error, #EditbanknameInput-error, #EditbranchInput-error, #EditaccountnameInput-error,
-    #EditaccountnumberInput-error, #EditifscInput-error.error,
-    #EditGSTNumberInput-error {
-        color: red;
-    }
-
-    label.failed {
-        color: red;
-    }
-</style>
-
-<!-- Calender -->
-<script>
-    var today = new Date().toISOString().split('T')[0];
-    document.getElementById("CreatedOn").setAttribute("max", today);
-</script>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/moduls/taskscript.js"></script>
 <script src="~/moduls/vendordetailsscript.js"></script>
