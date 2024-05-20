@@ -421,6 +421,7 @@ namespace EMPManegment.Repository.UserListRepository
                            join c in Context.TblCountries on e.CountryId equals c.Id
                            join s in Context.TblStates on e.StateId equals s.Id
                            join ct in Context.TblCities on e.CityId equals ct.Id
+                           join b in Context.TblProjectMembers on e.Id equals b.UserId
                            select new EmpDetailsView
                            {
                                Id = e.Id,
@@ -445,6 +446,7 @@ namespace EMPManegment.Repository.UserListRepository
                                CityId = e.CityId,
                                StateId = e.StateId,
                                CountryId = e.CountryId,
+                               ProjectId =b.ProjectId,
                            }).First();
                 return Userdata;
             }

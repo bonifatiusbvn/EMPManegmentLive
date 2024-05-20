@@ -4,6 +4,7 @@ using EMPManegment.Inretface.Interface.ProductMaster;
 using EMPManegment.Inretface.Services.ProductMaster;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -71,6 +72,11 @@ namespace EMPManegment.Services.ProductMaster
         public async Task<IEnumerable<ProductDetailsView>> GetAllProductList(string? searchText)
         {
             return await productMaster.GetAllProductList(searchText);
+        }
+
+        public async Task<UserResponceModel> DeleteProductDetails(Guid ProductId)
+        {
+            return await productMaster.DeleteProductDetails(ProductId);
         }
     }
 }

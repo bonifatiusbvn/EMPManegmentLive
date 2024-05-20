@@ -183,3 +183,25 @@ function serrchproject() {
     loadPartialView(1);
     GetUserProjectList(1);
 }
+function UserProjectActivity(ProId) {
+
+    $.ajax({
+        url: '/Task/ProjectActivityByUserId?ProId=' + ProId,
+        type: 'Get',
+        dataType: 'json',
+        processData: false,
+        contentType: false,
+        complete: function (Result) {
+
+            $('#UserProjectActivity').html(Result.responseText);
+        },
+        Error: function () {
+            Swal.fire({
+                title: "Can't get data!",
+                icon: 'warning',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'OK',
+            })
+        }
+    })
+}

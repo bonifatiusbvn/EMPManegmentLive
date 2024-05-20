@@ -22,6 +22,7 @@ namespace EMPManagment.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class UserHomeController : ControllerBase
     {
         public UserHomeController(IUserDetailsServices userDetails, IUserAttendanceServices attendanceServices, ITaskServices taskServices)
@@ -292,6 +293,13 @@ namespace EMPManagment.API.Controllers
         public async Task<IActionResult> ProjectActivity(Guid ProId)
         {
             IEnumerable<TaskDetailsView> UserTask = await TaskServices.ProjectActivity(ProId);
+            return Ok(new { code = 200, data = UserTask.ToList() });
+        }
+        [HttpGet]
+        [Route("ProjectActivityByUserId")]
+        public async Task<IActionResult> ProjectActivityByUserId(Guid ProId,Guid UserId)
+        {
+            IEnumerable<TaskDetailsView> UserTask = await TaskServices.ProjectActivityByUserId(ProId, UserId);
             return Ok(new { code = 200, data = UserTask.ToList() });
         }
     }

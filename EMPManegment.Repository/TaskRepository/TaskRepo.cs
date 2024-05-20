@@ -259,7 +259,40 @@ namespace EMPManegment.Repository.TaskRepository
             }
         }
 
+        public async Task<IEnumerable<TaskDetailsView>> ProjectActivityByUserId(Guid ProId, Guid UserId)
+        {
+            try
+            {
+                var activity = (from a in Context.TblTaskDetails
+                                join b in Context.TblUsers on a.User.Id equals b.Id
+                                join c in Context.TblTaskMasters on a.TaskType equals c.Id
+                                where a.ProjectId == ProId && a.UserId == UserId
+                                orderby a.UpdatedOn ascending
+                                select new TaskDetailsView
+                                {
+                                    Id = a.Id,
+                                    UserId = b.Id,
+                                    TaskType = a.TaskType,
+                                    TaskStatus = a.TaskStatus,
+                                    TaskDate = a.TaskDate,
+                                    TaskDetails = a.TaskDetails,
+                                    TaskEndDate = a.TaskEndDate,
+                                    TaskTitle = a.TaskTitle,
+                                    UserProfile = b.Image,
+                                    UserName = b.UserName,
+                                    TaskTypeName = c.TaskType,
+                                    CreatedBy = a.CreatedBy,
+                                    UpdatedOn = a.UpdatedOn,
 
+                                }).ToList();
+
+                return activity;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
 
         public async Task<IEnumerable<TaskDetailsView>> GetTaskDetails(Guid Taskid, Guid ProjectId)
         {
