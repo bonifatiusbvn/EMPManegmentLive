@@ -2,7 +2,6 @@
     GetAllItemDetailsList();
     updateTotals();
     GetPurchaseRequestList();
-    GetPRData();
     showHidebtn();
 });
 
@@ -162,78 +161,98 @@ function showHidebtn() {
     }
 }
 
-function GetPRData() {
-    
-    $('#PRListTable').DataTable({
-        processing: false,
-        serverSide: true,
-        filter: true,
-        "bDestroy": true,
-        ajax: {
-            type: "Post",
-            url: '/PurchaseRequest/GetPRList',
-            dataType: 'json'
-        },
-        columns: [
-            {
-                "data": "prNo", "name": "PRNo",
-                "render": function (data, type, full) {
-
-                    return '<h5 class="fs-15"><a href="/PurchaseRequest/PurchaseRequestDetails?prNo=' + full.prNo + '" class="fw-medium link-primary">' + full.prNo; '</a></h5>';
+var datas = userPermissions
+$(document).ready(function () {
+    function data(datas) {
+        var userPermission = datas;
+        GetPRData(userPermission);
+    }
+    function GetPRData(userPermission) {
+        $('#PRListTable').DataTable({
+            processing: false,
+            serverSide: true,
+            filter: true,
+            destroy: true,
+            ajax: {
+                type: "POST",
+                url: '/PurchaseRequest/GetPRList',
+                dataType: 'json',
+                dataSrc: function (json) {
+                    console.log('AJAX response:', json);
+                    return json.data;
                 }
             },
-            {
-                "render": function (data, type, full) {
-                    return full.fullName + ' ( ' + full.userName + ')';
+            columns: [
+                {
+                    "render": function (data, type, full) {
+                        return '<h5 class="fs-15"><a href="/PurchaseRequest/PurchaseRequestDetails?prNo=' + full.prNo + '" class="fw-medium link-primary">' + full.prNo; '</a></h5>';
+                    }
                 },
+                {
+                    "render": function (data, type, full) {
+                        return full.fullName + ' ( ' + full.userName + ')';
+                    },
 
-            },
-            { "data": "projectName", "name": "ProjectName" },
-            { "data": "productName", "name": "ProductName" },
-            { "data": "quantity", "name": "Quantity" },
-            {
-                "data": "isApproved", "name": "IsApproved",
-                "render": function (data, type, full) {
-                    return '<input type="checkbox" ' + (full.isApproved ? 'checked' : '') + ' onclick="ApproveUnapprovePR(this,\'' + full.prNo + '\')">';
-                }
-            },
-            {
-                "render": function (data, type, full) {
-                    var canEdit = userPermissions.some(function (permission) {
-                        return permission.FormName == "Purchase Request List" && permission.Edit == true;
-                    });
-                    var canDelete = userPermissions.some(function (permission) {
-                        return permission.FormName == "Purchase Request List" && permission.Delete == true;
-                    });
-                    var buttons = '<ul class="list-inline hstack gap-2 mb-0">';
+                },
+                { "data": "projectName", "name": "ProjectName" },
+                { "data": "productName", "name": "ProductName" },
+                { "data": "quantity", "name": "Quantity" },
+                {
+                    "data": "isApproved", "name": "IsApproved",
+                    "render": function (data, type, full) {
+                        return '<input type="checkbox" ' + (full.isApproved ? 'checked' : '') + ' onclick="ApproveUnapprovePR(this,\'' + full.prNo + '\')">';
+                    }
+                },
+                {
+                    "render": function (data, type, full) {
+                        var userPermissionArray = [];
+                        userPermissionArray = JSON.parse(userPermission);
 
-                    if (canEdit) {
-                        buttons += '<li class="btn list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">' +
-                            '<a onclick="EditPurchaseRequestDetails(\'' + full.prId + '\')">' +
-                            '<i class="ri-pencil-fill fs-16"></i></a></li>';
+                        var canEdit = false;
+                        var canDelete = false;
+
+                        for (var i = 0; i < userPermissionArray.length; i++) {
+                            var permission = userPermissionArray[i];
+                            if (permission.formName == "Purchase Request List ") {
+                                canEdit = permission.edit;
+                                canDelete = permission.delete;
+                                break; 
+                            }
+                        }
+
+
+                        var buttons = '<ul class="list-inline hstack gap-2 mb-0">';
+
+                        if (canEdit) {
+                            buttons += '<li class="btn list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">' +
+                                '<a onclick="EditPurchaseRequestDetails(\'' + full.prId + '\')">' +
+                                '<i class="ri-pencil-fill fs-16"></i></a></li>';
+                        }
+
+                        if (canDelete) {
+                            buttons += '<li class="btn text-danger list-inline-item delete" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Delete" style="margin-left:12px;">' +
+                                '<a onclick="DeletePurchaseRequest(\'' + full.prNo + '\')">' +
+                                '<i class="fas fa-trash"></i></a></li>';
+                        }
+
+                        buttons += '</ul>';
+                        return buttons;
                     }
 
-                    if (canDelete) {
-                        buttons += '<li class="btn text-danger list-inline-item delete" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Delete" style="margin-left:12px;">' +
-                            '<a onclick="DeletePurchaseRequest(\'' + full.prNo + '\')">' +
-                            '<i class="fas fa-trash"></i></a></li>';
-                    }
-
-                    buttons += '</ul>';
-                    return buttons;
-                   /* return ('<li class="btn list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit"><a onclick="EditPurchaseRequestDetails(\'' + full.prId + '\')"><i class="ri-pencil-fill fs-16"></i></a></li><li class="btn text-danger list-inline-item delete" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Delete" style="margin-left:12px;"><a onclick="DeletePurchaseRequest(\'' + full.prNo + '\')"><i class="fas fa-trash"></i></a></li>');*/
                 }
-            },
-        ],
-        columnDefs: [{
-            "defaultContent": "",
-            "targets": "_all",
-        }]
-    });
-}
+            ],
+            columnDefs: [{
+                "defaultContent": "",
+                "targets": "_all",
+            }]
+        });
+    }
+    data(datas);
+});
 
-function ApproveUnapprovePR(checkbox,PrNo) {
-    
+
+function ApproveUnapprovePR(checkbox, PrNo) {
+
     var isChecked = $(checkbox).is(':checked');
     var confirmationMessage = isChecked ? "Are you sure you want to approve this purchase request?" : "Are you sure you want to unapprove this purchase request?";
 

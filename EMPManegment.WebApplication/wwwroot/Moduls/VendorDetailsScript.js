@@ -1,9 +1,16 @@
 ﻿$(document).ready(function () {
-    GetAllVendorData();
     GetVendorType()
     fn_getState('dropState', 1);
+    $('#VendorDetailsModel').modal('hide');
 });
-function GetAllVendorData() {
+
+var datas = userPermissions
+$(document).ready(function () {
+    function data(datas) {
+        var userPermission = datas;
+        GetAllVendorData(userPermission);
+    }
+    function GetAllVendorData(userPermission) {
 
     $('#VendorTableData').DataTable({
         processing: false,
@@ -22,27 +29,38 @@ function GetAllVendorData() {
             { "data": "vendorCompanyEmail", "name": "VendorCompanyEmail" },
             {
                 "render": function (data, type, full) {
+                    debugger
+                    var userPermissionArray = [];
+                    userPermissionArray = JSON.parse(userPermission);
 
-                    var canEdit = userPermissions.some(function (permission) {
-                        return permission.FormName == "Vendor List" && permission.Edit == true;
-                    });
-                    var buttons = '<ul class="list-inline hstack gap-2 mb-0">';
-                    if (canEdit)
-                    {
-                        buttons += '<li class="list-inline-item"><a onclick="EditVendorDetails(\'' + full.vid + '\')"><i class="fas fa-edit"></i></a></li></ul></div>';
+                    var canEdit = false;
+
+                    for (var i = 0; i < userPermissionArray.length; i++) {
+                        debugger
+                        var permission = userPermissionArray[i];
+                        if (permission.formName == "Vendor List") {
+                            canEdit = permission.edit;
+                            break;
+                        }
                     }
-                    buttons += '<li class="list-inline-item"><a onclick="VendorDetails(\'' + full.vid + '\')"><i class="fa-solid fa-eye""></i></a>';
+                    var buttons = '<ul class="list-inline hstack gap-2 mb-0">';
+                    if (canEdit) {
+                        buttons += '<li class="list-inline-item"><a onclick="EditVendorDetails(\'' + full.vid + '\')"><i class="fas fa-edit"></i></a></li>';
+                    }
                     buttons += '</ul>';
-                    return buttons;
+                    return '<div class="flex-shrink-0 ms-4"><ul class="list-inline hstack gap-2 mb-0"><li class="list-inline-item"><a onclick="VendorDetails(\'' + full.vid + '\')"><i class="fa-solid fa-eye""></i></a>' + buttons + '</div>';
                 }
-            },
+            }
+
         ],
         columnDefs: [{
             "defaultContent": "",
             "targets": "_all",
         }]
     });
-}
+    }
+    data(datas);
+});
 
 function VendorDetails(Id) {
     $.ajax({
