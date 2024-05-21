@@ -646,7 +646,16 @@ namespace EMPManegment.Web.Controllers
             try
             {
                 var userstausres = HttpContext.Request.Form["USERUPDATE"];
-                var statusRequest = JsonConvert.DeserializeObject<UserEditViewModel>(userstausres);
+                var settings = new JsonSerializerSettings
+                {
+                    DateFormatString = "dd-MM-yyyy HH:mm:ss",
+                    Error = (sender, args) =>
+                    {
+                        args.ErrorContext.Handled = true;
+                    }
+                };
+
+                var statusRequest = JsonConvert.DeserializeObject<UserEditViewModel>(userstausres, settings);
                 ApiResponseModel postUser = await APIServices.PostAsync(statusRequest, "UserProfile/UpdateUserDetails");
                 if (postUser.code == 200)
                 {
