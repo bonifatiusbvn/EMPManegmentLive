@@ -206,19 +206,20 @@ function UserActiveDeactive(UserId, checkboxElement) {
 }
 function UpdateUserRoleAndDept(userId) {
     var objData = {
-        Id: $('#txtUserId').val(),
+        Id: $('#txtUserId_' + userId).val(),
         RoleId: $('#ddlUserRole_' + userId).val(),
         DepartmentId: $('#ddlDepartment_' + userId).val(),
-        DateOfBirth: $('#txtDateOfBirth').val(),
-        Gender: $('#txtGender').val(),
-        FirstName: $('#txtFirstName').val(),
-        LastName: $('#txtLastName').val(),
-        Email: $('#txtEmail').val(),
-        PhoneNumber: $('#txtPhoneNumber').val(),
-        Address: $('#txtAddress').val()
+        DateOfBirth: $('#txtDateOfBirth_' + userId).val(),
+        Gender: $('#txtGender_' + userId).val(),
+        FirstName: $('#txtFirstName_' + userId).val(),
+        LastName: $('#txtLastName_' + userId).val(),
+        Email: $('#txtEmail_' + userId).val(),
+        PhoneNumber: $('#txtPhoneNumber_' + userId).val(),
+        Address: $('#txtAddress_' + userId).val()
     };
     var form_data = new FormData();
     form_data.append("USERUPDATE", JSON.stringify(objData));
+
     $.ajax({
         url: '/UserProfile/UpdateUserRoleAndDepartment',
         type: 'post',
@@ -254,6 +255,7 @@ function UpdateUserRoleAndDept(userId) {
         }
     });
 }
+
 
 
 

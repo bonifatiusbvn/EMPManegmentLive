@@ -1,4 +1,8 @@
 ﻿@model List<EMPManegment.EntityModels.ViewModels.ExpenseMaster.ExpenseDetailsView>
+@using EMPManegment.Web.Models
+@inject IHttpContextAccessor Accessor;
+@inject UserSession _userSession
+
 @{
     ViewData["Title"] = "ExpenseList";
     Layout = "~/Views/Shared/_UserHomeLayout.cshtml";
@@ -30,12 +34,15 @@
                     <div class="col-sm">
                         <h5 class="card-title mb-0">Order History</h5>
                     </div>
-                    <div class="col-sm-auto">
-                        <div class="d-flex gap-1 flex-wrap">
-                            <button class="btn btn-primary" id="remove-actions"><i class="ri-delete-bin-2-line"></i></button>
-                            <a class="btn btn-block btn-warning" onclick="DisplayAddExpenseModel()"><i class="ri-add-line align-bottom me-1"></i> Add Expense</a>
+                    @if (UserSession.FormPermisionData.Any(a => a.FormName == "All Expenses List" && (a.Add == true)))
+                    {
+                        <div class="col-sm-auto">
+                            <div class="d-flex gap-1 flex-wrap">
+                                <button class="btn btn-primary" id="remove-actions"><i class="ri-delete-bin-2-line"></i></button>
+                                <a class="btn btn-block btn-warning" onclick="DisplayAddExpenseModel()"><i class="ri-add-line align-bottom me-1"></i> Add Expense</a>
+                            </div>
                         </div>
-                    </div>
+                    }
                 </div>
             </div>
             <!--Edit Expense Modal -->

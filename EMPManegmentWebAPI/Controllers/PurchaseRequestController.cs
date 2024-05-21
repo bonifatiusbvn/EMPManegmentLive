@@ -86,11 +86,11 @@ namespace EMPManagment.API.Controllers
             return StatusCode(response.code, response);
         }
         [HttpPost]
-        [Route("DeletePurchaseRequestDetails")]
-        public async Task<IActionResult> DeletePurchaseRequestDetails(Guid PrId)
+        [Route("DeletePurchaseRequest")]
+        public async Task<IActionResult> DeletePurchaseRequest(string PrNo)
         {
             ApiResponseModel responseModel = new ApiResponseModel();
-            var PurchaseRequest = await purchaseRequest.DeletePurchaseRequestDetails(PrId);
+            var PurchaseRequest = await purchaseRequest.DeletePurchaseRequest(PrNo);
             try
             {
                 if (PurchaseRequest != null)
@@ -126,6 +126,40 @@ namespace EMPManagment.API.Controllers
         {
             var purchaseRequestList = await purchaseRequest.GetPRList(PRdataTable);
             return Ok(new { code = 200, data = purchaseRequestList });
+        }
+
+        [HttpGet]
+        [Route("PurchaseRequestDetailsByPrNo")]
+        public async Task<IActionResult> PurchaseRequestDetailsByPrNo(string PrNo)
+        {
+            var prdetails = await purchaseRequest.PurchaseRequestDetailsByPrNo(PrNo);
+            return Ok(new { code = 200, data = prdetails });
+        }
+
+        [HttpPost]
+        [Route("ApproveUnapprovePR")]
+        public async Task<IActionResult> ApproveUnapprovePR(string PrNo)
+        {
+            UserResponceModel responseModel = new UserResponceModel();
+            var PurchaseRequest = await purchaseRequest.ApproveUnapprovePR(PrNo);
+            try
+            {
+                if (PurchaseRequest != null)
+                {
+                    responseModel.Code = (int)HttpStatusCode.OK;
+                    responseModel.Message = PurchaseRequest.Message;
+                }
+                else
+                {
+                    responseModel.Message = PurchaseRequest.Message;
+                    responseModel.Code = (int)HttpStatusCode.NotFound;
+                }
+            }
+            catch (Exception ex)
+            {
+                responseModel.Code = (int)HttpStatusCode.InternalServerError;
+            }
+            return StatusCode(responseModel.Code, responseModel);
         }
     }
 }

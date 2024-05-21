@@ -7,6 +7,7 @@ using EMPManegment.EntityModels.ViewModels.OrderModels;
 using EMPManegment.EntityModels.ViewModels.ProductMaster;
 using EMPManegment.EntityModels.ViewModels.PurchaseOrderModels;
 using EMPManegment.EntityModels.ViewModels.TaskModels;
+using EMPManegment.Web.Helper;
 using EMPManegment.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis;
@@ -28,6 +29,7 @@ namespace EMPManegment.Web.Controllers
         public IWebHostEnvironment Environment { get; }
         public APIServices APIServices { get; }
 
+        [FormPermissionAttribute("Purchase Order List -View")]
         [HttpGet]
         public async Task<IActionResult> CreatePurchaseOrder(int? page)
         {
@@ -48,6 +50,7 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
+        [FormPermissionAttribute("Create Purchase Order-Add")]
         [HttpPost]
         public async Task<IActionResult> CreatePurchaseOrder(PurchaseOrderDetailView orderDetail)
         {
@@ -85,6 +88,7 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
+        [FormPermissionAttribute("ShowProductDetails-View")]
         public IActionResult ShowProductDetails()
         {
             return View();
@@ -108,6 +112,8 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
+
+        [FormPermissionAttribute("Create Purchase Order-View")]
         [HttpGet]
         public async Task<IActionResult> CreatePurchaseOrderView()
         {
@@ -127,6 +133,7 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
+        [FormPermissionAttribute("Create Purchase Order-Add")]
         [HttpPost]
         public async Task<IActionResult> InsertMultiplePurchaseOrderDetails()
         {
@@ -168,10 +175,13 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
+
+        [FormPermissionAttribute("Show Payment Details-View")]
         public IActionResult ShowPaymentDetails()
         {
             return View();
         }
+
         [HttpGet]
         public async Task<JsonResult> EditPurchaseOrderDetails(Guid Id)
         {
@@ -191,6 +201,7 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
+        [FormPermissionAttribute("Create Purchase Order-Edit")]
         [HttpPost]
         public async Task<IActionResult> UpdatePurchaseOrderDetails(UpdatePurchaseOrderView orderDetail)
         {
@@ -208,6 +219,8 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
+
+        [FormPermissionAttribute("Create Purchase Order-Delete")]
         [HttpPost]
         public async Task<IActionResult> DeletePurchaseOrderDetails(Guid Id)
         {

@@ -1,5 +1,6 @@
 ﻿using EMPManagment.Web.Models.API;
 using EMPManegment.EntityModels.ViewModels.DataTableParameters;
+using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.Purchase_Request;
 using EMPManegment.Inretface.Interface.OrderDetails;
 using EMPManegment.Inretface.Interface.PurchaseRequest;
@@ -26,9 +27,9 @@ namespace EMPManegment.Services.PurchaseRequest
             return await purchaseRequest.CreatePurchaseRequest(AddPurchaseRequest);
         }
 
-        public async Task<ApiResponseModel> DeletePurchaseRequestDetails(Guid PrId)
+        public async Task<ApiResponseModel> DeletePurchaseRequest(string PrNo)
         {
-            return await purchaseRequest.DeletePurchaseRequestDetails(PrId);
+            return await purchaseRequest.DeletePurchaseRequest(PrNo);
         }
 
         public async Task<PurchaseRequestModel> GetPurchaseRequestDetailsById(Guid PrId)
@@ -53,6 +54,14 @@ namespace EMPManegment.Services.PurchaseRequest
         public async Task<jsonData> GetPRList(DataTableRequstModel PRdataTable)
         {
             return await purchaseRequest.GetPRList(PRdataTable);
+        }
+        public async Task<PurchaseRequestMasterView> PurchaseRequestDetailsByPrNo(string PrNo)
+        {
+            return await purchaseRequest.PurchaseRequestDetailsByPrNo(PrNo);
+        }
+        public async Task<UserResponceModel> ApproveUnapprovePR(string PrNo)
+        {
+            return await purchaseRequest.ApproveUnapprovePR(PrNo);
         }
     }
 }

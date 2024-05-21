@@ -1,4 +1,8 @@
-﻿@{
+﻿@using EMPManegment.Web.Models
+@inject IHttpContextAccessor Accessor;
+@inject UserSession _userSession
+
+@{
     ViewData["Title"] = "DisplayVendorList";
     Layout = "~/Views/Shared/_UserHomeLayout.cshtml";
 }
@@ -93,11 +97,14 @@
             <div class="card-header">
                 <div class="d-flex align-items-center">
                     <h5 class="card-title mb-0 flex-grow-1">Vendor List</h5>
-                    <div class="flex-shrink-0">
-                        <div class="d-flex flex-wrap gap-2">
-                            <button class="btn btn-block btn-warning" style="margin-left: 665px;" id="AddVendorModelButton" onclick="openvendormodel()"><i class="ri-add-fill me-1 align-bottom"></i>Add Vendor</button>
+                    @if (UserSession.FormPermisionData.Any(a => a.FormName == "Vendor List" && (a.Add == true)))
+                    {
+                        <div class="flex-shrink-0">
+                            <div class="d-flex flex-wrap gap-2">
+                                <button class="btn btn-block btn-warning" style="margin-left: 665px;" id="AddVendorModelButton" onclick="openvendormodel()"><i class="ri-add-fill me-1 align-bottom"></i>Add Vendor</button>
+                            </div>
                         </div>
-                    </div>
+                    }
                 </div>
             </div>
         </div>

@@ -1,0 +1,126 @@
+﻿@model EMPManegment.EntityModels.ViewModels.Purchase_Request.PurchaseRequestMasterView
+@{
+    ViewData["Title"] = "PurchaseRequestDetails";
+    Layout = "~/Views/Shared/_UserHomeLayout.cshtml";
+}
+
+<!-- start page title -->
+<div class="row" style="margin-top:80px;">
+    <div class="col-12">
+        <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+            <h4 class="mb-sm-0">Purchase Request Details</h4>
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Purchase Request</a></li>
+                    <li class="breadcrumb-item active">Purchase Request Details</li>
+                </ol>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- end page title -->
+@{
+    var firstItem = Model;
+}
+
+<div class="card">
+    <div class="card-header">
+        <div class="d-flex align-items-center">
+            <h5 class="card-title flex-grow-1 mb-0">Purchase Request NO : @firstItem.PrNo</h5>
+            <div class="flex-shrink-0">
+                <a href="apps-invoices-details.html" class="btn btn-primary btn-sm"><i class="ri-download-2-fill align-middle me-1"></i> Invoice</a>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive table-card">
+            <table class="table table-nowrap align-middle table-borderless mb-0">
+                <thead class="table-light text-muted">
+                    <tr>
+                        <th scope="col">Product Details</th>
+                        <th scope="col">Item Price</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Rating</th>
+                        <th scope="col" class="text-end">Total Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        decimal? subtotal = 0;
+                        decimal? totalGst = 0;
+                        decimal? totalAmount = 0;
+                    }
+                    @foreach (var item in Model.PRList)
+                    {
+                        <tr>
+                            <td>
+                                <div class="d-flex">
+                                    <div class="flex-shrink-0 avatar-md bg-light rounded p-1">
+                                        <img src="~/@item.ProductImage" alt="" class="img-fluid d-block">
+                                    </div>
+                                    <div class="flex-grow-1 ms-3">
+                                        <h5 class="fs-15"><a href="apps-ecommerce-product-details.html" class="link-primary">@item.ProductName</a></h5>
+                                        <p class="text-muted mb-0">Color: <span class="fw-medium">Pink</span></p>
+                                        <p class="text-muted mb-0">Size: <span class="fw-medium">M</span></p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>@item.Price</td>
+                            <td>@item.Quantity</td>
+                            <td>
+                                <div class="text-warning fs-15">
+                                    <i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-half-fill"></i>
+                                </div>
+                            </td>
+                            <td class="fw-medium text-end">
+                                @item.ProductTotal
+                            </td>
+                        </tr>
+                        subtotal += item.ProductTotal;
+                        totalGst += item.PerUnitWithGstprice;
+                    }
+                    <tr class="border-top border-top-dashed">
+                        <td colspan="3"></td>
+                        <td colspan="2" class="fw-medium p-0">
+                            <table class="table table-borderless mb-0">
+                                <tbody>
+                                    <tr>
+                                        <td>Sub Total :</td>
+                                        <td id="subtotal" class="text-end">₹@subtotal</td>
+                                    </tr>
+                                   @* <tr>
+                                        <td>Discount <span class="text-muted">(VELZON15)</span> : :</td>
+                                        <td class="text-end">-$53.99</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Shipping Charge :</td>
+                                        <td class="text-end">$65.00</td>
+                                    </tr>*@
+                                    <tr>
+                                        <td>GST :</td>
+                                        <td id="totalGst" class="text-end">₹@totalGst</td>
+                                    </tr>
+                                    <tr class="border-top border-top-dashed">
+                                        <th scope="row">Total :</th>
+                                        <th id="total" class="text-end">₹</th>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<!--end card-->
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/moduls/purchaserequestscript.js"></script>
+<script>
+    var subtotal = parseFloat(document.getElementById('subtotal').textContent.replace('₹', ''));
+    var totalGst = parseFloat(document.getElementById('totalGst').textContent.replace('₹', ''));
+    var total = subtotal + totalGst;
+    document.getElementById('total').textContent = '₹' + total.toFixed(2);
+</script>

@@ -1,5 +1,5 @@
 ﻿var UserId = '';
-
+var userPermissions = '';
 $(document).ready(function () {
     GetDocumentList();
     GetDocumentType();

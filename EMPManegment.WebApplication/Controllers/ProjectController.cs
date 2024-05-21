@@ -16,6 +16,7 @@ using X.PagedList;
 using X.PagedList.Mvc;
 using EMPManegment.EntityModels.ViewModels.Invoice;
 using System.Linq;
+using EMPManegment.Web.Helper;
 
 namespace EMPManegment.Web.Controllers
 {
@@ -37,6 +38,9 @@ namespace EMPManegment.Web.Controllers
         {
             return View();
         }
+
+
+        [FormPermissionAttribute("Create Project-View")]
         [HttpGet]
         public async Task<IActionResult> CreateProject()
         {
@@ -55,6 +59,7 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
+        [FormPermissionAttribute("Project List-View")]
         public async Task<IActionResult> ProjectList()
         {
             return View();
@@ -175,6 +180,8 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
+
+        [FormPermissionAttribute("Create Project-Add")]
         [HttpPost]
         public async Task<IActionResult> CreateProject(ProjectDetailRequestModel project)
         {
@@ -223,6 +230,7 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
+        [FormPermissionAttribute("GetProjectDetails-View")]
         public async Task<IActionResult> GetProjectDetails(Guid Id)
         {
             try
@@ -296,6 +304,7 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
+        [FormPermissionAttribute("GetProjectDetails-Add")]
         [HttpPost]
         public async Task<IActionResult> InviteMemberToProject()
         {
@@ -362,8 +371,10 @@ namespace EMPManegment.Web.Controllers
                     ProjectMembersList = new List<ProjectView>();
                     ViewBag.Error = "note found";
                 }
-                var pageMembersList = ProjectMembersList.ToPagedList(page ?? 1, 4);
-                return PartialView("~/Views/Project/_showTeam.cshtml", pageMembersList);
+                int pageSize = 5;
+                var pageNumber = page ?? 1;
+                var pagedList = ProjectMembersList.ToPagedList(pageNumber, pageSize);
+                return PartialView("~/Views/Project/_showTeam.cshtml", pagedList);
             }
             catch (Exception ex)
             {
@@ -372,6 +383,7 @@ namespace EMPManegment.Web.Controllers
 
         }
 
+        [FormPermissionAttribute("GetProjectDetails-Add")]
         [HttpPost]
         public async Task<IActionResult> AddDocumentToProject(ProjectRequestModel projectDocument)
         {
@@ -475,7 +487,7 @@ namespace EMPManegment.Web.Controllers
             return File(memory, ContentType, fileName);
         }
 
-
+        [FormPermissionAttribute("GetProjectDetails-Delete")]
         [HttpPost]
         public async Task<IActionResult> IsDeletedMember()
         {

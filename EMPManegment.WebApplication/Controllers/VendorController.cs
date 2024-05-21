@@ -15,10 +15,11 @@ using EMPManegment.EntityModels.ViewModels.TaskModels;
 using Microsoft.AspNetCore.Authorization;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.Web.Models;
+using EMPManegment.Web.Helper;
 
 namespace EMPManegment.Web.Controllers
 {
-    //[Authorize]
+    [Authorize]
     public class VendorController : Controller
     {
         public WebAPI WebAPI { get; }
@@ -43,6 +44,7 @@ namespace EMPManegment.Web.Controllers
             return View();
         }
 
+        [FormPermissionAttribute("Vendor List-Add")]
         [HttpPost]
         public async Task<IActionResult> AddVandorDetail()
         {
@@ -122,6 +124,8 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
+
+        [FormPermissionAttribute("Vendor List-View")]
         [HttpGet]
         public async Task<IActionResult> DisplayVendorList()
         {
@@ -193,6 +197,8 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
+
+        [FormPermissionAttribute("Vendor List-Edit")]
         [HttpPost]
         public async Task<IActionResult> UpdateVendorDetails(VendorDetailsView VendorDetails)
         {

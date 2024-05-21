@@ -4,13 +4,11 @@ using EMPManegment.EntityModels.ViewModels.ExpenseMaster;
 using EMPManegment.EntityModels.ViewModels.Invoice;
 using EMPManegment.EntityModels.ViewModels.ProductMaster;
 using EMPManegment.EntityModels.ViewModels.Models;
-using EMPManegment.EntityModels.ViewModels.ProductMaster;
 using EMPManegment.EntityModels.ViewModels.VendorModels;
 using EMPManegment.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 using EMPManegment.EntityModels.ViewModels.OrderModels;
 using X.PagedList;
@@ -18,9 +16,11 @@ using DocumentFormat.OpenXml.Spreadsheet;
 using Microsoft.AspNetCore.Http;
 using Aspose.Pdf.Operators;
 using EMPManegment.Web.Helper;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EMPManegment.Web.Controllers
 {
+    [Authorize]
     public class ExpenseMasterController : Controller
     {
         public WebAPI WebAPI { get; }
@@ -36,6 +36,7 @@ namespace EMPManegment.Web.Controllers
             _userSession = userSession;
         }
 
+        [FormPermissionAttribute("All Expenses List-View")]
         public async Task<IActionResult> ExpenseList()
         {
             return View();
@@ -88,11 +89,13 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
+        [FormPermissionAttribute("Expenses-View")]
         public async Task<IActionResult> UserExpenseList()
         {
             return View();
         }
 
+        [FormPermissionAttribute("All User Expenses-View")]
         public async Task<IActionResult> UserExpenseListById()
         {
             return View();
@@ -232,6 +235,8 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
+
+        [FormPermissionAttribute("Expenses-Add,All Expenses List-Add,All User Expenses-Add,ApprovedExpense-Add")]
         [HttpPost]
         public async Task<IActionResult> AddexpenseDetails(ExpenseRequestModel Addexpense)
         {
@@ -279,6 +284,8 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
+
+       [FormPermissionAttribute("GetPayExpense-Add")]
         [HttpPost]
         public async Task<IActionResult> GetPayExpense(ExpenseDetailsView Addexpense)
         {
@@ -304,6 +311,7 @@ namespace EMPManegment.Web.Controllers
             FileStream stream = new FileStream(ImagePath, FileMode.Create);
             ImageFile.CopyTo(stream);
         }
+
         [HttpGet]
         public async Task<JsonResult> EditExpenseDetails(Guid ExpenseId)
         {
@@ -323,6 +331,7 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
+        [FormPermissionAttribute("Expenses-Edit,All Expenses List-Edit,All User Expenses-Edit,ApprovedExpense-Edit")]
         [HttpPost]
         public async Task<IActionResult> UpdateExpenseDetails(ExpenseDetailsView ExpenseDetails)
         {
@@ -340,6 +349,7 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
+
         [HttpPost]
         public async Task<IActionResult> GetExpenseDetailsByUserId()
         {
@@ -361,6 +371,7 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
+        [FormPermissionAttribute("ApprovedExpense-View")]
         public IActionResult ApprovedExpense(Guid UserId,string UserName)
         {
             HttpContext.Session.SetString("UserId", UserId.ToString());
@@ -563,6 +574,8 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
+
+        [FormPermissionAttribute("Expenses-Delete,All Expenses List-Delete,All User Expenses-Delete,ApprovedExpense-Delete")]
         [HttpPost]
         public async Task<IActionResult> DeleteExpense(Guid Id)
         {
@@ -584,7 +597,7 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
-
+        [FormPermissionAttribute("GetPayExpense-View")]
         public async Task<IActionResult> GetPayExpense()
         {
             ViewBag.UserId = HttpContext.Session.GetString("UserId");

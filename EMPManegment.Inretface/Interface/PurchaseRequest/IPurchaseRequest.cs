@@ -18,7 +18,9 @@ namespace EMPManegment.Inretface.Interface.PurchaseRequest
         Task<IEnumerable<PurchaseRequestModel>> GetPurchaseRequestList();
         Task<PurchaseRequestModel> GetPurchaseRequestDetailsById(Guid PrId);
         Task<ApiResponseModel> UpdatePurchaseRequestDetails(PurchaseRequestModel UpdatePurchaseRequest);
-        Task<ApiResponseModel> DeletePurchaseRequestDetails(Guid PrId);
+        Task<ApiResponseModel> DeletePurchaseRequest(string PrNo);
         string CheckPRNo();
+        Task<PurchaseRequestMasterView> PurchaseRequestDetailsByPrNo(string PrNo);
+        Task<UserResponceModel> ApproveUnapprovePR(string PrNo);
     }
 }                                                                                      

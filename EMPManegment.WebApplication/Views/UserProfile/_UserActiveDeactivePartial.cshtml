@@ -53,13 +53,13 @@
                                 @if (item.IsActive == true)
                                 {
                                     <a class="text-success" href="/UserProfile/DisplayUserDetails/?Id=@item.Id">
-                                        <h5 class="mt-2 mb-1 fs-15">@item.FirstName  @item.LastName</h5>
+                                        <h5 class="mt-2 mb-1 fs-15">@item.FirstName @item.LastName</h5>
                                     </a>
                                 }
                                 else
                                 {
                                     <a class="text-danger" href="/UserProfile/DisplayUserDetails/?Id=@item.Id">
-                                        <h5 class="mt-2 mb-1 fs-15">@item.FirstName  @item.LastName</h5>
+                                        <h5 class="mt-2 mb-1 fs-15">@item.FirstName @item.LastName</h5>
                                     </a>
                                 }
 
@@ -80,23 +80,20 @@
                                         </select>
                                     </span>
                                 </p>
-                                <input type="hidden" value="@item.Id" id="txtUserId" />
-                                <input type="hidden" value="@item.DateOfBirth" id="txtDateOfBirth" />
-                                <input type="hidden" value="@item.Gender" id="txtGender" />
-                                <input type="hidden" value="@item.FirstName" id="txtFirstName" />
-                                <input type="hidden" value="@item.LastName" id="txtLastName" />
-                                <input type="hidden" value="@item.Email" id="txtEmail" />
-                                <input type="hidden" value="@item.PhoneNumber" id="txtPhoneNumber" />
-                                <input type="hidden" value="@item.Address" id="txtAddress" />
+                                <input type="hidden" value="@item.Id" id="txtUserId_@item.Id" />
+                                <input type="hidden" value="@item.DateOfBirth" id="txtDateOfBirth_@item.Id" />
+                                <input type="hidden" value="@item.Gender" id="txtGender_@item.Id" />
+                                <input type="hidden" value="@item.FirstName" id="txtFirstName_@item.Id" />
+                                <input type="hidden" value="@item.LastName" id="txtLastName_@item.Id" />
+                                <input type="hidden" value="@item.Email" id="txtEmail_@item.Id" />
+                                <input type="hidden" value="@item.PhoneNumber" id="txtPhoneNumber_@item.Id" />
+                                <input type="hidden" value="@item.Address" id="txtAddress_@item.Id" />
                                 <form method="post">
                                     <div class="form-check form-switch text-center font-22">
-                                        <input class="form-check-input" style="font-size:24px; margin-left:-30px;" type="checkbox" id="isAdd" name="isAdd" @(item.IsActive == true ? "checked" : "")  onclick="UserActiveDeactive('@item.UserName', this)">
+                                        <input class="form-check-input" style="font-size:24px; margin-left:-30px;" type="checkbox" id="isAdd_@item.Id" name="isAdd" @(item.IsActive == true ? "checked" : "") onclick="UserActiveDeactive('@item.UserName', this)">
                                     </div>
                                     <br />
-                                    <div>
-                                        <a href="#" class="btn btn-block btn-primary btn-lg" onclick="UpdateUserRoleAndDept('@item.Id');">Update</a>
-                                    </div>
-                                    
+                                    <a href="#" class="btn btn-block btn-primary btn-lg" onclick="UpdateUserRoleAndDept('@item.Id');">Update</a>
                                 </form>
                             </div>
                         </div>
@@ -110,6 +107,7 @@
                     </script>
                 }
             }
+
         </div>
         <!--end row-->
     </div>

@@ -5,7 +5,6 @@ $(document).ready(function () {
     document.getElementById("showProjectDocuments").click()
 });
 
-
 function btnCreateProjectDetail() {
 
     if ($('#formprojectdetails').valid()) {
@@ -244,7 +243,6 @@ function invitemember(Id) {
 }
 
 function showProjectMembers(ProjectId) {
-
     var formData = new FormData();
     formData.append("ProjectId", ProjectId);
     $.ajax({
@@ -269,9 +267,15 @@ function showProjectMembers(ProjectId) {
     })
 }
 
-function showTeams(ProjectId) {
+function showTeamsPagination(ProjectId)
+{
+    showTeams(ProjectId, 1);
+}
+
+function showTeams(ProjectId,page) {
     var formData = new FormData();
     formData.append("ProjectId", ProjectId);
+    formData.append("page", page);
     $.ajax({
         url: '/Project/ShowTeam',
         type: 'Post',
@@ -394,11 +398,12 @@ function GetAllUserProjectDetailsList(page) {
 
 GetAllUserProjectDetailsList(1);
 
-
 $(document).on("click", ".pagination a", function (e) {
     e.preventDefault();
     var page = $(this).text();
     GetAllUserProjectDetailsList(page);
+    var ProjectId = $("#projectid").val();
+    showTeams(ProjectId,page);
 });
 
 
@@ -406,12 +411,16 @@ $(document).on("click", "#backButton", function (e) {
     e.preventDefault();
     var page = $(this).text();
     GetAllUserProjectDetailsList(page);
+    var ProjectId = $("#projectid").val();
+    showTeams(ProjectId, page);
 });
+
 
 function searchproject() {
 
     GetAllUserProjectDetailsList(1);
 }
+
 $(document).ready(function () {
     $(document).on('click', '.btndeletedoc', function () {
         var userId = $(this).data("user-id");
@@ -426,7 +435,7 @@ $(document).ready(function () {
 
 
 function opendeletpop(userId) {
-    $("#delete-product").data("user-id", userId); // Set the data attribute
+    $("#delete-product").data("user-id", userId); 
     $("#deleteOrderModal").modal('show');
 }
 

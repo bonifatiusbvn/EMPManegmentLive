@@ -22,7 +22,18 @@ function GetAllVendorData() {
             { "data": "vendorCompanyEmail", "name": "VendorCompanyEmail" },
             {
                 "render": function (data, type, full) {
-                    return '<div class="flex-shrink-0 ms-4"><ul class="list-inline tasks-list-menu mb-0"><li class="list-inline-item"><a onclick="VendorDetails(\'' + full.vid + '\')" style=" margin-left: -22px;"><i class="fa-solid fa-eye""></i></a><li class="list-inline-item"><a onclick="EditVendorDetails(\'' + full.vid + '\')"><i class="fas fa-edit"></i></a></li></ul></div>';
+
+                    var canEdit = userPermissions.some(function (permission) {
+                        return permission.FormName == "Vendor List" && permission.Edit == true;
+                    });
+                    var buttons = '<ul class="list-inline hstack gap-2 mb-0">';
+                    if (canEdit)
+                    {
+                        buttons += '<li class="list-inline-item"><a onclick="EditVendorDetails(\'' + full.vid + '\')"><i class="fas fa-edit"></i></a></li></ul></div>';
+                    }
+                    buttons += '<li class="list-inline-item"><a onclick="VendorDetails(\'' + full.vid + '\')"><i class="fa-solid fa-eye""></i></a>';
+                    buttons += '</ul>';
+                    return buttons;
                 }
             },
         ],

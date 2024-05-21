@@ -41,11 +41,24 @@ namespace EMPManegment.EntityModels.ViewModels.Purchase_Request
         public string? ProjectName { get; set; }
 
         public int RowNumber {get; set; }
+
         public string? FullName {get; set; }
+
+        public string? ProductTypeName {get; set; }
+
+        public decimal? Price { get; set; }
+
+        public decimal? ProductTotal { get; set; }
+
+        public decimal? PerUnitWithGstprice { get; set; }
+
+        public string? ProductImage { get; set; }
 
     }
     public class PurchaseRequestMasterView
     {
+        public string PrNo { get; set; } = null!;
+        public decimal? SubTotal { get; set; }
         public List<PurchaseRequestModel>? PRList { get; set; }
-    }
+    }   
 }

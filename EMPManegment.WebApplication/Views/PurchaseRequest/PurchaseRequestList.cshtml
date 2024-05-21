@@ -52,7 +52,10 @@
                                         <th>ProductName</th>
                                         <th>Quantity</th>
                                         <th>IsApproved</th>
-                                        <th>Action</th>
+                                        @if (UserSession.FormPermisionData.Any(a => a.FormName == "Purchase Request List" && (a.Edit == true || a.Delete == true)))
+                                        {
+                                            <th>Action</th>
+                                        }
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -192,6 +195,8 @@
         color: red;
     }
 </style>
-
+<script type="text/javascript">
+    var userPermissions = '@Html.Raw(Json.Serialize(UserSession.FormPermisionData))';
+</script>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/moduls/purchaserequestscript.js" asp-append-version="true"></script>

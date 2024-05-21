@@ -8,6 +8,7 @@ using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.ProductMaster;
 using EMPManegment.EntityModels.ViewModels.TaskModels;
 using EMPManegment.EntityModels.ViewModels.UserModels;
+using EMPManegment.Web.Helper;
 using EMPManegment.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -37,6 +38,7 @@ namespace EMPManegment.Web.Controllers
             return View();
         }
 
+        [FormPermissionAttribute("Task Board-View")]
         public async Task<IActionResult> UserTasks()
         {
             try
@@ -80,6 +82,7 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
+        [FormPermissionAttribute("Tasks List-Add")]
         [HttpPost]
         public async Task<IActionResult> AddTaskDetails(TaskDetailsView task)
         {
@@ -232,6 +235,7 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
+        [FormPermissionAttribute("Tasks List-View")]
         [HttpGet]
         public IActionResult AllTaskDetails()
         {
@@ -291,6 +295,8 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
+
+        [FormPermissionAttribute("Tasks List-Edit")]
         [HttpPost]
         public async Task<IActionResult> UpdateTaskDetails(TaskDetailsView updateTaskDetails)
         {
