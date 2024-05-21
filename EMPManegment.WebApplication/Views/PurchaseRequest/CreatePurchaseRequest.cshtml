@@ -23,91 +23,92 @@
     </div>
 </div>
 <!-- end page title -->
-
-<div class="card">
-    <div class="card-header">
-        <div class="row g-4">
-            <div class="col-sm-auto">
-            </div>
+<div class="row mb-3">
+    <div class="col-xl-8">
+        <div class="row align-items-center gy-3 mb-3">
             <div class="col-sm">
-                <div class="d-flex justify-content-sm-end">
-                    <div>
-                        <a class="btn btn-warning" onclick="fn_OpenAddproductmodal()"><i class="ri-add-line align-bottom me-1"></i> Add Product</a>
-                    </div>
+                <div>
+                    <h5 class="fs-14 mb-0">Your Cart (03 items)</h5>
                 </div>
             </div>
+            <div class="col-sm-auto">
+                <a class="btn btn-warning" onclick="fn_OpenAddproductmodal()"><i class="ri-add-line align-bottom me-1"></i> Add Product</a>
+                <input type="text" class="form-control form-control" id="prNo" value="@ViewData["PrNo"].ToString()" hidden />
+            </div>
+        </div>
+        <div id="displayPurchaseRequest">
+        </div>
+
+
+        <div class="text-end mb-4">
+            <a id="btnpurchaserequest" onclick="CreatePurchaseRequest()" class="btn btn-primary btn-label right ms-auto"><i class="ri-arrow-right-line label-icon align-bottom fs-16 ms-2"></i>Create</a>
         </div>
     </div>
-    <!-- end card header -->
+    <!-- end col -->
 
-    <div class="card-body">
-        <div class="tab-content text-muted">
-            <div class="tab-pane active" id="productnav-all" role="tabpanel">
-                <div id="table-product-list-all" class="table-card gridjs-border-none">
-                    <div class="col-sm-auto">
-                        <div class="col-sm">
-                            <div>
-                                @*  <h5 class="fs-14 mb-0">Your Cart (01 items)</h5>*@
-                                <input type="text" class="form-control form-control" id="prNo" value="@ViewData["PrNo"].ToString()" hidden />
-                            </div>
-                        </div>
+    <div class="col-xl-4">
+        <div class="sticky-side-div">
+            <div class="card">
+                <div class="card-header border-bottom-dashed">
+                    <h5 class="card-title mb-0">Order Summary</h5>
+                </div>
 
+                <div class="card-body pt-2">
+                    <div class="table-responsive">
+                        <table class="table table-borderless mb-0">
+                            <tbody>
+                                <tr>
+                                    <td>Sub Total :</td>
+                                    <td class="text-end" id="cart-subtotal">₹ 359.96</td>
+                                </tr>
+                                <tr>
+                                    <td>Estimated Tax (12.5%) : </td>
+                                    <td class="text-end" id="cart-tax">₹ 44.99</td>
+                                </tr>
+                                <tr class="table-active">
+                                    <th>Total  :</th>
+                                    <td class="text-end">
+                                        <span class="fw-semibold" id="cart-total">
+                                            ₹
+                                        </span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
-                    <div class="card product">
-                        <!--- Partial View --->
-                        <div id="displayPurchaseRequest">
-                        </div>
-                        <!---->
-
-                    </div>
-                </div>
-                <div class="text-end mb-4">
-                    <button type="button" class="btn btn-lg btn-primary px-5" id="btnpurchaserequest" onclick="CreatePurchaseRequest()">Save</button>
+                    <!-- end table-responsive -->
                 </div>
             </div>
-            <!-- end tab pane -->
 
-            <div class="tab-pane" id="productnav-published" role="tabpanel">
-                <div id="table-product-list-published" class="table-card gridjs-border-none"></div>
-            </div>
-            <!-- end tab pane -->
-
-            <div class="tab-pane" id="productnav-draft" role="tabpanel">
-                <div class="py-4 text-center">
-                    <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#405189,secondary:#0ab39c" style="width:72px;height:72px">
-                    </lord-icon>
-                    <h5 class="mt-4">Sorry! No Result Found</h5>
-                </div>
-            </div>
-            <!-- end tab pane -->
         </div>
-        <!-- end tab content -->
-        <div class="modal fade show" tabindex="-1" id="mdPoproductModal" role="dialog" aria-labelledby="myLargeModalLabel" aria-modal="true" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Select Product</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="clearsearchtext()"></button>
-                    </div>
-                    <div class="modal-header">
-                        <label class="form-label">Search Product</label>
-                        <input class="form-control" id="mdProductSearch" onkeyup="filterallItemTable()" />
-                    </div>
+        <!-- end stickey -->
 
-                    <div class="modal-body" id="mdlistofItem" style="overflow-x: hidden">
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
-    <!-- end card body -->
 </div>
+
 <!-- end card -->
+<div class="modal fade show" tabindex="-1" id="mdPoproductModal" role="dialog" aria-labelledby="myLargeModalLabel" aria-modal="true" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Select Product</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="clearsearchtext()"></button>
+            </div>
+            <div class="modal-header">
+                <label class="form-label">Search Product</label>
+                <input class="form-control" id="mdProductSearch" onkeyup="filterallItemTable()" />
+            </div>
+
+            <div class="modal-body" id="mdlistofItem" style="overflow-x: hidden">
+            </div>
+        </div>
+    </div>
+</div>
 
 
 
 <script type="text/javascript">
-   
+
     function fn_OpenAddproductmodal() {
         $('#mdProductSearch').val('');
         $('#mdPoproductModal').modal('show');
