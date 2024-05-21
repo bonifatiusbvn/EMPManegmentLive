@@ -100,18 +100,21 @@ $(document).ready(function () {
     }
     function GetUserAttendance(userPermission) {
 
-        $('#attendanceTableData').DataTable({
-            processing: false,
-            serverSide: true,
-            filter: true,
-            "bDestroy": true,
-            ajax: {
-                type: "Post",
-                url: '/UserProfile/GetUserAttendanceList',
-                dataType: 'json'
-            },
-            columns: [
-                { "data": "userName", "name": "UserName" },
+        var userPermissionArray = [];
+                        userPermissionArray = JSON.parse(userPermission);
+
+                        var canEdit = false;
+
+                        for (var i = 0; i < userPermissionArray.length; i++) {
+                            var permission = userPermissionArray[i];
+                            if (permission.formName == "GetAllUsersAttendanceList") {
+                                canEdit = permission.edit;
+                                break;
+                            }
+                        }
+
+        var columns = [
+            { "data": "userName", "name": "UserName" },
                 {
                     "data": "date", "name": "Date",
                     render: function (data, type, row) {
@@ -156,30 +159,36 @@ $(document).ready(function () {
                         }
                     }
                 },
-                {
-                    "render": function (data, type, full) {
-                        var userPermissionArray = [];
-                        userPermissionArray = JSON.parse(userPermission);
-
-                        var canEdit = false;
-
-                        for (var i = 0; i < userPermissionArray.length; i++) {
-                            var permission = userPermissionArray[i];
-                            if (permission.formName == "GetAllUsersAttendanceList") {
-                                canEdit = permission.edit;
-                                break;
-                            }
-                        }
+        ];
+        if (canEdit) {
+            columns.push({
+                "data": null,
+                "orderable": false,
+                "searchable": false,
+                "render": function (data, type, full) {
+                        
                         if (canEdit) {
-                            return '<a class="btn btn-sm btn-primary edit-item-btn" onclick="EditUserAttendance(\'' + full.attendanceId + '\')" >EditTime</a>';
+                            return '<a onclick="EditUserAttendance(\'' + full.attendanceId + '\')" class="btn text-primary btndeletedoc">' +
+                            '<i class="fa-regular fa-pen-to-square"></i></a>';
                         }
                     }
-                },
-            ],
+            });
+        }
+        $('#attendanceTableData').DataTable({
+            processing: false,
+            serverSide: true,
+            filter: true,
+            "bDestroy": true,
+            ajax: {
+                type: "Post",
+                url: '/UserProfile/GetUserAttendanceList',
+                dataType: 'json'
+            },
+            columns: columns,
             columnDefs: [{
                 "defaultContent": "",
-                "targets": "_all",
-            }],
+                "targets": "_all"
+            }]
         });
     }
     data(datas);
