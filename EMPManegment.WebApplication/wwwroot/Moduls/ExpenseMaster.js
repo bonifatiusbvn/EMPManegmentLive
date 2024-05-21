@@ -659,67 +659,74 @@ function GetAllUserExpenseList(userId) {
     });
 }
 
-function GetUserUnApprovedExpenseList(UserId) {
-    $('#UserallUnApprovedExpenseTable').DataTable({
-        processing: false,
-        serverSide: true,
-        filter: true,
-        "bDestroy": true,
-        ajax: {
-            type: "POST",
-            url: '/ExpenseMaster/GetUserUnApprovedExpenseList?UserId=' + UserId,
-            dataType: 'json',
-        },
-        columns: [
-            {
-                "data": null,
-                "render": function (data, type, full, meta) {
-                    return '<div class="form-check"><input class="form-check-input" data-id="' + full.id + '" type="checkbox" name="chk_child" value="option1"></div>';
-                },
-                "orderable": false
+$(document).ready(function () {
+    function GetUserUnApprovedExpenseList(UserId) {
+        $('#UserallUnApprovedExpenseTable').DataTable({
+            processing: false,
+            serverSide: true,
+            filter: true,
+            "bDestroy": true,
+            ajax: {
+                type: "POST",
+                url: '/ExpenseMaster/GetUserUnApprovedExpenseList?UserId=' + UserId,
+                dataType: 'json',
             },
-            {
-                "data": null,
-                "render": function (data, type, full, meta) {
-                    var account = full.account.toLowerCase();
-                    if (account === "credit") {
-                        return '<div class="avatar-xs"><div class="avatar-title bg-success-subtle text-success rounded-circle fs-16"><i class="ri-arrow-left-down-fill"></i></div></div>';
-                    } else if (account === "debit") {
-                        return '<div class="avatar-xs"><div class="avatar-title bg-danger-subtle text-danger rounded-circle fs-16"><i class="ri-arrow-right-up-fill"></i></div></div>';
-                    } else {
-                        return '';
+            columns: [
+                {
+                    "data": null,
+                    "render": function (data, type, full, meta) {
+                        return '<div class="form-check"><input class="form-check-input" data-id="' + full.id + '" type="checkbox" name="chk_child" value="option1"></div>';
+                    },
+                    "orderable": false
+                },
+                {
+                    "data": null,
+                    "render": function (data, type, full, meta) {
+                        var account = full.account.toLowerCase();
+                        if (account === "credit") {
+                            return '<div class="avatar-xs"><div class="avatar-title bg-success-subtle text-success rounded-circle fs-16"><i class="ri-arrow-left-down-fill"></i></div></div>';
+                        } else if (account === "debit") {
+                            return '<div class="avatar-xs"><div class="avatar-title bg-danger-subtle text-danger rounded-circle fs-16"><i class="ri-arrow-right-up-fill"></i></div></div>';
+                        } else {
+                            return '';
+                        }
+                    },
+                    "orderable": false
+                },
+                { "data": "id", "name": "Id", "visible": false },
+                { "data": "expenseTypeName", "name": "ExpenseTypeName" },
+                { "data": "paymentTypeName", "name": "PaymentTypeName" },
+                { "data": "billNumber", "name": "BillNumber" },
+                { "data": "description", "name": "Description" },
+                {
+                    "data": "date",
+                    "name": "Date",
+                    "render": function (data, type, full, meta) {
+                        return new Date(data).toLocaleDateString();
                     }
                 },
-                "orderable": false
-            },
-            { "data": "id", "name": "Id", "visible": false },
-            { "data": "expenseTypeName", "name": "ExpenseTypeName" },
-            { "data": "paymentTypeName", "name": "PaymentTypeName" },
-            { "data": "billNumber", "name": "BillNumber" },
-            { "data": "description", "name": "Description" },
-            {
-                "data": "date",
-                "name": "Date",
-                "render": function (data, type, full, meta) {
-                    return new Date(data).toLocaleDateString();
-                }
-            },
-            {
-                "data": "totalAmount",
-                "name": "TotalAmount",
-                "render": function (data, type, full, meta) {
-                    var color = full.account && full.account.toLowerCase() === "credit" ? "green" : "red";
-                    return '<span style="color: ' + color + ';">' + data + '</span>';
-                }
-            },
-            { "data": "account", "name": "Account", "visible": false },
-        ],
-        columnDefs: [{
-            "defaultContent": "",
-            "targets": "_all",
-        }]
-    });
-}
+                {
+                    "data": "totalAmount",
+                    "name": "TotalAmount",
+                    "render": function (data, type, full, meta) {
+                        var color = full.account && full.account.toLowerCase() === "credit" ? "green" : "red";
+                        return '<span style="color: ' + color + ';">' + data + '</span>';
+                    }
+                },
+                { "data": "account", "name": "Account", "visible": false },
+            ],
+            columnDefs: [{
+                "defaultContent": "",
+                "targets": "_all",
+            }],
+            fixedHeader: true // Add this line to enable fixed header
+        });
+    }
+
+    // Call the function with a sample UserId
+    GetUserUnApprovedExpenseList(1);
+});
+
 function GetUserApprovedExpenseList(UserId) {
     $('#GetUserApprovedExpenseList').DataTable({
         processing: false,
@@ -877,10 +884,10 @@ $(document).ready(function () {
                             '<div class="flex-grow-1 tasks_name">' + full['billNumber'] + '</div>' +
                             '<div class="flex-shrink-0 ms-4 task-icons">' +
                             '<ul class="list-inline tasks-list-menu mb-0">' +
-                                '</div>' +
-                                '</div>';
+                            '</div>' +
+                            '</div>';
                     }
-                    
+
                 }
             },
             {
