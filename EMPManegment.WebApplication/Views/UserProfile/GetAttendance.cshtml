@@ -1,4 +1,8 @@
-﻿@{
+﻿@using EMPManegment.Web.Models
+@inject IHttpContextAccessor Accessor;
+@inject UserSession _userSessio
+
+@{
     ViewData["Title"] = "GetAttendance";
     Layout = "~/Views/Shared/_UserHomeLayout.cshtml";
 }
@@ -113,7 +117,8 @@
         </div>
     </div>
 </div>
-<script>
+<script type="text/javascript">
+    var userPermissions = '@Html.Raw(Json.Serialize(UserSession.FormPermisionData))';
     var today = new Date();
     var month = today.getMonth() + 1;
     var year = today.getFullYear();
