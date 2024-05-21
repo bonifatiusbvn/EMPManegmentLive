@@ -45,17 +45,17 @@
                         <table id="invoiceTable" class="table table-bordered dt-responsive nowrap table-striped align-middle dataTable no-footer dtr-inline">
                             <thead class="table-light text-muted text-center">
                                 <tr>
-                                    <th class="sort text-uppercase" data-sort="isnvoiceNo">InvoiceNo</th>
-                                    <th class="sort text-uppercase" data-sort="isnvoiceNo">VendorName</th>
-                                    <th class="sort text-uppercase" data-sort="isnvoiceNo">ProjectName</th>
-                                    <th class="sort text-uppercase" data-sort="invoiceDate">TotalAmount</th>
+                                    <th class="sort text-uppercase" data-sort="invoiceNo">InvoiceNo</th>
+                                    <th class="sort text-uppercase" data-sort="vendorName">VendorName</th>
+                                    <th class="sort text-uppercase" data-sort="projectName">ProjectName</th>
+                                    <th class="sort text-uppercase" data-sort="totalAmount">TotalAmount</th>
                                     @if (UserSession.FormPermisionData.Any(a => a.FormName == "InvoiceListView" && (a.Edit == true || a.Delete == true)))
                                     {
                                         <th class="sort text-uppercase" data-sort="action">Action</th>
                                     }
                                 </tr>
                             </thead>
-                            <tbody> </tbody>
+                            <tbody></tbody>
                         </table>
                         <!-- end table -->
                     </div>

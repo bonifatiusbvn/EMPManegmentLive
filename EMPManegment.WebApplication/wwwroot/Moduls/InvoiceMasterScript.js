@@ -589,16 +589,62 @@ function GetAllTransactionData() {
         }
     });
 }
-
 var datas = userPermissions
 $(document).ready(function () {
-    debugger
-    function data(datas) {
-        var userPermission = datas;
-        AllInvoiceList(userPermission);
-    }
+
+
     function AllInvoiceList(userPermission) {
-        debugger
+        var canEdit = false;
+        var canDelete = false;
+
+        for (var i = 0; i < userPermission.length; i++) {
+            var permission = userPermission[i];
+            if (permission.formName == "InvoiceListView") {
+                canEdit = permission.edit;
+                canDelete = permission.delete;
+                break;
+            }
+        }
+
+        var columns = [
+            {
+                "data": "invoiceNo",
+                "name": "InvoiceNo",
+                "render": function (data, type, full) {
+                    return '<h5 class="fs-15"><a href="/Invoice/DisplayInvoiceDetails?InvoiceId=' + full.id + '" class="fw-medium link-primary">' + full.invoiceNo + '</a></h5>';
+                }
+            },
+            { "data": "vendorName", "name": "VendorName", "className": "text-center" },
+            { "data": "projectName", "name": "ProjectName", "className": "text-center" },
+            { "data": "totalAmount", "name": "TotalAmount", "className": "text-center" }
+        ];
+
+        if (canEdit || canDelete) {
+            columns.push({
+                "data": null,
+                "orderable": false,
+                "searchable": false,
+                "render": function (data, type, full) {
+                    var buttons = '<ul class="list-inline hstack gap-2 mb-0">';
+
+                    if (canEdit) {
+                        buttons += '<li class="btn list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">' +
+                            '<a onclick="EditInvoiceDetails(\'' + full.invoiceNo + '\')">' +
+                            '<i class="fa-regular fa-pen-to-square"></i></a></li>';
+                    }
+
+                    if (canDelete) {
+                        buttons += '<li class="btn text-danger list-inline-item delete" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Delete" style="margin-left:12px;">' +
+                            '<a onclick="deleteInvoice(\'' + full.id + '\')">' +
+                            '<i class="fas fa-trash"></i></a></li>';
+                    }
+
+                    buttons += '</ul>';
+                    return buttons;
+                }
+            });
+        }
+
         $('#invoiceTable').DataTable({
             processing: false,
             serverSide: true,
@@ -607,71 +653,15 @@ $(document).ready(function () {
             ajax: {
                 type: "POST",
                 url: '/Invoice/GetInvoiceListView',
-                dataType: 'json',
+                dataType: 'json'
             },
-            columns: [
-                {
-                    "data": "invoiceNo", "name": "InvoiceNo",
-                    "render": function (data, type, full) {
-                        return '<h5 class="fs-15"><a href="/Invoice/DisplayInvoiceDetails?InvoiceId=' + full.id + '" class="fw-medium link-primary">' + full.invoiceNo; '</a></h5>';
-                    }
-                },
-                {
-                    "data": "vendorName", "name": "VendorName",
-                    "className": "text-center"
-                },
-                {
-                    "data": "projectName", "name": "ProjectName",
-                    "className": "text-center"
-                },
-                {
-                    "data": "totalAmount", "name": "TotalAmount",
-                    "className": "text-center"
-                },
-                {
-                    render: function (data, type, full) {
-                        var userPermissionArray = [];
-                        userPermissionArray = JSON.parse(userPermission);
-
-                        var canEdit = false;
-                        var canDelete = false;
-
-                        for (var i = 0; i < userPermissionArray.length; i++) {
-                            debugger
-                            var permission = userPermissionArray[i];
-                            if (permission.formName == "InvoiceListView") {
-                                canEdit = permission.edit;
-                                canDelete = permission.delete;
-                                break;
-                            }
-                        }
-
-
-                        var buttons = '<ul class="list-inline hstack gap-2 mb-0">';
-
-                        if (canEdit) {
-                            buttons += '<li class="btn list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">' +
-                                '<a onclick="EditInvoiceDetails(\'' + full.invoiceNo + '\')">' +
-                                '<i class="fa-regular fa-pen-to-square"></i></a></li>';
-                        }
-
-                        if (canDelete) {
-                            buttons += '<li class="btn text-danger list-inline-item delete" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Delete" style="margin-left:12px;">' +
-                                '<a onclick="deleteInvoice(\'' + full.id + '\')">' +
-                                '<i class="fas fa-trash"></i></a></li>';
-                        }
-
-                        buttons += '</ul>';
-                        return buttons;
-                    }
-                        
-                }
-            ],
-    columnDefs: [{
-        "defaultContent": "",
-        "targets": "_all",
-    }]
-});
+            columns: columns,
+            columnDefs: [{
+                "defaultContent": "",
+                "targets": "_all"
+            }]
+        });
     }
-data(datas);
+
+    AllInvoiceList(userPermissions);
 });
