@@ -31,6 +31,17 @@
     <link rel="stylesheet" href="~/lteassets/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
     <link rel="stylesheet" href="~/lteassets/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
     <!-- Theme style -->
+    <style>
+        .icon {
+            margin-right: 6px;
+        }
+
+        .text {
+            display: inline;
+            margin: 0;
+        }
+
+    </style>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed accent-info">
     <div class="wrapper">
@@ -97,23 +108,114 @@
 
             <!-- Sidebar -->
             <div class="sidebar">
-
+                <!-- Sidebar user panel (optional) -->
+                <!-- SidebarSearch Form -->
                 <!-- Sidebar Menu -->
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                        @foreach (var group in UserSession.FormPermisionData.Select(a => a.GroupName).Distinct())
+                        {
+                            @if (group == "Dashboard" && UserSession.FormPermisionData.Count(e => e.GroupName == group) > 0)
+                            {
+                                @foreach (var item in UserSession.FormPermisionData.Where(e => e.GroupName == group && e.isActive == true))
+                                {
+                                    <li class="nav-item">
+                                        <a asp-action="@item.Action" asp-controller="@item.Controller" class="nav-link active">
+                                            <i class="nav-icon fas fa-tachometer-alt icon"></i>
+                                            <p class="text">
+                                                Dashboard
+                                                <i class="right fas fa-angle-left"></i>
+                                            </p>
+                                        </a>
+                                    </li>
+                                }
+                            }
 
-                        <li class="nav-item">
-                            <a asp-action="UserHome" asp-controller="Home" class="nav-link active">
-                                <i class="nav-icon fas fa-tachometer-alt"></i>
-                                <p>
-                                    Dashboard
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
+                            @if (group == "Expense" && UserSession.FormPermisionData.Count(e => e.GroupName == group) > 0 && UserSession.FormPermisionData.Any(e => e.GroupName == group && e.isViewAllow == true))
+                            {
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="fa-solid fa-coins icon"></i>
+                                        <p class="text">
+                                            Expense
+                                            <i class="right fas fa-angle-left"></i>
+                                        </p>
+                                    </a>
+                                    <ul class="nav nav-treeview">
+                                        @foreach (var item in UserSession.FormPermisionData.Where(e => e.GroupName == group && e.isActive == true))
+                                        {
+                                            @if (item.View)
+                                            {
+                                                <li class="nav-item">
+                                                    <a asp-action="@item.Action" asp-controller="@item.Controller" class="nav-link">
+                                                        <i class="far fa-circle nav-icon"></i>
+                                                        <p>@item.FormName</p>
+                                                    </a>
+                                                </li>
+                                            }
+                                        }
+                                    </ul>
+                                </li>
+                            }
+                            @if (group == "User" && UserSession.FormPermisionData.Count(e => e.GroupName == group) > 0 && UserSession.FormPermisionData.Any(e => e.GroupName == group && e.isViewAllow == true))
+                            {
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="fa-solid fa-user icon"></i>
+                                        <p class="text">
+                                            User
+                                            <i class="right fas fa-angle-left"></i>
+                                        </p>
+                                    </a>
+                                    <ul class="nav nav-treeview">
+                                        @foreach (var item in UserSession.FormPermisionData.Where(e => e.GroupName == group && e.isActive == true))
+                                        {
+                                            @if (item.View)
+                                            {
 
-                        </li>
+                                                <li class="nav-item">
+                                                    <a asp-action="@item.Action" asp-controller="@item.Controller" class="nav-link">
+                                                        <i class="far fa-circle nav-icon"></i>
+                                                        <p>@item.FormName</p>
+                                                    </a>
+                                                </li>
+                                            }
+                                        }
+                                    </ul>
+                                </li>
+                            }
+                            @if (group == "Attendance" && UserSession.FormPermisionData.Count(e => e.GroupName == group) > 0 && UserSession.FormPermisionData.Any(e => e.GroupName == group && e.isViewAllow == true))
+                            {
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="fa-solid fa-clipboard-user icon"></i>
+                                        <p class="text">
+                                            Attendance
+                                            <i class="right fas fa-angle-left"></i>
+                                        </p>
+                                    </a>
+                                    <ul class="nav nav-treeview">
+                                        @foreach (var item in UserSession.FormPermisionData.Where(e => e.GroupName == group && e.isActive == true))
+                                        {
+                                            @if (item.View)
+                                            {
 
+                                                <li class="nav-item">
+                                                    <a asp-action="@item.Action" asp-controller="@item.Controller" class="nav-link">
+                                                        <i class="far fa-circle nav-icon"></i>
+                                                        <p>
+                                                            @item.FormName
+                                                        </p>
+                                                    </a>
+                                                </li>
+                                            }
+                                        }
+                                    </ul>
+                                </li>
+                            }
+                        }
                     </ul>
+
                 </nav>
                 <!-- /.sidebar-menu -->
             </div>
