@@ -9,7 +9,6 @@ namespace EMPManegment.EntityModels.ViewModels.ExpenseMaster
     public class UserExpenseDetailsView
     {
 
-
         public Guid UserId { get; set; }
         public string UserName { get; set; }
         public string FullName { get; set; }

@@ -8,7 +8,6 @@ $(document).ready(function () {
         var Text = $("#ddlCountry Option:Selected").text();
         var StateId = $(this).val();
         $("#txtcountry").val(Text);
-        $('#ddlState').append('<Option >--Select State--</Option>');
         $.ajax({
             url: '/Authentication/GetState?StateId=' + StateId,
             success: function (result) {
@@ -26,7 +25,7 @@ $(document).ready(function () {
         var Text = $("#ddlState Option:Selected").text();
         var CityId = $(this).val();
         $("#txtstate").val(CityId);
-        $('#ddlCity').append('<Option >--Select City--</Option>');
+
         $.ajax({
             url: '/Authentication/GetCity?CityId=' + CityId,
             success: function (result) {

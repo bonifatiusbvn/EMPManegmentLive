@@ -6,6 +6,19 @@
     ViewData["Title"] = "ApprovedExpense";
     Layout = "~/Views/Shared/_UserHomeLayout.cshtml";
 }
+<style>
+    #txtexpensetype-error, #txtDescription-error, #txtbillno-error,
+    #txtdate-error, #txttotalamount-error, #txtimage-error,
+    #txtaccount-error, #txtpaymenttype-error, #txtispaid-error, #txtisapproved-error {
+        color: red;
+    }
+
+    #EditDescription-error, #Editbillno-error, #Edittotalamount-error {
+        color: red;
+    }
+
+</style>
+
 <input type="hidden" id="txtgetUserName" value="@ViewBag.UserName" hidden />
 <div class="row" style="margin-top:80px;">
     <div class="col-12">
@@ -30,7 +43,7 @@
             <div class="card-header">
                 <div class="row align-items-center gy-3">
                     <div class="col-sm">
-                        <h5 class="card-title mb-0">Expense History</h5>
+                        <h5 class="card-title mb-0 fw-bold">@ViewBag.UserName (Expense History)</h5>
                     </div>
                     <div class="col-sm-auto">
                         <div class="d-flex gap-1 flex-wrap">
@@ -133,9 +146,7 @@
                                 <i class="ri-arrow-left-right-fill me-1 align-bottom"></i>Approved Expense
                             </a>
                         </li>
-                        <li>
-                            <a class="nav-link All py-3" style="margin-left:835px; width:250px;">@ViewBag.UserName-Expense</a>
-                        </li>
+
                     </ul>
                     <div class="tab-content">
                         <div class="tab-pane fade show active" id="allExpense" role="tabpanel">
@@ -249,19 +260,8 @@
         </div>
         <!--end col-->
     </div>
+</div>
+<!--end row-->
 
-    <!--end row-->
-    <style>
-        #txtexpensetype-error, #txtDescription-error, #txtbillno-error,
-        #txtdate-error, #txttotalamount-error, #txtimage-error,
-        #txtaccount-error, #txtpaymenttype-error, #txtispaid-error, #txtisapproved-error {
-            color: red;
-        }
-
-        #EditDescription-error, #Editbillno-error, #Edittotalamount-error {
-            color: red;
-        }
-
-    </style>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/moduls/expensemaster.js" asp-append-version="true"></script>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/moduls/expensemaster.js" asp-append-version="true"></script>

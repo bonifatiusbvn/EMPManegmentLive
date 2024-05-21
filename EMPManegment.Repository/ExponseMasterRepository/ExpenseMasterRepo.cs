@@ -515,7 +515,6 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                 }
 
                 int totalRecord = await UserList.CountAsync();
-
                 var cData = await UserList.Skip(dataTable.skip).Take(dataTable.pageSize).ToListAsync();
 
                 jsonData jsonData = new jsonData

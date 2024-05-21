@@ -91,6 +91,7 @@ namespace EMPManagment.API.Controllers
         }
         [HttpGet]
         [Route("GetAllExpensType")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetAllExpensType()
         {
             IEnumerable<ExpenseTypeView> getExpense = await expenseMaster.GetAllExpensType();

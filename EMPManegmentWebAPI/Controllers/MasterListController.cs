@@ -10,6 +10,7 @@ namespace EMPManagment.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [AllowAnonymous]
 
     public class MasterListController : ControllerBase
     {

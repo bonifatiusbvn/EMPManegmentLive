@@ -156,6 +156,7 @@ namespace EMPManagment.API.Controllers
 
         [HttpGet]
         [Route("GetTaskType")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetTaskType()
         {
             IEnumerable<TaskTypeView> getTask = await TaskServices.GetTaskType();
@@ -297,7 +298,7 @@ namespace EMPManagment.API.Controllers
         }
         [HttpGet]
         [Route("ProjectActivityByUserId")]
-        public async Task<IActionResult> ProjectActivityByUserId(Guid ProId,Guid UserId)
+        public async Task<IActionResult> ProjectActivityByUserId(Guid ProId, Guid UserId)
         {
             IEnumerable<TaskDetailsView> UserTask = await TaskServices.ProjectActivityByUserId(ProId, UserId);
             return Ok(new { code = 200, data = UserTask.ToList() });

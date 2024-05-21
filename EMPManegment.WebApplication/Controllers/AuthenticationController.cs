@@ -82,7 +82,7 @@ namespace EMPManegment.Web.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    ApiResponseModel responsemodel = await APIServices.PostAsync(login, "UserLogin/Login");
+                    ApiResponseModel responsemodel = await APIServices.PostAsync(login, "User/Login");
                     LoginResponseModel userlogin = new LoginResponseModel();
 
                     if (responsemodel.code != (int)HttpStatusCode.OK)

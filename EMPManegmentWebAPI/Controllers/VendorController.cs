@@ -63,6 +63,7 @@ namespace EMPManagment.API.Controllers
 
         [HttpGet]
         [Route("GetVendorType")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetVendorType()
         {
             IEnumerable<VendorTypeView> VendorType = await vendorServices.GetVendorType();

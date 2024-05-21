@@ -59,6 +59,7 @@ namespace EMPManagment.API.Controllers
 
         [HttpPost]
         [Route("AddProductType")]
+        [AllowAnonymous]
         public async Task<IActionResult> AddProductType(ProductTypeView AddProduct)
         {
             UserResponceModel response = new UserResponceModel();

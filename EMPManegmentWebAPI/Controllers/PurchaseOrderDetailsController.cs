@@ -121,6 +121,7 @@ namespace EMPManagment.API.Controllers
 
         [HttpGet]
         [Route("GetAllPaymentMethod")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetAllPaymentMethod()
         {
             IEnumerable<PaymentMethodView> paymentmethod = await PurchaseOrderDetails.GetAllPaymentMethod();

@@ -6,7 +6,18 @@
     ViewData["Title"] = "UserExpenseList";
     Layout = "~/Views/Shared/_UserHomeLayout.cshtml";
 }
+<style>
+    #txtexpensetype-error, #txtDescription-error, #txtbillno-error,
+    #txtdate-error, #txttotalamount-error, #txtimage-error,
+    #txtaccount-error, #txtpaymenttype-error, #txtispaid-error, #txtisapproved-error {
+        color: red;
+    }
 
+    #EditDescription-error, #Editbillno-error, #Edittotalamount-error {
+        color: red;
+    }
+
+</style>
 <input type="hidden" class="form-control" id="txtuserid" value="@_userSession.UserId" hidden>
 <div class="row" style="margin-top:80px;">
     <div class="col-12">
@@ -378,18 +389,7 @@
 </div>
 <!--end col-->
 <!--end row-->
-<style>
-    #txtexpensetype-error, #txtDescription-error, #txtbillno-error,
-    #txtdate-error, #txttotalamount-error, #txtimage-error,
-    #txtaccount-error, #txtpaymenttype-error, #txtispaid-error, #txtisapproved-error {
-        color: red;
-    }
 
-    #EditDescription-error, #Editbillno-error, #Edittotalamount-error {
-        color: red;
-    }
-
-</style>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/moduls/expensemaster.js" asp-append-version="true"></script>
 

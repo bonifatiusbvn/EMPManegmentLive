@@ -12,6 +12,9 @@
         overflow-y: auto;
     }
 
+    #txtcreditamount-error, #txtpaymenttype-error {
+        color: red;
+    }
 </style>
 <input type="hidden" class="form-control" id="txtuseraproveid" value="@_userSession.UserId" hidden>
 <input type="hidden" class="form-control" id="txtuseraprovename" value="@_userSession.FullName" hidden>
@@ -109,12 +112,10 @@
             <ul class="nav nav-tabs nav-tabs-custom nav-primary mb-3" role="tablist">
                 <li class="nav-item">
                     <a class="nav-link active All py-3" data-bs-toggle="tab" id="All" href="#GetallExpense" role="tab" aria-selected="true">
-                        <i class="ri-store-2-fill me-1 align-bottom"></i>All Expense
+                        <i class="ri-store-2-fill me-1 align-bottom"></i>@ViewBag.UserName (All Expense)
                     </a>
                 </li>
-                <li>
-                    <a class="nav-link All py-3" style="margin-left:835px; width:250px;">@ViewBag.UserName-Expense</a>
-                </li>
+
             </ul>
             <div class="row">
                 <div class="col-lg-12">
@@ -247,10 +248,6 @@
     <!--end row-->
     <!--end card-->
 </div>
-<style>
-    #txtcreditamount-error, #txtpaymenttype-error {
-        color: red;
-    }
-</style>
+
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/moduls/expensemaster.js" asp-append-version="true"></script>

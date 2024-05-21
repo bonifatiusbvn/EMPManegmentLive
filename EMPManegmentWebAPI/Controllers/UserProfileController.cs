@@ -104,6 +104,7 @@ namespace EMPManagment.API.Controllers
 
         [HttpGet]
         [Route("GetDocumentType")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetDocumentType()
         {
             IEnumerable<EmpDocumentView> getDocumentType = await UserListServices.GetDocumentType();
