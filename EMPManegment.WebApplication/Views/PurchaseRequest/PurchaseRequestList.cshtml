@@ -33,7 +33,7 @@
                         </div>
                         <div class="col-sm-auto">
                             <div class="d-flex gap-1 flex-wrap">
-                                <a class="btn btn-warning add-btn btn-md" id="create-btn" asp-action="CreatePurchaseRequest" asp-controller="PurchaseRequest"><i class="ri-add-line align-bottom me-1"></i> Create PR</a>
+                                <a class="btn btn-warning add-btn btn-md" id="create-btn" asp-action="CreatePurchaseRequest" asp-controller="PurchaseRequest"><i class="ri-add-line align-bottom me-1"></i>Purchase Request</a>
                                 @*                                <button type="button" class="btn btn-info"><i class="ri-file-download-line align-bottom me-1"></i> Import</button>*@
                                 <button class="btn btn-soft-danger" id="remove-actions" onClick="deleteMultiple()"><i class="ri-delete-bin-2-line"></i></button>
                             </div>
@@ -197,4 +197,4 @@
     var userPermissions = '@Html.Raw(Json.Serialize(UserSession.FormPermisionData))';
 </script>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script src="~/moduls/purchaserequestscript.js"></script>
+<script src="~/moduls/purchaserequestscript.js" asp-append-version="true"></script>

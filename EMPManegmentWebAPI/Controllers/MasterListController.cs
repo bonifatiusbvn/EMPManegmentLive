@@ -10,7 +10,7 @@ namespace EMPManagment.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+
     public class MasterListController : ControllerBase
     {
         public MasterListController(IMasterList cSC)
