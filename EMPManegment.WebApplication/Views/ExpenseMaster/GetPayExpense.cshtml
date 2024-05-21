@@ -248,6 +248,13 @@
     <!--end row-->
     <!--end card-->
 </div>
-
+<style>
+    #txtcreditamount-error, #txtpaymenttype-error {
+        color: red;
+    }
+</style>
+<script type="text/javascript">
+    var userPermissions = '@Html.Raw(Json.Serialize(UserSession.FormPermisionData))';
+</script>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/moduls/expensemaster.js" asp-append-version="true"></script>

@@ -1,4 +1,7 @@
-﻿$("#monthbox").show();
+﻿
+var datas = userPermissions
+
+$("#monthbox").show();
 $("#datebox").hide();
 $("#datebox1").hide();
 $("#usernamebox").show();
@@ -18,7 +21,6 @@ function CleartextBox() {
     $("#txtenddate").val('');
 }
 $(document).ready(function () {
-    GetUserAttendance(); 
     GetAttendance();
     $("#attendanceform").validate({
         rules: {
@@ -90,76 +92,99 @@ $('#SelectAttandance').change(function () {
     }
 })
 
-function GetUserAttendance() {
 
-     $('#attendanceTableData').DataTable({
-        processing: false,
-        serverSide: true,
-        filter: true,
-        "bDestroy": true,
-        ajax: {
-            type: "Post",
-            url: '/UserProfile/GetUserAttendanceList',
-            dataType: 'json'
-        },
-        columns: [
-            { "data": "userName", "name": "UserName" },
-            {
-                "data": "date", "name": "Date",
-                render: function (data, type, row) {
-                    var dateObj = new Date(data);
-                    var day = dateObj.getDate();
-                    var month = dateObj.getMonth() + 1; 
-                    var year = dateObj.getFullYear();
-                    if (day < 10) {
-                        day = '0' + day;
-                    }
-                    if (month < 10) {
-                        month = '0' + month;
-                    }
-                    return day + '-' + month + '-' + year;
-                }
+$(document).ready(function () {
+    function data(datas) {
+        var userPermission = datas;
+        GetUserAttendance(userPermission);
+    }
+    function GetUserAttendance(userPermission) {
+
+        $('#attendanceTableData').DataTable({
+            processing: false,
+            serverSide: true,
+            filter: true,
+            "bDestroy": true,
+            ajax: {
+                type: "Post",
+                url: '/UserProfile/GetUserAttendanceList',
+                dataType: 'json'
             },
-            {
-                "data": "intime", "name": "InTime",
-                "render": function (data, type, full) {
-                    return (new Date(full.intime)).toLocaleTimeString('en-GB');
-                }
-            },
-            {
-                "data": "outTime", "name": "OutTime",
-                "render": function (data, type, full) {
-                    return (new Date(full.outTime)).toLocaleTimeString('en-GB');
-                }
-            },
-            {
-                "data": "totalHours", "name": "TotalHours",
-                "render": function (data, type, full) {
-                    var userdate = new Date(full.date).toLocaleDateString('en-GB');
-                    var todate = new Date().toLocaleDateString('en-US');
-                    if (full.totalHours != null) {
-                        return (full.totalHours?.substr(0, 8)) + ('hr');
+            columns: [
+                { "data": "userName", "name": "UserName" },
+                {
+                    "data": "date", "name": "Date",
+                    render: function (data, type, row) {
+                        var dateObj = new Date(data);
+                        var day = dateObj.getDate();
+                        var month = dateObj.getMonth() + 1;
+                        var year = dateObj.getFullYear();
+                        if (day < 10) {
+                            day = '0' + day;
+                        }
+                        if (month < 10) {
+                            month = '0' + month;
+                        }
+                        return day + '-' + month + '-' + year;
                     }
-                    else if (full.totalHours == null && userdate == todate) {
-                        return ("Pending...");
+                },
+                {
+                    "data": "intime", "name": "InTime",
+                    "render": function (data, type, full) {
+                        return (new Date(full.intime)).toLocaleTimeString('en-GB');
                     }
-                    else {
-                        return ("Missing");
+                },
+                {
+                    "data": "outTime", "name": "OutTime",
+                    "render": function (data, type, full) {
+                        return (new Date(full.outTime)).toLocaleTimeString('en-GB');
                     }
-                }
-            },
-            {
-                "render": function (data, type, full) {
-                    return '<a class="btn btn-sm btn-primary edit-item-btn" onclick="EditUserAttendance(\'' + full.attendanceId + '\')" >EditTime</a>';
-                }
-            },
-        ],
-        columnDefs: [{
-            "defaultContent": "",
-            "targets": "_all",
-        }],
-    });
-}
+                },
+                {
+                    "data": "totalHours", "name": "TotalHours",
+                    "render": function (data, type, full) {
+                        var userdate = new Date(full.date).toLocaleDateString('en-GB');
+                        var todate = new Date().toLocaleDateString('en-US');
+                        if (full.totalHours != null) {
+                            return (full.totalHours?.substr(0, 8)) + ('hr');
+                        }
+                        else if (full.totalHours == null && userdate == todate) {
+                            return ("Pending...");
+                        }
+                        else {
+                            return ("Missing");
+                        }
+                    }
+                },
+                {
+                    "render": function (data, type, full) {
+                        var userPermissionArray = [];
+                        userPermissionArray = JSON.parse(userPermission);
+
+                        var canEdit = false;
+
+                        for (var i = 0; i < userPermissionArray.length; i++) {
+                            var permission = userPermissionArray[i];
+                            if (permission.formName == "GetAllUsersAttendanceList") {
+                                canEdit = permission.edit;
+                                break;
+                            }
+                        }
+                        if (canEdit) {
+                            return '<a class="btn btn-sm btn-primary edit-item-btn" onclick="EditUserAttendance(\'' + full.attendanceId + '\')" >EditTime</a>';
+                        }
+                    }
+                },
+            ],
+            columnDefs: [{
+                "defaultContent": "",
+                "targets": "_all",
+            }],
+        });
+    }
+    data(datas);
+});
+
 
 
 function EditUserAttendance(attandenceId) {

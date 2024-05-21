@@ -52,7 +52,7 @@
                                         <th>ProductName</th>
                                         <th>Quantity</th>
                                         <th>IsApproved</th>
-                                        @if (UserSession.FormPermisionData.Any(a => a.FormName == "Purchase Request List" && (a.Edit == true || a.Delete == true)))
+                                        @if (UserSession.FormPermisionData.Any(a => a.FormName == "Purchase Request List " && (a.Edit == true || a.Delete == true)))
                                         {
                                             <th>Action</th>
                                         }
@@ -195,6 +195,7 @@
         color: red;
     }
 </style>
+
 <script type="text/javascript">
     var userPermissions = '@Html.Raw(Json.Serialize(UserSession.FormPermisionData))';
 </script>

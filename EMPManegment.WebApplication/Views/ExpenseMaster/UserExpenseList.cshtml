@@ -243,7 +243,10 @@
                                         <th class="sort text-uppercase" data-sort="BillNo">BillNo</th>
                                         <th class="sort text-uppercase" data-sort="Date">Date</th>
                                         <th class="sort text-uppercase" data-sort="TotalAmount">TotalAmount</th>
-                                        <th class="sort text-uppercase" data-sort="action">Action</th>
+                                        @if (UserSession.FormPermisionData.Any(a => a.FormName == "Expenses" && (a.Edit == true || a.Delete == true)))
+                                        {
+                                            <th class="sort text-uppercase" data-sort="action">Action</th>
+                                        }
                                     </tr>
                                 </thead>
                                 <tbody class="list form-check-all text-center"> </tbody>
@@ -390,6 +393,10 @@
 <!--end col-->
 <!--end row-->
 
+</style>
+<script type="text/javascript">
+    var userPermissions = '@Html.Raw(Json.Serialize(UserSession.FormPermisionData))';
+</script>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/moduls/expensemaster.js" asp-append-version="true"></script>
 

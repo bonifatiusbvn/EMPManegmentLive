@@ -796,9 +796,9 @@
     <!--end col-->
 </div>
 
-
-
-
+<script type="text/javascript">
+    var userPermissions = '@Html.Raw(Json.Serialize(UserSession.FormPermisionData))';
+</script>
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/moduls/taskscript.js" asp-append-version="true"></script>

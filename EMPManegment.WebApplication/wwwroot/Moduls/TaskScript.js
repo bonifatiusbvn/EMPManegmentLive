@@ -530,113 +530,147 @@ function GetUserTotalTask() {
         },
     });
 };
-function AllTaskDetailsList() {
-    $('#tasksTableData').DataTable({
-        processing: false,
-        serverSide: true,
-        filter: true,
-        "bDestroy": true,
-        ajax: {
-            type: "Post",
-            url: '/Task/TaskDetailsDataTable',
-            dataType: 'json',
-        },
-        columns: [
-            {
-                "data": "userName", "name": "UserName",
-            },
-            {
-                "data": "taskTitle", "name": "TaskTitle"
-            },
-            {
-                "data": "taskDetails",
-                "name": "TaskDetails",
-                "render": function (data, type, row) {
-                    if (type === 'display' && data.length > 50) {
-                        // Truncate the TaskDetails text and add a tooltip
-                        return '<span title="' + data + '">' + data.substr(0, 50) + '...</span>';
-                    }
-                    return data;
-                }
-            },
-            {
-                "data": "taskType", "name": "TaskType",
-                "render": function (data, type, full) {
 
-                    if (full.taskTypeName == "HighPriority") {
-                        return '<a class="badge bg-danger-subtle text-danger text-uppercase">' + full.taskTypeName + '</a>';
-                    }
-                    else if (full.taskTypeName == "MediumPriority") {
-                        return '<a class="badge bg-warning-subtle text-warning text-uppercase">' + full.taskTypeName + '</a>';
-                    }
-                    else {
-                        return '<a class="badge bg-success-subtle text-success text-uppercase">' + full.taskTypeName + '</a>';
-                    }
-                }
+var datas = userPermissions
+$(document).ready(function () {
+    function data(datas) {
+        var userPermission = datas;
+        AllTaskDetailsList(userPermission);
+    }
+    function AllTaskDetailsList(userPermission) {
+        $('#tasksTableData').DataTable({
+            processing: false,
+            serverSide: true,
+            filter: true,
+            "bDestroy": true,
+            ajax: {
+                type: "Post",
+                url: '/Task/TaskDetailsDataTable',
+                dataType: 'json',
             },
-            {
-                "data": "taskDate", "name": "TaskDate",
-                render: function (data, type, row) {
-                    var dateObj = new Date(data);
-                    var day = dateObj.getDate();
-                    var month = dateObj.getMonth() + 1;
-                    var year = dateObj.getFullYear();
-                    if (day < 10) {
-                        day = '0' + day;
+            columns: [
+                {
+                    "data": "userName", "name": "UserName",
+                },
+                {
+                    "data": "taskTitle", "name": "TaskTitle"
+                },
+                {
+                    "data": "taskDetails",
+                    "name": "TaskDetails",
+                    "render": function (data, type, row) {
+                        if (type === 'display' && data.length > 50) {
+                            // Truncate the TaskDetails text and add a tooltip
+                            return '<span title="' + data + '">' + data.substr(0, 50) + '...</span>';
+                        }
+                        return data;
                     }
-                    if (month < 10) {
-                        month = '0' + month;
-                    }
-                    return day + '-' + month + '-' + year;
-                }
-            },
-            {
-                "data": "taskEndDate", "name": "TaskEndDate",
-                render: function (data, type, row) {
-                    var dateObj = new Date(data);
-                    var day = dateObj.getDate();
-                    var month = dateObj.getMonth() + 1;
-                    var year = dateObj.getFullYear();
-                    if (day < 10) {
-                        day = '0' + day;
-                    }
-                    if (month < 10) {
-                        month = '0' + month;
-                    }
-                    return day + '-' + month + '-' + year;
-                }
-            },
-            {
-                "data": "taskStatus", "name": "TaskStatus",
-                "render": function (data, type, full) {
+                },
+                {
+                    "data": "taskType", "name": "TaskType",
+                    "render": function (data, type, full) {
 
-                    if (full.taskStatus == "Working") {
-                        return ('<ul class="list-inline hstack gap-2 mb-0"><li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="View"><a class="badge bg-warning text-uppercase">' + full.taskStatus + '</a></li><li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="View" style="margin-left:7px;"><a onclick="btnTaskDetails(\'' + full.id + '\')"><i class="ri-eye-fill fs-16"></i></a></li><li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit"><a onclick="EditTaskDetails(\'' + full.id + '\')"><i class="ri-pencil-fill fs-16"></i></a></li></ul>');
+                        if (full.taskTypeName == "HighPriority") {
+                            return '<a class="badge bg-danger-subtle text-danger text-uppercase">' + full.taskTypeName + '</a>';
+                        }
+                        else if (full.taskTypeName == "MediumPriority") {
+                            return '<a class="badge bg-warning-subtle text-warning text-uppercase">' + full.taskTypeName + '</a>';
+                        }
+                        else {
+                            return '<a class="badge bg-success-subtle text-success text-uppercase">' + full.taskTypeName + '</a>';
+                        }
                     }
-                    else if (full.taskStatus == "Completed") {
-                        return ('<ul class="list-inline hstack gap-2 mb-0"><a class="badge bg-success text-uppercase">' + full.taskStatus + '</a><li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="View" style="margin-left:3px;"><a onclick="btnTaskDetails(\'' + full.id + '\')"><i class="ri-eye-fill fs-16"></i></a></li><li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit"><a onclick="EditTaskDetails(\'' + full.id + '\')"><i class="ri-pencil-fill fs-16"></i></a></li></ul>');
+                },
+                {
+                    "data": "taskDate", "name": "TaskDate",
+                    render: function (data, type, row) {
+                        var dateObj = new Date(data);
+                        var day = dateObj.getDate();
+                        var month = dateObj.getMonth() + 1;
+                        var year = dateObj.getFullYear();
+                        if (day < 10) {
+                            day = '0' + day;
+                        }
+                        if (month < 10) {
+                            month = '0' + month;
+                        }
+                        return day + '-' + month + '-' + year;
                     }
-                    else if (full.taskStatus == "Pending") {
-                        return ('<ul class="list-inline hstack gap-2 mb-0"><li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="View"><a class="badge bg-primary text-uppercase">' + full.taskStatus + '</a></li><li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="View" style="margin-left:10px;"><a onclick="btnTaskDetails(\'' + full.id + '\')"><i class="ri-eye-fill fs-16"></i></a></li><li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit"><a onclick="EditTaskDetails(\'' + full.id + '\')"><i class="ri-pencil-fill fs-16"></i></a></li></ul>');
+                },
+                {
+                    "data": "taskEndDate", "name": "TaskEndDate",
+                    render: function (data, type, row) {
+                        var dateObj = new Date(data);
+                        var day = dateObj.getDate();
+                        var month = dateObj.getMonth() + 1;
+                        var year = dateObj.getFullYear();
+                        if (day < 10) {
+                            day = '0' + day;
+                        }
+                        if (month < 10) {
+                            month = '0' + month;
+                        }
+                        return day + '-' + month + '-' + year;
                     }
-                    else if (full.taskStatus == "InReview") {
-                        return ('<ul class="list-inline hstack gap-2 mb-0"><li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="View"><a class="badge bg-secondary text-uppercase">' + full.taskStatus + '</a></li><li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="View" style="margin-left:7px;"><a onclick="btnTaskDetails(\'' + full.id + '\')"><i class="ri-eye-fill fs-16"></i></a></li><li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit" ><a onclick="EditTaskDetails(\'' + full.id + '\')"><i class="ri-pencil-fill fs-16"></i></a></li></ul>');
+                },
+                {
+                    "data": "taskStatus", "name": "TaskStatus",
+                    "render": function (data, type, full) {
+
+                        var userPermissionArray = [];
+                        userPermissionArray = JSON.parse(userPermission);
+
+                        var canEdit = false;
+
+                        for (var i = 0; i < userPermissionArray.length; i++) {
+                            var permission = userPermissionArray[i];
+                            if (permission.formName == "Tasks List") {
+                                canEdit = permission.edit;
+                                canDelete = permission.delete;
+                                break;
+                            }
+                        }
+
+
+                        var buttons = '<ul class="list-inline hstack gap-2 mb-0">';
+
+                        if (canEdit) {
+                            buttons += '<li class="btn list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">' +
+                                '<a onclick="EditTaskDetails(\'' + full.id + '\')">' +
+                                '<i class="fa-regular fa-pen-to-square"></i></a></li>';
+                        }
+
+                        buttons += '</ul>';
+
+                        if (full.taskStatus == "Working") {
+                            return ('<ul class="list-inline hstack gap-2 mb-0"><li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="View"><a class="badge bg-warning text-uppercase">' + full.taskStatus + '</a></li><li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="View" style="margin-left:7px;"><a onclick="btnTaskDetails(\'' + full.id + '\')"><i class="ri-eye-fill fs-16"></i></a></li>' + buttons + '</ul >');
+                        }
+                        else if (full.taskStatus == "Completed") {
+                            return ('<ul class="list-inline hstack gap-2 mb-0"><a class="badge bg-success text-uppercase">' + full.taskStatus + '</a><li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="View" style="margin-left:3px;"><a onclick="btnTaskDetails(\'' + full.id + '\')"><i class="ri-eye-fill fs-16"></i></a></li>' + buttons + '</ul >');
+                        }
+                        else if (full.taskStatus == "Pending") {
+                            return ('<ul class="list-inline hstack gap-2 mb-0"><li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="View"><a class="badge bg-primary text-uppercase">' + full.taskStatus + '</a></li><li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="View" style="margin-left:10px;"><a onclick="btnTaskDetails(\'' + full.id + '\')"><i class="ri-eye-fill fs-16"></i></a></li>' + buttons + '</ul >');
+                        }
+                        else if (full.taskStatus == "InReview") {
+                            return ('<ul class="list-inline hstack gap-2 mb-0"><li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="View"><a class="badge bg-secondary text-uppercase">' + full.taskStatus + '</a></li><li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="View" style="margin-left:7px;"><a onclick="btnTaskDetails(\'' + full.id + '\')"><i class="ri-eye-fill fs-16"></i></a></li>' + buttons + '</ul >');
+                        }
+                        else if (full.taskStatus == "InReview") {
+                            return ('<a class="badge bg-danger text-uppercase">' + full.taskStatus + '</a>' + '<a onclick="btnTaskDetails(\'' + full.id + '\')"><i class="ri-eye-fill align-bottom me-2 text-muted"></i></a>' + buttons);
+                        }
+                        else {
+                            return ('<ul class="list-inline hstack gap-2 mb-0"><li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="View"><a class="badge bg-secondary text-uppercase">' + full.taskStatus + '</a></li><li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="View" style="margin-left:29px;"><a onclick="btnTaskDetails(\'' + full.id + '\')"><i class="ri-eye-fill fs-16"></i></a></li>' + buttons + '</ul >');
+                        }
                     }
-                    else if (full.taskStatus == "InReview") {
-                        return ('<a class="badge bg-danger text-uppercase">' + full.taskStatus + '</a>' + '<a onclick="btnTaskDetails(\'' + full.id + '\')"><i class="ri-eye-fill align-bottom me-2 text-muted"></i></a>' + '<a onclick="EditTaskDetails(\'' + full.id + '\')"><i class="ri-pencil-fill align-bottom me-2 text-muted"></i></a>');
-                    }
-                    else {
-                        return ('<ul class="list-inline hstack gap-2 mb-0"><li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="View"><a class="badge bg-secondary text-uppercase">' + full.taskStatus + '</a></li><li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="View" style="margin-left:29px;"><a onclick="btnTaskDetails(\'' + full.id + '\')"><i class="ri-eye-fill fs-16"></i></a></li><li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit" ><a onclick="EditTaskDetails(\'' + full.id + '\')"><i class="ri-pencil-fill fs-16"></i></a></li></ul>');
-                    }
-                }
-            },
-        ],
-        columnDefs: [{
-            "defaultContent": "",
-            "targets": "_all",
-        }]
-    });
-}
+                },
+            ],
+            columnDefs: [{
+                "defaultContent": "",
+                "targets": "_all",
+            }]
+        });
+    }
+    data(datas);
+});
 
 
 function EditTaskDetails(Id) {

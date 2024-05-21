@@ -1,4 +1,7 @@
-﻿@{
+﻿@using EMPManegment.Web.Models;
+@inject IHttpContextAccessor Accessor;
+@inject UserSession _userSession;
+@{
     ViewData["Title"] = "GetAllUsersAttendanceList";
     Layout = "~/Views/Shared/_UserHomeLayout.cshtml";
 }
@@ -145,7 +148,11 @@
                             <th class="sort" data-sort="InTime">InTime</th>
                             <th class="sort" data-sort="OutTime">OutTime</th>
                             <th class="sort" data-sort="TotalHours">TotalHours</th>
-                            <th class="sort" data-sort="Action">Action</th>
+                            @if(UserSession.FormPermisionData.Any(a => a.FormName == "GetAllUsersAttendanceList" && (a.Edit == true)))
+                            {
+                                <th class="sort">Action</th>
+                            }
+                            @* <th class="sort" data-sort="Action">Action</th> *@
                         </tr>
                     </thead>
                     <tbody class="text-center"> </tbody>
@@ -163,7 +170,7 @@
     </h4>
 </div>
 
-<script>
+<script type="text/javascript">
     var today = new Date();
     var month = today.getMonth() + 1;
     var year = today.getFullYear();
@@ -177,14 +184,18 @@
     document.getElementById("txtstartdatebox").setAttribute("max", maxDate);
     document.getElementById("txtenddatebox").setAttribute("max", maxDate);
     document.getElementById("txtdate").setAttribute("max", maxDate);
-</script>
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script src="~/moduls/userattendancescript.js" asp-append-version="true"></script>
-<script src="~/moduls/taskscript.js" asp-append-version="true"></script>
-<!-----Calander----->
-<script>
+
+    debugger
+    var userPermissions = '@Html.Raw(Json.Serialize(UserSession.FormPermisionData))';
+
     var today = new Date().toISOString().split('T')[0];
     document.getElementById("OutTime").setAttribute("max", today);
 </script>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/moduls/userattendancescript.js" asp-append-version="true"></script>
+<script src="~/moduls/taskscript.js" asp-append-version="true"></script>
+
+
 
 

@@ -2,6 +2,8 @@
 @using EMPManegment.Web.Models
 @using X.PagedList;
 @using X.PagedList.Mvc.Core;
+@inject IHttpContextAccessor Accessor;
+@inject UserSession _userSession
 
 @* <div class="card">
     <div class="card-body">
@@ -58,7 +60,10 @@
                 <tr class="text-uppercase">
                     <th data-sort="Products">Products</th>
                     <th data-sort="Price">Price</th>
-                    <th data-sort="Action">Action</th>
+                    @if (UserSession.FormPermisionData.Any(a => a.FormName == "Product List" && (a.Edit == true || a.Delete == true)))
+                    {
+                        <th data-sort="Action">Action</th>
+                    }
                 </tr>
             </thead>
             <tbody>
@@ -77,14 +82,23 @@
                             </div>
                         </td>
                         <td>@item.PerUnitPrice</td>
-                        <td>
-                            <a href="#showModal" onclick="EditProductDetails('@item.Id')" data-bs-toggle="modal" class="text-primary d-inline-block edit-item-btn">
-                                <i class="fas fa-edit"></i>
-                            </a>
-                            <a href="#showModal" onclick="DeleteProductDetails('@item.Id')" data-bs-toggle="modal" class="btn text-danger d-inline-block remove-item-btn">
-                                <i class="fas fa-trash"></i>
-                            </a>
-                        </td>
+                        @if (UserSession.FormPermisionData.Any(a => a.FormName == "Product List" && (a.Edit == true || a.Delete == true)))
+                        {
+                            <td>
+                                @if (UserSession.FormPermisionData.Any(a => a.FormName == "Product List" && (a.Edit == true)))
+                                {
+                                    <a href="#showModal" onclick="EditProductDetails('@item.Id')" data-bs-toggle="modal" class="text-primary d-inline-block edit-item-btn">
+                                        <i class="fa-regular fa-pen-to-square"></i>
+                                    </a>
+                                }
+                                @if (UserSession.FormPermisionData.Any(a => a.FormName == "Product List" && (a.Delete == true)))
+                                {
+                                    <a href="#showModal" onclick="DeleteProductDetails('@item.Id')" data-bs-toggle="modal" class="btn text-danger d-inline-block remove-item-btn">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                }
+                            </td>
+                        }
                     </tr>
                 }
             </tbody>
