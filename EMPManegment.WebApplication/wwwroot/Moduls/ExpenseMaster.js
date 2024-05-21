@@ -836,6 +836,98 @@ $(document).ready(function () {
         DisplayAllExpenseList(userPermission);
     }
     function DisplayAllExpenseList(userPermission) {
+        debugger
+        var userPermissionArray = [];
+        userPermissionArray = JSON.parse(userPermission);
+
+        var canEdit = false;
+        var canDelete = false;
+
+        for (var i = 0; i < userPermissionArray.length; i++) {
+            var permission = userPermissionArray[i];
+            if (permission.formName == "All Expenses List") {
+                canEdit = permission.edit;
+                canDelete = permission.delete;
+                break;
+            }
+        }
+        var columns = [
+            {
+                "data": "userName", "name": "UserName",
+                "className": "text-center"
+            },
+            {
+                "data": "description", "name": "Description",
+                "className": "text-center"
+            },
+            {
+                "render": function (data, type, full) {
+                    return '<div class="d-flex">' +
+                        '<div class="flex-grow-1 tasks_name">' + full['billNumber'] + '</div>' +
+                        '<div class="flex-shrink-0 ms-4 task-icons">' +
+                        '<ul class="list-inline tasks-list-menu mb-0">' +
+                        '<li class="list-inline-item"><a href="/ExpenseMaster/DownloadBill/?BillName=' + full.image + '"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M13 12h3l-4 4l-4-4h3V8h2v4Zm2-8H5v16h14V8h-4V4ZM3 2.992C3 2.444 3.447 2 3.999 2H16l5 5v13.993A1 1 0 0 1 20.007 22H3.993A1 1 0 0 1 3 21.008V2.992Z" /></svg></a></li>'; +
+                            '</ul>' +
+                            '</div>' +
+                            '</div>';
+                }
+            },
+            {
+                "data": "date",
+                "name": "Date",
+                "className": "text-center",
+
+                "render": function (data, type, full, meta) {
+                    var dateObj = new Date(data);
+                    var day = dateObj.getDate();
+                    var month = dateObj.getMonth() + 1;
+                    var year = dateObj.getFullYear();
+                    if (day < 10) {
+                        day = '0' + day;
+                    }
+                    if (month < 10) {
+                        month = '0' + month;
+                    }
+                    return day + '-' + month + '-' + year;
+                }
+            },
+            {
+                "data": "totalAmount", "name": "TotalAmount",
+                "className": "text-center"
+            },
+            {
+                "data": "account", "name": "Account",
+                "className": "text-center"
+            }
+        ];
+        if (canEdit || canDelete) {
+            columns.push({
+                "data": null,
+                "orderable": false,
+                "searchable": false,
+                "render": function (data, type, full) {
+
+                    var buttons = '<ul class="list-inline hstack gap-2 mb-0">';
+
+                    if (canEdit) {
+                        buttons += '<li class="btn text-primary list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">' +
+                            '<a class="btn text-primary" onclick="EditExpenseDetails(\'' + full.id + '\')">' +
+                            '<i class="fa-regular fa-pen-to-square"></i></a></li>';
+                    }
+
+                    if (canDelete) {
+                        buttons += '<li class="btn text-danger list-inline-item delete" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Delete" style="margin-left:12px;">' +
+                            '<a class="btn text-danger" onclick="deleteExpense(\'' + full.id + '\')">' +
+                            '<i class="fas fa-trash"></i></a></li>';
+                    }
+
+                    buttons += '</ul>';
+                    return buttons;
+                }
+
+            });
+        }
+
         $('#ExpenseTable').DataTable({
             processing: false,
             serverSide: true,
@@ -846,95 +938,7 @@ $(document).ready(function () {
                 url: '/ExpenseMaster/GetExpenseDetailsList',
                 dataType: 'json',
             },
-            columns: [
-                {
-                    "data": "userName", "name": "UserName",
-                    "className": "text-center"
-                },
-                {
-                    "data": "description", "name": "Description",
-                    "className": "text-center"
-                },
-                {
-                    "render": function (data, type, full) {
-                        return '<div class="d-flex">' +
-                            '<div class="flex-grow-1 tasks_name">' + full['billNumber'] + '</div>' +
-                            '<div class="flex-shrink-0 ms-4 task-icons">' +
-                            '<ul class="list-inline tasks-list-menu mb-0">' +
-                            '<li class="list-inline-item"><a href="/ExpenseMaster/DownloadBill/?BillName=' + full.image + '"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M13 12h3l-4 4l-4-4h3V8h2v4Zm2-8H5v16h14V8h-4V4ZM3 2.992C3 2.444 3.447 2 3.999 2H16l5 5v13.993A1 1 0 0 1 20.007 22H3.993A1 1 0 0 1 3 21.008V2.992Z" /></svg></a></li>'; +
-                                '</ul>' +
-                                '</div>' +
-                                '</div>';
-                    }
-                },
-                {
-                    "data": "date",
-                    "name": "Date",
-                    "className": "text-center",
-
-                    "render": function (data, type, full, meta) {
-                        var dateObj = new Date(data);
-                        var day = dateObj.getDate();
-                        var month = dateObj.getMonth() + 1;
-                        var year = dateObj.getFullYear();
-                        if (day < 10) {
-                            day = '0' + day;
-                        }
-                        if (month < 10) {
-                            month = '0' + month;
-                        }
-                        return day + '-' + month + '-' + year;
-                    }
-                },
-                {
-                    "data": "totalAmount", "name": "TotalAmount",
-                    "className": "text-center"
-                },
-                {
-                    "data": "account", "name": "Account",
-                    "className": "text-center"
-                },
-                {
-                    "data": "Action",
-                    "name": "Action",
-                    "className": "text-center",
-                    "orderable": false,
-                    "render": function (data, type, full) {
-                        var userPermissionArray = [];
-                        userPermissionArray = JSON.parse(userPermission);
-
-                        var canEdit = false;
-                        var canDelete = false;
-
-                        for (var i = 0; i < userPermissionArray.length; i++) {
-                            var permission = userPermissionArray[i];
-                            if (permission.formName == "All Expenses List") {
-                                canEdit = permission.edit;
-                                canDelete = permission.delete;
-                                break;
-                            }
-                        }
-
-
-                        var buttons = '<ul class="list-inline hstack gap-2 mb-0">';
-
-                        if (canEdit) {
-                            buttons += '<li class="btn text-primary list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">' +
-                                '<a class="btn text-primary" onclick="EditExpenseDetails(\'' + full.id + '\')">' +
-                                '<i class="fa-regular fa-pen-to-square"></i></a></li>';
-                        }
-
-                        if (canDelete) {
-                            buttons += '<li class="btn text-danger list-inline-item delete" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Delete" style="margin-left:12px;">' +
-                                '<a onclick="deleteExpense(\'' + full.id + '\')">' +
-                                '<i class="fas fa-trash"></i></a></li>';
-                        }
-
-                        buttons += '</ul>';
-                        return buttons;
-                    }
-                },
-            ],
+            columns: columns,
             columnDefs: [{
                 "defaultContent": "",
                 "targets": "_all",
@@ -1269,6 +1273,75 @@ $(document).ready(function () {
 
     function GetAllUserUnapproveExpenseList(userPermission) {
         var IsApprove = false;
+        var userPermissionArray = [];
+        userPermissionArray = JSON.parse(userPermission);
+
+        var canEdit = false;
+        var canDelete = false;
+
+        for (var i = 0; i < userPermissionArray.length; i++) {
+            var permission = userPermissionArray[i];
+            if (permission.formName == "Expenses") {
+                debugger
+                canEdit = permission.edit;
+                canDelete = permission.delete;
+                break;
+            }
+        }
+
+        var columns = [
+            {
+                "data": null,
+                "render": function (data, type, full, meta) {
+                    var account = full.account.toLowerCase();
+                    return '<div class="avatar-xs"><div class="avatar-title bg-danger-subtle text-danger rounded-circle fs-16"><i class="ri-arrow-right-up-fill"></i></div></div>';
+                },
+                "orderable": false
+            },
+            { "data": "description", "name": "Description" },
+            { "data": "billNumber", "name": "BillNumber" },
+            {
+                "data": "date",
+                "name": "Date",
+                "render": function (data, type, full, meta) {
+                    return new Date(data).toLocaleDateString();
+                }
+            },
+            {
+                "data": "totalAmount",
+                "name": "TotalAmount",
+                "render": function (data, type, full, meta) {
+
+                    var color = full.account.toLowerCase() === "credit" ? "green" : "red";
+                    return '<span style="color: ' + color + ';">' + data + '</span>';
+                }
+            }
+        ];
+        if (canEdit || canDelete) {
+            columns.push({
+                "data": null,
+                "orderable": false,
+                "searchable": false,
+                "render": function (data, type, full) {
+                    var buttons = '<ul class="list-inline hstack gap-2 mb-0">';
+
+                    if (canEdit) {
+                        buttons += '<li class="btn text-primary list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit" style="margin-left:12px;">' +
+                            '<a class="btn text-primary" onclick="EditExpenseDetails(\'' + full.id + '\')">' +
+                            '<i class="fa-regular fa-pen-to-square"></i></a></li>';
+                    }
+
+                    if (canDelete) {
+                        buttons += '<li class="btn text-danger list-inline-item delete" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Delete" style="margin-left:12px;">' +
+                            '<a class="btn text-danger btndeletedoc" onclick="deleteExpense(\'' + full.id + '\')">' +
+                            '<i class="fas fa-trash"></i></a></li>';
+                    }
+
+                    buttons += '</ul>';
+                    return buttons;
+                }
+            });
+        }
         $('#GetUserUnapprovedExpenseList').DataTable({
             processing: false,
             serverSide: true,
@@ -1279,74 +1352,7 @@ $(document).ready(function () {
                 url: '/ExpenseMaster/GetAllUserUnapproveExpenseList?Unapprove=' + IsApprove,
                 dataType: 'json'
             },
-            columns: [
-                {
-                    "data": null,
-                    "render": function (data, type, full, meta) {
-                        var account = full.account.toLowerCase();
-                        return '<div class="avatar-xs"><div class="avatar-title bg-danger-subtle text-danger rounded-circle fs-16"><i class="ri-arrow-right-up-fill"></i></div></div>';
-                    },
-                    "orderable": false
-                },
-                { "data": "description", "name": "Description" },
-                { "data": "billNumber", "name": "BillNumber" },
-                {
-                    "data": "date",
-                    "name": "Date",
-                    "render": function (data, type, full, meta) {
-                        return new Date(data).toLocaleDateString();
-                    }
-                },
-                {
-                    "data": "totalAmount",
-                    "name": "TotalAmount",
-                    "render": function (data, type, full, meta) {
-
-                        var color = full.account.toLowerCase() === "credit" ? "green" : "red";
-                        return '<span style="color: ' + color + ';">' + data + '</span>';
-                    }
-                },
-                {
-                    "data": null,
-                    "name": "Action",
-                    "render": function (data, type, full, meta) {
-                        debugger
-                        var userPermissionArray = [];
-                        userPermissionArray = JSON.parse(userPermission);
-
-                        var canEdit = false;
-                        var canDelete = false;
-
-                        for (var i = 0; i < userPermissionArray.length; i++) {
-                            var permission = userPermissionArray[i];
-                            if (permission.formName == "Expenses") {
-                                debugger
-                                canEdit = permission.edit;
-                                canDelete = permission.delete;
-                                break;
-                            }
-                        }
-
-
-                        var buttons = '<ul class="list-inline hstack gap-2 mb-0">';
-
-                        if (canEdit) {
-                            buttons += '<li class="btn text-primary list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit" style="margin-left:12px;">' +
-                                '<a class="btn text-primary" onclick="EditExpenseDetails(\'' + full.id + '\')">' +
-                                '<i class="fa-regular fa-pen-to-square"></i></a></li>';
-                        }
-
-                        if (canDelete) {
-                            buttons += '<li class="btn text-danger list-inline-item delete" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Delete" style="margin-left:12px;">' +
-                                '<a class="btn text-danger btndeletedoc" onclick="deleteExpense(\'' + full.id + '\')">' +
-                                '<i class="fas fa-trash"></i></a></li>';
-                        }
-
-                        buttons += '</ul>';
-                        return buttons;
-                    },
-                }
-            ],
+            columns: columns,
             columnDefs: [
                 {
                     "targets": [0, -1],
