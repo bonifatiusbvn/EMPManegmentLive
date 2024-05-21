@@ -45,7 +45,7 @@ $(document).ready(function () {
                     }
                     var buttons = '<ul class="list-inline hstack gap-2 mb-0">';
                     if (canEdit) {
-                        buttons += '<li class="list-inline-item"><a onclick="EditVendorDetails(\'' + full.vid + '\')"><i class="fas fa-edit"></i></a></li>';
+                        buttons += '<li class="list-inline-item"><a onclick="EditVendorDetails(\'' + full.vid + '\')"><i class="fa-regular fa-pen-to-square"></i></a></li>';
                     }
                     buttons += '</ul>';
                     return '<div class="flex-shrink-0 ms-4"><ul class="list-inline hstack gap-2 mb-0"><li class="list-inline-item"><a onclick="VendorDetails(\'' + full.vid + '\')"><i class="fa-solid fa-eye""></i></a>' + buttons + '</div>';

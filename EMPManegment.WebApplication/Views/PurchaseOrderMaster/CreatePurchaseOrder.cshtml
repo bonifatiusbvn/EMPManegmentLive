@@ -196,7 +196,10 @@
                                                             <th class="sort" data-sort="total_amount">Amount</th>
                                                             <th class="sort" data-sort="payment">Payment Method</th>
                                                             <th class="sort" data-sort="status">Delivery Status</th>
-                                                            <th class="sort" data-sort="city">Action</th>
+                                                            @if (UserSession.FormPermisionData.Any(a => a.FormName == "Create Purchase Order" && (a.Edit == true || a.Delete == true)))
+                                                            {
+                                                                <th class="sort" data-sort="city">Action</th>
+                                                            }
                                                         </tr>
                                                     </thead>
                                                     <tbody class="list form-check-all">

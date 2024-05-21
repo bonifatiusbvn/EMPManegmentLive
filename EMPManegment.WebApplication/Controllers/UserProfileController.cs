@@ -485,7 +485,7 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
-        [FormPermissionAttribute("RolewiseFormPermission-View")]
+        [FormPermissionAttribute("GetAllUsersAttendanceList-View")]
         [HttpGet]
         public async Task<IActionResult> GetAllUsersAttendanceList()
         {
@@ -560,6 +560,8 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
+
+        [FormPermissionAttribute("GetAllUsersAttendanceList-Edit")]
         [HttpPost]
         public async Task<IActionResult> UpdateUserAttendanceOutTime(UserAttendanceModel userAttendance)
         {
