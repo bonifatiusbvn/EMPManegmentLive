@@ -44,14 +44,14 @@
                     <div class="table-responsive">
                         <table id="invoiceTable" class="table table-bordered dt-responsive nowrap table-striped align-middle dataTable no-footer dtr-inline">
                             <thead class="table-light text-muted text-center">
-                                <tr>
-                                    <th class="sort text-uppercase" data-sort="invoiceNo">InvoiceNo</th>
-                                    <th class="sort text-uppercase" data-sort="vendorName">VendorName</th>
-                                    <th class="sort text-uppercase" data-sort="projectName">ProjectName</th>
-                                    <th class="sort text-uppercase" data-sort="totalAmount">TotalAmount</th>
+                                <tr class="text-center">
+                                    <th>InvoiceNo</th>
+                                    <th>VendorName</th>
+                                    <th>ProjectName</th>
+                                    <th>TotalAmount</th>
                                     @if (UserSession.FormPermisionData.Any(a => a.FormName == "InvoiceListView" && (a.Edit == true || a.Delete == true)))
                                     {
-                                        <th class="sort text-uppercase" data-sort="action">Action</th>
+                                        <th>Action</th>
                                     }
                                 </tr>
                             </thead>
