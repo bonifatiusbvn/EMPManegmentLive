@@ -591,14 +591,19 @@ function GetAllTransactionData() {
 }
 var datas = userPermissions
 $(document).ready(function () {
-
-
+    function data(datas) {
+        userPermission = datas;
+        AllInvoiceList(userPermission);
+    }
     function AllInvoiceList(userPermission) {
+        var userPermissionArray = [];
+        userPermissionArray = JSON.parse(userPermission);
+
         var canEdit = false;
         var canDelete = false;
 
-        for (var i = 0; i < userPermission.length; i++) {
-            var permission = userPermission[i];
+        for (var i = 0; i < userPermissionArray.length; i++) {
+            var permission = userPermissionArray[i];
             if (permission.formName == "InvoiceListView") {
                 canEdit = permission.edit;
                 canDelete = permission.delete;
@@ -662,6 +667,5 @@ $(document).ready(function () {
             }]
         });
     }
-
-    AllInvoiceList(userPermissions);
+    data(datas);
 });
