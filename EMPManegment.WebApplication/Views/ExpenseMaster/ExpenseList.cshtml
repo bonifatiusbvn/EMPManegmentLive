@@ -255,15 +255,15 @@
                         <table class="table table-bordered dt-responsive nowrap table-striped align-middle dataTable no-footer dtr-inline" id="ExpenseTable">
                             <thead class="table-light text-muted text-center">
                                 <tr>
-                                    <th class="sort text-uppercase" data-sort="UserName">User Name</th>
-                                    <th class="sort text-uppercase" data-sort="Description">Description</th>
-                                    <th class="sort text-uppercase" data-sort="BillNo">BillNo</th>
-                                    <th class="sort text-uppercase" data-sort="Date">Date</th>
-                                    <th class="sort text-uppercase" data-sort="TotalAmount">TotalAmount</th>
-                                    <th class="sort text-uppercase" data-sort="Account">Account</th>
+                                    <th class="sort" data-sort="UserName">User Name</th>
+                                    <th class="sort" data-sort="Description">Description</th>
+                                    <th class="sort" data-sort="BillNo">Bill No</th>
+                                    <th class="sort" data-sort="Date">Date</th>
+                                    <th class="sort" data-sort="TotalAmount">Total Amount</th>
+                                    <th class="sort" data-sort="Account">Account</th>
                                     @if (UserSession.FormPermisionData.Any(a => a.FormName == "All Expenses List" && (a.Edit == true || a.Delete == true)))
                                     {
-                                        <th class="sort text-uppercase" data-sort="action">Action</th>
+                                        <th class="sort" data-sort="action">Action</th>
                                     }
                                 </tr>
                             </thead>

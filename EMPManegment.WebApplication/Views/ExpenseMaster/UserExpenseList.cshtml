@@ -4,7 +4,7 @@
 @inject UserSession _userSession
 @{
     ViewData["Title"] = "UserExpenseList";
-    Layout = "~/Views/Shared/_UserHomeLayout.cshtml";
+    Layout = "~/Views/Shared/_HomeLayout.cshtml";
 }
 <style>
     #txtexpensetype-error, #txtDescription-error, #txtbillno-error,
@@ -236,25 +236,45 @@
                                 <i class="ri-store-2-fill me-1 align-bottom"></i>Credit Expense
                             </a>
                         </li>
+                        <li class="nav-item" style="margin-left: 660px;">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked="">
+                                <label class="form-check-label" for="flexRadioDefault2">
+                                    Last Month
+                                </label>
+                                <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked="">
+                                <label class="form-check-label" for="flexRadioDefault2">
+                                    Current Month
+                                </label>
+                                <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked="">
+                                <label class="form-check-label" for="flexRadioDefault2">
+                                    Between Month
+                                </label>
+                                <a class="btn btn-primary" id="addproduct-btn"><i class="ri-search-line"></i>Search</a>
+                            </div>
+                        </li>
+
                     </ul>
+
                     <div class="tab-content">
                         <div class="tab-pane fade show active" id="GetUserAllExpenseList" role="tabpanel">
                             <table class="table table-bordered dt-responsive table-striped align-middle dataTable no-footer dtr-inline" id="DisplayUserAllExpenseList">
                                 <thead class="table-light text-muted text-center">
                                     <tr>
                                         <th data-sort="name" scope="col" style="width: 60px;"></th>
-                                        <th class="sort text-uppercase" data-sort="Description">Description</th>
-                                        <th class="sort text-uppercase" data-sort="BillNo">BillNo</th>
-                                        <th class="sort text-uppercase" data-sort="Date">Date</th>
-                                        <th class="sort text-uppercase" data-sort="TotalAmount">TotalAmount</th>
+                                        <th class="sort" data-sort="Description">Description</th>
+                                        <th class="sort" data-sort="BillNo">Bill No</th>
+                                        <th class="sort" data-sort="Date">Date</th>
+                                        <th class="sort" data-sort="TotalAmount">Total Amount</th>
                                         @if (UserSession.FormPermisionData.Any(a => a.FormName == "Expenses" && (a.Edit == true || a.Delete == true)))
                                         {
-                                            <th class="sort text-uppercase" data-sort="action">Action</th>
+                                            <th class="sort" data-sort="action">Action</th>
                                         }
                                     </tr>
                                 </thead>
                                 <tbody class="list form-check-all text-center"> </tbody>
                             </table>
+
                             <!-- end table -->
                             <div class="noresult" style="display: none">
                                 <div class="text-center">
@@ -301,10 +321,10 @@
                                 <thead class="table-light text-muted text-center">
                                     <tr>
                                         <th data-sort="name" scope="col" style="width: 60px;"></th>
-                                        <th class="sort text-uppercase" data-sort="Description">Description</th>
-                                        <th class="sort text-uppercase" data-sort="BillNo">BillNo</th>
-                                        <th class="sort text-uppercase" data-sort="Date">Date</th>
-                                        <th class="sort text-uppercase" data-sort="TotalAmount">TotalAmount</th>
+                                        <th class="sort" data-sort="Description">Description</th>
+                                        <th class="sort" data-sort="BillNo">Bill No</th>
+                                        <th class="sort" data-sort="Date">Date</th>
+                                        <th class="sort" data-sort="TotalAmount">Total Amount</th>
                                     </tr>
                                 </thead>
                                 <tbody class="list form-check-all text-center"> </tbody>
@@ -327,10 +347,10 @@
                                 <thead class="table-light text-muted text-center">
                                     <tr>
                                         <th data-sort="name" scope="col" style="width: 60px;"></th>
-                                        <th class="sort text-uppercase" data-sort="Description">Description</th>
-                                        <th class="sort text-uppercase" data-sort="BillNo">BillNo</th>
-                                        <th class="sort text-uppercase" data-sort="Date">Date</th>
-                                        <th class="sort text-uppercase" data-sort="TotalAmount">TotalAmount</th>
+                                        <th class="sort" data-sort="Description">Description</th>
+                                        <th class="sort" data-sort="BillNo">Bill No</th>
+                                        <th class="sort" data-sort="Date">Date</th>
+                                        <th class="sort" data-sort="TotalAmount">Total Amount</th>
                                     </tr>
                                 </thead>
                                 <tbody class="list form-check-all text-center">
@@ -422,9 +442,7 @@
     </div>
 </div>
 <!--end col-->
-<!--end row-->
 
-</style>
 <script type="text/javascript">
     var userPermissions = '@Html.Raw(Json.Serialize(UserSession.FormPermisionData))';
 </script>

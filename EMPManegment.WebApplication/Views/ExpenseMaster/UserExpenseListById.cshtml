@@ -53,13 +53,13 @@
                             <table id="UserListTable" class="table table-bordered table-striped">
                                 <thead>
                                     <tr>
-                                        <th class="sort" data-sort="name">FullName</th>
-                                        <th class="sort" data-sort="name">FullName</th>
-                                        <th class="sort" data-sort="company_name">UserID</th>
+                                        <th class="sort" data-sort="name">Full Name</th>
+                                        <th class="sort" data-sort="name">Full Name</th>
+                                        <th class="sort" data-sort="company_name">User Id</th>
                                         <th class="sort" data-sort="leads_score">Date</th>
-                                        <th class="sort" data-sort="leads_score">UnapprovedPendingAmount</th>
-                                        <th class="sort" data-sort="leads_score">TotalPendingAmount</th>
-                                        <th class="sort" data-sort="phone">TotalAmount</th>
+                                        <th class="sort" data-sort="leads_score">Unapproved Pending Amount</th>
+                                        <th class="sort" data-sort="leads_score">Total Pending Amount</th>
+                                        <th class="sort" data-sort="phone">Total Amount</th>
 
                                     </tr>
                                 </thead>
@@ -89,8 +89,6 @@
 </div>
 <!--end row-->
 
-
-</style>
 <script type="text/javascript">
     var userPermissions = '@Html.Raw(Json.Serialize(UserSession.FormPermisionData))';
 </script>
