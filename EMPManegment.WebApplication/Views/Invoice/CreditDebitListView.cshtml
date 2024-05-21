@@ -2,7 +2,52 @@
     ViewData["Title"] = "CreditDebitListView";
     Layout = "~/Views/Shared/_UserHomeLayout.cshtml";
 }
+<style>
+    .box-1, .box-2 {
+        background-color: lightgrey;
+        width: 350px;
+        height: 250px;
+        border: 5px solid gray;
+        padding: 20px;
+        float: left;
+        margin-left: 20px;
+    }
 
+    .box-3 {
+        background-color: lightgrey;
+        width: 720px;
+        height: 180px;
+        border: 5px solid gray;
+        padding: 20px;
+        margin-top: 270px;
+        margin-left: 20px;
+    }
+
+    .box-4 {
+        background-color: lightgrey;
+        width: 720px;
+        height: 180px;
+        border: 5px solid gray;
+        padding: 20px;
+        margin-top: 20px;
+        margin-left: 20px;
+    }
+
+    #firstnameInput-error, #lastnameInput-error, #contactnumberInput-error.error,
+    #phonenumberInput-error, #emailidInput-error, #ddlVendorType-error,
+    #ddlCountry-error, #ddlState-error, #ddlCity-error.error,
+    #AddressidInput-error, #pincodeidInput-error, #companynameInput-error,
+    #CompanyType-error, #companyemailInput-error, #worknumberInput-error.error,
+    #companylogoInput-error, #banknameInput-error, #branchInput-error, #accountnameInput-error,
+    #accountnumberInput-error, #ifscInput-error.error,
+    #GSTNumberInput-error {
+        color: red;
+    }
+
+    label.failed {
+        color: red;
+    }
+</style>
 <div class="row" style="margin-top:80px;">
     <div class="col-12">
         <div class="page-title-box d-sm-flex align-items-center justify-content-between">
@@ -420,52 +465,7 @@
 </div>
 
 
-<style>
-    .box-1, .box-2 {
-        background-color: lightgrey;
-        width: 350px;
-        height: 250px;
-        border: 5px solid gray;
-        padding: 20px;
-        float: left;
-        margin-left: 20px;
-    }
 
-    .box-3 {
-        background-color: lightgrey;
-        width: 720px;
-        height: 180px;
-        border: 5px solid gray;
-        padding: 20px;
-        margin-top: 270px;
-        margin-left: 20px;
-    }
-
-    .box-4 {
-        background-color: lightgrey;
-        width: 720px;
-        height: 180px;
-        border: 5px solid gray;
-        padding: 20px;
-        margin-top: 20px;
-        margin-left: 20px;
-    }
-
-    #firstnameInput-error, #lastnameInput-error, #contactnumberInput-error.error,
-    #phonenumberInput-error, #emailidInput-error, #ddlVendorType-error,
-    #ddlCountry-error, #ddlState-error, #ddlCity-error.error,
-    #AddressidInput-error, #pincodeidInput-error, #companynameInput-error,
-    #CompanyType-error, #companyemailInput-error, #worknumberInput-error.error,
-    #companylogoInput-error, #banknameInput-error, #branchInput-error, #accountnameInput-error,
-    #accountnumberInput-error, #ifscInput-error.error,
-    #GSTNumberInput-error {
-        color: red;
-    }
-
-    label.failed {
-        color: red;
-    }
-</style>
 
 
 
@@ -474,4 +474,4 @@
 <!-- End Page-content -->
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/assets/libs/list.pagination.js/list.pagination.min.js"></script>
-<script src="~/moduls/invoicemasterscript.js"></script>
+<script src="~/moduls/invoicemasterscript.js" asp-append-version="true"></script>

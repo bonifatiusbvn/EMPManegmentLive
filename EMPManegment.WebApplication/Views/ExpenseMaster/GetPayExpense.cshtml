@@ -7,10 +7,10 @@
     Layout = "~/Views/Shared/_UserHomeLayout.cshtml";
 }
 <style>
-        .table-responsive {
-            height: 100%;
-            overflow-y: auto;
-        }
+    .table-responsive {
+        height: 100%;
+        overflow-y: auto;
+    }
 
 </style>
 <input type="hidden" class="form-control" id="txtuseraproveid" value="@_userSession.UserId" hidden>
@@ -253,4 +253,4 @@
     }
 </style>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script src="~/moduls/expensemaster.js"></script>
+<script src="~/moduls/expensemaster.js" asp-append-version="true"></script>
