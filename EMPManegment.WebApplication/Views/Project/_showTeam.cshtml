@@ -16,7 +16,7 @@
                 <div class="col-lg-6">
                     @if (UserSession.FormPermisionData.Any(a => a.FormName == "GetProjectDetails" && (a.Add == true)))
                     {
-                        <button class="btn btn-block btn-warning" style="margin-left: 540px;width: 141px;" onclick="openmemberpop()"><i class="ri-add-line align-bottom me-1"></i>Add Member</button>
+                        <button class="btn btn-block btn-warning" style="margin-left: 640px;width: 141px;" onclick="openmemberpop()"><i class="ri-add-line align-bottom me-1"></i>Add Member</button>
                     }
                 </div>
             </div>
@@ -72,8 +72,8 @@
     {
         page = page,
     }),
-                new X.PagedList.Web.Common.PagedListRenderOptions
-            {
-                LiElementClasses = new string[] { "page-item" },
-                PageClasses = new string[] { "page-link" }
-            })
+                        new X.PagedList.Web.Common.PagedListRenderOptions
+                    {
+                        LiElementClasses = new string[] { "page-item" },
+                        PageClasses = new string[] { "page-link" }
+                    })
