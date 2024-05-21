@@ -380,7 +380,7 @@ function deleteExpense(Id) {
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'OK'
                     }).then(function () {
-                        window.location = '/ExpenseMaster/UserExpenseList';
+                        window.location = '/ExpenseMaster/ExpenseList';
                     })
                 },
                 error: function () {
@@ -390,7 +390,7 @@ function deleteExpense(Id) {
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'OK',
                     }).then(function () {
-                        window.location = '/ExpenseMaster/UserExpenseList';
+                        window.location = '/ExpenseMaster/ExpenseList';
                     })
                 }
             })
