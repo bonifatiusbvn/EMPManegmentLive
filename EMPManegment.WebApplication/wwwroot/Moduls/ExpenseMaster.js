@@ -679,87 +679,73 @@ function GetAllUserExpenseList(userId) {
     });
 }
 
-$(document).ready(function () {
-    function GetUserUnApprovedExpenseList(UserId) {
-        $('#UserallUnApprovedExpenseTable').DataTable({
-            processing: false,
-            serverSide: true,
-            filter: true,
-            "bDestroy": true,
-            ajax: {
-                type: "POST",
-                url: '/ExpenseMaster/GetUserUnApprovedExpenseList?UserId=' + UserId,
-                dataType: 'json',
+
+function GetUserUnApprovedExpenseList(UserId) {
+    $('#UserallUnApprovedExpenseTable').DataTable({
+        processing: false,
+        serverSide: true,
+        filter: true,
+        "bDestroy": true,
+        ajax: {
+            type: "POST",
+            url: '/ExpenseMaster/GetUserUnApprovedExpenseList?UserId=' + UserId,
+            dataType: 'json',
+        },
+        columns: [
+            {
+                "data": null,
+                "render": function (data, type, full, meta) {
+                    return '<div class="form-check"><input class="form-check-input" data-id="' + full.id + '" type="checkbox" name="chk_child" value="option1"></div>';
+                },
+                "orderable": false
             },
-            columns: [
-                {
-                    "data": null,
-                    "render": function (data, type, full, meta) {
-                        return '<div class="form-check"><input class="form-check-input" data-id="' + full.id + '" type="checkbox" name="chk_child" value="option1"></div>';
-                    },
-                    "orderable": false
-                },
-                {
-                    "data": null,
-                    "render": function (data, type, full, meta) {
-                        var account = full.account.toLowerCase();
-                        if (account === "credit") {
-                            return '<div class="avatar-xs"><div class="avatar-title bg-success-subtle text-success rounded-circle fs-16"><i class="ri-arrow-left-down-fill"></i></div></div>';
-                        } else if (account === "debit") {
-                            return '<div class="avatar-xs"><div class="avatar-title bg-danger-subtle text-danger rounded-circle fs-16"><i class="ri-arrow-right-up-fill"></i></div></div>';
-                        } else {
-                            return '';
-                        }
-                    },
-                    "orderable": false
-                },
-                { "data": "id", "name": "Id", "visible": false },
-                { "data": "expenseTypeName", "name": "ExpenseTypeName" },
-                { "data": "paymentTypeName", "name": "PaymentTypeName" },
-                { "data": "billNumber", "name": "BillNumber" },
-                { "data": "description", "name": "Description" },
-                {
-                    "data": "date",
-                    "name": "Date",
-                    "render": function (data, type, full, meta) {
-                        {
-                            "data": null,
-                                "render": function (data, type, full, meta) {
-                                    var account = full.account.toLowerCase();
-                                    if (account === "credit") {
-                                        return '<div class="avatar-xs"><div class="avatar-title bg-success-subtle text-success rounded-circle fs-16"><i class="ri-arrow-left-down-fill"></i></div></div>';
-                                    } else if (account === "debit") {
-                                        return '<div class="avatar-xs"><div class="avatar-title bg-danger-subtle text-danger rounded-circle fs-16"><i class="ri-arrow-right-up-fill"></i></div></div>';
-                                    } else {
-                                        return '';
-                                    }
-                                },
-                    "orderable": false
-                },
+            {
+                "data": null,
+                "render": function (data, type, full, meta) {
+                    var account = full.account.toLowerCase();
+                    if (account === "credit") {
+                        return '<div class="avatar-xs"><div class="avatar-title bg-success-subtle text-success rounded-circle fs-16"><i class="ri-arrow-left-down-fill"></i></div></div>';
+                    } else if (account === "debit") {
+                        return '<div class="avatar-xs"><div class="avatar-title bg-danger-subtle text-danger rounded-circle fs-16"><i class="ri-arrow-right-up-fill"></i></div></div>';
+                    } else {
+                        return '';
                     }
                 },
-                {
-                    "data": "totalAmount",
-                    "name": "TotalAmount",
-                    "render": function (data, type, full, meta) {
-                        var color = full.account && full.account.toLowerCase() === "credit" ? "green" : "red";
-                        return '<span style="color: ' + color + ';">' + data + '</span>';
-                    }
-                },
-                { "data": "account", "name": "Account", "visible": false },
-            ],
-            columnDefs: [{
-                "defaultContent": "",
-                "targets": "_all",
-            }],
-            fixedHeader: true // Add this line to enable fixed header
-        });
-    }
-
-    // Call the function with a sample UserId
-    GetUserUnApprovedExpenseList(1);
-});
-
+                "orderable": false
+            },
+            { "data": "id", "name": "Id", "visible": false },
+            { "data": "expenseTypeName", "name": "ExpenseTypeName" },
+            { "data": "paymentTypeName", "name": "PaymentTypeName" },
+            { "data": "billNumber", "name": "BillNumber" },
+            { "data": "description", "name": "Description" },
+            {
+                "data": "date",
+                "name": "Date",
+                "render": function (data, type, full, meta) {
+                    var dateObj = new Date(data);
+                    var day = dateObj.getDate();
+                    var month = dateObj.toLocaleString('default', { month: 'long' });
+                    var year = dateObj.getFullYear();
+                    var formattedDate = day + '-' + month + '-' + year;
+                    return formattedDate;
+                }
+            },
+            {
+                "data": "totalAmount",
+                "name": "TotalAmount",
+                "render": function (data, type, full, meta) {
+                    var color = full.account && full.account.toLowerCase() === "credit" ? "green" : "red";
+                    return '<span style="color: ' + color + ';">' + data + '</span>';
+                }
+            },
+            { "data": "account", "name": "Account", "visible": false },
+        ],
+        columnDefs: [{
+            "defaultContent": "",
+            "targets": "_all",
+        }]
+    });
+}
 function GetUserApprovedExpenseList(UserId) {
     $('#GetUserApprovedExpenseList').DataTable({
         processing: false,
