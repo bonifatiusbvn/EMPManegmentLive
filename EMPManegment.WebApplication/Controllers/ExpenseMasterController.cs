@@ -765,7 +765,7 @@ namespace EMPManegment.Web.Controllers
                 List<ExpenseDetailsView> ApproveExpense = new List<ExpenseDetailsView>();
                 foreach (var item in Expense)
                 {
-                    if (item.IsApproved == Approve)
+                    if (item.IsApproved == Approve && item.Description != "Expense Paid")
                     {
                         ApproveExpense.Add(item);
                     }

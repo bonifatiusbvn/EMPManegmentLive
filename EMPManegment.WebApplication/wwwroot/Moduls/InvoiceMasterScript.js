@@ -633,15 +633,13 @@ $(document).ready(function () {
                     var buttons = '<ul class="list-inline hstack gap-2 mb-0">';
 
                     if (canEdit) {
-                        buttons += '<li class="btn list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">' +
-                            '<a onclick="EditInvoiceDetails(\'' + full.invoiceNo + '\')">' +
-                            '<i class="fa-regular fa-pen-to-square"></i></a></li>';
+                        buttons += '<a onclick="EditInvoiceDetails(\'' + full.invoiceNo + '\')" class="btn text-primary btndeletedoc">' +
+                            '<i class="fa-regular fa-pen-to-square"></i></a>';
                     }
 
                     if (canDelete) {
-                        buttons += '<li class="btn text-danger list-inline-item delete" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Delete" style="margin-left:12px;">' +
-                            '<a onclick="deleteInvoice(\'' + full.id + '\')">' +
-                            '<i class="fas fa-trash"></i></a></li>';
+                        buttons += '<a onclick="deleteInvoice(\'' + full.id + '\')" class="btn text-danger btndeletedoc">' +
+                            '<i class="fas fa-trash"></i></a>';
                     }
 
                     buttons += '</ul>';
