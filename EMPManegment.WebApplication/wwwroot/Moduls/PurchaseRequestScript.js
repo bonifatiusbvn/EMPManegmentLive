@@ -224,9 +224,9 @@ $(document).ready(function () {
                         var buttons = '<ul class="list-inline hstack gap-2 mb-0">';
 
                         if (canEdit) {
-                            buttons += '<li class="btn list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">' +
-                                '<a onclick="EditPurchaseRequestDetails(\'' + full.prId + '\')">' +
-                                '<i class="ri-pencil-fill fs-16"></i></a></li>';
+                            buttons += '<li class="btn text-primary list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">' +
+                                '<a class="btn text-primary" onclick="EditPurchaseRequestDetails(\'' + full.prId + '\')">' +
+                                '<i class="fa-regular fa-pen-to-square"></i></a></li>';
                         }
 
                         if (canDelete) {

@@ -1,4 +1,8 @@
 ﻿@model List<EMPManegment.EntityModels.ViewModels.Invoice.InvoiceViewModel>
+@using EMPManegment.Web.Models;
+@inject IHttpContextAccessor Accessor;
+@inject UserSession _userSession
+
 @{
     ViewData["Title"] = "InvoiceListView";
     Layout = "~/Views/Shared/_UserHomeLayout.cshtml";
@@ -45,7 +49,10 @@
                                     <th class="sort text-uppercase" data-sort="isnvoiceNo">VendorName</th>
                                     <th class="sort text-uppercase" data-sort="isnvoiceNo">ProjectName</th>
                                     <th class="sort text-uppercase" data-sort="invoiceDate">TotalAmount</th>
-                                    <th class="sort text-uppercase" data-sort="action">Action</th>
+                                    @if (UserSession.FormPermisionData.Any(a => a.FormName == "InvoiceListView" && (a.Edit == true || a.Delete == true)))
+                                    {
+                                        <th class="sort text-uppercase" data-sort="action">Action</th>
+                                    }
                                 </tr>
                             </thead>
                             <tbody> </tbody>
@@ -134,7 +141,9 @@
         color: red;
     }
 </style>
-
+<script type="text/javascript">
+    var userPermissions = '@Html.Raw(Json.Serialize(UserSession.FormPermisionData))';
+</script>
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/moduls/invoicemasterscript.js" asp-append-version="true"></script>
