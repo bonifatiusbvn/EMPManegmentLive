@@ -783,7 +783,6 @@ $(document).ready(function () {
     if (UserId) {
         GetUserUnApprovedExpenseList(UserId);
         GetUserApprovedExpenseList(UserId);
-
     }
 
     $('.nav-link').click(function () {
@@ -1266,13 +1265,16 @@ function UserCreditExpenseList(UserId) {
 $(document).ready(function () {
     function data(datas) {
         var userPermission = datas;
-        GetAllUserUnapproveExpenseList(userPermission);
+        GetUserAllExpenseList(userPermission);
     }
     $('.nav-link').click(function () {
         var targetTab = $(this).attr('href');
-        if (targetTab === '#GetAllUnApprovedExpenseList') {
+        if (targetTab === '#GetUserAllExpenseList') {
+            GetUserAllExpenseList(userPermission);
+        }
+        else if (targetTab === '#GetAllUnApprovedExpenseList') {
 
-            GetAllUserUnapproveExpenseList(userPermission);
+            GetAllUserUnapproveExpenseList();
         } else if (targetTab === '#GetAllApprovedExpenseList') {
 
             GetAllUserApproveExpenseList();
@@ -1282,8 +1284,7 @@ $(document).ready(function () {
         }
     });
 
-    function GetAllUserUnapproveExpenseList(userPermission) {
-        var IsApprove = false;
+function GetUserAllExpenseList(userPermission) {debugger
         var userPermissionArray = [];
         userPermissionArray = JSON.parse(userPermission);
 
@@ -1305,7 +1306,13 @@ $(document).ready(function () {
                 "data": null,
                 "render": function (data, type, full, meta) {
                     var account = full.account.toLowerCase();
-                    return '<div class="avatar-xs"><div class="avatar-title bg-danger-subtle text-danger rounded-circle fs-16"><i class="ri-arrow-right-up-fill"></i></div></div>';
+                    if (account === "credit") {
+                        return '<div class="avatar-xs"><div class="avatar-title bg-success-subtle text-success rounded-circle fs-16"><i class="ri-arrow-left-down-fill"></i></div></div>';
+                    } else if (account === "debit") {
+                        return '<div class="avatar-xs"><div class="avatar-title bg-danger-subtle text-danger rounded-circle fs-16"><i class="ri-arrow-right-up-fill"></i></div></div>';
+                    } else {
+                        return '';
+                    }
                 },
                 "orderable": false
             },
@@ -1353,14 +1360,15 @@ $(document).ready(function () {
                 }
             });
         }
-        $('#GetUserUnapprovedExpenseList').DataTable({
+        debugger
+        $('#DisplayUserAllExpenseList').DataTable({
             processing: false,
             serverSide: true,
             filter: true,
             "bDestroy": true,
             ajax: {
                 type: "Post",
-                url: '/ExpenseMaster/GetAllUserUnapproveExpenseList?Unapprove=' + IsApprove,
+                url: '/ExpenseMaster/GetUserAllExpenseList',
                 dataType: 'json'
             },
             columns: columns,
@@ -1373,6 +1381,60 @@ $(document).ready(function () {
     }
     data(datas);
 });
+
+function GetAllUserUnapproveExpenseList() {
+     var IsApprove = false;
+    $('#GetUserUnapprovedExpenseList').DataTable({
+        processing: false,
+        serverSide: true,
+        filter: true,
+        "bDestroy": true,
+        ajax: {
+            type: "Post",
+             url: '/ExpenseMaster/GetAllUserUnapproveExpenseList?Unapprove=' + IsApprove,
+            dataType: 'json'
+        },
+        columns: [
+            {
+                "data": null,
+                "render": function (data, type, full, meta) {
+                    var account = full.account.toLowerCase();
+                    if (account === "credit") {
+                        return '<div class="avatar-xs"><div class="avatar-title bg-success-subtle text-success rounded-circle fs-16"><i class="ri-arrow-left-down-fill"></i></div></div>';
+                    } else if (account === "debit") {
+                        return '<div class="avatar-xs"><div class="avatar-title bg-danger-subtle text-danger rounded-circle fs-16"><i class="ri-arrow-right-up-fill"></i></div></div>';
+                    } else {
+                        return '';
+                    }
+                },
+                "orderable": false
+            },
+            { "data": "description", "name": "Description" },
+            { "data": "billNumber", "name": "BillNumber" },
+            {
+                "data": "date",
+                "name": "Date",
+                "render": function (data, type, full, meta) {
+                    return new Date(data).toLocaleDateString();
+                }
+            },
+            {
+                "data": "totalAmount",
+                "name": "TotalAmount",
+                "render": function (data, type, full, meta) {
+                    var color = full.account && full.account.toLowerCase() === "credit" ? "green" : "red";
+                    return '<span style="color: ' + color + ';">' + data + '</span>';
+                }
+            },
+        ],
+        columnDefs: [
+            {
+                "targets": [0, -1],
+                "orderable": false
+            }
+        ]
+    });
+}
 
 function GetAllUserApproveExpenseList() {
     var IsApprove = true;
@@ -1427,6 +1489,7 @@ function GetAllUserApproveExpenseList() {
         ]
     });
 }
+
 
 function GetAllUserCreditExpenseList() {
     var Account = "Credit";
