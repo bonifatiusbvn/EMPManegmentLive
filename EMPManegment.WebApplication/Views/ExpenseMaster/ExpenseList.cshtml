@@ -237,7 +237,7 @@
                                 <i class="ri-store-2-fill me-1 align-bottom"></i> All Expense
                             </a>
                         </li>
-                        <li class="nav-item">
+                       @* <li class="nav-item">
                             <a class="nav-link py-3 Delivered" data-bs-toggle="tab" id="Delivered" href="#delivered" role="tab" aria-selected="false">
                                 <i class="ri-checkbox-circle-line me-1 align-bottom"></i> UnApprove Expense
                             </a>
@@ -247,7 +247,7 @@
                             <a class="nav-link py-3 Returns" data-bs-toggle="tab" id="Returns" href="#returns" role="tab" aria-selected="false">
                                 <i class="ri-arrow-left-right-fill me-1 align-bottom"></i> Approve Expense
                             </a>
-                        </li>
+                        </li>*@
 
                     </ul>
 
@@ -261,7 +261,7 @@
                                     <th class="sort text-uppercase" data-sort="Date">Date</th>
                                     <th class="sort text-uppercase" data-sort="TotalAmount">TotalAmount</th>
                                     <th class="sort text-uppercase" data-sort="Account">Account</th>
-                                    @if (UserSession.FormPermisionData.Any(a => a.FormName == "Expenses" && (a.Edit == true || a.Delete == true)))
+                                    @if (UserSession.FormPermisionData.Any(a => a.FormName == "All Expenses List" && (a.Edit == true || a.Delete == true)))
                                     {
                                         <th class="sort text-uppercase" data-sort="action">Action</th>
                                     }
