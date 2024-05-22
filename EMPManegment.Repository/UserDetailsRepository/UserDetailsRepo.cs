@@ -241,17 +241,17 @@ namespace EMPManegment.Repository.UserListRepository
             return response;
         }
 
-        public async Task<UserResponceModel> ResetPassword(PasswordResetView resetemppass)
+        public async Task<UserResponceModel> ResetPassword(PasswordResetView ResetPassword)
         {
             UserResponceModel response = new UserResponceModel();
             try
             {
-                var userdata = Context.TblUsers.FirstOrDefault(x => x.UserName == resetemppass.UserName);
+                var userdata = Context.TblUsers.FirstOrDefault(x => x.UserName == ResetPassword.UserName);
                 if(userdata != null) 
                 {
 
-                    userdata.PasswordHash = resetemppass.PasswordHash;
-                    userdata.PasswordSalt = resetemppass.PasswordSalt;
+                    userdata.PasswordHash = ResetPassword.PasswordHash;
+                    userdata.PasswordSalt = ResetPassword.PasswordSalt;
                 }
                 Context.TblUsers.Update(userdata);
                 Context.SaveChanges();

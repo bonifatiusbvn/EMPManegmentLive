@@ -424,16 +424,16 @@ namespace EMPManegment.Web.Controllers
 
         [FormPermissionAttribute("Reset Password-Add")]
         [HttpPost]
-        public async Task<IActionResult> ResetUserPassword(PasswordResetResponseModel emp)
+        public async Task<IActionResult> ResetUserPassword(PasswordResetResponseModel ResetPassword)
         {
             try
             {
-                Crypto.Hash(emp.Password,
+                Crypto.Hash(ResetPassword.Password,
                    out byte[] passwordHash,
                    out byte[] passwordSalt);
                 var resetPass = new PasswordResetView
                 {
-                    UserName = emp.UserName,
+                    UserName = ResetPassword.UserName,
                     PasswordHash = passwordHash,
                     PasswordSalt = passwordSalt
                 };
