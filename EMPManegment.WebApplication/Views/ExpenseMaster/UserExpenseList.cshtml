@@ -17,7 +17,25 @@
         color: red;
     }
 
+    .nav-tabs-custom {
+        display: flex;
+        flex-wrap: nowrap;
+    }
+
+        .nav-tabs-custom .nav-item {
+            margin-right: 15px;
+            white-space: nowrap;
+        }
+
+    .form-check-label {
+        margin-bottom: 0;
+    }
+
+    .nav-tabs-custom .nav-item input.form-check-input {
+        margin-right: 5px;
+    }
 </style>
+
 <input type="hidden" class="form-control" id="txtuserid" value="@_userSession.UserId" hidden>
 <div class="row" style="margin-top:80px;">
     <div class="col-12">
@@ -216,8 +234,8 @@
             <div class="card-body p-0">
                 <div>
                     <div class="row g-3">
-                        <div class="col-xxl-5 col-sm-6">
-                            <ul class="nav nav-tabs nav-tabs-custom nav-primary mb-3" role="tablist">
+                        <div class="col-xxl-5 col-sm-12">
+                            <ul class="nav nav-tabs nav-tabs-custom nav-primary mb-3 d-flex align-items-center flex-wrap" role="tablist">
                                 <li class="nav-item">
                                     <a class="nav-link active All py-3" data-bs-toggle="tab" id="All" href="#GetUserAllExpenseList" role="tab">
                                         <i class="ri-checkbox-circle-line me-1 align-bottom"></i>Get All Expense
@@ -238,45 +256,29 @@
                                         <i class="ri-store-2-fill me-1 align-bottom"></i>Credit Expense
                                     </a>
                                 </li>
-                        </div>
-                        <li class="nav-item">
-                            <div class="col-xxl-2 col-sm-6">
-                                <div>
-                                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked="">
-                                    <label class="form-check-label" for="flexRadioDefault2">
+                                <li class="nav-item d-flex align-items-center ms-3">
+                                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="lastMonthRadio">
+                                    <label class="form-check-label ms-2" for="lastMonthRadio">
                                         Last Month
                                     </label>
-                                </div>
-                            </div>
-                            <!--end col-->
-                            <div class="col-xxl-2 col-sm-4">
-                                <div>
-                                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked="">
-                                    <label class="form-check-label" for="flexRadioDefault2">
+                                </li>
+                                <li class="nav-item d-flex align-items-center ms-3">
+                                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="currentMonthRadio">
+                                    <label class="form-check-label ms-2" for="currentMonthRadio">
                                         Current Month
                                     </label>
-                                </div>
-                            </div>
-                            <!--end col-->
-                            <div class="col-xxl-2 col-sm-4">
-                                <div>
-                                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked="">
-                                    <label class="form-check-label" for="flexRadioDefault2">
+                                </li>
+                                <li class="nav-item d-flex align-items-center ms-3">
+                                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="betweenMonthRadio">
+                                    <label class="form-check-label ms-2" for="betweenMonthRadio">
                                         Between Month
                                     </label>
-                                </div>
-                            </div>
-                            <!--end col-->
-                            <div class="col-xxl-1 col-sm-4">
-                                <div>
+                                </li>
+                                <li class="nav-item ms-3">
                                     <a class="btn btn-primary" id="addproduct-btn"><i class="ri-search-line"></i>Search</a>
-                                </div>
-                            </div>
-                        </li>
-                        </ul>
-
-                        <!--end col-->
-                        <!--end col-->
+                                </li>
+                            </ul>
+                        </div>
                     </div>
 
 
