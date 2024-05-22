@@ -124,7 +124,7 @@ function GetAllUserData() {
         }]
     });
 }
-function UserActiveDeactive(UserId) {
+
 
 function UserActiveDeactive(UserId, checkboxElement) {
     var isActive = checkboxElement.checked;
@@ -342,32 +342,41 @@ function EnterOutTime() {
     }
 }
 function ResetPassword() {
-    debugger
-    var objData = {
-        UserName: $('#txtUserName').val(),
-        Password: $('#password-input').val(),
-        ConfirmPassword: $('#confirm-password-input').val(),
+    if ($("#passwordform").valid()) {
+        var objData = {
+            UserName: $('#txtUserName').val(),
+            Password: $('#passwordinput').val(),
+            ConfirmPassword: $('#confirmpasswordinput').val(),
+        }
+
+        $.ajax({
+            url: '/UserProfile/ResetUserPassword',
+            type: 'post',
+            data: objData,
+            datatype: 'json',
+            success: function (Result) {
+
+                Swal.fire({
+                    title: Result.message,
+                    icon: 'success',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'OK'
+                }).then(function () {
+                    window.location = '/UserProfile/DisplayUserList';
+                });
+            },
+        })
     }
-
-    $.ajax({
-        url: '/UserProfile/ResetUserPassword',
-        type: 'post',
-        data: objData,
-        datatype: 'json',
-        success: function (Result) {
-
-            Swal.fire({
-                title: Result.message,
-                icon: 'success',
-                confirmButtonColor: '#3085d6',
-                confirmButtonText: 'OK'
-            }).then(function () {
-                window.location = '/UserProfile/DisplayUserList';
-            });
-        },
-    })
-
+    else {
+        Swal.fire({
+            title: "Kindly fill all datafield",
+            icon: 'warning',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'OK',
+        })
+    }
 }
+
 
 function GetUserAttendanceInTime() {
 
@@ -852,4 +861,20 @@ function updateuserDetails() {
             confirmButtonText: 'OK'
         })
     }
+}
+var PasswordForm;
+function validateAndPassword() {debugger
+
+    PasswordForm= $("#passwordform").validate({
+        rules: {
+            passwordinput: "required",
+            confirmpasswordinput: "required",
+        },
+        messages: {
+            passwordinput: "Please Enter Password",
+            confirmpasswordinput: "Please Enter ConfirmPassword",
+        },
+    })
+    var isValid = true;
+   
 }
