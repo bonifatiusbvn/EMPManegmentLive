@@ -486,75 +486,75 @@
                         </div>
                     </div>
                 </div>
+                <!-- Modal -->
+                <div class="modal fade zoomIn" id="AddExpenseModel" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class=" modal-dialog modal-dialog-centered modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header bg-primary-subtle p-3">
+                                <h5 class="modal-title" id="exampleModalLabel">Add Expense Details</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="userexpenseform">
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <div class="mb-3">
+                                                <label for="txtexpensetype" class="form-label">Expense Type</label>
+                                                <select class="form-control form-select valid" id="txtexpensetype" name="txtexpensetype">
+                                                    <option selected disabled value="">---Select Expense Type---</option>
+                                                </select>
+                                                <input type="hidden" class="text-muted text-uppercase fw-semibold" id="txtexpensetypeid">
+                                                <input type="hidden" class="text-muted text-uppercase fw-semibold" id="txtaccount" value="Debit">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Description</label>
+                                                <input type="text" id="txtDescription" class="form-control" name="txtDescription" placeholder="Enter Description" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Bill Number</label>
+                                                <input type="text" id="txtbillno" class="form-control" name="txtbillno" placeholder="Enter Bill Number" />
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Date</label>
+                                                <input type="date" id="txtdate" class="form-control" name="txtdate" placeholder="Enter Date" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Total Amount</label>
+                                                <input type="number" id="txttotalamount" class="form-control" name="txttotalamount" placeholder="Enter Amount" oninput="preventEmptyValue(this)" min="1" value="1" />
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Image</label>
+                                                <input type="file" id="txtimage" class="form-control" name="txtimage" placeholder="Enter Image" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-danger btn-default m-1" id="close-modal" data-bs-dismiss="modal" onclick="ClearTextBox()">Close</button>
+                                <button type="submit" class="btn btn-primary" onclick="AddUserExpenseDetails();">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--end modal-->
             </div>
         </div>
     </div>
-    <!-- Modal -->
-    <div class="modal fade zoomIn" id="AddExpenseModel" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class=" modal-dialog modal-dialog-centered modal-lg">
-            <div class="modal-content">
-                <div class="modal-header bg-primary-subtle p-3">
-                    <h5 class="modal-title" id="exampleModalLabel">Add Expense Details</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="userexpenseform">
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <div class="mb-3">
-                                    <label for="txtexpensetype" class="form-label">Expense Type</label>
-                                    <select class="form-control form-select valid" id="txtexpensetype" name="txtexpensetype">
-                                        <option selected disabled value="">---Select Expense Type---</option>
-                                    </select>
-                                    <input type="hidden" class="text-muted text-uppercase fw-semibold" id="txtexpensetypeid">
-                                    <input type="hidden" class="text-muted text-uppercase fw-semibold" id="txtaccount" value="Debit">
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Description</label>
-                                    <input type="text" id="txtDescription" class="form-control" name="txtDescription" placeholder="Enter Description" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Bill Number</label>
-                                    <input type="text" id="txtbillno" class="form-control" name="txtbillno" placeholder="Enter Bill Number" />
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Date</label>
-                                    <input type="date" id="txtdate" class="form-control" name="txtdate" placeholder="Enter Date" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Total Amount</label>
-                                    <input type="number" id="txttotalamount" class="form-control" name="txttotalamount" placeholder="Enter Amount" oninput="preventEmptyValue(this)" min="1" value="1" />
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Image</label>
-                                    <input type="file" id="txtimage" class="form-control" name="txtimage" placeholder="Enter Image" />
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger btn-default m-1" id="close-modal" data-bs-dismiss="modal" onclick="ClearTextBox()">Close</button>
-                    <button type="submit" class="btn btn-primary" onclick="AddUserExpenseDetails();">Save</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!--end modal-->
 
 </div>
 </div>
