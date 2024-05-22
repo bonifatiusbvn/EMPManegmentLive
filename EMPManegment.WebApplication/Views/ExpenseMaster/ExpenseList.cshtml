@@ -237,33 +237,21 @@
                                 <i class="ri-store-2-fill me-1 align-bottom"></i> All Expense
                             </a>
                         </li>
-                       @* <li class="nav-item">
-                            <a class="nav-link py-3 Delivered" data-bs-toggle="tab" id="Delivered" href="#delivered" role="tab" aria-selected="false">
-                                <i class="ri-checkbox-circle-line me-1 align-bottom"></i> UnApprove Expense
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link py-3 Returns" data-bs-toggle="tab" id="Returns" href="#returns" role="tab" aria-selected="false">
-                                <i class="ri-arrow-left-right-fill me-1 align-bottom"></i> Approve Expense
-                            </a>
-                        </li>*@
-
                     </ul>
 
                     <div class="table-responsive" id="allExpense">
                         <table class="table table-bordered dt-responsive nowrap table-striped align-middle dataTable no-footer dtr-inline" id="ExpenseTable">
                             <thead class="table-light text-muted text-center">
                                 <tr>
-                                    <th class="sort" data-sort="UserName">User Name</th>
-                                    <th class="sort" data-sort="Description">Description</th>
-                                    <th class="sort" data-sort="BillNo">Bill No</th>
-                                    <th class="sort" data-sort="Date">Date</th>
-                                    <th class="sort" data-sort="TotalAmount">Total Amount</th>
-                                    <th class="sort" data-sort="Account">Account</th>
+                                    <th>User Name</th>
+                                    <th>Description</th>
+                                    <th>Bill No</th>
+                                    <th>Date</th>
+                                    <th>Total Amount</th>
+                                    <th>Account</th>
                                     @if (UserSession.FormPermisionData.Any(a => a.FormName == "All Expenses List" && (a.Edit == true || a.Delete == true)))
                                     {
-                                        <th class="sort" data-sort="action">Action</th>
+                                        <th>Action</th>
                                     }
                                 </tr>
                             </thead>
@@ -286,17 +274,15 @@
                         <table class="table table-bordered dt-responsive nowrap table-striped align-middle dataTable no-footer dtr-inline" id="ExpenseTable">
                             <thead class="table-light text-muted text-center">
                                 <tr>
-                                    <th class="sort text-uppercase" data-sort="UserName">User Name</th>
-                                    <th class="sort text-uppercase" data-sort="Description">
+                                    <th>User Name</th>
+                                    <th>
                                         Description
                                     </th>
-                                    <th class="sort text-uppercase" data-sort="BillNo">BillNo</th>
-                                    <th class="sort text-uppercase" data-sort="Date">Date</th>
-                                    <th class="sort text-uppercase" data-sort="TotalAmount">TotalAmount</th>
-                                    <th class="sort text-uppercase" data-sort="Account">
-                                        Account
-                                    </th>
-                                    <th class="sort text-uppercase" data-sort="action">Action</th>
+                                    <th>BillNo</th>
+                                    <th>Date</th>
+                                    <th>TotalAmount</th>
+                                    <th>Account</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
@@ -318,17 +304,15 @@
                         <table class="table table-bordered dt-responsive nowrap table-striped align-middle dataTable no-footer dtr-inline" id="ExpenseTable">
                             <thead class="table-light text-muted text-center">
                                 <tr>
-                                    <th class="sort text-uppercase" data-sort="UserName">User Name</th>
-                                    <th class="sort text-uppercase" data-sort="Description">
-                                        Description
-                                    </th>
-                                    <th class="sort text-uppercase" data-sort="BillNo">BillNo</th>
-                                    <th class="sort text-uppercase" data-sort="Date">Date</th>
-                                    <th class="sort text-uppercase" data-sort="TotalAmount">TotalAmount</th>
-                                    <th class="sort text-uppercase" data-sort="Account">
+                                    <th>User Name</th>
+                                    <th>Description</th>
+                                    <th>BillNo</th>
+                                    <th>Date</th>
+                                    <th>TotalAmount</th>
+                                    <th>
                                         Account
                                     </th>
-                                    <th class="sort text-uppercase" data-sort="action">Action</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
