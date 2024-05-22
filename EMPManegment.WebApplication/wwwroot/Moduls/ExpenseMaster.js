@@ -640,7 +640,7 @@ function GetAllUserExpenseList(userId) {
         pageLength: 30,
         ajax: {
             type: "POST",
-            url: '/ExpenseMaster/GetAllUserExpenseListTable?UserId=' + userId,
+            url: '/ExpenseMaster/GetUserExpenseList?UserId=' + userId,
             dataType: 'json',
         },
         columns: [
@@ -704,6 +704,7 @@ function GetAllUserExpenseList(userId) {
 }
 
 function GetUserUnApprovedExpenseList(UserId) {
+    var unapprove = false;
     $('#UserallUnApprovedExpenseTable').DataTable({
         processing: false,
         serverSide: true,
@@ -712,7 +713,7 @@ function GetUserUnApprovedExpenseList(UserId) {
         pageLength: 30,
         ajax: {
             type: "POST",
-            url: '/ExpenseMaster/GetUserUnApprovedExpenseList?UserId=' + UserId,
+            url: '/ExpenseMaster/GetUserExpenseList?UserId=' + UserId + '&unapprove=' + unapprove,
             dataType: 'json',
         },
         columns: [
@@ -782,6 +783,7 @@ function GetUserUnApprovedExpenseList(UserId) {
     });
 }
 function GetUserApprovedExpenseList(UserId) {
+    var approve = true;
     $('#GetUserApprovedExpenseList').DataTable({
         processing: false,
         serverSide: true,
@@ -790,7 +792,7 @@ function GetUserApprovedExpenseList(UserId) {
         pageLength: 30,
         ajax: {
             type: "POST",
-            url: '/ExpenseMaster/GetUserApprovedExpenseList?UserId=' + UserId,
+            url: '/ExpenseMaster/GetUserExpenseList?UserId=' + UserId + '&approve=' + approve,
             dataType: 'json',
         },
         columns: [
@@ -1052,7 +1054,7 @@ function GetExpenseTotalAmount() {
         dataType: 'json',
         contentType: false,
         processData: false,
-        success: function (result) {
+        success: function (result) {debugger
             var total = 0;
             result.forEach(function (obj) {
                 if (obj.totalAmount) {
@@ -1158,6 +1160,7 @@ function ApproveExpense() {
 
 function ApprovedExpenseList() {
     var UserId = $("#txtuserid").val();
+    var approve = true;
     $('#GetUserApprovedExpenseList').DataTable({
         processing: false,
         serverSide: true,
@@ -1165,7 +1168,7 @@ function ApprovedExpenseList() {
         "bDestroy": true,
         ajax: {
             type: "POST",
-            url: '/ExpenseMaster/GetUserApprovedExpenseList?UserId=' + UserId,
+            url: '/ExpenseMaster/GetUserExpenseList?UserId=' + UserId + '&approve=' + approve,
             dataType: 'json',
         },
         columns: [

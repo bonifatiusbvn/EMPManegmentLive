@@ -100,7 +100,7 @@ $(document).ready(function () {
 
     function GetUserAttendance(userPermission) {
         var userPermissionArray = JSON.parse(userPermission);
-        var canEdit = userPermissionArray.some(permission => permission.formName === "GetAllUsersAttendanceList" && permission.edit);
+        var canEdit = userPermissionArray.some(permission => permission.formName === "Users Attendance" && permission.edit);
 
         var columns = [
             { "data": "userName", "name": "UserName" },
@@ -334,6 +334,7 @@ function GetAttendance() {
 
             }
             else {
+                debugger
                 $('#TableDataAttendanceList').html(object);
             }
         }

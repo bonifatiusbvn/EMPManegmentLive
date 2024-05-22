@@ -55,11 +55,6 @@ namespace EMPManegment.Services.ExpenseMaster
             return await expenseMaster.GetAllPaymentType();
         }
 
-        public async Task<jsonData> GetAllUserExpenseList(Guid UserId, DataTableRequstModel dataTable)
-        {
-            return await expenseMaster.GetAllUserExpenseList(UserId, dataTable);
-        }
-
         public async Task<ExpenseTypeView> GetExpenseById(int ExpenseId)
         {
             return await expenseMaster.GetExpenseById(ExpenseId);
@@ -85,11 +80,6 @@ namespace EMPManegment.Services.ExpenseMaster
             return await expenseMaster.GetPaymentById(PaymentId);
         }
 
-        public async Task<jsonData> GetUserApprovedExpenseList(Guid UserId, DataTableRequstModel dataTable)
-        {
-            return await expenseMaster.GetUserApprovedExpenseList(UserId, dataTable);
-        }
-
         public async Task<jsonData> GetUserExpenseList(Guid UserId, DataTableRequstModel dataTable)
         {
             return await expenseMaster.GetUserExpenseList(UserId, dataTable);
@@ -98,11 +88,6 @@ namespace EMPManegment.Services.ExpenseMaster
         public async Task<jsonData> GetUserList(DataTableRequstModel dataTable)
         {
             return await expenseMaster.GetUserList(dataTable);
-        }
-
-        public async Task<jsonData> GetUserUnApprovedExpenseList(Guid UserId, DataTableRequstModel dataTable)
-        {
-            return await expenseMaster.GetUserUnApprovedExpenseList(UserId, dataTable);
         }
 
         public async Task<UserResponceModel> UpdateExpenseDetail(ExpenseDetailsView ExpenseDetails)

@@ -363,6 +363,7 @@ namespace EMPManegment.Web.Controllers
                 {
                     expense = JsonConvert.DeserializeObject<List<ExpenseDetailsView>>(response.data.ToString());
                 }
+                expense = expense.Where(expense => expense.IsApproved == true).ToList();
                 return new JsonResult(expense);
             }
             catch (Exception ex)
@@ -379,157 +380,6 @@ namespace EMPManegment.Web.Controllers
             ViewBag.UserId = HttpContext.Session.GetString("UserId");
             ViewBag.UserName = HttpContext.Session.GetString("UserName");
             return View();
-        }
-
-
-        [HttpPost]
-        public async Task<IActionResult> GetAllUserExpenseListTable(Guid UserId)
-        {
-            try
-            {
-
-
-                var draw = Request.Form["draw"].FirstOrDefault();
-                var start = Request.Form["start"].FirstOrDefault();
-                var length = Request.Form["length"].FirstOrDefault();
-                var sortColumn = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
-                var sortColumnDir = Request.Form["order[0][dir]"].FirstOrDefault();
-                var searchValue = Request.Form["search[value]"].FirstOrDefault();
-                int pageSize = length != null ? Convert.ToInt32(length) : 0;
-                int skip = start != null ? Convert.ToInt32(start) : 0;
-
-                var dataTable = new DataTableRequstModel
-                {
-                    draw = draw,
-                    start = start,
-                    pageSize = pageSize,
-                    skip = skip,
-                    lenght = length,
-                    searchValue = searchValue,
-                    sortColumn = sortColumn,
-                    sortColumnDir = sortColumnDir
-                };
-                List<ExpenseDetailsView> Expense = new List<ExpenseDetailsView>();
-                var data = new jsonData();
-                ApiResponseModel response = await APIServices.PostAsync(dataTable, "ExpenseMaster/GetAllUserExpenseDetail?UserId=" + UserId);
-                if (response.code == 200)
-                {
-                    data = JsonConvert.DeserializeObject<jsonData>(response.data.ToString());
-                    Expense = JsonConvert.DeserializeObject<List<ExpenseDetailsView>>(data.data.ToString());
-                }
-                var jsonData = new
-                {
-                    draw = data.draw,
-                    recordsFiltered = data.recordsFiltered,
-                    recordsTotal = data.recordsTotal,
-                    data = Expense,
-                };
-                return new JsonResult(jsonData);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> GetUserUnApprovedExpenseList(Guid UserId)
-        {
-            try
-            {
-
-
-                var draw = Request.Form["draw"].FirstOrDefault();
-                var start = Request.Form["start"].FirstOrDefault();
-                var length = Request.Form["length"].FirstOrDefault();
-                var sortColumn = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
-                var sortColumnDir = Request.Form["order[0][dir]"].FirstOrDefault();
-                var searchValue = Request.Form["search[value]"].FirstOrDefault();
-                int pageSize = length != null ? Convert.ToInt32(length) : 0;
-                int skip = start != null ? Convert.ToInt32(start) : 0;
-
-                var dataTable = new DataTableRequstModel
-                {
-                    draw = draw,
-                    start = start,
-                    pageSize = pageSize,
-                    skip = skip,
-                    lenght = length,
-                    searchValue = searchValue,
-                    sortColumn = sortColumn,
-                    sortColumnDir = sortColumnDir
-                };
-                List<ExpenseDetailsView> Expense = new List<ExpenseDetailsView>();
-                var data = new jsonData();
-                ApiResponseModel response = await APIServices.PostAsync(dataTable, "ExpenseMaster/GetUserUnApprovedExpenseList?UserId=" + UserId);
-                if (response.code == 200)
-                {
-                    data = JsonConvert.DeserializeObject<jsonData>(response.data.ToString());
-                    Expense = JsonConvert.DeserializeObject<List<ExpenseDetailsView>>(data.data.ToString());
-                }
-                var jsonData = new
-                {
-                    draw = data.draw,
-                    recordsFiltered = data.recordsFiltered,
-                    recordsTotal = data.recordsTotal,
-                    data = Expense,
-                };
-                return new JsonResult(jsonData);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> GetUserApprovedExpenseList(Guid UserId)
-        {
-            try
-            {
-
-
-                var draw = Request.Form["draw"].FirstOrDefault();
-                var start = Request.Form["start"].FirstOrDefault();
-                var length = Request.Form["length"].FirstOrDefault();
-                var sortColumn = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
-                var sortColumnDir = Request.Form["order[0][dir]"].FirstOrDefault();
-                var searchValue = Request.Form["search[value]"].FirstOrDefault();
-                int pageSize = length != null ? Convert.ToInt32(length) : 0;
-                int skip = start != null ? Convert.ToInt32(start) : 0;
-
-                var dataTable = new DataTableRequstModel
-                {
-                    draw = draw,
-                    start = start,
-                    pageSize = pageSize,
-                    skip = skip,
-                    lenght = length,
-                    searchValue = searchValue,
-                    sortColumn = sortColumn,
-                    sortColumnDir = sortColumnDir
-                };
-                List<ExpenseDetailsView> Expense = new List<ExpenseDetailsView>();
-                var data = new jsonData();
-                ApiResponseModel response = await APIServices.PostAsync(dataTable, "ExpenseMaster/GetUserApprovedExpenseList?UserId=" + UserId);
-                if (response.code == 200)
-                {
-                    data = JsonConvert.DeserializeObject<jsonData>(response.data.ToString());
-                    Expense = JsonConvert.DeserializeObject<List<ExpenseDetailsView>>(data.data.ToString());
-                }
-                var jsonData = new
-                {
-                    draw = data.draw,
-                    recordsFiltered = data.recordsFiltered,
-                    recordsTotal = data.recordsTotal,
-                    data = Expense,
-                };
-                return new JsonResult(jsonData);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
         }
 
         [HttpPost]
@@ -634,7 +484,7 @@ namespace EMPManegment.Web.Controllers
 
                 List<ExpenseDetailsView> expense = new List<ExpenseDetailsView>();
                 var data = new jsonData();
-                ApiResponseModel response = await APIServices.PostAsync(dataTable, "ExpenseMaster/GetAllUserExpenseDetail?UserId=" + UserId);
+                ApiResponseModel response = await APIServices.PostAsync(dataTable, "ExpenseMaster/GetUserExpenseDetail?UserId=" + UserId);
 
                 if (response.code == 200)
                 {
@@ -651,7 +501,7 @@ namespace EMPManegment.Web.Controllers
                             expense = expense.Where(expense => expense.Account.ToLower() == "credit").ToList();
                             break;
                         case "debit":
-                            expense = expense.Where(e => e.Account.ToLower() == filterType).ToList();
+                            expense = expense.Where(e => e.Account.ToLower() == filterType && e.IsApproved == true).ToList();
                             break;
                         case "thismonth":
                             expense = expense.Where(e => e.Date.Year == DateTime.Now.Year && e.Date.Month == DateTime.Now.Month).ToList();
@@ -672,7 +522,7 @@ namespace EMPManegment.Web.Controllers
                 }
                 else if (unapprove.HasValue)
                 {
-                    expense = expense.Where(e => e.IsApproved == unapprove).ToList();
+                    expense = expense.Where(e => e.IsApproved == unapprove && e.Description != "Expense Paid").ToList();
                 }
                 else if (approve.HasValue)
                 {
