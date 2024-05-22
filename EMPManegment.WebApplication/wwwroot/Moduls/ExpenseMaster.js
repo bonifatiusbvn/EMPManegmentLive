@@ -1782,6 +1782,14 @@ function GetUserLastMonthExpenseList() {
                 }
             },
         ],
+        scrollY: 400,
+        scrollX: true,
+        scrollCollapse: true,
+        fixedHeader: {
+            header: true,
+            footer: true
+        },
+        autoWidth: false,
         columnDefs: [
             {
                 "targets": [0, -1],
@@ -1842,6 +1850,14 @@ function GetUserCurrentMonthExpenseList() {
                 }
             },
         ],
+        scrollY: 400,
+        scrollX: true,
+        scrollCollapse: true,
+        fixedHeader: {
+            header: true,
+            footer: true
+        },
+        autoWidth: false,
         columnDefs: [
             {
                 "targets": [0, -1],
