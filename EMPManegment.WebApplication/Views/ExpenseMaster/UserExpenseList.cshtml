@@ -273,7 +273,7 @@
                                     </label>
                                 </li>
                                 <li class="nav-item d-flex align-items-center ms-3">
-                                    <input class="nav-radio form-check-input" type="radio" name="flexRadioDefault"  id="betweenMonthRadio">
+                                    <input class="nav-radio form-check-input" type="radio" name="flexRadioDefault" id="betweenMonthRadio">
                                     <label class="form-check-label ms-2" for="betweenMonthRadio">
                                         Between Date
                                     </label>
@@ -296,11 +296,11 @@
                         <table class="table table-bordered dt-responsive table-striped align-middle dataTable no-footer dtr-inline" id="DisplayUserAllExpenseList">
                             <thead class="table-light text-muted text-center">
                                 <tr>
-                                    <th data-sort="name" scope="col" style="width: 60px;"></th>
-                                    <th class="sort" data-sort="Description">Description</th>
-                                    <th class="sort" data-sort="BillNo">Bill No</th>
-                                    <th class="sort" data-sort="Date">Date</th>
-                                    <th class="sort" data-sort="TotalAmount">Total Amount</th>
+                                    <th></th>
+                                    <th>Description</th>
+                                    <th>Bill No</th>
+                                    <th>Date</th>
+                                    <th>Total Amount</th>
                                     @if (UserSession.FormPermisionData.Any(a => a.FormName == "Expenses" && (a.Edit == true || a.Delete == true)))
                                     {
                                         <th class="sort" data-sort="action">Action</th>
@@ -328,11 +328,11 @@
                         <table class="table table-bordered dt-responsive table-striped align-middle dataTable no-footer dtr-inline" id="GetUserUnapprovedExpenseList">
                             <thead class="table-light text-muted text-center">
                                 <tr>
-                                    <th data-sort="name" scope="col" style="width: 60px;"></th>
-                                    <th class="sort text-uppercase" data-sort="Description">Description</th>
-                                    <th class="sort text-uppercase" data-sort="BillNo">BillNo</th>
-                                    <th class="sort text-uppercase" data-sort="Date">Date</th>
-                                    <th class="sort text-uppercase" data-sort="TotalAmount">TotalAmount</th>
+                                    <th></th>
+                                    <th>Description</th>
+                                    <th>BillNo</th>
+                                    <th>Date</th>
+                                    <th>TotalAmount</th>
                                 </tr>
                             </thead>
                             <tbody class="list form-check-all text-center"> </tbody>
@@ -355,11 +355,11 @@
                         <table class="table table-bordered dt-responsive table-striped align-middle dataTable no-footer dtr-inline" id="GetAllUserApprovedExpenseList">
                             <thead class="table-light text-muted text-center">
                                 <tr>
-                                    <th data-sort="name" scope="col" style="width: 60px;"></th>
-                                    <th class="sort" data-sort="Description">Description</th>
-                                    <th class="sort" data-sort="BillNo">Bill No</th>
-                                    <th class="sort" data-sort="Date">Date</th>
-                                    <th class="sort" data-sort="TotalAmount">Total Amount</th>
+                                    <th></th>
+                                    <th>Description</th>
+                                    <th>Bill No</th>
+                                    <th>Date</th>
+                                    <th>Total Amount</th>
                                 </tr>
                             </thead>
                             <tbody class="list form-check-all text-center"> </tbody>
@@ -382,11 +382,11 @@
                         <table class="table table-bordered dt-responsive table-striped align-middle dataTable no-footer dtr-inline" id="UserallCreditExpenseTable">
                             <thead class="table-light text-muted text-center">
                                 <tr>
-                                    <th data-sort="name" scope="col" style="width: 60px;"></th>
-                                    <th class="sort" data-sort="Description">Description</th>
-                                    <th class="sort" data-sort="BillNo">Bill No</th>
-                                    <th class="sort" data-sort="Date">Date</th>
-                                    <th class="sort" data-sort="TotalAmount">Total Amount</th>
+                                    <th></th>
+                                    <th>Description</th>
+                                    <th>Bill No</th>
+                                    <th>Date</th>
+                                    <th>Total Amount</th>
                                 </tr>
                             </thead>
                             <tbody class="list form-check-all text-center">
@@ -409,11 +409,11 @@
                         <table class="table table-bordered dt-responsive table-striped align-middle" id="GetUserLastMonthExpense">
                             <thead class="table-light text-muted text-center">
                                 <tr>
-                                    <th data-sort="name" scope="col" style="width: 60px;"></th>
-                                    <th class="sort" data-sort="Description">Description</th>
-                                    <th class="sort" data-sort="BillNo">Bill No</th>
-                                    <th class="sort" data-sort="Date">Date</th>
-                                    <th class="sort" data-sort="TotalAmount">Total Amount</th>
+                                    <th></th>
+                                    <th>Description</th>
+                                    <th>Bill No</th>
+                                    <th>Date</th>
+                                    <th>Total Amount</th>
                                 </tr>
                             </thead>
                             <tbody class="list form-check-all text-center"> </tbody>
@@ -436,11 +436,11 @@
                         <table class="table table-bordered dt-responsive table-striped align-middle" id="GetUserCurrentExpense">
                             <thead class="table-light text-muted text-center">
                                 <tr>
-                                    <th data-sort="name" scope="col" style="width: 60px;"></th>
-                                    <th class="sort" data-sort="Description">Description</th>
-                                    <th class="sort" data-sort="BillNo">Bill No</th>
-                                    <th class="sort" data-sort="Date">Date</th>
-                                    <th class="sort" data-sort="TotalAmount">Total Amount</th>
+                                    <th></th>
+                                    <th>Description</th>
+                                    <th>Bill No</th>
+                                    <th>Date</th>
+                                    <th>Total Amount</th>
                                 </tr>
                             </thead>
                             <tbody class="list form-check-all text-center"> </tbody>
@@ -463,11 +463,11 @@
                         <table class="table table-bordered dt-responsive table-striped align-middle dataTable no-footer dtr-inline" id="GetBetweendatesExpense">
                             <thead class="table-light text-muted text-center">
                                 <tr>
-                                    <th data-sort="name" scope="col" style="width: 60px;"></th>
-                                    <th class="sort" data-sort="Description">Description</th>
-                                    <th class="sort" data-sort="BillNo">Bill No</th>
-                                    <th class="sort" data-sort="Date">Date</th>
-                                    <th class="sort" data-sort="TotalAmount">Total Amount</th>
+                                    <th></th>
+                                    <th>Description</th>
+                                    <th>Bill No</th>
+                                    <th>Date</th>
+                                    <th>Total Amount</th>
                                 </tr>
                             </thead>
                             <tbody class="list form-check-all text-center"> </tbody>
@@ -556,7 +556,6 @@
         </div>
     </div>
 
-</div>
 </div>
 <!--end col-->
 <script type="text/javascript">

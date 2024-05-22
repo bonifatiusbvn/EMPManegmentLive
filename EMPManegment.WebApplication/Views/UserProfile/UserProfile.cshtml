@@ -102,35 +102,46 @@
                                                 <table class="table table-borderless mb-0">
                                                     <tbody>
                                                         <tr>
-                                                            <th class="ps-0" scope="row">UserName:</th>
+                                                            <th>UserName:</th>
                                                             <td class="text-muted" id="UserName">@Model.UserName</td>
                                                         </tr>
                                                         <tr>
-                                                            <th class="ps-0" scope="row">Name:</th>
+                                                            <th>Name:</th>
                                                             <td class="text-muted" id="FirstName">@Model.FirstName @Model.LastName</td>
                                                         </tr>
                                                         <tr>
-                                                            <th class="ps-0" scope="row">Birth Date:</th>
+                                                            <th>Birth Date:</th>
                                                             <td class="text-muted" id="LastName">@Model.DateOfBirth.ToString("dd/MM/yyyy")</td>
                                                         </tr>
                                                         <tr>
-                                                            <th class="ps-0" scope="row">E-mail:</th>
+                                                            <th>E-mail:</th>
                                                             <td class="text-muted" id="Email">@Model.Email</td>
                                                         </tr>
                                                         <tr>
-                                                            <th class="ps-0" scope="row">Mobile:</th>
+                                                            <th>Mobile:</th>
                                                             <td class="text-muted" id="PhoneNumber">@Model.PhoneNumber</td>
                                                         </tr>
                                                         <tr>
-                                                            <th class="ps-0" scope="row">JoiningDate:</th>
+                                                            <th>JoiningDate:</th>
                                                             <td class="text-muted" id="JoiningDate">@Model.JoiningDate.Value.ToString("dd/MM/yyyy")</td>
                                                         </tr>
                                                         <tr>
-                                                            <th class="ps-0" scope="row">Address:</th>
+                                                            <th>Address:</th>
                                                             <td class="text-muted" id="Address">@Model.Address</td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
+                                                <div class="noresult" style="display: none">
+                                                    <div class="text-center">
+                                                        <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#25a0e2,secondary:#00bd9d" style="width:75px;height:75px">
+                                                        </lord-icon>
+                                                        <h5 class="mt-2">Sorry! No Result Found</h5>
+                                                        <p class="text-muted mb-0">
+                                                            We've searched more than 150+ invoices We did not find any
+                                                            invoices for you search.
+                                                        </p>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div><!-- end card body -->
                                     </div><!-- end card -->
@@ -490,16 +501,26 @@
                                                 <table class="table table-bordered dt-responsive nowrap table-striped align-middle dataTable no-footer dtr-inline">
                                                     <thead class="table-light text-muted text-center">
                                                         <tr class="text-center">
-                                                            <th scope="col">DocumentType</th>
-                                                            <th scope="col">DocumentName</th>
-                                                            <th scope="col">CreatedOn</th>
-                                                            <th scope="col">CreatedBy</th>
-                                                            <th scope="col">Download</th>
+                                                            <th>DocumentType</th>
+                                                            <th>DocumentName</th>
+                                                            <th>CreatedOn</th>
+                                                            <th>CreatedBy</th>
+                                                            <th>Download</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody class="text-center" id="TableData"></tbody>
                                                 </table>
-
+                                                <div class="noresult" style="display: none">
+                                                    <div class="text-center">
+                                                        <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#25a0e2,secondary:#00bd9d" style="width:75px;height:75px">
+                                                        </lord-icon>
+                                                        <h5 class="mt-2">Sorry! No Result Found</h5>
+                                                        <p class="text-muted mb-0">
+                                                            We've searched more than 150+ invoices We did not find any
+                                                            invoices for you search.
+                                                        </p>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
