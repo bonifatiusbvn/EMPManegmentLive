@@ -607,7 +607,7 @@ namespace EMPManegment.Web.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> GetUserExpenseList(string filterType = null, bool? unapprove = null, bool? approve = null, DateTime? startDate = null, DateTime? endDate = null, string account = null)
+        public async Task<IActionResult> GetUserExpenseList(Guid? UserId, string filterType = null, bool? unapprove = null, bool? approve = null, DateTime? startDate = null, DateTime? endDate = null, string account = null)
         {
             try
             {
@@ -632,7 +632,6 @@ namespace EMPManegment.Web.Controllers
                     sortColumnDir = sortColumnDir
                 };
 
-                var UserId=_userSession.UserId;
                 List<ExpenseDetailsView> expense = new List<ExpenseDetailsView>();
                 var data = new jsonData();
                 ApiResponseModel response = await APIServices.PostAsync(dataTable, "ExpenseMaster/GetAllUserExpenseDetail?UserId=" + UserId);
