@@ -519,33 +519,3 @@ function updateUserAttendance() {
     }
 }
 
-//function exportToExcel()
-//{
-//
-//    $.ajax({
-//        url: '/UserProfile/ExportToExcel',
-//        type: 'Get',
-//        datatype: 'json',
-//        processData: false,
-//        contentType: false,
-//        success: function (Result) {
-//
-//            var bytes = new Uint8Array(Result.fileContents);
-//            var blob = new Blob([bytes], { type: "application/vnd.openxmlformats-officedocuments.spreadsheetml.sheet" });
-//
-//            var link = document.createElement('a');
-//            link.href = window.URL.createObjectURL(blob);
-//            link.download = Result.fileDownloadName;
-//            link.click();
-//            Swal.fire({
-//                title: 'Successfully Download',
-//                icon: 'success',
-//                confirmButtonColor: '#3085d6',
-//                confirmButtonText: 'OK',
-//            }).then(function () {
-//                window.location = '/UserProfile/GetAttendance';
-//            });
-
-//        }
-//    });
-//}
