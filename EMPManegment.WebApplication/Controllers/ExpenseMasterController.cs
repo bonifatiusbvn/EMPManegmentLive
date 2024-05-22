@@ -648,6 +648,8 @@ namespace EMPManegment.Web.Controllers
                     switch (filterType.ToLower())
                     {
                         case "credit":
+                            expense = expense.Where(expense => expense.Account.ToLower() == "credit").ToList();
+                            break;
                         case "debit":
                             expense = expense.Where(e => e.Account.ToLower() == filterType).ToList();
                             break;
