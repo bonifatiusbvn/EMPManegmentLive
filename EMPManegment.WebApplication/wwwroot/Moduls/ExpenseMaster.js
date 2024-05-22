@@ -866,7 +866,6 @@ $(document).ready(function () {
         DisplayAllExpenseList(userPermission);
     }
     function DisplayAllExpenseList(userPermission) {
-        debugger
         var userPermissionArray = [];
         userPermissionArray = JSON.parse(userPermission);
 
@@ -1325,9 +1324,24 @@ $(document).ready(function () {
             GetAllUserCreditExpenseList();
         }
     });
+    $('.nav-radio').click(function () {
+        
+        var targetTab = $(this).attr('href');
+         if (targetTab === '#GetUserLastMonthExpenseList') {
+            GetUserLastMonthExpenseList();
+         } else if (targetTab === '#GetUserCurrentMonthExpenseList') {
+             GetUserCurrentMonthExpenseList();
+        }
+    });
+    $('.nav-btn').click(function () {
+
+        var targetTab = $(this).attr('href');
+        if (targetTab === '#GetBetweendatesExpenseList') {
+            SearchBetweenDateExpense();
+        }
+    });
 
     function GetUserAllExpenseList(userPermission) {
-        debugger
         var userPermissionArray = [];
         userPermissionArray = JSON.parse(userPermission);
 
@@ -1337,7 +1351,6 @@ $(document).ready(function () {
         for (var i = 0; i < userPermissionArray.length; i++) {
             var permission = userPermissionArray[i];
             if (permission.formName == "Expenses") {
-                debugger
                 canEdit = permission.edit;
                 canDelete = permission.delete;
                 break;
@@ -1389,26 +1402,24 @@ $(document).ready(function () {
                 "orderable": false,
                 "searchable": false,
                 "render": function (data, type, full) {
-                    var buttons = '<ul class="list-inline hstack gap-2 mb-0">';
+                    var buttons = '';
 
                     if (canEdit) {
-                        buttons += '<li class="btn text-primary list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit" style="margin-left:12px;">' +
+                        buttons += 
                             '<a class="btn text-primary" onclick="EditExpenseDetails(\'' + full.id + '\')">' +
-                            '<i class="fa-regular fa-pen-to-square"></i></a></li>';
+                            '<i class="fa-regular fa-pen-to-square"></i></a>';
                     }
 
                     if (canDelete) {
-                        buttons += '<li class="btn text-danger list-inline-item delete" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Delete" style="margin-left:12px;">' +
-                            '<a class="btn text-danger btndeletedoc" onclick="deleteExpense(\'' + full.id + '\')">' +
-                            '<i class="fas fa-trash"></i></a></li>';
+                        buttons +='<a class="btn text-danger btndeletedoc" onclick="deleteExpense(\'' + full.id + '\')">' +
+                            '<i class="fas fa-trash"></i></a>';
                     }
 
-                    buttons += '</ul>';
+                   
                     return buttons;
                 }
             });
         }
-        debugger
         $('#DisplayUserAllExpenseList').DataTable({
             processing: false,
             serverSide: true,
@@ -1603,34 +1614,24 @@ function GetAllUserCreditExpenseList() {
         ]
     });
 }
-
-function GetUserBetweenExpenseList(userId, startDate, endDate) {
-    $('#UserallUnApprovedExpenseTable').DataTable({
+function GetUserLastMonthExpenseList() {
+    
+    $('#GetUserLastMonthExpense').DataTable({
         processing: false,
         serverSide: true,
         filter: true,
         "bDestroy": true,
+
         ajax: {
-            type: "POST",
-            url: '/ExpenseMaster/GetUserUnApprovedExpenseList?UserId=' + userId,
-            data: {
-                UserId: UserId,
-                startDate: startDate,
-                endDate: endDate
-            },
-            dataType: 'json',
+            type: "Post",
+            url: '/ExpenseMaster/GetUserExpenseListLastMonth',
+            dataType: 'json'
         },
         columns: [
             {
                 "data": null,
                 "render": function (data, type, full, meta) {
-                    return '<div class="form-check"><input class="form-check-input" data-id="' + full.id + '" type="checkbox" name="chk_child" value="option1"></div>';
-                },
-                "orderable": false
-            },
-            {
-                "data": null,
-                "render": function (data, type, full, meta) {
+                    
                     var account = full.account.toLowerCase();
                     if (account === "credit") {
                         return '<div class="avatar-xs"><div class="avatar-title bg-success-subtle text-success rounded-circle fs-16"><i class="ri-arrow-left-down-fill"></i></div></div>';
@@ -1642,16 +1643,18 @@ function GetUserBetweenExpenseList(userId, startDate, endDate) {
                 },
                 "orderable": false
             },
-            { "data": "id", "name": "Id", "visible": false },
-            { "data": "expenseTypeName", "name": "ExpenseTypeName" },
-            { "data": "paymentTypeName", "name": "PaymentTypeName" },
-            { "data": "billNumber", "name": "BillNumber" },
             { "data": "description", "name": "Description" },
+            { "data": "billNumber", "name": "BillNumber" },
             {
                 "data": "date",
                 "name": "Date",
                 "render": function (data, type, full, meta) {
-                    return new Date(data).toLocaleDateString();
+                    var dateObj = new Date(data);
+                    var day = dateObj.getDate();
+                    var month = dateObj.toLocaleString('default', { month: 'long' });
+                    var year = dateObj.getFullYear();
+                    var formattedDate = day + '-' + month + '-' + year;
+                    return formattedDate;
                 }
             },
             {
@@ -1662,11 +1665,147 @@ function GetUserBetweenExpenseList(userId, startDate, endDate) {
                     return '<span style="color: ' + color + ';">' + data + '</span>';
                 }
             },
-            { "data": "account", "name": "Account", "visible": false },
         ],
-        columnDefs: [{
-            "defaultContent": "",
-            "targets": "_all",
-        }]
+        columnDefs: [
+            {
+                "targets": [0, -1],
+                "orderable": false
+            }
+        ]
     });
 }
+function GetUserCurrentMonthExpenseList() {
+    
+    $('#GetUserCurrentExpense').DataTable({
+        processing: false,
+        serverSide: true,
+        filter: true,
+        "bDestroy": true,
+        ajax: {
+            type: "Post",
+            url: '/ExpenseMaster/GetUserExpenseListthisMonth',
+            dataType: 'json'
+        },
+        columns: [
+            {
+                "data": null,
+                "render": function (data, type, full, meta) {
+                    
+                    var account = full.account.toLowerCase();
+                    if (account === "credit") {
+                        return '<div class="avatar-xs"><div class="avatar-title bg-success-subtle text-success rounded-circle fs-16"><i class="ri-arrow-left-down-fill"></i></div></div>';
+                    } else if (account === "debit") {
+                        return '<div class="avatar-xs"><div class="avatar-title bg-danger-subtle text-danger rounded-circle fs-16"><i class="ri-arrow-right-up-fill"></i></div></div>';
+                    } else {
+                        return '';
+                    }
+                },
+                "orderable": false
+            },
+            { "data": "description", "name": "Description" },
+            { "data": "billNumber", "name": "BillNumber" },
+            {
+                "data": "date",
+                "name": "Date",
+                "render": function (data, type, full, meta) {
+                    var dateObj = new Date(data);
+                    var day = dateObj.getDate();
+                    var month = dateObj.toLocaleString('default', { month: 'long' });
+                    var year = dateObj.getFullYear();
+                    var formattedDate = day + '-' + month + '-' + year;
+                    return formattedDate;
+                }
+            },
+            {
+                "data": "totalAmount",
+                "name": "TotalAmount",
+                "render": function (data, type, full, meta) {
+                    var color = full.account && full.account.toLowerCase() === "credit" ? "green" : "red";
+                    return '<span style="color: ' + color + ';">' + data + '</span>';
+                }
+            },
+        ],
+        columnDefs: [
+            {
+                "targets": [0, -1],
+                "orderable": false
+            }
+        ]
+    });
+}
+
+function SearchBetweenDateExpense() {
+    var StartDate = $('#startDate').val();
+    var EndDate = $('#endDate').val();
+
+    if (StartDate == "" && EndDate == "") {
+        toastr.error("Select dates");
+    } else if (StartDate == "" ) {
+        toastr.error("Select Satrtdate");
+    } else if (EndDate == "") {
+        toastr.error("Select Enddate");
+    } else {
+        GetUserBetweenMonthsExpenseList(StartDate, EndDate)
+    }
+    
+}
+function GetUserBetweenMonthsExpenseList(StartDate, EndDate) {
+    
+    $('#GetBetweendatesExpense').DataTable({
+        processing: false,
+        serverSide: true,
+        filter: true,
+        "bDestroy": true,
+        ajax: {
+            type: "Post",
+            url: '/ExpenseMaster/GetUserBetweenExpenseList?startDate=' + StartDate + '&endDate=' + EndDate,
+            dataType: 'json'
+        },
+        columns: [
+            {
+                "data": null,
+                "render": function (data, type, full, meta) {
+                    
+                    var account = full.account.toLowerCase();
+                    if (account === "credit") {
+                        return '<div class="avatar-xs"><div class="avatar-title bg-success-subtle text-success rounded-circle fs-16"><i class="ri-arrow-left-down-fill"></i></div></div>';
+                    } else if (account === "debit") {
+                        return '<div class="avatar-xs"><div class="avatar-title bg-danger-subtle text-danger rounded-circle fs-16"><i class="ri-arrow-right-up-fill"></i></div></div>';
+                    } else {
+                        return '';
+                    }
+                },
+                "orderable": false
+            },
+            { "data": "description", "name": "Description" },
+            { "data": "billNumber", "name": "BillNumber" },
+            {
+                "data": "date",
+                "name": "Date",
+                "render": function (data, type, full, meta) {
+                    var dateObj = new Date(data);
+                    var day = dateObj.getDate();
+                    var month = dateObj.toLocaleString('default', { month: 'long' });
+                    var year = dateObj.getFullYear();
+                    var formattedDate = day + '-' + month + '-' + year;
+                    return formattedDate;
+                }
+            },
+            {
+                "data": "totalAmount",
+                "name": "TotalAmount",
+                "render": function (data, type, full, meta) {
+                    var color = full.account && full.account.toLowerCase() === "credit" ? "green" : "red";
+                    return '<span style="color: ' + color + ';">' + data + '</span>';
+                }
+            },
+        ],
+        columnDefs: [
+            {
+                "targets": [0, -1],
+                "orderable": false
+            }
+        ]
+    });
+}
+
