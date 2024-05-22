@@ -124,33 +124,7 @@ function GetAllUserData() {
         }]
     });
 }
-function GetUserRoleList(itemId, selectedRoleId) {
-    $.ajax({
-        url: '/UserProfile/RolewisePermissionListAction',
-        success: function (result) {
-            var roleDropdown = $('#ddlUserRole_' + itemId);
-            roleDropdown.empty();
-            $.each(result, function (i, data) {
-                var selected = data.roleId == selectedRoleId ? 'selected' : '';
-                roleDropdown.append('<option value=' + data.roleId + ' ' + selected + '>' + data.role + '</option>');
-            });
-        }
-    });
-}
-
-function GetDepartmentList(itemId, selectedDepartmentId) {
-    $.ajax({
-        url: '/Authentication/GetDepartment',
-        success: function (result) {
-            var departmentDropdown = $('#ddlDepartment_' + itemId);
-            departmentDropdown.empty();
-            $.each(result, function (i, data) {
-                var selected = data.id == selectedDepartmentId ? 'selected' : '';
-                departmentDropdown.append('<option value=' + data.id + ' ' + selected + '>' + data.departments + '</option>');
-            });
-        }
-    });
-}
+function UserActiveDeactive(UserId) {
 
 function UserActiveDeactive(UserId, checkboxElement) {
     var isActive = checkboxElement.checked;
@@ -169,6 +143,7 @@ function UserActiveDeactive(UserId, checkboxElement) {
         buttonsStyling: false,
         showCloseButton: true
     }).then((result) => {
+        
         if (result.isConfirmed) {
             $.ajax({
                 url: '/UserProfile/UserActiveDecative?UserName=' + UserId,
@@ -366,34 +341,32 @@ function EnterOutTime() {
 
     }
 }
-
 function ResetPassword() {
-    var fromData = new FormData();
-    fromData.append("UserName", $("#txtUserName").val());
-    fromData.append("Password", $("#password-input").val());
+    debugger
+    var objData = {
+        UserName: $('#txtUserName').val(),
+        Password: $('#password-input').val(),
+        ConfirmPassword: $('#confirm-password-input').val(),
+    }
 
     $.ajax({
         url: '/UserProfile/ResetUserPassword',
-        type: 'Post',
-        data: fromData,
-        dataType: 'json',
-        processData: false,
-        contentType: false,
+        type: 'post',
+        data: objData,
+        datatype: 'json',
         success: function (Result) {
+
             Swal.fire({
                 title: Result.message,
                 icon: 'success',
                 confirmButtonColor: '#3085d6',
                 confirmButtonText: 'OK'
             }).then(function () {
-                window.location = '/UserProfile/ResetUserPassword';
+                window.location = '/UserProfile/DisplayUserList';
             });
-
         },
-        error: function () {
-            alert('There is some problem in your request.');
-        }
     })
+
 }
 
 function GetUserAttendanceInTime() {

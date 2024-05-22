@@ -153,6 +153,7 @@
                                             </label>
                                             <input type="text" class="form-control" id="firstnameInput" name="firstnameInput" placeholder="Enter your firstname" value="@Model.FirstName" readonly>
                                             <input type="hidden" class="form-control" id="idInput" value="@Model.Id" />
+                                            <input type="hidden" class="form-control" id="txtUserName" value="@Model.UserName" />
                                         </div>
                                     </div>
                                     <!--end col-->
@@ -262,33 +263,46 @@
                         </div>
                         <!--end tab-pane-->
                         <div class="tab-pane" id="changePassword" role="tabpanel">
+                            <h3 class="text-danger text-center">@TempData["errorMessage"]</h3>
                             <form action="javascript:void(0);">
                                 <div class="row g-2">
 
                                     <!--end col-->
                                     <div class="col-lg-4">
                                         <div>
-                                            <label for="newpasswordInput" class="form-label">
+                                            <label for="password-input" class="form-label">
                                                 New
                                                 Password*
                                             </label>
-                                            <input type="password" class="form-control" id="newpasswordInput" placeholder="Enter new password">
+                                            <div class="position-relative auth-pass-inputgroup">
+                                                <input type="password" class="form-control" id="password-input" placeholder="Enter new password" onpaste="return false" aria-describedby="passwordInput" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}">
+                                                <div id="passwordInput" class="form-text">Must be at least 8 characters.</div>
+                                            </div>
                                         </div>
                                     </div>
                                     <!--end col-->
                                     <div class="col-lg-4">
                                         <div>
-                                            <label for="confirmpasswordInput" class="form-label">
+                                            <label for="confirm-password-input" class="form-label">
                                                 Confirm
                                                 Password*
                                             </label>
-                                            <input type="password" class="form-control" id="confirmpasswordInput" placeholder="Confirm password">
+                                            <div class="position-relative auth-pass-inputgroup mb-3">
+                                                <input type="password" class="form-control" id="confirm-password-input" placeholder="Confirm password" onpaste="return false" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}">
+                                            </div>
                                         </div>
+                                    </div>
+                                    <div id="password-contain" class="p-3 bg-light mb-2 rounded">
+                                        <h5 class="fs-13">Password must contain:</h5>
+                                        <p id="pass-length" class="invalid fs-12 mb-2">Minimum <b>8 characters</b></p>
+                                        <p id="pass-lower" class="invalid fs-12 mb-2">At <b>lowercase</b> letter (a-z)</p>
+                                        <p id="pass-upper" class="invalid fs-12 mb-2">At least <b>uppercase</b> letter (A-Z)</p>
+                                        <p id="pass-number" class="invalid fs-12 mb-0">A least <b>number</b> (0-9)</p>
                                     </div>
                                     <!--end col-->
                                     <div class="col-lg-12">
                                         <div class="mb-3">
-                                            <button type="submit" class="btn btn-primary">
+                                            <button type="submit" class="btn btn-primary" onclick="ResetPassword();">
                                                 Change
                                                 Password
                                             </button>
@@ -443,6 +457,6 @@
 
 </div>
 <!-- container-fluid -->
-
+<script src="~/assets/js/pages/passowrd-create.init.js"></script>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/moduls/userdetailsScript.js" asp-append-version="true"></script>
