@@ -1020,7 +1020,7 @@ namespace EMPManegment.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> GetUserExpenseListthisMonth(Guid UserId)
+        public async Task<IActionResult> GetUserExpenseListthisMonth()
         {
             try
             {
@@ -1047,6 +1047,7 @@ namespace EMPManegment.Web.Controllers
 
                 List<ExpenseDetailsView> Expense = new List<ExpenseDetailsView>();
                 var data = new jsonData();
+                var UserId=_userSession.UserId;
                 ApiResponseModel response = await APIServices.PostAsync(dataTable, "ExpenseMaster/GetAllUserExpenseDetail?UserId=" + UserId);
                 if (response.code == 200)
                 {
@@ -1075,7 +1076,7 @@ namespace EMPManegment.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> GetUserExpenseListLastMonth(Guid UserId)
+        public async Task<IActionResult> GetUserExpenseListLastMonth()
         {
             try
             {
@@ -1102,6 +1103,7 @@ namespace EMPManegment.Web.Controllers
 
                 List<ExpenseDetailsView> Expense = new List<ExpenseDetailsView>();
                 var data = new jsonData();
+                var UserId=_userSession.UserId;
                 ApiResponseModel response = await APIServices.PostAsync(dataTable, "ExpenseMaster/GetAllUserExpenseDetail?UserId=" + UserId);
                 if (response.code == 200)
                 {
@@ -1137,7 +1139,7 @@ namespace EMPManegment.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> GetUserBetweenExpenseList(Guid UserId, DateTime? startDate, DateTime? endDate)
+        public async Task<IActionResult> GetUserBetweenExpenseList(DateTime? startDate, DateTime? endDate)
         {
             try
             {
@@ -1164,6 +1166,7 @@ namespace EMPManegment.Web.Controllers
 
                 List<ExpenseDetailsView> Expense = new List<ExpenseDetailsView>();
                 var data = new jsonData();
+                var UserId=_userSession.UserId;
                 ApiResponseModel response = await APIServices.PostAsync(dataTable, "ExpenseMaster/GetAllUserExpenseDetail?UserId=" + UserId);
                 if (response.code == 200)
                 {
