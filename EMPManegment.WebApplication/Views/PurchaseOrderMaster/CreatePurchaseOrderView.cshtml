@@ -150,7 +150,17 @@
                                                 <tbody id="addnewproductlink">
                                                 </tbody>
                                             </table>
-
+                                            <div class="noresult" style="display: none">
+                                                <div class="text-center">
+                                                    <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#25a0e2,secondary:#00bd9d" style="width:75px;height:75px">
+                                                    </lord-icon>
+                                                    <h5 class="mt-2">Sorry! No Result Found</h5>
+                                                    <p class="text-muted mb-0">
+                                                        We've searched more than 150+ invoices We did not find any
+                                                        invoices for you search.
+                                                    </p>
+                                                </div>
+                                            </div>
                                         </div>
                                         <div class="card-footer">
                                             <table class="table align-middle mb-0">
@@ -171,6 +181,17 @@
                                                     </tr>
                                                 </thead>
                                             </table>
+                                            <div class="noresult" style="display: none">
+                                                <div class="text-center">
+                                                    <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#25a0e2,secondary:#00bd9d" style="width:75px;height:75px">
+                                                    </lord-icon>
+                                                    <h5 class="mt-2">Sorry! No Result Found</h5>
+                                                    <p class="text-muted mb-0">
+                                                        We've searched more than 150+ invoices We did not find any
+                                                        invoices for you search.
+                                                    </p>
+                                                </div>
+                                            </div>
                                         </div>
                                         <div class=" card">
                                             <div class="row card-body">
@@ -224,25 +245,36 @@
                                                         <table class="table table-borderless table-sm table-nowrap align-middle mb-0">
                                                             <tbody>
                                                                 <tr>
-                                                                    <th scope="row">Sub Total</th>
+                                                                    <th>Sub Total</th>
                                                                     <td style="width:150px;">
                                                                         <input type="text" class="form-control bg-light border-0" id="cart-subtotal" placeholder="₹0.00" readonly />
                                                                     </td>
                                                                 </tr>
                                                                 <tr>
-                                                                    <th scope="row">Total GST</th>
+                                                                    <th>Total GST</th>
                                                                     <td>
                                                                         <input type="text" class="form-control bg-light border-0" id="totalgst" placeholder="₹0.00" readonly />
                                                                     </td>
                                                                 </tr>
                                                                 <tr class="border-top border-top-dashed">
-                                                                    <th scope="row">Total Amount</th>
+                                                                    <th>Total Amount</th>
                                                                     <td>
                                                                         <input type="text" class="form-control bg-light border-0" id="cart-total" placeholder="₹0.00" readonly />
                                                                     </td>
                                                                 </tr>
                                                             </tbody>
                                                         </table>
+                                                        <div class="noresult" style="display: none">
+                                                            <div class="text-center">
+                                                                <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#25a0e2,secondary:#00bd9d" style="width:75px;height:75px">
+                                                                </lord-icon>
+                                                                <h5 class="mt-2">Sorry! No Result Found</h5>
+                                                                <p class="text-muted mb-0">
+                                                                    We've searched more than 150+ invoices We did not find any
+                                                                    invoices for you search.
+                                                                </p>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -361,20 +393,32 @@
                         <table class="table table-borderless align-middle mb-0" id="productTable">
                             <thead class="table-light text-muted">
                                 <tr>
-                                    <th style="width: 90px;" scope="col">Product</th>
-                                    <th scope="col">Product Info</th>
-                                    <th scope="col" class="text-end">Add</th>
+                                    <th>Product</th>
+                                    <th>Product Info</th>
+                                    <th>Add</th>
                                 </tr>
                             </thead>
                             <tbody id="mdlistofItem">
                             </tbody>
                         </table>
+                        <div class="noresult" style="display: none">
+                            <div class="text-center">
+                                <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#25a0e2,secondary:#00bd9d" style="width:75px;height:75px">
+                                </lord-icon>
+                                <h5 class="mt-2">Sorry! No Result Found</h5>
+                                <p class="text-muted mb-0">
+                                    We've searched more than 150+ invoices We did not find any
+                                    invoices for you search.
+                                </p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <!--end col-->
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/moduls/purchaseorderdetailsscript.js" asp-append-version="true"></script>
+</div>
+<!--end col-->
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/moduls/purchaseorderdetailsscript.js" asp-append-version="true"></script>
 
