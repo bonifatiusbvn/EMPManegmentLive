@@ -1326,7 +1326,8 @@ $(document).ready(function () {
         }
     });
 
-function GetUserAllExpenseList(userPermission) {debugger
+    function GetUserAllExpenseList(userPermission) {
+        debugger
         var userPermissionArray = [];
         userPermissionArray = JSON.parse(userPermission);
 
@@ -1430,7 +1431,7 @@ function GetUserAllExpenseList(userPermission) {debugger
 });
 
 function GetAllUserUnapproveExpenseList() {
-     var IsApprove = false;
+    var IsApprove = false;
     $('#GetUserUnapprovedExpenseList').DataTable({
         processing: false,
         serverSide: true,
@@ -1438,7 +1439,7 @@ function GetAllUserUnapproveExpenseList() {
         "bDestroy": true,
         ajax: {
             type: "Post",
-             url: '/ExpenseMaster/GetAllUserUnapproveExpenseList?Unapprove=' + IsApprove,
+            url: '/ExpenseMaster/GetAllUserUnapproveExpenseList?Unapprove=' + IsApprove,
             dataType: 'json'
         },
         columns: [
@@ -1600,5 +1601,72 @@ function GetAllUserCreditExpenseList() {
                 "orderable": false
             }
         ]
+    });
+}
+
+function GetUserBetweenExpenseList(userId, startDate, endDate) {
+    $('#UserallUnApprovedExpenseTable').DataTable({
+        processing: false,
+        serverSide: true,
+        filter: true,
+        "bDestroy": true,
+        ajax: {
+            type: "POST",
+            url: '/ExpenseMaster/GetUserUnApprovedExpenseList?UserId=' + userId,
+            data: {
+                UserId: UserId,
+                startDate: startDate,
+                endDate: endDate
+            },
+            dataType: 'json',
+        },
+        columns: [
+            {
+                "data": null,
+                "render": function (data, type, full, meta) {
+                    return '<div class="form-check"><input class="form-check-input" data-id="' + full.id + '" type="checkbox" name="chk_child" value="option1"></div>';
+                },
+                "orderable": false
+            },
+            {
+                "data": null,
+                "render": function (data, type, full, meta) {
+                    var account = full.account.toLowerCase();
+                    if (account === "credit") {
+                        return '<div class="avatar-xs"><div class="avatar-title bg-success-subtle text-success rounded-circle fs-16"><i class="ri-arrow-left-down-fill"></i></div></div>';
+                    } else if (account === "debit") {
+                        return '<div class="avatar-xs"><div class="avatar-title bg-danger-subtle text-danger rounded-circle fs-16"><i class="ri-arrow-right-up-fill"></i></div></div>';
+                    } else {
+                        return '';
+                    }
+                },
+                "orderable": false
+            },
+            { "data": "id", "name": "Id", "visible": false },
+            { "data": "expenseTypeName", "name": "ExpenseTypeName" },
+            { "data": "paymentTypeName", "name": "PaymentTypeName" },
+            { "data": "billNumber", "name": "BillNumber" },
+            { "data": "description", "name": "Description" },
+            {
+                "data": "date",
+                "name": "Date",
+                "render": function (data, type, full, meta) {
+                    return new Date(data).toLocaleDateString();
+                }
+            },
+            {
+                "data": "totalAmount",
+                "name": "TotalAmount",
+                "render": function (data, type, full, meta) {
+                    var color = full.account && full.account.toLowerCase() === "credit" ? "green" : "red";
+                    return '<span style="color: ' + color + ';">' + data + '</span>';
+                }
+            },
+            { "data": "account", "name": "Account", "visible": false },
+        ],
+        columnDefs: [{
+            "defaultContent": "",
+            "targets": "_all",
+        }]
     });
 }
