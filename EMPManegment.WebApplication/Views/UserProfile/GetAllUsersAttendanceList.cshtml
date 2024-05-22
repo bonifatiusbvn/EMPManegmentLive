@@ -185,7 +185,7 @@
     document.getElementById("txtenddatebox").setAttribute("max", maxDate);
     document.getElementById("txtdate").setAttribute("max", maxDate);
 
-    debugger
+    
     var userPermissions = '@Html.Raw(Json.Serialize(UserSession.FormPermisionData))';
 
     var today = new Date().toISOString().split('T')[0];

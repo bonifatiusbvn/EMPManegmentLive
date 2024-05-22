@@ -240,16 +240,6 @@ function UpdateUserRoleAndDept(userId) {
     });
 }
 
-
-
-
-//$(document).ready(function () {
-
-//    $('.user-action-btn').on('click', function (e) {debugger
-       
-//});
-
-
 function EnterInTime() {
 
     var fromData = new FormData();
@@ -696,7 +686,7 @@ function clearSelectedBox() {
         '<option selected disabled value="">--Select Department--</option>');
 }
 
-function SearchEmployeeList() {debugger
+function SearchEmployeeList() {
     if ($("#searchEmployee").val() == "ByUsername") {
         clearSelectedBox();
         GetUsername();
@@ -872,7 +862,7 @@ function updateuserDetails() {
     }
 }
 var PasswordForm;
-function validateAndPassword() {debugger
+function validateAndPassword() {
 
     PasswordForm= $("#passwordform").validate({
         rules: {

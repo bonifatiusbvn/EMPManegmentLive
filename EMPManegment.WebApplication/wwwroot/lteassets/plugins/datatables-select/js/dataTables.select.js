@@ -43,7 +43,7 @@
         };
     }
     else {
-        // Browser
+       
         factory(jQuery, window, document);
     }
 }(function ($, window, document, undefined) {
@@ -51,8 +51,7 @@
     var DataTable = $.fn.dataTable;
 
 
-    // Version information for debugger
-    DataTable.select = {};
+    
 
     DataTable.select.version = '1.3.4-dev';
 

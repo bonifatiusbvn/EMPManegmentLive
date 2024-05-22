@@ -29,14 +29,14 @@ $(document).ready(function () {
             { "data": "vendorCompanyEmail", "name": "VendorCompanyEmail" },
             {
                 "render": function (data, type, full) {
-                    debugger
+                    
                     var userPermissionArray = [];
                     userPermissionArray = JSON.parse(userPermission);
 
                     var canEdit = false;
 
                     for (var i = 0; i < userPermissionArray.length; i++) {
-                        debugger
+                        
                         var permission = userPermissionArray[i];
                         if (permission.formName == "Vendor List") {
                             canEdit = permission.edit;

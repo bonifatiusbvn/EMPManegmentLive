@@ -261,31 +261,31 @@
                                     </a>
                                 </li>
                                 <li class="nav-item d-flex align-items-center ms-3">
-                                    <input class="nav-radio form-check-input Returns" data-bs-toggle="tab" role="tab" type="radio" name="flexRadioDefault" href="#GetUserLastMonthExpenseList">
+                                    <input class="nav-radio form-check-input Returns" data-bs-toggle="tab" role="tab" type="radio" name="flexRadioDefault" id="lastMonthRadio" href="#GetUserLastMonthExpenseList">
                                     <label class="form-check-label ms-2" for="lastMonthRadio">
                                         Last Month
                                     </label>
                                 </li>
                                 <li class="nav-item d-flex align-items-center ms-3">
-                                    <input class="nav-radio form-check-input Returns" data-bs-toggle="tab" role="tab" type="radio" name="flexRadioDefault" href="#GetUserCurrentMonthExpenseList">
+                                    <input class="nav-radio form-check-input Returns" data-bs-toggle="tab" role="tab" type="radio" name="flexRadioDefault" id="currentMonthRadio" href="#GetUserCurrentMonthExpenseList">
                                     <label class="form-check-label ms-2" for="currentMonthRadio">
                                         Current Month
                                     </label>
                                 </li>
                                 <li class="nav-item d-flex align-items-center ms-3">
-                                    <input class="nav-radio form-check-input" type="radio" name="flexRadioDefault"  id="betweenMonthRadio">
+                                    <input class="nav-radio form-check-input Returns" type="radio" data-bs-toggle="tab" role="tab" name="flexRadioDefault" id="betweenMonthRadio">
                                     <label class="form-check-label ms-2" for="betweenMonthRadio">
                                         Between Date
                                     </label>
                                 </li>
                                 <li class="nav-item align-items-center ms-3 date-input" style="display:none;">
-                                    <input class="form-control" type="date" id="startDate">
+                                    <input class="form-control" placeholder="dd-mm-yyyy" type="date" id="startDate">
                                 </li>
                                 <li class="nav-item align-items-center ms-3 date-input" style="display:none;">
-                                    <input class="form-control" type="date" id="endDate">
+                                    <input class="form-control" placeholder="dd-mm-yyyy" type="date" id="endDate">
                                 </li>
                                 <li class="nav-item d-flex align-items-center ms-3">
-                                    <a class="btn btn-primary nav-btn" id="addproduct-btn" data-bs-toggle="tab" role="tab" href="#GetBetweendatesExpenseList"><i class="ri-search-line"></i>Search</a>
+                                    <a class="btn btn-primary nav-btn Returns" id="addproduct-btn" data-bs-toggle="tab" role="tab" href="#GetBetweendatesExpenseList"><i class="ri-search-line"></i>Search</a>
                                 </li>
                             </ul>
                         </div>
@@ -568,6 +568,7 @@
         const radios = document.querySelectorAll('input[name="flexRadioDefault"]');
 
         function toggleDateInputs() {
+            clearDates();
             if (betweenMonthRadio.checked) {
                 dateInputs.forEach(input => input.style.display = 'flex');
             } else {
@@ -581,6 +582,66 @@
 
         // Initial check to set the correct state on page load
         toggleDateInputs();
+    });
+
+    document.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', function () {
+            document.querySelectorAll('.nav-radio').forEach(radio => {
+                radio.checked = false;
+            });
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            this.classList.add('active');
+        });
+    });
+
+    document.querySelectorAll('.nav-radio').forEach(radio => {
+        radio.addEventListener('click', function () {
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            this.checked = true;
+        });
+    });
+    function clearDates() {
+        $("#startDate").val('');
+        $("#endDate").val('');
+    }
+
+    document.getElementById('startDate').addEventListener('change', function () {
+        var startDate = new Date(this.value);
+
+        var endDate = new Date(startDate);
+        endDate.setDate(startDate.getDate() + 30);
+
+        var endDateInput = document.getElementById('endDate');
+        endDateInput.min = this.value;
+        endDateInput.max = endDate.toISOString().split('T')[0];
+
+        endDateInput.style.display = 'block';
+        endDateInput.disabled = false;
+
+        // Update the placeholder to maintain dd-mm-yyyy format
+        endDateInput.placeholder = "dd-mm-yyyy";
+
+        // Reset the end date value to clear previous selection
+        endDateInput.value = '';
+    });
+
+    // Function to format date as dd-mm-yyyy for display
+    function formatDateForDisplay(date) {
+        var day = String(date.getDate()).padStart(2, '0');
+        var month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+        var year = date.getFullYear();
+
+        return day + '-' + month + '-' + year;
+    }
+
+    // Add a placeholder format for endDate when it is displayed
+    document.getElementById('startDate').addEventListener('change', function () {
+        var endDateInput = document.getElementById('endDate');
+        endDateInput.placeholder = "dd-mm-yyyy";
     });
 </script>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
