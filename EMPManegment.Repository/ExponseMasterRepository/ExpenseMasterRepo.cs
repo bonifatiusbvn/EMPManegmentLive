@@ -639,9 +639,6 @@ namespace EMPManegment.Repository.ExponseMasterRepository
             }
         }
 
-
-
-
         public async Task<jsonData> GetUserUnApprovedExpenseList(Guid UserId, DataTableRequstModel dataTable)
         {
             try
@@ -787,7 +784,6 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                 throw ex;
             }
         }
-
 
         public async Task<UserResponceModel> ApprovedExpense(List<ApprovedExpense> ApprovedallExpense)
         {
