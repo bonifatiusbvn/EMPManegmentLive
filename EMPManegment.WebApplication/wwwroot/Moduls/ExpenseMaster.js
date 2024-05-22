@@ -1671,7 +1671,7 @@ function GetAllUserCreditExpenseList() {
         "bDestroy": true,
         ajax: {
             type: "Post",
-            url: '/ExpenseMaster/GetUserExpenseList?Credit=' + Account + "&UserId=" + UserId,
+            url: '/ExpenseMaster/GetUserExpenseList?Credit=' + Account + "&UserId=" + UserId + '&filterType=' + filterType,
             dataType: 'json'
         },
         columns: [
