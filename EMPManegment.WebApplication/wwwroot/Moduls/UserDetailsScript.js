@@ -118,9 +118,18 @@ function GetAllUserData() {
             { "data": "phoneNumber", "name": "PhoneNumber" },
             { "data": "address", "name": "Address" }
         ],
+        scrollY: 400,
+        scrollX: true,
+        scrollCollapse: true,
+        fixedHeader: {
+            header: true,
+            footer: true
+        },
+        autoWidth: false,
         columnDefs: [{
-            "defaultContent": "",
-            "targets": "_all",
+            defaultContent: "",
+            targets: "_all",
+            width: 'auto'
         }]
     });
 }
