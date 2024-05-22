@@ -406,6 +406,7 @@ function deleteExpense(Id) {
 }
 
 function GetPayUserExpenseCreditList(userId) {
+    var filterType = "credit";
     $('#UserPayExpenseTableCredit').DataTable({
         processing: false,
         serverSide: true,
@@ -413,7 +414,7 @@ function GetPayUserExpenseCreditList(userId) {
         "bDestroy": true,
         ajax: {
             type: "POST",
-            url: '/ExpenseMaster/GetPayCreditExpenseListTable?UserId=' + userId,
+            url: '/ExpenseMaster/GetUserExpenseList?UserId=' + userId + '&filterType=' + filterType,
             dataType: 'json',
         },
         columns: [
@@ -1413,7 +1414,7 @@ $(document).ready(function () {
     });
 
     function GetUserAllExpenseList(userPermission) {
-
+        var UserId = $("#txtuserid").val();
         var userPermissionArray = [];
         userPermissionArray = JSON.parse(userPermission);
 
@@ -1500,7 +1501,7 @@ $(document).ready(function () {
             "bDestroy": true,
             ajax: {
                 type: "Post",
-                url: '/ExpenseMaster/GetUserAllExpenseList',
+                url: '/ExpenseMaster/GetUserExpenseList?UserId=' + UserId,
                 dataType: 'json'
             },
             columns: columns,
@@ -1526,6 +1527,7 @@ $(document).ready(function () {
 });
 
 function GetAllUserUnapproveExpenseList() {
+    var UserId = $("#txtuserid").val();
     var IsApprove = false;
     $('#GetUserUnapprovedExpenseList').DataTable({
         processing: false,
@@ -1534,7 +1536,7 @@ function GetAllUserUnapproveExpenseList() {
         "bDestroy": true,
         ajax: {
             type: "Post",
-            url: '/ExpenseMaster/GetAllUserUnapproveExpenseList?Unapprove=' + IsApprove,
+            url: '/ExpenseMaster/GetUserExpenseList?unapprove=' + IsApprove + "&UserId=" + UserId,
             dataType: 'json'
         },
         columns: [
@@ -1588,6 +1590,7 @@ function GetAllUserUnapproveExpenseList() {
 }
 
 function GetAllUserApproveExpenseList() {
+    var UserId = $("#txtuserid").val();
     var IsApprove = true;
     $('#GetAllUserApprovedExpenseList').DataTable({
         processing: false,
@@ -1596,7 +1599,7 @@ function GetAllUserApproveExpenseList() {
         "bDestroy": true,
         ajax: {
             type: "Post",
-            url: '/ExpenseMaster/GetAllApproveExpenseList?Approve=' + IsApprove,
+            url: '/ExpenseMaster/GetUserExpenseList?approve=' + IsApprove + "&UserId=" + UserId,
             dataType: 'json'
         },
         columns: [
@@ -1656,6 +1659,7 @@ function GetAllUserApproveExpenseList() {
 
 
 function GetAllUserCreditExpenseList() {
+    var UserId = $("#txtuserid").val();
     var Account = "Credit";
     $('#UserallCreditExpenseTable').DataTable({
         processing: false,
@@ -1664,7 +1668,7 @@ function GetAllUserCreditExpenseList() {
         "bDestroy": true,
         ajax: {
             type: "Post",
-            url: '/ExpenseMaster/GetAllUserCreditExpenseList?Credit=' + Account,
+            url: '/ExpenseMaster/GetUserExpenseList?Credit=' + Account + "&UserId=" + UserId,
             dataType: 'json'
         },
         columns: [
@@ -1723,7 +1727,8 @@ function GetAllUserCreditExpenseList() {
     });
 }
 function GetUserLastMonthExpenseList() {
-    
+    var filterType = "lastmonth";
+    var UserId = $("#txtuserid").val();
     $('#GetUserLastMonthExpense').DataTable({
         processing: false,
         serverSide: true,
@@ -1732,7 +1737,7 @@ function GetUserLastMonthExpenseList() {
 
         ajax: {
             type: "Post",
-            url: '/ExpenseMaster/GetUserExpenseListLastMonth',
+            url: '/ExpenseMaster/GetUserExpenseList?UserId=' + UserId + '&filterType=' + filterType,
             dataType: 'json'
         },
         columns: [
@@ -1783,7 +1788,8 @@ function GetUserLastMonthExpenseList() {
     });
 }
 function GetUserCurrentMonthExpenseList() {
-    
+    var filterType = 'thismonth';
+    var UserId = $("#txtuserid").val();
     $('#GetUserCurrentExpense').DataTable({
         processing: false,
         serverSide: true,
@@ -1791,7 +1797,7 @@ function GetUserCurrentMonthExpenseList() {
         "bDestroy": true,
         ajax: {
             type: "Post",
-            url: '/ExpenseMaster/GetUserExpenseListthisMonth',
+            url: '/ExpenseMaster/GetUserExpenseList?UserId=' + UserId + '&filterType=' + filterType,
             dataType: 'json'
         },
         columns: [
