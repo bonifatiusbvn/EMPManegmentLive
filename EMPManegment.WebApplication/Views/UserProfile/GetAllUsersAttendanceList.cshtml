@@ -148,7 +148,7 @@
                             <th class="sort" data-sort="InTime">InTime</th>
                             <th class="sort" data-sort="OutTime">OutTime</th>
                             <th class="sort" data-sort="TotalHours">TotalHours</th>
-                            @if (UserSession.FormPermisionData.Any(a => a.FormName == "GetAllUsersAttendanceList" && (a.Edit == true)))
+                            @if (UserSession.FormPermisionData.Any(a => a.FormName == "Users Attendance" && (a.Edit == true)))
                             {
                                 <th class="sort">Action</th>
                             }

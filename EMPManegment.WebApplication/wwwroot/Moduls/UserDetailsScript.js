@@ -118,39 +118,22 @@ function GetAllUserData() {
             { "data": "phoneNumber", "name": "PhoneNumber" },
             { "data": "address", "name": "Address" }
         ],
+        scrollY: 400,
+        scrollX: true,
+        scrollCollapse: true,
+        fixedHeader: {
+            header: true,
+            footer: true
+        },
+        autoWidth: false,
         columnDefs: [{
-            "defaultContent": "",
-            "targets": "_all",
+            defaultContent: "",
+            targets: "_all",
+            width: 'auto'
         }]
     });
 }
-function GetUserRoleList(itemId, selectedRoleId) {
-    $.ajax({
-        url: '/UserProfile/RolewisePermissionListAction',
-        success: function (result) {
-            var roleDropdown = $('#ddlUserRole_' + itemId);
-            roleDropdown.empty();
-            $.each(result, function (i, data) {
-                var selected = data.roleId == selectedRoleId ? 'selected' : '';
-                roleDropdown.append('<option value=' + data.roleId + ' ' + selected + '>' + data.role + '</option>');
-            });
-        }
-    });
-}
 
-function GetDepartmentList(itemId, selectedDepartmentId) {
-    $.ajax({
-        url: '/Authentication/GetDepartment',
-        success: function (result) {
-            var departmentDropdown = $('#ddlDepartment_' + itemId);
-            departmentDropdown.empty();
-            $.each(result, function (i, data) {
-                var selected = data.id == selectedDepartmentId ? 'selected' : '';
-                departmentDropdown.append('<option value=' + data.id + ' ' + selected + '>' + data.departments + '</option>');
-            });
-        }
-    });
-}
 
 function UserActiveDeactive(UserId, checkboxElement) {
     var isActive = checkboxElement.checked;
@@ -169,6 +152,7 @@ function UserActiveDeactive(UserId, checkboxElement) {
         buttonsStyling: false,
         showCloseButton: true
     }).then((result) => {
+        
         if (result.isConfirmed) {
             $.ajax({
                 url: '/UserProfile/UserActiveDecative?UserName=' + UserId,
@@ -366,35 +350,42 @@ function EnterOutTime() {
 
     }
 }
-
 function ResetPassword() {
-    var fromData = new FormData();
-    fromData.append("UserName", $("#txtUserName").val());
-    fromData.append("Password", $("#password-input").val());
-
-    $.ajax({
-        url: '/UserProfile/ResetUserPassword',
-        type: 'Post',
-        data: fromData,
-        dataType: 'json',
-        processData: false,
-        contentType: false,
-        success: function (Result) {
-            Swal.fire({
-                title: Result.message,
-                icon: 'success',
-                confirmButtonColor: '#3085d6',
-                confirmButtonText: 'OK'
-            }).then(function () {
-                window.location = '/UserProfile/ResetUserPassword';
-            });
-
-        },
-        error: function () {
-            alert('There is some problem in your request.');
+    if ($("#passwordform").valid()) {
+        var objData = {
+            UserName: $('#txtUserName').val(),
+            Password: $('#passwordinput').val(),
+            ConfirmPassword: $('#confirmpasswordinput').val(),
         }
-    })
+
+        $.ajax({
+            url: '/UserProfile/ResetUserPassword',
+            type: 'post',
+            data: objData,
+            datatype: 'json',
+            success: function (Result) {
+
+                Swal.fire({
+                    title: Result.message,
+                    icon: 'success',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'OK'
+                }).then(function () {
+                    window.location = '/UserProfile/DisplayUserList';
+                });
+            },
+        })
+    }
+    else {
+        Swal.fire({
+            title: "Kindly fill all datafield",
+            icon: 'warning',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'OK',
+        })
+    }
 }
+
 
 function GetUserAttendanceInTime() {
 
@@ -879,4 +870,20 @@ function updateuserDetails() {
             confirmButtonText: 'OK'
         })
     }
+}
+var PasswordForm;
+function validateAndPassword() {debugger
+
+    PasswordForm= $("#passwordform").validate({
+        rules: {
+            passwordinput: "required",
+            confirmpasswordinput: "required",
+        },
+        messages: {
+            passwordinput: "Please Enter Password",
+            confirmpasswordinput: "Please Enter ConfirmPassword",
+        },
+    })
+    var isValid = true;
+   
 }

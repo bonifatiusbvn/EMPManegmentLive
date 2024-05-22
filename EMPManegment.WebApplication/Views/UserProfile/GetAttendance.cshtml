@@ -13,6 +13,25 @@
         width: 17px;
         height: 30px;
     }
+
+    .fixTableHead {
+        overflow-y: auto;
+        height: 300px;
+    }
+
+    .fixTableHead thead th {
+        position: sticky;
+        top: 0;
+        z-index: 1;
+    }
+
+
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+
 </style>
 <!-- start page title -->
 <div class="row" style="margin-top:80px;">
@@ -86,15 +105,15 @@
                         </div>
 
                     </div>
-                    <div class="table-responsive table-card mt-3 mb-1">
+                    <div class="fixTableHead table-responsive table-card mt-3 mb-1">
                         <table class="table table-bordered dt-responsive table-striped align-middle dataTable no-footer dtr-inline">
                             <thead class="table-light text-muted">
                                 <tr class="text-center">
-                                    <th class="sort" data-sort="UserName">UserName</th>
-                                    <th class="sort" data-sort="Date">Date</th>
-                                    <th class="sort" data-sort="Intime">Intime</th>
-                                    <th class="sort" data-sort="OutTime">OutTime</th>
-                                    <th class="sort" data-sort="TotalHours">TotalHours</th>
+                                    <th>UserName</th>
+                                    <th>Date</th>
+                                    <th>Intime</th>
+                                    <th>OutTime</th>
+                                    <th>TotalHours</th>
                                 </tr>
                             </thead>
                             <tbody class="text-center" id="TableDataAttendanceList">

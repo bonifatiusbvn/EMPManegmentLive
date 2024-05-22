@@ -143,7 +143,7 @@ namespace EMPManegment.Web.Controllers
         }
 
 
-        [FormPermissionAttribute("User List-View")]
+        [FormPermissionAttribute("Users-View")]
         public async Task<IActionResult> DisplayUserList()
         {
             return View();
@@ -233,7 +233,7 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
-        [FormPermissionAttribute("ActiveDeactive-View")]
+        [FormPermissionAttribute("Active Deactive-View")]
         public async Task<IActionResult> UserActiveDecative()
         {
             return View();
@@ -286,7 +286,7 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
-        [FormPermissionAttribute("ActiveDeactive-Edit")]
+        [FormPermissionAttribute("Active Deactive-Edit")]
         [HttpPost]
         public async Task<IActionResult> UserActiveDecative(string UserName)
         {
@@ -424,16 +424,16 @@ namespace EMPManegment.Web.Controllers
 
         [FormPermissionAttribute("Reset Password-Add")]
         [HttpPost]
-        public async Task<IActionResult> ResetUserPassword(PasswordResetResponseModel emp)
+        public async Task<IActionResult> ResetUserPassword(PasswordResetResponseModel ResetPassword)
         {
             try
             {
-                Crypto.Hash(emp.Password,
+                Crypto.Hash(ResetPassword.Password,
                    out byte[] passwordHash,
                    out byte[] passwordSalt);
                 var resetPass = new PasswordResetView
                 {
-                    UserName = emp.UserName,
+                    UserName = ResetPassword.UserName,
                     PasswordHash = passwordHash,
                     PasswordSalt = passwordSalt
                 };
@@ -485,7 +485,7 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
-        [FormPermissionAttribute("GetAllUsersAttendanceList-View")]
+        [FormPermissionAttribute("Users Attendance-View")]
         [HttpGet]
         public async Task<IActionResult> GetAllUsersAttendanceList()
         {
@@ -561,7 +561,7 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
-        [FormPermissionAttribute("GetAllUsersAttendanceList-Edit")]
+        [FormPermissionAttribute("Users Attendance-Edit")]
         [HttpPost]
         public async Task<IActionResult> UpdateUserAttendanceOutTime(UserAttendanceModel userAttendance)
         {
@@ -606,7 +606,7 @@ namespace EMPManegment.Web.Controllers
         }
 
 
-        [FormPermissionAttribute("User List-Edit")]
+        [FormPermissionAttribute("Users-Edit")]
         [HttpPost]
         public async Task<IActionResult> UpdateUserDetails(UserEditViewModel employee)
         {
@@ -674,7 +674,7 @@ namespace EMPManegment.Web.Controllers
 
 
 
-        [FormPermissionAttribute("GetAttendance-View")]
+        [FormPermissionAttribute("Attendance-View")]
         public async Task<IActionResult> GetAttendance()
         {
             return View();
@@ -884,7 +884,7 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
-        [FormPermissionAttribute("RolewiseFormPermission-View")]
+        [FormPermissionAttribute("Form Permission-View")]
         [HttpGet]
         public IActionResult RolewisePermission()
         {
@@ -937,7 +937,7 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
-        [FormPermissionAttribute("RolewiseFormPermission-Edit")]
+        [FormPermissionAttribute("Form Permission-Edit")]
         [HttpPost]
         public async Task<IActionResult> UpdateMultipleRolewiseFormPermission()
         {
@@ -963,7 +963,7 @@ namespace EMPManegment.Web.Controllers
         }
 
 
-        [FormPermissionAttribute("RolewiseFormPermission-Add")]
+        [FormPermissionAttribute("Form Permission-Add")]
         [HttpPost]
         public async Task<IActionResult> CreateUserRole(UserRoleModel roleDetails)
         {
