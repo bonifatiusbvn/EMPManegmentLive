@@ -1737,7 +1737,17 @@ function GetUserCurrentMonthExpenseList() {
 function SearchBetweenDateExpense() {
     var StartDate = $('#startDate').val();
     var EndDate = $('#endDate').val();
-    GetUserBetweenMonthsExpenseList(StartDate, EndDate)
+
+    if (StartDate == "" && EndDate == "") {
+        toastr.error("Select dates");
+    } else if (StartDate == "" ) {
+        toastr.error("Select Satrtdate");
+    } else if (EndDate == "") {
+        toastr.error("Select Enddate");
+    } else {
+        GetUserBetweenMonthsExpenseList(StartDate, EndDate)
+    }
+    
 }
 function GetUserBetweenMonthsExpenseList(StartDate, EndDate) {
     
