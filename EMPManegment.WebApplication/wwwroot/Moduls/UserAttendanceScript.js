@@ -166,17 +166,19 @@ $(document).ready(function () {
                 dataType: 'json'
             },
             columns: columns,
-            columnDefs: [{
-                "defaultContent": "",
-                "targets": "_all"
-            }],
             scrollY: 400,
             scrollX: true,
             scrollCollapse: true,
             fixedHeader: {
                 header: true,
                 footer: true
-            }
+            },
+            autoWidth: false,
+            columnDefs: [
+                {
+                    targets: '_all', width: 'auto'
+                }
+            ]
         });
     }
 

@@ -448,9 +448,17 @@ function GetPayUserExpenseCreditList(userId) {
             },
             { "data": "account", "name": "Account", "visible": false },
         ],
+        scrollX: true,
+        scrollCollapse: true,
+        fixedHeader: {
+            header: true,
+            footer: true
+        },
+        autoWidth: false,
         columnDefs: [{
-            "targets": [0],
-            "orderable": false
+            targets: [0],
+            orderable: false,
+            width: "auto"
         }],
         "footerCallback": function (row, data, start, end, display) {
             var api = this.api(), data;
@@ -523,9 +531,17 @@ function GetPayUserExpenseDebitList(userId) {
             },
             { "data": "account", "name": "Account", "visible": false },
         ],
+        scrollX: true,
+        scrollCollapse: true,
+        fixedHeader: {
+            header: true,
+            footer: true
+        },
+        autoWidth: false,
         columnDefs: [{
-            "targets": [0],
-            "orderable": false
+            targets: [0],
+            orderable: false,
+            width:"auto"
         }],
         "footerCallback": function (row, data, start, end, display) {
             var api = this.api(), data;
@@ -553,10 +569,6 @@ function GetPayUserExpenseDebitList(userId) {
         }
     });
 }
-
-
-
-
 
 
 $(document).ready(function () {
@@ -672,10 +684,21 @@ function GetAllUserExpenseList(userId) {
             },
             { "data": "account", "name": "Account", "visible": false },
         ],
-        columnDefs: [{
-            "defaultContent": "",
-            "targets": "_all",
-        }]
+        scrollY: 400,
+        scrollX: true,
+        scrollCollapse: true,
+        fixedHeader: {
+            header: true,
+            footer: true
+        },
+        autoWidth: false,
+        columnDefs: [
+            {
+            defaultContent: "",
+            targets: "_all",
+            width: 'auto'
+            }
+        ]
     });
 }
 
@@ -740,10 +763,21 @@ function GetUserUnApprovedExpenseList(UserId) {
             },
             { "data": "account", "name": "Account", "visible": false },
         ],
-        columnDefs: [{
-            "defaultContent": "",
-            "targets": "_all",
-        }]
+        scrollY: 400,
+        scrollX: true,
+        scrollCollapse: true,
+        fixedHeader: {
+            header: true,
+            footer: true
+        },
+        autoWidth: false,
+        columnDefs: [
+            {
+            defaultContent: "",
+            targets: "_all",
+            width: 'auto'
+            }
+        ]
     });
 }
 function GetUserApprovedExpenseList(UserId) {
@@ -799,10 +833,21 @@ function GetUserApprovedExpenseList(UserId) {
             },
             { "data": "account", "name": "Account", "visible": false },
         ],
-        columnDefs: [{
-            "defaultContent": "",
-            "targets": "_all",
-        }]
+        scrollY: 400,
+        scrollX: true,
+        scrollCollapse: true,
+        fixedHeader: {
+            header: true,
+            footer: true
+        },
+        autoWidth: false,
+        columnDefs: [
+            {
+            defaultContent: "",
+            targets: "_all",
+            width: 'auto'
+            }
+        ]
     });
 }
 
@@ -976,6 +1021,14 @@ $(document).ready(function () {
                 dataType: 'json',
             },
             columns: columns,
+            scrollY: 400,
+            scrollX: true,
+            scrollCollapse: true,
+            fixedHeader: {
+                header: true,
+                footer: true
+            },
+            autoWidth: false,
             columnDefs: [{
                 "defaultContent": "",
                 "targets": "_all",
@@ -1258,9 +1311,18 @@ function UserDebitExpenseList(UserId) {
             { "data": "totalAmount", "name": "TotalAmount" },
             { "data": "account", "name": "Account" },
         ],
+        scrollY: 400,
+        scrollX: true,
+        scrollCollapse: true,
+        fixedHeader: {
+            header: true,
+            footer: true
+        },
+        autoWidth: false,
         columnDefs: [{
-            "defaultContent": "",
-            "targets": "_all",
+            defaultContent: "",
+            targets: "_all",
+            width: 'auto'
         }]
     });
 }
@@ -1296,10 +1358,19 @@ function UserCreditExpenseList(UserId) {
             },
             { "data": "totalAmount", "name": "TotalAmount" },
             { "data": "account", "name": "Account" },
-        ],
+        ], 
+        scrollY: 400,
+        scrollX: true,
+        scrollCollapse: true,
+        fixedHeader: {
+            header: true,
+            footer: true
+        },
+        autoWidth: false,
         columnDefs: [{
-            "defaultContent": "",
-            "targets": "_all",
+            defaultContent: "",
+            targets: "_all",
+            width: 'auto'
         }]
     });
 }
@@ -1327,7 +1398,7 @@ $(document).ready(function () {
     });
 
     function GetUserAllExpenseList(userPermission) {
-        debugger
+
         var userPermissionArray = [];
         userPermissionArray = JSON.parse(userPermission);
 
@@ -1337,7 +1408,7 @@ $(document).ready(function () {
         for (var i = 0; i < userPermissionArray.length; i++) {
             var permission = userPermissionArray[i];
             if (permission.formName == "Expenses") {
-                debugger
+  
                 canEdit = permission.edit;
                 canDelete = permission.delete;
                 break;
@@ -1408,7 +1479,6 @@ $(document).ready(function () {
                 }
             });
         }
-        debugger
         $('#DisplayUserAllExpenseList').DataTable({
             processing: false,
             serverSide: true,
@@ -1420,11 +1490,22 @@ $(document).ready(function () {
                 dataType: 'json'
             },
             columns: columns,
+            scrollY: 400,
+            scrollX: true,
+            scrollCollapse: true,
+            fixedHeader: {
+                header: true,
+                footer: true
+            },
+            autoWidth: false,
             columnDefs: [
                 {
-                    "targets": [0, -1],
+                    targets: 0, width: '60px'
+                },
+                {
+                    targets: '_all', width: 'auto'
                 }
-            ]
+            ],          
         });
     }
     data(datas);
@@ -1475,6 +1556,14 @@ function GetAllUserUnapproveExpenseList() {
                 }
             },
         ],
+        scrollY: 400,
+        scrollX: true,
+        scrollCollapse: true,
+        fixedHeader: {
+            header: true,
+            footer: true
+        },
+        autoWidth: false,
         columnDefs: [
             {
                 "targets": [0, -1],
@@ -1534,6 +1623,14 @@ function GetAllUserApproveExpenseList() {
                 }
             },
         ],
+        scrollY: 400,
+        scrollX: true,
+        scrollCollapse: true,
+        fixedHeader: {
+            header: true,
+            footer: true
+        },
+        autoWidth: false,
         columnDefs: [
             {
                 "targets": [0, -1],
@@ -1595,6 +1692,14 @@ function GetAllUserCreditExpenseList() {
                 }
             },
         ],
+        scrollY: 400,
+        scrollX: true,
+        scrollCollapse: true,
+        fixedHeader: {
+            header: true,
+            footer: true
+        },
+        autoWidth: false,
         columnDefs: [
             {
                 "targets": [0, -1],
@@ -1664,9 +1769,17 @@ function GetUserBetweenExpenseList(userId, startDate, endDate) {
             },
             { "data": "account", "name": "Account", "visible": false },
         ],
+        scrollY: 400,
+        scrollX: true,
+        scrollCollapse: true,
+        fixedHeader: {
+            header: true,
+            footer: true
+        },
+        autoWidth: false,
         columnDefs: [{
             "defaultContent": "",
             "targets": "_all",
-        }]
+        }],
     });
 }
