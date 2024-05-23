@@ -998,21 +998,17 @@ $(document).ready(function () {
                 "searchable": false,
                 "render": function (data, type, full) {
 
-                    var buttons = '<ul class="list-inline hstack gap-2 mb-0">';
+                    var buttons = '';
 
                     if (canEdit) {
-                        buttons += '<li class="btn text-primary list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">' +
-                            '<a class="btn text-primary" onclick="EditExpenseDetails(\'' + full.id + '\')">' +
-                            '<i class="fa-regular fa-pen-to-square"></i></a></li>';
+                        buttons += '<a class="btn text-primary" onclick="EditExpenseDetails(\'' + full.id + '\')">' +
+                            '<i class="fa-regular fa-pen-to-square"></i></a>';
                     }
 
                     if (canDelete) {
-                        buttons += '<li class="btn text-danger list-inline-item delete" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Delete" style="margin-left:12px;">' +
-                            '<a class="btn text-danger" onclick="deleteExpense(\'' + full.id + '\')">' +
-                            '<i class="fas fa-trash"></i></a></li>';
+                        buttons += '<a class="btn text-danger" onclick="deleteExpense(\'' + full.id + '\')">' +
+                            '<i class="fas fa-trash"></i></a>';
                     }
-
-                    buttons += '</ul>';
                     return buttons;
                 }
 
