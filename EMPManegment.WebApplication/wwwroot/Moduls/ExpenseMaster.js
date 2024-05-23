@@ -680,7 +680,7 @@ function GetAllUserExpenseList(userId) {
                 "name": "TotalAmount",
                 "render": function (data, type, full, meta) {
                     var color = full.account && full.account.toLowerCase() === "credit" ? "green" : "red";
-                    return '<span style="color: ' + color + ';">' + data + '</span>';
+                    return '<span style="color: ' + color + ';">' + '₹' + data + '</span>';
                 }
             },
             { "data": "account", "name": "Account", "visible": false },
@@ -760,7 +760,7 @@ function GetUserUnApprovedExpenseList(UserId) {
                 "name": "TotalAmount",
                 "render": function (data, type, full, meta) {
                     var color = full.account && full.account.toLowerCase() === "credit" ? "green" : "red";
-                    return '<span style="color: ' + color + ';">' + data + '</span>';
+                    return '<span style="color: ' + color + ';">' + '₹' + data + '</span>';
                 }
             },
             { "data": "account", "name": "Account", "visible": false },
@@ -832,7 +832,7 @@ function GetUserApprovedExpenseList(UserId) {
                 "name": "TotalAmount",
                 "render": function (data, type, full, meta) {
                     var color = full.account && full.account.toLowerCase() === "credit" ? "green" : "red";
-                    return '<span style="color: ' + color + ';">' + data + '</span>';
+                    return '<span style="color: ' + color + ';">' + '₹' + data + '</span>';
                 }
             },
             { "data": "account", "name": "Account", "visible": false },
@@ -976,7 +976,11 @@ $(document).ready(function () {
             },
             {
                 "data": "totalAmount", "name": "TotalAmount",
-                "className": "text-center"
+                "className": "text-center",
+                "render": function (data, type, full, meta) {
+                    var color = full.account && full.account.toLowerCase() === "credit" ? "green" : "red";
+                    return '<span style="color: ' + color + ';">' + '₹' + data + '</span>';
+                }
             },
             {
                 "data": "account", "name": "Account",
@@ -1470,7 +1474,7 @@ $(document).ready(function () {
                 "render": function (data, type, full, meta) {
 
                     var color = full.account.toLowerCase() === "credit" ? "green" : "red";
-                    return '<span style="color: ' + color + ';">' + data + '</span>';
+                    return '<span style="color: ' + color + ';">' + '₹' + data + '</span>';
                 }
             }
         ];
@@ -1573,7 +1577,7 @@ function GetAllUserUnapproveExpenseList() {
                 "name": "TotalAmount",
                 "render": function (data, type, full, meta) {
                     var color = full.account && full.account.toLowerCase() === "credit" ? "green" : "red";
-                    return '<span style="color: ' + color + ';">' + data + '</span>';
+                    return '<span style="color: ' + color + ';">' + '₹' + data + '</span>';
                 }
             },
         ],
@@ -1641,7 +1645,7 @@ function GetAllUserApproveExpenseList() {
                 "name": "TotalAmount",
                 "render": function (data, type, full, meta) {
                     var color = full.account && full.account.toLowerCase() === "credit" ? "green" : "red";
-                    return '<span style="color: ' + color + ';">' + data + '</span>';
+                    return '<span style="color: ' + color + ';">' + '₹' + data + '</span>';
                 }
             },
         ],
@@ -1712,7 +1716,7 @@ function GetAllUserCreditExpenseList() {
                 "render": function (data, type, full, meta) {
 
                     var color = full.account.toLowerCase() === "credit" ? "green" : "red";
-                    return '<span style="color: ' + color + ';">' + data + '</span>';
+                    return '<span style="color: ' + color + ';">' + '₹' + data + '</span>';
                 }
             },
         ],
@@ -1781,7 +1785,7 @@ function GetUserLastMonthExpenseList() {
                 "name": "TotalAmount",
                 "render": function (data, type, full, meta) {
                     var color = full.account && full.account.toLowerCase() === "credit" ? "green" : "red";
-                    return '<span style="color: ' + color + ';">' + data + '</span>';
+                    return '<span style="color: ' + color + ';">' + '₹' + data + '</span>';
                 }
             },
         ],
@@ -1850,7 +1854,7 @@ function GetUserCurrentMonthExpenseList() {
                 "name": "TotalAmount",
                 "render": function (data, type, full, meta) {
                     var color = full.account && full.account.toLowerCase() === "credit" ? "green" : "red";
-                    return '<span style="color: ' + color + ';">' + data + '</span>';
+                    return '<span style="color: ' + color + ';">' + '₹' + data + '</span>';
                 }
             },
         ],
@@ -1935,7 +1939,7 @@ function GetUserBetweenMonthsExpenseList(StartDate, EndDate, UserId) {
                 "name": "TotalAmount",
                 "render": function (data, type, full, meta) {
                     var color = full.account && full.account.toLowerCase() === "credit" ? "green" : "red";
-                    return '<span style="color: ' + color + ';">' + data + '</span>';
+                    return '<span style="color: ' + color + ';">' + '₹' + data + '</span>';
                 }
             },
         ],
