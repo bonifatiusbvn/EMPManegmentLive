@@ -41,7 +41,7 @@ function resetForm() {
     }
     if (ExpenseTypeForm) {
         ExpenseTypeForm.resetForm();
-    }  
+    }
 }
 function preventEmptyValue(input) {
 
@@ -601,7 +601,7 @@ function UserExpensesDetails() {
         serverSide: true,
         filter: true,
         "bDestroy": true,
-        pageLength: 30,
+        order: [[4, 'asc']],
         ajax: {
             type: "Post",
             url: '/ExpenseMaster/GetUserListTable',
@@ -689,12 +689,12 @@ function GetAllUserUnapproveExpense() {
     });
 }
 function GetAllUserApproveExpense() {
-    
+
     $.ajax({
         url: '/ExpenseMaster/DisplayExpenseList',
         type: 'GET',
         success: function (result) {
-            
+
             $("#AllUserExpensePartial").html(result);
             DisplayAllApprovedExpenseList();
         },
@@ -734,7 +734,7 @@ function DisplayAllUserExpenseList() {
         processing: true,
         serverSide: true,
         filter: true,
-        destroy: true, 
+        destroy: true,
         pageLength: 30,
         ajax: {
             url: '/ExpenseMaster/GetUserExpenseList',
@@ -896,7 +896,7 @@ function DisplayUnApprovedExpenseList() {
 }
 
 function DisplayAllApprovedExpenseList() {
-    
+
     var UserId = GetParameterByName('userId');
     var approve = true;
     $('#UserallExpenseTable').DataTable({

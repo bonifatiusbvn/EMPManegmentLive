@@ -19,6 +19,7 @@ using EMPManegment.EntityModels.ViewModels.OrderModels;
 using EMPManegment.EntityModels.ViewModels.Invoice;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Mvc;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace EMPManegment.Repository.ExponseMasterRepository
 {
@@ -69,17 +70,17 @@ namespace EMPManegment.Repository.ExponseMasterRepository
             UserResponceModel response = new UserResponceModel();
             try
             {
-                    var Payment = new TblPaymentType()
-                    {
-                        Type = AddPayment.Type,
-                        CreatedOn = DateTime.Now,
-                    };
-                    response.Code = (int)HttpStatusCode.OK;
+                var Payment = new TblPaymentType()
+                {
+                    Type = AddPayment.Type,
+                    CreatedOn = DateTime.Now,
+                };
+                response.Code = (int)HttpStatusCode.OK;
                 response.Message = "PaymentType successfully inserted";
-                    response.Icone = "success";
-                    Context.TblPaymentTypes.Add(Payment);
-                    Context.SaveChanges();
-                }               
+                response.Icone = "success";
+                Context.TblPaymentTypes.Add(Payment);
+                Context.SaveChanges();
+            }
             catch (Exception)
             {
 
@@ -218,7 +219,7 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                         CreatedBy = ExpenseDetails.CreatedBy,
                         IsPaid = false,
                         IsApproved = false,
-                        CreatedOn = DateTime.Today,
+                        CreatedOn = DateTime.Now,
                         PaymentType = 1,
 
                     };
@@ -243,7 +244,7 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                         IsDeleted = false,
                         CreatedBy = ExpenseDetails.CreatedBy,
                         IsPaid = false,
-                        CreatedOn = DateTime.Today,
+                        CreatedOn = DateTime.Now,
                         IsApproved = true,
                         ApprovedBy = ExpenseDetails.ApprovedBy,
                         ApprovedByName = ExpenseDetails.ApprovedByName,
@@ -334,13 +335,17 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                 {
                     Expense = Expense.OrderBy(dataTable.sortColumn + " " + dataTable.sortColumnDir);
                 }
-
+                else
+                {
+                    Expense = Expense.OrderBy("Date asc");
+                }
                 if (!string.IsNullOrEmpty(dataTable.searchValue))
                 {
                     Expense = Expense.Where(e => e.Description.Contains(dataTable.searchValue) ||
                     e.Date.ToString().ToLower().Contains(dataTable.searchValue.ToLower()) ||
                     e.Account.Contains(dataTable.searchValue) ||
                     e.BillNumber.Contains(dataTable.searchValue) ||
+                    e.UserName.Contains(dataTable.searchValue) ||
                     e.TotalAmount.ToString().ToLower().Contains(dataTable.searchValue.ToLower()));
                 }
 
@@ -441,6 +446,10 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                             break;
                     }
                 }
+                else
+                {
+                    expenses = expenses.OrderBy("Date asc");
+                }
                 if (!string.IsNullOrEmpty(dataTable.searchValue))
                 {
                     string searchLower = dataTable.searchValue.ToLower();
@@ -511,7 +520,10 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                             break;
                     }
                 }
-
+                else
+                {
+                    UserList = UserList.OrderBy("Date asc");
+                }
                 if (!string.IsNullOrEmpty(dataTable.searchValue))
                 {
                     string searchLower = dataTable.searchValue.ToLower();
