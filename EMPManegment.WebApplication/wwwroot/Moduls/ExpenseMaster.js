@@ -1741,6 +1741,7 @@ function GetUserLastMonthExpenseList() {
         filter: true,
         "bDestroy": true,
         pageLength: 30,
+        responsive: true,
         ajax: {
             type: "Post",
             url: '/ExpenseMaster/GetUserExpenseList?UserId=' + UserId + '&filterType=' + filterType,
@@ -1770,9 +1771,9 @@ function GetUserLastMonthExpenseList() {
                 "render": function (data, type, full, meta) {
                     var dateObj = new Date(data);
                     var day = dateObj.getDate();
-                    var month = dateObj.toLocaleString('default', { month: 'long' });
+                    var month = dateObj.toLocaleString('default', { month: 'short' });
                     var year = dateObj.getFullYear();
-                    var formattedDate = day + '-' + month + '-' + year;
+                    var formattedDate = day + " " + month + " " + year;
                     return formattedDate;
                 }
             },
