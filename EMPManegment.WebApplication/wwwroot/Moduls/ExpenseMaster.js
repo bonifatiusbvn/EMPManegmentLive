@@ -411,7 +411,9 @@ function GetPayUserExpenseCreditList(userId) {
         serverSide: true,
         filter: true,
         "bDestroy": true,
-        pageLength: 30,
+        searching: false,
+        info: false,
+        lengthChange: false,
         ajax: {
             type: "POST",
             url: '/ExpenseMaster/GetUserExpenseList?UserId=' + userId + '&filterType=' + filterType,
@@ -494,7 +496,9 @@ function GetPayUserExpenseDebitList(userId) {
         serverSide: true,
         filter: true,
         "bDestroy": true,
-        pageLength: 30,
+        searching: false,
+        info: false,
+        lengthChange: false,
         ajax: {
             type: "POST",
             url: '/ExpenseMaster/GetUserExpenseList?UserId=' + userId + '&filterType=' + filtertype,
@@ -1388,24 +1392,22 @@ $(document).ready(function () {
         var userPermission = datas;
         GetUserAllExpenseList(userPermission);
     }
+
     $('.nav-link').click(function () {
         var targetTab = $(this).attr('href');
         if (targetTab === '#GetUserAllExpenseList') {
             GetUserAllExpenseList(userPermission);
         }
         else if (targetTab === '#GetAllUnApprovedExpenseList') {
-
             GetAllUserUnapproveExpenseList();
         } else if (targetTab === '#GetAllApprovedExpenseList') {
-
             GetAllUserApproveExpenseList();
         } else if (targetTab === '#GetAllCreditExpenseList') {
-
             GetAllUserCreditExpenseList();
         }
     });
-    $('.nav-radio').click(function () {
 
+    $('.nav-radio').click(function () {
         var targetTab = $(this).attr('href');
         if (targetTab === '#GetUserLastMonthExpenseList') {
             GetUserLastMonthExpenseList();
@@ -1413,26 +1415,32 @@ $(document).ready(function () {
             GetUserCurrentMonthExpenseList();
         }
     });
-    $('.nav-btn').click(function () {
 
+    $('.nav-btn').click(function () {
         var targetTab = $(this).attr('href');
         if (targetTab === '#GetBetweendatesExpenseList') {
             SearchBetweenDateExpense();
         }
     });
 
+    function addPlaceholderRows(api, rowCount) {
+        var rowsToAdd = rowCount - api.rows().count();
+        if (rowsToAdd > 0) {
+            for (var i = 0; i < rowsToAdd; i++) {
+                api.row.add({ "description": "", "billNumber": "", "date": "", "totalAmount": "", "account": "" }).draw(false);
+            }
+        }
+    }
+
     function GetUserAllExpenseList(userPermission) {
         var UserId = $("#txtuserid").val();
-        var userPermissionArray = [];
-        userPermissionArray = JSON.parse(userPermission);
-
+        var userPermissionArray = JSON.parse(userPermission);
         var canEdit = false;
         var canDelete = false;
 
         for (var i = 0; i < userPermissionArray.length; i++) {
             var permission = userPermissionArray[i];
             if (permission.formName == "Expenses") {
-
                 canEdit = permission.edit;
                 canDelete = permission.delete;
                 break;
@@ -1460,6 +1468,7 @@ $(document).ready(function () {
                 "data": "date",
                 "name": "Date",
                 "render": function (data, type, full, meta) {
+                    if (!data) return ''; // Return empty string if date is null
                     var dateObj = new Date(data);
                     var day = dateObj.getDate();
                     var month = dateObj.toLocaleString('default', { month: 'long' });
@@ -1472,7 +1481,7 @@ $(document).ready(function () {
                 "data": "totalAmount",
                 "name": "TotalAmount",
                 "render": function (data, type, full, meta) {
-
+                    if (!data) return ''; // Return empty string if total amount is null
                     var color = full.account.toLowerCase() === "credit" ? "green" : "red";
                     return '<span style="color: ' + color + ';">' + '₹' + data + '</span>';
                 }
@@ -1497,20 +1506,26 @@ $(document).ready(function () {
                             '<i class="fas fa-trash"></i></a>';
                     }
 
-
                     return buttons;
                 }
             });
         }
-        $('#DisplayUserAllExpenseList').DataTable({
+
+        var table = $('#DisplayUserAllExpenseList').DataTable({
             processing: false,
             serverSide: true,
             filter: true,
             "bDestroy": true,
             ajax: {
-                type: "Post",
+                type: "POST",
                 url: '/ExpenseMaster/GetUserExpenseList?UserId=' + UserId,
-                dataType: 'json'
+                dataType: 'json',
+                dataSrc: function (json) {
+                    if (json.data.length < 10) {
+                        addPlaceholderRows(table, 10);
+                    }
+                    return json.data;
+                }
             },
             columns: columns,
             scrollY: 400,
@@ -1528,11 +1543,13 @@ $(document).ready(function () {
                 {
                     targets: '_all', width: 'auto'
                 }
-            ],
+            ]
         });
     }
+
     data(datas);
 });
+
 
 function GetAllUserUnapproveExpenseList() {
     var UserId = $("#txtuserid").val();
@@ -1745,6 +1762,7 @@ function GetUserLastMonthExpenseList() {
         filter: true,
         "bDestroy": true,
         pageLength: 30,
+        responsive: true,
         ajax: {
             type: "Post",
             url: '/ExpenseMaster/GetUserExpenseList?UserId=' + UserId + '&filterType=' + filterType,
@@ -1774,9 +1792,9 @@ function GetUserLastMonthExpenseList() {
                 "render": function (data, type, full, meta) {
                     var dateObj = new Date(data);
                     var day = dateObj.getDate();
-                    var month = dateObj.toLocaleString('default', { month: 'long' });
+                    var month = dateObj.toLocaleString('default', { month: 'short' });
                     var year = dateObj.getFullYear();
-                    var formattedDate = day + '-' + month + '-' + year;
+                    var formattedDate = day + " " + month + " " + year;
                     return formattedDate;
                 }
             },
