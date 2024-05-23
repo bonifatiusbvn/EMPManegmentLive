@@ -444,7 +444,7 @@ function GetPayUserExpenseCreditList(userId) {
                 "name": "TotalAmount",
                 "render": function (data, type, full, meta) {
                     var color = full.account.toLowerCase() === "debit" ? "green" : "red";
-                    return '<span style="color: ' + color + ';">' + data + '</span>';
+                    return '<span style="color: ' + color + ';">' + '₹' + data + '</span>';
                 }
             },
             { "data": "account", "name": "Account", "visible": false },
@@ -482,7 +482,7 @@ function GetPayUserExpenseCreditList(userId) {
 
 
             $(api.column(4).footer()).html(
-                '<span style="color: black;">Total: ' + total + '</span>'
+                '<span style="color: black;">Total: ' + '₹' + total + '</span>'
             );
         }
     });
@@ -527,7 +527,7 @@ function GetPayUserExpenseDebitList(userId) {
                 "name": "TotalAmount",
                 "render": function (data, type, full, meta) {
                     var color = full.account.toLowerCase() === "credit" ? "red" : "green";
-                    return '<span style="color: ' + color + ';">' + data + '</span>';
+                    return '<span style="color: ' + color + ';">' + '₹' + data + '</span>';
                 }
             },
             { "data": "account", "name": "Account", "visible": false },
@@ -565,7 +565,7 @@ function GetPayUserExpenseDebitList(userId) {
 
             // Update footer
             $(api.column(4).footer()).html(
-                '<span style="color: black;">Total: ' + total + '</span>'
+                '<span style="color: black;">Total: ' + '₹' + total + '</span>'
             );
         }
     });
