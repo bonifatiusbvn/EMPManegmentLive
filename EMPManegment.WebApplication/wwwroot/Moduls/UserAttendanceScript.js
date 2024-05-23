@@ -106,12 +106,13 @@ $(document).ready(function () {
             { "data": "userName", "name": "UserName" },
             {
                 "data": "date", "name": "Date",
-                render: function (data) {
+                "render": function (data, type, full, meta) {
                     var dateObj = new Date(data);
-                    var day = ('0' + dateObj.getDate()).slice(-2);
-                    var month = ('0' + (dateObj.getMonth() + 1)).slice(-2);
+                    var day = dateObj.getDate();
+                    var month = dateObj.toLocaleString('default', { month: 'short' });
                     var year = dateObj.getFullYear();
-                    return day + '-' + month + '-' + year;
+                    var formattedDate = day + '-' + month + '-' + year;
+                    return formattedDate;
                 }
             },
             {
@@ -285,11 +286,14 @@ function GetAttendance() {
         success: function (Result, status, xhr) {
             var object = '';
             $.each(Result, function (index, item) {
-                var userdate = new Date(item.date).toLocaleDateString('en-US');
+                var dateObj = new Date(item.date);
+                var day = dateObj.getDate();
+                var month = dateObj.toLocaleString('default', { month: 'short' });
+                var year = dateObj.getFullYear();
+                var formattedDate = day + '-' + month + '-' + year;
                 var todate = new Date().toLocaleDateString('en-US');
                 object += '<tr>';
                 object += '<td>' + item.userName + '</td>';
-                var formattedDate = formatDate(new Date(item.date));
                 object += '<td>' + formattedDate + '</td>';
                 object += '<td>' + (new Date(item.intime)).toLocaleTimeString('en-US') + '</td>';
                 //---------OutTime---------//

@@ -435,7 +435,7 @@ function GetPayUserExpenseCreditList(userId) {
                 "render": function (data, type, full, meta) {
                     var dateObj = new Date(data);
                     var day = dateObj.getDate();
-                    var month = dateObj.toLocaleString('default', { month: 'long' });
+                    var month = dateObj.toLocaleString('default', { month: 'short' });
                     var year = dateObj.getFullYear();
                     var formattedDate = day + '-' + month + '-' + year;
                     return formattedDate;
@@ -520,7 +520,7 @@ function GetPayUserExpenseDebitList(userId) {
                 "render": function (data, type, full, meta) {
                     var dateObj = new Date(data);
                     var day = dateObj.getDate();
-                    var month = dateObj.toLocaleString('default', { month: 'long' });
+                    var month = dateObj.toLocaleString('default', { month: 'short' });
                     var year = dateObj.getFullYear();
                     var formattedDate = day + '-' + month + '-' + year;
                     return formattedDate;
@@ -611,7 +611,7 @@ function UserExpensesDetails() {
                 "render": function (data, type, full, meta) {
                     var dateObj = new Date(data);
                     var day = dateObj.getDate();
-                    var month = dateObj.toLocaleString('default', { month: 'long' });
+                    var month = dateObj.toLocaleString('default', { month: 'short' });
                     var year = dateObj.getFullYear();
                     var formattedDate = day + '-' + month + '-' + year;
                     return formattedDate;
@@ -753,7 +753,7 @@ function DisplayAllUserExpenseList() {
                 "render": function (data, type, full, meta) {
                     var dateObj = new Date(data);
                     var day = dateObj.getDate();
-                    var month = dateObj.toLocaleString('default', { month: 'long' });
+                    var month = dateObj.toLocaleString('default', { month: 'short' });
                     var year = dateObj.getFullYear();
                     var formattedDate = day + '-' + month + '-' + year;
                     return formattedDate;
@@ -838,7 +838,7 @@ function DisplayUnApprovedExpenseList() {
                 "render": function (data, type, full, meta) {
                     var dateObj = new Date(data);
                     var day = dateObj.getDate();
-                    var month = dateObj.toLocaleString('default', { month: 'long' });
+                    var month = dateObj.toLocaleString('default', { month: 'short' });
                     var year = dateObj.getFullYear();
                     return day + '-' + month + '-' + year;
                 }
@@ -920,7 +920,7 @@ function DisplayAllApprovedExpenseList() {
                 "render": function (data, type, full, meta) {
                     var dateObj = new Date(data);
                     var day = dateObj.getDate();
-                    var month = dateObj.toLocaleString('default', { month: 'long' });
+                    var month = dateObj.toLocaleString('default', { month: 'short' });
                     var year = dateObj.getFullYear();
                     var formattedDate = day + '-' + month + '-' + year;
                     return formattedDate;
@@ -1017,7 +1017,7 @@ $(document).ready(function () {
 
                     var dateObj = new Date(data);
                     var day = dateObj.getDate();
-                    var month = dateObj.toLocaleString('default', { month: 'long' });
+                    var month = dateObj.toLocaleString('default', { month: 'short' });
                     var year = dateObj.getFullYear();
                     var formattedDate = day + '-' + month + '-' + year;
                     return formattedDate;
@@ -1238,7 +1238,7 @@ function ApprovedExpenseList() {
                 "render": function (data, type, full, meta) {
                     var dateObj = new Date(data);
                     var day = dateObj.getDate();
-                    var month = dateObj.toLocaleString('default', { month: 'long' });
+                    var month = dateObj.toLocaleString('default', { month: 'short' });
                     var year = dateObj.getFullYear();
                     var formattedDate = day + '-' + month + '-' + year;
                     return formattedDate;
@@ -1358,7 +1358,7 @@ function UserDebitExpenseList(UserId) {
                 "render": function (data, type, full, meta) {
                     var dateObj = new Date(data);
                     var day = dateObj.getDate();
-                    var month = dateObj.toLocaleString('default', { month: 'long' });
+                    var month = dateObj.toLocaleString('default', { month: 'short' });
                     var year = dateObj.getFullYear();
                     var formattedDate = day + '-' + month + '-' + year;
                     return formattedDate;
@@ -1407,7 +1407,7 @@ function UserCreditExpenseList(UserId) {
                 "render": function (data, type, full, meta) {
                     var dateObj = new Date(data);
                     var day = dateObj.getDate();
-                    var month = dateObj.toLocaleString('default', { month: 'long' });
+                    var month = dateObj.toLocaleString('default', { month: 'short' });
                     var year = dateObj.getFullYear();
                     var formattedDate = day + '-' + month + '-' + year;
                     return formattedDate;
@@ -1516,7 +1516,7 @@ $(document).ready(function () {
                     if (!data) return ''; // Return empty string if date is null
                     var dateObj = new Date(data);
                     var day = dateObj.getDate();
-                    var month = dateObj.toLocaleString('default', { month: 'long' });
+                    var month = dateObj.toLocaleString('default', { month: 'short' });
                     var year = dateObj.getFullYear();
                     var formattedDate = day + '-' + month + '-' + year;
                     return formattedDate;
@@ -1631,7 +1631,12 @@ function GetAllUserUnapproveExpenseList() {
                 "data": "date",
                 "name": "Date",
                 "render": function (data, type, full, meta) {
-                    return new Date(data).toLocaleDateString();
+                    var dateObj = new Date(data);
+                    var day = dateObj.getDate();
+                    var month = dateObj.toLocaleString('default', { month: 'short' });
+                    var year = dateObj.getFullYear();
+                    var formattedDate = day + '-' + month + '-' + year;
+                    return formattedDate;
                 }
             },
             {
@@ -1651,12 +1656,32 @@ function GetAllUserUnapproveExpenseList() {
             footer: true
         },
         autoWidth: false,
-        columnDefs: [
-            {
-                "targets": [0, -1],
-                "orderable": false
-            }
-        ]
+        columnDefs: [{
+            targets: [0],
+            orderable: false,
+            width: "auto"
+        }],
+        "footerCallback": function (row, data, start, end, display) {
+            var api = this.api(), data;
+
+            var intVal = function (i) {
+                return typeof i === 'string' ?
+                    i.replace(/[\$,]/g, '') * 1 :
+                    typeof i === 'number' ?
+                        i : 0;
+            };
+
+            total = api
+                .column(4)
+                .data()
+                .reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0);
+
+            $(api.column(4).footer()).html(
+                '<span style="color: black;">Total: ' + '₹' + total + '</span>'
+            );
+        }
     });
 }
 function GetAllUserApproveExpenseList() {
@@ -1696,7 +1721,7 @@ function GetAllUserApproveExpenseList() {
                 "render": function (data, type, full, meta) {
                     var dateObj = new Date(data);
                     var day = dateObj.getDate();
-                    var month = dateObj.toLocaleString('default', { month: 'long' });
+                    var month = dateObj.toLocaleString('default', { month: 'short' });
                     var year = dateObj.getFullYear();
                     var formattedDate = day + '-' + month + '-' + year;
                     return formattedDate;
@@ -1719,12 +1744,32 @@ function GetAllUserApproveExpenseList() {
             footer: true
         },
         autoWidth: false,
-        columnDefs: [
-            {
-                "targets": [0, -1],
-                "orderable": false
-            }
-        ]
+        columnDefs: [{
+            targets: [0],
+            orderable: false,
+            width: "auto"
+        }],
+        "footerCallback": function (row, data, start, end, display) {
+            var api = this.api(), data;
+
+            var intVal = function (i) {
+                return typeof i === 'string' ?
+                    i.replace(/[\$,]/g, '') * 1 :
+                    typeof i === 'number' ?
+                        i : 0;
+            };
+
+            total = api
+                .column(4)
+                .data()
+                .reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0);
+
+            $(api.column(4).footer()).html(
+                '<span style="color: black;">Total: ' + '₹' + total + '</span>'
+            );
+        }
     });
 }
 function GetAllUserCreditExpenseList() {
@@ -1766,7 +1811,7 @@ function GetAllUserCreditExpenseList() {
                 "render": function (data, type, full, meta) {
                     var dateObj = new Date(data);
                     var day = dateObj.getDate();
-                    var month = dateObj.toLocaleString('default', { month: 'long' });
+                    var month = dateObj.toLocaleString('default', { month: 'short' });
                     var year = dateObj.getFullYear();
                     var formattedDate = day + '-' + month + '-' + year;
                     return formattedDate;
@@ -1790,12 +1835,32 @@ function GetAllUserCreditExpenseList() {
             footer: true
         },
         autoWidth: false,
-        columnDefs: [
-            {
-                "targets": [0, -1],
-                "orderable": false
-            }
-        ]
+        columnDefs: [{
+            targets: [0],
+            orderable: false,
+            width: "auto"
+        }],
+        "footerCallback": function (row, data, start, end, display) {
+            var api = this.api(), data;
+
+            var intVal = function (i) {
+                return typeof i === 'string' ?
+                    i.replace(/[\$,]/g, '') * 1 :
+                    typeof i === 'number' ?
+                        i : 0;
+            };
+
+            total = api
+                .column(4)
+                .data()
+                .reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0);
+
+            $(api.column(4).footer()).html(
+                '<span style="color: black;">Total: ' + '₹' + total + '</span>'
+            );
+        }
     });
 }
 function GetUserLastMonthExpenseList() {
@@ -1861,12 +1926,32 @@ function GetUserLastMonthExpenseList() {
             footer: true
         },
         autoWidth: false,
-        columnDefs: [
-            {
-                "targets": [0, -1],
-                "orderable": false
-            }
-        ]
+        columnDefs: [{
+            targets: [0],
+            orderable: false,
+            width: "auto"
+        }],
+        "footerCallback": function (row, data, start, end, display) {
+            var api = this.api(), data;
+
+            var intVal = function (i) {
+                return typeof i === 'string' ?
+                    i.replace(/[\$,]/g, '') * 1 :
+                    typeof i === 'number' ?
+                        i : 0;
+            };
+
+            total = api
+                .column(4)
+                .data()
+                .reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0);
+
+            $(api.column(4).footer()).html(
+                '<span style="color: black;">Total: ' + '₹' + total + '</span>'
+            );
+        }
     });
 }
 function GetUserCurrentMonthExpenseList() {
@@ -1909,7 +1994,7 @@ function GetUserCurrentMonthExpenseList() {
                 "render": function (data, type, full, meta) {
                     var dateObj = new Date(data);
                     var day = dateObj.getDate();
-                    var month = dateObj.toLocaleString('default', { month: 'long' });
+                    var month = dateObj.toLocaleString('default', { month: 'short' });
                     var year = dateObj.getFullYear();
                     var formattedDate = day + '-' + month + '-' + year;
                     return formattedDate;
@@ -1919,7 +2004,7 @@ function GetUserCurrentMonthExpenseList() {
                 "data": "totalAmount",
                 "name": "TotalAmount",
                 "render": function (data, type, full, meta) {
-                    var color = full.account && full.account.toLowerCase() === "credit" ? "green" : "red";
+                    var color = full.account.toLowerCase() === "debit" ? "green" : "red";
                     return '<span style="color: ' + color + ';">' + '₹' + data + '</span>';
                 }
             },
@@ -1932,12 +2017,32 @@ function GetUserCurrentMonthExpenseList() {
             footer: true
         },
         autoWidth: false,
-        columnDefs: [
-            {
-                "targets": [0, -1],
-                "orderable": false
-            }
-        ]
+        columnDefs: [{
+            targets: [0],
+            orderable: false,
+            width: "auto"
+        }],
+        "footerCallback": function (row, data, start, end, display) {
+            var api = this.api(), data;
+
+            var intVal = function (i) {
+                return typeof i === 'string' ?
+                    i.replace(/[\$,]/g, '') * 1 :
+                    typeof i === 'number' ?
+                        i : 0;
+            };
+
+            total = api
+                .column(4)
+                .data()
+                .reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0);
+
+            $(api.column(4).footer()).html(
+                '<span style="color: black;">Total: ' + '₹' + total + '</span>'
+            );
+        }
     });
 }
 
@@ -1996,7 +2101,7 @@ function GetUserBetweenMonthsExpenseList(StartDate, EndDate, UserId) {
                 "render": function (data, type, full, meta) {
                     var dateObj = new Date(data);
                     var day = dateObj.getDate();
-                    var month = dateObj.toLocaleString('default', { month: 'long' });
+                    var month = dateObj.toLocaleString('default', { month: 'short' });
                     var year = dateObj.getFullYear();
                     var formattedDate = day + '-' + month + '-' + year;
                     return formattedDate;
@@ -2020,9 +2125,31 @@ function GetUserBetweenMonthsExpenseList(StartDate, EndDate, UserId) {
         },
         autoWidth: false,
         columnDefs: [{
-            "defaultContent": "",
-            "targets": "_all",
+            targets: [0],
+            orderable: false,
+            width: "auto"
         }],
+        "footerCallback": function (row, data, start, end, display) {
+            var api = this.api(), data;
+
+            var intVal = function (i) {
+                return typeof i === 'string' ?
+                    i.replace(/[\$,]/g, '') * 1 :
+                    typeof i === 'number' ?
+                        i : 0;
+            };
+
+            total = api
+                .column(4)
+                .data()
+                .reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0);
+
+            $(api.column(4).footer()).html(
+                '<span style="color: black;">Total: ' + '₹' + total + '</span>'
+            );
+        }
     });
 }
 
