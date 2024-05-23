@@ -263,28 +263,28 @@
                                     </a>
                                 </li>
                                 <li class="nav-item d-flex align-items-center ms-3">
-                                    <input class="nav-radio form-check-input Returns" data-bs-toggle="tab" role="tab" type="radio" name="flexRadioDefault" href="#GetUserLastMonthExpenseList">
+                                    <input class="nav-radio form-check-input Returns" data-bs-toggle="tab" role="tab" type="radio" name="flexRadioDefault" id="lastMonthRadio" href="#GetUserLastMonthExpenseList">
                                     <label class="form-check-label ms-2" for="lastMonthRadio">
                                         Last Month
                                     </label>
                                 </li>
                                 <li class="nav-item d-flex align-items-center ms-3">
-                                    <input class="nav-radio form-check-input Returns" data-bs-toggle="tab" role="tab" type="radio" name="flexRadioDefault" href="#GetUserCurrentMonthExpenseList">
+                                    <input class="nav-radio form-check-input Returns" data-bs-toggle="tab" role="tab" type="radio" name="flexRadioDefault" id="currentMonthRadio" href="#GetUserCurrentMonthExpenseList">
                                     <label class="form-check-label ms-2" for="currentMonthRadio">
                                         Current Month
                                     </label>
                                 </li>
                                 <li class="nav-item d-flex align-items-center ms-3">
-                                    <input class="nav-radio form-check-input" type="radio" name="flexRadioDefault"  id="betweenMonthRadio">
+                                    <input class="nav-radio form-check-input Returns" type="radio" data-bs-toggle="tab" role="tab" name="flexRadioDefault" id="betweenMonthRadio">
                                     <label class="form-check-label ms-2" for="betweenMonthRadio">
                                         Between Date
                                     </label>
                                 </li>
                                 <li class="nav-item align-items-center ms-3 date-input" style="display:none;">
-                                    <input class="form-control" type="date" id="startDate">
+                                    <input class="form-control" placeholder="dd-mm-yyyy" type="date" id="startDate">
                                 </li>
                                 <li class="nav-item align-items-center ms-3 date-input" style="display:none;">
-                                    <input class="form-control" type="date" id="endDate">
+                                    <input class="form-control" placeholder="dd-mm-yyyy" type="date" id="endDate">
                                 </li>
                                 <li class="nav-item d-flex align-items-center ms-3">
                                     <a class="btn btn-primary nav-btn" id="addproduct-btn" data-bs-toggle="tab" role="tab" href="#GetBetweendatesExpenseList" style="display:none;"><i class="ri-search-line"></i></a>
@@ -298,18 +298,18 @@
                         <table class="table table-bordered dt-responsive table-striped align-middle dataTable no-footer dtr-inline" id="DisplayUserAllExpenseList">
                             <thead class="table-light text-muted text-center">
                                 <tr>
-                                    <th data-sort="name" scope="col" style="width: 60px;"></th>
-                                    <th class="sort" data-sort="Description">Description</th>
-                                    <th class="sort" data-sort="BillNo">Bill No</th>
-                                    <th class="sort" data-sort="Date">Date</th>
-                                    <th class="sort" data-sort="TotalAmount">Total Amount</th>
+                                    <th></th>
+                                    <th>Description</th>
+                                    <th>Bill No</th>
+                                    <th>Date</th>
+                                    <th>Total Amount</th>
                                     @if (UserSession.FormPermisionData.Any(a => a.FormName == "Expenses" && (a.Edit == true || a.Delete == true)))
                                     {
-                                        <th class="sort" data-sort="action">Action</th>
+                                        <th>Action</th>
                                     }
                                 </tr>
                             </thead>
-                            <tbody class="list form-check-all text-center"> </tbody>
+                            <tbody> </tbody>
                         </table>
 
                         <!-- end table -->
@@ -330,14 +330,14 @@
                         <table class="table table-bordered dt-responsive table-striped align-middle dataTable no-footer dtr-inline" id="GetUserUnapprovedExpenseList">
                             <thead class="table-light text-muted text-center">
                                 <tr>
-                                    <th data-sort="name" scope="col" style="width: 60px;"></th>
-                                    <th class="sort text-uppercase" data-sort="Description">Description</th>
-                                    <th class="sort text-uppercase" data-sort="BillNo">BillNo</th>
-                                    <th class="sort text-uppercase" data-sort="Date">Date</th>
-                                    <th class="sort text-uppercase" data-sort="TotalAmount">TotalAmount</th>
+                                    <th></th>
+                                    <th>Description</th>
+                                    <th>BillNo</th>
+                                    <th>Date</th>
+                                    <th>TotalAmount</th>
                                 </tr>
                             </thead>
-                            <tbody class="list form-check-all text-center"> </tbody>
+                            <tbody> </tbody>
                         </table>
                         <!-- end table -->
                         <div class="noresult" style="display: none">
@@ -357,14 +357,14 @@
                         <table class="table table-bordered dt-responsive table-striped align-middle dataTable no-footer dtr-inline" id="GetAllUserApprovedExpenseList">
                             <thead class="table-light text-muted text-center">
                                 <tr>
-                                    <th data-sort="name" scope="col" style="width: 60px;"></th>
-                                    <th class="sort" data-sort="Description">Description</th>
-                                    <th class="sort" data-sort="BillNo">Bill No</th>
-                                    <th class="sort" data-sort="Date">Date</th>
-                                    <th class="sort" data-sort="TotalAmount">Total Amount</th>
+                                    <th></th>
+                                    <th>Description</th>
+                                    <th>Bill No</th>
+                                    <th>Date</th>
+                                    <th>Total Amount</th>
                                 </tr>
                             </thead>
-                            <tbody class="list form-check-all text-center"> </tbody>
+                            <tbody> </tbody>
                         </table>
                         <!-- end table -->
                         <div class="noresult" style="display: none">
@@ -384,14 +384,14 @@
                         <table class="table table-bordered dt-responsive table-striped align-middle dataTable no-footer dtr-inline" id="UserallCreditExpenseTable">
                             <thead class="table-light text-muted text-center">
                                 <tr>
-                                    <th data-sort="name" scope="col" style="width: 60px;"></th>
-                                    <th class="sort" data-sort="Description">Description</th>
-                                    <th class="sort" data-sort="BillNo">Bill No</th>
-                                    <th class="sort" data-sort="Date">Date</th>
-                                    <th class="sort" data-sort="TotalAmount">Total Amount</th>
+                                    <th></th>
+                                    <th>Description</th>
+                                    <th>Bill No</th>
+                                    <th>Date</th>
+                                    <th>Total Amount</th>
                                 </tr>
                             </thead>
-                            <tbody class="list form-check-all text-center">
+                            <tbody>
                             </tbody>
                         </table>
                         <div class="noresult" style="display: none">
@@ -411,14 +411,14 @@
                         <table class="table table-bordered dt-responsive table-striped align-middle" id="GetUserLastMonthExpense">
                             <thead class="table-light text-muted text-center">
                                 <tr>
-                                    <th data-sort="name" scope="col" style="width: 60px;"></th>
-                                    <th class="sort" data-sort="Description">Description</th>
-                                    <th class="sort" data-sort="BillNo">Bill No</th>
-                                    <th class="sort" data-sort="Date">Date</th>
-                                    <th class="sort" data-sort="TotalAmount">Total Amount</th>
+                                    <th></th>
+                                    <th>Description</th>
+                                    <th>Bill No</th>
+                                    <th>Date</th>
+                                    <th>Total Amount</th>
                                 </tr>
                             </thead>
-                            <tbody class="list form-check-all text-center"> </tbody>
+                            <tbody> </tbody>
                         </table>
                         <!-- end table -->
                         <div class="noresult" style="display: none">
@@ -438,11 +438,11 @@
                         <table class="table table-bordered dt-responsive table-striped align-middle" id="GetUserCurrentExpense">
                             <thead class="table-light text-muted text-center">
                                 <tr>
-                                    <th data-sort="name" scope="col" style="width: 60px;"></th>
-                                    <th class="sort" data-sort="Description">Description</th>
-                                    <th class="sort" data-sort="BillNo">Bill No</th>
-                                    <th class="sort" data-sort="Date">Date</th>
-                                    <th class="sort" data-sort="TotalAmount">Total Amount</th>
+                                    <th></th>
+                                    <th>Description</th>
+                                    <th>Bill No</th>
+                                    <th>Date</th>
+                                    <th>Total Amount</th>
                                 </tr>
                             </thead>
                             <tbody class="list form-check-all text-center"> </tbody>
@@ -465,11 +465,11 @@
                         <table class="table table-bordered dt-responsive table-striped align-middle dataTable no-footer dtr-inline" id="GetBetweendatesExpense">
                             <thead class="table-light text-muted text-center">
                                 <tr>
-                                    <th data-sort="name" scope="col" style="width: 60px;"></th>
-                                    <th class="sort" data-sort="Description">Description</th>
-                                    <th class="sort" data-sort="BillNo">Bill No</th>
-                                    <th class="sort" data-sort="Date">Date</th>
-                                    <th class="sort" data-sort="TotalAmount">Total Amount</th>
+                                    <th></th>
+                                    <th>Description</th>
+                                    <th>Bill No</th>
+                                    <th>Date</th>
+                                    <th>Total Amount</th>
                                 </tr>
                             </thead>
                             <tbody class="list form-check-all text-center"> </tbody>
@@ -559,7 +559,6 @@
     </div>
 
 </div>
-</div>
 <!--end col-->
 <script type="text/javascript">
     var userPermissions = '@Html.Raw(Json.Serialize(UserSession.FormPermisionData))';
@@ -571,6 +570,7 @@
         const searchButton = document.getElementById('addproduct-btn');
 
         function toggleDateInputs() {
+            clearDates();
             if (betweenMonthRadio.checked) {
                 dateInputs.forEach(input => input.style.display = 'flex');
                 searchButton.style.display = 'block';
@@ -584,8 +584,67 @@
             radio.addEventListener('change', toggleDateInputs);
         });
 
-        // Initial check to set the correct state on page load
         toggleDateInputs();
+    });
+
+    document.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', function () {
+            document.querySelectorAll('.nav-radio').forEach(radio => {
+                radio.checked = false;
+            });
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            this.classList.add('active');
+        });
+    });
+
+    document.querySelectorAll('.nav-radio').forEach(radio => {
+        radio.addEventListener('click', function () {
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            this.checked = true;
+        });
+    });
+    function clearDates() {
+        $("#startDate").val('');
+        $("#endDate").val('');
+    }
+
+    document.getElementById('startDate').addEventListener('change', function () {
+        var startDate = new Date(this.value);
+
+        var endDate = new Date(startDate);
+        endDate.setDate(startDate.getDate() + 30);
+
+        var endDateInput = document.getElementById('endDate');
+        endDateInput.min = this.value;
+        endDateInput.max = endDate.toISOString().split('T')[0];
+
+        endDateInput.style.display = 'block';
+        endDateInput.disabled = false;
+
+
+        endDateInput.placeholder = "dd-mm-yyyy";
+
+
+        endDateInput.value = '';
+    });
+
+
+    function formatDateForDisplay(date) {
+        var day = String(date.getDate()).padStart(2, '0');
+        var month = String(date.getMonth() + 1).padStart(2, '0');
+        var year = date.getFullYear();
+
+        return day + '-' + month + '-' + year;
+    }
+
+
+    document.getElementById('startDate').addEventListener('change', function () {
+        var endDateInput = document.getElementById('endDate');
+        endDateInput.placeholder = "dd-mm-yyyy";
     });
 </script>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>

@@ -334,7 +334,7 @@ function GetAttendance() {
 
             }
             else {
-                debugger
+                
                 $('#TableDataAttendanceList').html(object);
             }
         }

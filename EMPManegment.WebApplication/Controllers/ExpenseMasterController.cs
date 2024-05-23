@@ -358,7 +358,7 @@ namespace EMPManegment.Web.Controllers
                 var ExpenseDetails = HttpContext.Request.Form["USERID"];
                 var InsertDetails = JsonConvert.DeserializeObject<ExpenseDetailsView>(ExpenseDetails);
                 List<ExpenseDetailsView> expense = new List<ExpenseDetailsView>();
-                ApiResponseModel response = await APIServices.PostAsync(null, "ExpenseMaster/GetExpenseDetailByUserId?UserId=" + InsertDetails.UserId);
+                ApiResponseModel response = await APIServices.PostAsync("", "ExpenseMaster/GetExpenseDetailByUserId?UserId=" + InsertDetails.UserId);
                 if (response.code == 200)
                 {
                     expense = JsonConvert.DeserializeObject<List<ExpenseDetailsView>>(response.data.ToString());
@@ -431,7 +431,7 @@ namespace EMPManegment.Web.Controllers
         {
             try
             {
-                ApiResponseModel postuser = await APIServices.PostAsync(null, "ExpenseMaster/DeleteExpense?Id=" + Id);
+                ApiResponseModel postuser = await APIServices.PostAsync("", "ExpenseMaster/DeleteExpense?Id=" + Id);
                 if (postuser.code == 200)
                 {
                     return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });

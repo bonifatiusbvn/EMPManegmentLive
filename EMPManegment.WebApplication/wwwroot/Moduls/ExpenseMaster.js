@@ -1054,7 +1054,8 @@ function GetExpenseTotalAmount() {
         dataType: 'json',
         contentType: false,
         processData: false,
-        success: function (result) {debugger
+        success: function (result) {
+
             var total = 0;
             result.forEach(function (obj) {
                 if (obj.totalAmount) {

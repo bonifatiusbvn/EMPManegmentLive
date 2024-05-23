@@ -226,7 +226,7 @@ namespace EMPManegment.Web.Controllers
         {
             try
             {
-                ApiResponseModel postuser = await APIServices.PostAsync(null, "PurchaseOrderDetails/DeletePurchaseOrderDetails?Id=" + Id);
+                ApiResponseModel postuser = await APIServices.PostAsync("", "PurchaseOrderDetails/DeletePurchaseOrderDetails?Id=" + Id);
                 if (postuser.code == 200)
                 {
                     return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
