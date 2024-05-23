@@ -549,6 +549,10 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
+        public IActionResult DisplayExpenseList()
+        {
+            return PartialView("~/Views/ExpenseMaster/_AllUserExpensePartial.cshtml");
+        }
 
 
 

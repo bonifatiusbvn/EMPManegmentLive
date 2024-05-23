@@ -575,13 +575,6 @@ function GetPayUserExpenseDebitList(userId) {
     });
 }
 
-$(document).ready(function () {
-
-    var userId = GetParameterByName('userId');
-    if (userId) {
-        GetAllUserExpenseList(userId);
-    }
-});
 function UserExpensesDetails() {
     $('#UserListTable').DataTable({
         processing: false,
@@ -635,19 +628,106 @@ function UserExpensesDetails() {
     });
 }
 
-function GetAllUserExpenseList(userId) {
+function GetAllUserExpenseList() {
+    $.ajax({
+        url: '/ExpenseMaster/DisplayExpenseList',
+        type: 'GET',
+        success: function (result) {
+            $("#AllUserExpensePartial").html(result);
+            DisplayAllUserExpenseList();
+        },
+        error: function () {
+            alert('Error loading expenses. Please try again.');
+        }
+    });
+}
+$(document).ready(function () {
+    $('.nav-link').click(function () {
+        var targetTab = $(this).attr('href');
+
+        if (targetTab === 'AllExpenseList') {
+
+            GetAllUserExpenseList();
+        } else if (targetTab === 'UnapproveExpenseList') {
+            GetAllUserUnapproveExpense();
+        } else if (targetTab === 'ApproveExpenseList') {
+            GetAllUserApproveExpense();
+        }
+    });
+});
+function GetAllUserUnapproveExpense() {
+    $.ajax({
+        url: '/ExpenseMaster/DisplayExpenseList',
+        type: 'GET',
+        success: function (result) {
+            $("#AllUserUnapproveExpensePartial").html(result);
+            DisplayUnApprovedExpenseList();
+        },
+        error: function () {
+            alert('Error loading expenses. Please try again.');
+        }
+    });
+}
+function GetAllUserApproveExpense() {
+    
+    $.ajax({
+        url: '/ExpenseMaster/DisplayExpenseList',
+        type: 'GET',
+        success: function (result) {
+            
+            $("#AllUserExpensePartial").html(result);
+            DisplayAllApprovedExpenseList();
+        },
+        error: function () {
+            alert('Error loading expenses. Please try again.');
+        }
+    });
+}
+//$(document).ready(function () {
+//    function anyCheckboxChecked() {debugger
+//        return $("input[name='chk_child']:checked").length > 0;
+//    }
+
+//    $('#UserallExpenseTable').on('change', 'input[name="chk_child"]', function () {debugger
+//        if (anyCheckboxChecked()) {
+//            $('#remove-actions').show();
+//        } else {
+//            $('#remove-actions').hide();
+//        }
+//        var allChecked = $('input[name="chk_child"]').length === $('input[name="chk_child"]:checked').length;
+//        $('#checkedAll').prop('checked', allChecked);
+//    });
+
+//    $('#checkedAll').on('change', function () {
+//        $('input[name="chk_child"]').prop('checked', $(this).prop('checked'));
+//        if ($(this).prop('checked')) {
+//            $('#remove-actions').show();
+//        } else {
+//            $('#remove-actions').hide();
+//        }
+//    });
+//});
+
+function DisplayAllUserExpenseList() {
+    var userId = GetParameterByName('userId');
     $('#UserallExpenseTable').DataTable({
-        processing: false,
+        processing: true,
         serverSide: true,
         filter: true,
-        "bDestroy": true,
+        destroy: true, 
         pageLength: 30,
         ajax: {
-            type: "POST",
-            url: '/ExpenseMaster/GetUserExpenseList?UserId=' + userId,
-            dataType: 'json',
+            url: '/ExpenseMaster/GetUserExpenseList',
+            type: 'POST',
+            data: function (d) {
+                d.UserId = userId;
+            }
         },
         columns: [
+            {
+                "data": null, "visible": false,
+                "orderable": false
+            },
             {
                 "data": null,
                 "render": function (data, type, full, meta) {
@@ -687,7 +767,7 @@ function GetAllUserExpenseList(userId) {
                     return '<span style="color: ' + color + ';">' + '₹' + data + '</span>';
                 }
             },
-            { "data": "account", "name": "Account", "visible": false },
+            { "data": "account", "name": "Account", "visible": false }
         ],
         scrollY: 400,
         scrollX: true,
@@ -707,24 +787,29 @@ function GetAllUserExpenseList(userId) {
     });
 }
 
-function GetUserUnApprovedExpenseList(UserId) {
+function DisplayUnApprovedExpenseList() {
+    var UserId = GetParameterByName('userId');
     var unapprove = false;
-    $('#UserallUnApprovedExpenseTable').DataTable({
-        processing: false,
+    $('#UserallExpenseTable').DataTable({
+        processing: true,
         serverSide: true,
         filter: true,
-        "bDestroy": true,
+        destroy: true,
         pageLength: 30,
         ajax: {
             type: "POST",
-            url: '/ExpenseMaster/GetUserExpenseList?UserId=' + UserId + '&unapprove=' + unapprove,
-            dataType: 'json',
+            url: '/ExpenseMaster/GetUserExpenseList',
+            data: function (d) {
+                d.UserId = UserId;
+                d.unapprove = unapprove;
+            },
+            dataType: 'json'
         },
         columns: [
             {
                 "data": null,
                 "render": function (data, type, full, meta) {
-                    return '<div class="form-check"><input class="form-check-input" data-id="' + full.id + '" type="checkbox" name="chk_child" value="option1"></div>';
+                    return '<div class="form-check"><input class="form-check-input" data-id="' + full.id + '" type="checkbox" name="chk_child"></div>';
                 },
                 "orderable": false
             },
@@ -755,8 +840,7 @@ function GetUserUnApprovedExpenseList(UserId) {
                     var day = dateObj.getDate();
                     var month = dateObj.toLocaleString('default', { month: 'long' });
                     var year = dateObj.getFullYear();
-                    var formattedDate = day + '-' + month + '-' + year;
-                    return formattedDate;
+                    return day + '-' + month + '-' + year;
                 }
             },
             {
@@ -783,12 +867,19 @@ function GetUserUnApprovedExpenseList(UserId) {
                 targets: "_all",
                 width: 'auto'
             }
-        ]
+        ],
+        drawCallback: function () {
+            // Update the state of the "check all" checkbox after table redraw
+            updateCheckedAllState();
+        }
     });
 }
-function GetUserApprovedExpenseList(UserId) {
+
+function DisplayAllApprovedExpenseList() {
+    
+    var UserId = GetParameterByName('userId');
     var approve = true;
-    $('#GetUserApprovedExpenseList').DataTable({
+    $('#UserallExpenseTable').DataTable({
         processing: false,
         serverSide: true,
         filter: true,
@@ -801,6 +892,10 @@ function GetUserApprovedExpenseList(UserId) {
         },
         columns: [
             {
+                "data": null, "visible": false,
+                "orderable": false
+            },
+            {
                 "data": null,
                 "render": function (data, type, full, meta) {
                     var account = full.account.toLowerCase();
@@ -859,56 +954,6 @@ function GetUserApprovedExpenseList(UserId) {
     });
 }
 
-$(document).ready(function () {
-
-    var UserId = GetParameterByName('userId');
-
-    if (UserId) {
-        GetUserUnApprovedExpenseList(UserId);
-        GetUserApprovedExpenseList(UserId);
-    }
-
-    $('.nav-link').click(function () {
-        var targetTab = $(this).attr('href');
-
-        if (targetTab === '#allExpense') {
-
-            GetAllUserExpenseList(userId);
-        } else if (targetTab === '#allUnApprovedExpense') {
-            GetUserUnApprovedExpenseList(UserId);
-        } else if (targetTab === '#allApprovedExpense') {
-            GetUserApprovedExpenseList(UserId);
-        }
-    });
-});
-
-
-$(document).ready(function () {
-    function anyCheckboxChecked() {
-        return $("input[name='chk_child']:checked").length > 0;
-    }
-
-    $('#UserallUnApprovedExpenseTable').on('change', 'input[name="chk_child"]', function () {
-        if (anyCheckboxChecked()) {
-            $('#remove-actions').show();
-        } else {
-            $('#remove-actions').hide();
-        }
-        var allChecked = $('input[name="chk_child"]:checked').length === $('input[name="chk_child"]').length;
-        $('#checkedAll').prop('checked', allChecked);
-    });
-
-    $('#checkedAll').on('change', function () {
-        $('input[name="chk_child"]').prop('checked', $(this).prop('checked'));
-        if ($(this).prop('checked')) {
-            $('#remove-actions').show();
-        } else {
-            if (!anyCheckboxChecked()) {
-                $('#remove-actions').hide();
-            }
-        }
-    });
-});
 
 var datas = userPermissions
 $(document).ready(function () {
@@ -1266,26 +1311,26 @@ $(document).ready(function () {
 
     var UserId = $("#txtuserid").val();
     if (UserId) {
-        GetAllUserExpenseList(UserId);
-        UserDebitExpenseList(UserId);
-        UserCreditExpenseList(UserId);
+        //GetAllUserExpenseList(UserId);
+        //UserDebitExpenseList(UserId);
+        //UserCreditExpenseList(UserId);
         GetPayUserExpenseCreditList(UserId)
         GetPayUserExpenseDebitList(UserId)
     }
 
-    $('.nav-link').click(function () {
-        var targetTab = $(this).attr('href');
+    //$('.nav-link').click(function () {
+    //    var targetTab = $(this).attr('href');
 
-        var UserId = $("#txtuserid").val();
+    //    var UserId = $("#txtuserid").val();
 
-        if (targetTab === '#GetallExpense') {
-            GetAllUserExpenseList(UserId);
-        } else if (targetTab === '#GetallUnApprovedExpense') {
-            UserDebitExpenseList(UserId);
-        } else if (targetTab === '#GetallApprovedExpense') {
-            UserCreditExpenseList(UserId);
-        }
-    });
+    //    if (targetTab === '#GetallExpense') {
+    //        GetAllUserExpenseList(UserId);
+    //    } else if (targetTab === '#GetallUnApprovedExpense') {
+    //        UserDebitExpenseList(UserId);
+    //    } else if (targetTab === '#GetallApprovedExpense') {
+    //        UserCreditExpenseList(UserId);
+    //    }
+    //});
 });
 function UserDebitExpenseList(UserId) {
     var Account = "Debit";
