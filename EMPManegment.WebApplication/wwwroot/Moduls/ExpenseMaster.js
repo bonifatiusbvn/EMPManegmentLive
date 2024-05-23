@@ -20,6 +20,13 @@ function clearText() {
     $("#txtdate").val('');
     $("#txttotalamount").val('');
     $("#txtimage").val('');
+    $('#txtexpensetype').select2({
+        theme: 'bootstrap4',
+        width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+        placeholder: $(this).data('placeholder'),
+        allowClear: Boolean($(this).data('allow-clear')),
+        dropdownParent: $("#AddExpenseModel")
+    });
 }
 
 function resetForm() {
@@ -32,6 +39,9 @@ function resetForm() {
     if (FormExpenseDetails) {
         FormExpenseDetails.resetForm();
     }
+    if (ExpenseTypeForm) {
+        ExpenseTypeForm.resetForm();
+    }  
 }
 function preventEmptyValue(input) {
 
@@ -44,6 +54,8 @@ function GetExpenseTypeList() {
     $.ajax({
         url: '/ExpenseMaster/GetExpenseTypeList',
         success: function (result) {
+            $('#txtexpensetype').empty().append('<option selected disabled value="">---Select Expense Type---</option>');
+            $('#Editexpensetype').empty().append('<option selected disabled value="">---Select Expense Type---</option>');
             $.each(result, function (i, data) {
                 $('#txtexpensetype').append('<Option value=' + data.id + '>' + data.type + '</Option>')
                 $('#Editexpensetype').append('<Option value=' + data.id + '>' + data.type + '</Option>')
@@ -201,6 +213,14 @@ function EditExpenseDetails(Id) {
             $('#Editpaymenttypeid').val(response.paymentType);
             $('#EditIsPaid').val(response.isPaid ? "True" : "False");
             $('#EditIsApproved').val(response.isApproved ? "True" : "False");
+
+            $('#Editexpensetype').select2({
+                theme: 'bootstrap4',
+                width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+                placeholder: $(this).data('placeholder'),
+                allowClear: Boolean($(this).data('allow-clear')),
+                dropdownParent: $("#EditExpenseModel")
+            });
 
         },
         error: function () {
@@ -1974,5 +1994,72 @@ function GetUserBetweenMonthsExpenseList(StartDate, EndDate, UserId) {
             "targets": "_all",
         }],
     });
+}
+
+var ExpenseTypeForm;
+$(document).ready(function () {
+    ExpenseTypeForm = $("#addExpenseType").validate({
+        rules: {
+            textExpenseType: "required",
+        },
+        messages: {
+            textExpenseType: "Please Enter Expense Type",
+        }
+    })
+});
+
+function DisplayExpenseTypeModal() {
+    clearExpenseTypeText();
+    $('#ExpenseTypeModal').modal('show');
+}
+
+function clearExpenseTypeText() {
+    resetForm();
+    $("#textExpenseType").val('');
+}
+function AddExpenseType() {
+    if ($("#addExpenseType").valid()) {
+
+        var formData = new FormData();
+        formData.append("Type", $("#textExpenseType").val());
+
+        $.ajax({
+            url: '/ExpenseMaster/AddExpenseType',
+            type: 'Post',
+            data: formData,
+            dataType: 'json',
+            contentType: false,
+            processData: false,
+            success: function (Result) {
+                if (Result.code == 200) {
+                    Swal.fire({
+                        title: Result.message,
+                        icon: 'success',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK'
+                    }).then(function () {
+                        $('#ExpenseTypeModal').modal('hide');
+                        GetExpenseTypeList();
+                    });
+                }
+                else {
+                    Swal.fire({
+                        title: Result.message,
+                        icon: 'warning',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK'
+                    });
+                }
+            }
+        });
+    }
+    else {
+        Swal.fire({
+            title: "Kindly fill expense type",
+            icon: 'warning',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'OK',
+        })
+    }
 }
 

@@ -18,6 +18,7 @@ using System.Threading.Tasks;
 using EMPManegment.EntityModels.ViewModels.OrderModels;
 using EMPManegment.EntityModels.ViewModels.Invoice;
 using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Mvc;
 
 namespace EMPManegment.Repository.ExponseMasterRepository
 {
@@ -34,21 +35,31 @@ namespace EMPManegment.Repository.ExponseMasterRepository
             UserResponceModel response = new UserResponceModel();
             try
             {
-                var Expense = new TblExpenseType()
+                bool isExpenseTypeAlreadyExists = Context.TblExpenseTypes.Any(x => x.Type == AddExpense.Type);
+                if (isExpenseTypeAlreadyExists == true)
                 {
-                    Type = AddExpense.Type,
-                    CreatedOn = DateTime.Now,
-                };
-                response.Code = (int)HttpStatusCode.OK;
-                response.Message = "Expensetype cuccessfully inserted";
-                response.Icone = "success";
-                Context.TblExpenseTypes.Add(Expense);
-                Context.SaveChanges();
+                    response.Message = "Expense type already exists";
+                    response.Code = 404;
+                }
+                else
+                {
+
+                    var Expense = new TblExpenseType()
+                    {
+                        Type = AddExpense.Type,
+                        CreatedOn = DateTime.Now,
+                    };
+                    response.Code = 200;
+                    response.Message = "Expense type successfully inserted";
+                    response.Icone = "success";
+                    Context.TblExpenseTypes.Add(Expense);
+                    Context.SaveChanges();
+                }
             }
             catch (Exception)
             {
-
-                throw;
+                response.Code = 404;
+                response.Message = "Error in creating expense type";
             }
             return response;
         }
@@ -58,17 +69,17 @@ namespace EMPManegment.Repository.ExponseMasterRepository
             UserResponceModel response = new UserResponceModel();
             try
             {
-                var Payment = new TblPaymentType()
-                {
-                    Type = AddPayment.Type,
-                    CreatedOn = DateTime.Now,
-                };
-                response.Code = (int)HttpStatusCode.OK;
+                    var Payment = new TblPaymentType()
+                    {
+                        Type = AddPayment.Type,
+                        CreatedOn = DateTime.Now,
+                    };
+                    response.Code = (int)HttpStatusCode.OK;
                 response.Message = "PaymentType successfully inserted";
-                response.Icone = "success";
-                Context.TblPaymentTypes.Add(Payment);
-                Context.SaveChanges();
-            }
+                    response.Icone = "success";
+                    Context.TblPaymentTypes.Add(Payment);
+                    Context.SaveChanges();
+                }               
             catch (Exception)
             {
 

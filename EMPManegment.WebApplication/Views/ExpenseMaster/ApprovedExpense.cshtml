@@ -8,13 +8,18 @@
 }
 <style>
     #txtexpensetype-error, #txtDescription-error, #txtbillno-error,
-    #txtdate-error, #txttotalamount-error, #txtimage-error,
+    #txtdate-error, #txttotalamount-error, #txtimage-error, #textExpenseType-error,
     #txtaccount-error, #txtpaymenttype-error, #txtispaid-error, #txtisapproved-error {
         color: red;
     }
 
     #EditDescription-error, #Editbillno-error, #Edittotalamount-error {
         color: red;
+    }
+
+    .select2-container--bootstrap4 .select2-selection--single {
+        height: 38px;
+        line-height: 36px;
     }
 
 </style>
@@ -74,12 +79,21 @@
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="mb-3">
-                                            <label for="txtexpensetype" class="form-label">Expense Type</label>
-                                            <select class="form-control form-select valid" id="txtexpensetype" name="txtexpensetype">
-                                                <option selected disabled value="">---Select Expense Type---</option>
-                                            </select>
-                                            <input type="hidden" class="text-muted text-uppercase fw-semibold" id="txtexpensetypeid">
-                                            <input type="hidden" class="text-muted text-uppercase fw-semibold" id="txtaccount" value="Debit">
+                                            <div class="d-flex justify-content-between align-items-center" style="margin-top:-10px;">
+                                                <label for="txtexpensetype" class="form-label">Expense Type</label>
+                                                <p class="text-muted">
+                                                    <button type="button" onclick="DisplayExpenseTypeModal()" class="float-end text-decoration-underline btn btn-link waves-effect">
+                                                        Add New-Expense Type
+                                                    </button>
+                                                </p>
+                                            </div>
+                                            <div class="d-flex justify-content-between align-items-center" style="margin-top:-12px;">
+                                                <select class="form-control form-select valid select-margin-top" id="txtexpensetype" name="txtexpensetype">
+                                                    <option selected disabled value="">---Select Expense Type---</option>
+                                                </select>
+                                                <input type="hidden" class="text-muted text-uppercase fw-semibold" id="txtexpensetypeid">
+                                                <input type="hidden" class="text-muted text-uppercase fw-semibold" id="txtaccount" value="Debit">
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-lg-6">
@@ -262,6 +276,33 @@
     </div>
 </div>
 <!--end row-->
+<form id="addExpenseType">
+    <div id="ExpenseTypeModal" class="modal fade flip" tabindex="-1" aria-labelledby="flipModalLabel" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-primary-subtle p-3">
+                    <h5 class="modal-title" id="flipModalLabel">Add Expense Type</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="hstack gap-3 align-items-start">
+                        <div class="flex-grow-1">
+                            <label>Expense Type</label>
+                            <input class="form-control" id="textExpenseType" name="textExpenseType" placeholder="Enter Expense Type" type="text" />
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="AddExpenseType()">Save</button>
+                </div>
+
+            </div><!-- /.modal-content -->
+
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+</form>
+
 <script type="text/javascript">
     var userPermissions = '@Html.Raw(Json.Serialize(UserSession.FormPermisionData))';
 </script>
