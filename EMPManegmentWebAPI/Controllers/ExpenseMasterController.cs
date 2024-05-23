@@ -3,6 +3,7 @@ using EMPManegment.EntityModels.ViewModels.ExpenseMaster;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.OrderModels;
 using EMPManegment.EntityModels.ViewModels.ProductMaster;
+using EMPManegment.Inretface.Interface.ExpenseMaster;
 using EMPManegment.Inretface.Interface.InvoiceMaster;
 using EMPManegment.Inretface.Interface.OrderDetails;
 using EMPManegment.Inretface.Interface.ProductMaster;
@@ -173,6 +174,32 @@ namespace EMPManagment.API.Controllers
                 {
                     responseModel.Message = expense.Message;
                     responseModel.Code = (int)HttpStatusCode.NotFound;
+                }
+            }
+            catch (Exception ex)
+            {
+                responseModel.Code = (int)HttpStatusCode.InternalServerError;
+            }
+            return StatusCode(responseModel.Code, responseModel);
+        }
+
+        [HttpPost]
+        [Route("AddExpenseType")]
+        public async Task<IActionResult> AddExpenseType(ExpenseTypeView ExpenseDetails)
+        {
+            UserResponceModel responseModel = new UserResponceModel();
+            var expense = await expenseMaster.AddExpenseType(ExpenseDetails);
+            try
+            {
+                if (expense.Code == 200)
+                { 
+                    responseModel.Code = expense.Code;
+                    responseModel.Message = expense.Message;
+                }
+                else
+                {
+                    responseModel.Message = expense.Message;
+                    responseModel.Code = expense.Code;
                 }
             }
             catch (Exception ex)

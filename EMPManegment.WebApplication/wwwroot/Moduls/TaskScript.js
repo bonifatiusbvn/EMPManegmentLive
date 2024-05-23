@@ -581,34 +581,24 @@ $(document).ready(function () {
                 },
                 {
                     "data": "taskDate", "name": "TaskDate",
-                    render: function (data, type, row) {
+                    "render": function (data, type, full, meta) {
                         var dateObj = new Date(data);
                         var day = dateObj.getDate();
-                        var month = dateObj.getMonth() + 1;
+                        var month = dateObj.toLocaleString('default', { month: 'short' });
                         var year = dateObj.getFullYear();
-                        if (day < 10) {
-                            day = '0' + day;
-                        }
-                        if (month < 10) {
-                            month = '0' + month;
-                        }
-                        return day + '-' + month + '-' + year;
+                        var formattedDate = day + '-' + month + '-' + year;
+                        return formattedDate;
                     }
                 },
                 {
                     "data": "taskEndDate", "name": "TaskEndDate",
-                    render: function (data, type, row) {
+                    "render": function (data, type, full, meta) {
                         var dateObj = new Date(data);
                         var day = dateObj.getDate();
-                        var month = dateObj.getMonth() + 1;
+                        var month = dateObj.toLocaleString('default', { month: 'short' });
                         var year = dateObj.getFullYear();
-                        if (day < 10) {
-                            day = '0' + day;
-                        }
-                        if (month < 10) {
-                            month = '0' + month;
-                        }
-                        return day + '-' + month + '-' + year;
+                        var formattedDate = day + '-' + month + '-' + year;
+                        return formattedDate;
                     }
                 },
                 {
