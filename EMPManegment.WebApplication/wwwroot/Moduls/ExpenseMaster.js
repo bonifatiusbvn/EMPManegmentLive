@@ -735,7 +735,7 @@ function DisplayAllUserExpenseList() {
         serverSide: true,
         filter: true,
         destroy: true,
-        pageLength: 30,
+        order: [[3, 'asc']],
         ajax: {
             url: '/ExpenseMaster/GetUserExpenseList',
             type: 'POST',
@@ -815,7 +815,7 @@ function DisplayUnApprovedExpenseList() {
         serverSide: true,
         filter: true,
         destroy: true,
-        pageLength: 30,
+        order: [[3, 'asc']],
         ajax: {
             type: "POST",
             url: '/ExpenseMaster/GetUserExpenseList',
@@ -889,7 +889,7 @@ function DisplayUnApprovedExpenseList() {
             }
         ],
         drawCallback: function () {
-            // Update the state of the "check all" checkbox after table redraw
+
             updateCheckedAllState();
         }
     });
@@ -904,7 +904,7 @@ function DisplayAllApprovedExpenseList() {
         serverSide: true,
         filter: true,
         "bDestroy": true,
-        pageLength: 30,
+        order: [[3, 'asc']],
         ajax: {
             type: "POST",
             url: '/ExpenseMaster/GetUserExpenseList?UserId=' + UserId + '&approve=' + approve,
@@ -1085,7 +1085,7 @@ $(document).ready(function () {
             serverSide: true,
             filter: true,
             "bDestroy": true,
-            pageLength: 30,
+            order: [[3, 'asc']],
             ajax: {
                 type: "POST",
                 url: '/ExpenseMaster/GetExpenseDetailsList',
