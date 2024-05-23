@@ -1806,8 +1806,9 @@ function GetUserLastMonthExpenseList() {
         serverSide: true,
         filter: true,
         "bDestroy": true,
-        pageLength: 30,
-        responsive: true,
+        searching: false,
+        info: false,
+        lengthChange: false,
         ajax: {
             type: "Post",
             url: '/ExpenseMaster/GetUserExpenseList?UserId=' + UserId + '&filterType=' + filterType,
@@ -1876,7 +1877,9 @@ function GetUserCurrentMonthExpenseList() {
         serverSide: true,
         filter: true,
         "bDestroy": true,
-        pageLength: 30,
+        searching: false,
+        info: false,
+        lengthChange: false,
         ajax: {
             type: "Post",
             url: '/ExpenseMaster/GetUserExpenseList?UserId=' + UserId + '&filterType=' + filterType,
@@ -1961,7 +1964,9 @@ function GetUserBetweenMonthsExpenseList(StartDate, EndDate, UserId) {
         serverSide: true,
         filter: true,
         "bDestroy": true,
-        pageLength: 30,
+        searching: false,
+        info: false,
+        lengthChange: false,
         ajax: {
             type: "Post",
             url: '/ExpenseMaster/GetUserExpenseList?startDate=' + StartDate + '&endDate=' + EndDate + '&UserId=' + UserId + '&filterType=' + filterType,
