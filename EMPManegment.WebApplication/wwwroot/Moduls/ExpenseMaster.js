@@ -1055,7 +1055,7 @@ function GetExpenseTotalAmount() {
         contentType: false,
         processData: false,
         success: function (result) {
-            
+
             var total = 0;
             result.forEach(function (obj) {
                 if (obj.totalAmount) {
@@ -1870,7 +1870,6 @@ function GetUserCurrentMonthExpenseList() {
         ]
     });
 }
-
 
 function SearchBetweenDateExpense() {
     var StartDate = $('#startDate').val();

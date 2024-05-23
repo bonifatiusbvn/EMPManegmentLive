@@ -293,7 +293,7 @@ namespace EMPManegment.Web.Controllers
             try
             {
 
-                ApiResponseModel postuser = await APIServices.PostAsync(null, "UserProfile/ActiveDeactiveUsers?UserName=" + UserName);
+                ApiResponseModel postuser = await APIServices.PostAsync("", "UserProfile/ActiveDeactiveUsers?UserName=" + UserName);
                 if (postuser.code == 200)
                 {
 
@@ -540,7 +540,7 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
-        
+
         [HttpGet]
         public async Task<JsonResult> EditUserAttendanceOutTime(int attendanceId)
         {

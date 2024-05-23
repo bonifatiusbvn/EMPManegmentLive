@@ -303,11 +303,11 @@
                                     <th>Total Amount</th>
                                     @if (UserSession.FormPermisionData.Any(a => a.FormName == "Expenses" && (a.Edit == true || a.Delete == true)))
                                     {
-                                        <th class="sort" data-sort="action">Action</th>
+                                        <th>Action</th>
                                     }
                                 </tr>
                             </thead>
-                            <tbody class="list form-check-all text-center"> </tbody>
+                            <tbody> </tbody>
                         </table>
 
                         <!-- end table -->
@@ -335,7 +335,7 @@
                                     <th>TotalAmount</th>
                                 </tr>
                             </thead>
-                            <tbody class="list form-check-all text-center"> </tbody>
+                            <tbody> </tbody>
                         </table>
                         <!-- end table -->
                         <div class="noresult" style="display: none">
@@ -362,7 +362,7 @@
                                     <th>Total Amount</th>
                                 </tr>
                             </thead>
-                            <tbody class="list form-check-all text-center"> </tbody>
+                            <tbody> </tbody>
                         </table>
                         <!-- end table -->
                         <div class="noresult" style="display: none">
@@ -389,7 +389,7 @@
                                     <th>Total Amount</th>
                                 </tr>
                             </thead>
-                            <tbody class="list form-check-all text-center">
+                            <tbody>
                             </tbody>
                         </table>
                         <div class="noresult" style="display: none">
@@ -416,7 +416,7 @@
                                     <th>Total Amount</th>
                                 </tr>
                             </thead>
-                            <tbody class="list form-check-all text-center"> </tbody>
+                            <tbody> </tbody>
                         </table>
                         <!-- end table -->
                         <div class="noresult" style="display: none">
@@ -579,7 +579,6 @@
             radio.addEventListener('change', toggleDateInputs);
         });
 
-        // Initial check to set the correct state on page load
         toggleDateInputs();
     });
 
@@ -621,23 +620,23 @@
         endDateInput.style.display = 'block';
         endDateInput.disabled = false;
 
-        // Update the placeholder to maintain dd-mm-yyyy format
+
         endDateInput.placeholder = "dd-mm-yyyy";
 
-        // Reset the end date value to clear previous selection
+
         endDateInput.value = '';
     });
 
-    // Function to format date as dd-mm-yyyy for display
+
     function formatDateForDisplay(date) {
         var day = String(date.getDate()).padStart(2, '0');
-        var month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+        var month = String(date.getMonth() + 1).padStart(2, '0');
         var year = date.getFullYear();
 
         return day + '-' + month + '-' + year;
     }
 
-    // Add a placeholder format for endDate when it is displayed
+
     document.getElementById('startDate').addEventListener('change', function () {
         var endDateInput = document.getElementById('endDate');
         endDateInput.placeholder = "dd-mm-yyyy";

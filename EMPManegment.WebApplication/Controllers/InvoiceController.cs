@@ -289,7 +289,7 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
-        [FormPermissionAttribute("VendorInvoiceListView-Add")]        
+        [FormPermissionAttribute("VendorInvoiceListView-Add")]
         [HttpPost]
         public async Task<IActionResult> InsertCreditDebitDetails()
         {
@@ -529,7 +529,7 @@ namespace EMPManegment.Web.Controllers
                 var creditdebitdetails = HttpContext.Request.Form["CREDITDEBITDETAILSBYID"];
                 var InsertDetails = JsonConvert.DeserializeObject<CreditDebitView>(creditdebitdetails);
                 List<CreditDebitView> creditdebit = new List<CreditDebitView>();
-                ApiResponseModel response = await APIServices.PostAsync(null, "Invoice/GetCreditDebitDetailsByVendorId?Vid=" + InsertDetails.VendorId);
+                ApiResponseModel response = await APIServices.PostAsync("", "Invoice/GetCreditDebitDetailsByVendorId?Vid=" + InsertDetails.VendorId);
                 if (response.code == 200)
                 {
                     creditdebit = JsonConvert.DeserializeObject<List<CreditDebitView>>(response.data.ToString());
@@ -586,7 +586,7 @@ namespace EMPManegment.Web.Controllers
         {
             try
             {
-                ApiResponseModel postuser = await APIServices.PostAsync(null, "Invoice/IsDeletedInvoice?InvoiceId=" + InvoiceId);
+                ApiResponseModel postuser = await APIServices.PostAsync("", "Invoice/IsDeletedInvoice?InvoiceId=" + InvoiceId);
                 if (postuser.code == 200)
                 {
                     return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
