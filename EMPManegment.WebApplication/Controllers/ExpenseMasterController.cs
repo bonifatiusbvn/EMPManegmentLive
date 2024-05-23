@@ -549,6 +549,13 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
+        public IActionResult DisplayExpenseList()
+        {
+            return PartialView("~/Views/ExpenseMaster/_AllUserExpensePartial.cshtml");
+        }
+
+
+
         [HttpGet]
         public async Task<FileResult> DownloadBill(string BillName)
         {

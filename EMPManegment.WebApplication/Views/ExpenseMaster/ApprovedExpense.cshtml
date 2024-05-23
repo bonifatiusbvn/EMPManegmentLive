@@ -146,126 +146,99 @@
                 <div>
                     <ul class="nav nav-tabs nav-tabs-custom nav-primary mb-3" role="tablist">
                         <li class="nav-item">
-                            <a class="nav-link active All py-3" data-bs-toggle="tab" id="All" href="#allExpense" role="tab" aria-selected="true">
+                            <a class="nav-link active All py-3" data-bs-toggle="tab" id="All" role="tab" aria-selected="true" href="AllExpenseList">
                                 <i class="ri-arrow-left-right-fill me-1 align-bottom"></i>All Expense
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link py-3 Delivered" data-bs-toggle="tab" id="Delivered" href="#allUnApprovedExpense" role="tab" aria-selected="false">
+                            <a class="nav-link py-3 Returns" data-bs-toggle="tab" role="tab" aria-selected="false" href="UnapproveExpenseList" >
                                 <i class="ri-close-circle-line me-1 align-bottom"></i>UnApproved Expense
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link py-3 Returns" data-bs-toggle="tab" id="Returns" href="#allApprovedExpense" role="tab" aria-selected="false">
+                            <a class="nav-link py-3 Returns" data-bs-toggle="tab" id="Returns" role="tab" aria-selected="false" href="ApproveExpenseList">
                                 <i class="ri-checkbox-circle-line me-1 align-bottom"></i>Approved Expense
                             </a>
                         </li>
-
                     </ul>
                     <div class="tab-content">
-                        <div class="tab-pane fade show active" id="allExpense" role="tabpanel">
-                            <table class="table table-bordered table-striped" id="UserallExpenseTable">
-                                <thead class="table-light text-muted">
-                                    <tr>
-                                        <th></th>
-                                        <th>Id</th>
-                                        <th>Expense Type</th>
-                                        <th>Payment Type</th>
-                                        <th>Bill Number</th>
-                                        <th>Description</th>
-                                        <th>Date</th>
-                                        <th>Total Amount</th>
-                                        <th>Account</th>
-
-                                    </tr>
-                                </thead>
-                                <tbody class="list form-check-all">
-                                </tbody>
-                            </table>
-                            <div class="noresult" style="display: none">
-                                <div class="text-center">
-                                    <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#25a0e2,secondary:#00bd9d" style="width:75px;height:75px">
-                                    </lord-icon>
-                                    <h5 class="mt-2">Sorry! No Result Found</h5>
-                                    <p class="text-muted mb-0">
-                                        We've searched more than 150+ invoices We did not find any
-                                        invoices for you search.
-                                    </p>
-                                </div>
+                        <div class="tab-pane fade show active" role="tabpanel">
+                            <!---Partial View--->
+                            <div id="AllUserExpensePartial">
                             </div>
                         </div>
 
-                        <div class="tab-pane fade" id="allUnApprovedExpense" role="tabpanel">
-                            <table id="UserallUnApprovedExpenseTable" class="table table-bordered table-striped">
-                                <thead class="table-light text-muted">
-                                    <tr>
-                                        <th scope="col" style="width: 50px;">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" id="checkedAll" value="option">
-                                            </div>
-                                        </th>
-                                        <th></th>
-                                        <th>Id</th>
-                                        <th>Expense Type</th>
-                                        <th>Payment Type</th>
-                                        <th>Bill Number</th>
-                                        <th>Description</th>
-                                        <th>Date</th>
-                                        <th>Total Amount</th>
-                                        <th>Account</th>
+                        @* <div class="tab-pane fade" id="allUnApprovedExpense" role="tabpanel">
+                        <table id="UserallUnApprovedExpenseTable" class="table table-bordered table-striped">
+                        <thead class="table-light text-muted">
+                        <tr>
+                        <th scope="col" style="width: 50px;">
+                        <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="checkedAll" value="option">
+                        </div>
+                        </th>
+                        <th></th>
+                        <th>Id</th>
+                        <th>Expense Type</th>
+                        <th>Payment Type</th>
+                        <th>Bill Number</th>
+                        <th>Description</th>
+                        <th>Date</th>
+                        <th>Total Amount</th>
+                        <th>Account</th>
 
-                                    </tr>
-                                </thead>
-                                <tbody class="list form-check-all"> </tbody>
-                            </table>
-                            <!-- end table -->
+                        </tr>
+                        </thead>
+                        <tbody class="list form-check-all"> </tbody>
+                        </table>
+                        <!-- end table -->
 
 
-                            <div class="noresult" style="display: none">
-                                <div class="text-center">
-                                    <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#25a0e2,secondary:#00bd9d" style="width:75px;height:75px">
-                                    </lord-icon>
-                                    <h5 class="mt-2">Sorry! No Result Found</h5>
-                                    <p class="text-muted mb-0">
-                                        We've searched more than 150+ invoices We did not find any
-                                        invoices for you search.
-                                    </p>
-                                </div>
-                            </div>
+                        <div class="noresult" style="display: none">
+                        <div class="text-center">
+                        <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#25a0e2,secondary:#00bd9d" style="width:75px;height:75px">
+                        </lord-icon>
+                        <h5 class="mt-2">Sorry! No Result Found</h5>
+                        <p class="text-muted mb-0">
+                        We've searched more than 150+ invoices We did not find any
+                        invoices for you search.
+                        </p>
+                        </div>
+                        </div>
                         </div>
 
                         <div class="tab-pane fade" id="allApprovedExpense" role="tabpanel">
 
-                            <table id="GetUserApprovedExpenseList" class="table table-bordered table-striped">
-                                <thead class="table-light text-muted">
-                                    <tr>
-                                        <th></th>
-                                        <th>Id</th>
-                                        <th>Expense Type</th>
-                                        <th>Payment Type</th>
-                                        <th>Bill Number</th>
-                                        <th>Description</th>
-                                        <th>Date</th>
-                                        <th>Total Amount</th>
-                                        <th>Account</th>
+                        <table id="GetUserApprovedExpenseList" class="table table-bordered table-striped">
+                        <thead class="table-light text-muted">
+                        <tr>
+                        <th></th>
+                        <th>Id</th>
+                        <th>Expense Type</th>
+                        <th>Payment Type</th>
+                        <th>Bill Number</th>
+                        <th>Description</th>
+                        <th>Date</th>
+                        <th>Total Amount</th>
+                        <th>Account</th>
 
-                                    </tr>
-                                </thead>
-                                <tbody class="list form-check-all"> </tbody>
-                            </table>
-                            <!-- end table -->
-                            <div class="noresult" style="display: none">
-                                <div class="text-center">
-                                    <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#25a0e2,secondary:#00bd9d" style="width:75px;height:75px">
-                                    </lord-icon>
-                                    <h5 class="mt-2">Sorry! No Result Found</h5>
-                                    <p class="text-muted mb-0">
-                                        We've searched more than 150+ invoices We did not find any
-                                        invoices for you search.
-                                    </p>
-                                </div>
-                            </div>
+                        </tr>
+                        </thead>
+                        <tbody class="list form-check-all"> </tbody>
+                        </table>
+                        <!-- end table -->
+                        <div class="noresult" style="display: none">
+                        <div class="text-center">
+                        <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#25a0e2,secondary:#00bd9d" style="width:75px;height:75px">
+                        </lord-icon>
+                        <h5 class="mt-2">Sorry! No Result Found</h5>
+                        <p class="text-muted mb-0">
+                        We've searched more than 150+ invoices We did not find any
+                        invoices for you search.
+                        </p>
                         </div>
+                        </div>
+                        </div> *@
 
                     </div>
                 </div>
