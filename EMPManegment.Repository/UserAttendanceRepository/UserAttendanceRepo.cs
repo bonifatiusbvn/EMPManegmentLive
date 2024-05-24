@@ -247,7 +247,6 @@ namespace EMPManegment.Repository.UserAttendanceRepository
 
                         return userAttendance;
                     }
-                    
                 }
             }
             catch (Exception ex)
@@ -260,9 +259,9 @@ namespace EMPManegment.Repository.UserAttendanceRepository
             try
             {
                 IEnumerable<UserAttendanceModel> userAttendance = null;
-                if (AttendanceList.UserId != null && AttendanceList.Date == DateTime.MinValue && AttendanceList.StartDate==null && AttendanceList.EndDate==null)
+                if (AttendanceList.UserId != null && AttendanceList.Date == DateTime.MinValue && AttendanceList.StartDate == null && AttendanceList.EndDate == null)
                 {
-                    IEnumerable<UserAttendanceModel> userAttendance1 = from a in Context.TblAttendances.OrderByDescending(a=> a.Date)
+                    IEnumerable<UserAttendanceModel> userAttendance1 = from a in Context.TblAttendances.OrderByDescending(a => a.Date)
                                                                        join
                                                                        b in Context.TblUsers on a.User.Id equals b.Id
                                                                        where (b.Id == AttendanceList.UserId)
@@ -368,8 +367,8 @@ namespace EMPManegment.Repository.UserAttendanceRepository
                                 return AttendanceDataTable;
                             }
                         }
-                        }
                     }
+                }
             }
             catch (Exception ex)
             {
