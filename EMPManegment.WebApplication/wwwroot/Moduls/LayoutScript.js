@@ -75,17 +75,6 @@ $(document).ready(function () {
         }
     });
 
-
-    var activeNavLink = localStorage.getItem('activeNavLink');
-    if (activeNavLink) {
-        $('.nav-link').each(function () {
-            if ($(this).attr('href') === activeNavLink) {
-                $(this).addClass('active');
-                $(this).parents('.nav-item').addClass('menu-open');
-                $(this).parents('.nav-treeview').slideDown().css('display', '');
-            }
-        });
-    }
 });
 
 
