@@ -467,7 +467,7 @@ namespace EMPManegment.Web.Controllers
                 var sortColumn = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
                 var sortColumnDir = Request.Form["order[0][dir]"].FirstOrDefault();
                 var searchValue = Request.Form["search[value]"].FirstOrDefault();
-                int pageSize = length != null ? Convert.ToInt32(length) : 0;
+                int pageSize = length != null ? Convert.ToInt32(length) : 20;
                 int skip = start != null ? Convert.ToInt32(start) : 0;
 
                 var dataTable = new DataTableRequstModel
@@ -554,7 +554,14 @@ namespace EMPManegment.Web.Controllers
             return PartialView("~/Views/ExpenseMaster/_AllUserExpensePartial.cshtml");
         }
 
-
+        public IActionResult DisplayUserExpenseList()
+        {
+            return PartialView("~/Views/ExpenseMaster/_UserExpenseListPartial.cshtml");
+        }
+        public IActionResult DisplayUserExpenseDetails()
+        {
+            return PartialView("~/Views/ExpenseMaster/_UserAllDetailsPartial.cshtml");
+        }
 
         [HttpGet]
         public async Task<FileResult> DownloadBill(string BillName)

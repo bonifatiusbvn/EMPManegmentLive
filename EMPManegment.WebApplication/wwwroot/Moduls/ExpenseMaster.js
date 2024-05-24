@@ -41,7 +41,7 @@ function resetForm() {
     }
     if (ExpenseTypeForm) {
         ExpenseTypeForm.resetForm();
-    }  
+    }
 }
 function preventEmptyValue(input) {
 
@@ -591,7 +591,7 @@ function UserExpensesDetails() {
         serverSide: true,
         filter: true,
         "bDestroy": true,
-        pageLength: 30,
+        order: [[4, 'asc']],
         ajax: {
             type: "Post",
             url: '/ExpenseMaster/GetUserListTable',
@@ -632,20 +632,6 @@ function UserExpensesDetails() {
         }]
     });
 }
-
-function GetAllUserExpenseList() {
-    $.ajax({
-        url: '/ExpenseMaster/DisplayExpenseList',
-        type: 'GET',
-        success: function (result) {
-            $("#AllUserExpensePartial").html(result);
-            DisplayAllUserExpenseList();
-        },
-        error: function () {
-            alert('Error loading expenses. Please try again.');
-        }
-    });
-}
 $(document).ready(function () {
     $('.nav-link').click(function () {
         var targetTab = $(this).attr('href');
@@ -660,6 +646,19 @@ $(document).ready(function () {
         }
     });
 });
+function GetAllUserExpenseList() {
+    $.ajax({
+        url: '/ExpenseMaster/DisplayExpenseList',
+        type: 'GET',
+        success: function (result) {
+            $("#AllUserExpensePartial").html(result);
+            DisplayAllUserExpenseList();
+        },
+        error: function () {
+            alert('Error loading expenses. Please try again.');
+        }
+    });
+}
 function GetAllUserUnapproveExpense() {
     $.ajax({
         url: '/ExpenseMaster/DisplayExpenseList',
@@ -674,12 +673,12 @@ function GetAllUserUnapproveExpense() {
     });
 }
 function GetAllUserApproveExpense() {
-    
+
     $.ajax({
         url: '/ExpenseMaster/DisplayExpenseList',
         type: 'GET',
         success: function (result) {
-            
+
             $("#AllUserExpensePartial").html(result);
             DisplayAllApprovedExpenseList();
         },
@@ -688,39 +687,15 @@ function GetAllUserApproveExpense() {
         }
     });
 }
-//$(document).ready(function () {
-//    function anyCheckboxChecked() {
-//        return $("input[name='chk_child']:checked").length > 0;
-//    }
-
-//    $('#UserallExpenseTable').on('change', 'input[name="chk_child"]', function () {
-//        if (anyCheckboxChecked()) {
-//            $('#remove-actions').show();
-//        } else {
-//            $('#remove-actions').hide();
-//        }
-//        var allChecked = $('input[name="chk_child"]').length === $('input[name="chk_child"]:checked').length;
-//        $('#checkedAll').prop('checked', allChecked);
-//    });
-
-//    $('#checkedAll').on('change', function () {
-//        $('input[name="chk_child"]').prop('checked', $(this).prop('checked'));
-//        if ($(this).prop('checked')) {
-//            $('#remove-actions').show();
-//        } else {
-//            $('#remove-actions').hide();
-//        }
-//    });
-//});
 
 function DisplayAllUserExpenseList() {
     var userId = GetParameterByName('userId');
     $('#UserallExpenseTable').DataTable({
-        processing: true,
+        processing: false,
         serverSide: true,
         filter: true,
-        destroy: true, 
-        pageLength: 30,
+        destroy: true,
+        order: [[7, 'desc']],
         ajax: {
             url: '/ExpenseMaster/GetUserExpenseList',
             type: 'POST',
@@ -791,11 +766,11 @@ function DisplayUnApprovedExpenseList() {
     var UserId = GetParameterByName('userId');
     var unapprove = false;
     $('#UserallExpenseTable').DataTable({
-        processing: true,
+        processing: false,
         serverSide: true,
         filter: true,
         destroy: true,
-        pageLength: 30,
+        order: [[7, 'desc']],
         ajax: {
             type: "POST",
             url: '/ExpenseMaster/GetUserExpenseList',
@@ -865,14 +840,14 @@ function DisplayUnApprovedExpenseList() {
             }
         ],
         drawCallback: function () {
-            // Update the state of the "check all" checkbox after table redraw
+
             updateCheckedAllState();
         }
     });
 }
 
 function DisplayAllApprovedExpenseList() {
-    
+
     var UserId = GetParameterByName('userId');
     var approve = true;
     $('#UserallExpenseTable').DataTable({
@@ -880,7 +855,7 @@ function DisplayAllApprovedExpenseList() {
         serverSide: true,
         filter: true,
         "bDestroy": true,
-        pageLength: 30,
+        order: [[7, 'desc']],
         ajax: {
             type: "POST",
             url: '/ExpenseMaster/GetUserExpenseList?UserId=' + UserId + '&approve=' + approve,
@@ -1028,21 +1003,17 @@ $(document).ready(function () {
                 "searchable": false,
                 "render": function (data, type, full) {
 
-                    var buttons = '<ul class="list-inline hstack gap-2 mb-0">';
+                    var buttons = '';
 
                     if (canEdit) {
-                        buttons += '<li class="btn text-primary list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">' +
-                            '<a class="btn text-primary" onclick="EditExpenseDetails(\'' + full.id + '\')">' +
-                            '<i class="fa-regular fa-pen-to-square"></i></a></li>';
+                        buttons += '<a class="btn text-primary" onclick="EditExpenseDetails(\'' + full.id + '\')">' +
+                            '<i class="fa-regular fa-pen-to-square"></i></a>';
                     }
 
                     if (canDelete) {
-                        buttons += '<li class="btn text-danger list-inline-item delete" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Delete" style="margin-left:12px;">' +
-                            '<a class="btn text-danger" onclick="deleteExpense(\'' + full.id + '\')">' +
-                            '<i class="fas fa-trash"></i></a></li>';
+                        buttons += '<a class="btn text-danger" onclick="deleteExpense(\'' + full.id + '\')">' +
+                            '<i class="fas fa-trash"></i></a>';
                     }
-
-                    buttons += '</ul>';
                     return buttons;
                 }
 
@@ -1054,7 +1025,7 @@ $(document).ready(function () {
             serverSide: true,
             filter: true,
             "bDestroy": true,
-            pageLength: 30,
+            order: [[3, 'desc']],
             ajax: {
                 type: "POST",
                 url: '/ExpenseMaster/GetExpenseDetailsList',
@@ -1288,29 +1259,11 @@ $(document).ready(function () {
     })
 });
 $(document).ready(function () {
-
     var UserId = $("#txtuserid").val();
     if (UserId) {
-        //GetAllUserExpenseList(UserId);
-        //UserDebitExpenseList(UserId);
-        //UserCreditExpenseList(UserId);
         GetPayUserExpenseCreditList(UserId)
         GetPayUserExpenseDebitList(UserId)
     }
-
-    //$('.nav-link').click(function () {
-    //    var targetTab = $(this).attr('href');
-
-    //    var UserId = $("#txtuserid").val();
-
-    //    if (targetTab === '#GetallExpense') {
-    //        GetAllUserExpenseList(UserId);
-    //    } else if (targetTab === '#GetallUnApprovedExpense') {
-    //        UserDebitExpenseList(UserId);
-    //    } else if (targetTab === '#GetallApprovedExpense') {
-    //        UserCreditExpenseList(UserId);
-    //    }
-    //});
 });
 function UserDebitExpenseList(UserId) {
     var Account = "Debit";
@@ -1402,42 +1355,61 @@ function UserCreditExpenseList(UserId) {
     });
 }
 
-$(document).ready(function () {
-    function data(datas) {
-        var userPermission = datas;
-        GetUserAllExpenseList(userPermission);
-    }
+var userPermissions = "";
 
+$(document).ready(function () {
+    // Initialize the page by fetching user expense list
+    GetMyExpenseList();
+    function UserData(datas) {
+        debugger;
+        var userPermissions = datas;
+    };
+    // Click event handlers for navigation links
     $('.nav-link').click(function () {
         var targetTab = $(this).attr('href');
-        if (targetTab === '#GetUserAllExpenseList') {
-            GetUserAllExpenseList(userPermission);
-        }
-        else if (targetTab === '#GetAllUnApprovedExpenseList') {
-            GetAllUserUnapproveExpenseList();
+        if (targetTab === '#GetMyAllExpenseList') {
+            GetMyExpenseList();
+        } else if (targetTab === '#GetAllUnApprovedExpenseList') {
+            GetMyUnapproveExpenseList();
         } else if (targetTab === '#GetAllApprovedExpenseList') {
-            GetAllUserApproveExpenseList();
+            GetMyApproveExpenseList();
         } else if (targetTab === '#GetAllCreditExpenseList') {
-            GetAllUserCreditExpenseList();
+            GetMyCreditExpenseList();
         }
     });
 
     $('.nav-radio').click(function () {
         var targetTab = $(this).attr('href');
         if (targetTab === '#GetUserLastMonthExpenseList') {
-            GetUserLastMonthExpenseList();
+            GetMyLastMonthExpenseList();
         } else if (targetTab === '#GetUserCurrentMonthExpenseList') {
-            GetUserCurrentMonthExpenseList();
+            GetMyCurrentMonthExpenseList();
         }
     });
 
     $('.nav-btn').click(function () {
         var targetTab = $(this).attr('href');
         if (targetTab === '#GetBetweendatesExpenseList') {
-            SearchBetweenDateExpense();
+            GetMyBetweenDateExpenseList();
         }
     });
 
+    // Function to fetch and display user expense details
+    function GetMyExpenseList() {
+        $.ajax({
+            url: '/ExpenseMaster/DisplayUserExpenseDetails',
+            type: 'GET',
+            success: function (result) {
+                $("#UserExpenseListPartial").html(result);
+                GetUserAllExpenseList(datas);
+            },
+            error: function () {
+                alert('Error loading expenses. Please try again.');
+            }
+        });
+    }
+
+    // Function to add placeholder rows to DataTable
     function addPlaceholderRows(api, rowCount) {
         var rowsToAdd = rowCount - api.rows().count();
         if (rowsToAdd > 0) {
@@ -1447,9 +1419,10 @@ $(document).ready(function () {
         }
     }
 
-    function GetUserAllExpenseList(userPermission) {
+    // Function to fetch and display all user expenses with permissions
+    function GetUserAllExpenseList(datas) {debugger
         var UserId = $("#txtuserid").val();
-        var userPermissionArray = JSON.parse(userPermission);
+        var userPermissionArray = JSON.parse(datas);
         var canEdit = false;
         var canDelete = false;
 
@@ -1461,8 +1434,8 @@ $(document).ready(function () {
                 break;
             }
         }
-
-        var columns = [
+        debugger
+        var column = [
             {
                 "data": null,
                 "render": function (data, type, full, meta) {
@@ -1497,47 +1470,35 @@ $(document).ready(function () {
                 }
             }
         ];
+        debugger
         if (canEdit || canDelete) {
-            columns.push({
-                "data": null,
-                "orderable": false,
-                "searchable": false,
+            column.push({
                 "render": function (data, type, full) {
                     var buttons = '';
-
                     if (canEdit) {
-                        buttons +=
-                            '<a class="btn text-primary" onclick="EditExpenseDetails(\'' + full.id + '\')">' +
-                            '<i class="fa-regular fa-pen-to-square"></i></a>';
+                        buttons += '<a class="btn text-primary" onclick="EditExpenseDetails(\'' + full.id + '\')"><i class="fa-regular fa-pen-to-square"></i></a>';
                     }
-
                     if (canDelete) {
-                        buttons += '<a class="btn text-danger btndeletedoc" onclick="deleteExpense(\'' + full.id + '\')">' +
-                            '<i class="fas fa-trash"></i></a>';
+                        buttons += '<a class="btn text-danger btndeletedoc" onclick="deleteExpense(\'' + full.id + '\')"><i class="fas fa-trash"></i></a>';
                     }
-
                     return buttons;
                 }
             });
         }
-
-        var table = $('#DisplayUserAllExpenseList').DataTable({
+        debugger
+        $('#GetMyAllExpenseList').DataTable({
             processing: false,
             serverSide: true,
             filter: true,
             "bDestroy": true,
+            order: [[3, 'asc']],
+            pageLength: 30,
             ajax: {
-                type: "POST",
+                type: "Post",
                 url: '/ExpenseMaster/GetUserExpenseList?UserId=' + UserId,
-                dataType: 'json',
-                dataSrc: function (json) {
-                    if (json.data.length < 10) {
-                        addPlaceholderRows(table, 10);
-                    }
-                    return json.data;
-                }
+                dataType: 'json'
             },
-            columns: columns,
+            columns: column,
             scrollY: 400,
             scrollX: true,
             scrollCollapse: true,
@@ -1546,29 +1507,60 @@ $(document).ready(function () {
                 footer: true
             },
             autoWidth: false,
-            columnDefs: [
-                {
-                    targets: 0, width: '60px'
-                },
-                {
-                    targets: '_all', width: 'auto'
-                }
-            ]
+            columnDefs: [{
+                targets: [0],
+                orderable: false,
+                width: "auto"
+            }],
+            "footerCallback": function (row, data, start, end, display) {
+                var api = this.api(), data;
+
+                var intVal = function (i) {
+                    return typeof i === 'string' ?
+                        i.replace(/[\$,]/g, '') * 1 :
+                        typeof i === 'number' ?
+                            i : 0;
+                };
+
+                total = api
+                    .column(4)
+                    .data()
+                    .reduce(function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                $(api.column(4).footer()).html(
+                    '<span style="color: black;">Total: ' + '₹' + total + '</span>'
+                );
+            }
         });
     }
 
-    data(datas);
 });
 
-
+function GetMyUnapproveExpenseList() {
+    $.ajax({
+        url: '/ExpenseMaster/DisplayUserExpenseList',
+        type: 'GET',
+        success: function (result) {
+            
+            $("#UserExpenseListPartial").html(result);
+            GetAllUserUnapproveExpenseList();
+        },
+        error: function () {
+            alert('Error loading expenses. Please try again.');
+        }
+    });
+}
 function GetAllUserUnapproveExpenseList() {
     var UserId = $("#txtuserid").val();
     var IsApprove = false;
-    $('#GetUserUnapprovedExpenseList').DataTable({
+    $('#DisplayUserAllExpenseList').DataTable({
         processing: false,
         serverSide: true,
         filter: true,
         "bDestroy": true,
+        order: [[3, 'asc']],
         pageLength: 30,
         ajax: {
             type: "Post",
@@ -1644,14 +1636,29 @@ function GetAllUserUnapproveExpenseList() {
         }
     });
 }
+function GetMyApproveExpenseList() {
+    $.ajax({
+        url: '/ExpenseMaster/DisplayUserExpenseList',
+        type: 'GET',
+        success: function (result) {
+
+            $("#UserExpenseListPartial").html(result);
+            GetAllUserApproveExpenseList();
+        },
+        error: function () {
+            alert('Error loading expenses. Please try again.');
+        }
+    });
+}
 function GetAllUserApproveExpenseList() {
     var UserId = $("#txtuserid").val();
     var IsApprove = true;
-    $('#GetAllUserApprovedExpenseList').DataTable({
+    $('#DisplayUserAllExpenseList').DataTable({
         processing: false,
         serverSide: true,
         filter: true,
         "bDestroy": true,
+        order: [[3, 'asc']],
         pageLength: 30,
         ajax: {
             type: "Post",
@@ -1727,16 +1734,31 @@ function GetAllUserApproveExpenseList() {
         }
     });
 }
+function GetMyCreditExpenseList() {
+    $.ajax({
+        url: '/ExpenseMaster/DisplayUserExpenseList',
+        type: 'GET',
+        success: function (result) {
+
+            $("#UserExpenseListPartial").html(result);
+            GetAllUserCreditExpenseList();
+        },
+        error: function () {
+            alert('Error loading expenses. Please try again.');
+        }
+    });
+}
 function GetAllUserCreditExpenseList() {
     var UserId = $("#txtuserid").val();
     var Account = "Credit";
     var filterType = 'credit';
 
-    $('#UserallCreditExpenseTable').DataTable({
+    $('#DisplayUserAllExpenseList').DataTable({
         processing: false,
         serverSide: true,
         filter: true,
         "bDestroy": true,
+        order: [[3, 'asc']],
         pageLength: 30,
         ajax: {
             type: "Post",
@@ -1813,14 +1835,29 @@ function GetAllUserCreditExpenseList() {
         }
     });
 }
+function GetMyLastMonthExpenseList() {
+    $.ajax({
+        url: '/ExpenseMaster/DisplayUserExpenseList',
+        type: 'GET',
+        success: function (result) {
+
+            $("#UserExpenseListPartial").html(result);
+            GetUserLastMonthExpenseList();
+        },
+        error: function () {
+            alert('Error loading expenses. Please try again.');
+        }
+    });
+}
 function GetUserLastMonthExpenseList() {
     var filterType = "lastmonth";
     var UserId = $("#txtuserid").val();
-    $('#GetUserLastMonthExpense').DataTable({
+    $('#DisplayUserAllExpenseList').DataTable({
         processing: false,
         serverSide: true,
         filter: true,
         "bDestroy": true,
+        order: [[3, 'asc']],
         searching: false,
         info: false,
         lengthChange: false,
@@ -1899,14 +1936,29 @@ function GetUserLastMonthExpenseList() {
         }
     });
 }
+function GetMyCurrentMonthExpenseList() {
+    $.ajax({
+        url: '/ExpenseMaster/DisplayUserExpenseList',
+        type: 'GET',
+        success: function (result) {
+
+            $("#UserExpenseListPartial").html(result);
+            GetUserCurrentMonthExpenseList();
+        },
+        error: function () {
+            alert('Error loading expenses. Please try again.');
+        }
+    });
+}
 function GetUserCurrentMonthExpenseList() {
     var filterType = 'thismonth';
     var UserId = $("#txtuserid").val();
-    $('#GetUserCurrentExpense').DataTable({
+    $('#DisplayUserAllExpenseList').DataTable({
         processing: false,
         serverSide: true,
         filter: true,
         "bDestroy": true,
+        order: [[3, 'asc']],
         searching: false,
         info: false,
         lengthChange: false,
@@ -1985,7 +2037,20 @@ function GetUserCurrentMonthExpenseList() {
         }
     });
 }
+function GetMyBetweenDateExpenseList() {
+    $.ajax({
+        url: '/ExpenseMaster/DisplayUserExpenseList',
+        type: 'GET',
+        success: function (result) {
 
+            $("#UserExpenseListPartial").html(result);
+            SearchBetweenDateExpense();
+        },
+        error: function () {
+            alert('Error loading expenses. Please try again.');
+        }
+    });
+}
 function SearchBetweenDateExpense() {
     var StartDate = $('#startDate').val();
     var EndDate = $('#endDate').val();
@@ -2004,11 +2069,12 @@ function SearchBetweenDateExpense() {
 }
 function GetUserBetweenMonthsExpenseList(StartDate, EndDate, UserId) {
     var filterType = 'daterange';
-    $('#GetBetweendatesExpense').DataTable({
+    $('#DisplayUserAllExpenseList').DataTable({
         processing: false,
         serverSide: true,
         filter: true,
         "bDestroy": true,
+        order: [[3, 'asc']],
         searching: false,
         info: false,
         lengthChange: false,
