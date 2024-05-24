@@ -517,6 +517,7 @@
     <!-- DataTables  & Plugins -->
     <script src="~/lteassets/plugins/datatables/jquery.dataTables.min.js"></script>
     <script src="~/lteassets/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="~/lteassets/plugins/moment/moment.min.js"></script>
     <script src="~/lteassets/plugins/select2/js/select2.min.js"></script>
     <script src="~/lteassets/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
     <script src="~/lteassets/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
@@ -547,7 +548,8 @@
     <!-- App js -->
     <!-- moduls -->
     <script src="~/js/loader.js"></script>
-    <script src="~/moduls/userdetailsscript.js"></script>
+    <script src="~/moduls/common.js"></script>
+    <script src="~/moduls/userdetailsscript.js"></script> 
     <script src="~/moduls/userprofile.js"></script>
     <script src="~/moduls/layoutscript.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
@@ -559,5 +561,4 @@
 
     var UserId = '@_userSession.UserId';
     var TodayDate = '@DateTime.Today';
-
 </script>

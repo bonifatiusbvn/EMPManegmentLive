@@ -1,4 +1,5 @@
 ﻿@model IEnumerable<EMPManegment.EntityModels.ViewModels.Models.UserAttendanceModel>
+@inject EMPManegment.Web.Helper.Common CommonHelper
 
 <div class="tab-pane" role="tabpanel" style="margin-top:30px;">
     <div class="table-responsive table-card mb-1">
@@ -18,7 +19,7 @@
                 {
                     <tr>
                         <td>@item.UserName</td>
-                        <td>@item.Date.ToString("dd/MM/yyyy")</td>
+                        <td>@CommonHelper.GetCommonDateFormat(item.Date)</td>
                         <td>@item.Intime.ToLongTimeString()</td>
                       
                             @if(item.OutTime != null)

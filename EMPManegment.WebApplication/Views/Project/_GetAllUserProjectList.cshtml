@@ -4,6 +4,7 @@
 @using X.PagedList.Mvc.Core;
 @inject IHttpContextAccessor Accessor
 @inject UserSession _userSession
+@inject EMPManegment.Web.Helper.Common CommonHelper
 @*
     For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 *@
@@ -57,7 +58,7 @@
                         <div class="col-6">
                             <div>
                                 <p class="text-muted mb-1">Deadline</p>
-                                <h5 class="fs-14">@item.ProjectDeadline.ToString("dd/MM/yyyy")</h5>
+                                <h5 class="fs-14">@CommonHelper.GetCommonDateFormat(item.ProjectDeadline)</h5>
                             </div>
                         </div>
                         <div class="mt-auto">
@@ -99,7 +100,7 @@
                         </div>
                         <div class="flex-shrink-0">
                             <div class="text-muted">
-                                <i class="ri-calendar-event-fill me-1 align-bottom"></i> @item.ProjectStartDate.ToString("dd/MM/yyyy")
+                                <i class="ri-calendar-event-fill me-1 align-bottom"></i>@CommonHelper.GetCommonDateFormat(item.ProjectStartDate)
 
                             </div>
                         </div>

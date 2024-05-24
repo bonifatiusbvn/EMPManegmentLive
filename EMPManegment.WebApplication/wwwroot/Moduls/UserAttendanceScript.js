@@ -107,24 +107,19 @@ $(document).ready(function () {
             {
                 "data": "date", "name": "Date",
                 "render": function (data, type, full, meta) {
-                    var dateObj = new Date(data);
-                    var day = dateObj.getDate();
-                    var month = dateObj.toLocaleString('default', { month: 'short' });
-                    var year = dateObj.getFullYear();
-                    var formattedDate = day + '-' + month + '-' + year;
-                    return formattedDate;
+                    return getCommonDateformat(data);
                 }
             },
             {
                 "data": "intime", "name": "InTime",
                 render: function (data) {
-                    return new Date(data).toLocaleTimeString('en-GB');
+                    return new Date(data).toLocaleTimeString('en-US');
                 }
             },
             {
                 "data": "outTime", "name": "OutTime",
                 render: function (data) {
-                    return new Date(data).toLocaleTimeString('en-GB');
+                    return new Date(data).toLocaleTimeString('en-US');
                 }
             },
             {
@@ -286,11 +281,7 @@ function GetAttendance() {
         success: function (Result, status, xhr) {
             var object = '';
             $.each(Result, function (index, item) {
-                var dateObj = new Date(item.date);
-                var day = dateObj.getDate();
-                var month = dateObj.toLocaleString('default', { month: 'short' });
-                var year = dateObj.getFullYear();
-                var formattedDate = day + '-' + month + '-' + year;
+                var formattedDate = getCommonDateformat(item.date);
                 var todate = new Date().toLocaleDateString('en-US');
                 var date = (new Date(item.date)).toLocaleDateString('en-US')
                 object += '<tr>';

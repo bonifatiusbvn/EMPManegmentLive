@@ -582,23 +582,13 @@ $(document).ready(function () {
                 {
                     "data": "taskDate", "name": "TaskDate",
                     "render": function (data, type, full, meta) {
-                        var dateObj = new Date(data);
-                        var day = dateObj.getDate();
-                        var month = dateObj.toLocaleString('default', { month: 'short' });
-                        var year = dateObj.getFullYear();
-                        var formattedDate = day + '-' + month + '-' + year;
-                        return formattedDate;
+                        return getCommonDateformat(data);
                     }
                 },
                 {
                     "data": "taskEndDate", "name": "TaskEndDate",
-                    "render": function (data, type, full, meta) {
-                        var dateObj = new Date(data);
-                        var day = dateObj.getDate();
-                        var month = dateObj.toLocaleString('default', { month: 'short' });
-                        var year = dateObj.getFullYear();
-                        var formattedDate = day + '-' + month + '-' + year;
-                        return formattedDate;
+                    "render": function (data, type, full, meta) {                      
+                        return getCommonDateformat(data);
                     }
                 },
                 {

@@ -1,4 +1,5 @@
 ﻿@model List<EMPManegment.EntityModels.ViewModels.ProjectModels.ProjectDetailView>
+@inject EMPManegment.Web.Helper.Common CommonHelper
 
 
 <div class="tab-pane" role="tabpanel">
@@ -22,7 +23,7 @@
                                                 <p class="text-muted text-truncate mb-0">
                                                     Last
                                                     Update : <span class="fw-semibold text-body">
-                                                        @item.ProjectStartDate.ToString("dd/MM/yyyy")
+                                                        @CommonHelper.GetCommonDateFormat(item.ProjectStartDate)
                                                     </span>
                                                 </p>
                                             </div>
@@ -83,7 +84,7 @@
                                                 <p class="text-muted text-truncate mb-0">
                                                     Last
                                                     Update : <span class="fw-semibold text-body">
-                                                        @item.ProjectStartDate.ToString("dd/MM/yyyy")
+                                                        @CommonHelper.GetCommonDateFormat(item.ProjectStartDate)
                                                     </span>
                                                 </p>
                                             </div>

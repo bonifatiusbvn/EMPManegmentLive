@@ -1,4 +1,7 @@
 ﻿@model EMPManegment.EntityModels.ViewModels.Purchase_Request.PurchaseRequestMasterView
+@using EMPManegment.Web.Models;
+@inject IHttpContextAccessor Accessor;
+@inject UserSession _userSession
 @{
     ViewData["Title"] = "PurchaseRequestDetails";
     Layout = "~/Views/Shared/_UserHomeLayout.cshtml";
@@ -103,7 +106,7 @@
                                     </tr>
                                     <tr class="border-top border-top-dashed">
                                         <th>Total :</th>
-                                        <th>₹</th>
+                                        <th id="total" class="text-end">₹0</th>
                                     </tr>
                                 </tbody>
                             </table>
@@ -137,12 +140,12 @@
     </div>
 </div>
 <!--end card-->
-
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script src="~/moduls/purchaserequestscript.js"></script>
-<script>
+<script type="text/javascript">
     var subtotal = parseFloat(document.getElementById('subtotal').textContent.replace('₹', ''));
     var totalGst = parseFloat(document.getElementById('totalGst').textContent.replace('₹', ''));
     var total = subtotal + totalGst;
     document.getElementById('total').textContent = '₹' + total.toFixed(2);
+    var userPermissions = '@Html.Raw(Json.Serialize(UserSession.FormPermisionData))';
 </script>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/moduls/purchaserequestscript.js"></script>
