@@ -20,6 +20,7 @@ using EMPManegment.EntityModels.ViewModels.Invoice;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Mvc;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using System.Globalization;
 
 namespace EMPManegment.Repository.ExponseMasterRepository
 {
@@ -306,7 +307,6 @@ namespace EMPManegment.Repository.ExponseMasterRepository
         {
             try
             {
-
                 var Expense = (from a in Context.TblExpenseMasters
                                join b in Context.TblExpenseTypes on a.ExpenseType equals b.Id
                                join c in Context.TblPaymentTypes on a.PaymentType equals c.Id
@@ -337,21 +337,27 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                 }
                 else
                 {
-                    Expense = Expense.OrderBy("Date asc");
+                    Expense = Expense.OrderBy("Date desc");
                 }
+
+
                 if (!string.IsNullOrEmpty(dataTable.searchValue))
                 {
-                    Expense = Expense.Where(e => e.Description.Contains(dataTable.searchValue) ||
-                    e.Date.ToString().ToLower().Contains(dataTable.searchValue.ToLower()) ||
-                    e.Account.Contains(dataTable.searchValue) ||
-                    e.BillNumber.Contains(dataTable.searchValue) ||
-                    e.UserName.Contains(dataTable.searchValue) ||
-                    e.TotalAmount.ToString().ToLower().Contains(dataTable.searchValue.ToLower()));
+                    string searchValue = dataTable.searchValue.ToLower();
+                    DateTime searchDate;
+                    bool isDate = DateTime.TryParseExact(dataTable.searchValue, "d-MMM-yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out searchDate);
+
+                    Expense = Expense.Where(e => e.Description.ToLower().Contains(searchValue) ||
+                                                 (isDate && e.Date == searchDate) ||
+                                                 e.Account.ToLower().Contains(searchValue) ||
+                                                 e.BillNumber.ToLower().Contains(searchValue) ||
+                                                 e.UserName.ToLower().Contains(searchValue) ||
+                                                 e.TotalAmount.ToString().ToLower().Contains(searchValue));
                 }
 
-                int totalRecord = Expense.Count();
+                int totalRecord = await Expense.CountAsync();
 
-                var cData = Expense.Skip(dataTable.skip).Take(dataTable.pageSize).ToList();
+                var cData = await Expense.Skip(dataTable.skip).Take(dataTable.pageSize).ToListAsync();
 
                 jsonData jsonData = new jsonData
                 {
@@ -448,7 +454,7 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                 }
                 else
                 {
-                    expenses = expenses.OrderBy("Date asc");
+                    expenses = expenses.OrderBy("Date desc");
                 }
                 if (!string.IsNullOrEmpty(dataTable.searchValue))
                 {
@@ -522,7 +528,7 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                 }
                 else
                 {
-                    UserList = UserList.OrderBy("Date asc");
+                    UserList = UserList.OrderBy("Date desc");
                 }
                 if (!string.IsNullOrEmpty(dataTable.searchValue))
                 {

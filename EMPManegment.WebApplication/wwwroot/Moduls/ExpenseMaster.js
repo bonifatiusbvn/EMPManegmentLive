@@ -735,7 +735,7 @@ function DisplayAllUserExpenseList() {
         serverSide: true,
         filter: true,
         destroy: true,
-        order: [[3, 'asc']],
+        order: [[7, 'desc']],
         ajax: {
             url: '/ExpenseMaster/GetUserExpenseList',
             type: 'POST',
@@ -815,7 +815,7 @@ function DisplayUnApprovedExpenseList() {
         serverSide: true,
         filter: true,
         destroy: true,
-        order: [[3, 'asc']],
+        order: [[7, 'desc']],
         ajax: {
             type: "POST",
             url: '/ExpenseMaster/GetUserExpenseList',
@@ -904,7 +904,7 @@ function DisplayAllApprovedExpenseList() {
         serverSide: true,
         filter: true,
         "bDestroy": true,
-        order: [[3, 'asc']],
+        order: [[7, 'desc']],
         ajax: {
             type: "POST",
             url: '/ExpenseMaster/GetUserExpenseList?UserId=' + UserId + '&approve=' + approve,
@@ -1085,7 +1085,7 @@ $(document).ready(function () {
             serverSide: true,
             filter: true,
             "bDestroy": true,
-            order: [[3, 'asc']],
+            order: [[3, 'desc']],
             ajax: {
                 type: "POST",
                 url: '/ExpenseMaster/GetExpenseDetailsList',
