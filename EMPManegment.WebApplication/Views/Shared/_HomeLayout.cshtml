@@ -27,7 +27,6 @@
     <link rel="stylesheet" href="~/lteassets/plugins/ekko-lightbox/ekko-lightbox.css">
     <link rel="stylesheet" href="~/lteassets/plugins/toastr/toastr.min.css">
     <link href="~/lteassets/plugins/select2/css/select2.min.css" rel="stylesheet" />
-    <link href="~/lteassets/plugins/select2/css/select2-bootstrap4.css" rel="stylesheet" />
     <!-- DataTables -->
     <link rel="stylesheet" href="~/lteassets/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="~/lteassets/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
@@ -70,11 +69,11 @@
                                 <span class="text-start ms-xl-2">
                                     <span class="d-none d-xl-inline-block ms-1 fw-medium d-block">@_userSession.FullName</span>
                                     <span class="d-none d-xl-block ms-1 fs-12 d-block">@_userSession.UserName</span>
-                                    <input type="hidden" value="@_userSession.UserId" />
+
                                 </span>
                             </span>
-
                         </button>
+                        <input type="hidden" value="@_userSession.UserId" />
                         <div class="dropdown-menu dropdown-menu-end" style="position: absolute; inset: 0px 0px auto auto; margin: 0px; transform: translate(0px, 66px);">
                             <!-- item-->
                             <h6 class="dropdown-header">Welcome @_userSession.FirstName!</h6>
@@ -122,7 +121,7 @@
                                 @foreach (var item in UserSession.FormPermisionData.Where(e => e.GroupName == group && e.isActive == true))
                                 {
                                     <li class="nav-item">
-                                        <a asp-action="@item.Action" asp-controller="@item.Controller" class="nav-link active">
+                                        <a asp-action="@item.Action" asp-controller="@item.Controller" class="nav-link">
                                             <i class="nav-icon fas fa-tachometer-alt icon"></i>
                                             <p class="text">
                                                 Dashboard
@@ -143,7 +142,7 @@
                                             <i class="right fas fa-angle-left"></i>
                                         </p>
                                     </a>
-                                    <ul class="nav nav-treeview">
+                                    <ul class="nav nav-treeview" style="display: none;">
                                         @foreach (var item in UserSession.FormPermisionData.Where(e => e.GroupName == group && e.isActive == true))
                                         {
                                             @if (item.View)
@@ -169,12 +168,11 @@
                                             <i class="right fas fa-angle-left"></i>
                                         </p>
                                     </a>
-                                    <ul class="nav nav-treeview">
+                                    <ul class="nav nav-treeview" style="display: none;">
                                         @foreach (var item in UserSession.FormPermisionData.Where(e => e.GroupName == group && e.isActive == true))
                                         {
                                             @if (item.View)
                                             {
-
                                                 <li class="nav-item">
                                                     <a asp-action="@item.Action" asp-controller="@item.Controller" class="nav-link">
                                                         <i class="far fa-circle nav-icon"></i>
@@ -196,18 +194,15 @@
                                             <i class="right fas fa-angle-left"></i>
                                         </p>
                                     </a>
-                                    <ul class="nav nav-treeview">
+                                    <ul class="nav nav-treeview" style="display: none;">
                                         @foreach (var item in UserSession.FormPermisionData.Where(e => e.GroupName == group && e.isActive == true))
                                         {
                                             @if (item.View)
                                             {
-
                                                 <li class="nav-item">
                                                     <a asp-action="@item.Action" asp-controller="@item.Controller" class="nav-link">
                                                         <i class="far fa-circle nav-icon"></i>
-                                                        <p>
-                                                            @item.FormName
-                                                        </p>
+                                                        <p>@item.FormName</p>
                                                     </a>
                                                 </li>
                                             }
@@ -217,10 +212,9 @@
                             }
                         }
                     </ul>
-
                 </nav>
-                <!-- /.sidebar-menu -->
             </div>
+
             <!-- /.sidebar -->
         </aside>
 
@@ -264,8 +258,6 @@
     <!-- overlayScrollbars -->
     <script src="~/lteassets/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
     <!-- AdminLTE App -->
-    <script src="~/lteassets/dist/js/adminlte.js"></script>
-
     <!-- PAGE PLUGINS -->
     <!-- listjs init -->
 
