@@ -31,11 +31,11 @@ namespace EMPManegment.Repository.UserListRepository
     public class UserDetailsRepo : IUserDetails
     {
         public BonifatiusEmployeesContext Context { get; }
-        
+
         public UserDetailsRepo(BonifatiusEmployeesContext context)
         {
             Context = context;
-           
+
         }
 
 
@@ -43,40 +43,41 @@ namespace EMPManegment.Repository.UserListRepository
         {
 
             var GetUsersList = from e in Context.TblUsers
-                                                 join d in Context.TblDepartments on e.DepartmentId equals d.Id
-                                                 join c in Context.TblCountries on e.CountryId equals c.Id
-                                                 join s in Context.TblStates on e.StateId equals s.Id
-                                                 join ct in Context.TblCities on e.CityId equals ct.Id
-                                                 join r in Context.TblRoleMasters on e.RoleId equals r.RoleId
-                                                 select new UserDataTblModel
-                                                 {
-                                                     Id = e.Id,
-                                                     IsActive = e.IsActive,
-                                                     UserName = e.UserName,
-                                                     FirstName = e.FirstName,
-                                                     LastName = e.LastName,
-                                                     Image = e.Image,
-                                                     Gender = e.Gender,
-                                                     DateOfBirth = e.DateOfBirth,
-                                                     Email = e.Email,
-                                                     PhoneNumber = e.PhoneNumber,
-                                                     Address = e.Address,
-                                                     CityName = ct.City,
-                                                     StateName = s.State,
-                                                     CountryName = c.Country,
-                                                     DepartmentName = d.Department,
-                                                     RoleId = e.RoleId,
-                                                     RoleName = r.Role,
-                                                 };
+                               join d in Context.TblDepartments on e.DepartmentId equals d.Id
+                               join c in Context.TblCountries on e.CountryId equals c.Id
+                               join s in Context.TblStates on e.StateId equals s.Id
+                               join ct in Context.TblCities on e.CityId equals ct.Id
+                               join r in Context.TblRoleMasters on e.RoleId equals r.RoleId
+                               select new UserDataTblModel
+                               {
+                                   Id = e.Id,
+                                   IsActive = e.IsActive,
+                                   UserName = e.UserName,
+                                   FirstName = e.FirstName,
+                                   LastName = e.LastName,
+                                   Image = e.Image,
+                                   Gender = e.Gender,
+                                   DateOfBirth = e.DateOfBirth,
+                                   Email = e.Email,
+                                   PhoneNumber = e.PhoneNumber,
+                                   Address = e.Address,
+                                   CityName = ct.City,
+                                   StateName = s.State,
+                                   CountryName = c.Country,
+                                   DepartmentName = d.Department,
+                                   RoleId = e.RoleId,
+                                   RoleName = r.Role,
+                                   FullName = e.FirstName + " " + e.LastName,
+                               };
 
-            if(!string.IsNullOrEmpty(dataTable.sortColumn) && !string.IsNullOrEmpty(dataTable.sortColumnDir))
+            if (!string.IsNullOrEmpty(dataTable.sortColumn) && !string.IsNullOrEmpty(dataTable.sortColumnDir))
             {
                 GetUsersList = GetUsersList.OrderBy(dataTable.sortColumn + " " + dataTable.sortColumnDir);
             }
 
             if (!string.IsNullOrEmpty(dataTable.searchValue))
             {
-                GetUsersList = GetUsersList.Where(e=>e.UserName.Contains(dataTable.searchValue) || e.DepartmentName.Contains(dataTable.searchValue) || e.Gender.Contains(dataTable.searchValue) || e.Email.Contains(dataTable.searchValue));
+                GetUsersList = GetUsersList.Where(e => e.UserName.Contains(dataTable.searchValue) || e.DepartmentName.Contains(dataTable.searchValue) || e.Gender.Contains(dataTable.searchValue) || e.Email.Contains(dataTable.searchValue) || e.FullName.Contains(dataTable.searchValue));
             }
 
             int totalRecord = GetUsersList.Count();
@@ -96,7 +97,7 @@ namespace EMPManegment.Repository.UserListRepository
 
 
         }
-        
+
         public async Task<UserResponceModel> ActiveDeactiveUsers(string UserName)
         {
             UserResponceModel response = new UserResponceModel();
@@ -111,8 +112,8 @@ namespace EMPManegment.Repository.UserListRepository
                     Context.TblUsers.Update(GetUserdta);
                     Context.SaveChanges();
                     response.Code = 200;
-                    response.Data = GetUserdta; 
-                    response.Message = "User" + " "+ GetUserdta.UserName +" " +"Is Deactive Succesfully";
+                    response.Data = GetUserdta;
+                    response.Message = "User" + " " + GetUserdta.UserName + " " + "Is Deactive Succesfully";
                 }
 
                 else
@@ -122,7 +123,7 @@ namespace EMPManegment.Repository.UserListRepository
                     Context.SaveChanges();
                     response.Code = 200;
                     response.Data = GetUserdta;
-                    response.Message = "User" + " "+ GetUserdta.UserName + " "+ "Is Active Succesfully";
+                    response.Message = "User" + " " + GetUserdta.UserName + " " + "Is Active Succesfully";
                 }
 
 
@@ -141,10 +142,10 @@ namespace EMPManegment.Repository.UserListRepository
                 {
                     response.Message = "You missed out-time of " + Intimedata.Date.ToString("dd/MM/yyyy") + " " + "Kindly contact your admin";
                     response.Icone = "warning";
-                } 
-                
+                }
 
-               else 
+
+                else
                 {
                     if (Intimedata.Date == DateTime.Today && Intimedata.Intime != null)
                     {
@@ -169,7 +170,7 @@ namespace EMPManegment.Repository.UserListRepository
 
                     }
 
-               }
+                }
             }
 
             else
@@ -195,7 +196,7 @@ namespace EMPManegment.Repository.UserListRepository
         public async Task<UserResponceModel> EnterOutTime(UserAttendanceModel userAttendance)
         {
             UserResponceModel response = new UserResponceModel();
-            var Outtimedata = Context.TblAttendances.Where(a => a.UserId == userAttendance.UserId).OrderByDescending(a => a.Date).FirstOrDefault();;
+            var Outtimedata = Context.TblAttendances.Where(a => a.UserId == userAttendance.UserId).OrderByDescending(a => a.Date).FirstOrDefault(); ;
             if (Outtimedata.OutTime == null && Outtimedata.Date != DateTime.Today)
             {
                 response.Message = "You missed out-time of " + Outtimedata.Date.ToString("dd/MM/yyyy") + " " + "Kindly contact your admin";
@@ -203,15 +204,15 @@ namespace EMPManegment.Repository.UserListRepository
 
             }
 
-           else
+            else
             {
-               if(Outtimedata.Date != DateTime.Today)
+                if (Outtimedata.Date != DateTime.Today)
                 {
                     response.Message = "Please enter in-time first";
                     response.Icone = "warning";
                 }
 
-               else 
+                else
                 {
 
                     if (Outtimedata.Date == DateTime.Today && Outtimedata.OutTime == null)
@@ -237,7 +238,7 @@ namespace EMPManegment.Repository.UserListRepository
                 }
 
 
-                }
+            }
 
             return response;
         }
@@ -248,7 +249,7 @@ namespace EMPManegment.Repository.UserListRepository
             try
             {
                 var userdata = Context.TblUsers.FirstOrDefault(x => x.UserName == ResetPassword.UserName);
-                if(userdata != null) 
+                if (userdata != null)
                 {
 
                     userdata.PasswordHash = ResetPassword.PasswordHash;
@@ -256,10 +257,10 @@ namespace EMPManegment.Repository.UserListRepository
                 }
                 Context.TblUsers.Update(userdata);
                 Context.SaveChanges();
-                response.Code=200;
+                response.Code = 200;
                 response.Message = "Password updated!";
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 throw ex;
             }
@@ -283,24 +284,25 @@ namespace EMPManegment.Repository.UserListRepository
         }
         public async Task<IEnumerable<DocumentInfoView>> GetDocumentList(Guid Userid)
         {
-    
+
             try
             {
                 IEnumerable<DocumentInfoView> DocumentList = from a in Context.TblUserDocuments
                                                              join b in Context.TblUsers on a.User.Id equals b.Id
-                                                             join c in Context.TblDocumentMasters on a.DocumentTypeId equals c.Id where b.Id==Userid
+                                                             join c in Context.TblDocumentMasters on a.DocumentTypeId equals c.Id
+                                                             where b.Id == Userid
                                                              select new DocumentInfoView
                                                              {
                                                                  Id = a.Id,
                                                                  UserId = a.UserId,
-                                                                 DocumentType = c.DocumentType,                                                                                                                        
+                                                                 DocumentType = c.DocumentType,
                                                                  DocumentName = a.DocumentName,
                                                                  CreatedOn = DateTime.Now,
                                                                  CreatedBy = a.CreatedBy,
                                                              };
-            return DocumentList;
+                return DocumentList;
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 throw ex;
             }
@@ -315,7 +317,7 @@ namespace EMPManegment.Repository.UserListRepository
                 DocumentTypeId = docview.DocumentTypeId,
                 DocumentName = docview.DocumentName,
                 CreatedOn = DateTime.Now,
-                CreatedBy= docview.CreatedBy,
+                CreatedBy = docview.CreatedBy,
             };
             Context.TblUserDocuments.Add(UploadDocument);
             Context.SaveChanges();
@@ -328,7 +330,7 @@ namespace EMPManegment.Repository.UserListRepository
             try
             {
                 var tblUser = Context.TblUsers.Where(p => p.UserName == loginrequest.UserName).SingleOrDefault();
-                if(tblUser != null)
+                if (tblUser != null)
                 {
                     if (tblUser.UserName == loginrequest.UserName && Crypto.VarifyHash(loginrequest.Password, tblUser.PasswordHash, tblUser.PasswordSalt))
                     {
@@ -341,11 +343,12 @@ namespace EMPManegment.Repository.UserListRepository
                         response.Message = "Your password is wrong";
                     }
                 }
-            }catch (Exception ex)
-            { 
+            }
+            catch (Exception ex)
+            {
                 throw ex;
             }
-        return response;
+            return response;
         }
 
         public async Task<UserResponceModel> UserBirsthDayWish(Guid UserId)
@@ -362,8 +365,8 @@ namespace EMPManegment.Repository.UserListRepository
                     string checkdate = userdata.DateOfBirth.ToString("dd/MM");
                     if (today == checkdate)
                     {
-                        response.Message = "Bonifatius wish you a very happy birthday.." +" " + userdata.FirstName + " " + userdata.LastName +" "+ "Enjoy your day";
-                        response.Code = (int)HttpStatusCode.OK; 
+                        response.Message = "Bonifatius wish you a very happy birthday.." + " " + userdata.FirstName + " " + userdata.LastName + " " + "Enjoy your day";
+                        response.Code = (int)HttpStatusCode.OK;
                     }
                     else
                     {
@@ -372,7 +375,7 @@ namespace EMPManegment.Repository.UserListRepository
                     }
 
                 }
-                
+
                 return response;
 
             }
@@ -381,34 +384,34 @@ namespace EMPManegment.Repository.UserListRepository
 
                 throw ex;
             }
-            
+
         }
 
         public async Task<IEnumerable<EmpDetailsView>> UserEdit()
         {
             IEnumerable<EmpDetailsView> UserEdit = from e in Context.TblUsers
-                                                 join d in Context.TblDepartments on e.DepartmentId equals d.Id
-                                                 join c in Context.TblCountries on e.CountryId equals c.Id
-                                                 join s in Context.TblStates on e.StateId equals s.Id
-                                                 join ct in Context.TblCities on e.CityId equals ct.Id
-                                                 select new EmpDetailsView
-                                                 {
-                                                     Id = e.Id,
-                                                     IsActive = e.IsActive,
-                                                     UserName = e.UserName,
-                                                     FirstName = e.FirstName,
-                                                     LastName = e.LastName,
-                                                     Image = e.Image,
-                                                     Gender = e.Gender,
-                                                     DateOfBirth = e.DateOfBirth,
-                                                     Email = e.Email,
-                                                     PhoneNumber = e.PhoneNumber,
-                                                     Address = e.Address,
-                                                     CityName = ct.City,
-                                                     StateName = s.State,
-                                                     CountryName = c.Country,
-                                                     DepartmentName = d.Department
-                                                 };
+                                                   join d in Context.TblDepartments on e.DepartmentId equals d.Id
+                                                   join c in Context.TblCountries on e.CountryId equals c.Id
+                                                   join s in Context.TblStates on e.StateId equals s.Id
+                                                   join ct in Context.TblCities on e.CityId equals ct.Id
+                                                   select new EmpDetailsView
+                                                   {
+                                                       Id = e.Id,
+                                                       IsActive = e.IsActive,
+                                                       UserName = e.UserName,
+                                                       FirstName = e.FirstName,
+                                                       LastName = e.LastName,
+                                                       Image = e.Image,
+                                                       Gender = e.Gender,
+                                                       DateOfBirth = e.DateOfBirth,
+                                                       Email = e.Email,
+                                                       PhoneNumber = e.PhoneNumber,
+                                                       Address = e.Address,
+                                                       CityName = ct.City,
+                                                       StateName = s.State,
+                                                       CountryName = c.Country,
+                                                       DepartmentName = d.Department
+                                                   };
             return UserEdit;
         }
 
@@ -483,7 +486,7 @@ namespace EMPManegment.Repository.UserListRepository
                 response.Code = (int)HttpStatusCode.OK;
                 response.Message = "User data updated successfully";
                 return response;
-                
+
             }
             catch (Exception ex)
             {
@@ -499,7 +502,7 @@ namespace EMPManegment.Repository.UserListRepository
                 UserName = a.UserName,
                 FirstName = a.FirstName,
                 LastName = a.LastName,
-               
+
             }).ToList();
             return GetUserNameList;
         }
@@ -507,28 +510,28 @@ namespace EMPManegment.Repository.UserListRepository
         public async Task<IEnumerable<EmpDetailsView>> GetUsersDetails()
         {
             IEnumerable<EmpDetailsView> GetUsersList = from e in Context.TblUsers
-                               join d in Context.TblDepartments on e.DepartmentId equals d.Id
-                               join c in Context.TblCountries on e.CountryId equals c.Id
-                               join s in Context.TblStates on e.StateId equals s.Id
-                               join ct in Context.TblCities on e.CityId equals ct.Id
-                               select new EmpDetailsView
-                               {
-                                   Id = e.Id,
-                                   IsActive = e.IsActive,
-                                   UserName = e.UserName,
-                                   FirstName = e.FirstName,
-                                   LastName = e.LastName,
-                                   Image = e.Image,
-                                   Gender = e.Gender,
-                                   DateOfBirth = e.DateOfBirth,
-                                   Email = e.Email,
-                                   PhoneNumber = e.PhoneNumber,
-                                   Address = e.Address,
-                                   CityName = ct.City,
-                                   StateName = s.State,
-                                   CountryName = c.Country,
-                                   DepartmentName = d.Department
-                               };           
+                                                       join d in Context.TblDepartments on e.DepartmentId equals d.Id
+                                                       join c in Context.TblCountries on e.CountryId equals c.Id
+                                                       join s in Context.TblStates on e.StateId equals s.Id
+                                                       join ct in Context.TblCities on e.CityId equals ct.Id
+                                                       select new EmpDetailsView
+                                                       {
+                                                           Id = e.Id,
+                                                           IsActive = e.IsActive,
+                                                           UserName = e.UserName,
+                                                           FirstName = e.FirstName,
+                                                           LastName = e.LastName,
+                                                           Image = e.Image,
+                                                           Gender = e.Gender,
+                                                           DateOfBirth = e.DateOfBirth,
+                                                           Email = e.Email,
+                                                           PhoneNumber = e.PhoneNumber,
+                                                           Address = e.Address,
+                                                           CityName = ct.City,
+                                                           StateName = s.State,
+                                                           CountryName = c.Country,
+                                                           DepartmentName = d.Department
+                                                       };
             return GetUsersList;
         }
         public async Task<IEnumerable<EmpDetailsView>> GetSearchEmpList(EmpDetailsModel EmpList)
@@ -637,7 +640,7 @@ namespace EMPManegment.Repository.UserListRepository
                                                            StateName = s.State,
                                                            CountryName = c.Country,
                                                            DepartmentName = d.Department,
-                                                           DepartmentId=e.DepartmentId,
+                                                           DepartmentId = e.DepartmentId,
                                                            RoleId = e.RoleId,
                                                            RoleName = r.Role,
                                                        };
@@ -654,5 +657,5 @@ namespace EMPManegment.Repository.UserListRepository
     }
 }
 
-      
+
 
