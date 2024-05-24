@@ -283,6 +283,7 @@ function GetAttendance() {
             $.each(Result, function (index, item) {
                 var formattedDate = getCommonDateformat(item.date);
                 var todate = new Date().toLocaleDateString('en-US');
+                var date = (new Date(item.date)).toLocaleDateString('en-US')
                 object += '<tr>';
                 object += '<td>' + item.userName + '</td>';
                 object += '<td>' + formattedDate + '</td>';
@@ -292,7 +293,7 @@ function GetAttendance() {
                     object += '<td>' +
                         (new Date(item.outTime)).toLocaleTimeString('en-US') + '</td>';
                 }
-                else if (item.outTime == null && userdate == todate) {
+                else if (item.outTime == null && date == todate) {
 
                     object += '<td>' +
                         ("Pending") + '</td>';
@@ -306,7 +307,7 @@ function GetAttendance() {
                     object += '<td>' +
                         (item.totalHours?.substr(0, 8)) + ('hr') + '</td>';
                 }
-                else if (item.totalHours == null && userdate == todate) {
+                else if (item.totalHours == null && date == todate) {
                     object += '<td>' +
                         ("Pending") + '</td>';
                 }
@@ -515,3 +516,100 @@ function updateUserAttendance() {
     }
 }
 
+function ExportToExcel() {
+    siteloadershow();
+    $.ajax({
+        url: '/UserProfile/ExportToExcel',
+        type: 'GET',
+        success: function (data, status, xhr) {
+            siteloaderhide();
+            var filename = "";
+            var disposition = xhr.getResponseHeader('Content-Disposition');
+            if (disposition && disposition.indexOf('attachment') !== -1) {
+                var matches = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/.exec(disposition);
+                if (matches != null && matches[1]) filename = matches[1].replace(/['"]/g, '');
+            }
+
+            var type = xhr.getResponseHeader('Content-Type');
+            var blob = new Blob([data], { type: type });
+
+            if (typeof window.navigator.msSaveBlob !== 'undefined') {
+                window.navigator.msSaveBlob(blob, filename);
+            } else {
+                var URL = window.URL || window.webkitURL;
+                var downloadUrl = URL.createObjectURL(blob);
+
+                if (filename) {
+                    var a = document.createElement("a");
+                    if (typeof a.download === 'undefined') {
+                        window.location = downloadUrl;
+                    } else {
+                        a.href = downloadUrl;
+                        a.download = filename;
+                        document.body.appendChild(a);
+                        a.click();
+                    }
+                } else {
+                    window.location = downloadUrl;
+                }
+
+                setTimeout(function () { URL.revokeObjectURL(downloadUrl); }, 100);
+            }
+        },
+        error: function (xhr, status, error) {
+            alert("Error: " + error);
+        },
+        xhrFields: {
+            responseType: 'blob'
+        }
+    });
+}
+
+function ExportToPDF() {
+    siteloadershow();
+    $.ajax({
+        url: '/UserProfile/ExportToPdf',
+        type: 'POST',
+        success: function (data, status, xhr) {
+            siteloaderhide();
+            var filename = "";
+            var disposition = xhr.getResponseHeader('Content-Disposition');
+            if (disposition && disposition.indexOf('attachment') !== -1) {
+                var matches = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/.exec(disposition);
+                if (matches != null && matches[1]) filename = matches[1].replace(/['"]/g, '');
+            }
+
+            var type = xhr.getResponseHeader('Content-Type');
+            var blob = new Blob([data], { type: type });
+
+            if (typeof window.navigator.msSaveBlob !== 'undefined') {
+                window.navigator.msSaveBlob(blob, filename);
+            } else {
+                var URL = window.URL || window.webkitURL;
+                var downloadUrl = URL.createObjectURL(blob);
+
+                if (filename) {
+                    var a = document.createElement("a");
+                    if (typeof a.download === 'undefined') {
+                        window.location = downloadUrl;
+                    } else {
+                        a.href = downloadUrl;
+                        a.download = filename;
+                        document.body.appendChild(a);
+                        a.click();
+                    }
+                } else {
+                    window.location = downloadUrl;
+                }
+
+                setTimeout(function () { URL.revokeObjectURL(downloadUrl); }, 100);
+            }
+        },
+        error: function (xhr, status, error) {
+            alert("Error: " + error);
+        },
+        xhrFields: {
+            responseType: 'blob'
+        }
+    });
+}

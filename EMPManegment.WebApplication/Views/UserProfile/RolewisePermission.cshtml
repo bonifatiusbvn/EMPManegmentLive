@@ -46,7 +46,7 @@
                                     @if (UserSession.FormPermisionData.Any(a => a.FormName == "Form Permission" && (a.Add == true)))
                                     {
 
-                                        <button type="button" class="btn btn-block btn-warning btn-md" data-toggle="modal" data-target="#createRoleModal" onclick="clearTextRoleName()"><i class="ri-add-line align-bottom me-1"></i>Create Role</button>
+                                        <button type="button" class="btn btn-block btn-warning btn-md" data-bs-toggle="modal" data-bs-target="#createRoleModal" onclick="clearTextRoleName()"><i class="ri-add-line align-bottom me-1"></i>Create Role</button>
                                     }
                                 </form>
 
@@ -88,32 +88,34 @@
     </div>
 </div>
 
-
-<!-- Modal -->
-<div class="modal fade" id="createRoleModal" tabindex="-1" role="dialog" aria-labelledby="createRoleModalLabel" aria-hidden="true">
+<div id="createRoleModal" class="modal fade flip" tabindex="-1" role="dialog" aria-labelledby="createRoleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="createRoleModalLabel">Create Role</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <form id="addUserRole" autocomplete="off">
+            <form id="addUserRole">
+                <div class="modal-header bg-primary-subtle p-3">
+                    <h5 class="modal-title" id="createRoleModalLabel">Create Role</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
                 <div class="modal-body">
-                    <div class="col-lg-12">
-                        <label for="textRoleName" class="form-label">Role</label>
-                        <input type="text" value="@_userSession.UserId" id="txtUserId" hidden />
-                        <input type="text" class="form-control" id="textRoleName" name="textRoleName" />
-                        <input type="text" class="form-control" id="textRoleId" name="textRoleId" hidden />
+                    <div class="hstack gap-3 align-items-start">
+                        <div class="flex-grow-1">
+                            <label for="textRoleName" class="form-label">Role</label>
+                            <input type="text" value="@_userSession.UserId" id="txtUserId" hidden />
+                            <input type="text" class="form-control" id="textRoleName" placeholder="Enter Role" name="textRoleName" />
+                            <input type="text" class="form-control" id="textRoleId" name="textRoleId" hidden />
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger btn-default m-1" id="close-modal" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-primary" onclick="validateAndCreateRole()">Create</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
+
+
 
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>

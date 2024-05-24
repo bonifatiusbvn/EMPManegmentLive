@@ -24,6 +24,7 @@ using static System.Net.Mime.MediaTypeNames;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using EMPManegment.EntityModels.ViewModels.UserModels;
 using EMPManegment.EntityModels.ViewModels.ProductMaster;
+#nullable disable
 
 namespace EMPManegment.Repository.UserListRepository
 {
@@ -417,37 +418,38 @@ namespace EMPManegment.Repository.UserListRepository
             try
             {
                 Userdata = (from e in Context.TblUsers.Where(x => x.Id == Userid)
-                           join d in Context.TblDepartments on e.DepartmentId equals d.Id
-                           join c in Context.TblCountries on e.CountryId equals c.Id
-                           join s in Context.TblStates on e.StateId equals s.Id
-                           join ct in Context.TblCities on e.CityId equals ct.Id
-                           join b in Context.TblProjectMembers on e.Id equals b.UserId
-                           select new EmpDetailsView
-                           {
-                               Id = e.Id,
-                               IsActive = e.IsActive,
-                               UserName = e.UserName,
-                               FirstName = e.FirstName,
-                               LastName = e.LastName,
-                               Image = e.Image,
-                               Gender = e.Gender,
-                               DateOfBirth = e.DateOfBirth,
-                               Email = e.Email,
-                               PhoneNumber = e.PhoneNumber,
-                               Address = e.Address,
-                               CityName = ct.City,
-                               StateName = s.State,
-                               CountryName = c.Country,
-                               DepartmentName = d.Department,
-                               JoiningDate = e.JoiningDate,
-                               Pincode = e.Pincode,
-                               Designation = e.Designation,
-                               DepartmentId = e.DepartmentId,
-                               CityId = e.CityId,
-                               StateId = e.StateId,
-                               CountryId = e.CountryId,
-                               ProjectId =b.ProjectId,
-                           }).First();
+                            join d in Context.TblDepartments on e.DepartmentId equals d.Id
+                            join c in Context.TblCountries on e.CountryId equals c.Id
+                            join s in Context.TblStates on e.StateId equals s.Id
+                            join ct in Context.TblCities on e.CityId equals ct.Id
+                            join b in Context.TblProjectMembers on e.Id equals b.UserId into project
+                            from p in project.DefaultIfEmpty()
+                            select new EmpDetailsView
+                            {
+                                Id = e.Id,
+                                IsActive = e.IsActive,
+                                UserName = e.UserName,
+                                FirstName = e.FirstName,
+                                LastName = e.LastName,
+                                Image = e.Image,
+                                Gender = e.Gender,
+                                DateOfBirth = e.DateOfBirth,
+                                Email = e.Email,
+                                PhoneNumber = e.PhoneNumber,
+                                Address = e.Address,
+                                CityName = ct.City,
+                                StateName = s.State,
+                                CountryName = c.Country,
+                                DepartmentName = d.Department,
+                                JoiningDate = e.JoiningDate,
+                                Pincode = e.Pincode,
+                                Designation = e.Designation,
+                                DepartmentId = e.DepartmentId,
+                                CityId = e.CityId,
+                                StateId = e.StateId,
+                                CountryId = e.CountryId,
+                                ProjectId = p != null ? p.ProjectId : (Guid?)null,
+                            }).FirstOrDefault();
                 return Userdata;
             }
             catch (Exception ex)
