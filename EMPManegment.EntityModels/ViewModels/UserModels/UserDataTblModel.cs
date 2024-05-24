@@ -30,5 +30,7 @@ namespace EMPManegment.EntityModels.ViewModels.UserModels
         public string? DepartmentName { get; set; }
         public Guid? RoleId { get; set; }
         public string? RoleName { get; set; }
+        public string? FullName { get; set; }
+
     }
 }
