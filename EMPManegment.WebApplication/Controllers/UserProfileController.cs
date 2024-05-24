@@ -396,11 +396,11 @@ namespace EMPManegment.Web.Controllers
                 ApiResponseModel postuser = await APIServices.PostAsync(uploadDocument, "UserProfile/UploadDocument");
                 if (postuser.code == 200)
                 {
-                    return new JsonResult(postuser.message = "Document Uploaded Successfully!");
+                    return new JsonResult(postuser.message = "Document Uploaded Successfully!",postuser.code);
                 }
                 else
                 {
-                    return new JsonResult(postuser.message);
+                    return new JsonResult(postuser.code);
                 }
             }
             catch (Exception ex)

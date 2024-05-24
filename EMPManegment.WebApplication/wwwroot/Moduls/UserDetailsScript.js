@@ -101,12 +101,7 @@ function GetAllUserData() {
             {
                 "data": "dateOfBirth", "name": "DateOfBirth", "type": "date",
                 "render": function (data, type, full, meta) {
-                    var dateObj = new Date(data);
-                    var day = dateObj.getDate();
-                    var month = dateObj.toLocaleString('default', { month: 'short' });
-                    var year = dateObj.getFullYear();
-                    var formattedDate = day + '-' + month + '-' + year;
-                    return formattedDate;
+                    return getCommonDateformat(data);
                 }
             },
             { "data": "email", "name": "Email" },

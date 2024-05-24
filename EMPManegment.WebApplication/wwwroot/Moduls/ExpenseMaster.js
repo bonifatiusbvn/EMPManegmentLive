@@ -453,12 +453,7 @@ function GetPayUserExpenseCreditList(userId) {
                 "data": "date",
                 "name": "Date",
                 "render": function (data, type, full, meta) {
-                    var dateObj = new Date(data);
-                    var day = dateObj.getDate();
-                    var month = dateObj.toLocaleString('default', { month: 'short' });
-                    var year = dateObj.getFullYear();
-                    var formattedDate = day + '-' + month + '-' + year;
-                    return formattedDate;
+                    return getCommonDateformat(data);
                 }
             },
             {
@@ -538,12 +533,7 @@ function GetPayUserExpenseDebitList(userId) {
                 "data": "date",
                 "name": "Date",
                 "render": function (data, type, full, meta) {
-                    var dateObj = new Date(data);
-                    var day = dateObj.getDate();
-                    var month = dateObj.toLocaleString('default', { month: 'short' });
-                    var year = dateObj.getFullYear();
-                    var formattedDate = day + '-' + month + '-' + year;
-                    return formattedDate;
+                    return getCommonDateformat(data);
                 }
             },
             {
@@ -629,12 +619,7 @@ function UserExpensesDetails() {
                 "data": "date",
                 "name": "Date",
                 "render": function (data, type, full, meta) {
-                    var dateObj = new Date(data);
-                    var day = dateObj.getDate();
-                    var month = dateObj.toLocaleString('default', { month: 'short' });
-                    var year = dateObj.getFullYear();
-                    var formattedDate = day + '-' + month + '-' + year;
-                    return formattedDate;
+                    return getCommonDateformat(data);
                 }
             },
             { "data": "unapprovedPendingAmount", "name": "UnapprovedPendingAmount" },
@@ -704,11 +689,11 @@ function GetAllUserApproveExpense() {
     });
 }
 //$(document).ready(function () {
-//    function anyCheckboxChecked() {debugger
+//    function anyCheckboxChecked() {
 //        return $("input[name='chk_child']:checked").length > 0;
 //    }
 
-//    $('#UserallExpenseTable').on('change', 'input[name="chk_child"]', function () {debugger
+//    $('#UserallExpenseTable').on('change', 'input[name="chk_child"]', function () {
 //        if (anyCheckboxChecked()) {
 //            $('#remove-actions').show();
 //        } else {
@@ -771,12 +756,7 @@ function DisplayAllUserExpenseList() {
                 "data": "date",
                 "name": "Date",
                 "render": function (data, type, full, meta) {
-                    var dateObj = new Date(data);
-                    var day = dateObj.getDate();
-                    var month = dateObj.toLocaleString('default', { month: 'short' });
-                    var year = dateObj.getFullYear();
-                    var formattedDate = day + '-' + month + '-' + year;
-                    return formattedDate;
+                    return getCommonDateformat(data);
                 }
             },
             {
@@ -856,11 +836,7 @@ function DisplayUnApprovedExpenseList() {
                 "data": "date",
                 "name": "Date",
                 "render": function (data, type, full, meta) {
-                    var dateObj = new Date(data);
-                    var day = dateObj.getDate();
-                    var month = dateObj.toLocaleString('default', { month: 'short' });
-                    var year = dateObj.getFullYear();
-                    return day + '-' + month + '-' + year;
+                    return getCommonDateformat(data);
                 }
             },
             {
@@ -938,12 +914,7 @@ function DisplayAllApprovedExpenseList() {
                 "data": "date",
                 "name": "Date",
                 "render": function (data, type, full, meta) {
-                    var dateObj = new Date(data);
-                    var day = dateObj.getDate();
-                    var month = dateObj.toLocaleString('default', { month: 'short' });
-                    var year = dateObj.getFullYear();
-                    var formattedDate = day + '-' + month + '-' + year;
-                    return formattedDate;
+                    return getCommonDateformat(data);
                 }
             },
             {
@@ -1034,13 +1005,7 @@ $(document).ready(function () {
                 "className": "text-center",
 
                 "render": function (data, type, full, meta) {
-
-                    var dateObj = new Date(data);
-                    var day = dateObj.getDate();
-                    var month = dateObj.toLocaleString('default', { month: 'short' });
-                    var year = dateObj.getFullYear();
-                    var formattedDate = day + '-' + month + '-' + year;
-                    return formattedDate;
+                    return getCommonDateformat(data);
                 }
             },
             {
@@ -1256,12 +1221,7 @@ function ApprovedExpenseList() {
                 "data": "date",
                 "name": "Date",
                 "render": function (data, type, full, meta) {
-                    var dateObj = new Date(data);
-                    var day = dateObj.getDate();
-                    var month = dateObj.toLocaleString('default', { month: 'short' });
-                    var year = dateObj.getFullYear();
-                    var formattedDate = day + '-' + month + '-' + year;
-                    return formattedDate;
+                    return getCommonDateformat(data);
                 }
             },
             { "data": "totalAmount", "name": "TotalAmount" },
@@ -1376,12 +1336,7 @@ function UserDebitExpenseList(UserId) {
                 "data": "date",
                 "name": "Date",
                 "render": function (data, type, full, meta) {
-                    var dateObj = new Date(data);
-                    var day = dateObj.getDate();
-                    var month = dateObj.toLocaleString('default', { month: 'short' });
-                    var year = dateObj.getFullYear();
-                    var formattedDate = day + '-' + month + '-' + year;
-                    return formattedDate;
+                    return getCommonDateformat(data);
                 }
             },
             { "data": "totalAmount", "name": "TotalAmount" },
@@ -1425,12 +1380,7 @@ function UserCreditExpenseList(UserId) {
                 "data": "date",
                 "name": "Date",
                 "render": function (data, type, full, meta) {
-                    var dateObj = new Date(data);
-                    var day = dateObj.getDate();
-                    var month = dateObj.toLocaleString('default', { month: 'short' });
-                    var year = dateObj.getFullYear();
-                    var formattedDate = day + '-' + month + '-' + year;
-                    return formattedDate;
+                    return getCommonDateformat(data);
                 }
             },
             { "data": "totalAmount", "name": "TotalAmount" },
@@ -1534,12 +1484,7 @@ $(document).ready(function () {
                 "name": "Date",
                 "render": function (data, type, full, meta) {
                     if (!data) return ''; // Return empty string if date is null
-                    var dateObj = new Date(data);
-                    var day = dateObj.getDate();
-                    var month = dateObj.toLocaleString('default', { month: 'short' });
-                    var year = dateObj.getFullYear();
-                    var formattedDate = day + '-' + month + '-' + year;
-                    return formattedDate;
+                    return getCommonDateformat(data);
                 }
             },
             {
@@ -1651,12 +1596,7 @@ function GetAllUserUnapproveExpenseList() {
                 "data": "date",
                 "name": "Date",
                 "render": function (data, type, full, meta) {
-                    var dateObj = new Date(data);
-                    var day = dateObj.getDate();
-                    var month = dateObj.toLocaleString('default', { month: 'short' });
-                    var year = dateObj.getFullYear();
-                    var formattedDate = day + '-' + month + '-' + year;
-                    return formattedDate;
+                    return getCommonDateformat(data);
                 }
             },
             {
@@ -1739,12 +1679,7 @@ function GetAllUserApproveExpenseList() {
                 "data": "date",
                 "name": "Date",
                 "render": function (data, type, full, meta) {
-                    var dateObj = new Date(data);
-                    var day = dateObj.getDate();
-                    var month = dateObj.toLocaleString('default', { month: 'short' });
-                    var year = dateObj.getFullYear();
-                    var formattedDate = day + '-' + month + '-' + year;
-                    return formattedDate;
+                    return getCommonDateformat(data);
                 }
             },
             {
@@ -1829,12 +1764,7 @@ function GetAllUserCreditExpenseList() {
                 "data": "date",
                 "name": "Date",
                 "render": function (data, type, full, meta) {
-                    var dateObj = new Date(data);
-                    var day = dateObj.getDate();
-                    var month = dateObj.toLocaleString('default', { month: 'short' });
-                    var year = dateObj.getFullYear();
-                    var formattedDate = day + '-' + month + '-' + year;
-                    return formattedDate;
+                    return getCommonDateformat(data);
                 }
             },
             {
@@ -1921,12 +1851,7 @@ function GetUserLastMonthExpenseList() {
                 "data": "date",
                 "name": "Date",
                 "render": function (data, type, full, meta) {
-                    var dateObj = new Date(data);
-                    var day = dateObj.getDate();
-                    var month = dateObj.toLocaleString('default', { month: 'short' });
-                    var year = dateObj.getFullYear();
-                    var formattedDate = day + " " + month + " " + year;
-                    return formattedDate;
+                    return getCommonDateformat(data);
                 }
             },
             {
@@ -2012,12 +1937,7 @@ function GetUserCurrentMonthExpenseList() {
                 "data": "date",
                 "name": "Date",
                 "render": function (data, type, full, meta) {
-                    var dateObj = new Date(data);
-                    var day = dateObj.getDate();
-                    var month = dateObj.toLocaleString('default', { month: 'short' });
-                    var year = dateObj.getFullYear();
-                    var formattedDate = day + '-' + month + '-' + year;
-                    return formattedDate;
+                    return getCommonDateformat(data);
                 }
             },
             {
@@ -2119,12 +2039,7 @@ function GetUserBetweenMonthsExpenseList(StartDate, EndDate, UserId) {
                 "data": "date",
                 "name": "Date",
                 "render": function (data, type, full, meta) {
-                    var dateObj = new Date(data);
-                    var day = dateObj.getDate();
-                    var month = dateObj.toLocaleString('default', { month: 'short' });
-                    var year = dateObj.getFullYear();
-                    var formattedDate = day + '-' + month + '-' + year;
-                    return formattedDate;
+                    return getCommonDateformat(data);
                 }
             },
             {
