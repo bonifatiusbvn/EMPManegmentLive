@@ -28,30 +28,10 @@
 
 
 $(document).ready(function () {
+    debugger
     function handleNavClick(e) {
         var $this = $(this);
         var $submenu = $this.siblings('.nav-treeview');
-
-
-        if ($submenu.length > 0) {
-            e.preventDefault();
-
-            var isActive = $this.hasClass('active');
-            $this.toggleClass('active', !isActive);
-            $this.parent('.nav-item').toggleClass('menu-open', !isActive);
-
-            if ($submenu.is(':visible')) {
-                $submenu.slideUp();
-            } else {
-                $submenu.slideDown();
-            }
-        } else {
-            // If it's a sub-item, let the navigation proceed and add the active class to the parent items
-            $('.nav-treeview .nav-link').removeClass('active'); // Only remove active class from sub-items
-            $this.addClass('active');
-            $this.parents('.nav-item').addClass('menu-open');
-            $this.parents('.nav-treeview').slideDown().css('display', '');
-        }
     }
 
 
@@ -61,8 +41,9 @@ $(document).ready(function () {
         $('.nav-treeview .nav-link').removeClass('active');
         $this.addClass('active');
         $this.parents('.nav-item').addClass('menu-open');
+        $this.children('.nav-link').addClass('active');
         $this.parents('.nav-treeview').slideDown().css('display', '');
-        $this.parents('.nav-item').children('.nav-link').addClass('active'); // Keep main nav-link active
+
     });
 
 
@@ -71,7 +52,9 @@ $(document).ready(function () {
         if ($(this).attr('href') === currentPath) {
             $(this).addClass('active');
             $(this).parents('.nav-item').addClass('menu-open');
+            $('.menu-open').children('a.nav-link').addClass('active');
             $(this).parents('.nav-treeview').slideDown().css('display', '');
+
         }
     });
 
