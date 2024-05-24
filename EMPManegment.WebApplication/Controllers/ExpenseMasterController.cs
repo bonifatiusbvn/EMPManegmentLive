@@ -578,5 +578,26 @@ namespace EMPManegment.Web.Controllers
             var fileName = Path.GetFileName(path);
             return File(memory, ContentType, fileName);
         }
+
+        public async Task<IActionResult> AddExpenseType(ExpenseTypeView ExpenseDetails)
+        {
+            try
+            {
+                ApiResponseModel postuser = await APIServices.PostAsync(ExpenseDetails, "ExpenseMaster/AddExpenseType");
+                if (postuser.code == 200)
+                {
+                    return new JsonResult(new { postuser.message,postuser.code });
+                }
+                else
+                {
+
+                    return new JsonResult(new { postuser.code,postuser.message });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }
