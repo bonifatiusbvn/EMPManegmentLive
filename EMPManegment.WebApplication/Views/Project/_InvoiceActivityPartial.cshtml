@@ -1,6 +1,7 @@
 ﻿@using EMPManegment.Web.Models
 @model IEnumerable<EMPManegment.EntityModels.ViewModels.Invoice.InvoiceViewModel>
 @inject UserSession _userSession
+@inject EMPManegment.Web.Helper.Common CommonHelper
 @*
     For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 *@
@@ -28,7 +29,7 @@
         <div class="flex-grow-1 ms-3">
             <h6 class="mb-1">Your order is placed <span class="badge bg-danger-subtle text-danger align-middle ms-1">@item.Status</span></h6>
             <p class="text-muted mb-2">@item.ShippingAddress</p>
-            <small class="mb-0 text-muted">@item.InvoiceDate</small>
+            <small class="mb-0 text-muted">@CommonHelper.GetCommonDateFormat(item?.InvoiceDate ?? DateTime.MinValue)</small>
         </div>
     </div>
 

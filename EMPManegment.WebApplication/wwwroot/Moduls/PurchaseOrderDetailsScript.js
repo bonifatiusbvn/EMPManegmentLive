@@ -16,6 +16,7 @@ function preventEmptyValue(input) {
         input.value = 1;
     }
 }
+
 $(document).ready(function () {
     $(document).on('input', '.product-quantity', function () {
         var row = $(this).closest('.product');
@@ -359,12 +360,7 @@ function GetProductDetailsList() {
 }
 
 $(document).ready(function () {
-    var today = new Date();
-    var dd = String(today.getDate()).padStart(2, '0');
-    var mm = String(today.getMonth() + 1).padStart(2, '0');
-    var yyyy = today.getFullYear();
-
-    today = yyyy + '-' + mm + '-' + dd;
+    today = getCommonDateformat(new Date());
     $("#textOrderDate").val(today);
     $("#textOrderDate").prop("disabled", true);
 });

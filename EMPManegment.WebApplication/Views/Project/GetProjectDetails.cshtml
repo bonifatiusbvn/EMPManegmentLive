@@ -2,6 +2,7 @@
 @using EMPManegment.Web.Models
 @inject IHttpContextAccessor Accessor;
 @inject UserSession _userSession
+@inject EMPManegment.Web.Helper.Common CommonHelper
 
 @{
     ViewData["Title"] = "GetProjectDetails";
@@ -47,10 +48,10 @@
                                                 <div class="fw-medium" id="projecttype">@Model.ProjectType</div>
                                                 <input type="text" id="projectid" value="@Model.ProjectId" hidden />
                                                 <div class="vr"></div>
-                                                <div>Create Date : <span class="fw-medium">@Model.ProjectStartDate.ToString("dd/MM/yyyy")</span></div>
+                                                <div>Create Date : <span class="fw-medium">@CommonHelper.GetCommonDateFormat(Model.ProjectStartDate)</span></div>
                                                 <input type="hidden" value="@Model.ProjectStartDate" id="projectstartdate" />
                                                 <div class="vr"></div>
-                                                <div>Due Date : <span class="fw-medium" id="projectenddate"></span>@Model.ProjectEndDate.ToString("dd/MM/yyyy")</div>
+                                                <div>Due Date : <span class="fw-medium" id="projectenddate"></span>@CommonHelper.GetCommonDateFormat(Model.ProjectEndDate)</div>
                                                 <div class="vr"></div>
                                                 <div class="badge rounded-pill bg-primary fs-12" id="projectstatus">@Model.ProjectStatus</div>
                                                 <div class="badge rounded-pill bg-success fs-12" id="projectpriority">@Model.ProjectPriority</div>
@@ -114,13 +115,13 @@
                                                 <div class="col-lg-3 col-sm-6">
                                                     <div>
                                                         <p class="mb-2 text-uppercase fw-medium">Create Date :</p>
-                                                        <h5 class="fs-15 mb-0" id="projectstartdate">@Model.ProjectStartDate.ToString("dd/MM/yyyy")</h5>
+                                                        <h5 class="fs-15 mb-0" id="projectstartdate">@CommonHelper.GetCommonDateFormat(Model.ProjectStartDate)</h5>
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-3 col-sm-6">
                                                     <div>
                                                         <p class="mb-2 text-uppercase fw-medium">Due Date :</p>
-                                                        <h5 class="fs-15 mb-0" id="projectenddate">@Model.ProjectEndDate.ToString("dd/MM/yyyy")</h5>
+                                                        <h5 class="fs-15 mb-0" id="projectenddate">@CommonHelper.GetCommonDateFormat(Model.ProjectEndDate)</h5>
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-3 col-sm-6">
@@ -406,6 +407,5 @@
 </div>
 
 <!-- end modal -->
-
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/moduls/projectdetailsscript.js" asp-append-version="true"></script>

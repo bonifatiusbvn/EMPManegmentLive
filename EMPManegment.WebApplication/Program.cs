@@ -2,6 +2,8 @@
 using DinkToPdf;
 using DinkToPdf.Contracts;
 using EMPManagment.Web.Helper;
+using EMPManegment.EntityModels.Common;
+using EMPManegment.Web.Helper;
 using EMPManegment.Web.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
@@ -14,6 +16,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddSession();
 builder.Services.AddScoped<WebAPI, WebAPI>();
 builder.Services.AddScoped<UserSession>();
+builder.Services.AddScoped<EMPManegment.Web.Helper.Common>();
 builder.Services.AddScoped<APIServices, APIServices>();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 

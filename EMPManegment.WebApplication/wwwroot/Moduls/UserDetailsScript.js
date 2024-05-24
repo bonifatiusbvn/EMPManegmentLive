@@ -101,12 +101,7 @@ function GetAllUserData() {
             {
                 "data": "dateOfBirth", "name": "DateOfBirth", "type": "date",
                 "render": function (data, type, full, meta) {
-                    var dateObj = new Date(data);
-                    var day = dateObj.getDate();
-                    var month = dateObj.toLocaleString('default', { month: 'short' });
-                    var year = dateObj.getFullYear();
-                    var formattedDate = day + '-' + month + '-' + year;
-                    return formattedDate;
+                    return getCommonDateformat(data);
                 }
             },
             { "data": "email", "name": "Email" },
@@ -128,7 +123,33 @@ function GetAllUserData() {
         }]
     });
 }
+function GetUserRoleList(itemId, selectedRoleId) {
+    $.ajax({
+        url: '/UserProfile/RolewisePermissionListAction',
+        success: function (result) {
+            var roleDropdown = $('#ddlUserRole_' + itemId);
+            roleDropdown.empty();
+            $.each(result, function (i, data) {
+                var selected = data.roleId == selectedRoleId ? 'selected' : '';
+                roleDropdown.append('<option value=' + data.roleId + ' ' + selected + '>' + data.role + '</option>');
+            });
+        }
+    });
+}
 
+function GetDepartmentList(itemId, selectedDepartmentId) {
+    $.ajax({
+        url: '/Authentication/GetDepartment',
+        success: function (result) {
+            var departmentDropdown = $('#ddlDepartment_' + itemId);
+            departmentDropdown.empty();
+            $.each(result, function (i, data) {
+                var selected = data.id == selectedDepartmentId ? 'selected' : '';
+                departmentDropdown.append('<option value=' + data.id + ' ' + selected + '>' + data.departments + '</option>');
+            });
+        }
+    });
+}
 
 function UserActiveDeactive(UserId, checkboxElement) {
     var isActive = checkboxElement.checked;

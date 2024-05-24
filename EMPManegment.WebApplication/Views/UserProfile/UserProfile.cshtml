@@ -2,6 +2,7 @@
 @model EMPManegment.EntityModels.View_Model.EmpDetailsView
 @inject IHttpContextAccessor Accessor
 @inject UserSession _userSession
+@inject EMPManegment.Web.Helper.Common CommonHelper
 @{
     ViewData["Title"] = "UnAuthorised";
     Layout = "~/Views/Shared/_HomeLayout.cshtml";
@@ -111,7 +112,7 @@
                                                         </tr>
                                                         <tr>
                                                             <th>Birth Date:</th>
-                                                            <td class="text-muted" id="LastName">@Model.DateOfBirth.ToString("dd/MM/yyyy")</td>
+                                                            <td class="text-muted" id="LastName">@CommonHelper.GetCommonDateFormat(Model.DateOfBirth)</td>
                                                         </tr>
                                                         <tr>
                                                             <th>E-mail:</th>
@@ -123,7 +124,7 @@
                                                         </tr>
                                                         <tr>
                                                             <th>JoiningDate:</th>
-                                                            <td class="text-muted" id="JoiningDate">@Model.JoiningDate.Value.ToString("dd/MM/yyyy")</td>
+                                                            <td class="text-muted" id="JoiningDate">@CommonHelper.GetCommonDateFormat(Model?.JoiningDate ?? DateTime.MinValue)</td>
                                                         </tr>
                                                         <tr>
                                                             <th>Address:</th>

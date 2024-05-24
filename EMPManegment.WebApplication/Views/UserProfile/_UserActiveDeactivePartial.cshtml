@@ -1,6 +1,7 @@
 ﻿@model IEnumerable<EMPManegment.EntityModels.View_Model.EmpDetailsView>
 @using X.PagedList;
 @using X.PagedList.Mvc.Core;
+@inject EMPManegment.Web.Helper.Common CommonHelper
 
 <div class="card">
     <div class="card-header">
@@ -81,7 +82,7 @@
                                     </span>
                                 </p>
                                 <input type="hidden" value="@item.Id" id="txtUserId_@item.Id" />
-                                <input type="hidden" value="@item.DateOfBirth" id="txtDateOfBirth_@item.Id" />
+                                <input type="hidden" value="@CommonHelper.GetCommonDateFormat(item.DateOfBirth)" id="txtDateOfBirth_@item.Id" />
                                 <input type="hidden" value="@item.Gender" id="txtGender_@item.Id" />
                                 <input type="hidden" value="@item.FirstName" id="txtFirstName_@item.Id" />
                                 <input type="hidden" value="@item.LastName" id="txtLastName_@item.Id" />
