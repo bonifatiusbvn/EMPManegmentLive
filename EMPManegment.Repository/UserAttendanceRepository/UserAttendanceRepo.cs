@@ -39,21 +39,21 @@ namespace EMPManegment.Repository.UserAttendanceRepository
         public async Task<jsonData> GetUserAttendanceList(DataTableRequstModel dataTable)
         {
             var AttendanceDataTable = from a in Context.TblAttendances
-                                                     join
-                                                     b in Context.TblUsers on a.User.Id equals b.Id
-                                                     select new UserAttendanceModel
-                                                     {
-                                                         UserName = b.FirstName + ' ' + b.LastName,
-                                                         UserId = a.UserId,
-                                                         AttendanceId = a.Id,
-                                                         Date = a.Date,
-                                                         Intime = a.Intime,
-                                                         OutTime = a.OutTime,
-                                                         TotalHours = a.TotalHours,
-                                                         CreatedBy = a.CreatedBy,
-                                                         CreatedOn = a.CreatedOn,
+                                      join b in Context.TblUsers on a.User.Id equals b.Id
+                                      orderby a.Date descending
+                                      select new UserAttendanceModel
+                                      {
+                                          UserName = b.FirstName + ' ' + b.LastName,
+                                          UserId = a.UserId,
+                                          AttendanceId = a.Id,
+                                          Date = a.Date,
+                                          Intime = a.Intime,
+                                          OutTime = a.OutTime,
+                                          TotalHours = a.TotalHours,
+                                          CreatedBy = a.CreatedBy,
+                                          CreatedOn = a.CreatedOn,
 
-                                                     };
+                                      };
             if (!string.IsNullOrEmpty(dataTable.sortColumn) && !string.IsNullOrEmpty(dataTable.sortColumnDir))
             {
                 AttendanceDataTable = AttendanceDataTable.OrderBy(dataTable.sortColumn + " " + dataTable.sortColumnDir);
@@ -103,7 +103,7 @@ namespace EMPManegment.Repository.UserAttendanceRepository
                 else
                 {
                     response.Code = 200;
-                }  
+                }
                 return response;
 
             }
@@ -122,7 +122,7 @@ namespace EMPManegment.Repository.UserAttendanceRepository
             try
             {
                 var UserAttendance = Context.TblAttendances.FirstOrDefault(a => a.Id == userAttendance.AttendanceId);
-                if (UserAttendance != null )
+                if (UserAttendance != null)
                 {
                     string today = UserAttendance.Date.ToString("dd/MM/yyyy");
                     string checkdate = userAttendance.OutTime?.ToString("dd/MM/yyyy");
@@ -162,23 +162,24 @@ namespace EMPManegment.Repository.UserAttendanceRepository
         public async Task<IEnumerable<UserAttendanceModel>> GetUserAttendanceById(int attendanceId)
         {
             IEnumerable<UserAttendanceModel> attendanceById = from a in Context.TblAttendances
-                             join
-                             b in Context.TblUsers on a.User.Id equals b.Id where a.Id == attendanceId
-                             select new UserAttendanceModel
-                             {
-                                 UserName = b.FirstName + ' ' + b.LastName,
-                                 UserId = a.UserId,
-                                 AttendanceId = a.Id,
-                                 Date = a.Date,
-                                 Intime = a.Intime,
-                                 OutTime = a.OutTime,
-                                 TotalHours = a.OutTime - a.Intime,
-                                 CreatedOn = a.CreatedOn,
-                                 CreatedBy = a.CreatedBy,
-                             };           
+                                                              join b in Context.TblUsers on a.User.Id equals b.Id
+                                                              where a.Id == attendanceId
+                                                              orderby a.Date descending
+                                                              select new UserAttendanceModel
+                                                              {
+                                                                  UserName = b.FirstName + ' ' + b.LastName,
+                                                                  UserId = a.UserId,
+                                                                  AttendanceId = a.Id,
+                                                                  Date = a.Date,
+                                                                  Intime = a.Intime,
+                                                                  OutTime = a.OutTime,
+                                                                  TotalHours = a.OutTime - a.Intime,
+                                                                  CreatedOn = a.CreatedOn,
+                                                                  CreatedBy = a.CreatedBy,
+                                                              };
             return attendanceById;
         }
-        public async Task<IEnumerable <UserAttendanceModel>> GetAttendanceList(SearchAttendanceModel GetAttendanceList)
+        public async Task<IEnumerable<UserAttendanceModel>> GetAttendanceList(SearchAttendanceModel GetAttendanceList)
         {
             try
             {
@@ -189,6 +190,7 @@ namespace EMPManegment.Repository.UserAttendanceRepository
                                                                        join
                                                                        b in Context.TblUsers on a.User.Id equals b.Id
                                                                        where (b.Id == GetAttendanceList.UserId && (a.Date.Month == Convert.ToDateTime(GetAttendanceList.Cmonth).Month && a.Date.Year == Convert.ToDateTime(GetAttendanceList.Cmonth).Year))
+                                                                       orderby a.Date descending
                                                                        select new UserAttendanceModel
                                                                        {
                                                                            UserName = b.FirstName + ' ' + b.LastName,
@@ -210,6 +212,7 @@ namespace EMPManegment.Repository.UserAttendanceRepository
                         userAttendance = from a in Context.TblAttendances
                                          join b in Context.TblUsers on a.User.Id equals b.Id
                                          where (b.Id == GetAttendanceList.UserId && a.Date >= GetAttendanceList.StartDate && a.Date <= GetAttendanceList.EndDate)
+                                         orderby a.Date descending
                                          select new UserAttendanceModel
                                          {
                                              UserName = b.FirstName + ' ' + b.LastName,
@@ -232,6 +235,7 @@ namespace EMPManegment.Repository.UserAttendanceRepository
                                          join
                                          b in Context.TblUsers on a.User.Id equals b.Id
                                          where (b.Id == GetAttendanceList.UserId && (a.Date.Month == Convert.ToDateTime(date).Month && a.Date.Year == Convert.ToDateTime(date).Year))
+                                         orderby a.Date descending
                                          select new UserAttendanceModel
                                          {
                                              UserName = b.FirstName + ' ' + b.LastName,
@@ -265,6 +269,7 @@ namespace EMPManegment.Repository.UserAttendanceRepository
                                                                        join
                                                                        b in Context.TblUsers on a.User.Id equals b.Id
                                                                        where (b.Id == AttendanceList.UserId)
+                                                                       orderby a.Date descending
                                                                        select new UserAttendanceModel
                                                                        {
                                                                            UserName = b.FirstName + ' ' + b.LastName,
@@ -286,6 +291,7 @@ namespace EMPManegment.Repository.UserAttendanceRepository
                         userAttendance = from a in Context.TblAttendances.OrderByDescending(a => a.Date)
                                          join b in Context.TblUsers on a.User.Id equals b.Id
                                          where (b.Id == AttendanceList.UserId && a.Date == AttendanceList.Date)
+                                         orderby a.Date descending
                                          select new UserAttendanceModel
                                          {
                                              UserName = b.FirstName + ' ' + b.LastName,
@@ -308,6 +314,7 @@ namespace EMPManegment.Repository.UserAttendanceRepository
                             userAttendance = from a in Context.TblAttendances.OrderByDescending(a => a.Date)
                                              join b in Context.TblUsers on a.User.Id equals b.Id
                                              where (a.Date == AttendanceList.Date)
+                                             orderby a.Date descending
                                              select new UserAttendanceModel
                                              {
                                                  UserName = b.FirstName + ' ' + b.LastName,
@@ -330,6 +337,7 @@ namespace EMPManegment.Repository.UserAttendanceRepository
                                 userAttendance = from a in Context.TblAttendances.OrderByDescending(a => a.Date)
                                                  join b in Context.TblUsers on a.User.Id equals b.Id
                                                  where (b.Id == AttendanceList.UserId && a.Date >= AttendanceList.StartDate && a.Date <= AttendanceList.EndDate)
+                                                 orderby a.Date descending
                                                  select new UserAttendanceModel
                                                  {
                                                      UserName = b.FirstName + ' ' + b.LastName,
@@ -350,6 +358,7 @@ namespace EMPManegment.Repository.UserAttendanceRepository
                                 var AttendanceDataTable = from a in Context.TblAttendances.OrderByDescending(a => a.Date)
                                                           join
                                                           b in Context.TblUsers on a.UserId equals b.Id
+                                                          orderby a.Date descending
                                                           select new UserAttendanceModel
                                                           {
                                                               UserName = b.FirstName + ' ' + b.LastName,
@@ -377,5 +386,5 @@ namespace EMPManegment.Repository.UserAttendanceRepository
         }
     }
 }
- 
-        
+
+
