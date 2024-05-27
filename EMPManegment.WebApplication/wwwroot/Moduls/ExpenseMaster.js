@@ -1388,31 +1388,40 @@ $(document).ready(function () {
             GetMyBetweenDateExpenseList();
         }
     });
-    function GetUserAllExpenseDetails() {
+    function GetMyUnapproveExpenseList() {
+        $.ajax({
+            url: '/ExpenseMaster/DisplayUserExpenseDetails',
+            type: 'GET',
+            success: function (result) {
+
+                $("#UserExpenseListPartial").html(result);
+                GetAllUserUnapproveExpenseList();
+            },
+            error: function () {
+                alert('Error loading expenses. Please try again.');
+            }
+        });
+    }
+    function GetAllUserUnapproveExpenseList() {
         var UserId = $("#txtuserid").val();
-        $('#GetMyAllExpense').DataTable({
+        var IsApprove = false;
+        $('#GetMyUnapproveExpense').DataTable({
             processing: false,
             serverSide: true,
             filter: true,
-            destroy: true,
+            "bDestroy": true,
+            order: [[3, 'asc']],
+            pageLength: 30,
             ajax: {
-                type: "POST",
-                url: '/ExpenseMaster/GetUserExpenseList?UserId=' + UserId,
-                dataType: 'json',
-                dataSrc: function (json) {
-                    // Verify the structure of the returned JSON data
-                    if (json.data && json.data.length > 0) {
-                        return json.data;
-                    } else {
-                        return [];
-                    }
-                }
+                type: "Post",
+                url: '/ExpenseMaster/GetUserExpenseList?unapprove=' + IsApprove + "&UserId=" + UserId,
+                dataType: 'json'
             },
             columns: [
                 {
-                    data: null,
-                    render: function (data, type, full, meta) {
-                        var account = full.account ? full.account.toLowerCase() : '';
+                    "data": null,
+                    "render": function (data, type, full, meta) {
+                        var account = full.account.toLowerCase();
                         if (account === "credit") {
                             return '<div class="avatar-xs"><div class="avatar-title bg-success-subtle text-success rounded-circle fs-16"><i class="ri-arrow-left-down-fill"></i></div></div>';
                         } else if (account === "debit") {
@@ -1421,21 +1430,21 @@ $(document).ready(function () {
                             return '';
                         }
                     },
-                    orderable: false
+                    "orderable": false
                 },
-                { data: "description", name: "Description" },
-                { data: "billNumber", name: "BillNumber" },
+                { "data": "description", "name": "Description" },
+                { "data": "billNumber", "name": "BillNumber" },
                 {
-                    data: "date",
-                    name: "Date",
-                    render: function (data, type, full, meta) {
+                    "data": "date",
+                    "name": "Date",
+                    "render": function (data, type, full, meta) {
                         return getCommonDateformat(data);
                     }
                 },
                 {
-                    data: "totalAmount",
-                    name: "TotalAmount",
-                    render: function (data, type, full, meta) {
+                    "data": "totalAmount",
+                    "name": "TotalAmount",
+                    "render": function (data, type, full, meta) {
                         var color = full.account && full.account.toLowerCase() === "credit" ? "green" : "red";
                         return '<span style="color: ' + color + ';">' + '₹' + data + '</span>';
                     }
@@ -1444,9 +1453,7 @@ $(document).ready(function () {
                     data: null,
                     render: function (data, type, full) {
                         return '<a class="btn text-primary" onclick="EditExpenseDetails(\'' + full.id + '\')">' +
-                            '<i class="fa-regular fa-pen-to-square"></i></a>' +
-                            '<a class="btn text-danger" onclick="deleteExpense(\'' + full.id + '\')">' +
-                            '<i class="fas fa-trash"></i></a>';
+                            '<i class="fa-regular fa-pen-to-square"></i></a>';
                     },
                     orderable: false
                 },
@@ -1460,7 +1467,7 @@ $(document).ready(function () {
             },
             autoWidth: false,
             columnDefs: [{
-                targets: [0, 5],
+                targets: [0],
                 orderable: false,
                 width: "auto"
             }],
@@ -1481,47 +1488,30 @@ $(document).ready(function () {
                         return intVal(a) + intVal(b);
                     }, 0);
 
-                $(api.column(4).footer()).html(
+                $(api.column(5).footer()).html(
                     '<span style="color: black;">Total: ' + '₹' + total + '</span>'
                 );
             }
         });
     }
-
-    function GetMyExpenseList() {
-        $.ajax({
-            url: '/ExpenseMaster/DisplayUserExpenseDetails',
-            type: 'GET',
-            success: function (result) {
-                $("#UserExpenseListPartial").html(result);
-                GetUserAllExpenseDetails();
-            },
-            error: function () {
-                alert('Error loading expenses. Please try again.');
-            }
-        });
-    }
     
 });
-
-
-function GetMyUnapproveExpenseList() {
+function GetMyExpenseList() {
     $.ajax({
         url: '/ExpenseMaster/DisplayUserExpenseList',
         type: 'GET',
         success: function (result) {
-
             $("#UserExpenseListPartial").html(result);
-            GetAllUserUnapproveExpenseList();
+            GetUserAllExpenseDetails();
         },
         error: function () {
             alert('Error loading expenses. Please try again.');
         }
     });
 }
-function GetAllUserUnapproveExpenseList() {
+
+function GetUserAllExpenseDetails() {
     var UserId = $("#txtuserid").val();
-    var IsApprove = false;
     $('#DisplayUserAllExpenseList').DataTable({
         processing: false,
         serverSide: true,
@@ -1531,7 +1521,7 @@ function GetAllUserUnapproveExpenseList() {
         pageLength: 30,
         ajax: {
             type: "Post",
-            url: '/ExpenseMaster/GetUserExpenseList?unapprove=' + IsApprove + "&UserId=" + UserId,
+            url: '/ExpenseMaster/GetUserExpenseList?UserId=' + UserId ,
             dataType: 'json'
         },
         columns: [
@@ -1562,7 +1552,8 @@ function GetAllUserUnapproveExpenseList() {
                 "data": "totalAmount",
                 "name": "TotalAmount",
                 "render": function (data, type, full, meta) {
-                    var color = full.account && full.account.toLowerCase() === "credit" ? "green" : "red";
+
+                    var color = full.account.toLowerCase() === "credit" ? "green" : "red";
                     return '<span style="color: ' + color + ';">' + '₹' + data + '</span>';
                 }
             },
