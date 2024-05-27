@@ -28,8 +28,7 @@
     <!-- Ekko Lightbox -->
     <link rel="stylesheet" href="~/lteassets/plugins/ekko-lightbox/ekko-lightbox.css">
     <link rel="stylesheet" href="~/lteassets/plugins/toastr/toastr.min.css">
-    <link href="~/lteassets/plugins/select2/css/select2.min.css" rel="stylesheet" />
-    <link href="~/lteassets/plugins/select2/css/select2-bootstrap4.css" rel="stylesheet" />
+
     <!-- DataTables -->
     <link rel="stylesheet" href="~/lteassets/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="~/lteassets/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
@@ -42,6 +41,10 @@
         .text {
             display: inline;
             margin: 0;
+        }
+
+        .nav-treeview {
+            display: none;
         }
 
     </style>
@@ -144,7 +147,7 @@
                                         </p>
                                     </a>
 
-                                    <ul class="nav nav-treeview">
+                                    <ul class="nav nav-treeview" style="display: none;">
                                         @foreach (var item in UserSession.FormPermisionData.Where(e => e.GroupName == group && e.isActive == true))
                                         {
                                             @if (item.View)
@@ -171,7 +174,7 @@
                                             <i class="right fas fa-angle-left"></i>
                                         </p>
                                     </a>
-                                    <ul class="nav nav-treeview">
+                                    <ul class="nav nav-treeview" style="display: none;">
                                         @foreach (var item in UserSession.FormPermisionData.Where(e => e.GroupName == group && e.isActive == true))
                                         {
                                             @if (item.View)
@@ -198,7 +201,7 @@
                                             <i class="right fas fa-angle-left"></i>
                                         </p>
                                     </a>
-                                    <ul class="nav nav-treeview">
+                                    <ul class="nav nav-treeview" style="display: none;">
                                         @foreach (var item in UserSession.FormPermisionData.Where(e => e.GroupName == group && e.isActive == true))
                                         {
                                             @if (item.View)
@@ -224,7 +227,7 @@
                                             <i class="right fas fa-angle-left"></i>
                                         </p>
                                     </a>
-                                    <ul class="nav nav-treeview">
+                                    <ul class="nav nav-treeview" style="display: none;">
                                         @foreach (var item in UserSession.FormPermisionData.Where(e => e.GroupName == group && e.isActive == true))
                                         {
                                             @if (item.View)
@@ -250,7 +253,7 @@
                                             <i class="right fas fa-angle-left"></i>
                                         </p>
                                     </a>
-                                    <ul class="nav nav-treeview">
+                                    <ul class="nav nav-treeview" style="display: none;">
                                         @foreach (var item in UserSession.FormPermisionData.Where(e => e.GroupName == group && e.isActive == true))
                                         {
                                             @if (item.View)
@@ -278,7 +281,7 @@
                                             <i class="right fas fa-angle-left"></i>
                                         </p>
                                     </a>
-                                    <ul class="nav nav-treeview">
+                                    <ul class="nav nav-treeview" style="display: none;">
                                         @foreach (var item in UserSession.FormPermisionData.Where(e => e.GroupName == group && e.isActive == true))
                                         {
                                             @if (item.View)
@@ -305,7 +308,7 @@
                                             <i class="right fas fa-angle-left"></i>
                                         </p>
                                     </a>
-                                    <ul class="nav nav-treeview">
+                                    <ul class="nav nav-treeview" style="display: none;">
                                         @foreach (var item in UserSession.FormPermisionData.Where(e => e.GroupName == group && e.isActive == true))
                                         {
                                             @if (item.View)
@@ -331,7 +334,7 @@
                                             <i class="right fas fa-angle-left"></i>
                                         </p>
                                     </a>
-                                    <ul class="nav nav-treeview">
+                                    <ul class="nav nav-treeview" style="display: none;">
                                         @foreach (var item in UserSession.FormPermisionData.Where(e => e.GroupName == group && e.isActive == true))
                                         {
                                             @if (item.View)
@@ -359,7 +362,7 @@
                                             <i class="right fas fa-angle-left"></i>
                                         </p>
                                     </a>
-                                    <ul class="nav nav-treeview">
+                                    <ul class="nav nav-treeview" style="display: none;">
                                         @foreach (var item in UserSession.FormPermisionData.Where(e => e.GroupName == group && e.isActive == true))
                                         {
                                             @if (item.View)
@@ -386,7 +389,7 @@
                                             <i class="right fas fa-angle-left"></i>
                                         </p>
                                     </a>
-                                    <ul class="nav nav-treeview">
+                                    <ul class="nav nav-treeview" style="display: none;">
                                         @foreach (var item in UserSession.FormPermisionData.Where(e => e.GroupName == group && e.isActive == true))
                                         {
                                             @if (item.View)
@@ -415,12 +418,11 @@
                                             <i class="right fas fa-angle-left"></i>
                                         </p>
                                     </a>
-                                    <ul class="nav nav-treeview">
+                                    <ul class="nav nav-treeview" style="display: none;">
                                         @foreach (var item in UserSession.FormPermisionData.Where(e => e.GroupName == group && e.isActive == true))
                                         {
                                             @if (item.View)
                                             {
-
                                                 <li class="nav-item">
                                                     <a asp-action="@item.Action" asp-controller="@item.Controller" class="nav-link">
                                                         <i class="far fa-circle nav-icon"></i>
@@ -442,7 +444,7 @@
                                             <i class="right fas fa-angle-left"></i>
                                         </p>
                                     </a>
-                                    <ul class="nav nav-treeview">
+                                    <ul class="nav nav-treeview" style="display: none;">
                                         @foreach (var item in UserSession.FormPermisionData.Where(e => e.GroupName == group && e.isActive == true))
                                         {
                                             @if (item.View)
@@ -501,14 +503,11 @@
     <!-- jQuery -->
     <script src="~/lteassets/plugins/jquery/jquery.min.js"></script>
     <!-- Bootstrap -->
-    <script src="~/lteassets/dist/js/pages/dashboard2.js"></script>
     <script src="~/assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
     <!-- overlayScrollbars -->
     <script src="~/lteassets/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
 
     <!-- AdminLTE App -->
-    <script src="~/lteassets/dist/js/adminlte.js"></script>
-
     <!-- PAGE PLUGINS -->
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
     <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
@@ -546,12 +545,14 @@
     <!-- Toastr -->
     <script src="~/lteassets/plugins/toastr/toastr.min.js"></script>
     <!-- App js -->
+    <script src="~/moduls/layoutscript.js"></script>
+    <script src="~/lteassets/dist/js/adminlte.js"></script>
     <!-- moduls -->
     <script src="~/js/loader.js"></script>
-    <script src="~/moduls/common.js"></script>
-    <script src="~/moduls/userdetailsscript.js"></script> 
-    <script src="~/moduls/userprofile.js"></script>
-    <script src="~/moduls/layoutscript.js"></script>
+    <script src="~/moduls/common.js" asp-append-version="true"></script>
+    <script src="~/moduls/userdetailsscript.js" asp-append-version="true"></script>
+    <script src="~/moduls/userprofile.js" asp-append-version="true"></script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
