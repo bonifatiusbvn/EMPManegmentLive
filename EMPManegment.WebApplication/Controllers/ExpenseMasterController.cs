@@ -467,7 +467,7 @@ namespace EMPManegment.Web.Controllers
                 var sortColumn = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
                 var sortColumnDir = Request.Form["order[0][dir]"].FirstOrDefault();
                 var searchValue = Request.Form["search[value]"].FirstOrDefault();
-                int pageSize = length != null ? Convert.ToInt32(length) : 20;
+                int pageSize = length != null ? Convert.ToInt32(length) : 0;
                 int skip = start != null ? Convert.ToInt32(start) : 0;
 
                 var dataTable = new DataTableRequstModel

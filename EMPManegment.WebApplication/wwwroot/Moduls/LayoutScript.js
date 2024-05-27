@@ -28,7 +28,6 @@
 
 
 $(document).ready(function () {
-    debugger
     function handleNavClick(e) {
         var $this = $(this);
         var $submenu = $this.siblings('.nav-treeview');
