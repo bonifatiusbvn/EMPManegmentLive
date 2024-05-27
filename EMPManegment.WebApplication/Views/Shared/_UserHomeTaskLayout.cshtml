@@ -517,13 +517,13 @@
     <!-- Toastr -->
     <script src="~/lteassets/plugins/toastr/toastr.min.js"></script>
     <!-- App js -->
-    <script src="~/moduls/layoutscript.js"></script>
+    <script src="~/moduls/layoutscript.js" asp-append-version="true"></script>
     <script src="~/lteassets/dist/js/adminlte.js"></script>
     <!-- moduls -->
 
     <script src="~/js/loader.js"></script>
-    <script src="~/moduls/userdetailsscript.js"></script>
-    <script src="~/moduls/userprofile.js"></script>
+    <script src="~/moduls/userdetailsscript.js" asp-append-version="true"></script>
+    <script src="~/moduls/userprofile.js" asp-append-version="true"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>
