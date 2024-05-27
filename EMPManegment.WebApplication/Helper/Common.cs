@@ -13,7 +13,7 @@ namespace EMPManegment.Web.Helper
 
         public string GetCommonDateFormat(DateTime date)
         {
-            return date.ToString("dd MMM yyyy", CultureInfo.InvariantCulture);
+            return date.ToString("dd MMM yy", CultureInfo.InvariantCulture);
         }
     }
 }

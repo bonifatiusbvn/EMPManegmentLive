@@ -1,3 +1,4 @@
 ﻿function getCommonDateformat(date) {
-    return moment(date).format('DD MMM yy');
+    var formattedDate = moment(date).format('DD MMM YY');
+    return formattedDate;
 }
