@@ -34,7 +34,7 @@
         </div>
         <div class="pt-4 mb-4 mb-lg-3 pb-lg-4 profile-wrapper">
             <div class="row g-4">
-                <div class="col-auto">
+                <div class="col-auto" style="margin: auto;position: revert-layer;">
                     <div class="avatar-lg">
                         @if (!string.IsNullOrEmpty(imageUrl))
                         {
@@ -42,8 +42,7 @@
                         }
                         else
                         {
-                            <div class="flex-shrink-0 avatar-xs me-2"><div class="avatar-title bg-success-subtle text-success rounded-circle fs-13"> @initials</div></div>
-
+                            <div class="avatar-title bg-success-subtle text-success rounded-circle fs-13" style="height:95px;width:95px;">@initials</div>
                         }
                     </div>
                 </div>
