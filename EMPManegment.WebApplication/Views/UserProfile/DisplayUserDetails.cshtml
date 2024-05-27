@@ -31,14 +31,14 @@
             <div class="card mt-n5">
                 <div class="card-body p-4">
                     <div class="text-center">
-                        <div class="profile-user position-relative d-inline-block mx-auto mb-4">
+                        <div class="profile-user position-relative d-inline-block mx-auto mb-4" style="height: 130px;width: 130px;">
                             @if (!string.IsNullOrEmpty(imageUrl))
                             {
                                 <img src="@imageUrl" class="rounded-circle avatar-xl img-thumbnail user-profile-image" alt="user-profile-image">
                             }
                             else
                             {
-                                <div class="rounded-circle avatar-xl img-thumbnail user-profile-image d-flex justify-content-center align-items-center" style="background-color: #ccc; color: #fff; font-size: 24px;">
+                                <div class="avatar-title bg-success-subtle text-success rounded-circle fs-13">
                                     @initials
                                 </div>
                             }

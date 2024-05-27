@@ -118,7 +118,7 @@
                 <div class="card-footer text-center">
                     @if (!string.IsNullOrEmpty(profilePhoto) && !profilePhoto.Equals(defaultImagePath, StringComparison.OrdinalIgnoreCase))
                     {
-                        <img src="@profilePhoto" style="height:40px;width:40px;" alt="message user image" class="img-circle img-bordered-sm">
+                        <img src="~/@profilePhoto" style="height:40px;width:40px;" alt="message user image" class="img-circle img-bordered-sm">
                     }
                     else
                     {
@@ -140,11 +140,11 @@
         searchfor = @Context.Request.Query["searchfor"],
         searchby = @Context.Request.Query["searchby"]
     }),
-        new X.PagedList.Web.Common.PagedListRenderOptions
-    {
-        LiElementClasses = new string[] { "page-item" },
-        PageClasses = new string[] { "page-link" }
-    })
+                            new X.PagedList.Web.Common.PagedListRenderOptions
+                        {
+                            LiElementClasses = new string[] { "page-item" },
+                            PageClasses = new string[] { "page-link" }
+                        })
 
 
 
