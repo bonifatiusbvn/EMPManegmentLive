@@ -71,7 +71,7 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
         }
         public async Task<IEnumerable<ProjectDetailView>> GetProjectList(string? searchby, string? searchfor)
         {
-            
+
             IEnumerable<ProjectDetailView> data = Context.TblProjectMasters.OrderByDescending(x => x.CreatedOn).ToList().Select(a => new ProjectDetailView
             {
                 ProjectId = a.ProjectId,
@@ -95,7 +95,7 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
                 ProjectDeadline = a.ProjectDeadline,
                 CreatedOn = a.CreatedOn
             });
-      
+
             if (searchby == "ProjectTitle" && searchfor != null)
             {
                 data = data.Where(ser => ser.ProjectTitle.ToLower().Contains(searchfor.ToLower())).ToList();
@@ -185,7 +185,7 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
 
         public async Task<IEnumerable<EmpDetailsView>> GetAllMembers()
         {
-            IEnumerable<EmpDetailsView> data = Context.TblUsers.Where(a=>a.IsActive == true).ToList().Select(a => new EmpDetailsView
+            IEnumerable<EmpDetailsView> data = Context.TblUsers.Where(a => a.IsActive == true).ToList().Select(a => new EmpDetailsView
             {
                 Id = a.Id,
                 FirstName = a.FirstName,
@@ -259,6 +259,8 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
                                   Id = e.Id,
                                   ProjectId = e.ProjectId,
                                   Fullname = d.FirstName + " " + d.LastName,
+                                  FirstName = d.FirstName,
+                                  LastName = d.LastName,
                                   Image = d.Image,
                                   UserId = e.UserId,
                                   Designation = d.Designation,
@@ -361,7 +363,7 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
                         ProjectStartDate = item.ProjectStartDate,
                         ProjectDeadline = item.ProjectDeadline,
                         ProjectDescription = item.ProjectDescription,
-                        ProjectImage= item.ProjectImage,
+                        ProjectImage = item.ProjectImage,
                     });
                 }
             }

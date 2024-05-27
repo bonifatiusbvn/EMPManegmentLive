@@ -7,8 +7,22 @@
 {
     foreach (var item in Model)
     {
+        var imageUrl = !string.IsNullOrEmpty(item.Image) ? Url.Content($"~/{item.Image}") : null;
+        var initials = (!string.IsNullOrEmpty(item.FirstName) && !string.IsNullOrEmpty(item.LastName)) ? $"{item.FirstName[0]}{item.LastName[0]}".ToUpper() : null;
+
         <tr>
-            <td><img class="direct-chat-img" src="~/@item.Image" alt="user image"></td>
+            <td>
+                @if (!string.IsNullOrEmpty(imageUrl))
+                {
+                    <img class="direct-chat-img" src="@imageUrl" alt="user image">
+                }
+                else
+                {
+                    <div class="flex-shrink-0 avatar-xs me-2">
+                        <div class="avatar-title bg-success-subtle text-success rounded-circle fs-13" style="height:40px;width:40px;">@initials</div>
+                    </div>
+                }
+            </td>
             <td>@item.Fullname</td>
             <td>
                 @if (UserSession.FormPermisionData.Any(a => a.FormName == "GetProjectDetails" && (a.Delete == true)))
@@ -19,5 +33,6 @@
         </tr>
     }
 }
+
 
 

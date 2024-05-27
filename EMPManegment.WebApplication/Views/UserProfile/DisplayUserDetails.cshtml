@@ -6,6 +6,8 @@
 @{
     ViewData["Title"] = "DisplayUserDetails";
     Layout = "~/Views/Shared/_HomeLayout.cshtml";
+    var imageUrl = !string.IsNullOrEmpty(Model.Image) ? Url.Content($"~/{Model.Image}") : null;
+    var initials = $"{Model.FirstName[0]}{Model.LastName[0]}".ToUpper();
 }
 
 
@@ -29,8 +31,17 @@
             <div class="card mt-n5">
                 <div class="card-body p-4">
                     <div class="text-center">
-                        <div class="profile-user position-relative d-inline-block mx-auto  mb-4">
-                            <img src="~/@Model.Image" class="rounded-circle avatar-xl img-thumbnail user-profile-image" alt="user-profile-image">
+                        <div class="profile-user position-relative d-inline-block mx-auto mb-4">
+                            @if (!string.IsNullOrEmpty(imageUrl))
+                            {
+                                <img src="@imageUrl" class="rounded-circle avatar-xl img-thumbnail user-profile-image" alt="user-profile-image">
+                            }
+                            else
+                            {
+                                <div class="rounded-circle avatar-xl img-thumbnail user-profile-image d-flex justify-content-center align-items-center" style="background-color: #ccc; color: #fff; font-size: 24px;">
+                                    @initials
+                                </div>
+                            }
                             <div class="avatar-xs p-0 rounded-circle profile-photo-edit">
                                 <input id="profile-img-file-input" type="file" class="profile-img-file-input">
                                 <label for="profile-img-file-input" class="profile-photo-edit avatar-xs">
@@ -197,7 +208,7 @@
                                             <label for="joiningdateInput" class="form-label">
                                                 Joining Date
                                             </label>
-                                            <input type="datetime" class="form-control" id="joiningdateInput" name="joiningdateInput" placeholder="Select date" value="@CommonHelper.GetCommonDateFormat(Model?.JoiningDate ?? DateTime.MinValue)" readonly  />
+                                            <input type="datetime" class="form-control" id="joiningdateInput" name="joiningdateInput" placeholder="Select date" value="@CommonHelper.GetCommonDateFormat(Model?.JoiningDate ?? DateTime.MinValue)" readonly />
                                         </div>
                                     </div>
                                     <!--end col-->

@@ -31,12 +31,14 @@ namespace EMPManegment.EntityModels.ViewModels.ProjectModels
         public DateTime? CreatedOn { get; set; }
 
         public Guid? CreatedBy { get; set; }
-         
+
         public string? Fullname { get; set; }
+        public string? FirstName { get; set; }
+        public string? LastName { get; set; }
         public string? Image { get; set; }
         public string? Designation { get; set; }
-        public string? ProjectDescription { get; set; } = null!; 
-         public bool? IsDeleted { get; set; }
+        public string? ProjectDescription { get; set; } = null!;
+        public bool? IsDeleted { get; set; }
 
         public int TotalTask { get; set; }
     }

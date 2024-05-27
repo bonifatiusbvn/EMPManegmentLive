@@ -106,6 +106,7 @@ namespace EMPManegment.Repository.UserLoginRepository
                                 Id = tblUser.User.Id,
                                 FullName = $"{tblUser.User.FirstName} {tblUser.User.LastName}",
                                 FirstName = tblUser.User.FirstName,
+                                LastName = tblUser.User.LastName,
                                 ProfileImage = tblUser.User.Image,
                                 Role = tblUser.Role.Role,
                                 RoleId = tblUser.Role.RoleId,
