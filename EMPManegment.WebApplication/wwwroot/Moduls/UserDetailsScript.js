@@ -100,18 +100,8 @@ function GetAllUserData() {
             { "data": "gender", "name": "Gender" },
             {
                 "data": "dateOfBirth", "name": "DateOfBirth", "type": "date",
-                "render": function (data) {
-                    var dateObj = new Date(data);
-                    var day = dateObj.getDate();
-                    var month = dateObj.getMonth() + 1;
-                    var year = dateObj.getFullYear();
-                    if (day < 10) {
-                        day = '0' + day;
-                    }
-                    if (month < 10) {
-                        month = '0' + month;
-                    }
-                    return day + '-' + month + '-' + year;
+                "render": function (data, type, full, meta) {
+                    return getCommonDateformat(data);
                 }
             },
             { "data": "email", "name": "Email" },
@@ -133,7 +123,33 @@ function GetAllUserData() {
         }]
     });
 }
+function GetUserRoleList(itemId, selectedRoleId) {
+    $.ajax({
+        url: '/UserProfile/RolewisePermissionListAction',
+        success: function (result) {
+            var roleDropdown = $('#ddlUserRole_' + itemId);
+            roleDropdown.empty();
+            $.each(result, function (i, data) {
+                var selected = data.roleId == selectedRoleId ? 'selected' : '';
+                roleDropdown.append('<option value=' + data.roleId + ' ' + selected + '>' + data.role + '</option>');
+            });
+        }
+    });
+}
 
+function GetDepartmentList(itemId, selectedDepartmentId) {
+    $.ajax({
+        url: '/Authentication/GetDepartment',
+        success: function (result) {
+            var departmentDropdown = $('#ddlDepartment_' + itemId);
+            departmentDropdown.empty();
+            $.each(result, function (i, data) {
+                var selected = data.id == selectedDepartmentId ? 'selected' : '';
+                departmentDropdown.append('<option value=' + data.id + ' ' + selected + '>' + data.departments + '</option>');
+            });
+        }
+    });
+}
 
 function UserActiveDeactive(UserId, checkboxElement) {
     var isActive = checkboxElement.checked;

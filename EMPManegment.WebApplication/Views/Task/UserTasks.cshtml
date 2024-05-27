@@ -1,6 +1,7 @@
 ﻿@using EMPManegment.Web.Models
 @model IEnumerable<EMPManegment.EntityModels.ViewModels.TaskModels.TaskDetailsView>
 @inject UserSession _userSession
+@inject EMPManegment.Web.Helper.Common CommonHelper
 @{
     ViewData["Title"] = "0";
     Layout = "~/Views/Shared/_UserHomeTaskLayout.cshtml";
@@ -135,13 +136,13 @@
                                         <div class="flex-grow-1">
                                             <span class="text-muted">
                                                 <i class="ri-time-line align-bottom"></i>
-                                                @item.TaskDate.Value.ToString("dd/MM/yyyy")
+                                                @CommonHelper.GetCommonDateFormat(item?.TaskDate ?? DateTime.MinValue)
                                             </span>
                                         </div>
                                         <div class="flex-grow-1">
                                             <span class="text-muted">
                                                 <i class="ri-time-line align-bottom"></i>
-                                                @item.TaskEndDate.Value.ToString("dd/MM/yyyy")
+                                                @CommonHelper.GetCommonDateFormat(item?.TaskEndDate ?? DateTime.MinValue)
                                             </span>
                                         </div>
                                     </div>
@@ -253,13 +254,13 @@
                                         <div class="flex-grow-1">
                                             <span class="text-muted">
                                                 <i class="ri-time-line align-bottom"></i>
-                                                @item.TaskDate.Value.ToString("dd/MM/yyyy")
+                                                @CommonHelper.GetCommonDateFormat(item?.TaskDate ?? DateTime.MinValue)
                                             </span>
                                         </div>
                                         <div class="flex-grow-1">
                                             <span class="text-muted">
                                                 <i class="ri-time-line align-bottom"></i>
-                                                @item.TaskEndDate.Value.ToString("dd/MM/yyyy")
+                                                @CommonHelper.GetCommonDateFormat(item?.TaskEndDate ?? DateTime.MinValue)
                                             </span>
                                         </div>
                                     </div>
@@ -379,13 +380,13 @@
                                         <div class="flex-grow-1">
                                             <span class="text-muted">
                                                 <i class="ri-time-line align-bottom"></i>
-                                                @item.TaskDate.Value.ToString("dd/MM/yyyy")
+                                                @CommonHelper.GetCommonDateFormat(item?.TaskDate ?? DateTime.MinValue)
                                             </span>
                                         </div>
                                         <div class="flex-grow-1">
                                             <span class="text-muted">
                                                 <i class="ri-time-line align-bottom"></i>
-                                                @item.TaskEndDate.Value.ToString("dd/MM/yyyy")
+                                                @CommonHelper.GetCommonDateFormat(item?.TaskEndDate ?? DateTime.MinValue)
                                             </span>
                                         </div>
                                     </div>
@@ -513,13 +514,13 @@
                                         <div class="flex-grow-1">
                                             <span class="text-muted">
                                                 <i class="ri-time-line align-bottom"></i>
-                                                @item.TaskDate.Value.ToString("dd/MM/yyyy")
+                                                @CommonHelper.GetCommonDateFormat(item?.TaskDate ?? DateTime.MinValue)
                                             </span>
                                         </div>
                                         <div class="flex-grow-1">
                                             <span class="text-muted">
                                                 <i class="ri-time-line align-bottom"></i>
-                                                @item.TaskEndDate.Value.ToString("dd/MM/yyyy")
+                                                @CommonHelper.GetCommonDateFormat(item?.TaskEndDate ?? DateTime.MinValue)
                                             </span>
                                         </div>
                                     </div>
@@ -642,13 +643,13 @@
                                         <div class="flex-grow-1">
                                             <span class="text-muted">
                                                 <i class="ri-time-line align-bottom"></i>
-                                                @item.TaskDate.Value.ToString("dd/MM/yyyy")
+                                                @CommonHelper.GetCommonDateFormat(item?.TaskDate ?? DateTime.MinValue)
                                             </span>
                                         </div>
                                         <div class="flex-grow-1">
                                             <span class="text-muted">
                                                 <i class="ri-time-line align-bottom"></i>
-                                                @item.TaskEndDate.Value.ToString("dd/MM/yyyy")
+                                                @CommonHelper.GetCommonDateFormat(item?.TaskEndDate ?? DateTime.MinValue)
                                             </span>
                                         </div>
                                     </div>

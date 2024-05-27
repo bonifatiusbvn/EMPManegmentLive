@@ -256,7 +256,7 @@ namespace EMPManagment.API.Controllers
         public async Task<IActionResult> GetAttendanceList(SearchAttendanceModel GetAttendanceList)
         {
             IEnumerable<UserAttendanceModel> getAttendanceList = await UserAttendance.GetAttendanceList(GetAttendanceList);
-            return Ok(new { code = 200, data = getAttendanceList.ToList() });
+            return Ok(new { code = 200, data = getAttendanceList.ToList() }); ;
         }
 
         [HttpPost]

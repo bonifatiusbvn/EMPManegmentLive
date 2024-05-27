@@ -2,6 +2,7 @@
 @model IEnumerable<EMPManegment.EntityModels.ViewModels.OrderModels.PurchaseOrderDetailView>
 @inject IHttpContextAccessor Accessor;
 @inject UserSession _userSession
+@inject EMPManegment.Web.Helper.Common CommonHelper
 @*@using X.PagedList;
 @using X.PagedList.Mvc.Core;*@
 @{
@@ -214,7 +215,7 @@
                                                                 <td class="id"><a href="/PurchaseOrderMaster/GetPurchaseOrderDetailsByOrderId/?OrderId=@item.OrderId" class="fw-medium link-primary">@item.OrderId</a></td>
                                                                 <td class="company_name">@item.CompanyName</td>
                                                                 <td class="product_name">@item.ProductName</td>
-                                                                <td class="date">@item.OrderDate.ToString("dd/MM/yyyy")</td>
+                                                                <td class="date">@CommonHelper.GetCommonDateFormat(item.OrderDate)</td>
                                                                 <td class="total_amount">@item.TotalAmount</td>
                                                                 <td class="payment">@item.PaymentMethodName</td>
                                                                 <td class="status" id="DeliveryStatus">
@@ -317,7 +318,7 @@
                                                                     <td class="id"><a href="/OrderMaster/GetPurchaseOrderDetailsByOrderId/?OrderId=@item.OrderId" class="fw-medium link-primary">@item.OrderId</a></td>
                                                                     <td class="company_name">@item.CompanyName</td>
                                                                     <td class="product_name">@item.ProductName</td>
-                                                                    <td class="date">@item.OrderDate.ToString("dd/MM/yyyy")</td>
+                                                                    <td class="date">@CommonHelper.GetCommonDateFormat(item.OrderDate)</td>
                                                                     <td class="total_amount">@item.TotalAmount</td>
                                                                     <td class="payment">@item.PaymentMethodName</td>
                                                                     <td class="status" id="DeliveryStatus">
@@ -409,7 +410,7 @@
                                                                     <td class="id"><a href="/OrderMaster/GetPurchaseOrderDetailsByOrderId/?OrderId=@item.OrderId" class="fw-medium link-primary">@item.OrderId</a></td>
                                                                     <td class="company_name">@item.CompanyName</td>
                                                                     <td class="product_name">@item.ProductName</td>
-                                                                    <td class="date">@item.OrderDate.ToString("dd/MM/yyyy")</td>
+                                                                    <td class="date">@CommonHelper.GetCommonDateFormat(item.OrderDate)</td>
                                                                     <td class="total_amount">@item.TotalAmount</td>
                                                                     <td class="payment">@item.PaymentMethodName</td>
                                                                     <td class="status" id="DeliveryStatus">
@@ -502,7 +503,7 @@
                                                                     <td class="id"><a href="/OrderMaster/GetPurchaseOrderDetailsByOrderId/?OrderId=@item.OrderId" class="fw-medium link-primary">@item.OrderId</a></td>
                                                                     <td class="company_name">@item.CompanyName</td>
                                                                     <td class="product_name">@item.ProductName</td>
-                                                                    <td class="date">@item.OrderDate.ToString("dd/MM/yyyy")</td>
+                                                                    <td class="date">@CommonHelper.GetCommonDateFormat(item.OrderDate)</td>
                                                                     <td class="total_amount">@item.TotalAmount</td>
                                                                     <td class="payment">@item.PaymentMethodName</td>
                                                                     <td class="status" id="DeliveryStatus">
@@ -595,7 +596,7 @@
                                                                     <td class="id"><a href="/OrderMaster/GetPurchaseOrderDetailsByOrderId/?OrderId=@item.OrderId" class="fw-medium link-primary">@item.OrderId</a></td>
                                                                     <td class="company_name">@item.CompanyName</td>
                                                                     <td class="product_name">@item.ProductName</td>
-                                                                    <td class="date">@item.OrderDate.ToString("dd/MM/yyyy")</td>
+                                                                    <td class="date">@CommonHelper.GetCommonDateFormat(item.OrderDate)</td>
                                                                     <td class="total_amount">@item.TotalAmount</td>
                                                                     <td class="payment">@item.PaymentMethodName</td>
                                                                     <td class="status" id="DeliveryStatus">
@@ -688,7 +689,7 @@
                                                                     <td class="id"><a href="/OrderMaster/GetPurchaseOrderDetailsByOrderId/?OrderId=@item.OrderId" class="fw-medium link-primary">@item.OrderId</a></td>
                                                                     <td class="company_name">@item.CompanyName</td>
                                                                     <td class="product_name">@item.ProductName</td>
-                                                                    <td class="date">@item.OrderDate.ToString("dd/MM/yyyy")</td>
+                                                                    <td class="date">@CommonHelper.GetCommonDateFormat(item.OrderDate)</td>
                                                                     <td class="total_amount">@item.TotalAmount</td>
                                                                     <td class="payment">@item.PaymentMethodName</td>
                                                                     <td class="status" id="DeliveryStatus">
@@ -781,7 +782,7 @@
                                                                     <td class="id"><a href="/OrderMaster/GetPurchaseOrderDetailsByOrderId/?OrderId=@item.OrderId" class="fw-medium link-primary">@item.OrderId</a></td>
                                                                     <td class="company_name">@item.CompanyName</td>
                                                                     <td class="product_name">@item.ProductName</td>
-                                                                    <td class="date">@item.OrderDate.ToString("dd/MM/yyyy")</td>
+                                                                    <td class="date">@CommonHelper.GetCommonDateFormat(item.OrderDate)</td>
                                                                     <td class="total_amount">@item.TotalAmount</td>
                                                                     <td class="payment">@item.PaymentMethodName</td>
                                                                     <td class="status" id="DeliveryStatus">

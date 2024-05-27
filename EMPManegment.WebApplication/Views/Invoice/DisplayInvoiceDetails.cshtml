@@ -2,6 +2,7 @@
 @using EMPManegment.Web.Models;
  @inject IHttpContextAccessor Accessor;
 @inject UserSession _userSession
+@inject EMPManegment.Web.Helper.Common CommonHelper
 
 @{
     ViewData["Title"] = "DisplayInvoiceDetails";
@@ -68,7 +69,7 @@
                         <div class="flex-grow-1 col-3">
                             <div class="flex-shrink-0 mt-sm-0 mt-3 border">
                                 <label class="form-label">Date</label>
-                                <p><span class="text-muted fw-normal">@firstItem.InvoiceDate.ToString("dd/MM/yyyy")</span></p>
+                                <p><span class="text-muted fw-normal">@CommonHelper.GetCommonDateFormat(firstItem.InvoiceDate)</span></p>
                             </div>
                             <div class="flex-shrink-0 mt-sm-0 mt-3 border">
                                 <label class="form-label">Mode/Terms of Payment</label>

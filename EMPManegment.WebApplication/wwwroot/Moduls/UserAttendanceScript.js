@@ -101,35 +101,40 @@ $(document).ready(function () {
     function GetUserAttendance(userPermission) {
         var userPermissionArray = JSON.parse(userPermission);
         var canEdit = userPermissionArray.some(permission => permission.formName === "Users Attendance" && permission.edit);
-
         var columns = [
             { "data": "userName", "name": "UserName" },
             {
                 "data": "date", "name": "Date",
-                render: function (data) {
-                    var dateObj = new Date(data);
-                    var day = ('0' + dateObj.getDate()).slice(-2);
-                    var month = ('0' + (dateObj.getMonth() + 1)).slice(-2);
-                    var year = dateObj.getFullYear();
-                    return day + '-' + month + '-' + year;
+                "render": function (data, type, full, meta) {
+                    return getCommonDateformat(data);
                 }
             },
             {
                 "data": "intime", "name": "InTime",
                 render: function (data) {
-                    return new Date(data).toLocaleTimeString('en-GB');
+                    return new Date(data).toLocaleTimeString('en-US');
                 }
             },
             {
                 "data": "outTime", "name": "OutTime",
-                render: function (data) {
-                    return new Date(data).toLocaleTimeString('en-GB');
+                render: function (data, type, full) {
+                    var userDate = new Date(full.date).toLocaleDateString('en-US');
+                    var todayDate = new Date().toLocaleDateString('en-US');
+                    if (data != null) {
+                        return new Date(data).toLocaleTimeString('en-US');
+                    }
+                    else if (data == null && userDate == todayDate) {
+                        return "Pending...";
+                    }
+                    else {
+                        return "Missing"
+                    }
                 }
             },
             {
                 "data": "totalHours", "name": "TotalHours",
                 render: function (data, type, full) {
-                    var userDate = new Date(full.date).toLocaleDateString('en-GB');
+                    var userDate = new Date(full.date).toLocaleDateString('en-US');
                     var todayDate = new Date().toLocaleDateString('en-US');
                     if (full.totalHours != null) {
                         return full.totalHours.substr(0, 8) + ' hr';
@@ -285,11 +290,11 @@ function GetAttendance() {
         success: function (Result, status, xhr) {
             var object = '';
             $.each(Result, function (index, item) {
-                var userdate = new Date(item.date).toLocaleDateString('en-US');
+                var formattedDate = getCommonDateformat(item.date);
                 var todate = new Date().toLocaleDateString('en-US');
+                var date = (new Date(item.date)).toLocaleDateString('en-US')
                 object += '<tr>';
                 object += '<td>' + item.userName + '</td>';
-                var formattedDate = formatDate(new Date(item.date));
                 object += '<td>' + formattedDate + '</td>';
                 object += '<td>' + (new Date(item.intime)).toLocaleTimeString('en-US') + '</td>';
                 //---------OutTime---------//
@@ -297,7 +302,7 @@ function GetAttendance() {
                     object += '<td>' +
                         (new Date(item.outTime)).toLocaleTimeString('en-US') + '</td>';
                 }
-                else if (item.outTime == null && userdate == todate) {
+                else if (item.outTime == null && date == todate) {
 
                     object += '<td>' +
                         ("Pending") + '</td>';
@@ -311,7 +316,7 @@ function GetAttendance() {
                     object += '<td>' +
                         (item.totalHours?.substr(0, 8)) + ('hr') + '</td>';
                 }
-                else if (item.totalHours == null && userdate == todate) {
+                else if (item.totalHours == null && date == todate) {
                     object += '<td>' +
                         ("Pending") + '</td>';
                 }
@@ -334,7 +339,7 @@ function GetAttendance() {
 
             }
             else {
-                
+
                 $('#TableDataAttendanceList').html(object);
             }
         }
@@ -520,3 +525,100 @@ function updateUserAttendance() {
     }
 }
 
+function ExportToExcel() {
+    siteloadershow();
+    $.ajax({
+        url: '/UserProfile/ExportToExcel',
+        type: 'GET',
+        success: function (data, status, xhr) {
+            siteloaderhide();
+            var filename = "";
+            var disposition = xhr.getResponseHeader('Content-Disposition');
+            if (disposition && disposition.indexOf('attachment') !== -1) {
+                var matches = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/.exec(disposition);
+                if (matches != null && matches[1]) filename = matches[1].replace(/['"]/g, '');
+            }
+
+            var type = xhr.getResponseHeader('Content-Type');
+            var blob = new Blob([data], { type: type });
+
+            if (typeof window.navigator.msSaveBlob !== 'undefined') {
+                window.navigator.msSaveBlob(blob, filename);
+            } else {
+                var URL = window.URL || window.webkitURL;
+                var downloadUrl = URL.createObjectURL(blob);
+
+                if (filename) {
+                    var a = document.createElement("a");
+                    if (typeof a.download === 'undefined') {
+                        window.location = downloadUrl;
+                    } else {
+                        a.href = downloadUrl;
+                        a.download = filename;
+                        document.body.appendChild(a);
+                        a.click();
+                    }
+                } else {
+                    window.location = downloadUrl;
+                }
+
+                setTimeout(function () { URL.revokeObjectURL(downloadUrl); }, 100);
+            }
+        },
+        error: function (xhr, status, error) {
+            alert("Error: " + error);
+        },
+        xhrFields: {
+            responseType: 'blob'
+        }
+    });
+}
+
+function ExportToPDF() {
+    siteloadershow();
+    $.ajax({
+        url: '/UserProfile/ExportToPdf',
+        type: 'POST',
+        success: function (data, status, xhr) {
+            siteloaderhide();
+            var filename = "";
+            var disposition = xhr.getResponseHeader('Content-Disposition');
+            if (disposition && disposition.indexOf('attachment') !== -1) {
+                var matches = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/.exec(disposition);
+                if (matches != null && matches[1]) filename = matches[1].replace(/['"]/g, '');
+            }
+
+            var type = xhr.getResponseHeader('Content-Type');
+            var blob = new Blob([data], { type: type });
+
+            if (typeof window.navigator.msSaveBlob !== 'undefined') {
+                window.navigator.msSaveBlob(blob, filename);
+            } else {
+                var URL = window.URL || window.webkitURL;
+                var downloadUrl = URL.createObjectURL(blob);
+
+                if (filename) {
+                    var a = document.createElement("a");
+                    if (typeof a.download === 'undefined') {
+                        window.location = downloadUrl;
+                    } else {
+                        a.href = downloadUrl;
+                        a.download = filename;
+                        document.body.appendChild(a);
+                        a.click();
+                    }
+                } else {
+                    window.location = downloadUrl;
+                }
+
+                setTimeout(function () { URL.revokeObjectURL(downloadUrl); }, 100);
+            }
+        },
+        error: function (xhr, status, error) {
+            alert("Error: " + error);
+        },
+        xhrFields: {
+            responseType: 'blob'
+        }
+    });
+}

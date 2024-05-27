@@ -2,6 +2,7 @@
 @using EMPManegment.Web.Models;
 @inject IHttpContextAccessor Accessor;
 @inject UserSession _userSession
+@inject EMPManegment.Web.Helper.Common CommonHelper
 @{
     ViewData["Title"] = "VendorInvoiceListView";
     Layout = "~/Views/Shared/_UserHomeLayout.cshtml";
@@ -189,7 +190,7 @@
                                         <td class="form_name" id="txtvendorid" hidden>@item.VandorId</td>
                                         <td class="form_name" id="txtinvoiceno">@item.InvoiceNo</td>
                                         <td class="to_name" id="txtorderid" hidden>@item.OrderId</td>
-                                        <td class="details" id="txtdate">@item.Date.ToString("dd/MM/yyyy")</td>
+                                        <td class="details" id="txtdate">@CommonHelper.GetCommonDateFormat(item.Date)</td>
                                         <td>
                                             <h6 class="text-success mb-1 amount">@item.TotalAmount</h6>
                                         </td>

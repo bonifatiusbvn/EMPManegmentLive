@@ -396,11 +396,11 @@ namespace EMPManegment.Web.Controllers
                 ApiResponseModel postuser = await APIServices.PostAsync(uploadDocument, "UserProfile/UploadDocument");
                 if (postuser.code == 200)
                 {
-                    return new JsonResult(postuser.message = "Document Uploaded Successfully!");
+                    return new JsonResult(postuser.message = "Document Uploaded Successfully!",postuser.code);
                 }
                 else
                 {
-                    return new JsonResult(postuser.message);
+                    return new JsonResult(postuser.code);
                 }
             }
             catch (Exception ex)
@@ -500,8 +500,8 @@ namespace EMPManegment.Web.Controllers
                 var draw = Request.Form["draw"].FirstOrDefault();
                 var start = Request.Form["start"].FirstOrDefault();
                 var length = Request.Form["length"].FirstOrDefault();
-                var sortColumn = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
-                var sortColumnDir = Request.Form["order[0][dir]"].FirstOrDefault();
+                var sortColumn = Request.Form["columns[" + Request.Form["order[1][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
+                var sortColumnDir = Request.Form["order[1][dir]"].FirstOrDefault();
                 var searchValue = Request.Form["search[value]"].FirstOrDefault();
                 int pageSize = length != null ? Convert.ToInt32(length) : 0;
                 int skip = start != null ? Convert.ToInt32(start) : 0;
@@ -734,16 +734,14 @@ namespace EMPManegment.Web.Controllers
             return File(memory, ContentType, fileName);
         }
 
+        [HttpPost]
         public async Task<IActionResult> ExportToPdf()
         {
             try
             {
-                List<UserAttendanceModel> getAttendanceList = new List<UserAttendanceModel>();
-
                 DateTime Cmonth = Convert.ToDateTime(TempData["Cmonth"]);
                 DateTime StartDate = Convert.ToDateTime(TempData["StartDate"]);
                 DateTime EndDate = Convert.ToDateTime(TempData["EndDate"]);
-                IEnumerable<UserAttendanceModel> userAttendance = null;
 
                 var data = new SearchAttendanceModel
                 {
@@ -754,25 +752,30 @@ namespace EMPManegment.Web.Controllers
                 };
 
                 HttpClient client = WebAPI.Initil();
-
                 ApiResponseModel response = await APIServices.PostAsync(data, "UserProfile/GetAttendanceList");
+
                 if (response.data.Count != 0)
                 {
-                    getAttendanceList = JsonConvert.DeserializeObject<List<UserAttendanceModel>>(response.data.ToString());
-                    var document = new Document
+                    var getAttendanceList = JsonConvert.DeserializeObject<List<UserAttendanceModel>>(response.data.ToString());
+
+                    var document = new Aspose.Pdf.Document
                     {
                         PageInfo = new PageInfo { Margin = new MarginInfo(25, 25, 25, 40) }
                     };
+
                     var pdfPage = document.Pages.Add();
-                    Aspose.Pdf.Table table = new Aspose.Pdf.Table()
+
+                    Aspose.Pdf.Table table = new Aspose.Pdf.Table
                     {
                         ColumnWidths = "15% 16% 16% 16% 20% 16%",
                         DefaultCellPadding = new MarginInfo(5, 5, 5, 5),
                         Border = new BorderInfo(BorderSide.All, .5f, Aspose.Pdf.Color.Black),
                         DefaultCellBorder = new BorderInfo(BorderSide.All, .2f, Aspose.Pdf.Color.Black),
                     };
-                    System.Data.DataTable dt = ToConvertDataTable(getAttendanceList.ToList());
+
+                    System.Data.DataTable dt = ToConvertDataTable(getAttendanceList);
                     table.ImportDataTable(dt, true, 0, 0);
+
                     document.Pages[1].Paragraphs.Add(table);
 
                     using (var streamout = new MemoryStream())
@@ -788,7 +791,8 @@ namespace EMPManegment.Web.Controllers
             }
             catch (Exception ex)
             {
-                throw ex;
+                // Log the exception here as needed
+                return StatusCode(500, "Internal server error: " + ex.Message);
             }
         }
 
@@ -796,12 +800,9 @@ namespace EMPManegment.Web.Controllers
         {
             try
             {
-                List<UserAttendanceModel> getAttendanceList = new List<UserAttendanceModel>();
-
                 DateTime Cmonth = Convert.ToDateTime(TempData["Cmonth"]);
                 DateTime StartDate = Convert.ToDateTime(TempData["StartDate"]);
                 DateTime EndDate = Convert.ToDateTime(TempData["EndDate"]);
-                IEnumerable<UserAttendanceModel> userAttendance = null;
 
                 var data = new SearchAttendanceModel
                 {
@@ -812,20 +813,21 @@ namespace EMPManegment.Web.Controllers
                 };
 
                 HttpClient client = WebAPI.Initil();
-
                 ApiResponseModel response = await APIServices.PostAsync(data, "UserProfile/GetAttendanceList");
+
                 if (response.data.Count != 0)
                 {
-                    getAttendanceList = JsonConvert.DeserializeObject<List<UserAttendanceModel>>(response.data.ToString());
-                    using (XLWorkbook wb = new XLWorkbook())
+                    var getAttendanceList = JsonConvert.DeserializeObject<List<UserAttendanceModel>>(response.data.ToString());
+
+                    using (var wb = new XLWorkbook())
                     {
-                        wb.Worksheets.Add(ToConvertDataTable(getAttendanceList.ToList()));
-                        using (MemoryStream stream = new MemoryStream())
+                        wb.Worksheets.Add(ToConvertDataTable(getAttendanceList));
+                        using (var stream = new MemoryStream())
                         {
                             wb.SaveAs(stream);
-                            string FileName = Guid.NewGuid() + "_AttendanceList.xlsx";
-                            return File(stream.ToArray(), "application/vnd.openxmlformats-officedocuments.spreadsheetml.sheet", FileName);
-
+                            stream.Seek(0, SeekOrigin.Begin);
+                            string fileName = Guid.NewGuid() + "_AttendanceList.xlsx";
+                            return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
                         }
                     }
                 }
@@ -833,7 +835,8 @@ namespace EMPManegment.Web.Controllers
             }
             catch (Exception ex)
             {
-                throw ex;
+                // Log the exception here as needed
+                return StatusCode(500, "Internal server error: " + ex.Message);
             }
         }
 

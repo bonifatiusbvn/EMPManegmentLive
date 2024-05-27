@@ -1,4 +1,5 @@
 ﻿@model IEnumerable<EMPManegment.EntityModels.ViewModels.OrderModels.PurchaseOrderDetailView>
+@inject EMPManegment.Web.Helper.Common CommonHelper
 
 <div class="tab-pane" role="tabpanel">
     <div class="table-responsive table-card mb-1">
@@ -32,7 +33,7 @@
                         <td class="id"><a href="/OrderMaster/GetPurchaseOrderDetailsByOrderId/?OrderId=@item.OrderId" class="fw-medium link-primary">@item.OrderId</a></td>
                         <td class="company_name">@item.CompanyName</td>
                         <td class="product_name">@item.Product</td>
-                        <td class="date">@item.OrderDate.ToString("dd/MM/yyyy")</td>
+                        <td class="date">@CommonHelper.GetCommonDateFormat(item.OrderDate)</td>
                         <td class="total_amount">@item.TotalAmount</td>
                         <td class="payment">@item.PaymentMethod</td>
                         <td class="status" id="DeliveryStatus">

@@ -1,4 +1,7 @@
-﻿@{
+﻿@using EMPManegment.Web.Models;
+@inject IHttpContextAccessor Accessor;
+@inject UserSession _userSession
+@{
     ViewData["Title"] = "GetAllTransaction";
     Layout = "~/Views/Shared/_UserHomeLayout.cshtml";
 }
@@ -69,5 +72,8 @@
     <!--end col-->
 </div>
 <!--end row-->
+<script type="text/javascript">
+    var userPermissions = '@Html.Raw(Json.Serialize(UserSession.FormPermisionData))';
+</script>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/moduls/invoicemasterscript.js" asp-append-version="true"></script>

@@ -27,12 +27,8 @@ $(document).on("click", "#addItemButton", function () {
 });
 
 $(document).ready(function () {
-    var today = new Date();
-    var dd = String(today.getDate()).padStart(2, '0');
-    var mm = String(today.getMonth() + 1).padStart(2, '0');
-    var yyyy = today.getFullYear();
-
-    today = yyyy + '-' + mm + '-' + dd;
+    var today = new Date();  
+    today = getCommonDateformat(today);
     $("#textInvoiceDate").val(today);
     $("#textInvoiceDate").prop("disabled", true);
 });
@@ -547,8 +543,7 @@ function GetAllTransactionData() {
             {
                 "data": "date", "name": "Date",
                 "render": function (data, type, row) {
-                    var date = new Date(data);
-                    return date.toLocaleDateString();
+                    return getCommonDateformat(data);
                 }
             },
             { "data": "paymentMethodName", "name": "PaymentMethodName" },
@@ -578,7 +573,7 @@ function GetAllTransactionData() {
             var htmlContent = '<td class="id" style="display:none;"><a href="javascript:void(0);" class="fw-medium link-primary">#VZ001</a></td>';
             htmlContent += '<td><div class="avatar-xs"><div class="avatar-title bg-danger-subtle text-danger rounded-circle fs-16"><i class="ri-arrow-right-up-fill"></i></div></div></td>';
             htmlContent += '<td class="date">' + data.vendorName + '<small class="text-muted"></small></td>';
-            htmlContent += '<td class="form_name">' + data.date + '</td>';
+            htmlContent += '<td class="form_name">' + getCommonDateformat(data.date)  + '</td>';
             htmlContent += '<td class="to_name">' + data.paymentMethodName + '</td>';
             htmlContent += '<td class="to_name">' + data.paymentTypeName + '</td>';
             htmlContent += '<td class="to_name text-success">' + data.creditDebitAmount + '</td>';
