@@ -101,7 +101,6 @@ $(document).ready(function () {
     function GetUserAttendance(userPermission) {
         var userPermissionArray = JSON.parse(userPermission);
         var canEdit = userPermissionArray.some(permission => permission.formName === "Users Attendance" && permission.edit);
-
         var columns = [
             { "data": "userName", "name": "UserName" },
             {
@@ -118,14 +117,24 @@ $(document).ready(function () {
             },
             {
                 "data": "outTime", "name": "OutTime",
-                render: function (data) {
-                    return new Date(data).toLocaleTimeString('en-US');
+                render: function (data, type, full) {
+                    var userDate = new Date(full.date).toLocaleDateString('en-US');
+                    var todayDate = new Date().toLocaleDateString('en-US');
+                    if (data != null) {
+                        return new Date(data).toLocaleTimeString('en-US');
+                    }
+                    else if (data == null && userDate == todayDate) {
+                        return "Pending...";
+                    }
+                    else {
+                        return "Missing"
+                    }
                 }
             },
             {
                 "data": "totalHours", "name": "TotalHours",
                 render: function (data, type, full) {
-                    var userDate = new Date(full.date).toLocaleDateString('en-GB');
+                    var userDate = new Date(full.date).toLocaleDateString('en-US');
                     var todayDate = new Date().toLocaleDateString('en-US');
                     if (full.totalHours != null) {
                         return full.totalHours.substr(0, 8) + ' hr';
@@ -330,7 +339,7 @@ function GetAttendance() {
 
             }
             else {
-                
+
                 $('#TableDataAttendanceList').html(object);
             }
         }
