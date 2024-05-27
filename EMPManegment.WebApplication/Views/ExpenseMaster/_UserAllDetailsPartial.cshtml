@@ -2,7 +2,7 @@
 @inject IHttpContextAccessor Accessor;
 @inject UserSession _userSession
 
-<table class="table table-bordered dt-responsive table-striped align-middle dataTable no-footer dtr-inline" id="GetMyAllExpenseList">
+<table class="table table-bordered dt-responsive table-striped align-middle dataTable no-footer dtr-inline" id="GetMyAllExpense">
     <thead class="table-light text-muted text-center dt-responsive">
         <tr class="text-center dt-responsive">
             <th></th>
@@ -10,15 +10,13 @@
             <th>Bill No</th>
             <th>Date</th>
             <th>Total Amount</th>
-            @if (UserSession.FormPermisionData.Any(a => a.FormName == "Expenses" && (a.Edit == true || a.Delete == true)))
-            {
-                <th>Action</th>
-            }
+            <th>Action</th>
         </tr>
     </thead>
-    <tbody class="list form-check-all text-center"> </tbody>
+    <tbody class="list form-check-all text-center"></tbody>
     <tfoot>
         <tr>
+            <th></th>
             <th></th>
             <th></th>
             <th></th>
