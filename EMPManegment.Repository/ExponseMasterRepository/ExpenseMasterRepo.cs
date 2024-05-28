@@ -345,7 +345,7 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                 {
                     string searchValue = dataTable.searchValue.ToLower();
                     DateTime searchDate;
-                    bool isDate = DateTime.TryParseExact(dataTable.searchValue, "d-MMM-yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out searchDate);
+                    bool isDate = DateTime.TryParseExact(dataTable.searchValue, "dd MMM yy", CultureInfo.InvariantCulture, DateTimeStyles.None, out searchDate);
 
                     Expense = Expense.Where(e => e.Description.ToLower().Contains(searchValue) ||
                                                  (isDate && e.Date == searchDate) ||
@@ -458,12 +458,14 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                 }
                 if (!string.IsNullOrEmpty(dataTable.searchValue))
                 {
-                    string searchLower = dataTable.searchValue.ToLower();
-                    expenses = expenses.Where(e =>
-                        e.BillNumber.ToLower().Contains(searchLower) ||
-                        e.Date.ToString().Contains(searchLower) ||
-                        e.Account.ToLower().Contains(searchLower) ||
-                        e.TotalAmount.ToString().Contains(dataTable.searchValue));
+                    string searchValue = dataTable.searchValue.ToLower();
+                    DateTime searchDate;
+                    bool isDate = DateTime.TryParseExact(dataTable.searchValue, "dd MMM yy", CultureInfo.InvariantCulture, DateTimeStyles.None, out searchDate);
+
+                    expenses = expenses.Where(e => e.BillNumber.ToLower().Contains(searchValue) ||
+                                                 (isDate && e.Date == searchDate) ||
+                                                 e.Account.ToLower().Contains(searchValue) ||
+                                                 e.TotalAmount.ToString().ToLower().Contains(searchValue));
                 }
 
                 int totalRecord = await expenses.CountAsync();
@@ -532,12 +534,14 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                 }
                 if (!string.IsNullOrEmpty(dataTable.searchValue))
                 {
-                    string searchLower = dataTable.searchValue.ToLower();
-                    UserList = UserList.Where(e =>
-                        e.UserName.ToLower().Contains(searchLower) ||
-                        e.Date.ToString().Contains(searchLower) ||
-                        e.FullName.ToLower().Contains(searchLower) ||
-                        e.TotalAmount.ToString().Contains(dataTable.searchValue));
+                    string searchValue = dataTable.searchValue.ToLower();
+                    DateTime searchDate;
+                    bool isDate = DateTime.TryParseExact(dataTable.searchValue, "dd MMM yy", CultureInfo.InvariantCulture, DateTimeStyles.None, out searchDate);
+
+                    UserList = UserList.Where(e => e.UserName.ToLower().Contains(searchValue) ||
+                                                 (isDate && e.Date == searchDate) ||
+                                                 e.FullName.ToLower().Contains(searchValue) ||
+                                                 e.TotalAmount.ToString().ToLower().Contains(searchValue));
                 }
 
                 int totalRecord = await UserList.CountAsync();
