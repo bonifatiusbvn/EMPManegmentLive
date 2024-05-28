@@ -9,6 +9,24 @@
     #textRoleName-error {
         color: red;
     }
+
+    .dropdown-item-custom {
+        display: block;
+        width: 100%;
+        padding: 0.25rem 1.5rem;
+        clear: both;
+        font-weight: 400;
+        color: #212529;
+        text-align: inherit;
+        white-space: nowrap;
+        background-color: transparent;
+        border: 0;
+        cursor: pointer;
+    }
+
+        .dropdown-item-custom:hover {
+            background-color: #e9ecef;
+        }
 </style>
 <div class="row" style="margin-top:80px;">
     <div class="col-12">
@@ -35,11 +53,14 @@
                     <div class="row g-4 mb-3">
                         <div class="row g-2">
                             <div class="col-lg-auto">
-                                <div class="btn btn-primary" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <select class="dropdown-toggle dropdown-toggle-split show" id="txtUserRole" onclick="EditRoleWiseFormDetails()">
-                                        <option selected disabled>--Select UserRole--</option>
-                                    </select>
+                                <div class="btn-group">
+                                    <button id="dropdownButton" class="btn btn-primary btn-lg dropdown-toggle" type="button" aria-haspopup="true" aria-expanded="false">
+                                        --Select UserRole--
+                                    </button>
+                                    <div id="customDropdown" class="dropdown-menu p-2" style="display: none;">
+                                    </div>
                                 </div>
+
                             </div>
                             <div class="col-lg d-flex justify-content-end ">
                                 <form class="position-relative">
@@ -114,9 +135,6 @@
         </div>
     </div>
 </div>
-
-
-
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/moduls/rolewiseformpermissionscript.js" asp-append-version="true"></script>

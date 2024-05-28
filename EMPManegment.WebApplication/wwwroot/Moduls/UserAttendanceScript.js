@@ -70,26 +70,40 @@ $('#selectSearchAttandanceOption').change(function () {
         cleartextBox();
     }
 })
-$('#SelectAttandance').change(function () {
-    if ($("#SelectAttandance").val() == "ByMonth") {
-        $("#monthbox").show();
-        $("#datebox").hide();
-        $("#datebox1").hide();
-        CleartextBox();
+$(document).ready(function () {
+    $('.dropdown-item').on('click', function () {
+        var selectedValue = $(this).data('value');
+        $('#SelectAttandance').val(selectedValue);
+
+        if (selectedValue == "ByMonth") {
+            $("#monthbox").show();
+            $("#datebox").hide();
+            $("#datebox1").hide();
+            CleartextBox();
+        } else if (selectedValue == "BetweenDates") {
+            $("#monthbox").hide();
+            $("#datebox").show();
+            $("#datebox1").show();
+            CleartextBox();
+        } else {
+            $("#monthbox").show();
+            $("#datebox").hide();
+            $("#datebox1").hide();
+            CleartextBox();
+        }
+
+
+        $('.btn-group .dropdown-toggle').text($(this).text());
+    });
+
+    function CleartextBox() {
+
+        $('#monthbox').val('');
+        $('#datebox').val('');
+        $('#datebox1').val('');
     }
-    if ($("#SelectAttandance").val() == "BetweenDates") {
-        $("#monthbox").hide();
-        $("#datebox").show();
-        $("#datebox1").show();
-        CleartextBox();
-    }
-    if ($("#SelectAttandance").val() == "") {
-        $("#monthbox").show();
-        $("#datebox").hide();
-        $("#datebox1").hide();
-        CleartextBox();
-    }
-})
+});
+
 
 
 $(document).ready(function () {

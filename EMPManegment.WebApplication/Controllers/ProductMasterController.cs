@@ -59,11 +59,11 @@ namespace EMPManegment.Web.Controllers
                     ProductDescription = AddProduct.ProductDescription,
                     ProductShortDescription = AddProduct.ProductShortDescription,
                     ProductImage = filepath,
-                    ProductStocks = AddProduct.ProductStocks,
                     PerUnitPrice = AddProduct.PerUnitPrice,
+                    IsWithGst=AddProduct.IsWithGst,
+                    GstPercentage = AddProduct.GstPercentage,
+                    GstAmount= AddProduct.GstAmount,
                     Hsn = AddProduct.Hsn,
-                    Gst = AddProduct.Gst,
-                    PerUnitWithGstprice = AddProduct.PerUnitWithGstprice
                 };
                 ApiResponseModel postuser = await APIServices.PostAsync(ProductDetails, "ProductMaster/AddProductDetails");
                 UserResponceModel responseModel = new UserResponceModel();
@@ -176,27 +176,42 @@ namespace EMPManegment.Web.Controllers
         {
             return View();
         }
-        public async Task<IActionResult> GetAllProductList(int? page, string? searchText)
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllProductList(int? page, int? ProductId, string? ProductName)
         {
             try
             {
                 List<ProductDetailsView> productlist = new List<ProductDetailsView>();
-                ApiResponseModel response = await APIServices.PostAsync(searchText, "ProductMaster/GetAllProductList");
+                ApiResponseModel response = await APIServices.PostAsync("", "ProductMaster/GetAllProductList");
                 if (response.code == 200)
                 {
                     productlist = JsonConvert.DeserializeObject<List<ProductDetailsView>>(response.data.ToString());
                 }
+
+                // Apply filters before pagination
+                if (ProductId.HasValue)
+                {
+                    productlist = productlist.Where(e => e.ProductType == ProductId).ToList();
+                }
+                else if (!string.IsNullOrEmpty(ProductName))
+                {
+                    productlist = productlist.Where(e => e.ProductName.Contains(ProductName, StringComparison.OrdinalIgnoreCase)).ToList();
+                }
+
                 int pageSize = 5;
                 var pageNumber = page ?? 1;
-
                 var pagedList = productlist.ToPagedList(pageNumber, pageSize);
-                return PartialView("~/Views/ProductMaster/_GetAllProductList.cshtml", pagedList);
+
+                return PartialView("~/Views/ProductMaster/_ProductDetailsbtVendorId.cshtml", pagedList);
             }
             catch (Exception ex)
             {
                 throw ex;
             }
         }
+
+
 
         [HttpGet]
         public async Task<IActionResult> GetProductDetailsByVendorId(Guid VendorId)
@@ -261,29 +276,6 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
-        [HttpPost]
-        public async Task<IActionResult> SearchProductName(string ProductName)
-        {
-            try
-            {
-                List<ProductDetailsView> ProductList = new List<ProductDetailsView>();
-                ApiResponseModel postuser = await APIServices.PostAsync("", "ProductMaster/SearchProductName?ProductName=" + ProductName);
-                if (postuser.data != null)
-                {
-                    ProductList = JsonConvert.DeserializeObject<List<ProductDetailsView>>(postuser.data.ToString());
-                }
-                else
-                {
-                    ProductList = new List<ProductDetailsView>();
-                    ViewBag.Error = "note found";
-                }
-                return PartialView("~/Views/ProductMaster/_ProductDetailsbtVendorId.cshtml", ProductList);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
 
         [FormPermissionAttribute("Product Details-View")]
         public IActionResult ProductDetails()
@@ -372,29 +364,7 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
-        [HttpPost]
-        public async Task<IActionResult> GetProductDetailsByProductId(int ProductId)
-        {
-            try
-            {
-                List<ProductDetailsView> ProductList = new List<ProductDetailsView>();
-                ApiResponseModel postuser = await APIServices.PostAsync("", "ProductMaster/GetProductDetailsByProductId?ProductId=" + ProductId);
-                if (postuser.data != null)
-                {
-                    ProductList = JsonConvert.DeserializeObject<List<ProductDetailsView>>(postuser.data.ToString());
-                }
-                else
-                {
-                    ProductList = new List<ProductDetailsView>();
-                    ViewBag.Error = "not found";
-                }
-                return PartialView("~/Views/ProductMaster/_ProductDetailsbtVendorId.cshtml", ProductList);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
+
         [HttpPost]
         public async Task<IActionResult> SerchProductByVendor(int ProductId, Guid VendorId)
         {

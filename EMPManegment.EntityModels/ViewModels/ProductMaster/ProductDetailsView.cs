@@ -23,15 +23,15 @@ namespace EMPManegment.EntityModels.ViewModels.ProductMaster
 
         public string ProductImage { get; set; }
 
-        public decimal? ProductStocks { get; set; }
-
         public decimal PerUnitPrice { get; set; }
 
+        public bool? IsWithGst { get; set; }
+
+        public decimal? GstAmount { get; set; }
+
+        public decimal? GstPercentage { get; set; }
+
         public int? Hsn { get; set; }
-
-        public decimal Gst { get; set; }
-
-        public decimal PerUnitWithGstprice { get; set; }
 
         public decimal? Quantity { get; set; }
         public bool? IsDeleted { get; set; }
@@ -59,15 +59,15 @@ namespace EMPManegment.EntityModels.ViewModels.ProductMaster
 
         public IFormFile? ProductImage { get; set; }
 
-        public decimal ProductStocks { get; set; }
-
         public decimal PerUnitPrice { get; set; }
 
+        public bool? IsWithGst { get; set; }
+
+        public decimal? GstAmount { get; set; }
+
+        public decimal? GstPercentage { get; set; }
+
         public int? Hsn { get; set; }
-
-        public decimal Gst { get; set; }
-
-        public decimal PerUnitWithGstprice { get; set; }
 
         public DateTime CreatedOn { get; set; }
 

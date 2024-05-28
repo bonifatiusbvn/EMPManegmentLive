@@ -710,17 +710,22 @@ function clearSelectedBox() {
         '<option selected disabled value="">--Select Department--</option>');
 }
 
-function SearchEmployeeList() {
-    if ($("#searchEmployee").val() == "ByUsername") {
-        clearSelectedBox();
-        GetUsername();
-        $("#empnamebox").show();
-    } else if ($("#searchEmployee").val() == "ByDepartment") {
-        clearSelectedBox();
-        GetDepartment();
-        $("#empnamebox").show();
-    }
-}
+$(document).ready(function () {
+
+    $('.dropdown-item').on('click', function () {
+        var selectedValue = $(this).data('value');
+        if (selectedValue == "ByUsername") {
+            clearSelectedBox();
+            GetUsername();
+            $("#empnamebox").show();
+        } else if (selectedValue == "ByDepartment") {
+            clearSelectedBox();
+            GetDepartment();
+            $("#empnamebox").show();
+        }
+    });
+});
+
 
 function GetUsername() {
     $.ajax({
