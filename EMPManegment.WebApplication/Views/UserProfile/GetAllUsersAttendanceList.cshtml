@@ -41,15 +41,21 @@
                         <div class="col-lg-auto">
                             <a type="button" href="/UserProfile/GetAllUsersAttendanceList" class="btn btn-warning" id="backbtn"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="m5.828 7l2.536 2.535L6.95 10.95L2 6l4.95-4.95l1.414 1.415L5.828 5H13a8 8 0 1 1 0 16H4v-2h9a6 6 0 0 0 0-12z" /></svg> </a>
 
-                            <div class="btn btn-primary" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <select class="dropdown-toggle dropdown-toggle-split show" id="selectSearchAttandanceOption">
-                                    <option class="dropdown-item" selected disabled value="">Search By</option>
-                                    <option class="dropdown-item" value="ByUsername">UserName</option>
-                                    <option class="dropdown-item" value="ByDate">Date</option>
-                                    <option class="dropdown-item" value="ByDate&ByUsername">UserName & Date</option>
-                                    <option class="dropdown-item" value="ByBetweenDates&ByUsername">UserName & Between-Dates</option>
-                                </select>
+                            <div class="btn-group">
+                                <button class="btn btn-primary btn-lg dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Search By
+                                </button>
+                                <div class="dropdown-menu p-2">
+                                    <select class="form-select" id="selectSearchAttendanceOption" onchange="handleSearchChange()">
+                                        <option class="dropdown-item" selected disabled value="">Search By</option>
+                                        <option class="dropdown-item" value="ByUsername">Username</option>
+                                        <option class="dropdown-item" value="ByDate">Date</option>
+                                        <option class="dropdown-item" value="ByDate&ByUsername">Username & Date</option>
+                                        <option class="dropdown-item" value="ByBetweenDates&ByUsername">Username & Between-Dates</option>
+                                    </select>
+                                </div>
                             </div>
+
                         </div>
 
                         <div class="col-sm" id="usernamebox">
@@ -195,7 +201,7 @@
     document.getElementById("txtenddatebox").setAttribute("max", maxDate);
     document.getElementById("txtdate").setAttribute("max", maxDate);
 
-    
+
     var userPermissions = '@Html.Raw(Json.Serialize(UserSession.FormPermisionData))';
 
     var today = new Date().toISOString().split('T')[0];

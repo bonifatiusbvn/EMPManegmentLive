@@ -12,28 +12,38 @@ $(document).ready(function () {
     function GetAllVendorData(userPermission) {
         var userPermissionArray = JSON.parse(userPermission);
         var canEdit = userPermissionArray.some(permission => permission.formName === "Vendor List" && permission.edit);
+        var colorClasses = [
+            { bgClass: 'bg-primary-subtle', textClass: 'text-primary' },
+            { bgClass: 'bg-secondary-subtle', textClass: 'text-secondary' },
+            { bgClass: 'bg-success-subtle', textClass: 'text-success' },
+            { bgClass: 'bg-info-subtle', textClass: 'text-info' },
+            { bgClass: 'bg-warning-subtle', textClass: 'text-warning' },
+            { bgClass: 'bg-danger-subtle', textClass: 'text-danger' },
+            { bgClass: 'bg-dark-subtle', textClass: 'text-dark' }
+        ];
+
         var columns = [
             {
                 "data": "vendorCompany", "name": "VendorCompany",
                 "render": function (data, type, full) {
-                    debugger
                     var profileImageHtml;
                     if (full.vendorCompanyLogo && full.vendorCompanyLogo.trim() !== '') {
                         profileImageHtml = '<img src="/Content/Image/' + full.vendorCompanyLogo + '" style="height: 40px; width: 40px; border-radius: 50%;" ' +
                             'onmouseover="showIcons(event, this.parentElement)" onmouseout="hideIcons(event, this.parentElement)">';
                     } else {
                         var initials = (full.vendorCompany ? full.vendorCompany[0] : '');
+                        var randomColor = colorClasses[Math.floor(Math.random() * colorClasses.length)];
                         profileImageHtml = '<div class="flex-shrink-0 avatar-xs me-2">' +
-                            '<div class="avatar-title bg-success-subtle text-success rounded-circle fs-13" style="height: 40px; width: 40px; border-radius: 50%;">' + initials.toUpperCase() + '</div></div>';
+                            '<div class="avatar-title ' + randomColor.bgClass + ' ' + randomColor.textClass + ' rounded-circle" style="height: 40px; width: 40px; border-radius: 50%;">' + initials.toUpperCase() + '</div></div>';
                     }
                     return '<a href="/Vendor/CreateVendor?Vid=' + full.vid + '&viewMode=true" class="link-primary" style="display: flex; align-items: center;">' + profileImageHtml + '<span style="margin-left: 5px;">' + full.vendorCompany + '</span></a>';
-
                 }
             },
             { "data": "vendorFirstName", "name": "VendorFirstName" },
             { "data": "vendorCompanyNumber", "name": "VendorCompanyNumber" },
             { "data": "vendorCompanyEmail", "name": "VendorCompanyEmail" },
         ];
+
         if (canEdit) {
             columns.push({
                 "data": null,
@@ -44,6 +54,7 @@ $(document).ready(function () {
                 }
             });
         }
+
         $('#VendorTableData').DataTable({
             processing: false,
             serverSide: true,
@@ -55,7 +66,6 @@ $(document).ready(function () {
                 url: '/Vendor/GetVendorList',
                 dataType: 'json'
             },
-
             columns: columns,
             scrollY: 400,
             scrollX: true,
@@ -73,6 +83,8 @@ $(document).ready(function () {
         });
     }
 
+
+
     data(datas);
 });
 
@@ -89,7 +101,7 @@ function VendorDetails(Id) {
             $('#VendorPhone').text(response.vendorPhone);
             $('#VendorContectNo').text(response.vendorContectNo);
             $('#VendorType').text(response.vendorTypeName);
-              $('#VendorCountry').text(response.vendorCountryName);
+            $('#VendorCountry').text(response.vendorCountryName);
             $('#VendorState').text(response.vendorStateName);
             $('#VendorCity').text(response.vendorCityName);
             $('#VendorPinCode').text(response.vendorPinCode);
@@ -494,7 +506,7 @@ function GetVendorCountry() {
     $.ajax({
         url: '/Authentication/GetCountrys',
         success: function (result) {
-            var selectedid = $("#txtcountryId").val(); 
+            var selectedid = $("#txtcountryId").val();
             $.each(result, function (i, data) {
                 debugger
                 if (data.id != selectedid) {

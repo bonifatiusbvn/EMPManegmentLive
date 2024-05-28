@@ -64,8 +64,19 @@
         page,
         searchText = ViewBag.SearchText
     }),
-    new PagedListRenderOptions
-{
-    LiElementClasses = new[] { "page-item" },
-    PageClasses = new[] { "page-link" }
-})
+        new PagedListRenderOptions
+    {
+        LiElementClasses = new[] { "page-item" },
+        PageClasses = new[] { "page-link" }
+    })
+
+<script>
+    $(document).ready(function () {
+    @if (TempData["EmptyProductList"] != null)
+    {
+        <text>
+                toastr.warning("@TempData["EmptyProductList"]");
+        </text>
+    }
+        });
+</script>
