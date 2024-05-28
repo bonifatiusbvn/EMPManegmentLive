@@ -189,7 +189,6 @@ namespace EMPManegment.Web.Controllers
                     productlist = JsonConvert.DeserializeObject<List<ProductDetailsView>>(response.data.ToString());
                 }
 
-                // Apply filters before pagination
                 if (ProductId.HasValue)
                 {
                     productlist = productlist.Where(e => e.ProductType == ProductId).ToList();
@@ -197,6 +196,11 @@ namespace EMPManegment.Web.Controllers
                 else if (!string.IsNullOrEmpty(ProductName))
                 {
                     productlist = productlist.Where(e => e.ProductName.Contains(ProductName, StringComparison.OrdinalIgnoreCase)).ToList();
+                }
+
+                if (!productlist.Any())
+                {
+                    TempData["EmptyProductList"] = "No data for selected!";
                 }
 
                 int pageSize = 5;
@@ -210,6 +214,7 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
+
 
 
 
