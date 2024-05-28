@@ -50,6 +50,16 @@ $(document).ready(function () {
 
 
 function GetAllUserData() {
+    var colorClasses = [
+        { bgClass: 'bg-primary-subtle', textClass: 'text-primary' },
+        { bgClass: 'bg-secondary-subtle', textClass: 'text-secondary' },
+        { bgClass: 'bg-success-subtle', textClass: 'text-success' },
+        { bgClass: 'bg-info-subtle', textClass: 'text-info' },
+        { bgClass: 'bg-warning-subtle', textClass: 'text-warning' },
+        { bgClass: 'bg-danger-subtle', textClass: 'text-danger' },
+        { bgClass: 'bg-dark-subtle', textClass: 'text-dark' }
+    ];
+
     $('#UserTableData').DataTable({
         processing: false,
         serverSide: true,
@@ -83,8 +93,9 @@ function GetAllUserData() {
                             'onmouseover="showIcons(event, this.parentElement)" onmouseout="hideIcons(event, this.parentElement)">';
                     } else {
                         var initials = (full.firstName ? full.firstName[0] : '') + (full.lastName ? full.lastName[0] : '');
+                        var randomColor = colorClasses[Math.floor(Math.random() * colorClasses.length)];
                         profileImageHtml = '<div class="flex-shrink-0 avatar-xs me-2">' +
-                            '<div class="avatar-title bg-success-subtle text-success rounded-circle fs-13" style="height: 40px; width: 40px; border-radius: 50%;">' + initials.toUpperCase() + '</div></div>';
+                            '<div class="avatar-title ' + randomColor.bgClass + ' ' + randomColor.textClass + ' rounded-circle fs-13" style="height: 40px; width: 40px; border-radius: 50%;">' + initials.toUpperCase() + '</div></div>';
                     }
 
                     return '<div class="d-flex align-items-center">' +
@@ -129,6 +140,7 @@ function GetAllUserData() {
         }]
     });
 }
+
 
 
 function GetUserRoleList(itemId, selectedRoleId) {
