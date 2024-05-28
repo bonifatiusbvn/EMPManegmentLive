@@ -28,10 +28,10 @@
             <input type="text" class="form-control" id="txtproductamount" value="@item.PerUnitPrice" oninput="preventEmptyValue(this)" />
         </td>
         <td class="text-start">
-            <input type="text" class="form-control" id="txtgst" max="99" value="@item.Gst" maxlength="4" oninput="preventEmptyValue(this)" />
+            <input type="text" class="form-control" id="txtgst" max="99" @* value="@item.Gst" *@ maxlength="4" oninput="preventEmptyValue(this)" />
         </td>
         <td class="text-start">
-            <input type="number" class="form-control" id="txtgstAmount" value="@item.PerUnitWithGstprice" readonly />
+            <input type="number" class="form-control" id="txtgstAmount"@*  value="@item.PerUnitWithGstprice" *@ readonly />
         </td>
         <td class="text-start">
             <div>

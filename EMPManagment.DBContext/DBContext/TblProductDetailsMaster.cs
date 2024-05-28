@@ -17,17 +17,17 @@ public partial class TblProductDetailsMaster
 
     public string? ProductImage { get; set; }
 
-    public decimal? ProductStocks { get; set; }
-
     public decimal PerUnitPrice { get; set; }
+
+    public bool? IsWithGst { get; set; }
+
+    public decimal? GstAmount { get; set; }
+
+    public decimal? GstPercentage { get; set; }
 
     public int? Hsn { get; set; }
 
-    public decimal Gst { get; set; }
-
-    public decimal PerUnitWithGstprice { get; set; }
     public bool? IsDeleted { get; set; }
-
 
     public DateTime CreatedOn { get; set; }
 
