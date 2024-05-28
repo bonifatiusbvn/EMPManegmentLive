@@ -33,12 +33,12 @@ namespace EMPManegment.Repository.VendorDetailsRepository
             UserResponceModel response = new UserResponceModel();
             try
             {
-                bool isEmailAlredyExists = Context.TblVendorMasters.Any(x => x.VendorEmail == vendor.VendorEmail);
-                if (isEmailAlredyExists == true)
+                bool isEmailAlreadyExists = Context.TblVendorMasters.Any(x => x.VendorEmail == vendor.VendorEmail);
+                if (isEmailAlreadyExists == true)
                 {
                     response.Message = "User with this email already exists";
                     response.Data = vendor;
-                    response.Code = (int)HttpStatusCode.NotFound;
+                    response.Code = 400;
                 }
                 else
                 {
@@ -77,7 +77,8 @@ namespace EMPManegment.Repository.VendorDetailsRepository
             }
             catch (Exception ex)
             {
-                throw ex;
+                response.Code = 400;
+                response.Message = "There is Some error in creating Vendor";
             }
             return response;
         }
@@ -265,8 +266,6 @@ namespace EMPManegment.Repository.VendorDetailsRepository
             response.Code = 200;
             response.Message = "Vendor data updated successfully!";
             return response;
-
         }
-
     }
 }
