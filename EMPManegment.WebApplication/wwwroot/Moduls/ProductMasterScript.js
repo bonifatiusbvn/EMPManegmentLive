@@ -1,7 +1,7 @@
 ﻿$(document).ready(function () {
-    GetAllProductDetailsList()
     GetVendorNameList()
     GetProducts()
+    GetAllProductDetailsList();
 });
 
 function GetVendorNameList() {
@@ -29,8 +29,6 @@ function ClearTextBox() {
     $("#txtvendorname").val('');
 }
 function AddProductType() {
-
-    /*if ($("#addproduct").valid()) {*/
 
     var formData = new FormData();
     formData.append("ProductName", $("#txtProductType").val());
@@ -96,15 +94,12 @@ $("#txtProductList").change(function () {
     ProductDetailsByProductTypeId()
 })
 function ProductDetailsByProductTypeId() {
-    var form_data = new FormData();
-    form_data.append("ProductId", $('#txtProductList').val());
+
+    var productId = $('#txtProductList').val();
     $.ajax({
-        url: '/ProductMaster/GetProductDetailsByProductId',
-        type: 'Post',
+        url: '/ProductMaster/GetAllProductList?ProductId=' + productId,
+        type: 'Get',
         datatype: 'json',
-        data: form_data,
-        processData: false,
-        contentType: false,
         complete: function (Result) {
             $("#table-product-list-all").hide();
             $("#dvproductdetails").html(Result.responseText);
@@ -124,18 +119,16 @@ $(document).ready(function () {
         rules: {
             txtproductname: "required",
             txtproductdescription: "required",
-            txtstocks: "required",
             txtPerUnitPrice: "required",
             txtGST: "required",
-            txtPerUnitWithGSTPrice: "required",
+            txtGstPerUnit: "required",
         },
         messages: {
-            txtproductname: "Please Enter Product Name",
-            txtproductdescription: "Please Enter Product Description",
-            txtstocks: "Please Enter Product Stocks",
-            txtPerUnitPrice: "Please Enter Per Unit Price of the Product",
-            txtGST: "Please Enter GST",
-            txtPerUnitWithGSTPrice: "Please Enter Per Unit With GST Price of the Product",
+            txtproductname: "Please enter product name",
+            txtproductdescription: "Please enter product description",
+            txtPerUnitPrice: "Please enter price",
+            txtGST: "Please enter Gst",
+            txtGstPerUnit: "Please enter Gst %",
         }
     })
     $("#saveproductdetails").on('click', function () {
@@ -143,6 +136,46 @@ $(document).ready(function () {
     });
 });
 
+function WithGSTSelected() {
+    var isWithGstCheckbox = document.getElementById('txtIsWithGst');
+    var gstAmountInput = document.getElementById('txtGstAmount');
+    var gstPercentageInput = document.getElementById('txtGstPerUnit');
+    var priceInput = document.getElementById('txtPerUnitPrice');
+
+    var price = parseFloat(priceInput.value);
+    var gstPercentage = parseFloat(gstPercentageInput.value);
+
+    if (isWithGstCheckbox.checked) {
+
+        if (!isNaN(price) && !isNaN(gstPercentage)) {
+            var totalAmount = 100 + gstPercentage;
+            var baseAmount = price - (price * gstPercentage / totalAmount);
+            var gstAmount = price - baseAmount;
+            gstAmountInput.value = gstAmount.toFixed(2);
+            priceInput.value = baseAmount.toFixed(2);
+        } else {
+            gstAmountInput.value = "";
+        }
+    } else {
+
+        if (!isNaN(price) && !isNaN(gstPercentage)) {
+            var Amount = (gstPercentage / 100) * price;
+            gstAmountInput.value = Amount.toFixed(2);
+        } else {
+            gstAmountInput.value = "";
+        }
+    }
+}
+
+document.getElementById('txtGstPerUnit').addEventListener('input', function () {
+    WithGSTSelected();
+});
+document.getElementById('txtPerUnitPrice').addEventListener('input', function () {
+    WithGSTSelected();
+});
+document.getElementById('txtIsWithGst').addEventListener('change', function () {
+    WithGSTSelected();
+});
 function SaveProductDetails() {
     siteloadershow()
     if ($('#createproductform').valid()) {
@@ -153,11 +186,12 @@ function SaveProductDetails() {
         formData.append("ProductDescription", $("#txtproductdescription").val());
         formData.append("ProductShortDescription", $("#txtshortdescription").val());
         formData.append("ProductImage", $("#txtproductimage")[0].files[0]);
-        formData.append("ProductStocks", $("#txtstocks").val());
         formData.append("PerUnitPrice", $("#txtPerUnitPrice").val());
+        formData.append("IsWithGst", $("#txtIsWithGst").prop('checked'));
+        formData.append("GstPercentage", $("#txtGstPerUnit").val());
+        formData.append("GstAmount", $("#txtGstAmount").val());
         formData.append("Hsn", $("#txtHSN").val());
         formData.append("Gst", $("#txtGST").val());
-        formData.append("PerUnitWithGstprice", $("#txtPerUnitWithGSTPrice").val());
         $.ajax({
             url: '/ProductMaster/AddProductDetails',
             type: 'Post',
@@ -193,12 +227,7 @@ function SaveProductDetails() {
     }
     else {
         siteloaderhide()
-        Swal.fire({
-            title: "Kindly fill all details",
-            icon: 'warning',
-            confirmButtonColor: '#3085d6',
-            confirmButtonText: 'OK',
-        })
+        toastr.warning("Kindly fill all details");
     }
 }
 
@@ -220,7 +249,7 @@ function ProductDetails() {
         contentType: false,
         complete: function (Result) {
             $("#getallproductlist").hide();
-            $("#dvproductdetails").html(Result.responseText);
+            $("#dvproductdetails").html(Result.responseText).show();
         }
     });
 }
@@ -237,10 +266,10 @@ function EditProductDetails(Id) {
             $('#txtProductName').val(response.productName);
             $('#txtProductDescription').val(response.productDescription);
             $('#txtPerUnitPrice').val(response.perUnitPrice);
-            $('#txtGST').val(response.gst);
-            $('#txtPerUnitWithGSTPrice').val(response.perUnitWithGstprice);
+            $('#txtIsWithGst').prop('checked', response.isWithGst);
+            $('#txtGstPerUnit').val(response.gstPercentage);
+            $('#txtGstAmount').val(response.gstAmount);
             $('#txtHSN').val(response.hsn);
-            $('#txtstocks').val(response.productStocks);
             $('#txtProducts').val(response.productType);
             $('#txtshortdescription').val(response.productShortDescription);
             $('#txtproductImage').val(response.productImage);
@@ -259,11 +288,11 @@ function UpdateProductDetails() {
         formData.append("ProductType", $("#txtProducts").val());
         formData.append("ProductDescription", $("#txtProductDescription").val());
         formData.append("ProductShortDescription", $("#txtshortdescription").val());
-        formData.append("ProductStocks", $("#txtstocks").val());
         formData.append("PerUnitPrice", $("#txtPerUnitPrice").val());
+        formData.append("IsWithGst", $("#txtIsWithGst").prop('checked'));
+        formData.append("GstPercentage", $("#txtGstPerUnit").val());
+        formData.append("GstAmount", $("#txtGstAmount").val());
         formData.append("Hsn", $("#txtHSN").val());
-        formData.append("Gst", $("#txtGST").val());
-        formData.append("PerUnitWithGstprice", $("#txtPerUnitWithGSTPrice").val());
         formData.append("ProductImage", $("#txtproductImage").val());
 
         $.ajax({
@@ -354,24 +383,20 @@ $(document).ready(function () {
             txtProductName: "required",
             txtProductDescription: "required",
             txtshortdescription: "required",
-            txtstocks: "required",
             txtproductImage: "required",
             txtPerUnitPrice: "required",
-            txtHSN: "required",
             txtGST: "required",
-            txtPerUnitWithGSTPrice: "required",
+            txtGstPerUnit: "required",
             txtProducts: "required"
         },
         messages: {
             txtProductName: "Please Enter Product Name",
             txtProductDescription: "Please Enter Product Description",
             txtshortdescription: "Please Enter Product Short Description",
-            txtstocks: "Please Enter Product Stocks",
             txtPerUnitPrice: "Please Enter Per Unit Price of the Product",
             txtproductImage: "Please Enter Product Image",
-            txtHSN: "Please Enter HSN",
             txtGST: "Please Enter GST",
-            txtPerUnitWithGSTPrice: "Please Enter Per Unit With GST Price of the Product",
+            txtGstPerUnit: "Please Enter Gst %",
             txtProducts: "Please Select Product Type"
         }
     })
@@ -380,65 +405,40 @@ $(document).ready(function () {
     });
 });
 
-$(document).ready(function () {
-    $('#productsearchvalidateform').validate({
-        rules: {
-            txtsearch: "required",
-        },
-        messages: {
-            txtsearch: "Enter the Product Name"
-        }
-    })
-});
 
-//$("#txtvendorname").change(function () {
-//    SearchProductName()
-//})
 function SearchProductName() {
-    if ($("#productsearchvalidateform").valid()) {
-        var form_data = new FormData();
-        form_data.append("ProductName", $('#txtsearch').val());
-        $.ajax({
-            url: '/ProductMaster/SearchProductName',
-            type: 'Post',
-            datatype: 'json',
-            data: form_data,
-            processData: false,
-            contentType: false,
-            complete: function (Result) {
-                $("#getallproductlist").hide();
-                $("#dvproductdetails").html(Result.responseText);
-            }
-        });
-    }
-    else {
-        Swal.fire({
-            title: "Kindly fill all details",
-            icon: 'warning',
-            confirmButtonColor: '#3085d6',
-            confirmButtonText: 'OK',
-        })
-    }
+    var searchValue = $('#txtsearch').val();
+
+    $.ajax({
+        url: '/ProductMaster/GetAllProductList?ProductName='+searchValue,
+        type: 'Get',
+        datatype: 'json',
+        complete: function (Result) {
+            $("#dvproductdetails").html(Result.responseText);
+        }
+    });    
 }
 
 function GetAllProductDetailsList(page) {
-
-    $.get("/ProductMaster/GetAllProductList", { page: page })
+    $.get("/ProductMaster/GetAllProductList", { page: page})
         .done(function (result) {
-
-            $("#getallproductlist").html(result);
+            $("#dvproductdetails").html(result);
         })
         .fail(function (error) {
             console.error(error);
         });
 }
-GetAllProductDetailsList(1)
-$(document).on("click", ".pagination a", function (e) {
 
+$(document).ready(function () {
+    GetAllProductDetailsList(1, "");
+});
+
+$(document).on("click", ".pagination a", function (e) {
     e.preventDefault();
-    var page = $(this).text();
+    var page = $(this).data("page") || $(this).attr("href").split('page=')[1]; 
     GetAllProductDetailsList(page);
 });
+
 
 function clearProductImage() {
     var inputFile = document.getElementById('txtproductimage');
@@ -451,21 +451,33 @@ function clearProductImage() {
     clearButton.style.display = 'none';
 }
 
-document.getElementById('txtproductimage').addEventListener('change', function () {
+document.addEventListener('DOMContentLoaded', function () {
+    var fileInput = document.getElementById('txtproductimage');
     var clearButton = document.querySelector('.btn-danger');
-    if (this.files && this.files[0]) {
-        var previewImage = document.getElementById('imgPreview');
-        var reader = new FileReader();
+    var previewImage = document.getElementById('imgPreview');
 
-        reader.onload = function (e) {
-            previewImage.src = e.target.result;
-        }
+    if (fileInput) {
+        fileInput.addEventListener('change', function () {
+            if (this.files && this.files[0]) {
+                var reader = new FileReader();
 
-        reader.readAsDataURL(this.files[0]);
+                reader.onload = function (e) {
+                    previewImage.src = e.target.result;
+                };
 
-        clearButton.style.display = 'block';
-    } else {
-        clearButton.style.display = 'none';
+                reader.readAsDataURL(this.files[0]);
+
+                clearButton.style.display = 'block';
+            } else {
+                clearButton.style.display = 'none';
+            }
+        });
     }
 });
 
+function clearSearchInput() {
+    var input = document.getElementById('txtsearch');
+    input.value = '';
+    input.focus();
+    GetAllProductDetailsList(1); 
+}

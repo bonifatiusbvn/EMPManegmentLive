@@ -7,7 +7,7 @@
 <style>
     #txtproductname-error, #txtproductdescription-error,
     #txtstocks-error, #txtPerUnitPrice-error,
-    #txtGST-error, #txtPerUnitWithGSTPrice-error, #txtProductType-error {
+    #txtGST-error, #txtGstPerUnit-error, #txtProductType-error {
         color: red;
     }
 
@@ -41,13 +41,22 @@
     <div class="row">
         <div class="col-lg-8">
             <div class="card">
+                <div class="card-header">
+                    <ul class="nav nav-tabs-custom card-header-tabs border-bottom-0" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" role="tab">
+                                Product Details
+                            </a>
+                        </li>
+                    </ul>
+                </div>
                 <div class="card-body">
                     <div class="mb-3">
-                        <label class="form-label" for="ProductName">Product Name</label>
+                        <label class="form-label text-muted" for="ProductName">Product Name</label>
                         <input type="text" class="form-control" id="txtproductname" name="txtproductname" placeholder="Enter product name" required>
                     </div>
                     <div>
-                        <label class="form-label" for="ProductDescription">Product Description</label>
+                        <label class="form-label text-muted" for="ProductDescription">Product Description</label>
                         <textarea rows="10" class="form-control" id="txtproductdescription" name="txtproductdescription" placeholder="Enter product description" required style="height:100px"></textarea>
                     </div>
                 </div>
@@ -56,12 +65,17 @@
 
             <div class="card">
                 <div class="card-header">
-                    <h5 class="card-title mb-0">Product Gallery</h5>
+                    <ul class="nav nav-tabs-custom card-header-tabs border-bottom-0" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" role="tab">
+                                Product Gallery
+                            </a>
+                        </li>
+                    </ul>
                 </div>
                 <div class="card-body">
                     <div class="mb-4">
-                        <h5 class="fs-14 mb-1">Product Image</h5>
-                        <p class="text-muted">Add Product main Image.</p>
+                        <label class="form-label text-muted">Product Image</label>
                         <div class="text-center">
                             <div class="position-relative d-inline-block">
                                 <div class="position-absolute top-0 end-0 translate-middle">
@@ -78,7 +92,7 @@
                     <div>
                         <h5 class="fs-14 mb-1" style="margin-top:120px;">Product Gallery</h5>
                         <p class="text-muted">Add Product Gallery Images.</p>
-                        <label class="form-label" for="ProductImage"></label>
+                        <label class="form-label text-muted" for="ProductImage"></label>
                         <div class="mb-3">
                             <input type="file" class="form-control" id="txtproductimage" name="txtproductimage" />
                         </div>
@@ -97,7 +111,13 @@
         <div class="col-lg-4">
             <div class="card">
                 <div class="card-header">
-                    <h5 class="card-title mb-0">Product Categories</h5>
+                    <ul class="nav nav-tabs-custom card-header-tabs border-bottom-0" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" role="tab">
+                                Product Categories
+                            </a>
+                        </li>
+                    </ul>
                 </div>
                 <div class="card-body">
                     <p class="text-muted mb-2">
@@ -105,7 +125,7 @@
                             Add New-Type
                         </button>
                     </p>
-                    <label for="ProductType" class="form-label">Product Type</label>
+                    <label for="ProductType" class="form-label text-muted">Product Type</label>
                     <select id="txtProducts" class="form-control bg-transparent" onchange="selectProductTypeId()">
                         <option selected disabled value="">----Select Product Type---</option>
                     </select>
@@ -117,10 +137,16 @@
 
             <div class="card">
                 <div class="card-header">
-                    <h5 class="card-title mb-0">Product Short Description</h5>
+                    <ul class="nav nav-tabs-custom card-header-tabs border-bottom-0" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" role="tab">
+                                Product Short Description
+                            </a>
+                        </li>
+                    </ul>
                 </div>
                 <div class="card-body">
-                    <p class="text-muted mb-2">Add short description for product</p>
+                    <label class="form-label text-muted">Add short description for product</label>
                     <textarea class="form-control" id="txtshortdescription" name="txtshortdescription" placeholder="Must enter maximum of a 50 characters" rows="3"></textarea>
                 </div>
                 <!-- end card body -->
@@ -142,39 +168,36 @@
                             <div class="row">
                                 <div class="col-lg-4">
                                     <div class="mb-3">
-                                        <label class="form-label" for="PerUnitPrice">Per Unit Price</label>
-                                        <input type="text" class="form-control" id="txtPerUnitPrice" name="txtPerUnitPrice" placeholder="Enter PerUnitPrice" required>
+                                        <label class="form-label text-muted" for="PerUnitPrice">Price</label>
+                                        <input type="text" class="form-control" id="txtPerUnitPrice" name="txtPerUnitPrice" placeholder="Enter PerUnitPrice">
                                     </div>
                                 </div>
                                 <div class="col-lg-4">
                                     <div class="mb-3">
-                                        <label class="form-label" for="GST">GST</label>
-                                        <input type="text" class="form-control" id="txtGST" name="txtGST" placeholder="Enter GST" required>
+                                        <label class="form-label text-muted">WithGST</label>
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input font-22" id="txtIsWithGst" type="checkbox" style="margin-left: 5px;font-size: 22px;">
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-lg-4">
                                     <div class="mb-3">
-                                        <label class="form-label" for="PerUnitWithGSTPrice">With GST</label>
-                                        <input type="text" class="form-control" id="txtPerUnitWithGSTPrice" name="txtPerUnitWithGSTPrice" placeholder="Enter price" required>
+                                        <label class="form-label text-muted">GST%</label>
+                                        <input type="text" class="form-control form-control" placeholder="Gst %" id="txtGstPerUnit" name="txtGstPerUnit">
                                     </div>
                                 </div>
-                            </div>
-                            <!-- end row -->
-
-                            <div class="row">
-                                <div class="col-lg-3 col-sm-6">
+                                <div class="col-lg-4">
                                     <div class="mb-3">
-                                        <label class="form-label" for="HSN">HSN</label>
+                                        <label class="form-label text-muted">GST Amount</label>
+                                        <input type="text" class="form-control form-control" placeholder="Gst Amount" id="txtGstAmount" name="txtGstAmount" disabled>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="mb-3">
+                                        <label class="form-label text-muted" for="HSN">HSN</label>
                                         <input type="text" class="form-control" id="txtHSN" name="txtHSN" placeholder="Enter HSN">
                                     </div>
                                 </div>
-                                <div class="col-lg-3 col-sm-6">
-                                    <div class="mb-3">
-                                        <label class="form-label" for="stocks">Stocks</label>
-                                        <input type="text" class="form-control" id="txtstocks" name="txtstocks" placeholder="Stocks" required>
-                                    </div>
-                                </div>
-                                <!-- end col -->
                             </div>
                             <!-- end row -->
                         </div>

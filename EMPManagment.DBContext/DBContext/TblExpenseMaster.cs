@@ -9,6 +9,8 @@ public partial class TblExpenseMaster
 
     public Guid UserId { get; set; }
 
+    public Guid? ProjectId { get; set; }
+
     public int ExpenseType { get; set; }
 
     public int? PaymentType { get; set; }

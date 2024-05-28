@@ -15,10 +15,36 @@
     #txtProductType-error,
     #txtProductName-error, #txtProductDescription-error, #txtshortdescription-error,
     #txtproductImage-error, #txtstocks-error, #txtPerUnitPrice-error,
-    #txtHSN-error, #txtGST-error, #txtPerUnitWithGSTPrice-error, #txtProductType-error,
+    #txtHSN-error, #txtGST-error, #txtGstPerUnit-error, #txtProductType-error,
     #txtProducts-error, #txtsearch-error {
         color: red;
     }
+
+    span.deleteicon {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+    }
+
+        span.deleteicon span {
+            position: absolute;
+            display: block;
+            right: 3px;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            color: red;
+            background-color: #ccc;
+            font: 13px monospace;
+            text-align: center;
+            line-height: 1em;
+            cursor: pointer;
+        }
+
+        span.deleteicon input {
+            padding-right: 18px;
+            box-sizing: border-box;
+        }
 </style>
 
 <!-- start page title -->
@@ -66,24 +92,44 @@
                             </div>
                         </div>
                         <div class="card-body border border-dashed border-end-0 border-start-0">
-                            <form id="productsearchvalidateform">
-                                <div class="row g-3">
-                                    <div class="col-xxl-7 col-sm-6">
-                                        <div class="filter-choices-input">
-                                            <select class="form-control" id="txtProductList" onchange="selectProductId()" style="width: 260px; margin-left:520px;">
-                                                <option selected disabled value="">---Select Products---</option>
-                                            </select>
+
+                          
+                                <div class="card-header border-0 rounded">
+                                    <div class="row g-2">
+                                        <div class="col-xl-3">
+                                        <div class="deleteicon search-box">
+                                            <span class="deleteicon">
+                                                <input type="text" class="form-control" autocomplete="off" id="txtsearch" placeholder="Search for Products..." style="width:368px;"><i class="ri-search-line search-icon"></i>
+
+                                                <span onclick="clearSearchInput()" style="margin-top:0px;margin-left:-24px;position:relative;cursor:pointer;">x</span>
+                                            </span>
+
                                             <input type="hidden" class="form-control" id="txtProductListId">
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="col-xxl-6 col-sm-5">
-                                        <div class="input-group">
-                                            <input type="text" placeholder="Search here...." id="txtsearch" name="txtsearch" class="form-control" style="margin-left:100px;" />
+                                    <div class="col-lg-auto">
+                                        <div class="hstack gap-2">
                                             <button class="btn btn-success" type="button" onclick="SearchProductName()" id="searchproductname" value="Validate" style="margin-right:-130px;">Search</button>
                                         </div>
                                     </div>
+                                        <!--end col-->
+                                        <div class="col-xxl-3 ms-auto">
+                                            <div>
+                                            <select class="form-control" id="txtProductList" onchange="selectProductId()">
+                                                <option selected>All Products</option>
+                                            </select>
+                                            </div>
+                                        </div>
+                                        <!--end col-->
+                                       
+                                        <!--end col-->
+                                    </div>
+                                    <!--end row-->
                                 </div>
-                            </form>
+
+
+
+                           
                         </div>
 
                         <!-- end card header -->
@@ -150,28 +196,30 @@
                                 </div>
                                 <!--end col-->
                                 <div class="col-lg-6">
-                                    <label for="TaskDate" class="form-label">Per Unit Price</label>
+                                    <label for="TaskDate" class="form-label">Price</label>
                                     <input type="text" id="txtPerUnitPrice" name="txtPerUnitPrice" class="form-control" placeholder="Enter PerUnit Price" />
                                 </div>
                                 <!--end col-->
                                 <div class="col-lg-6">
-                                    <label for="TaskEndDate" class="form-label">GST</label>
-                                    <input type="text" id="txtGST" class="form-control" data-provider="flatpickr" placeholder="Enter GST" />
+                                    <label class="form-label">IsWithGST</label>
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input font-22" id="txtIsWithGst" type="checkbox" style="margin-left: 5px;font-size: 22px;">
+                                    </div>
                                 </div>
                                 <!--end col-->
                                 <div class="col-lg-6">
-                                    <label for="TaskStatus" class="form-label">Per Unit With GST Price</label>
-                                    <input type="text" class="form-control" id="txtPerUnitWithGSTPrice" name="txtPerUnitWithGSTPrice" placeholder="Enter PerUnit GST Price" required>
+                                        <label class="form-label">GST%</label>
+                                        <input type="text" class="form-control form-control" placeholder="Gst %" id="txtGstPerUnit" name="txtGstPerUnit">
+                                </div>
+                                <!--end col-->
+                                <div class="col-lg-6">
+                                        <label class="form-label">GST Amount</label>
+                                        <input type="text" class="form-control form-control" placeholder="Gst Amount" id="txtGstAmount" name="txtGstAmount" disabled>
                                 </div>
                                 <!--end col-->
                                 <div class="col-lg-6">
                                     <label class="form-label" for="HSN">HSN</label>
-                                    <input type="text" class="form-control" id="txtHSN" name="txtHSN" placeholder="Enter HSN" required>
-                                </div>
-                                <!--end col-->
-                                <div class="col-lg-6">
-                                    <label class="form-label" for="stocks">Stocks</label>
-                                    <input type="text" class="form-control" id="txtstocks" name="txtstocks" placeholder="Enter Stocks" required>
+                                    <input type="text" class="form-control" id="txtHSN" name="txtHSN" placeholder="Enter HSN">
                                 </div>
                                 <!--end col-->
                                 <div class="col-lg-6">

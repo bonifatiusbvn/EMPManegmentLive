@@ -547,7 +547,7 @@ function GetProjectCountry() {
         success: function (result) {
             $.each(result, function (i, data) {
 
-                $('#projectCountry').append('<Option value=' + data.id + ' Selected>' + data.countryName + '</Option>')
+                $('#projectCountry').append('<Option value=' + data.id + '>' + data.countryName + '</Option>')
 
             });
         }

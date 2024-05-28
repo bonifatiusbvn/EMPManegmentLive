@@ -1,0 +1,379 @@
+﻿@model EMPManegment.EntityModels.ViewModels.VendorModels.VendorDetailsView
+@using EMPManegment.Web.Models
+@inject IHttpContextAccessor Accessor;
+@inject UserSession _userSession
+
+
+@{
+    ViewData["Title"] = "CreateVendor";
+    Layout = "~/Views/Shared/_UserHomeLayout.cshtml";
+}
+<style>
+    #firstnameInput-error, #lastnameInput-error, #contactnumberInput-error,
+    #phonenumberInput-error, #emailidInput-error, #ddlVendorType-error,
+    #VendorCountry-error, #VendorState-error, #VendorCity-error,
+    #AddressidInput-error, #pincodeidInput-error, #companynameInput-error,
+    #CompanyType-error, #companyemailInput-error, #worknumberInput-error.error,
+    #companylogoInput-error, #banknameInput-error, #branchInput-error, #accountnameInput-error,
+    #accountnumberInput-error, #ifscInput-error.error,
+    #GSTNumberInput-error
+    {
+        color: red;
+    }
+
+    label.failed {
+        color: red;
+    }
+
+</style>
+
+<!-- start page title -->
+<div class="row" style="margin-top:80px;">
+    <div class="col-12">
+        <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+            <h4 class="mb-sm-0">Create Vendor</h4>
+
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Vendor</a></li>
+                    <li class="breadcrumb-item active">Create Vendor</li>
+                </ol>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- end page title -->
+<form id="createVendorform" autocomplete="off">
+    <div class="row">
+        <input type="hidden" class="form-control" id="textViewMode" value="@ViewBag.ViewMode.ToString()" readonly />
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header">
+                    <ul class="nav nav-tabs-custom card-header-tabs border-bottom-0" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" role="tab">
+                                Business Details
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="mb-3">
+                                <label class="form-label" for="companynameInput">Company Name</label>
+                                <input type="text" class="form-control" autocomplete="off" id="companynameInput" name="companynameInput" value="@Model.VendorCompany" placeholder="Enter your company name">
+                                <input type="hidden" class="form-control" autocomplete="off" id="vendorIdInput" value="@Model.Vid">
+                            </div>
+                        </div>
+                        <!--end col-->
+                        <div class="col-lg-6">
+                            <div class="mb-3">
+                                <label for="CompanyType" class="form-label">Company Type</label>
+                                @if (Model.VendorCompanyType != null)
+                                {
+                                    <select class="form-control form-select valid" id="CompanyType" name="CompanyType">
+                                        <option value="@Model.VendorCompanyType">@Model.VendorCompanyType</option>
+                                        <option value="Merchandising">Merchandising</option>
+                                        <option value="Manufacturing">Manufacturing</option>
+                                        <option value="Partnership">Partnership</option>
+                                        <option value="Corporation">Corporation</option>
+                                    </select>
+                                }
+                                else
+                                {
+                                    <select class="form-control form-select valid" id="CompanyType" name="CompanyType">
+                                        <option value="">Select type</option>
+                                        @* <option value="All" selected>All</option>*@
+                                        <option value="Merchandising">Merchandising</option>
+                                        <option value="Manufacturing">Manufacturing</option>
+                                        <option value="Partnership">Partnership</option>
+                                        <option value="Corporation">Corporation</option>
+                                    </select>
+                                }
+                            </div>
+                        </div>
+                        <!--end col-->
+                        <div class="col-lg-6">
+                            <div class="mb-3">
+                                <label for="emailidInput" class="form-label">Email</label>
+                                <input type="email" class="form-control" autocomplete="off" id="emailidInput" value="@Model.VendorEmail" name="emailidInput" placeholder="Enter your email">
+                            </div>
+                        </div>
+                        <!--end col-->
+                        <div class="col-lg-6">
+                            <div class="mb-3">
+                                <label for="ddlVendorType" class="form-label">VendorType</label>
+                                @if (Model.VendorTypeName != null)
+                                {
+                                    <select id="ddlVendorType" name="ddlVendorType" class="form-control form-select valid">
+                                        <option selected value="@Model.VendorTypeId">@Model.VendorTypeName</option>
+                                    </select>
+                                }
+                                else
+                                {
+                                    <select id="ddlVendorType" name="ddlVendorType" class="form-control form-select valid">
+                                        <option selected>--Select Type--</option>
+                                    </select>
+                                }
+                                <input type="hidden" id="VendorTypeInput" name="VendorTypeInput" value="" />
+                            </div>
+                        </div>
+                        <!--end col-->
+                        <div class="col-lg-6">
+                            <div class="mb-3">
+                                <label for="contactnumberInput" class="form-label">Contact Number</label>
+                                <input type="text" class="form-control" autocomplete="off" value="@Model.VendorContectNo" id="contactnumberInput" name="contactnumberInput" placeholder="Enter your number">
+                            </div>
+                        </div>
+                        <!--end col-->
+                        <div class="col-lg-6">
+                            <div class="mb-3">
+                                <label for="phonenumberInput" class="form-label">Phone Number</label>
+                                <input type="number" class="form-control" autocomplete="off" value="@Model.VendorPhone" id="phonenumberInput" name="phonenumberInput" placeholder="Enter your number">
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="mb-3">
+                                <label for="ddlCountry" class="form-label">Country</label>
+                                @if (Model.VendorCountryName != null)
+                                {
+                                    <select id="VendorCountry" name="VendorCountry" class="form-control form-select valid" onchange="fn_getVendorState('VendorState',null,this)">
+                                        <option value="@Model.VendorCountry">@Model.VendorCountryName</option>
+                                    </select>
+                                    <input type="hidden" id="txtcountryId" value="@Model.VendorCountry" />
+                                }
+                                else
+                                {
+                                    <select id="VendorCountry" name="VendorCountry" class="form-control form-select valid" onchange="fn_getVendorState('VendorState',null,this)">
+                                        <option selected>--Select Country--</option>
+                                    </select>
+                                }
+                                <input type="hidden" id="txtcountry" name="txtcountry" value="" />
+                            </div>
+                        </div>
+                        <!--end col-->
+                        <div class="col-lg-4">
+                            <div class="mb-3">
+                                <label for="ddlState" class="form-label">State</label>
+                                @if (Model.VendorStateName != null)
+                                {
+                                    <select id="VendorState" name="VendorState" class="form-control form-select valid" onchange="fn_getVendorcitiesbystateId('VendorCity', null, this)">
+                                        <option value="@Model.VendorState">@Model.VendorStateName</option>
+                                    </select>
+                                }
+                                else
+                                {
+                                    <select id="VendorState" name="VendorState" class="form-control form-select valid" onchange="fn_getVendorcitiesbystateId('VendorCity', null, this)">
+                                        <option>--Select State--</option>
+                                    </select>
+                                }
+                                <input type="hidden" id="txtstate" name="txtstate" value="" />
+                            </div>
+                        </div>
+                        <!--end col-->
+                        <div class="col-lg-4">
+                            <div class="mb-3">
+                                <label for="ddlCity" class="form-label">City</label>
+                                @if (Model.VendorCityName != null)
+                                {
+                                    <select id="VendorCity" name="VendorCity" class="form-control form-select valid">
+                                        <option value="@Model.VendorCity">@Model.VendorCityName</option>
+                                    </select>
+                                }
+                                else
+                                {
+                                    <select id="VendorCity" name="VendorCity" class="form-control form-select valid">
+                                        <option selected>--Select City--</option>
+                                    </select>
+                                }
+                                <input type="hidden" id="txtcity" name="txtcity" value="" />
+                            </div>
+                        </div>
+                        <!--end col-->
+                        <div class="col-lg-12">
+                            <div class="mb-3">
+                                <label for="AddressidInput" class="form-label">Address</label>
+                                @if (Model.VendorAddress != null)
+                                {
+                                    <textarea type="text" class="form-control" id="AddressidInput" name="AddressidInput" rows="3" placeholder="Enter your Address">@Model.VendorAddress</textarea>
+                                }
+                                else
+                                {
+                                    <textarea type="text" class="form-control" id="AddressidInput" name="AddressidInput" rows="3" placeholder="Enter your Address"></textarea>
+                                }
+                            </div>
+                        </div>
+                        <!--end col-->
+                        <div class="col-lg-6">
+                            <div class="mb-3">
+                                <label for="pincodeidInput" class="form-label">PinCode</label>
+                                <input type="number" class="form-control" autocomplete="off" value="@Model.VendorPinCode" id="pincodeidInput" name="pincodeidInput" placeholder="Enter your Pincode">
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="mb-3">
+                                <label for="companylogoInput" class="form-label">Logo</label>
+                                <input type="file" class="form-control" autocomplete="off" value="@Model.VendorCompanyLogo" id="companylogoInput" name="companylogoInput">
+                            </div>
+                        </div>
+                        <!--end col-->
+                    </div>
+                </div>
+            </div>
+            <!-- end card -->
+            <div class="text-end mb-3">
+                @if (Model.Vid == null || Model.Vid == Guid.Empty)
+                {
+                    <button type="button" class="btn btn-primary w-sm" onclick="AddVendorDetails()" id="SubmitVendorDetails">Submit</button>
+                }
+                else
+                {
+                    @if (UserSession.FormPermisionData.Any(a => a.FormName == "Vendor List" && (a.Edit == true)))
+                    {
+                        <button type="button" class="btn btn-primary w-sm" onclick="UpdateVendorDetails()('@Model.Vid')" id="updateVendorbtn">Update</button>
+                        <button type="button" class="btn btn-primary w-sm" onclick="EditVendor()" id="editVendorbtn" style="display: none;">Edit</button>
+                    }
+                }
+
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header">
+                    <ul class="nav nav-tabs-custom card-header-tabs border-bottom-0" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" role="tab">
+                                Personal Details
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="mb-3">
+                                <label for="firstnameInput" class="form-label">First Name</label>
+                                <input type="text" class="form-control" value="@Model.VendorFirstName" autocomplete="off" id="firstnameInput" name="firstnameInput" placeholder="Enter your firstname">
+                            </div>
+                        </div>
+                        <!--end col-->
+                        <div class="col-lg-6">
+                            <div class="mb-3">
+                                <label for="lastnameInput" class="form-label">Last Name</label>
+                                <input type="text" class="form-control" value="@Model.VendorLastName" autocomplete="off" id="lastnameInput" name="lastnameInput" placeholder="Enter your lastname">
+                            </div>
+                        </div>
+                        <!--end col-->
+                        <div class="col-lg-6">
+                            <div class="mb-3">
+                                <label for="companyemailInput" class="form-label">Email</label>
+                                <input type="email" class="form-control" value="@Model.VendorCompanyEmail" id="companyemailInput" name="companyemailInput" placeholder="Enter your email" autocomplete="off">
+                            </div>
+                        </div>
+                        <!--end col-->
+                        <div class="col-lg-6">
+                            <div class="mb-3">
+                                <label for="worknumberInput" class="form-label">Number</label>
+                                <input type="number" class="form-control" autocomplete="off" value="@Model.VendorCompanyNumber" id="worknumberInput" name="worknumberInput" placeholder="Enter your number">
+                            </div>
+                        </div>
+                        <!--end col-->
+                    </div>
+                    <!--end row-->
+                </div>
+                <!-- end card body -->
+            </div>
+            <!-- end card -->
+            <div class="card">
+                <div class="card-header">
+                    <ul class="nav nav-tabs-custom card-header-tabs border-bottom-0" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" role="tab">
+                                Bank Details
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <!-- end card header -->
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="mb-3">
+                                <label for="banknameInput" class="form-label">Bank Name</label>
+                                <input type="text" class="form-control" value="@Model.VendorBankName" autocomplete="off" id="banknameInput" name="banknameInput" placeholder="Enter your bank name">
+                            </div>
+                        </div>
+                        <!--end col-->
+                        <div class="col-lg-6">
+                            <div class="mb-3">
+                                <label for="branchInput" class="form-label">Branch</label>
+                                <input type="text" class="form-control" value="@Model.VendorBankBranch" autocomplete="off" id="branchInput" name="branchInput" placeholder="Branch">
+                            </div>
+                        </div>
+                        <!--end col-->
+                        <div class="col-lg-12">
+                            <div class="mb-3">
+                                <label for="accountnameInput" class="form-label">Account Holder Name</label>
+                                <input type="text" class="form-control" value="@Model.VendorAccountHolderName" autocomplete="off" id="accountnameInput" name="accountnameInput" placeholder="Enter account holder name">
+                            </div>
+                        </div>
+                        <!--end col-->
+                        <div class="col-lg-6">
+                            <div class="mb-3">
+                                <label for="accountnumberInput" class="form-label">Account Number</label>
+                                <input type="number" class="form-control" value="@Model.VendorBankAccountNo" autocomplete="off" id="accountnumberInput" name="accountnumberInput" placeholder="Enter account number">
+                            </div>
+                        </div>
+                        <!--end col-->
+                        <div class="col-lg-6">
+                            <div class="mb-3">
+                                <label for="ifscInput" class="form-label">IFSC</label>
+                                <input type="text" class="form-control" value="@Model.VendorBankIfsc" autocomplete="off" id="ifscInput" name="ifscInput" placeholder="IFSC">
+                            </div>
+                        </div>
+                        <!--end col-->
+                        <div class="col-lg-6">
+                            <div class="mb-3">
+                                <label for="GSTInput" class="form-label">GSTNumber</label>
+                                <input type="text" class="form-control" value="@Model.VendorGstnumber" autocomplete="off" id="GSTNumberInput" name="GSTNumberInput" placeholder="GST-Number">
+                            </div>
+                        </div>
+                        <!--end col-->
+                    </div>
+                    <!--end row-->
+                </div>
+                <!-- end card body -->
+            </div>
+            <!-- end card -->
+        </div>
+        <!-- end col -->
+    </div>
+    <!-- end row -->
+</form>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+<script type="text/javascript">
+    var userPermissions = '@Html.Raw(Json.Serialize(UserSession.FormPermisionData))';
+    $(document).ready(function () {
+
+        if ($("#textViewMode").val() === "True") {
+            document.querySelectorAll('#createVendorform input, #createVendorform select, #createVendorform textarea').forEach(function (element) {
+                element.disabled = true;
+            });
+            $("#createVendorform button").hide();
+            $("#editVendorbtn").show();
+        }
+        else {
+            document.querySelectorAll('#createVendorform input, #createVendorform select, #createVendorform textarea').forEach(function (element) {
+                element.disabled = false;
+            });
+        }
+    });
+
+</script>
+
+
+<script src="~/moduls/vendordetailsscript.js" asp-append-version="true"></script>

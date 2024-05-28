@@ -43,7 +43,7 @@ namespace EMPManagment.API.Controllers
                 else
                 {
                     response.Message = addVendor.Result.Message;
-                    response.Code = (int)HttpStatusCode.NotFound;
+                    response.Code = addVendor.Result.Code;
                 }
             }
             catch (Exception ex)

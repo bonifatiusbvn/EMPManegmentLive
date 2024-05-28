@@ -85,11 +85,11 @@ namespace EMPManegment.Repository.ProductMaster
                         ProductDescription = AddProduct.ProductDescription,
                         ProductShortDescription = AddProduct.ProductShortDescription,
                         ProductImage = AddProduct.ProductImage,
-                        ProductStocks = AddProduct.ProductStocks,
                         PerUnitPrice = AddProduct.PerUnitPrice,
+                        IsWithGst=AddProduct.IsWithGst,
+                        GstPercentage = AddProduct.GstPercentage,
+                        GstAmount = AddProduct.GstAmount,
                         Hsn = AddProduct.Hsn,
-                        Gst = AddProduct.Gst,
-                        PerUnitWithGstprice = AddProduct.PerUnitWithGstprice,
                         CreatedBy = AddProduct.CreatedBy,
                         CreatedOn = DateTime.Today,
                         UpdatedBy = AddProduct.UpdatedBy,
@@ -139,7 +139,6 @@ namespace EMPManegment.Repository.ProductMaster
                                   {
                                       a.Id,
                                       a.ProductImage,
-                                      a.ProductStocks,
                                       a.ProductType,
                                       a.PerUnitPrice,
                                       a.ProductName,
@@ -155,7 +154,6 @@ namespace EMPManegment.Repository.ProductMaster
                             Id = item.Id,
                             ProductImage = item.ProductImage,
                             ProductName = item.ProductName,
-                            ProductStocks = item.ProductStocks,
                             PerUnitPrice = item.PerUnitPrice,
                             ProductShortDescription = item.ProductShortDescription,
                             ProductTypeName = item.Type,
@@ -185,10 +183,11 @@ namespace EMPManegment.Repository.ProductMaster
                                       ProductName = a.ProductName,
                                       ProductImage = a.ProductImage,
                                       ProductId = a.Id,
-                                      Gst = a.Gst,
                                       Hsn = a.Hsn,
-                                      PerUnitWithGstprice = a.PerUnitWithGstprice,
                                       PerUnitPrice = a.PerUnitPrice,
+                                      IsWithGst = a.IsWithGst,
+                                      GstPercentage = a.GstPercentage,
+                                      GstAmount = a.GstAmount,
                                       ProductTypeName = b.Type,
                                   }).ToListAsync();
                 if (data != null)
@@ -203,10 +202,11 @@ namespace EMPManegment.Repository.ProductMaster
                             ProductName = item.ProductName,
                             ProductId = item.ProductId,
                             ProductImage = item.ProductImage,
-                            Gst = item.Gst,
                             Hsn = item.Hsn,
-                            PerUnitWithGstprice = item.PerUnitWithGstprice,
                             PerUnitPrice = item.PerUnitPrice,
+                            IsWithGst= item.IsWithGst,
+                            GstPercentage = item.GstPercentage,
+                            GstAmount = item.GstAmount,
                             ProductTypeName = item.ProductTypeName,
                         });
                     }
@@ -237,11 +237,11 @@ namespace EMPManegment.Repository.ProductMaster
                                ProductDescription = a.ProductDescription,
                                ProductShortDescription = a.ProductShortDescription,
                                ProductImage = a.ProductImage,
-                               ProductStocks = a.ProductStocks,
                                PerUnitPrice = a.PerUnitPrice,
+                               IsWithGst = a.IsWithGst,
+                               GstPercentage= a.GstPercentage,
+                               GstAmount= a.GstAmount,
                                Hsn = a.Hsn,
-                               Gst = a.Gst,
-                               PerUnitWithGstprice = a.PerUnitWithGstprice,
                                CreatedBy = a.CreatedBy,
                            }).First();
                 return Product;
@@ -264,13 +264,13 @@ namespace EMPManegment.Repository.ProductMaster
                     getProduct.ProductDescription = UpdateProduct.ProductDescription;
                     getProduct.ProductShortDescription = UpdateProduct.ProductShortDescription;
                     getProduct.PerUnitPrice = UpdateProduct.PerUnitPrice;
+                    getProduct.IsWithGst=UpdateProduct.IsWithGst;
+                    getProduct.GstPercentage = UpdateProduct.GstPercentage;
+                    getProduct.GstAmount = UpdateProduct.GstAmount;
                     getProduct.ProductType = UpdateProduct.ProductType;
                     getProduct.ProductImage = UpdateProduct.ProductImage;
-                    getProduct.Gst = UpdateProduct.Gst;
                     getProduct.Hsn = UpdateProduct.Hsn;
                     getProduct.Id = UpdateProduct.Id;
-                    getProduct.PerUnitWithGstprice = UpdateProduct.PerUnitWithGstprice;
-                    getProduct.ProductStocks = UpdateProduct.ProductStocks;
 
                 }
                 Context.TblProductDetailsMasters.Update(getProduct);
@@ -301,42 +301,11 @@ namespace EMPManegment.Repository.ProductMaster
 
                             ProductImage = item.ProductImage,
                             ProductName = item.ProductName,
-                            ProductStocks = item.ProductStocks,
                             PerUnitPrice = item.PerUnitPrice,
                         });
                     }
                 }
                 return productDetails;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        public async Task<IEnumerable<ProductDetailsView>> SearchProductName(String ProductName)
-        {
-            try
-            {
-                var productDetails = new List<ProductDetailsView>();
-                var data = await Context.TblProductDetailsMasters.Where(x => x.ProductName == ProductName).ToListAsync();
-                if (data != null)
-                {
-                    foreach (var item in data)
-                    {
-                        productDetails.Add(new ProductDetailsView()
-                        {
-                            Id = item.Id,
-
-                            ProductImage = item.ProductImage,
-                            ProductName = item.ProductName,
-                            ProductStocks = item.ProductStocks,
-                            PerUnitPrice = item.PerUnitPrice,
-                        });
-                    }
-                }
-                return productDetails;
-
             }
             catch (Exception ex)
             {
@@ -360,11 +329,11 @@ namespace EMPManegment.Repository.ProductMaster
 
                             ProductImage = item.ProductImage,
                             ProductName = item.ProductName,
-                            ProductStocks = item.ProductStocks,
                             PerUnitPrice = item.PerUnitPrice,
-                            PerUnitWithGstprice = item.PerUnitWithGstprice,
+                            IsWithGst = item.IsWithGst,
+                            GstPercentage = item.GstPercentage,
+                            GstAmount = item.GstAmount,
                             Hsn = item.Hsn,
-                            Gst = item.Gst,
                             ProductDescription = item.ProductDescription,
                             ProductShortDescription = item.ProductShortDescription,
                         });
@@ -397,11 +366,11 @@ namespace EMPManegment.Repository.ProductMaster
                         ProductDescription = data.ProductDescription,
                         ProductShortDescription = data.ProductShortDescription,
                         ProductImage = data.ProductImage,
-                        ProductStocks = data.ProductStocks,
                         PerUnitPrice = data.PerUnitPrice,
+                        IsWithGst = data.IsWithGst,
+                        GstPercentage = data.GstPercentage,
+                        GstAmount = data.GstAmount,
                         Hsn = data.Hsn,
-                        Gst = data.Gst,
-                        PerUnitWithGstprice = data.PerUnitWithGstprice,
                         CreatedBy = data.CreatedBy,
                     };
                 }
@@ -414,7 +383,7 @@ namespace EMPManegment.Repository.ProductMaster
             }
         }
 
-        public async Task<IEnumerable<ProductDetailsView>> GetAllProductList(string? searchText)
+        public async Task<IEnumerable<ProductDetailsView>> GetAllProductList()
         {
             try
             {
@@ -425,20 +394,13 @@ namespace EMPManegment.Repository.ProductMaster
                     ProductShortDescription = a.ProductShortDescription,
                     ProductImage = a.ProductImage,
                     ProductName = a.ProductName,
-                    ProductStocks = a.ProductStocks,
                     PerUnitPrice = a.PerUnitPrice,
+                    IsWithGst = a.IsWithGst,    
+                    GstPercentage = a.GstPercentage,
+                    GstAmount= a.GstAmount,
                     Hsn = a.Hsn,
-                    PerUnitWithGstprice = a.PerUnitWithGstprice,
-                    Gst = a.Gst,
+                    ProductType = a.ProductType,
                 });
-
-                if (!string.IsNullOrEmpty(searchText))
-                {
-                    searchText = searchText.ToLower();
-                    Product = Product.Where(u =>
-                        u.ProductName.ToLower().Contains(searchText)
-                    );
-                }
 
                 return Product;
             }
