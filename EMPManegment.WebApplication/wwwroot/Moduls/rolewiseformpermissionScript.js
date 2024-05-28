@@ -1,43 +1,72 @@
-﻿GetUserRoleList();
+﻿
 
-function GetUserRoleList() {
-
-    $.ajax({
-        url: '/UserProfile/RolewisePermissionListAction',
-        success: function (result) {
-            $.each(result, function (i, data) {
-                
-                $('#txtUserRole').append('<Option value=' + data.roleId + '>' + data.role + '</Option>')
-            });
+$(document).ready(function () {
+    $('#dropdownButton').click(function () {
+        var dropdown = $('#customDropdown');
+        if (dropdown.is(':visible')) {
+            dropdown.hide();
+        } else {
+            dropdown.show();
+            GetUserRoleList();
         }
     });
-}
 
-function EditRoleWiseFormDetails() {
-    var RoleId = document.getElementById('txtUserRole').value;
-    $.ajax({
-        url: '/UserProfile/GetRolewiseFormListById?RoleId=' + RoleId,
-        type: 'post',
-        dataType: 'json',
-        processData: false,
-        contentType: false,
-        complete: function (Result) {
-            if (Result.responseText != "{\"code\":400}") {
-                document.getElementById("updatebtn").style.display = "block";
-                $('#dveditRolePermissionForm').html(Result.responseText).show();
+    $(document).on('click', '.dropdown-item-custom', function () {
+        var selectedText = $(this).text();
+        var selectedValue = $(this).data('value');
+        $('#dropdownButton').text(selectedText).attr('data-selected-value', selectedValue);
+        $('#customDropdown').hide();
+        EditRoleWiseFormDetails(selectedValue);
+    });
+
+    $(document).click(function (event) {
+        if (!$(event.target).closest('#dropdownButton').length && !$(event.target).closest('#customDropdown').length) {
+            $('#customDropdown').hide();
+        }
+    });
+
+    function GetUserRoleList() {
+        $.ajax({
+            url: '/UserProfile/RolewisePermissionListAction',
+            success: function (result) {
+                var dropdown = $('#customDropdown');
+                dropdown.empty();
+                $.each(result, function (i, data) {
+                    dropdown.append('<div class="dropdown-item-custom" data-value="' + data.roleId + '">' + data.role + '</div>');
+                });
             }
-        },
-        Error: function () {
+        });
+    }
 
-            Swal.fire({
-                title: "Can't get data!",
-                icon: 'warning',
-                confirmButtonColor: '#3085d6',
-                confirmButtonText: 'OK',
-            })
-        }
-    });
-}
+    function EditRoleWiseFormDetails(roleId) {
+        var RoleId = roleId
+        $.ajax({
+            url: '/UserProfile/GetRolewiseFormListById?RoleId=' + RoleId,
+            type: 'post',
+            dataType: 'json',
+            processData: false,
+            contentType: false,
+            complete: function (Result) {
+                if (Result.responseText != "{\"code\":400}") {
+                    document.getElementById("updatebtn").style.display = "block";
+                    $('#dveditRolePermissionForm').html(Result.responseText).show();
+                }
+            },
+            Error: function () {
+
+                Swal.fire({
+                    title: "Can't get data!",
+                    icon: 'warning',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'OK',
+                })
+            }
+        });
+    }
+});
+
+
+
 
 function UpdateRolewiseFormPermission() {
 
@@ -156,7 +185,7 @@ function validateAndCreateRole() {
 
 function clearTextRoleName() {
     ResetUserRoleForm();
-    document.getElementById("textRoleName").value = ""; 
+    document.getElementById("textRoleName").value = "";
     $('#createRoleModal').modal('show');
 }
 
@@ -165,5 +194,4 @@ function ResetUserRoleForm() {
         UserRoleForm.resetForm();
     }
 }
-       
-  
+
