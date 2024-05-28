@@ -27,7 +27,7 @@ namespace EMPManegment.Web.Controllers
         public APIServices APIServices { get; }
         public UserSession _userSession { get; }
 
-        public VendorController(WebAPI webAPI, IWebHostEnvironment environment, APIServices aPIServices,UserSession userSession)
+        public VendorController(WebAPI webAPI, IWebHostEnvironment environment, APIServices aPIServices, UserSession userSession)
         {
             WebAPI = webAPI;
             Environment = environment;
@@ -39,9 +39,43 @@ namespace EMPManegment.Web.Controllers
             return View();
         }
 
-        public async Task<IActionResult> AddVandorDetails()
+        [HttpGet]
+        public async Task<IActionResult> CreateVendor(Guid? VId, bool viewMode = false)
         {
-            return View();
+            try
+            {
+                VendorDetailsView vendorDetails = new VendorDetailsView();
+                if (VId != null)
+                {
+                    ApiResponseModel response = await APIServices.GetAsync("", "Vendor/GetVendorDetailsById?vendorId=" + VId);
+                    if (response.code == 200)
+                    {
+                        vendorDetails = JsonConvert.DeserializeObject<VendorDetailsView>(response.data.ToString());
+
+                    }                
+                }
+                ViewBag.ViewMode = viewMode;
+                return View(vendorDetails);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> EditVendorDetails(string VId)
+        {
+            try
+            {
+
+                return RedirectToAction("CreateVendor", new { Vid = VId });
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
         }
 
         [FormPermissionAttribute("Vendor List-Add")]
@@ -208,7 +242,7 @@ namespace EMPManegment.Web.Controllers
                 if (postuser.code == 200)
                 {
 
-                    return Ok(new UserResponceModel { Message = string.Format(postuser.message),Code = postuser.code });
+                    return Ok(new UserResponceModel { Message = string.Format(postuser.message), Code = postuser.code });
 
 
                 }

@@ -102,17 +102,21 @@ namespace EMPManegment.Web.Controllers
                     {
                         var data = JsonConvert.SerializeObject(responsemodel.data);
                         userlogin.Data = JsonConvert.DeserializeObject<LoginView>(data);
-                        var claims = new List<Claim>()
-                              {
-                                new Claim("UserID", userlogin.Data.Id.ToString()),
-                                new Claim("FirstName", userlogin.Data.FirstName),
-                                new Claim("FullName", userlogin.Data.FullName),
-                                new Claim("UserName", userlogin.Data.UserName),
-                                new Claim("ProfileImage", userlogin.Data.ProfileImage),
-                                new Claim("IsAdmin", userlogin.Data.Role),
-                                new Claim("AccessToken", userlogin.Data.Token),
+                        var defaultProfileImage = "~/content/image/image-b2.jpg";
 
-                              };
+
+                        var claims = new List<Claim>()
+                    {
+     new Claim("UserID", userlogin.Data.Id.ToString()),
+    new Claim("FirstName", userlogin.Data.FirstName),
+    new Claim("LastName", userlogin.Data.LastName),
+    new Claim("FullName", userlogin.Data.FullName),
+    new Claim("UserName", userlogin.Data.UserName),
+    new Claim("ProfileImage", string.IsNullOrEmpty(userlogin.Data.ProfileImage) ? defaultProfileImage : userlogin.Data.ProfileImage),
+    new Claim("IsAdmin", userlogin.Data.Role),
+    new Claim("AccessToken", userlogin.Data.Token),
+};
+
                         var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                         var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
 
@@ -120,8 +124,8 @@ namespace EMPManegment.Web.Controllers
                         {
                             CookieOptions cookie = new CookieOptions();
                             cookie.Expires = DateTime.UtcNow.AddDays(7);
-                            Response.Cookies.Append("UserName", (userlogin.Data.UserName), cookie);
-                            Response.Cookies.Append("Password", (login.Password), cookie);
+                            Response.Cookies.Append("UserName", userlogin.Data.UserName, cookie);
+                            Response.Cookies.Append("Password", login.Password, cookie);
                             ViewBag.checkRememberMe = true;
                         }
                         else
@@ -129,8 +133,11 @@ namespace EMPManegment.Web.Controllers
                             Response.Cookies.Delete("UserName");
                             Response.Cookies.Delete("Password");
                         }
-                        UserSession.ProfilePhoto = userlogin.Data.ProfileImage;
+
+
+                        UserSession.ProfilePhoto = string.IsNullOrEmpty(userlogin.Data.ProfileImage) ? defaultProfileImage : userlogin.Data.ProfileImage;
                         UserSession.FormPermisionData = userlogin.Data.FromPermissionData;
+
                         await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
                         return RedirectToAction("UserHome", "Home");
                     }

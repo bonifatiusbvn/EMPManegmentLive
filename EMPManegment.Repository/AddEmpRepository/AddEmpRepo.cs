@@ -30,7 +30,7 @@ namespace EMPManegment.Repository.AddEmpRepository
     public class AddEmpRepo : IAuthentication
     {
 
-        public AddEmpRepo(BonifatiusEmployeesContext context,IConfiguration configuration)
+        public AddEmpRepo(BonifatiusEmployeesContext context, IConfiguration configuration)
         {
             Context = context;
             Configuration = configuration;
@@ -69,7 +69,7 @@ namespace EMPManegment.Repository.AddEmpRepository
                         PhoneNumber = addemp.PhoneNumber,
                         CreatedOn = DateTime.Now,
                         PasswordHash = addemp.PasswordHash,
-                        PasswordSalt = addemp.PasswordSalt,   
+                        PasswordSalt = addemp.PasswordSalt,
                         Image = addemp.Image,
                         IsActive = true,
                         JoiningDate = DateTime.Now,
@@ -87,7 +87,7 @@ namespace EMPManegment.Repository.AddEmpRepository
             {
 
                 throw ex;
-            }          
+            }
             return response;
         }
 
@@ -137,6 +137,7 @@ namespace EMPManegment.Repository.AddEmpRepository
                                 Id = tblUser.User.Id,
                                 FullName = $"{tblUser.User.FirstName} {tblUser.User.LastName}",
                                 FirstName = tblUser.User.FirstName,
+                                LastName = tblUser.User.LastName,
                                 ProfileImage = tblUser.User.Image,
                                 Role = tblUser.Role.Role,
                                 RoleId = tblUser.Role.RoleId,
@@ -249,13 +250,13 @@ namespace EMPManegment.Repository.AddEmpRepository
                 SmtpClient smtpClient = new SmtpClient(emailSettingView.SmtpServer)
                 {
                     Port = emailSettingView.Port,
-                    Credentials = new NetworkCredential(emailSettingView.From,emailSettingView.SecretKey),
+                    Credentials = new NetworkCredential(emailSettingView.From, emailSettingView.SecretKey),
                     EnableSsl = emailSettingView.EnableSSL
                 };
                 await smtpClient.SendMailAsync(mailMessage);
                 status = true;
             }
-            catch(Exception)
+            catch (Exception)
             {
                 status = false;
             }
@@ -302,9 +303,9 @@ namespace EMPManegment.Repository.AddEmpRepository
                                     CountryId = e.CountryId,
                                 }).First();
 
-                        responceModel.Data = Userdata;
-                        responceModel.Code = 200;
-                        responceModel.Message = "Reset link send on your registered email";
+                    responceModel.Data = Userdata;
+                    responceModel.Code = 200;
+                    responceModel.Message = "Reset link send on your registered email";
 
                 }
                 else
@@ -314,11 +315,11 @@ namespace EMPManegment.Repository.AddEmpRepository
                 }
                 return responceModel;
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 throw ex;
             }
         }
 
-    }   
+    }
 }

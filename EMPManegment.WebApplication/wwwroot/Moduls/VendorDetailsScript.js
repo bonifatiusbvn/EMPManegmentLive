@@ -1,6 +1,5 @@
 ﻿$(document).ready(function () {
     GetVendorType()
-    fn_getState('dropState', 1);
     $('#VendorDetailsModel').modal('hide');
 });
 
@@ -11,54 +10,58 @@ $(document).ready(function () {
         GetAllVendorData(userPermission);
     }
     function GetAllVendorData(userPermission) {
-
-    $('#VendorTableData').DataTable({
-        processing: false,
-        serverSide: true,
-        filter: true,
-        "bDestroy": true,
-        ajax: {
-            type: "Post",
-            url: '/Vendor/GetVendorList',
-            dataType: 'json'
-        },
-        columns: [
-            { "data": "vendorCompany", "name": "VendorCompany" },
+        var userPermissionArray = JSON.parse(userPermission);
+        var canEdit = userPermissionArray.some(permission => permission.formName === "Vendor List" && permission.edit);
+        var columns = [
+            {
+                "data": "vendorCompany", "name": "VendorCompany",
+                "render": function (data, type, full) {
+                    return '<a href="/Vendor/CreateVendor?Vid=' + full.vid + '&viewMode=true" class="link-primary">' + full.vendorCompany + '</a>';
+                }
+            },
             { "data": "vendorFirstName", "name": "VendorFirstName" },
             { "data": "vendorCompanyNumber", "name": "VendorCompanyNumber" },
             { "data": "vendorCompanyEmail", "name": "VendorCompanyEmail" },
-            {
+        ];
+        if (canEdit) {
+            columns.push({
+                "data": null,
+                "orderable": false,
+                "searchable": false,
                 "render": function (data, type, full) {
-                    
-                    var userPermissionArray = [];
-                    userPermissionArray = JSON.parse(userPermission);
-
-                    var canEdit = false;
-
-                    for (var i = 0; i < userPermissionArray.length; i++) {
-                        
-                        var permission = userPermissionArray[i];
-                        if (permission.formName == "Vendor List") {
-                            canEdit = permission.edit;
-                            break;
-                        }
-                    }
-                    var buttons = '<ul class="list-inline hstack gap-2 mb-0">';
-                    if (canEdit) {
-                        buttons += '<li class="list-inline-item"><a onclick="EditVendorDetails(\'' + full.vid + '\')"><i class="fa-regular fa-pen-to-square"></i></a></li>';
-                    }
-                    buttons += '</ul>';
-                    return '<div class="flex-shrink-0 ms-4"><ul class="list-inline hstack gap-2 mb-0"><li class="list-inline-item"><a onclick="VendorDetails(\'' + full.vid + '\')"><i class="fa-solid fa-eye""></i></a>' + buttons + '</div>';
+                    return '<li class="list-inline-item"><a href="EditVendorDetails?VId=' + full.vid + '"><i class="fa-regular fa-pen-to-square"></i></a></li>';
                 }
-            }
+            });
+        }
+        $('#VendorTableData').DataTable({
+            processing: false,
+            serverSide: true,
+            filter: true,
+            destroy: true,
+            pageLength: 30,
+            ajax: {
+                type: "Post",
+                url: '/Vendor/GetVendorList',
+                dataType: 'json'
+            },
 
-        ],
-        columnDefs: [{
-            "defaultContent": "",
-            "targets": "_all",
-        }]
-    });
+            columns: columns,
+            scrollY: 400,
+            scrollX: true,
+            scrollCollapse: true,
+            fixedHeader: {
+                header: true,
+                footer: true
+            },
+            autoWidth: false,
+            columnDefs: [
+                {
+                    targets: '_all', width: 'auto'
+                }
+            ]
+        });
     }
+
     data(datas);
 });
 
@@ -75,7 +78,7 @@ function VendorDetails(Id) {
             $('#VendorPhone').text(response.vendorPhone);
             $('#VendorContectNo').text(response.vendorContectNo);
             $('#VendorType').text(response.vendorTypeName);
-            $('#VendorCountry').text(response.vendorCountryName);
+            /*  $('#VendorCountry').text(response.vendorCountryName);*/
             $('#VendorState').text(response.vendorStateName);
             $('#VendorCity').text(response.vendorCityName);
             $('#VendorPinCode').text(response.vendorPinCode);
@@ -110,84 +113,39 @@ function VendorDetails(Id) {
 //    }
 //}
 
-
-
-function EditVendorDetails(Id) {
-
-    var editing = true;
-    $("#editPersonalDetailsModel").prop("disabled", true);
-    $("#editBankDetailsModel").prop("disabled", true);
-
-    $.ajax({
-        url: '/Vendor/GetVendorDetailsById?VendorId=' + Id,
-        type: "Get",
-        contentType: 'application/json;charset=utf-8;',
-        dataType: 'json',
-        success: function (response) {
-
-            $('#UpdateVendorModel').modal('show');
-            $('#vendorId').val(response.vid);
-            $('#EditfirstnameInput').val(response.vendorFirstName);
-            $('#EditlastnameInput').val(response.vendorLastName);
-            $('#EditemailidInput').val(response.vendorEmail);
-            $('#EditphonenumberInput').val(response.vendorPhone);
-            $('#EditworknumberInput').val(response.vendorContectNo);
-            $('#EditVendorTypeInput').val(response.vendorTypeName);
-            $('#EditpincodeidInput').val(response.vendorPinCode);
-            $('#EditAddressidInput').val(response.vendorAddress);
-            $('#EditcompanynameInput').val(response.vendorCompany);
-            $('#EditCompanyType').val(response.vendorCompanyType);
-            $('#EditcompanyemailInput').val(response.vendorCompanyEmail);
-            $('#EditcontactnumberInput').val(response.vendorCompanyNumber);
-            $('#EditaccountnumberInput').val(response.vendorBankAccountNo);
-            $('#EditbanknameInput').val(response.vendorBankName);
-            $('#EditbranchInput').val(response.vendorBankBranch);
-            $('#EditaccountnameInput').val(response.vendorAccountHolderName);
-            $('#EditifscInput').val(response.vendorBankIfsc);
-            $('#EditGSTNumberInput').val(response.vendorGstnumber);
-            $("#textVendorType").val(response.vendorTypeId);
-
-            fn_getcitiesbystateId('dropCity', response.vendorState);
-            $('#dropState').val(response.vendorState);
-            $("#textCountry").val(response.vendorCountry);
-            CheckValidation();
-            setTimeout(function () { $('#dropCity').val(response.vendorCity); }, 100)
-            CheckValidation();
-        },
-        error: function () {
-            alert('Data not found');
-        }
+function EditVendor() {
+    document.querySelectorAll('#createVendorform input, #createVendorform select, #createVendorform textarea').forEach(function (element) {
+        element.disabled = false;
     });
+    $("#editVendorbtn").hide();
+    $("#updateVendorbtn").show();
 }
 
 function UpdateVendorDetails() {
-
-    $("#editPersonalDetailsModel").prop("disabled", true);
-    $("#editBankDetailsModel").prop("disabled", true);
-    if ($("#editVendorbankDetails").valid()) {
+    if ($("#createVendorform").valid()) {
         var fromData = {
-            "Vid": $("#vendorId").val(),
-            "VendorFirstName": $("#EditfirstnameInput").val(),
-            "VendorLastName": $("#EditlastnameInput").val(),
-            "VendorEmail": $("#EditemailidInput").val(),
-            "VendorPhone": $("#EditphonenumberInput").val(),
-            "VendorContectNo": $('#EditworknumberInput').val(),
-            "VendorTypeId": $("#textVendorType").val(),
-            "VendorCountry": $("#textCountry").val(),
-            "VendorState": $("#dropState").val(),
-            "VendorCity": $("#dropCity").val(),
-            "VendorAddress": $("#EditAddressidInput").val(),
-            "VendorPinCode": $("#EditpincodeidInput").val(),
-            "VendorCompany": $("#EditcompanynameInput").val(),
-            "VendorCompanyType": $("#EditCompanyType").val(),
-            "VendorCompanyEmail": $("#EditcompanyemailInput").val(),
-            "VendorCompanyNumber": $("#EditcontactnumberInput").val(),
-            "VendorBankName": $("#EditbanknameInput").val(),
-            "VendorBankBranch": $("#EditbranchInput").val(),
-            "VendorAccountHolderName": $("#EditaccountnameInput").val(),
-            "VendorBankAccountNo": $("#EditaccountnumberInput").val(),
-            "VendorBankIfsc": $("#EditifscInput").val(),
-            "VendorGstnumber": $("#EditGSTNumberInput").val()
+            "Vid": $("#vendorIdInput").val(),
+            "VendorFirstName": $("#firstnameInput").val(),
+            "VendorLastName": $("#lastnameInput").val(),
+            "VendorContectNo": $('#contactnumberInput').val(),
+            "VendorPhone": $("#phonenumberInput").val(),
+            "VendorEmail": $("#emailidInput").val(),
+            "VendorTypeId": $("#ddlVendorType").val(),
+            "VendorCountry": $("#VendorCountry").val(),
+            "VendorState": $("#VendorState").val(),
+            "VendorCity": $("#VendorCity").val(),
+            "VendorAddress": $("#AddressidInput").val(),
+            "VendorPinCode": $("#pincodeidInput").val(),
+            "VendorCompany": $("#companynameInput").val(),
+            "VendorCompanyType": $("#CompanyType").val(),
+            "VendorCompanyEmail": $("#companyemailInput").val(),
+            "VendorCompanyNumber": $("#worknumberInput").val(),
+            "VendorBankName": $("#banknameInput").val(),
+            "VendorBankBranch": $("#branchInput").val(),
+            "VendorAccountHolderName": $("#accountnameInput").val(),
+            "VendorBankAccountNo": $("#accountnumberInput").val(),
+            "VendorBankIfsc": $("#ifscInput").val(),
+            "VendorGstnumber": $("#GSTNumberInput").val()
         };
         $.ajax({
             url: '/Vendor/UpdateVendorDetails',
@@ -216,39 +174,9 @@ function UpdateVendorDetails() {
         })
     }
 }
-
-$('#AddVendorModelButton').click(function () {
-    ClearTextBox();
-});
-function ClearTextBox() {
-    $("#firstnameInput").val('');
-    $("#lastnameInput").val('');
-    $("#contactnumberInput").val('');
-    $("#phonenumberInput").val('');
-    $("#emailidInput").val('');
-    $("#ddlVendorType").val('--Select Type--');
-    $("#ddlCountry").val('--Select Country--');
-    $("#ddlState").val('--Select State--');
-    $("#ddlCity").val('--Select City--');
-    $("#AddressidInput").val('');
-    $("#pincodeidInput").val('');
-    $("#companynameInput").val('');
-    $("#CompanyType").val('');
-    $("#companyemailInput").val('');
-    $("#worknumberInput").val('');
-    $("#banknameInput").val('');
-    $("#branchInput").val('');
-    $("#accountnameInput").val('');
-    $("#accountnumberInput").val('');
-    $("#ifscInput").val('');
-    $("#GSTNumberInput").val('');
-    $('#dropCity').val('');
-    $('#dropState').val('');
-    $('#textVendorType').val('');
-}
 function AddVendorDetails() {
 
-    if ($("#VendorbankDetails").valid()) {
+    if ($("#createVendorform").valid()) {
         var fromData = {
             "VendorFirstName": $("#firstnameInput").val(),
             "VendorLastName": $("#lastnameInput").val(),
@@ -256,9 +184,9 @@ function AddVendorDetails() {
             "VendorPhone": $("#phonenumberInput").val(),
             "VendorEmail": $("#emailidInput").val(),
             "VendorTypeId": $("#ddlVendorType").val(),
-            "VendorCountry": $("#ddlCountry").val(),
-            "VendorState": $("#ddlState").val(),
-            "VendorCity": $("#ddlCity").val(),
+            "VendorCountry": $("#VendorCountry").val(),
+            "VendorState": $("#VendorState").val(),
+            "VendorCity": $("#VendorCity").val(),
             "VendorAddress": $("#AddressidInput").val(),
             "VendorPinCode": $("#pincodeidInput").val(),
             "VendorCompany": $("#companynameInput").val(),
@@ -286,16 +214,23 @@ function AddVendorDetails() {
             processData: false,
             contentType: false,
             success: function (Result) {
-
-                Swal.fire({
-                    title: Result.message,
-                    icon: 'success',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK'
-                }).then(function () {
-                    window.location = '/Vendor/DisplayVendorList';
-                });
-
+                if (Result.code == 200) {
+                    Swal.fire({
+                        title: Result.message,
+                        icon: 'success',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK'
+                    }).then(function () {
+                        window.location = '/Vendor/DisplayVendorList';
+                    });
+                } else {
+                    Swal.fire({
+                        title: Result.message,
+                        icon: 'error',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK'
+                    })
+                }
             },
         })
     }
@@ -322,84 +257,88 @@ function GetVendorType() {
     });
 }
 
-
-$('#CloseButton').click(function () {
-    window.location = '/Vendor/AddVandorDetails';
-});
-
-function openvendormodel() {
-
-    $("#PersonalDetailsModel").prop("disabled", true);
-    $("#BankDetailsModel").prop("disabled", true);
-    $("#addSeller").modal('show');
-
-}
-
-
-//-----------------Validation-----------------//
-
-function nexttoPersonalDetails() {
-
-    if ($('#VendorFormId').valid()) {
-        $("#PersonalDetailsModel").prop("disabled", false);
-        document.getElementById("PersonalDetailsModel").click()
-    }
-    else {
-        Swal.fire({
-            title: "Kindly fill all datafield",
-            icon: 'warning',
-            confirmButtonColor: '#3085d6',
-            confirmButtonText: 'OK',
-        })
-    }
-}
-function nexttoBankDetails() {
-
-    if ($('#VendorPersonalDetails').valid()) {
-        $("#BankDetailsModel").prop("disabled", false);
-        document.getElementById("BankDetailsModel").click()
-    }
-    else {
-        Swal.fire({
-            title: "Kindly fill all datafield",
-            icon: 'warning',
-            confirmButtonColor: '#3085d6',
-            confirmButtonText: 'OK',
-        })
-    }
-}
-
 $(document).ready(function () {
 
-    $("#VendorFormId").validate({
+    $("#createVendorform").validate({
 
         rules: {
 
             companynameInput: "required",
-            contactnumberInput: "required",
-            phonenumberInput: "required",
-            emailidInput: "required",
+            contactnumberInput: {
+                required: true,
+                digits: true,
+                minlength: 10,
+                maxlength: 10
+            },
+            phonenumberInput: {
+                required: true,
+                digits: true,
+                minlength: 10,
+                maxlength: 10
+            },
+            emailidInput: {
+                required: true,
+                email: true
+            },
             ddlVendorType: "required",
-            ddlCountry: "required",
-            ddlState: "required",
-            ddlCity: "required",
+            VendorCountry: "required",
+            VendorState: "required",
+            VendorCity: "required",
             AddressidInput: "required",
             pincodeidInput: {
                 required: true,
                 digits: true,
                 minlength: 6,
                 maxlength: 6
-}
+            },
+            firstnameInput: "required",
+            lastnameInput: "required",
+            CompanyType: "required",
+            companyemailInput: {
+                required: true,
+                email: true
+            },
+            worknumberInput: {
+                required: true,
+                digits: true,
+                minlength: 10,
+                maxlength: 10
+            },
+            banknameInput: "required",
+            branchInput: "required",
+            accountnameInput: "required",
+            accountnumberInput: "required",
+            ifscInput: "required",
+            GSTNumberInput: "required",
+            banknameInput: "required",
+            branchInput: "required",
+            accountnameInput: "required",
+            accountnumberInput: "required",
+            ifscInput: "required",
+            GSTNumberInput: "required",
         },
         messages: {
             companynameInput: "Please Enter Company",
-            contactnumberInput: "Please Enter ContectNo",
-            phonenumberInput: "Please Enter Phone",
-            emailidInput: "Please Enter Email",
+            contactnumberInput: {
+                required: "Please Enter Contact Number",
+                digits: "Contact Number must contain only digits",
+                minlength: "Contact Number must be 10 digits long",
+                maxlength: "Contact Number must be 10 digits long"
+            },
+            phonenumberInput: {
+                required: "Please Enter phone number",
+                digits: "phone number must contain only digits",
+                minlength: "phone number must be 10 digits long",
+                maxlength: "phone number must be 10 digits long"
+            },
+            emailidInput: {
+                required: "Please Enter Email",
+                email: "Please enter a valid email address"
+            },
             ddlVendorType: "Please Enter vendorTypeId",
-            ddlCountry: "Please Enter Country",
-            ddlState: "Please Enter State",
-            ddlCity: "Please Enter City",
+            VendorCity: "Please Enter City",
+            VendorState: "Please Enter State",
+            VendorCountry: "Please Enter Country",
             AddressidInput: "Please Enter Address",
             pincodeidInput: {
                 required: "Please Enter Pincode",
@@ -407,30 +346,25 @@ $(document).ready(function () {
                 minlength: "Pin code must be 6 digits long",
                 maxlength: "Pin code must be 6 digits long"
             },
-        }
-    })
-    $("#VendorPersonalDetails").validate({
-        rules: {
-            firstnameInput: "required",
-            lastnameInput: "required",
-            CompanyType: "required",
-            companyemailInput: "required",
-            worknumberInput: "required",
-            companylogoInput: "required",
-            banknameInput: "required",
-            branchInput: "required",
-            accountnameInput: "required",
-            accountnumberInput: "required",
-            ifscInput: "required",
-            GSTNumberInput: "required",
-        },
-        messages: {
-            firstnameInput: "Please Enter FirstName",
-            lastnameInput: "Please Enter LastName",
+            firstnameInput: "Please Enter First Name",
+            lastnameInput: "Please Enter Last Name",
             CompanyType: "Please Enter CompanyType",
-            companyemailInput: "Please Enter CompanyEmail",
-            worknumberInput: "Please Enter CompanyNumber",
-            companylogoInput: "Please Enter CompanyLogo",
+            companyemailInput: {
+                required: "Please Enter Company Email",
+                email: "Please enter a valid email address"
+            },
+            worknumberInput: {
+                required: "Please Enter work number",
+                digits: "Work number must contain only digits",
+                minlength: "Work number must be 10 digits long",
+                maxlength: "Work number must be 10 digits long"
+            },
+            banknameInput: "Please Enter BankName",
+            branchInput: "Please Enter BankBranch",
+            accountnameInput: "Please Enter AccountHolderName",
+            accountnumberInput: "Please Enter BankAccountNo",
+            ifscInput: "Please Enter BankIfsc",
+            GSTNumberInput: "Please Enter Gstnumber",
             banknameInput: "Please Enter BankName",
             branchInput: "Please Enter BankBranch",
             accountnameInput: "Please Enter AccountHolderName",
@@ -439,97 +373,6 @@ $(document).ready(function () {
             GSTNumberInput: "Please Enter Gstnumber",
         }
     })
-    $("#VendorbankDetails").validate({
-        rules: {
-            banknameInput: "required",
-            branchInput: "required",
-            accountnameInput: "required",
-            accountnumberInput: "required",
-            ifscInput: "required",
-            GSTNumberInput: "required",
-        },
-        messages: {
-            banknameInput: "Please Enter BankName",
-            branchInput: "Please Enter BankBranch",
-            accountnameInput: "Please Enter AccountHolderName",
-            accountnumberInput: "Please Enter BankAccountNo",
-            ifscInput: "Please Enter BankIfsc",
-            GSTNumberInput: "Please Enter Gstnumber",
-        }
-    })
-
-    $("#editVendorFormId").validate({
-
-        rules: {
-
-            EditcompanynameInput: "required",
-            EditcontactnumberInput: "required",
-            EditphonenumberInput: "required",
-            EditemailidInput: "required",
-            EditAddressidInput: "required",
-            EditpincodeidInput: "required",
-        },
-        messages: {
-            EditcompanynameInput: "Please Enter Company",
-            EditcontactnumberInput: "Please Enter ContectNo",
-            EditphonenumberInput: "Please Enter Phone",
-            EditemailidInput: "Please Enter Email",
-            EditddlVendorType: "Please Enter vendorTypeId",
-            EditddlCountry: "Please Enter Country",
-            EditddlState: "Please Enter State",
-            EditddlCity: "Please Enter City",
-            EditAddressidInput: "Please Enter Address",
-            EditpincodeidInput: "Please Enter PinCode",
-        }
-    })
-    $("#editVendorPersonalDetails").validate({
-        rules: {
-            EditfirstnameInput: "required",
-            EditlastnameInput: "required",
-            EditCompanyType: "required",
-            EditcompanyemailInput: "required",
-            EditworknumberInput: "required",
-            EditbanknameInput: "required",
-            EditbranchInput: "required",
-            EditaccountnameInput: "required",
-            EditaccountnumberInput: "required",
-            EditifscInput: "required",
-            EditGSTNumberInput: "required",
-        },
-        messages: {
-            EditfirstnameInput: "Please Enter FirstName",
-            EditlastnameInput: "Please Enter LastName",
-            EditCompanyType: "Please Enter CompanyType",
-            EditcompanyemailInput: "Please Enter CompanyEmail",
-            EditworknumberInput: "Please Enter CompanyNumber",
-            EditcompanylogoInput: "Please Enter CompanyLogo",
-            EditbanknameInput: "Please Enter BankName",
-            EditbranchInput: "Please Enter BankBranch",
-            EditaccountnameInput: "Please Enter AccountHolderName",
-            EditaccountnumberInput: "Please Enter BankAccountNo",
-            EditifscInput: "Please Enter BankIfsc",
-            EditGSTNumberInput: "Please Enter Gstnumber",
-        }
-    })
-    $("#editVendorbankDetails").validate({
-        rules: {
-            EditbanknameInput: "required",
-            EditbranchInput: "required",
-            EditaccountnameInput: "required",
-            EditaccountnumberInput: "required",
-            EditifscInput: "required",
-            EditGSTNumberInput: "required",
-        },
-        messages: {
-            EditbanknameInput: "Please Enter BankName",
-            EditbranchInput: "Please Enter BankBranch",
-            EditaccountnameInput: "Please Enter AccountHolderName",
-            EditaccountnumberInput: "Please Enter BankAccountNo",
-            EditifscInput: "Please Enter BankIfsc",
-            EditGSTNumberInput: "Please Enter Gstnumber",
-        }
-    })
-
 });
 
 function editnexttoPersonalDetails() {
@@ -564,82 +407,6 @@ function editnexttoBankDetails() {
 }
 
 
-$(document).ready(function () {
-
-    GetVendorCountry();
-    GetVendorTypes();
-    $('#dropState').change(function () {
-
-        var Text = $("#dropState Option:Selected").text();
-        var txtstateid = $(this).val();
-        $("#txtstate").val(txtstateid);
-    });
-
-    $('#dropCity').change(function () {
-
-        var Text = $("#dropCity Option:Selected").text();
-        var txtcityid = $(this).val();
-        $("#txtcity").val(txtcityid);
-    });
-
-});
-
-function fn_getState(drpstate, countryId, that) {
-
-    var cid = countryId;
-    if (cid == undefined || cid == null) {
-        var cid = $(that).val();
-    }
-
-    $('#' + drpstate).empty();
-    $('#' + drpstate).append('<Option >--Select State--</Option>');
-    $.ajax({
-        url: '/Authentication/GetState?StateId=' + cid,
-        success: function (result) {
-
-            $.each(result, function (i, data) {
-
-                $('#' + drpstate).append('<Option value=' + data.id + '>' + data.stateName + '</Option>')
-            });
-        }
-    });
-}
-
-function fn_getcitiesbystateId(drpcity, stateid, that) {
-
-    var sid = stateid;
-    if (sid == undefined || sid == null) {
-        var sid = $(that).val();
-    }
-    $('#' + drpcity).empty();
-    $('#' + drpcity).append('<Option >--Select City--</Option>');
-    $.ajax({
-        url: '/Authentication/GetCity?CityId=' + sid,
-        success: function (result) {
-
-            $.each(result, function (i, data) {
-
-                $('#' + drpcity).append('<Option value=' + data.id + '>' + data.cityName + '</Option>');
-
-            });
-        }
-    });
-}
-
-function GetVendorCountry() {
-
-    $.ajax({
-        url: '/Authentication/GetCountrys',
-        success: function (result) {
-            $.each(result, function (i, data) {
-
-                $('#textCountry').append('<Option value=' + data.id + ' Selected>' + data.countryName + '</Option>')
-
-            });
-        }
-    });
-}
-
 function GetVendorTypes() {
 
     $.ajax({
@@ -654,4 +421,80 @@ function GetVendorTypes() {
 }
 
 
+$(document).ready(function () {
+
+    GetVendorCountry();
+
+    $('#dropVendorState').change(function () {
+
+        var Text = $("#dropVendorState Option:Selected").text();
+        var txtVendorid = $(this).val();
+        $("#txtVendorstate").val(txtVendorid);
+    });
+
+    $('#VendorCity').change(function () {
+
+        var Text = $("#VendorCity Option:Selected").text();
+        var txtVendorcity = $(this).val();
+        $("#txtVendorCity").val(txtVendorcity);
+    });
+
+});
+
+function fn_getVendorState(drpVendorstate, countryId, that) {
+    var cid = countryId;
+    if (cid == undefined || cid == null) {
+        var cid = $(that).val();
+    }
+
+
+    $('#' + drpVendorstate).empty();
+    $('#' + drpVendorstate).append('<Option >--Select State--</Option>');
+    $.ajax({
+        url: '/Authentication/GetState?StateId=' + cid,
+        success: function (result) {
+
+            $.each(result, function (i, data) {
+                $('#' + drpVendorstate).append('<Option value=' + data.id + '>' + data.stateName + '</Option>')
+            });
+        }
+    });
+}
+
+function fn_getVendorcitiesbystateId(drpVendorcity, stateid, that) {
+
+    var sid = stateid;
+    if (sid == undefined || sid == null) {
+        var sid = $(that).val();
+    }
+
+
+    $('#' + drpVendorcity).empty();
+    $('#' + drpVendorcity).append('<Option >--Select City--</Option>');
+    $.ajax({
+        url: '/Authentication/GetCity?CityId=' + sid,
+        success: function (result) {
+
+            $.each(result, function (i, data) {
+                $('#' + drpVendorcity).append('<Option value=' + data.id + '>' + data.cityName + '</Option>');
+
+            });
+        }
+    });
+}
+
+function GetVendorCountry() {
+    $.ajax({
+        url: '/Authentication/GetCountrys',
+        success: function (result) {
+            var selectedid = $("#txtcountryId").val(); 
+            $.each(result, function (i, data) {
+                debugger
+                if (data.id != selectedid) {
+                    $('#VendorCountry').append('<option value="' + data.id + '">' + data.countryName + '</option>');
+                }
+            });
+        }
+    });
+}
 

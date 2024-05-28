@@ -43,6 +43,14 @@ namespace EMPManegment.Web.Models
             }
         }
 
+        public string LastName
+        {
+            get
+            {
+                return HttpContext.User.Claims.FirstOrDefault(x => string.Compare(x.Type, "LastName", true) == 0)?.Value;
+            }
+        }
+
         public string FullName
         {
             get

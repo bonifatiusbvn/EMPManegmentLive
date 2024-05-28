@@ -6,6 +6,8 @@
 @{
     ViewData["Title"] = "UnAuthorised";
     Layout = "~/Views/Shared/_HomeLayout.cshtml";
+    var imageUrl = !string.IsNullOrEmpty(Model.Image) ? Url.Content($"~/{Model.Image}") : null;
+    var initials = $"{Model.FirstName[0]}{Model.LastName[0]}".ToUpper();
 }
 <div class="row" style="margin-top:80px;">
     <div class="col-12">
@@ -32,9 +34,16 @@
         </div>
         <div class="pt-4 mb-4 mb-lg-3 pb-lg-4 profile-wrapper">
             <div class="row g-4">
-                <div class="col-auto">
+                <div class="col-auto" style="margin: auto;position: revert-layer;">
                     <div class="avatar-lg">
-                        <img src="~/@Model.Image" alt="user-img" class="img-thumbnail rounded-circle" style="height: 100%;" />
+                        @if (!string.IsNullOrEmpty(imageUrl))
+                        {
+                            <img src="@imageUrl" class="rounded-circle avatar-xl img-thumbnail user-profile-image" alt="user-profile-image">
+                        }
+                        else
+                        {
+                            <div class="avatar-title bg-success-subtle text-success rounded-circle fs-13" style="height:95px;width:95px;">@initials</div>
+                        }
                     </div>
                 </div>
                 <!--end col-->

@@ -56,7 +56,7 @@ function GetAllUserData() {
         filter: true,
         "bDestroy": true,
         ajax: {
-            type: "Post",
+            type: "POST",
             url: '/UserProfile/GetUserList',
             dataType: 'json'
         },
@@ -70,27 +70,33 @@ function GetAllUserData() {
             {
                 "data": "departmentId", "name": "DepartmentName",
                 "render": function (data, type, full) {
-                    return '<div class="d-flex"><div class="flex-grow-1 tasks_name">' + full.departmentName + '</div>';
+                    return '<div class="d-flex"><div class="flex-grow-1 tasks_name">' + full.departmentName + '</div></div>';
                 }
             },
             { "data": "roleName", "name": "RoleName" },
             {
                 "data": "firstName", "name": "FirstName",
                 "render": function (data, type, full) {
-                    return '<div class="d-flex">' +
-                        '<div class="flex-grow-1 tasks_name">' +
-                        '<img src="/' + full.image + '" style="height: 40px; width: 40px; border-radius: 50%;" ' +
-                        'onmouseover="showIcons(event, this.parentElement)" onmouseout="hideIcons(event, this.parentElement)">' +
-                        full['firstName'] + ' ' + full['lastName'] +
+                    var profileImageHtml;
+                    if (full.image && full.image.trim() !== '') {
+                        profileImageHtml = '<img src="/' + full.image + '" style="height: 40px; width: 40px; border-radius: 50%;" ' +
+                            'onmouseover="showIcons(event, this.parentElement)" onmouseout="hideIcons(event, this.parentElement)">';
+                    } else {
+                        var initials = (full.firstName ? full.firstName[0] : '') + (full.lastName ? full.lastName[0] : '');
+                        profileImageHtml = '<div class="flex-shrink-0 avatar-xs me-2">' +
+                            '<div class="avatar-title bg-success-subtle text-success rounded-circle fs-13" style="height: 40px; width: 40px; border-radius: 50%;">' + initials.toUpperCase() + '</div></div>';
+                    }
+
+                    return '<div class="d-flex align-items-center">' +
+                        profileImageHtml +
+                        '<div class="flex-grow-1 tasks_name ml-2">' + full.firstName + ' ' + full.lastName + '</div>' +
                         '</div>';
                 }
-
-
             },
             {
                 "data": "isActive", "name": "IsActive",
                 "render": function (data, type, full) {
-                    if (full.isActive == true) {
+                    if (full.isActive) {
                         return '<span class="badge bg-success text-uppercase">Active</span>';
                     } else {
                         return '<span class="badge bg-danger text-uppercase">Deactive</span>';
@@ -123,6 +129,8 @@ function GetAllUserData() {
         }]
     });
 }
+
+
 function GetUserRoleList(itemId, selectedRoleId) {
     $.ajax({
         url: '/UserProfile/RolewisePermissionListAction',
@@ -168,7 +176,7 @@ function UserActiveDeactive(UserId, checkboxElement) {
         buttonsStyling: false,
         showCloseButton: true
     }).then((result) => {
-        
+
         if (result.isConfirmed) {
             $.ajax({
                 url: '/UserProfile/UserActiveDecative?UserName=' + UserId,
@@ -880,7 +888,7 @@ function updateuserDetails() {
 var PasswordForm;
 function validateAndPassword() {
 
-    PasswordForm= $("#passwordform").validate({
+    PasswordForm = $("#passwordform").validate({
         rules: {
             passwordinput: "required",
             confirmpasswordinput: "required",
@@ -891,5 +899,5 @@ function validateAndPassword() {
         },
     })
     var isValid = true;
-   
+
 }
