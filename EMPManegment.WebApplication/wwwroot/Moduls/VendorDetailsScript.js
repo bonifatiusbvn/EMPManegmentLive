@@ -16,7 +16,18 @@ $(document).ready(function () {
             {
                 "data": "vendorCompany", "name": "VendorCompany",
                 "render": function (data, type, full) {
-                    return '<a href="/Vendor/CreateVendor?Vid=' + full.vid + '&viewMode=true" class="link-primary">' + full.vendorCompany + '</a>';
+                    debugger
+                    var profileImageHtml;
+                    if (full.vendorCompanyLogo && full.vendorCompanyLogo.trim() !== '') {
+                        profileImageHtml = '<img src="/Content/Image/' + full.vendorCompanyLogo + '" style="height: 40px; width: 40px; border-radius: 50%;" ' +
+                            'onmouseover="showIcons(event, this.parentElement)" onmouseout="hideIcons(event, this.parentElement)">';
+                    } else {
+                        var initials = (full.vendorCompany ? full.vendorCompany[0] : '');
+                        profileImageHtml = '<div class="flex-shrink-0 avatar-xs me-2">' +
+                            '<div class="avatar-title bg-success-subtle text-success rounded-circle fs-13" style="height: 40px; width: 40px; border-radius: 50%;">' + initials.toUpperCase() + '</div></div>';
+                    }
+                    return '<a href="/Vendor/CreateVendor?Vid=' + full.vid + '&viewMode=true" class="link-primary" style="display: flex; align-items: center;">' + profileImageHtml + '<span style="margin-left: 5px;">' + full.vendorCompany + '</span></a>';
+
                 }
             },
             { "data": "vendorFirstName", "name": "VendorFirstName" },
@@ -78,7 +89,7 @@ function VendorDetails(Id) {
             $('#VendorPhone').text(response.vendorPhone);
             $('#VendorContectNo').text(response.vendorContectNo);
             $('#VendorType').text(response.vendorTypeName);
-            /*  $('#VendorCountry').text(response.vendorCountryName);*/
+              $('#VendorCountry').text(response.vendorCountryName);
             $('#VendorState').text(response.vendorStateName);
             $('#VendorCity').text(response.vendorCityName);
             $('#VendorPinCode').text(response.vendorPinCode);
@@ -175,41 +186,37 @@ function UpdateVendorDetails() {
     }
 }
 function AddVendorDetails() {
-
     if ($("#createVendorform").valid()) {
-        var fromData = {
-            "VendorFirstName": $("#firstnameInput").val(),
-            "VendorLastName": $("#lastnameInput").val(),
-            "VendorContectNo": $('#contactnumberInput').val(),
-            "VendorPhone": $("#phonenumberInput").val(),
-            "VendorEmail": $("#emailidInput").val(),
-            "VendorTypeId": $("#ddlVendorType").val(),
-            "VendorCountry": $("#VendorCountry").val(),
-            "VendorState": $("#VendorState").val(),
-            "VendorCity": $("#VendorCity").val(),
-            "VendorAddress": $("#AddressidInput").val(),
-            "VendorPinCode": $("#pincodeidInput").val(),
-            "VendorCompany": $("#companynameInput").val(),
-            "VendorCompanyType": $("#CompanyType").val(),
-            "VendorCompanyEmail": $("#companyemailInput").val(),
-            "VendorCompanyNumber": $("#worknumberInput").val(),
-            "VendorBankName": $("#banknameInput").val(),
-            "VendorBankBranch": $("#branchInput").val(),
-            "VendorAccountHolderName": $("#accountnameInput").val(),
-            "VendorBankAccountNo": $("#accountnumberInput").val(),
-            "VendorBankIfsc": $("#ifscInput").val(),
-            "VendorGstnumber": $("#GSTNumberInput").val()
-        };
-
-
-        var from_Data = new FormData();
-        from_Data.append("ADDVENDOR", JSON.stringify(fromData));
+        var formData = new FormData();
+        formData.append("Vid", $("#vendorIdInput").val());
+        formData.append("VendorFirstName", $("#firstnameInput").val());
+        formData.append("VendorLastName", $("#lastnameInput").val());
+        formData.append("VendorContectNo", $('#contactnumberInput').val());
+        formData.append("VendorPhone", $("#phonenumberInput").val());
+        formData.append("VendorEmail", $("#emailidInput").val());
+        formData.append("VendorTypeId", $("#ddlVendorType").val());
+        formData.append("VendorCountry", $("#VendorCountry").val());
+        formData.append("VendorState", $("#VendorState").val());
+        formData.append("VendorCity", $("#VendorCity").val());
+        formData.append("VendorAddress", $("#AddressidInput").val());
+        formData.append("VendorPinCode", $("#pincodeidInput").val());
+        formData.append("VendorCompany", $("#companynameInput").val());
+        formData.append("VendorCompanyType", $("#CompanyType").val());
+        formData.append("VendorCompanyEmail", $("#companyemailInput").val());
+        formData.append("VendorCompanyNumber", $("#worknumberInput").val());
+        formData.append("VendorBankName", $("#banknameInput").val());
+        formData.append("VendorBankBranch", $("#branchInput").val());
+        formData.append("VendorAccountHolderName", $("#accountnameInput").val());
+        formData.append("VendorBankAccountNo", $("#accountnumberInput").val());
+        formData.append("VendorBankIfsc", $("#ifscInput").val());
+        formData.append("VendorGstnumber", $("#GSTNumberInput").val());
+        formData.append("VendorCompanyLogo", $("#companylogoInput")[0].files[0]);
 
 
         $.ajax({
             url: '/Vendor/AddVandorDetail',
             type: 'Post',
-            data: from_Data,
+            data: formData,
             dataType: 'json',
             processData: false,
             contentType: false,
