@@ -80,16 +80,18 @@ namespace EMPManegment.Web.Controllers
 
         [FormPermissionAttribute("Vendor List-Add")]
         [HttpPost]
-        public async Task<IActionResult> AddVandorDetail()
+        public async Task<IActionResult> AddVandorDetail(AddVendorDetailsView addVandorDetails)
         {
             try
             {
-                var VendorObj = HttpContext.Request.Form["ADDVENDOR"];
-                var addVandorDetails = JsonConvert.DeserializeObject<AddVendorDetailsView>(VendorObj);
-                //var path = Environment.WebRootPath;
-                //    var filepath = "Content/Image/" + ProfilePhoto.FileName;
-                //    var fullpath = Path.Combine(path, filepath);
-                //    UploadFile(ProfilePhoto, fullpath);
+                var fileName = addVandorDetails.VendorCompanyLogo.FileName;
+                if (fileName != null)
+                {
+                    var path = Environment.WebRootPath;
+                    var filepath = "Content/Image/" + fileName;
+                    var fullpath = Path.Combine(path, filepath);
+                    UploadFile(addVandorDetails.VendorCompanyLogo, fullpath);
+                }
                 var addVandor = new VendorDetailsView()
                 {
                     VendorFirstName = addVandorDetails.VendorFirstName,
@@ -114,6 +116,7 @@ namespace EMPManegment.Web.Controllers
                     VendorBankIfsc = addVandorDetails.VendorBankIfsc,
                     VendorTypeId = addVandorDetails.VendorTypeId,
                     CreatedBy = _userSession.FirstName,
+                    VendorCompanyLogo = fileName
                 };
                 ApiResponseModel postuser = await APIServices.PostAsync(addVandor, "Vendor/CreateVendors");
                 if (postuser.code == 200)
