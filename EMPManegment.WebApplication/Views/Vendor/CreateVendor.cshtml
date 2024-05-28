@@ -215,7 +215,15 @@
                         <div class="col-lg-6">
                             <div class="mb-3">
                                 <label for="companylogoInput" class="form-label">Logo</label>
-                                <input type="file" class="form-control" autocomplete="off" value="@Model.VendorCompanyLogo" id="companylogoInput" name="companylogoInput">
+                                @if(Model.VendorCompanyLogo != null)
+                                {
+                                    <img src="~/Content/Image/@Model.VendorCompanyLogo" class="form-control" alt="Company Logo" id="companylogoInput" name="companylogoInput" style="height:200px;width:200px;">
+                                }
+                                else
+                                {
+                                    <input type="file" class="form-control" autocomplete="off" id="companylogoInput" name="companylogoInput">
+                                }
+                               
                             </div>
                         </div>
                         <!--end col-->
