@@ -12,7 +12,10 @@
             <th>Bill No</th>
             <th>Date</th>
             <th>Total Amount</th>
-            <th>Action</th>
+            @if (UserSession.FormPermisionData.Any(a => a.FormName == "Expenses" && (a.Edit == true || a.Delete == true)))
+            {
+                <th>Action</th>
+            }
         </tr>
     </thead>
     <tbody class="list form-check-all text-center"></tbody>
