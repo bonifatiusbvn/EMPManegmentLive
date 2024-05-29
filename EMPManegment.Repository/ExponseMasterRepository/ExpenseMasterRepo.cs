@@ -494,11 +494,13 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                 var UserList = from a in Context.TblExpenseMasters
                                join b in Context.TblUsers on a.UserId equals b.Id
                                where a.IsDeleted == false
-                               group new { a, b } by new { a.UserId, b.Image, b.UserName, FullName = b.FirstName + " " + b.LastName } into userGroup
+                               group new { a, b } by new { a.UserId, b.Image, b.UserName, FullName = b.FirstName + " " + b.LastName,b.FirstName,b.LastName } into userGroup
                                select new UserExpenseDetailsView
                                {
                                    UserId = userGroup.Key.UserId,
                                    FullName = userGroup.Key.FullName,
+                                   FirstName= userGroup.Key.FirstName,
+                                   LastName= userGroup.Key.LastName,
                                    Image = userGroup.Key.Image,
                                    UserName = userGroup.Key.UserName,
                                    Date = userGroup.Max(e => e.a.Date),
