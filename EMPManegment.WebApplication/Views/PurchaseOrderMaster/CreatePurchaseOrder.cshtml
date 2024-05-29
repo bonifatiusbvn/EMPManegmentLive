@@ -47,12 +47,15 @@
                         <div class="col-sm">
                             <h5 class="card-title mb-0">Order History</h5>
                         </div>
-                        <div class="col-sm-auto">
-                            <div class="d-flex gap-1 flex-wrap">
+                        @if (UserSession.FormPermisionData.Any(a => a.FormName == "Create Purchase Order" && (a.Add == true)))
+                        {
+                            <div class="col-sm-auto">
+                                <div class="d-flex gap-1 flex-wrap">
                                 <a class="btn btn-warning add-btn" id="create-btn" asp-action="CreatePurchaseOrderView" asp-controller="PurchaseOrderMaster"><i class="ri-add-line align-bottom me-1"></i>Purchase Order</a>
-                                <button class="btn btn-soft-danger" id="remove-actions" onClick="deleteMultiple()"><i class="ri-delete-bin-2-line"></i></button>
+                                    <button class="btn btn-soft-danger" id="remove-actions" onClick="deleteMultiple()"><i class="ri-delete-bin-2-line"></i></button>
+                                </div>
                             </div>
-                        </div>
+                        }
                     </div>
                 </div>
                 <div class="card-body border border-dashed border-end-0 border-start-0">

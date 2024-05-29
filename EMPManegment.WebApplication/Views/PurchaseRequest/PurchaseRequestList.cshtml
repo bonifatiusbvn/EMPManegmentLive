@@ -31,13 +31,16 @@
                         <div class="col-sm">
                             <h5 class="card-title mb-0">Purchase Request</h5>
                         </div>
-                        <div class="col-sm-auto">
-                            <div class="d-flex gap-1 flex-wrap">
+                        @if (UserSession.FormPermisionData.Any(a => a.FormName == "Create Purchase Request" && (a.Add == true)))
+                        {
+                            <div class="col-sm-auto">
+                                <div class="d-flex gap-1 flex-wrap">
                                 <a class="btn btn-warning add-btn btn-md" id="create-btn" asp-action="CreatePurchaseRequest" asp-controller="PurchaseRequest"><i class="ri-add-line align-bottom me-1"></i>Purchase Request</a>
-                                @*                                <button type="button" class="btn btn-info"><i class="ri-file-download-line align-bottom me-1"></i> Import</button>*@
-                                <button class="btn btn-soft-danger" id="remove-actions" onClick="deleteMultiple()"><i class="ri-delete-bin-2-line"></i></button>
+                                    @*                                <button type="button" class="btn btn-info"><i class="ri-file-download-line align-bottom me-1"></i> Import</button>*@
+                                    <button class="btn btn-soft-danger" id="remove-actions" onClick="deleteMultiple()"><i class="ri-delete-bin-2-line"></i></button>
+                                </div>
                             </div>
-                        </div>
+                        }
                     </div>
                 </div>
                 <div class="card-body">

@@ -309,33 +309,33 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
             try
             {
                 var invoicelist = from a in Context.TblInvoices
-                            join b in Context.TblVendorMasters on a.VandorId equals b.Vid
-                            join c in Context.TblProjectMasters on a.ProjectId equals c.ProjectId
-                            where a.IsDeleted != true
-                            orderby a.CreatedOn descending
-                            select new InvoiceViewModel
-                            {
-                                Id = a.Id,
-                                InvoiceNo = a.InvoiceNo,
-                                InvoiceType = a.InvoiceType,
-                                InvoiceDate = a.InvoiceDate,
-                                VendorName = b.VendorCompany,
-                                VandorId = a.VandorId,
-                                OrderId = a.OrderId,
-                                ProjectId = a.ProjectId,
-                                ProjectName = c.ShortName,
-                                DispatchThrough = a.DispatchThrough,
-                                Cgst = a.Cgst,
-                                Igst = a.Igst,
-                                Sgst = a.Sgst,
-                                BuyesOrderNo = a.BuyesOrderNo,
-                                BuyesOrderDate = a.BuyesOrderDate,
-                                TotalAmount = a.TotalAmount,
-                                CreatedOn = a.CreatedOn,
-                                CreatedBy = a.CreatedBy,
-                                UpdatedOn = a.UpdatedOn,
-                                UpdatedBy = a.UpdatedBy
-                            };
+                                  join b in Context.TblVendorMasters on a.VandorId equals b.Vid
+                                  join c in Context.TblProjectMasters on a.ProjectId equals c.ProjectId
+                                  where a.IsDeleted != true
+                                  orderby a.CreatedOn descending
+                                  select new InvoiceViewModel
+                                  {
+                                      Id = a.Id,
+                                      InvoiceNo = a.InvoiceNo,
+                                      InvoiceType = a.InvoiceType,
+                                      InvoiceDate = a.InvoiceDate,
+                                      VendorName = b.VendorCompany,
+                                      VandorId = a.VandorId,
+                                      OrderId = a.OrderId,
+                                      ProjectId = a.ProjectId,
+                                      ProjectName = c.ShortName,
+                                      DispatchThrough = a.DispatchThrough,
+                                      Cgst = a.Cgst,
+                                      Igst = a.Igst,
+                                      Sgst = a.Sgst,
+                                      BuyesOrderNo = a.BuyesOrderNo,
+                                      BuyesOrderDate = a.BuyesOrderDate,
+                                      TotalAmount = a.TotalAmount,
+                                      CreatedOn = a.CreatedOn,
+                                      CreatedBy = a.CreatedBy,
+                                      UpdatedOn = a.UpdatedOn,
+                                      UpdatedBy = a.UpdatedBy
+                                  };
 
                 if (!string.IsNullOrEmpty(dataTable.searchValue))
                 {
@@ -357,7 +357,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                 var filteredData = await invoicelist
                 .ToListAsync();
 
-                var totalRecord = filteredData.Count; 
+                var totalRecord = filteredData.Count;
 
 
                 var jsonData = new jsonData
@@ -921,6 +921,8 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                                     VendorName = b.VendorCompany,
                                     VandorId = a.VandorId,
                                     UserName = u.UserName,
+                                    FirstName = u.FirstName,
+                                    LastName = u.LastName,
                                     UserImage = u.Image,
                                     Status = a.Status,
                                     ShippingAddress = a.ShippingAddress,

@@ -346,7 +346,7 @@ namespace EMPManegment.Web.Controllers
             return File(fileContent, "application/pdf", "document.pdf");
         }
 
-        [FormPermissionAttribute("CreditDebitListView-View")]
+        [FormPermissionAttribute("Credit Debit-View")]
         [HttpGet]
         public async Task<IActionResult> CreditDebitListView()
         {
@@ -442,7 +442,7 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
-        [FormPermissionAttribute("GetAllTransactionByVendorId-View")]
+        [FormPermissionAttribute("All Transaction-View")]
         [HttpGet]
         public async Task<IActionResult> GetAllTransactionByVendorId(Guid Vid)
         {
@@ -462,7 +462,7 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
-        [FormPermissionAttribute("GetAllTransaction-View")]
+        [FormPermissionAttribute("All Transaction-View")]
         [HttpGet]
         public async Task<IActionResult> GetAllTransaction()
         {

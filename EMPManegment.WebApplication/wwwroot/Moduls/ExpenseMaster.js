@@ -603,7 +603,15 @@ function UserExpensesDetails() {
                 "data": "fullName",
                 "name": "FullName",
                 "render": function (data, type, full, meta) {
-                    var imageSrc = full.image ? '<img src="/' + full.image + '" class="direct-chat-img">' : '';
+                    var imageSrc;
+                    if (full.image && full.image.trim() !== '') {
+                        imageSrc = '<img src="/' + full.image + '" style="height: 40px; width: 40px; border-radius: 50%;" ' +
+                            'onmouseover="showIcons(event, this.parentElement)" onmouseout="hideIcons(event, this.parentElement)">';
+                    } else {
+                        var initials = (full.firstName ? full.firstName[0] : '') + (full.lastName ? full.lastName[0] : '');
+                        imageSrc = '<div class="flex-shrink-0 avatar-xs me-2">' +
+                            '<div class="avatar-title bg-success-subtle text-success rounded-circle fs-13" style="height: 40px; width: 40px; border-radius: 50%;">' + initials.toUpperCase() + '</div></div>';
+                    }
                     return '<div class="d-flex align-items-center">' +
                         '<div class="flex-shrink-0">' +
                         imageSrc +
