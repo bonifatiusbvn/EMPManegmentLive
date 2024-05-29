@@ -554,6 +554,11 @@ function GetProjectCountry() {
     });
 }
 
+$(document).ready(function () {
+    var ProId = $('#txtprojectid').val();
+    projectActivity(ProId);
+})
+
 function projectActivity(ProId) {
 
     $.ajax({
@@ -565,6 +570,7 @@ function projectActivity(ProId) {
         complete: function (Result) {
 
             $('#projectActivity').html(Result.responseText);
+            $('#projectActivityinoverview').html(Result.responseText);
             projectinvoiceActivity(ProId)
         },
         Error: function () {
