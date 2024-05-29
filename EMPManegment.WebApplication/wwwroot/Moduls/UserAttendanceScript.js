@@ -37,8 +37,10 @@ $(document).ready(function () {
     });
 });
 
-$('#selectSearchAttandanceOption').change(function () {
-    if ($("#selectSearchAttandanceOption").val() == "ByUsername") {
+$('.dropdown-item').click(function () {
+    var selectedValue = $(this).attr('data-value');
+
+    if (selectedValue === "ByUsername") {
         GetUsername();
         $("#usernamebox").show();
         $("#datesbox").hide();
@@ -46,14 +48,14 @@ $('#selectSearchAttandanceOption').change(function () {
         $("#enddatebox").hide();
         cleartextBox();
     }
-    if ($("#selectSearchAttandanceOption").val() == "ByDate") {
+    if (selectedValue === "ByDate") {
         $("#usernamebox").hide();
         $("#datesbox").show();
         $("#startdatebox").hide();
         $("#enddatebox").hide();
         cleartextBox();
     }
-    if ($("#selectSearchAttandanceOption").val() == "ByDate&ByUsername") {
+    if (selectedValue === "ByDate&ByUsername") {
         GetUsername();
         $("#usernamebox").show();
         $("#datesbox").show();
@@ -61,7 +63,7 @@ $('#selectSearchAttandanceOption').change(function () {
         $("#enddatebox").hide();
         cleartextBox();
     }
-    if ($("#selectSearchAttandanceOption").val() == "ByBetweenDates&ByUsername") {
+    if (selectedValue === "ByBetweenDates&ByUsername") {
         GetUsername();
         $("#usernamebox").show();
         $("#datesbox").hide();
@@ -69,7 +71,7 @@ $('#selectSearchAttandanceOption').change(function () {
         $("#enddatebox").show();
         cleartextBox();
     }
-})
+});
 $(document).ready(function () {
     $('.dropdown-item').on('click', function () {
         var selectedValue = $(this).data('value');

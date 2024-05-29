@@ -45,6 +45,8 @@ namespace EMPManegment.EntityModels.ViewModels.ProjectModels
         public DateTime ProjectDeadline { get; set; }
 
         public string? ProjectImage { get; set; }
+        public string? FirstName { get; set; }
+        public string? LastName { get; set; }
 
         public string? ProjectPath { get; set; }
 

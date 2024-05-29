@@ -62,14 +62,30 @@
                 </li>
 
             </ul>
-
+            @{
+                var profilePhoto = UserSession.ProfilePhoto;
+                var fullName = _userSession.FullName;
+                var firstNameInitial = !string.IsNullOrEmpty(_userSession.FirstName) ? _userSession.FirstName[0].ToString() : string.Empty;
+                var lastNameInitial = !string.IsNullOrEmpty(_userSession.LastName) ? _userSession.LastName[0].ToString() : string.Empty;
+                var initials = (firstNameInitial + lastNameInitial).ToUpper();
+                var defaultImagePath = "~/content/image/image-b2.jpg";
+            }
             <!-- Right navbar links -->
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item dropdown">
                     <div class="dropdown ms-sm-3 header-item topbar-user" style="height:60px;">
                         <button type="button" class="btn" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <span class="d-flex align-items-center ">
-                                <img src="~/@UserSession.ProfilePhoto" style="height:40px;width:40px;" alt="message user image" class="rounded-circle header-profile-user">
+                                @if (!string.IsNullOrEmpty(profilePhoto) && !profilePhoto.Equals(defaultImagePath, StringComparison.OrdinalIgnoreCase))
+                                {
+                                    <img src="@profilePhoto" style="height:40px;width:40px;" alt="message user image" class="img-circle img-bordered-sm">
+                                }
+                                else
+                                {
+                                    <div class="flex-shrink-0 avatar-xs me-2">
+                                        <div class="avatar-title bg-success-subtle text-success rounded-circle fs-13" style="height:40px;width:40px;">@initials</div>
+                                    </div>
+                                }
                                 <span class="text-start ms-xl-2">
                                     <span class="d-none d-xl-inline-block ms-1 fw-medium d-block">@_userSession.FullName</span>
                                     <span class="d-none d-xl-block ms-1 fs-12 d-block">@_userSession.UserName</span>

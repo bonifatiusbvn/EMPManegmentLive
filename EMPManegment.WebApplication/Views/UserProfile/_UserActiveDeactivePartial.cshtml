@@ -1,7 +1,11 @@
 ﻿@model IEnumerable<EMPManegment.EntityModels.View_Model.EmpDetailsView>
+@using EMPManegment.Web.Models;
 @using X.PagedList;
 @using X.PagedList.Mvc.Core;
+@inject IHttpContextAccessor Accessor
+@inject UserSession _userSession
 @inject EMPManegment.Web.Helper.Common CommonHelper
+
 
 <div class="card">
     <div class="card-header">
@@ -44,14 +48,26 @@
     <div class="card-body" id="allemplist">
         <div class="row row-cols-xl-5 row-cols-lg-3 row-cols-md-2 row-cols-1" style="margin-top:20px;">
             @if (Model.Count() > 0)
-            {
+            { 
                 @foreach (var item in Model)
                 {
+                    var imageUrl = !string.IsNullOrEmpty(item.Image) ? Url.Content($"~/{item.Image}") : null;
+                    var initials = (!string.IsNullOrEmpty(item.FirstName) && !string.IsNullOrEmpty(item.LastName)) ? $"{item.FirstName[0]}{item.LastName[0]}".ToUpper() : null;
+
                     <div class="col" style="margin-left:60px;">
                         <div class="card">
                             <img src="~/assets/images/nft/img-03.jpg" alt="" class="object-fit-cover card-img-top" height="120">
                             <div class="card-body text-center">
-                                <img src="~/@item.Image" alt="" class="avatar-md rounded-circle object-fit-cover mt-n5 img-thumbnail border-light mx-auto d-block" style="width:110px;height:80px;">
+                                @if (!string.IsNullOrEmpty(imageUrl))
+                                {
+                                    <img class="avatar-title bg-success-subtle text-success rounded-circle fs-13" src="@imageUrl" alt="user image" style="width:110px;height:90px;margin-left:58px;margin-top:-65px;">
+                                }
+                                else
+                                {
+                                    <div class="flex-shrink-0 avatar-xs me-2" style="width:110px;height:90px;margin-left:58px;margin-top:-65px;">
+                                        <div class="avatar-title bg-success-subtle text-success rounded-circle fs-13"><h5>@initials</h5></div>
+                                    </div>
+                                }
                                 @if (item.IsActive == true)
                                 {
                                     <a class="text-success" href="/UserProfile/DisplayUserDetails/?Id=@item.Id">

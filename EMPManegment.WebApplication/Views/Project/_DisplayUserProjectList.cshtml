@@ -3,6 +3,15 @@
 @inject IHttpContextAccessor Accessor
 @inject UserSession _userSession
 <link href="~/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+@{
+    var profilePhoto = UserSession.ProfilePhoto;
+    var fullName = _userSession.FullName;
+    var firstNameInitial = !string.IsNullOrEmpty(_userSession.FirstName) ? _userSession.FirstName[0].ToString() : string.Empty;
+    var lastNameInitial = !string.IsNullOrEmpty(_userSession.LastName) ? _userSession.LastName[0].ToString() : string.Empty;
+    var initials = (firstNameInitial + lastNameInitial).ToUpper();
+    var defaultImagePath = "~/content/image/image-b2.jpg";
+}
+
 <div class="tab-pane" role="tabpanel">
 
     <div class="card-body">
@@ -45,7 +54,16 @@
                                                 <div class="avatar-group">
                                                     <a href="javascript: void(0);" class="avatar-group-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="@Accessor.HttpContext.Session.GetString("FullName")">
                                                         <div class="avatar-xxs">
-                                                            <img src="~/@UserSession.ProfilePhoto" alt="" class="direct-chat-img">
+                                                            @if (!string.IsNullOrEmpty(profilePhoto) && !profilePhoto.Equals(defaultImagePath, StringComparison.OrdinalIgnoreCase))
+                                                            {
+                                                                <img src="~/@profilePhoto" style="height:40px;width:40px;" alt="message user image" class="img-circle img-bordered-sm">
+                                                            }
+                                                            else
+                                                            {
+                                                                <div class="flex-shrink-0 avatar-xs me-2">
+                                                                    <div class="avatar-title bg-success-subtle text-success rounded-circle fs-13" style="height:40px;width:40px;">@initials</div>
+                                                                </div>
+                                                            }
                                                         </div>
                                                     </a>
                                                 </div>
