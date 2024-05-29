@@ -7,33 +7,45 @@
 
 <div class="card-body">
     <div class="table-responsive table-card mb-1">
-        <table class="table table-bordered dt-responsive nowrap table-striped align-middle dataTable no-footer dtr-inline">
-            <thead class="text-muted table-light">
-                <tr class="text-uppercase">
-                    <th>Products</th>
-                    <th>Price</th>
-                    @if (UserSession.FormPermisionData.Any(a => a.FormName == "Product List" && (a.Edit == true || a.Delete == true)))
-                    {
-                        <th>Action</th>
-                    }
+        <table role="grid" class="gridjs-table" style="height: auto;">
+            <thead class="gridjs-thead">
+                <tr class="gridjs-tr">
+
+                    <th data-column-id="product" class="gridjs-th gridjs-th-sort text-muted" tabindex="0" style="width: 360px;">
+                        <div class="gridjs-th-content">Product</div>
+                        <button tabindex="-1" aria-label="Sort column ascending" title="Sort column ascending" class="gridjs-sort gridjs-sort-desc"></button>
+                    </th>
+
+                    <th data-column-id="price" class="gridjs-th gridjs-th-sort text-muted" tabindex="0" style="width: 101px;">
+                        <div class="gridjs-th-content">Price</div>
+                        <button tabindex="-1" aria-label="Sort column ascending" title="Sort column ascending" class="gridjs-sort gridjs-sort-neutral"></button>
+                    </th>
+
+                    <th data-column-id="action" class="gridjs-th gridjs-th-sort text-muted" tabindex="0" style="width: 80px;">
+                        <div class="gridjs-th-content">Action</div>
+                        <button tabindex="-1" aria-label="Sort column ascending" title="Sort column ascending" class="gridjs-sort gridjs-sort-neutral"></button>
+                    </th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody class="gridjs-tbody">
                 @foreach (var item in Model)
                 {
-                    <tr>
-                        <td>
-                            <div class="d-flex">
-                                <div class="flex-shrink-0 avatar-md bg-light rounded p-1">
-                                    <img src="~/@item.ProductImage" alt="" class="img-fluid d-block">
+                    <tr class="gridjs-tr">
+                        <td data-column-id="product" class="gridjs-td">
+                            <span>
+                                <div class="d-flex align-items-center">
+                                    <div class="flex-shrink-0 me-3">
+                                        <div class="avatar-sm bg-light rounded p-1"><img src="~/@item.ProductImage" alt="" class="img-fluid d-block"></div>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <h5 class="fs-14 mb-1"><a href="apps-ecommerce-product-details.html" class="text-body">Half Sleeve Round Neck T-Shirts</a></h5>
+                                        <p class="text-muted mb-0">Category : <span class="fw-medium">@item.ProductTypeName</span></p>
+                                        <p class="text-muted mb-0">Details : <span class="fw-medium">@item.ProductShortDescription</span></p>
+                                    </div>
                                 </div>
-                                <div class="flex-grow-1 ms-3">
-                                    <h5 class="fs-15"><a href="/ProductMaster/GetProductDetailsById/?ProductId=@item.Id" class="fw-medium link-primary">@item.ProductName</a></h5>
-                                    <p class="text-muted mb-0">Description: <span class="fw-medium"> @item.ProductShortDescription </span></p>
-                                </div>
-                            </div>
+                            </span>
                         </td>
-                        <td>@item.PerUnitPrice</td>
+                        <td data-column-id="price" class="gridjs-td"><span>@item.PerUnitPrice</span></td>
                         @if (UserSession.FormPermisionData.Any(a => a.FormName == "Product List" && (a.Edit == true || a.Delete == true)))
                         {
                             <td>
@@ -51,6 +63,7 @@
                                 }
                             </td>
                         }
+
                     </tr>
                 }
             </tbody>
@@ -76,8 +89,8 @@
         searchfor = @Context.Request.Query["searchfor"],
         searchby = @Context.Request.Query["searchby"]
     }),
-    new X.PagedList.Web.Common.PagedListRenderOptions
-{
-    LiElementClasses = new string[] { "page-item" },
-    PageClasses = new string[] { "page-link" }
-})
+        new X.PagedList.Web.Common.PagedListRenderOptions
+    {
+        LiElementClasses = new string[] { "page-item" },
+        PageClasses = new string[] { "page-link" }
+    })
