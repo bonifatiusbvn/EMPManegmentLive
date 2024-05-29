@@ -37,10 +37,28 @@
                 <tbody>
                     @foreach (var item in Model)
                     {
+                        var imageUrl = !string.IsNullOrEmpty(item.Image) ? Url.Content($"~/{item.Image}") : null;
+                        var initials = (!string.IsNullOrEmpty(item.FirstName) && !string.IsNullOrEmpty(item.LastName)) ? $"{item.FirstName[0]}{item.LastName[0]}".ToUpper() : null;
                         <tr>
                             <td>
-                                <img src="~/@item.Image" alt="Product 1" class="img-circle img-size-32 mr-2">
-                                @item.Fullname
+                                <div class="d-flex gap-2 align-items-center">
+                                    <div class="flex-shrink-0">
+                                        @if (!string.IsNullOrEmpty(imageUrl))
+                                        {
+                                            <img class="direct-chat-img" src="@imageUrl" alt="user image">
+                                        }
+                                        else
+                                        {
+                                            <div class="flex-shrink-0 avatar-xs me-2">
+                                                <div class="avatar-title bg-success-subtle text-success rounded-circle fs-13" style="height:40px;width:40px;">@initials</div>
+                                            </div>
+                                        }
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        @item.Fullname
+                                    </div>
+                                </div>
+
                             </td>
                             <td>
                                 <a href="#" class="text-muted">
@@ -83,8 +101,8 @@
     {
         page = page,
     }),
-                        new X.PagedList.Web.Common.PagedListRenderOptions
-                    {
-                        LiElementClasses = new string[] { "page-item" },
-                        PageClasses = new string[] { "page-link" }
-                    })
+                                                            new X.PagedList.Web.Common.PagedListRenderOptions
+                                                        {
+                                                            LiElementClasses = new string[] { "page-item" },
+                                                            PageClasses = new string[] { "page-link" }
+                                                        })
