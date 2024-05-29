@@ -50,7 +50,7 @@ $(document).ready(function () {
                 "orderable": false,
                 "searchable": false,
                 "render": function (data, type, full) {
-                    return '<li class="list-inline-item"><a href="EditVendorDetails?VId=' + full.vid + '"><i class="fa-regular fa-pen-to-square"></i></a></li>';
+                    return '<li class="list-inline-item"><a class="text-primary" href="EditVendorDetails?VId=' + full.vid + '"><i class="fa-regular fa-pen-to-square"></i></a></li>';
                 }
             });
         }

@@ -854,6 +854,8 @@ function EdituserDetails() {
     document.getElementById("birthdateInput").removeAttribute("readonly");
     document.getElementById("addressInput").removeAttribute("readonly");
     document.getElementById("genderInput").removeAttribute("readonly");
+    $("#btnEdit").hide();
+    $("#btnUpdateDetails").show();
 
     //var inputs = document.querySelectorAll('input[readonly], textarea[readonly]');
     //for (var i = 0; i < inputs.length; i++) {

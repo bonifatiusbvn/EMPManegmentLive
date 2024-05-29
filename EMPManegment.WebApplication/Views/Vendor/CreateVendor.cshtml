@@ -234,14 +234,14 @@
             <div class="text-end mb-3">
                 @if (Model.Vid == null || Model.Vid == Guid.Empty)
                 {
-                    <button type="button" class="btn btn-primary w-sm" onclick="AddVendorDetails()" id="SubmitVendorDetails">Submit</button>
+                    <button type="button" class="btn btn-success btn-lg" onclick="AddVendorDetails()" id="SubmitVendorDetails" style="width: 230px;height: 50px;">Submit</button>
                 }
                 else
                 {
                     @if (UserSession.FormPermisionData.Any(a => a.FormName == "Vendor List" && (a.Edit == true)))
                     {
-                        <button type="button" class="btn btn-primary w-sm" onclick="UpdateVendorDetails()('@Model.Vid')" id="updateVendorbtn">Update</button>
-                        <button type="button" class="btn btn-primary w-sm" onclick="EditVendor()" id="editVendorbtn" style="display: none;">Edit</button>
+                        <button type="button" class="btn btn-primary btn-lg" onclick="UpdateVendorDetails()('@Model.Vid')" id="updateVendorbtn" style="width: 230px;height: 50px;">Update</button>
+                        <button type="button" class="btn btn-primary btn-lg" onclick="EditVendor()" id="editVendorbtn" style="display: none;width: 230px;height: 50px;">Edit</button>
                     }
                 }
 
