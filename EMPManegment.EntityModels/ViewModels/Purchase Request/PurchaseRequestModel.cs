@@ -57,7 +57,7 @@ namespace EMPManegment.EntityModels.ViewModels.Purchase_Request
     }
     public class PurchaseRequestMasterView
     {
-        public string PrNo { get; set; } = null!;
+        public string? PrNo { get; set; }
         public decimal? SubTotal { get; set; }
         public List<PurchaseRequestModel>? PRList { get; set; }
     }   

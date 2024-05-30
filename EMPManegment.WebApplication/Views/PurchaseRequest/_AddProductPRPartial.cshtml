@@ -5,34 +5,39 @@
 
 @foreach (var item in Model)
 {
-    <div class="card product">
-        <div class="card-body">
+    <div class="products card">
+        <div class="card-body" data-product-id="@item.Id">
             <div class="row gy-3">
                 <div class="col-sm-auto">
                     <div class="avatar-lg bg-light rounded p-1">
-                        <img src="~/@item.ProductImage" alt="" class="img-fluid d-block">
+                        <img src="~/@item.ProductImage" alt="" class="img-fluid d-block" style="width: 100px;height: 100px;">
                     </div>
                 </div>
                 <div class="col-sm">
-                    <h5 class="fs-14 text-truncate"><p class="text-body" id="txtProductName">@item.ProductName</p></h5>
+                    <h5 class="fs-14 text-truncate"><a href="ecommerce-product-detail.html" class="text-body">@item.ProductName</a></h5>
                     <ul class="list-inline text-muted">
-                        <li class="list-inline-item">Color : <span class="fw-medium">Pink</span></li>
-                        <li class="list-inline-item">Size : <span class="fw-medium">M</span></li>
+                        <li class="list-inline-item">Category : <span class="fw-medium">@item.ProductTypeName</span></li>
                     </ul>
 
                     <input type="hidden" class="product-quantity form-control" id="txtproducttype" value="@item.ProductType" style="width:80px;">
                     <input type="hidden" class="form-control" id="txtproductId" value="@item.Id" style="width:80px;">
+                    <input type="hidden" class="form-control" id="txtProductName" value="@item.ProductName" style="width:80px;">
                     <input type="hidden" value="@UserSession.ProjectId" id="txtprojectId" />
                     <input type="hidden" value="@_userSession.UserId" id="txtuserId" />
 
                     <div class="input-step">
                         <input type="number" class="product-quantity" value="1" min="1" oninput="preventEmptyValue(this)" id="txtproductquantity">
                     </div>
+
                 </div>
                 <div class="col-sm-auto">
                     <div class="text-lg-end">
-                        <p class="text-muted mb-1">Item Price:</p>
+                        <p class="text-muted mb-1">Price :</p>
                         <h5 class="fs-14" id="dspperunitprice">₹<span class="product-price">@item.PerUnitPrice</span></h5>
+                    </div>
+                    <div class="text-lg-end">
+                        <p class="text-muted mb-1">GST :</p>
+                        <h5 class="fs-14" id="txtProductGstAmount">₹@item.GstAmount</h5>
                     </div>
                 </div>
             </div>
@@ -43,25 +48,20 @@
                 <div class="col-sm">
                     <div class="d-flex flex-wrap my-n1">
                         <div>
-                            <a class="d-block text-body p-1 px-2" onclick="removeProduct(this)"><i class="ri-delete-bin-fill text-muted align-bottom me-1"></i> Remove</a>
+                            <a class="btn text-danger remove-btn" onclick="removeProduct(this)"><i class="fas fa-trash"></i></a>
                         </div>
                     </div>
                 </div>
                 <div class="col-sm-auto">
                     <div class="d-flex align-items-center gap-2 text-muted">
                         <div>Total :</div>
-                        <h5 class="fs-14 mb-0" id="dsptotalAmount">₹<span class="product-line-price"></span></h5>
+                        <h5 class="fs-14 mb-0" id="dsptotalAmount"></h5>
                     </div>
                 </div>
             </div>
         </div>
         <!-- end card footer -->
     </div>
-
 }
 
 
-
-@section Scripts {
-    <script src="~/moduls/purchaserequestscript.js"></script>
-}
