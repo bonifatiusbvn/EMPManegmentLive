@@ -72,7 +72,7 @@ function ShowInvoiceDetailsByOrderId(OrderId) {
                     confirmButtonText: 'OK',
                 });
             } else {
-                window.location = '/Invoice/DisplayInvoiceDetails?OrderId=' + OrderId;
+                window.location = '/Invoice/InvoiceDetails?OrderId=' + OrderId;
             }
         },
         error: function (xhr, status, error) {
@@ -403,7 +403,7 @@ function GetAllVendorData() {
                 "data": "vendorCompany", "name": "VendorCompany",
                 "render": function (data, type, full) {
 
-                    return '<h5 class="fs-15"><a href="/Invoice/VendorInvoiceListView/?Vid=' + full.vid + '" class="fw-medium link-primary">' + full.vendorCompany; '</a></h5>';
+                    return '<h5 class="fs-15"><a href="/Invoice/PayVendors/?Vid=' + full.vid + '" class="fw-medium link-primary">' + full.vendorCompany; '</a></h5>';
                 }
             },
             {
@@ -611,7 +611,7 @@ $(document).ready(function () {
                 "data": "invoiceNo",
                 "name": "InvoiceNo",
                 "render": function (data, type, full) {
-                    return '<h5 class="fs-15"><a href="/Invoice/DisplayInvoiceDetails?InvoiceId=' + full.id + '" class="fw-medium link-primary">' + full.invoiceNo + '</a></h5>';
+                    return '<h5 class="fs-15"><a href="/Invoice/OrderInvoiceDetails?InvoiceId=' + full.id + '" class="fw-medium link-primary">' + full.invoiceNo + '</a></h5>';
                 }
             },
             { "data": "vendorName", "name": "VendorName", "className": "text-center" },
