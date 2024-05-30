@@ -561,7 +561,7 @@ function GetPayUserExpenseDebitList(userId) {
         "footerCallback": function (row, data, start, end, display) {
             var api = this.api(), data;
 
-            // Remove the formatting to get integer data for summation
+
             var intVal = function (i) {
                 return typeof i === 'string' ?
                     i.replace(/[\$,]/g, '') * 1 :
@@ -569,7 +569,7 @@ function GetPayUserExpenseDebitList(userId) {
                         i : 0;
             };
 
-            // Total over all pages
+
             total = api
                 .column(4)
                 .data()
@@ -577,7 +577,6 @@ function GetPayUserExpenseDebitList(userId) {
                     return intVal(a) + intVal(b);
                 }, 0);
 
-            // Update footer
             $(api.column(4).footer()).html(
                 '<span style="color: black;">Total: ' + '₹' + total + '</span>'
             );
@@ -728,7 +727,8 @@ function DisplayAllUserExpenseList() {
                         return '';
                     }
                 },
-                "orderable": false
+                "orderable": false,
+                width: "05%"
             },
             { "data": "id", "name": "Id", "visible": false },
             { "data": "expenseTypeName", "name": "ExpenseTypeName" },
@@ -808,7 +808,8 @@ function DisplayUnApprovedExpenseList() {
                         return '';
                     }
                 },
-                "orderable": false
+                "orderable": false,
+                width: "05%"
             },
             { "data": "id", "name": "Id", "visible": false },
             { "data": "expenseTypeName", "name": "ExpenseTypeName" },
@@ -886,7 +887,8 @@ function DisplayAllApprovedExpenseList() {
                         return '';
                     }
                 },
-                "orderable": false
+                "orderable": false,
+                width: "05%"
             },
             { "data": "id", "name": "Id", "visible": false },
             { "data": "expenseTypeName", "name": "ExpenseTypeName" },
@@ -1439,7 +1441,8 @@ $(document).ready(function () {
                         return '';
                     }
                 },
-                "orderable": false
+                "orderable": false,
+                width: "05%"
             },
             { "data": "description", "name": "Description" },
             { "data": "billNumber", "name": "BillNumber" },
@@ -1551,7 +1554,7 @@ function GetUserAllExpenseDetails() {
         processing: false,
         serverSide: true,
         filter: true,
-        "bDestroy": true,
+        destroy: true,
         order: [[3, 'asc']],
         pageLength: 30,
         ajax: {
@@ -1561,8 +1564,8 @@ function GetUserAllExpenseDetails() {
         },
         columns: [
             {
-                "data": null,
-                "render": function (data, type, full, meta) {
+                data: null,
+                render: function (data, type, full, meta) {
                     var account = full.account.toLowerCase();
                     if (account === "credit") {
                         return '<div class="avatar-xs"><div class="avatar-title bg-success-subtle text-success rounded-circle fs-16"><i class="ri-arrow-left-down-fill"></i></div></div>';
@@ -1572,25 +1575,27 @@ function GetUserAllExpenseDetails() {
                         return '';
                     }
                 },
-                "orderable": false
+                orderable: false,
+                width: "05%"
             },
-            { "data": "description", "name": "Description" },
-            { "data": "billNumber", "name": "BillNumber" },
+            { data: "description", name: "Description", width: "20%" },
+            { data: "billNumber", name: "BillNumber", width: "20%" },
             {
-                "data": "date",
-                "name": "Date",
-                "render": function (data, type, full, meta) {
+                data: "date",
+                name: "Date",
+                render: function (data, type, full, meta) {
                     return getCommonDateformat(data);
-                }
+                },
+                width: "20%"
             },
             {
-                "data": "totalAmount",
-                "name": "TotalAmount",
-                "render": function (data, type, full, meta) {
-
+                data: "totalAmount",
+                name: "TotalAmount",
+                render: function (data, type, full, meta) {
                     var color = full.account.toLowerCase() === "credit" ? "green" : "red";
                     return '<span style="color: ' + color + ';">' + '₹' + data + '</span>';
-                }
+                },
+                width: "20%"
             },
         ],
         scrollY: 400,
@@ -1604,9 +1609,9 @@ function GetUserAllExpenseDetails() {
         columnDefs: [{
             targets: [0],
             orderable: false,
-            width: "auto"
+            width: "20%"
         }],
-        "footerCallback": function (row, data, start, end, display) {
+        footerCallback: function (row, data, start, end, display) {
             var api = this.api(), data;
 
             var intVal = function (i) {
@@ -1629,6 +1634,7 @@ function GetUserAllExpenseDetails() {
         }
     });
 }
+
 function GetMyApproveExpenseList() {
     $.ajax({
         url: '/ExpenseMaster/DisplayUserExpenseList',
@@ -1671,7 +1677,9 @@ function GetAllUserApproveExpenseList() {
                         return '';
                     }
                 },
-                "orderable": false
+
+                "orderable": false,
+                width: "05%"
             },
             { "data": "description", "name": "Description" },
             { "data": "billNumber", "name": "BillNumber" },
@@ -1771,7 +1779,8 @@ function GetAllUserCreditExpenseList() {
                         return '';
                     }
                 },
-                "orderable": false
+                "orderable": false,
+                width: "05%"
             },
             { "data": "description", "name": "Description" },
             { "data": "billNumber", "name": "BillNumber" },
@@ -1873,7 +1882,8 @@ function GetUserLastMonthExpenseList() {
                         return '';
                     }
                 },
-                "orderable": false
+                "orderable": false,
+                width: "05%"
             },
             { "data": "description", "name": "Description" },
             { "data": "billNumber", "name": "BillNumber" },
@@ -1974,7 +1984,8 @@ function GetUserCurrentMonthExpenseList() {
                         return '';
                     }
                 },
-                "orderable": false
+                "orderable": false,
+                width: "05%"
             },
             { "data": "description", "name": "Description" },
             { "data": "billNumber", "name": "BillNumber" },
@@ -2090,7 +2101,8 @@ function GetUserBetweenMonthsExpenseList(StartDate, EndDate, UserId) {
                         return '';
                     }
                 },
-                "orderable": false
+                "orderable": false,
+                width: "05%"
             },
             { "data": "description", "name": "Description" },
             { "data": "billNumber", "name": "BillNumber" },
