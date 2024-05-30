@@ -164,7 +164,7 @@
                 <div class="card-body">
                     <div class="table-responsive table-card">
                         <table class="table align-middle table-nowrap" id="customerTable">
-                            <thead class="table-light text-muted">
+                            <thead class="table-info text-muted">
                                 <tr>
                                     <th></th>
                                     <th>VendorName</th>
@@ -295,6 +295,9 @@
     <!--end col-->
 </div>
 <!--end card-->
+<script type="text/javascript">
+    var userPermissions = '@Html.Raw(Json.Serialize(UserSession.FormPermisionData))';
+</script>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/moduls/invoicemasterscript.js" asp-append-version="true"></script>
 <script src="~/assets/libs/swiper/swiper-bundle.min.js"></script>

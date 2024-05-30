@@ -44,7 +44,7 @@ namespace EMPManagment.Web.Helper
 
                 using var client = new HttpClient(httpClientHandler)
                 {
-                    Timeout = TimeSpan.FromMinutes(30)
+                    Timeout = TimeSpan.FromMinutes(80)
                 };
 
                 if (!string.IsNullOrWhiteSpace(Token))
@@ -82,7 +82,7 @@ namespace EMPManagment.Web.Helper
 
                 using var client = new HttpClient(httpClientHandler)
                 {
-                    Timeout = TimeSpan.FromMinutes(30)
+                    Timeout = TimeSpan.FromMinutes(80)
                 };
 
                 if (!string.IsNullOrWhiteSpace(Token))
@@ -124,7 +124,7 @@ namespace EMPManagment.Web.Helper
 
                 using var client = new HttpClient(httpClientHandler)
                 {
-                    Timeout = TimeSpan.FromMinutes(30)
+                    Timeout = TimeSpan.FromMinutes(80)
                 };
 
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);

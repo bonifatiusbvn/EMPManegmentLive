@@ -72,7 +72,7 @@ namespace EMPManegment.Web.Controllers
         }
 
         [FormPermissionAttribute("InvoiceDetails-View")]
-        public async Task<IActionResult> InvoiceDetails(string OrderId)
+        public async Task<IActionResult> OrderInvoiceDetails(string OrderId)
         {
             try
             {
@@ -99,7 +99,7 @@ namespace EMPManegment.Web.Controllers
         }
 
         [FormPermissionAttribute("DisplayInvoiceDetails-View")]
-        public async Task<IActionResult> DisplayInvoiceDetails(Guid InvoiceId)
+        public async Task<IActionResult> InvoiceDetails(Guid InvoiceId)
         {
             try
             {
@@ -211,7 +211,7 @@ namespace EMPManegment.Web.Controllers
         }
 
         [FormPermissionAttribute("InvoiceListView-View")]
-        public async Task<IActionResult> InvoiceListView()
+        public async Task<IActionResult> Invoices()
         {
             return View();
         }
@@ -348,7 +348,7 @@ namespace EMPManegment.Web.Controllers
 
         [FormPermissionAttribute("Credit Debit-View")]
         [HttpGet]
-        public async Task<IActionResult> CreditDebitListView()
+        public async Task<IActionResult> VendorTransactions()
         {
             return View();
 
@@ -404,7 +404,7 @@ namespace EMPManegment.Web.Controllers
 
         [FormPermissionAttribute("VendorInvoiceListView-View")]
         [HttpGet]
-        public async Task<IActionResult> VendorInvoiceListView(Guid Vid)
+        public async Task<IActionResult> PayVendors(Guid Vid)
         {
             try
             {
@@ -444,7 +444,7 @@ namespace EMPManegment.Web.Controllers
 
         [FormPermissionAttribute("All Transaction-View")]
         [HttpGet]
-        public async Task<IActionResult> GetAllTransactionByVendorId(Guid Vid)
+        public async Task<IActionResult> VendorAllTransaction(Guid Vid)
         {
             try
             {
@@ -464,7 +464,7 @@ namespace EMPManegment.Web.Controllers
 
         [FormPermissionAttribute("All Transaction-View")]
         [HttpGet]
-        public async Task<IActionResult> GetAllTransaction()
+        public async Task<IActionResult> AllTransaction()
         {
             return View();
         }

@@ -231,7 +231,7 @@ namespace EMPManegment.Web.Controllers
         }
 
         [FormPermissionAttribute("GetProjectDetails-View")]
-        public async Task<IActionResult> GetProjectDetails(Guid Id)
+        public async Task<IActionResult> ProjectDetails(Guid Id)
         {
             try
             {

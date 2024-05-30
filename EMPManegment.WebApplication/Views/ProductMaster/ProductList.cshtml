@@ -83,7 +83,7 @@
                                 {
                                     <div class="col-sm-auto">
                                         <div class="d-flex gap-1 flex-wrap">
-                                            <a asp-action="CreateProduct" asp-controller="ProductMaster" class="btn btn-warning">
+                                            <a asp-action="CreateProduct" asp-controller="ProductMaster" class="btn btn-info">
                                                 <i class="ri-add-line align-bottom me-1 "></i>Product
                                             </a>
                                         </div>
@@ -93,10 +93,10 @@
                         </div>
                         <div class="card-body border border-dashed border-end-0 border-start-0">
 
-                          
-                                <div class="card-header border-0 rounded">
-                                    <div class="row g-2">
-                                        <div class="col-xl-3">
+
+                            <div class="card-header border-0 rounded">
+                                <div class="row g-2">
+                                    <div class="col-xl-3">
                                         <div class="deleteicon search-box">
                                             <span class="deleteicon">
                                                 <input type="text" class="form-control" autocomplete="off" id="txtsearch" placeholder="Search for Products..." style="width:368px;"><i class="ri-search-line search-icon"></i>
@@ -105,36 +105,35 @@
                                             </span>
 
                                             <input type="hidden" class="form-control" id="txtProductListId">
-                                            </div>
                                         </div>
+                                    </div>
                                     <div class="col-lg-auto">
                                         <div class="hstack gap-2">
                                             <button class="btn btn-success" type="button" onclick="SearchProductName()" id="searchproductname" value="Validate" style="margin-right:-130px;">Search</button>
                                         </div>
                                     </div>
-                                        <!--end col-->
-                                        <div class="col-xxl-3 ms-auto">
-                                            <div>
+                                    <!--end col-->
+                                    <div class="col-xxl-3 ms-auto">
+                                        <div>
                                             <select class="form-control form-select" id="txtProductList" onchange="selectProductId()">
                                                 <option selected>All Products</option>
                                             </select>
-                                            </div>
                                         </div>
+                                    </div>
                                     <div class="col-lg-auto">
                                         <div class="hstack gap-2">
                                             <button type="button" class="btn btn-info"><i class="ri-equalizer-fill me-1 align-bottom"></i>Type Filters</button>
                                         </div>
                                     </div>
-                                        <!--end col--> 
-                                       
-                                        <!--end col-->
-                                    </div>
-                                    <!--end row-->
+                                    <!--end col-->
+                                    <!--end col-->
                                 </div>
+                                <!--end row-->
+                            </div>
 
 
 
-                           
+
                         </div>
 
                         <!-- end card header -->
@@ -213,13 +212,13 @@
                                 </div>
                                 <!--end col-->
                                 <div class="col-lg-6">
-                                        <label class="form-label">GST%</label>
-                                        <input type="text" class="form-control form-control" placeholder="Gst %" id="txtGstPerUnit" name="txtGstPerUnit">
+                                    <label class="form-label">GST%</label>
+                                    <input type="text" class="form-control form-control" placeholder="Gst %" id="txtGstPerUnit" name="txtGstPerUnit">
                                 </div>
                                 <!--end col-->
                                 <div class="col-lg-6">
-                                        <label class="form-label">GST Amount</label>
-                                        <input type="text" class="form-control form-control" placeholder="Gst Amount" id="txtGstAmount" name="txtGstAmount" disabled>
+                                    <label class="form-label">GST Amount</label>
+                                    <input type="text" class="form-control form-control" placeholder="Gst Amount" id="txtGstAmount" name="txtGstAmount" disabled>
                                 </div>
                                 <!--end col-->
                                 <div class="col-lg-6">

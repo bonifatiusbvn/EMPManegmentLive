@@ -37,7 +37,7 @@ namespace EMPManegment.Web.Controllers
         }
 
         [FormPermissionAttribute("All Expenses List-View")]
-        public async Task<IActionResult> ExpenseList()
+        public async Task<IActionResult> Allexpense()
         {
             return View();
         }
@@ -90,13 +90,13 @@ namespace EMPManegment.Web.Controllers
         }
 
         [FormPermissionAttribute("Expenses-View")]
-        public async Task<IActionResult> UserExpenseList()
+        public async Task<IActionResult> MyExpense()
         {
             return View();
         }
 
         [FormPermissionAttribute("All User Expenses-View")]
-        public async Task<IActionResult> UserExpenseListById()
+        public async Task<IActionResult> UserListforExpense()
         {
             return View();
         }
@@ -287,7 +287,7 @@ namespace EMPManegment.Web.Controllers
 
         [FormPermissionAttribute("GetPayExpense-Add")]
         [HttpPost]
-        public async Task<IActionResult> GetPayExpense(ExpenseDetailsView Addexpense)
+        public async Task<IActionResult> PayExpense(ExpenseDetailsView Addexpense)
         {
             try
             {
@@ -586,12 +586,12 @@ namespace EMPManegment.Web.Controllers
                 ApiResponseModel postuser = await APIServices.PostAsync(ExpenseDetails, "ExpenseMaster/AddExpenseType");
                 if (postuser.code == 200)
                 {
-                    return new JsonResult(new { postuser.message,postuser.code });
+                    return new JsonResult(new { postuser.message, postuser.code });
                 }
                 else
                 {
 
-                    return new JsonResult(new { postuser.code,postuser.message });
+                    return new JsonResult(new { postuser.code, postuser.message });
                 }
             }
             catch (Exception ex)

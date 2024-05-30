@@ -28,13 +28,13 @@
         <div class="card">
             <div class="card-header">
                 <div class="d-flex align-items-center">
-                    <h5 class="card-title mb-0 flex-grow-1">All User List</h5>
+                    <h4 class="card-title mb-0 flex-grow-1 text-info">User List</h4>
                     <div class="flex-shrink-0">
                         <form class="position-relative">
                             @if (UserSession.FormPermisionData.Any(a => a.FormName == "Create User" && (a.Add == true)))
                             {
                                 <div class="d-flex flex-wrap gap-2">
-                                    <a href="/UserProfile/UserSingUp" class="btn btn-block btn-warning btn-md"><i class="ri-add-line align-bottom me-1"></i>User</a>
+                                    <a href="/UserProfile/UserSingUp" class="btn btn-block btn-info btn-md"><i class="ri-add-circle-line align-bottom me-1"></i>User</a>
                                 </div>
                             }
                         </form>
@@ -42,10 +42,10 @@
                 </div>
             </div>
             <div class="card-body">
-                <div id="example_wrapper" class="dataTables_wrapper dt-bootstrap5 no-footer">
+                <div id="example_wrapper" class="dataTables_wrapper dt-bootstrap5">
                     <div class="col-sm-12">
-                        <table id="UserTableData" class="table table-bordered dt-responsive table-striped align-middle dataTable no-footer dtr-inline" aria-describedby="example_info">
-                            <thead class="table-light text-muted text-center">
+                        <table id="UserTableData" class="table table-bordered dt-responsive table-striped align-middle dataTable  dtr-inline" aria-describedby="example_info">
+                            <thead class="text-muted text-center table-info">
                                 <tr>
                                     <th>UserID</th>
                                     <th>Department</th>
@@ -61,6 +61,7 @@
                             </thead>
                             <tbody>
                             </tbody>
+
                         </table>
                         <div class="noresult" style="display: none">
                             <div class="text-center">
