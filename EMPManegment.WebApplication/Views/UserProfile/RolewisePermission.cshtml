@@ -67,7 +67,7 @@
                                     @if (UserSession.FormPermisionData.Any(a => a.FormName == "Form Permission" && (a.Add == true)))
                                     {
 
-                                        <button type="button" class="btn btn-block btn-warning btn-md" data-bs-toggle="modal" data-bs-target="#createRoleModal" onclick="clearTextRoleName()"><i class="ri-add-line align-bottom me-1"></i>Role</button>
+                                        <button type="button" class="btn btn-block btn-info btn-md" data-bs-toggle="modal" data-bs-target="#createRoleModal" onclick="clearTextRoleName()"><i class="ri-add-line align-bottom me-1"></i>Role</button>
                                     }
                                 </form>
 
@@ -76,7 +76,7 @@
                     </div>
                     <div class="table-responsive">
                         <table class="table table-bordered dt-responsive table-striped align-middle dataTable no-footer dtr-inline">
-                            <thead class="table-light text-muted">
+                            <thead class="table-light text-muted table-info">
                                 <tr>
                                     <th>Form Name</th>
                                     <th>IsAddAllow</th>
