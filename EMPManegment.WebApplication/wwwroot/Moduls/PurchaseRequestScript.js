@@ -3,6 +3,8 @@
     updateTotals();
     GetPurchaseRequestList();
     showHidebtn();
+    updateCartTotal();
+    CountCartTotalItems();
 });
 
 function GetAllItemDetailsList(page) {
@@ -66,50 +68,30 @@ function SerchItemDetailsById(Id) {
 var count = 0;
 function AddNewRow(Result) {
     var newProductRow = $(Result);
-    var productId = newProductRow.data('product-id');
-    var newProductId = newProductRow.attr('data-product-id');
+    var newProductId = newProductRow.find('.card-body').data('product-id');
     var isDuplicate = false;
 
-    $('#displayPurchaseRequest .products').each(function () {
+    $('#displayPurchaseRequest .products .card-body').each(function () {
         var existingProductRow = $(this);
-        var existingProductId = existingProductRow.attr('data-product-id');
+        var existingProductId = existingProductRow.data('product-id');
         if (existingProductId === newProductId) {
             isDuplicate = true;
-            return false;
+            return false; 
         }
     });
 
     if (!isDuplicate) {
         count++;
         $("#displayPurchaseRequest").append(Result);
-        updateRowNumbers();
+        updateTotals();
+        updateCartTotal();
+        showHidebtn();
+        CountCartTotalItems();
     } else {
-        Swal.fire({
-            title: "Product already added!",
-            text: "The selected product is already added.",
-            icon: "warning",
-            confirmButtonColor: "#3085d6",
-            confirmButtonText: "OK"
-        });
-    }
-    updateTotals();
-    showHidebtn();
-}
-
-function updateRowNumbers() {
-
-    $(".product-id").each(function (index) {
-        $(this).text(index + 1);
-    });
-}
-
-function preventEmptyValue(input) {
-
-    if (input.value === "") {
-
-        input.value = 1;
+        toastr.warning("Product already added!");
     }
 }
+
 
 $(document).ready(function () {
     $(document).on('input', '.product-quantity', function () {
@@ -135,22 +117,55 @@ $(document).ready(function () {
 });
 
 function updateTotals() {
-    $(".products").each(function () {
+
+    $(".products").each(function () {debugger
         var row = $(this);
         var subtotal = parseFloat(row.find("#dspperunitprice").text().replace('₹', ''));
         var totalquantity = parseFloat(row.find("#txtproductquantity").val());
-        var totalAmount = subtotal * totalquantity;
-        row.find("#dsptotalAmount").text(totalAmount.toFixed(2));
+        var gstAmount = parseFloat(row.find("#txtProductGstAmount").text().replace('₹', ''));
+        var totalGstamount = gstAmount * totalquantity;
+        var Amount = subtotal * totalquantity;
+        var TotalAmount = totalGstamount + Amount;
+
+        row.find("#dsptotalAmount").text('₹' + TotalAmount.toFixed(2));
+
     });
+    updateCartTotal();
 }
 
+function updateCartTotal() {
+    
+    var cartSubtotal = 0;
+    var cartGst = 0;
+    var cartTotalamount = 0;
+
+    $(".products").each(function () {
+        var row = $(this);
+
+        var subtotal = parseFloat(row.find("#dspperunitprice").text().replace('₹', ''));
+        var gst = parseFloat(row.find("#txtProductGstAmount").text().replace('₹', ''));
+        var quantity = parseFloat(row.find("#txtproductquantity").val());
+        var totalGstamount = gst * quantity;
+        var Amount = subtotal * quantity;
+
+        cartSubtotal += Amount;
+        cartGst += totalGstamount;
+        cartTotalamount = cartSubtotal + cartGst;
+    });
+
+    $("#cart-subtotal").html('₹' + cartSubtotal.toFixed(2));
+    $("#cart-Gst").html('₹' + cartGst.toFixed(2));
+    $("#cart-total").html('₹' + cartTotalamount.toFixed(2));
+}
+function CountCartTotalItems() {
+    var totalItems = $('.products').length;
+    $("#cartTotalItemCount").html('Your Select ' + '(' + totalItems + ' ' + 'items)');
+};
 function removeProduct(btn) {
-    var cardBody = btn.closest('.card-body');
-    if (cardBody) {
-        cardBody.remove();
-    }
+    $(btn).closest(".products").remove();
     updateTotals();
-    showHidebtn();
+    updateCartTotal();
+    CountCartTotalItems();
 }
 function showHidebtn() {
     var totalAmount = $("#dsptotalAmount").text();
@@ -158,6 +173,13 @@ function showHidebtn() {
         $("#btnpurchaserequest").show();
     } else {
         $("#btnpurchaserequest").hide();
+    }
+}
+function preventEmptyValue(input) {
+
+    if (input.value === "") {
+
+        input.value = 1;
     }
 }
 
@@ -354,7 +376,7 @@ function CreatePurchaseRequest() {
 
         var form_data = new FormData();
         form_data.append("InsertPRDetails", JSON.stringify(data));
-
+        
         $.ajax({
             url: '/PurchaseRequest/CreateMutiplePurchaseRequest',
             type: 'POST',
@@ -548,5 +570,7 @@ function DeletePurchaseRequest(PrNo) {
 //        }
 //    }
 //}
+
+
 
 
