@@ -55,7 +55,7 @@
                             <button type="button" class="btn btn-primary" id="remove-actions" onclick="ApproveExpense()"><i class="ri-filter-3-line align-bottom me-1"></i>Approve All</button>
                             @if (UserSession.FormPermisionData.Any(a => a.FormName == "ApprovedExpense" && (a.Add == true)))
                             {
-                                <button class="btn btn-warning" onclick="DisplayAddExpenseModel()" style="width: 115px;"><i class="ri-add-line align-bottom me-1"></i>Expense</button>
+                                <button class="btn btn-info" onclick="DisplayAddExpenseModel()" style="width: 115px;"><i class="ri-add-line align-bottom me-1"></i>Expense</button>
                             }
                             @if (UserSession.FormPermisionData.Any(a => a.FormName == "GetPayExpense" && (a.Add == true)))
                             {

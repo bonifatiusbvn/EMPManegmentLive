@@ -16,7 +16,7 @@
         <div class="col-xxl-3 col-sm-4 project-card">
             <div class="card card-height-100 border">
                 <div class="card-body">
-                    <div class="p-3 mt-n3 mx-n3 bg-danger-subtle rounded-top">
+                    <div class="p-3 mt-n3 mx-n3 bg-info-subtle rounded-top">
                         <div class="d-flex align-items-center">
                             <div class="flex-grow-1">
                                 <h5 class="mb-0 fs-16" style="font-weight:bold;">@item.ProjectTitle</h5>
@@ -107,11 +107,11 @@
         searchfor = @Context.Request.Query["searchfor"],
         searchby = @Context.Request.Query["searchby"]
     }),
-                    new X.PagedList.Web.Common.PagedListRenderOptions
-                {
-                    LiElementClasses = new string[] { "page-item" },
-                    PageClasses = new string[] { "page-link" }
-                })
+                            new X.PagedList.Web.Common.PagedListRenderOptions
+                        {
+                            LiElementClasses = new string[] { "page-item" },
+                            PageClasses = new string[] { "page-link" }
+                        })
 
 
 
