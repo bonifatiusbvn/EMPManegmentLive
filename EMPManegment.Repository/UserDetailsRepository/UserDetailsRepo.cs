@@ -615,7 +615,7 @@ namespace EMPManegment.Repository.UserListRepository
             }
         }
 
-        public async Task<IEnumerable<EmpDetailsView>> GetActiveDeactiveUserList(string? searchby, string? searchfor)
+        public async Task<IEnumerable<EmpDetailsView>> GetActiveDeactiveUserList()
         {
             IEnumerable<EmpDetailsView> GetUsersList = from e in Context.TblUsers
                                                        join d in Context.TblDepartments on e.DepartmentId equals d.Id
@@ -644,14 +644,6 @@ namespace EMPManegment.Repository.UserListRepository
                                                            RoleId = e.RoleId,
                                                            RoleName = r.Role,
                                                        };
-            if (searchby == "ByUsername" && searchfor != null)
-            {
-                GetUsersList = GetUsersList.Where(ser => ser.UserName.ToLower().Contains(searchfor.ToLower())).ToList();
-            }
-            if (searchby == "ByDepartment" && searchfor != null)
-            {
-                GetUsersList = GetUsersList.Where(ser => ser.DepartmentName.ToLower().Contains(searchfor.ToLower())).ToList();
-            }
             return GetUsersList;
         }
     }

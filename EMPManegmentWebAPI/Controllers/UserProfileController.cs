@@ -49,9 +49,9 @@ namespace EMPManagment.API.Controllers
         }
         [HttpGet]
         [Route("GetActiveDeactiveUserList")]
-        public async Task<IActionResult> GetActiveDeactiveUserList(string? searchby, string? searchfor)
+        public async Task<IActionResult> GetActiveDeactiveUserList()
         {
-            var activedeactive = await UserListServices.GetActiveDeactiveUserList(searchby, searchfor);
+            var activedeactive = await UserListServices.GetActiveDeactiveUserList();
             return Ok(new { code = 200, data = activedeactive });
         }
 

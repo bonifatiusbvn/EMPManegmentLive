@@ -10,6 +10,11 @@
     #ddlDepartmenrnt-error, #ddlusername-error {
         color: red;
     }
+
+    .select2-container--bootstrap4 .select2-selection--single {
+        height: 38px;
+        line-height: 36px;
+    }
 </style>
 <!-- start page title -->
 <div class="row" style="margin-top:80px;">
@@ -28,18 +33,57 @@
     </div>
 </div>
 <!-- end page title -->
-<!-- Partial View-->
-<div class="card-body">
-    <div id="activedeactivepartial"></div>
+<div class="card">
+    <div class="card-header">
+        <div class="row g-4 mb-3">
+            <form id="SearchEmpForm">
+                <div class="row g-2">
+                    <div class="col-lg-auto">
+                        <div class="btn-group">
+                            <a type="button" href="/UserProfile/UserActiveDecative" class="btn btn-warning" id="backBtn" style="display:none;"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="m5.828 7l2.536 2.535L6.95 10.95L2 6l4.95-4.95l1.414 1.415L5.828 5H13a8 8 0 1 1 0 16H4v-2h9a6 6 0 0 0 0-12z" /></svg> </a>
+                            <button class="btn btn-primary btn-md dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Search By
+                            </button>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" data-value="Department">Department</a>
+                                <a class="dropdown-item" data-value="UserName">UserName</a>
+                            </div>
+                        </div>
+                        <input type="hidden" id="SelectDropdown" name="SelectDropdown">
+                    </div>
+                    <div class="col-sm" id="departmentbox">
+                        <div class="search-box">
+                            <select class="form-control" id="ddlDepartment" name="ddlDepartment">
+                                <option selected value="">---Select Department---</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm" id="usernamebox">
+                        <div class="search-box">
+                            <select class="form-control" id="ddlusername" name="ddlusername">
+                                <option selected value="">---Select Username---</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-auto">
+                        <button class="btn btn-success" type="button" onclick="GetUserSearchData()">
+                            Search
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- Partial View-->
+    <div class="card-body">
+        <div id="activedeactivepartial"></div>
+    </div>
+
+    <h4 class="fs-22 fw-semibold ff-secondary mb-4">
+        <span class="text-danger" id="errorMessage"></span>
+    </h4>
 </div>
-
-<h4 class="fs-22 fw-semibold ff-secondary mb-4">
-    <span class="text-danger" id="errorMessage"></span>
-</h4>
-
-
-
-
+<!-- end card -->
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/moduls/userdetailsscript.js" asp-append-version="true"></script>
