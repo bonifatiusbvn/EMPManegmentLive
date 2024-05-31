@@ -949,7 +949,7 @@ namespace EMPManegment.Web.Controllers
 
         [FormPermissionAttribute("Form Permission-Edit")]
         [HttpPost]
-        public async Task<IActionResult> UpdateMultipleRolewiseFormPermission()
+        public async Task<IActionResult> UpdatePermission()
         {
             try
             {

@@ -91,7 +91,7 @@ function UpdateRolewiseFormPermission() {
     form_data.append("RolewisePermissionDetails", JSON.stringify(formPermissions));
 
     $.ajax({
-        url: '/UserProfile/UpdateMultipleRolewiseFormPermission',
+        url: '/UserProfile/UpdatePermission',
         type: 'post',
         data: form_data,
         processData: false,
