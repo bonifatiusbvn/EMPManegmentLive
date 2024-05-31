@@ -96,15 +96,13 @@
                                     <h6 class="text-muted text-uppercase fw-semibold mb-3">Billing Address</h6>
                                     <p class="fw-medium mb-2" id="billing-name">@firstItem.CompanyName</p>
                                     <p class="text-muted mb-1" id="billing-address-line-1">@firstItem.CompanyFullAddress</p>
-                                    @*  <p class="text-muted mb-1"><span>Phone: +</span><span id="billing-phone-no">(123) 456-7890</span></p>*@
+
                                     <p class="text-muted mb-0"><span>Tax: </span><span id="billing-tax-no">@firstItem.CompanyGstNumber</span> </p>
                                 </div>
                                 <!--end col-->
                                 <div class="col-6">
                                     <h6 class="text-muted text-uppercase fw-semibold mb-3">Shipping Address</h6>
                                     <p class="fw-medium mb-2" id="shipping-name">@firstItem.Address</p>
-                                    @* <p class="text-muted mb-1" id="shipping-address-line-1"></p>
-                                <p class="text-muted mb-1"><span>Phone: </span><span id="shipping-phone-no"></span></p>*@
                                 </div>
                                 <!--end col-->
                             }
@@ -114,7 +112,6 @@
                                     <h6 class="text-muted text-uppercase fw-semibold mb-3">Billing Address</h6>
                                     <p class="fw-medium mb-2" id="billing-name">@firstItem.CompanyName</p>
                                     <p class="text-muted mb-1" id="billing-address-line-1">@firstItem.CompanyFullAddress</p>
-                                    @*  <p class="text-muted mb-1"><span>Phone: +</span><span id="billing-phone-no">(123) 456-7890</span></p>*@
                                     <p class="text-muted mb-0"><span>Tax: </span><span id="billing-tax-no">@firstItem.CompanyGstNumber</span> </p>
                                 </div>
                                 <!--end col-->
@@ -219,7 +216,5 @@
     <!--end col-->
 </div>
 <!--end row-->
-
-
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/moduls/invoicemasterscript.js" asp-append-version="true"></script>

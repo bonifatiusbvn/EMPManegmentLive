@@ -1,0 +1,415 @@
+﻿@model EMPManegment.EntityModels.ViewModels.PurchaseOrderModels.PurchaseOrderMasterView
+@using EMPManegment.Web.Models;
+@inject IHttpContextAccessor Accessor;
+@inject UserSession _userSession
+@{
+    ViewData["Title"] = "CreateOrderView";
+    Layout = "~/Views/Shared/_UserHomeLayout.cshtml";
+}
+
+<style>
+    #textVendorName-error, #textCompanyName-error, #textDeliveryStatus-error, #textShortDescription-error,
+    #txtpaymentmethod-error {
+        color: red;
+    }
+</style>
+
+<div class="row" style="margin-top:80px;">
+    <div class="col-12">
+        <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+            <h4 class="mb-sm-0">Create Purchase Order</h4>
+
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Purchase Order</a></li>
+                    <li class="breadcrumb-item active">Create Purchase Order</li>
+                </ol>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="" id="invoiceList">
+            <form id="CreatePOForm">
+                <div class="">
+                    <div>
+                        <div class="row justify-content-center">
+                            <div class="col-xxl-12">
+                                <div class="">
+                                    <div class=" border-bottom border-bottom-dashed">
+                                        <div class="row">
+                                            <div class="col-6 col-lg-6">
+                                                <div class=" card">
+                                                    <h5 class="card-header">Vendor Details</h5>
+                                                    <div class="card-body">
+                                                        <div class="row">
+                                                            <div class="col-6 col-lg-6 ">
+                                                                <label for="textVendorName" class="form-label">Vendor Name</label>
+                                                                <select class="form-control form-select valid" id="textVendorName" name="textVendorName">
+                                                                    <option selected value="">--Select Vendor--</option>
+                                                                </select>
+                                                            </div>
+                                                            <div class="col-6 col-lg-6 ">
+                                                                <label for="textVendorMobile" class="form-label ">Mobile No</label>
+                                                                <input type="text" id="textVendorMobile" class="form-control" placeholder="Mobile No" readonly />
+                                                            </div>
+                                                        </div>
+                                                        <div class="row mt-3">
+                                                            <div class="col-6 col-lg-6">
+                                                                <label for="textVendorAddress" class="form-label ">Address</label>
+                                                                <input type="text" id="textVendorAddress" class="form-control" placeholder="Address" readonly />
+                                                            </div>
+                                                            <div class="col-6 col-lg-6">
+                                                                <label for="textVendorGSTNumber" class="form-label ">GST NO</label>
+                                                                <input type="text" id="textVendorGSTNumber" class="form-control" placeholder="GST No" readonly />
+                                                            </div>
+                                                            <input type="text" id="textProjectId" class="form-control" hidden value="@UserSession.ProjectId" />
+                                                            <input type="text" id="textCreatedById" class="form-control" hidden value="@_userSession.UserId" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-6 col-lg-6">
+                                                <div class=" card">
+                                                    <h5 class="card-header">Purchase Order Details</h5>
+                                                    <div class="card-body">
+                                                        <div class="row">
+                                                            <div class="col-md-4">
+                                                                <div>
+                                                                    <label for="textCompanyName" class="form-label">Company Name</label>
+                                                                </div>
+                                                                <div class="ms-auto">
+                                                                    <select class="form-control form-select valid" id="textCompanyName" name="textCompanyName">
+                                                                        <option selected value="">--Select Company--</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-5 col-lg-5">
+                                                                <label for="textPoId " class="form-label">Order No</label>
+                                                                <input type="text" class="form-control" id="textPoId" value="@ViewBag.PoId" readonly />
+                                                            </div>
+                                                            <div class="col-3 col-lg-3 ">
+                                                                <label for="textOrderDate" class="form-label">Order Date</label>
+                                                                <input type="text" id="textOrderDate" class="form-control" name="textOrderDate" placeholder="Select Order-Date">
+                                                            </div>
+                                                        </div>
+                                                        <div class="row mt-3">
+                                                            <div class="col-6 col-lg-6">
+                                                                <label for="textCompanyBillingAddress" class="form-label ">Billing Address</label>
+                                                                <input type="text" id="textCompanyBillingAddress" name="textCompanyBillingAddress" class="form-control" placeholder="Billing Address" readonly />
+                                                            </div>
+                                                            <div class="col-6 col-lg-6">
+                                                                <label class="form-label ">GST NO</label>
+                                                                <input type="text" id="textCompanyGstNo" class="form-control" placeholder="GST No" readonly />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--end row-->
+                                </div>
+
+                                <!---- Product Details ---->
+                                <div class="row">
+                                </div>
+                                <div class="card">
+                                    <div class="card-header">
+                                        <div class="d-flex align-items-center">
+                                            <h5 class="card-title mb-0 flex-grow-1">Purchase Order</h5>
+                                            <div class="flex-shrink-0">
+                                                <div class="d-flex flex-wrap gap-2">
+                                                    <a class="btn btn-block btn-warning" style="margin-left: 665px;" id="AddVendorModelButton" onclick="fn_OpenAddproductmodal()"><i class="ri-add-fill me-1 align-bottom"></i>Add Product</a>
+                                                    <span id="spnitembutton" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="card-body pt-0">
+                                        <div class="table-responsive" style="height:350px">
+                                            <table class="table align-middle mb-0">
+                                                <thead class="table-secondary">
+                                                    <tr class="text-uppercase">
+                                                        <th>#</th>
+                                                        <th>Product</th>
+                                                        <th>HSN Code</th>
+                                                        <th>Quantity</th>
+                                                        <th>Qty Type</th>
+                                                        <th>Price</th>
+                                                        <th>GST (%)</th>
+                                                        <th>GST Amt (₹)</th>
+                                                        <th>Amount (₹)</th>
+                                                        <th>Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="addnewproductlink">
+                                                </tbody>
+                                            </table>
+                                            <div class="noresult" style="display: none">
+                                                <div class="text-center">
+                                                    <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#25a0e2,secondary:#00bd9d" style="width:75px;height:75px">
+                                                    </lord-icon>
+                                                    <h5 class="mt-2">Sorry! No Result Found</h5>
+                                                    <p class="text-muted mb-0">
+                                                        We've searched more than 150+ invoices We did not find any
+                                                        invoices for you search.
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card-footer">
+                                            <table class="table align-middle mb-0">
+                                                <thead class="table align-middle mb-0">
+                                                    <tr>
+                                                        <th>#</th>
+                                                        <th colspan="2">Total</th>
+                                                        <th></th>
+                                                        <th></th>
+                                                        <th id="TotalProductQuantity"></th>
+                                                        <th></th>
+                                                        <th id="TotalProductPrice"></th>
+                                                        <th></th>
+                                                        <th></th>
+                                                        <th id="TotalProductGST"></th>
+                                                        <th id="TotalProductAmount"></th>
+                                                        <th></th>
+                                                    </tr>
+                                                </thead>
+                                            </table>
+                                            <div class="noresult" style="display: none">
+                                                <div class="text-center">
+                                                    <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#25a0e2,secondary:#00bd9d" style="width:75px;height:75px">
+                                                    </lord-icon>
+                                                    <h5 class="mt-2">Sorry! No Result Found</h5>
+                                                    <p class="text-muted mb-0">
+                                                        We've searched more than 150+ invoices We did not find any
+                                                        invoices for you search.
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class=" card">
+                                            <div class="row card-body">
+                                                <div class="col-lg-6 col-sm-12">
+                                                    <div class="row">
+                                                        <div class="col-lg-12 col-sm-12">
+                                                            <div class="input-group mb-3">
+                                                                <label class="input-group-text" for="textDeliveryStatus">Delivery Status</label>
+                                                                <input type="text" class="form-control" id="textDeliveryStatus" name="textDeliveryStatus" placeholder="Enter Delivery Status">
+                                                            </div>
+                                                            <span id="spnDeliverySchedule" class="text-danger"></span>
+                                                        </div>
+                                                        <div class="col-lg-12 col-sm-12 mt-2">
+                                                            <div class="mb-2">
+                                                                <div class="input-group mb-3">
+                                                                    <label class="input-group-text" for="textDescription">Product Short Description</label>
+                                                                    <textarea type="text" id="textShortDescription" rows="3" class="form-control" placeholder="Enter Product Short Description" name="textDescription"></textarea>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-12 col-sm-12 mt-2">
+                                                            <div class="col-lg-12 col-sm-12 mt-2">
+                                                                <div class="mb-2">
+                                                                    <div class="input-group mb-3">
+                                                                        <label for="txtpaymentmethod" class="input-group-text">Payment Method </label>
+                                                                        <select class="form-control form-select valid" id="txtpaymentmethod" name="txtpaymentmethod">
+                                                                            <option selected value="">--Select Payment Method--</option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-12 col-sm-12 mt-2">
+                                                            <div class="col-lg-12 col-sm-12 mt-2">
+                                                                <div class="mb-2">
+                                                                    <div class="input-group mb-3">
+                                                                        <label for="txtpaymenttype" class="input-group-text">Payment Status</label>
+                                                                        <select class="form-control form-select valid" id="txtpaymenttype" name="txtpaymenttype">
+                                                                            <option selected value="">--Select Payment Status--</option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="col-lg-6 col-sm-12 ac-invoice-total">
+                                                    <div class="table">
+                                                        <table class="table table-borderless table-sm table-nowrap align-middle mb-0">
+                                                            <tbody>
+                                                                <tr>
+                                                                    <th>Sub Total</th>
+                                                                    <td style="width:150px;">
+                                                                        <input type="text" class="form-control bg-light border-0" id="cart-subtotal" placeholder="₹0.00" readonly />
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th>Total GST</th>
+                                                                    <td>
+                                                                        <input type="text" class="form-control bg-light border-0" id="totalgst" placeholder="₹0.00" readonly />
+                                                                    </td>
+                                                                </tr>
+                                                                <tr class="border-top border-top-dashed">
+                                                                    <th>Total Amount</th>
+                                                                    <td>
+                                                                        <input type="text" class="form-control bg-light border-0" id="cart-total" placeholder="₹0.00" readonly />
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                        <div class="noresult" style="display: none">
+                                                            <div class="text-center">
+                                                                <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#25a0e2,secondary:#00bd9d" style="width:75px;height:75px">
+                                                                </lord-icon>
+                                                                <h5 class="mt-2">Sorry! No Result Found</h5>
+                                                                <p class="text-muted mb-0">
+                                                                    We've searched more than 150+ invoices We did not find any
+                                                                    invoices for you search.
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-lg-6 col-sm-12">
+                                        <div class="card">
+                                            <h5 class="card-header">
+                                                Shipping Addresses
+                                                <a class="font-22" onclick="fn_OpenShippingModal()">
+                                                    <i class="bi bi-plus-circle"></i>
+                                                </a>
+                                            </h5>
+                                            <div class="card-body">
+                                                <input type="checkbox" id="hideShippingAddress" name="hideShippingAddress" onchange="toggleShippingAddress()" checked>
+                                                <label for="hideShippingAddress"><b>Is Your Billing Address is same as Shipping Address?</b></label>
+                                                <div id="shippingAddressFields" style="display:none;">
+                                                    <textarea type="text" id="textShippingAddress" name="textShippingAddress" class="form-control" placeholder="Shipping Address"></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div id="dvshipping" class="col-lg-6">
+                                    <div class="row">
+                                    </div>
+                                </div>
+                                <!--end row-->
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="hstack gap-2 justify-content-end d-print-none mt-4">
+                                            <button type="button" class="btn btn-lg btn-success" id="SavePOButton" onclick="InsertMultiplePurchaseOrderDetails()" style="width: 160px;height: 50px;"><i class="ri-printer-line align-bottom me-1"></i>Create</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--end col-->
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="mdShippingAdd" tabindex="-1" aria-labelledby="mdShippingAddlLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="mdShippingAddlLabel">Shipping Address</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="ShippingAddressForm">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-10 col-sm-10 ">
+                                <label class="form-lable">Select Site</label>
+                                <select class="form-control form-select valid" id="txtPoSiteName" name="txtPoSiteName" required>
+                                    <option selected value="">--Select Site--</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-9 col-sm-9">
+                                <label class="form-lable">Address</label>
+                                <textarea class="form-control" id="txtmdAddress" style="height:90px;"></textarea>
+                                <span id="spnSiteAddress" style="color:red;"></span>
+                            </div>
+                            <div class="col-3 col-sm-3">
+                                <label class="form-lable">Qty</label>
+                                <input class="form-control" id="txtmdqty" name="txtmdqty" value="" required />
+                                <span id="spnShippingQuantity" style="color:red;"></span>
+                            </div>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary add-address" id="AddShippingBtn" onclick="AddShippingAddress()">Add</button>
+                <span id="spnaddressbutton" style="color:red;"></span>
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade show" tabindex="-1" id="mdPoproductModal" role="dialog" aria-labelledby="myLargeModalLabel" aria-modal="true" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Select Product</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-header">
+                <label class="form-label">Search Product</label>
+                <input class="form-control" id="mdProductSearch" onkeyup="filterallItemTable()" />
+            </div>
+
+            <div class="modal-body">
+                <div class="card-body">
+                    <div class="table-responsive table-card">
+                        <table class="table table-borderless align-middle mb-0" id="productTable">
+                            <thead class="table-light text-muted">
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Product Info</th>
+                                    <th>Add</th>
+                                </tr>
+                            </thead>
+                            <tbody id="mdlistofItem">
+                            </tbody>
+                        </table>
+                        <div class="noresult" style="display: none">
+                            <div class="text-center">
+                                <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#25a0e2,secondary:#00bd9d" style="width:75px;height:75px">
+                                </lord-icon>
+                                <h5 class="mt-2">Sorry! No Result Found</h5>
+                                <p class="text-muted mb-0">
+                                    We've searched more than 150+ invoices We did not find any
+                                    invoices for you search.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--end col-->
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/moduls/purchaseorderdetailsscript.js" asp-append-version="true"></script>
+
