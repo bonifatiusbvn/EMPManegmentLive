@@ -7,48 +7,11 @@
 @inject EMPManegment.Web.Helper.Common CommonHelper
 
 
-<div class="card">
-    <div class="card-header">
-        <form id="activeInactiveForm" style="margin-bottom: -20px;">
-            <div class="row g-4 mb-3">
-                <div class="row g-2 text-align">
-                    <div class="col-lg-auto">
-                        <a type="button" href="/UserProfile/UserActiveDecative" class="btn btn-warning btn-lg" id="backbtn">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                                <path fill="currentColor" d="m5.828 7l2.536 2.535L6.95 10.95L2 6l4.95-4.95l1.414 1.415L5.828 5H13a8 8 0 1 1 0 16H4v-2h9a6 6 0 0 0 0-12z" />
-                            </svg>
-                        </a>
-                        <div class="btn-group">
-                            <button class="btn btn-primary btn-lg dropdown-toggle" type="button" id="searchByDropdownButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Search By
-                            </button>
-                            <div class="dropdown-menu" aria-labelledby="searchByDropdownButton">
-                                <a class="dropdown-item" href="#" data-value="ByUsername">Username</a>
-                                <a class="dropdown-item" href="#" data-value="ByDepartment">Department</a>
-                            </div>
-                        </div>
-                    </div>
 
-                    <div class="col-sm" id="empnamebox">
-                        <div class="search-box">
-                            <input name="searchfor" class="form-control" id="txtsearchfor" aria-label="Search" autocomplete="off" />
-                        </div>
-                    </div>
-
-
-                    <div class="col-lg-auto">
-                        <button class="btn btn-success" type="button" onclick="BtnSearchDetails()" id="searchEmployeeform" value="Validate">
-                            Search
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div>
     <div class="card-body" id="allemplist">
         <div class="row row-cols-xl-5 row-cols-lg-3 row-cols-md-2 row-cols-1" style="margin-top:20px;">
             @if (Model.Count() > 0)
-            { 
+            {
                 @foreach (var item in Model)
                 {
                     var imageUrl = !string.IsNullOrEmpty(item.Image) ? Url.Content($"~/{item.Image}") : null;
@@ -130,19 +93,17 @@
         <!--end row-->
     </div>
     <!-- end card body -->
+
     <div id="activedeactivepagination">
         @Html.PagedListPager((IPagedList)Model, page => Url.Action("UserActiveDecative", new
-            {
-                page = page,
-                searchfor = @Context.Request.Query["searchfor"],
-                searchby = @Context.Request.Query["searchby"]
-            }),
-                 new X.PagedList.Web.Common.PagedListRenderOptions
         {
-            LiElementClasses = new string[] { "page-item" },
-            PageClasses = new string[] { "page-link" }
+        page = page
+        }),
+        new X.PagedList.Web.Common.PagedListRenderOptions
+        {
+        LiElementClasses = new string[] { "page-item" },
+        PageClasses = new string[] { "page-link" }
         })
     </div>
 
-</div>
-<!-- end card -->
+

@@ -239,19 +239,27 @@ namespace EMPManegment.Web.Controllers
             return View();
         }
 
-
         [HttpGet]
-        public async Task<IActionResult> UserActiveDecativeList(string? searchby, string? searchfor, int? page)
+        public async Task<IActionResult> UserActiveDecativeList(Guid? Id, int? DepartmentId, int? page)
         {
             try
             {
                 List<EmpDetailsView> ActiveDecative = new List<EmpDetailsView>();
-                ApiResponseModel res = await APIServices.GetAsync("", "UserProfile/GetActiveDeactiveUserList?searchby=" + searchby + "&searchfor=" + searchfor);
+                ApiResponseModel res = await APIServices.GetAsync("", "UserProfile/GetActiveDeactiveUserList");
                 if (res.code == 200)
                 {
                     ActiveDecative = JsonConvert.DeserializeObject<List<EmpDetailsView>>(res.data.ToString());
                 }
-                int pageSize = 4;
+                if (Id.HasValue)
+                {
+                    ActiveDecative = ActiveDecative.Where(a=>a.Id == Id).ToList();  
+                }
+                else if(DepartmentId.HasValue)
+                {
+                    ActiveDecative = ActiveDecative.Where(a=>a.DepartmentId == DepartmentId).ToList();
+                }
+
+               int pageSize = 4;
                 var pageNumber = page ?? 1;
 
                 var pagedList = ActiveDecative.ToPagedList(pageNumber, pageSize);

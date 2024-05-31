@@ -27,7 +27,7 @@ $(document).on("click", "#addItemButton", function () {
 });
 
 $(document).ready(function () {
-    var today = new Date();  
+    var today = new Date();
     today = getCommonDateformat(today);
     $("#textInvoiceDate").val(today);
     $("#textInvoiceDate").prop("disabled", true);
@@ -72,7 +72,7 @@ function ShowInvoiceDetailsByOrderId(OrderId) {
                     confirmButtonText: 'OK',
                 });
             } else {
-                window.location = '/Invoice/DisplayInvoiceDetails?OrderId=' + OrderId;
+                window.location = '/Invoice/InvoiceDetails?OrderId=' + OrderId;
             }
         },
         error: function (xhr, status, error) {
@@ -403,7 +403,7 @@ function GetAllVendorData() {
                 "data": "vendorCompany", "name": "VendorCompany",
                 "render": function (data, type, full) {
 
-                    return '<h5 class="fs-15"><a href="/Invoice/VendorInvoiceListView/?Vid=' + full.vid + '" class="fw-medium link-primary">' + full.vendorCompany; '</a></h5>';
+                    return '<h5 class="fs-15"><a href="/Invoice/PayVendors/?Vid=' + full.vid + '" class="fw-medium link-primary">' + full.vendorCompany; '</a></h5>';
                 }
             },
             {
@@ -414,7 +414,7 @@ function GetAllVendorData() {
             },
             { "data": "vendorEmail", "name": "VendorEmail" },
             { "data": "vendorPhone", "name": "VendorPhone" },
-            { "data": "vendorAddress", "name": "VendorAddress" },
+
         ],
         columnDefs: [{
             "defaultContent": "",
@@ -573,7 +573,7 @@ function GetAllTransactionData() {
             var htmlContent = '<td class="id" style="display:none;"><a href="javascript:void(0);" class="fw-medium link-primary">#VZ001</a></td>';
             htmlContent += '<td><div class="avatar-xs"><div class="avatar-title bg-danger-subtle text-danger rounded-circle fs-16"><i class="ri-arrow-right-up-fill"></i></div></div></td>';
             htmlContent += '<td class="date">' + data.vendorName + '<small class="text-muted"></small></td>';
-            htmlContent += '<td class="form_name">' + getCommonDateformat(data.date)  + '</td>';
+            htmlContent += '<td class="form_name">' + getCommonDateformat(data.date) + '</td>';
             htmlContent += '<td class="to_name">' + data.paymentMethodName + '</td>';
             htmlContent += '<td class="to_name">' + data.paymentTypeName + '</td>';
             htmlContent += '<td class="to_name text-success">' + data.creditDebitAmount + '</td>';
@@ -611,7 +611,7 @@ $(document).ready(function () {
                 "data": "invoiceNo",
                 "name": "InvoiceNo",
                 "render": function (data, type, full) {
-                    return '<h5 class="fs-15"><a href="/Invoice/DisplayInvoiceDetails?InvoiceId=' + full.id + '" class="fw-medium link-primary">' + full.invoiceNo + '</a></h5>';
+                    return '<h5 class="fs-15"><a href="/Invoice/OrderInvoiceDetails?InvoiceId=' + full.id + '" class="fw-medium link-primary">' + full.invoiceNo + '</a></h5>';
                 }
             },
             { "data": "vendorName", "name": "VendorName", "className": "text-center" },

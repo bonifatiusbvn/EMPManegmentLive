@@ -1,28 +1,26 @@
-﻿
-$("#departmentbox").hide();
-$("#backbtn").hide();
-
+﻿$("#usernamebox").hide();
+$("#departmentbox").show();
 $(document).ready(function () {
     GetUserAttendanceInTime();
     UserBirsthDayWish();
     GetAllUserData();
     clearSelectedBox();
-    //GetUserRoleList();
-    //GetDepartment();
-
-    $("#activeInactiveForm").validate({
+    GetUserRoleList();
+});
+$(document).ready(function () {
+    $("#SearchEmpForm").validate({
         rules: {
             ddlusername: "required",
-            ddlDepartmenrnt: "required"
+            ddlDepartment: "required"
         },
         messages: {
             ddlusername: "Please Select UserName",
-            ddlDepartmenrnt: "Please Select Department"
+            ddlDepartment: "Please Select Department"
         }
     })
-    $('#searchEmployeeform').on('click', function () {
-        $("#activeInactiveForm").validate();
-    });
+});
+
+$(document).ready(function () {
     $("#frmuserDetails").validate({
         rules: {
             firstnameInput: "required",
@@ -722,99 +720,38 @@ function clearSelectedBox() {
         '<option selected disabled value="">--Select Department--</option>');
 }
 
-$(document).ready(function () {
-
-    $('.dropdown-item').on('click', function () {
-        var selectedValue = $(this).data('value');
-        if (selectedValue == "ByUsername") {
-            clearSelectedBox();
-            GetUsername();
-            $("#empnamebox").show();
-        } else if (selectedValue == "ByDepartment") {
-            clearSelectedBox();
-            GetDepartment();
-            $("#empnamebox").show();
-        }
-    });
-});
-
-
 function GetUsername() {
     $.ajax({
         url: '/Task/GetUserName',
         success: function (result) {
+            $('#ddlusername').empty();
+            $('#ddlusername').append('<option selected disabled value="">--Select Username--</option>');
             $.each(result, function (i, data) {
                 $('#ddlusername').append('<option value=' + data.id + '>' + data.firstName + ' ' + data.lastName + ' (' + data.userName + ')</option>');
             });
         }
     });
+
 }
 
 function GetDepartment() {
     $.ajax({
         url: '/Authentication/GetDepartment',
         success: function (result) {
+            $('#ddlDepartment').empty();
+            $('#ddlDepartment').append('<option selected disabled value="">--Select Department--</option>');
             $.each(result, function (i, data) {
-                $('#ddlDepartmenrnt').append('<option value=' + data.id + '>' + data.departments + '</option>');
+                $('#ddlDepartment').append('<option value=' + data.id + '>' + data.departments + '</option>');
             });
         }
     });
 }
 
-$(document).ready(function () {
-    $("#searchEmployee").change(SearchEmployeeList);
-    $("#empnamebox").hide();
-});
-
-
-function GetSearchEmpList() {
-
-    if ($('#activeInactiveForm').valid()) {
-        var form_data = new FormData();
-        form_data.append("DepartmentId", $('#ddlDepartmenrnt').val());
-        form_data.append("Id", $("#ddlusername").val());
-        $.ajax({
-            url: '/UserProfile/GetSearchEmpList',
-            type: 'Post',
-            datatype: 'json',
-            data: form_data,
-            processData: false,
-            contentType: false,
-            complete: function (Result) {
-
-                $("#allemplist").hide();
-                $("#activedeactivepagination").hide();
-                $("#backbtn").show();
-                if (Result.responseText != '{\"code\":400}') {
-                    $("#errorMessage").hide();
-                    $("#dvseachemplist").show();
-                    $("#dvseachemplist").html(Result.responseText);
-                } else {
-                    var message = "No Data Found On Selected Username Or Department!!";
-                    $("#errorMessage").show();
-                    $("#errorMessage").text(message);
-                    $("#dvseachemplist").hide();
-                }
-                /*clearSelectedBox()*/
-            }
-        });
-    } else {
-        Swal.fire({
-            title: "Kindly fill the status",
-            icon: 'warning',
-            confirmButtonColor: '#3085d6',
-            confirmButtonText: 'OK',
-        })
-    }
-};
-
-
-
 function GetActiveDeactiveList(page) {
+    DepartmentId = $("#ddlDepartment").val();
+    Id = $("#ddlusername").val();
 
-    var searchBy = $("#searchEmployee").val();
-    var searchFor = $('#txtsearchfor').val();
-    $.get("/UserProfile/UserActiveDecativeList", { searchby: searchBy, searchfor: searchFor, page: page })
+    $.get("/UserProfile/UserActiveDecativeList", { DepartmentId: DepartmentId, Id: Id, page: page })
         .done(function (result) {
 
             $("#activedeactivepartial").html(result);
@@ -825,12 +762,12 @@ function GetActiveDeactiveList(page) {
 }
 
 GetActiveDeactiveList(1);
+var searchValue;
 $(document).on("click", ".pagination a", function (e) {
     e.preventDefault();
     var page = $(this).text();
     GetActiveDeactiveList(page);
 });
-
 
 $(document).on("click", "#backbtn", function (e) {
     e.preventDefault();
@@ -838,10 +775,56 @@ $(document).on("click", "#backbtn", function (e) {
     GetActiveDeactiveList(page);
 });
 
-function BtnSearchDetails() {
+function clearsearchtextbox() {
+    $("#ddlDepartment").val('');
+    $("#ddlusername").val('');
+}
 
+$('.dropdown-item').click(function () {
+    var selectedValue = $(this).attr('data-value');
+    $('#SelectDropdown').val(selectedValue);
 
-    GetActiveDeactiveList(1);
+    if (selectedValue === "UserName") {
+        clearsearchtextbox();
+        GetUsername();
+        $("#usernamebox").show();
+        $("#departmentbox").hide();
+    }
+    if (selectedValue === "Department") {
+        clearsearchtextbox();
+        GetDepartment();
+        $("#usernamebox").hide();
+        $("#departmentbox").show();
+    }
+    $('.btn-group .dropdown-toggle').text($(this).text());
+    $('#ddlusername').select2({
+        theme: 'bootstrap4',
+        width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+        placeholder: $(this).data('placeholder'),
+        allowClear: Boolean($(this).data('allow-clear')),
+        dropdownParent: $("#SearchEmpForm")
+    });
+    $('#ddlDepartment').select2({
+        theme: 'bootstrap4',
+        width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+        placeholder: $(this).data('placeholder'),
+        allowClear: Boolean($(this).data('allow-clear')),
+        dropdownParent: $("#SearchEmpForm")
+    });
+});
+
+function GetUserSearchData() {
+    DepartmentId = $("#ddlDepartment").val() === "" ? null : $("#ddlDepartment").val();
+    Id = $("#ddlusername").val();
+
+    if (Id != null || DepartmentId != null) {
+            $("#backBtn").show();
+            GetActiveDeactiveList(1);
+    }
+    else {
+        $("#backBtn").hide();
+        toastr.error("Select Username or Department");
+    }
 }
 
 

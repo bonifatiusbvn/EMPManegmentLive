@@ -267,12 +267,11 @@ function showProjectMembers(ProjectId) {
     })
 }
 
-function showTeamsPagination(ProjectId)
-{
+function showTeamsPagination(ProjectId) {
     showTeams(ProjectId, 1);
 }
 
-function showTeams(ProjectId,page) {
+function showTeams(ProjectId, page) {
     var formData = new FormData();
     formData.append("ProjectId", ProjectId);
     formData.append("page", page);
@@ -403,7 +402,7 @@ $(document).on("click", ".pagination a", function (e) {
     var page = $(this).text();
     GetAllUserProjectDetailsList(page);
     var ProjectId = $("#projectid").val();
-    showTeams(ProjectId,page);
+    showTeams(ProjectId, page);
 });
 
 
@@ -435,7 +434,7 @@ $(document).ready(function () {
 
 
 function opendeletpop(userId) {
-    $("#delete-product").data("user-id", userId); 
+    $("#delete-product").data("user-id", userId);
     $("#deleteOrderModal").modal('show');
 }
 
@@ -464,7 +463,7 @@ function deleteProjectMember(userId) {
                 confirmButtonColor: '#3085d6',
                 confirmButtonText: 'OK'
             }).then(function () {
-                window.location = '/Project/GetProjectDetails/?Id=' + proId;
+                window.location = '/Project/ProjectDetails/?Id=' + proId;
             })
         },
         error: function () {
