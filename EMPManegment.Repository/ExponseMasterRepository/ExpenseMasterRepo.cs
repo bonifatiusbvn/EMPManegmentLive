@@ -448,6 +448,15 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                         case "TotalAmount":
                             expenses = dataTable.sortColumnDir == "asc" ? expenses.OrderBy(e => e.TotalAmount) : expenses.OrderByDescending(e => e.TotalAmount);
                             break;
+                        case "Description":
+                            expenses = dataTable.sortColumnDir == "asc" ? expenses.OrderBy(e => e.Description) : expenses.OrderByDescending(e => e.Description);
+                            break;
+                        case "ExpenseTypeName":
+                            expenses = dataTable.sortColumnDir == "asc" ? expenses.OrderBy(e => e.ExpenseTypeName) : expenses.OrderByDescending(e => e.ExpenseTypeName);
+                            break;
+                        case "PaymentTypeName":
+                            expenses = dataTable.sortColumnDir == "asc" ? expenses.OrderBy(e => e.PaymentTypeName) : expenses.OrderByDescending(e => e.PaymentTypeName);
+                            break;
                         default:
                             break;
                     }
@@ -525,6 +534,12 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                             break;
                         case "TotalAmount":
                             UserList = dataTable.sortColumnDir == "asc" ? UserList.OrderBy(e => e.TotalAmount) : UserList.OrderByDescending(e => e.TotalAmount);
+                            break;
+                        case "UnapprovedPendingAmount":
+                            UserList = dataTable.sortColumnDir == "asc" ? UserList.OrderBy(e => e.UnapprovedPendingAmount) : UserList.OrderByDescending(e => e.UnapprovedPendingAmount);
+                            break;
+                        case "TotalPendingAmount":
+                            UserList = dataTable.sortColumnDir == "asc" ? UserList.OrderBy(e => e.TotalPendingAmount) : UserList.OrderByDescending(e => e.TotalPendingAmount);
                             break;
                         default:
                             break;
