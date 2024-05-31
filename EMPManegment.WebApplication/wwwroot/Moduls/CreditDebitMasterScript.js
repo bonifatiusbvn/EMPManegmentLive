@@ -194,7 +194,7 @@ function InsertCreditDebitDetails() {
                     confirmButtonColor: '#3085d6',
                     confirmButtonText: 'OK',
                 }).then(function () {
-                    window.location = '/Invoice/CreditDebitListView';
+                    window.location = '/Invoice/VendorTransactions';
                 });
             },
             error: function (xhr, status, error) {
@@ -256,4 +256,16 @@ function GetCreditDebitTotalAmount(Vid) {
 };
 
 
+function getLastTransaction(Vid) {
 
+    $.ajax({
+        url: '/Invoice/GetLastTransactionByVendorId',
+        type: 'GET',
+        dataType: 'html',
+        data: { Vid: Vid },
+        success: function (response) {
+            $("#lasttenTransaction").html(response);
+            $("#zoomInModal").modal('show');
+        },
+    });
+}

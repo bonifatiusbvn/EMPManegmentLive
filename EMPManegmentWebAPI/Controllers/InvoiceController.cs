@@ -176,6 +176,7 @@ namespace EMPManagment.API.Controllers
                 throw ex;
             }
         }
+
         [HttpPost]
         [Route("InsertCreditDebitDetails")]
         public async Task<IActionResult> InsertCreditDebitDetails(CreditDebitView creditdebit)
@@ -200,6 +201,7 @@ namespace EMPManagment.API.Controllers
             }
             return StatusCode(response.Code, response);
         }
+
         [HttpPost]
         [Route("GetCreditDebitDetailsByVendorId")]
         public async Task<IActionResult> GetCreditDebitDetailsByVendorId(Guid Vid)

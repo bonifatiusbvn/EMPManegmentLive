@@ -382,20 +382,7 @@ function downloadPDF() {
     });
 }
 
-function getLastTransaction(Vid) {
 
-    $.ajax({
-        url: '/Invoice/GetLastTransactionByVendorId',
-        type: 'GET',
-        dataType: 'html',
-        data: { Vid: Vid },
-        success: function (response) {
-            $("#lasttenTransaction").html(response);
-            $("#zoomInModal").modal('show');
-        },
-
-    });
-}
 function EditInvoiceDetails(InvoiceNo) {
 
     $.ajax({

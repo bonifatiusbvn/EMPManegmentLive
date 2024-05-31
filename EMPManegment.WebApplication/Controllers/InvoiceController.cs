@@ -442,7 +442,7 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
-        [FormPermissionAttribute("All Transaction-View")]
+            [FormPermissionAttribute("All Transaction-View")]
         [HttpGet]
         public async Task<IActionResult> VendorAllTransaction(Guid Vid)
         {
