@@ -18,6 +18,7 @@ using System.Threading.Tasks;
 using X.PagedList;
 using Microsoft.AspNetCore.Mvc;
 using EMPManegment.EntityModels.ViewModels.PurchaseOrderModels;
+using Microsoft.EntityFrameworkCore;
 #nullable disable
 
 namespace EMPManegment.Repository.PurchaseRequestRepository
@@ -78,8 +79,8 @@ namespace EMPManegment.Repository.PurchaseRequestRepository
                 {
                     foreach (var pr in GetPRdata)
                     {
-                            pr.IsDeleted = true;
-                            response.message = "Purchase request with PR No. " + PrNo + " is deleted successfully."; 
+                        pr.IsDeleted = true;
+                        response.message = "Purchase request with PR No. " + PrNo + " is deleted successfully.";
                     }
 
                     Context.TblPurchaseRequests.UpdateRange(GetPRdata);
@@ -94,7 +95,7 @@ namespace EMPManegment.Repository.PurchaseRequestRepository
                     response.message = "Purchase request with PR No. " + PrNo + " not found.";
                 }
 
-                return response;   
+                return response;
             }
         }
 
@@ -295,32 +296,32 @@ namespace EMPManegment.Repository.PurchaseRequestRepository
             try
             {
                 PRDetails = (from a in Context.TblPurchaseRequests.Where(a => a.PrNo == PrNo)
-                                                     select new PurchaseRequestMasterView
-                                                     {
-                                                         PrNo = PrNo,
-                                                     }).FirstOrDefault();
+                             select new PurchaseRequestMasterView
+                             {
+                                 PrNo = PrNo,
+                             }).FirstOrDefault();
                 List<PurchaseRequestModel> PRList = (from a in Context.TblPurchaseRequests.Where(a => a.PrNo == PRDetails.PrNo)
-                                                               join b in Context.TblProductDetailsMasters on a.ProductId equals b.Id
-                                                               join c in Context.TblProductTypeMasters on a.ProductTypeId equals c.Id
-                                                               join d in Context.TblUsers on a.UserId equals d.Id
-                                                               join e in Context.TblProjectMasters on a.ProjectId equals e.ProjectId
-                                                               select new PurchaseRequestModel
-                                                               {
-                                                                   ProductTypeId = a.ProductTypeId,
-                                                                   ProductName = a.ProductName,
-                                                                   ProductId = a.ProductId,
-                                                                   ProductTypeName = c.Type,
-                                                                   UserId = a.UserId,
-                                                                   FullName = d.FirstName + " " + d.LastName,
-                                                                   ProjectId = a.ProjectId,
-                                                                   ProjectName = e.ProjectTitle,
-                                                                   Quantity = a.Quantity,
-                                                                   Price = b.PerUnitPrice,
-                                                                   //PerUnitWithGstprice = b.PerUnitWithGstprice,
-                                                                   ProductImage = b.ProductImage,
-                                                                   ProductTotal = b.PerUnitPrice * a.Quantity,
-                                                               }).ToList();
-                PRDetails.PRList = PRList; 
+                                                     join b in Context.TblProductDetailsMasters on a.ProductId equals b.Id
+                                                     join c in Context.TblProductTypeMasters on a.ProductTypeId equals c.Id
+                                                     join d in Context.TblUsers on a.UserId equals d.Id
+                                                     join e in Context.TblProjectMasters on a.ProjectId equals e.ProjectId
+                                                     select new PurchaseRequestModel
+                                                     {
+                                                         ProductTypeId = a.ProductTypeId,
+                                                         ProductName = a.ProductName,
+                                                         ProductId = a.ProductId,
+                                                         ProductTypeName = c.Type,
+                                                         UserId = a.UserId,
+                                                         FullName = d.FirstName + " " + d.LastName,
+                                                         ProjectId = a.ProjectId,
+                                                         ProjectName = e.ProjectTitle,
+                                                         Quantity = a.Quantity,
+                                                         Price = b.PerUnitPrice,
+                                                         //PerUnitWithGstprice = b.PerUnitWithGstprice,
+                                                         ProductImage = b.ProductImage,
+                                                         ProductTotal = b.PerUnitPrice * a.Quantity,
+                                                     }).ToList();
+                PRDetails.PRList = PRList;
                 return PRDetails;
             }
             catch (Exception ex)
@@ -328,40 +329,52 @@ namespace EMPManegment.Repository.PurchaseRequestRepository
                 throw ex;
             }
         }
-        public async Task<UserResponceModel> ApproveUnapprovePR(string PrNo)
+        public async Task<UserResponceModel> ApproveUnapprovePR(List<string> PrNo)
         {
-            UserResponceModel response = new UserResponceModel();
-            var GetPRdata = Context.TblPurchaseRequests.Where(a => a.PrNo == PrNo).ToList();
+            UserResponceModel response = new UserResponceModel { };
 
-            if (GetPRdata.Any())
+            try
             {
-                foreach (var pr in GetPRdata)
+                foreach (var item in PrNo)
                 {
-                    if (pr.IsApproved == true)
+                    if (item != "")
                     {
-                        pr.IsApproved = false;
-                        response.Message = "Purchase request with PR No. " + PrNo + " is deactivated successfully.";
+                        var prList = await Context.TblPurchaseRequests.Where(a => a.PrNo == item).ToListAsync();
+                        if (prList.Any())
+                        {
+                            foreach (var pr in prList)
+                            {
+                                pr.IsApproved = true;
+                                response.Message = "Purchase request with PR No. {pr.PrNo} is approved successfully.";
+                                response.Code = 200;
+                                Context.TblPurchaseRequests.Update(pr);
+                            }
+                            await Context.SaveChangesAsync();
+                        }
+                        else
+                        {
+                            response.Message = "Purchase request with PR No. {item} already approved!";
+                            response.Code = 404;
+                        }
                     }
                     else
                     {
-                        pr.IsApproved = true;
-                        response.Message = "Purchase request with PR No. " + PrNo + " is activated successfully.";
+                        response.Message = "Please select purchase request!";
+                        response.Code = 404;
                     }
+
                 }
 
-                Context.TblPurchaseRequests.UpdateRange(GetPRdata);
-                await Context.SaveChangesAsync();
-
-                response.Code = 200;
-                response.Data = GetPRdata;
             }
-            else
+            catch (Exception ex)
             {
-                response.Code = 404;
-                response.Message = "Purchase request with PR No. " + PrNo + " not found.";
+                response.Message = "An error occurred while processing your request.";
+                response.Code = 500;
             }
 
             return response;
         }
+
+
     }
 }

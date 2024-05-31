@@ -20,6 +20,6 @@ namespace EMPManegment.Inretface.Services.PurchaseRequestServices
         Task<ApiResponseModel> DeletePurchaseRequest(string PrNo);
         string CheckPRNo();
         Task<PurchaseRequestMasterView> PurchaseRequestDetailsByPrNo(string PrNo);
-        Task<UserResponceModel> ApproveUnapprovePR(string PrNo);
+        Task<UserResponceModel> ApproveUnapprovePR(List<string> PrNo);
     }
 }

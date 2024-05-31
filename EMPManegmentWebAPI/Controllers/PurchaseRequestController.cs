@@ -138,21 +138,21 @@ namespace EMPManagment.API.Controllers
 
         [HttpPost]
         [Route("ApproveUnapprovePR")]
-        public async Task<IActionResult> ApproveUnapprovePR(string PrNo)
+        public async Task<IActionResult> ApproveUnapprovePR(List<string> PrNo)
         {
             UserResponceModel responseModel = new UserResponceModel();
             var PurchaseRequest = await purchaseRequest.ApproveUnapprovePR(PrNo);
             try
             {
-                if (PurchaseRequest != null)
+                if (PurchaseRequest.Code == 200)
                 {
-                    responseModel.Code = (int)HttpStatusCode.OK;
+                    responseModel.Code = PurchaseRequest.Code;
                     responseModel.Message = PurchaseRequest.Message;
                 }
                 else
                 {
                     responseModel.Message = PurchaseRequest.Message;
-                    responseModel.Code = (int)HttpStatusCode.NotFound;
+                    responseModel.Code = PurchaseRequest.Code;
                 }
             }
             catch (Exception ex)

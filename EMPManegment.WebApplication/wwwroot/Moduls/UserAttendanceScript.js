@@ -143,7 +143,7 @@ $(document).ready(function () {
                         return "Pending...";
                     }
                     else {
-                        return "Missing"
+                        return "Missing";
                     }
                 }
             },
@@ -199,9 +199,11 @@ $(document).ready(function () {
                 {
                     targets: '_all', width: 'auto'
                 }
-            ]
+            ],
+            order: [[1, 'asc']] 
         });
     }
+
 
     data(datas);
 });
