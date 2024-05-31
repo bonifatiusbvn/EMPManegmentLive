@@ -448,7 +448,7 @@ namespace EMPManegment.Web.Controllers
         }
 
         [FormPermissionAttribute("GetPayExpense-View")]
-        public async Task<IActionResult> GetPayExpense()
+        public async Task<IActionResult> PayExpense()
         {
             ViewBag.UserId = HttpContext.Session.GetString("UserId");
             ViewBag.UserName = HttpContext.Session.GetString("UserName");

@@ -8,28 +8,19 @@
 
 <div class="card-body">
     <div class="table-responsive table-card mb-1">
-        <table role="grid" class="gridjs-table" style="height: auto;">
-            <thead class="gridjs-thead table-info">
-                <tr class="gridjs-tr">
-                    <th data-column-id="product" class="gridjs-th gridjs-th-sort text-muted" tabindex="0" style="width: 360px;">
-                        <div class="gridjs-th-content">Product</div>
-                        <button tabindex="-1" aria-label="Sort column ascending" title="Sort column ascending" class="gridjs-sort gridjs-sort-desc"></button>
-                    </th>
-                    <th data-column-id="price" class="gridjs-th gridjs-th-sort text-muted" tabindex="0" style="width: 101px;">
-                        <div class="gridjs-th-content">Price</div>
-                        <button tabindex="-1" aria-label="Sort column ascending" title="Sort column ascending" class="gridjs-sort gridjs-sort-neutral"></button>
-                    </th>
-                    <th data-column-id="action" class="gridjs-th gridjs-th-sort text-muted" tabindex="0" style="width: 80px;">
-                        <div class="gridjs-th-content">Action</div>
-                        <button tabindex="-1" aria-label="Sort column ascending" title="Sort column ascending" class="gridjs-sort gridjs-sort-neutral"></button>
-                    </th>
+        <table class="table table-bordered dt-responsive table-striped align-middle dataTable  dtr-inline" style="height: auto;">
+            <thead class="text-muted table-info">
+                <tr>
+                    <th>Product</th>
+                    <th>Price</th>
+                    <th>Action</th>
                 </tr>
             </thead>
-            <tbody class="gridjs-tbody">
+            <tbody>
                 @foreach (var item in Model)
                 {
-                    <tr class="gridjs-tr">
-                        <td data-column-id="product" class="gridjs-td">
+                    <tr>
+                        <td data-column-id="product">
                             <span>
                                 <div class="d-flex align-items-center">
                                     <div class="flex-shrink-0 me-3">
@@ -47,10 +38,10 @@
                                 </div>
                             </span>
                         </td>
-                        <td data-column-id="price" class="gridjs-td"><span>@item.PerUnitPrice</span></td>
+                        <td data-column-id="price" ><span>@item.PerUnitPrice</span></td>
                         @if (UserSession.FormPermisionData.Any(a => a.FormName == "Product List" && (a.Edit == true || a.Delete == true)))
                         {
-                            <td data-column-id="action" class="gridjs-td">
+                            <td data-column-id="action">
                                 @if (UserSession.FormPermisionData.Any(a => a.FormName == "Product List" && a.Edit == true))
                                 {
                                     <a href="#showModal" onclick="EditProductDetails('@item.Id')" data-bs-toggle="modal" class="text-primary d-inline-block edit-item-btn">
