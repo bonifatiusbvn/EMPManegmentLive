@@ -522,14 +522,12 @@ namespace EMPManegment.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<JsonResult> GetCreditDebitDetailsByVendorId()
+        public async Task<JsonResult> GetCreditDebitDetailsByVendorId(Guid VendorId)
         {
             try
             {
-                var creditdebitdetails = HttpContext.Request.Form["CREDITDEBITDETAILSBYID"];
-                var InsertDetails = JsonConvert.DeserializeObject<CreditDebitView>(creditdebitdetails);
                 List<CreditDebitView> creditdebit = new List<CreditDebitView>();
-                ApiResponseModel response = await APIServices.PostAsync("", "Invoice/GetCreditDebitDetailsByVendorId?Vid=" + InsertDetails.VendorId);
+                ApiResponseModel response = await APIServices.PostAsync("", "Invoice/GetCreditDebitDetailsByVendorId?Vid=" + VendorId);
                 if (response.code == 200)
                 {
                     creditdebit = JsonConvert.DeserializeObject<List<CreditDebitView>>(response.data.ToString());
