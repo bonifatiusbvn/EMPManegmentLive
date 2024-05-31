@@ -44,7 +44,7 @@
                         <th>Product Details</th>
                         <th>Item Price</th>
                         <th>Quantity</th>
-                        <th>Rating</th>
+                        <th>GST</th>
                         <th>Total Amount</th>
                     </tr>
                 </thead>
@@ -53,9 +53,15 @@
                         decimal? subtotal = 0;
                         decimal? totalGst = 0;
                         decimal? totalAmount = 0;
+                        decimal? ProductAmount = 0;
+                        decimal? ProductGst = 0;
+                        decimal? ProductTotalAmount = 0;
                     }
                     @foreach (var item in Model.PRList)
                     {
+                        ProductAmount = item.Price * item.Quantity;
+                        ProductGst = item.GstAmount * item.Quantity;
+                        ProductTotalAmount = ProductAmount + ProductGst;
                         <tr>
                             <td>
                                 <div class="d-flex">
@@ -64,24 +70,21 @@
                                     </div>
                                     <div class="flex-grow-1 ms-3">
                                         <h5 class="fs-15"><a href="apps-ecommerce-product-details.html" class="link-primary">@item.ProductName</a></h5>
-                                        <p class="text-muted mb-0">Color: <span class="fw-medium">Pink</span></p>
-                                        <p class="text-muted mb-0">Size: <span class="fw-medium">M</span></p>
+                                        <p class="text-muted mb-0">Category: <span class="fw-medium">@item.ProductTypeName</span></p>
+                                        <p class="text-muted mb-0">Description: <span class="fw-medium">@item.ProductDescription</span></p>
                                     </div>
                                 </div>
                             </td>
-                            <td>@item.Price</td>
+                            <td>@ProductAmount</td>
                             <td>@item.Quantity</td>
-                            <td>
-                                <div class="text-warning fs-15">
-                                    <i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-half-fill"></i>
-                                </div>
-                            </td>
-                            <td class="fw-medium text-end">
-                                @item.ProductTotal
+                            <td>@ProductGst</td>
+                            <td class="fw-medium ">
+                                @ProductTotalAmount
                             </td>
                         </tr>
-                        subtotal += item.ProductTotal;
-                        totalGst += item.PerUnitWithGstprice;
+                        subtotal += ProductAmount;
+                        totalGst += ProductGst;
+                        totalAmount = subtotal + totalGst;
                     }
                     <tr class="border-top border-top-dashed">
                         <td colspan="3"></td>
@@ -90,23 +93,15 @@
                                 <tbody>
                                     <tr>
                                         <td>Sub Total :</td>
-                                        <td id="subtotal" class="text-end">₹@subtotal</td>
+                                        <td id="subtotal">₹@subtotal</td>
                                     </tr>
-                                   @* <tr>
-                                        <td>Discount <span class="text-muted">(VELZON15)</span> : :</td>
-                                        <td class="text-end">-$53.99</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Shipping Charge :</td>
-                                        <td class="text-end">$65.00</td>
-                                    </tr>*@
                                     <tr>
                                         <td>GST :</td>
-                                        <td id="totalGst" class="text-end">₹@totalGst</td>
+                                        <td id="totalGst">₹@totalGst</td>
                                     </tr>
                                     <tr class="border-top border-top-dashed">
                                         <th>Total :</th>
-                                        <th id="total" class="text-end">₹0</th>
+                                        <th id="total">₹@totalAmount</th>
                                     </tr>
                                 </tbody>
                             </table>

@@ -317,9 +317,10 @@ namespace EMPManegment.Repository.PurchaseRequestRepository
                                                          ProjectName = e.ProjectTitle,
                                                          Quantity = a.Quantity,
                                                          Price = b.PerUnitPrice,
-                                                         //PerUnitWithGstprice = b.PerUnitWithGstprice,
+                                                         GstAmount = b.GstAmount,
                                                          ProductImage = b.ProductImage,
                                                          ProductTotal = b.PerUnitPrice * a.Quantity,
+                                                         ProductDescription = b.ProductShortDescription,
                                                      }).ToList();
                 PRDetails.PRList = PRList;
                 return PRDetails;

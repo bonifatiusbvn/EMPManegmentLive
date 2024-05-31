@@ -50,9 +50,10 @@ namespace EMPManegment.EntityModels.ViewModels.Purchase_Request
 
         public decimal? ProductTotal { get; set; }
 
-        public decimal? PerUnitWithGstprice { get; set; }
+        public decimal? GstAmount { get; set; }
 
         public string? ProductImage { get; set; }
+        public string? ProductDescription { get; set; }
 
     }
     public class PurchaseRequestMasterView
