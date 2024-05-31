@@ -188,11 +188,7 @@
                                                 <table class="table table-bordered dt-responsive nowrap table-striped align-middle dataTable no-footer dtr-inline" id="orderTable">
                                                     <thead class="text-muted table-info">
                                                         <tr class="text-uppercase">
-                                                            @*  <th scope="col" style="width: 25px;">
-                                                            <div class="form-check">
-                                                            <input class="form-check-input" type="checkbox" id="checkAll" value="option">
-                                                            </div>
-                                                            </th> *@
+
                                                             <th>Order ID</th>
                                                             <th>Company</th>
                                                             <th>Product</th>
@@ -210,11 +206,7 @@
                                                         @foreach (var item in Model)
                                                         {
                                                             <tr>
-                                                                @* <th scope="row">
-                                                            <div class="form-check">
-                                                            <input class="form-check-input" type="checkbox" name="checkAll" value="option1">
-                                                            </div>
-                                                            </th> *@
+
                                                                 <td class="id"><a href="/PurchaseOrderMaster/GetPurchaseOrderDetailsByOrderId/?OrderId=@item.OrderId" class="fw-medium link-primary">@item.OrderId</a></td>
                                                                 <td class="company_name">@item.CompanyName</td>
                                                                 <td class="product_name">@item.ProductName</td>
@@ -292,11 +284,7 @@
                                                 <table class="table table-bordered dt-responsive nowrap table-striped align-middle dataTable no-footer dtr-inline" id="orderTable">
                                                     <thead class="text-muted table-light">
                                                         <tr class="text-uppercase">
-                                                            @* <th scope="col" style="width: 25px;">
-                                                            <div class="form-check">
-                                                            <input class="form-check-input" type="checkbox" id="checkAll" value="option">
-                                                            </div>
-                                                            </th> *@
+
                                                             <th>Order ID</th>
                                                             <th>Company</th>
                                                             <th>Product</th>
@@ -313,11 +301,7 @@
                                                             if (item.DeliveryStatus == "Delivered")
                                                             {
                                                                 <tr>
-                                                                    @* <th scope="row">
-                                                            <div class="form-check">
-                                                            <input class="form-check-input" type="checkbox" name="checkAll" value="option1">
-                                                            </div>
-                                                            </th> *@
+
                                                                     <td class="id"><a href="/OrderMaster/GetPurchaseOrderDetailsByOrderId/?OrderId=@item.OrderId" class="fw-medium link-primary">@item.OrderId</a></td>
                                                                     <td class="company_name">@item.CompanyName</td>
                                                                     <td class="product_name">@item.ProductName</td>
@@ -384,11 +368,7 @@
                                                 <table class="table table-bordered dt-responsive nowrap table-striped align-middle dataTable no-footer dtr-inline" id="orderTable">
                                                     <thead class="text-muted table-light">
                                                         <tr class="text-uppercase">
-                                                            @*  <th scope="col" style="width: 25px;">
-                                                            <div class="form-check">
-                                                            <input class="form-check-input" type="checkbox" id="checkAll" value="option">
-                                                            </div>
-                                                            </th> *@
+
                                                             <th>Order ID</th>
                                                             <th>Company</th>
                                                             <th>Product</th>
@@ -405,11 +385,7 @@
                                                             if (item.DeliveryStatus == "Pickups")
                                                             {
                                                                 <tr>
-                                                                    @* <th scope="row">
-                                                            <div class="form-check">
-                                                            <input class="form-check-input" type="checkbox" name="checkAll" value="option1">
-                                                            </div>
-                                                            </th> *@
+
                                                                     <td class="id"><a href="/OrderMaster/GetPurchaseOrderDetailsByOrderId/?OrderId=@item.OrderId" class="fw-medium link-primary">@item.OrderId</a></td>
                                                                     <td class="company_name">@item.CompanyName</td>
                                                                     <td class="product_name">@item.ProductName</td>
@@ -477,11 +453,7 @@
                                                 <table class="table table-bordered dt-responsive nowrap table-striped align-middle dataTable no-footer dtr-inline" id="orderTable">
                                                     <thead class="text-muted table-light">
                                                         <tr class="text-uppercase">
-                                                            @* <th scope="col" style="width: 25px;">
-                                                            <div class="form-check">
-                                                            <input class="form-check-input" type="checkbox" id="checkAll" value="option">
-                                                            </div>
-                                                            </th> *@
+
                                                             <th>Order ID</th>
                                                             <th>Company</th>
                                                             <th>Product</th>
@@ -498,11 +470,7 @@
                                                             if (item.DeliveryStatus == "Returns")
                                                             {
                                                                 <tr>
-                                                                    @* <th scope="row">
-                                                            <div class="form-check">
-                                                            <input class="form-check-input" type="checkbox" name="checkAll" value="option1">
-                                                            </div>
-                                                            </th> *@
+
                                                                     <td class="id"><a href="/OrderMaster/GetPurchaseOrderDetailsByOrderId/?OrderId=@item.OrderId" class="fw-medium link-primary">@item.OrderId</a></td>
                                                                     <td class="company_name">@item.CompanyName</td>
                                                                     <td class="product_name">@item.ProductName</td>
@@ -570,11 +538,7 @@
                                                 <table class="table table-bordered dt-responsive nowrap table-striped align-middle dataTable no-footer dtr-inline" id="orderTable">
                                                     <thead class="text-muted table-light">
                                                         <tr class="text-uppercase">
-                                                            @* <th scope="col" style="width: 25px;">
-                                                            <div class="form-check">
-                                                            <input class="form-check-input" type="checkbox" id="checkAll" value="option">
-                                                            </div>
-                                                            </th> *@
+
                                                             <th>Order ID</th>
                                                             <th>Company</th>
                                                             <th>Product</th>
@@ -591,11 +555,7 @@
                                                             if (item.DeliveryStatus == "Cancelled")
                                                             {
                                                                 <tr>
-                                                                    @*  <th scope="row">
-                                                            <div class="form-check">
-                                                            <input class="form-check-input" type="checkbox" name="checkAll" value="option1">
-                                                            </div>
-                                                            </th> *@
+
                                                                     <td class="id"><a href="/OrderMaster/GetPurchaseOrderDetailsByOrderId/?OrderId=@item.OrderId" class="fw-medium link-primary">@item.OrderId</a></td>
                                                                     <td class="company_name">@item.CompanyName</td>
                                                                     <td class="product_name">@item.ProductName</td>
@@ -663,11 +623,7 @@
                                                 <table class="table table-bordered dt-responsive nowrap table-striped align-middle dataTable no-footer dtr-inline" id="orderTable">
                                                     <thead class="text-muted table-light">
                                                         <tr class="text-uppercase">
-                                                            @* <th scope="col" style="width: 25px;">
-                                                            <div class="form-check">
-                                                            <input class="form-check-input" type="checkbox" id="checkAll" value="option">
-                                                            </div>
-                                                            </th> *@
+
                                                             <th>Order ID</th>
                                                             <th>Company</th>
                                                             <th>Product</th>
@@ -684,11 +640,7 @@
                                                             if (item.DeliveryStatus == "Pending")
                                                             {
                                                                 <tr>
-                                                                    @*  <th scope="row">
-                                                            <div class="form-check">
-                                                            <input class="form-check-input" type="checkbox" name="checkAll" value="option1">
-                                                            </div>
-                                                            </th> *@
+
                                                                     <td class="id"><a href="/OrderMaster/GetPurchaseOrderDetailsByOrderId/?OrderId=@item.OrderId" class="fw-medium link-primary">@item.OrderId</a></td>
                                                                     <td class="company_name">@item.CompanyName</td>
                                                                     <td class="product_name">@item.ProductName</td>
@@ -756,11 +708,7 @@
                                                 <table class="table table-bordered dt-responsive nowrap table-striped align-middle dataTable no-footer dtr-inline" id="orderTable">
                                                     <thead class="text-muted table-light">
                                                         <tr class="text-uppercase">
-                                                            @* <th scope="col" style="width: 25px;">
-                                                            <div class="form-check">
-                                                            <input class="form-check-input" type="checkbox" id="checkAll" value="option">
-                                                            </div>
-                                                            </th> *@
+
                                                             <th>Order ID</th>
                                                             <th>Company</th>
                                                             <th>Product</th>
@@ -777,11 +725,7 @@
                                                             if (item.DeliveryStatus == "Inprogress")
                                                             {
                                                                 <tr>
-                                                                    @* <th scope="row">
-                                                            <div class="form-check">
-                                                            <input class="form-check-input" type="checkbox" name="checkAll" value="option1">
-                                                            </div>
-                                                            </th> *@
+
                                                                     <td class="id"><a href="/OrderMaster/GetPurchaseOrderDetailsByOrderId/?OrderId=@item.OrderId" class="fw-medium link-primary">@item.OrderId</a></td>
                                                                     <td class="company_name">@item.CompanyName</td>
                                                                     <td class="product_name">@item.ProductName</td>

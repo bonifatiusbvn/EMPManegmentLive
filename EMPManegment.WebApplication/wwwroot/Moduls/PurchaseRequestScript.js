@@ -76,7 +76,7 @@ function AddNewRow(Result) {
         var existingProductId = existingProductRow.data('product-id');
         if (existingProductId === newProductId) {
             isDuplicate = true;
-            return false; 
+            return false;
         }
     });
 
@@ -134,7 +134,7 @@ function updateTotals() {
 }
 
 function updateCartTotal() {
-    
+
     var cartSubtotal = 0;
     var cartGst = 0;
     var cartTotalamount = 0;
@@ -202,15 +202,16 @@ $(document).ready(function () {
             },
             columns: [
                 {
+                    "data": "prNo",
                     "render": function (data, type, full) {
-                        return '<h5 class="fs-15"><a href="/PurchaseRequest/PurchaseRequestDetails?prNo=' + full.prNo + '" class="fw-medium link-primary">' + full.prNo; '</a></h5>';
+                        return '<h5 class="fs-15"><a href="/PurchaseRequest/PurchaseRequestDetails?prNo=' + full.prNo + '" class="fw-medium link-primary">' + full.prNo + '</a></h5>';
                     }
                 },
                 {
+                    "data": null,
                     "render": function (data, type, full) {
                         return full.fullName + ' ( ' + full.userName + ')';
                     },
-
                 },
                 { "data": "projectName", "name": "ProjectName" },
                 { "data": "productName", "name": "ProductName" },
@@ -222,52 +223,57 @@ $(document).ready(function () {
                     }
                 },
                 {
+                    "data": null,
                     "render": function (data, type, full) {
-                        var userPermissionArray = [];
-                        userPermissionArray = JSON.parse(userPermission);
-
-                        var canEdit = false;
-                        var canDelete = false;
-
-                        for (var i = 0; i < userPermissionArray.length; i++) {
-                            var permission = userPermissionArray[i];
-                            if (permission.formName == "Purchase Request List ") {
-                                canEdit = permission.edit;
-                                canDelete = permission.delete;
-                                break; 
-                            }
-                        }
-
+                        var userPermissionArray = JSON.parse(userPermission);
+                        var canEdit = userPermissionArray.some(permission => permission.formName === "Purchase Request List " && permission.edit);
+                        var canDelete = userPermissionArray.some(permission => permission.formName === "Purchase Request List " && permission.delete);
 
                         var buttons = '<ul class="list-inline hstack gap-2 mb-0">';
-
                         if (canEdit) {
                             buttons += '<li class="btn text-primary list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">' +
                                 '<a class="btn text-primary" onclick="EditPurchaseRequestDetails(\'' + full.prId + '\')">' +
                                 '<i class="fa-regular fa-pen-to-square"></i></a></li>';
                         }
-
                         if (canDelete) {
                             buttons += '<li class="btn text-danger list-inline-item delete" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Delete" style="margin-left:12px;">' +
                                 '<a onclick="DeletePurchaseRequest(\'' + full.prNo + '\')">' +
                                 '<i class="fas fa-trash"></i></a></li>';
                         }
-
                         buttons += '</ul>';
                         return buttons;
                     }
-
                 }
             ],
             columnDefs: [{
                 "defaultContent": "",
                 "targets": "_all",
-            }]
+            }],
+            drawCallback: function () {
+
+                updateCheckedAllState();
+                $('#AllChecked').off('change').on('change', function () {
+                    $('input[name="chk_child"]').prop('checked', $(this).prop('checked'));
+                    updateCheckedAllState();
+                });
+
+                $('input[name="chk_child"]').off('change').on('change', function () {
+                    updateCheckedAllState();
+                });
+            }
         });
     }
-    data(datas);
-});
 
+    function updateCheckedAllState() {
+        var allChecked = $('input[name="chk_child"]').length === $('input[name="chk_child"]:checked').length;
+        $('#AllChecked').prop('checked', allChecked);
+    }
+
+});
+function updateCheckedAllState() {
+    var allChecked = $('input[name="chk_child"]').length === $('input[name="chk_child"]:checked').length;
+    $('#AllChecked').prop('checked', allChecked);
+}
 
 function ApproveUnapprovePR() {
 
@@ -292,7 +298,7 @@ function ApproveUnapprovePR() {
             if (val.length >= 0) {
                 var form_data = new FormData();
                 form_data.append("PrNo", val);
-                
+
                 $.ajax({
                     url: '/PurchaseRequest/ApproveUnapprovePR',
                     type: 'Post',
@@ -356,7 +362,6 @@ function GetPurchaseRequestList() {
     })
 }
 
-
 function CreatePurchaseRequest() {
     var TotalAmount = $("#dsptotalAmount").text();
     if (TotalAmount != "") {
@@ -382,7 +387,7 @@ function CreatePurchaseRequest() {
 
         var form_data = new FormData();
         form_data.append("InsertPRDetails", JSON.stringify(data));
-        
+
         $.ajax({
             url: '/PurchaseRequest/CreateMutiplePurchaseRequest',
             type: 'POST',
@@ -430,9 +435,6 @@ function CreatePurchaseRequest() {
         })
     }
 }
-
-
-
 
 function EditPurchaseRequestDetails(PrId) {
     $.ajax({
@@ -487,15 +489,7 @@ function UpdatePurchaseRequestDetails() {
             }
         }
     })
-    //}
-    //else {
-    //    Swal.fire({
-    //        title: "Kindly Fill All Details",
-    //        icon: 'warning',
-    //        confirmButtonColor: '#3085d6',
-    //        confirmButtonText: 'OK',
-    //    })
-    //}
+
 }
 function DeletePurchaseRequest(PrNo) {
 
@@ -548,24 +542,5 @@ function DeletePurchaseRequest(PrNo) {
     });
 }
 
-function anyCheckboxChecked() {debugger
-    return $("input[name='chk_child']:checked").length > 0;
-}
-
-function updateCheckedAllState() {debugger
-    var allChecked = $('input[name="chk_child"]').length === $('input[name="chk_child"]:checked').length;
-    $('#AllChecked').prop('checked', allChecked);
-}
-
-// Event listener for individual checkboxes
-$('#PRListTable').on('change', 'input[name="chk_child"]', function () {debugger
-    updateCheckedAllState();
-});
-
-// Event listener for the "check all" checkbox
-$('#AllChecked').on('change', function () {debugger
-    $('input[name="chk_child"]').prop('checked', $(this).prop('checked'));
-    updateCheckedAllState();
-});
 
 
