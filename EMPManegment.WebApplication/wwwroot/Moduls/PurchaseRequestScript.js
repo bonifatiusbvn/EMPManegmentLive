@@ -249,7 +249,7 @@ $(document).ready(function () {
 
                         if (canDelete) {
                             buttons += '<li class="btn text-danger list-inline-item delete" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Delete" style="margin-left:12px;">' +
-                                '<a onclick="DeletePurchaseRequest(\'' + full.prNo + '\')">' +
+                                '<a  class="text-danger" onclick="DeletePurchaseRequest(\'' + full.prNo + '\')">' +
                                 '<i class="fas fa-trash"></i></a></li>';
                         }
 
@@ -308,7 +308,7 @@ function ApproveUnapprovePR() {
                                 confirmButtonClass: "btn btn-primary w-xs mt-2",
                                 buttonsStyling: false
                             }).then(function () {
-                                window.location = '/PurchaseRequest/PurchaseRequestList';
+                                window.location = '/PurchaseRequest/PurchaseRequests';
                             });
                         } else {
                             Swal.fire({
@@ -317,7 +317,7 @@ function ApproveUnapprovePR() {
                                 confirmButtonClass: "btn btn-primary w-xs mt-2",
                                 buttonsStyling: false
                             }).then(function () {
-                                window.location = '/PurchaseRequest/PurchaseRequestList';
+                                window.location = '/PurchaseRequest/PurchaseRequests';
                             });
                         }
                     }
@@ -329,7 +329,7 @@ function ApproveUnapprovePR() {
                 'User have no changes.!!😊',
                 'error'
             ).then(function () {
-                window.location = '/PurchaseRequest/PurchaseRequestList';
+                window.location = '/PurchaseRequest/PurchaseRequests';
             });
         }
     });
@@ -398,7 +398,7 @@ function CreatePurchaseRequest() {
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'OK'
                     }).then(function () {
-                        window.location = '/PurchaseRequest/PurchaseRequestList';
+                        window.location = '/PurchaseRequest/PurchaseRequests';
                     });
                 }
                 else {
@@ -482,7 +482,7 @@ function UpdatePurchaseRequestDetails() {
                     confirmButtonColor: '#3085d6',
                     confirmButtonText: 'OK',
                 }).then(function () {
-                    window.location = '/PurchaseRequest/PurchaseRequestList';
+                    window.location = '/PurchaseRequest/PurchaseRequests';
                 });
             }
         }

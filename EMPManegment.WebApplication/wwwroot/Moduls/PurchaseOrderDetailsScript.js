@@ -18,6 +18,7 @@ function preventEmptyValue(input) {
 }
 
 $(document).ready(function () {
+    debugger
     $(document).on('input', '.product-quantity', function () {
         var row = $(this).closest('.product');
         updateProductTotalAmount(row);
@@ -166,7 +167,7 @@ function SearchData() {
             });
         }
         else {
-            window.location = '/OrderMaster/CreateOrder';
+            window.location = '/PurchaseOrderMaster/PurchaseOrders';
         }
     }
     else {
@@ -232,7 +233,7 @@ function SaveCreatePurchaseOrder() {
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'OK',
                     }).then(function () {
-                        window.location = '/PurchaseOrderMaster/CreatePurchaseOrder';
+                        window.location = '/PurchaseOrderMaster/PurchaseOrders';
                     });
                 }
             }
@@ -581,7 +582,7 @@ function deletePurchaseOrderDetails(Id) {
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'OK'
                     }).then(function () {
-                        window.location = '/PurchaseOrderMaster/CreatePurchaseOrder';
+                        window.location = '/PurchaseOrderMaster/PurchaseOrders';
                     })
                 },
                 error: function () {
@@ -591,7 +592,7 @@ function deletePurchaseOrderDetails(Id) {
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'OK',
                     }).then(function () {
-                        window.location = '/PurchaseOrderMaster/CreatePurchaseOrder';
+                        window.location = '/PurchaseOrderMaster/PurchaseOrders';
                     })
                 }
             })
@@ -659,7 +660,7 @@ function UpdatePurchaseOrderDetails() {
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'OK',
                     }).then(function () {
-                        window.location = '/PurchaseOrderMaster/CreatePurchaseOrder';
+                        window.location = '/PurchaseOrderMaster/PurchaseOrders';
                     });
                 }
             }
@@ -801,8 +802,6 @@ function AddNewRow(Result) {
         });
     }
 }
-
-
 
 function updateRowNumbers() {
     $(".product-id").each(function (index) {
@@ -1220,7 +1219,7 @@ function InsertMultiplePurchaseOrderDetails() {
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'OK'
                     }).then(function () {
-                        window.location = '/PurchaseOrderMaster/GetPurchaseOrderDetailsByOrderId/?OrderId=' + PONumber;
+                        window.location = '/PurchaseOrderMaster/PurchaseOrderDetails/?OrderId=' + PONumber;
                     });
                 }
                 else {
