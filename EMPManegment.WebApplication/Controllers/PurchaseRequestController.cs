@@ -128,7 +128,7 @@ namespace EMPManegment.Web.Controllers
         }
 
         [FormPermissionAttribute("Purchase Request List-View")]
-        public IActionResult PurchaseRequestList()
+        public IActionResult PurchaseRequests()
         {
             return View();
         }

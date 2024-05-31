@@ -31,7 +31,7 @@ namespace EMPManegment.Web.Controllers
 
         [FormPermissionAttribute("Purchase Order List -View")]
         [HttpGet]
-        public async Task<IActionResult> CreatePurchaseOrder(int? page)
+        public async Task<IActionResult> PurchaseOrders(int? page)
         {
             try
             {
@@ -89,13 +89,8 @@ namespace EMPManegment.Web.Controllers
         }
 
         [FormPermissionAttribute("ShowProductDetails-View")]
-        public IActionResult ShowProductDetails()
-        {
-            return View();
-        }
-
         [HttpGet]
-        public async Task<IActionResult> GetPurchaseOrderDetailsByOrderId(string OrderId)
+        public async Task<IActionResult> PurchaseOrderDetails(string OrderId)
         {
             try
             {
@@ -105,7 +100,7 @@ namespace EMPManegment.Web.Controllers
                 {
                     order = JsonConvert.DeserializeObject<PurchaseOrderMasterView>(response.data.ToString());
                 }
-                return View("ShowProductDetails", order);
+                return View(order);
             }
             catch (Exception ex)
             {
@@ -115,7 +110,7 @@ namespace EMPManegment.Web.Controllers
 
         [FormPermissionAttribute("Create Purchase Order-View")]
         [HttpGet]
-        public async Task<IActionResult> CreatePurchaseOrderView()
+        public async Task<IActionResult> CreatePurchaseOrder()
         {
             try
             {
