@@ -311,15 +311,6 @@
                                     <div class="card-body">
                                         <div class="hstack gap-2 justify-content-end d-print-none mt-4">
                                             <button type="button" class="btn btn-lg btn-success" id="SavePOButton" onclick="InsertMultiplePurchaseOrderDetails()" style="width: 160px;height: 50px;"><i class="ri-printer-line align-bottom me-1"></i>Create</button>
-                                            @*                                            @if (Model.Id == Guid.Empty)
-                                            {
-
-                                            <button type="button" class="btn btn-lg btn-primary px-5" id="SavePOButton" onclick="InsertMultiplePurchaseOrderDetails()"><i class="ri-printer-line align-bottom me-1"></i> Add Purchase Order</button>
-                                            }
-                                            else
-                                            {
-                                            <button type="button" class="btn btn-lg btn-primary px-5" id="UpdatePOButton" onclick="UpdateMultiplePurchaseOrderDetails()"><i class="ri-printer-line align-bottom me-1"></i> Update</button>
-                                            }*@
                                         </div>
                                     </div>
                                 </div>
@@ -370,7 +361,7 @@
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-primary add-address" id="AddShippingBtn" onclick="AddShippingAddress()">Add</button>
                 <span id="spnaddressbutton" style="color:red;"></span>
-                @* <button type="button" class="btn btn-primary" onclick="fn_mdAddAddress()">Add</button> *@
+
             </div>
         </div>
     </div>
