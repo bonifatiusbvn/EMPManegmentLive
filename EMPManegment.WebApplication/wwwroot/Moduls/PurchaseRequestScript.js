@@ -118,7 +118,7 @@ $(document).ready(function () {
 
 function updateTotals() {
 
-    $(".products").each(function () {debugger
+    $(".products").each(function () {
         var row = $(this);
         var subtotal = parseFloat(row.find("#dspperunitprice").text().replace('₹', ''));
         var totalquantity = parseFloat(row.find("#txtproductquantity").val());
@@ -199,10 +199,6 @@ $(document).ready(function () {
                 type: "POST",
                 url: '/PurchaseRequest/GetPRList',
                 dataType: 'json',
-                dataSrc: function (json) {
-                    console.log('AJAX response:', json);
-                    return json.data;
-                }
             },
             columns: [
                 {
@@ -222,7 +218,7 @@ $(document).ready(function () {
                 {
                     "data": "isApproved", "name": "IsApproved",
                     "render": function (data, type, full) {
-                        return '<input type="checkbox" ' + (full.isApproved ? 'checked' : '') + ' onclick="ApproveUnapprovePR(this,\'' + full.prNo + '\')">';
+                        return '<div class="form-check"><input class="form-check-input" ' + (full.isApproved ? 'checked' : '') + ' data-id="' + full.prNo + '" type="checkbox" name="chk_child"></div>';
                     }
                 },
                 {
@@ -273,13 +269,10 @@ $(document).ready(function () {
 });
 
 
-function ApproveUnapprovePR(checkbox, PrNo) {
-
-    var isChecked = $(checkbox).is(':checked');
-    var confirmationMessage = isChecked ? "Are you sure you want to approve this purchase request?" : "Are you sure you want to unapprove this purchase request?";
+function ApproveUnapprovePR() {
 
     Swal.fire({
-        title: confirmationMessage,
+        title: "Are you sure you want to approve this purchase request?",
         text: "You won't be able to revert this!",
         icon: "warning",
         showCancelButton: true,
@@ -291,40 +284,53 @@ function ApproveUnapprovePR(checkbox, PrNo) {
         showCloseButton: true
     }).then((result) => {
         if (result.isConfirmed) {
-            var formData = new FormData();
-            formData.append("PrNo", PrNo);
 
-            $.ajax({
-                url: '/PurchaseRequest/ApproveUnapprovePR?PrNo=' + PrNo,
-                type: 'Post',
-                contentType: 'application/json;charset=utf-8;',
-                dataType: 'json',
-                success: function (Result) {
-                    if (Result.code == 200) {
-                        Swal.fire({
-                            title: isChecked ? "Approve!" : "Unapprove!",
-                            text: Result.message,
-                            icon: "success",
-                            confirmButtonClass: "btn btn-primary w-xs mt-2",
-                            buttonsStyling: false
-                        }).then(function () {
-                            GetPRData();
-                        });
-                    } else {
-                        GetPRData();
-                    }
-
-                }
+            let val = [];
+            $("input[name=chk_child]:checked").each(function () {
+                val.push($(this).attr("data-id"));
             });
+            if (val.length >= 0) {
+                var form_data = new FormData();
+                form_data.append("PrNo", val);
+                
+                $.ajax({
+                    url: '/PurchaseRequest/ApproveUnapprovePR',
+                    type: 'Post',
+                    contentType: 'application/json',
+                    data: form_data,
+                    processData: false,
+                    contentType: false,
+                    success: function (Result) {
+                        if (Result.code == 200) {
+                            Swal.fire({
+                                title: Result.message,
+                                icon: "success",
+                                confirmButtonClass: "btn btn-primary w-xs mt-2",
+                                buttonsStyling: false
+                            }).then(function () {
+                                window.location = '/PurchaseRequest/PurchaseRequestList';
+                            });
+                        } else {
+                            Swal.fire({
+                                title: Result.message,
+                                icon: "warning",
+                                confirmButtonClass: "btn btn-primary w-xs mt-2",
+                                buttonsStyling: false
+                            }).then(function () {
+                                window.location = '/PurchaseRequest/PurchaseRequestList';
+                            });
+                        }
+                    }
+                });
+            }
         } else if (result.dismiss === Swal.DismissReason.cancel) {
-
             Swal.fire(
                 'Cancelled',
                 'User have no changes.!!😊',
                 'error'
             ).then(function () {
-                GetPRData();
-            });;
+                window.location = '/PurchaseRequest/PurchaseRequestList';
+            });
         }
     });
 }
@@ -541,36 +547,25 @@ function DeletePurchaseRequest(PrNo) {
         }
     });
 }
-//function validateAndCreatePurchaseRequest() {
-//    PRForm = $("#UpdatePurchaseRequestDetailsForm").validate({
-//        rules: {
-//            txtusername: "required",
-//            txtprojectId: "required",
-//            txtProductId: "required",
-//            txtproductName: "required",
-//            txtProductTypeId: "required",
-//        },
-//        messages: {
-//            txtusername: "Please Enter UserNAme",
-//            txtprojectId: "Please Enter ProjectId",
-//            txtProductId: "Please Enter ProductId",
-//            txtproductName: "Please Enter ProductName",
-//            txtProductTypeId: "Please Enter ProductTypeId",
 
-//        }
-//    })
-//    var isValid = true;
+function anyCheckboxChecked() {debugger
+    return $("input[name='chk_child']:checked").length > 0;
+}
 
-//    if (isValid) {
-//        if ($("#txtPrId").val() == '') {
-//            CreatePurchaseRequest();
-//        }
-//        else {
-//            UpdatePurchaseRequestDetails()
-//        }
-//    }
-//}
+function updateCheckedAllState() {debugger
+    var allChecked = $('input[name="chk_child"]').length === $('input[name="chk_child"]:checked').length;
+    $('#AllChecked').prop('checked', allChecked);
+}
 
+// Event listener for individual checkboxes
+$('#PRListTable').on('change', 'input[name="chk_child"]', function () {debugger
+    updateCheckedAllState();
+});
 
+// Event listener for the "check all" checkbox
+$('#AllChecked').on('change', function () {debugger
+    $('input[name="chk_child"]').prop('checked', $(this).prop('checked'));
+    updateCheckedAllState();
+});
 
 

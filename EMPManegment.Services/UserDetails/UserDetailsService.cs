@@ -99,9 +99,9 @@ namespace EMPManegment.Services.UserList
             return await UserList.GetSearchEmpList(EmpList);
         }
 
-        public async Task<IEnumerable<EmpDetailsView>> GetActiveDeactiveUserList(string? searchby, string? searchfor)
+        public async Task<IEnumerable<EmpDetailsView>> GetActiveDeactiveUserList()
         {
-            return await UserList.GetActiveDeactiveUserList(searchby,searchfor);
+            return await UserList.GetActiveDeactiveUserList();
         }
     }
 }

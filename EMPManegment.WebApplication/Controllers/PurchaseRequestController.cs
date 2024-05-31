@@ -14,6 +14,7 @@ using X.PagedList;
 using Newtonsoft.Json;
 using DocumentFormat.OpenXml.Drawing.Charts;
 using EMPManegment.Web.Helper;
+using EMPManegment.EntityModels.ViewModels.ExpenseMaster;
 
 namespace EMPManegment.Web.Controllers
 {
@@ -259,24 +260,30 @@ namespace EMPManegment.Web.Controllers
             return View();
         }
 
-        public async Task<IActionResult> ApproveUnapprovePR(string prNo)
+        public async Task<IActionResult> ApproveUnapprovePR()
         {
             try
             {
-                ApiResponseModel response = await APIServices.PostAsync("", "PurchaseRequest/ApproveUnapprovePR?PrNo=" + prNo);
+                var PR = HttpContext.Request.Form["PrNo"];
+                List<string> PrNo = PR.ToString().Split(',').ToList();
+
+                ApiResponseModel response = await APIServices.PostAsync(PrNo, "PurchaseRequest/ApproveUnapprovePR");
+
                 if (response.code == 200)
                 {
-                    return Ok(new { Message = string.Format(response.message), Code = response.code });
+                    return Ok(new { Message = response.message, Code = response.code });
                 }
                 else
                 {
-                    return BadRequest(new { Message = string.Format(response.message), Code = response.code });
+                    return Ok(new { Message = response.message, Code = response.code });
                 }
             }
             catch (Exception ex)
             {
-                throw ex;
+                return StatusCode(500, new { Message = "An error occurred while processing your request.", Code = 500 });
             }
         }
+
+
     }
 }
