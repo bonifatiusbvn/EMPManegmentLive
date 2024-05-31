@@ -190,7 +190,7 @@ $(document).ready(function () {
         GetPRData(userPermission);
     }
     function GetPRData(userPermission) {
-        $('#PRListTable').DataTable({
+        var table = $('#PRListTable').DataTable({
             processing: false,
             serverSide: true,
             filter: true,
@@ -219,7 +219,7 @@ $(document).ready(function () {
                 {
                     "data": "isApproved", "name": "IsApproved",
                     "render": function (data, type, full) {
-                        return '<div class="form-check"><input class="form-check-input" ' + (full.isApproved ? 'checked' : '') + ' data-id="' + full.prNo + '" type="checkbox" name="chk_child"></div>';
+                        return '<div class="form-check"><input class="form-check-input chk-child" ' + (full.isApproved ? 'checked' : '') + ' data-id="' + full.prNo + '" type="checkbox" name="chk_child"></div>';
                     }
                 },
                 {
@@ -237,7 +237,7 @@ $(document).ready(function () {
                         }
                         if (canDelete) {
                             buttons += '<li class="btn text-danger list-inline-item delete" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Delete" style="margin-left:12px;">' +
-                                '<a  class="text-danger" onclick="DeletePurchaseRequest(\'' + full.prNo + '\')">' +
+                                '<a onclick="DeletePurchaseRequest(\'' + full.prNo + '\')">' +
                                 '<i class="fas fa-trash"></i></a></li>';
                         }
                         buttons += '</ul>';
@@ -245,16 +245,20 @@ $(document).ready(function () {
                     }
                 }
             ],
-            columnDefs: [{
-                "defaultContent": "",
-                "targets": "_all",
-            }],
+            columnDefs: [
+                {
+                    "targets": 5,
+                    "orderable": false
+                },
+                {
+                    "defaultContent": "",
+                    "targets": "_all",
+                }
+            ],
             drawCallback: function () {
-
-                updateCheckedAllState();
+                $('#AllChecked').prop('checked', false);
                 $('#AllChecked').off('change').on('change', function () {
                     $('input[name="chk_child"]').prop('checked', $(this).prop('checked'));
-                    updateCheckedAllState();
                 });
 
                 $('input[name="chk_child"]').off('change').on('change', function () {
@@ -263,17 +267,15 @@ $(document).ready(function () {
             }
         });
     }
-
     function updateCheckedAllState() {
+        debugger
         var allChecked = $('input[name="chk_child"]').length === $('input[name="chk_child"]:checked').length;
         $('#AllChecked').prop('checked', allChecked);
     }
 
+    data(datas);
 });
-function updateCheckedAllState() {
-    var allChecked = $('input[name="chk_child"]').length === $('input[name="chk_child"]:checked').length;
-    $('#AllChecked').prop('checked', allChecked);
-}
+
 
 function ApproveUnapprovePR() {
 
@@ -489,7 +491,15 @@ function UpdatePurchaseRequestDetails() {
             }
         }
     })
-
+    //}
+    //else {
+    //    Swal.fire({
+    //        title: "Kindly Fill All Details",
+    //        icon: 'warning',
+    //        confirmButtonColor: '#3085d6',
+    //        confirmButtonText: 'OK',
+    //    })
+    //}
 }
 function DeletePurchaseRequest(PrNo) {
 
