@@ -226,12 +226,17 @@
                 <ul class="nav nav-tabs-custom rounded card-header-tabs nav-justified border-bottom-0 mx-n3" role="tablist">
                     <li class="nav-item ">
                         <h6 class="text-primary p-3 bg-primary-subtle">
-                            Creadit Debit
+                            Credit Debit
                         </h6>
                     </li>
                 </ul>
             </div>
             <div class="card-body p-0">
+                @foreach (var item in Model)
+                {
+                    <input type="text" id="txtvendorid" value="@item.VandorId" hidden />
+                    <input type="text" id="txtinvoiceno" value="@item.InvoiceNo" hidden />
+                }
                 <div class="tab-content text-muted">
                     <div class="tab-pane active" id="cryptoBuy" role="tabpanel">
                         <div class="p-3 bg-primary-subtle">
@@ -299,9 +304,4 @@
     var userPermissions = '@Html.Raw(Json.Serialize(UserSession.FormPermisionData))';
 </script>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script src="~/moduls/invoicemasterscript.js" asp-append-version="true"></script>
-<script src="~/assets/libs/swiper/swiper-bundle.min.js"></script>
-
-<!--crypto transactions init js-->
-<script src="~/assets/js/pages/crypto-transactions.init.js"></script>
 <script src="~/moduls/creditdebitmasterscript.js" asp-append-version="true"></script>

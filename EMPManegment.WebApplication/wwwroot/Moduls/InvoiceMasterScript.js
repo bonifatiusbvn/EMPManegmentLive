@@ -1,9 +1,5 @@
 ﻿
 $(document).ready(function () {
-    GetAllVendorData()
-    GetAllTransactionData()
-});
-$(document).ready(function () {
     $("#CreateInvoiceForm").validate({
         rules: {
             textVendorName: "required",
@@ -386,43 +382,6 @@ function downloadPDF() {
     });
 }
 
-function GetAllVendorData() {
-
-    $('#VendorTableData').DataTable({
-        processing: false,
-        serverSide: true,
-        filter: true,
-        "bDestroy": true,
-        ajax: {
-            type: "Post",
-            url: '/Invoice/GetVendorList',
-            dataType: 'json'
-        },
-        columns: [
-            {
-                "data": "vendorCompany", "name": "VendorCompany",
-                "render": function (data, type, full) {
-
-                    return '<h5 class="fs-15"><a href="/Invoice/PayVendors/?Vid=' + full.vid + '" class="fw-medium link-primary">' + full.vendorCompany; '</a></h5>';
-                }
-            },
-            {
-                "name": "VendorFullName",
-                "render": function (data, type, full, meta) {
-                    return full.vendorFirstName + ' ' + full.vendorLastName;
-                }
-            },
-            { "data": "vendorEmail", "name": "VendorEmail" },
-            { "data": "vendorPhone", "name": "VendorPhone" },
-
-        ],
-        columnDefs: [{
-            "defaultContent": "",
-            "targets": "_all",
-        }]
-    });
-}
-
 function getLastTransaction(Vid) {
 
     $.ajax({
@@ -526,64 +485,8 @@ $(document).ready(function () {
     });
 });
 
-function GetAllTransactionData() {
-    $('#transactionTable').DataTable({
-        processing: false,
-        serverSide: true,
-        filter: true,
-        "bDestroy": true,
-        ajax: {
-            type: "Post",
-            url: '/Invoice/GetAllTransactiondata',
-            dataType: 'json'
-        },
-        autoWidth: false,
-        columns: [
-            { "data": "vendorName", "name": "VendorName" },
-            {
-                "data": "date", "name": "Date",
-                "render": function (data, type, row) {
-                    return getCommonDateformat(data);
-                }
-            },
-            { "data": "paymentMethodName", "name": "PaymentMethodName" },
-            { "data": "paymentTypeName", "name": "PaymentTypeName" },
-            { "data": "creditDebitAmount", "name": "CreditDebitAmount" },
-            { "data": "pendingAmount", "name": "PendingAmount" },
-            { "data": "vendorAddress", "name": "VendorAddress" },
-        ],
-        columnDefs: [
-            {
-                targets: 4,
-                render: function (data, type, row) {
-                    var amountClass = parseFloat(data) < 0 ? 'text-success' : 'text-success';
-                    return '<span class="' + amountClass + '">' + data + '</span>';
-                }
-            },
-            {
-                targets: 5,
-                render: function (data, type, row) {
-                    var amountClass = parseFloat(data) < 0 ? 'text-danger' : 'text-danger';
-                    return '<span class="' + amountClass + '">' + data + '</span>';
-                }
-            }
-        ],
-        createdRow: function (row, data, dataIndex) {
-            $(row).addClass('text-muted');
-            var htmlContent = '<td class="id" style="display:none;"><a href="javascript:void(0);" class="fw-medium link-primary">#VZ001</a></td>';
-            htmlContent += '<td><div class="avatar-xs"><div class="avatar-title bg-danger-subtle text-danger rounded-circle fs-16"><i class="ri-arrow-right-up-fill"></i></div></div></td>';
-            htmlContent += '<td class="date">' + data.vendorName + '<small class="text-muted"></small></td>';
-            htmlContent += '<td class="form_name">' + getCommonDateformat(data.date) + '</td>';
-            htmlContent += '<td class="to_name">' + data.paymentMethodName + '</td>';
-            htmlContent += '<td class="to_name">' + data.paymentTypeName + '</td>';
-            htmlContent += '<td class="to_name text-success">' + data.creditDebitAmount + '</td>';
-            htmlContent += '<td class="to_name text-danger">' + data.pendingAmount + '</td>';
-            htmlContent += '<td class="status"><span class="badge bg-primary-subtle text-primary fs-11"><i class="ri-time-line align-bottom"></i> Processing</span></td>';
 
-            $(row).html(htmlContent);
-        }
-    });
-}
+
 var datas = userPermissions
 $(document).ready(function () {
     function data(datas) {
@@ -611,7 +514,7 @@ $(document).ready(function () {
                 "data": "invoiceNo",
                 "name": "InvoiceNo",
                 "render": function (data, type, full) {
-                    return '<h5 class="fs-15"><a href="/Invoice/OrderInvoiceDetails?InvoiceId=' + full.id + '" class="fw-medium link-primary">' + full.invoiceNo + '</a></h5>';
+                    return '<h5 class="fs-15"><a href="/Invoice/InvoiceDetails?InvoiceId=' + full.id + '" class="fw-medium link-primary">' + full.invoiceNo + '</a></h5>';
                 }
             },
             { "data": "vendorName", "name": "VendorName", "className": "text-center" },
