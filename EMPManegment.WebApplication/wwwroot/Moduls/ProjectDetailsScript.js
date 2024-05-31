@@ -217,7 +217,7 @@ function invitemember(Id) {
                     confirmButtonColor: '#3085d6',
                     confirmButtonText: 'OK',
                 }).then(function () {
-                    window.location = '/Project/GetProjectDetails/?Id=' + proProjectId;
+                    window.location = '/Project/ProjectDetails/?Id=' + proProjectId;
                 });
             }
             else {
@@ -227,7 +227,7 @@ function invitemember(Id) {
                     confirmButtonColor: '#3085d6',
                     confirmButtonText: 'OK',
                 }).then(function () {
-                    window.location = '/Project/GetProjectDetails/?Id=' + proProjectId;
+                    window.location = '/Project/ProjectDetails/?Id=' + proProjectId;
                 });
             }
         },
@@ -318,7 +318,7 @@ function addProjectDocument() {
                 confirmButtonColor: '#3085d6',
                 confirmButtonText: 'OK',
             }).then(function () {
-                window.location = '/Project/GetProjectDetails/?Id=' + data6;
+                window.location = '/Project/ProjectDetails/?Id=' + data6;
             })
         },
         Error: function () {
