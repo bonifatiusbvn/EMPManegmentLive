@@ -76,6 +76,7 @@ function UpdateRolewiseFormPermission() {
         var rolewiseformRow = $(this);
         var objData = {
             RoleId: $('#txtRoleId').val(),
+            CreatedBy: $("#txtUserId").val(),
             FormId: rolewiseformRow.find('#formId').val(),
             IsAddAllow: rolewiseformRow.find('#isAdd').prop('checked'),
             IsViewAllow: rolewiseformRow.find('#isView').prop('checked'),

@@ -72,7 +72,7 @@ function GetAllUserData() {
             {
                 "data": "userName", "name": "UserName",
                 "render": function (data, type, full) {
-                    return '<h5 class="fs-15"><a href="/UserProfile/DisplayUserDetails/?Id=' + full.id + '" class="fw-medium link-primary">' + full.userName + '</a></h5>';
+                    return '<h5 class="fs-15"><a href="/UserProfile/UserInfo/?Id=' + full.id + '" class="fw-medium link-primary">' + full.userName + '</a></h5>';
                 }
             },
             {
@@ -818,8 +818,8 @@ function GetUserSearchData() {
     Id = $("#ddlusername").val();
 
     if (Id != null || DepartmentId != null) {
-            $("#backBtn").show();
-            GetActiveDeactiveList(1);
+        $("#backBtn").show();
+        GetActiveDeactiveList(1);
     }
     else {
         $("#backBtn").hide();
