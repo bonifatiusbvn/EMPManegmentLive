@@ -46,7 +46,7 @@ function GetAllVendorData() {
                             ' rounded-circle" style="height: 40px; width: 40px; border-radius: 50%;">' +
                             initials.toUpperCase() + '</div></div>';
                     }
-                    return '<a href="#" onclick="GetVendorDetails(\'' + full.vid + '\')" class="link-primary" style="display: flex; align-items: center;">' + profileImageHtml + '<span style="margin-left: 5px;">' + full.vendorCompany + '</span></a>';   
+                    return '<a href="#" onclick="GetVendorDetails(\'' + full.vid + '\')" class="link-primary" style="display: flex; align-items: center;">' + profileImageHtml + '<span style="margin-left: 5px;">' + full.vendorCompany + '</span></a>';
                 }
             },
             {
@@ -65,11 +65,6 @@ function GetAllVendorData() {
     });
 }
 
-function GetVendorDetails(Vid) {
-    debugger
-    GetCreditDebitTotalAmount(Vid);
-    window.location = '/Invoice/PayVendors?Vid=' + Vid;
-}
 
 function GetAllTransactionData() {
     $('#transactionTable').DataTable({
@@ -159,15 +154,16 @@ function GetPaymentTypeList() {
 }
 
 function InsertCreditDebitDetails() {
-    debugger
+
     var value = $('#txtcreditdebitamount').val();
     if (value.trim() === '') {
 
-        $('#warningMessage').text('Please enter value for credit amount!!');
+        $('#warningMessage').text('Please enter value!!');
         return;
     }
     else {
-        debugger
+        var VendorId = document.getElementById("txtvendorid").textContent;
+
         var objData = {
             VendorId: document.getElementById("txtvendorid").textContent,
             InvoiceNo: document.getElementById("txtinvoiceno").textContent,
@@ -194,7 +190,7 @@ function InsertCreditDebitDetails() {
                     confirmButtonColor: '#3085d6',
                     confirmButtonText: 'OK',
                 }).then(function () {
-                    window.location = '/Invoice/VendorTransactions';
+                    window.location = '/Invoice/PayVendors?Vid=' + VendorId;
                 });
             },
             error: function (xhr, status, error) {
@@ -209,33 +205,37 @@ function InsertCreditDebitDetails() {
         });
     }
 }
-
+function GetVendorDetails(Vid) {
+    GetCreditDebitTotalAmount(Vid);
+    window.location = '/Invoice/PayVendors?Vid=' + Vid;
+}
+$(document).ready(function () {
+    var Vid = document.getElementById("txtvendorid").innerText;
+    GetCreditDebitTotalAmount(Vid);
+})
 function GetCreditDebitTotalAmount(Vid) {
-    var form_data = new FormData();
-    form_data.append("CREDITDEBITDETAILSBYID", JSON.stringify(Vid));
+
     $.ajax({
-        url: '/Invoice/GetCreditDebitDetailsByVendorId',
-        type: 'Post',
-        data: form_data,
+        url: '/Invoice/GetCreditDebitDetailsByVendorId?VendorId=' + Vid,
+        type: 'POST',
         dataType: 'json',
-        contentType: false,
-        processData: false,
         success: function (result) {
+            
             var total = 0;
             result.forEach(function (obj) {
                 if (obj.creditDebitAmount) {
                     total += obj.creditDebitAmount;
                 }
             });
-            $("#txttotalcreditamount").text('₹' + total);
 
+            $("#txttotalcreditamount").text('₹' + total);
             var totalAmount = parseFloat($('#txttotalamount').val());
             var totalpendingAmount = totalAmount - total;
 
             $("#txttotalpendingamount").text('₹' + totalpendingAmount);
             $("#pendingamount").text('₹' + totalpendingAmount);
 
-            $('#txtcreditdebitamount').on('input', function () {
+            $('#txtcreditdebitamount').off('input').on('input', function () {
                 var enteredAmount = parseFloat($(this).val());
 
                 if (!isNaN(enteredAmount)) {
@@ -244,6 +244,7 @@ function GetCreditDebitTotalAmount(Vid) {
                     if (enteredAmount > totalpendingAmount) {
                         $('#warningMessage').text('Entered amount cannot exceed pending amount.');
                     } else {
+                        $('#warningMessage').text('');
                         $('#txtpendingamount').val(pendingAmount.toFixed(2));
                     }
                 } else {
@@ -252,8 +253,12 @@ function GetCreditDebitTotalAmount(Vid) {
                 }
             });
         },
+        error: function (xhr, status, error) {
+            console.error("Error in AJAX request:", status, error);
+        }
     });
-};
+}
+
 
 
 function getLastTransaction(Vid) {

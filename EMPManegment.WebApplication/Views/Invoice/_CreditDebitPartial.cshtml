@@ -1,4 +1,5 @@
 ﻿@model IEnumerable<EMPManegment.EntityModels.ViewModels.Invoice.CreditDebitView>
+@inject EMPManegment.Web.Helper.Common CommonHelper
 @*
     For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 *@
@@ -9,7 +10,7 @@
                 <thead class="table-light text-muted">
                     <tr>
                         <th></th>
-                        <th>VendorName</th>
+                        <th>CompanyName</th>
                         <th>Date</th>
                         <th>PaymentMethod</th>
                         <th>PaymentType</th>
@@ -32,7 +33,7 @@
                                 </div>
                             </td>
                             <td class="date">@item.VendorName<small class="text-muted"></small></td>
-                            <td class="form_name">@item.Date</td>
+                            <td class="form_name">@CommonHelper.GetCommonDateFormat(item?.Date ?? DateTime.MinValue)</td>
                             <td class="to_name">@item.PaymentMethodName</td>
                             <td class="to_name">@item.PaymentTypeName</td>
                             <td class="to_name text-success">@item.CreditDebitAmount</td>
