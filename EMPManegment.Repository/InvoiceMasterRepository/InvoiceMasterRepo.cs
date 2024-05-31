@@ -380,7 +380,6 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
 
         public async Task<IEnumerable<InvoiceViewModel>> GetInvoiceListByVendorId(Guid Vid)
         {
-
             try
             {
                 IEnumerable<InvoiceViewModel> invoiceList = (from a in Context.TblInvoices.Where(x => x.VandorId == Vid)
