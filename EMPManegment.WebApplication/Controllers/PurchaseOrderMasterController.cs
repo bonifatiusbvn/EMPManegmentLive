@@ -177,7 +177,7 @@ namespace EMPManegment.Web.Controllers
         }
 
         [FormPermissionAttribute("Show Payment Details-View")]
-        public IActionResult ShowPaymentDetails()
+        public IActionResult PaymentDetails()
         {
             return View();
         }
