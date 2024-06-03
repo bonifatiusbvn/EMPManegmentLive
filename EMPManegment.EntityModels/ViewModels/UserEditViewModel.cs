@@ -30,6 +30,8 @@ namespace EMPManegment.EntityModels.ViewModels
         
         public int? CountryId { get; set; }
         public Guid? RoleId { get; set; }
+        public DateTime? UpdatedOn { get; set; }
+        public Guid? UpdatedBy { get; set; }
 
     }
 }

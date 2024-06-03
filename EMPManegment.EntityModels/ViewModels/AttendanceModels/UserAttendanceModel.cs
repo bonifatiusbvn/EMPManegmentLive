@@ -18,7 +18,8 @@ namespace EMPManegment.EntityModels.ViewModels.Models
         public TimeSpan? TotalHours { get; set;}
         public string? CreatedBy { get; set; }
         public DateTime? CreatedOn { get; set; }
- 
+        public Guid? UpdatedBy { get; set; }
+        public DateTime? UpdatedOn { get; set; }
     }
 
     public class UserAttendanceRequestModel

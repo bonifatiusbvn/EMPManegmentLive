@@ -114,6 +114,7 @@ namespace EMPManegment.Web.Controllers
                         PasswordSalt = passwordSalt,
                         Image = filepath,
                         IsActive = AddEmployee.IsActive,
+                        CreatedBy = _userSession.FullName
                     };
                     ApiResponseModel postuser = await APIServices.PostAsync(AddUser, "User/UserSingUp");
                     if (postuser.code == 200)
@@ -296,12 +297,12 @@ namespace EMPManegment.Web.Controllers
 
         [FormPermissionAttribute("Active Deactive-Edit")]
         [HttpPost]
-        public async Task<IActionResult> UserActiveDecative(string UserName)
+        public async Task<IActionResult> UserActiveDecative(string UserName,Guid UpdatedBy)
         {
             try
             {
 
-                ApiResponseModel postuser = await APIServices.PostAsync("", "UserProfile/ActiveDeactiveUsers?UserName=" + UserName);
+                ApiResponseModel postuser = await APIServices.PostAsync("", "UserProfile/ActiveDeactiveUsers?UserName=" + UserName + "&UpdatedBy" + UpdatedBy);
                 if (postuser.code == 200)
                 {
 
@@ -443,7 +444,8 @@ namespace EMPManegment.Web.Controllers
                 {
                     UserName = ResetPassword.UserName,
                     PasswordHash = passwordHash,
-                    PasswordSalt = passwordSalt
+                    PasswordSalt = passwordSalt,
+                    UpdatedBy = _userSession.UserId
                 };
                 ApiResponseModel postuser = await APIServices.PostAsync(resetPass, "UserProfile/ResetUserPassword");
                 if (postuser.code == 200)
@@ -508,8 +510,8 @@ namespace EMPManegment.Web.Controllers
                 var draw = Request.Form["draw"].FirstOrDefault();
                 var start = Request.Form["start"].FirstOrDefault();
                 var length = Request.Form["length"].FirstOrDefault();
-                var sortColumn = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
-                var sortColumnDir = Request.Form["order[0][dir]"].FirstOrDefault();  // Corrected line
+                var sortColumn = Request.Form["columns[" + Request.Form["order[1][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
+                var sortColumnDir = Request.Form["order[0][dir]"].FirstOrDefault(); 
                 var searchValue = Request.Form["search[value]"].FirstOrDefault();
                 int pageSize = length != null ? Convert.ToInt32(length) : 0;
                 int skip = start != null ? Convert.ToInt32(start) : 0;
@@ -578,10 +580,7 @@ namespace EMPManegment.Web.Controllers
                 ApiResponseModel postuser = await APIServices.PostAsync(userAttendance, "UserProfile/UpdateUserOutTime");
                 if (postuser.code == 200)
                 {
-
                     return Ok(new UserResponceModel { Message = string.Format(postuser.message), Icone = string.Format(postuser.Icone), Code = postuser.code });
-
-
                 }
                 else
                 {
@@ -631,6 +630,7 @@ namespace EMPManegment.Web.Controllers
                     PhoneNumber = employee.PhoneNumber,
                     DateOfBirth = employee.DateOfBirth,
                     Gender = employee.Gender,
+                    UpdatedBy = _userSession.UserId,
                 };
                 ApiResponseModel postUser = await APIServices.PostAsync(Updateuser, "UserProfile/UpdateUserDetails");
                 if (postUser.code == 200)

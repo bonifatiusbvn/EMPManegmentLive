@@ -9,6 +9,7 @@ using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.UserModels;
 using EMPManegment.Inretface.EmployeesInterface.AddEmployee;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -76,6 +77,7 @@ namespace EMPManegment.Repository.AddEmpRepository
                         //Role = 4,
                         EmailConfirmed = true,
                         PhoneNumberConfirmed = true,
+                        CreatedBy = addemp.CreatedBy
 
                     };
                     response.Code = (int)HttpStatusCode.OK;

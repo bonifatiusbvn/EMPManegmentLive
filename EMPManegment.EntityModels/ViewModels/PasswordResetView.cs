@@ -15,6 +15,8 @@ namespace EMPManegment.EntityModels.ViewModels
 
         public byte[]? PasswordSalt { get; set; }
         public string? Email { get; set; }
+        public Guid? UpdatedBy { get; set; }
+        public DateTime? UpdatedOn { get; set; }
 
     }
     public class PasswordResetResponseModel
@@ -28,6 +30,8 @@ namespace EMPManegment.EntityModels.ViewModels
         [Display(Name = "Confirm Password")]
         [Compare("Password", ErrorMessage = ("Confirm Password Dose Not Match..!!"))]
         public string? ConfirmPassword { get; set; }
-       
+        public Guid? UpdatedBy { get; set; }
+        public DateTime? UpdatedOn { get; set; }
+
     }
  }

@@ -164,6 +164,7 @@ function btnStatusUpdate(Id) {
             Role: $('#userrole').val(),
             Id: Id,
             UserId: $('#userid').val(),
+            UpdatedBy: $("#userid").val(),
         }
         var form_data = new FormData();
         form_data.append("STATUSUPDATE", JSON.stringify(StausChange));
@@ -233,6 +234,7 @@ function btnStatusUpdateLow(Id) {
             Role: $('#userrole').val(),
             Id: Id,
             UserId: UserId,
+            UpdatedBy: $("#userid").val(),
         }
         var form_data = new FormData();
         form_data.append("STATUSUPDATE", JSON.stringify(StausChange));
@@ -310,6 +312,7 @@ function btnStatusUpdateMedium(Id) {
             Role: $('#userrole').val(),
             Id: Id,
             UserId: UserId,
+            UpdatedBy: $("#userid").val(),
 
         }
         var form_data = new FormData();
@@ -384,6 +387,7 @@ function btnStatusUpdateHigh(Id) {
     if ($("#tasksListhigh").valid()) {
 
         var StausChange = {
+            UpdatedBy: $("#userid").val(),
             TaskStatus: $('#ddlStatusHigh' + Id).val(),
             Role: $('#userrole').val(),
             Id: Id,
@@ -681,8 +685,8 @@ function EditTaskDetails(Id) {
 }
 
 function UpdateTaskDetails() {
-
     var objData = {
+        UpdatedBy: $("#textUpdatedById").val(),
         Id: $("#EditId").val(),
         UserName: $("#EditUserName").val(),
         TaskTitle: $("#EditTaskTitle").val(),

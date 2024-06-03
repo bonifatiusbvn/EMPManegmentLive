@@ -283,7 +283,7 @@ function UpdateUserAttendance() {
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'OK'
                     }).then(function () {
-                        window.location = '/UserProfile/GetAllUsersAttendanceList';
+                        window.location = '/UserProfile/UsersAttendance';
                     });
                 }
             },
@@ -492,7 +492,6 @@ function UpdateUserAttendanceSrc() {
         })
     }
 }
-
 function updateUserAttendance() {
     var objData = {
         AttendanceId: $("#AttandanceId").val(),
@@ -500,6 +499,7 @@ function updateUserAttendance() {
         Intime: $("#Intime").val(),
         UserName: $("#UserName").val(),
         Date: $("#Date").val(),
+        UpdatedBy: $("#textUpdatedById").val(),
     }
 
 
@@ -532,7 +532,7 @@ function updateUserAttendance() {
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'OK'
                     }).then(function () {
-                        window.location = '/UserProfile/GetAllUsersAttendanceList';
+                        window.location = '/UserProfile/UsersAttendance';
                     });
 
                 }

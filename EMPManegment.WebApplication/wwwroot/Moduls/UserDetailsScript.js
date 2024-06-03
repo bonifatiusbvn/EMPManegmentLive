@@ -170,6 +170,8 @@ function GetDepartmentList(itemId, selectedDepartmentId) {
 }
 
 function UserActiveDeactive(UserId, checkboxElement) {
+    debugger
+    UpdatedBy = $("#txtUpdatedById").val();
     var isActive = checkboxElement.checked;
     var action = isActive ? 'activate' : 'deactivate';
     var confirmationMessage = isActive ? "Are you sure you want to activate this user?" : "Are you sure you want to deactivate this user?";
@@ -189,7 +191,7 @@ function UserActiveDeactive(UserId, checkboxElement) {
 
         if (result.isConfirmed) {
             $.ajax({
-                url: '/UserProfile/UserActiveDecative?UserName=' + UserId,
+                url: '/UserProfile/UserActiveDecative?UserName=' + UserId + '&UpdatedBy=' + UpdatedBy,
                 type: 'POST',
                 contentType: 'application/json;charset=utf-8',
                 dataType: 'json',
@@ -224,6 +226,7 @@ function UserActiveDeactive(UserId, checkboxElement) {
 }
 function UpdateUserRoleAndDept(userId) {
     var objData = {
+        UpdatedBy: $("#txtUpdatedById").val(),
         Id: $('#txtUserId_' + userId).val(),
         RoleId: $('#ddlUserRole_' + userId).val(),
         DepartmentId: $('#ddlDepartment_' + userId).val(),
@@ -874,7 +877,7 @@ function updateuserDetails() {
                     confirmButtonColor: '#3085d6',
                     confirmButtonText: 'OK'
                 }).then(function () {
-                    window.location = '/UserProfile/DisplayUserDetails/?Id=' + UserId;
+                    window.location = '/UserProfile/UserInfo/?Id=' + UserId;
                 });
             },
         })

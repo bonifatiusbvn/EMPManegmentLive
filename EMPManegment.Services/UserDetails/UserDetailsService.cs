@@ -26,9 +26,9 @@ namespace EMPManegment.Services.UserList
             return await UserList.GetUsersList(GetUserlist);
         }
 
-        public Task<UserResponceModel> ActiveDeactiveUsers(string activedeavtiveuser)
+        public Task<UserResponceModel> ActiveDeactiveUsers(string activedeavtiveuser, Guid UpdatedBy)
         {
-            return UserList.ActiveDeactiveUsers(activedeavtiveuser);    
+            return UserList.ActiveDeactiveUsers(activedeavtiveuser, UpdatedBy);    
         }
 
 

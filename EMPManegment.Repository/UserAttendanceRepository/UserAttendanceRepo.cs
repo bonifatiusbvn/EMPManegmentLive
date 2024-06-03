@@ -131,7 +131,8 @@ namespace EMPManegment.Repository.UserAttendanceRepository
                     {
                         UserAttendance.OutTime = userAttendance.OutTime;
                         UserAttendance.TotalHours = UserAttendance.OutTime - UserAttendance.Intime;
-                        UserAttendance.CreatedOn = DateTime.Today;
+                        UserAttendance.UpdatedOn = DateTime.Now;
+                        UserAttendance.UpdatedBy = userAttendance.UpdatedBy;
                         response.Code = (int)HttpStatusCode.OK;
                         response.Message = "User outTime successfully updated";
                         response.Icone = "success";

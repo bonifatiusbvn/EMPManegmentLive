@@ -98,7 +98,7 @@ namespace EMPManegment.Repository.UserListRepository
 
         }
 
-        public async Task<UserResponceModel> ActiveDeactiveUsers(string UserName)
+        public async Task<UserResponceModel> ActiveDeactiveUsers(string UserName,Guid UpdatedBy)
         {
             UserResponceModel response = new UserResponceModel();
             var GetUserdta = Context.TblUsers.Where(a => a.UserName == UserName).FirstOrDefault();
@@ -109,6 +109,8 @@ namespace EMPManegment.Repository.UserListRepository
                 if (GetUserdta.IsActive == true)
                 {
                     GetUserdta.IsActive = false;
+                    GetUserdta.UpdatedOn = DateTime.Now;
+                    GetUserdta.UpdatedBy = UpdatedBy;
                     Context.TblUsers.Update(GetUserdta);
                     Context.SaveChanges();
                     response.Code = 200;
@@ -119,6 +121,8 @@ namespace EMPManegment.Repository.UserListRepository
                 else
                 {
                     GetUserdta.IsActive = true;
+                    GetUserdta.UpdatedOn = DateTime.Now;
+                    GetUserdta.UpdatedBy = UpdatedBy;
                     Context.TblUsers.Update(GetUserdta);
                     Context.SaveChanges();
                     response.Code = 200;
@@ -251,7 +255,8 @@ namespace EMPManegment.Repository.UserListRepository
                 var userdata = Context.TblUsers.FirstOrDefault(x => x.UserName == ResetPassword.UserName);
                 if (userdata != null)
                 {
-
+                    userdata.UpdatedBy = ResetPassword.UpdatedBy;
+                    userdata.UpdatedOn = DateTime.Now;
                     userdata.PasswordHash = ResetPassword.PasswordHash;
                     userdata.PasswordSalt = ResetPassword.PasswordSalt;
                 }
@@ -479,6 +484,8 @@ namespace EMPManegment.Repository.UserListRepository
                     Userdata.Address = employee.Address;
                     Userdata.DepartmentId = employee.DepartmentId;
                     Userdata.RoleId = employee.RoleId;
+                    Userdata.UpdatedBy = employee.UpdatedBy;
+                    Userdata.UpdatedOn = DateTime.Now;
 
                     Context.TblUsers.Update(Userdata);
                     await Context.SaveChangesAsync();
