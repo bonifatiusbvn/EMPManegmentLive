@@ -408,11 +408,11 @@ namespace EMPManegment.Web.Controllers
         {
             try
             {
-                List<InvoiceViewModel> products = new List<InvoiceViewModel>();
+                InvoicePayVendorModel products = new InvoicePayVendorModel();
                 ApiResponseModel response = await APIServices.GetAsync("", "Invoice/GetInvoiceListByVendorId?Vid=" + Vid);
                 if (response.code == 200)
                 {
-                    products = JsonConvert.DeserializeObject<List<InvoiceViewModel>>(response.data.ToString());
+                    products = JsonConvert.DeserializeObject<InvoicePayVendorModel>(response.data.ToString());
                 }
                 return View(products);
             }
@@ -442,25 +442,66 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
-            [FormPermissionAttribute("All Transaction-View")]
+        [FormPermissionAttribute("All Transaction-View")]
         [HttpGet]
         public async Task<IActionResult> VendorAllTransaction(Guid Vid)
         {
+            ViewBag.VendorId = Vid;
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> GetVendorTransactionList(Guid? Vid)
+        {
             try
             {
-                List<CreditDebitView> products = new List<CreditDebitView>();
-                ApiResponseModel response = await APIServices.GetAsync("", "Invoice/GetLastTransactionByVendorId?Vid=" + Vid);
+                var draw = Request.Form["draw"].FirstOrDefault();
+                var start = Request.Form["start"].FirstOrDefault();
+                var length = Request.Form["length"].FirstOrDefault();
+                var sortColumn = Request.Form["columns[" + Request.Form["order[2][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
+                var sortColumnDir = Request.Form["order[0][dir]"].FirstOrDefault();
+                var searchValue = Request.Form["search[value]"].FirstOrDefault();
+                int pageSize = length != null ? Convert.ToInt32(length) : 0;
+                int skip = start != null ? Convert.ToInt32(start) : 0;
+
+                var dataTable = new DataTableRequstModel
+                {
+                    draw = draw,
+                    start = start,
+                    pageSize = pageSize,
+                    skip = skip,
+                    lenght = length,
+                    searchValue = searchValue,
+                    sortColumn = sortColumn,
+                    sortColumnDir = sortColumnDir
+                };
+
+                List<CreditDebitView> transactionList = new List<CreditDebitView>();
+                var data = new jsonData();
+                ApiResponseModel response = await APIServices.PostAsync(dataTable, "Invoice/GetAllTransactionByVendorId?Vid=" + Vid);
+
                 if (response.code == 200)
                 {
-                    products = JsonConvert.DeserializeObject<List<CreditDebitView>>(response.data.ToString());
+                    data = JsonConvert.DeserializeObject<jsonData>(response.data.ToString());
+                    transactionList = JsonConvert.DeserializeObject<List<CreditDebitView>>(data.data.ToString());
                 }
-                return View(products);
+
+                var jsonData = new
+                {
+                    draw = draw,
+                    recordsFiltered = transactionList.Count,
+                    recordsTotal = transactionList.Count,
+                    data = transactionList,
+                };
+
+                return new JsonResult(jsonData);
             }
             catch (Exception ex)
             {
                 throw ex;
             }
         }
+
 
         [FormPermissionAttribute("All Transaction-View")]
         [HttpGet]

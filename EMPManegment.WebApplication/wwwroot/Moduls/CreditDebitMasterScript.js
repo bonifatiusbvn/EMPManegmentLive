@@ -4,6 +4,7 @@ $(document).ready(function () {
     GetAllTransactionData();
     GetPaymentMethodList();
     GetPaymentTypeList();
+    getVendorTransactionList();
 });
 
 function GetAllVendorData() {
@@ -210,7 +211,7 @@ function GetVendorDetails(Vid) {
     window.location = '/Invoice/PayVendors?Vid=' + Vid;
 }
 $(document).ready(function () {
-    var Vid = document.getElementById("txtvendorid").innerText;
+    var Vid = $("#textvendorId").val();
     GetCreditDebitTotalAmount(Vid);
 })
 function GetCreditDebitTotalAmount(Vid) {
@@ -220,7 +221,7 @@ function GetCreditDebitTotalAmount(Vid) {
         type: 'POST',
         dataType: 'json',
         success: function (result) {
-            
+
             var total = 0;
             result.forEach(function (obj) {
                 if (obj.creditDebitAmount) {
@@ -272,5 +273,50 @@ function getLastTransaction(Vid) {
             $("#lasttenTransaction").html(response);
             $("#zoomInModal").modal('show');
         },
+    });
+}
+
+
+
+function getVendorTransactionList() {
+    Vid = $("#inputVendorId").val();
+    $('#vendorAllTransactionTable').DataTable({
+        processing: false,
+        serverSide: true,
+        searching: true,
+        destroy: true,
+        ajax: {
+            type: "POST",
+            url: '/Invoice/GetVendorTransactionList?Vid=' + Vid,
+            dataType: 'json',
+        },
+        autoWidth: false,
+        columns: [
+            {
+                "render": function (data, type, row) {
+                    return '<div class="avatar-xs" > <div class="avatar-title bg-danger-subtle text-danger rounded-circle fs-16"><i class="ri-arrow-right-up-fill"></i></div></div>';
+                }
+            },
+            { "data": "vendorName", "name": "VendorName" },
+            {
+                "data": "date", "name": "Date",
+                "render": function (data, type, row) {
+                    return getCommonDateformat(data);
+                }
+            },
+            { "data": "paymentMethodName", "name": "PaymentMethodName" },
+            { "data": "paymentTypeName", "name": "PaymentTypeName" },
+            { "data": "creditDebitAmount", "name": "CreditDebitAmount" },
+            { "data": "pendingAmount", "name": "PendingAmount" },
+            {
+                "render": function (data, type, row) {
+                    return '<span class="badge bg-primary-subtle text-primary fs-11"><i class="ri-time-line align-bottom"></i> Processing</span>';
+                }
+            },
+        ],
+        columnDefs: [{
+            "defaultContent": "",
+            "targets": "_all",
+        }]
     });
 }

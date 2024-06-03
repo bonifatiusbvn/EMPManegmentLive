@@ -79,4 +79,10 @@ namespace EMPManegment.EntityModels.ViewModels.Invoice
         public string? LastName { get; set; }
         public string? Status { get; set; }
     }
+    public class InvoicePayVendorModel
+    {
+        public Guid? VendorId { get; set; }
+
+        public List<InvoiceViewModel>? InvoicePaymentTransaction { get; set; }
+    }
 }
