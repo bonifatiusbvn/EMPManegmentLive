@@ -200,7 +200,7 @@ $(document).ready(function () {
                     targets: '_all', width: 'auto'
                 }
             ],
-            order: [[1, 'asc']] 
+            order: [[1, 'asc']]
         });
     }
 
@@ -214,7 +214,7 @@ $(document).ready(function () {
 function EditUserAttendance(attandenceId) {
     $('#EditTimeModel').modal('show');
     $.ajax({
-        url: '/UserProfile/EditUserAttendanceOutTime?attendanceId=' + attandenceId,
+        url: '/UserProfile/EditOutTime?attendanceId=' + attandenceId,
         type: 'Get',
         dataType: 'json',
         processData: false,
@@ -257,7 +257,7 @@ function UpdateUserAttendance() {
     else {
         $("#OutTime").css('border-color', 'lightgray');
         $.ajax({
-            url: '/UserProfile/UpdateUserAttendanceOutTime',
+            url: '/UserProfile/UpdateOutTime',
             type: 'Post',
             data: objData,
             dataType: 'json',
@@ -414,7 +414,7 @@ function GetSearchAttendanceList() {
 
 function editUserAttendanceSrc(attandenceId) {
     $.ajax({
-        url: '/UserProfile/EditUserAttendanceOutTime?attendanceId=' + attandenceId,
+        url: '/UserProfile/EditOutTime?attendanceId=' + attandenceId,
         type: 'Get',
         dataType: 'json',
         processData: false,
@@ -459,7 +459,7 @@ function UpdateUserAttendanceSrc() {
     else {
         $("#OutTime").css('border-color', 'lightgray');
         $.ajax({
-            url: '/UserProfile/UpdateUserAttendanceOutTime',
+            url: '/UserProfile/UpdateOutTime',
             type: 'Post',
             data: objData,
             dataType: 'json',
@@ -511,7 +511,7 @@ function updateUserAttendance() {
     else {
         $("#OutTime").css('border-color', 'lightgray');
         $.ajax({
-            url: '/UserProfile/UpdateUserAttendanceOutTime',
+            url: '/UserProfile/UpdateOutTime',
             type: 'Post',
             data: objData,
             dataType: 'json',

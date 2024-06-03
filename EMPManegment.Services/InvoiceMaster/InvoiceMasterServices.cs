@@ -43,9 +43,9 @@ namespace EMPManegment.Services.InvoiceMaster
             return InvoiceMaster.GetAllTransaction();
         }
 
-        public async Task<IEnumerable<CreditDebitView>> GetAllTransactionByVendorId(Guid Vid)
+        public async Task<jsonData> GetAllTransactionByVendorId(Guid Vid, DataTableRequstModel dataTable)
         {
-            return await InvoiceMaster.GetAllTransactionByVendorId(Vid);
+            return await InvoiceMaster.GetAllTransactionByVendorId(Vid, dataTable);
         }
 
         public async Task<IEnumerable<CreditDebitView>> GetCreditDebitListByVendorId(Guid Vid)
@@ -68,7 +68,7 @@ namespace EMPManegment.Services.InvoiceMaster
             return await InvoiceMaster.GetInvoiceDetailsList(InvoiceList);
         }
 
-        public async Task<IEnumerable<InvoiceViewModel>> GetInvoiceListByVendorId(Guid Vid)
+        public async Task<InvoicePayVendorModel> GetInvoiceListByVendorId(Guid Vid)
         {
             return await InvoiceMaster.GetInvoiceListByVendorId(Vid);
         }

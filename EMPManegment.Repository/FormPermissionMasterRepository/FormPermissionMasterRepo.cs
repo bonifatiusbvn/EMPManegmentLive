@@ -71,6 +71,8 @@ namespace EMPManegment.Repository.FormPermissionMasterRepository
                             Item.IsViewAllow = updatedPermission.IsViewAllow;
                             Item.IsEditAllow = updatedPermission.IsEditAllow;
                             Item.IsDeleteAllow = updatedPermission.IsDeleteAllow;
+                            Item.UpdatedBy = updatedPermission.CreatedBy;
+                            Item.UpdatedOn = DateTime.Now;
                             Context.Entry(Item).State = EntityState.Modified;
                         }
                     }
@@ -124,13 +126,13 @@ namespace EMPManegment.Repository.FormPermissionMasterRepository
                 {
                     var rolemodel = new TblRoleMaster()
                     {
-                       RoleId = Guid.NewGuid(),
-                       Role = roleDetails.Role,
-                       IsActive = true,
-                       IsDelete = false,
-                       CreatedBy = roleDetails.CreatedBy,
-                       CreatedOn = DateTime.Now,
-                    };          
+                        RoleId = Guid.NewGuid(),
+                        Role = roleDetails.Role,
+                        IsActive = true,
+                        IsDelete = false,
+                        CreatedBy = roleDetails.CreatedBy,
+                        CreatedOn = DateTime.Now,
+                    };
 
                     var forms = Context.TblForms.ToList();
                     var roleWiseFormPermissions = new List<TblRolewiseFormPermission>();
@@ -159,7 +161,7 @@ namespace EMPManegment.Repository.FormPermissionMasterRepository
                     Context.SaveChanges();
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 response.code = 400;
                 response.message = "Error in creating role";

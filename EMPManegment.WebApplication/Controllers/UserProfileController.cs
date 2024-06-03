@@ -60,7 +60,7 @@ namespace EMPManegment.Web.Controllers
         }
 
         [FormPermissionAttribute("Create User-View")]
-        public async Task<IActionResult> UserSingUp()
+        public async Task<IActionResult> CreateUser()
         {
             try
             {
@@ -82,7 +82,7 @@ namespace EMPManegment.Web.Controllers
 
         [FormPermissionAttribute("Create User-Add")]
         [HttpPost]
-        public async Task<IActionResult> UserSingUp(LoginDetailsView AddEmployee)
+        public async Task<IActionResult> CreateUser(LoginDetailsView AddEmployee)
         {
             try
             {
@@ -144,7 +144,7 @@ namespace EMPManegment.Web.Controllers
 
 
         [FormPermissionAttribute("Users-View")]
-        public async Task<IActionResult> DisplayUserList()
+        public async Task<IActionResult> UserList()
         {
             return View();
         }
@@ -197,7 +197,7 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
-        public async Task<IActionResult> DisplayUserDetails(Guid Id)
+        public async Task<IActionResult> UserInfo(Guid Id)
         {
             try
             {
@@ -252,14 +252,14 @@ namespace EMPManegment.Web.Controllers
                 }
                 if (Id.HasValue)
                 {
-                    ActiveDecative = ActiveDecative.Where(a=>a.Id == Id).ToList();  
+                    ActiveDecative = ActiveDecative.Where(a => a.Id == Id).ToList();
                 }
-                else if(DepartmentId.HasValue)
+                else if (DepartmentId.HasValue)
                 {
-                    ActiveDecative = ActiveDecative.Where(a=>a.DepartmentId == DepartmentId).ToList();
+                    ActiveDecative = ActiveDecative.Where(a => a.DepartmentId == DepartmentId).ToList();
                 }
 
-               int pageSize = 4;
+                int pageSize = 4;
                 var pageNumber = page ?? 1;
 
                 var pagedList = ActiveDecative.ToPagedList(pageNumber, pageSize);
@@ -404,7 +404,7 @@ namespace EMPManegment.Web.Controllers
                 ApiResponseModel postuser = await APIServices.PostAsync(uploadDocument, "UserProfile/UploadDocument");
                 if (postuser.code == 200)
                 {
-                    return new JsonResult(postuser.message = "Document Uploaded Successfully!",postuser.code);
+                    return new JsonResult(postuser.message = "Document Uploaded Successfully!", postuser.code);
                 }
                 else
                 {
@@ -424,7 +424,7 @@ namespace EMPManegment.Web.Controllers
         }
 
         [FormPermissionAttribute("Reset Password-View")]
-        public async Task<IActionResult> ResetUserPassword()
+        public async Task<IActionResult> ResetPassword()
         {
             return View();
         }
@@ -432,7 +432,7 @@ namespace EMPManegment.Web.Controllers
 
         [FormPermissionAttribute("Reset Password-Add")]
         [HttpPost]
-        public async Task<IActionResult> ResetUserPassword(PasswordResetResponseModel ResetPassword)
+        public async Task<IActionResult> ResetPassword(PasswordResetResponseModel ResetPassword)
         {
             try
             {
@@ -495,7 +495,7 @@ namespace EMPManegment.Web.Controllers
 
         [FormPermissionAttribute("Users Attendance-View")]
         [HttpGet]
-        public async Task<IActionResult> GetAllUsersAttendanceList()
+        public async Task<IActionResult> UsersAttendance()
         {
             return View();
         }
@@ -550,7 +550,7 @@ namespace EMPManegment.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<JsonResult> EditUserAttendanceOutTime(int attendanceId)
+        public async Task<JsonResult> EditOutTime(int attendanceId)
         {
             try
             {
@@ -571,7 +571,7 @@ namespace EMPManegment.Web.Controllers
 
         [FormPermissionAttribute("Users Attendance-Edit")]
         [HttpPost]
-        public async Task<IActionResult> UpdateUserAttendanceOutTime(UserAttendanceModel userAttendance)
+        public async Task<IActionResult> UpdateOutTime(UserAttendanceModel userAttendance)
         {
             try
             {
@@ -683,7 +683,7 @@ namespace EMPManegment.Web.Controllers
 
 
         [FormPermissionAttribute("Attendance-View")]
-        public async Task<IActionResult> GetAttendance()
+        public async Task<IActionResult> MyAttendance()
         {
             return View();
         }
@@ -799,7 +799,7 @@ namespace EMPManegment.Web.Controllers
             }
             catch (Exception ex)
             {
-                // Log the exception here as needed
+
                 return StatusCode(500, "Internal server error: " + ex.Message);
             }
         }
@@ -843,7 +843,6 @@ namespace EMPManegment.Web.Controllers
             }
             catch (Exception ex)
             {
-                // Log the exception here as needed
                 return StatusCode(500, "Internal server error: " + ex.Message);
             }
         }
@@ -897,7 +896,7 @@ namespace EMPManegment.Web.Controllers
 
         [FormPermissionAttribute("Form Permission-View")]
         [HttpGet]
-        public IActionResult RolewisePermission()
+        public IActionResult FormPermission()
         {
             return View();
         }
@@ -950,7 +949,7 @@ namespace EMPManegment.Web.Controllers
 
         [FormPermissionAttribute("Form Permission-Edit")]
         [HttpPost]
-        public async Task<IActionResult> UpdateMultipleRolewiseFormPermission()
+        public async Task<IActionResult> UpdatePermission()
         {
             try
             {

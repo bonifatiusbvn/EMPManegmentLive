@@ -115,7 +115,7 @@ namespace EMPManagment.API.Controllers
         {
             try
             {
-                IEnumerable<InvoiceViewModel> vendorInloviceList = await InvoiceMaster.GetInvoiceListByVendorId(Vid);
+                InvoicePayVendorModel vendorInloviceList = await InvoiceMaster.GetInvoiceListByVendorId(Vid);
                 return Ok(new { code = 200, data = vendorInloviceList });
             }
             catch (Exception ex)
@@ -145,14 +145,14 @@ namespace EMPManagment.API.Controllers
 
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("GetAllTransactionByVendorId")]
-        public async Task<IActionResult> GetAllTransactionByVendorId(Guid Vid)
+        public async Task<IActionResult> GetAllTransactionByVendorId(Guid Vid, DataTableRequstModel dataTable)
         {
             try
             {
-                IEnumerable<CreditDebitView> allCreditList = await InvoiceMaster.GetAllTransactionByVendorId(Vid);
-                return Ok(new { code = 200, data = allCreditList });
+                var CreditList = await InvoiceMaster.GetAllTransactionByVendorId(Vid, dataTable);
+                return Ok(new { code = 200, data = CreditList });
             }
             catch (Exception ex)
             {

@@ -52,7 +52,7 @@ namespace EMPManegment.Web.Controllers
                     {
                         vendorDetails = JsonConvert.DeserializeObject<VendorDetailsView>(response.data.ToString());
 
-                    }                
+                    }
                 }
                 ViewBag.ViewMode = viewMode;
                 return View(vendorDetails);
@@ -164,7 +164,7 @@ namespace EMPManegment.Web.Controllers
 
         [FormPermissionAttribute("Vendor List-View")]
         [HttpGet]
-        public async Task<IActionResult> DisplayVendorList()
+        public async Task<IActionResult> VendorList()
         {
             return View();
         }
