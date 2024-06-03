@@ -4,11 +4,23 @@
 {
     foreach (var m in Model)
     {
+        var imageUrl = !string.IsNullOrEmpty(@m.Image) ? Url.Content($"~/{@m.Image}") : null;
+        var initials = (!string.IsNullOrEmpty(@m.FirstName) && !string.IsNullOrEmpty(@m.LastName)) ? $"{@m.FirstName[0]}{@m.LastName[0]}".ToUpper() : null;
+
         <div class="mx-n4 px-4" style="height: 40px;">
             <div class="vstack1 gap-3">
                 <div class="d-flex align-items-center">
                     <div class="avatar-xs flex-shrink-0 me-3">
-                        <img src="~/@m.Image" alt="" class="direct-chat-img">
+                        @if (!string.IsNullOrEmpty(imageUrl))
+                        {
+                            <img class="direct-chat-img" src="@imageUrl" alt="user image">
+                        }
+                        else
+                        {
+                            <div class="flex-shrink-0 avatar-xs me-2">
+                                <div class="avatar-title bg-success-subtle text-success rounded-circle fs-13" style="height:40px;width:40px;">@initials</div>
+                            </div>
+                        }
                     </div>
                     <div class="flex-grow-1">
                         <h5 class="fs-13 mb-0"><a href="#" class="text-body d-block">@m.FirstName @m.LastName</a></h5>
