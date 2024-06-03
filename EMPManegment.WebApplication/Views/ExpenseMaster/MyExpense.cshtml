@@ -438,26 +438,7 @@
         toggleDateInputs();
     });
 
-    document.querySelectorAll('.nav-link').forEach(link => {
-        link.addEventListener('click', function () {
-            document.querySelectorAll('.nav-radio').forEach(radio => {
-                radio.checked = false;
-            });
-            document.querySelectorAll('.nav-link').forEach(link => {
-                link.classList.remove('active');
-            });
-            this.classList.add('active');
-        });
-    });
 
-    document.querySelectorAll('.nav-radio').forEach(radio => {
-        radio.addEventListener('click', function () {
-            document.querySelectorAll('.nav-link').forEach(link => {
-                link.classList.remove('active');
-            });
-            this.checked = true;
-        });
-    });
     function clearDates() {
         $("#startDate").val('');
         $("#endDate").val('');

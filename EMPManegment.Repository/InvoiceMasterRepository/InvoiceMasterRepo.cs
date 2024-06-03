@@ -560,73 +560,35 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
             return response;
         }
 
-        public async Task<jsonData> GetAllTransaction(DataTableRequstModel dataTable)
+        public async Task<List<CreditDebitView>> GetAllTransaction()
         {
-            var allCreditList = from a in Context.TblCreditDebitMasters
-                                join b in Context.TblVendorMasters on a.VendorId equals b.Vid
-                                join c in Context.TblPaymentTypes on a.PaymentType equals c.Id
-                                join d in Context.TblPaymentMethodTypes on a.PaymentMethod equals d.Id
-                                orderby a.Date descending
-                                select new CreditDebitView
-                                {
-                                    Id = a.Id,
-                                    VendorName = b.VendorCompany,
-                                    Date = a.Date,
-                                    PaymentTypeName = c.Type,
-                                    PaymentMethodName = d.PaymentMethod,
-                                    PendingAmount = a.PendingAmount,
-                                    CreditDebitAmount = a.CreditDebitAmount,
-                                    TotalAmount = a.TotalAmount,
-                                    VendorAddress = b.VendorAddress
-                                };
-
-            if (!string.IsNullOrEmpty(dataTable.sortColumn) && !string.IsNullOrEmpty(dataTable.sortColumnDir))
+            try
             {
-                if (dataTable.sortColumnDir == "asc")
-                {
-                    allCreditList = allCreditList.OrderBy(e => EF.Property<object>(e, dataTable.sortColumn));
-                }
-                else
-                {
-                    allCreditList = allCreditList.OrderByDescending(e => EF.Property<object>(e, dataTable.sortColumn));
-                }
+                var allCreditList = await (from a in Context.TblCreditDebitMasters
+                                           join b in Context.TblVendorMasters on a.VendorId equals b.Vid
+                                           join c in Context.TblPaymentTypes on a.PaymentType equals c.Id
+                                           join d in Context.TblPaymentMethodTypes on a.PaymentMethod equals d.Id
+                                           orderby a.Date descending
+                                           select new CreditDebitView
+                                           {
+                                               Id = a.Id,
+                                               VendorName = b.VendorCompany,
+                                               Date = a.Date,
+                                               PaymentTypeName = c.Type,
+                                               PaymentMethodName = d.PaymentMethod,
+                                               PendingAmount = a.PendingAmount,
+                                               CreditDebitAmount = a.CreditDebitAmount,
+                                               TotalAmount = a.TotalAmount,
+                                               VendorAddress = b.VendorAddress,
+                                               VendorId=b.Vid,
+                                           }).ToListAsync();
+
+                return allCreditList;
             }
-
-            if (!string.IsNullOrEmpty(dataTable.searchValue))
+            catch (Exception)
             {
-                decimal searchValueDecimal;
-                if (decimal.TryParse(dataTable.searchValue, out searchValueDecimal))
-                {
-                    allCreditList = allCreditList.Where(e =>
-                        e.VendorName.Contains(dataTable.searchValue) ||
-                        e.PaymentTypeName.Contains(dataTable.searchValue) ||
-                        (e.CreditDebitAmount.HasValue && e.CreditDebitAmount.Value == searchValueDecimal) ||
-                        (e.PendingAmount.HasValue && e.PendingAmount.Value == searchValueDecimal) ||
-                        e.PaymentMethodName.Contains(dataTable.searchValue));
-                }
-                else
-                {
-                    allCreditList = allCreditList.Where(e =>
-                        e.VendorName.Contains(dataTable.searchValue) ||
-                        e.PaymentTypeName.Contains(dataTable.searchValue) ||
-                        e.PaymentMethodName.Contains(dataTable.searchValue));
-                }
+                throw;
             }
-
-
-            int totalRecord = await allCreditList.CountAsync();
-
-            var cData = await allCreditList.Skip(dataTable.skip).Take(dataTable.pageSize).ToListAsync();
-
-            jsonData jsonData = new jsonData
-            {
-                draw = dataTable.draw,
-                recordsFiltered = totalRecord,
-                recordsTotal = totalRecord,
-                data = cData
-            };
-
-            return jsonData;
         }
 
         public async Task<PurchaseOrderResponseModel> DisplayInvoiceDetails(string OrderId)

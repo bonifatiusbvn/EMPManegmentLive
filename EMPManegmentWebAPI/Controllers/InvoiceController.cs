@@ -163,12 +163,12 @@ namespace EMPManagment.API.Controllers
 
         [HttpPost]
         [Route("GetAllTransaction")]
-        public async Task<IActionResult> GetAllTransaction(DataTableRequstModel CreditList)
+        public async Task<IActionResult> GetAllTransaction()
         {
             try
             {
-                var allCreditList = await InvoiceMaster.GetAllTransaction(CreditList);
-                return Ok(new { code = 200, data = allCreditList });
+                var allCreditList = await InvoiceMaster.GetAllTransaction();
+                return Ok(new { code = 200, data = allCreditList.ToList() });
             }
             catch (Exception ex)
             {

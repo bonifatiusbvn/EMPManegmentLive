@@ -750,7 +750,7 @@ function DisplayAllUserExpenseList() {
                     return '<span style="color: ' + color + ';">' + '₹' + data + '</span>';
                 }
             },
-            { "data": "account", "name": "Account", "visible": false }
+
         ],
         scrollY: 400,
         scrollX: true,
@@ -962,7 +962,7 @@ $(document).ready(function () {
                 "className": "text-center"
             },
             {
-                "data": "billNumber", "name":"BillNumber",
+                "data": "billNumber", "name": "BillNumber",
                 "render": function (data, type, full) {
                     if (full.image != null) {
                         return '<div class="d-flex">' +

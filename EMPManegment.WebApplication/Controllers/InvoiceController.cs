@@ -22,6 +22,7 @@ using Microsoft.AspNetCore.Components;
 using EMPManegment.EntityModels.ViewModels.ProjectModels;
 using EMPManegment.Web.Helper;
 using Microsoft.AspNetCore.Authorization;
+using Irony.Parsing.Construction;
 
 
 
@@ -505,60 +506,36 @@ namespace EMPManegment.Web.Controllers
 
         [FormPermissionAttribute("All Transaction-View")]
         [HttpGet]
-        public async Task<IActionResult> AllTransaction()
+        public IActionResult AllTransaction()
         {
             return View();
         }
-
-
-
-        [HttpPost]
-        public async Task<IActionResult> GetAllTransactiondata()
+        public async Task<IActionResult> AllVendorTransaction(Guid? VendorId, DateTime? Startdate, DateTime? Enddate)
         {
             try
             {
-
-                var draw = Request.Form["draw"].FirstOrDefault();
-                var start = Request.Form["start"].FirstOrDefault();
-                var length = Request.Form["length"].FirstOrDefault();
-                var sortColumn = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
-                var sortColumnDir = Request.Form["order[0][dir]"].FirstOrDefault();
-                var searchValue = Request.Form["search[value]"].FirstOrDefault();
-                int pageSize = length != null ? Convert.ToInt32(length) : 0;
-                int skip = start != null ? Convert.ToInt32(start) : 0;
-
-                var dataTable = new DataTableRequstModel
-                {
-                    draw = draw,
-                    start = start,
-                    pageSize = pageSize,
-                    skip = skip,
-                    lenght = length,
-                    searchValue = searchValue,
-                    sortColumn = sortColumn,
-                    sortColumnDir = sortColumnDir
-                };
                 List<CreditDebitView> transactions = new List<CreditDebitView>();
-                var data = new jsonData();
-                ApiResponseModel response = await APIServices.PostAsync(dataTable, "Invoice/GetAllTransaction");
+                ApiResponseModel response = await APIServices.PostAsync("", "Invoice/GetAllTransaction");
                 if (response.code == 200)
                 {
-                    data = JsonConvert.DeserializeObject<jsonData>(response.data.ToString());
-                    transactions = JsonConvert.DeserializeObject<List<CreditDebitView>>(data.data.ToString());
+                    transactions = JsonConvert.DeserializeObject<List<CreditDebitView>>(response.data.ToString());
                 }
-                var jsonData = new
-                {
-                    draw = data.draw,
-                    recordsFiltered = data.recordsFiltered,
-                    recordsTotal = data.recordsTotal,
-                    data = transactions,
-                };
-                return new JsonResult(jsonData);
 
+                if (VendorId.HasValue)
+                {
+                    transactions = transactions.Where(e => e.VendorId == VendorId.Value).ToList();
+                }
+
+                if (Startdate.HasValue && Enddate.HasValue)
+                {
+                    transactions = transactions.Where(e => e.Date >= Startdate.Value && e.Date <= Enddate.Value).ToList();
+                }
+
+                return PartialView("~/Views/Invoice/_AllTransactionPartial.cshtml", transactions);
             }
             catch (Exception ex)
             {
-                throw ex;
+                return StatusCode(500, "Internal server error");
             }
         }
 
