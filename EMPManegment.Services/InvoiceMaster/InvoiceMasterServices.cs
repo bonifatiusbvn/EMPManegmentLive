@@ -38,9 +38,9 @@ namespace EMPManegment.Services.InvoiceMaster
             return InvoiceMaster.EditInvoiceDetails(InvoiceNo);
         }
 
-        public Task<jsonData> GetAllTransaction(DataTableRequstModel dataTable)
+        public Task<List<CreditDebitView>> GetAllTransaction()
         {
-            return InvoiceMaster.GetAllTransaction(dataTable);
+            return InvoiceMaster.GetAllTransaction();
         }
 
         public async Task<IEnumerable<CreditDebitView>> GetAllTransactionByVendorId(Guid Vid)

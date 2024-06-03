@@ -1,9 +1,9 @@
 ﻿
 $(document).ready(function () {
     GetAllVendorData();
-    GetAllTransactionData();
     GetPaymentMethodList();
     GetPaymentTypeList();
+    AllTransactionData();
 });
 
 function GetAllVendorData() {
@@ -62,66 +62,6 @@ function GetAllVendorData() {
             defaultContent: "",
             targets: "_all"
         }]
-    });
-}
-
-
-function GetAllTransactionData() {
-    $('#transactionTable').DataTable({
-        processing: false,
-        serverSide: true,
-        filter: true,
-        "bDestroy": true,
-        ajax: {
-            type: "Post",
-            url: '/Invoice/GetAllTransactiondata',
-            dataType: 'json'
-        },
-        autoWidth: false,
-        columns: [
-            { "data": "vendorName", "name": "VendorName" },
-            {
-                "data": "date", "name": "Date",
-                "render": function (data, type, row) {
-                    return getCommonDateformat(data);
-                }
-            },
-            { "data": "paymentMethodName", "name": "PaymentMethodName" },
-            { "data": "paymentTypeName", "name": "PaymentTypeName" },
-            { "data": "creditDebitAmount", "name": "CreditDebitAmount" },
-            { "data": "pendingAmount", "name": "PendingAmount" },
-            { "data": "vendorAddress", "name": "VendorAddress" },
-        ],
-        columnDefs: [
-            {
-                targets: 4,
-                render: function (data, type, row) {
-                    var amountClass = parseFloat(data) < 0 ? 'text-success' : 'text-success';
-                    return '<span class="' + amountClass + '">' + data + '</span>';
-                }
-            },
-            {
-                targets: 5,
-                render: function (data, type, row) {
-                    var amountClass = parseFloat(data) < 0 ? 'text-danger' : 'text-danger';
-                    return '<span class="' + amountClass + '">' + data + '</span>';
-                }
-            }
-        ],
-        createdRow: function (row, data, dataIndex) {
-            $(row).addClass('text-muted');
-            var htmlContent = '<td class="id" style="display:none;"><a href="javascript:void(0);" class="fw-medium link-primary">#VZ001</a></td>';
-            htmlContent += '<td><div class="avatar-xs"><div class="avatar-title bg-danger-subtle text-danger rounded-circle fs-16"><i class="ri-arrow-right-up-fill"></i></div></div></td>';
-            htmlContent += '<td class="date">' + data.vendorName + '<small class="text-muted"></small></td>';
-            htmlContent += '<td class="form_name">' + getCommonDateformat(data.date) + '</td>';
-            htmlContent += '<td class="to_name">' + data.paymentMethodName + '</td>';
-            htmlContent += '<td class="to_name">' + data.paymentTypeName + '</td>';
-            htmlContent += '<td class="to_name text-success">' + data.creditDebitAmount + '</td>';
-            htmlContent += '<td class="to_name text-danger">' + data.pendingAmount + '</td>';
-            htmlContent += '<td class="status"><span class="badge bg-primary-subtle text-primary fs-11"><i class="ri-time-line align-bottom"></i> Processing</span></td>';
-
-            $(row).html(htmlContent);
-        }
     });
 }
 
@@ -274,3 +214,110 @@ function getLastTransaction(Vid) {
         },
     });
 }
+
+$(document).ready(function () {
+    $('#searchcreditdebitlist').on('keyup', function () {
+        var value = $(this).val().toLowerCase();
+        var hasVisibleItems = false;
+
+        $('#AllVendorCreditDebitList .transaction-item').filter(function () {
+            var isVisible = $(this).text().toLowerCase().indexOf(value) > -1;
+            $(this).toggle(isVisible);
+            if (isVisible) {
+                hasVisibleItems = true;
+            }
+        });
+
+        if (hasVisibleItems) {
+            $('.noresult').hide();
+        } else {
+            $('.noresult').show();
+        }
+    });
+});
+
+
+function GetCompanyNameList() {
+    $.ajax({
+        url: '/ProductMaster/GetVendorsNameList',
+        success: function (result) {
+            $.each(result, function (i, data) {
+                $('#textCompanyName').append('<option value="' + data.id + '">' + data.vendorCompany + '</option>');
+            });
+        },
+    });
+}
+function AllTransactionData() {
+    $.ajax({
+        url: '/Invoice/AllVendorTransaction',
+        type: 'GET',
+        dataType: 'html',
+        success: function (response) {
+            $("#AllTransactionPartial").html(response);
+        },
+    }); 
+}
+
+$(document).ready(function () {
+    GetCompanyNameList();
+
+    $('#textCompanyName').on('change', SortCompanyName);
+});
+
+function SortCompanyName() {
+    var CompanyId = $('#textCompanyName').val();
+    if (CompanyId == "AllCompany") {
+        $.ajax({
+            url: '/Invoice/AllVendorTransaction',
+            type: 'GET',
+            dataType: 'html',
+            success: function (response) {
+                $("#AllTransactionPartial").html(response);
+            },
+        });
+    } else {
+        $.ajax({
+            url: '/Invoice/AllVendorTransaction?VendorId=' + CompanyId,
+            type: 'GET',
+            dataType: 'html',
+            success: function (response) {
+                
+                if (response == "\r\n") {
+                    toastr.warning("There is no data for selected company!");
+                    $("#AllTransactionPartial").html(response);
+                } else {
+                    $("#AllTransactionPartial").html(response);
+                }
+            },
+        });
+    }
+}
+
+function SearchDatesInVendorCreditDebitList() {
+    var StartDate = $('#vendorstartdate').val();
+    var EndDate = $('#vendorenddate').val();
+
+    if (StartDate == "" && EndDate == "") {
+        toastr.warning("Select dates");
+    } else if (StartDate == "") {
+        toastr.warning("Select Start date");
+    } else if (EndDate == "") {
+        toastr.warning("Select End date");
+    } else {
+        $.ajax({
+            url: '/Invoice/AllVendorTransaction?Startdate=' + StartDate + '&Enddate=' + EndDate,
+            type: 'GET',
+            dataType: 'html',
+            success: function (response) {
+                if (response == "\r\n") {
+                    toastr.warning("There is no data for selected date!");
+                    $("#AllTransactionPartial").html(response);
+                } else {
+                    $("#AllTransactionPartial").html(response);
+                }
+            },
+        });
+    }
+}
+
+

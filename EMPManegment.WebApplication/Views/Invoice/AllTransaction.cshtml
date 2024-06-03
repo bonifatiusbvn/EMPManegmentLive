@@ -1,6 +1,7 @@
 ﻿@using EMPManegment.Web.Models;
 @inject IHttpContextAccessor Accessor;
 @inject UserSession _userSession
+
 @{
     ViewData["Title"] = "GetAllTransaction";
     Layout = "~/Views/Shared/_HomeLayout.cshtml";
@@ -24,43 +25,70 @@
 </div>
 <!-- end page title -->
 
+
 <div class="row" id="contactList">
     <div class="col-lg-12">
         <div class="card">
-            <div class="card-header d-flex align-items-center">
-                <h5 class="card-title mb-0 flex-grow-1">All Transactions</h5>
+            <div class="card-header d-flex align-items-center border-0">
+                <h5 class="card-title mb-0 flex-grow-1">Vendor Transactions</h5>
+            </div>
+            <div class="card-body border border-dashed border-end-0 border-start-0">
+                <div class="row g-2">
+                    <div class="col-xl-4 col-md-6">
+                        <div class="search-box">
+                            <input type="text" class="form-control search" id="searchcreditdebitlist" placeholder="Search...">
+                            <i class="ri-search-line search-icon"></i>
+                        </div>
+                    </div>
+                    <!--end col-->
+                    <div class="col-xl-3 col-md-6">
+                        <select class="form-control" id="textCompanyName">
+                            <option value="AllCompany">All Company</option>
+                        </select>
+                    </div>
+                    <!--end col-->
+                    <div class="col-xl-2 col-md-4">
+                        <div class="input-group">
+                            <input type="date" class="form-control" id="vendorstartdate">
+                        </div>
+                    </div>
+                    <!--end col-->
+                    <div class="col-xl-2 col-md-4">
+                        <div class="input-group">
+                            <input type="date" class="form-control" id="vendorenddate">
+                        </div>
+                    </div>
+                    <!--end col-->
+                    <div class="col-xl-1 col-md-4">
+                        <button class="btn btn-primary w-100" onclick="SearchDatesInVendorCreditDebitList();">Search</button>
+                    </div>
+                </div>
+                <!--end row-->
             </div>
             <div class="card-body p-0">
                 <div class="card-body">
-                    <div id="example_wrapper" class="dataTables_wrapper dt-bootstrap5 no-footer">
-                        <div class="col-sm-12">
-                            <table id="transactionTable" class="table table-bordered dt-responsive nowrap table-striped align-middle dataTable no-footer dtr-inline">
-                                <thead class="table-info text-muted">
-                                    <tr>
-                                        <th></th>
-                                        <th>VendorName</th>
-                                        <th>Date</th>
-                                        <th>PaymentMethod</th>
-                                        <th>PaymentType</th>
-                                        <th>CreditDebitAmount</th>
-                                        <th>PendingAmount</th>
-                                        <th>Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="list form-check-all">
-                                </tbody>
-                            </table>
-                            <!--end table-->
-                        </div>
+                    <div class="table-responsive table-card">
+                        <table class="table align-middle table-nowrap" id="AllVendorCreditDebitList">
+                            <thead class="table-info text-muted">
+                                <tr>
+                                    <th></th>
+                                    <th>Vendor Name</th>
+                                    <th>Date</th>
+                                    <th>Payment Type</th>
+                                    <th>Credit Amount</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody class="list form-check-all" id="AllTransactionPartial">
+                                
+                            </tbody>
+                        </table>
+                        <!--end table-->
                         <div class="noresult" style="display: none">
                             <div class="text-center">
                                 <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#25a0e2,secondary:#00bd9d" style="width:75px;height:75px">
                                 </lord-icon>
                                 <h5 class="mt-2">Sorry! No Result Found</h5>
-                                <p class="text-muted mb-0">
-                                    We've searched more than 150+ transactions We did not find any
-                                    transactions for you search.
-                                </p>
                             </div>
                         </div>
                     </div>
@@ -71,7 +99,9 @@
     </div>
     <!--end col-->
 </div>
-<!--end row-->
+
+
+
 <script type="text/javascript">
     var userPermissions = '@Html.Raw(Json.Serialize(UserSession.FormPermisionData))';
 </script>

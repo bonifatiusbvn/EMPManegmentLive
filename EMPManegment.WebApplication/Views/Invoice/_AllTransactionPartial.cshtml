@@ -1,0 +1,22 @@
+﻿@model IEnumerable<EMPManegment.EntityModels.ViewModels.Invoice.CreditDebitView>
+@inject EMPManegment.Web.Helper.Common CommonHelper
+
+@foreach (var item in Model)
+{
+    <tr class="transaction-item">
+        <td>
+            <div class="avatar-xs">
+                <div class="avatar-title bg-danger-subtle text-danger rounded-circle fs-16">
+                    <i class="ri-arrow-right-up-fill"></i>
+                </div>
+            </div>
+        </td>
+        <td>@item.VendorName<small class="text-muted"></small></td>
+        <td>@CommonHelper.GetCommonDateFormat(item?.Date ?? DateTime.MinValue)</td>
+        <td>@item.PaymentTypeName</td>
+        <td class="to_name text-success">@item.CreditDebitAmount</td>
+        <td class="status">
+            <span class="badge bg-primary-subtle text-primary fs-11"><i class="ri-time-line align-bottom"></i> Processing</span>
+        </td>
+    </tr>
+}
