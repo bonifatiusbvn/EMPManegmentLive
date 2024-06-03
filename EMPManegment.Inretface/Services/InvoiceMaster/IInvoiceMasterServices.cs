@@ -13,10 +13,10 @@ namespace EMPManegment.Inretface.Services.InvoiceMaster
     public interface IInvoiceMasterServices
     {
         Task<InvoiceMasterModel> GetInvoiceDetailsById(Guid Id);
-        Task<IEnumerable<InvoiceViewModel>> GetInvoiceListByVendorId(Guid Vid);
+        Task<InvoicePayVendorModel> GetInvoiceListByVendorId(Guid Vid);
+        Task<jsonData> GetAllTransactionByVendorId(Guid Vid, DataTableRequstModel dataTable);
         Task<IEnumerable<CreditDebitView>> GetLastTransactionByVendorId(Guid Vid);
-        Task<IEnumerable<CreditDebitView>> GetAllTransactionByVendorId(Guid Vid);
-        Task<jsonData> GetAllTransaction(DataTableRequstModel dataTable);
+        Task<List<CreditDebitView>> GetAllTransaction();
         Task<jsonData> GetInvoiceDetailsList(DataTableRequstModel dataTable);
         string CheckInvoiceNo(string porjectname);
         Task<UserResponceModel> InsertInvoiceDetails(InvoiceMasterModel InsertInvoice);

@@ -22,6 +22,7 @@ using Microsoft.AspNetCore.Components;
 using EMPManegment.EntityModels.ViewModels.ProjectModels;
 using EMPManegment.Web.Helper;
 using Microsoft.AspNetCore.Authorization;
+using Irony.Parsing.Construction;
 
 
 
@@ -408,11 +409,11 @@ namespace EMPManegment.Web.Controllers
         {
             try
             {
-                List<InvoiceViewModel> products = new List<InvoiceViewModel>();
+                InvoicePayVendorModel products = new InvoicePayVendorModel();
                 ApiResponseModel response = await APIServices.GetAsync("", "Invoice/GetInvoiceListByVendorId?Vid=" + Vid);
                 if (response.code == 200)
                 {
-                    products = JsonConvert.DeserializeObject<List<InvoiceViewModel>>(response.data.ToString());
+                    products = JsonConvert.DeserializeObject<InvoicePayVendorModel>(response.data.ToString());
                 }
                 return View(products);
             }
@@ -442,45 +443,23 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
-            [FormPermissionAttribute("All Transaction-View")]
+        [FormPermissionAttribute("All Transaction-View")]
         [HttpGet]
         public async Task<IActionResult> VendorAllTransaction(Guid Vid)
         {
-            try
-            {
-                List<CreditDebitView> products = new List<CreditDebitView>();
-                ApiResponseModel response = await APIServices.GetAsync("", "Invoice/GetLastTransactionByVendorId?Vid=" + Vid);
-                if (response.code == 200)
-                {
-                    products = JsonConvert.DeserializeObject<List<CreditDebitView>>(response.data.ToString());
-                }
-                return View(products);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        [FormPermissionAttribute("All Transaction-View")]
-        [HttpGet]
-        public async Task<IActionResult> AllTransaction()
-        {
+            ViewBag.VendorId = Vid;
             return View();
         }
 
-
-
         [HttpPost]
-        public async Task<IActionResult> GetAllTransactiondata()
+        public async Task<IActionResult> GetVendorTransactionList(Guid? Vid)
         {
             try
             {
-
                 var draw = Request.Form["draw"].FirstOrDefault();
                 var start = Request.Form["start"].FirstOrDefault();
                 var length = Request.Form["length"].FirstOrDefault();
-                var sortColumn = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
+                var sortColumn = Request.Form["columns[" + Request.Form["order[2][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
                 var sortColumnDir = Request.Form["order[0][dir]"].FirstOrDefault();
                 var searchValue = Request.Form["search[value]"].FirstOrDefault();
                 int pageSize = length != null ? Convert.ToInt32(length) : 0;
@@ -497,27 +476,66 @@ namespace EMPManegment.Web.Controllers
                     sortColumn = sortColumn,
                     sortColumnDir = sortColumnDir
                 };
-                List<CreditDebitView> transactions = new List<CreditDebitView>();
+
+                List<CreditDebitView> transactionList = new List<CreditDebitView>();
                 var data = new jsonData();
-                ApiResponseModel response = await APIServices.PostAsync(dataTable, "Invoice/GetAllTransaction");
+                ApiResponseModel response = await APIServices.PostAsync(dataTable, "Invoice/GetAllTransactionByVendorId?Vid=" + Vid);
+
                 if (response.code == 200)
                 {
                     data = JsonConvert.DeserializeObject<jsonData>(response.data.ToString());
-                    transactions = JsonConvert.DeserializeObject<List<CreditDebitView>>(data.data.ToString());
+                    transactionList = JsonConvert.DeserializeObject<List<CreditDebitView>>(data.data.ToString());
                 }
+
                 var jsonData = new
                 {
-                    draw = data.draw,
-                    recordsFiltered = data.recordsFiltered,
-                    recordsTotal = data.recordsTotal,
-                    data = transactions,
+                    draw = draw,
+                    recordsFiltered = transactionList.Count,
+                    recordsTotal = transactionList.Count,
+                    data = transactionList,
                 };
-                return new JsonResult(jsonData);
 
+                return new JsonResult(jsonData);
             }
             catch (Exception ex)
             {
                 throw ex;
+            }
+        }
+
+
+        [FormPermissionAttribute("All Transaction-View")]
+        [HttpGet]
+        public IActionResult AllTransaction()
+        {
+            return View();
+        }
+        public async Task<IActionResult> AllVendorTransaction(Guid? VendorId, DateTime? Startdate, DateTime? Enddate)
+        {
+            try
+            {
+                List<CreditDebitView> transactions = new List<CreditDebitView>();
+                ApiResponseModel response = await APIServices.PostAsync("", "Invoice/GetAllTransaction");
+                if (response.code == 200)
+                {
+                    transactions = JsonConvert.DeserializeObject<List<CreditDebitView>>(response.data.ToString());
+                }
+
+                if (VendorId.HasValue)
+                {
+                    transactions = transactions.Where(e => e.VendorId == VendorId.Value).ToList();
+                }
+
+                if (Startdate.HasValue && Enddate.HasValue)
+                {
+                    transactions = transactions.Where(e => e.Date >= Startdate.Value && e.Date <= Enddate.Value).ToList();
+                }
+
+                return PartialView("~/Views/Invoice/_AllTransactionPartial.cshtml", transactions);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error");
             }
         }
 

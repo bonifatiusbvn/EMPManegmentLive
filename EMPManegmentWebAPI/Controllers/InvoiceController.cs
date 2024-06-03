@@ -115,7 +115,7 @@ namespace EMPManagment.API.Controllers
         {
             try
             {
-                IEnumerable<InvoiceViewModel> vendorInloviceList = await InvoiceMaster.GetInvoiceListByVendorId(Vid);
+                InvoicePayVendorModel vendorInloviceList = await InvoiceMaster.GetInvoiceListByVendorId(Vid);
                 return Ok(new { code = 200, data = vendorInloviceList });
             }
             catch (Exception ex)
@@ -145,14 +145,14 @@ namespace EMPManagment.API.Controllers
 
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("GetAllTransactionByVendorId")]
-        public async Task<IActionResult> GetAllTransactionByVendorId(Guid Vid)
+        public async Task<IActionResult> GetAllTransactionByVendorId(Guid Vid, DataTableRequstModel dataTable)
         {
             try
             {
-                IEnumerable<CreditDebitView> allCreditList = await InvoiceMaster.GetAllTransactionByVendorId(Vid);
-                return Ok(new { code = 200, data = allCreditList });
+                var CreditList = await InvoiceMaster.GetAllTransactionByVendorId(Vid, dataTable);
+                return Ok(new { code = 200, data = CreditList });
             }
             catch (Exception ex)
             {
@@ -163,12 +163,12 @@ namespace EMPManagment.API.Controllers
 
         [HttpPost]
         [Route("GetAllTransaction")]
-        public async Task<IActionResult> GetAllTransaction(DataTableRequstModel CreditList)
+        public async Task<IActionResult> GetAllTransaction()
         {
             try
             {
-                var allCreditList = await InvoiceMaster.GetAllTransaction(CreditList);
-                return Ok(new { code = 200, data = allCreditList });
+                var allCreditList = await InvoiceMaster.GetAllTransaction();
+                return Ok(new { code = 200, data = allCreditList.ToList() });
             }
             catch (Exception ex)
             {
