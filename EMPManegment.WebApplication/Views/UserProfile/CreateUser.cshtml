@@ -33,7 +33,7 @@
                             <h5 class="text-primary">Create New User</h5>
                         </div>
                         <div class="p-2 mt-4">
-                            <form class="form w-150 h-100" id="empaddDetails" asp-action="UserSingUp" method="post" enctype="multipart/form-data">
+                            <form class="form w-150 h-100" id="empaddDetails" asp-action="CreateUser" method="post" enctype="multipart/form-data">
                                 <div class="fv-row mb-4">
                                     <select asp-for=DepartmentId id="ddlDepartmenrnt" class="form-control">
                                         <option>--Select Department--</option>
@@ -71,7 +71,7 @@
                                                 </div>
                                                 <div class="col-6">
                                                     <div class="fv-row mb-4">
-                                                        <select asp-for="Gender" id="Gender" class="form-control">
+                                                        <select asp-for="Gender" id="Gender" class="form-control form-select">
                                                             <option>--Select Gender--</option>
                                                             <option value="Male">Male</option>
                                                             <option value="Female">Female</option>

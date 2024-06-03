@@ -44,7 +44,32 @@
     </div>
 </div>
 <!-- end page title -->
-
+<div id="createRoleModal" class="modal fade flip" tabindex="-1" role="dialog" aria-labelledby="createRoleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form id="addUserRole">
+                <div class="modal-header bg-primary-subtle p-3">
+                    <h5 class="modal-title" id="createRoleModalLabel">Create Role</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="hstack gap-3 align-items-start">
+                        <div class="flex-grow-1">
+                            <label for="textRoleName" class="form-label">Role</label>
+                            <input type="text" value="@_userSession.UserId" id="txtUserId" hidden />
+                            <input type="text" class="form-control" id="textRoleName" placeholder="Enter Role" name="textRoleName" />
+                            <input type="text" class="form-control" id="textRoleId" name="textRoleId" hidden />
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success" onclick="validateAndCreateRole()">Create</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 <div class="row">
     <div class="col-lg-12">
         <div class="card">
@@ -73,56 +98,29 @@
 
                             </div>
                         </div>
-                    <div class="table-responsive">
-                        <table class="table table-bordered dt-responsive table-striped align-middle dataTable no-footer dtr-inline">
-                            <thead class="table-light text-muted ">
-                                <tr class="table-info">
-                                    <th>Form Name</th>
-                                    <th>IsAddAllow</th>
-                                    <th>IsViewAllow</th>
-                                    <th>IsEditAllow</th>
-                                    <th>isDeleteAllow</th>
-                                </tr>
-                            </thead>
-                            <tbody id="dveditRolePermissionForm">
-                            </tbody>
-                        </table>
-                        <div class="text-end" id="updatebtn" style="display:none;">
-                            <button type="button" class="btn btn-lg btn-primary" onclick="UpdateRolewiseFormPermission()" id="btnUserRolewiseForm" style="width: 160px;height: 50px;">Update</button>
+                        <div class="table-responsive">
+                            <table class="table table-bordered dt-responsive table-striped align-middle dataTable no-footer dtr-inline">
+                                <thead class="table-light text-muted ">
+                                    <tr class="table-info">
+                                        <th>Form Name</th>
+                                        <th>IsAddAllow</th>
+                                        <th>IsViewAllow</th>
+                                        <th>IsEditAllow</th>
+                                        <th>isDeleteAllow</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="dveditRolePermissionForm">
+                                </tbody>
+                            </table>
+                            <div class="text-end" id="updatebtn" style="display:none;">
+                                <button type="button" class="btn btn-lg btn-primary" onclick="UpdateRolewiseFormPermission()" id="btnUserRolewiseForm" style="width: 160px;height: 50px;">Update</button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<div id="createRoleModal" class="modal fade flip" tabindex="-1" role="dialog" aria-labelledby="createRoleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <form id="addUserRole">
-                <div class="modal-header bg-primary-subtle p-3">
-                    <h5 class="modal-title" id="createRoleModalLabel">Create Role</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="hstack gap-3 align-items-start">
-                        <div class="flex-grow-1">
-                            <label for="textRoleName" class="form-label">Role</label>
-                            <input type="text" value="@_userSession.UserId" id="txtUserId" hidden />
-                            <input type="text" class="form-control" id="textRoleName" placeholder="Enter Role" name="textRoleName" />
-                            <input type="text" class="form-control" id="textRoleId" name="textRoleId" hidden />
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-success" onclick="validateAndCreateRole()">Create</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script src="~/moduls/rolewiseformpermissionscript.js" asp-append-version="true"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/moduls/FormPermissionScript.js" asp-append-version="true"></script>

@@ -76,6 +76,7 @@ function UpdateRolewiseFormPermission() {
         var rolewiseformRow = $(this);
         var objData = {
             RoleId: $('#txtRoleId').val(),
+            CreatedBy: $("#txtUserId").val(),
             FormId: rolewiseformRow.find('#formId').val(),
             IsAddAllow: rolewiseformRow.find('#isAdd').prop('checked'),
             IsViewAllow: rolewiseformRow.find('#isView').prop('checked'),
@@ -90,7 +91,7 @@ function UpdateRolewiseFormPermission() {
     form_data.append("RolewisePermissionDetails", JSON.stringify(formPermissions));
 
     $.ajax({
-        url: '/UserProfile/UpdateMultipleRolewiseFormPermission',
+        url: '/UserProfile/UpdatePermission',
         type: 'post',
         data: form_data,
         processData: false,
