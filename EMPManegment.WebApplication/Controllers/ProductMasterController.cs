@@ -283,9 +283,15 @@ namespace EMPManegment.Web.Controllers
 
 
         [FormPermissionAttribute("Product Details-View")]
-        public IActionResult ProductDetails()
+        public async Task<IActionResult> ProductDetails(Guid? ProductId)
         {
-            return View();
+            ProductDetailsView products = new ProductDetailsView();
+            ApiResponseModel response = await APIServices.PostAsync("", "ProductMaster/DisplayProductDetailsById?ProductId=" + ProductId);
+            if (response.code == 200)
+            {
+                products = JsonConvert.DeserializeObject<ProductDetailsView>(response.data.ToString());
+            }
+            return View(products);
         }
 
         [HttpPost]
