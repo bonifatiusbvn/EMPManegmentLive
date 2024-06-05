@@ -418,7 +418,20 @@ function SearchProductName() {
         }
     });    
 }
-
+function sortProductTable() {
+    var sortBy = $('#ddlSortBy').val();
+    $.ajax({
+        url: '/ProductMaster/GetAllProductList?sortBy=' + sortBy,
+        type: 'GET',
+        
+        success: function (result) {
+            $("#dvproductdetails").html(result);
+        },
+        error: function (xhr, status, error) {
+            toastr.error(error);
+        }
+    });
+}
 function GetAllProductDetailsList(page) {
     $.get("/ProductMaster/GetAllProductList", { page: page})
         .done(function (result) {

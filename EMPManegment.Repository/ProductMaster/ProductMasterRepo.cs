@@ -9,6 +9,7 @@ using EMPManegment.EntityModels.ViewModels.VendorModels;
 using EMPManegment.Inretface.Interface.ProductMaster;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Linq;
@@ -383,25 +384,63 @@ namespace EMPManegment.Repository.ProductMaster
             }
         }
 
-        public async Task<IEnumerable<ProductDetailsView>> GetAllProductList()
+        public async Task<IEnumerable<ProductDetailsView>> GetAllProductList(string? sortBy)
         {
+            List<ProductDetailsView> Product = new List<ProductDetailsView>();
             try
             {
-                IEnumerable<ProductDetailsView> Product = Context.TblProductDetailsMasters.Where(a=>a.IsDeleted==false).ToList().Select(a => new ProductDetailsView
+                Product = (from a in Context.TblProductDetailsMasters.Where(a => a.IsDeleted == false)
+                           join b in Context.TblProductTypeMasters
+                           on a.ProductType equals b.Id
+                           orderby a.ProductName ascending 
+                           select new ProductDetailsView
+                           {
+                               Id = a.Id,
+                               ProductType = a.ProductType,
+                               ProductTypeName = b.Type,
+                               ProductName = a.ProductName,
+                               ProductDescription = a.ProductDescription,
+                               ProductShortDescription = a.ProductShortDescription,
+                               ProductImage = a.ProductImage,
+                               PerUnitPrice = a.PerUnitPrice,
+                               IsWithGst = a.IsWithGst,
+                               GstPercentage = a.GstPercentage,
+                               GstAmount = a.GstAmount,
+                               Hsn = a.Hsn,
+                               CreatedBy = a.CreatedBy,
+                           }).ToList();
+                if (string.IsNullOrEmpty(sortBy))
                 {
-                    Id = a.Id,
-                    ProductDescription = a.ProductDescription,
-                    ProductShortDescription = a.ProductShortDescription,
-                    ProductImage = a.ProductImage,
-                    ProductName = a.ProductName,
-                    PerUnitPrice = a.PerUnitPrice,
-                    IsWithGst = a.IsWithGst,    
-                    GstPercentage = a.GstPercentage,
-                    GstAmount= a.GstAmount,
-                    Hsn = a.Hsn,
-                    ProductType = a.ProductType,
-                });
+                    Product = Product.OrderByDescending(a => a.CreatedOn).ToList();
+                }
+                else
+                {
+                    string sortOrder = sortBy.StartsWith("Ascending", StringComparison.OrdinalIgnoreCase) ? "ascending" :
+                                       sortBy.StartsWith("Descending", StringComparison.OrdinalIgnoreCase) ? "descending" :
+                                       string.Empty;
 
+                    if (!string.IsNullOrEmpty(sortOrder))
+                    {
+                        string field = sortBy.Substring(sortOrder.Length).Trim();
+                        switch (field.ToLower())
+                        {
+                            case "productname":
+                                if (sortOrder == "ascending")
+                                    Product = Product.OrderBy(a => a.ProductName).ToList();
+                                else if (sortOrder == "descending")
+                                    Product = Product.OrderByDescending(a => a.ProductName).ToList();
+                                break;
+                            case "perunitprice":
+                                if (sortOrder == "ascending")
+                                    Product = Product.OrderBy(a => a.PerUnitPrice).ToList();
+                                else if (sortOrder == "descending")
+                                    Product = Product.OrderByDescending(a => a.PerUnitPrice).ToList();
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
                 return Product;
             }
             catch (Exception ex)
