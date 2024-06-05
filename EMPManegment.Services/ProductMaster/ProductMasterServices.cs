@@ -65,9 +65,9 @@ namespace EMPManegment.Services.ProductMaster
         {
             return await productMaster.DisplayProductDetailsById(ProductId);
         }
-        public async Task<IEnumerable<ProductDetailsView>> GetAllProductList()
+        public async Task<IEnumerable<ProductDetailsView>> GetAllProductList(string? sortBy)
         {
-            return await productMaster.GetAllProductList();
+            return await productMaster.GetAllProductList(sortBy);
         }
 
         public async Task<UserResponceModel> DeleteProductDetails(Guid ProductId)

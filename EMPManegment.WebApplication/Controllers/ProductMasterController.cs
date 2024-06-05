@@ -178,12 +178,12 @@ namespace EMPManegment.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllProductList(int? page, int? ProductId, string? ProductName)
+        public async Task<IActionResult> GetAllProductList(int? page, int? ProductId, string? ProductName, string? sortBy)
         {
             try
             {
                 List<ProductDetailsView> productlist = new List<ProductDetailsView>();
-                ApiResponseModel response = await APIServices.PostAsync("", "ProductMaster/GetAllProductList");
+                ApiResponseModel response = await APIServices.PostAsync("", "ProductMaster/GetAllProductList?sortBy="+ sortBy);
                 if (response.code == 200)
                 {
                     productlist = JsonConvert.DeserializeObject<List<ProductDetailsView>>(response.data.ToString());
