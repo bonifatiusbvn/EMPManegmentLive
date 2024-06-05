@@ -77,7 +77,7 @@
                         <div class="card-header border-0">
                             <div class="row align-items-center gy-3">
                                 <div class="col-sm">
-                                    <h5 class="card-title mb-0">Search Products</h5>
+                                    <h5 class="card-title mb-0">Product List</h5>
                                 </div>
                                 @if (UserSession.FormPermisionData.Any(a => a.FormName == "Create Product" && (a.Add == true)))
                                 {
@@ -109,8 +109,16 @@
                                     </div>
                                     <div class="col-lg-auto">
                                         <div class="hstack gap-2">
-                                            <button class="btn btn-success" type="button" onclick="SearchProductName()" id="searchproductname" value="Validate" style="margin-right:-130px;">Search</button>
+                                            <button class="btn btn-success" type="button" onclick="SearchProductName()" id="searchproductname" value="Validate" style="margin-right:130px;">Search</button>
                                         </div>
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <select class="form-select" id="ddlSortBy" onchange="sortProductTable()" style="margin-left:23px; width:-10px;">
+                                            <option value="AscendingProductName">ProductName(a-z)</option>
+                                            <option value="DescendingProductName">ProductName(z-a)</option>
+                                            <option value="AscendingPerUnitPrice">PerUnitPrice-Asc </option>
+                                            <option value="DescendingPerUnitPrice">PerUnitPrice-Des</option>
+                                        </select>
                                     </div>
                                     <!--end col-->
                                     <div class="col-xxl-3 ms-auto">
@@ -126,6 +134,7 @@
                                         </div>
                                     </div>
                                     <!--end col-->
+
                                     <!--end col-->
                                 </div>
                                 <!--end row-->
