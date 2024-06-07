@@ -1,4 +1,5 @@
 ﻿
+using Azure;
 using EMPManegment.EntityModels.ViewModels;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.ProductMaster;
@@ -13,6 +14,7 @@ using EMPManegment.Services.ProductMaster;
 using EMPManegment.Services.VendorDetails;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -41,18 +43,17 @@ namespace EMPManagment.API.Controllers
                 {
                     response.Code = (int)HttpStatusCode.OK;
                     response.Message = result.Result.Message;
-                    response.Icone = result.Result.Icone;
                 }
                 else
                 {
                     response.Message = result.Result.Message;
-                    response.Code = (int)HttpStatusCode.NotFound;
-                    response.Icone = result.Result.Icone;
+                    response.Code = result.Result.Code;
                 }
             }
             catch (Exception ex)
             {
-                throw ex;
+                response.Code = (int)HttpStatusCode.InternalServerError;
+                response.Message = "An error occurred while processing the request.";
             }
             return StatusCode(response.Code, response);
         }
@@ -70,21 +71,21 @@ namespace EMPManagment.API.Controllers
                 {
                     response.Code = (int)HttpStatusCode.OK;
                     response.Message = Product.Result.Message;
-                    response.Icone = Product.Result.Icone;
                 }
                 else
                 {
                     response.Message = Product.Result.Message;
-                    response.Code = (int)HttpStatusCode.NotFound;
-                    response.Icone = Product.Result.Icone;
+                    response.Code = Product.Result.Code;
                 }
             }
             catch (Exception ex)
             {
-                throw ex;
+                response.Code = (int)HttpStatusCode.InternalServerError;
+                response.Message = "An error occurred while processing the request.";
             }
             return StatusCode(response.Code, response);
         }
+
         [HttpGet]
         [Route("GetProduct")]
         public async Task<IActionResult> GetProduct()
@@ -134,15 +135,17 @@ namespace EMPManagment.API.Controllers
                 else
                 {
                     updateresponsemodel.Message = UpdateProduct.Result.Message;
-                    updateresponsemodel.Code = (int)HttpStatusCode.NotFound;
+                    updateresponsemodel.Code = UpdateProduct.Result.Code;
                 }
             }
             catch (Exception ex)
             {
-                throw ex;
+                updateresponsemodel.Code = (int)HttpStatusCode.InternalServerError;
+                updateresponsemodel.Message = "An error occurred while processing the request.";
             }
             return StatusCode(updateresponsemodel.Code, updateresponsemodel);
         }
+
         [HttpPost]
         [Route("DeleteProductDetails")]
         public async Task<IActionResult> DeleteProductDetails(Guid ProductId)
@@ -151,7 +154,7 @@ namespace EMPManagment.API.Controllers
             var order = await productMaster.DeleteProductDetails(ProductId);
             try
             {
-                if (order != null)
+                if (order.Code == 200)
                 {
                     responseModel.Code = (int)HttpStatusCode.OK;
                     responseModel.Message = order.Message;
@@ -159,15 +162,17 @@ namespace EMPManagment.API.Controllers
                 else
                 {
                     responseModel.Message = order.Message;
-                    responseModel.Code = (int)HttpStatusCode.NotFound;
+                    responseModel.Code = order.Code;
                 }
             }
             catch (Exception ex)
             {
                 responseModel.Code = (int)HttpStatusCode.InternalServerError;
+                responseModel.Message = "An error occurred while processing the request.";
             }
             return StatusCode(responseModel.Code, responseModel);
         }
+
         [HttpPost]
         [Route("GetProductDetailsByProductId")]
         public async Task<IActionResult> GetProductDetailsByProductId(int ProductId)

@@ -102,18 +102,16 @@ namespace EMPManegment.Repository.UserAttendanceRepository
                 }
                 else
                 {
-                    response.Code = 200;
+                    response.Code = 404;
+                    response.Message = "UserId Doesn't found.";
                 }
-                return response;
-
             }
             catch (Exception ex)
             {
-
-                throw ex;
+                response.Code = 400;
+                response.Message = "Error in getting user attendance in time.";
             }
-
-
+            return response;
         }
 
         public async Task<UserResponceModel> UpdateUserOutTime(UserAttendanceModel userAttendance)
@@ -141,21 +139,23 @@ namespace EMPManegment.Repository.UserAttendanceRepository
                     }
                     else
                     {
-                        response.Code = (int)HttpStatusCode.OK;
-                        response.Message = "Pleas select valid date!!";
+                        response.Code = 404;
+                        response.Message = "Please select valid date!!";
                         response.Icone = "warning";
                     }
 
                 }
                 else
                 {
-                    response.Message = "Pleas select valid date!!";
+                    response.Message = "Please select valid date!!";
                     response.Icone = "warning";
+                    response.Code = 404;
                 }
             }
             catch (Exception ex)
             {
-                throw ex;
+                response.Code = 400;
+                response.Message = "Error in updating user out time.";
             }
             return response;
         }

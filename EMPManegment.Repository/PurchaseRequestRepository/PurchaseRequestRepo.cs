@@ -19,6 +19,7 @@ using X.PagedList;
 using Microsoft.AspNetCore.Mvc;
 using EMPManegment.EntityModels.ViewModels.PurchaseOrderModels;
 using Microsoft.EntityFrameworkCore;
+using Azure;
 #nullable disable
 
 namespace EMPManegment.Repository.PurchaseRequestRepository
@@ -64,15 +65,16 @@ namespace EMPManegment.Repository.PurchaseRequestRepository
             catch (Exception ex)
             {
                 response.code = 500;
-                response.message = "Error creating purchaseRequest ";
+                response.message = "Error in creating purchase request.";
             }
             return response;
         }
 
         public async Task<ApiResponseModel> DeletePurchaseRequest(string PrNo)
         {
+            ApiResponseModel response = new ApiResponseModel();
+            try
             {
-                ApiResponseModel response = new ApiResponseModel();
                 var GetPRdata = Context.TblPurchaseRequests.Where(a => a.PrNo == PrNo).ToList();
 
                 if (GetPRdata.Any())
@@ -94,9 +96,13 @@ namespace EMPManegment.Repository.PurchaseRequestRepository
                     response.code = 404;
                     response.message = "Purchase request with PR No. " + PrNo + " not found.";
                 }
-
-                return response;
             }
+            catch
+            {
+                response.code = 400;
+                response.message = "Error in deleting purchase request.";
+            }
+            return response;
         }
 
         public async Task<PurchaseRequestModel> GetPurchaseRequestDetailsById(Guid PrId)
@@ -188,7 +194,8 @@ namespace EMPManegment.Repository.PurchaseRequestRepository
             }
             catch (Exception ex)
             {
-                throw ex;
+                model.code = 400;
+                model.message = "Error in updating purchase request details.";
             }
             return model;
         }
@@ -332,8 +339,7 @@ namespace EMPManegment.Repository.PurchaseRequestRepository
         }
         public async Task<UserResponceModel> ApproveUnapprovePR(List<string> PrNo)
         {
-            UserResponceModel response = new UserResponceModel { };
-
+            UserResponceModel response = new UserResponceModel();
             try
             {
                 foreach (var item in PrNo)
@@ -363,19 +369,14 @@ namespace EMPManegment.Repository.PurchaseRequestRepository
                         response.Message = "Please select purchase request!";
                         response.Code = 404;
                     }
-
                 }
-
             }
             catch (Exception ex)
             {
-                response.Message = "An error occurred while processing your request.";
-                response.Code = 500;
+                response.Message = "Error in approve - unapprove purchase request.";
+                response.Code = 400;
             }
-
             return response;
         }
-
-
     }
 }

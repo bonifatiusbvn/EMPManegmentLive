@@ -58,7 +58,8 @@ namespace EMPManagment.API.Controllers
             }
             catch (Exception ex)
             {
-                throw ex;
+                response.code = (int)HttpStatusCode.InternalServerError;
+                response.message = "An error occurred while processing the request.";
             }
             return StatusCode(response.code, response);
         }

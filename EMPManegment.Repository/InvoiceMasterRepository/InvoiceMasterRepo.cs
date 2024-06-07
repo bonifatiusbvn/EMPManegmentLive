@@ -300,7 +300,8 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
             }
             catch (Exception ex)
             {
-                throw ex;
+                response.Code = 400;
+                response.Message = "Error in generating invoice.";
             }
             return response;
         }
@@ -475,7 +476,8 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
             }
             catch (Exception ex)
             {
-                throw ex;
+                response.Code = 400;
+                response.Message = "Error in inserting credit debit details.";
             }
             return response;
         }
@@ -554,7 +556,8 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
             }
             catch (Exception)
             {
-                throw;
+                response.Code = 400;
+                response.Message = "Error in inserting Invoice.";
             }
 
             return response;
@@ -671,7 +674,8 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
             }
             catch (Exception ex)
             {
-                throw ex;
+                response.Code = 400;
+                response.Message = "Error in generating invoice";
             }
             return response;
         }
@@ -679,31 +683,38 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
         public async Task<UserResponceModel> IsDeletedInvoice(Guid InvoiceId)
         {
             UserResponceModel response = new UserResponceModel();
-            var GetInvoicedata = Context.TblInvoices.Where(a => a.Id == InvoiceId).FirstOrDefault();
-            var GetInvoiceDetails = Context.TblInvoiceDetails.Where(a => a.InvoiceRefId == InvoiceId).ToList();
-
-            GetInvoicedata.IsDeleted = true;
-            Context.TblInvoices.Update(GetInvoicedata);
-
-            if (GetInvoiceDetails.Any())
+            try
             {
-                foreach (var invoice in GetInvoiceDetails)
+                var GetInvoicedata = Context.TblInvoices.Where(a => a.Id == InvoiceId).FirstOrDefault();
+                var GetInvoiceDetails = Context.TblInvoiceDetails.Where(a => a.InvoiceRefId == InvoiceId).ToList();
+
+                GetInvoicedata.IsDeleted = true;
+                Context.TblInvoices.Update(GetInvoicedata);
+
+                if (GetInvoiceDetails.Any())
                 {
-                    invoice.IsDeleted = true;
-                    Context.TblInvoiceDetails.Update(invoice);
+                    foreach (var invoice in GetInvoiceDetails)
+                    {
+                        invoice.IsDeleted = true;
+                        Context.TblInvoiceDetails.Update(invoice);
+                    }
+
+                    Context.SaveChanges();
+
+                    response.Code = 200;
+                    response.Message = "Invoice details are successfully deleted.";
                 }
-
-                Context.SaveChanges();
-
-                response.Code = 200;
-                response.Message = "Invoice details are successfully deleted.";
+                else
+                {
+                    response.Code = 404;
+                    response.Message = "No related records found to delete";
+                }
             }
-            else
+            catch (Exception ex)
             {
-                response.Code = 404;
-                response.Message = "No related records found to delete";
+                response.Code = 400;
+                response.Message = "Error in deleting invoice";
             }
-
             return response;
         }
 
@@ -757,7 +768,8 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
             }
             catch (Exception ex)
             {
-                throw ex;
+                model.Code = 400;
+                model.Message = "Error in updating invoice.";
             }
             return model;
         }
@@ -844,7 +856,8 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
             }
             catch (Exception ex)
             {
-                throw ex;
+                response.Message = "Error in generating invoice.";
+                response.Code = 400;
             }
             return response;
         }

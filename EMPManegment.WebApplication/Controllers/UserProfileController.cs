@@ -382,6 +382,7 @@ namespace EMPManegment.Web.Controllers
             }
 
         }
+
         [HttpPost]
         public async Task<JsonResult> UploadDocument(EmpDocumentView doc)
         {
@@ -409,7 +410,7 @@ namespace EMPManegment.Web.Controllers
                 }
                 else
                 {
-                    return new JsonResult(postuser.code);
+                    return new JsonResult(postuser.code = 400, postuser.message = "Error in saving the uploaded document");
                 }
             }
             catch (Exception ex)
@@ -454,7 +455,7 @@ namespace EMPManegment.Web.Controllers
                 }
                 else
                 {
-                    return new JsonResult(new { Message = string.Format(postuser.message), Code = postuser.code });
+                    return BadRequest(new { Message = string.Format(postuser.message), Code = postuser.code });
                 }
             }
             catch (Exception ex)
@@ -631,6 +632,7 @@ namespace EMPManegment.Web.Controllers
                     DateOfBirth = employee.DateOfBirth,
                     Gender = employee.Gender,
                     UpdatedBy = _userSession.UserId,
+                    RoleId  = employee.RoleId,
                 };
                 ApiResponseModel postUser = await APIServices.PostAsync(Updateuser, "UserProfile/UpdateUserDetails");
                 if (postUser.code == 200)
@@ -639,7 +641,7 @@ namespace EMPManegment.Web.Controllers
                 }
                 else
                 {
-                    return new JsonResult(new { Message = string.Format(postUser.message), Code = postUser.code });
+                    return BadRequest(new { Message = string.Format(postUser.message), Code = postUser.code });
                 }
             }
             catch (Exception ex)
@@ -671,7 +673,7 @@ namespace EMPManegment.Web.Controllers
                 }
                 else
                 {
-                    return new JsonResult(new { Message = postUser.message, Code = postUser.code });
+                    return BadRequest(new { Message = postUser.message, Code = postUser.code });
                 }
             }
             catch (Exception ex)

@@ -18,7 +18,6 @@ function preventEmptyValue(input) {
 }
 
 $(document).ready(function () {
-    debugger
     $(document).on('input', '.product-quantity', function () {
         var row = $(this).closest('.product');
         updateProductTotalAmount(row);
@@ -171,12 +170,7 @@ function SearchData() {
         }
     }
     else {
-        Swal.fire({
-            title: "Kindly fill the status",
-            icon: 'warning',
-            confirmButtonColor: '#3085d6',
-            confirmButtonText: 'OK',
-        })
+        toastr.error("Kindly fill the status");
     }
 }
 
@@ -236,16 +230,15 @@ function SaveCreatePurchaseOrder() {
                         window.location = '/PurchaseOrderMaster/PurchaseOrders';
                     });
                 }
+                else {
+                    toastr.error(Result.message);
+                }
+
             }
         })
     }
     else {
-        Swal.fire({
-            title: "Kindly fill all datafield",
-            icon: 'warning',
-            confirmButtonColor: '#3085d6',
-            confirmButtonText: 'OK',
-        })
+        toastr.warning("Kindly fill all datafield");
     }
 }
 
@@ -439,7 +432,7 @@ function getCompanyDetail(CompanyName) {
                 $('#textCompanyGstNo').val(response.gst);
                 $('#textCompanyBillingAddress').val(response.fullAddress);
             } else {
-                console.log('Empty response received.');
+                toastr.error('Empty response received.');
             }
         },
     });
@@ -575,15 +568,18 @@ function deletePurchaseOrderDetails(Id) {
                 type: 'POST',
                 dataType: 'json',
                 success: function (Result) {
-                 
-                    Swal.fire({
-                        title: Result.message,
-                        icon: 'success',
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'OK'
-                    }).then(function () {
-                        window.location = '/PurchaseOrderMaster/PurchaseOrders';
-                    })
+                    if (Result.code == 200) {
+                        Swal.fire({
+                            title: Result.message,
+                            icon: 'success',
+                            confirmButtonColor: '#3085d6',
+                            confirmButtonText: 'OK'
+                        }).then(function () {
+                            window.location = '/PurchaseOrderMaster/PurchaseOrders';
+                        })
+                    } else {
+                        toastr.error(Result.message);
+                    }                    
                 },
                 error: function () {
                     Swal.fire({
@@ -626,7 +622,7 @@ function EditPurchaseOrderDetails(Id) {
             $('#txtorderstatus').val(response.orderStatus);
         },
         error: function () {
-            alert('Data not found');
+            toastr.error("Can't get Data");
         }
     });
 }
@@ -653,7 +649,7 @@ function UpdatePurchaseOrderDetails() {
             contentType: false,
             processData: false,
             success: function (Result) {
-                if (Result.message != null) {
+                if (Result.code == 200) {
                     Swal.fire({
                         title: Result.message,
                         icon: 'success',
@@ -662,17 +658,14 @@ function UpdatePurchaseOrderDetails() {
                     }).then(function () {
                         window.location = '/PurchaseOrderMaster/PurchaseOrders';
                     });
+                } else {
+                    toastr.error(Result.message);
                 }
             }
         })
     }
     else {
-        Swal.fire({
-            title: "Kindly fill all details",
-            icon: 'warning',
-            confirmButtonColor: '#3085d6',
-            confirmButtonText: 'OK',
-        })
+        toastr.warning("Kindly fill all datafield");
     }
 }
 
@@ -1223,32 +1216,16 @@ function InsertMultiplePurchaseOrderDetails() {
                     });
                 }
                 else {
-                    Swal.fire({
-                        title: Result.message,
-                        icon: 'warning',
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'OK'
-                    });
+                    toastr.error(Result.message);
                 }
             },
-            error: function (xhr, status, error) {
-                Swal.fire({
-                    title: 'Error',
-                    text: 'An error occurred while processing your request.',
-                    icon: 'error',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK',
-                });
+            error: function () {
+                toastr.error('An error occurred while processing your request.');
             }
         });
 
     }
     else {
-        Swal.fire({
-            title: "Kindly fill all data fields",
-            icon: 'warning',
-            confirmButtonColor: '#3085d6',
-            confirmButtonText: 'OK',
-        })
+        toastr.warning("Kindly fill all data fields");
     }
 }

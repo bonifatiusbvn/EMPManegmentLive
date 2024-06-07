@@ -48,7 +48,8 @@ namespace EMPManagment.API.Controllers
             }
             catch (Exception ex)
             {
-                throw ex;
+                response.Code = (int)HttpStatusCode.InternalServerError;
+                response.Message = "An error occurred while processing the request.";
             }
             return StatusCode(response.Code, response);
         }
@@ -96,13 +97,19 @@ namespace EMPManagment.API.Controllers
                 var vendordetails = vendorServices.UpdateVendorDetails(updateVendor);
                 if (vendordetails.Result.Code == 200)
                 {
-                    response.Code = 200;
+                    response.Code = vendordetails.Result.Code;
+                    response.Message = vendordetails.Result.Message;
+                }
+                else
+                {
+                    response.Code = vendordetails.Result.Code;
                     response.Message = vendordetails.Result.Message;
                 }
             }
             catch (Exception ex)
             {
-                throw ex;
+                response.Code = (int)HttpStatusCode.InternalServerError;
+                response.Message = "An error occurred while processing the request.";
             }
             return StatusCode(response.Code, response);
         }

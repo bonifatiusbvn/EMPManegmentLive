@@ -18,7 +18,7 @@ namespace EMPManegment.Inretface.Interface.ExpenseMaster
 
         Task<IEnumerable<PaymentTypeView>> GetAllPaymentType();
 
-        Task<PaymentTypeView> GetPaymentById(int PaymentId);
+        Task<UserResponceModel> GetPaymentById(int PaymentId);
 
         Task<UserResponceModel> UpdatePaymentType(PaymentTypeView UpdatePayment);
 
@@ -26,19 +26,26 @@ namespace EMPManegment.Inretface.Interface.ExpenseMaster
 
         Task<IEnumerable<ExpenseTypeView>> GetAllExpensType();
 
-        Task<ExpenseTypeView> GetExpenseById(int ExpenseId);
+        Task<UserResponceModel> GetExpenseById(int ExpenseId);
 
         Task<UserResponceModel> UpdateExpenseType(ExpenseTypeView UpdateExpense);
 
         Task<UserResponceModel> AddExpenseDetails(ExpenseDetailsView ExpenseDetails);
+
         Task<jsonData> GetUserExpenseList(Guid UserId, DataTableRequstModel dataTable);
+
         Task<jsonData> GetUserList(DataTableRequstModel dataTable);
+
         Task<jsonData> GetExpenseDetailList(DataTableRequstModel dataTable);
-        Task<ExpenseDetailsView> GetExpenseDetailById(Guid Id);
+
+        Task<UserResponceModel> GetExpenseDetailById(Guid Id);
+
         Task<UserResponceModel> UpdateExpenseDetail(ExpenseDetailsView ExpenseDetails);
+
         Task<List<ExpenseDetailsView>> GetExpenseDetailByUserId(Guid UserId);
 
         Task<UserResponceModel> ApprovedExpense(List<ApprovedExpense> InsertOrder);
+
         Task<UserResponceModel> DeleteExpense(Guid Id);
     }
 }

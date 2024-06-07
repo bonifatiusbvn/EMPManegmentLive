@@ -1,4 +1,5 @@
-﻿using EMPManagment.Web.Models.API;
+﻿using Azure;
+using EMPManagment.Web.Models.API;
 using EMPManegment.EntityModels.View_Model;
 using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 using EMPManegment.EntityModels.ViewModels.Models;
@@ -32,19 +33,28 @@ namespace EMPManagment.API.Controllers
         public async Task<IActionResult> CreatePurchaseRequest(PurchaseRequestMasterView AddPurchaseRequest)
         {
             ApiResponseModel response = new ApiResponseModel();
-            var PurchaseRequest = await purchaseRequest.CreatePurchaseRequest(AddPurchaseRequest);
-            if (PurchaseRequest.code == 200)
+            try
             {
-                response.code = PurchaseRequest.code;
-                response.message = PurchaseRequest.message;
+                var PurchaseRequest = await purchaseRequest.CreatePurchaseRequest(AddPurchaseRequest);
+                if (PurchaseRequest.code == 200)
+                {
+                    response.code = PurchaseRequest.code;
+                    response.message = PurchaseRequest.message;
+                }
+                else
+                {
+                    response.code = PurchaseRequest.code;
+                    response.message = PurchaseRequest.message;
+                }
             }
-            else
+            catch (Exception ex)
             {
-                response.code = PurchaseRequest.code;
-                response.message = PurchaseRequest.message;
+                response.code = (int)HttpStatusCode.InternalServerError;
+                response.message = "An error occurred while processing the request.";
             }
             return StatusCode(response.code, response);
         }
+
         [HttpPost]
         [Route("GetPurchaseRequestList")]
         public async Task<IActionResult> GetPurchaseRequestList()
@@ -60,6 +70,7 @@ namespace EMPManagment.API.Controllers
             var purchaseRequestDetails = await purchaseRequest.GetPurchaseRequestDetailsById(PrId);
             return Ok(new { code = 200, data = purchaseRequestDetails });
         }
+
         [HttpPost]
         [Route("UpdatePurchaseRequestDetails")]
         public async Task<IActionResult> UpdatePurchaseRequestDetails(PurchaseRequestModel PurchaseRequestDetails)
@@ -76,15 +87,17 @@ namespace EMPManagment.API.Controllers
                 else
                 {
                     response.message = updatePR.Result.message;
-                    response.code = (int)HttpStatusCode.NotFound;
+                    response.code = updatePR.Result.code;
                 }
             }
             catch (Exception ex)
             {
-                throw ex;
+                response.code = (int)HttpStatusCode.InternalServerError;
+                response.message = "An error occurred while processing the request.";
             }
             return StatusCode(response.code, response);
         }
+
         [HttpPost]
         [Route("DeletePurchaseRequest")]
         public async Task<IActionResult> DeletePurchaseRequest(string PrNo)
@@ -101,16 +114,16 @@ namespace EMPManagment.API.Controllers
                 else
                 {
                     responseModel.message = PurchaseRequest.message;
-                    responseModel.code = (int)HttpStatusCode.NotFound;
+                    responseModel.code = PurchaseRequest.code;
                 }
             }
             catch (Exception ex)
             {
                 responseModel.code = (int)HttpStatusCode.InternalServerError;
+                responseModel.message = "An error occurred while processing the request.";
             }
             return StatusCode(responseModel.code, responseModel);
         }
-
 
         [HttpGet]
         [Route("CheckPRNo")]
@@ -158,6 +171,7 @@ namespace EMPManagment.API.Controllers
             catch (Exception ex)
             {
                 responseModel.Code = (int)HttpStatusCode.InternalServerError;
+                responseModel.Message = "An error occurred while processing the request.";
             }
             return StatusCode(responseModel.Code, responseModel);
         }

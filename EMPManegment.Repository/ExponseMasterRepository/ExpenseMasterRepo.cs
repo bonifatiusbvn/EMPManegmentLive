@@ -21,6 +21,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Mvc;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using System.Globalization;
+using Azure;
 
 namespace EMPManegment.Repository.ExponseMasterRepository
 {
@@ -60,7 +61,7 @@ namespace EMPManegment.Repository.ExponseMasterRepository
             }
             catch (Exception)
             {
-                response.Code = 404;
+                response.Code = 400;
                 response.Message = "Error in creating expense type";
             }
             return response;
@@ -84,8 +85,8 @@ namespace EMPManegment.Repository.ExponseMasterRepository
             }
             catch (Exception)
             {
-
-                throw;
+                response.Code = 400;
+                response.Message = "Error in creating payment type";
             }
             return response;
         }
@@ -126,28 +127,50 @@ namespace EMPManegment.Repository.ExponseMasterRepository
             }
         }
 
-        public async Task<ExpenseTypeView> GetExpenseById(int ExpenseId)
+        public async Task<UserResponceModel> GetExpenseById(int ExpenseId)
         {
-            var ExpenseType = await Context.TblExpenseTypes.SingleOrDefaultAsync(x => x.Id == ExpenseId);
-            ExpenseTypeView model = new ExpenseTypeView
+            UserResponceModel response = new UserResponceModel();
+            try
             {
-                Id = ExpenseType.Id,
-                Type = ExpenseType.Type,
-                CreatedOn = ExpenseType.CreatedOn,
-            };
-            return model;
+                var ExpenseType = await Context.TblExpenseTypes.SingleOrDefaultAsync(x => x.Id == ExpenseId);
+                ExpenseTypeView model = new ExpenseTypeView
+                {
+                    Id = ExpenseType.Id,
+                    Type = ExpenseType.Type,
+                    CreatedOn = ExpenseType.CreatedOn,
+                };
+                response.Code = 200;
+                response.Data = model;
+            }
+            catch (Exception ex)
+            {
+                response.Code = 400;
+                response.Message = "Error in getting expense by id";
+            }
+            return response;
         }
 
-        public async Task<PaymentTypeView> GetPaymentById(int PaymentId)
+        public async Task<UserResponceModel> GetPaymentById(int PaymentId)
         {
-            var PaymentType = await Context.TblPaymentTypes.SingleOrDefaultAsync(x => x.Id == PaymentId);
-            PaymentTypeView model = new PaymentTypeView
+            UserResponceModel response = new UserResponceModel();
+            try
             {
-                Id = PaymentType.Id,
-                Type = PaymentType.Type,
-                CreatedOn = PaymentType.CreatedOn,
-            };
-            return model;
+
+                var PaymentType = await Context.TblPaymentTypes.SingleOrDefaultAsync(x => x.Id == PaymentId);
+                PaymentTypeView model = new PaymentTypeView
+                {
+                    Id = PaymentType.Id,
+                    Type = PaymentType.Type,
+                };
+                response.Code = 200;
+                response.Data = model;
+            }
+            catch (Exception ex)
+            {
+                response.Code = 400;
+                response.Message = "Error in getting payment by id";
+            }
+            return response;
         }
 
         public async Task<UserResponceModel> UpdateExpenseType(ExpenseTypeView UpdateExpense)
@@ -169,7 +192,8 @@ namespace EMPManegment.Repository.ExponseMasterRepository
             }
             catch (Exception ex)
             {
-                throw ex;
+                model.Code = 400;
+                model.Message = "Error in updating expense type";
             }
             return model;
         }
@@ -193,7 +217,8 @@ namespace EMPManegment.Repository.ExponseMasterRepository
             }
             catch (Exception ex)
             {
-                throw ex;
+                model.Code = 400;
+                model.Message = "Error in updating payment type";
             }
             return model;
         }
@@ -261,17 +286,18 @@ namespace EMPManegment.Repository.ExponseMasterRepository
             }
             catch (Exception ex)
             {
-                throw ex;
+                response.Code = 400;
+                response.Message = "Error in adding expense";
             }
             return response;
         }
 
-        public async Task<ExpenseDetailsView> GetExpenseDetailById(Guid Id)
+        public async Task<UserResponceModel> GetExpenseDetailById(Guid Id)
         {
-
-            ExpenseDetailsView ExpenseDetail = new ExpenseDetailsView();
+            UserResponceModel response = new UserResponceModel();
             try
             {
+                ExpenseDetailsView ExpenseDetail = new ExpenseDetailsView();
                 ExpenseDetail = (from a in Context.TblExpenseMasters.Where(x => x.Id == Id)
                                  join b in Context.TblPaymentTypes
                                  on a.PaymentType equals b.Id
@@ -290,17 +316,21 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                                      Account = a.Account,
                                      IsPaid = a.IsPaid,
                                      IsApproved = a.IsApproved,
+                                     ProjectId = a.ProjectId,
                                      ApprovedBy = a.ApprovedBy,
                                      ApprovedByName = a.ApprovedByName,
                                      CreatedBy = a.CreatedBy,
                                      CreatedOn = a.CreatedOn,
                                  }).First();
-                return ExpenseDetail;
+                response.Code = 200;
+                response.Data = ExpenseDetail;
             }
             catch (Exception ex)
             {
-                throw ex;
+                response.Code = 400;
+                response.Message = "Error in getting expense detail by id";
             }
+            return response;
         }
 
         public async Task<jsonData> GetExpenseDetailList(DataTableRequstModel dataTable)
@@ -402,7 +432,8 @@ namespace EMPManegment.Repository.ExponseMasterRepository
             }
             catch (Exception ex)
             {
-                throw ex;
+                model.Code = 400;
+                model.Message = "Error in updating expense details";
             }
             return model;
         }
@@ -503,13 +534,13 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                 var UserList = from a in Context.TblExpenseMasters
                                join b in Context.TblUsers on a.UserId equals b.Id
                                where a.IsDeleted == false
-                               group new { a, b } by new { a.UserId, b.Image, b.UserName, FullName = b.FirstName + " " + b.LastName,b.FirstName,b.LastName } into userGroup
+                               group new { a, b } by new { a.UserId, b.Image, b.UserName, FullName = b.FirstName + " " + b.LastName, b.FirstName, b.LastName } into userGroup
                                select new UserExpenseDetailsView
                                {
                                    UserId = userGroup.Key.UserId,
                                    FullName = userGroup.Key.FullName,
-                                   FirstName= userGroup.Key.FirstName,
-                                   LastName= userGroup.Key.LastName,
+                                   FirstName = userGroup.Key.FirstName,
+                                   LastName = userGroup.Key.LastName,
                                    Image = userGroup.Key.Image,
                                    UserName = userGroup.Key.UserName,
                                    Date = userGroup.Max(e => e.a.Date),
@@ -649,8 +680,8 @@ namespace EMPManegment.Repository.ExponseMasterRepository
             }
             catch (Exception ex)
             {
-                response.Code = 500;
-                response.Message = "Error updating expenses: " + ex.Message;
+                response.Code = 400;
+                response.Message = "Error in updating expenses.";
             }
             return response;
         }
@@ -658,16 +689,29 @@ namespace EMPManegment.Repository.ExponseMasterRepository
         public async Task<UserResponceModel> DeleteExpense(Guid Id)
         {
             UserResponceModel response = new UserResponceModel();
-            var GetExpensedata = Context.TblExpenseMasters.Where(a => a.Id == Id).FirstOrDefault();
-
-            if (GetExpensedata != null)
+            try
             {
-                GetExpensedata.IsDeleted = true;
-                Context.TblExpenseMasters.Update(GetExpensedata);
-                Context.SaveChanges();
-                response.Code = 200;
-                response.Data = GetExpensedata;
-                response.Message = "Expense is deleted successfully";
+                var GetExpensedata = Context.TblExpenseMasters.Where(a => a.Id == Id).FirstOrDefault();
+
+                if (GetExpensedata != null)
+                {
+                    GetExpensedata.IsDeleted = true;
+                    Context.TblExpenseMasters.Update(GetExpensedata);
+                    Context.SaveChanges();
+                    response.Code = 200;
+                    response.Data = GetExpensedata;
+                    response.Message = "Expense is deleted successfully";
+                }
+                else
+                {
+                    response.Code = 404;
+                    response.Message = "Can't find the expense Id";
+                }
+            }
+            catch(Exception ex)
+            {  
+                response.Code = 400;
+                response.Message = "Error deleting expenses";
             }
             return response;
         }

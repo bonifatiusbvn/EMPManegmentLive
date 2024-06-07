@@ -1,4 +1,5 @@
-﻿using EMPManagment.Web.Models.API;
+﻿using Azure;
+using EMPManagment.Web.Models.API;
 using EMPManegment.EntityModels.ViewModels.ExpenseMaster;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.OrderModels;
@@ -44,12 +45,13 @@ namespace EMPManagment.API.Controllers
                 else
                 {
                     response.Message = createOrder.Result.Message;
-                    response.Code = (int)HttpStatusCode.NotFound;
+                    response.Code = createOrder.Result.Code;
                 }
             }
             catch (Exception ex)
             {
-                throw ex;
+                response.Code = (int)HttpStatusCode.InternalServerError;
+                response.Message = "An error occurred while processing the request.";
             }
             return StatusCode(response.Code, response);
         }
@@ -109,12 +111,13 @@ namespace EMPManagment.API.Controllers
                 else
                 {
                     response.message = createOrder.message;
-                    response.code = (int)HttpStatusCode.NotFound;
+                    response.code = createOrder.code;
                 }
             }
             catch (Exception ex)
             {
-                throw ex;
+                response.code = (int)HttpStatusCode.InternalServerError;
+                response.message = "An error occurred while processing the request.";
             }
             return StatusCode(response.code, response);
         }
@@ -127,6 +130,7 @@ namespace EMPManagment.API.Controllers
             IEnumerable<PaymentMethodView> paymentmethod = await PurchaseOrderDetails.GetAllPaymentMethod();
             return Ok(new { code = 200, data = paymentmethod.ToList() });
         }
+
         [HttpGet]
         [Route("EditPurchaseOrderDetails")]
         public async Task<IActionResult> EditPurchaseOrderDetails(Guid Id)
@@ -134,6 +138,7 @@ namespace EMPManagment.API.Controllers
             var getorderDetails = await PurchaseOrderDetails.EditPurchaseOrderDetails(Id);
             return Ok(new { code = 200, data = getorderDetails });
         }
+
         [HttpPost]
         [Route("UpdatePurchaseOrderDetails")]
         public async Task<IActionResult> UpdatePurchaseOrderDetails(UpdatePurchaseOrderView PurchaseorderDetails)
@@ -150,15 +155,17 @@ namespace EMPManagment.API.Controllers
                 else
                 {
                     response.Message = updateorder.Result.Message;
-                    response.Code = (int)HttpStatusCode.NotFound;
+                    response.Code = updateorder.Result.Code;
                 }
             }
             catch (Exception ex)
             {
-                throw ex;
+                response.Code = (int)HttpStatusCode.InternalServerError;
+                response.Message = "An error occurred while processing the request.";
             }
             return StatusCode(response.Code, response);
         }
+
         [HttpPost]
         [Route("DeletePurchaseOrderDetails")]
         public async Task<IActionResult> DeletePurchaseOrderDetails(Guid Id)
@@ -175,12 +182,13 @@ namespace EMPManagment.API.Controllers
                 else
                 {
                     responseModel.Message = order.Message;
-                    responseModel.Code = (int)HttpStatusCode.NotFound;
+                    responseModel.Code = order.Code;
                 }
             }
             catch (Exception ex)
             {
                 responseModel.Code = (int)HttpStatusCode.InternalServerError;
+                responseModel.Message = "An error occurred while processing the request.";
             }
             return StatusCode(responseModel.Code, responseModel);
         }

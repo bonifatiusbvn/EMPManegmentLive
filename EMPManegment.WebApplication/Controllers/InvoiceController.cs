@@ -85,7 +85,6 @@ namespace EMPManegment.Web.Controllers
                 {
                     order = JsonConvert.DeserializeObject<List<PurchaseOrderDetailView>>(response.data.ToString());
                     response.data = order;
-
                 }
                 if (Response.code == 200)
                 {
@@ -178,11 +177,11 @@ namespace EMPManegment.Web.Controllers
                 ApiResponseModel response = await APIServices.GetAsync("", "Invoice/GetInvoiceDetailsByOrderId?OrderId=" + OrderId);
                 if (response.code == 200)
                 {
-                    return Ok(new { Code = response.code });
+                    return Ok(new { Code = response.code, Message = string.Format(response.message) });
                 }
                 else
                 {
-                    return new JsonResult(new { Message = string.Format(response.message), Code = response.code, Icone = "warning" });
+                    return Ok(new { Message = string.Format(response.message), Code = response.code });
                 }
 
             }
@@ -281,7 +280,7 @@ namespace EMPManegment.Web.Controllers
                 }
                 else
                 {
-                    return new JsonResult(new { Message = string.Format(postuser.message), Icone = string.Format(postuser.Icone), Code = postuser.code });
+                    return BadRequest(new { Message = string.Format(postuser.message), Code = postuser.code });
                 }
             }
             catch (Exception ex)
@@ -302,11 +301,11 @@ namespace EMPManegment.Web.Controllers
                 ApiResponseModel postuser = await APIServices.PostAsync(InsertDetails, "Invoice/InsertCreditDebitDetails");
                 if (postuser.code == 200)
                 {
-                    return Ok(new { Message = string.Format(postuser.message), Code = postuser });
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
                 }
                 else
                 {
-                    return new JsonResult(new { Message = string.Format(postuser.message), Icone = string.Format(postuser.Icone), Code = postuser.code });
+                    return new JsonResult(new { Message = string.Format(postuser.message), Code = postuser.code });
                 }
             }
             catch (Exception ex)
@@ -586,9 +585,12 @@ namespace EMPManegment.Web.Controllers
                 ApiResponseModel postuser = await APIServices.PostAsync(invoiceDetails, "Invoice/UpdateInvoiceDetails");
                 if (postuser.code == 200)
                 {
-                    return Ok(new { postuser.message });
+                    return Ok(new { postuser.message,postuser.code });
                 }
-                return View(invoiceDetails);
+                else
+                {
+                    return Ok(new { postuser.message, postuser.code });
+                }
             }
             catch (Exception ex)
             {
@@ -609,7 +611,7 @@ namespace EMPManegment.Web.Controllers
                 }
                 else
                 {
-                    return new JsonResult(new { Message = string.Format(postuser.message), Code = postuser.code });
+                    return BadRequest(new { Message = string.Format(postuser.message), Code = postuser.code });
                 }
             }
             catch (Exception ex)
@@ -625,11 +627,11 @@ namespace EMPManegment.Web.Controllers
                 ApiResponseModel response = await APIServices.GetAsync("", "Invoice/ShowInvoiceDetailsByOrderId?OrderId=" + OrderId);
                 if (response.code == 200)
                 {
-                    return Ok(new { Code = response.code });
+                    return Ok(new { Code = response.code, Message = string.Format(response.message) });
                 }
                 else
                 {
-                    return new JsonResult(new { Message = string.Format(response.message), Code = response.code, Icone = "warning" });
+                    return Ok(new { Message = string.Format(response.message), Code = response.code, Icone = "warning" });
                 }
 
             }

@@ -69,12 +69,12 @@ namespace EMPManegment.Web.Controllers
                 UserResponceModel responseModel = new UserResponceModel();
                 if (postuser.code == 200)
                 {
-                    return Ok(new { postuser.message, postuser.Icone, postuser.code });
+                    return Ok(new { postuser.message, postuser.code });
                 }
                 else
                 {
 
-                    return Ok(new { postuser.message, postuser.Icone, postuser.code });
+                    return BadRequest(new { postuser.message, postuser.code });
                 }
             }
             catch (Exception ex)
@@ -117,16 +117,16 @@ namespace EMPManegment.Web.Controllers
                     ApiResponseModel postuser = await APIServices.PostAsync(AddProduct, "ProductMaster/AddProductType");
                     if (postuser.code == 200)
                     {
-                        return Ok(new { Message = string.Format(postuser.message), Icone = string.Format(postuser.Icone), Code = postuser.code });
+                        return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
                     }
                     else
                     {
-                        return new JsonResult(new { Message = string.Format(postuser.message), Icone = string.Format(postuser.Icone), Code = postuser.code });
+                        return BadRequest(new { Message = string.Format(postuser.message), Code = postuser.code });
                     }
                 }
                 else
                 {
-                    return new JsonResult(new { Message = "Please Select Product", Icone = "warning" });
+                    return BadRequest(new { Message = "Please Select Product"});
                 }
             }
             catch (Exception ex)
@@ -341,7 +341,7 @@ namespace EMPManegment.Web.Controllers
                 }
                 else
                 {
-                    return new JsonResult(new { Message = string.Format(postuser.message), Code = postuser.code });
+                    return BadRequest(new { Message = string.Format(postuser.message), Code = postuser.code });
                 }
             }
             catch (Exception ex)
@@ -361,7 +361,7 @@ namespace EMPManegment.Web.Controllers
                 }
                 else
                 {
-                    return new JsonResult(new { Message = string.Format(postuser.message), Code = postuser.code });
+                    return BadRequest(new { Message = string.Format(postuser.message), Code = postuser.code });
                 }
             }
             catch (Exception ex)

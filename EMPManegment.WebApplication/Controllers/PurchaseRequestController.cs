@@ -91,7 +91,7 @@ namespace EMPManegment.Web.Controllers
                 }
                 else
                 {
-                    return Ok(new { Message = postUser.message, Code = postUser.code });
+                    return BadRequest(new { Message = postUser.message, Code = postUser.code });
                 }
             }
             catch (Exception ex)
@@ -160,9 +160,12 @@ namespace EMPManegment.Web.Controllers
                 ApiResponseModel postuser = await APIServices.PostAsync(UpdatePurchaseRequest, "PurchaseRequest/UpdatePurchaseRequestDetails");
                 if (postuser.code == 200)
                 {
-                    return Ok(new { postuser.message });
+                    return Ok(new { postuser.message,postuser.code });
                 }
-                return View(UpdatePurchaseRequest);
+                else
+                {
+                    return BadRequest(new { postuser.message, postuser.code });
+                }
             }
             catch (Exception ex)
             {
@@ -183,7 +186,7 @@ namespace EMPManegment.Web.Controllers
                 }
                 else
                 {
-                    return new JsonResult(new { Message = string.Format(purchaseRequest.message), Code = purchaseRequest.code });
+                    return BadRequest(new { Message = string.Format(purchaseRequest.message), Code = purchaseRequest.code });
                 }
             }
             catch (Exception ex)
@@ -275,7 +278,7 @@ namespace EMPManegment.Web.Controllers
                 }
                 else
                 {
-                    return Ok(new { Message = response.message, Code = response.code });
+                    return BadRequest(new { Message = response.message, Code = response.code });
                 }
             }
             catch (Exception ex)

@@ -11,15 +11,15 @@
         <table role="grid" class="gridjs-table border" style="height: auto;">
             <thead class="gridjs-thead">
                 <tr class="gridjs-tr">
-                    <th data-column-id="product" class="gridjs-th gridjs-th-sort text-muted" tabindex="0" style="width: 360px;">
+                    <th data-column-id="product" class="gridjs-th gridjs-th-sort text-muted" tabindex="0" style="width: 360px;background-color: #bee5eb;">
                         <div class="gridjs-th-content">Product</div>
                         <button tabindex="-1" aria-label="Sort column ascending" title="Sort column ascending" class="gridjs-sort gridjs-sort-desc"></button>
                     </th>
-                    <th data-column-id="price" class="gridjs-th gridjs-th-sort text-muted" tabindex="0" style="width: 101px;">
+                    <th data-column-id="price" class="gridjs-th gridjs-th-sort text-muted" tabindex="0" style="width: 101px;background-color: #bee5eb;">
                         <div class="gridjs-th-content">Price</div>
                         <button tabindex="-1" aria-label="Sort column ascending" title="Sort column ascending" class="gridjs-sort gridjs-sort-neutral"></button>
                     </th>
-                    <th data-column-id="action" class="gridjs-th gridjs-th-sort text-muted" tabindex="0" style="width: 80px;">
+                    <th data-column-id="action" class="gridjs-th gridjs-th-sort text-muted" tabindex="0" style="width: 80px;background-color: #bee5eb;">
                         <div class="gridjs-th-content">Action</div>
                         <button tabindex="-1" aria-label="Sort column ascending" title="Sort column ascending" class="gridjs-sort gridjs-sort-neutral"></button>
                     </th>
@@ -29,7 +29,7 @@
                 @foreach (var item in Model)
                 {
                     <tr>
-                        <td data-column-id="product">
+                        <td data-column-id="product" class="gridjs-td">
                             <span>
                                 <div class="d-flex align-items-center">
                                     <div class="flex-shrink-0 me-3">
@@ -50,7 +50,7 @@
                         <td data-column-id="price" class="gridjs-td">₹<span>@item.PerUnitPrice</span></td>
                         @if (UserSession.FormPermisionData.Any(a => a.FormName == "Product List" && (a.Edit == true || a.Delete == true)))
                         {
-                            <td data-column-id="action">
+                            <td data-column-id="action" class="gridjs-td">
                                 @if (UserSession.FormPermisionData.Any(a => a.FormName == "Product List" && a.Edit == true))
                                 {
                                     <a href="#showModal" onclick="EditProductDetails('@item.Id')" data-bs-toggle="modal" class="text-primary d-inline-block edit-item-btn">
@@ -92,5 +92,5 @@
                 toastr.warning("@TempData["EmptyProductList"]");
         </text>
     }
-                });
+                        });
 </script>

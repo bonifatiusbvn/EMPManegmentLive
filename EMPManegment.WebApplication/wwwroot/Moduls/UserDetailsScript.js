@@ -27,8 +27,16 @@ $(document).ready(function () {
             lastnameInput: "required",
             birthdateInput: "required",
             genderInput: "required",
-            emailInput: "required",
-            phonenumberInput: "required",
+            emailInput: {
+                required: true,
+                email: true
+            },
+            phonenumberInput: {
+                required: true,
+                digits: true,
+                minlength: 10,
+                maxlength: 10
+            },
             addressInput: "required",
         },
         messages: {
@@ -36,8 +44,16 @@ $(document).ready(function () {
             lastnameInput: "Please Enter LastName",
             birthdateInput: "Please Enter DateOfBirth",
             genderInput: "Please Enter Gender",
-            emailInput: "Please Enter Email",
-            phonenumberInput: "Please Enter PhoneNumber",
+            emailInput: {
+                required: "Please Enter Email",
+                email: "Please enter a valid email address"
+            },
+            phonenumberInput: {
+                required: "Please Enter phone number",
+                digits: "phone number must contain only digits",
+                minlength: "phone number must be 10 digits long",
+                maxlength: "phone number must be 10 digits long"
+            },
             addressInput: "Please Enter Address",
         }
     })
@@ -170,7 +186,6 @@ function GetDepartmentList(itemId, selectedDepartmentId) {
 }
 
 function UserActiveDeactive(UserId, checkboxElement) {
-    debugger
     UpdatedBy = $("#txtUpdatedById").val();
     var isActive = checkboxElement.checked;
     var action = isActive ? 'activate' : 'deactivate';
@@ -259,16 +274,11 @@ function UpdateUserRoleAndDept(userId) {
                     window.location = '/UserProfile/UserActiveDecative';
                 });
             } else {
-                Swal.fire({
-                    title: result.message,
-                    icon: 'warning',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK'
-                });
+                toastr.error(result.message);
             }
         },
         error: function (xhr, status, error) {
-            Swal.fire(
+            toastr.error(
                 'Error',
                 'An error occurred while updating user details. Please try again later.',
                 'error'
@@ -278,7 +288,6 @@ function UpdateUserRoleAndDept(userId) {
 }
 
 function EnterInTime() {
-
     var fromData = new FormData();
     fromData.append("UserId", $("#txtuserid").val());
     fromData.append("Date", $("#txttodayDate").val());
@@ -291,20 +300,25 @@ function EnterInTime() {
         processData: false,
         contentType: false,
         success: function (Result) {
-            Swal.fire({
-                title: Result.message,
-                icon: Result.icone,
-                confirmButtonColor: '#3085d6',
-                confirmButtonText: 'OK'
-            })
-            GetUserAttendanceInTime();
-        },
 
+            if (Result.code == 200) {
+
+                Swal.fire({
+                    title: Result.message,
+                    icon: Result.icone,
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'OK'
+                })
+                GetUserAttendanceInTime();
+            }
+            else {
+                toastr.warning(Result.message);
+            }
+        },
     })
 }
 
 function EnterOutTime() {
-
     if ($("#todayouttime").text() == "Pending") {
 
         Swal.fire({
@@ -332,14 +346,18 @@ function EnterOutTime() {
                     processData: false,
                     contentType: false,
                     success: function (Result) {
-                        Swal.fire({
-                            title: "Deleted!",
-                            text: Result.message,
-                            icon: "success",
-                            confirmButtonClass: "btn btn-primary w-xs mt-2",
-                            buttonsStyling: false
-                        });
-                        GetUserAttendanceInTime();
+                        if (Result.code == 200) {
+                            Swal.fire({
+                                text: Result.message,
+                                icon: "success",
+                                confirmButtonClass: "btn btn-primary w-xs mt-2",
+                                buttonsStyling: false
+                            });
+                            GetUserAttendanceInTime();
+                        }
+                        else {
+                            toastr.warning(Result.message);
+                        }
                     }
                 });
             } else if (result.dismiss === Swal.DismissReason.cancel) {
@@ -351,10 +369,7 @@ function EnterOutTime() {
                 );
             }
         });
-
-
     } else {
-
         var formData = new FormData();
         formData.append("UserId", $("#txtuserid").val());
         $.ajax({
@@ -365,16 +380,20 @@ function EnterOutTime() {
             processData: false,
             contentType: false,
             success: function (Result) {
-                Swal.fire({
-                    title: Result.message,
-                    icon: Result.icone,
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK'
-                });
-                GetUserAttendanceInTime();
+                if (Result.code == 200) {
+                    Swal.fire({
+                        title: Result.message,
+                        icon: "success",
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK'
+                    });
+                    GetUserAttendanceInTime();
+                }
+                else {
+                    toastr.warning(Result.message);
+                }
             }
         });
-
     }
 }
 function ResetPassword() {
@@ -391,25 +410,24 @@ function ResetPassword() {
             data: objData,
             datatype: 'json',
             success: function (Result) {
-
-                Swal.fire({
-                    title: Result.message,
-                    icon: 'success',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK'
-                }).then(function () {
-                    window.location = '/UserProfile/DisplayUserList';
-                });
+                if (Result.code == 200) {
+                    Swal.fire({
+                        title: Result.message,
+                        icon: 'success',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK'
+                    }).then(function () {
+                        window.location = '/UserProfile/DisplayUserList';
+                    });
+                }
+                else {
+                    toastr.error(Result.message);
+                }
             },
         })
     }
     else {
-        Swal.fire({
-            title: "Kindly fill all datafield",
-            icon: 'warning',
-            confirmButtonColor: '#3085d6',
-            confirmButtonText: 'OK',
-        })
+        toastr.warning("Kindly fill all datafield");
     }
 }
 
@@ -423,7 +441,6 @@ function GetUserAttendanceInTime() {
         processData: false,
         contentType: false,
         success: function (Result) {
-
             var datetime = Result.data;
             if (datetime != null) {
                 var userInTime = datetime.intime;
@@ -463,9 +480,7 @@ function GetUserAttendanceInTime() {
                 $("#todayouttime").text("Missing");
                 $("#txttotalhours").text("Pending");
             }
-
         },
-
     })
 }
 
@@ -481,9 +496,7 @@ function UserBirsthDayWish() {
         processData: false,
         contentType: false,
         success: function (Result) {
-
-
-            if (Result.message != null) {
+            if (Result.code == 200) {
                 Swal.fire(
                     {
                         html: '<div class="mt-3"><lord-icon src="https://cdn.lordicon.com/lupuorrc.json" trigger="loop" colors="primary:#0ab39c,secondary:#405189" style="width:120px;height:120px"></lord-icon><div class="mt-4 pt-2 fs-15"><h4>' + Result.message + '</h4></div></div>',
@@ -521,6 +534,9 @@ function EditUserDetails(EmpId) {
             $('#PhoneNo').val(response.phoneNumber);
             $('#Address').val(response.address);
         },
+        error: function () {
+            toastr.error("Can't get Data");
+        }
     })
 }
 
@@ -558,46 +574,10 @@ function logout() {
             window.location.href = '/Authentication/Login';
         })
         .catch(error => {
-            console.error('Error:', error);
+            toastr.error('Error:', error);
 
         });
 }
-
-function UpdateUserDetails() {
-    var objData = {
-        Id: $('#Userid').val(),
-        FirstName: $('#FirstName').val(),
-        LastName: $('#LastName').val(),
-        DateOfBirth: $('#Dob').val(),
-        Gender: $('#Gender').val(),
-        Email: $('#Email').val(),
-        CountryId: $('#Contry').val(),
-        StateId: $('#state').val(),
-        CityId: $('#City').val(),
-        DepartmentId: $('#deptid').val(),
-        PhoneNumber: $('#PhoneNo').val(),
-        Address: $('#Address').val(),
-    }
-    $.ajax({
-        url: '/UserProfile/UpdateUserDetails',
-        type: 'post',
-        data: objData,
-        datatype: 'json',
-        success: function (Result) {
-
-            Swal.fire({
-                title: Result.message,
-                icon: 'success',
-                confirmButtonColor: '#3085d6',
-                confirmButtonText: 'OK'
-            }).then(function () {
-                window.location = '/UserProfile/DisplayUserList';
-            });
-        },
-    })
-
-}
-
 
 //validation
 
@@ -760,7 +740,7 @@ function GetActiveDeactiveList(page) {
             $("#activedeactivepartial").html(result);
         })
         .fail(function (error) {
-            console.error(error);
+            toastr.error(error);
         });
 }
 
@@ -826,7 +806,7 @@ function GetUserSearchData() {
     }
     else {
         $("#backBtn").hide();
-        toastr.error("Select Username or Department");
+        toastr.warning("Select Username or Department");
     }
 }
 
@@ -862,6 +842,7 @@ function updateuserDetails() {
             PhoneNumber: $('#phonenumberInput').val(),
             DateOfBirth: $('#birthdateInput').val(),
             Gender: $('#genderInput').val(),
+            RoleId: $('#textUserRole').val(),
 
         }
         $.ajax({
@@ -870,24 +851,23 @@ function updateuserDetails() {
             data: objData,
             datatype: 'json',
             success: function (Result) {
-
-                Swal.fire({
-                    title: Result.message,
-                    icon: 'success',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK'
-                }).then(function () {
-                    window.location = '/UserProfile/UserInfo/?Id=' + UserId;
-                });
+                if (Result.code == 200) {
+                    Swal.fire({
+                        title: Result.message,
+                        icon: 'success',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK'
+                    }).then(function () {
+                        window.location = '/UserProfile/UserInfo/?Id=' + UserId;
+                    });
+                }
+                else {
+                    toastr.error(Result.message);
+                }
             },
         })
     } else {
-        Swal.fire({
-            title: 'Fill empty the details',
-            icon: 'warning',
-            confirmButtonColor: '#3085d6',
-            confirmButtonText: 'OK'
-        })
+        toastr.warning("Kindly fill all datafield");
     }
 }
 var PasswordForm;
@@ -904,5 +884,4 @@ function validateAndPassword() {
         },
     })
     var isValid = true;
-
 }

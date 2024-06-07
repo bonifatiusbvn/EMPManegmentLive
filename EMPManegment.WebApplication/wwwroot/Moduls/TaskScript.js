@@ -67,8 +67,7 @@ function btnSaveTaskDetail() {
             processData: false,
             success: function (Result) {
                 siteloaderhide()
-
-                if (Result.message != null) {
+                if (Result.code == 200) {
                     Swal.fire({
                         title: Result.message,
                         icon: 'success',
@@ -78,17 +77,15 @@ function btnSaveTaskDetail() {
                         window.location = '/Task/AllTaskDetails';
                     });
                 }
+                else {
+                    toastr.error(Result.message);
+                }
             }
         })
     }
     else {
-        siteloaderhide()
-        Swal.fire({
-            title: "Kindly fill all datafield",
-            icon: 'warning',
-            confirmButtonColor: '#3085d6',
-            confirmButtonText: 'OK',
-        })
+        siteloaderhide();
+        toastr.warning("Kindly fill all datafield");
     }
 }
 
@@ -189,23 +186,15 @@ function btnStatusUpdate(Id) {
                     });
                 }
                 else {
-                    Swal.fire({
-                        title: Result.message,
-                        icon: 'warning',
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'OK',
-                    });
+                    toastr.error(Result.message);
                 }
             },
         });
     }
+
     else {
-        Swal.fire({
-            title: "Kindly select the status",
-            icon: 'warning',
-            confirmButtonColor: '#3085d6',
-            confirmButtonText: 'OK',
-        })
+        siteloaderhide();
+        toastr.warning("Kindly select the status");
     }
 }
 /*----ValidateMeassge----*/
@@ -246,6 +235,7 @@ function btnStatusUpdateLow(Id) {
             contentType: false,
             processData: false,
             success: function (Result) {
+                siteloaderhide();
                 GetUserTaskDetails();
                 if (Result.code == 200) {
 
@@ -259,28 +249,19 @@ function btnStatusUpdateLow(Id) {
                     });
                 }
                 else {
-
-                    Swal.fire({
-                        title: Result.message,
-                        icon: 'warning',
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'OK',
-                    });
+                    toastr.error(Result.message);
                 }
             },
             error: function (error, status) {
-                alert(error);
+                toastr.error(error);
+
             }
         });
     }
-    else {
 
-        Swal.fire({
-            title: "Kindly select the status",
-            icon: 'warning',
-            confirmButtonColor: '#3085d6',
-            confirmButtonText: 'OK',
-        })
+    else {
+        siteloaderhide();
+        toastr.warning("Kindly select the status");
     }
 }
 /*----ValidateMeassge LowPrority----*/
@@ -326,7 +307,7 @@ function btnStatusUpdateMedium(Id) {
             contentType: false,
             processData: false,
             success: function (Result) {
-
+                siteloaderhide();
                 GetUserTaskDetails();
                 if (Result.code == 200) {
 
@@ -340,28 +321,19 @@ function btnStatusUpdateMedium(Id) {
                     });
                 }
                 else {
-
-                    Swal.fire({
-                        title: Result.message,
-                        icon: 'warning',
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'OK',
-                    });
+                    toastr.error(Result.message);
                 }
             },
             error: function (error, status) {
-                alert(error);
+                toastr.error(error);
+
             }
         });
     }
-    else {
 
-        Swal.fire({
-            title: "Kindly select the status",
-            icon: 'warning',
-            confirmButtonColor: '#3085d6',
-            confirmButtonText: 'OK',
-        })
+    else {
+        siteloaderhide();
+        toastr.warning("Kindly select the status");
     }
 }
 /*----ValidateMeassge MediumPrority----*/
@@ -404,7 +376,7 @@ function btnStatusUpdateHigh(Id) {
             contentType: false,
             processData: false,
             success: function (Result) {
-
+                siteloaderhide();
                 GetUserTaskDetails();
                 if (Result.code == 200) {
 
@@ -418,28 +390,18 @@ function btnStatusUpdateHigh(Id) {
                     });
                 }
                 else {
-
-                    Swal.fire({
-                        title: Result.message,
-                        icon: 'warning',
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'OK',
-                    });
+                    toastr.error(Result.message);
                 }
             },
             error: function (error, status) {
-                alert(error);
+                toastr.error(error);
+
             }
         });
     }
     else {
-
-        Swal.fire({
-            title: "Kindly select the status",
-            icon: 'warning',
-            confirmButtonColor: '#3085d6',
-            confirmButtonText: 'OK',
-        })
+        siteloaderhide();
+        toastr.warning("Kindly select the status");
     }
 }
 /*----ValidateMeassge HighPrority----*/
@@ -479,8 +441,10 @@ function btnTaskDetails(Id) {
             $('#taskstatus-field').text(response.taskStatus);
         },
         error: function () {
-            alert('Data not found');
+            siteloaderhide();
+            toastr.error("Can't get Data");
         }
+
     });
 }
 
@@ -679,8 +643,9 @@ function EditTaskDetails(Id) {
             CheckValidation();
         },
         error: function () {
-            alert('Data not found');
+            toastr.error("Can't get Data");
         }
+
     });
 }
 
@@ -703,14 +668,18 @@ function UpdateTaskDetails() {
         data: objData,
         dataType: 'json',
         success: function (Result) {
-            Swal.fire({
-                title: Result.message,
-                icon: 'success',
-                confirmButtonColor: '#3085d6',
-                confirmButtonText: 'OK',
-            }).then(function () {
-                window.location = '/Task/AllTaskDetails';
-            })
+            if (Result.code == 200) {
+                Swal.fire({
+                    title: Result.message,
+                    icon: 'success',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'OK',
+                }).then(function () {
+                    window.location = '/Task/AllTaskDetails';
+                })
+            } else {
+                toastr.error(Result.message);
+            }            
         },
     })
 }

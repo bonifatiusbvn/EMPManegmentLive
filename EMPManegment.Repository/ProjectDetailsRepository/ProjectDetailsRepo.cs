@@ -65,7 +65,8 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
             }
             catch (Exception ex)
             {
-                throw ex;
+                response.Code = 404;
+                response.Message = "Error in creating project.";
             }
             return response;
         }
@@ -191,7 +192,7 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
                 FirstName = a.FirstName,
                 LastName = a.LastName,
                 Image = a.Image,
-            });
+            }).Take(10);
             return data;
         }
 
@@ -235,14 +236,15 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
                         IsDeleted = true,
                     };
                     response.Code = 200;
-                    response.Message = "Member add successfully!";
+                    response.Message = "Project member is added succesfully!";
                     Context.TblProjectMembers.Add(projectmodel);
                     Context.SaveChanges();
                 }
             }
             catch (Exception ex)
             {
-                throw ex;
+                response.Code = 400;
+                response.Message = "Error in adding member to project.";
             }
             return response;
         }
@@ -294,7 +296,8 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
             }
             catch (Exception ex)
             {
-                throw ex;
+                response.Code = 400;
+                response.Message = "Error in adding document to project.";
             }
             return response;
         }
@@ -418,32 +421,43 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
         public async Task<UserResponceModel> MemberIsDeleted(ProjectMemberUpdate projectMember)
         {
             UserResponceModel response = new UserResponceModel();
-            var GetUserdata = Context.TblProjectMembers.Where(a => a.UserId == projectMember.UserId && a.ProjectId == projectMember.ProjectId).FirstOrDefault();
-
-            if (GetUserdata != null)
+            try
             {
+                var GetUserdata = Context.TblProjectMembers.Where(a => a.UserId == projectMember.UserId && a.ProjectId == projectMember.ProjectId).FirstOrDefault();
 
-                if (GetUserdata.IsDeleted == true)
+                if (GetUserdata != null)
                 {
-                    GetUserdata.IsDeleted = false;
-                    Context.TblProjectMembers.Update(GetUserdata);
-                    Context.SaveChanges();
-                    response.Code = 200;
-                    response.Data = GetUserdata;
-                    response.Message = "Project member is deactive succesfully";
-                }
 
+                    if (GetUserdata.IsDeleted == true)
+                    {
+                        GetUserdata.IsDeleted = false;
+                        Context.TblProjectMembers.Update(GetUserdata);
+                        Context.SaveChanges();
+                        response.Code = 200;
+                        response.Data = GetUserdata;
+                        response.Message = "Project member is deactive succesfully";
+                    }
+
+                    else
+                    {
+                        GetUserdata.IsDeleted = true;
+                        Context.TblProjectMembers.Update(GetUserdata);
+                        Context.SaveChanges();
+                        response.Code = 200;
+                        response.Data = GetUserdata;
+                        response.Message = "Project member is active succesfully";
+                    }
+                }
                 else
                 {
-                    GetUserdata.IsDeleted = true;
-                    Context.TblProjectMembers.Update(GetUserdata);
-                    Context.SaveChanges();
-                    response.Code = 200;
-                    response.Data = GetUserdata;
-                    response.Message = "Project member is active succesfully";
+                    response.Code = 404;
+                    response.Message = "Project member doesn't found";
                 }
-
-
+            }
+            catch (Exception ex)
+            {
+                response.Code = 400;
+                response.Message = "Error in deleting Project member.";
             }
             return response;
         }

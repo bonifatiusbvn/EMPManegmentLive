@@ -59,14 +59,14 @@ namespace EMPManegment.Web.Controllers
         {
             try
             {
-                ApiResponseModel postuser = await APIServices.PostAsync(forgetpass, "UserLogin/ForgetPassword");
+                ApiResponseModel postuser = await APIServices.PostAsync(forgetpass, "User/ForgetPassword");
                 if (postuser.code == 200)
                 {
-                    return new JsonResult(new { Message = string.Format(postuser.message), Code = postuser.code });
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
                 }
                 else
                 {
-                    return new JsonResult(new { Message = string.Format(postuser.message), Code = postuser.code });
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
                 }
             }
             catch (Exception ex)

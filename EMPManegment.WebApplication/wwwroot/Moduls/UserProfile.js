@@ -40,7 +40,7 @@ function GetDocumentList() {
             $('#TableData').html(object);
         },
         error: function () {
-            alert("data can't get");
+            toastr.error("Can't get Data");
         }
     });
 };
@@ -74,12 +74,7 @@ function UploadDocument() {
                 });
             }
             else {
-                Swal.fire({
-                    title: 'Error in uploading the document',
-                    icon: 'error',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK',
-                })
+                toastr.error(Result.message);
             }
         }
     });
@@ -96,13 +91,13 @@ function GetUserProjectList(page) {
             $("#dvshowprojectdetail").html(result);
         })
         .fail(function (error) {
-            console.error(error);
+            toastr.error(error);
         });
 }
 
 GetUserProjectList(1);
 $(document).on("click", ".pagination a", function (e) {
-   
+
     e.preventDefault();
     var page = $(this).text();
     GetUserProjectList(page);
@@ -110,14 +105,14 @@ $(document).on("click", ".pagination a", function (e) {
 
 
 $(document).on("click", "#btnbackButton", function (e) {
-    
+
     e.preventDefault();
     var page = $(this).text();
     GetUserProjectList(page);
 });
 
 function btnserrchproject() {
-    
+
 
     GetUserProjectList(1);
 }
@@ -130,16 +125,9 @@ function GetProjectList() {
         processData: false,
         contentType: false,
         complete: function (Result) {
+
             $('#dvuserprojectlist').html(Result.responseText);
         },
-        Error: function () {
-            Swal.fire({
-                title: "Can't get data!",
-                icon: 'warning',
-                confirmButtonColor: '#3085d6',
-                confirmButtonText: 'OK',
-            })
-        }
     })
 }
 
@@ -168,7 +156,7 @@ function loadPartialView(page) {
             $("#projectListContainer").html(result);
         })
         .fail(function (error) {
-            console.error(error);
+            toastr.error(error);
         });
 }
 
@@ -205,13 +193,5 @@ function UserProjectActivity(ProId) {
 
             $('#UserProjectActivity').html(Result.responseText);
         },
-        Error: function () {
-            Swal.fire({
-                title: "Can't get data!",
-                icon: 'warning',
-                confirmButtonColor: '#3085d6',
-                confirmButtonText: 'OK',
-            })
-        }
     })
 }

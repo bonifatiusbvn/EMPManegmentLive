@@ -1,4 +1,5 @@
-﻿using EMPManegment.EntityModels.View_Model;
+﻿using Azure;
+using EMPManegment.EntityModels.View_Model;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.ProjectModels;
 using EMPManegment.EntityModels.ViewModels.TaskModels;
@@ -8,6 +9,7 @@ using EMPManegment.Inretface.Services.ProjectDetailsServices;
 using EMPManegment.Inretface.Services.TaskServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 using System.Net;
@@ -42,12 +44,13 @@ namespace EMPManagment.API.Controllers
                 else
                 {
                     response.Message = result.Result.Message;
-                    response.Code = (int)HttpStatusCode.NotFound;
+                    response.Code = result.Result.Code;
                 }
             }
             catch (Exception ex)
             {
-                throw ex;
+                response.Code = (int)HttpStatusCode.InternalServerError;
+                response.Message = "An error occurred while processing the request.";
             }
             return StatusCode(response.Code, response);
         }
@@ -59,7 +62,6 @@ namespace EMPManagment.API.Controllers
             IEnumerable<ProjectDetailView> projectlist = await ProjectDetail.GetProjectList(searchby, searchfor);
             return Ok(new { code = 200, data = projectlist.ToList() });
         }
-
 
         [HttpPost]
         [Route("GetUserProjectList")]
@@ -101,12 +103,13 @@ namespace EMPManagment.API.Controllers
                 else
                 {
                     response.Message = result.Result.Message;
-                    response.Code = (int)HttpStatusCode.NotFound;
+                    response.Code = result.Result.Code;
                 }
             }
             catch (Exception ex)
             {
-                throw ex;
+                response.Code = (int)HttpStatusCode.InternalServerError;
+                response.Message = "An error occurred while processing the request.";
             }
             return StatusCode(response.Code, response);
         }
@@ -118,6 +121,7 @@ namespace EMPManagment.API.Controllers
             IEnumerable<ProjectView> Members = await ProjectDetail.GetProjectMember(ProjectId);
             return Ok(new { code = 200, data = Members.ToList() });
         }
+
         [HttpPost]
         [Route("AddDocumentToProject")]
         public async Task<IActionResult> AddDocumentToProject(ProjectDocumentView AddDocument)
@@ -134,16 +138,16 @@ namespace EMPManagment.API.Controllers
                 else
                 {
                     response.Message = result.Result.Message;
-                    response.Code = (int)HttpStatusCode.NotFound;
+                    response.Code = result.Result.Code;
                 }
             }
             catch (Exception ex)
             {
-                throw ex;
+                response.Code = (int)HttpStatusCode.InternalServerError;
+                response.Message = "An error occurred while processing the request.";
             }
             return StatusCode(response.Code, response);
         }
-
 
         [HttpPost]
         [Route("GetProjectDocument")]
@@ -160,6 +164,7 @@ namespace EMPManagment.API.Controllers
             List<ProjectDetailView> projectlist = await ProjectDetail.GetProjectListById(searchby, searchfor, UserId);
             return Ok(new { code = 200, data = projectlist.ToList() });
         }
+
         [HttpGet]
         [Route("CheckProjectName")]
         public IActionResult CheckProjectName()
@@ -168,18 +173,16 @@ namespace EMPManagment.API.Controllers
             return Ok(new { code = 200, data = checkProject });
         }
 
-
         [HttpPost]
         [Route("IsDeletedMember")]
         public async Task<IActionResult> IsDeletedMember(ProjectMemberUpdate projectMember)
         {
             UserResponceModel responseModel = new UserResponceModel();
-
-            var Member = await ProjectDetail.MemberIsDeleted(projectMember);
             try
             {
 
-                if (Member != null)
+                var Member = await ProjectDetail.MemberIsDeleted(projectMember);
+                if (Member.Code == 200)
                 {
 
                     responseModel.Code = (int)HttpStatusCode.OK;
@@ -188,12 +191,13 @@ namespace EMPManagment.API.Controllers
                 else
                 {
                     responseModel.Message = Member.Message;
-                    responseModel.Code = (int)HttpStatusCode.NotFound;
+                    responseModel.Code = Member.Code;
                 }
             }
             catch (Exception ex)
             {
                 responseModel.Code = (int)HttpStatusCode.InternalServerError;
+                responseModel.Message = "An error occurred while processing the request.";
             }
             return StatusCode(responseModel.Code, responseModel);
         }

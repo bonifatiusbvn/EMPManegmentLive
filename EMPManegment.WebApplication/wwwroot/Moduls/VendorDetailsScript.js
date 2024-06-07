@@ -82,9 +82,6 @@ $(document).ready(function () {
             ]
         });
     }
-
-
-
     data(datas);
 });
 
@@ -118,7 +115,7 @@ function VendorDetails(Id) {
             $('#VendorGstnumber').text(response.vendorGstnumber);
         },
         error: function () {
-            alert('Data not found');
+            toastr.error("Can't get Data");
         }
     });
 }
@@ -176,25 +173,23 @@ function UpdateVendorDetails() {
             data: fromData,
             datatype: 'json',
             success: function (Result) {
-
-                Swal.fire({
-                    title: Result.message,
-                    icon: 'success',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK'
-                }).then(function () {
-                    window.location = '/Vendor/DisplayVendorList';
-                });
+                if (Result.code == 200){
+                    Swal.fire({
+                        title: Result.message,
+                        icon: 'success',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK'
+                    }).then(function () {
+                        window.location = '/Vendor/VendorList';
+                    });
+                } else {
+                    toastr.error(Result.message);
+                }               
             },
         })
     }
     else {
-        Swal.fire({
-            title: "Kindly fill all datafield",
-            icon: 'warning',
-            confirmButtonColor: '#3085d6',
-            confirmButtonText: 'OK',
-        })
+        toastr.warning("Kindly fill all datafield");
     }
 }
 function AddVendorDetails() {
@@ -240,26 +235,18 @@ function AddVendorDetails() {
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'OK'
                     }).then(function () {
-                        window.location = '/Vendor/DisplayVendorList';
+                        window.location = '/Vendor/VendorList';
                     });
                 } else {
-                    Swal.fire({
-                        title: Result.message,
-                        icon: 'error',
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'OK'
-                    })
+                    toastr.error(Result.message);
                 }
+
             },
         })
     }
+
     else {
-        Swal.fire({
-            title: "Kindly fill all datafield",
-            icon: 'warning',
-            confirmButtonColor: '#3085d6',
-            confirmButtonText: 'OK',
-        })
+        toastr.warning("Kindly fill all datafield");
     }
 }
 
@@ -508,7 +495,6 @@ function GetVendorCountry() {
         success: function (result) {
             var selectedid = $("#txtcountryId").val();
             $.each(result, function (i, data) {
-                debugger
                 if (data.id != selectedid) {
                     $('#VendorCountry').append('<option value="' + data.id + '">' + data.countryName + '</option>');
                 }

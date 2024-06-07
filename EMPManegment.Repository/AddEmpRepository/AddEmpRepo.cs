@@ -80,6 +80,7 @@ namespace EMPManegment.Repository.AddEmpRepository
                         CreatedBy = addemp.CreatedBy
 
                     };
+                    response.Message = "User Added Sucessfully!";
                     response.Code = (int)HttpStatusCode.OK;
                     Context.TblUsers.Add(model);
                     Context.SaveChanges();
@@ -87,8 +88,8 @@ namespace EMPManegment.Repository.AddEmpRepository
             }
             catch (Exception ex)
             {
-
-                throw ex;
+                response.Message = "Error in creating user.";
+                response.Code = 400;
             }
             return response;
         }
@@ -195,7 +196,8 @@ namespace EMPManegment.Repository.AddEmpRepository
             }
             catch (Exception ex)
             {
-                throw ex;
+                response.Message = "Error in Login the User.";
+                response.Code = 400;
             }
 
             return response;
@@ -315,13 +317,13 @@ namespace EMPManegment.Repository.AddEmpRepository
                     responceModel.Code = 400;
                     responceModel.Message = "Invalid email id!";
                 }
-                return responceModel;
             }
             catch (Exception ex)
             {
-                throw ex;
+                responceModel.Code = 404;
+                responceModel.Message = "Error in finding User.";
             }
+            return responceModel;
         }
-
     }
 }

@@ -234,7 +234,7 @@ function EditUserAttendance(attandenceId) {
             });
         },
         error: function () {
-            alert('Data not found');
+            toastr.error("Can't get Data");
         }
     })
 }
@@ -266,16 +266,6 @@ function UpdateUserAttendance() {
                 var ricon = "warning";
 
                 if (Result.icone == ricon) {
-
-                    Swal.fire({
-                        title: Result.message,
-                        icon: Result.icone,
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'OK'
-                    })
-                }
-
-                else {
 
                     Swal.fire({
                         title: Result.message,
@@ -403,12 +393,7 @@ function GetSearchAttendanceList() {
             }
         });
     } else {
-        Swal.fire({
-            title: "Kindly fill the status",
-            icon: 'warning',
-            confirmButtonColor: '#3085d6',
-            confirmButtonText: 'OK',
-        })
+        toastr.warning("Kindly fill all datafield");
     }
 };
 
@@ -435,7 +420,7 @@ function editUserAttendanceSrc(attandenceId) {
             $('#editTimeModelsearch').modal('show');
         },
         error: function () {
-            alert('Data not found');
+            toastr.error("Can't get Data");
         }
     })
 }

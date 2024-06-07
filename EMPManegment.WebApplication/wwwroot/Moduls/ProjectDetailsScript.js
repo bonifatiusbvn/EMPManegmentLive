@@ -35,25 +35,24 @@ function btnCreateProjectDetail() {
             contentType: false,
             processData: false,
             success: function (Result) {
-
-                Swal.fire({
-                    title: Result.message,
-                    icon: 'success',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK',
-                }).then(function () {
-                    window.location = '/Project/CreateProject';
-                });
+                if (Result.code == 200) {
+                    Swal.fire({
+                        title: Result.message,
+                        icon: 'success',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK',
+                    }).then(function () {
+                        window.location = '/Project/CreateProject';
+                    });
+                }
+                else {
+                    toastr.error(Result.message);
+                }               
             }
         })
     }
     else {
-        Swal.fire({
-            title: "Kindly fill all datafield",
-            icon: 'warning',
-            confirmButtonColor: '#3085d6',
-            confirmButtonText: 'OK',
-        })
+        toastr.warning("Kindly fill all datafield");
     }
 }
 
@@ -115,11 +114,12 @@ $(document).ready(function () {
         $('#frmprojectdetails').valid();
     });
 });
+
 function openmemberpop() {
     showMember()
     $("#inviteMembersModal").modal('show');
-
 }
+
 function showMember() {
 
     $.ajax({
@@ -129,17 +129,8 @@ function showMember() {
         processData: false,
         contentType: false,
         complete: function (Result) {
-
             $('#dvinvitemember').html(Result.responseText);
         },
-        Error: function () {
-            Swal.fire({
-                title: "Can't get data!",
-                icon: 'warning',
-                confirmButtonColor: '#3085d6',
-                confirmButtonText: 'OK',
-            })
-        }
     })
 }
 function ProjectHeadMemberList() {
@@ -152,14 +143,6 @@ function ProjectHeadMemberList() {
         complete: function (Result) {
             $('#dvinvitemember').html(Result.responseText);
         },
-        Error: function () {
-            Swal.fire({
-                title: "Can't get data!",
-                icon: 'warning',
-                confirmButtonColor: '#3085d6',
-                confirmButtonText: 'OK',
-            })
-        }
     })
 }
 function SelectProjectHead(button) {
@@ -221,24 +204,10 @@ function invitemember(Id) {
                 });
             }
             else {
-                Swal.fire({
-                    title: Result.message,
-                    icon: 'warning',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK',
-                }).then(function () {
-                    window.location = '/Project/ProjectDetails/?Id=' + proProjectId;
-                });
+                $("#inviteMembersModal").modal('hide');
+                toastr.warning(Result.message);
             }
         },
-        Error: function () {
-            Swal.fire({
-                title: "Can't get data!",
-                icon: 'warning',
-                confirmButtonColor: '#3085d6',
-                confirmButtonText: 'OK',
-            })
-        }
     })
 }
 
@@ -256,14 +225,6 @@ function showProjectMembers(ProjectId) {
 
             $('#dvshowmembers').html(Result.responseText);
         },
-        Error: function () {
-            Swal.fire({
-                title: "Can't get data!",
-                icon: 'warning',
-                confirmButtonColor: '#3085d6',
-                confirmButtonText: 'OK',
-            })
-        }
     })
 }
 
@@ -285,14 +246,6 @@ function showTeams(ProjectId, page) {
         complete: function (Result) {
             $('#dvshowteam').html(Result.responseText);
         },
-        Error: function () {
-            Swal.fire({
-                title: "Can't get data!",
-                icon: 'warning',
-                confirmButtonColor: '#3085d6',
-                confirmButtonText: 'OK',
-            })
-        }
     })
 }
 
@@ -312,22 +265,22 @@ function addProjectDocument() {
         processData: false,
         contentType: false,
         success: function (Result) {
-            Swal.fire({
-                title: Result.message,
-                icon: 'success',
-                confirmButtonColor: '#3085d6',
-                confirmButtonText: 'OK',
-            }).then(function () {
-                window.location = '/Project/ProjectDetails/?Id=' + data6;
-            })
+            if (Result.code == 200) {
+                Swal.fire({
+                    title: Result.message,
+                    icon: 'success',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'OK',
+                }).then(function () {
+                    window.location = '/Project/ProjectDetails/?Id=' + data6;
+                })
+            }
+            else {
+                toastr.error(Result.message);
+            }
         },
-        Error: function () {
-            Swal.fire({
-                title: "Can't get data!",
-                icon: 'warning',
-                confirmButtonColor: '#3085d6',
-                confirmButtonText: 'OK',
-            })
+        error: function () {
+            toastr.error("Can't get Data");
         }
     })
 }
@@ -345,14 +298,6 @@ function showProjectDocuments(ProjectId) {
         complete: function (Result) {
             $('#dvshowdocuments').html(Result.responseText);
         },
-        Error: function () {
-            Swal.fire({
-                title: "Can't get data!",
-                icon: 'warning',
-                confirmButtonColor: '#3085d6',
-                confirmButtonText: 'OK',
-            })
-        }
     })
 }
 
@@ -369,14 +314,6 @@ function showuploadDocuments(ProjectId) {
         complete: function (Result) {
             $('#dvuploadDocuments').html(Result.responseText);
         },
-        Error: function () {
-            Swal.fire({
-                title: "Can't get data!",
-                icon: 'warning',
-                confirmButtonColor: '#3085d6',
-                confirmButtonText: 'OK',
-            })
-        }
     })
 }
 
@@ -391,7 +328,7 @@ function GetAllUserProjectDetailsList(page) {
             $("#getallprojectlist").html(result);
         })
         .fail(function (error) {
-            console.error(error);
+            toastr.error(error);
         });
 }
 
@@ -457,22 +394,23 @@ function deleteProjectMember(userId) {
         processData: false,
         contentType: false,
         success: function (Result) {
-            Swal.fire({
-                title: Result.message,
-                icon: 'success',
-                confirmButtonColor: '#3085d6',
-                confirmButtonText: 'OK'
-            }).then(function () {
-                window.location = '/Project/ProjectDetails/?Id=' + proId;
-            })
+            if (Result.code == 200) {
+                Swal.fire({
+                    title: Result.message,
+                    icon: 'success',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'OK'
+                }).then(function () {
+                    window.location = '/Project/ProjectDetails/?Id=' + proId;
+                })
+            }
+            else {
+                toastr.error(Result.message);
+            }
+           
         },
         error: function () {
-            Swal.fire({
-                title: "Can't remove member!",
-                icon: 'warning',
-                confirmButtonColor: '#3085d6',
-                confirmButtonText: 'OK',
-            })
+            toastr.error("Can't remove member");
         }
     })
 }
@@ -572,14 +510,6 @@ function projectActivity(ProId) {
             $('#projectActivityinoverview').html(Result.responseText);
             projectinvoiceActivity(ProId)
         },
-        Error: function () {
-            Swal.fire({
-                title: "Can't get data!",
-                icon: 'warning',
-                confirmButtonColor: '#3085d6',
-                confirmButtonText: 'OK',
-            })
-        }
     })
 }
 
@@ -595,13 +525,5 @@ function projectinvoiceActivity(ProId) {
 
             $('#invoiceactivity').html(Result.responseText);
         },
-        Error: function () {
-            Swal.fire({
-                title: "Can't get data!",
-                icon: 'warning',
-                confirmButtonColor: '#3085d6',
-                confirmButtonText: 'OK',
-            })
-        }
     })
 }

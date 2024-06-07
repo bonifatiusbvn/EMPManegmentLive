@@ -13,6 +13,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Net;
 using System.Numerics;
 using System.Security.Cryptography;
@@ -50,14 +51,14 @@ namespace EMPManegment.Repository.ProductMaster
                     };
                     response.Code = (int)HttpStatusCode.OK;
                     response.Message = "Product successfully inserted";
-                    response.Icone = "success";
                     Context.TblProductTypeMasters.Add(Product);
                     Context.SaveChanges();
                 }
             }
             catch (Exception ex)
             {
-                throw ex;
+                response.Code = 400;
+                response.Message = "Error in inserting product type";
             }
             return response;
         }
@@ -99,14 +100,14 @@ namespace EMPManegment.Repository.ProductMaster
                     };
                     response.Code = 200;
                     response.Message = "Product add successfully!";
-                    response.Icone = "success";
                     Context.TblProductDetailsMasters.Add(productdetails);
                     Context.SaveChanges();
                 }
             }
             catch (Exception ex)
             {
-                throw ex;
+                response.Code = 400;
+                response.Message = "Error in inserting product";
             }
             return response;
         }
@@ -281,7 +282,8 @@ namespace EMPManegment.Repository.ProductMaster
             }
             catch (Exception ex)
             {
-                throw ex;
+                model.Code = 400;
+                model.Message = "Error in updating product details.";
             }
             return model;
         }
@@ -452,23 +454,33 @@ namespace EMPManegment.Repository.ProductMaster
         public async Task<UserResponceModel> DeleteProductDetails(Guid ProductId)
         {
             UserResponceModel response = new UserResponceModel();
-            var Product = Context.TblProductDetailsMasters.Where(a => a.Id == ProductId).FirstOrDefault();
-
-            if (Product != null)
+            try
             {
+                var Product = Context.TblProductDetailsMasters.Where(a => a.Id == ProductId).FirstOrDefault();
 
-                Product.IsDeleted = true;
-                Context.TblProductDetailsMasters.Update(Product);
-                Context.SaveChanges();
-                response.Code = 200;
-                response.Message = "Product is successfully deleted.";
+                if (Product != null)
+                {
+
+                    Product.IsDeleted = true;
+                    Context.TblProductDetailsMasters.Update(Product);
+                    Context.SaveChanges();
+                    response.Code = 200;
+                    response.Message = "Product is successfully deleted.";
+                }
+                else
+                {
+                    response.Code = 404;
+                    response.Message = "ProductId does not found";
+                }
             }
-            else
+            catch
             {
                 response.Code = 400;
                 response.Message = "Error in deleting product.";
             }
+            
             return response;
+            
         }
     }
 }

@@ -25,19 +25,13 @@
                     });
                 }
                 else {
-                    $("#invalidmessage").show();
-                    $("#invalidmessage").text(Result.message);
+                    toastr.error(Result.message);
                 }
             },
         })
     } else {
         $("#invalidmessage").hide();
-        Swal.fire({
-            title: "Enter email id",
-            icon: 'warning',
-            confirmButtonColor: '#3085d6',
-            confirmButtonText: 'OK',
-        })
+            toastr.warning("Enter email id");     
     }   
 }
 

@@ -36,12 +36,7 @@ function GetInvoiceDetailsByOrderId(OrderId) {
         type: 'GET',
         success: function (result) {
             if (result.code == 400) {
-                Swal.fire({
-                    title: result.message,
-                    icon: result.icone,
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK',
-                });
+                toastr.error(result.message);
             } else {
                 window.location = '/Invoice/InvoiceDetails/?OrderId=' + OrderId;
             }
@@ -61,20 +56,15 @@ function ShowInvoiceDetailsByOrderId(OrderId) {
         type: 'GET',
         success: function (result) {
             if (result.code == 400) {
-                Swal.fire({
-                    title: result.message,
-                    icon: result.icone,
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK',
-                });
+                toastr.error(Result.message);
             } else {
                 window.location = '/Invoice/InvoiceDetails?OrderId=' + OrderId;
             }
         },
         error: function (xhr, status, error) {
-            console.error('AJAX Error:', error);
+            toastr.error('AJAX Error:', error);
             // Handle error here, for example, show an alert
-            alert('An error occurred while fetching data.');
+            toastr.error('An error occurred while fetching data.');
         }
     });
 }
@@ -145,22 +135,11 @@ function InsertInvoiceDetails() {
                         });
                     }
                     else {
-                        Swal.fire({
-                            title: Result.message,
-                            icon: 'warning',
-                            confirmButtonColor: '#3085d6',
-                            confirmButtonText: 'OK'
-                        });
+                        toastr.error(Result.message);
                     }
                 },
                 error: function (xhr, status, error) {
-                    Swal.fire({
-                        title: 'Error',
-                        text: 'An error occurred while processing your request.',
-                        icon: 'error',
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'OK',
-                    });
+                    toastr.error("An error occurred while processing your request.");  
                 }
             });
         } else {
@@ -172,12 +151,7 @@ function InsertInvoiceDetails() {
         }
     }
     else {
-        Swal.fire({
-            title: "Kindly fill all data fields",
-            icon: 'warning',
-            confirmButtonColor: '#3085d6',
-            confirmButtonText: 'OK',
-        })
+        toastr.warning("Kindly fill all datafield");
     }
 }
 
@@ -254,17 +228,18 @@ $(document).ready(function () {
             success: function (response) {
                 if (response) {
                     generatePdf(response);
-                } else {
-                    alert("Error generating invoice. please try again.");
+                }
+                else {
+                    toastr.error("Error generating invoice. please try again.");
                 }
             },
             error: function () {
-                alert("An error occurred. please try again.");
+                toastr.error("An error occurred. please try again.");
             }
         });
     });
-
 });
+
 function deleteInvoice(InvoiceId) {
     Swal.fire({
         title: "Are you sure want to delete this?",
@@ -284,14 +259,19 @@ function deleteInvoice(InvoiceId) {
                 type: 'POST',
                 dataType: 'json',
                 success: function (Result) {
-                    Swal.fire({
-                        title: Result.message,
-                        icon: 'success',
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'OK'
-                    }).then(function () {
-                        window.location = '/Invoice/InvoiceListView';
-                    })
+                    if (Result.code == 200) {
+                        Swal.fire({
+                            title: Result.message,
+                            icon: 'success',
+                            confirmButtonColor: '#3085d6',
+                            confirmButtonText: 'OK'
+                        }).then(function () {
+                            window.location = '/Invoice/InvoiceListView';
+                        })
+                    }
+                    else {
+                        toastr.error(Result.message);
+                    }
                 },
                 error: function () {
                     Swal.fire({
@@ -377,7 +357,7 @@ function downloadPDF() {
         },
         error: function (xhr, status, error) {
 
-            console.error(xhr.responseText);
+            toastr.error(xhr.responseText);
         }
     });
 }
@@ -402,8 +382,9 @@ function EditInvoiceDetails(InvoiceNo) {
             $('#txtstatus').val(response.status);
         },
         error: function () {
-            alert('Data not found');
+            toastr.error("Can't get Data");
         }
+
     });
 }
 
@@ -426,7 +407,7 @@ function UpdateInvoiceDetails() {
             contentType: false,
             processData: false,
             success: function (Result) {
-                if (Result.message != null) {
+                if (Result.code == 200) {
                     Swal.fire({
                         title: Result.message,
                         icon: 'success',
@@ -436,16 +417,15 @@ function UpdateInvoiceDetails() {
                         window.location = '/Invoice/InvoiceListView';
                     });
                 }
+                else {
+                    toastr.error(Result.message);
+                }
+
             }
         })
     }
     else {
-        Swal.fire({
-            title: "Kindly fill all details",
-            icon: 'warning',
-            confirmButtonColor: '#3085d6',
-            confirmButtonText: 'OK',
-        })
+        toastr.warning("Kindly fill all datafield");
     }
 }
 
