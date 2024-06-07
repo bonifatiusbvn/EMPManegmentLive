@@ -47,7 +47,7 @@
                                 </div>
                             </span>
                         </td>
-                        <td data-column-id="price" class="gridjs-td">₹<span>@item.PerUnitPrice</span></td>
+                        <td>₹<span>@item.PerUnitPrice</span></td>
                         @if (UserSession.FormPermisionData.Any(a => a.FormName == "Product List" && (a.Edit == true || a.Delete == true)))
                         {
                             <td data-column-id="action" class="gridjs-td">
