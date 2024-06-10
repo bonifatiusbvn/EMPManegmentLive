@@ -142,6 +142,7 @@ namespace EMPManegment.Web.Controllers
                         return RedirectToAction("UserHome", "Home");
                     }
                 }
+                ViewBag.UserName = (Request.Cookies["UserName"].ToString());
                 return View();
             }
             catch (Exception ex)

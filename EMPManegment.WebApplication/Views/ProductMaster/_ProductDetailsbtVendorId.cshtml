@@ -8,20 +8,17 @@
 
 <div class="card-body">
     <div class="table-responsive table-card mb-1">
-        <table role="grid" class="gridjs-table border" style="height: auto;">
-            <thead class="gridjs-thead">
-                <tr class="gridjs-tr">
-                    <th data-column-id="product" class="gridjs-th gridjs-th-sort text-muted" tabindex="0" style="width: 360px;background-color: #bee5eb;">
-                        <div class="gridjs-th-content">Product</div>
-                        <button tabindex="-1" aria-label="Sort column ascending" title="Sort column ascending" class="gridjs-sort gridjs-sort-desc"></button>
+        <table class="table table-bordered dt-responsive nowrap table-striped align-middle dataTable no-footer dtr-inline">
+            <thead class="text-muted table-info">
+                <tr>
+                    <th>
+                        Product
                     </th>
-                    <th data-column-id="price" class="gridjs-th gridjs-th-sort text-muted" tabindex="0" style="width: 101px;background-color: #bee5eb;">
-                        <div class="gridjs-th-content">Price</div>
-                        <button tabindex="-1" aria-label="Sort column ascending" title="Sort column ascending" class="gridjs-sort gridjs-sort-neutral"></button>
+                    <th>
+                        Price
                     </th>
-                    <th data-column-id="action" class="gridjs-th gridjs-th-sort text-muted" tabindex="0" style="width: 80px;background-color: #bee5eb;">
-                        <div class="gridjs-th-content">Action</div>
-                        <button tabindex="-1" aria-label="Sort column ascending" title="Sort column ascending" class="gridjs-sort gridjs-sort-neutral"></button>
+                    <th>
+                        Action
                     </th>
                 </tr>
             </thead>
@@ -29,28 +26,26 @@
                 @foreach (var item in Model)
                 {
                     <tr>
-                        <td data-column-id="product" class="gridjs-td">
-                            <span>
-                                <div class="d-flex align-items-center">
-                                    <div class="flex-shrink-0 me-3">
-                                        <div class="avatar-sm bg-light rounded p-1">
-                                            <img src="~/@item.ProductImage" alt="" class="img-fluid d-block">
-                                        </div>
-                                    </div>
-                                    <div class="flex-grow-1">
-                                        <h5 class="fs-14 mb-1">
-                                            <a href="apps-ecommerce-product-details.html" class="text-body">@item.ProductName</a>
-                                        </h5>
-                                        <p class="text-muted mb-0">Category : <span class="fw-medium">@item.ProductTypeName</span></p>
-                                        <p class="text-muted mb-0">Details : <span class="fw-medium">@item.ProductShortDescription</span></p>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="flex-shrink-0 me-3">
+                                    <div class="avatar-sm bg-light rounded p-1">
+                                        <img src="~/@item.ProductImage" alt="" class="img-fluid d-block">
                                     </div>
                                 </div>
-                            </span>
+                                <div class="flex-grow-1">
+                                    <h5 class="fs-14 mb-1">
+                                        <a href="/ProductMaster/ProductDetails/?ProductId=@item.Id" class="text-info btn-block">@item.ProductName</a>
+                                    </h5>
+                                    <p class="text-muted mb-0">Category : <span class="fw-medium">@item.ProductTypeName</span></p>
+                                    <p class="text-muted mb-0">Details : <span class="fw-medium">@item.ProductShortDescription</span></p>
+                                </div>
+                            </div>
                         </td>
                         <td>₹<span>@item.PerUnitPrice</span></td>
                         @if (UserSession.FormPermisionData.Any(a => a.FormName == "Product List" && (a.Edit == true || a.Delete == true)))
                         {
-                            <td data-column-id="action" class="gridjs-td">
+                            <td data-column-id="action">
                                 @if (UserSession.FormPermisionData.Any(a => a.FormName == "Product List" && a.Edit == true))
                                 {
                                     <a href="#showModal" onclick="EditProductDetails('@item.Id')" data-bs-toggle="modal" class="text-primary d-inline-block edit-item-btn">
@@ -92,5 +87,5 @@
                 toastr.warning("@TempData["EmptyProductList"]");
         </text>
     }
-                        });
+                            });
 </script>
