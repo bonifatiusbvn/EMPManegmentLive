@@ -9,6 +9,7 @@ using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.UserModels;
 using EMPManegment.Inretface.EmployeesInterface.AddEmployee;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -76,8 +77,10 @@ namespace EMPManegment.Repository.AddEmpRepository
                         //Role = 4,
                         EmailConfirmed = true,
                         PhoneNumberConfirmed = true,
+                        CreatedBy = addemp.CreatedBy
 
                     };
+                    response.Message = "User Added Sucessfully!";
                     response.Code = (int)HttpStatusCode.OK;
                     Context.TblUsers.Add(model);
                     Context.SaveChanges();
@@ -85,8 +88,8 @@ namespace EMPManegment.Repository.AddEmpRepository
             }
             catch (Exception ex)
             {
-
-                throw ex;
+                response.Message = "Error in creating user.";
+                response.Code = 400;
             }
             return response;
         }
@@ -193,7 +196,8 @@ namespace EMPManegment.Repository.AddEmpRepository
             }
             catch (Exception ex)
             {
-                throw ex;
+                response.Message = "Error in Login the User.";
+                response.Code = 400;
             }
 
             return response;
@@ -313,13 +317,13 @@ namespace EMPManegment.Repository.AddEmpRepository
                     responceModel.Code = 400;
                     responceModel.Message = "Invalid email id!";
                 }
-                return responceModel;
             }
             catch (Exception ex)
             {
-                throw ex;
+                responceModel.Code = 404;
+                responceModel.Message = "Error in finding User.";
             }
+            return responceModel;
         }
-
     }
 }

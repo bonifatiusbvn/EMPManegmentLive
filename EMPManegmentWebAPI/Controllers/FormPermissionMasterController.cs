@@ -29,20 +29,28 @@ namespace EMPManagment.API.Controllers
         public async Task<IActionResult> GetRolewiseFormListById(Guid RoleId)
         {
             ApiResponseModel response = new ApiResponseModel();
-            List<RolewiseFormPermissionModel> RolewiseFormList = await RolewisePermissionMaster.GetRolewiseFormListById(RoleId);
+            try
+            {
+                List<RolewiseFormPermissionModel> RolewiseFormList = await RolewisePermissionMaster.GetRolewiseFormListById(RoleId);
 
-            if (RolewiseFormList.Count == 0)
-            {
-                response.code = 400;
+                if (RolewiseFormList.Count == 0)
+                {
+                    response.code = 400;
+                    response.message = "Error in getting FormList.";
+                }
+                else
+                {
+                    response.code = 200;
+                    response.data = RolewiseFormList.ToList();
+                }
             }
-            else
+            catch (Exception ex)
             {
-                response.code = 200;
-                response.data = RolewiseFormList.ToList();
+                response.code = (int)HttpStatusCode.InternalServerError;
+                response.message = "An error occurred while processing the request.";
             }
             return StatusCode(response.code, response);
         }
-
 
         [HttpPost]
         [Route("UpdateMultipleRolewiseFormPermission")]
@@ -60,12 +68,13 @@ namespace EMPManagment.API.Controllers
                 else
                 {
                     response.message = rolewiseFormPermission.Result.message;
-                    response.code = (int)HttpStatusCode.NotFound;
+                    response.code = rolewiseFormPermission.Result.code;
                 }
             }
             catch (Exception ex)
             {
-                throw ex;
+                response.code = (int)HttpStatusCode.InternalServerError;
+                response.message = "An error occurred while processing the request.";
             }
             return StatusCode(response.code, response);
         }
@@ -86,12 +95,13 @@ namespace EMPManagment.API.Controllers
                 else
                 {
                     response.message = RoleData.Result.message;
-                    response.code = (int)HttpStatusCode.NotFound;
+                    response.code = RoleData.Result.code;
                 }
             }
             catch (Exception ex)
             {
-                throw ex;
+                response.code = (int)HttpStatusCode.InternalServerError;
+                response.message = "An error occurred while processing the request.";
             }
             return StatusCode(response.code, response);
         }

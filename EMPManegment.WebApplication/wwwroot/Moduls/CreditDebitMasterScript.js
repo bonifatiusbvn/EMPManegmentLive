@@ -1,5 +1,4 @@
-﻿
-$(document).ready(function () {
+﻿$(document).ready(function () {
     GetAllVendorData();
     GetPaymentMethodList();
     GetPaymentTypeList();
@@ -100,7 +99,7 @@ function InsertCreditDebitDetails() {
     if (value.trim() === '') {
 
         $('#warningMessage').text('Please enter value!!');
-        return;
+        toastr.warning("Kindly fill all datafield");
     }
     else {
         var VendorId = document.getElementById("txtvendorid").textContent;
@@ -125,27 +124,27 @@ function InsertCreditDebitDetails() {
             contentType: false,
             processData: false,
             success: function (result) {
-                Swal.fire({
-                    title: result.message,
-                    icon: 'success',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK',
-                }).then(function () {
-                    window.location = '/Invoice/PayVendors?Vid=' + VendorId;
-                });
+                if (result.code == 200) {
+                    Swal.fire({
+                        title: result.message,
+                        icon: 'success',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK',
+                    }).then(function () {
+                        window.location = '/Invoice/PayVendors?Vid=' + VendorId;
+                    });
+                }
+                else {
+                    toastr.error(Result.message);
+                }
             },
-            error: function (xhr, status, error) {
-                Swal.fire({
-                    title: 'Error',
-                    text: 'An error occurred while processing your request.',
-                    icon: 'error',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK',
-                });
+            error: function () {
+                toastr.error('An error occurred while processing your request.');
             }
         });
     }
 }
+
 function GetVendorDetails(Vid) {
     GetCreditDebitTotalAmount(Vid);
     window.location = '/Invoice/PayVendors?Vid=' + Vid;
@@ -195,7 +194,7 @@ function GetCreditDebitTotalAmount(Vid) {
             });
         },
         error: function (xhr, status, error) {
-            console.error("Error in AJAX request:", status, error);
+            toastr.error("Error in AJAX request:", status, error);
         }
     });
 }
@@ -301,7 +300,10 @@ function AllTransactionData() {
         success: function (response) {
             $("#AllTransactionPartial").html(response);
         },
-    }); 
+        error: function () {
+             toastr.error("Can't get Data");
+        }
+    });
 }
 
 $(document).ready(function () {
@@ -327,7 +329,7 @@ function SortCompanyName() {
             type: 'GET',
             dataType: 'html',
             success: function (response) {
-                
+
                 if (response == "\r\n") {
                     toastr.warning("There is no data for selected company!");
                     $("#AllTransactionPartial").html(response);

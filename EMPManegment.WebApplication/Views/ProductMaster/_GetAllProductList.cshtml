@@ -38,17 +38,19 @@
                                         <div class="avatar-sm bg-light rounded p-1"><img src="~/@item.ProductImage" alt="" class="img-fluid d-block"></div>
                                     </div>
                                     <div class="flex-grow-1">
-                                        <h5 class="fs-14 mb-1"><a href="apps-ecommerce-product-details.html" class="text-body">Half Sleeve Round Neck T-Shirts</a></h5>
+                                        <h5 class="fs-14 mb-1"><a href="apps-ecommerce-product-details.html" class="text-body">@item.ProductName</a></h5>
                                         <p class="text-muted mb-0">Category : <span class="fw-medium">@item.ProductTypeName</span></p>
                                         <p class="text-muted mb-0">Details : <span class="fw-medium">@item.ProductShortDescription</span></p>
                                     </div>
                                 </div>
                             </span>
                         </td>
-                        <td data-column-id="price" class="gridjs-td"><span>@item.PerUnitPrice</span></td>
+                        <td data-column-id="price" class="gridjs-td">
+                            <span>@item.PerUnitPrice</span>
+                        </td>
                         @if (UserSession.FormPermisionData.Any(a => a.FormName == "Product List" && (a.Edit == true || a.Delete == true)))
                         {
-                            <td>
+                            <td data-column-id="action" class="gridjs-td">
                                 @if (UserSession.FormPermisionData.Any(a => a.FormName == "Product List" && (a.Edit == true)))
                                 {
                                     <a href="#showModal" onclick="EditProductDetails('@item.Id')" data-bs-toggle="modal" class="text-primary d-inline-block edit-item-btn">

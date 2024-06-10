@@ -271,12 +271,12 @@ namespace EMPManegment.Web.Controllers
                 UserResponceModel responseModel = new UserResponceModel();
                 if (postuser.code == 200)
                 {
-                    return Ok(new { postuser.message });
+                    return Ok(new { postuser.message, postuser.code });
                 }
                 else
                 {
 
-                    return Ok(new { postuser.code });
+                    return Ok(new { postuser.message, postuser.code });
                 }
             }
             catch (Exception ex)
@@ -294,11 +294,11 @@ namespace EMPManegment.Web.Controllers
                 ApiResponseModel postuser = await APIServices.PostAsync(Addexpense, "ExpenseMaster/AddExpenseDetails");
                 if (postuser.code == 200)
                 {
-                    return Ok(new { postuser.message });
+                    return Ok(new { postuser.message, postuser.code });
                 }
                 else
                 {
-                    return Ok(new { postuser.code });
+                    return Ok(new { postuser.message, postuser.code });
                 }
             }
             catch (Exception ex)
@@ -340,9 +340,12 @@ namespace EMPManegment.Web.Controllers
                 ApiResponseModel postuser = await APIServices.PostAsync(ExpenseDetails, "ExpenseMaster/UpdateExpenseDetails");
                 if (postuser.code == 200)
                 {
-                    return Ok(new { postuser.message });
+                    return Ok(new { postuser.message,postuser.code });
                 }
-                return View(ExpenseDetails);
+                else
+                {
+                    return Ok(new { postuser.message, postuser.code });
+                }
             }
             catch (Exception ex)
             {
@@ -412,11 +415,11 @@ namespace EMPManegment.Web.Controllers
                 ApiResponseModel postuser = await APIServices.PostAsync(UpdateExpense, "ExpenseMaster/ApprovedExpense");
                 if (postuser.code == 200)
                 {
-                    return Ok(new { postuser.message });
+                    return Ok(new { postuser.message,postuser.code });
                 }
                 else
                 {
-                    return Ok(new { postuser.message });
+                    return Ok(new { postuser.message,postuser.code});
                 }
             }
             catch (Exception ex)
@@ -438,7 +441,7 @@ namespace EMPManegment.Web.Controllers
                 }
                 else
                 {
-                    return new JsonResult(new { Message = string.Format(postuser.message), Code = postuser.code });
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
                 }
             }
             catch (Exception ex)
@@ -586,12 +589,12 @@ namespace EMPManegment.Web.Controllers
                 ApiResponseModel postuser = await APIServices.PostAsync(ExpenseDetails, "ExpenseMaster/AddExpenseType");
                 if (postuser.code == 200)
                 {
-                    return new JsonResult(new { postuser.message, postuser.code });
+                    return Ok(new { postuser.message, postuser.code });
                 }
                 else
                 {
 
-                    return new JsonResult(new { postuser.code, postuser.message });
+                    return Ok(new { postuser.code, postuser.message });
                 }
             }
             catch (Exception ex)

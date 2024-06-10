@@ -105,12 +105,12 @@ namespace EMPManegment.Web.Controllers
                 UserResponceModel responseModel = new UserResponceModel();
                 if (postuser.code == 200)
                 {
-                    return Ok(new { postuser.message });
+                    return Ok(new { postuser.message, postuser.code });
                 }
                 else
                 {
 
-                    return Ok(new { postuser.code });
+                    return BadRequest(new { postuser.message, postuser.code });
                 }
             }
             catch (Exception ex)
@@ -179,11 +179,11 @@ namespace EMPManegment.Web.Controllers
                 UserResponceModel userResponceModel = new UserResponceModel();
                 if (postuser.code == 200)
                 {
-                    return Ok(new { postuser.message, postuser.code, postuser.Icone });
+                    return Ok(new { postuser.message, postuser.code});
                 }
                 else
                 {
-                    return Ok(new { postuser.code, postuser.message, postuser.Icone });
+                    return Ok(new { postuser.code, postuser.message });
                 }
             }
             catch (Exception ex)
@@ -311,7 +311,7 @@ namespace EMPManegment.Web.Controllers
                     }
                     else
                     {
-                        return new JsonResult(new { Message = string.Format(postuser.message), Code = postuser.code });
+                        return BadRequest(new { Message = string.Format(postuser.message), Code = postuser.code });
                     }
                 }
                 else

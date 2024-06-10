@@ -69,12 +69,12 @@ namespace EMPManegment.Web.Controllers
                 UserResponceModel responseModel = new UserResponceModel();
                 if (postuser.code == 200)
                 {
-                    return Ok(new { postuser.message, postuser.Icone, postuser.code });
+                    return Ok(new { postuser.message, postuser.code });
                 }
                 else
                 {
 
-                    return Ok(new { postuser.message, postuser.Icone, postuser.code });
+                    return BadRequest(new { postuser.message, postuser.code });
                 }
             }
             catch (Exception ex)
@@ -117,16 +117,16 @@ namespace EMPManegment.Web.Controllers
                     ApiResponseModel postuser = await APIServices.PostAsync(AddProduct, "ProductMaster/AddProductType");
                     if (postuser.code == 200)
                     {
-                        return Ok(new { Message = string.Format(postuser.message), Icone = string.Format(postuser.Icone), Code = postuser.code });
+                        return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
                     }
                     else
                     {
-                        return new JsonResult(new { Message = string.Format(postuser.message), Icone = string.Format(postuser.Icone), Code = postuser.code });
+                        return BadRequest(new { Message = string.Format(postuser.message), Code = postuser.code });
                     }
                 }
                 else
                 {
-                    return new JsonResult(new { Message = "Please Select Product", Icone = "warning" });
+                    return BadRequest(new { Message = "Please Select Product"});
                 }
             }
             catch (Exception ex)
@@ -178,12 +178,12 @@ namespace EMPManegment.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllProductList(int? page, int? ProductId, string? ProductName)
+        public async Task<IActionResult> GetAllProductList(int? page, int? ProductId, string? ProductName, string? sortBy)
         {
             try
             {
                 List<ProductDetailsView> productlist = new List<ProductDetailsView>();
-                ApiResponseModel response = await APIServices.PostAsync("", "ProductMaster/GetAllProductList");
+                ApiResponseModel response = await APIServices.PostAsync("", "ProductMaster/GetAllProductList?sortBy="+ sortBy);
                 if (response.code == 200)
                 {
                     productlist = JsonConvert.DeserializeObject<List<ProductDetailsView>>(response.data.ToString());
@@ -283,9 +283,15 @@ namespace EMPManegment.Web.Controllers
 
 
         [FormPermissionAttribute("Product Details-View")]
-        public IActionResult ProductDetails()
+        public async Task<IActionResult> ProductDetails(Guid? ProductId)
         {
-            return View();
+            ProductDetailsView products = new ProductDetailsView();
+            ApiResponseModel response = await APIServices.PostAsync("", "ProductMaster/DisplayProductDetailsById?ProductId=" + ProductId);
+            if (response.code == 200)
+            {
+                products = JsonConvert.DeserializeObject<ProductDetailsView>(response.data.ToString());
+            }
+            return View(products);
         }
 
         [HttpPost]
@@ -341,7 +347,7 @@ namespace EMPManegment.Web.Controllers
                 }
                 else
                 {
-                    return new JsonResult(new { Message = string.Format(postuser.message), Code = postuser.code });
+                    return BadRequest(new { Message = string.Format(postuser.message), Code = postuser.code });
                 }
             }
             catch (Exception ex)
@@ -361,7 +367,7 @@ namespace EMPManegment.Web.Controllers
                 }
                 else
                 {
-                    return new JsonResult(new { Message = string.Format(postuser.message), Code = postuser.code });
+                    return BadRequest(new { Message = string.Format(postuser.message), Code = postuser.code });
                 }
             }
             catch (Exception ex)

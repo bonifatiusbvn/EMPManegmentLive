@@ -9,9 +9,20 @@ $("#datesbox").hide();
 $("#backbtn").hide();
 $("#startdatebox").hide();
 $("#enddatebox").hide();
+
+function GetUsernameList() {
+    $.ajax({
+        url: '/Task/GetUserName',
+        success: function (result) {
+            $.each(result, function (i, data) {
+                $('#drpAttusername').append('<option value=' + data.id + '>' + data.firstName + ' ' + data.lastName + ' (' + data.userName + ')</option>');
+            });
+        }
+    });
+}
 function cleartextBox() {
-    $("#ddlusername").find("option").remove().end().append(
-        '<option selected value = "">--Select Username--</option>');
+    $("#drpAttusername").find("option").remove().end().append(
+        '<option selected value="" >--Select Username--</option>');
     $("#txtdate").val('');
 }
 
@@ -39,37 +50,33 @@ $(document).ready(function () {
 
 $('.dropdown-item').click(function () {
     var selectedValue = $(this).attr('data-value');
-
+    cleartextBox();
     if (selectedValue === "ByUsername") {
-        GetUsername();
+        GetUsernameList()
         $("#usernamebox").show();
         $("#datesbox").hide();
         $("#startdatebox").hide();
         $("#enddatebox").hide();
-        cleartextBox();
     }
     if (selectedValue === "ByDate") {
         $("#usernamebox").hide();
         $("#datesbox").show();
         $("#startdatebox").hide();
         $("#enddatebox").hide();
-        cleartextBox();
     }
     if (selectedValue === "ByDate&ByUsername") {
-        GetUsername();
+        GetUsernameList()
         $("#usernamebox").show();
         $("#datesbox").show();
         $("#startdatebox").hide();
         $("#enddatebox").hide();
-        cleartextBox();
     }
     if (selectedValue === "ByBetweenDates&ByUsername") {
-        GetUsername();
+        GetUsernameList()
         $("#usernamebox").show();
         $("#datesbox").hide();
         $("#startdatebox").show();
         $("#enddatebox").show();
-        cleartextBox();
     }
 });
 $(document).ready(function () {
@@ -208,7 +215,14 @@ $(document).ready(function () {
     data(datas);
 });
 
-
+function formatDateToLocal(date) {
+    var year = date.getFullYear();
+    var month = (date.getMonth() + 1).toString().padStart(2, '0');
+    var day = date.getDate().toString().padStart(2, '0');
+    var hours = date.getHours().toString().padStart(2, '0');
+    var minutes = date.getMinutes().toString().padStart(2, '0');
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
+}
 
 
 function EditUserAttendance(attandenceId) {
@@ -226,15 +240,34 @@ function EditUserAttendance(attandenceId) {
                 $('#Date').val((new Date(item.date)).toLocaleDateString('en-GB'));
                 $('#Intime').val((new Date(item.intime)).toLocaleTimeString('en-GB'));
                 if (item.outTime == null) {
-                    $('#OutTime').val(item.date);
+
+                    var MinDate = new Date(item.date);
+                    var MaxDate = new Date(MinDate);
+                    MaxDate.setDate(MinDate.getDate() + 7);
+
+                    var formattedMinDate = formatDateToLocal(MinDate);
+                    var formattedMaxDate = formatDateToLocal(MaxDate);
+
+                    $('#OutTime').attr('min', formattedMinDate);
+                    $('#OutTime').attr('max', formattedMaxDate);
+                    $('#OutTime').val(formattedMinDate);
                 }
                 else {
+                    var MinDate = new Date(item.date);
+                    var MaxDate = new Date(MinDate);
+                    MaxDate.setDate(MinDate.getDate() + 7);
+
+                    var formattedMinDate = formatDateToLocal(MinDate);
+                    var formattedMaxDate = formatDateToLocal(MaxDate);
+
+                    $('#OutTime').attr('min', formattedMinDate);
+                    $('#OutTime').attr('max', formattedMaxDate);
                     $('#OutTime').val(item.outTime);
                 }
             });
         },
         error: function () {
-            alert('Data not found');
+            toastr.error("Can't get Data");
         }
     })
 }
@@ -272,18 +305,8 @@ function UpdateUserAttendance() {
                         icon: Result.icone,
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'OK'
-                    })
-                }
-
-                else {
-
-                    Swal.fire({
-                        title: Result.message,
-                        icon: Result.icone,
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'OK'
                     }).then(function () {
-                        window.location = '/UserProfile/GetAllUsersAttendanceList';
+                        window.location = '/UserProfile/UsersAttendance';
                     });
                 }
             },
@@ -377,7 +400,7 @@ function GetSearchAttendanceList() {
     if ($('#attendanceform').valid()) {
         var form_data = new FormData();
         form_data.append("Date", $('#txtdate').val());
-        form_data.append("UserId", $("#ddlusername").val());
+        form_data.append("UserId", $("#drpAttusername").val());
         form_data.append("StartDate", $("#txtstartdatebox").val());
         form_data.append("EndDate", $("#txtenddatebox").val());
         $.ajax({
@@ -395,7 +418,7 @@ function GetSearchAttendanceList() {
                     $("#dvattendancelist").show();
                     $("#dvattendancelist").html(Result.responseText);
                 } else {
-                    var message = "No Data Found On Selected Username Or Dates!!";
+                    toastr.warning("No Data Found On Selected Username Or Dates!!");
                     $("#errorMessage").show();
                     $("#errorMessage").text(message);
                     $("#dvattendancelist").hide();
@@ -403,14 +426,13 @@ function GetSearchAttendanceList() {
             }
         });
     } else {
-        Swal.fire({
-            title: "Kindly fill the status",
-            icon: 'warning',
-            confirmButtonColor: '#3085d6',
-            confirmButtonText: 'OK',
-        })
+        toastr.warning("Kindly fill all datafield");
     }
 };
+
+$('#backbtn').on('click', function (event) {
+    window.location = '/UserProfile/UsersAttendance';
+});
 
 function editUserAttendanceSrc(attandenceId) {
     $.ajax({
@@ -435,7 +457,7 @@ function editUserAttendanceSrc(attandenceId) {
             $('#editTimeModelsearch').modal('show');
         },
         error: function () {
-            alert('Data not found');
+            toastr.error("Can't get Data");
         }
     })
 }
@@ -492,7 +514,6 @@ function UpdateUserAttendanceSrc() {
         })
     }
 }
-
 function updateUserAttendance() {
     var objData = {
         AttendanceId: $("#AttandanceId").val(),
@@ -500,6 +521,7 @@ function updateUserAttendance() {
         Intime: $("#Intime").val(),
         UserName: $("#UserName").val(),
         Date: $("#Date").val(),
+        UpdatedBy: $("#textUpdatedById").val(),
     }
 
 
@@ -516,27 +538,19 @@ function updateUserAttendance() {
             data: objData,
             dataType: 'json',
             success: function (Result) {
-                var ricon = "warning";
-                if (Result.icone == ricon) {
+                if (Result.code == 200) {
                     Swal.fire({
                         title: Result.message,
-                        icon: Result.icone,
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'OK'
-                    })
-                }
-                else {
-                    Swal.fire({
-                        title: Result.message,
-                        icon: Result.icone,
+                        icon: "success",
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'OK'
                     }).then(function () {
-                        window.location = '/UserProfile/GetAllUsersAttendanceList';
+                        window.location = '/UserProfile/UsersAttendance';
                     });
-
                 }
-
+                else {
+                    toastr.error(Result.message);
+                }
             },
 
         })
@@ -640,3 +654,4 @@ function ExportToPDF() {
         }
     });
 }
+

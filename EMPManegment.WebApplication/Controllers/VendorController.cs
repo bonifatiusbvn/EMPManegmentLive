@@ -125,10 +125,8 @@ namespace EMPManegment.Web.Controllers
                 }
                 else
                 {
-                    return new JsonResult(new { Message = string.Format(postuser.message), Code = postuser.code });
+                    return BadRequest(new { Message = string.Format(postuser.message), Code = postuser.code });
                 }
-
-
             }
             catch (Exception ex)
             {
@@ -245,13 +243,13 @@ namespace EMPManegment.Web.Controllers
                 if (postuser.code == 200)
                 {
 
-                    return Ok(new UserResponceModel { Message = string.Format(postuser.message), Code = postuser.code });
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
 
 
                 }
                 else
                 {
-                    return new JsonResult(new { Message = string.Format(postuser.message), Code = postuser.code });
+                    return BadRequest(new { Message = string.Format(postuser.message), Code = postuser.code });
                 }
             }
             catch (Exception ex)

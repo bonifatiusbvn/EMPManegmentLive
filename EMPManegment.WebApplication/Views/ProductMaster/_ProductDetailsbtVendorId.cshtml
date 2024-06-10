@@ -8,37 +8,41 @@
 
 <div class="card-body">
     <div class="table-responsive table-card mb-1">
-        <table class="table table-bordered dt-responsive table-striped align-middle dataTable  dtr-inline" style="height: auto;">
+        <table class="table table-bordered dt-responsive nowrap table-striped align-middle dataTable no-footer dtr-inline">
             <thead class="text-muted table-info">
                 <tr>
-                    <th>Product</th>
-                    <th>Price</th>
-                    <th>Action</th>
+                    <th>
+                        Product
+                    </th>
+                    <th>
+                        Price
+                    </th>
+                    <th>
+                        Action
+                    </th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (var item in Model)
                 {
                     <tr>
-                        <td data-column-id="product">
-                            <span>
-                                <div class="d-flex align-items-center">
-                                    <div class="flex-shrink-0 me-3">
-                                        <div class="avatar-sm bg-light rounded p-1">
-                                            <img src="~/@item.ProductImage" alt="" class="img-fluid d-block">
-                                        </div>
-                                    </div>
-                                    <div class="flex-grow-1">
-                                        <h5 class="fs-14 mb-1">
-                                            <a href="apps-ecommerce-product-details.html" class="text-body">Half Sleeve Round Neck T-Shirts</a>
-                                        </h5>
-                                        <p class="text-muted mb-0">Category : <span class="fw-medium">@item.ProductTypeName</span></p>
-                                        <p class="text-muted mb-0">Details : <span class="fw-medium">@item.ProductShortDescription</span></p>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="flex-shrink-0 me-3">
+                                    <div class="avatar-sm bg-light rounded p-1">
+                                        <img src="~/@item.ProductImage" alt="" class="img-fluid d-block">
                                     </div>
                                 </div>
-                            </span>
+                                <div class="flex-grow-1">
+                                    <h5 class="fs-14 mb-1">
+                                        <a href="/ProductMaster/ProductDetails/?ProductId=@item.Id" class="text-info btn-block">@item.ProductName</a>
+                                    </h5>
+                                    <p class="text-muted mb-0">Category : <span class="fw-medium">@item.ProductTypeName</span></p>
+                                    <p class="text-muted mb-0">Details : <span class="fw-medium">@item.ProductShortDescription</span></p>
+                                </div>
+                            </div>
                         </td>
-                        <td data-column-id="price" ><span>@item.PerUnitPrice</span></td>
+                        <td>₹<span>@item.PerUnitPrice</span></td>
                         @if (UserSession.FormPermisionData.Any(a => a.FormName == "Product List" && (a.Edit == true || a.Delete == true)))
                         {
                             <td data-column-id="action">
@@ -83,5 +87,5 @@
                 toastr.warning("@TempData["EmptyProductList"]");
         </text>
     }
-                });
+                            });
 </script>

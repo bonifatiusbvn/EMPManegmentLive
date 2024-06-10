@@ -91,7 +91,7 @@ namespace EMPManegment.Repository.FormPermissionMasterRepository
             catch (Exception ex)
             {
                 response.code = 400;
-                response.message = "Error updating rolewise permissions";
+                response.message = "Error in updating rolewise permissions";
             }
             return response;
         }

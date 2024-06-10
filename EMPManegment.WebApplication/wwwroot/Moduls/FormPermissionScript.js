@@ -50,17 +50,10 @@ $(document).ready(function () {
                 if (Result.responseText != "{\"code\":400}") {
                     document.getElementById("updatebtn").style.display = "block";
                     $('#dveditRolePermissionForm').html(Result.responseText).show();
+                } else {
+                    toastr.error(Result.message);
                 }
             },
-            Error: function () {
-
-                Swal.fire({
-                    title: "Can't get data!",
-                    icon: 'warning',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK',
-                })
-            }
         });
     }
 });
@@ -107,16 +100,11 @@ function UpdateRolewiseFormPermission() {
                     confirmButtonText: 'OK'
                 })
             } else {
-                Swal.fire({
-                    title: Result.message,
-                    icon: 'warning',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK'
-                })
+                toastr.error(Result.message);
             }
         },
         error: function (xhr, status, error) {
-            console.error(error);
+            toastr.error(error);
         }
     });
 }
@@ -146,23 +134,14 @@ function createRole() {
                     });
                 }
                 else {
-                    Swal.fire({
-                        title: Result.message,
-                        icon: 'warning',
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'OK'
-                    })
+                    toastr.error(Result.message);
                 }
             }
         });
     }
-    else {
-        Swal.fire({
-            title: "Kindly fill role",
-            icon: 'warning',
-            confirmButtonColor: '#3085d6',
-            confirmButtonText: 'OK',
-        })
+    else
+    {
+        toastr.warning("Kindly fill role");
     }
 }
 

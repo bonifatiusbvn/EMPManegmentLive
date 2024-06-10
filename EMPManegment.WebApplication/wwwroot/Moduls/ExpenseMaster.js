@@ -122,26 +122,23 @@ function AddExpenseDetails() {
             contentType: false,
             processData: false,
             success: function (Result) {
-                if (Result.message != null) {
+                if (Result.code == 200) {
                     Swal.fire({
                         title: Result.message,
                         icon: 'success',
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'OK',
                     }).then(function () {
-                        window.location = '/ExpenseMaster/ExpenseList';
+                        window.location = '/ExpenseMaster/MyExpense';
                     });
+                } else {
+                    toastr.error(Result.message);
                 }
             }
         })
     }
     else {
-        Swal.fire({
-            title: "Kindly fill all datafield",
-            icon: 'warning',
-            confirmButtonColor: '#3085d6',
-            confirmButtonText: 'OK',
-        })
+        toastr.warning("Kindly fill all datafield");
     }
 }
 function AddUserExpenseDetails() {
@@ -162,26 +159,24 @@ function AddUserExpenseDetails() {
             contentType: false,
             processData: false,
             success: function (Result) {
-                if (Result.message != null) {
+                if (Result.code == 200) {
                     Swal.fire({
                         title: Result.message,
                         icon: 'success',
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'OK',
                     }).then(function () {
-                        window.location = '/ExpenseMaster/UserExpenseList';
+                        window.location = '/ExpenseMaster/AllExpense';
                     });
+                } else {
+                    toastr.error(Result.message);
                 }
             }
         })
     }
+
     else {
-        Swal.fire({
-            title: "Kindly fill all datafield",
-            icon: 'warning',
-            confirmButtonColor: '#3085d6',
-            confirmButtonText: 'OK',
-        })
+        toastr.warning("Kindly fill all datafield");
     }
 }
 function populateDropdown(elementId, options) {
@@ -224,7 +219,7 @@ function EditExpenseDetails(Id) {
 
         },
         error: function () {
-            alert("Data not found");
+            toastr.error("Data not found");
         }
     });
 }
@@ -250,26 +245,23 @@ function UpdateExpenseDetails() {
             contentType: false,
             processData: false,
             success: function (Result) {
-                if (Result.message != null) {
+                if (Result.code == 200) {
                     Swal.fire({
                         title: Result.message,
                         icon: 'success',
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'OK',
                     }).then(function () {
-                        window.location = '/ExpenseMaster/UserExpenseList';
+                        window.location = '/ExpenseMaster/MyExpense';
                     });
+                } else {
+                    toastr.error(Result.message);
                 }
             }
         })
     }
     else {
-        Swal.fire({
-            title: "Kindly fill all details",
-            icon: 'warning',
-            confirmButtonColor: '#3085d6',
-            confirmButtonText: 'OK',
-        })
+        toastr.warning("Kindly fill all datafield");
     }
 }
 
@@ -295,26 +287,25 @@ function UpdateExpenseListDetails() {
             contentType: false,
             processData: false,
             success: function (Result) {
-                if (Result.message != null) {
+                if (Result.code == 200) {
                     Swal.fire({
                         title: Result.message,
                         icon: 'success',
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'OK',
                     }).then(function () {
-                        window.location = '/ExpenseMaster/ExpenseList';
+                        window.location = '/ExpenseMaster/AllExpense';
                     });
+                }
+                else
+                {
+                    toastr.error(Result.message);
                 }
             }
         })
     }
     else {
-        Swal.fire({
-            title: "Kindly fill all details",
-            icon: 'warning',
-            confirmButtonColor: '#3085d6',
-            confirmButtonText: 'OK',
-        })
+        toastr.warning("Kindly fill all datafield");
     }
 }
 
@@ -393,14 +384,20 @@ function deleteExpense(Id) {
                 type: 'POST',
                 dataType: 'json',
                 success: function (Result) {
-                    Swal.fire({
-                        title: Result.message,
-                        icon: 'success',
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'OK'
-                    }).then(function () {
-                        window.location = '/ExpenseMaster/ExpenseList';
-                    })
+                    if (Result.code)
+                    {
+                        Swal.fire({
+                            title: Result.message,
+                            icon: 'success',
+                            confirmButtonColor: '#3085d6',
+                            confirmButtonText: 'OK'
+                        }).then(function () {
+                            window.location = '/ExpenseMaster/AllExpense';
+                        })
+                    }
+                    else {
+                        toastr.error(Result.message);
+                    }              
                 },
                 error: function () {
                     Swal.fire({
@@ -409,7 +406,7 @@ function deleteExpense(Id) {
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'OK',
                     }).then(function () {
-                        window.location = '/ExpenseMaster/ExpenseList';
+                        window.location = '/ExpenseMaster/AllExpense';
                     })
                 }
             })
@@ -750,7 +747,7 @@ function DisplayAllUserExpenseList() {
                     return '<span style="color: ' + color + ';">' + '₹' + data + '</span>';
                 }
             },
-            { "data": "account", "name": "Account", "visible": false }
+
         ],
         scrollY: 400,
         scrollX: true,
@@ -962,7 +959,7 @@ $(document).ready(function () {
                 "className": "text-center"
             },
             {
-                "data": "billNumber", "name":"BillNumber",
+                "data": "billNumber", "name": "BillNumber",
                 "render": function (data, type, full) {
                     if (full.image != null) {
                         return '<div class="d-flex">' +
@@ -1250,12 +1247,7 @@ function GetPayExpense() {
         })
     }
     else {
-        Swal.fire({
-            title: "Kindly fill all data fields",
-            icon: 'warning',
-            confirmButtonColor: '#3085d6',
-            confirmButtonText: 'OK',
-        })
+        toastr.warning("Kindly fill all datafield");
     }
 }
 
@@ -1484,7 +1476,6 @@ $(document).ready(function () {
                 }
             });
         }
-        debugger
         $('#GetMyUnapproveExpense').DataTable({
             processing: false,
             serverSide: true,

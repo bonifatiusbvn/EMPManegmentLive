@@ -1,4 +1,5 @@
-﻿using EMPManagment.Web.Models.API;
+﻿using Azure;
+using EMPManagment.Web.Models.API;
 using EMPManegment.EntityModels.View_Model;
 using EMPManegment.EntityModels.ViewModels;
 using EMPManegment.EntityModels.ViewModels.ForgetPasswordModels;
@@ -47,12 +48,13 @@ namespace EMPManagment.API.Controllers
                 else
                 {
                     loginresponsemodel.Message = result.Message;
-                    loginresponsemodel.Code = (int)HttpStatusCode.NotFound;
+                    loginresponsemodel.Code = result.Code;
                 }
             }
             catch (Exception ex)
             {
                 loginresponsemodel.Code = (int)HttpStatusCode.InternalServerError;
+                loginresponsemodel.Message = "An error occurred while processing the request.";
             }
             return StatusCode(loginresponsemodel.Code, loginresponsemodel);
         }
@@ -78,16 +80,19 @@ namespace EMPManagment.API.Controllers
                 if (addEmployee.Result.Code == 200)
                 {
                     response.Code = (int)HttpStatusCode.OK;
+                    response.Message =  addEmployee.Result.Message;
 
                 }
                 else
                 {
+                    response.Code = addEmployee.Result.Code;
                     response.Message = addEmployee.Result.Message;
                 }
             }
             catch (Exception ex)
             {
-                throw ex;
+                response.Code = (int)HttpStatusCode.InternalServerError;
+                response.Message = "An error occurred while processing the request.";
             }
             return StatusCode(response.Code, response);
         }
@@ -123,6 +128,7 @@ namespace EMPManagment.API.Controllers
             catch (Exception ex)
             {
                 responseModel.code = (int)HttpStatusCode.InternalServerError;
+                responseModel.message = "An error occurred while processing the request.";
             }
             return StatusCode(responseModel.code, responseModel);
         }

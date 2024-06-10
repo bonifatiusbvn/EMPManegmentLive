@@ -46,9 +46,8 @@ namespace EMPManagment.API.Controllers
             try
             {
 
-                if (user != null)
+                if (user.Code == 200)
                 {
-
                     userresponseModel.Code = (int)HttpStatusCode.OK;
                     userresponseModel.Message = user.Message;
                     userresponseModel.Icone = user.Icone;
@@ -56,12 +55,13 @@ namespace EMPManagment.API.Controllers
                 else
                 {
                     userresponseModel.Message = user.Message;
-                    userresponseModel.Code = (int)HttpStatusCode.NotFound;
+                    userresponseModel.Code = user.Code;
                 }
             }
             catch (Exception ex)
             {
                 userresponseModel.Code = (int)HttpStatusCode.InternalServerError;
+                userresponseModel.Message = "An error occurred while processing the request.";
             }
             return StatusCode(userresponseModel.Code, userresponseModel);
         }
@@ -75,7 +75,7 @@ namespace EMPManagment.API.Controllers
             var user = await UserDetails.EnterOutTime(InsertOutTime);
             try
             {
-                if (user != null)
+                if (user.Code == 200)
                 {
                     userresponseModel.Code = (int)HttpStatusCode.OK;
                     userresponseModel.Message = user.Message;
@@ -84,12 +84,13 @@ namespace EMPManagment.API.Controllers
                 else
                 {
                     userresponseModel.Message = user.Message;
-                    userresponseModel.Code = (int)HttpStatusCode.NotFound;
+                    userresponseModel.Code = user.Code;
                 }
             }
             catch (Exception ex)
             {
                 userresponseModel.Code = (int)HttpStatusCode.InternalServerError;
+                userresponseModel.Message = "An error occurred while processing the request.";
             }
             return StatusCode(userresponseModel.Code, userresponseModel);
         }
@@ -103,8 +104,7 @@ namespace EMPManagment.API.Controllers
             var user = await AttendanceServices.GetUserAttendanceInTime(GetAttendance);
             try
             {
-
-                if (user.Data != null)
+                if (user.Code == 200)
                 {
                     userresponseModel.Data = user.Data;
                     userresponseModel.Code = (int)HttpStatusCode.OK;
@@ -113,13 +113,13 @@ namespace EMPManagment.API.Controllers
                 else
                 {
                     userresponseModel.Code = user.Code;
-
-
+                    userresponseModel.Message = user.Message;
                 }
             }
             catch (Exception ex)
             {
                 userresponseModel.Code = (int)HttpStatusCode.InternalServerError;
+                userresponseModel.Message = "An error occurred while processing the request.";
             }
             return StatusCode(userresponseModel.Code, userresponseModel);
         }
@@ -142,14 +142,13 @@ namespace EMPManagment.API.Controllers
                 }
                 else
                 {
-                    responsemodel.Code = (int)HttpStatusCode.OK;
-
+                    responsemodel.Code = user.Code;
                 }
-
             }
             catch (Exception ex)
             {
                 responsemodel.Code = (int)HttpStatusCode.InternalServerError;
+                responsemodel.Message = "An error occurred while processing the request.";
             }
             return StatusCode(responsemodel.Code, responsemodel);
         }
@@ -179,12 +178,13 @@ namespace EMPManagment.API.Controllers
                 else
                 {
                     userresponsemodel.Message = AddTask.Result.Message;
-                    userresponsemodel.Code = (int)HttpStatusCode.NotFound;
+                    userresponsemodel.Code = AddTask.Result.Code;
                 }
             }
             catch (Exception ex)
             {
-                throw ex;
+                userresponsemodel.Code = (int)HttpStatusCode.InternalServerError;
+                userresponsemodel.Message = "An error occurred while processing the request.";
             }
             return StatusCode(userresponsemodel.Code, userresponsemodel);
         }
@@ -209,21 +209,21 @@ namespace EMPManagment.API.Controllers
                 {
                     updateresponsemodel.Code = (int)HttpStatusCode.OK;
                     updateresponsemodel.Message = UpdateTask.Result.Message;
-                    updateresponsemodel.Icone = UpdateTask.Result.Icone;
                 }
                 else
                 {
                     updateresponsemodel.Message = UpdateTask.Result.Message;
-                    updateresponsemodel.Code = (int)HttpStatusCode.NotFound;
-                    updateresponsemodel.Icone = UpdateTask.Result.Icone;
+                    updateresponsemodel.Code = UpdateTask.Result.Code;
                 }
             }
             catch (Exception ex)
             {
-                throw ex;
+                updateresponsemodel.Code = (int)HttpStatusCode.InternalServerError;
+                updateresponsemodel.Message = "An error occurred while processing the request.";
             }
             return StatusCode(updateresponsemodel.Code, updateresponsemodel);
         }
+
         [HttpGet]
         [Route("GetTaskDetailsById")]
         public async Task<IActionResult> GetTaskDetailsById(Guid Taskid)
@@ -239,6 +239,7 @@ namespace EMPManagment.API.Controllers
             IEnumerable<TaskDetailsView> AllTaskList = await TaskServices.GetAllUserTaskDetails();
             return Ok(new { code = 200, data = AllTaskList.ToList() });
         }
+
         [HttpPost]
         [Route("TaskDetailsDataTable")]
         public async Task<IActionResult> TaskDetailsDataTable(DataTableRequstModel dataTable)
@@ -262,6 +263,7 @@ namespace EMPManagment.API.Controllers
             IEnumerable<TaskDetailsView> UserTotalTask = await TaskServices.GetUserTotalTask(UserId);
             return Ok(new { code = 200, data = UserTotalTask.ToList() });
         }
+
         [HttpPost]
         [Route("UpdateTaskDetails")]
         public async Task<IActionResult> UpdateTaskDetails(TaskDetailsView task)
@@ -279,12 +281,13 @@ namespace EMPManagment.API.Controllers
                 else
                 {
                     updateresponsemodel.Message = UpdateTask.Result.Message;
-                    updateresponsemodel.Code = (int)HttpStatusCode.NotFound;
+                    updateresponsemodel.Code = UpdateTask.Result.Code;
                 }
             }
             catch (Exception ex)
             {
-                throw ex;
+                updateresponsemodel.Code = (int)HttpStatusCode.InternalServerError;
+                updateresponsemodel.Message = "An error occurred while processing the request.";
             }
             return StatusCode(updateresponsemodel.Code, updateresponsemodel);
         }
@@ -296,6 +299,7 @@ namespace EMPManagment.API.Controllers
             IEnumerable<TaskDetailsView> UserTask = await TaskServices.ProjectActivity(ProId);
             return Ok(new { code = 200, data = UserTask.ToList() });
         }
+
         [HttpGet]
         [Route("ProjectActivityByUserId")]
         public async Task<IActionResult> ProjectActivityByUserId(Guid ProId, Guid UserId)

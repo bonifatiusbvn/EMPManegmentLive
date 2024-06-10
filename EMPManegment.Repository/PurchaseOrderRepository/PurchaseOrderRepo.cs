@@ -63,7 +63,8 @@ namespace EMPManegment.Repository.OrderRepository
             }
             catch (Exception ex)
             {
-                throw ex;
+                response.Code = 404;
+                response.Message = "Error in creating order.";
             }
             return response;
         }
@@ -267,8 +268,8 @@ namespace EMPManegment.Repository.OrderRepository
             }
             catch (Exception ex)
             {
-                response.code = 500;
-                response.message = "Error creating orders: " + ex.Message;
+                response.code = 400;
+                response.message = "Error in creating purchase orders.";
             }
             return response;
         }
@@ -415,15 +416,18 @@ namespace EMPManegment.Repository.OrderRepository
             }
             catch (Exception ex)
             {
-                throw ex;
+                model.Code = 400;
+                model.Message = "Error in updating order details.";
             }
             return model;
         }
 
         public async Task<UserResponceModel> DeletePurchaseOrderDetails(Guid Id)
         {
+            UserResponceModel response = new UserResponceModel();
+            try
             {
-                UserResponceModel response = new UserResponceModel();
+               
                 var GetOrderdata = Context.TblPurchaseOrderMasters.Where(a => a.Id == Id).FirstOrDefault();
                 var PODetails = Context.TblPurchaseOrderDetails.Where(a => a.PorefId == Id).ToList();
                 var POAddress = Context.TblPodeliveryAddresses.Where(a => a.Poid == Id).FirstOrDefault();
@@ -458,9 +462,14 @@ namespace EMPManegment.Repository.OrderRepository
                 {
                     response.Code = 404;
                     response.Message = "No related records found to delete";
-                }                   
-                return response;
+                }                                  
             }
+            catch (Exception ex)
+            {
+                response.Code = 400;
+                response.Message = "Error in deleting purchase order.";
+            }
+            return response;
         }
     }
 }

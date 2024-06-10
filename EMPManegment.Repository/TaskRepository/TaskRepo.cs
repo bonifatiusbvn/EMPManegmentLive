@@ -65,7 +65,7 @@ namespace EMPManegment.Repository.TaskRepository
                     TaskDate = addtask.TaskDate,
                     UserId = addtask.UserId,
                     CreatedBy = addtask.CreatedBy,
-                    CreatedOn = DateTime.Today,
+                    CreatedOn = DateTime.Now,
                     TaskEndDate = addtask.TaskEndDate,
                     ProjectId = addtask.ProjectId,
                 };
@@ -76,7 +76,8 @@ namespace EMPManegment.Repository.TaskRepository
             }
             catch (Exception ex)
             {
-                throw ex;
+                response.Code = 400;
+                response.Message = "Error in creating task.";
             }
             return response;
         }
@@ -100,6 +101,7 @@ namespace EMPManegment.Repository.TaskRepository
                                 taskstatusupdate.IsCompleted = updatetask.TaskStatus;
                                 taskstatusupdate.CompletedBy = updatetask.UserId;
                                 taskstatusupdate.UpdatedOn = DateTime.Now;
+                                taskstatusupdate.UpdatedBy = updatetask.UpdatedBy;
                             }
                             Context.TblTaskDetails.Update(taskstatusupdate);
                             Context.SaveChanges();
@@ -113,13 +115,14 @@ namespace EMPManegment.Repository.TaskRepository
                     }
                     else
                     {
+                        responcemodel.Code = 401;
                         responcemodel.Message = "You aren't authorize!!";
-                        responcemodel.Icone = "warning";
                     }
                 }
                 catch (Exception ex)
                 {
-                    throw ex;
+                    responcemodel.Code = 400;
+                    responcemodel.Message = "Error in updating task status.";
                 }
             }
             else
@@ -132,6 +135,7 @@ namespace EMPManegment.Repository.TaskRepository
                         gettask.TaskStatus = updatetask.TaskStatus;
                         gettask.CompletedBy = updatetask.UserId;
                         gettask.UpdatedOn = DateTime.Now;
+                        gettask.UpdatedBy = updatetask.UpdatedBy;
                     }
                     Context.TblTaskDetails.Update(gettask);
                     Context.SaveChanges();
@@ -140,7 +144,8 @@ namespace EMPManegment.Repository.TaskRepository
                 }
                 catch (Exception ex)
                 {
-                    throw ex;
+                    responcemodel.Code = 400;
+                    responcemodel.Message = "Error in updating task status.";
                 }
             }
             return responcemodel;
@@ -400,9 +405,9 @@ namespace EMPManegment.Repository.TaskRepository
         public async Task<UserResponceModel> UpdateTaskDetails(TaskDetailsView updatetask)
         {
             UserResponceModel model = new UserResponceModel();
-            var gettask = Context.TblTaskDetails.Where(e => e.Id == updatetask.Id).FirstOrDefault();
             try
             {
+                var gettask = Context.TblTaskDetails.Where(e => e.Id == updatetask.Id).FirstOrDefault();
                 if (gettask != null)
                 {
                     gettask.TaskStatus = updatetask.TaskStatus;
@@ -412,15 +417,24 @@ namespace EMPManegment.Repository.TaskRepository
                     gettask.TaskDate = updatetask.TaskDate;
                     gettask.TaskEndDate = updatetask.TaskEndDate;
                     gettask.UpdatedOn = DateTime.Now;
+                    gettask.UpdatedBy = updatetask.UpdatedBy;
+
+
+                    Context.TblTaskDetails.Update(gettask);
+                    Context.SaveChanges();
+                    model.Code = 200;
+                    model.Message = "Task status updated successfully!";
                 }
-                Context.TblTaskDetails.Update(gettask);
-                Context.SaveChanges();
-                model.Code = 200;
-                model.Message = "Task status updated successfully!";
+                else
+                {
+                    model.Code = 404;
+                    model.Message = "Task id doesn't found";
+                }        
             }
             catch (Exception ex)
             {
-                throw ex;
+                model.Code = 400;
+                model.Message = "Error in updating task details.";
             }
             return model;
         }

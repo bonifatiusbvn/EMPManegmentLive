@@ -27,8 +27,16 @@ $(document).ready(function () {
             lastnameInput: "required",
             birthdateInput: "required",
             genderInput: "required",
-            emailInput: "required",
-            phonenumberInput: "required",
+            emailInput: {
+                required: true,
+                email: true
+            },
+            phonenumberInput: {
+                required: true,
+                digits: true,
+                minlength: 10,
+                maxlength: 10
+            },
             addressInput: "required",
         },
         messages: {
@@ -36,8 +44,16 @@ $(document).ready(function () {
             lastnameInput: "Please Enter LastName",
             birthdateInput: "Please Enter DateOfBirth",
             genderInput: "Please Enter Gender",
-            emailInput: "Please Enter Email",
-            phonenumberInput: "Please Enter PhoneNumber",
+            emailInput: {
+                required: "Please Enter Email",
+                email: "Please enter a valid email address"
+            },
+            phonenumberInput: {
+                required: "Please Enter phone number",
+                digits: "phone number must contain only digits",
+                minlength: "phone number must be 10 digits long",
+                maxlength: "phone number must be 10 digits long"
+            },
             addressInput: "Please Enter Address",
         }
     })
@@ -170,6 +186,7 @@ function GetDepartmentList(itemId, selectedDepartmentId) {
 }
 
 function UserActiveDeactive(UserId, checkboxElement) {
+    UpdatedBy = $("#txtUpdatedById").val();
     var isActive = checkboxElement.checked;
     var action = isActive ? 'activate' : 'deactivate';
     var confirmationMessage = isActive ? "Are you sure you want to activate this user?" : "Are you sure you want to deactivate this user?";
@@ -189,7 +206,7 @@ function UserActiveDeactive(UserId, checkboxElement) {
 
         if (result.isConfirmed) {
             $.ajax({
-                url: '/UserProfile/UserActiveDecative?UserName=' + UserId,
+                url: '/UserProfile/UserActiveDecative?UserName=' + UserId + '&UpdatedBy=' + UpdatedBy,
                 type: 'POST',
                 contentType: 'application/json;charset=utf-8',
                 dataType: 'json',
@@ -224,6 +241,7 @@ function UserActiveDeactive(UserId, checkboxElement) {
 }
 function UpdateUserRoleAndDept(userId) {
     var objData = {
+        UpdatedBy: $("#txtUpdatedById").val(),
         Id: $('#txtUserId_' + userId).val(),
         RoleId: $('#ddlUserRole_' + userId).val(),
         DepartmentId: $('#ddlDepartment_' + userId).val(),
@@ -256,16 +274,11 @@ function UpdateUserRoleAndDept(userId) {
                     window.location = '/UserProfile/UserActiveDecative';
                 });
             } else {
-                Swal.fire({
-                    title: result.message,
-                    icon: 'warning',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK'
-                });
+                toastr.error(result.message);
             }
         },
         error: function (xhr, status, error) {
-            Swal.fire(
+            toastr.error(
                 'Error',
                 'An error occurred while updating user details. Please try again later.',
                 'error'
@@ -275,7 +288,6 @@ function UpdateUserRoleAndDept(userId) {
 }
 
 function EnterInTime() {
-
     var fromData = new FormData();
     fromData.append("UserId", $("#txtuserid").val());
     fromData.append("Date", $("#txttodayDate").val());
@@ -288,20 +300,25 @@ function EnterInTime() {
         processData: false,
         contentType: false,
         success: function (Result) {
-            Swal.fire({
-                title: Result.message,
-                icon: Result.icone,
-                confirmButtonColor: '#3085d6',
-                confirmButtonText: 'OK'
-            })
-            GetUserAttendanceInTime();
-        },
 
+            if (Result.code == 200) {
+
+                Swal.fire({
+                    title: Result.message,
+                    icon: Result.icone,
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'OK'
+                })
+                GetUserAttendanceInTime();
+            }
+            else {
+                toastr.warning(Result.message);
+            }
+        },
     })
 }
 
 function EnterOutTime() {
-
     if ($("#todayouttime").text() == "Pending") {
 
         Swal.fire({
@@ -329,14 +346,18 @@ function EnterOutTime() {
                     processData: false,
                     contentType: false,
                     success: function (Result) {
-                        Swal.fire({
-                            title: "Deleted!",
-                            text: Result.message,
-                            icon: "success",
-                            confirmButtonClass: "btn btn-primary w-xs mt-2",
-                            buttonsStyling: false
-                        });
-                        GetUserAttendanceInTime();
+                        if (Result.code == 200) {
+                            Swal.fire({
+                                text: Result.message,
+                                icon: "success",
+                                confirmButtonClass: "btn btn-primary w-xs mt-2",
+                                buttonsStyling: false
+                            });
+                            GetUserAttendanceInTime();
+                        }
+                        else {
+                            toastr.warning(Result.message);
+                        }
                     }
                 });
             } else if (result.dismiss === Swal.DismissReason.cancel) {
@@ -348,10 +369,7 @@ function EnterOutTime() {
                 );
             }
         });
-
-
     } else {
-
         var formData = new FormData();
         formData.append("UserId", $("#txtuserid").val());
         $.ajax({
@@ -362,51 +380,54 @@ function EnterOutTime() {
             processData: false,
             contentType: false,
             success: function (Result) {
-                Swal.fire({
-                    title: Result.message,
-                    icon: Result.icone,
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK'
-                });
-                GetUserAttendanceInTime();
+                if (Result.code == 200) {
+                    Swal.fire({
+                        title: Result.message,
+                        icon: "success",
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK'
+                    });
+                    GetUserAttendanceInTime();
+                }
+                else {
+                    toastr.warning(Result.message);
+                }
             }
         });
-
     }
 }
 function ResetPassword() {
-    if ($("#passwordform").valid()) {
+    var form = document.getElementById('resetPasswordForm');
+    if (form.checkValidity()) {
         var objData = {
             UserName: $('#txtUserName').val(),
-            Password: $('#passwordinput').val(),
-            ConfirmPassword: $('#confirmpasswordinput').val(),
+            Password: $('#password-input').val(),
+            ConfirmPassword: $('#confirm-password-input').val(),
         }
-
         $.ajax({
             url: '/UserProfile/ResetUserPassword',
             type: 'post',
             data: objData,
             datatype: 'json',
             success: function (Result) {
-
-                Swal.fire({
-                    title: Result.message,
-                    icon: 'success',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK'
-                }).then(function () {
-                    window.location = '/UserProfile/DisplayUserList';
-                });
+                if (Result.code == 200) {
+                    Swal.fire({
+                        title: Result.message,
+                        icon: 'success',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK'
+                    }).then(function () {
+                        window.location = '/UserProfile/ResetPassword';
+                    });
+                }
+                else {
+                    toastr.error(Result.message);
+                }
             },
         })
-    }
-    else {
-        Swal.fire({
-            title: "Kindly fill all datafield",
-            icon: 'warning',
-            confirmButtonColor: '#3085d6',
-            confirmButtonText: 'OK',
-        })
+    } else {
+        toastr.warning("Kindly Fill all Datafields.")
+        form.reportValidity();
     }
 }
 
@@ -420,7 +441,6 @@ function GetUserAttendanceInTime() {
         processData: false,
         contentType: false,
         success: function (Result) {
-
             var datetime = Result.data;
             if (datetime != null) {
                 var userInTime = datetime.intime;
@@ -460,9 +480,7 @@ function GetUserAttendanceInTime() {
                 $("#todayouttime").text("Missing");
                 $("#txttotalhours").text("Pending");
             }
-
         },
-
     })
 }
 
@@ -478,9 +496,7 @@ function UserBirsthDayWish() {
         processData: false,
         contentType: false,
         success: function (Result) {
-
-
-            if (Result.message != null) {
+            if (Result.code == 200) {
                 Swal.fire(
                     {
                         html: '<div class="mt-3"><lord-icon src="https://cdn.lordicon.com/lupuorrc.json" trigger="loop" colors="primary:#0ab39c,secondary:#405189" style="width:120px;height:120px"></lord-icon><div class="mt-4 pt-2 fs-15"><h4>' + Result.message + '</h4></div></div>',
@@ -518,6 +534,9 @@ function EditUserDetails(EmpId) {
             $('#PhoneNo').val(response.phoneNumber);
             $('#Address').val(response.address);
         },
+        error: function () {
+            toastr.error("Can't get Data");
+        }
     })
 }
 
@@ -555,46 +574,10 @@ function logout() {
             window.location.href = '/Authentication/Login';
         })
         .catch(error => {
-            console.error('Error:', error);
+            toastr.error('Error:', error);
 
         });
 }
-
-function UpdateUserDetails() {
-    var objData = {
-        Id: $('#Userid').val(),
-        FirstName: $('#FirstName').val(),
-        LastName: $('#LastName').val(),
-        DateOfBirth: $('#Dob').val(),
-        Gender: $('#Gender').val(),
-        Email: $('#Email').val(),
-        CountryId: $('#Contry').val(),
-        StateId: $('#state').val(),
-        CityId: $('#City').val(),
-        DepartmentId: $('#deptid').val(),
-        PhoneNumber: $('#PhoneNo').val(),
-        Address: $('#Address').val(),
-    }
-    $.ajax({
-        url: '/UserProfile/UpdateUserDetails',
-        type: 'post',
-        data: objData,
-        datatype: 'json',
-        success: function (Result) {
-
-            Swal.fire({
-                title: Result.message,
-                icon: 'success',
-                confirmButtonColor: '#3085d6',
-                confirmButtonText: 'OK'
-            }).then(function () {
-                window.location = '/UserProfile/DisplayUserList';
-            });
-        },
-    })
-
-}
-
 
 //validation
 
@@ -757,7 +740,7 @@ function GetActiveDeactiveList(page) {
             $("#activedeactivepartial").html(result);
         })
         .fail(function (error) {
-            console.error(error);
+            toastr.error(error);
         });
 }
 
@@ -823,7 +806,7 @@ function GetUserSearchData() {
     }
     else {
         $("#backBtn").hide();
-        toastr.error("Select Username or Department");
+        toastr.warning("Select Username or Department");
     }
 }
 
@@ -859,6 +842,7 @@ function updateuserDetails() {
             PhoneNumber: $('#phonenumberInput').val(),
             DateOfBirth: $('#birthdateInput').val(),
             Gender: $('#genderInput').val(),
+            RoleId: $('#textUserRole').val(),
 
         }
         $.ajax({
@@ -867,39 +851,215 @@ function updateuserDetails() {
             data: objData,
             datatype: 'json',
             success: function (Result) {
-
-                Swal.fire({
-                    title: Result.message,
-                    icon: 'success',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK'
-                }).then(function () {
-                    window.location = '/UserProfile/DisplayUserDetails/?Id=' + UserId;
-                });
+                if (Result.code == 200) {
+                    Swal.fire({
+                        title: Result.message,
+                        icon: 'success',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK'
+                    }).then(function () {
+                        window.location = '/UserProfile/UserInfo/?Id=' + UserId;
+                    });
+                }
+                else {
+                    toastr.error(Result.message);
+                }
             },
         })
     } else {
-        Swal.fire({
-            title: 'Fill empty the details',
-            icon: 'warning',
-            confirmButtonColor: '#3085d6',
-            confirmButtonText: 'OK'
-        })
+        toastr.warning("Kindly fill all datafield");
     }
 }
-var PasswordForm;
-function validateAndPassword() {
+$(document).ready(function () {
+    $("#CreateUserForm").validate({
 
-    PasswordForm = $("#passwordform").validate({
         rules: {
+            txtCuFirstname: "required",
+            textCuPhoneNumber: {
+                required: true,
+                digits: true,
+                minlength: 10,
+                maxlength: 10
+            },
+            txtCuEmail: {
+                required: true,
+                email: true
+            },
+            txtCuLastname: "required",
+            drpCuDepartment: "required",
+            textCuAddress: "required",
+            txtCuDOB: "required",
+            drpCuGender: "required",
+            drpCuCountry: "required",
+            drpCuState: "required",
+            drpCuCity: "required",
             passwordinput: "required",
             confirmpasswordinput: "required",
         },
         messages: {
+            txtCuFirstname: "Please Enter First Name",
+            textCuPhoneNumber: {
+                required: "Please Enter phone number",
+                digits: "phone number must contain only digits",
+                minlength: "phone number must be 10 digits long",
+                maxlength: "phone number must be 10 digits long"
+            },
+            txtCuEmail: {
+                required: "Please Enter Email",
+                email: "Please enter a valid email address"
+            },
+            txtCuLastname: "Please Enter Last Name",
+            drpCuDepartment: "Please Select Department",
+            textCuAddress: "Please Enter Address",
+            txtCuDOB: "Please Enter Date of Birth",
+            drpCuGender: "Please Select Gender",
+            drpCuCountry: "Please Select Country",
+            drpCuState: "Please Select State",
+            drpCuCity: "Please Select City",
             passwordinput: "Please Enter Password",
-            confirmpasswordinput: "Please Enter ConfirmPassword",
-        },
+            confirmpasswordinput: "Please Enter Confirm Password",
+        }
     })
-    var isValid = true;
+});
 
+function CreateUser() {
+    var form = document.getElementById('CreateUserForm');
+    if ($("#CreateUserForm").valid()) {
+        if (form.checkValidity()) {
+            var formData = new FormData();
+            formData.append("UserName", $('#EmpId').val());
+            formData.append("FirstName", $('#txtCuFirstname').val());
+            formData.append("LastName", $('#txtCuLastname').val());
+            formData.append("DepartmentId", $('#drpCuDepartment').val());
+            formData.append("Email", $('#txtCuEmail').val());
+            formData.append("Address", $('#textCuAddress').val());
+            formData.append("PhoneNumber", $('#textCuPhoneNumber').val());
+            formData.append("DateOfBirth", $('#txtCuDOB').val());
+            formData.append("Gender", $('#drpCuGender').val());
+            formData.append("CountryId", $('#drpCuCountry').val());
+            formData.append("StateId", $('#drpCuState').val());
+            formData.append("CityId", $('#drpCuCity').val());
+            formData.append("Password", $('#passwordinput').val());
+            formData.append("Image", $('#filecuImage')[0].files[0]);
+            $.ajax({
+                url: '/UserProfile/CreateUser',
+                type: 'post',
+                data: formData,
+                processData: false,
+                contentType: false,
+                datatype: 'json',
+                success: function (Result) {
+                    if (Result.code == 200) {
+                        Swal.fire({
+                            title: Result.message,
+                            icon: 'success',
+                            confirmButtonColor: '#3085d6',
+                            confirmButtonText: 'OK'
+                        }).then(function () {
+                            window.location = '/UserProfile/UserList';
+                        });
+                    }
+                    else {
+                        toastr.error(Result.message);
+                    }
+                },
+            })
+        }
+        else {
+            form.reportValidity();
+        }
+    }
+    else {
+        toastr.warning("Kindly Fill all Datafields.")
+    }
+}
+$(document).ready(function () {
+
+    GetUserDepartment();
+    GetUserCountry();
+
+    $('#dropUserState').change(function () {
+
+        var Text = $("#dropUserState Option:Selected").text();
+        var txtUserid = $(this).val();
+        $("#txtUserstate").val(txtUserid);
+    });
+
+    $('#drpCuCity').change(function () {
+
+        var Text = $("#UserCity Option:Selected").text();
+        var txtUsercity = $(this).val();
+        $("#txtUserCity").val(txtUsercity);
+    });
+
+});
+
+function fn_getUserState(drpUserstate, countryId, that) {
+    var cid = countryId;
+    if (cid == undefined || cid == null) {
+        var cid = $(that).val();
+    }
+
+
+    $('#' + drpUserstate).empty();
+    $('#' + drpUserstate).append('<Option >--Select State--</Option>');
+    $.ajax({
+        url: '/Authentication/GetState?StateId=' + cid,
+        success: function (result) {
+
+            $.each(result, function (i, data) {
+                $('#' + drpUserstate).append('<Option value=' + data.id + '>' + data.stateName + '</Option>')
+            });
+        }
+    });
+}
+
+function fn_getUsercitiesbystateId(drpUsercity, stateid, that) {
+
+    var sid = stateid;
+    if (sid == undefined || sid == null) {
+        var sid = $(that).val();
+    }
+
+
+    $('#' + drpUsercity).empty();
+    $('#' + drpUsercity).append('<Option >--Select City--</Option>');
+    $.ajax({
+        url: '/Authentication/GetCity?CityId=' + sid,
+        success: function (result) {
+
+            $.each(result, function (i, data) {
+                $('#' + drpUsercity).append('<Option value=' + data.id + '>' + data.cityName + '</Option>');
+
+            });
+        }
+    });
+}
+
+function GetUserCountry() {
+    $.ajax({
+        url: '/Authentication/GetCountrys',
+        success: function (result) {
+            var $countryDropdown = $("#drpCuCountry");
+            $countryDropdown.empty();
+            $countryDropdown.append('<option selected value="">--Select Country--</option>');
+            $.each(result, function (i, data) {
+                $countryDropdown.append('<option value="' + data.id + '">' + data.countryName + '</option>');
+            });
+        }
+    });
+}
+
+function GetUserDepartment() {
+    $.ajax({
+        url: '/Authentication/GetDepartment',
+        success: function (result) {
+            var $departmentDropdown = $("#drpCuDepartment");
+            $departmentDropdown.empty();
+            $departmentDropdown.append('<option selected value="">--Select Department--</option>');
+            $.each(result, function (i, data) {
+                $departmentDropdown.append('<Option value=' + data.id + '>' + data.departments + '</Option>')
+            });
+        }
+    });
 }

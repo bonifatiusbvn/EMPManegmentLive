@@ -11,6 +11,7 @@ using EMPManegment.Inretface.Services.ExpenseMaster;
 using EMPManegment.Inretface.Services.ProductMaster;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -26,6 +27,7 @@ namespace EMPManagment.API.Controllers
         {
             expenseMaster = ExpenseMaster;
         }
+
         [HttpPost]
         [Route("AddExpenseDetails")]
         public async Task<IActionResult> AddExpenseDetails(ExpenseDetailsView AddExpense)
@@ -42,15 +44,17 @@ namespace EMPManagment.API.Controllers
                 else
                 {
                     response.Message = result.Result.Message;
-                    response.Code = (int)HttpStatusCode.NotFound;
+                    response.Code = result.Result.Code;
                 }
             }
             catch (Exception ex)
             {
-                throw ex;
+                response.Code = (int)HttpStatusCode.InternalServerError;
+                response.Message = "An error occurred while processing the request.";
             }
             return StatusCode(response.Code, response);
         }
+
         [HttpPost]
         [Route("GetExpenseDetailList")]
         public async Task<IActionResult> GetExpenseDetailList(DataTableRequstModel DataTable)
@@ -58,13 +62,34 @@ namespace EMPManagment.API.Controllers
             var getExpense = await expenseMaster.GetExpenseDetailList(DataTable);
             return Ok(new { code = 200, data = getExpense });
         }
+
         [HttpGet]
         [Route("GetExpenseDetailById")]
         public async Task<IActionResult> GetExpenseDetailById(Guid Id)
         {
-            var getExpense = await expenseMaster.GetExpenseDetailById(Id);
-            return Ok(new { code = 200, data = getExpense });
+            UserResponceModel response = new UserResponceModel();
+            try
+            { 
+                var getExpense = await expenseMaster.GetExpenseDetailById(Id);
+                if (getExpense.Code == 200)
+                {
+                    response.Code = (int)HttpStatusCode.OK;
+                    response.Data = getExpense.Data;
+                }
+                else
+                {
+                    response.Message = getExpense.Message;
+                    response.Code = getExpense.Code;
+                }
+            }
+            catch(Exception ex)
+            {
+                response.Code = (int)HttpStatusCode.InternalServerError;
+                response.Message = "An error occurred while processing the request.";
+            }
+            return StatusCode(response.Code, response);
         }
+
         [HttpPost]
         [Route("UpdateExpenseDetails")]
         public async Task<IActionResult> UpdateExpenseDetails(ExpenseDetailsView ExpenseDetail)
@@ -81,15 +106,17 @@ namespace EMPManagment.API.Controllers
                 else
                 {
                     response.Message = result.Result.Message;
-                    response.Code = (int)HttpStatusCode.NotFound;
+                    response.Code = result.Result.Code;
                 }
             }
             catch (Exception ex)
             {
-                throw ex;
+                response.Code = (int)HttpStatusCode.InternalServerError;
+                response.Message = "An error occurred while processing the request.";
             }
             return StatusCode(response.Code, response);
         }
+
         [HttpGet]
         [Route("GetAllExpensType")]
         [AllowAnonymous]
@@ -98,6 +125,7 @@ namespace EMPManagment.API.Controllers
             IEnumerable<ExpenseTypeView> getExpense = await expenseMaster.GetAllExpensType();
             return Ok(new { code = 200, data = getExpense.ToList() });
         }
+
         [HttpGet]
         [Route("GetAllPaymentType")]
         public async Task<IActionResult> GetAllPaymentType()
@@ -113,6 +141,7 @@ namespace EMPManagment.API.Controllers
             var getUserExpense = await expenseMaster.GetUserExpenseList(UserId, dataTable);
             return Ok(new { code = 200, data = getUserExpense });
         }
+
         [HttpPost]
         [Route("GetUserList")]
         public async Task<IActionResult> GetUserList(DataTableRequstModel dataTable)
@@ -120,6 +149,7 @@ namespace EMPManagment.API.Controllers
             var getUserExpense = await expenseMaster.GetUserList(dataTable);
             return Ok(new { code = 200, data = getUserExpense });
         }
+
         [HttpPost]
         [Route("GetExpenseDetailByUserId")]
         public async Task<IActionResult> GetExpenseDetailByUserId(Guid UserId)
@@ -145,7 +175,7 @@ namespace EMPManagment.API.Controllers
                 else
                 {
                     response.Message = result.Message;
-                    response.Code = (int)HttpStatusCode.NotFound;
+                    response.Code = result.Code;
                 }
             }
             catch (Exception ex)
@@ -157,6 +187,7 @@ namespace EMPManagment.API.Controllers
 
             return StatusCode(response.Code, response);
         }
+
         [HttpPost]
         [Route("DeleteExpense")]
         public async Task<IActionResult> DeleteExpense(Guid Id)
@@ -173,12 +204,13 @@ namespace EMPManagment.API.Controllers
                 else
                 {
                     responseModel.Message = expense.Message;
-                    responseModel.Code = (int)HttpStatusCode.NotFound;
+                    responseModel.Code = expense.Code;
                 }
             }
             catch (Exception ex)
             {
                 responseModel.Code = (int)HttpStatusCode.InternalServerError;
+                responseModel.Message = "An error occurred while processing the request.";
             }
             return StatusCode(responseModel.Code, responseModel);
         }
@@ -205,6 +237,7 @@ namespace EMPManagment.API.Controllers
             catch (Exception ex)
             {
                 responseModel.Code = (int)HttpStatusCode.InternalServerError;
+                responseModel.Message = "An error occurred while processing the request.";
             }
             return StatusCode(responseModel.Code, responseModel);
         }

@@ -54,6 +54,7 @@
                         <h5 class="fs-16 mb-1">@Model.FirstName @Model.LastName</h5>
                         <p class="text-muted mb-0" id="departmentInput">@Model.DepartmentName</p>
                         <input type="hidden" id="departmentIdInput" value="@Model.DepartmentId">
+
                     </div>
                 </div>
             </div>
@@ -161,6 +162,7 @@
                                             <input type="text" class="form-control" id="firstnameInput" name="firstnameInput" placeholder="Enter your firstname" value="@Model.FirstName" readonly>
                                             <input type="hidden" class="form-control" id="idInput" value="@Model.Id" />
                                             <input type="hidden" class="form-control" id="txtUserName" value="@Model.UserName" />
+                                            <input type="hidden" id="textUserRole" value="@Model.RoleId">
                                         </div>
                                     </div>
                                     <!--end col-->

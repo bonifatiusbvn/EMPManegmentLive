@@ -100,8 +100,8 @@ namespace EMPManegment.Repository.CompanyRepository
             }
             catch (Exception)
             {
-
-                throw;
+                response.code = 400;
+                response.message = "Error in creating company.";
             }
             return response;
         }

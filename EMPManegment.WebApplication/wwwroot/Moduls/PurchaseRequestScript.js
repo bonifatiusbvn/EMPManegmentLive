@@ -268,7 +268,6 @@ $(document).ready(function () {
         });
     }
     function updateCheckedAllState() {
-        debugger
         var allChecked = $('input[name="chk_child"]').length === $('input[name="chk_child"]:checked').length;
         $('#AllChecked').prop('checked', allChecked);
     }
@@ -319,14 +318,7 @@ function ApproveUnapprovePR() {
                                 window.location = '/PurchaseRequest/PurchaseRequests';
                             });
                         } else {
-                            Swal.fire({
-                                title: Result.message,
-                                icon: "warning",
-                                confirmButtonClass: "btn btn-primary w-xs mt-2",
-                                buttonsStyling: false
-                            }).then(function () {
-                                window.location = '/PurchaseRequest/PurchaseRequests';
-                            });
+                            toastr.error(Result.message);
                         }
                     }
                 });
@@ -353,14 +345,6 @@ function GetPurchaseRequestList() {
         complete: function (result) {
             $('#addNewlink').html(result.responseText);
         },
-        Error: function () {
-            Swal.fire({
-                title: "Can't get data!",
-                icon: 'warning',
-                confirmButtonColor: '#3085d6',
-                confirmButtonText: 'OK',
-            })
-        }
     })
 }
 
@@ -409,32 +393,15 @@ function CreatePurchaseRequest() {
                     });
                 }
                 else {
-                    Swal.fire({
-                        title: Result.message,
-                        icon: 'warning',
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'OK'
-                    });
+                    toastr.error(Result.message);
                 }
             },
-            error: function (xhr, status, error) {
-                console.error(xhr.responseText);
-                Swal.fire({
-                    title: "Error",
-                    text: "An error occurred while creating the purchase request.",
-                    icon: "error",
-                    confirmButtonColor: "#3085d6",
-                    confirmButtonText: "OK"
-                });
+            error: function () {
+                toastr.error("An error occurred while creating the purchase request."); 
             }
         });
     } else {
-        Swal.fire({
-            title: "Kindly add products!",
-            icon: 'warning',
-            confirmButtonColor: '#3085d6',
-            confirmButtonText: 'OK',
-        })
+        toastr.warning("Kindly fill all datafield");
     }
 }
 
@@ -456,7 +423,7 @@ function EditPurchaseRequestDetails(PrId) {
             $('#txtIsApproved').val(response.isApproved);
         },
         error: function () {
-            alert('Data not found');
+            toastr.error("Can't get Data");
         }
     });
 }
@@ -479,7 +446,7 @@ function UpdatePurchaseRequestDetails() {
         contentType: false,
         processData: false,
         success: function (Result) {
-            if (Result.message != null) {
+            if (Result.code == 200) {
                 Swal.fire({
                     title: Result.message,
                     icon: 'success',
@@ -489,16 +456,16 @@ function UpdatePurchaseRequestDetails() {
                     window.location = '/PurchaseRequest/PurchaseRequests';
                 });
             }
+            else {
+                toastr.error(Result.message);
+            }
+
         }
     })
     //}
     //else {
-    //    Swal.fire({
-    //        title: "Kindly Fill All Details",
-    //        icon: 'warning',
-    //        confirmButtonColor: '#3085d6',
-    //        confirmButtonText: 'OK',
-    //    })
+    //   toastr.warning("Kindly fill all datafield");
+    //}
     //}
 }
 function DeletePurchaseRequest(PrNo) {
@@ -521,14 +488,20 @@ function DeletePurchaseRequest(PrNo) {
                 type: 'POST',
                 dataType: 'json',
                 success: function (Result) {
-                    Swal.fire({
-                        title: Result.message,
-                        icon: 'success',
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'OK'
-                    }).then(function () {
-                        GetPRData();
-                    })
+                    if (Result.code == 200)
+                    {
+                        Swal.fire({
+                            title: Result.message,
+                            icon: 'success',
+                            confirmButtonColor: '#3085d6',
+                            confirmButtonText: 'OK'
+                        }).then(function () {
+                            GetPRData();
+                        })
+                    }
+                    else {
+                        toastr.error(Result.message);
+                    }                   
                 },
                 error: function () {
                     Swal.fire({

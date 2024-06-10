@@ -98,35 +98,49 @@ namespace EMPManegment.Repository.UserListRepository
 
         }
 
-        public async Task<UserResponceModel> ActiveDeactiveUsers(string UserName)
+        public async Task<UserResponceModel> ActiveDeactiveUsers(string UserName,Guid UpdatedBy)
         {
             UserResponceModel response = new UserResponceModel();
+            try { 
             var GetUserdta = Context.TblUsers.Where(a => a.UserName == UserName).FirstOrDefault();
 
-            if (GetUserdta != null)
-            {
-
-                if (GetUserdta.IsActive == true)
+                if (GetUserdta != null)
                 {
-                    GetUserdta.IsActive = false;
-                    Context.TblUsers.Update(GetUserdta);
-                    Context.SaveChanges();
-                    response.Code = 200;
-                    response.Data = GetUserdta;
-                    response.Message = "User" + " " + GetUserdta.UserName + " " + "Is Deactive Succesfully";
-                }
 
+                    if (GetUserdta.IsActive == true)
+                    {
+                        GetUserdta.IsActive = false;
+                        GetUserdta.UpdatedOn = DateTime.Now;
+                        GetUserdta.UpdatedBy = UpdatedBy;
+                        Context.TblUsers.Update(GetUserdta);
+                        Context.SaveChanges();
+                        response.Code = 200;
+                        response.Data = GetUserdta;
+                        response.Message = "User" + " " + GetUserdta.UserName + " " + "Is Deactive Succesfully";
+                    }
+
+                    else
+                    {
+                        GetUserdta.IsActive = true;
+                        GetUserdta.UpdatedOn = DateTime.Now;
+                        GetUserdta.UpdatedBy = UpdatedBy;
+                        Context.TblUsers.Update(GetUserdta);
+                        Context.SaveChanges();
+                        response.Code = 200;
+                        response.Data = GetUserdta;
+                        response.Message = "User" + " " + GetUserdta.UserName + " " + "Is Active Succesfully";
+                    }
+                }
                 else
                 {
-                    GetUserdta.IsActive = true;
-                    Context.TblUsers.Update(GetUserdta);
-                    Context.SaveChanges();
-                    response.Code = 200;
-                    response.Data = GetUserdta;
-                    response.Message = "User" + " " + GetUserdta.UserName + " " + "Is Active Succesfully";
+                    response.Code = 404;
+                    response.Message = "Can't find the User";
                 }
-
-
+            }
+            catch(Exception ex)
+            {
+                response.Code = 400;
+                response.Message = "Error in active-deactive of the user";
             }
             return response;
         }
@@ -134,60 +148,70 @@ namespace EMPManegment.Repository.UserListRepository
         public async Task<UserResponceModel> EnterInTime(UserAttendanceModel userAttendance)
         {
             UserResponceModel response = new UserResponceModel();
-            var Intimedata = Context.TblAttendances.Where(a => a.UserId == userAttendance.UserId).OrderByDescending(a => a.Date).FirstOrDefault();
-
-            if (Intimedata != null)
+            try
             {
-                if (Intimedata.OutTime == null && Intimedata.Date != DateTime.Today)
-                {
-                    response.Message = "You missed out-time of " + Intimedata.Date.ToString("dd/MM/yyyy") + " " + "Kindly contact your admin";
-                    response.Icone = "warning";
-                }
+                var Intimedata = Context.TblAttendances.Where(a => a.UserId == userAttendance.UserId).OrderByDescending(a => a.Date).FirstOrDefault();
 
-
-                else
+                if (Intimedata != null)
                 {
-                    if (Intimedata.Date == DateTime.Today && Intimedata.Intime != null)
+                    if (Intimedata.OutTime == null && Intimedata.Date != DateTime.Today)
                     {
-                        response.Message = "Your already enter in-time";
+                        response.Message = "You missed out-time of " + Intimedata.Date.ToString("dd/MM/yyyy") + " " + "Kindly contact your admin";
                         response.Icone = "warning";
+                        response.Code = 404;
                     }
+
 
                     else
                     {
-                        TblAttendance tblAttendance = new TblAttendance();
-                        tblAttendance.UserId = userAttendance.UserId;
-                        tblAttendance.Intime = DateTime.Now;
-                        tblAttendance.Date = DateTime.Today;
-                        tblAttendance.CreatedBy = userAttendance.CreatedBy;
-                        tblAttendance.CreatedOn = DateTime.Now;
-                        tblAttendance.OutTime = null;
-                        Context.TblAttendances.Add(tblAttendance);
-                        Context.SaveChanges();
-                        response.Code = 200;
-                        response.Message = "In-time enter successfully";
-                        response.Icone = "success";
+                        if (Intimedata.Date == DateTime.Today && Intimedata.Intime != null)
+                        {
+                            response.Message = "Your already enter in-time";
+                            response.Icone = "warning";
+                            response.Code = 404;
+                        }
+
+                        else
+                        {
+                            TblAttendance tblAttendance = new TblAttendance();
+                            tblAttendance.UserId = userAttendance.UserId;
+                            tblAttendance.Intime = DateTime.Now;
+                            tblAttendance.Date = DateTime.Today;
+                            tblAttendance.CreatedBy = userAttendance.CreatedBy;
+                            tblAttendance.CreatedOn = DateTime.Now;
+                            tblAttendance.OutTime = null;
+                            Context.TblAttendances.Add(tblAttendance);
+                            Context.SaveChanges();
+                            response.Code = 200;
+                            response.Message = "In-time enter successfully";
+                            response.Icone = "success";
+
+                        }
 
                     }
+                }
+
+                else
+                {
+                    TblAttendance tblAttendance = new TblAttendance();
+                    tblAttendance.UserId = userAttendance.UserId;
+                    tblAttendance.Intime = DateTime.Now;
+                    tblAttendance.Date = DateTime.Today;
+                    tblAttendance.CreatedOn = DateTime.Now;
+                    tblAttendance.CreatedBy = userAttendance.CreatedBy;
+                    tblAttendance.OutTime = null;
+                    Context.TblAttendances.Add(tblAttendance);
+                    Context.SaveChanges();
+                    response.Code = 200;
+                    response.Message = "In-time enter successfully";
+                    response.Icone = "success";
 
                 }
             }
-
-            else
+            catch (Exception ex)
             {
-                TblAttendance tblAttendance = new TblAttendance();
-                tblAttendance.UserId = userAttendance.UserId;
-                tblAttendance.Intime = DateTime.Now;
-                tblAttendance.Date = DateTime.Today;
-                tblAttendance.CreatedOn = DateTime.Now;
-                tblAttendance.CreatedBy = userAttendance.CreatedBy;
-                tblAttendance.OutTime = null;
-                Context.TblAttendances.Add(tblAttendance);
-                Context.SaveChanges();
-                response.Code = 200;
-                response.Message = "In-time enter successfully";
-                response.Icone = "success";
-
+                response.Code = 400;
+                response.Message = "Error occur at entering the time in.";
             }
 
             return response;
@@ -196,48 +220,56 @@ namespace EMPManegment.Repository.UserListRepository
         public async Task<UserResponceModel> EnterOutTime(UserAttendanceModel userAttendance)
         {
             UserResponceModel response = new UserResponceModel();
-            var Outtimedata = Context.TblAttendances.Where(a => a.UserId == userAttendance.UserId).OrderByDescending(a => a.Date).FirstOrDefault(); ;
-            if (Outtimedata.OutTime == null && Outtimedata.Date != DateTime.Today)
+            try
             {
-                response.Message = "You missed out-time of " + Outtimedata.Date.ToString("dd/MM/yyyy") + " " + "Kindly contact your admin";
-                response.Icone = "warning";
-
-            }
-
-            else
-            {
-                if (Outtimedata.Date != DateTime.Today)
+                var Outtimedata = Context.TblAttendances.Where(a => a.UserId == userAttendance.UserId).OrderByDescending(a => a.Date).FirstOrDefault(); ;
+                if (Outtimedata.OutTime == null && Outtimedata.Date != DateTime.Today)
                 {
-                    response.Message = "Please enter in-time first";
+                    response.Message = "You missed out-time of " + Outtimedata.Date.ToString("dd/MM/yyyy") + " " + "Kindly contact your admin";
                     response.Icone = "warning";
+                    response.Code = 404;
                 }
 
                 else
                 {
-
-                    if (Outtimedata.Date == DateTime.Today && Outtimedata.OutTime == null)
+                    if (Outtimedata.Date != DateTime.Today)
                     {
-                        var outtime = Context.TblAttendances.Where(a => a.UserId == userAttendance.UserId && a.Date == DateTime.Today).FirstOrDefault();
-                        outtime.OutTime = DateTime.Now;
-                        outtime.CreatedOn = DateTime.Now;
-                        outtime.TotalHours = outtime.OutTime - outtime.Intime;
-                        Context.TblAttendances.Update(outtime);
-                        Context.SaveChanges();
-                        response.Code = 200;
-                        response.Message = "Out-time enter successfully";
-                        response.Icone = "success";
-
+                        response.Code = 404;
+                        response.Message = "Please enter in-time first";
+                        response.Icone = "warning";
                     }
+
                     else
                     {
-                        response.Message = "Your already enter out-time";
-                        response.Icone = "warning";
+
+                        if (Outtimedata.Date == DateTime.Today && Outtimedata.OutTime == null)
+                        {
+                            var outtime = Context.TblAttendances.Where(a => a.UserId == userAttendance.UserId && a.Date == DateTime.Today).FirstOrDefault();
+                            outtime.OutTime = DateTime.Now;
+                            outtime.CreatedOn = DateTime.Now;
+                            outtime.TotalHours = outtime.OutTime - outtime.Intime;
+                            Context.TblAttendances.Update(outtime);
+                            Context.SaveChanges();
+                            response.Code = 200;
+                            response.Message = "Out-time enter successfully";
+                            response.Icone = "success";
+
+                        }
+                        else
+                        {
+                            response.Code = 404;
+                            response.Message = "Your already enter out-time";
+                            response.Icone = "warning";
+
+                        }
 
                     }
-
                 }
-
-
+            }
+            catch(Exception ex) 
+            {
+                response.Code = 400;
+                response.Message = "Error occur at entering the time out.";
             }
 
             return response;
@@ -251,18 +283,27 @@ namespace EMPManegment.Repository.UserListRepository
                 var userdata = Context.TblUsers.FirstOrDefault(x => x.UserName == ResetPassword.UserName);
                 if (userdata != null)
                 {
-
+                    userdata.UpdatedBy = ResetPassword.UpdatedBy;
+                    userdata.UpdatedOn = DateTime.Now;
                     userdata.PasswordHash = ResetPassword.PasswordHash;
                     userdata.PasswordSalt = ResetPassword.PasswordSalt;
+
+                    Context.TblUsers.Update(userdata);
+                    Context.SaveChanges();
+                    response.Code = 200;
+                    response.Message = "Password updated!";
                 }
-                Context.TblUsers.Update(userdata);
-                Context.SaveChanges();
-                response.Code = 200;
-                response.Message = "Password updated!";
+                else
+                {
+                    response.Code = 404;
+                    response.Message = "Can't found User";
+                }
+               
             }
             catch (Exception ex)
             {
-                throw ex;
+                response.Code = 400;
+                response.Message = "Error in reset password.";
             }
             return response;
         }
@@ -339,14 +380,16 @@ namespace EMPManegment.Repository.UserListRepository
                         response.Code = (int)HttpStatusCode.OK;
                     }
                     else
-                    {
+                    { 
+                        response.Code = 400;
                         response.Message = "Your password is wrong";
                     }
                 }
             }
             catch (Exception ex)
             {
-                throw ex;
+                response.Code = 400;
+                response.Message = "Error in locking the screen";
             }
             return response;
         }
@@ -370,21 +413,16 @@ namespace EMPManegment.Repository.UserListRepository
                     }
                     else
                     {
-                        response.Code = (int)HttpStatusCode.OK;
-
+                        response.Code = 400;
                     }
-
                 }
-
-                return response;
-
             }
             catch (Exception ex)
             {
-
-                throw ex;
+                response.Message = "Error in wishing User's Birthday";
+                response.Code = 400;
             }
-
+            return response;
         }
 
         public async Task<IEnumerable<EmpDetailsView>> UserEdit()
@@ -451,6 +489,7 @@ namespace EMPManegment.Repository.UserListRepository
                                 CityId = e.CityId,
                                 StateId = e.StateId,
                                 CountryId = e.CountryId,
+                                RoleId = e.RoleId,
                                 ProjectId = p != null ? p.ProjectId : (Guid?)null,
                             }).FirstOrDefault();
                 return Userdata;
@@ -463,9 +502,9 @@ namespace EMPManegment.Repository.UserListRepository
 
         public async Task<UserResponceModel> UpdateUserDetails(UserEditViewModel employee)
         {
+            UserResponceModel response = new UserResponceModel();
             try
             {
-                UserResponceModel response = new UserResponceModel();
                 var Userdata = await Context.TblUsers.FirstOrDefaultAsync(a => a.Id == employee.Id);
                 if (Userdata != null)
                 {
@@ -479,19 +518,21 @@ namespace EMPManegment.Repository.UserListRepository
                     Userdata.Address = employee.Address;
                     Userdata.DepartmentId = employee.DepartmentId;
                     Userdata.RoleId = employee.RoleId;
+                    Userdata.UpdatedBy = employee.UpdatedBy;
+                    Userdata.UpdatedOn = DateTime.Now;
 
                     Context.TblUsers.Update(Userdata);
                     await Context.SaveChangesAsync();
                 }
                 response.Code = (int)HttpStatusCode.OK;
                 response.Message = "User data updated successfully";
-                return response;
-
             }
             catch (Exception ex)
             {
-                throw ex;
+                response.Code = 400;
+                response.Message = "Error in upadting user deatils.";
             }
+            return response;
         }
 
         public async Task<IEnumerable<EmpDetailsView>> GetUsersNameList()

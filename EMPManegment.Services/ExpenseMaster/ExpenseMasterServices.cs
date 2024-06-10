@@ -55,12 +55,12 @@ namespace EMPManegment.Services.ExpenseMaster
             return await expenseMaster.GetAllPaymentType();
         }
 
-        public async Task<ExpenseTypeView> GetExpenseById(int ExpenseId)
+        public async Task<UserResponceModel> GetExpenseById(int ExpenseId)
         {
             return await expenseMaster.GetExpenseById(ExpenseId);
         }
 
-        public async Task<ExpenseDetailsView> GetExpenseDetailById(Guid Id)
+        public async Task<UserResponceModel> GetExpenseDetailById(Guid Id)
         {
             return await expenseMaster.GetExpenseDetailById(Id);
         }
@@ -75,7 +75,7 @@ namespace EMPManegment.Services.ExpenseMaster
             return await expenseMaster.GetExpenseDetailList(dataTable);
         }
 
-        public async Task<PaymentTypeView> GetPaymentById(int PaymentId)
+        public async Task<UserResponceModel> GetPaymentById(int PaymentId)
         {
             return await expenseMaster.GetPaymentById(PaymentId);
         }

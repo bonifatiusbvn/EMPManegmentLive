@@ -55,12 +55,12 @@ namespace EMPManegment.Web.Controllers
                 if (postuser.code == 200)
                 {
 
-                    return Ok(new UserResponceModel { Message = string.Format(postuser.message), Icone = string.Format(postuser.Icone), Code = postuser.code });
+                    return Ok(new { Message = string.Format(postuser.message), Icone = string.Format(postuser.Icone), Code = postuser.code });
 
                 }
                 else
                 {
-                    return new JsonResult(new { Message = string.Format(postuser.message), Code = postuser.code });
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
                 }
             }
             catch (Exception ex)
@@ -79,12 +79,12 @@ namespace EMPManegment.Web.Controllers
                 if (postuser.code == 200)
                 {
 
-                    return Ok(new UserResponceModel { Message = string.Format(postuser.message), Icone = string.Format(postuser.Icone), Code = postuser.code });
+                    return Ok(new { Message = string.Format(postuser.message), Icone = string.Format(postuser.Icone), Code = postuser.code });
 
                 }
                 else
                 {
-                    return new JsonResult(new { Message = string.Format(postuser.message), Code = postuser.code });
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
                 }
             }
             catch (Exception ex)
@@ -99,7 +99,6 @@ namespace EMPManegment.Web.Controllers
         {
             try
             {
-
                 UserAttendanceRequestModel userAttendance = new UserAttendanceRequestModel
                 {
                     UserId = _userSession.UserId,
@@ -107,15 +106,15 @@ namespace EMPManegment.Web.Controllers
                 };
                 ApiResponseModel postuser = await APIServices.PostAsync(userAttendance, "UserHome/GetUserAttendanceInTime");
                 UserAttendanceResponseModel responseModel = new UserAttendanceResponseModel();
-                if (postuser.data != null)
+                if (postuser.code == 200)
                 {
                     var data = JsonConvert.SerializeObject(postuser.data);
                     responseModel.Data = JsonConvert.DeserializeObject<UserAttendanceModel>(data);
-                    return Ok(new { responseModel.Data });
+                    return Ok(new { responseModel.Data,postuser.code });
                 }
                 else
                 {
-                    return Ok(new { postuser.code });
+                    return Ok(new { postuser.code ,postuser.message});
                 }
             }
             catch (Exception ex)
@@ -131,17 +130,16 @@ namespace EMPManegment.Web.Controllers
         {
             try
             {
-
                 Guid UserId = _userSession.UserId;
                 ApiResponseModel postuser = await APIServices.GetAsync("", "UserHome/UserBirsthDayWish?UserId=" + UserId);
                 UserAttendanceResponseModel responseModel = new UserAttendanceResponseModel();
-                if (postuser.message != null)
+                if (postuser.code == 200)
                 {
                     return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
                 }
                 else
                 {
-                    return Ok(new { postuser.code }); ;
+                    return Ok(new { postuser.code });
                 }
             }
             catch (Exception ex)

@@ -41,10 +41,10 @@ function AddProductType() {
         contentType: false,
         processData: false,
         success: function (Result) {
-            if (Result.message == "Product successfully inserted") {
+            if (Result.code == 200) {
                 Swal.fire({
                     title: Result.message,
-                    icon: Result.icone,
+                    icon: "success",
                     confirmButtonColor: '#3085d6',
                     confirmButtonText: 'OK'
                 }).then(function () {
@@ -52,13 +52,9 @@ function AddProductType() {
                 });
             }
             else {
-                Swal.fire({
-                    title: Result.message,
-                    icon: Result.icone,
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK'
-                });
+                toastr.error(Result.message);
             }
+
         }
     });
 }
@@ -103,6 +99,8 @@ function ProductDetailsByProductTypeId() {
         complete: function (Result) {
             $("#table-product-list-all").hide();
             $("#dvproductdetails").html(Result.responseText);
+        }, error: function () {
+            toastr.error(Result.responseText);
         }
     });
 }
@@ -200,12 +198,11 @@ function SaveProductDetails() {
             contentType: false,
             processData: false,
             success: function (Result) {
-
                 if (Result.code == 200) {
                     siteloaderhide()
                     Swal.fire({
                         title: Result.message,
-                        icon: Result.icone,
+                        icon: "success",
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'OK',
                     }).then(function () {
@@ -213,21 +210,15 @@ function SaveProductDetails() {
                     });
                 }
                 else {
-
-                    Swal.fire({
-                        title: Result.message,
-                        icon: Result.icone,
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'OK',
-                    })
-
+                    toastr.error(Result.message);
                 }
+
             }
         })
     }
     else {
         siteloaderhide()
-        toastr.warning("Kindly fill all details");
+        toastr.warning("Kindly fill all datafield");
     }
 }
 
@@ -275,7 +266,7 @@ function EditProductDetails(Id) {
             $('#txtproductImage').val(response.productImage);
         },
         error: function () {
-            alert('Data not found');
+            toastr.error("Can't get Data");
         }
     });
 }
@@ -304,7 +295,7 @@ function UpdateProductDetails() {
             contentType: false,
             processData: false,
             success: function (Result) {
-                if (Result.message != null) {
+                if (Result.code == 200) {
                     Swal.fire({
                         title: Result.message,
                         icon: 'success',
@@ -314,16 +305,14 @@ function UpdateProductDetails() {
                         window.location = '/ProductMaster/ProductList';
                     });
                 }
+                else {
+                    toastr.error(Result.message);
+                }
             }
         })
     }
     else {
-        Swal.fire({
-            title: "Kindly fill all details",
-            icon: 'warning',
-            confirmButtonColor: '#3085d6',
-            confirmButtonText: 'OK',
-        })
+        toastr.warning("Kindly fill all datafield");
     }
 }
 function DeleteProductDetails(ProductId) {
@@ -345,15 +334,18 @@ function DeleteProductDetails(ProductId) {
                 type: 'POST',
                 dataType: 'json',
                 success: function (Result) {
-
-                    Swal.fire({
-                        title: Result.message,
-                        icon: 'success',
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'OK'
-                    }).then(function () {
-                        window.location = '/ProductMaster/ProductList';
-                    })
+                    if (Result.code == 200) {
+                        Swal.fire({
+                            title: Result.message,
+                            icon: 'success',
+                            confirmButtonColor: '#3085d6',
+                            confirmButtonText: 'OK'
+                        }).then(function () {
+                            window.location = '/ProductMaster/ProductList';
+                        })
+                    } else {
+                        toastr.error(Result.message);
+                    }                  
                 },
                 error: function () {
                     Swal.fire({
@@ -419,7 +411,20 @@ function SearchProductName() {
         }
     });    
 }
-
+function sortProductTable() {
+    var sortBy = $('#ddlSortBy').val();
+    $.ajax({
+        url: '/ProductMaster/GetAllProductList?sortBy=' + sortBy,
+        type: 'GET',
+        
+        success: function (result) {
+            $("#dvproductdetails").html(result);
+        },
+        error: function (xhr, status, error) {
+            toastr.error(error);
+        }
+    });
+}
 function GetAllProductDetailsList(page) {
     $.get("/ProductMaster/GetAllProductList", { page: page})
         .done(function (result) {

@@ -226,7 +226,7 @@ namespace EMPManegment.Repository.VendorDetailsRepository
             {
                 Id = a.Vid,
                 VendorCompany = a.VendorCompany,
-                
+
 
             }).ToList();
             return GetVendorList;

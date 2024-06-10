@@ -39,6 +39,7 @@ using EMPManegment.EntityModels.ViewModels.ProjectModels;
 using EMPManegment.EntityModels.ViewModels.FormPermissionMaster;
 using Microsoft.AspNetCore.Authorization;
 using EMPManegment.Web.Helper;
+using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
 
 namespace EMPManegment.Web.Controllers
 {
@@ -86,55 +87,52 @@ namespace EMPManegment.Web.Controllers
         {
             try
             {
-                if (ModelState.IsValid)
+                Crypto.Hash(AddEmployee.Password,
+                    out byte[] passwordHash,
+                    out byte[] passwordSalt);
+                var AddUser = new EmpDetailsView()
                 {
+                    UserName = AddEmployee.UserName,
+                    DepartmentId = AddEmployee.DepartmentId,
+                    FirstName = AddEmployee.FirstName,
+                    LastName = AddEmployee.LastName,
+                    Address = AddEmployee.Address,
+                    CityId = AddEmployee.CityId,
+                    StateId = AddEmployee.StateId,
+                    CountryId = AddEmployee.CountryId,
+                    DateOfBirth = AddEmployee.DateOfBirth,
+                    Email = AddEmployee.Email,
+                    Gender = AddEmployee.Gender,
+                    PhoneNumber = AddEmployee.PhoneNumber,
+                    CreatedOn = DateTime.Now,
+                    PasswordHash = passwordHash,
+                    PasswordSalt = passwordSalt,
+                    IsActive = true,
+                    CreatedBy = _userSession.FullName
+                };
+                if (AddEmployee.Image != null)
+                {
+                    var UserImg = Guid.NewGuid() + "_" + AddEmployee.Image.FileName;
                     var path = Environment.WebRootPath;
-                    var filepath = "Content/Image/" + AddEmployee.Image.FileName;
+                    var filepath = "Content/Image/" + UserImg;
                     var fullpath = Path.Combine(path, filepath);
                     UploadFile(AddEmployee.Image, fullpath);
-                    Crypto.Hash(AddEmployee.Password,
-                        out byte[] passwordHash,
-                        out byte[] passwordSalt);
-                    var AddUser = new EmpDetailsView()
-                    {
-                        UserName = AddEmployee.UserName,
-                        DepartmentId = AddEmployee.DepartmentId,
-                        FirstName = AddEmployee.FirstName,
-                        LastName = AddEmployee.LastName,
-                        Address = AddEmployee.Address,
-                        CityId = AddEmployee.CityId,
-                        StateId = AddEmployee.StateId,
-                        CountryId = AddEmployee.CountryId,
-                        DateOfBirth = AddEmployee.DateOfBirth,
-                        Email = AddEmployee.Email,
-                        Gender = AddEmployee.Gender,
-                        PhoneNumber = AddEmployee.PhoneNumber,
-                        CreatedOn = DateTime.Now,
-                        PasswordHash = passwordHash,
-                        PasswordSalt = passwordSalt,
-                        Image = filepath,
-                        IsActive = AddEmployee.IsActive,
-                    };
-                    ApiResponseModel postuser = await APIServices.PostAsync(AddUser, "User/UserSingUp");
-                    if (postuser.code == 200)
-                    {
-                        var identity = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, AddEmployee.UserName) }, CookieAuthenticationDefaults.AuthenticationScheme);
-                        var principal = new ClaimsPrincipal(identity);
-                        HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
-                        return RedirectToAction("Login", "Authentication");
-                    }
-                    else
-                    {
-                        TempData["ErrorMessage"] = postuser.message;
-                        return View();
-                    }
+                    AddUser.Image = UserImg;
                 }
-                ApiResponseModel addEmpResponse = await APIServices.GetAsync("", "User/CheckUser");
-                if (addEmpResponse.code == 200)
+                else
                 {
-                    ViewBag.EmpId = addEmpResponse.data;
+                    AddUser.Image = null;
                 }
-                return View();
+                              
+                ApiResponseModel postuser = await APIServices.PostAsync(AddUser, "User/UserSingUp");
+                if (postuser.code == 200)
+                {
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
+                }
+                else
+                {
+                    return new JsonResult(new { Message = string.Format(postuser.message), Code = postuser.code });
+                }
             }
             catch (Exception ex)
             {
@@ -296,12 +294,12 @@ namespace EMPManegment.Web.Controllers
 
         [FormPermissionAttribute("Active Deactive-Edit")]
         [HttpPost]
-        public async Task<IActionResult> UserActiveDecative(string UserName)
+        public async Task<IActionResult> UserActiveDecative(string UserName, Guid UpdatedBy)
         {
             try
             {
 
-                ApiResponseModel postuser = await APIServices.PostAsync("", "UserProfile/ActiveDeactiveUsers?UserName=" + UserName);
+                ApiResponseModel postuser = await APIServices.PostAsync("", "UserProfile/ActiveDeactiveUsers?UserName=" + UserName + "&UpdatedBy" + UpdatedBy);
                 if (postuser.code == 200)
                 {
 
@@ -381,6 +379,7 @@ namespace EMPManegment.Web.Controllers
             }
 
         }
+
         [HttpPost]
         public async Task<JsonResult> UploadDocument(EmpDocumentView doc)
         {
@@ -408,7 +407,7 @@ namespace EMPManegment.Web.Controllers
                 }
                 else
                 {
-                    return new JsonResult(postuser.code);
+                    return new JsonResult(postuser.code = 400, postuser.message = "Error in saving the uploaded document");
                 }
             }
             catch (Exception ex)
@@ -432,7 +431,7 @@ namespace EMPManegment.Web.Controllers
 
         [FormPermissionAttribute("Reset Password-Add")]
         [HttpPost]
-        public async Task<IActionResult> ResetPassword(PasswordResetResponseModel ResetPassword)
+        public async Task<IActionResult> ResetUserPassword(PasswordResetResponseModel ResetPassword)
         {
             try
             {
@@ -443,7 +442,8 @@ namespace EMPManegment.Web.Controllers
                 {
                     UserName = ResetPassword.UserName,
                     PasswordHash = passwordHash,
-                    PasswordSalt = passwordSalt
+                    PasswordSalt = passwordSalt,
+                    UpdatedBy = _userSession.UserId
                 };
                 ApiResponseModel postuser = await APIServices.PostAsync(resetPass, "UserProfile/ResetUserPassword");
                 if (postuser.code == 200)
@@ -452,7 +452,7 @@ namespace EMPManegment.Web.Controllers
                 }
                 else
                 {
-                    return new JsonResult(new { Message = string.Format(postuser.message), Code = postuser.code });
+                    return BadRequest(new { Message = string.Format(postuser.message), Code = postuser.code });
                 }
             }
             catch (Exception ex)
@@ -508,8 +508,8 @@ namespace EMPManegment.Web.Controllers
                 var draw = Request.Form["draw"].FirstOrDefault();
                 var start = Request.Form["start"].FirstOrDefault();
                 var length = Request.Form["length"].FirstOrDefault();
-                var sortColumn = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
-                var sortColumnDir = Request.Form["order[0][dir]"].FirstOrDefault();  // Corrected line
+                var sortColumn = Request.Form["columns[" + Request.Form["order[1][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
+                var sortColumnDir = Request.Form["order[0][dir]"].FirstOrDefault();
                 var searchValue = Request.Form["search[value]"].FirstOrDefault();
                 int pageSize = length != null ? Convert.ToInt32(length) : 0;
                 int skip = start != null ? Convert.ToInt32(start) : 0;
@@ -578,14 +578,11 @@ namespace EMPManegment.Web.Controllers
                 ApiResponseModel postuser = await APIServices.PostAsync(userAttendance, "UserProfile/UpdateUserOutTime");
                 if (postuser.code == 200)
                 {
-
-                    return Ok(new UserResponceModel { Message = string.Format(postuser.message), Icone = string.Format(postuser.Icone), Code = postuser.code });
-
-
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
                 }
                 else
                 {
-                    return new JsonResult(new { Message = string.Format(postuser.message), Code = postuser.code });
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
                 }
             }
             catch (Exception ex)
@@ -631,6 +628,8 @@ namespace EMPManegment.Web.Controllers
                     PhoneNumber = employee.PhoneNumber,
                     DateOfBirth = employee.DateOfBirth,
                     Gender = employee.Gender,
+                    UpdatedBy = _userSession.UserId,
+                    RoleId = employee.RoleId,
                 };
                 ApiResponseModel postUser = await APIServices.PostAsync(Updateuser, "UserProfile/UpdateUserDetails");
                 if (postUser.code == 200)
@@ -639,7 +638,7 @@ namespace EMPManegment.Web.Controllers
                 }
                 else
                 {
-                    return new JsonResult(new { Message = string.Format(postUser.message), Code = postUser.code });
+                    return BadRequest(new { Message = string.Format(postUser.message), Code = postUser.code });
                 }
             }
             catch (Exception ex)
@@ -671,7 +670,7 @@ namespace EMPManegment.Web.Controllers
                 }
                 else
                 {
-                    return new JsonResult(new { Message = postUser.message, Code = postUser.code });
+                    return BadRequest(new { Message = postUser.message, Code = postUser.code });
                 }
             }
             catch (Exception ex)
