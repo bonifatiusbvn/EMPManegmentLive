@@ -180,6 +180,8 @@ namespace EMPManegment.Repository.PurchaseRequestRepository
                     purchaseRequest.ProductTypeId = UpdatePurchaseRequest.ProductTypeId;
                     purchaseRequest.Quantity = UpdatePurchaseRequest.Quantity;
                     purchaseRequest.IsApproved = UpdatePurchaseRequest.IsApproved;
+                    purchaseRequest.UpdatedBy = UpdatePurchaseRequest.UpdatedBy;
+                    purchaseRequest.UpdatedOn=DateTime.Now;
                 }
                 Context.TblPurchaseRequests.Update(purchaseRequest);
                 Context.SaveChanges();

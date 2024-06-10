@@ -39,7 +39,10 @@ namespace EMPManegment.EntityModels.ViewModels.VendorModels
         public int VendorTypeId { get; set; }
         public string? VendorTypeName { get; set; } 
         public DateTime? CreatedOn { get; set; }
-        public string? CreatedBy { get; set; }       
+        public string? CreatedBy { get; set; }
+        public Guid? UpdatedBy { get; set; }
+
+        public DateTime? UpdatedOn { get; set; }
         public string? FullAddress { get; set; }       
     }
 

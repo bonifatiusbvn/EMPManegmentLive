@@ -261,6 +261,8 @@ namespace EMPManegment.Repository.VendorDetailsRepository
                 Vendordata.VendorCountry = updateVendor.VendorCountry;
                 Vendordata.VendorState =  updateVendor.VendorState;
                 Vendordata.VendorTypeId = updateVendor.VendorTypeId;
+                Vendordata.UpdatedOn=DateTime.Now;
+                Vendordata.UpdatedBy=updateVendor.UpdatedBy;
                 Context.TblVendorMasters.Update(Vendordata);
                 await Context.SaveChangesAsync();
             }

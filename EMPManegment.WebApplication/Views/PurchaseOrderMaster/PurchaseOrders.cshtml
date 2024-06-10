@@ -74,6 +74,8 @@
                                         <label for="date-field" class="form-label">Order Date</label>
                                         <input type="datetime-local" data-date-format="d M, Y" data-enable-time id="txtorderdate" name="txtorderdate" class="form-control" />
                                         <input type="hidden" id="txtorderid" class="form-control" style="border:hidden;" />
+                                        <input type="hidden" id="txtUpdatedby" value="@_userSession.UserId" />
+                                        <input type="hidden" id="POId" />
                                     </div>
 
                                     <div class="mb-3">
@@ -83,7 +85,7 @@
 
                                     <div class="mb-3">
                                         <label for="customername-field" class="form-label">Product Details</label>
-                                        <input type="text" id="txtorderdetails" name="txtorderdetails" class="form-control" placeholder="Enter Company name" />
+                                        <input type="text" id="txtorderdetails" name="txtorderdetails" class="form-control" placeholder="Enter Product name" />
                                     </div>
 
                                     <div class="row gy-4 mb-3">

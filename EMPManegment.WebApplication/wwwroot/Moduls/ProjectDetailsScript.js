@@ -189,6 +189,7 @@ function invitemember(Id) {
     var proStatus = document.getElementById('projectstatus').textContent;
     var proProjectType = document.getElementById('projecttype').textContent;
     var proProjectId = $('#projectid').val();
+    var UpdatedBy = $('#memberUpdatedby').val();
 
     var MemberData = {
         ProjectId: proProjectId,
@@ -196,7 +197,8 @@ function invitemember(Id) {
         ProjectType: proProjectType,
         ProjectTitle: protitel,
         StartDate: proStartDate,
-        Status: proStatus
+        Status: proStatus,
+        UpdatedBy: UpdatedBy,
 
     }
     var form_data = new FormData();
@@ -443,9 +445,11 @@ function docmodalopen() {
 }
 function deleteProjectMember(userId) {
     var proId = $('#projectid').val();
+    var updatedby = $('#txtUpdatedBy').val();
     var MemberData = {
         ProjectId: proId,
         UserId: userId,
+        UpdatedBy: updatedby,
     }
     var form_data = new FormData();
     form_data.append("InviteMember", JSON.stringify(MemberData));
@@ -604,4 +608,56 @@ function projectinvoiceActivity(ProId) {
             })
         }
     })
+}
+
+function deleteProjectDocument(DocumentId) {
+    var proId = $('#txtProjectId').val();
+    Swal.fire({
+        title: "Are you sure want to delete this?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, delete it!",
+        cancelButtonText: "No, cancel!",
+        confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
+        cancelButtonClass: "btn btn-danger w-xs mt-2",
+        buttonsStyling: false,
+        showCloseButton: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: '/Project/DeleteProjectDocument?DocumentId=' + DocumentId,
+                type: 'POST',
+                dataType: 'json',
+                success: function (Result) {
+                    if (Result.code == 200) {
+                        Swal.fire({
+                            title: Result.message,
+                            icon: 'success',
+                            confirmButtonColor: '#3085d6',
+                            confirmButtonText: 'OK'
+                        }).then(function () {
+                            window.location = '/Project/ProjectDetails/?Id=' + proId;
+                        })
+                    } else {
+                        Swal.fire({
+                            title: Result.message,
+                            icon: 'success',
+                            confirmButtonColor: '#3085d6',
+                            confirmButtonText: 'OK'
+                        }).then(function () {
+                            window.location = '/Project/ProjectDetails/?Id=' + proId;
+                        })
+                    }
+                },
+            })
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+
+            Swal.fire(
+                'Cancelled',
+                'Project document have no changes.!!😊',
+                'error'
+            );
+        }
+    });
 }

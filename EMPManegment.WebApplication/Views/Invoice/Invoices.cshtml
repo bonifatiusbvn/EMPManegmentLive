@@ -93,6 +93,7 @@
                                 <label for="date-field" class="form-label">Invoice Date</label>
                                 <input type="datetime-local" data-date-format="d M, Y" data-enable-time id="txtinvoicedate" name="txtinvoicedate" class="form-control" />
                                 <input type="hidden" id="txtid" class="form-control" />
+                                <input type="hidden" id="txtUpdatedBy" value="@_userSession.UserId" />
                             </div>
 
                             <div class="mb-3">
@@ -161,3 +162,4 @@
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/moduls/invoicemasterscript.js" asp-append-version="true"></script>
+<script src="~/moduls/purchaseorderdetailsscript.js" asp-append-version="true"></script>
