@@ -133,7 +133,7 @@ namespace EMPManegment.Repository.UserAttendanceRepository
                         UserAttendance.UpdatedBy = userAttendance.UpdatedBy;
                         response.Code = (int)HttpStatusCode.OK;
                         response.Message = "User outTime successfully updated";
-                        response.Icone = "success";
+                        response.Code = 200;
                         Context.TblAttendances.Update(UserAttendance);
                         Context.SaveChanges();
                     }
@@ -141,14 +141,12 @@ namespace EMPManegment.Repository.UserAttendanceRepository
                     {
                         response.Code = 404;
                         response.Message = "Please select valid date!!";
-                        response.Icone = "warning";
                     }
 
                 }
                 else
                 {
                     response.Message = "Please select valid date!!";
-                    response.Icone = "warning";
                     response.Code = 404;
                 }
             }

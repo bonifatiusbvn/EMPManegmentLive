@@ -7,6 +7,14 @@
     ViewData["Title"] = "RolewisePermission";
     Layout = "~/Views/Shared/_HomeLayout.cshtml";
 }
+<style>
+    #txtCuFirstname-error, #txtCuLastname-error, #txtCuDOB-error,#txtCuEmail-error,
+    #textCuPhoneNumber-error, #textCuAddress-error, #passwordinput-error, #confirmpasswordinput-error,
+    #drpCuDepartment-error, #drpCuGender-error, #drpCuCountry-error, #drpCuState-error, #drpCuCity-error 
+    {
+        color:red;
+    }
+</style>
 
 <div class="row" style="margin-top:80px;">
     <div class="col-12">
@@ -33,29 +41,25 @@
                             <h5 class="text-primary">Create New User</h5>
                         </div>
                         <div class="p-2 mt-4">
-                            <form class="form w-150 h-100" id="empaddDetails" asp-action="CreateUser" method="post" enctype="multipart/form-data">
+                            <form class="form w-150 h-100" id="CreateUserForm" method="post" enctype="multipart/form-data">
                                 <div class="fv-row mb-4">
-                                    <select asp-for=DepartmentId id="ddlDepartmenrnt" class="form-control">
-                                        <option>--Select Department--</option>
+                                    <select id="drpCuDepartment" class="form-control" name="drpCuDepartment">
+                                        <option selected value="">--Select Department--</option>
                                     </select>
-                                    <input type="hidden" asp-for="DepartmentId" id="txtdeptid" value="" />
-                                    <span asp-validation-for="DepartmentId" class="text-danger"></span>
                                 </div>
                                 <div class="fv-row mb-4">
-                                    <input type="text" asp-for="UserName" readonly id="EmpId" autocomplete="off" class="form-control" value="@ViewBag.EmpId" />
+                                    <input type="text" readonly id="EmpId" autocomplete="off" class="form-control" value="@ViewBag.EmpId" />
                                 </div>
                                 <div class="row">
 
                                     <div class="col-6">
                                         <div class="fv-row mb-4">
-                                            <input type="text" asp-for="FirstName" placeholder="First Name" name="FirstName" class="form-control" />
-                                            <span asp-validation-for="FirstName" class="text-danger"></span>
+                                            <input type="text" placeholder="First Name" name="txtCuFirstname" class="form-control" id="txtCuFirstname"  />
                                         </div>
                                     </div>
                                     <div class="col-6">
                                         <div class="fv-row mb-4">
-                                            <input type="text" asp-for="LastName" placeholder="Last Name" name="LastName" class="form-control" />
-                                            <span asp-validation-for="LastName" class="text-danger"></span>
+                                            <input type="text" placeholder="Last Name" name="txtCuLastname" class="form-control" id="txtCuLastname" />
                                         </div>
                                     </div>
                                 </div>
@@ -65,26 +69,22 @@
                                             <div class="row">
                                                 <div class="col-6">
                                                     <div class="fv-row mb-4">
-                                                        <input type="date" asp-for="DateOfBirth" placeholder="DOB" itemid="DOB" max="" autocomplete="off" class="form-control bg-transparent" />
-                                                        <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+                                                        <input type="date" placeholder="DOB" id="txtCuDOB" name="txtCuDOB" max="@DateTime.Now.ToString("yyyy-MM-dd")" autocomplete="off" class="form-control bg-transparent" />
                                                     </div>
                                                 </div>
                                                 <div class="col-6">
                                                     <div class="fv-row mb-4">
-                                                        <select asp-for="Gender" id="Gender" class="form-control form-select">
-                                                            <option>--Select Gender--</option>
+                                                        <select id="drpCuGender" class="form-control form-select" name="drpCuGender" >
+                                                            <option value="">--Select Gender--</option>
                                                             <option value="Male">Male</option>
                                                             <option value="Female">Female</option>
                                                             <option value="Other">Other</option>
                                                         </select>
-                                                        <span asp-validation-for="Gender" class="text-danger"></span>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="fv-row mb-4">
-                                                <input type="text" asp-for="Email" placeholder="Email" id="email" autocomplete="off" class="form-control bg-transparent" />
-                                                <span asp-validation-for="Email" class="text-danger"></span>
-                                                <span class="text-danger">@TempData["ErrorMessage"]</span>
+                                                <input type="text" placeholder="Email" id="txtCuEmail" name="txtCuEmail" autocomplete="off" class="form-control bg-transparent"  />
                                             </div>
                                         </div>
                                     </div>
@@ -93,77 +93,60 @@
                                 <div class="row">
                                     <div class="col-6">
                                         <div class="fv-row mb-4">
-                                            <select asp-for=CountryId id="ddlCountry" class="form-control bg-transparent">
-                                                <option>--Select Country--</option>
+                                            <select id="drpCuCountry" name="drpCuCountry" class="form-control form-select bg-transparent valid"  onchange="fn_getUserState('drpCuState',null,this)">
+                                                <option selected value="">--Select Country--</option>
                                             </select>
-                                            <input type="hidden" asp-for="CountryId" id="txtcountry" value="" />
-                                            <span asp-validation-for="CountryId" class="text-danger"></span>
                                         </div>
                                     </div>
                                     <div class="col-6">
                                         <div class="fv-row mb-4">
-                                            <select asp-for=StateId id="ddlState" class="form-control bg-transparent">
-                                                <option>--Select State--</option>
+                                            <select id="drpCuState" name="drpCuState" class="form-control form-select bg-transparent valid"  onchange="fn_getUsercitiesbystateId('drpCuCity', null, this)">
+                                                <option selected value="">--Select State--</option>
                                             </select>
-                                            <input type="hidden" asp-for="StateId" id="txtstate" value="" />
-                                            <span asp-validation-for="StateId" class="text-danger"></span>
                                         </div>
                                     </div>
                                 </div>
-
                                 <div class="fv-row mb-4">
                                     <div class="row">
                                         <div class="col-6">
                                             <div class="fv-row mb-4">
-                                                <select asp-for=CityId id="ddlCity" class="form-control bg-transparent">
-                                                    <option>--Select City--</option>
+                                                <select id="drpCuCity" name="drpCuCity" class="form-control form-select bg-transparent valid" >
+                                                    <option selected value="">--Select City--</option>
                                                 </select>
-                                                <input type="hidden" asp-for="CityId" id="txtcity" value="" />
-                                                <span asp-validation-for="CityId" class="text-danger"></span>
                                             </div>
                                         </div>
                                         <div class="col-6">
                                             <div class="fv-row mb-4">
-                                                <input type="text" asp-for="PhoneNumber" placeholder="Mobile.NO" id="PhoneNumber" autocomplete="off" class="form-control bg-transparent" />
-                                                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                                                <input type="text" placeholder="Mobile.NO" id="textCuPhoneNumber" name="textCuPhoneNumber" autocomplete="off" class="form-control bg-transparent"  />
                                             </div>
                                         </div>
                                         <div class="fv-row mb-6">
-                                            <input type="text" asp-for="Address" class="form-control bg-transparent" placeholder="Address" id="Address" style="height: 75px;" />
-                                            <span asp-validation-for="Address" class="text-danger"></span>
+                                            <textarea type="text" class="form-control bg-transparent" rows="3" placeholder="Address" id="textCuAddress" name="textCuAddress" ></textarea>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-6">
-                                        <div class="mb-3">
-
-                                            <div class="position-relative auth-pass-inputgroup">
-                                                <input type="password" class="form-control pe-5 password-input" onpaste="return false" placeholder="Enter password" id="password-input" aria-describedby="passwordInput" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" asp-for="Password">
-                                                <button class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon" type="button" id="password-addon"><i class="ri-eye-fill align-middle"></i></button>
-                                            </div>
-                                        </div>
-                                        <div id="password-contain" class="p-3 bg-light mb-2 rounded">
-                                            <h5 class="fs-13 fw-semibold">Password must contain:</h5>
-                                            <p id="pass-length" class="invalid fs-12 mb-2">Minimum <b>8 characters</b></p>
-                                            <p id="pass-lower" class="invalid fs-12 mb-2">At <b>lowercase</b> letter (a-z)</p>
-                                            <p id="pass-upper" class="invalid fs-12 mb-2">At least <b>uppercase</b> letter (A-Z)</p>
-                                            <p id="pass-number" class="invalid fs-12 mb-0">A least <b>number</b> (0-9)</p>
+                                        <label class="form-label" for="password-input">Password</label>
+                                        <div class="position-relative auth-pass-inputgroup">
+                                            <input type="password" class="form-control pe-5 password-input" onpaste="return false" placeholder="Enter password" id="passwordinput" name="passwordinput" aria-describedby="passwordInput" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" required >
+                                            <button class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon" type="button" id="password-addon"><i class="ri-eye-fill align-middle"></i></button>
                                         </div>
                                     </div>
                                     <div class="col-6">
-
-                                        <div class="fv-row mb-2">
-                                            <input type="password" placeholder="Confirm Password" asp-for="ConfirmPassword" autocomplete="off" class="form-control" />
+                                        <label class="form-label" for="confirm-password-input">Confirm Password</label>
+                                        <div class="position-relative auth-pass-inputgroup mb-3">
+                                            <input type="password" class="form-control pe-5 password-input" onpaste="return false" placeholder="Confirm password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" id="confirmpasswordinput" name="confirmpasswordinput" required >
+                                            <button class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon" type="button" id="confirm-password-input"><i class="ri-eye-fill align-middle"></i></button>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="fv-row mb-2">
                                     <label class="fs-6 fw-semibold form-label mt-1">Upload Image</label>
-                                    <input type="file" asp-for="Image" autocomplete="off" class="form-control bg-transparent" />
+                                    <input type="file" asp-for="Image" autocomplete="off" class="form-control bg-transparent" id="filecuImage" />
                                 </div>
                                 <div class="d-flex justify-content-end">
-                                    <button class="btn btn-success btn-lg" type="submit" style="width: 160px;height: 50px;">
+                                    <button class="btn btn-success btn-lg" type="button" style="width: 160px;height: 50px;" onclick="CreateUser()">
                                         Submit
                                     </button>
                                 </div>
@@ -171,10 +154,40 @@
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+    var forms = Array.from(document.querySelectorAll("form .auth-pass-inputgroup"));
+    forms.forEach(function (s) {
+        var addons = Array.from(s.querySelectorAll(".password-addon"));
+        addons.forEach(function (t) {
+
+            t.addEventListener("click", function (t) {
+                var e = s.querySelector(".password-input");
+                if (e.type === "password") {
+                    e.type = "text";
+                } else {
+                    e.type = "password";
+                }
+            });
+        });
+    });
+
+    var password = document.getElementById("passwordinput");
+    var confirm_password = document.getElementById("confirmpasswordinput");
+
+    function validatePassword() {
+        if (password.value !== confirm_password.value) {
+            confirm_password.setCustomValidity("Passwords Don't Match");
+        } else {
+            confirm_password.setCustomValidity("");
+        }
+    }
+
+    confirm_password.onkeyup = validatePassword;
+</script>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script src="~/moduls/masterlistscript.js"></script>
+<script src="~/moduls/userdetailsscript.js" asp-append-version="true"></script>

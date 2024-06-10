@@ -397,13 +397,13 @@ function EnterOutTime() {
     }
 }
 function ResetPassword() {
-    if ($("#passwordform").valid()) {
+    var form = document.getElementById('resetPasswordForm');
+    if (form.checkValidity()) {
         var objData = {
             UserName: $('#txtUserName').val(),
-            Password: $('#passwordinput').val(),
-            ConfirmPassword: $('#confirmpasswordinput').val(),
+            Password: $('#password-input').val(),
+            ConfirmPassword: $('#confirm-password-input').val(),
         }
-
         $.ajax({
             url: '/UserProfile/ResetUserPassword',
             type: 'post',
@@ -417,7 +417,7 @@ function ResetPassword() {
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'OK'
                     }).then(function () {
-                        window.location = '/UserProfile/DisplayUserList';
+                        window.location = '/UserProfile/ResetPassword';
                     });
                 }
                 else {
@@ -425,9 +425,9 @@ function ResetPassword() {
                 }
             },
         })
-    }
-    else {
-        toastr.warning("Kindly fill all datafield");
+    } else {
+        toastr.warning("Kindly Fill all Datafields.")
+        form.reportValidity();
     }
 }
 
@@ -870,18 +870,196 @@ function updateuserDetails() {
         toastr.warning("Kindly fill all datafield");
     }
 }
-var PasswordForm;
-function validateAndPassword() {
+$(document).ready(function () {
+    $("#CreateUserForm").validate({
 
-    PasswordForm = $("#passwordform").validate({
         rules: {
+            txtCuFirstname: "required",
+            textCuPhoneNumber: {
+                required: true,
+                digits: true,
+                minlength: 10,
+                maxlength: 10
+            },
+            txtCuEmail: {
+                required: true,
+                email: true
+            },
+            txtCuLastname: "required",
+            drpCuDepartment: "required",
+            textCuAddress: "required",
+            txtCuDOB: "required",
+            drpCuGender: "required",
+            drpCuCountry: "required",
+            drpCuState: "required",
+            drpCuCity: "required",
             passwordinput: "required",
             confirmpasswordinput: "required",
         },
         messages: {
+            txtCuFirstname: "Please Enter First Name",
+            textCuPhoneNumber: {
+                required: "Please Enter phone number",
+                digits: "phone number must contain only digits",
+                minlength: "phone number must be 10 digits long",
+                maxlength: "phone number must be 10 digits long"
+            },
+            txtCuEmail: {
+                required: "Please Enter Email",
+                email: "Please enter a valid email address"
+            },
+            txtCuLastname: "Please Enter Last Name",
+            drpCuDepartment: "Please Select Department",
+            textCuAddress: "Please Enter Address",
+            txtCuDOB: "Please Enter Date of Birth",
+            drpCuGender: "Please Select Gender",
+            drpCuCountry: "Please Select Country",
+            drpCuState: "Please Select State",
+            drpCuCity: "Please Select City",
             passwordinput: "Please Enter Password",
-            confirmpasswordinput: "Please Enter ConfirmPassword",
-        },
+            confirmpasswordinput: "Please Enter Confirm Password",
+        }
     })
-    var isValid = true;
+});
+
+function CreateUser() {
+    var form = document.getElementById('CreateUserForm');
+    if ($("#CreateUserForm").valid()) {
+        if (form.checkValidity()) {
+            var formData = new FormData();
+            formData.append("UserName", $('#EmpId').val());
+            formData.append("FirstName", $('#txtCuFirstname').val());
+            formData.append("LastName", $('#txtCuLastname').val());
+            formData.append("DepartmentId", $('#drpCuDepartment').val());
+            formData.append("Email", $('#txtCuEmail').val());
+            formData.append("Address", $('#textCuAddress').val());
+            formData.append("PhoneNumber", $('#textCuPhoneNumber').val());
+            formData.append("DateOfBirth", $('#txtCuDOB').val());
+            formData.append("Gender", $('#drpCuGender').val());
+            formData.append("CountryId", $('#drpCuCountry').val());
+            formData.append("StateId", $('#drpCuState').val());
+            formData.append("CityId", $('#drpCuCity').val());
+            formData.append("Password", $('#passwordinput').val());
+            formData.append("Image", $('#filecuImage')[0].files[0]);
+            $.ajax({
+                url: '/UserProfile/CreateUser',
+                type: 'post',
+                data: formData,
+                processData: false,
+                contentType: false,
+                datatype: 'json',
+                success: function (Result) {
+                    if (Result.code == 200) {
+                        Swal.fire({
+                            title: Result.message,
+                            icon: 'success',
+                            confirmButtonColor: '#3085d6',
+                            confirmButtonText: 'OK'
+                        }).then(function () {
+                            window.location = '/UserProfile/UserList';
+                        });
+                    }
+                    else {
+                        toastr.error(Result.message);
+                    }
+                },
+            })
+        }
+        else {
+            form.reportValidity();
+        }
+    }
+    else {
+        toastr.warning("Kindly Fill all Datafields.")
+    }
+}
+$(document).ready(function () {
+
+    GetUserDepartment();
+    GetUserCountry();
+
+    $('#dropUserState').change(function () {
+
+        var Text = $("#dropUserState Option:Selected").text();
+        var txtUserid = $(this).val();
+        $("#txtUserstate").val(txtUserid);
+    });
+
+    $('#drpCuCity').change(function () {
+
+        var Text = $("#UserCity Option:Selected").text();
+        var txtUsercity = $(this).val();
+        $("#txtUserCity").val(txtUsercity);
+    });
+
+});
+
+function fn_getUserState(drpUserstate, countryId, that) {
+    var cid = countryId;
+    if (cid == undefined || cid == null) {
+        var cid = $(that).val();
+    }
+
+
+    $('#' + drpUserstate).empty();
+    $('#' + drpUserstate).append('<Option >--Select State--</Option>');
+    $.ajax({
+        url: '/Authentication/GetState?StateId=' + cid,
+        success: function (result) {
+
+            $.each(result, function (i, data) {
+                $('#' + drpUserstate).append('<Option value=' + data.id + '>' + data.stateName + '</Option>')
+            });
+        }
+    });
+}
+
+function fn_getUsercitiesbystateId(drpUsercity, stateid, that) {
+
+    var sid = stateid;
+    if (sid == undefined || sid == null) {
+        var sid = $(that).val();
+    }
+
+
+    $('#' + drpUsercity).empty();
+    $('#' + drpUsercity).append('<Option >--Select City--</Option>');
+    $.ajax({
+        url: '/Authentication/GetCity?CityId=' + sid,
+        success: function (result) {
+
+            $.each(result, function (i, data) {
+                $('#' + drpUsercity).append('<Option value=' + data.id + '>' + data.cityName + '</Option>');
+
+            });
+        }
+    });
+}
+
+function GetUserCountry() {
+    $.ajax({
+        url: '/Authentication/GetCountrys',
+        success: function (result) {
+            var $countryDropdown = $("#drpCuCountry");
+            $countryDropdown.empty();
+            $countryDropdown.append('<option selected value="">--Select Country--</option>');
+            $.each(result, function (i, data) {
+                $countryDropdown.append('<option value="' + data.id + '">' + data.countryName + '</option>');
+            });
+        }
+    });
+}
+
+function GetUserDepartment() {
+    $.ajax({
+        url: '/Authentication/GetDepartment',
+        success: function (result) {
+            var $departmentDropdown = $("#drpCuDepartment");
+            $departmentDropdown.empty();
+            $departmentDropdown.append('<option selected value="">--Select Department--</option>');
+            $.each(result, function (i, data) {
+                $departmentDropdown.append('<Option value=' + data.id + '>' + data.departments + '</Option>')
+            });
+        }
+    });
 }

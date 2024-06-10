@@ -22,13 +22,7 @@ namespace EMPManegment.EntityModels.ViewModels
     public class PasswordResetResponseModel
     {
         public string? UserName { get; set; }
-
-        [Required(ErrorMessage = "Please Enter Password..!")]
         public string? Password { get; set; }
-
-        [Required(ErrorMessage = "Please Enter the Confirm Password..!")]
-        [Display(Name = "Confirm Password")]
-        [Compare("Password", ErrorMessage = ("Confirm Password Dose Not Match..!!"))]
         public string? ConfirmPassword { get; set; }
         public Guid? UpdatedBy { get; set; }
         public DateTime? UpdatedOn { get; set; }

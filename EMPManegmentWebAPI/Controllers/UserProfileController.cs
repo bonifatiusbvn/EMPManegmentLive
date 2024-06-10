@@ -215,7 +215,6 @@ namespace EMPManagment.API.Controllers
                 {
                     response.Code = (int)HttpStatusCode.OK;
                     response.Message = updateUserOutTime.Result.Message;
-                    response.Icone = updateUserOutTime.Result.Icone;
                 }
                 else
                 {

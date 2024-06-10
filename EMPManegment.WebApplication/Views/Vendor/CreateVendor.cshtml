@@ -114,7 +114,7 @@
                                 else
                                 {
                                     <select id="ddlVendorType" name="ddlVendorType" class="form-control form-select valid">
-                                        <option selected>--Select Type--</option>
+                                        <option selected value="">--Select Type--</option>
                                     </select>
                                 }
                                 <input type="hidden" id="VendorTypeInput" name="VendorTypeInput" value="" />
@@ -147,7 +147,7 @@
                                 else
                                 {
                                     <select id="VendorCountry" name="VendorCountry" class="form-control form-select valid" onchange="fn_getVendorState('VendorState',null,this)">
-                                        <option selected>--Select Country--</option>
+                                        <option selected value="">--Select Country--</option>
                                     </select>
                                 }
                                 <input type="hidden" id="txtcountry" name="txtcountry" value="" />
@@ -166,7 +166,7 @@
                                 else
                                 {
                                     <select id="VendorState" name="VendorState" class="form-control form-select valid" onchange="fn_getVendorcitiesbystateId('VendorCity', null, this)">
-                                        <option>--Select State--</option>
+                                        <option value="">--Select State--</option>
                                     </select>
                                 }
                                 <input type="hidden" id="txtstate" name="txtstate" value="" />
@@ -185,7 +185,7 @@
                                 else
                                 {
                                     <select id="VendorCity" name="VendorCity" class="form-control form-select valid">
-                                        <option selected>--Select City--</option>
+                                        <option selected value="">--Select City--</option>
                                     </select>
                                 }
                                 <input type="hidden" id="txtcity" name="txtcity" value="" />

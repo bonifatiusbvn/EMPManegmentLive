@@ -105,21 +105,21 @@
                         <div class="col-4 mb-3">
                             <label class="form-label">Country</label>
                             <select id="projectCountry" name="projectCountry" class="form-control form-select valid" onchange="fn_getProjectState('ProjectState',null,this)">
-                                <option selected>--Select Country--</option>
+                                <option selected value="">--Select Country--</option>
                             </select>
                             <input type="hidden" id="txtprojectCountry" value="" />
                         </div>
                         <div class="col-4 mb-3">
                             <label class="form-label">State</label>
                             <select id="ProjectState" name="ProjectState" class="form-control form-select valid" onchange="fn_getProjectcitiesbystateId('ProjectCity', null, this)">
-                                <option>--Select State--</option>
+                                <option value="">--Select State--</option>
                             </select>
                             <input type="hidden" id="txtProjectState" value="" />
                         </div>
                         <div class="col-4 mb-3">
                             <label class="form-label">City</label>
                             <select id="ProjectCity" name="ProjectCity" class="form-control form-select valid">
-                                <option>--Select City--</option>
+                                <option value="">--Select City--</option>
                             </select>
                             <input type="hidden" id="txtProjectCity" value="" />
                         </div>
@@ -151,7 +151,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="projectStartDate" class="form-label">Project Start Date</label>
-                        <input type="date" class="form-control material_blue" id="projectStartDate" name="projectStartDate" />
+                        <input type="date" class="form-control material_blue" id="projectStartDate" name="projectStartDate" max="@DateTime.Now.ToString("yyyy-MM-dd")" />
                     </div>
                     <div class="mb-3">
                         <label for="projectEndDate" class="form-label">Project End Date</label>
