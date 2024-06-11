@@ -18,17 +18,21 @@ function preventEmptyValue(input) {
 }
 
 $(document).ready(function () {
+
+    function handleFocus(event, selector) {
+        if (event.keyCode == 13 || event.keyCode == 9) {
+            event.preventDefault();
+            $(selector).focus();
+        }
+    }
     $(document).on('input', '.product-quantity', function () {
         var row = $(this).closest('.product');
         updateProductTotalAmount(row);
         updateTotals();
-    });
-
-
-    $(document).on('keydown', '.product-quantity', function (event) {
-        if (event.key === 'Enter') {
-            $(this).blur();
-        }
+    }).on('keydown', '.product-quantity', function (event) {
+        var row = $(this).closest(".product");
+        var productFocus = row.find('#txtproductamount');
+        handleFocus(event, productFocus);
     });
 
 
@@ -36,22 +40,17 @@ $(document).ready(function () {
         var row = $(this).closest('.product');
         updateProductTotalAmount(row);
         updateTotals();
-    });
-
-
-    $(document).on('keydown', '#txtproductamount', function (event) {
-        if (event.key === 'Enter') {
-            $(this).blur();
-        }
+    }).on('keydown', '#txtproductamount', function (event) {
+        var row = $(this).closest(".product");
+        var productFocus = row.find('#txtgst');
+        handleFocus(event, productFocus);
     });
 
     $(document).on('input', '#txtgst', function () {
         var row = $(this).closest('.product');
         updateProductTotalAmount(row);
         updateTotals();
-    });
-
-    $(document).on('keydown', '#txtgst', function (event) {
+    }).on('keydown', '#txtgst', function (event) {
         if (event.key === 'Enter') {
             $(this).blur();
         }
@@ -479,7 +478,7 @@ function ProductTypeDropdown(productId) {
         url: '/ProductMaster/GetProduct',
         success: function (result) {
             $.each(result, function (i, data) {
-                $('#txtPOProductType_' + productId).append('<option value=' + data.id + '>' + data.productName + '</option>');
+                $('#txtPOProductType_' + productId).append('<option value="' + data.id + '">' + data.productName + '</option>');
             });
         }
     });

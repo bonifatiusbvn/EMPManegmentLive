@@ -12,6 +12,12 @@
     #txtpaymentmethod-error {
         color: red;
     }
+
+    .table-body {
+        height: 200px;
+    }
+
+
 </style>
 
 <div class="row" style="margin-top:80px;">
@@ -128,12 +134,12 @@
                                         </div>
                                     </div>
                                     <div class="card-body pt-0">
-                                        <div class="table-responsive" style="height:350px">
+                                        <div class="table-responsive table-container">
                                             <table class="table align-middle mb-0">
                                                 <thead class="table-secondary">
                                                     <tr class="text-uppercase">
                                                         <th>#</th>
-                                                        <th>Product Details</th>
+                                                        <th>Products</th>
                                                         <th>HSN Code</th>
                                                         <th>Quantity</th>
                                                         <th>Qty Type</th>
@@ -144,7 +150,7 @@
                                                         <th>Action</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody id="addnewproductlink">
+                                                <tbody id="addnewproductlink" class="table-body">
                                                 </tbody>
                                             </table>
                                             <div class="noresult" style="display: none">
