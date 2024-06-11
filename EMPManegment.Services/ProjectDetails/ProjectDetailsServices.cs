@@ -71,5 +71,10 @@ namespace EMPManegment.Services.ProjectDetails
         {
             return await ProjectDetails.MemberIsDeleted(projectMember);
         }
+
+        public async Task<UserResponceModel> DeleteProjectDocument(Guid DocumentId)
+        {
+            return await ProjectDetails.DeleteProjectDocument(DocumentId);
+        }
     }
 }

@@ -214,6 +214,8 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
                     {
                         var GetUserdata = Context.TblProjectMembers.Where(a => a.UserId == AddMember.UserId && a.ProjectId == AddMember.ProjectId).FirstOrDefault();
                         GetUserdata.IsDeleted = true;
+                        GetUserdata.UpdatedOn = DateTime.Now;
+                        GetUserdata.UpdatedBy = AddMember.UpdatedBy;
                         Context.TblProjectMembers.Update(GetUserdata);
                         Context.SaveChanges();
                         response.Code = 200;
@@ -288,6 +290,7 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
                     Date = DateTime.Today,
                     DocumentName = AddDocument.DocumentName,
                     CreatdBy = AddDocument.CreatdBy,
+                    CreadetOn=DateTime.Now,
                 };
                 response.Code = 200;
                 response.Message = "Document uploaded successfully!";
@@ -428,36 +431,50 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
                 if (GetUserdata != null)
                 {
 
-                    if (GetUserdata.IsDeleted == true)
-                    {
-                        GetUserdata.IsDeleted = false;
-                        Context.TblProjectMembers.Update(GetUserdata);
-                        Context.SaveChanges();
-                        response.Code = 200;
-                        response.Data = GetUserdata;
-                        response.Message = "Project member is deactive succesfully";
-                    }
-
-                    else
-                    {
-                        GetUserdata.IsDeleted = true;
-                        Context.TblProjectMembers.Update(GetUserdata);
-                        Context.SaveChanges();
-                        response.Code = 200;
-                        response.Data = GetUserdata;
-                        response.Message = "Project member is active succesfully";
-                    }
+                if (GetUserdata.IsDeleted == true)
+                {
+                    GetUserdata.IsDeleted = false;
+                    GetUserdata.UpdatedOn = DateTime.Now;
+                    GetUserdata.UpdatedBy = projectMember.UpdatedBy;
+                    Context.TblProjectMembers.Update(GetUserdata);
+                    Context.SaveChanges();
+                    response.Code = 200;
+                    response.Data = GetUserdata;
+                    response.Message = "Project member is deactive succesfully";
                 }
+
                 else
                 {
-                    response.Code = 404;
-                    response.Message = "Project member doesn't found";
+                    GetUserdata.IsDeleted = true;
+                    GetUserdata.UpdatedOn = DateTime.Now;
+                    GetUserdata.UpdatedBy = projectMember.UpdatedBy;
+                    Context.TblProjectMembers.Update(GetUserdata);
+                    Context.SaveChanges();
+                    response.Code = 200;
+                    response.Data = GetUserdata;
+                    response.Message = "Project member is active succesfully";
                 }
+
+
             }
-            catch (Exception ex)
+            return response;
+        }
+
+        public async Task<UserResponceModel> DeleteProjectDocument(Guid DocumentId)
+        {
+            UserResponceModel response = new UserResponceModel();
+            var GetDocumentdata = Context.TblProjectDocuments.Where(a => a.Id == DocumentId).FirstOrDefault();
+            if(GetDocumentdata != null)
             {
-                response.Code = 400;
-                response.Message = "Error in deleting Project member.";
+                Context.TblProjectDocuments.Remove(GetDocumentdata);
+                Context.SaveChanges();
+                response.Code=200;
+                response.Message = "Project document deleted successfully.";
+            }
+            else
+            {
+                response.Code = 404;
+                response.Message = "There is some problem in your request!";
             }
             return response;
         }

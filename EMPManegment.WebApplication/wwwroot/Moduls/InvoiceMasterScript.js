@@ -131,7 +131,7 @@ function InsertInvoiceDetails() {
                             confirmButtonColor: '#3085d6',
                             confirmButtonText: 'OK'
                         }).then(function () {
-                            window.location = '/Invoice/InvoiceListView';
+                            window.location = '/Invoice/Invoices';
                         });
                     }
                     else {
@@ -259,19 +259,14 @@ function deleteInvoice(InvoiceId) {
                 type: 'POST',
                 dataType: 'json',
                 success: function (Result) {
-                    if (Result.code == 200) {
-                        Swal.fire({
-                            title: Result.message,
-                            icon: 'success',
-                            confirmButtonColor: '#3085d6',
-                            confirmButtonText: 'OK'
-                        }).then(function () {
-                            window.location = '/Invoice/InvoiceListView';
-                        })
-                    }
-                    else {
-                        toastr.error(Result.message);
-                    }
+                    Swal.fire({
+                        title: Result.message,
+                        icon: 'success',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK'
+                    }).then(function () {
+                        window.location = '/Invoice/Invoices';
+                    })
                 },
                 error: function () {
                     Swal.fire({
@@ -280,7 +275,7 @@ function deleteInvoice(InvoiceId) {
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'OK',
                     }).then(function () {
-                        window.location = '/Invoice/InvoiceListView';
+                        window.location = '/Invoice/Invoices';
                     })
                 }
             })
@@ -398,6 +393,7 @@ function UpdateInvoiceDetails() {
         formData.append("TotalAmount", $("#txtamount").val());
         formData.append("PaymentMethod", $("#txtpaymentmethod").val());
         formData.append("Status", $("#txtstatus").val());
+        formData.append("UpdatedBy", $("#txtUpdatedBy").val());
 
         $.ajax({
             url: '/Invoice/UpdateInvoiceDetails',
@@ -414,7 +410,7 @@ function UpdateInvoiceDetails() {
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'OK',
                     }).then(function () {
-                        window.location = '/Invoice/InvoiceListView';
+                        window.location = '/Invoice/Invoices';
                     });
                 }
                 else {

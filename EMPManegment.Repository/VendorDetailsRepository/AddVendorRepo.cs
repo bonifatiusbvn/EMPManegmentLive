@@ -235,52 +235,39 @@ namespace EMPManegment.Repository.VendorDetailsRepository
         public async Task<UserResponceModel> UpdateVendorDetails(VendorDetailsView updateVendor)
         {
             UserResponceModel response = new UserResponceModel();
-            try
+            var Vendordata = await Context.TblVendorMasters.FirstOrDefaultAsync(a => a.Vid == updateVendor.Vid);
+            if (Vendordata.Vid != null)
             {
-                var Vendordata = await Context.TblVendorMasters.FirstOrDefaultAsync(a => a.Vid == updateVendor.Vid);
-                if (Vendordata.Vid != null)
-                {
-
-                    Vendordata.Vid = updateVendor.Vid;
-                    Vendordata.VendorFirstName = updateVendor.VendorFirstName;
-                    Vendordata.VendorLastName = updateVendor.VendorLastName;
-                    Vendordata.VendorEmail = updateVendor.VendorEmail;
-                    Vendordata.VendorPhone = updateVendor.VendorPhone;
-                    Vendordata.VendorContact = updateVendor.VendorContectNo;
-                    Vendordata.VendorPinCode = updateVendor.VendorPinCode;
-                    Vendordata.VendorAddress = updateVendor.VendorAddress;
-                    Vendordata.VendorCompany = updateVendor.VendorCompany;
-                    Vendordata.VendorCompanyType = updateVendor.VendorCompanyType;
-                    Vendordata.VendorCompanyEmail = updateVendor.VendorCompanyEmail;
-                    Vendordata.VendorCompanyNumber = updateVendor.VendorCompanyNumber;
-                    Vendordata.VendorBankAccountNo = updateVendor.VendorBankAccountNo;
-                    Vendordata.VendorBankName = updateVendor.VendorBankName;
-                    Vendordata.VendorBankBranch = updateVendor.VendorBankBranch;
-                    Vendordata.VendorAccountHolderName = updateVendor.VendorAccountHolderName;
-                    Vendordata.VendorBankIfsc = updateVendor.VendorBankIfsc;
-                    Vendordata.VendorGstnumber = updateVendor.VendorGstnumber;
-                    Vendordata.VendorCity = updateVendor.VendorCity;
-                    Vendordata.VendorCountry = updateVendor.VendorCountry;
-                    Vendordata.VendorState = updateVendor.VendorState;
-                    Vendordata.VendorTypeId = updateVendor.VendorTypeId;
-
-                    Context.TblVendorMasters.Update(Vendordata);
-                    await Context.SaveChangesAsync();
-                    response.Code = 200;
-                    response.Message = "Vendor data updated successfully!";
-                }
-                else
-                {
-                    response.Code = 404;
-                    response.Message = "Vendor doesn't found.";
-                }
-
+                                  
+                Vendordata.Vid = updateVendor.Vid;
+                Vendordata.VendorFirstName = updateVendor.VendorFirstName;
+                Vendordata.VendorLastName = updateVendor.VendorLastName;
+                Vendordata.VendorEmail = updateVendor.VendorEmail;
+                Vendordata.VendorPhone = updateVendor.VendorPhone;
+                Vendordata.VendorContact = updateVendor.VendorContectNo;
+                Vendordata.VendorPinCode = updateVendor.VendorPinCode;
+                Vendordata.VendorAddress = updateVendor.VendorAddress;
+                Vendordata.VendorCompany = updateVendor.VendorCompany;
+                Vendordata.VendorCompanyType = updateVendor.VendorCompanyType;
+                Vendordata.VendorCompanyEmail = updateVendor.VendorCompanyEmail;
+                Vendordata.VendorCompanyNumber = updateVendor.VendorCompanyNumber;
+                Vendordata.VendorBankAccountNo = updateVendor.VendorBankAccountNo;
+                Vendordata.VendorBankName = updateVendor.VendorBankName;
+                Vendordata.VendorBankBranch = updateVendor.VendorBankBranch;
+                Vendordata.VendorAccountHolderName = updateVendor.VendorAccountHolderName;
+                Vendordata.VendorBankIfsc = updateVendor.VendorBankIfsc;
+                Vendordata.VendorGstnumber = updateVendor.VendorGstnumber;
+                Vendordata.VendorCity = updateVendor.VendorCity;
+                Vendordata.VendorCountry = updateVendor.VendorCountry;
+                Vendordata.VendorState =  updateVendor.VendorState;
+                Vendordata.VendorTypeId = updateVendor.VendorTypeId;
+                Vendordata.UpdatedOn=DateTime.Now;
+                Vendordata.UpdatedBy=updateVendor.UpdatedBy;
+                Context.TblVendorMasters.Update(Vendordata);
+                await Context.SaveChangesAsync();
             }
-            catch (Exception ex)
-            {
-                response.Code = 400;
-                response.Message = "There is Some error in creating Vendor";
-            }
+            response.Code = 200;
+            response.Message = "Vendor data updated successfully!";
             return response;
         }
     }

@@ -374,6 +374,7 @@ namespace EMPManegment.Repository.OrderRepository
                         OrderDate = data.OrderDate,
                         CompanyName = data.CompanyName,
                         ProductName = data.ProductName,
+                        ProductShortDescription = data.ProductShortDescription,
                         TotalAmount = data.TotalAmount,
                         PaymentMethod = data.PaymentMethod,
                         DeliveryStatus = data.DeliveryStatus,
@@ -405,6 +406,8 @@ namespace EMPManegment.Repository.OrderRepository
                     orderdetails.PaymentMethod = UpdatePurchaseorder.PaymentMethod;
                     orderdetails.DeliveryStatus = UpdatePurchaseorder.DeliveryStatus;
                     orderdetails.OrderStatus = UpdatePurchaseorder.OrderStatus;
+                    orderdetails.UpdatedBy=UpdatePurchaseorder.UpdatedBy;
+                    orderdetails.UpdatedOn=DateTime.Now;
                 }
                 Context.TblPurchaseOrderMasters.Update(orderdetails);
                 Context.SaveChanges();

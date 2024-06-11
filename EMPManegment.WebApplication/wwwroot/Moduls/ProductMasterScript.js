@@ -296,6 +296,7 @@ function UpdateProductDetails() {
         formData.append("GstAmount", $("#txtGstAmount").val());
         formData.append("Hsn", $("#txtHSN").val());
         formData.append("ProductImage", $("#txtproductImage").val());
+        formData.append("UpdatedBy", $("#txtUpdatedby").val());
 
         $.ajax({
             url: '/ProductMaster/UpdateProductDetails',

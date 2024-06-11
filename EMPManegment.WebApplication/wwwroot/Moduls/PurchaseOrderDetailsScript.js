@@ -510,7 +510,7 @@ function EditPurchaseOrderDetails(Id) {
             $('#txtorderno').html(response.orderId);
             $('#txtorderdate').val(response.orderDate);
             $('#txtcompanyname').val(response.companyName);
-            $('#txtorderdetails').val(response.productName);
+            $('#txtorderdetails').val(response.productShortDescription);
             $('#txtamount').val(response.totalAmount);
             $('#txtpaymentmethod').val(response.paymentMethod);
             $('#txtdeliverystatus').val(response.deliveryStatus);
@@ -530,11 +530,12 @@ function UpdatePurchaseOrderDetails() {
         formData.append("orderId", $("#txtorderno").val());
         formData.append("orderDate", $("#txtorderdate").val());
         formData.append("companyName", $("#txtcompanyname").val());
-        formData.append("productName", $("#txtorderdetails").val());
+        formData.append("ProductShortDescription", $("#txtorderdetails").val());
         formData.append("totalAmount", $("#txtamount").val());
         formData.append("paymentMethod", $("#txtpaymentmethod").val());
         formData.append("deliveryStatus", $("#txtdeliverystatus").val());
         formData.append("orderStatus", $("#txtorderstatus").val());
+        formData.append("UpdatedBy", $("#txtUpdatedby").val());
 
         $.ajax({
             url: '/PurchaseOrderMaster/UpdatePurchaseOrderDetails',

@@ -201,5 +201,24 @@ namespace EMPManagment.API.Controllers
             }
             return StatusCode(responseModel.Code, responseModel);
         }
+        [HttpPost]
+        [Route("DeleteProjectDocument")]
+        public async Task<IActionResult> DeleteProjectDocument(Guid DocumentId)
+        {
+            UserResponceModel responseModel = new UserResponceModel();
+
+            var Member = await ProjectDetail.DeleteProjectDocument(DocumentId);
+            if(Member.Code == 200)
+            {
+                responseModel.Code = Member.Code;
+                responseModel.Message=Member.Message;
+            }
+            else
+            {
+                responseModel.Code = Member.Code;
+                responseModel.Message = Member.Message;
+            }
+            return StatusCode(responseModel.Code, responseModel);
+        }
     }
 }
