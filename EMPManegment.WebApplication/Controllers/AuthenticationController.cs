@@ -95,7 +95,7 @@ namespace EMPManegment.Web.Controllers
                         else
                         {
                             TempData["ErrorMessage"] = responsemodel.message;
-                           
+
                         }
                     }
 
@@ -163,7 +163,6 @@ namespace EMPManegment.Web.Controllers
             }
             catch (Exception ex)
             {
-
                 throw ex;
             }
             return RedirectToAction("Login");

@@ -5,7 +5,6 @@ using EMPManegment.EntityModels.ViewModels.ExpenseMaster;
 using EMPManegment.EntityModels.ViewModels.Invoice;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.OrderModels;
-
 using EMPManegment.EntityModels.ViewModels.ProductMaster;
 using EMPManegment.EntityModels.ViewModels.TaskModels;
 using EMPManegment.EntityModels.ViewModels.VendorModels;
@@ -216,7 +215,6 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                 bool isInvoiceAlredyExists = Context.TblInvoices.Any(x => x.OrderId == OrderId);
                 if (isInvoiceAlredyExists == true)
                 {
-
                     response.Message = "This invoice is already generated";
                     response.Code = 400;
                 }
@@ -245,7 +243,6 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                                           Quantity = a.Quantity,
                                           OrderDate = a.OrderDate,
                                           PerUnitPrice = c.PerUnitPrice,
-                                          //PerUnitWithGstprice = c.PerUnitWithGstprice,
                                           SubTotal = a.SubTotal,
                                           GstPerUnit = a.GstPerUnit,
                                           TotalAmount = a.TotalAmount,
@@ -583,7 +580,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                                                CreditDebitAmount = a.CreditDebitAmount,
                                                TotalAmount = a.TotalAmount,
                                                VendorAddress = b.VendorAddress,
-                                               VendorId=b.Vid,
+                                               VendorId = b.Vid,
                                            }).ToListAsync();
 
                 return allCreditList;
