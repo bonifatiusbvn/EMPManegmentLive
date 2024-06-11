@@ -18,6 +18,7 @@
                         <h5 class="fs-13 mb-1"><a href="#" class="text-body text-truncate d-block">@item.DocumentName.Substring(37)</a></h5>
                         @* <div>2.2MB</div>*@
                         <div>@item.FullName</div>
+                        <input type="hidden" value="@item.ProjectId" id="txtProjectId" />
                     </div>
                     <div class="flex-shrink-0 ms-2">
                         <div class="d-flex gap-1">
@@ -28,7 +29,7 @@
                                 </button>
                                 <ul class="dropdown-menu">
                                     <li><a class="dropdown-item" href="#"><i class="ri-pencil-fill align-bottom me-2 text-muted"></i> Rename</a></li>
-                                    <li><a class="dropdown-item" href="#"><i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i> Delete</a></li>
+                                    <li><a class="dropdown-item" onclick="deleteProjectDocument('@item.Id')"><i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i> Delete</a></li>
                                 </ul>
                             </div>
                         </div>

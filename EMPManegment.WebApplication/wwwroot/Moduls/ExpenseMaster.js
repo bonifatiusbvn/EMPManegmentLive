@@ -2053,16 +2053,16 @@ function SearchBetweenDateExpense() {
     var UserId = $('#txtuserid').val();
 
     if (StartDate == "" && EndDate == "") {
-        toastr.error("Select dates");
+        toastr.warning("Select dates");
     } else if (StartDate == "") {
-        toastr.error("Select Satrtdate");
+        toastr.warning("Select Start date");
     } else if (EndDate == "") {
-        toastr.error("Select Enddate");
+        toastr.warning("Select End date");
     } else {
         GetUserBetweenMonthsExpenseList(StartDate, EndDate, UserId)
     }
-
 }
+
 function GetUserBetweenMonthsExpenseList(StartDate, EndDate, UserId) {
     var filterType = 'daterange';
     $('#DisplayUserAllExpenseList').DataTable({
@@ -2209,12 +2209,7 @@ function AddExpenseType() {
         });
     }
     else {
-        Swal.fire({
-            title: "Kindly fill expense type",
-            icon: 'warning',
-            confirmButtonColor: '#3085d6',
-            confirmButtonText: 'OK',
-        })
+        toastr.warning("Kindly fill expense type");    
     }
 }
 

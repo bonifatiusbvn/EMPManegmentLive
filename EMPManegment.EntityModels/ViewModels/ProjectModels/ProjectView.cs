@@ -31,6 +31,7 @@ namespace EMPManegment.EntityModels.ViewModels.ProjectModels
         public DateTime? CreatedOn { get; set; }
 
         public Guid? CreatedBy { get; set; }
+        public Guid? UpdatedBy { get; set; }
 
         public string? Fullname { get; set; }
         public string? FirstName { get; set; }
@@ -46,5 +47,6 @@ namespace EMPManegment.EntityModels.ViewModels.ProjectModels
     {
         public Guid? ProjectId { get; set; }
         public Guid? UserId { get; set; }
+        public Guid? UpdatedBy { get; set; }
     }
 }

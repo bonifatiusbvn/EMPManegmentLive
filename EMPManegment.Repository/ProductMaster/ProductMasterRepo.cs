@@ -273,6 +273,8 @@ namespace EMPManegment.Repository.ProductMaster
                     getProduct.ProductImage = UpdateProduct.ProductImage;
                     getProduct.Hsn = UpdateProduct.Hsn;
                     getProduct.Id = UpdateProduct.Id;
+                    getProduct.UpdatedBy = UpdateProduct.UpdatedBy;
+                    getProduct.UpdatedOn=DateTime.Now;
 
                 }
                 Context.TblProductDetailsMasters.Update(getProduct);

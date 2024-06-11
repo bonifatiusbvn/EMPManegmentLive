@@ -77,11 +77,14 @@ namespace EMPManegment.EntityModels.ViewModels.OrderModels
         public Guid Id { get; set; }
         public string OrderId { get; set; }
         public string? CompanyName { get; set; }
-        public string ProductName { get; set; }
+        public string? ProductName { get; set; }
         public decimal TotalAmount { get; set; }
         public DateTime OrderDate { get; set; }
         public int? PaymentMethod { get; set; }
         public string? DeliveryStatus { get; set; }
         public string? OrderStatus { get; set; }
+        public string? ProductShortDescription { get; set; }
+        public Guid? UpdatedBy { get; set; }
+        public DateTime? UpdatedOn { get; set; }
     }
 }

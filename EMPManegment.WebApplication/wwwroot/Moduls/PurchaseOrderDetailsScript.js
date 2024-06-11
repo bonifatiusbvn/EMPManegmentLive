@@ -68,111 +68,6 @@ GetCompanyNameList();
 GetProductDetailsList();
 GetProducts();
 GetPaymentMethodList();
-function SearchData() {
-    if ($('#statusform').valid()) {
-        if ($("#idStatus").val() != "All") {
-            $("#status-delivered").hide();
-            $("#status-cancelled").hide();
-            $("#status-pickups").hide();
-            $("#status-returns").hide();
-            $("#status-inprogress").hide();
-            $("#status-pending").hide();
-            $("#project-overview").hide();
-            if ($("#idStatus").val() == "Pickups") {
-                $("#deliveredactive").removeClass('active');
-                $('#pendingactive').removeClass('active');
-                $('#cancelledactive').removeClass('active');
-                $('#inprogressactive').removeClass('active');
-                $('#returnsactive').removeClass('active');
-                $('#allordersactive').removeClass('active');
-                $('#pickupactive').addClass('active');
-                var DeliveryStatus = "Pickups";
-            }
-            else {
-                if ($("#idStatus").val() == "Delivered") {
-                    $('#allordersactive').removeClass('active');
-                    $("#deliveredactive").addClass('active');
-                    $('#pendingactive').removeClass('active');
-                    $('#cancelledactive').removeClass('active');
-                    $('#inprogressactive').removeClass('active');
-                    $('#returnsactive').removeClass('active');
-                    $('#pickupactive').removeClass('active');
-                    var DeliveryStatus = "Delivered";
-                }
-                else {
-                    if ($("#idStatus").val() == "Returns") {
-                        $('#allordersactive').removeClass('active');
-                        $("#deliveredactive").removeClass('active');
-                        $('#pendingactive').removeClass('active');
-                        $('#cancelledactive').removeClass('active');
-                        $('#inprogressactive').removeClass('active');
-                        $('#returnsactive').addClass('active');
-                        $('#pickupactive').removeClass('active');
-                        var DeliveryStatus = "Returns";
-                    }
-                    else {
-                        if ($("#idStatus").val() == "Cancelled") {
-                            $('#allordersactive').removeClass('active');
-                            $("#deliveredactive").removeClass('active');
-                            $('#pendingactive').removeClass('active');
-                            $('#cancelledactive').addClass('active');
-                            $('#inprogressactive').removeClass('active');
-                            $('#returnsactive').removeClass('active');
-                            $('#pickupactive').removeClass('active');
-                            var DeliveryStatus = "Cancelled";
-                        }
-                        else {
-                            if ($("#idStatus").val() == "Pending") {
-                                $('#allordersactive').removeClass('active');
-                                $("#deliveredactive").removeClass('active');
-                                $('#pendingactive').addClass('active');
-                                $('#cancelledactive').removeClass('active');
-                                $('#inprogressactive').removeClass('active');
-                                $('#returnsactive').removeClass('active');
-                                $('#pickupactive').removeClass('active');
-                                $('#pickupactive').removeClass('active');
-                                var DeliveryStatus = "Pending";
-                            }
-                            else {
-                                if ($("#idStatus").val() == "Inprogress") {
-                                    $('#allordersactive').removeClass('active');
-                                    $("#deliveredactive").removeClass('active');
-                                    $('#pendingactive').removeClass('active');
-                                    $('#cancelledactive').removeClass('active');
-                                    $('#inprogressactive').addClass('active');
-                                    $('#returnsactive').removeClass('active');
-                                    $('#pickupactive').removeClass('active');
-                                    var DeliveryStatus = "Inprogress";
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            var formData = new FormData();
-            formData.append("DeliveryStatus", DeliveryStatus);
-
-            $.ajax({
-                url: '/PurchaseOrderMaster/GetPurchaseOrderDetailsByStatus',
-                type: 'Post',
-                dataType: 'json',
-                data: formData,
-                processData: false,
-                contentType: false,
-                complete: function (Result) {
-                    $("#dvdeliveredstatus").show();
-                    $("#dvdeliveredstatus").html(Result.responseText);
-                }
-            });
-        }
-        else {
-            window.location = '/PurchaseOrderMaster/PurchaseOrders';
-        }
-    }
-    else {
-        toastr.error("Kindly fill the status");
-    }
-}
 
 $(document).ready(function () {
     $('#txtvendorname').change(function () {
@@ -615,7 +510,7 @@ function EditPurchaseOrderDetails(Id) {
             $('#txtorderno').html(response.orderId);
             $('#txtorderdate').val(response.orderDate);
             $('#txtcompanyname').val(response.companyName);
-            $('#txtorderdetails').val(response.productName);
+            $('#txtorderdetails').val(response.productShortDescription);
             $('#txtamount').val(response.totalAmount);
             $('#txtpaymentmethod').val(response.paymentMethod);
             $('#txtdeliverystatus').val(response.deliveryStatus);
@@ -635,11 +530,12 @@ function UpdatePurchaseOrderDetails() {
         formData.append("orderId", $("#txtorderno").val());
         formData.append("orderDate", $("#txtorderdate").val());
         formData.append("companyName", $("#txtcompanyname").val());
-        formData.append("productName", $("#txtorderdetails").val());
+        formData.append("ProductShortDescription", $("#txtorderdetails").val());
         formData.append("totalAmount", $("#txtamount").val());
         formData.append("paymentMethod", $("#txtpaymentmethod").val());
         formData.append("deliveryStatus", $("#txtdeliverystatus").val());
         formData.append("orderStatus", $("#txtorderstatus").val());
+        formData.append("UpdatedBy", $("#txtUpdatedby").val());
 
         $.ajax({
             url: '/PurchaseOrderMaster/UpdatePurchaseOrderDetails',

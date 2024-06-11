@@ -165,7 +165,8 @@ function UpdateVendorDetails() {
             "VendorAccountHolderName": $("#accountnameInput").val(),
             "VendorBankAccountNo": $("#accountnumberInput").val(),
             "VendorBankIfsc": $("#ifscInput").val(),
-            "VendorGstnumber": $("#GSTNumberInput").val()
+            "VendorGstnumber": $("#GSTNumberInput").val(),
+            "UpdatedBy": $("#txtUpdatedby").val(),
         };
         $.ajax({
             url: '/Vendor/UpdateVendorDetails',
@@ -173,18 +174,15 @@ function UpdateVendorDetails() {
             data: fromData,
             datatype: 'json',
             success: function (Result) {
-                if (Result.code == 200){
-                    Swal.fire({
-                        title: Result.message,
-                        icon: 'success',
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'OK'
-                    }).then(function () {
-                        window.location = '/Vendor/VendorList';
-                    });
-                } else {
-                    toastr.error(Result.message);
-                }               
+
+                Swal.fire({
+                    title: Result.message,
+                    icon: 'success',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'OK'
+                }).then(function () {
+                    window.location = '/Vendor/VendorList';
+                });
             },
         })
     }

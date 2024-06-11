@@ -48,6 +48,7 @@
                                 <label class="form-label" for="companynameInput">Company Name</label>
                                 <input type="text" class="form-control" autocomplete="off" id="companynameInput" name="companynameInput" value="@Model.VendorCompany" placeholder="Enter your company name">
                                 <input type="hidden" class="form-control" autocomplete="off" id="vendorIdInput" value="@Model.Vid">
+                                <input type="hidden" id="txtUpdatedby" value="@_userSession.UserId" />
                             </div>
                         </div>
                         <!--end col-->

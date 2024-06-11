@@ -47,10 +47,11 @@
                                     <a href="/Project/DownloadProjectDocument/?DocumentName=@item.DocumentName" class="btn btn-info"><i class="fas fa-cloud-download-alt"></i></a>
                                     @if (UserSession.FormPermisionData.Any(a => a.FormName == "GetProjectDetails" && (a.Delete == true)))
                                     {
-                                        <a href="#" class="btn btn-danger"><i class="fas fa-trash"></i></a>
+                                        <a href="#" class="btn btn-danger" onclick="deleteProjectDocument('@item.Id')"><i class="fas fa-trash"></i></a>
                                     }
                                 </div>
                             </td>
+                            <input type="hidden" value="@item.ProjectId" id="txtProjectId" />
                         </tr>
                         counter++;
                     }

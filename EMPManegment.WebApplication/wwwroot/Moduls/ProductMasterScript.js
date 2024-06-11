@@ -29,34 +29,36 @@ function ClearTextBox() {
     $("#txtvendorname").val('');
 }
 function AddProductType() {
+    if ($("#addproduct").valid()) {
+        var formData = new FormData();
+        formData.append("ProductName", $("#txtProductType").val());
 
-    var formData = new FormData();
-    formData.append("ProductName", $("#txtProductType").val());
-
-    $.ajax({
-        url: '/ProductMaster/AddProductType',
-        type: 'Post',
-        data: formData,
-        dataType: 'json',
-        contentType: false,
-        processData: false,
-        success: function (Result) {
-            if (Result.code == 200) {
-                Swal.fire({
-                    title: Result.message,
-                    icon: "success",
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK'
-                }).then(function () {
-                    window.location = '/ProductMaster/CreateProduct';
-                });
+        $.ajax({
+            url: '/ProductMaster/AddProductType',
+            type: 'Post',
+            data: formData,
+            dataType: 'json',
+            contentType: false,
+            processData: false,
+            success: function (Result) {
+                if (Result.code == 200) {
+                    Swal.fire({
+                        title: Result.message,
+                        icon: "success",
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK'
+                    }).then(function () {
+                        window.location = '/ProductMaster/CreateProduct';
+                    });
+                }
+                else {
+                    toastr.error(Result.message);
+                }
             }
-            else {
-                toastr.error(Result.message);
-            }
-
-        }
-    });
+        });
+    } else {
+        toastr.warning("Kindly fill the product type")
+    }
 }
 
 
@@ -132,6 +134,15 @@ $(document).ready(function () {
     $("#saveproductdetails").on('click', function () {
         $("#createproductform").validate();
     });
+
+    $("#addproduct").validate({
+        rules: {
+            txtProductType:"required"
+        },
+        messages :{
+        txtProductType :"Enter Product Type"
+        }
+    })
 });
 
 function WithGSTSelected() {
@@ -285,6 +296,7 @@ function UpdateProductDetails() {
         formData.append("GstAmount", $("#txtGstAmount").val());
         formData.append("Hsn", $("#txtHSN").val());
         formData.append("ProductImage", $("#txtproductImage").val());
+        formData.append("UpdatedBy", $("#txtUpdatedby").val());
 
         $.ajax({
             url: '/ProductMaster/UpdateProductDetails',
