@@ -431,31 +431,36 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
                 if (GetUserdata != null)
                 {
 
-                if (GetUserdata.IsDeleted == true)
-                {
-                    GetUserdata.IsDeleted = false;
-                    GetUserdata.UpdatedOn = DateTime.Now;
-                    GetUserdata.UpdatedBy = projectMember.UpdatedBy;
-                    Context.TblProjectMembers.Update(GetUserdata);
-                    Context.SaveChanges();
-                    response.Code = 200;
-                    response.Data = GetUserdata;
-                    response.Message = "Project member is deactive succesfully";
+                    if (GetUserdata.IsDeleted == true)
+                    {
+                        GetUserdata.IsDeleted = false;
+                        GetUserdata.UpdatedOn = DateTime.Now;
+                        GetUserdata.UpdatedBy = projectMember.UpdatedBy;
+                        Context.TblProjectMembers.Update(GetUserdata);
+                        Context.SaveChanges();
+                        response.Code = 200;
+                        response.Data = GetUserdata;
+                        response.Message = "Project member is deactive succesfully";
+                    }
+
+                    else
+                    {
+                        GetUserdata.IsDeleted = true;
+                        GetUserdata.UpdatedOn = DateTime.Now;
+                        GetUserdata.UpdatedBy = projectMember.UpdatedBy;
+                        Context.TblProjectMembers.Update(GetUserdata);
+                        Context.SaveChanges();
+                        response.Code = 200;
+                        response.Data = GetUserdata;
+                        response.Message = "Project member is active succesfully";
+                    }
+
+                    
                 }
-
-                else
-                {
-                    GetUserdata.IsDeleted = true;
-                    GetUserdata.UpdatedOn = DateTime.Now;
-                    GetUserdata.UpdatedBy = projectMember.UpdatedBy;
-                    Context.TblProjectMembers.Update(GetUserdata);
-                    Context.SaveChanges();
-                    response.Code = 200;
-                    response.Data = GetUserdata;
-                    response.Message = "Project member is active succesfully";
-                }
-
-
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
             return response;
         }

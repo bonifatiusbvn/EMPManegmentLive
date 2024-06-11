@@ -95,6 +95,7 @@ namespace EMPManegment.Web.Controllers
                         else
                         {
                             TempData["ErrorMessage"] = responsemodel.message;
+                           
                         }
                     }
 
@@ -142,7 +143,7 @@ namespace EMPManegment.Web.Controllers
                         return RedirectToAction("UserHome", "Home");
                     }
                 }
-                ViewBag.UserName = (Request.Cookies["UserName"].ToString());
+                ViewBag.UserName = login.UserName;
                 return View();
             }
             catch (Exception ex)
