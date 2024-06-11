@@ -35,32 +35,42 @@
                 <p class="login-box-msg">Sign in to start your session</p>
 
                 <form asp-action="Login" asp-controller="Authentication">
-                    <div class="input-group mb-3">
-                        <input type="text" class="form-control" placeholder="UserId" asp-for="UserName" id="LoginUserName" value="@ViewBag.UserName">
-                        <div class="input-group-append">
-                            <div class="input-group-text">
-                                <i class="fa-solid fa-user"></i>
+                    <div class="mb-3">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="UserId" asp-for="UserName" id="LoginUserName" value="@ViewBag.UserName">
+                            <div class="input-group-append">
+                                <div class="input-group-text">
+                                    <i class="fa-solid fa-user"></i>
+                                </div>
                             </div>
+                        </div>
+                        <div>
                             <span asp-validation-for="UserName" class="text-danger"></span>
                         </div>
                     </div>
-                    <div class="input-group mb-3">
-                        <input type="password" value="@ViewBag.Password" class="form-control" placeholder="Password" id="LoginPassword" asp-for="Password">
-                        <div class="input-group-append">
-                            <div class="input-group-text">
-                                <a id="password-toggle">
-                                    <div id="open">
-                                        <i class="fa-solid fa-eye"></i>
-                                    </div>
-                                    <div class="d-none" id="close">
-                                        <i class="fa-solid fa-eye-slash"></i>
-                                    </div>
-                                </a>
+                    <div class="mb-3">
+                        <div class="input-group">
+                            <input type="password" value="@ViewBag.Password" class="form-control" placeholder="Password" id="LoginPassword" asp-for="Password">
+                            <div class="input-group-append">
+                                <div class="input-group-text">
+                                    <a id="password-toggle">
+                                        <div id="open">
+                                            <i class="fa-solid fa-eye"></i>
+                                        </div>
+                                        <div class="d-none" id="close">
+                                            <i class="fa-solid fa-eye-slash"></i>
+                                        </div>
+                                    </a>
+                                </div>
                             </div>
                         </div>
-                        <span asp-validation-for="Password" class="text-danger"></span>
+                        <div>
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                            <span class="text-danger">@TempData["ErrorMessage"]</span>
+                        </div>
                     </div>
-                    <span class="text-danger">@TempData["ErrorMessage"]</span>
+                    
+                    
                     <div class="row">
                         <div class="col-8">
                             <div class="icheck-primary">
