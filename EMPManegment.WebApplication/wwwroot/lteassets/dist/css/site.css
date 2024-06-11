@@ -71,3 +71,19 @@ body {
 .white-text {
     color: white; /* Set the text color to white */
 }
+
+label.error {
+    color: red;
+}
+
+.error {
+    color: red;
+}
+
+.label.failed {
+    color: red;
+}
+
+.btn-x {
+    display: none;
+}

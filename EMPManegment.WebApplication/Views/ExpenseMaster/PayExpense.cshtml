@@ -6,16 +6,7 @@
     ViewData["Title"] = "PayExpense";
     Layout = "~/Views/Shared/_HomeLayout.cshtml";
 }
-<style>
-    .table-responsive {
-        height: 100%;
-        overflow-y: auto;
-    }
 
-    #txtcreditamount-error, #txtpaymenttype-error {
-        color: red;
-    }
-</style>
 <input type="hidden" class="form-control" id="txtuseraproveid" value="@_userSession.UserId" hidden>
 <input type="hidden" class="form-control" id="txtuseraprovename" value="@_userSession.FullName" hidden>
 <input type="hidden" class="form-control" id="txtexpensetype" value="11" hidden>
@@ -270,11 +261,7 @@
     <!--end row-->
     <!--end card-->
 </div>
-<style>
-    #txtcreditamount-error, #txtpaymenttype-error {
-        color: red;
-    }
-</style>
+
 <script type="text/javascript">
     var userPermissions = '@Html.Raw(Json.Serialize(UserSession.FormPermisionData))';
 </script>
