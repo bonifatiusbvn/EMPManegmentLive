@@ -106,16 +106,16 @@ namespace EMPManegment.Web.Controllers
 
 
                         var claims = new List<Claim>()
-                    {
-     new Claim("UserID", userlogin.Data.Id.ToString()),
-    new Claim("FirstName", userlogin.Data.FirstName),
-    new Claim("LastName", userlogin.Data.LastName),
-    new Claim("FullName", userlogin.Data.FullName),
-    new Claim("UserName", userlogin.Data.UserName),
-    new Claim("ProfileImage", string.IsNullOrEmpty(userlogin.Data.ProfileImage) ? defaultProfileImage : userlogin.Data.ProfileImage),
-    new Claim("IsAdmin", userlogin.Data.Role),
-    new Claim("AccessToken", userlogin.Data.Token),
-};
+                        {
+                            new Claim("UserID", userlogin.Data.Id.ToString()),
+                            new Claim("FirstName", userlogin.Data.FirstName),
+                            new Claim("LastName", userlogin.Data.LastName),
+                            new Claim("FullName", userlogin.Data.FullName),
+                            new Claim("UserName", userlogin.Data.UserName),
+                            new Claim("ProfileImage", string.IsNullOrEmpty(userlogin.Data.ProfileImage) ? defaultProfileImage : userlogin.Data.ProfileImage),
+                            new Claim("IsAdmin", userlogin.Data.Role),
+                            new Claim("AccessToken", userlogin.Data.Token),
+                        };
 
                         var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                         var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);

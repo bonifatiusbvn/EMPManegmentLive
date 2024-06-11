@@ -5,7 +5,7 @@
     <tr id="templateRow_@Convert.ToInt64(item.RowNumber + 1)" class="product" data-product-id="@item.Id">
         <td scope="row" class="product-id">@Convert.ToInt64(item.RowNumber + 1)</td>
         <td class="text-start">
-            <p id="textProductName" style="padding-top:5px !important;">@item.ProductName</p>
+            <label id="textProductName" style="width: 160px;height: 30px;padding-top:5px !important;">@item.ProductName</label>
             <input type="hidden" class="form-control bg-light border-0" id="textProductId" readonly value="@item.Id" />
             <input type="hidden" class="form-control bg-light border-0" id="textProductType" readonly value="@item.ProductType" />
         </td>
@@ -14,7 +14,7 @@
         </td>
         <td class="text-start">
             <div class="">
-                  <input type="text" class="product-quantity form-control" id="txtproductquantity" value="1"  oninput="preventEmptyValue(this)" style="width:80px;">
+                <input type="text" class="product-quantity form-control" id="txtproductquantity" value="1" oninput="preventEmptyValue(this)" style="width:80px;">
             </div>
         </td>
         <td class="text-start">
@@ -31,7 +31,7 @@
             <input type="text" class="form-control" id="txtgst" max="99" value="@item.GstPercentage" maxlength="4" oninput="preventEmptyValue(this)" />
         </td>
         <td class="text-start">
-            <input type="number" class="form-control" id="txtgstAmount"  value="@item.GstAmount"  readonly />
+            <input type="number" class="form-control" id="txtgstAmount" value="@item.GstAmount" readonly />
         </td>
         <td class="text-start">
             <div>

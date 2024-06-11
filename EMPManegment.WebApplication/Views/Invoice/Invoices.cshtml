@@ -35,7 +35,7 @@
                     {
                         <div class="flex-shrink-0">
                             <div class="d-flex gap-2 flex-wrap">
-                            <a asp-action="CreateInvoice" asp-controller="Invoice" class="btn btn-info"><i class="ri-add-line align-bottom me-1"></i>Invoice</a>
+                                <a asp-action="CreateInvoice" asp-controller="Invoice" class="btn btn-info"><i class="ri-add-line align-bottom me-1"></i>Invoice</a>
                             </div>
                         </div>
                     }
@@ -150,12 +150,7 @@
 <!--end col-->
 <!-- end row-->
 <!--end row-->
-<style>
-    #txtinvoicedate-error, #txtcompanyname-error, #txtamount-error,
-    #txtpaymentmethod-error, #txtstatus-error {
-        color: red;
-    }
-</style>
+
 <script type="text/javascript">
     var userPermissions = '@Html.Raw(Json.Serialize(UserSession.FormPermisionData))';
 </script>

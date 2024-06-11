@@ -7,18 +7,6 @@
     Layout = "~/Views/Shared/_UserHomeLayout.cshtml";
 }
 
-<style>
-    #taskType-error.error, #dealTitle-error, #ddlusername-error.error,
-    #txtdatetime-error, #txtenddatetime-error, #contactDescription-error {
-        color: red;
-    }
-
-    label.failed {
-        border: red thin solid;
-    }
-</style>
-
-
 <input type="hidden" class="form-control" id="txtprojectid" value="@UserSession.ProjectId" style="border:hidden;" />
 <!-- start page title -->
 <div class="row" style="margin-top:80px;">

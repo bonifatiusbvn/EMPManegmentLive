@@ -8,24 +8,7 @@
     ViewData["Title"] = "CreateVendor";
     Layout = "~/Views/Shared/_UserHomeLayout.cshtml";
 }
-<style>
-    #firstnameInput-error, #lastnameInput-error, #contactnumberInput-error,
-    #phonenumberInput-error, #emailidInput-error, #ddlVendorType-error,
-    #VendorCountry-error, #VendorState-error, #VendorCity-error,
-    #AddressidInput-error, #pincodeidInput-error, #companynameInput-error,
-    #CompanyType-error, #companyemailInput-error, #worknumberInput-error.error,
-    #companylogoInput-error, #banknameInput-error, #branchInput-error, #accountnameInput-error,
-    #accountnumberInput-error, #ifscInput-error.error,
-    #GSTNumberInput-error
-    {
-        color: red;
-    }
 
-    label.failed {
-        color: red;
-    }
-
-</style>
 
 <!-- start page title -->
 <div class="row" style="margin-top:80px;">
@@ -52,7 +35,7 @@
                 <div class="card-header">
                     <ul class="nav nav-tabs-custom card-header-tabs border-bottom-0" role="tablist">
                         <li class="nav-item">
-                            <a class="nav-link active" role="tab">
+                            <a class="nav-link" role="tab">
                                 Business Details
                             </a>
                         </li>
@@ -216,7 +199,7 @@
                         <div class="col-lg-6">
                             <div class="mb-3">
                                 <label for="companylogoInput" class="form-label">Logo</label>
-                                @if(Model.VendorCompanyLogo != null)
+                                @if (Model.VendorCompanyLogo != null)
                                 {
                                     <img src="~/Content/Image/@Model.VendorCompanyLogo" class="form-control" alt="Company Logo" id="companylogoInput" name="companylogoInput" style="height:200px;width:200px;">
                                 }
@@ -224,7 +207,7 @@
                                 {
                                     <input type="file" class="form-control" autocomplete="off" id="companylogoInput" name="companylogoInput">
                                 }
-                               
+
                             </div>
                         </div>
                         <!--end col-->
@@ -253,7 +236,7 @@
                 <div class="card-header">
                     <ul class="nav nav-tabs-custom card-header-tabs border-bottom-0" role="tablist">
                         <li class="nav-item">
-                            <a class="nav-link active" role="tab">
+                            <a class="nav-link" role="tab">
                                 Personal Details
                             </a>
                         </li>
@@ -299,7 +282,7 @@
                 <div class="card-header">
                     <ul class="nav nav-tabs-custom card-header-tabs border-bottom-0" role="tablist">
                         <li class="nav-item">
-                            <a class="nav-link active" role="tab">
+                            <a class="nav-link" role="tab">
                                 Bank Details
                             </a>
                         </li>

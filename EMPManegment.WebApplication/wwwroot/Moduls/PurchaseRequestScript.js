@@ -166,6 +166,7 @@ function removeProduct(btn) {
     updateTotals();
     updateCartTotal();
     CountCartTotalItems();
+    showHidebtn();
 }
 function showHidebtn() {
     var totalAmount = $("#dsptotalAmount").text();
@@ -401,7 +402,7 @@ function CreatePurchaseRequest() {
             }
         });
     } else {
-        toastr.warning("Kindly fill all datafield");
+        toastr.warning("Kindly add the products");
     }
 }
 

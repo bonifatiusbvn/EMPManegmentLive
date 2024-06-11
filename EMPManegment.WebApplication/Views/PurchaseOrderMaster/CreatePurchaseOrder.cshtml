@@ -7,16 +7,7 @@
     Layout = "~/Views/Shared/_UserHomeLayout.cshtml";
 }
 
-<style>
-    #textVendorName-error, #textCompanyName-error, #textDeliveryStatus-error, #textShortDescription-error,
-    #txtpaymentmethod-error {
-        color: red;
-    }
 
-    .table-body {
-        height: 200px;
-    }
-</style>
 
 <div class="row" style="margin-top:80px;">
     <div class="col-12">
@@ -202,41 +193,39 @@
                                                 <div class="col-lg-6 col-sm-12">
                                                     <div class="row">
                                                         <div class="col-lg-12 col-sm-12">
-                                                            <div class="input-group mb-3">
+                                                            <div class="input-group">
                                                                 <label class="input-group-text" for="textDeliveryStatus">Delivery Status</label>
                                                                 <input type="text" class="form-control" id="textDeliveryStatus" name="textDeliveryStatus" placeholder="Enter Delivery Status">
                                                             </div>
-                                                            <span id="spnDeliverySchedule" class="text-danger"></span>
+                                                            <label id="textDeliveryStatus-error" class="error" for="textDeliveryStatus"></label>
+                                                        </div>
+                                                        <div class="col-lg-12 col-sm-12 mt-2">
+                                                            <div class="mb-2">
+                                                                <div class="input-group">
+                                                                    <label class="input-group-text" for="textDescription">Product Short Description</label>
+                                                                    <textarea type="text" id="textShortDescription" rows="3" class="form-control" placeholder="Enter Product Short Description" name="textDescription"></textarea>
+                                                                </div>
+                                                                <label id="textShortDescription-error" class="error" for="textShortDescription"></label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-12 col-sm-12 mt-2">
+                                                            <div class="mb-2">
+                                                                <div class="input-group">
+                                                                    <label for="txtpaymentmethod" class="input-group-text">Payment Method </label>
+                                                                    <select class="form-control form-select valid" id="txtpaymentmethod" name="txtpaymentmethod">
+                                                                        <option selected value="">--Select Payment Method--</option>
+                                                                    </select>
+                                                                </div>
+                                                                <label id="txtpaymentmethod-error" class="error" for="txtpaymentmethod"></label>
+                                                            </div>
                                                         </div>
                                                         <div class="col-lg-12 col-sm-12 mt-2">
                                                             <div class="mb-2">
                                                                 <div class="input-group mb-3">
-                                                                    <label class="input-group-text" for="textDescription">Product Short Description</label>
-                                                                    <textarea type="text" id="textShortDescription" rows="3" class="form-control" placeholder="Enter Product Short Description" name="textDescription"></textarea>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-lg-12 col-sm-12 mt-2">
-                                                            <div class="col-lg-12 col-sm-12 mt-2">
-                                                                <div class="mb-2">
-                                                                    <div class="input-group mb-3">
-                                                                        <label for="txtpaymentmethod" class="input-group-text">Payment Method </label>
-                                                                        <select class="form-control form-select valid" id="txtpaymentmethod" name="txtpaymentmethod">
-                                                                            <option selected value="">--Select Payment Method--</option>
-                                                                        </select>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-lg-12 col-sm-12 mt-2">
-                                                            <div class="col-lg-12 col-sm-12 mt-2">
-                                                                <div class="mb-2">
-                                                                    <div class="input-group mb-3">
-                                                                        <label for="txtpaymenttype" class="input-group-text">Payment Status</label>
-                                                                        <select class="form-control form-select valid" id="txtpaymenttype" name="txtpaymenttype">
-                                                                            <option selected value="">--Select Payment Status--</option>
-                                                                        </select>
-                                                                    </div>
+                                                                    <label for="txtpaymenttype" class="input-group-text">Payment Status</label>
+                                                                    <select class="form-control form-select valid" id="txtpaymenttype" name="txtpaymenttype">
+                                                                        <option selected value="">--Select Payment Status--</option>
+                                                                    </select>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -317,77 +306,77 @@
                                             <button type="button" class="btn btn-lg btn-success" id="SavePOButton" onclick="InsertMultiplePurchaseOrderDetails()" style="width: 160px;height: 50px;"><i class="ri-printer-line align-bottom me-1"></i>Create</button>
                                             @*                                            @if (Model.Id == Guid.Empty)
                                             {
-                                                            }
-                                                        }
-                                                    </tbody>
-                                                </table>
-                                                <div class="noresult" style="display: none">
-                                                    <div class="text-center">
-                                                        <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#25a0e2,secondary:#0ab39c" style="width:75px;height:75px">
-                                                        </lord-icon>
-                                                        <h5 class="mt-2">Sorry! No Result Found</h5>
-                                                        <p class="text-muted">
-                                                            We've searched more than 150+ Orders We did
-                                                            not find any
-                                                            orders for you search.
-                                                        </p>
-                                                    </div>
-                                                </div>
+                                            }
+                                            }
+                                            </tbody>
+                                            </table>
+                                            <div class="noresult" style="display: none">
+                                            <div class="text-center">
+                                            <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#25a0e2,secondary:#0ab39c" style="width:75px;height:75px">
+                                            </lord-icon>
+                                            <h5 class="mt-2">Sorry! No Result Found</h5>
+                                            <p class="text-muted">
+                                            We've searched more than 150+ Orders We did
+                                            not find any
+                                            orders for you search.
+                                            </p>
+                                            </div>
+                                            </div>
                                             </div>
                                             <div class="d-flex justify-content-end">
-                                                <div class="pagination-wrap hstack gap-2">
-                                                    <a class="page-item pagination-prev disabled" href="#">
-                                                        Previous
-                                                    </a>
-                                                    <ul class="pagination listjs-pagination mb-0"></ul>
-                                                    <a class="page-item pagination-next" href="#">
-                                                        Next
-                                                    </a>
-                                                </div>
+                                            <div class="pagination-wrap hstack gap-2">
+                                            <a class="page-item pagination-prev disabled" href="#">
+                                            Previous
+                                            </a>
+                                            <ul class="pagination listjs-pagination mb-0"></ul>
+                                            <a class="page-item pagination-next" href="#">
+                                            Next
+                                            </a>
                                             </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <div class="tab-content text-muted">
-                                    <div class="tab-pane" id="status-cancelled" role="tabpanel">
-                                        <div class="tab-pane" id="status-all" role="tabpanel">
+                                            </div>
+                                            </div>
+                                            </div>
+                                            </div>
+                                            </div>
+                                            </div>
+                                            <div class="row">
+                                            <div class="col-lg-12">
+                                            <div class="tab-content text-muted">
+                                            <div class="tab-pane" id="status-cancelled" role="tabpanel">
+                                            <div class="tab-pane" id="status-all" role="tabpanel">
                                             <div class="table-responsive table-card mb-1">
-                                                <table class="table table-bordered dt-responsive nowrap table-striped align-middle dataTable no-footer dtr-inline" id="orderTable">
-                                                    <thead class="text-muted table-light">
-                                                        <tr class="text-uppercase">
+                                            <table class="table table-bordered dt-responsive nowrap table-striped align-middle dataTable no-footer dtr-inline" id="orderTable">
+                                            <thead class="text-muted table-light">
+                                            <tr class="text-uppercase">
 
-                                                            <th>Order ID</th>
-                                                            <th>Company</th>
-                                                            <th>Product</th>
-                                                            <th>Order Date</th>
-                                                            <th>Amount</th>
-                                                            <th>Payment Method</th>
-                                                            <th>Delivery Status</th>
-                                                            <th>Action</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody class="list form-check-all">
-                                                        @foreach (var item in Model)
-                                                        {
-                                                            if (item.DeliveryStatus == "Cancelled")
-                                                            {
-                                                                <tr>
+                                            <th>Order ID</th>
+                                            <th>Company</th>
+                                            <th>Product</th>
+                                            <th>Order Date</th>
+                                            <th>Amount</th>
+                                            <th>Payment Method</th>
+                                            <th>Delivery Status</th>
+                                            <th>Action</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody class="list form-check-all">
+                                            @foreach (var item in Model)
+                                            {
+                                            if (item.DeliveryStatus == "Cancelled")
+                                            {
+                                            <tr>
 
-                                                                    <td class="id"><a href="/OrderMaster/GetPurchaseOrderDetailsByOrderId/?OrderId=@item.OrderId" class="fw-medium link-primary">@item.OrderId</a></td>
-                                                                    <td class="company_name">@item.CompanyName</td>
-                                                                    <td class="product_name">@item.ProductName</td>
-                                                                    <td class="date">@CommonHelper.GetCommonDateFormat(item.OrderDate)</td>
-                                                                    <td class="total_amount">@item.TotalAmount</td>
-                                                                    <td class="payment">@item.PaymentMethodName</td>
-                                                                    <td class="status" id="DeliveryStatus">
-                                                                        <span class="badge bg-warning-subtle text-warning text-uppercase">@item.DeliveryStatus</span>
-                                                                    </td>
-                                                                    <td>
-                                                                        <ul class="list-inline hstack gap-2 mb-0">
+                                            <td class="id"><a href="/OrderMaster/GetPurchaseOrderDetailsByOrderId/?OrderId=@item.OrderId" class="fw-medium link-primary">@item.OrderId</a></td>
+                                            <td class="company_name">@item.CompanyName</td>
+                                            <td class="product_name">@item.ProductName</td>
+                                            <td class="date">@CommonHelper.GetCommonDateFormat(item.OrderDate)</td>
+                                            <td class="total_amount">@item.TotalAmount</td>
+                                            <td class="payment">@item.PaymentMethodName</td>
+                                            <td class="status" id="DeliveryStatus">
+                                            <span class="badge bg-warning-subtle text-warning text-uppercase">@item.DeliveryStatus</span>
+                                            </td>
+                                            <td>
+                                            <ul class="list-inline hstack gap-2 mb-0">
 
                                             <button type="button" class="btn btn-lg btn-primary px-5" id="SavePOButton" onclick="InsertMultiplePurchaseOrderDetails()"><i class="ri-printer-line align-bottom me-1"></i> Add Purchase Order</button>
                                             }
