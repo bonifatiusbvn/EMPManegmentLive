@@ -459,23 +459,6 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
             }
             catch (Exception ex)
             {
-                throw ex;
-            }
-                    else
-                    {
-                        GetUserdata.IsDeleted = true;
-                        GetUserdata.UpdatedOn = DateTime.Now;
-                        GetUserdata.UpdatedBy = projectMember.UpdatedBy;
-                        Context.TblProjectMembers.Update(GetUserdata);
-                        Context.SaveChanges();
-                        response.Code = 200;
-                        response.Data = GetUserdata;
-                        response.Message = "Project member is active succesfully";
-                    }
-                }
-            }
-            catch (Exception ex) 
-            {
                 response.Code = 404;
                 response.Message = "Error in active-deactive the project member";
             }
