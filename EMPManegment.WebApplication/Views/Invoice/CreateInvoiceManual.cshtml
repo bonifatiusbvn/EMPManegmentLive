@@ -2,12 +2,11 @@
 @inject IHttpContextAccessor Accessor;
 @inject UserSession _userSession
 @model List<EMPManegment.EntityModels.ViewModels.Invoice.InvoiceViewModel>
+
 @{
-    ViewData["Title"] = "CreateInvoice";
-    Layout = "~/Views/Shared/_UserHomeLayout.cshtml";
+    ViewData["Title"] = "CreateInvoiceManual";
+    Layout = "~/Views/Shared/_HomeLayout.cshtml";
 }
-
-
 
 <div class="row" style="margin-top:80px;">
     <div class="col-12">
@@ -82,7 +81,7 @@
                                                             </div>
                                                             <div class="col-5 col-lg-5">
                                                                 <label for="textPoId " class="form-label">Invoice No</label>
-                                                                <input type="text" class="form-control" id="textInvoiceNo" value="@ViewBag.InvoiceNo" readonly />
+                                                                <input type="text" class="form-control" id="textInvoiceNo" />
                                                             </div>
                                                             <div class="col-3 col-lg-3 ">
                                                                 <label for="textInvoiceDate" class="form-label">Invoice Date</label>
@@ -123,12 +122,12 @@
                                         </div>
                                     </div>
                                     <div class="card-body pt-0">
-                                        <div class="table-responsive table-container">
+                                        <div class="table-responsive" style="height:350px">
                                             <table class="table align-middle mb-0">
                                                 <thead class="table-secondary">
                                                     <tr class="text-uppercase">
                                                         <th>#</th>
-                                                        <th>Products</th>
+                                                        <th>Product Details</th>
                                                         <th>HSN Code</th>
                                                         <th>Quantity</th>
                                                         <th>Qty Type</th>
@@ -139,7 +138,7 @@
                                                         <th>Action</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody id="addnewproductlink" class="table-body">
+                                                <tbody id="addnewproductlink">
                                                 </tbody>
                                             </table>
                                             <div class="noresult" style="display: none">

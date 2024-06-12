@@ -40,6 +40,9 @@ using EMPManegment.EntityModels.ViewModels.FormPermissionMaster;
 using Microsoft.AspNetCore.Authorization;
 using EMPManegment.Web.Helper;
 using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
+using EMPManegment.EntityModels.ViewModels.VendorModels;
+using EMPManegment.EntityModels.ViewModels.FormMaster;
+using iTextSharp.text.pdf;
 
 namespace EMPManegment.Web.Controllers
 {
@@ -979,6 +982,53 @@ namespace EMPManegment.Web.Controllers
             try
             {
                 ApiResponseModel postuser = await APIServices.PostAsync(roleDetails, "FormPermissionMaster/CreateUserRole");
+                if (postuser.code == 200)
+                {
+                    return Ok(new { postuser.message, postuser.code });
+                }
+                else
+                {
+                    return Ok(new { postuser.message, postuser.code });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [FormPermissionAttribute("FormCreation-View")]
+        [HttpGet]
+        public IActionResult FormCreation()
+        {
+            return View();
+        }
+
+        public async Task<JsonResult> GetFormNameList()
+        {
+            try
+            {
+                List<FormMasterModel> FormList = new List<FormMasterModel>();
+                ApiResponseModel res = await APIServices.GetAsync("", "FormPermissionMaster/FormList");
+                if (res.code == 200)
+                {
+                    FormList = JsonConvert.DeserializeObject<List<FormMasterModel>>(res.data.ToString());
+                }
+                return new JsonResult(FormList);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        [FormPermissionAttribute("FormCreation-Add")]
+        [HttpPost]
+        public async Task<IActionResult> CreateRolewisePermissionForm(int FormId)
+        {
+            try
+            {
+                var userId=@_userSession.UserId;
+                ApiResponseModel postuser = await APIServices.PostAsync("", "FormPermissionMaster/CreateRolewisePermissionForm?FormId="+ FormId+ "&userId=" + userId);
                 if (postuser.code == 200)
                 {
                     return Ok(new { postuser.message, postuser.code });

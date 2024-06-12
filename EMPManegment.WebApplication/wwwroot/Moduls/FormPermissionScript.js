@@ -1,6 +1,7 @@
 ﻿
 
 $(document).ready(function () {
+    GetFormList();
     $('#dropdownButton').click(function () {
         var dropdown = $('#customDropdown');
         if (dropdown.is(':visible')) {
@@ -139,8 +140,7 @@ function createRole() {
             }
         });
     }
-    else
-    {
+    else {
         toastr.warning("Kindly fill role");
     }
 }
@@ -173,5 +173,48 @@ function ResetUserRoleForm() {
     if (UserRoleForm) {
         UserRoleForm.resetForm();
     }
+}
+
+function GetFormList() {
+    $.ajax({
+        url: '/UserProfile/GetFormNameList',
+        success: function (result) {
+            $.each(result, function (i, data) {
+                $('#drpFormList').append('<Option value=' + data.formId + '>' + data.formName + '</Option>')
+            });
+        }
+    });
+}
+function SaveFormDetails() {
+    siteloadershow();
+    var formData = new FormData();
+    formData.append("FormId", $("#drpFormList").val());
+    $.ajax({
+        url: '/UserProfile/CreateRolewisePermissionForm',
+        type: 'Post',
+        data: formData,
+        dataType: 'json',
+        contentType: false,
+        processData: false,
+        success: function (Result) {
+            if (Result.code == 200) {
+                siteloaderhide();
+                Swal.fire({
+                    title: Result.message,
+                    icon: "success",
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'OK',
+                }).then(function () {
+                    window.location = '/UserProfile/FormCreation';
+                });
+            }
+            else {
+                siteloaderhide();
+                toastr.warning(Result.message);
+            }
+
+        }
+    });
+
 }
 

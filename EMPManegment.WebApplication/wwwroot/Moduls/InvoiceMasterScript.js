@@ -43,7 +43,6 @@ function GetInvoiceDetailsByOrderId(OrderId) {
         },
         error: function (xhr, status, error) {
             console.error('AJAX Error:', error);
-            // Handle error here, for example, show an alert
             alert('An error occurred while fetching data.');
         }
     });
@@ -63,7 +62,6 @@ function ShowInvoiceDetailsByOrderId(OrderId) {
         },
         error: function (xhr, status, error) {
             toastr.error('AJAX Error:', error);
-            // Handle error here, for example, show an alert
             toastr.error('An error occurred while fetching data.');
         }
     });
@@ -139,7 +137,7 @@ function InsertInvoiceDetails() {
                     }
                 },
                 error: function (xhr, status, error) {
-                    toastr.error("An error occurred while processing your request.");  
+                    toastr.error("An error occurred while processing your request.");
                 }
             });
         } else {
@@ -185,7 +183,7 @@ $(document).ready(function () {
 
     $("#addItemBtn").click(function () {
         var newItem = $(".invoice-item:first").clone().removeAttr("style");
-        newItem.find("input").val(""); // Clear input values for the new item
+        newItem.find("input").val("");
         $("#invoiceItems").append(newItem);
 
         itemCounter++;
@@ -297,7 +295,6 @@ function generatePdf(data) {
 
     var htmlContent = '<div class="col-lg-12"><div class="d-flex"><div class="flex-grow-1"><div class="mt-sm-5 mt-4"><h6 class="text-muted text-uppercase fw-semibold">Address</h6><p class="text-muted mb-1" id="address-details">California, United States</p></div></div><div class="flex-shrink-0 mt-sm-0 mt-3"><h6><span class="text-muted fw-normal">Legal Registration No:</span><span id="legal-register-no">987654</span></h6><h6><span class="text-muted fw-normal">Email:</span><span id="email">velzon@themesbrand.com</span></h6><h6 class="mb-0"><span class="text-muted fw-normal">Contact No: </span><span id="contact-no"> +(01) 234 6789</span></h6></div></div></div ></div >';
     htmlContent += '<div class="col-lg-12"><div class="row g-3"><div class="col-lg-3 col-6"><p class="text-muted mb-2 text-uppercase fw-semibold">Invoice No</p><h5 class="fs-14 mb-0">#VL<span id="invoice-no">' + data.invoiceNo + '</span></h5></div><div class="col-lg-3 col-6"><p class="text-muted mb-2 text-uppercase fw-semibold">Date</p><h5 class="fs-14 mb-0"><span id="invoice-date">23 Nov, 2021</span> <small class="text-muted" id="invoice-time">' + data.date + '</small></h5></div><div class="col-lg-3 col-6"><p class="text-muted mb-2 text-uppercase fw-semibold">Payment Status</p><span class="badge bg-success-subtle text-success fs-11" id="payment-status">' + data.paymentStatus + '</span></div><div class="col-lg-3 col-6"><p class="text-muted mb-2 text-uppercase fw-semibold">Total Amount</p><h5 class="fs-14 mb-0">$<span id="total-amount">' + data.totalAmount + '</span></h5></div></div></div >';
-    // Add the HTML content to the PDF with styles
     pdf.fromHTML(htmlContent, 15, 15, {
         'width': 170,
         'elementHandlers': {
@@ -447,8 +444,6 @@ $(document).ready(function () {
         $("#UpdateInvoiceDetailsForm").validate();
     });
 });
-
-
 
 var datas = userPermissions
 $(document).ready(function () {
