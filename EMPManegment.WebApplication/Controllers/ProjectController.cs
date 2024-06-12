@@ -579,5 +579,24 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
+
+        public async Task<JsonResult> GetUserProjectLists()
+        {
+            try
+            {
+                Guid UserId = _userSession.UserId;
+                List<ProjectView> projectlist = new List<ProjectView>();
+                ApiResponseModel response = await APIServices.PostAsync("", "ProjectDetails/GetUserProjectList?UserId=" + UserId);
+                if (response.code == 200)
+                {
+                    projectlist = JsonConvert.DeserializeObject<List<ProjectView>>(response.data.ToString());
+                }
+                return new JsonResult(projectlist);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

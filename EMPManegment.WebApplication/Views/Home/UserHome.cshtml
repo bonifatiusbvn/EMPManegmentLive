@@ -25,8 +25,8 @@
             <form id="frmdrpdashbord">
                 @if (_userSession.UserRoll == "Employee")
                 {
-                    <select class="form-select form-control-lg" id="drpProjectName" disabled>
-                        <option value="@UserSession.ProjectId">@UserSession.ProjectName</option>
+                    <select class="form-select form-control-lg" id="drpUserProjectList">
+                        <option selected value="">--Selected Project--</option>
                     </select>
                 }
                 else
@@ -181,7 +181,62 @@
 </div>
 @section Scripts {
     <script type="text/javascript">
-        ProjectListDrp();
+
+        var Role = "@_userSession.UserRoll";
+
+        if (Role == "Employee") {
+            UserProjectList();
+        }
+        else {
+            ProjectListDrp();
+        }
+
+        function UserProjectList() {
+            $.ajax({
+                url: '/Project/GetUserProjectLists',
+                success: function (result) {
+                    var $projectDropdown = $("#drpUserProjectList");
+                    $projectDropdown.empty();
+                    $projectDropdown.append('<option selected value="">--Selected Project--</option>');
+                    $.each(result, function (i, data) {
+                        $projectDropdown.append('<option value="' + data.projectId + '">' + data.projectTitle + ' (' + data.shortName + ')</option>');
+                    });
+
+                    var selectUserProjectId = sessionStorage.getItem('SelectedUserProjectId');
+
+                    if (selectUserProjectId) {
+                        $('#drpUserProjectList').val(selectUserProjectId);
+                    }
+                }
+            });
+        }
+
+        $('#drpUserProjectList').change(function () {
+            var UserProjectText = $(this).find('option:selected').text();
+            var selectedUserProjectId = $(this).val();
+            if (selectedUserProjectId == "") {
+                UserProjectText = " ";
+            }
+            $('#dashprojectName').html(UserProjectText);
+            fn_ChangeUserProject(selectedUserProjectId, UserProjectText)
+            sessionStorage.setItem('SelectedUserProjectId', selectedUserProjectId);
+        });
+
+        function fn_ChangeUserProject(selectedUserProjectId, UserProjectText) {
+            $.ajax({
+                url: '/Home/ProjectList',
+                type: 'GET',
+                data: {
+                    ProjectId: selectedUserProjectId,
+                    ProjectName: UserProjectText,
+                },
+                success: function (result) {
+
+                },
+            });
+
+        }
+
         function ProjectListDrp() {
             $.ajax({
                 url: '/Project/GetProjectsList',
@@ -206,7 +261,7 @@
             var ProjectText = $(this).find('option:selected').text();
             var selectedProjectId = $(this).val();
             if (selectedProjectId == "") {
-                ProjectText = " "; 
+                ProjectText = " ";
             }
             $('#dashprojectName').html(ProjectText);
             fn_ChangeProject(selectedProjectId, ProjectText)
@@ -214,7 +269,6 @@
         });
 
         function fn_ChangeProject(selectedProjectId, ProjectText) {
-            debugger
             $.ajax({
                 url: '/Home/ProjectList',
                 type: 'GET',

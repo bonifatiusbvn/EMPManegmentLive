@@ -560,6 +560,7 @@ function UserLogout() {
 
 function logout() {
     sessionStorage.removeItem('SelectedProjectId');
+    sessionStorage.removeItem('SelectedUserProjectId');
     fetch('/Authentication/Logout', {
         method: 'POST',
         headers: {
@@ -797,15 +798,16 @@ $('.dropdown-item').click(function () {
 });
 
 function GetUserSearchData() {
+
     DepartmentId = $("#ddlDepartment").val() === "" ? null : $("#ddlDepartment").val();
     Id = $("#ddlusername").val();
 
-    if (Id != null || DepartmentId != null) {
-        toastr.warning("No data found on select Username or Department");
+    if (Id != null || DepartmentId != null) { 
         $("#backBtn").show();
         GetActiveDeactiveList(1);
     }
     else {
+        toastr.warning("No data found on select Username or Department");
         $("#backBtn").hide();
     }
 }

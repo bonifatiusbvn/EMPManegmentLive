@@ -42,6 +42,7 @@ namespace EMPManegment.EntityModels.ViewModels.ProjectModels
         public bool? IsDeleted { get; set; }
 
         public int TotalTask { get; set; }
+        public string? ShortName { get; set; }
     }
     public class ProjectMemberUpdate
     {

@@ -129,6 +129,7 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
                                   a.EndDate,
                                   b.ProjectDescription,
                                   b.ProjectImage,
+                                  b.ShortName,
                               }).ToListAsync();
 
             if (data != null)
@@ -148,6 +149,8 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
                         StartDate = item.StartDate,
                         EndDate = item.EndDate,
                         ProjectDescription = item.ProjectDescription,
+                        ShortName = item.ShortName,
+                        
                     });
                 }
             }
