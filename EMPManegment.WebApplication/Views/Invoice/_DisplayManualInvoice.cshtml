@@ -1,0 +1,44 @@
+﻿@model List<EMPManegment.EntityModels.ViewModels.ProductMaster.ProductDetailsView>
+
+@foreach (var item in Model)
+{
+    <tr id="templateRow_@Convert.ToInt64(item.RowNumber + 1)" class="product" data-product-id="@item.Id">
+        <td scope="row" class="product-id">@Convert.ToInt64(item.RowNumber + 1)</td>
+        <td class="text-start">
+            <input id="textProductName" class="product-quantity form-control" />
+        </td>
+        <td class="text-start">
+            <input type="text" class="form-control bg-light border-0" id="txtHSNcode" />
+        </td>
+        <td class="text-start">
+            <div class="">
+                <input type="text" class="product-quantity form-control" id="txtproductquantity" value="1" oninput="preventEmptyValue(this)" style="width:80px;">
+            </div>
+        </td>
+        <td class="text-start">
+            <div class="">
+                <select class="form-control" id="txtPOProductType_@item.Id" style="width: 151px;">
+                    <option value=""></option>
+                </select>
+            </div>
+        </td>
+        <td class="text-start">
+            <input type="text" class="form-control" id="txtproductamount" oninput="preventEmptyValue(this)" />
+        </td>
+        <td class="text-start">
+            <input type="text" class="form-control" id="txtgst" max="99" maxlength="4" oninput="preventEmptyValue(this)" />
+        </td>
+        <td class="text-start">
+            <input type="number" class="form-control" id="txtgstAmount" readonly />
+        </td>
+        <td class="text-start">
+            <div>
+                <input type="text" class="form-control" id="txtproducttotalamount" readonly />
+            </div>
+        </td>
+        <td class="product-removal">
+            <a class="btn text-danger remove-btn" onclick="removeItem(this)"><i class="fas fa-trash"></i></a>
+        </td>
+    </tr>
+}
+
