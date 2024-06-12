@@ -431,17 +431,17 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
                 if (GetUserdata != null)
                 {
 
-                    if (GetUserdata.IsDeleted == true)
-                    {
-                        GetUserdata.IsDeleted = false;
-                        GetUserdata.UpdatedOn = DateTime.Now;
-                        GetUserdata.UpdatedBy = projectMember.UpdatedBy;
-                        Context.TblProjectMembers.Update(GetUserdata);
-                        Context.SaveChanges();
-                        response.Code = 200;
-                        response.Data = GetUserdata;
-                        response.Message = "Project member is deactive succesfully";
-                    }
+                if (GetUserdata.IsDeleted == true)
+                {
+                    GetUserdata.IsDeleted = false;
+                    GetUserdata.UpdatedOn = DateTime.Now;
+                    GetUserdata.UpdatedBy = projectMember.UpdatedBy;
+                    Context.TblProjectMembers.Update(GetUserdata);
+                    Context.SaveChanges();
+                    response.Code = 200;
+                    response.Data = GetUserdata;
+                    response.Message = "Project member is deactive succesfully";
+                }
 
                     else
                     {
@@ -459,7 +459,8 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
             }
             catch (Exception ex)
             {
-                throw ex;
+                response.Code = 404;
+                response.Message = "Error in active-deactive the project member";
             }
             return response;
         }
@@ -482,6 +483,24 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
                 response.Message = "There is some problem in your request!";
             }
             return response;
+        }
+
+        public async Task<IEnumerable<ProjectDetailView>> GetProjectsList()
+        { 
+            try
+            {
+                IEnumerable<ProjectDetailView> ProjectList = Context.TblProjectMasters.Select(a => new ProjectDetailView
+                {
+                    ProjectId = a.ProjectId,
+                    ProjectTitle = a.ProjectTitle,
+                    ShortName = a.ShortName,
+                }).ToList();
+                return ProjectList;
+            }
+            catch(Exception ex) 
+            {
+                throw ex;
+            }
         }
     }
 }

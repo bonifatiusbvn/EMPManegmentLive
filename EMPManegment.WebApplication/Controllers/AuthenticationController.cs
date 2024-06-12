@@ -46,6 +46,7 @@ namespace EMPManegment.Web.Controllers
                 ViewBag.checkRememberMe = true;
 
             }
+            
             return View();
         }
         public async Task<IActionResult> ForgetPassword()
@@ -134,7 +135,6 @@ namespace EMPManegment.Web.Controllers
                             Response.Cookies.Delete("UserName");
                             Response.Cookies.Delete("Password");
                         }
-
 
                         UserSession.ProfilePhoto = string.IsNullOrEmpty(userlogin.Data.ProfileImage) ? defaultProfileImage : userlogin.Data.ProfileImage;
                         UserSession.FormPermisionData = userlogin.Data.FromPermissionData;

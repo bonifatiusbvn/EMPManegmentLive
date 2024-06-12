@@ -67,7 +67,7 @@ namespace EMPManegment.Web.Controllers
                 }
                 else
                 {
-                    return new JsonResult(new { Message = "Failed to retrieve Purchase Order list" });
+                    return Ok(new { Message = "Failed to retrieve Purchase Order list" });
                 }
             }
             catch (Exception ex)
@@ -91,7 +91,7 @@ namespace EMPManegment.Web.Controllers
                 }
                 else
                 {
-                    return BadRequest(new { Message = postUser.message, Code = postUser.code });
+                    return Ok(new { Message = postUser.message, Code = postUser.code });
                 }
             }
             catch (Exception ex)
@@ -164,7 +164,7 @@ namespace EMPManegment.Web.Controllers
                 }
                 else
                 {
-                    return BadRequest(new { postuser.message, postuser.code });
+                    return Ok(new { postuser.message, postuser.code });
                 }
             }
             catch (Exception ex)
@@ -186,7 +186,7 @@ namespace EMPManegment.Web.Controllers
                 }
                 else
                 {
-                    return BadRequest(new { Message = string.Format(purchaseRequest.message), Code = purchaseRequest.code });
+                    return Ok(new { Message = string.Format(purchaseRequest.message), Code = purchaseRequest.code });
                 }
             }
             catch (Exception ex)
@@ -278,7 +278,7 @@ namespace EMPManegment.Web.Controllers
                 }
                 else
                 {
-                    return BadRequest(new { Message = response.message, Code = response.code });
+                    return Ok(new { Message = response.message, Code = response.code });
                 }
             }
             catch (Exception ex)
@@ -286,7 +286,5 @@ namespace EMPManegment.Web.Controllers
                 return StatusCode(500, new { Message = "An error occurred while processing your request.", Code = 500 });
             }
         }
-
-
     }
 }
