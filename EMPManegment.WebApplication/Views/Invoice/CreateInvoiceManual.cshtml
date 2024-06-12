@@ -39,23 +39,21 @@
                                                         <div class="row">
                                                             <div class="col-6 col-lg-6 ">
                                                                 <label for="textVendorName" class="form-label">Vendor Name</label>
-                                                                <select class="form-control form-select valid" id="textVendorName" name="textVendorName">
-                                                                    <option selected value="">--Select Vendor--</option>
-                                                                </select>
+                                                                <input class="form-control valid" id="textVendorName" name="textVendorName" />
                                                             </div>
                                                             <div class="col-6 col-lg-6 ">
                                                                 <label for="textVendorMobile" class="form-label ">Mobile No</label>
-                                                                <input type="text" id="textVendorMobile" class="form-control" placeholder="Mobile No" readonly />
+                                                                <input type="text" id="textVendorMobile" class="form-control" placeholder="Mobile No" />
                                                             </div>
                                                         </div>
                                                         <div class="row mt-3">
                                                             <div class="col-6 col-lg-6">
                                                                 <label for="textVendorAddress" class="form-label ">Address</label>
-                                                                <input type="text" id="textVendorAddress" class="form-control" placeholder="Address" readonly />
+                                                                <input type="text" id="textVendorAddress" class="form-control" placeholder="Address" />
                                                             </div>
                                                             <div class="col-6 col-lg-6">
                                                                 <label for="textVendorGSTNumber" class="form-label ">GST NO</label>
-                                                                <input type="text" id="textVendorGSTNumber" class="form-control" placeholder="GST No" readonly />
+                                                                <input type="text" id="textVendorGSTNumber" class="form-control" placeholder="GST No" />
                                                             </div>
                                                             <input type="text" id="textProjectId" class="form-control" hidden value="@UserSession.ProjectId" />
                                                             <input type="text" id="textCreatedById" class="form-control" hidden value="@_userSession.UserId" />
@@ -74,9 +72,7 @@
                                                                     <label for="textCompanyName" class="form-label">Company Name</label>
                                                                 </div>
                                                                 <div class="ms-auto">
-                                                                    <select class="form-control form-select valid" id="textCompanyName" name="textCompanyName">
-                                                                        <option selected value="">--Select Company--</option>
-                                                                    </select>
+                                                                    <input class="form-control valid" id="textCompanyName" name="textCompanyName" />
                                                                 </div>
                                                             </div>
                                                             <div class="col-5 col-lg-5">
@@ -91,11 +87,11 @@
                                                         <div class="row mt-3">
                                                             <div class="col-6 col-lg-6">
                                                                 <label for="textCompanyBillingAddress" class="form-label ">Billing Address</label>
-                                                                <input type="text" id="textCompanyBillingAddress" name="textCompanyBillingAddress" class="form-control" placeholder="Billing Address" readonly />
+                                                                <input type="text" id="textCompanyBillingAddress" name="textCompanyBillingAddress" class="form-control" placeholder="Billing Address" />
                                                             </div>
                                                             <div class="col-6 col-lg-6">
                                                                 <label class="form-label ">GST NO</label>
-                                                                <input type="text" id="textCompanyGstNo" class="form-control" placeholder="GST No" readonly />
+                                                                <input type="text" id="textCompanyGstNo" class="form-control" placeholder="GST No" />
                                                             </div>
                                                         </div>
                                                     </div>
