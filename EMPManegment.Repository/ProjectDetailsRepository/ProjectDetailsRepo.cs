@@ -290,7 +290,7 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
                     Date = DateTime.Today,
                     DocumentName = AddDocument.DocumentName,
                     CreatdBy = AddDocument.CreatdBy,
-                    CreadetOn=DateTime.Now,
+                    CreadetOn = DateTime.Now,
                 };
                 response.Code = 200;
                 response.Message = "Document uploaded successfully!";
@@ -454,9 +454,8 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
                         response.Data = GetUserdata;
                         response.Message = "Project member is active succesfully";
                     }
-
-                    
                 }
+
             }
             catch (Exception ex)
             {
@@ -465,15 +464,16 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
             return response;
         }
 
+
         public async Task<UserResponceModel> DeleteProjectDocument(Guid DocumentId)
         {
             UserResponceModel response = new UserResponceModel();
             var GetDocumentdata = Context.TblProjectDocuments.Where(a => a.Id == DocumentId).FirstOrDefault();
-            if(GetDocumentdata != null)
+            if (GetDocumentdata != null)
             {
                 Context.TblProjectDocuments.Remove(GetDocumentdata);
                 Context.SaveChanges();
-                response.Code=200;
+                response.Code = 200;
                 response.Message = "Project document deleted successfully.";
             }
             else

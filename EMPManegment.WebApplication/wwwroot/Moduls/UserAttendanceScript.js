@@ -599,7 +599,7 @@ function ExportToExcel() {
         },
         error: function (xhr, status, error) {
             siteloaderhide();
-            toastr.warning("No data for selected month & date");
+            toastr.warning("No data for selected month or date");
         },
         xhrFields: {
             responseType: 'blob'
@@ -649,7 +649,7 @@ function ExportToPDF() {
         },
         error: function (xhr, status, error) {
             siteloaderhide();
-            toastr.warning("No data for selected month & date");
+            toastr.warning("No data for selected month or date");
         },
         xhrFields: {
             responseType: 'blob'

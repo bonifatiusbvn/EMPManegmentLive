@@ -801,12 +801,12 @@ function GetUserSearchData() {
     Id = $("#ddlusername").val();
 
     if (Id != null || DepartmentId != null) {
+        toastr.warning("No data found on select Username or Department");
         $("#backBtn").show();
         GetActiveDeactiveList(1);
     }
     else {
         $("#backBtn").hide();
-        toastr.warning("Select Username or Department");
     }
 }
 

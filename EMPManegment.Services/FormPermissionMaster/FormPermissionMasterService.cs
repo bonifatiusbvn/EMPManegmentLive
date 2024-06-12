@@ -1,4 +1,5 @@
 ﻿using EMPManagment.Web.Models.API;
+using EMPManegment.EntityModels.ViewModels.FormMaster;
 using EMPManegment.EntityModels.ViewModels.FormPermissionMaster;
 using EMPManegment.EntityModels.ViewModels.UserModels;
 using EMPManegment.Inretface.Interface.FormPermissionMaster;
@@ -32,6 +33,16 @@ namespace EMPManegment.Services.FormPermissionMaster
         public async Task<ApiResponseModel> CreateUserRole(UserRoleModel roleDetails)
         {
             return await FormPermissionMaster.CreateUserRole(roleDetails);
+        }
+
+        public async Task<IEnumerable<FormMasterModel>> FormList()
+        {
+            return await FormPermissionMaster.FormList();
+        }
+
+        public async Task<ApiResponseModel> CreateRolewisePermissionForm(int FormId, Guid userId)
+        {
+            return await FormPermissionMaster.CreateRolewisePermissionForm(FormId,userId);
         }
     }
 }

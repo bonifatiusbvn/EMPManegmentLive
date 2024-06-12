@@ -1,13 +1,18 @@
 ﻿using EMPManagment.API;
 using EMPManagment.Web.Models.API;
+using EMPManegment.EntityModels.ViewModels.FormMaster;
 using EMPManegment.EntityModels.ViewModels.FormPermissionMaster;
 using EMPManegment.EntityModels.ViewModels.Models;
+using EMPManegment.EntityModels.ViewModels.ProductMaster;
 using EMPManegment.EntityModels.ViewModels.UserModels;
 using EMPManegment.Inretface.Interface.FormPermissionMaster;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.SqlServer.Server;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -168,5 +173,75 @@ namespace EMPManegment.Repository.FormPermissionMasterRepository
             }
             return response;
         }
+
+        public async Task<IEnumerable<FormMasterModel>> FormList()
+        {
+            try
+            {
+                IEnumerable<FormMasterModel> Form = Context.TblForms.ToList().Select(a => new FormMasterModel
+                {
+                    FormId = a.FormId,
+                    FormName = a.FormName,
+                });
+                return Form;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<ApiResponseModel> CreateRolewisePermissionForm(int FormId, Guid userId)
+        {
+            ApiResponseModel response = new ApiResponseModel();
+            try
+            {
+                var Roles = await Context.TblRoleMasters.ToListAsync();
+                var formDetails = new List<TblRolewiseFormPermission>();
+
+                foreach (var Role in Roles)
+                {
+                    var isFormAlreadyExist = await Context.TblRolewiseFormPermissions
+                        .AnyAsync(e => e.FormId == FormId && e.RoleId == Role.RoleId);
+
+                    if (!isFormAlreadyExist)
+                    {
+                        var Form = new TblRolewiseFormPermission()
+                        {
+                            RoleId = Role.RoleId,
+                            FormId = FormId,
+                            IsAddAllow = true,
+                            IsViewAllow = true,
+                            IsEditAllow = true,
+                            IsDeleteAllow = true,
+                            CreatedOn = DateTime.Now,
+                            CreatedBy = userId,
+                        };
+                        formDetails.Add(Form);
+                    }
+                }
+
+                if (formDetails.Any())
+                {
+                    await Context.TblRolewiseFormPermissions.AddRangeAsync(formDetails);
+                    await Context.SaveChangesAsync();
+                    response.code = 200;
+                    response.message = "Forms added successfully!";
+                }
+                else
+                {
+                    response.code = 400;
+                    response.message = "Forms already exist!";
+                }
+            }
+            catch (Exception ex)
+            {
+                response.code = 500;
+                response.message = $"Error in inserting form: {ex.Message}";
+            }
+
+            return response;
+        }
+
     }
 }
