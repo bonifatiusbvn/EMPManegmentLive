@@ -51,8 +51,6 @@
 <body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed accent-info">
     <div class="wrapper">
 
-
-
         <!-- Navbar -->
         <nav class="main-header navbar navbar-expand navbar-white navbar-light" style="height:60px;">
             <!-- Left navbar links -->
@@ -60,8 +58,10 @@
                 <li class="nav-item">
                     <a class="btn btn-sm px-3 fs-16 header-item vertical-menu-btn topnav-hamburger" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
                 </li>
-
             </ul>
+            <h5 id="dashprojectName" class="text-info" style="margin-top: 9px;margin-left: 10px;">
+                @UserSession.ProjectName
+            </h5>
             @{
                 var profilePhoto = UserSession.ProfilePhoto;
                 var fullName = _userSession.FullName;

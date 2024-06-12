@@ -125,7 +125,7 @@ namespace EMPManegment.Web.Controllers
                 }
                 else
                 {
-                    return BadRequest(new { Message = string.Format(postuser.message), Code = postuser.code });
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
                 }
             }
             catch (Exception ex)
@@ -249,7 +249,7 @@ namespace EMPManegment.Web.Controllers
                 }
                 else
                 {
-                    return BadRequest(new { Message = string.Format(postuser.message), Code = postuser.code });
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
                 }
             }
             catch (Exception ex)

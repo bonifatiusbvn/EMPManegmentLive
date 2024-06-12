@@ -559,7 +559,7 @@ function UserLogout() {
 }
 
 function logout() {
-
+    sessionStorage.removeItem('SelectedProjectId');
     fetch('/Authentication/Logout', {
         method: 'POST',
         headers: {

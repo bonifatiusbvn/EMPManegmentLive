@@ -17,6 +17,8 @@ using X.PagedList.Mvc;
 using EMPManegment.EntityModels.ViewModels.Invoice;
 using System.Linq;
 using EMPManegment.Web.Helper;
+using System.Collections.Generic;
+using Aspose.Foundation.UriResolver.RequestResponses;
 
 namespace EMPManegment.Web.Controllers
 {
@@ -106,9 +108,6 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
-
-
-
 
         public async Task<IActionResult> GetTaskTotal()
         {
@@ -242,9 +241,8 @@ namespace EMPManegment.Web.Controllers
                 if (response.code == 200)
                 {
                     projectDetails = JsonConvert.DeserializeObject<ProjectDetailView>(response.data.ToString());
-                    UserSession.ProjectId = projectDetails.ProjectId.ToString();
-                    UserSession.ProjectName = projectDetails.ShortName.ToString();
-
+                    //UserSession.ProjectId = projectDetails.ProjectId.ToString();
+                    //UserSession.ProjectName = projectDetails.ProjectTitle.ToString();
                 }
                 return View(projectDetails);
             }
@@ -554,8 +552,27 @@ namespace EMPManegment.Web.Controllers
                 }
                 else
                 {
-                    return new JsonResult(new { Message = string.Format(postuser.message), Code = postuser.code });
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
                 }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<JsonResult> GetProjectsList()
+        {
+            try
+            {
+                List<ProjectDetailView> projectList = new List<ProjectDetailView>();
+                ApiResponseModel postuser = await APIServices.GetAsync(null, "ProjectDetails/GetProjectsList");
+                if(postuser.code == 200)
+                {
+                    projectList = JsonConvert.DeserializeObject<List<ProjectDetailView>>(postuser.data.ToString());
+                }
+                return new JsonResult(projectList);
+
             }
             catch (Exception ex)
             {

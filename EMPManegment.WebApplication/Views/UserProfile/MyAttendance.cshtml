@@ -125,6 +125,8 @@
     document.getElementById("txtmonth").setAttribute("max", maxMonth);
     document.getElementById("txtstartdate").setAttribute("max", maxDate);
     document.getElementById("txtenddate").setAttribute("max", maxDate);
+
+    var userPermissions = '@Html.Raw(Json.Serialize(UserSession.FormPermisionData))';
 </script>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/moduls/userattendancescript.js" asp-append-version="true"></script>

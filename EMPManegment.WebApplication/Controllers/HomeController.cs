@@ -20,6 +20,7 @@ using EMPManegment.Web.Models;
 using DocumentFormat.OpenXml.Spreadsheet;
 using EMPManegment.EntityModels.ViewModels.ProjectModels;
 using X.PagedList;
+using Microsoft.CodeAnalysis;
 
 namespace EMPManegment.Web.Controllers
 {
@@ -110,11 +111,11 @@ namespace EMPManegment.Web.Controllers
                 {
                     var data = JsonConvert.SerializeObject(postuser.data);
                     responseModel.Data = JsonConvert.DeserializeObject<UserAttendanceModel>(data);
-                    return Ok(new { responseModel.Data,postuser.code });
+                    return Ok(new { responseModel.Data, postuser.code });
                 }
                 else
                 {
-                    return Ok(new { postuser.code ,postuser.message});
+                    return Ok(new { postuser.code, postuser.message });
                 }
             }
             catch (Exception ex)
@@ -147,11 +148,13 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
+
         [HttpGet]
         public async Task<JsonResult> GetUserTotalTask()
         {
             try
             {
+
                 var UserId = _userSession.UserId;
                 List<TaskDetailsView> TaskList = new List<TaskDetailsView>();
                 ApiResponseModel postuser = await APIServices.GetAsync("", "UserHome/GetUserTotalTask?UserId=" + UserId);
@@ -201,6 +204,13 @@ namespace EMPManegment.Web.Controllers
         public IActionResult UnAuthorised()
         {
             return View();
+        }
+
+        public async Task<JsonResult> ProjectList(Guid? ProjectId, string? ProjectName)
+        {
+            UserSession.ProjectId = ProjectId.ToString();
+            UserSession.ProjectName = ProjectId == null ? " " :  ProjectName.ToString();
+            return new JsonResult("Project Name updated succesfully!");
         }
     }
 }

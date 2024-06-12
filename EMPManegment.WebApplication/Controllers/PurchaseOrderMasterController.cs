@@ -143,7 +143,7 @@ namespace EMPManegment.Web.Controllers
                 }
                 else
                 {
-                    return BadRequest(new { postuser.message, postuser.code });
+                    return Ok(new { postuser.message, postuser.code });
                 }
             }
             catch (Exception ex)
@@ -209,7 +209,7 @@ namespace EMPManegment.Web.Controllers
                 }
                 else
                 {
-                    return BadRequest(new { postuser.message, postuser.code });
+                    return Ok(new { postuser.message, postuser.code });
                 }
             }
             catch (Exception ex)
@@ -231,7 +231,7 @@ namespace EMPManegment.Web.Controllers
                 }
                 else
                 {
-                    return BadRequest(new { Message = string.Format(postuser.message), Code = postuser.code });
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
                 }
             }
             catch (Exception ex)
@@ -253,7 +253,7 @@ namespace EMPManegment.Web.Controllers
                 }
                 else
                 {
-                    return new JsonResult(new { Message = "Failed to retrieve Product list" });
+                    return Ok(new { Message = "Failed to retrieve Product list" });
                 }
             }
             catch (Exception ex)

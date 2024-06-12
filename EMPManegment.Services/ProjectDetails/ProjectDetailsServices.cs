@@ -76,5 +76,9 @@ namespace EMPManegment.Services.ProjectDetails
         {
             return await ProjectDetails.DeleteProjectDocument(DocumentId);
         }
+        public async Task<IEnumerable<ProjectDetailView>> GetProjectsList()
+        {
+            return await ProjectDetails.GetProjectsList();
+        }
     }
 }
