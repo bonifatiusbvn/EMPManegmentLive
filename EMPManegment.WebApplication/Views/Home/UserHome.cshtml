@@ -20,22 +20,24 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-12 col-lg-4 col-xl-4 d-flex">
-        <div class="card radius-10 w-100">
-            <form id="frmdrpdashbord">
-                @if (_userSession.UserRoll == "Employee")
-                {
-                    <select class="form-select form-control-lg" id="drpUserProjectList">
-                        <option selected value="">--Selected Project--</option>
-                    </select>
-                }
-                else
-                {
-                    <select class="form-select form-control-lg" id="drpProjectName">
-                        <option selected value="">--All Project--</option>
-                    </select>
-                }
-            </form>
+    <div class="col-12">
+        <div class="card bg-light">
+            <div style="margin-left:25px;">
+                <form id="frmdrpdashbord">
+                    @if (_userSession.UserRoll == "Employee")
+                    {
+                        <select class="form-select form-control-lg border-0" id="drpUserProjectList" style="width:450px">
+                            <option selected value="">--Selected Project--</option>
+                        </select>
+                    }
+                    else
+                    {
+                        <select class="form-select form-control-lg" id="drpProjectName">
+                            <option selected value="">--All Project--</option>
+                        </select>
+                    }
+                </form>
+            </div>
         </div>
     </div>
 </div>
