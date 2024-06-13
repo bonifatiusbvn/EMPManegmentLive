@@ -17,8 +17,6 @@ namespace EMPManegment.EntityModels.ViewModels.ManualInvoice
 
         public Guid? ProjectId { get; set; }
 
-        public string OrderId { get; set; } = null!;
-
         public DateTime InvoiceDate { get; set; }
 
         public string? BuyesOrderNo { get; set; }

@@ -638,35 +638,6 @@ namespace EMPManegment.Web.Controllers
             {
                 throw ex;
             }
-        }
-
-        public IActionResult CreateInvoiceManual()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> InsertManualInvoice()
-        {
-            try
-            {
-                var InvoiceDetails = HttpContext.Request.Form["ManualInvoiceDetails"];
-                var InsertDetails = JsonConvert.DeserializeObject<ManualInvoiceMasterModel>(InvoiceDetails);
-
-                ApiResponseModel postuser = await APIServices.PostAsync(InsertDetails, "ManualInvoice/InsertManualInvoice");
-                if (postuser.code == 200)
-                {
-                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
-                }
-                else
-                {
-                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
-                }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
+        }      
     }
 }

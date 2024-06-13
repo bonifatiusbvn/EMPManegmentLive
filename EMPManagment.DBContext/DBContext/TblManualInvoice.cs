@@ -13,8 +13,6 @@ public partial class TblManualInvoice
 
     public Guid? ProjectId { get; set; }
 
-    public string OrderId { get; set; } = null!;
-
     public DateTime InvoiceDate { get; set; }
 
     public string? BuyesOrderNo { get; set; }

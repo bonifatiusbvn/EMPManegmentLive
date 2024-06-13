@@ -381,22 +381,22 @@ $(document).ready(function () {
 });
 function InsertManualInvoiceDetails()
 {
+    debugger
     if ($("#CreateManualInvoiceForm").valid()) {
         if ($('#addnewproductlink tr').length >= 1) {
 
             var ProductDetails = [];
-            $(".product-id").each(function () {
+            $(".product").each(function () {
                 var orderRow = $(this);
-                var productName = orderRow.find("#textProductName").text().trim();
                 var objData = {
-                    Product: productName,
+                    Product: orderRow.find("#textProductName").val(),
                     Quantity: orderRow.find("#txtproductquantity").val(),
                     Price: orderRow.find("#txtproductamount").val(),
-                    GSTamount: orderRow.find("#txtgstAmount").val(),
                     Gst: orderRow.find("#txtgst").val(),
                     Discount: orderRow.find("#txtdiscountamount").val(),
                     ProductTotal: orderRow.find("#txtproducttotalamount").val(),
                 };
+                debugger
                 ProductDetails.push(objData);
             });
             var Invoicedetails = {
@@ -419,13 +419,13 @@ function InsertManualInvoiceDetails()
                 PaymentStatus: $("#txtpaymenttype").val(),
                 CreatedBy: $("#textCreatedById").val(),
                 ShippingAddress: $('#hideShippingAddress').is(':checked') ? $('#textCompanyBillingAddress').val() : $('#textShippingAddress').val(),
-                InvoiceDetails: ProductDetails,
+                ManualInvoiceDetails: ProductDetails,
             }
             var form_data = new FormData();
             form_data.append("ManualInvoiceDetails", JSON.stringify(Invoicedetails));
 
             $.ajax({
-                url: '/Invoice/InsertManualInvoice',
+                url: '/ManualInvoice/InsertManualInvoice',
                 type: 'POST',
                 data: form_data,
                 dataType: 'json',

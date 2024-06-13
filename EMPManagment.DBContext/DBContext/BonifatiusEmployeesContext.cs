@@ -91,8 +91,7 @@ public partial class BonifatiusEmployeesContext : DbContext
 
     public virtual DbSet<TblVendorType> TblVendorTypes { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    { }
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<TblAttendance>(entity =>
@@ -339,7 +338,6 @@ public partial class BonifatiusEmployeesContext : DbContext
                 .HasColumnName("IGST");
             entity.Property(e => e.InvoiceDate).HasColumnType("date");
             entity.Property(e => e.InvoiceNo).HasMaxLength(100);
-            entity.Property(e => e.OrderId).HasMaxLength(50);
             entity.Property(e => e.Sgst)
                 .HasColumnType("numeric(18, 2)")
                 .HasColumnName("SGST");
@@ -354,10 +352,9 @@ public partial class BonifatiusEmployeesContext : DbContext
 
         modelBuilder.Entity<TblManualInvoiceDetail>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("tblManualInvoiceDetails");
+            entity.ToTable("tblManualInvoiceDetails");
 
+            entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
             entity.Property(e => e.Discount).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.Gst).HasColumnType("numeric(18, 2)");

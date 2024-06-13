@@ -31,7 +31,6 @@ namespace EMPManegment.Repository.ManualInvoiceRepository
                     InvoiceNo = InvoiceDetails.InvoiceNo,
                     VandorName = InvoiceDetails.VandorName,
                     ProjectId = InvoiceDetails.ProjectId,
-                    OrderId = InvoiceDetails.OrderId,
                     InvoiceDate = InvoiceDetails.InvoiceDate,
                     BuyesOrderNo = InvoiceDetails.BuyesOrderNo,
                     BuyesOrderDate = InvoiceDetails.BuyesOrderDate,
