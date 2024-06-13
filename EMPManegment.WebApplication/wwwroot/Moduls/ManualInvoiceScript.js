@@ -32,7 +32,6 @@
                 <td class="text-start">
                     <div class="">
                    <select class="form-control" id="txtPOProductType_${rowCount}" style="width: 151px;">
-                        <option value=""></option>
                     </select>
                     </div>
                 </td>
@@ -339,6 +338,7 @@ function GetPaymentMethodList() {
 }
 
 function ProductTypeDropdown(rowId) {
+    $('#txtPOProductType_' + rowId).append('<option value="" selected>--Select Type--</option>');
     $.ajax({
         url: '/ProductMaster/GetProduct',
         success: function (result) {
