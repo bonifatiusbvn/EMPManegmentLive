@@ -46,7 +46,7 @@ function GetAllVendorData() {
                             ' rounded-circle" style="height: 40px; width: 40px; border-radius: 50%;">' +
                             initials.toUpperCase() + '</div></div>';
                     }
-                    return '<a href="#" onclick="GetVendorDetails(\'' + full.vid + '\')" class="link-primary" style="display: flex; align-items: center;">' + profileImageHtml + '<span style="margin-left: 5px;">' + full.vendorCompany + '</span></a>';
+                    return '<a href="#" onclick="GetCreditDebitTotalAmount(\'' + full.vid + '\')" class="link-primary" style="display: flex; align-items: center;">' + profileImageHtml + '<span style="margin-left: 5px;">' + full.vendorCompany + '</span></a>';
                 }
             },
             {
@@ -145,14 +145,14 @@ function InsertCreditDebitDetails() {
     }
 }
 
-function GetVendorDetails(Vid) {
-    GetCreditDebitTotalAmount(Vid);
-    window.location = '/Invoice/PayVendors?Vid=' + Vid;
-}
-$(document).ready(function () {
-    var Vid = $("#textvendorId").val();
-    GetCreditDebitTotalAmount(Vid);
-})
+//function GetVendorDetails(Vid) {
+//    GetCreditDebitTotalAmount(Vid);
+//    window.location = '/Invoice/PayVendors?Vid=' + Vid;
+//}
+//$(document).ready(function () {
+//    var Vid = $("#textvendorId").val();
+///*    GetCreditDebitTotalAmount(Vid);*/
+//})
 function GetCreditDebitTotalAmount(Vid) {
 
     $.ajax({
@@ -160,38 +160,45 @@ function GetCreditDebitTotalAmount(Vid) {
         type: 'POST',
         dataType: 'json',
         success: function (result) {
+            if (result.length == 0) {
+                toastr.warning('There is no data for selected vendor.')
+                return
+            }
+            else {
+                window.location = '/Invoice/PayVendors?Vid=' + Vid;
+                var total = 0;
+                result.forEach(function (obj) {
+                    if (obj.creditDebitAmount) {
+                        total += obj.creditDebitAmount;
+                    }
+                });
 
-            var total = 0;
-            result.forEach(function (obj) {
-                if (obj.creditDebitAmount) {
-                    total += obj.creditDebitAmount;
-                }
-            });
+                $("#txttotalcreditamount").text('₹' + total);
+                var totalAmount = parseFloat($('#txttotalamount').val());
+                var totalpendingAmount = totalAmount - total;
 
-            $("#txttotalcreditamount").text('₹' + total);
-            var totalAmount = parseFloat($('#txttotalamount').val());
-            var totalpendingAmount = totalAmount - total;
+                $("#txttotalpendingamount").text('₹' + totalpendingAmount);
+                $("#pendingamount").text('₹' + totalpendingAmount);
 
-            $("#txttotalpendingamount").text('₹' + totalpendingAmount);
-            $("#pendingamount").text('₹' + totalpendingAmount);
+                $('#txtcreditdebitamount').off('input').on('input', function () {
+                    var enteredAmount = parseFloat($(this).val());
 
-            $('#txtcreditdebitamount').off('input').on('input', function () {
-                var enteredAmount = parseFloat($(this).val());
+                    if (!isNaN(enteredAmount)) {
+                        var pendingAmount = totalpendingAmount - enteredAmount;
 
-                if (!isNaN(enteredAmount)) {
-                    var pendingAmount = totalpendingAmount - enteredAmount;
-
-                    if (enteredAmount > totalpendingAmount) {
-                        $('#warningMessage').text('Entered amount cannot exceed pending amount.');
+                        if (enteredAmount > totalpendingAmount) {
+                            $('#warningMessage').text('Entered amount cannot exceed pending amount.');
+                        } else {
+                            $('#warningMessage').text('');
+                            $('#txtpendingamount').val(pendingAmount.toFixed(2));
+                        }
                     } else {
                         $('#warningMessage').text('');
-                        $('#txtpendingamount').val(pendingAmount.toFixed(2));
+                        $('#txtpendingamount').val('');
                     }
-                } else {
-                    $('#warningMessage').text('');
-                    $('#txtpendingamount').val('');
-                }
-            });
+                });
+            }
+            
         },
         error: function (xhr, status, error) {
             toastr.error("Error in AJAX request:", status, error);
