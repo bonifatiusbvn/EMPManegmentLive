@@ -7,18 +7,6 @@ $(document).ready(function () {
     clearSelectedBox();
     GetUserRoleList();
 });
-$(document).ready(function () {
-    $("#SearchEmpForm").validate({
-        rules: {
-            ddlusername: "required",
-            ddlDepartment: "required"
-        },
-        messages: {
-            ddlusername: "Please Select UserName",
-            ddlDepartment: "Please Select Department"
-        }
-    })
-});
 
 $(document).ready(function () {
     $("#frmuserDetails").validate({
@@ -766,7 +754,7 @@ function clearsearchtextbox() {
 
 $('.dropdown-item').click(function () {
     var selectedValue = $(this).attr('data-value');
-    $('#SelectDropdown').val(selectedValue);
+    $('.dropdown-toggle').data('value', selectedValue);
 
     if (selectedValue === "UserName") {
         clearsearchtextbox();
@@ -798,17 +786,27 @@ $('.dropdown-item').click(function () {
 });
 
 function GetUserSearchData() {
+    var selectedValue = $('.dropdown-toggle').data('value');
+    var isValid = true;
+    var errorMessage = "Kindly fill all required fields";
+    if (typeof selectedValue === "undefined") {
+        isValid = false;
+        errorMessage = "Please select a search criteria";
+    } else if (selectedValue === "UserName" && $("#ddlusername").val() === null) {
+        isValid = false;
+        errorMessage = "Please select a Username";
+    } else if (selectedValue === "Department" && $("#ddlDepartment").val() === null) {
+        isValid = false;
+        errorMessage = "Please select a Department";
+    } 
+    if (isValid) {
 
-    DepartmentId = $("#ddlDepartment").val() === "" ? null : $("#ddlDepartment").val();
-    Id = $("#ddlusername").val();
-
-    if (Id != null || DepartmentId != null) { 
-        $("#backBtn").show();
-        GetActiveDeactiveList(1);
+            $("#backBtn").show();
+            GetActiveDeactiveList(1);
     }
     else {
-        toastr.warning("No data found on select Username or Department");
         $("#backBtn").hide();
+        toastr.warning(errorMessage);
     }
 }
 

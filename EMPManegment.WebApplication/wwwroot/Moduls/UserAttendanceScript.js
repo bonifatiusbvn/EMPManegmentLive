@@ -33,23 +33,11 @@ function CleartextBox() {
 }
 $(document).ready(function () {
     GetAttendance();
-    $("#attendanceform").validate({
-        rules: {
-            ddlusername: "required",
-            txtdate: "required"
-        },
-        messages: {
-            ddlusername: "Please Enter UserName",
-            txtdate: "Please Enter Date"
-        }
-    })
-    $('#searchattendanceform').on('click', function () {
-        $("#attendanceform").validate();
-    });
 });
 
 $('.dropdown-item').click(function () {
     var selectedValue = $(this).attr('data-value');
+    $('.dropdown-toggle').data('value', selectedValue);
     cleartextBox();
     if (selectedValue === "ByUsername") {
         GetUsernameList()
@@ -396,13 +384,35 @@ function formatDate(date) {
 }
 
 function GetSearchAttendanceList() {
+ 
+    var selectedValue = $('.dropdown-toggle').data('value');
+    var isValid = true;
+    var errorMessage = "Kindly fill all required fields";
 
-    if ($('#attendanceform').valid()) {
+    if (typeof selectedValue === "undefined") {
+        isValid = false;
+        errorMessage = "Please select a search criteria";
+    } else if (selectedValue === "ByUsername" && $("#drpAttusername").val() === "") {
+        isValid = false;
+        errorMessage = "Please select a Username";
+    } else if (selectedValue === "ByDate" && $("#txtdate").val() === "") {
+        isValid = false;
+        errorMessage = "Please select a Date";
+    } else if (selectedValue === "ByDate&ByUsername" && ($("#drpAttusername").val() === "" || $("#txtdate").val() === "")) {
+        isValid = false;
+        errorMessage = "Please select both Username and Date";
+    } else if (selectedValue === "ByBetweenDates&ByUsername" && ($("#drpAttusername").val() === "" || $("#txtstartdatebox").val() === "" || $("#txtenddatebox").val() === "")) {
+        isValid = false;
+        errorMessage = "Please select Username, Start Date, and End Date";
+    }
+
+    if (isValid) {
         var form_data = new FormData();
         form_data.append("Date", $('#txtdate').val());
         form_data.append("UserId", $("#drpAttusername").val());
         form_data.append("StartDate", $("#txtstartdatebox").val());
         form_data.append("EndDate", $("#txtenddatebox").val());
+
         $.ajax({
             url: '/UserProfile/GetSearchAttendanceList',
             type: 'Post',
@@ -411,24 +421,25 @@ function GetSearchAttendanceList() {
             processData: false,
             contentType: false,
             complete: function (Result) {
+
                 $("#attendancedt").hide();
                 $("#backbtn").show();
                 if (Result.responseText != '{\"code\":400}') {
-                    $("#errorMessage").hide();
                     $("#dvattendancelist").show();
                     $("#dvattendancelist").html(Result.responseText);
                 } else {
                     toastr.warning("No Data Found On Selected Username Or Dates!!");
-                    $("#errorMessage").show();
-                    $("#errorMessage").text(message);
                     $("#dvattendancelist").hide();
                 }
             }
         });
     } else {
-        toastr.warning("Kindly fill all datafield");
+
+        $("#backbtn").hide();
+        toastr.warning(errorMessage);
     }
-};
+}
+
 
 $('#backbtn').on('click', function (event) {
     window.location = '/UserProfile/UsersAttendance';
