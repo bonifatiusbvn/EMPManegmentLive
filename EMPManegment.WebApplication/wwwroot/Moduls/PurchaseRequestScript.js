@@ -398,7 +398,7 @@ function CreatePurchaseRequest() {
                 }
             },
             error: function () {
-                toastr.error("An error occurred while creating the purchase request."); 
+                toastr.error("An error occurred while creating the purchase request.");
             }
         });
     } else {
@@ -489,8 +489,7 @@ function DeletePurchaseRequest(PrNo) {
                 type: 'POST',
                 dataType: 'json',
                 success: function (Result) {
-                    if (Result.code == 200)
-                    {
+                    if (Result.code == 200) {
                         Swal.fire({
                             title: Result.message,
                             icon: 'success',
@@ -502,7 +501,7 @@ function DeletePurchaseRequest(PrNo) {
                     }
                     else {
                         toastr.error(Result.message);
-                    }                   
+                    }
                 },
                 error: function () {
                     Swal.fire({
@@ -525,6 +524,9 @@ function DeletePurchaseRequest(PrNo) {
         }
     });
 }
+
+
+
 
 
 

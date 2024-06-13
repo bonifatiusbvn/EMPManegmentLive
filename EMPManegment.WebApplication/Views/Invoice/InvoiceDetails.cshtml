@@ -49,10 +49,12 @@
                                 <span class="text-muted text-uppercase">GSTIN/UIN :@firstItem.VendorGstnumber</span><br />
                                 <p class="text-muted text-uppercase">Email :@firstItem.VendorEmail</p>
                             </div>
-                            <p class="text-muted"><b>Consignee (Ship to):</b></p>
-                            <span class="text-muted text-uppercase"><b>@firstItem.ProjectName</b></span><br />
-                            <span class="text-muted">@firstItem.ShippingAddress</span><br />
-                            <span class="text-muted">GSTIN:- </span>
+                            <div class="flex-shrink-0 mt-sm-0 mt-3 border">
+                                <p class="text-muted"><b>Consignee (Ship to):</b></p>
+                                <span class="text-muted text-uppercase"><b>@firstItem.ProjectName</b></span><br />
+                                <span class="text-muted">@firstItem.ShippingAddress</span><br />
+                                <span class="text-muted">GSTIN:- </span>
+                            </div>
                         </div>
                         <div class="flex-grow-1 col-3">
                             <div class="flex-shrink-0 mt-sm-0 mt-3 border">
@@ -79,8 +81,10 @@
                                 <label class="form-label">Dispatched Through</label>
                                 <p class="text-muted text-uppercase"><b>@firstItem.DispatchThrough</b></p>
                             </div>
-                            <label class="form-label">Bill of Landing/LR-RR No.</label>
-                            <p class="text-muted text-uppercase"><b></b></p>
+                            <div class="flex-shrink-0 mt-sm-0 mt-3 border">
+                                <label class="form-label">Bill of Landing/LR-RR No.</label>
+                                <p class="text-muted text-uppercase"><b></b></p>
+                            </div>
                         </div>
                         <div class="flex-grow-1 col-3">
                             <div class="flex-shrink-0 mt-sm-0 mt-3 border">
@@ -130,7 +134,7 @@
                 </div>
                 <div class="card-body" id="cardbody3" style="margin-top:-33px;">
                     <table class="table table-border text-center table-nowrap align-middle mb-0">
-                        <thead>
+                        <thead class="table-info text-muted">
                             <tr class="table-active">
                                 <th>SINo.</th>
                                 <th>Product Details</th>
@@ -214,7 +218,7 @@
                 </div>
                 <div class="card-body" id="cardbody4" style="margin-top:-33px;">
                     <table class="table table-border text-center table-nowrap align-middle mb-0">
-                        <thead>
+                        <thead class="table-info text-muted">
                             <tr class="table-active">
                                 <th>HSN / SAC</th>
                                 <th>Taxable value</th>

@@ -21,22 +21,32 @@
 </div>
 <div class="row">
     <div class="col-12">
-        <div class="card bg-light">
+        <div class="card">
             <div style="margin-left:25px;">
-                <form id="frmdrpdashbord">
-                    @if (_userSession.UserRoll == "Employee")
-                    {
-                        <select class="form-select form-control-lg border-0" id="drpUserProjectList" style="width:450px">
-                            <option selected value="">--Selected Project--</option>
-                        </select>
-                    }
-                    else
-                    {
-                        <select class="form-select form-control-lg" id="drpProjectName">
-                            <option selected value="">--All Project--</option>
-                        </select>
-                    }
-                </form>
+                <div class="row align-items-center gy-3">
+                    <div class="col-sm">
+                        <form id="frmdrpdashbord">
+                            @if (_userSession.UserRoll == "Employee")
+                            {
+                                <select class="form-select form-control-lg border-0" id="drpUserProjectList" style="width:450px">
+                                    <option selected value="">--Selected Project--</option>
+                                </select>
+                            }
+                            else
+                            {
+                                <select class="form-select form-control-lg" id="drpProjectName">
+                                    <option selected value="">--All Project--</option>
+                                </select>
+                            }
+                        </form>
+                    </div>
+                    <div class="col-sm-auto">
+                        <div class="d-flex gap-1 flex-wrap">
+                        </div>
+                    </div>
+
+                </div>
+
             </div>
         </div>
     </div>
