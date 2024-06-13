@@ -1,4 +1,6 @@
 ﻿$(document).ready(function () {
+    GetPaymentMethodList()
+    GetPaymentTypeList()
     function handleFocus(event, selector) {
         if (event.keyCode == 13 || event.keyCode == 9) {
             event.preventDefault();
@@ -29,9 +31,9 @@
                 </td>
                 <td class="text-start">
                     <div class="">
-                    <select class="form-control" id="txtPOProductType_${rowCount}" style="width: 151px;">
-                 <option value=""></option>
-             </select>
+                   <select class="form-control" id="txtPOProductType_${rowCount}" style="width: 151px;">
+                        <option value=""></option>
+                    </select>
                     </div>
                 </td>
                 <td class="text-start">
@@ -68,6 +70,7 @@
             </tr>`;
         $('#addnewproductlink').append(newRow);
         updateRowNumbers();
+        ProductTypeDropdown(rowCount);
     });
 
     $(document).on('input', '#txtproductquantity', function () {
@@ -320,4 +323,40 @@ function preventEmptyValue(input) {
     if (input.value === "") {
         input.value = 0;
     }
+}
+
+
+function GetPaymentMethodList() {
+    debugger
+    $.ajax({
+        url: '/PurchaseOrderMaster/GetPaymentMethodList',
+        success: function (result) {
+            $.each(result, function (i, data) {
+                $('#txtpaymentmethod').append('<Option value=' + data.id + '>' + data.paymentMethod + '</Option>')
+            });
+        }
+    });
+}
+
+function ProductTypeDropdown(rowId) {
+    $.ajax({
+        url: '/ProductMaster/GetProduct',
+        success: function (result) {
+            $.each(result, function (i, data) {
+                $('#txtPOProductType_' + rowId).append('<option value="' + data.id + '">' + data.productName + '</option>');
+            });
+        }
+    });
+}
+
+function GetPaymentTypeList() {
+    $.ajax({
+        url: '/ExpenseMaster/GetPaymentTypeList',
+        success: function (result) {
+            $.each(result, function (i, data) {
+                $('#textPaymentMethod').append('<Option value=' + data.id + '>' + data.type + '</Option>')
+                $('#txtpaymenttype').append('<Option value=' + data.id + '>' + data.type + '</Option>')
+            });
+        }
+    });
 }
