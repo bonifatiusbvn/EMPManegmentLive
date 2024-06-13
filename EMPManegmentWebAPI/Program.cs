@@ -7,6 +7,7 @@ using EMPManegment.Inretface.Interface.CSC;
 using EMPManegment.Inretface.Interface.ExpenseMaster;
 using EMPManegment.Inretface.Interface.FormPermissionMaster;
 using EMPManegment.Inretface.Interface.InvoiceMaster;
+using EMPManegment.Inretface.Interface.ManualInvoice;
 using EMPManegment.Inretface.Interface.MasterList;
 using EMPManegment.Inretface.Interface.OrderDetails;
 using EMPManegment.Inretface.Interface.ProductMaster;
@@ -23,6 +24,7 @@ using EMPManegment.Inretface.Services.CSC;
 using EMPManegment.Inretface.Services.ExpenseMaster;
 using EMPManegment.Inretface.Services.FormPermissionMasterServices;
 using EMPManegment.Inretface.Services.InvoiceMaster;
+using EMPManegment.Inretface.Services.ManualInvoiceServices;
 using EMPManegment.Inretface.Services.MasterList;
 using EMPManegment.Inretface.Services.OrderDetails;
 using EMPManegment.Inretface.Services.ProductMaster;
@@ -39,6 +41,7 @@ using EMPManegment.Repository.CSCRepository;
 using EMPManegment.Repository.ExponseMasterRepository;
 using EMPManegment.Repository.FormPermissionMasterRepository;
 using EMPManegment.Repository.InvoiceMasterRepository;
+using EMPManegment.Repository.ManualInvoiceRepository;
 using EMPManegment.Repository.MasterListRepository;
 using EMPManegment.Repository.OrderRepository;
 using EMPManegment.Repository.ProductMaster;
@@ -55,6 +58,7 @@ using EMPManegment.Services.CSC;
 using EMPManegment.Services.ExpenseMaster;
 using EMPManegment.Services.FormPermissionMaster;
 using EMPManegment.Services.InvoiceMaster;
+using EMPManegment.Services.ManualInvoice;
 using EMPManegment.Services.MasterList;
 using EMPManegment.Services.OrderDetails;
 using EMPManegment.Services.ProductMaster;
@@ -97,6 +101,7 @@ builder.Services.AddScoped<IExpenseMaster, ExpenseMasterRepo>();
 builder.Services.AddScoped<IFormMaster, FormMasterRepo>();
 builder.Services.AddScoped<IFormPermissionMaster, FormPermissionMasterRepo>();
 builder.Services.AddScoped<ICompany, CompanyRepo>();
+builder.Services.AddScoped<IManualInvoice, ManualInvoiceRepo>();
 
 
 builder.Services.AddScoped<IAuthenticationServices, AuthenticationService>();
@@ -115,6 +120,7 @@ builder.Services.AddScoped<IExpenseMasterServices, ExpenseMasterServices>();
 builder.Services.AddScoped<IFormMasterServices, FormMasterService>();
 builder.Services.AddScoped<IFormPermissionMasterServices, FormPermissionMasterService>();
 builder.Services.AddScoped<ICompanyServices, CompanyServices>();
+builder.Services.AddScoped<IManualInvoiceServices, ManualInvoiceServices>();
 
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>

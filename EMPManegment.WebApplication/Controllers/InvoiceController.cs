@@ -23,8 +23,7 @@ using EMPManegment.EntityModels.ViewModels.ProjectModels;
 using EMPManegment.Web.Helper;
 using Microsoft.AspNetCore.Authorization;
 using Irony.Parsing.Construction;
-
-
+using EMPManegment.EntityModels.ViewModels.ManualInvoice;
 
 namespace EMPManegment.Web.Controllers
 {
@@ -644,6 +643,30 @@ namespace EMPManegment.Web.Controllers
         public IActionResult CreateInvoiceManual()
         {
             return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> InsertManualInvoice()
+        {
+            try
+            {
+                var InvoiceDetails = HttpContext.Request.Form["ManualInvoiceDetails"];
+                var InsertDetails = JsonConvert.DeserializeObject<ManualInvoiceMasterModel>(InvoiceDetails);
+
+                ApiResponseModel postuser = await APIServices.PostAsync(InsertDetails, "ManualInvoice/InsertManualInvoice");
+                if (postuser.code == 200)
+                {
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
+                }
+                else
+                {
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }
