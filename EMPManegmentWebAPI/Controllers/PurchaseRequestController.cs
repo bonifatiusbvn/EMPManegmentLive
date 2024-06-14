@@ -81,8 +81,8 @@ namespace EMPManagment.API.Controllers
                 var UpdatePurchaseRequest = purchaseRequest.UpdatePurchaseRequestDetails(PurchaseRequestDetails);
                 if (UpdatePurchaseRequest.Result.code == 200)
                 {
-                    response.code = updatePR.Result.code;
-                    response.message = updatePR.Result.message;
+                    response.code = UpdatePurchaseRequest.Result.code;
+                    response.message = UpdatePurchaseRequest.Result.message;
                 }
                 else
                 {
