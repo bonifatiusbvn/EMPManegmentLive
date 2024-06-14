@@ -7,7 +7,6 @@
             $(selector).focus();
         }
     }
-
     function showErrorMessage(selector, message) {
         $(selector).text(message).show();
     }
@@ -17,9 +16,9 @@
         rowCount++;
         const newRow = `
             <tr id="templateRow_${rowCount}" class="product" data-product-id="@item.ItemId">
-                <td scope="row" class="product-id">${rowCount}</td>
+                <td scope="row" class="product-id" id="rowno" name="rowno">${rowCount}</td>
                 <td class="text-start">
-                    <input id="textProductName" class="product-quantity form-control" />
+                    <input id="textProductName" class="product-quantity form-control"  name="textProductName"/>
                 </td>
                 <td class="text-start">
                     <input type="text" class="form-control" id="txtHSNcode" style="width: 75px;" />
@@ -36,7 +35,7 @@
                     </div>
                 </td>
                 <td class="text-start">
-                    <input type="text" class="form-control" id="txtproductamount" value="0" oninput="preventEmptyValue(this)"/>
+                    <input type="text" class="form-control" id="txtproductamount" name="txtproductamount" value="0" oninput="preventEmptyValue(this)"/>
                 </td>
                 <td class="text-start">
                     <div class="row">
@@ -72,11 +71,35 @@
         ProductTypeDropdown(rowCount);
     });
 
-    $(document).on('input', '#txtproductquantity', function () {
+    $(document).on('input', '#textProductName', function () {
+        var productRow = $(this).closest(".product");
+    }).on('keydown', '#textProductName', function (event) {
+        var productRow = $(this).closest(".product");
+        var productFocus = productRow.find('#txtHSNcode');
+        handleFocus(event, productFocus);
+    });
+
+    $(document).on('input', '#txtHSNcode', function () {
+        var productRow = $(this).closest(".product");
+    }).on('keydown', '#txtHSNcode', function (event) {
+        var productRow = $(this).closest(".product");
+        var productFocus = productRow.find('#txtproductquantity');
+        handleFocus(event, productFocus);
+    });
+
+    $(document).on('input', '#txtproductquantity', function () {    
         var productRow = $(this).closest(".product");
         updateProductTotalAmount(productRow);
         updateTotals();
     }).on('keydown', '#txtproductquantity', function (event) {
+        var productRow = $(this).closest(".product");
+        var productFocus = productRow.find('[id ^= "txtPOProductType_"]');
+        handleFocus(event, productFocus);
+    });
+
+    $(document).on('input', '[id^="txtPOProductType_"]', function () {
+        var productRow = $(this).closest(".product");
+    }).on('keydown', '[id^="txtPOProductType_"]', function (event) {
         var productRow = $(this).closest(".product");
         var productFocus = productRow.find('#txtproductamount');
         handleFocus(event, productFocus);
@@ -207,7 +230,6 @@ function updateProductTotalAmount(that) {
 }
 
 function updateDiscount(that) {
-    debugger
     var row = $(that);
     var productPrice = parseFloat(row.find("#txtproductamount").val());
     var quantity = parseFloat(row.find("#txtproductquantity").val());
@@ -326,7 +348,6 @@ function preventEmptyValue(input) {
 
 
 function GetPaymentMethodList() {
-    debugger
     $.ajax({
         url: '/PurchaseOrderMaster/GetPaymentMethodList',
         success: function (result) {
@@ -357,6 +378,270 @@ function GetPaymentTypeList() {
                 $('#textPaymentMethod').append('<Option value=' + data.id + '>' + data.type + '</Option>')
                 $('#txtpaymenttype').append('<Option value=' + data.id + '>' + data.type + '</Option>')
             });
+        }
+    });
+}
+
+
+$(document).ready(function () {
+    $("#CreateManualInvoiceForm").validate({
+        rules: {
+            textVendorName: "required",
+            textCompanyName: "required",
+            textInvoiceNo: "required",
+            textInvoiceDate: "required",
+        },
+        messages: {
+            textVendorName: "Enter Vendor Name",
+            textCompanyName: "Enter Company Name",
+            textInvoiceNo: "Please Enter InvoiceNo",
+            textInvoiceDate: "Please Select Date",
+        }
+    });
+});
+
+
+
+
+function InsertManualInvoiceDetails() {
+    if ($("#CreateManualInvoiceForm").valid()) {
+        if ($('#addnewproductlink tr').length >= 1) {
+
+            var ProductDetails = [];
+            var isValidProduct = true;
+            $(".product").each(function () {
+
+                var orderRow = $(this);
+                var objData = {
+                    row: orderRow.find("#rowno").text(),
+                    Product: orderRow.find("#textProductName").val(),
+                    Quantity: orderRow.find("#txtproductquantity").val(),
+                    Price: orderRow.find("#txtproductamount").val(),
+                    Gst: orderRow.find("#txtgst").val(),
+                    Discount: orderRow.find("#txtdiscountamount").val(),
+                    ProductTotal: orderRow.find("#txtproducttotalamount").val(),
+                    ProductType: $('[id^="txtPOProductType_"]').val(),
+                };
+                orderRow.find("#textProductName").on('input', function () {
+                    $(this).css("border", "1px solid #ced4da");
+                });
+                orderRow.find("#txtproductamount").on('input', function () {
+                    $(this).css("border", "1px solid #ced4da");
+                });
+                orderRow.find('[id^="txtPOProductType_"]').on('input', function () {
+                    $(this).css("border", "1px solid #ced4da");
+                });
+
+                if (!objData.Product.trim() || objData.Price == 0 || objData.ProductType == 0) {
+                    isValidProduct = false;
+                    if (!objData.Product.trim()) {
+                        orderRow.find("#textProductName").css("border", "2px solid red");
+                    }
+                    if (objData.Price == 0) {
+                        orderRow.find("#txtproductamount").css("border", "2px solid red");
+                    }
+                    if (objData.ProductType == 0) {
+                        orderRow.find('[id^="txtPOProductType_"]').css("border", "2px solid red");
+                    }
+                } else {
+                    ProductDetails.push(objData);
+                }
+            });
+
+            if (isValidProduct) {
+                var Invoicedetails = {
+                    ProjectId: $("#textProjectId").val(),
+                    InvoiceNo: $("#textInvoiceNo").val(),
+                    VendorName: $("#textVendorName").val(),
+                    VendorPhoneNo: $("#textVendorMobile").val(),
+                    VendorGstNo: $("#textVendorGSTNumber").val(),
+                    VendorAddress: $("#textVendorAddress").val(),
+                    CompanyName: $("#textCompanyName").val(),
+                    CompanyAddress: $("#textCompanyBillingAddress").val(),
+                    CompanyGstNo: $("#textCompanyGstNo").val(),
+                    TotalGst: $("#totalgst").val(),
+                    Cgst: $("#textCGst").val(),
+                    Sgst: $("#textSGst").val(),
+                    Igst: $("#textIGst").val(),
+                    SubTotal: $("#cart-subtotal").val(),
+                    TotalAmount: $("#cart-total").val(),
+                    DispatchThrough: $("#textDispatchThrough").val(),
+                    BuyesOrderNo: $("#textBuysOrderNo").val(),
+                    BuyesOrderDate: $("#textBuysOrderDate").val(),
+                    InvoiceDate: $("#textInvoiceDate").val(),
+                    OrderStatus: $("#UnitTypeId").val(),
+                    PaymentMethod: $("#txtpaymentmethod").val(),
+                    PaymentStatus: $("#txtpaymenttype").val(),
+                    CreatedBy: $("#textCreatedById").val(),
+                    ShippingAddress: $('#hideShippingAddress').is(':checked') ? $('#textCompanyBillingAddress').val() : $('#textShippingAddress').val(),
+                    ManualInvoiceDetails: ProductDetails,
+                };
+
+                var form_data = new FormData();
+                form_data.append("ManualInvoiceDetails", JSON.stringify(Invoicedetails));
+
+                $.ajax({
+                    url: '/ManualInvoice/InsertManualInvoice',
+                    type: 'POST',
+                    data: form_data,
+                    dataType: 'json',
+                    contentType: false,
+                    processData: false,
+                    success: function (Result) {
+                        if (Result.code == 200) {
+                            Swal.fire({
+                                title: Result.message,
+                                icon: 'success',
+                                confirmButtonColor: '#3085d6',
+                                confirmButtonText: 'OK'
+                            }).then(function () {
+                                window.location = '/ManualInvoice/ManualInvoices';
+                            });
+                        } else {
+                            toastr.error(Result.message);
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        toastr.error("An error occurred while processing your request.");
+                    }
+                });
+            }
+            else
+            {
+                toastr.warning("Kindly fill all data fields");
+            }
+        } else {
+            toastr.warning("Please select a product!");
+        }
+    } else {
+        toastr.warning("Kindly fill all data fields");
+    }
+}
+
+var datas = userPermissions
+$(document).ready(function () {
+    function data(datas) {
+        userPermission = datas;
+        AllManualInvoiceList(userPermission);
+    }
+    function AllManualInvoiceList(userPermission) {
+        var userPermissionArray = [];
+        userPermissionArray = JSON.parse(userPermission);
+
+        var canEdit = false;
+        var canDelete = false;
+
+        for (var i = 0; i < userPermissionArray.length; i++) {
+            var permission = userPermissionArray[i];
+            if (permission.formName == "ManualInvoiceList") {
+                canEdit = permission.edit;
+                canDelete = permission.delete;
+                break;
+            }
+        }
+
+        var columns = [
+            {
+                "data": "invoiceNo",
+                "name": "InvoiceNo",
+                "render": function (data, type, full) {
+                    return '<div class="d-flex justify-content-center"><h5 class="fs-15"><a href="#" class="fw-medium link-primary text-center">' + full.invoiceNo + '</a></h5></div>';
+                }
+            },
+            { "data": "vendorName", "name": "VendorName", "className": "text-center" },
+            { "data": "companyName", "name": "CompanyName", "className": "text-center" },
+            { "data": "totalAmount", "name": "TotalAmount", "className": "text-center" }
+        ];
+
+        if (canEdit || canDelete) {
+            columns.push({
+                "data": null,
+                "orderable": false,
+                "searchable": false,
+                "render": function (data, type, full) {
+                    var buttons = '<div class="d-flex justify-content-center">';
+                    buttons += '<ul class="list-inline mb-0">';
+
+                    if (canEdit) {
+                        buttons += '<a onclick="EditInvoiceDetails(\'' + full.invoiceNo + '\')" class="btn text-primary list-inline-item">' +
+                            '<i class="fa-regular fa-pen-to-square"></i></a>';
+                    }
+
+                    if (canDelete) {
+                        buttons += '<a onclick="deleteManualInvoice(\'' + full.id + '\')" class="btn text-danger btndeletedoc list-inline-item">' +
+                            '<i class="fas fa-trash"></i></a>';
+                    }
+
+                    buttons += '</ul></div>';
+                    return buttons;
+                }
+            });
+        }
+
+        $('#manualInvoiceTable').DataTable({
+            processing: false,
+            serverSide: true,
+            filter: true,
+            "bDestroy": true,
+            ajax: {
+                type: "POST",
+                url: '/ManualInvoice/GetManualInvoiceList',
+                dataType: 'json'
+            },
+            columns: columns,
+            columnDefs: [{
+                "defaultContent": "",
+                "targets": "_all"
+            }]
+        });
+    }
+    data(datas);
+});
+
+
+function deleteManualInvoice(InvoiceId) {
+    Swal.fire({
+        title: "Are you sure want to delete this?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, delete it!",
+        cancelButtonText: "No, cancel!",
+        confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
+        cancelButtonClass: "btn btn-danger w-xs mt-2",
+        buttonsStyling: false,
+        showCloseButton: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: '/ManualInvoice/DeleteManualInvoice?InvoiceId=' + InvoiceId,
+                type: 'POST',
+                dataType: 'json',
+                success: function (Result) {
+                    if (Result.code == 200) {
+                        Swal.fire({
+                            title: Result.message,
+                            icon: 'success',
+                            confirmButtonColor: '#3085d6',
+                            confirmButtonText: 'OK'
+                        }).then(function () {
+                            window.location = '/ManualInvoice/ManualInvoices';
+                        })
+                    } else {
+                        toastr.error(Result.message);
+                    }
+                },
+                error: function () {
+                    toastr.error("Can't delete Invoice!"); 
+                }
+            })
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+
+            Swal.fire(
+                'Cancelled',
+                'Manual Invoice have no changes.!!😊',
+                'error'
+            );
         }
     });
 }

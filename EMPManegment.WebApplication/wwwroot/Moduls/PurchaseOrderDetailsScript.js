@@ -1124,3 +1124,16 @@ function InsertMultiplePurchaseOrderDetails() {
         toastr.warning("Kindly fill all data fields");
     }
 }
+function createPO() {
+    if ($("#txtPOId").val() == "") {
+        Swal.fire({
+            title: "Kindly select project on dashboard.",
+            icon: 'warning',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'OK',
+        });
+    }
+    else {
+        window.location = '/PurchaseOrderMaster/CreatePurchaseOrder';
+    }
+}

@@ -531,6 +531,19 @@ function DeletePurchaseRequest(PrNo) {
         }
     });
 }
+function createPR() {
+    if ($("#txtProjectId").val() == "") {
+        Swal.fire({
+            title: "Kindly select project on dashboard.",
+            icon: 'warning',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'OK',
+        });
+    }
+    else {
+        window.location = '/PurchaseRequest/CreatePurchaseRequest';
+    }
+}
 
 
 

@@ -23,8 +23,7 @@ using EMPManegment.EntityModels.ViewModels.ProjectModels;
 using EMPManegment.Web.Helper;
 using Microsoft.AspNetCore.Authorization;
 using Irony.Parsing.Construction;
-
-
+using EMPManegment.EntityModels.ViewModels.ManualInvoice;
 
 namespace EMPManegment.Web.Controllers
 {
@@ -639,11 +638,6 @@ namespace EMPManegment.Web.Controllers
             {
                 throw ex;
             }
-        }
-
-        public IActionResult CreateInvoiceManual()
-        {
-            return View();
-        }
+        }      
     }
 }

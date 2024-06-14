@@ -120,6 +120,7 @@ namespace EMPManegment.Repository.PurchaseRequestRepository
                                        select new PurchaseRequestModel
                                        {
                                            PrId = a.PrId,
+                                           PrNo = a.PrNo,
                                            UserId = a.UserId,
                                            UserName = b.UserName,
                                            ProjectId = a.ProjectId,
@@ -127,6 +128,7 @@ namespace EMPManegment.Repository.PurchaseRequestRepository
                                            ProjectName = c.ProjectTitle,
                                            ProductName = a.ProductName,
                                            ProductTypeId = a.ProductTypeId,
+                                           ProductTypeName=a.ProductName,
                                            Quantity = a.Quantity,
                                            IsApproved = a.IsApproved,
                                            CreatedBy = a.CreatedBy,

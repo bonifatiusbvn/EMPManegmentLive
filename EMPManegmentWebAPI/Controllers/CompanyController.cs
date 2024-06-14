@@ -19,7 +19,7 @@ namespace EMPManagment.API.Controllers
             Company = company;
         }
 
-        public ICompanyServices Company { get; }
+        private readonly ICompanyServices Company;
 
         [HttpGet]
         [Route("GetCompanyNameList")]
