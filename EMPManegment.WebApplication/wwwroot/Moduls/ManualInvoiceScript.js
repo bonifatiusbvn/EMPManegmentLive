@@ -545,7 +545,7 @@ $(document).ready(function () {
                 "data": "invoiceNo",
                 "name": "InvoiceNo",
                 "render": function (data, type, full) {
-                    return '<div class="d-flex justify-content-center"><h5 class="fs-15"><a href="#" class="fw-medium link-primary text-center">' + full.invoiceNo + '</a></h5></div>';
+                    return '<div class="d-flex justify-content-center"><h5 class="fs-15"><a href="/ManualInvoice/ManualInvoiceDetails?InvoiceId=' + full.id + '" class="fw-medium link-primary text-center">' + full.invoiceNo + '</a></h5></div>';
                 }
             },
             { "data": "vendorName", "name": "VendorName", "className": "text-center" },

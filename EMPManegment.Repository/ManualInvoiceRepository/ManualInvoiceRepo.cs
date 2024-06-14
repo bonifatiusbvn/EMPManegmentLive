@@ -97,7 +97,6 @@ namespace EMPManegment.Repository.ManualInvoiceRepository
             try
             {
                 var invoicelist = from a in Context.TblManualInvoices
-                                  join b in Context.TblProjectMasters on a.ProjectId equals b.ProjectId
                                   where a.IsDeleted != true
                                   orderby a.CreatedOn descending
                                   select new ManualInvoiceMasterModel
@@ -112,7 +111,6 @@ namespace EMPManegment.Repository.ManualInvoiceRepository
                                       CompanyAddress = a.CompanyAddress,
                                       CompanyGstNo = a.CompanyGstNo,
                                       ProjectId = a.ProjectId,
-                                      ProjectName = b.ProjectTitle,
                                       DispatchThrough = a.DispatchThrough,
                                       Cgst = a.Cgst,
                                       Igst = a.Igst,
@@ -178,7 +176,7 @@ namespace EMPManegment.Repository.ManualInvoiceRepository
                 manualInvoice = (from a in Context.TblManualInvoices.Where(x => x.Id == InvoiceId)
                                  join b in Context.TblProjectMasters on a.ProjectId equals b.ProjectId
                                  join c in Context.TblPaymentMethodTypes on a.PaymentMethod equals c.Id
-                                 join d in Context.TblPaymentTypes on a.PaymentMethod equals d.Id
+                                 join d in Context.TblPaymentTypes on a.PaymentStatus equals d.Id
                                  select new ManualInvoiceMasterModel
                                  {
                                      Id = a.Id,
@@ -206,6 +204,7 @@ namespace EMPManegment.Repository.ManualInvoiceRepository
                                      Cgst = a.Cgst,
                                      Sgst = a.Sgst,
                                      Igst = a.Igst,
+                                     
                                  }).FirstOrDefault();
                 List<ManualInvoiceDetailsModel> manualInvoiceDetails = (from a in Context.TblManualInvoiceDetails.Where(a => a.RefId == manualInvoice.Id)
                                                                         join b in Context.TblProductTypeMasters on a.ProductType equals b.Id

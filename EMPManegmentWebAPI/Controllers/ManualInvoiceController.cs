@@ -58,12 +58,12 @@ namespace EMPManagment.API.Controllers
 
         [HttpGet]
         [Route("GetManualInvoiceDetails")]
-        public async Task<IActionResult> GetManualInvoiceDetails(Guid MInvoiceId)
+        public async Task<IActionResult> GetManualInvoiceDetails(Guid InvoiceId)
         {
             try
             {
-                var InvoiceId = await ManualInvoice.GetManualInvoiceDetails(MInvoiceId);
-                return Ok(new { code = 200, data = InvoiceId });
+                var invoiceId = await ManualInvoice.GetManualInvoiceDetails(InvoiceId);
+                return Ok(new { code = 200, data = invoiceId });
             }
             catch (Exception ex)
             {
