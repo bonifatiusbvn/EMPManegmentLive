@@ -131,6 +131,7 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
+        [FormPermissionAttribute("ManualInvoiceDetails-View")]
         public async Task<IActionResult> ManualInvoiceDetails(Guid InvoiceId)
         {
             try

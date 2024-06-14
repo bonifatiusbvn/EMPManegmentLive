@@ -147,7 +147,7 @@
     $(document).on('input', '#txtdiscountamount', debounce(function () {
         var productRow = $(this).closest(".product");
         var discountAmount = parseFloat($(this).val());
-        var productAmount = parseFloat($(productRow).find("#productamount").val());
+        var productAmount = parseFloat($(productRow).find("#txtproductamount").val());
 
         if (discountAmount > productAmount) {
             toastr.warning("Amount cannot be greater than Item price");
@@ -176,7 +176,7 @@
             productRow.find("#txtdiscountpercentage").val(0);
         }
 
-        productRow.find("#productamount").val(productAmount.toFixed(2));
+        productRow.find("#txtproductamount").val(productAmount.toFixed(2));
         updateProductTotalAmount(productRow);
         updateTotals();
 
