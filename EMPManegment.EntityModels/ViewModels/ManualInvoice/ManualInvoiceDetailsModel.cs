@@ -8,7 +8,9 @@ namespace EMPManegment.EntityModels.ViewModels.ManualInvoice
 {
     public class ManualInvoiceDetailsModel
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
+
+        public Guid RefId { get; set; }
 
         public string Product { get; set; } = null!;
 

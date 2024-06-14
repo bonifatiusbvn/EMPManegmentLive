@@ -1,4 +1,5 @@
-﻿using EMPManegment.EntityModels.ViewModels.ManualInvoice;
+﻿using EMPManegment.EntityModels.ViewModels.DataTableParameters;
+using EMPManegment.EntityModels.ViewModels.ManualInvoice;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.Inretface.Interface.InvoiceMaster;
 using EMPManegment.Inretface.Services.InvoiceMaster;
@@ -44,6 +45,14 @@ namespace EMPManagment.API.Controllers
                 response.Message = "An error occurred while processing the request.";
             }
             return StatusCode(response.Code, response);
+        }
+
+        [HttpPost]
+        [Route("GetManualInvoiceList")]
+        public async Task<IActionResult> GetManualInvoiceList(DataTableRequstModel dataTable)
+        {
+            var AllInvoiceList = await ManualInvoice.GetManualInvoiceList(dataTable);
+            return Ok(new { code = 200, data = AllInvoiceList });
         }
     }
 }

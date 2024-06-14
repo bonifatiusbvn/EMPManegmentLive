@@ -331,6 +331,8 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.Property(e => e.Cgst)
                 .HasColumnType("numeric(18, 2)")
                 .HasColumnName("CGST");
+            entity.Property(e => e.CompanyGstNo).HasMaxLength(50);
+            entity.Property(e => e.CompanyName).HasMaxLength(150);
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
             entity.Property(e => e.DispatchThrough).HasMaxLength(20);
             entity.Property(e => e.Igst)
@@ -347,14 +349,17 @@ public partial class BonifatiusEmployeesContext : DbContext
                 .HasColumnType("numeric(18, 2)")
                 .HasColumnName("TotalGST");
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
-            entity.Property(e => e.VandorName).HasMaxLength(150);
+            entity.Property(e => e.VendorGstNo).HasMaxLength(50);
+            entity.Property(e => e.VendorName).HasMaxLength(150);
+            entity.Property(e => e.VendorPhoneNo).HasMaxLength(12);
         });
 
         modelBuilder.Entity<TblManualInvoiceDetail>(entity =>
         {
+            entity.HasKey(e => e.Id).HasName("PK_tblManualInvoiceDetails_1");
+
             entity.ToTable("tblManualInvoiceDetails");
 
-            entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
             entity.Property(e => e.Discount).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.Gst).HasColumnType("numeric(18, 2)");

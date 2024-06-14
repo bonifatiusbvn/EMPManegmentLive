@@ -7,7 +7,6 @@
             $(selector).focus();
         }
     }
-
     function showErrorMessage(selector, message) {
         $(selector).text(message).show();
     }
@@ -17,7 +16,7 @@
         rowCount++;
         const newRow = `
             <tr id="templateRow_${rowCount}" class="product" data-product-id="@item.ItemId">
-                <td scope="row" class="product-id">${rowCount}</td>
+                <td scope="row" class="product-id" id="rowno" name="rowno">${rowCount}</td>
                 <td class="text-start">
                     <input id="textProductName" class="product-quantity form-control"  name="textProductName"/>
                 </td>
@@ -36,7 +35,7 @@
                     </div>
                 </td>
                 <td class="text-start">
-                    <input type="text" class="form-control" id="txtproductamount" value="0" oninput="preventEmptyValue(this)"/>
+                    <input type="text" class="form-control" id="txtproductamount" name="txtproductamount" value="0" oninput="preventEmptyValue(this)"/>
                 </td>
                 <td class="text-start">
                     <div class="row">
@@ -72,11 +71,35 @@
         ProductTypeDropdown(rowCount);
     });
 
-    $(document).on('input', '#txtproductquantity', function () {
+    $(document).on('input', '#textProductName', function () {
+        var productRow = $(this).closest(".product");
+    }).on('keydown', '#textProductName', function (event) {
+        var productRow = $(this).closest(".product");
+        var productFocus = productRow.find('#txtHSNcode');
+        handleFocus(event, productFocus);
+    });
+
+    $(document).on('input', '#txtHSNcode', function () {
+        var productRow = $(this).closest(".product");
+    }).on('keydown', '#txtHSNcode', function (event) {
+        var productRow = $(this).closest(".product");
+        var productFocus = productRow.find('#txtproductquantity');
+        handleFocus(event, productFocus);
+    });
+
+    $(document).on('input', '#txtproductquantity', function () {    
         var productRow = $(this).closest(".product");
         updateProductTotalAmount(productRow);
         updateTotals();
     }).on('keydown', '#txtproductquantity', function (event) {
+        var productRow = $(this).closest(".product");
+        var productFocus = productRow.find('[id ^= "txtPOProductType_"]');
+        handleFocus(event, productFocus);
+    });
+
+    $(document).on('input', '[id^="txtPOProductType_"]', function () {
+        var productRow = $(this).closest(".product");
+    }).on('keydown', '[id^="txtPOProductType_"]', function (event) {
         var productRow = $(this).closest(".product");
         var productFocus = productRow.find('#txtproductamount');
         handleFocus(event, productFocus);
@@ -207,7 +230,6 @@ function updateProductTotalAmount(that) {
 }
 
 function updateDiscount(that) {
-    debugger
     var row = $(that);
     var productPrice = parseFloat(row.find("#txtproductamount").val());
     var quantity = parseFloat(row.find("#txtproductquantity").val());
@@ -326,7 +348,6 @@ function preventEmptyValue(input) {
 
 
 function GetPaymentMethodList() {
-    debugger
     $.ajax({
         url: '/PurchaseOrderMaster/GetPaymentMethodList',
         success: function (result) {
@@ -361,34 +382,38 @@ function GetPaymentTypeList() {
     });
 }
 
+
 $(document).ready(function () {
     $("#CreateManualInvoiceForm").validate({
         rules: {
             textVendorName: "required",
             textCompanyName: "required",
-            textProductName: "required",
             textInvoiceNo: "required",
-            textInvoiceDate : "required",
+            textInvoiceDate: "required",
         },
         messages: {
             textVendorName: "Enter Vendor Name",
             textCompanyName: "Enter Company Name",
-            textProductName: "Enter Product Name",
             textInvoiceNo: "Please Enter InvoiceNo",
-            textInvoiceDate : "Pease Select Date",
+            textInvoiceDate: "Please Select Date",
         }
     });
 });
-function InsertManualInvoiceDetails()
-{
-    debugger
+
+
+
+
+function InsertManualInvoiceDetails() {
     if ($("#CreateManualInvoiceForm").valid()) {
         if ($('#addnewproductlink tr').length >= 1) {
 
             var ProductDetails = [];
+            var isValidProduct = true;
             $(".product").each(function () {
+
                 var orderRow = $(this);
                 var objData = {
+                    row: orderRow.find("#rowno").text(),
                     Product: orderRow.find("#textProductName").val(),
                     Quantity: orderRow.find("#txtproductquantity").val(),
                     Price: orderRow.find("#txtproductamount").val(),
@@ -396,70 +421,93 @@ function InsertManualInvoiceDetails()
                     Discount: orderRow.find("#txtdiscountamount").val(),
                     ProductTotal: orderRow.find("#txtproducttotalamount").val(),
                 };
-                debugger
-                ProductDetails.push(objData);
-            });
-            var Invoicedetails = {
-                ProjectId: $("#textProjectId").val(),
-                InvoiceNo: $("#textInvoiceNo").val(),
-                VandorName: $("#textVendorName").val(),
-                CompanyName: $("#textCompanyName").val(),
-                TotalGst: $("#totalgst").val(),
-                Cgst: $("#textCGst").val(),
-                Sgst: $("#textSGst").val(),
-                Igst: $("#textIGst").val(),
-                SubTotal: $("#cart-subtotal").val(),
-                TotalAmount: $("#cart-total").val(),
-                DispatchThrough: $("#textDispatchThrough").val(),
-                BuyesOrderNo: $("#textBuysOrderNo").val(),
-                BuyesOrderDate: $("#textBuysOrderDate").val(),
-                InvoiceDate: $("#textInvoiceDate").val(),
-                OrderStatus: $("#UnitTypeId").val(),
-                PaymentMethod: $("#txtpaymentmethod").val(),
-                PaymentStatus: $("#txtpaymenttype").val(),
-                CreatedBy: $("#textCreatedById").val(),
-                ShippingAddress: $('#hideShippingAddress').is(':checked') ? $('#textCompanyBillingAddress').val() : $('#textShippingAddress').val(),
-                ManualInvoiceDetails: ProductDetails,
-            }
-            var form_data = new FormData();
-            form_data.append("ManualInvoiceDetails", JSON.stringify(Invoicedetails));
+                orderRow.find("#textProductName").on('input', function () {
+                    $(this).css("border", "1px solid #ced4da");
+                });
 
-            $.ajax({
-                url: '/ManualInvoice/InsertManualInvoice',
-                type: 'POST',
-                data: form_data,
-                dataType: 'json',
-                contentType: false,
-                processData: false,
-                success: function (Result) {
+                orderRow.find("#txtproductamount").on('input', function () {
+                    $(this).css("border", "1px solid #ced4da");
+                });
 
-                    if (Result.code == 200) {
-                        Swal.fire({
-                            title: Result.message,
-                            icon: 'success',
-                            confirmButtonColor: '#3085d6',
-                            confirmButtonText: 'OK'
-                        }).then(function () {
-                            window.location = '/Invoice/Invoices';
-                        });
+                if (!objData.Product.trim() || objData.Price == 0) {
+                    isValidProduct = false;
+                    if (!objData.Product.trim()) {
+                        orderRow.find("#textProductName").css("border", "2px solid red");
                     }
-                    else {
-                        toastr.error(Result.message);
+                    if (objData.Price == 0) {
+                        orderRow.find("#txtproductamount").css("border", "2px solid red");
                     }
-                },
-                error: function (xhr, status, error) {
-                    toastr.error("An error occurred while processing your request.");
+                } else {
+                    ProductDetails.push(objData);
                 }
             });
-        } else {
-            if ($('#addnewproductlink tr').length == 0) {
-                $("#spnitembutton").text("Please select product!");
-            } else {
-                $("#spnitembutton").text("");
+
+            if (isValidProduct) {
+                var Invoicedetails = {
+                    ProjectId: $("#textProjectId").val(),
+                    InvoiceNo: $("#textInvoiceNo").val(),
+                    VendorName: $("#textVendorName").val(),
+                    VendorPhoneNo: $("#textVendorMobile").val(),
+                    VendorGstNo: $("#textVendorGSTNumber").val(),
+                    VendorAddress: $("#textVendorAddress").val(),
+                    CompanyName: $("#textCompanyName").val(),
+                    CompanyAddress: $("#textCompanyBillingAddress").val(),
+                    CompanyGstNo: $("#textCompanyGstNo").val(),
+                    TotalGst: $("#totalgst").val(),
+                    Cgst: $("#textCGst").val(),
+                    Sgst: $("#textSGst").val(),
+                    Igst: $("#textIGst").val(),
+                    SubTotal: $("#cart-subtotal").val(),
+                    TotalAmount: $("#cart-total").val(),
+                    DispatchThrough: $("#textDispatchThrough").val(),
+                    BuyesOrderNo: $("#textBuysOrderNo").val(),
+                    BuyesOrderDate: $("#textBuysOrderDate").val(),
+                    InvoiceDate: $("#textInvoiceDate").val(),
+                    OrderStatus: $("#UnitTypeId").val(),
+                    PaymentMethod: $("#txtpaymentmethod").val(),
+                    PaymentStatus: $("#txtpaymenttype").val(),
+                    CreatedBy: $("#textCreatedById").val(),
+                    ShippingAddress: $('#hideShippingAddress').is(':checked') ? $('#textCompanyBillingAddress').val() : $('#textShippingAddress').val(),
+                    ManualInvoiceDetails: ProductDetails,
+                };
+
+                var form_data = new FormData();
+                form_data.append("ManualInvoiceDetails", JSON.stringify(Invoicedetails));
+
+                $.ajax({
+                    url: '/ManualInvoice/InsertManualInvoice',
+                    type: 'POST',
+                    data: form_data,
+                    dataType: 'json',
+                    contentType: false,
+                    processData: false,
+                    success: function (Result) {
+                        if (Result.code == 200) {
+                            Swal.fire({
+                                title: Result.message,
+                                icon: 'success',
+                                confirmButtonColor: '#3085d6',
+                                confirmButtonText: 'OK'
+                            }).then(function () {
+                                window.location = '/ManualInvoice/CreateInvoiceManual';
+                            });
+                        } else {
+                            toastr.error(Result.message);
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        toastr.error("An error occurred while processing your request.");
+                    }
+                });
             }
+            else
+            {
+                toastr.warning("Kindly fill all data fields");
+            }
+        } else {
+            toastr.warning("Please select a product!");
         }
-    }
-    else {
-        toastr.warning("Kindly fill all datafield");
+    } else {
+        toastr.warning("Kindly fill all data fields");
     }
 }

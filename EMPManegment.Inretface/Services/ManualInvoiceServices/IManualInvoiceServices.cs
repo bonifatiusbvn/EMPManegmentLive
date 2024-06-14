@@ -1,4 +1,5 @@
-﻿using EMPManegment.EntityModels.ViewModels.ManualInvoice;
+﻿using EMPManegment.EntityModels.ViewModels.DataTableParameters;
+using EMPManegment.EntityModels.ViewModels.ManualInvoice;
 using EMPManegment.EntityModels.ViewModels.Models;
 using System;
 using System.Collections.Generic;
@@ -11,5 +12,6 @@ namespace EMPManegment.Inretface.Services.ManualInvoiceServices
     public interface IManualInvoiceServices
     {
         Task<UserResponceModel> InsertManualInvoice(ManualInvoiceMasterModel InvoiceDetails);
+        Task<jsonData> GetManualInvoiceList(DataTableRequstModel dataTable);
     }
 }

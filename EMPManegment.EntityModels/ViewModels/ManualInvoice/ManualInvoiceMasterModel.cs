@@ -13,7 +13,19 @@ namespace EMPManegment.EntityModels.ViewModels.ManualInvoice
 
         public string? InvoiceNo { get; set; }
 
-        public string? VandorName { get; set; }
+        public string? VendorName { get; set; }
+
+        public string? VendorPhoneNo { get; set; }
+
+        public string? VendorAddress { get; set; }
+
+        public string? VendorGstNo { get; set; }
+
+        public string? CompanyName { get; set; }
+
+        public string? CompanyAddress { get; set; }
+
+        public string? CompanyGstNo { get; set; }
 
         public Guid? ProjectId { get; set; }
 
@@ -52,6 +64,8 @@ namespace EMPManegment.EntityModels.ViewModels.ManualInvoice
         public DateTime? UpdatedOn { get; set; }
 
         public Guid? UpdatedBy { get; set; }
+
+        public string? ProjectName { get; set; }
 
         public List<ManualInvoiceDetailsModel>? ManualInvoiceDetails { get; set; }
     }
