@@ -15,11 +15,12 @@ namespace EMPManegment.Inretface.Services.PurchaseRequestServices
         Task<ApiResponseModel> CreatePurchaseRequest(PurchaseRequestMasterView AddPurchaseRequest);
         Task<jsonData> GetPRList(DataTableRequstModel PRdataTable);
         Task<IEnumerable<PurchaseRequestModel>> GetPurchaseRequestList();
-        Task<PurchaseRequestModel> GetPurchaseRequestDetailsById(Guid PrId);
-        Task<ApiResponseModel> UpdatePurchaseRequestDetails(PurchaseRequestModel UpdatePurchaseRequest);
+        Task<PurchaseRequestModel> GetPurchaseRequestDetailsById(string PrId);
+        Task<ApiResponseModel> UpdatePurchaseRequestDetails(PurchaseRequestMasterView UpdatePurchaseRequest);
         Task<ApiResponseModel> DeletePurchaseRequest(string PrNo);
         string CheckPRNo();
         Task<PurchaseRequestMasterView> PurchaseRequestDetailsByPrNo(string PrNo);
         Task<UserResponceModel> ApproveUnapprovePR(List<string> PrNo);
+        Task<List<PurchaseRequestModel>> ProductDetailsById(Guid ProductId);
     }
 }

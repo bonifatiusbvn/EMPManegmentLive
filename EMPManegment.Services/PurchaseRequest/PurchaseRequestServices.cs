@@ -42,7 +42,7 @@ namespace EMPManegment.Services.PurchaseRequest
             return await purchaseRequest.GetPurchaseRequestList();
         }
 
-        public async Task<ApiResponseModel> UpdatePurchaseRequestDetails(PurchaseRequestModel UpdatePurchaseRequest)
+        public async Task<ApiResponseModel> UpdatePurchaseRequestDetails(PurchaseRequestMasterView UpdatePurchaseRequest)
         {
             return await purchaseRequest.UpdatePurchaseRequestDetails(UpdatePurchaseRequest);
         }
@@ -62,6 +62,16 @@ namespace EMPManegment.Services.PurchaseRequest
         public async Task<UserResponceModel> ApproveUnapprovePR(List<string> PrNo)
         {
             return await purchaseRequest.ApproveUnapprovePR(PrNo);
+        }
+
+        public Task<PurchaseRequestModel> GetPurchaseRequestDetailsById(string PrId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<List<PurchaseRequestModel>> ProductDetailsById(Guid ProductId)
+        {
+            return await purchaseRequest.ProductDetailsById(ProductId);
         }
     }
 }

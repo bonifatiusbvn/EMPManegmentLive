@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EMPManegment.EntityModels.ViewModels.ProductMaster;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,6 +16,9 @@ namespace EMPManegment.EntityModels.ViewModels.Purchase_Request
         public Guid ProjectId { get; set; }
 
         public string PrNo { get; set; } = null!;
+        public DateTime? PrDate { get; set; }
+
+        public DateTime? Date { get; set; }
 
         public Guid? ProductId { get; set; }
 
@@ -61,5 +65,6 @@ namespace EMPManegment.EntityModels.ViewModels.Purchase_Request
         public string? PrNo { get; set; }
         public decimal? SubTotal { get; set; }
         public List<PurchaseRequestModel>? PRList { get; set; }
+        public DateTime? PrDate { get; set; }
     }   
 }

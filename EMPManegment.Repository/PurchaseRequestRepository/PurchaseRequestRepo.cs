@@ -20,6 +20,8 @@ using Microsoft.AspNetCore.Mvc;
 using EMPManegment.EntityModels.ViewModels.PurchaseOrderModels;
 using Microsoft.EntityFrameworkCore;
 using Azure;
+using EMPManegment.EntityModels.ViewModels.ProductMaster;
+using Microsoft.AspNetCore.Http.HttpResults;
 #nullable disable
 
 namespace EMPManegment.Repository.PurchaseRequestRepository
@@ -55,6 +57,8 @@ namespace EMPManegment.Repository.PurchaseRequestRepository
                         CreatedBy = item.CreatedBy,
                         CreatedOn = DateTime.Now,
                         PrNo = item.PrNo,
+                        Date=DateTime.Now,
+                        PrDate=item.PrDate,
                     };
                     Context.TblPurchaseRequests.Add(PRDetailS);
                 }
@@ -170,36 +174,71 @@ namespace EMPManegment.Repository.PurchaseRequestRepository
             }
         }
 
-        public async Task<ApiResponseModel> UpdatePurchaseRequestDetails(PurchaseRequestModel UpdatePurchaseRequest)
+        public async Task<ApiResponseModel> UpdatePurchaseRequestDetails(PurchaseRequestMasterView UpdatePurchaseRequest)
         {
-            ApiResponseModel model = new ApiResponseModel();
-            var purchaseRequest = Context.TblPurchaseRequests.Where(e => e.PrId == UpdatePurchaseRequest.PrId).FirstOrDefault();
+            ApiResponseModel response = new ApiResponseModel();
             try
             {
-                if (purchaseRequest != null)
+                foreach (var item in UpdatePurchaseRequest.PRList)
                 {
-                    purchaseRequest.PrId = UpdatePurchaseRequest.PrId;
-                    purchaseRequest.UserId = UpdatePurchaseRequest.UserId;
-                    purchaseRequest.ProjectId = UpdatePurchaseRequest.ProjectId;
-                    purchaseRequest.ProductId = UpdatePurchaseRequest.ProductId;
-                    purchaseRequest.ProductName = UpdatePurchaseRequest.ProductName;
-                    purchaseRequest.ProductTypeId = UpdatePurchaseRequest.ProductTypeId;
-                    purchaseRequest.Quantity = UpdatePurchaseRequest.Quantity;
-                    purchaseRequest.IsApproved = UpdatePurchaseRequest.IsApproved;
-                    purchaseRequest.UpdatedBy = UpdatePurchaseRequest.UpdatedBy;
-                    purchaseRequest.UpdatedOn=DateTime.Now;
+                    var existingPurchaseRequest = Context.TblPurchaseRequests.FirstOrDefault(e => e.PrNo == UpdatePurchaseRequest.PrNo && e.ProductId == item.ProductId);
+
+                    if (existingPurchaseRequest != null)
+                    {
+                        existingPurchaseRequest.UserId = item.UserId;
+                        existingPurchaseRequest.ProjectId = item.ProjectId;
+                        existingPurchaseRequest.ProductId = item.ProductId;
+                        existingPurchaseRequest.ProductName = item.ProductName;
+                        existingPurchaseRequest.ProductTypeId = item.ProductTypeId;
+                        existingPurchaseRequest.Quantity = item.Quantity;
+                        existingPurchaseRequest.PrNo = item.PrNo;
+                        existingPurchaseRequest.UpdatedBy = item.UpdatedBy;
+                        existingPurchaseRequest.UpdatedOn = DateTime.Now;
+                        existingPurchaseRequest.Date = DateTime.Now;
+                        existingPurchaseRequest.PrDate = item.PrDate;
+
+                        Context.TblPurchaseRequests.Update(existingPurchaseRequest);
+                    }
+                    else
+                    {
+                        var PRDetailS = new TblPurchaseRequest()
+                        {
+                            PrId = Guid.NewGuid(),
+                            UserId = item.UserId,
+                            ProjectId = item.ProjectId,
+                            ProductId = item.ProductId,
+                            ProductName = item.ProductName,
+                            ProductTypeId = item.ProductTypeId,
+                            Quantity = item.Quantity,
+                            IsApproved = false,
+                            IsDeleted = false,
+                            CreatedBy = item.CreatedBy,
+                            CreatedOn = DateTime.Now,
+                            PrNo = item.PrNo,
+                            Date = DateTime.Now,
+                            PrDate=item.PrDate,
+                        };
+                        Context.TblPurchaseRequests.Add(PRDetailS);
+                    }
                 }
-                Context.TblPurchaseRequests.Update(purchaseRequest);
-                Context.SaveChanges();
-                model.code = 200;
-                model.message = "Purchase request updated successfully!";
+
+                var deletedPurchaseRequest = UpdatePurchaseRequest.PRList.Select(a => a.ProductId).ToList();
+
+                var PurchaseRequestToRemove = Context.TblPurchaseRequests
+                    .Where(e => e.PrNo == UpdatePurchaseRequest.PrNo && !deletedPurchaseRequest.Contains(e.ProductId))
+                    .ToList();
+
+                Context.TblPurchaseRequests.RemoveRange(PurchaseRequestToRemove);
+                await Context.SaveChangesAsync();
+                response.code = (int)HttpStatusCode.OK;
+                response.message = "PurchaseRequest updated successfully.";
             }
             catch (Exception ex)
             {
-                model.code = 400;
-                model.message = "Error in updating purchase request details.";
+                response.code = 500;
+                response.message = "Error updating PR: " + ex.Message;
             }
-            return model;
+            return response;
         }
 
         public string CheckPRNo()
@@ -256,9 +295,9 @@ namespace EMPManegment.Repository.PurchaseRequestRepository
             var purchaseRequestList = from a in Context.TblPurchaseRequests
                                       join b in Context.TblUsers on a.UserId equals b.Id
                                       join c in Context.TblProjectMasters on a.ProjectId equals c.ProjectId
-                                      orderby a.CreatedOn descending
                                       where a.IsDeleted == false
                                       group new { a, b, c } by new { a.UserId, b.Image, b.UserName, FullName = b.FirstName + " " + b.LastName, a.PrNo } into userGroup
+                                       
                                       select new PurchaseRequestModel
                                       {
                                           PrId = userGroup.Select(x => x.a.PrId).FirstOrDefault(),
@@ -276,7 +315,9 @@ namespace EMPManegment.Repository.PurchaseRequestRepository
                                           CreatedBy = userGroup.Select(x => x.a.CreatedBy).FirstOrDefault(),
                                           CreatedOn = userGroup.Select(x => x.a.CreatedOn).FirstOrDefault(),
                                           PrNo = userGroup.Key.PrNo,
+                                          Date = userGroup.Select(x => x.a.Date).FirstOrDefault()
                                       };
+            purchaseRequestList = purchaseRequestList.OrderByDescending(pr => pr.Date);
 
             if (!string.IsNullOrEmpty(PRdataTable.sortColumn) && !string.IsNullOrEmpty(PRdataTable.sortColumnDir))
             {
@@ -308,6 +349,7 @@ namespace EMPManegment.Repository.PurchaseRequestRepository
                              select new PurchaseRequestMasterView
                              {
                                  PrNo = PrNo,
+                                 PrDate=a.PrDate,
                              }).FirstOrDefault();
                 List<PurchaseRequestModel> PRList = (from a in Context.TblPurchaseRequests.Where(a => a.PrNo == PRDetails.PrNo)
                                                      join b in Context.TblProductDetailsMasters on a.ProductId equals b.Id
@@ -316,6 +358,7 @@ namespace EMPManegment.Repository.PurchaseRequestRepository
                                                      join e in Context.TblProjectMasters on a.ProjectId equals e.ProjectId
                                                      select new PurchaseRequestModel
                                                      {
+                                                         PrId=a.PrId,
                                                          ProductTypeId = a.ProductTypeId,
                                                          ProductName = a.ProductName,
                                                          ProductId = a.ProductId,
@@ -379,6 +422,49 @@ namespace EMPManegment.Repository.PurchaseRequestRepository
                 response.Code = 400;
             }
             return response;
+        }
+
+        public async Task<List<PurchaseRequestModel>> ProductDetailsById(Guid ProductId)
+        {
+            try
+            {
+                var productDetails = new List<PurchaseRequestModel>();
+                var data = await(from a in Context.TblProductDetailsMasters.Where(x => x.Id == ProductId)
+                                 join b in Context.TblProductTypeMasters on a.ProductType equals b.Id
+                                 select new PurchaseRequestModel
+                                 {
+                                     ProductTypeId = b.Id,
+                                     ProductDescription = a.ProductDescription,
+                                     ProductName = a.ProductName,
+                                     ProductImage = a.ProductImage,
+                                     ProductId = a.Id,
+                                     Price = a.PerUnitPrice,
+                                     GstAmount = a.GstAmount,
+                                     ProductTypeName = b.Type,
+                                 }).ToListAsync();
+                if (data != null)
+                {
+                    foreach (var item in data)
+                    {
+                        productDetails.Add(new PurchaseRequestModel()
+                        {
+                            ProductId = item.ProductId,
+                            ProductTypeId = item.ProductTypeId,
+                            ProductDescription = item.ProductDescription,
+                            ProductName = item.ProductName,
+                            ProductImage = item.ProductImage,
+                            Price = item.Price,
+                            GstAmount = item.GstAmount,
+                            ProductTypeName = item.ProductTypeName,
+                        });
+                    }
+                }
+                return productDetails;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }

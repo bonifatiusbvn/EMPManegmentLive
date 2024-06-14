@@ -15,6 +15,10 @@ public partial class TblPurchaseRequest
 
     public Guid? ProductId { get; set; }
 
+    public DateTime? PrDate { get; set; }
+
+    public DateTime? Date { get; set; }
+
     public string ProductName { get; set; } = null!;
 
     public int ProductTypeId { get; set; }

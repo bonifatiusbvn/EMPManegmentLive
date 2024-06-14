@@ -5,9 +5,13 @@ namespace EMPManagment.API;
 
 public partial class TblManualInvoiceDetail
 {
-    public Guid Id { get; set; }
+    public int Id { get; set; }
+
+    public Guid RefId { get; set; }
 
     public string Product { get; set; } = null!;
+
+    public int? ProductType { get; set; }
 
     public decimal Quantity { get; set; }
 

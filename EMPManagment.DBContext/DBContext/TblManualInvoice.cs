@@ -9,11 +9,21 @@ public partial class TblManualInvoice
 
     public string? InvoiceNo { get; set; }
 
-    public string? VandorName { get; set; }
+    public string? VendorName { get; set; }
+
+    public string? VendorPhoneNo { get; set; }
+
+    public string? VendorAddress { get; set; }
+
+    public string? VendorGstNo { get; set; }
+
+    public string? CompanyName { get; set; }
+
+    public string? CompanyAddress { get; set; }
+
+    public string? CompanyGstNo { get; set; }
 
     public Guid? ProjectId { get; set; }
-
-    public string OrderId { get; set; } = null!;
 
     public DateTime InvoiceDate { get; set; }
 
