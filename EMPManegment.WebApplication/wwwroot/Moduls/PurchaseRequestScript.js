@@ -398,7 +398,7 @@ function CreatePurchaseRequest() {
                 }
             },
             error: function () {
-                toastr.error("An error occurred while creating the purchase request."); 
+                toastr.error("An error occurred while creating the purchase request.");
             }
         });
     } else {
@@ -456,7 +456,7 @@ function UpdatePurchaseRequestDetails() {
                 }).then(function () {
                     window.location = '/PurchaseRequest/PurchaseRequests';
                 });
-            }
+                }
             else {
                 toastr.error(Result.message);
             }
@@ -466,7 +466,6 @@ function UpdatePurchaseRequestDetails() {
     //}
     //else {
     //   toastr.warning("Kindly fill all datafield");
-    //}
     //}
 }
 function DeletePurchaseRequest(PrNo) {
@@ -489,8 +488,7 @@ function DeletePurchaseRequest(PrNo) {
                 type: 'POST',
                 dataType: 'json',
                 success: function (Result) {
-                    if (Result.code == 200)
-                    {
+                    if (Result.code == 200) {
                         Swal.fire({
                             title: Result.message,
                             icon: 'success',
@@ -502,7 +500,7 @@ function DeletePurchaseRequest(PrNo) {
                     }
                     else {
                         toastr.error(Result.message);
-                    }                   
+                    }
                 },
                 error: function () {
                     Swal.fire({
@@ -525,6 +523,22 @@ function DeletePurchaseRequest(PrNo) {
         }
     });
 }
+function createPR() {
+    if ($("#txtProjectId").val() == "") {
+        Swal.fire({
+            title: "Kindly select project on dashboard.",
+            icon: 'warning',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'OK',
+        });
+    }
+    else {
+        window.location = '/PurchaseRequest/CreatePurchaseRequest';
+    }
+}
+
+
+
 
 
 

@@ -523,3 +523,17 @@ $(document).ready(function () {
     }
     data(datas);
 });
+
+function createInvoice() {
+    if ($("#txtInvoice").val() == "") {
+        Swal.fire({
+            title: "Kindly select project on dashboard.",
+            icon: 'warning',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'OK',
+        });
+    }
+    else {
+        window.location = '/Invoice/CreateInvoice';
+    }
+}

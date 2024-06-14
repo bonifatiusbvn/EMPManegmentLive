@@ -13,7 +13,7 @@
             <div class="page-title-right">
                 <ol class="breadcrumb m-0">
                     <li class="breadcrumb-item"><a href="javascript: void(0);">Purchase Request</a></li>
-                    <li class="breadcrumb-item active">Purchase Request List</li>
+                    <li class="breadcrumb-item active">Purchase Requests</li>
                 </ol>
             </div>
 
@@ -29,13 +29,14 @@
                     <div class="row align-items-center gy-3">
                         <div class="col-sm">
                             <h5 class="card-title mb-0">Purchase Request</h5>
+                            <input hidden id="txtProjectId" type="text" value="@UserSession.ProjectId" />
                         </div>
                         @if (UserSession.FormPermisionData.Any(a => a.FormName == "Create Purchase Request" && (a.Add == true)))
                         {
                             <div class="col-sm-auto">
                                 <div class="d-flex gap-1 flex-wrap">
                                     <button class="btn btn-success" id="approvebtn" onclick="ApproveUnapprovePR();">Approve</button>
-                                    <a class="btn btn-info add-btn btn-md" id="create-btn" asp-action="CreatePurchaseRequest" asp-controller="PurchaseRequest"><i class="ri-add-line align-bottom me-1"></i>Purchase Request</a>
+                                    <button class="btn btn-info add-btn btn-md" id="create-btn"onclick="createPR()"><i class="ri-add-line align-bottom me-1"></i>Purchase Request</button>
                                     <button class="btn btn-soft-danger" id="remove-actions" style="display:none;"><i class="ri-delete-bin-2-line"></i></button>
                                 </div>
                             </div>
@@ -89,7 +90,7 @@
                                         <h5 class="modal-title" id="exampleModalLabel"> Purchase Request Details</h5>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"></button>
                                     </div>
-                                    <form class="tablelist-form" autocomplete="off" id="UpdatePurchaseRequestDetailsForm">
+                                    <form class="tablelist-form" id="UpdatePurchaseRequestDetailsForm">
                                         <div class="modal-body">
                                             <div class="mb-3">
                                                 <label for="date-field" class="form-label">PrId</label>
@@ -134,7 +135,7 @@
                                             <div class="col-6">
                                                 <label class="form-label">IsApproved</label>
                                                 <div class="form-check form-switch mb-3">
-                                                    <input type="checkbox" class="form-check-input font-22" id="txtIsApproved" name="txtIsApproved" style="margin-left:-35px;" disabled>
+                                                    <input type="checkbox" class="form-check-input font-22" id="txtIsApproved" name="txtIsApproved" style="margin-left:-35px;">
                                                 </div>
                                             </div>
                                         </div>
@@ -154,7 +155,7 @@
                                     <div class="tab-pane fade show active" id="project-overview" role="tabpanel">
                                     </div>
                                 </div>
-
+                                @* <div id="UpdatePR"></div> *@
                             </div>
                             <!--end col-->
                         </div>

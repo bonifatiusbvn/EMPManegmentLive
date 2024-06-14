@@ -78,16 +78,16 @@ namespace EMPManagment.API.Controllers
             ApiResponseModel response = new ApiResponseModel();
             try
             {
-                var updatePR = purchaseRequest.UpdatePurchaseRequestDetails(PurchaseRequestDetails);
-                if (updatePR.Result.code == 200)
+                var UpdatePurchaseRequest = purchaseRequest.UpdatePurchaseRequestDetails(PurchaseRequestDetails);
+                if (UpdatePurchaseRequest.Result.code == 200)
                 {
                     response.code = (int)HttpStatusCode.OK;
-                    response.message = updatePR.Result.message;
+                    response.message = UpdatePurchaseRequest.Result.message;
                 }
                 else
                 {
-                    response.message = updatePR.Result.message;
-                    response.code = updatePR.Result.code;
+                    response.message = UpdatePurchaseRequest.Result.message;
+                    response.code = UpdatePurchaseRequest.Result.code;
                 }
             }
             catch (Exception ex)
