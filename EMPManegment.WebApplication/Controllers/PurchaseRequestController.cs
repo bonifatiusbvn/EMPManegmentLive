@@ -144,6 +144,7 @@ namespace EMPManegment.Web.Controllers
                     purchaseRequest = JsonConvert.DeserializeObject<PurchaseRequestModel>(res.data.ToString());
                 }
                 return new JsonResult(purchaseRequest);
+                //return PartialView("~/Views/PurchaseRequest/_UpdatePRPartial.cshtml", purchaseRequest);
             }
             catch (Exception ex)
             {
@@ -153,11 +154,13 @@ namespace EMPManegment.Web.Controllers
 
         [FormPermissionAttribute("Create Purchase Request-Edit")]
         [HttpPost]
-        public async Task<IActionResult> UpdatePurchaseRequestDetails(PurchaseRequestModel UpdatePurchaseRequest)
+        public async Task<IActionResult> UpdatePurchaseRequestDetails()
         {
             try
             {
-                ApiResponseModel postuser = await APIServices.PostAsync(UpdatePurchaseRequest, "PurchaseRequest/UpdatePurchaseRequestDetails");
+                var PurchaseRequestDetails = HttpContext.Request.Form["UpdatePRDetails"];
+                var PRDetails = JsonConvert.DeserializeObject<PurchaseRequestModel>(PurchaseRequestDetails.ToString());
+                ApiResponseModel postuser = await APIServices.PostAsync(PRDetails, "PurchaseRequest/UpdatePurchaseRequestDetails");
                 if (postuser.code == 200)
                 {
                     return Ok(new { postuser.message,postuser.code });

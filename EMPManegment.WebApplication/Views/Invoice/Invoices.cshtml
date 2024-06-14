@@ -31,11 +31,12 @@
             <div class="card-header border-0">
                 <div class="d-flex align-items-center">
                     <h5 class="card-title mb-0 flex-grow-1">Invoices</h5>
+                    <input hidden id="txtInvoice" type="text" value="@UserSession.ProjectId" />
                     @if (UserSession.FormPermisionData.Any(a => a.FormName == "Create Invoice" && (a.Add == true)))
                     {
                         <div class="flex-shrink-0">
                             <div class="d-flex gap-2 flex-wrap">
-                                <a asp-action="CreateInvoice" asp-controller="Invoice" class="btn btn-info"><i class="ri-add-line align-bottom me-1"></i>Invoice</a>
+                                <button class="btn btn-info" onclick="createInvoice()"><i class="ri-add-line align-bottom me-1"></i>Invoice</button>
                             </div>
                         </div>
                     }

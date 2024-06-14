@@ -456,7 +456,7 @@ function UpdatePurchaseRequestDetails() {
                 }).then(function () {
                     window.location = '/PurchaseRequest/PurchaseRequests';
                 });
-            }
+                }
             else {
                 toastr.error(Result.message);
             }
@@ -466,7 +466,6 @@ function UpdatePurchaseRequestDetails() {
     //}
     //else {
     //   toastr.warning("Kindly fill all datafield");
-    //}
     //}
 }
 function DeletePurchaseRequest(PrNo) {
@@ -523,6 +522,19 @@ function DeletePurchaseRequest(PrNo) {
             );
         }
     });
+}
+function createPR() {
+    if ($("#txtProjectId").val() == "") {
+        Swal.fire({
+            title: "Kindly select project on dashboard.",
+            icon: 'warning',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'OK',
+        });
+    }
+    else {
+        window.location = '/PurchaseRequest/CreatePurchaseRequest';
+    }
 }
 
 

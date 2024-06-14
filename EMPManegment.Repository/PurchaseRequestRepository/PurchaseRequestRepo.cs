@@ -116,6 +116,7 @@ namespace EMPManegment.Repository.PurchaseRequestRepository
                                        select new PurchaseRequestModel
                                        {
                                            PrId = a.PrId,
+                                           PrNo = a.PrNo,
                                            UserId = a.UserId,
                                            UserName = b.UserName,
                                            ProjectId = a.ProjectId,
@@ -123,6 +124,7 @@ namespace EMPManegment.Repository.PurchaseRequestRepository
                                            ProjectName = c.ProjectTitle,
                                            ProductName = a.ProductName,
                                            ProductTypeId = a.ProductTypeId,
+                                           ProductTypeName=a.ProductName,
                                            Quantity = a.Quantity,
                                            IsApproved = a.IsApproved,
                                            CreatedBy = a.CreatedBy,
@@ -169,7 +171,7 @@ namespace EMPManegment.Repository.PurchaseRequestRepository
                 throw;
             }
         }
-
+        [HttpPost]
         public async Task<ApiResponseModel> UpdatePurchaseRequestDetails(PurchaseRequestModel UpdatePurchaseRequest)
         {
             ApiResponseModel model = new ApiResponseModel();
@@ -179,15 +181,10 @@ namespace EMPManegment.Repository.PurchaseRequestRepository
                 if (purchaseRequest != null)
                 {
                     purchaseRequest.PrId = UpdatePurchaseRequest.PrId;
-                    purchaseRequest.UserId = UpdatePurchaseRequest.UserId;
-                    purchaseRequest.ProjectId = UpdatePurchaseRequest.ProjectId;
-                    purchaseRequest.ProductId = UpdatePurchaseRequest.ProductId;
+                    purchaseRequest.PrNo= UpdatePurchaseRequest.PrNo;
                     purchaseRequest.ProductName = UpdatePurchaseRequest.ProductName;
                     purchaseRequest.ProductTypeId = UpdatePurchaseRequest.ProductTypeId;
                     purchaseRequest.Quantity = UpdatePurchaseRequest.Quantity;
-                    purchaseRequest.IsApproved = UpdatePurchaseRequest.IsApproved;
-                    purchaseRequest.UpdatedBy = UpdatePurchaseRequest.UpdatedBy;
-                    purchaseRequest.UpdatedOn=DateTime.Now;
                 }
                 Context.TblPurchaseRequests.Update(purchaseRequest);
                 Context.SaveChanges();
