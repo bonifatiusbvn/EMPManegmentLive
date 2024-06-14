@@ -29,5 +29,17 @@ namespace EMPManegment.Services.ManualInvoice
         {
             return await ManualInvoice.GetManualInvoiceList(dataTable);
         }
+        public async Task<ManualInvoiceMasterModel> GetManualInvoiceDetails(Guid InvoiceId)
+        {
+            return await ManualInvoice.GetManualInvoiceDetails(InvoiceId);
+        }
+        public async Task<UserResponceModel> DeleteManualInvoice(Guid InvoiceId)
+        {
+            return await ManualInvoice.DeleteManualInvoice(InvoiceId);
+        }
+        public async Task<UserResponceModel> UpdateManualInvoice(ManualInvoiceMasterModel UpdateInvoice)
+        {
+            return await ManualInvoice.UpdateManualInvoice(UpdateInvoice);
+        }
     }
 }

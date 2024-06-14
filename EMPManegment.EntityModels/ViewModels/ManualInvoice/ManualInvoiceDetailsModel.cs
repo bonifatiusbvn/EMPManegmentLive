@@ -14,6 +14,8 @@ namespace EMPManegment.EntityModels.ViewModels.ManualInvoice
 
         public string Product { get; set; } = null!;
 
+        public int? ProductType { get; set; }
+
         public decimal Quantity { get; set; }
 
         public decimal Price { get; set; }
@@ -33,5 +35,7 @@ namespace EMPManegment.EntityModels.ViewModels.ManualInvoice
         public Guid? UpdatedBy { get; set; }
 
         public DateTime? UpdatedOn { get; set; }
+
+        public string? ProductTypeName { get; set; }
     }
 }

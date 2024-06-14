@@ -420,22 +420,28 @@ function InsertManualInvoiceDetails() {
                     Gst: orderRow.find("#txtgst").val(),
                     Discount: orderRow.find("#txtdiscountamount").val(),
                     ProductTotal: orderRow.find("#txtproducttotalamount").val(),
+                    ProductType: $('[id^="txtPOProductType_"]').val(),
                 };
                 orderRow.find("#textProductName").on('input', function () {
                     $(this).css("border", "1px solid #ced4da");
                 });
-
                 orderRow.find("#txtproductamount").on('input', function () {
                     $(this).css("border", "1px solid #ced4da");
                 });
+                orderRow.find('[id^="txtPOProductType_"]').on('input', function () {
+                    $(this).css("border", "1px solid #ced4da");
+                });
 
-                if (!objData.Product.trim() || objData.Price == 0) {
+                if (!objData.Product.trim() || objData.Price == 0 || objData.ProductType == 0) {
                     isValidProduct = false;
                     if (!objData.Product.trim()) {
                         orderRow.find("#textProductName").css("border", "2px solid red");
                     }
                     if (objData.Price == 0) {
                         orderRow.find("#txtproductamount").css("border", "2px solid red");
+                    }
+                    if (objData.ProductType == 0) {
+                        orderRow.find('[id^="txtPOProductType_"]').css("border", "2px solid red");
                     }
                 } else {
                     ProductDetails.push(objData);
@@ -489,7 +495,7 @@ function InsertManualInvoiceDetails() {
                                 confirmButtonColor: '#3085d6',
                                 confirmButtonText: 'OK'
                             }).then(function () {
-                                window.location = '/ManualInvoice/CreateInvoiceManual';
+                                window.location = '/ManualInvoice/ManualInvoices';
                             });
                         } else {
                             toastr.error(Result.message);
@@ -510,4 +516,132 @@ function InsertManualInvoiceDetails() {
     } else {
         toastr.warning("Kindly fill all data fields");
     }
+}
+
+var datas = userPermissions
+$(document).ready(function () {
+    function data(datas) {
+        userPermission = datas;
+        AllManualInvoiceList(userPermission);
+    }
+    function AllManualInvoiceList(userPermission) {
+        var userPermissionArray = [];
+        userPermissionArray = JSON.parse(userPermission);
+
+        var canEdit = false;
+        var canDelete = false;
+
+        for (var i = 0; i < userPermissionArray.length; i++) {
+            var permission = userPermissionArray[i];
+            if (permission.formName == "ManualInvoiceList") {
+                canEdit = permission.edit;
+                canDelete = permission.delete;
+                break;
+            }
+        }
+
+        var columns = [
+            {
+                "data": "invoiceNo",
+                "name": "InvoiceNo",
+                "render": function (data, type, full) {
+                    return '<div class="d-flex justify-content-center"><h5 class="fs-15"><a href="#" class="fw-medium link-primary text-center">' + full.invoiceNo + '</a></h5></div>';
+                }
+            },
+            { "data": "vendorName", "name": "VendorName", "className": "text-center" },
+            { "data": "companyName", "name": "CompanyName", "className": "text-center" },
+            { "data": "totalAmount", "name": "TotalAmount", "className": "text-center" }
+        ];
+
+        if (canEdit || canDelete) {
+            columns.push({
+                "data": null,
+                "orderable": false,
+                "searchable": false,
+                "render": function (data, type, full) {
+                    var buttons = '<div class="d-flex justify-content-center">';
+                    buttons += '<ul class="list-inline mb-0">';
+
+                    if (canEdit) {
+                        buttons += '<a onclick="EditInvoiceDetails(\'' + full.invoiceNo + '\')" class="btn text-primary list-inline-item">' +
+                            '<i class="fa-regular fa-pen-to-square"></i></a>';
+                    }
+
+                    if (canDelete) {
+                        buttons += '<a onclick="deleteManualInvoice(\'' + full.id + '\')" class="btn text-danger btndeletedoc list-inline-item">' +
+                            '<i class="fas fa-trash"></i></a>';
+                    }
+
+                    buttons += '</ul></div>';
+                    return buttons;
+                }
+            });
+        }
+
+        $('#manualInvoiceTable').DataTable({
+            processing: false,
+            serverSide: true,
+            filter: true,
+            "bDestroy": true,
+            ajax: {
+                type: "POST",
+                url: '/ManualInvoice/GetManualInvoiceList',
+                dataType: 'json'
+            },
+            columns: columns,
+            columnDefs: [{
+                "defaultContent": "",
+                "targets": "_all"
+            }]
+        });
+    }
+    data(datas);
+});
+
+
+function deleteManualInvoice(InvoiceId) {
+    Swal.fire({
+        title: "Are you sure want to delete this?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, delete it!",
+        cancelButtonText: "No, cancel!",
+        confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
+        cancelButtonClass: "btn btn-danger w-xs mt-2",
+        buttonsStyling: false,
+        showCloseButton: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: '/ManualInvoice/DeleteManualInvoice?InvoiceId=' + InvoiceId,
+                type: 'POST',
+                dataType: 'json',
+                success: function (Result) {
+                    if (Result.code == 200) {
+                        Swal.fire({
+                            title: Result.message,
+                            icon: 'success',
+                            confirmButtonColor: '#3085d6',
+                            confirmButtonText: 'OK'
+                        }).then(function () {
+                            window.location = '/ManualInvoice/ManualInvoices';
+                        })
+                    } else {
+                        toastr.error(Result.message);
+                    }
+                },
+                error: function () {
+                    toastr.error("Can't delete Invoice!"); 
+                }
+            })
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+
+            Swal.fire(
+                'Cancelled',
+                'Manual Invoice have no changes.!!😊',
+                'error'
+            );
+        }
+    });
 }

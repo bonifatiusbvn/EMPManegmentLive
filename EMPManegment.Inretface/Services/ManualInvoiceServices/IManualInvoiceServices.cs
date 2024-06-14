@@ -13,5 +13,8 @@ namespace EMPManegment.Inretface.Services.ManualInvoiceServices
     {
         Task<UserResponceModel> InsertManualInvoice(ManualInvoiceMasterModel InvoiceDetails);
         Task<jsonData> GetManualInvoiceList(DataTableRequstModel dataTable);
+        Task<ManualInvoiceMasterModel> GetManualInvoiceDetails(Guid InvoiceId);
+        Task<UserResponceModel> DeleteManualInvoice(Guid InvoiceId);
+        Task<UserResponceModel> UpdateManualInvoice(ManualInvoiceMasterModel UpdateInvoice);
     }
 }

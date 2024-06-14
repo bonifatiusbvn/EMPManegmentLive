@@ -67,6 +67,10 @@ namespace EMPManegment.EntityModels.ViewModels.ManualInvoice
 
         public string? ProjectName { get; set; }
 
+        public string? PaymentStatusName { get; set; }
+
+        public string? PaymentMethodName { get; set; }
+
         public List<ManualInvoiceDetailsModel>? ManualInvoiceDetails { get; set; }
     }
 }

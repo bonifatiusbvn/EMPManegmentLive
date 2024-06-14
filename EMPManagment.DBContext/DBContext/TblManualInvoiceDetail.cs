@@ -11,6 +11,8 @@ public partial class TblManualInvoiceDetail
 
     public string Product { get; set; } = null!;
 
+    public int? ProductType { get; set; }
+
     public decimal Quantity { get; set; }
 
     public decimal Price { get; set; }
