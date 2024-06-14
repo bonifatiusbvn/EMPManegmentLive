@@ -1,12 +1,12 @@
 ﻿@using EMPManegment.Web.Models;
-@model List<EMPManegment.EntityModels.ViewModels.ProductMaster.ProductDetailsView>
+@model List<EMPManegment.EntityModels.ViewModels.Purchase_Request.PurchaseRequestModel>
 @inject IHttpContextAccessor Accessor;
 @inject UserSession _userSession
 
 @foreach (var item in Model)
 {
     <div class="products card">
-        <div class="card-body" data-product-id="@item.Id">
+        <div class="card-body" data-product-id="@item.ProductId">
             <div class="row gy-3">
                 <div class="col-sm-auto">
                     <div class="avatar-lg bg-light rounded p-1">
@@ -19,21 +19,29 @@
                         <li class="list-inline-item">Category : <span class="fw-medium">@item.ProductTypeName</span></li>
                     </ul>
 
-                    <input type="hidden" class="product-quantity form-control" id="txtproducttype" value="@item.ProductType" style="width:80px;">
-                    <input type="hidden" class="form-control" id="txtproductId" value="@item.Id" style="width:80px;">
+                    <input type="hidden" class="product-quantity form-control" id="txtproducttype" value="@item.ProductTypeId" style="width:80px;">
+                    <input type="hidden" class="form-control" id="txtproductId" value="@item.ProductId" style="width:80px;">
                     <input type="hidden" class="form-control" id="txtProductName" value="@item.ProductName" style="width:80px;">
                     <input type="hidden" value="@UserSession.ProjectId" id="txtprojectId" />
                     <input type="hidden" value="@_userSession.UserId" id="txtuserId" />
 
                     <div class="input-step">
-                        <input type="number" class="product-quantity" value="1" min="1" oninput="preventEmptyValue(this)" id="txtproductquantity">
+                        @if(item.Quantity == 0)
+                        {
+                            <input type="number" class="product-quantity" value="1" min="1" oninput="preventEmptyValue(this)" id="txtproductquantity">
+                        }
+                        else
+                        {
+                            <input type="number" class="product-quantity" value="@item.Quantity" min="1" oninput="preventEmptyValue(this)" id="txtproductquantity">
+                        }
+                        
                     </div>
 
                 </div>
                 <div class="col-sm-auto">
                     <div class="text-lg-end">
                         <p class="text-muted mb-1">Price :</p>
-                        <h5 class="fs-14" id="dspperunitprice">₹<span class="product-price">@item.PerUnitPrice</span></h5>
+                        <h5 class="fs-14" id="dspperunitprice">₹<span class="product-price">@item.Price</span></h5>
                     </div>
                     <div class="text-lg-end">
                         <p class="text-muted mb-1">GST :</p>

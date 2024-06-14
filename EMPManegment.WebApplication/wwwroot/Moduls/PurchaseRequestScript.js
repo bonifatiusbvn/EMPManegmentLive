@@ -54,7 +54,7 @@ function filterallItemTable() {
 
 function SerchItemDetailsById(Id) {
     $.ajax({
-        url: '/ProductMaster/DisplayProductDetilsListById?ProductId=' + Id,
+        url: '/PurchaseRequest/DisplayProductDetilsListById?ProductId=' + Id,
         type: 'Post',
         datatype: 'json',
         processData: false,
@@ -114,6 +114,8 @@ $(document).ready(function () {
     $(document).on('focusout', '.product-quantity', function () {
         $(this).trigger('input');
     });
+
+   
 });
 
 function updateTotals() {
@@ -209,7 +211,7 @@ $(document).ready(function () {
                     }
                 },
                 {
-                    "data": null,
+                    "data": null, "name": "FullName",
                     "render": function (data, type, full) {
                         return full.fullName + ' ( ' + full.userName + ')';
                     },
@@ -229,11 +231,12 @@ $(document).ready(function () {
                         var userPermissionArray = JSON.parse(userPermission);
                         var canEdit = userPermissionArray.some(permission => permission.formName === "Purchase Request List " && permission.edit);
                         var canDelete = userPermissionArray.some(permission => permission.formName === "Purchase Request List " && permission.delete);
+                        var PRNo = full.prNo;
 
                         var buttons = '<ul class="list-inline hstack gap-2 mb-0">';
                         if (canEdit) {
                             buttons += '<li class="btn text-primary list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">' +
-                                '<a class="btn text-primary" onclick="EditPurchaseRequestDetails(\'' + full.prId + '\')">' +
+                                '<a class="btn text-primary" href="/PurchaseRequest/CreatePurchaseRequest?id=' + PRNo + '">' +
                                 '<i class="fa-regular fa-pen-to-square"></i></a></li>';
                         }
                         if (canDelete) {
@@ -274,9 +277,10 @@ $(document).ready(function () {
     }
 
     data(datas);
+
 });
 
-
+    
 function ApproveUnapprovePR() {
 
     Swal.fire({
@@ -364,6 +368,7 @@ function CreatePurchaseRequest() {
                 Quantity: orderRow.find("#txtproductquantity").val(),
                 CreatedBy: $('#txtuserId').val(),
                 PrNo: $('#prNo').val(),
+                PrDate: $('#txtPrDate').val(),
             };
             purchaseRequests.push(objData);
         });
@@ -405,68 +410,71 @@ function CreatePurchaseRequest() {
         toastr.warning("Kindly add the products");
     }
 }
-
-function EditPurchaseRequestDetails(PrId) {
-    $.ajax({
-        url: '/PurchaseRequest/EditPurchaseRequestDetails?PrId=' + PrId,
-        type: "Get",
-        contentType: 'application/json;charset=utf-8;',
-        dataType: 'json',
-        success: function (response) {
-            $('#UpdateOrderModel').modal('show');
-            $('#txtPrId').val(response.prId);
-            $('#txtusername').val(response.userId);
-            $('#txtprojectId').val(response.projectId);
-            $('#txtProductId').val(response.productId);
-            $('#txtproductName').val(response.productName);
-            $('#txtProductTypeId').val(response.productTypeId);
-            $('#txtquantity').val(response.quantity);
-            $('#txtIsApproved').val(response.isApproved);
-        },
-        error: function () {
-            toastr.error("Can't get Data");
-        }
-    });
-}
-
-function UpdatePurchaseRequestDetails() {
-    //if ($('#UpdatePurchaseRequestDetailsForm').valid())
-    //{
-    var objData = {
-        UserName: $('#txtusername').val(),
-        ProjectName: $('#txtprojectId').val(),
-        ProductName: $('#txtproductName').val(),
-        Quantity: $('#txtquantity').val(),
+function CheckProjectIdIsSelected() {
+    var ProjectId = $('#txtProjectId').val();
+    if (ProjectId == "") {
+        toastr.warning('Please Select Project!');
+    } else {
+        UpdatePurchaseRequestDetails()
     }
+}
+function UpdatePurchaseRequestDetails() {
 
-    $.ajax({
-        url: '/PurchaseRequest/UpdatePurchaseRequestDetails',
-        type: 'Post',
-        data: objData,
-        dataType: 'json',
-        contentType: false,
-        processData: false,
-        success: function (Result) {
-            if (Result.code == 200) {
-                Swal.fire({
-                    title: Result.message,
-                    icon: 'success',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK',
-                }).then(function () {
-                    window.location = '/PurchaseRequest/PurchaseRequests';
-                });
-                }
-            else {
-                toastr.error(Result.message);
-            }
+    var TotalAmount = $("#dsptotalAmount").text();
+    if (TotalAmount != "") {
+        var purchaseRequests = [];
+        $(".products").each(function () {
+            var orderRow = $(this);
+            var objData = {
+                UserId: orderRow.find("#txtuserId").val(),
+                ProjectId: orderRow.find("#txtprojectId").val(),
+                ProductId: orderRow.find("#txtproductId").val(),
+                ProductName: orderRow.find("#txtProductName").val(),
+                ProductTypeId: orderRow.find("#txtproducttype").val(),
+                Quantity: orderRow.find("#txtproductquantity").val(),
+                UpdatedBy: $('#txtuserId').val(),
+                PrNo: $('#prNo').val(),
+                PrDate: $('#txtUpdatePrDate').val(),
+            };
+            purchaseRequests.push(objData);
+        });
 
+        var data = {
+            PRList: purchaseRequests,
+            PrNo: $('#prNo').val(),
         }
-    })
-    //}
-    //else {
-    //   toastr.warning("Kindly fill all datafield");
-    //}
+
+        var form_data = new FormData();
+        form_data.append("UpdatePRDetails", JSON.stringify(data));
+
+        $.ajax({
+            url: '/PurchaseRequest/UpdatePurchaseRequestDetails',
+            type: 'Post',
+            data: form_data,
+            dataType: 'json',
+            contentType: false,
+            processData: false,
+            success: function (Result) {
+                if (Result.code == 200) {
+                    Swal.fire({
+                        title: Result.message,
+                        icon: 'success',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK',
+                    }).then(function () {
+                        window.location = '/PurchaseRequest/PurchaseRequests';
+                    });
+                }
+                else {
+                    toastr.error(Result.message);
+                }
+            }
+        })
+    }
+    else {
+        toastr.warning("Please Add Product!");
+    }
+   
 }
 function DeletePurchaseRequest(PrNo) {
 

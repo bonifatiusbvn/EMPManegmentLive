@@ -1,4 +1,5 @@
-﻿@using EMPManegment.Web.Models;
+﻿@model EMPManegment.EntityModels.ViewModels.Purchase_Request.PurchaseRequestMasterView
+@using EMPManegment.Web.Models;
 @inject IHttpContextAccessor Accessor;
 @inject UserSession _userSession
 @{
@@ -11,17 +12,16 @@
     <div class="col-12">
         <div class="page-title-box d-sm-flex align-items-center justify-content-between">
             <h4 class="mb-sm-0"> Create Purchase Request</h4>
-
             <div class="page-title-right">
                 <ol class="breadcrumb m-0">
                     <li class="breadcrumb-item"><a href="javascript: void(0);">Purchase Request</a></li>
                     <li class="breadcrumb-item active">Create Purchase Request</li>
                 </ol>
             </div>
-
         </div>
     </div>
 </div>
+<input type="hidden" id="txtProjectId" value="@UserSession.ProjectId" />
 <!-- end page title -->
 <div class="row">
     <div class="col-xl-9">
@@ -31,26 +31,50 @@
                     <div class="col-sm">
                         # @ViewData["PrNo"] <h5 class="fs-14 mb-0" id="cartTotalItemCount"></h5>
                     </div>
-
                     <div class="col-sm-auto">
                         <div class="d-flex gap-1 flex-wrap">
+                            @{
+                                string formattedDate = Model.PrDate.HasValue ? Model.PrDate.Value.ToString("yyyy-MM-dd") : "";
+                            }
+                            @if (Model.PrDate == null)
+                            {
+                                <input type="date" class="form-control" id="txtPrDate" style="width:200px;" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                            }
+                            else
+                            {
+                                <input type="date" class="form-control" id="txtUpdatePrDate" style="width:200px;" value="@formattedDate" />
+                            }
+                            
                             <a class="btn btn-warning" onclick="fn_OpenAddproductmodal()"><i class="ri-add-line align-bottom me-1"></i> Add Product</a>
-                            <input type="text" class="form-control form-control" id="prNo" value="@ViewData["PrNo"].ToString()" hidden />
+                            <input type="text" class="form-control" id="prNo" value="@ViewData["PrNo"].ToString()" hidden />
                         </div>
                     </div>
-
                 </div>
             </div>
             <div class="card-body">
                 <div class="table-responsive table-card">
-                    <div id="displayPurchaseRequest">
-                    </div>
-
+                    @if (Model.PRList != null)
+                    {
+                        <div id="displayPurchaseRequest">
+                            @Html.Partial("_AddProductPRPartial.cshtml", Model.PRList)
+                        </div>
+                    }
+                    else
+                    {
+                        <div id="displayPurchaseRequest">
+                        </div>
+                    }
                 </div>
                 <div class="text-end mb-4">
-                    <a id="btnpurchaserequest" onclick="CreatePurchaseRequest()" class="btn btn-success btn-lg" style="margin-bottom: -30px;margin-right: 15px;width: 160px;height: 50px;">Create<i class="ri-arrow-right-line label-icon align-bottom fs-16 ms-2"></i></a>
+                    @if (Model.PRList != null)
+                    {
+                        <a id="btnUpdatepurchaserequest" onclick="CheckProjectIdIsSelected()" class="btn btn-success btn-lg" style="margin-bottom: -30px;margin-right: 15px;width: 160px;height: 50px;">Update<i class="ri-arrow-right-line label-icon align-bottom fs-16 ms-2"></i></a>
+                    }
+                    else
+                    {
+                        <a id="btnpurchaserequest" onclick="CreatePurchaseRequest()" class="btn btn-success btn-lg" style="margin-bottom: -30px;margin-right: 15px;width: 160px;height: 50px;">Create<i class="ri-arrow-right-line label-icon align-bottom fs-16 ms-2"></i></a>
+                    }
                 </div>
-
             </div>
         </div>
         <!--end card-->
@@ -78,18 +102,13 @@
                         <tr class="table-active">
                             <th>Total  :</th>
                             <td class="text-end">
-                                <span class="fw-semibold" id="cart-total">
-
-                                </span>
+                                <span class="fw-semibold" id="cart-total"></span>
                             </td>
                         </tr>
                     </tbody>
                 </table>
-
             </div>
         </div>
-        <!--end card-->
-        <!--end card-->
         <!--end card-->
     </div>
     <!--end col-->
@@ -107,7 +126,6 @@
                 <label class="form-label">Search Product</label>
                 <input class="form-control" id="mdProductSearch" onkeyup="filterallItemTable()" />
             </div>
-
             <div class="modal-body" id="mdlistofItem" style="overflow-x: hidden">
             </div>
         </div>
@@ -117,7 +135,6 @@
 
 
 <script type="text/javascript">
-
     function fn_OpenAddproductmodal() {
         $('#mdProductSearch').val('');
         $('#mdPoproductModal').modal('show');

@@ -584,6 +584,8 @@ public partial class BonifatiusEmployeesContext : DbContext
 
             entity.Property(e => e.PrId).ValueGeneratedNever();
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.Date).HasColumnType("datetime");
+            entity.Property(e => e.PrDate).HasColumnType("date");
             entity.Property(e => e.PrNo).HasMaxLength(50);
             entity.Property(e => e.ProductName).HasMaxLength(250);
             entity.Property(e => e.Quantity).HasColumnType("numeric(18, 2)");

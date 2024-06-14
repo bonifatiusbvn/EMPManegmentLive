@@ -64,16 +64,16 @@ namespace EMPManagment.API.Controllers
         }
 
         [HttpGet]
-        [Route("EditPurchaseRequestDetails")]
-        public async Task<IActionResult> EditPurchaseRequestDetails(Guid PrId)
+        [Route("GetPurchaseRequestDetailsById")]
+        public async Task<IActionResult> GetPurchaseRequestDetailsById(string PrNo)
         {
-            var purchaseRequestDetails = await purchaseRequest.GetPurchaseRequestDetailsById(PrId);
+            var purchaseRequestDetails = await purchaseRequest.PurchaseRequestDetailsByPrNo(PrNo);
             return Ok(new { code = 200, data = purchaseRequestDetails });
         }
 
         [HttpPost]
         [Route("UpdatePurchaseRequestDetails")]
-        public async Task<IActionResult> UpdatePurchaseRequestDetails(PurchaseRequestModel PurchaseRequestDetails)
+        public async Task<IActionResult> UpdatePurchaseRequestDetails(PurchaseRequestMasterView PurchaseRequestDetails)
         {
             ApiResponseModel response = new ApiResponseModel();
             try
@@ -81,7 +81,7 @@ namespace EMPManagment.API.Controllers
                 var UpdatePurchaseRequest = purchaseRequest.UpdatePurchaseRequestDetails(PurchaseRequestDetails);
                 if (UpdatePurchaseRequest.Result.code == 200)
                 {
-                    response.code = (int)HttpStatusCode.OK;
+                    response.code = UpdatePurchaseRequest.Result.code;
                     response.message = UpdatePurchaseRequest.Result.message;
                 }
                 else
@@ -174,6 +174,14 @@ namespace EMPManagment.API.Controllers
                 responseModel.Message = "An error occurred while processing the request.";
             }
             return StatusCode(responseModel.Code, responseModel);
+        }
+
+        [HttpGet]
+        [Route("ProductDetailsById")]
+        public async Task<IActionResult> ProductDetailsById(Guid ProductId)
+        {
+            var purchaseRequestDetails = await purchaseRequest.ProductDetailsById(ProductId);
+            return Ok(new { code = 200, data = purchaseRequestDetails });
         }
     }
 }

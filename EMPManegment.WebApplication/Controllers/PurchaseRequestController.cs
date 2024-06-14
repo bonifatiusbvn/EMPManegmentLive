@@ -15,6 +15,7 @@ using Newtonsoft.Json;
 using DocumentFormat.OpenXml.Drawing.Charts;
 using EMPManegment.Web.Helper;
 using EMPManegment.EntityModels.ViewModels.ExpenseMaster;
+using Irony.Parsing.Construction;
 
 namespace EMPManegment.Web.Controllers
 {
@@ -31,22 +32,33 @@ namespace EMPManegment.Web.Controllers
         public APIServices APIServices { get; }
 
         [FormPermissionAttribute("Create Purchase Request-View")]
-        public async Task<IActionResult> CreatePurchaseRequest()
+        public async Task<IActionResult> CreatePurchaseRequest(string? id)
         {
             try
             {
-                ApiResponseModel Response = await APIServices.GetAsync("", "PurchaseRequest/CheckPRNo");
-
-                if (Response.code == 200)
+                PurchaseRequestMasterView PRDetails = new PurchaseRequestMasterView();
+                if (id != null)
                 {
-                    ViewData["PrNo"] = JsonConvert.DeserializeObject<string>(JsonConvert.SerializeObject(Response.data));
+                    ApiResponseModel res = await APIServices.GetAsync("", "PurchaseRequest/GetPurchaseRequestDetailsById?PrNo=" + id);
+                    if (res.code == 200)
+                    {
+                        PRDetails = JsonConvert.DeserializeObject<PurchaseRequestMasterView>(res.data.ToString());
+                    }
+                    ViewData["PrNo"]=PRDetails.PrNo;
                 }
-                return View();
+                else
+                {
+                    ApiResponseModel Response = await APIServices.GetAsync("", "PurchaseRequest/CheckPRNo");
+                    if (Response.code == 200)
+                    {
+                        ViewData["PrNo"] = JsonConvert.DeserializeObject<string>(JsonConvert.SerializeObject(Response.data));
+                    }
+                }
+                return View(PRDetails);
             }
             catch (Exception ex)
             {
                 throw ex;
-
             }
         }
 
@@ -54,11 +66,18 @@ namespace EMPManegment.Web.Controllers
         {
             try
             {
-                string apiUrl = $"ProductMaster/GetAllProductList?searchText={searchText}";
+                string apiUrl = $"ProductMaster/GetAllProductList";
                 ApiResponseModel response = await APIServices.PostAsync("", apiUrl);
                 if (response.code == 200)
                 {
                     List<ProductDetailsView> Items = JsonConvert.DeserializeObject<List<ProductDetailsView>>(response.data.ToString());
+
+                    if (!string.IsNullOrEmpty(searchText))
+                    {
+                        searchText = searchText.ToLower();
+                        Items = Items.Where(u => u.ProductName.ToLower().Contains(searchText)).ToList(); 
+                    }
+
                     int pageSize = 5;
                     var pageNumber = page ?? 1;
 
@@ -75,6 +94,7 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
+
 
         [FormPermissionAttribute("Create Purchase Request-Add")]
         [HttpPost]
@@ -132,25 +152,6 @@ namespace EMPManegment.Web.Controllers
         {
             return View();
         }
-        [HttpGet]
-        public async Task<JsonResult> EditPurchaseRequestDetails(Guid PrId)
-        {
-            try
-            {
-                PurchaseRequestModel purchaseRequest = new PurchaseRequestModel();
-                ApiResponseModel res = await APIServices.GetAsync("", "PurchaseRequest/EditPurchaseRequestDetails?PrId=" + PrId);
-                if (res.code == 200)
-                {
-                    purchaseRequest = JsonConvert.DeserializeObject<PurchaseRequestModel>(res.data.ToString());
-                }
-                return new JsonResult(purchaseRequest);
-                //return PartialView("~/Views/PurchaseRequest/_UpdatePRPartial.cshtml", purchaseRequest);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
 
         [FormPermissionAttribute("Create Purchase Request-Edit")]
         [HttpPost]
@@ -159,11 +160,11 @@ namespace EMPManegment.Web.Controllers
             try
             {
                 var PurchaseRequestDetails = HttpContext.Request.Form["UpdatePRDetails"];
-                var PRDetails = JsonConvert.DeserializeObject<PurchaseRequestModel>(PurchaseRequestDetails.ToString());
+                var PRDetails = JsonConvert.DeserializeObject<PurchaseRequestMasterView>(PurchaseRequestDetails.ToString());
                 ApiResponseModel postuser = await APIServices.PostAsync(PRDetails, "PurchaseRequest/UpdatePurchaseRequestDetails");
                 if (postuser.code == 200)
                 {
-                    return Ok(new { postuser.message,postuser.code });
+                    return Ok(new { postuser.message, postuser.code });
                 }
                 else
                 {
@@ -199,15 +200,15 @@ namespace EMPManegment.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> GetPRList()
+        public async Task<IActionResult> GetPRList(string? SortBy)
         {
             try
             {
                 var draw = Request.Form["draw"].FirstOrDefault();
                 var start = Request.Form["start"].FirstOrDefault();
                 var length = Request.Form["length"].FirstOrDefault();
-                var sortColumn = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
-                var sortColumnDir = Request.Form["order[0][dir]"].FirstOrDefault();
+                //var sortColumn = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
+                //var sortColumnDir = Request.Form["order[0][dir]"].FirstOrDefault();
                 var searchValue = Request.Form["search[value]"].FirstOrDefault();
                 int pageSize = length != null ? Convert.ToInt32(length) : 0;
                 int skip = start != null ? Convert.ToInt32(start) : 0;
@@ -220,8 +221,8 @@ namespace EMPManegment.Web.Controllers
                     skip = skip,
                     lenght = length,
                     searchValue = searchValue,
-                    sortColumn = sortColumn,
-                    sortColumnDir = sortColumnDir
+                    //sortColumn = sortColumn,
+                    //sortColumnDir = sortColumnDir
                 };
                 List<PurchaseRequestModel> purchaseRequestList = new List<PurchaseRequestModel>();
                 var data = new jsonData();
@@ -231,6 +232,7 @@ namespace EMPManegment.Web.Controllers
                     data = JsonConvert.DeserializeObject<jsonData>(res.data.ToString());
                     purchaseRequestList = JsonConvert.DeserializeObject<List<PurchaseRequestModel>>(data.data.ToString());
                 }
+                
                 var jsonData = new
                 {
                     draw = data.draw,
@@ -287,6 +289,24 @@ namespace EMPManegment.Web.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, new { Message = "An error occurred while processing your request.", Code = 500 });
+            }
+        }
+        [HttpPost]
+        public async Task<IActionResult> DisplayProductDetilsListById(Guid ProductId)
+        {
+            try
+            {
+                List<PurchaseRequestModel> products = new List<PurchaseRequestModel>();
+                ApiResponseModel response = await APIServices.GetAsync("", "PurchaseRequest/ProductDetailsById?ProductId=" + ProductId);
+                if (response.code == 200)
+                {
+                    products = JsonConvert.DeserializeObject<List<PurchaseRequestModel>>(response.data.ToString());
+                }
+                return PartialView("~/Views/PurchaseRequest/_AddProductPRPartial.cshtml", products);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
     }
