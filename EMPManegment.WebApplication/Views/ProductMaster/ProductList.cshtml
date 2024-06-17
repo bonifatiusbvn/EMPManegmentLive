@@ -6,7 +6,33 @@
     ViewData["Title"] = "ProductList";
     Layout = "~/Views/Shared/_HomeLayout.cshtml";
 }
+<style>
+    span.deleteicon {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+    }
 
+        span.deleteicon span {
+            position: absolute;
+            display: block;
+            right: 3px;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            color: red;
+            background-color: #ccc;
+            font: 13px monospace;
+            text-align: center;
+            line-height: 1em;
+            cursor: pointer;
+        }
+
+        span.deleteicon input {
+            padding-right: 18px;
+            box-sizing: border-box;
+        }
+</style>
 
 <!-- start page title -->
 <div class="row" style="margin-top:80px;">

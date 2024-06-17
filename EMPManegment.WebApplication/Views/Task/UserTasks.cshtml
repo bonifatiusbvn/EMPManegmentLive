@@ -7,6 +7,22 @@
     Layout = "~/Views/Shared/_HomeLayout.cshtml";
 }
 
+<style>
+
+    .form-control {
+        width: 100%;
+        padding-left: 30px;
+    }
+
+    .search-icon {
+        position: absolute;
+        left: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+    }
+
+</style>
 
 <div class="row" style="margin-top:80px;">
     <div class="col-12">
@@ -33,14 +49,18 @@
             </div>
             <!--end col-->
             <div class="col-lg-3 col-auto">
-                <div class="search-box">
-                    My Task
+                <div class="col-sm">
+                    <h5 class="card-title">My Task</h5>
                 </div>
             </div>
             <div class="col-auto ms-sm-auto">
-                <input type="text" class="form-control search" id="search-task-options" placeholder="Search for project, tasks...">
-                <i class="ri-search-line search-icon"></i>
+                <div class="search-container" style="position: relative; width: 330px;">
+                    <i class="ri-search-line search-icon" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%);"></i>
+                    <input type="text" class="form-control" id="search-task-options" placeholder="Search for project, tasks..." style="width: 95%; padding-left: 42px;">
+                </div>
             </div>
+
+
             <!--end col-->
         </div>
         <!--end row-->
@@ -53,7 +73,7 @@
     <div class="tasks-list">
         <div class="d-flex mb-3">
             <div class="flex-grow-1">
-                <h6 class="fs-14 text-uppercase fw-semibold mb-0">Unassigned <small class="badge bg-success align-bottom ms-1 totaltask-badge">2</small></h6>
+                <h6 class="fs-14 text-uppercase fw-semibold mb-0">Unassigned <small class="badge bg-info align-bottom ms-1 totaltask-badge">@Model.Count(t => t.TaskStatus == null)</small></h6>
             </div>
             <div class="flex-shrink-0">
                 <div class="dropdown card-header-dropdown">
@@ -73,6 +93,8 @@
                     <div class="card-body bg-info">
                         @foreach (var item in Model)
                         {
+                            var imageUrl = !string.IsNullOrEmpty(item.UserProfile) ? Url.Content($"~/{item.UserProfile}") : null;
+                            var initials = $"{item.FirstName[0]}{item.LastName[0]}".ToUpper();
                             @if (item.TaskStatus == null)
                             {
                                 <div class="card tasks-box">
@@ -121,7 +143,7 @@
                                             }
                                             else if (item.TaskStatus == "Pending")
                                             {
-                                                <a class="badge bg-primary text-uppercase">  @item.TaskStatus  </a>
+                                                <a class="badge bg-secondary text-uppercase">  @item.TaskStatus  </a>
                                             }
                                             else if (item.TaskStatus == "InReview")
                                             {
@@ -129,14 +151,21 @@
                                             }
                                             else
                                             {
-                                                <a class="badge bg-secondary text-uppercase">  @item.TaskStatus  </a>
+                                                <a class="badge bg-info text-uppercase">  @item.TaskStatus  </a>
                                             }
                                             <div class="flex-grow-1">
                                                 @* <span class="badge bg-primary-subtle  text-uppercase">@item.TaskStatus</span> *@
                                             </div>
                                             <div class="flex-shrink-0">
                                                 <div class="avatar-group">
-                                                    <img src="~/@item.UserProfile" alt="" class="direct-chat-img">
+                                                    @if (!string.IsNullOrEmpty(imageUrl))
+                                                    {
+                                                        <img src="~/@item.UserProfile" alt="" class="direct-chat-img">
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="avatar-title bg-success-subtle text-success rounded-circle fs-13" style="margin-left:115px;height:40px;width:40px;">@initials</div>
+                                                    }
                                                 </div>
                                             </div>
                                         </div>
@@ -193,7 +222,7 @@
     <div class="tasks-list">
         <div class="d-flex mb-3">
             <div class="flex-grow-1">
-                <h6 class="fs-14 text-uppercase fw-semibold mb-0"> On Hold <small class="badge bg-success align-bottom ms-1 totaltask-badge">2</small></h6>
+                <h6 class="fs-14 text-uppercase fw-semibold mb-0"> On Hold <small class="badge bg-secondary align-bottom ms-1 totaltask-badge">@Model.Count(t => t.TaskStatus == "Pending")</small></h6>
             </div>
             <div class="flex-shrink-0">
                 <div class="dropdown card-header-dropdown">
@@ -213,6 +242,8 @@
                     <div class="card-body bg-secondary">
                         @foreach (var item in Model)
                         {
+                            var imageUrl = !string.IsNullOrEmpty(item.UserProfile) ? Url.Content($"~/{item.UserProfile}") : null;
+                            var initials = $"{item.FirstName[0]}{item.LastName[0]}".ToUpper();
                             @if (item.TaskStatus == "Pending")
                             {
                                 <div class="card tasks-box">
@@ -264,7 +295,7 @@
                                             }
                                             else if (item.TaskStatus == "Pending")
                                             {
-                                                <a class="badge bg-primary text-uppercase">  @item.TaskStatus  </a>
+                                                <a class="badge bg-secondary text-uppercase">  @item.TaskStatus  </a>
                                             }
                                             else if (item.TaskStatus == "InReview")
                                             {
@@ -272,14 +303,22 @@
                                             }
                                             else
                                             {
-                                                <a class="badge bg-secondary text-uppercase">  @item.TaskStatus  </a>
+                                                <a class="badge bg-info text-uppercase">  @item.TaskStatus  </a>
                                             }
                                             <div class="flex-grow-1">
                                                 @* <span class="badge bg-primary-subtle  text-uppercase">@item.TaskStatus</span> *@
                                             </div>
                                             <div class="flex-shrink-0">
                                                 <div class="avatar-group">
-                                                    <img src="~/@item.UserProfile" alt="" class="direct-chat-img">
+                                                    @if (!string.IsNullOrEmpty(imageUrl))
+                                                    {
+                                                        <img src="~/@item.UserProfile" alt="" class="direct-chat-img">
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="avatar-title bg-success-subtle text-success rounded-circle fs-13" style="margin-left:115px;height:40px;width:40px;">@initials</div>
+                                                    }
+                                                    
                                                 </div>
                                             </div>
                                         </div>
@@ -336,7 +375,7 @@
     <div class="tasks-list">
         <div class="d-flex mb-3">
             <div class="flex-grow-1">
-                <h6 class="fs-14 text-uppercase fw-semibold mb-0">To Do <small class="badge bg-success align-bottom ms-1 totaltask-badge">2</small></h6>
+                <h6 class="fs-14 text-uppercase fw-semibold mb-0">To Do <small class="badge bg-warning align-bottom ms-1 totaltask-badge">@Model.Count(t => t.TaskStatus == "Working")</small></h6>
             </div>
             <div class="flex-shrink-0">
                 <div class="dropdown card-header-dropdown">
@@ -356,6 +395,8 @@
                     <div class="card-body bg-warning">
                         @foreach (var item in Model)
                         {
+                            var imageUrl = !string.IsNullOrEmpty(item.UserProfile) ? Url.Content($"~/{item.UserProfile}") : null;
+                            var initials = $"{item.FirstName[0]}{item.LastName[0]}".ToUpper();
                             @if (item.TaskStatus == "Working")
                             {
                                 <div class="card tasks-box">
@@ -408,7 +449,7 @@
                                             }
                                             else if (item.TaskStatus == "Pending")
                                             {
-                                                <a class="badge bg-primary text-uppercase">  @item.TaskStatus  </a>
+                                                <a class="badge bg-secondary text-uppercase">  @item.TaskStatus  </a>
                                             }
                                             else if (item.TaskStatus == "InReview")
                                             {
@@ -416,14 +457,22 @@
                                             }
                                             else
                                             {
-                                                <a class="badge bg-secondary text-uppercase">  @item.TaskStatus  </a>
+                                                <a class="badge bg-info text-uppercase">  @item.TaskStatus  </a>
                                             }
                                             <div class="flex-grow-1">
                                                 @* <span class="badge bg-primary-subtle  text-uppercase">@item.TaskStatus</span> *@
                                             </div>
                                             <div class="flex-shrink-0">
                                                 <div class="avatar-group">
-                                                    <img src="~/@item.UserProfile" alt="" class="direct-chat-img">
+                                                    @if (!string.IsNullOrEmpty(imageUrl))
+                                                    {
+                                                        <img src="~/@item.UserProfile" alt="" class="direct-chat-img">
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="avatar-title bg-success-subtle text-success rounded-circle fs-13" style="margin-left:115px;height:40px;width:40px;">@initials</div>
+                                                    }
+                                                    
                                                 </div>
                                             </div>
                                         </div>
@@ -481,7 +530,7 @@
     <div class="tasks-list">
         <div class="d-flex mb-3">
             <div class="flex-grow-1">
-                <h6 class="fs-14 text-uppercase fw-semibold mb-0">In Reviews <small class="badge bg-success align-bottom ms-1 totaltask-badge">3</small></h6>
+                <h6 class="fs-14 text-uppercase fw-semibold mb-0">In Reviews <small class="badge bg-orange align-bottom ms-1 totaltask-badge">@Model.Count(t => t.TaskStatus == "InReview")</small></h6>
             </div>
             <div class="flex-shrink-0">
                 <div class="dropdown card-header-dropdown">
@@ -501,6 +550,8 @@
                     <div class="card-body" style="background-color:orangered">
                         @foreach (var item in Model)
                         {
+                            var imageUrl = !string.IsNullOrEmpty(item.UserProfile) ? Url.Content($"~/{item.UserProfile}") : null;
+                            var initials = $"{item.FirstName[0]}{item.LastName[0]}".ToUpper();
                             @if (item.TaskStatus == "InReview")
                             {
                                 <div class="card tasks-box">
@@ -551,7 +602,7 @@
                                             }
                                             else if (item.TaskStatus == "Pending")
                                             {
-                                                <a class="badge bg-primary text-uppercase">  @item.TaskStatus  </a>
+                                                <a class="badge bg-secondary text-uppercase">  @item.TaskStatus  </a>
                                             }
                                             else if (item.TaskStatus == "InReview")
                                             {
@@ -559,13 +610,20 @@
                                             }
                                             else
                                             {
-                                                <a class="badge bg-secondary text-uppercase">  @item.TaskStatus  </a>
+                                                <a class="badge bg-info text-uppercase">  @item.TaskStatus  </a>
                                             }
                                             <div class="flex-grow-1">
                                             </div>
                                             <div class="flex-shrink-0">
                                                 <div class="avatar-group">
-                                                    <img src="~/@item.UserProfile" alt="" class="direct-chat-img">
+                                                    @if (!string.IsNullOrEmpty(imageUrl))
+                                                    {
+                                                        <img src="~/@item.UserProfile" alt="" class="direct-chat-img">
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="avatar-title bg-success-subtle text-success rounded-circle fs-13" style="margin-left:115px;height:40px;width:40px;">@initials</div>
+                                                    }
                                                 </div>
                                             </div>
                                         </div>
@@ -637,7 +695,7 @@
     <div class="tasks-list">
         <div class="d-flex mb-3">
             <div class="flex-grow-1">
-                <h6 class="fs-14 text-uppercase fw-semibold mb-0">Completed <small class="badge bg-success align-bottom ms-1 totaltask-badge">1</small></h6>
+                <h6 class="fs-14 text-uppercase fw-semibold mb-0">Completed <small class="badge bg-success align-bottom ms-1 totaltask-badge">@Model.Count(t => t.TaskStatus == "Completed")</small></h6>
             </div>
             <div class="flex-shrink-0">
                 <div class="dropdown card-header-dropdown">
@@ -657,6 +715,8 @@
                     <div class="card-body bg-success">
                         @foreach (var item in Model.TakeLast(11))
                         {
+                            var imageUrl = !string.IsNullOrEmpty(item.UserProfile) ? Url.Content($"~/{item.UserProfile}") : null;
+                            var initials = $"{item.FirstName[0]}{item.LastName[0]}".ToUpper();
                             @if (item.TaskStatus == "Completed")
                             {
                                 <div class="card tasks-box">
@@ -705,7 +765,7 @@
                                             }
                                             else if (item.TaskStatus == "Pending")
                                             {
-                                                <a class="badge bg-primary text-uppercase">  @item.TaskStatus  </a>
+                                                <a class="badge bg-secondary text-uppercase">  @item.TaskStatus  </a>
                                             }
                                             else if (item.TaskStatus == "InReview")
                                             {
@@ -713,13 +773,20 @@
                                             }
                                             else
                                             {
-                                                <a class="badge bg-secondary text-uppercase">  @item.TaskStatus  </a>
+                                                <a class="badge bg-info text-uppercase">  @item.TaskStatus  </a>
                                             }
                                             <div class="flex-grow-1">
                                             </div>
                                             <div class="flex-shrink-0">
                                                 <div class="avatar-group">
-                                                    <img src="~/@item.UserProfile" alt="" class="direct-chat-img">
+                                                    @if (!string.IsNullOrEmpty(imageUrl))
+                                                    {
+                                                        <img src="~/@item.UserProfile" alt="" class="direct-chat-img">
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="avatar-title bg-success-subtle text-success rounded-circle fs-13" style="margin-left:115px;height:40px;width:40px;">@initials</div>
+                                                    }
                                                 </div>
                                             </div>
                                         </div>
