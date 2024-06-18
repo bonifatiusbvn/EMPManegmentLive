@@ -188,6 +188,8 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                                VendorAccountHolderName = b.VendorAccountHolderName,
                                VendorBankName = b.VendorBankName,
                                TotalGst = a.TotalGst,
+                               RoundOff = a.RoundOff,
+                               TotalDiscount= a.TotalDiscount,
                                InvoiceDate = a.InvoiceDate,
                            }).First();
                 List<InvoiceDetailsViewModel> Itemlist = (from a in Context.TblInvoiceDetails.Where(a => a.InvoiceRefId == invoice.Id)
@@ -203,6 +205,8 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                                                               ProductType = a.ProductType,
                                                               Hsn = c.Hsn,
                                                               PerUnitPrice = c.PerUnitPrice,
+                                                              DiscountAmount=a.DiscountAmount,
+                                                              DiscountPer=a.DiscountPer,
                                                               //PerUnitWithGstprice = c.PerUnitWithGstprice,
                                                               Price = a.Price,
                                                           }).ToList();
@@ -512,6 +516,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                     Igst = InsertInvoice.Igst,
                     TotalDiscount = InsertInvoice.TotalDiscount,
                     TotalGst = InsertInvoice.TotalGst,
+                    RoundOff= InsertInvoice.RoundOff,
                     TotalAmount = InsertInvoice.TotalAmount,
                     PaymentMethod = InsertInvoice.PaymentMethod,
                     Status = InsertInvoice.Status,
@@ -780,6 +785,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                     Igst = UpdateInvoice.Igst,
                     TotalDiscount = UpdateInvoice.TotalDiscount,
                     TotalGst = UpdateInvoice.TotalGst,
+                    RoundOff=UpdateInvoice.RoundOff,
                     TotalAmount = UpdateInvoice.TotalAmount,
                     PaymentMethod = UpdateInvoice.PaymentMethod,
                     Status = UpdateInvoice.Status,
@@ -1089,6 +1095,8 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                                    VendorGstnumber = d.VendorGstnumber,
                                    VendorAddress = d.VendorAddress,
                                    CreatedOn = a.CreatedOn,
+                                   RoundOff= a.RoundOff,
+                                   TotalDiscount=a.TotalDiscount,
                                }).FirstOrDefault();
                 List<InvoiceDetailsViewModel> Productlist = (from a in Context.TblInvoiceDetails.Where(a => a.InvoiceRefId == InvoiceList.Id)
                                                              join b in Context.TblProductTypeMasters on a.ProductType equals b.Id
@@ -1105,6 +1113,8 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                                                                  Gst = a.Gst,
                                                                  PerUnitWithGstprice = a.Gst,
                                                                  ProductTotal = a.ProductTotal,
+                                                                 DiscountPer=a.DiscountPer,
+                                                                 DiscountAmount=a.DiscountAmount,
                                                              }).ToList();
 
                 InvoiceList.InvoiceDetails = Productlist;

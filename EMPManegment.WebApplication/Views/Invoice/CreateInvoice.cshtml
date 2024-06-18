@@ -43,7 +43,7 @@
                                                         <div class="row">
                                                             <div class="col-6 col-lg-6 ">
                                                                 <label for="textVendorName" class="form-label">Vendor Name</label>
-                                                                @if (Model.VandorId != null)
+                                                                @if (Model.VendorCompanyName != null)
                                                                 {
                                                                     <select class="form-control form-select valid" id="textVendorName" name="textVendorName">
                                                                         <option selected value="@Model.VandorId">@Model.VendorCompanyName</option>
@@ -149,8 +149,7 @@
                                             <h5 class="card-title mb-0 flex-grow-1">Product Details</h5>
                                             <div class="flex-shrink-0">
                                                 <div class="d-flex flex-wrap gap-2">
-                                                    <a class="btn btn-block btn-warning" style="margin-left: 665px;" id="AddVendorModelButton" onclick="fn_OpenAddproductmodal()"><i class="ri-add-fill me-1 align-bottom"></i>Add Product</a>
-                                                    <span id="spnitembutton" style="color:red;"></span>
+                                                    <a class="btn btn-block btn-warning" style="margin-left: 665px;" id="AddVendorModelButton" onclick="fn_OpenAddInvoiceproductmodal()"><i class="ri-add-fill me-1 align-bottom"></i>Add Product</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -166,6 +165,8 @@
                                                         <th>Quantity</th>
                                                         <th>Qty Type</th>
                                                         <th>Price</th>
+                                                        <th>Discount</th>
+                                                        <th>Discount(%)</th>
                                                         <th>GST (%)</th>
                                                         <th>GST Amt (₹)</th>
                                                         <th>Amount (₹)</th>
@@ -175,7 +176,7 @@
                                                 @if (Model.InvoiceDetails != null)
                                                 {
                                                     <tbody id="addnewproductlink" class="table-body">
-                                                        @Html.Partial("~/Views/PurchaseOrderMaster/_DisplayProductDetailsById.cshtml", Model.InvoiceDetails)
+                                                        @Html.Partial("_DisplayInvoiceProductDetailsPartial.cshtml", Model.InvoiceDetails)
                                                     </tbody>
                                                 }
                                                 else
@@ -210,6 +211,7 @@
                                                         <th></th>
                                                         <th id="TotalProductPrice"></th>
                                                         <th></th>
+                                                        <th id="TotalDiscountPrice"></th>
                                                         <th></th>
                                                         <th></th>
                                                         <th></th>
@@ -323,6 +325,28 @@
                                                                         <input type="text" class="form-control bg-light border-0" id="totalgst" value="@Model.TotalGst" placeholder="₹0.00" readonly />
                                                                     </td>
                                                                 </tr>
+                                                                <tr>
+                                                                    <th scope="row">Discount <small class="text-muted"></small></th>
+                                                                    <td>
+                                                                        <input type="text" class="form-control border-0" id="cart-discount" placeholder="₹0.00" value="@Model.TotalDiscount" readonly />
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th>
+                                                                        Roundoff
+                                                                    </th>
+                                                                    <td>
+                                                                        @if (Model.RoundOff != null)
+                                                                        {
+                                                                            <input type="text" class="form-control bg-light border-0" id="cart-roundOff" value="@Model.RoundOff" placeholder="₹0.00" min="-0.99" max="0.99" />
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <input type="text" class="form-control bg-light border-0" name="txtroundOff" id="cart-roundOff" placeholder="₹0.00" min="-0.99" max="0.99" />
+
+                                                                        }
+                                                                    </td>
+                                                                </tr>
                                                                 <tr class="border-top border-top-dashed">
                                                                     <th>Total Amount</th>
                                                                     <td>
@@ -356,7 +380,7 @@
                                                 Shipping Addresses
                                             </h5>
                                             <div class="card-body">
-                                                <input type="checkbox" id="hideShippingAddress" name="hideShippingAddress" onchange="toggleShippingAddress()" checked>
+                                                <input type="checkbox" id="hideShippingAddress" name="hideShippingAddress" onchange="tn_toggleInvoiceShippingAddress()" checked>
                                                 <label for="hideShippingAddress"><b>Is Your Billing Address is same as Shipping Address?</b></label>
                                                 <div id="shippingAddressFields" style="display:none;">
                                                     <textarea type="text" id="textShippingAddress" name="textShippingAddress" class="form-control" placeholder="Shipping Address"></textarea>
@@ -395,7 +419,7 @@
         </div>
     </div>
 </div>
-<div class="modal fade show" tabindex="-1" id="mdPoproductModal" role="dialog" aria-labelledby="myLargeModalLabel" aria-modal="true" aria-hidden="true">
+<div class="modal fade show" tabindex="-1" id="mdInvoiceproductModal" role="dialog" aria-labelledby="myLargeModalLabel" aria-modal="true" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -418,7 +442,7 @@
                                     <th scope="col" class="text-end">Add</th>
                                 </tr>
                             </thead>
-                            <tbody id="mdlistofItem">
+                            <tbody id="mdlistofInvoiceItem">
                             </tbody>
                         </table>
                     </div>
@@ -445,4 +469,3 @@
 <!--Invoice create init js-->
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/moduls/invoicemasterscript.js" asp-append-version="true"></script>
-<script src="~/moduls/purchaseorderdetailsscript.js" asp-append-version="true"></script>

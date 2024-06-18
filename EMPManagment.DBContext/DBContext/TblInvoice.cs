@@ -37,6 +37,8 @@ public partial class TblInvoice
 
     public decimal? TotalGst { get; set; }
 
+    public decimal? RoundOff { get; set; }
+
     public decimal? TotalAmount { get; set; }
 
     public int? PaymentMethod { get; set; }

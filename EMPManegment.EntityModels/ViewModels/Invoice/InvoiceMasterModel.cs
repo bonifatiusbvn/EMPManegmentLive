@@ -39,6 +39,7 @@ namespace EMPManegment.EntityModels.ViewModels.Invoice
         public decimal? TotalDiscount { get; set; }
 
         public decimal? TotalGst { get; set; }
+        public decimal? RoundOff { get; set; }
 
         public decimal? TotalAmount { get; set; }
 

@@ -25,6 +25,7 @@ using Microsoft.AspNetCore.Authorization;
 using Irony.Parsing.Construction;
 using EMPManegment.EntityModels.ViewModels.ManualInvoice;
 using Aspose.Foundation.UriResolver.RequestResponses;
+using DocumentFormat.OpenXml.Spreadsheet;
 
 namespace EMPManegment.Web.Controllers
 {
@@ -80,7 +81,7 @@ namespace EMPManegment.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> DisplayProductDetailsListById()
+        public async Task<IActionResult> DisplayInvoiceProductDetailsListById()
         {
             try
             {
@@ -91,8 +92,9 @@ namespace EMPManegment.Web.Controllers
                 if (response.code == 200)
                 {
                     Product = JsonConvert.DeserializeObject<List<InvoiceDetailsViewModel>>(response.data.ToString());
+                    Product.ForEach(a => a.ProductTotal = (a.PerUnitPrice ?? 0) + (a.PerUnitWithGstprice ?? 0));
                 }
-                return PartialView("~/Views/PurchaseOrderMaster/_DisplayProductDetailsById.cshtml", Product);
+                return PartialView("~/Views/Invoice/_DisplayInvoiceProductDetailsPartial.cshtml", Product);
             }
             catch (Exception ex)
             {
@@ -681,6 +683,28 @@ namespace EMPManegment.Web.Controllers
             {
                 throw ex;
             }
-        }      
+        }
+
+        public async Task<IActionResult> GetInvoiceAllProductList(string? searchText)
+        {
+            try
+            {
+                string apiUrl = $"ProductMaster/GetAllProductList?searchText={searchText}";
+                ApiResponseModel response = await APIServices.PostAsync("", apiUrl);
+                if (response.code == 200)
+                {
+                    List<ProductDetailsView> Items = JsonConvert.DeserializeObject<List<ProductDetailsView>>(response.data.ToString());
+                    return PartialView("~/Views/Invoice/_showInvoiceAllProductsPartial.cshtml", Items);
+                }
+                else
+                {
+                    return Ok(new { Message = "Failed to retrieve Product list" });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

@@ -445,7 +445,7 @@ function SearchProductDetailsById(ProductId) {
 
 
     $.ajax({
-        url: '/Invoice/DisplayProductDetailsListById',
+        url: '/PurchaseOrderMaster/DisplayPOProductDetailsListById',
         type: 'Post',
         datatype: 'json',
         data: form_data,

@@ -79,6 +79,8 @@ function InsertInvoiceDetails() {
                     GSTamount: orderRow.find("#txtgstAmount").val(),
                     Gst: orderRow.find("#txtgst").val(),
                     ProductTotal: orderRow.find("#txtproducttotalamount").val(),
+                    DiscountAmount: orderRow.find("#txtdiscountamount").val(),
+                    DiscountPer: orderRow.find("#txtdiscountpercentage").val(),
                 };
                 ProductDetails.push(objData);
             });
@@ -101,6 +103,8 @@ function InsertInvoiceDetails() {
                 PaymentMethod: $("#txtpaymentmethod").val(),
                 PaymentStatus: $("#txtpaymenttype").val(),
                 CreatedBy: $("#textCreatedById").val(),
+                RoundOff: $('#cart-roundOff').val(),
+                TotalDiscount: $('#cart-discount').val(),
                 ShippingAddress: $('#hideShippingAddress').is(':checked') ? $('#textCompanyBillingAddress').val() : $('#textShippingAddress').val(),
                 InvoiceDetails: ProductDetails,
             }
@@ -173,6 +177,8 @@ function UpdateInvoiceDetails() {
                     GSTamount: orderRow.find("#txtgstAmount").val(),
                     Gst: orderRow.find("#txtgst").val(),
                     ProductTotal: orderRow.find("#txtproducttotalamount").val(),
+                    DiscountAmount: orderRow.find("#txtdiscountamount").val(),
+                    DiscountPer: orderRow.find("#txtdiscountpercentage").val(),
                 };
                 ProductDetails.push(objData);
             });
@@ -197,6 +203,8 @@ function UpdateInvoiceDetails() {
                 PaymentStatus: $("#txtpaymenttype").val(),
                 CreatedBy: $("#textCreatedById").val(),
                 CreatedOn: $("#txtCreatedOn").val(),
+                RoundOff: $('#cart-roundOff').val(),
+                TotalDiscount: $('#cart-discount').val(),
                 UpdatedBy: $("#textCreatedById").val(),
                 ShippingAddress: $('#hideShippingAddress').is(':checked') ? $('#textCompanyBillingAddress').val() : $('#textShippingAddress').val(),
                 InvoiceDetails: ProductDetails,
@@ -444,54 +452,6 @@ function downloadPDF() {
 }
 
 
-function EditInvoiceDetails(InvoiceNo) {
-
-    $.ajax({
-        url: '/Invoice/EditInvoiceDetails?InvoiceNo=' + InvoiceNo,
-        type: "Get",
-        contentType: 'application/json;charset=utf-8;',
-        dataType: 'json',
-        success: function (response) {
-
-            $('#UpdateInvoiceModel').modal('show');
-            $('#txtinvoiceno').html(response.invoiceNo);
-            $('#txtinvoicedate').val(response.invoiceDate);
-            $('#txtid').val(response.id);
-            $('#txtcompanyname').val(response.companyName);
-            $('#txtamount').val(response.totalAmount);
-            $('#txtpaymentmethod').val(response.paymentMethod);
-            $('#txtstatus').val(response.status);
-        },
-        error: function () {
-            toastr.error("Can't get Data");
-        }
-
-    });
-}
-
-$(document).ready(function () {
-
-    $("#UpdateInvoiceDetailsForm").validate({
-        rules: {
-            txtinvoicedate: "required",
-            txtamount: "required",
-            txtpaymentmethod: "required",
-            txtstatus: "required",
-            txtcompanyname: "required",
-        },
-        messages: {
-            txtinvoicedate: "Please emter invoice date",
-            txtamount: "Please enter invoice Amount",
-            txtpaymentmethod: "Please Enter Payment method",
-            txtstatus: "Plese enter status",
-            txtcompanyname: "Plese enter Company name",
-        }
-    })
-    $("#updatedetailbtn").on('click', function () {
-        $("#UpdateInvoiceDetailsForm").validate();
-    });
-});
-
 var datas = userPermissions
 $(document).ready(function () {
     function data(datas) {
@@ -582,5 +542,449 @@ function createInvoice() {
     }
     else {
         window.location = '/Invoice/CreateInvoice';
+    }
+}
+
+$(document).ready(function () {
+
+    fn_GetInvoiceVendorNameList()
+    $('#textVendorName').change(function () {
+        fn_getInvoiceVendorDetail($(this).val());
+    });
+    fn_GetInvoiceCompanyNameList()
+    $('#textCompanyName').change(function () {
+        fn_getInvoiceCompanyDetail($(this).val());
+    });
+    fn_GetInvoiceProductDetailsList()
+    fn_GetInvoicePaymentMethodList()
+    fn_GetInvoicePaymentTypeList()
+    function handleFocus(event, selector) {
+        if (event.keyCode == 13 || event.keyCode == 9) {
+            event.preventDefault();
+            $(selector).focus();
+        }
+    }
+    $(document).on('input', '.product-quantity', function () {
+        var row = $(this).closest('.product');
+        fn_updateInvoiceProductAmount(row);
+        fn_updateInvoiceTotals();
+    }).on('keydown', '.product-quantity', function (event) {
+        var row = $(this).closest(".product");
+        var productFocus = row.find('#txtproductamount');
+        handleFocus(event, productFocus);
+    });
+    function debounce(func, delay) {
+        let timer;
+        return function (...args) {
+            clearTimeout(timer);
+            timer = setTimeout(() => func.apply(this, args), delay);
+        };
+    }
+
+    $(document).on('input', '#txtdiscountpercentage', debounce(function () {debugger
+        var value = $(this).val();
+        var productRow = $(this).closest(".product");
+        if (value > 100) {
+            toastr.warning("Discount cannot be greater than 100%");
+            productRow.find("#txtdiscountpercentage").val(0);
+            productRow.find("#txtdiscountamount").val(0);
+        } else if (value <= 0 || value == "") {
+            productRow.find("#txtdiscountamount").val(0);
+            productRow.find("#txtdiscountpercentage").val(0);
+            fn_updateInvoiceProductAmount(productRow);
+        } else {
+            fn_UpdateInvoiceDiscountPercentage(productRow);
+        }
+    }, 300)).on('keydown', '#txtdiscountpercentage', function (event) {
+        var productRow = $(this).closest(".product");
+        var gstFocus = productRow.find('#txtgst');
+        handleFocus(event, gstFocus);
+    });
+
+    $(document).on('input', '#txtdiscountamount', debounce(function () {
+        var productRow = $(this).closest(".product");
+        var discountAmount = parseFloat($(this).val());
+        var productAmount = parseFloat($(productRow).find("#productamount").val());
+
+        if (discountAmount > productAmount) {
+            toastr.warning("Amount cannot be greater than Item price");
+            productRow.find("#txtdiscountamount").val(0);
+            productRow.find("#txtdiscountpercentage").val(0);
+        } else if (discountAmount <= 0 || discountAmount == "") {
+            productRow.find("#txtdiscountamount").val(0);
+            productRow.find("#txtdiscountpercentage").val(0);
+            fn_updateInvoiceProductAmount(productRow);
+        } else {
+            fn_updateInvoiceDiscount(productRow);
+        }
+    }, 300)).on('keydown', '#txtdiscountamount', function (event) {
+        var productRow = $(this).closest(".product");
+        var discountPercentagefocus = productRow.find('#txtdiscountpercentage');
+        handleFocus(event, discountPercentagefocus);
+    });
+
+    $(document).on('input', '#txtproductamount', function () {
+        var productRow = $(this).closest(".product");
+        var productAmount = parseFloat($(this).val());
+        var discountAmountfocus = productRow.find('#txtdiscountamount');
+
+        if (!isNaN(productAmount)) {
+            productRow.find("#txtdiscountamount").val(0);
+            productRow.find("#txtdiscountpercentage").val(0);
+        }
+
+        productRow.find("#productamount").val(productAmount.toFixed(2));
+        fn_updateInvoiceProductAmount(productRow);
+        fn_updateInvoiceTotals();
+    }).on('keydown', '#txtproductamount', function (event) {
+        var productRow = $(this).closest(".product");
+        var discountAmountfocus = productRow.find('#txtdiscountamount');
+        handleFocus(event, discountAmountfocus);
+    });
+
+    $(document).on('input', '#txtgst', function () {
+        var row = $(this).closest('.product');
+        fn_updateInvoiceProductAmount(row);
+        fn_updateInvoiceTotals();
+    }).on('keydown', '#txtgst', function (event) {
+        if (event.key === 'Enter') {
+            $(this).blur();
+        }
+    });
+    $(document).on('focusout', '.product-quantity', function () {
+        $(this).trigger('input');
+    });
+    $(document).on('input', '#cart-roundOff', debounce(function () {
+        var roundoff = $('#cart-roundOff').val();
+        if (isNaN(roundoff) || (roundoff < -0.99 || roundoff > 0.99)) {
+            toastr.warning("Value must be between -0.99 and 0.99");
+        }
+        else {
+            fn_updateInvoiceTotals();
+        }
+    }, 300));
+});
+
+function fn_GetInvoiceVendorNameList() {
+    $.ajax({
+        url: '/ProductMaster/GetVendorsNameList',
+        success: function (result) {
+            var selectedValue = $('#textVendorName').find('option:first').val();
+            $.each(result, function (i, data) {
+                if (data.id !== selectedValue) {
+                    $('#textVendorName').append('<Option value=' + data.id + '>' + data.vendorCompany + '</Option>')
+                }
+            });
+        }
+    });
+}
+function fn_getInvoiceVendorDetail(VendorId) {
+    $.ajax({
+        url: '/Vendor/GetVendorDetailsById?vendorId=' + VendorId,
+        type: 'GET',
+        contentType: 'application/json;charset=utf-8',
+        dataType: 'json',
+        success: function (response) {
+            if (response) {
+                $('#textVendorMobile').val(response.vendorPhone);
+                $('#textVendorGSTNumber').val(response.vendorGstnumber);
+                $('#textVendorAddress').val(response.vendorAddress);
+            } else {
+                console.log('Empty response received.');
+            }
+        },
+    });
+}
+function fn_GetInvoiceCompanyNameList() {
+    $.ajax({
+        url: '/Company/GetCompanyNameList',
+        success: function (result) {
+            var selectedValue = $('#textCompanyName').find('option:first').val();
+            $.each(result, function (i, data) {
+                if (data.id !== selectedValue) {
+                    $('#textCompanyName').append('<Option value=' + data.id + '>' + data.compnyName + '</Option>')
+                }
+            });
+        }
+    });
+}
+function fn_getInvoiceCompanyDetail(CompanyName) {
+    var CompanyId = CompanyName;
+    $.ajax({
+        url: '/Company/GetCompanyDetailsById',
+        type: 'GET',
+        contentType: 'application/json;charset=utf-8',
+        dataType: 'json',
+        data: { CompanyId: CompanyId },
+        success: function (response) {
+            if (response) {
+                $('#textCompanyGstNo').val(response.gst);
+                $('#textCompanyBillingAddress').val(response.fullAddress);
+            } else {
+                toastr.error('Empty response received.');
+            }
+        },
+    });
+}
+function fn_GetInvoicePaymentMethodList() {
+
+    $.ajax({
+        url: '/PurchaseOrderMaster/GetPaymentMethodList',
+        success: function (result) {
+            var selectedValue = $('#txtpaymentmethod').find('option:first').val();
+            $.each(result, function (i, data) {
+                if (data.id != selectedValue) {
+                    $('#txtpaymentmethod').append('<Option value=' + data.id + '>' + data.paymentMethod + '</Option>')
+                }
+
+            });
+        }
+    });
+}
+function fn_GetInvoicePaymentTypeList() {
+    $.ajax({
+        url: '/ExpenseMaster/GetPaymentTypeList',
+        success: function (result) {
+            var selectedValue = $('#txtpaymenttype').find('option:first').val();
+            $.each(result, function (i, data) {
+                $('#textPaymentMethod').append('<Option value=' + data.id + '>' + data.type + '</Option>')
+                if (data.id != selectedValue) {
+
+                    $('#txtpaymenttype').append('<Option value=' + data.id + '>' + data.type + '</Option>')
+                }
+            });
+        }
+    });
+}
+function preventInvoiceEmptyValue(input) {
+
+    if (input.value === "") {
+
+        input.value = 1;
+    }
+}
+function fn_OpenAddInvoiceproductmodal() {
+
+    $('#mdProductSearch').val('');
+    $('#mdInvoiceproductModal').modal('show');
+}
+function fn_GetInvoiceProductDetailsList() {
+    var searchText = $('#mdProductSearch').val();
+
+    $.get("/Invoice/GetInvoiceAllProductList", { searchText: searchText })
+        .done(function (result) {
+            $("#mdlistofInvoiceItem").html(result);
+        })
+        .fail(function (xhr, status, error) {
+            console.error("Error:", error);
+        });
+}
+function SearchInvoiceProductDetailsById(ProductId) {
+    var GetProductId = {
+        ProductId: ProductId,
+    }
+    var form_data = new FormData();
+    form_data.append("ProductId", JSON.stringify(GetProductId));
+
+
+    $.ajax({
+        url: '/Invoice/DisplayInvoiceProductDetailsListById',
+        type: 'Post',
+        datatype: 'json',
+        data: form_data,
+        processData: false,
+        contentType: false,
+        complete: function (Result) {
+
+            if (Result.statusText === "success") {
+                fn_InvoiceNewRow(Result.responseText);
+            }
+            else {
+                var GetProductId = $('#searchProductname').val();
+                if (GetProductId === "Select ProductName" || GetProductId === null) {
+                    $('#searchvalidationMessage').text('Please select ProductName!!');
+                }
+                else {
+                    $('#searchvalidationMessage').text('');
+                }
+            }
+        }
+    });
+}
+
+var count = 0;
+function fn_InvoiceNewRow(Result) {
+
+    var newProductRow = $(Result);
+    var productId = newProductRow.data('product-id');
+    fn_InvoiceProductType(productId);
+    var newProductId = newProductRow.attr('data-product-id');
+    var isDuplicate = false;
+
+    $('#addnewproductlink .product').each(function () {
+        var existingProductRow = $(this);
+        var existingProductId = existingProductRow.attr('data-product-id');
+        if (existingProductId === newProductId) {
+            isDuplicate = true;
+            return false;
+        }
+    });
+
+    if (!isDuplicate) {
+        count++;
+        $("#addnewproductlink").append(Result);
+        fn_updateInvoiceTotals();
+        fn_updateInvoiceRowNumbers();
+    } else {
+        Swal.fire({
+            title: "Product already added!",
+            text: "The selected product is already added.",
+            icon: "warning",
+            confirmButtonColor: "#3085d6",
+            confirmButtonText: "OK"
+        });
+    }
+}
+function fn_updateInvoiceRowNumbers() {
+    $(".product-id").each(function (index) {
+        $(this).text(index + 1);
+    });
+}
+function fn_InvoiceProductType(productId) {
+
+    if ($('#txtPOProductType_' + productId + ' option').length > 1) {
+        return
+    }
+    $.ajax({
+        url: '/ProductMaster/GetProduct',
+        success: function (result) {
+            $('#txtPOProductType_' + productId).empty();
+            $.each(result, function (i, data) {
+                $('#txtPOProductType_' + productId).append('<option value="' + data.id + '">' + data.productName + '</option>');
+
+            });
+            $('#txtPOProductType_' + productId).val($("#txtunittype_" + productId).val())
+        }
+    });
+}
+function fn_updateInvoiceProductAmount(that) {
+    var row = $(that);
+    var productPrice = parseFloat(row.find("#txtproductamount").val());
+    var hiddenproductPrice = parseFloat(row.find("#productamount").val());
+    var quantity = parseFloat(row.find("#txtproductquantity").val());
+    var discountprice = parseFloat(row.find("#txtdiscountamount").val());
+    var AmtWithDisc = hiddenproductPrice - discountprice;
+
+    var gst = parseFloat(row.find("#txtgst").val());
+
+    var totalGst = (AmtWithDisc * quantity * gst) / 100;
+
+    var TotalAmountAfterDiscount = AmtWithDisc * quantity + totalGst;
+
+    row.find("#txtgstAmount").val(totalGst.toFixed(2));
+    row.find("#txtproducttotalamount").val(TotalAmountAfterDiscount.toFixed(2));
+}
+function fn_updateInvoiceDiscount(that) {debugger
+    var row = $(that);
+    var productPrice = parseFloat(row.find("#productamount").val());
+    var quantity = parseFloat(row.find("#txtproductquantity").val());
+    var discountprice = parseFloat(row.find("#txtdiscountamount").val());
+    var discountPercentage = parseFloat(row.find("#txtdiscountpercentage").val());
+
+    if (isNaN(discountprice)) {
+        row.find("#txtdiscountamount").val(0);
+        row.find("#txtdiscountpercentage").val(0);
+        fn_updateInvoiceProductAmount(row);
+        fn_updateInvoiceTotals();
+        return;
+    }
+
+    if (discountPercentage == 0 && discountprice > 0) {
+        var discountperbyamount = discountprice / productPrice * 100;
+        row.find("#txtdiscountpercentage").val(discountperbyamount.toFixed(2));
+    } else if (discountprice > 0 && discountPercentage > 0) {
+        var discountperbyamount = discountprice / productPrice * 100;
+        row.find("#txtdiscountpercentage").val(discountperbyamount.toFixed(2));
+    }
+
+    fn_updateInvoiceProductAmount(row);
+    fn_updateInvoiceTotals();
+}
+
+function fn_UpdateInvoiceDiscountPercentage(that) {debugger
+    var row = $(that);
+    var productPrice = parseFloat(row.find("#productamount").val());
+    var quantity = parseFloat(row.find("#txtproductquantity").val());
+    var discountprice = parseFloat(row.find("#txtdiscountamount").val());
+    var discountPercentage = parseFloat(row.find("#txtdiscountpercentage").val());
+
+    if (isNaN(discountPercentage)) {
+        row.find("#txtdiscountamount").val(0);
+        row.find("#txtdiscountpercentage").val(0);
+        fn_updateInvoiceProductAmount(row);
+        fn_updateInvoiceTotals();
+        return;
+    }
+
+    if (discountprice == 0 && discountPercentage > 0) {
+        discountprice = productPrice * discountPercentage / 100;
+        row.find("#txtdiscountamount").val(discountprice.toFixed(2));
+    } else if (discountprice > 0 && discountPercentage > 0) {
+        discountprice = productPrice * discountPercentage / 100;
+        row.find("#txtdiscountamount").val(discountprice.toFixed(2));
+    }
+    fn_updateInvoiceProductAmount(row);
+    fn_updateInvoiceTotals();
+}
+function fn_updateInvoiceTotals() {
+    var totalSubtotal = 0;
+    var totalGst = 0;
+    var totalAmount = 0;
+    var TotalItemQuantity = 0;
+    var TotalDiscount = 0;
+    var roundoffvalue = $('#cart-roundOff').val();
+    $(".product").each(function () {
+        var row = $(this);
+        var subtotal = parseFloat(row.find("#txtproductamount").val());
+        var gst = parseFloat(row.find("#txtgstAmount").val());
+        var totalquantity = parseFloat(row.find("#txtproductquantity").val());
+        var discountprice = parseFloat(row.find("#txtdiscountamount").val());
+
+        totalSubtotal += subtotal * totalquantity;
+        totalGst += gst;
+        totalAmount = totalSubtotal + totalGst;
+        TotalItemQuantity += totalquantity;
+        TotalDiscount += discountprice;
+    });
+    $("#cart-subtotal").val(totalSubtotal.toFixed(2));
+    $("#totalgst").val(totalGst.toFixed(2));
+    $("#cart-total").val(totalAmount.toFixed(2));
+    $("#TotalProductQuantity").text(TotalItemQuantity);
+    $("#TotalProductPrice").html(totalSubtotal.toFixed(2));
+    $("#TotalProductGST").html(totalGst.toFixed(2));
+    $("#TotalProductAmount").html(totalAmount.toFixed(2));
+    $("#TotalDiscountPrice").html(TotalDiscount.toFixed(2));
+    $("#cart-discount").val(TotalDiscount.toFixed(2));
+    if (roundoffvalue != 0) {
+
+        var roundtotal = parseFloat(totalAmount) + parseFloat(roundoffvalue);
+        $("#cart-total").val(roundtotal.toFixed(2))
+    } else {
+        $("#cart-total").val(totalAmount.toFixed(2));
+    }
+}
+function fn_removeInvoiceItemRow(btn) {
+    $(btn).closest("tr").remove();
+    fn_updateInvoiceRowNumbers();
+    fn_updateInvoiceTotals();
+}
+function tn_toggleInvoiceShippingAddress() {
+    var checkbox = document.getElementById("hideShippingAddress");
+    var shippingFields = document.getElementById("shippingAddressFields");
+
+    if (checkbox.checked) {
+        shippingFields.style.display = "none";
+    } else {
+        shippingFields.style.display = "block";
     }
 }
