@@ -33,6 +33,7 @@ namespace EMPManagment.API.Controllers
                 {
                     response.Code = (int)HttpStatusCode.OK;
                     response.Message = createInvoice.Result.Message;
+                    response.Data = createInvoice.Result.Data;
                 }
                 else
                 {
@@ -73,21 +74,21 @@ namespace EMPManagment.API.Controllers
 
         [HttpPost]
         [Route("DeleteManualInvoice")]
-        public async Task<IActionResult> DeleteManualInvoice(Guid MInvoiceId)
+        public async Task<IActionResult> DeleteManualInvoice(Guid InvoiceId)
         {
             UserResponceModel response = new UserResponceModel();
             try
             {
-                var InvoiceId = await ManualInvoice.DeleteManualInvoice(MInvoiceId);
-                if(InvoiceId.Code == 200)
+                var invoiceId = await ManualInvoice.DeleteManualInvoice(InvoiceId);
+                if(invoiceId.Code == 200)
                 {
-                    response.Code = InvoiceId.Code;
-                    response.Message = InvoiceId.Message;
+                    response.Code = invoiceId.Code;
+                    response.Message = invoiceId.Message;
                 }
                 else
                 {
-                    response.Code = InvoiceId.Code;
-                    response.Message = InvoiceId.Message;
+                    response.Code = invoiceId.Code;
+                    response.Message = invoiceId.Message;
                 }
             }
             catch (Exception ex)

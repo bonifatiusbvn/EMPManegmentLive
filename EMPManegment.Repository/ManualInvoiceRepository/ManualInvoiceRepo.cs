@@ -56,6 +56,7 @@ namespace EMPManegment.Repository.ManualInvoiceRepository
                     Status = InvoiceDetails.Status,
                     PaymentStatus = InvoiceDetails.PaymentStatus,
                     IsDeleted = false,
+                    RoundOff = InvoiceDetails.RoundOff,
                     CreatedBy = InvoiceDetails.CreatedBy,
                     CreatedOn = DateTime.Now,
                 };
@@ -70,11 +71,14 @@ namespace EMPManegment.Repository.ManualInvoiceRepository
                         Quantity = item.Quantity,
                         ProductType = item.ProductType,
                         Price = item.Price,
-                        Discount = item.Discount,
+                        DiscountPercent = item.DiscountPercent,
                         Gst = item.Gst,
                         ProductTotal = item.ProductTotal,
                         IsDeleted = false,
                         CreatedBy = invoice.CreatedBy,
+                        GstAmount = item.GstAmount,
+                        Discount = item.Discount,
+                        Hsn = item.Hsn,
                         CreatedOn = DateTime.Now,
                     };
                     Context.TblManualInvoiceDetails.Add(invoiceDetails);
@@ -82,6 +86,7 @@ namespace EMPManegment.Repository.ManualInvoiceRepository
                 await Context.SaveChangesAsync();
                 response.Code = (int)HttpStatusCode.OK;
                 response.Message = "Invoice successfully inserted.";
+                response.Data = invoice.Id;
             }
             catch (Exception)
             {
@@ -96,60 +101,60 @@ namespace EMPManegment.Repository.ManualInvoiceRepository
         {
             try
             {
-                var invoicelist = from a in Context.TblManualInvoices
-                                  where a.IsDeleted != true
-                                  orderby a.CreatedOn descending
-                                  select new ManualInvoiceMasterModel
-                                  {
-                                      Id = a.Id,
-                                      InvoiceNo = a.InvoiceNo,
-                                      InvoiceDate = a.InvoiceDate,
-                                      VendorName = a.VendorName,
-                                      VendorPhoneNo = a.VendorPhoneNo,
-                                      VendorGstNo = a.VendorGstNo,
-                                      CompanyName = a.CompanyName,
-                                      CompanyAddress = a.CompanyAddress,
-                                      CompanyGstNo = a.CompanyGstNo,
-                                      ProjectId = a.ProjectId,
-                                      DispatchThrough = a.DispatchThrough,
-                                      Cgst = a.Cgst,
-                                      Igst = a.Igst,
-                                      Sgst = a.Sgst,
-                                      BuyesOrderNo = a.BuyesOrderNo,
-                                      BuyesOrderDate = a.BuyesOrderDate,
-                                      TotalAmount = a.TotalAmount,
-                                      CreatedOn = a.CreatedOn,
-                                      CreatedBy = a.CreatedBy,
-                                      UpdatedOn = a.UpdatedOn,
-                                      UpdatedBy = a.UpdatedBy,
-                                      TotalGst = a.TotalGst,
-                                      PaymentMethod = a.PaymentMethod,
-                                      PaymentStatus = a.PaymentStatus,
-                                      ShippingAddress = a.ShippingAddress
-                                  };
+                var mInvoicelist = Context.TblManualInvoices
+                    .Where(a => a.IsDeleted != true)
+                    .OrderByDescending(a => a.CreatedOn)
+                    .Select(a => new ManualInvoiceModel
+                    {
+                        Id = a.Id,
+                        InvoiceNo = a.InvoiceNo,
+                        InvoiceDate = a.InvoiceDate,
+                        VendorName = a.VendorName,
+                        VendorPhoneNo = a.VendorPhoneNo,
+                        VendorGstNo = a.VendorGstNo,
+                        CompanyName = a.CompanyName,
+                        CompanyAddress = a.CompanyAddress,
+                        CompanyGstNo = a.CompanyGstNo,
+                        ProjectId = a.ProjectId,
+                        DispatchThrough = a.DispatchThrough,
+                        Cgst = a.Cgst,
+                        Igst = a.Igst,
+                        Sgst = a.Sgst,
+                        BuyesOrderNo = a.BuyesOrderNo,
+                        BuyesOrderDate = a.BuyesOrderDate,
+                        TotalAmount = a.TotalAmount,
+                        CreatedOn = a.CreatedOn,
+                        CreatedBy = a.CreatedBy,
+                        UpdatedOn = a.UpdatedOn,
+                        UpdatedBy = a.UpdatedBy,
+                        TotalGst = a.TotalGst,
+                        PaymentMethod = a.PaymentMethod,
+                        PaymentStatus = a.PaymentStatus,
+                        ShippingAddress = a.ShippingAddress,
+                        RoundOff = a.RoundOff,
+                    });
 
                 if (!string.IsNullOrEmpty(dataTable.searchValue))
                 {
-                    invoicelist = invoicelist.Where(e =>
-                        e.VendorName.Contains(dataTable.searchValue) ||
-                        e.InvoiceNo.Contains(dataTable.searchValue) ||
-                        e.ProjectName.Contains(dataTable.searchValue) ||
-                        e.TotalAmount.ToString().Contains(dataTable.searchValue)
+                    var searchValueLower = dataTable.searchValue.ToLower();
+                    mInvoicelist = mInvoicelist.Where(e =>
+                        e.VendorName.ToLower().Contains(searchValueLower) ||
+                        e.InvoiceNo.ToLower().Contains(searchValueLower) ||
+                        e.ProjectName.ToLower().Contains(searchValueLower) ||
+                        e.TotalAmount.ToString().Contains(searchValueLower)
                     );
                 }
 
                 if (!string.IsNullOrEmpty(dataTable.sortColumn) && !string.IsNullOrEmpty(dataTable.sortColumnDir))
                 {
-                    invoicelist = dataTable.sortColumnDir == "asc"
-                        ? invoicelist.OrderBy(e => EF.Property<object>(e, dataTable.sortColumn))
-                        : invoicelist.OrderByDescending(e => EF.Property<object>(e, dataTable.sortColumn));
+                    mInvoicelist = dataTable.sortColumnDir == "asc"
+                        ? mInvoicelist.OrderBy(e => EF.Property<object>(e, dataTable.sortColumn))
+                        : mInvoicelist.OrderByDescending(e => EF.Property<object>(e, dataTable.sortColumn));
                 }
 
-                var filteredData = await invoicelist
-                .ToListAsync();
+                var filteredData = await mInvoicelist.ToListAsync();
 
                 var totalRecord = filteredData.Count;
-
 
                 var jsonData = new jsonData
                 {
@@ -163,10 +168,10 @@ namespace EMPManegment.Repository.ManualInvoiceRepository
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
-                return new jsonData { };
+                throw ex; 
             }
         }
+
 
         public async Task<ManualInvoiceMasterModel> GetManualInvoiceDetails(Guid InvoiceId)
         {
@@ -174,7 +179,6 @@ namespace EMPManegment.Repository.ManualInvoiceRepository
             try
             {
                 manualInvoice = (from a in Context.TblManualInvoices.Where(x => x.Id == InvoiceId)
-                                 join b in Context.TblProjectMasters on a.ProjectId equals b.ProjectId
                                  join c in Context.TblPaymentMethodTypes on a.PaymentMethod equals c.Id
                                  join d in Context.TblPaymentTypes on a.PaymentStatus equals d.Id
                                  select new ManualInvoiceMasterModel
@@ -189,7 +193,6 @@ namespace EMPManegment.Repository.ManualInvoiceRepository
                                      CompanyAddress = a.CompanyAddress,
                                      CompanyGstNo = a.CompanyGstNo,
                                      ProjectId = a.ProjectId,
-                                     ProjectName = b.ProjectTitle,
                                      InvoiceDate = a.InvoiceDate,
                                      BuyesOrderDate = a.BuyesOrderDate,
                                      BuyesOrderNo = a.BuyesOrderNo,
@@ -204,7 +207,10 @@ namespace EMPManegment.Repository.ManualInvoiceRepository
                                      Cgst = a.Cgst,
                                      Sgst = a.Sgst,
                                      Igst = a.Igst,
-                                     
+                                     CreatedBy = a.CreatedBy,
+                                     CreatedOn = a.CreatedOn,
+                                     RoundOff = a.RoundOff,
+
                                  }).FirstOrDefault();
                 List<ManualInvoiceDetailsModel> manualInvoiceDetails = (from a in Context.TblManualInvoiceDetails.Where(a => a.RefId == manualInvoice.Id)
                                                                         join b in Context.TblProductTypeMasters on a.ProductType equals b.Id
@@ -217,9 +223,12 @@ namespace EMPManegment.Repository.ManualInvoiceRepository
                                                                             ProductTypeName = b.Type,
                                                                             Quantity = a.Quantity,
                                                                             Price = a.Price,
-                                                                            Discount = a.Discount,
                                                                             Gst = a.Gst,
+                                                                            DiscountPercent = a.DiscountPercent,
                                                                             ProductTotal = a.ProductTotal,
+                                                                            GstAmount = a.GstAmount,
+                                                                            Discount = a.Discount,
+                                                                            Hsn = a.Hsn,
                                                                         }).ToList();
 
 
@@ -286,7 +295,7 @@ namespace EMPManegment.Repository.ManualInvoiceRepository
 
                 var ManualInvoice = new TblManualInvoice()
                 {
-                    Id = Guid.NewGuid(),
+                    Id = UpdateInvoice.Id,
                     InvoiceNo = UpdateInvoice.InvoiceNo,
                     VendorName = UpdateInvoice.VendorName,
                     VendorAddress = UpdateInvoice.VendorAddress,
@@ -310,8 +319,12 @@ namespace EMPManegment.Repository.ManualInvoiceRepository
                     Status = UpdateInvoice.Status,
                     PaymentStatus = UpdateInvoice.PaymentStatus,
                     IsDeleted = false,
-                    UpdatedBy = UpdateInvoice.CreatedBy,
+                    UpdatedBy = UpdateInvoice.UpdatedBy,
                     UpdatedOn = DateTime.Now,
+                    CreatedBy = UpdateInvoice.CreatedBy,
+                    CreatedOn = UpdateInvoice.CreatedOn,
+                    RoundOff = UpdateInvoice.RoundOff,
+
                 };
                 Context.TblManualInvoices.Update(ManualInvoice);
 
@@ -326,12 +339,17 @@ namespace EMPManegment.Repository.ManualInvoiceRepository
                         existingInvoice.ProductType = item.ProductType;
                         existingInvoice.Quantity = item.Quantity;
                         existingInvoice.Price = item.Price;
-                        existingInvoice.Discount = item.Discount;
+                        existingInvoice.DiscountPercent = item.DiscountPercent;
                         existingInvoice.Gst = item.Gst;
                         existingInvoice.ProductTotal = item.ProductTotal;
                         existingInvoice.IsDeleted = false;
                         existingInvoice.UpdatedOn = DateTime.Now;
                         existingInvoice.UpdatedBy = ManualInvoice.UpdatedBy;
+                        existingInvoice.CreatedOn = ManualInvoice.CreatedOn;
+                        existingInvoice.CreatedBy = ManualInvoice.CreatedBy;
+                        existingInvoice.GstAmount = item.GstAmount;
+                        existingInvoice.Discount = item.Discount;
+                        existingInvoice.Hsn = item.Hsn;
 
                         Context.TblManualInvoiceDetails.Update(existingInvoice);
                     }
@@ -344,11 +362,14 @@ namespace EMPManegment.Repository.ManualInvoiceRepository
                             ProductType = item.ProductType,
                             Quantity = item.Quantity,
                             Price = item.Price,
-                            Discount = item.Discount,
                             Gst = item.Gst,
+                            DiscountPercent = item.DiscountPercent,
                             ProductTotal = item.ProductTotal,
                             CreatedOn = DateTime.Now,
-                            CreatedBy = ManualInvoice.CreatedBy,                           
+                            CreatedBy = ManualInvoice.CreatedBy,
+                            Discount = item.Discount,
+                            GstAmount = item.GstAmount,
+                            Hsn = item.Hsn,
                         };
 
                         Context.TblManualInvoiceDetails.Add(newInvoice);

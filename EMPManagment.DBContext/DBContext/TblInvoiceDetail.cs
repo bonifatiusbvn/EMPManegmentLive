@@ -13,13 +13,17 @@ public partial class TblInvoiceDetail
 
     public string Product { get; set; } = null!;
 
+    public int? Hsn { get; set; }
+
     public int ProductType { get; set; }
 
     public decimal Quantity { get; set; }
 
     public decimal Price { get; set; }
 
-    public decimal? Discount { get; set; }
+    public decimal? DiscountPer { get; set; }
+
+    public decimal? DiscountAmount { get; set; }
 
     public decimal Gst { get; set; }
 

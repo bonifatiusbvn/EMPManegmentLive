@@ -24,4 +24,6 @@ public partial class TblForm
     public DateTime? UpdatedOn { get; set; }
 
     public virtual ICollection<TblRolewiseFormPermission> TblRolewiseFormPermissions { get; set; } = new List<TblRolewiseFormPermission>();
+
+    public virtual ICollection<TblUserFormPermission> TblUserFormPermissions { get; set; } = new List<TblUserFormPermission>();
 }
