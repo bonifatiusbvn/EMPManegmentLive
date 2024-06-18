@@ -26,4 +26,6 @@ public partial class TblCompanyMaster
     public Guid? UpdatedBy { get; set; }
 
     public DateTime? UpdatedOn { get; set; }
+
+    public virtual ICollection<TblInvoice> TblInvoices { get; set; } = new List<TblInvoice>();
 }

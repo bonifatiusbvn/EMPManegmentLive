@@ -209,7 +209,7 @@ namespace EMPManegment.Web.Controllers
         public async Task<JsonResult> ProjectList(Guid? ProjectId, string? ProjectName)
         {
             UserSession.ProjectId = ProjectId.ToString();
-            UserSession.ProjectName = ProjectId == null ? " " :  ProjectName.ToString();
+            UserSession.ProjectName = ProjectId == null ? " " : ProjectName.ToString();
             return new JsonResult("Project Name updated succesfully!");
         }
     }

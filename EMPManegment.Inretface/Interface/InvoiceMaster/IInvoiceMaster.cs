@@ -4,6 +4,7 @@ using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.OrderModels;
 using EMPManegment.EntityModels.ViewModels.ProductMaster;
 using EMPManegment.EntityModels.ViewModels.ProjectModels;
+using EMPManegment.EntityModels.ViewModels.Purchase_Request;
 using EMPManegment.EntityModels.ViewModels.VendorModels;
 using System;
 using System.Collections.Generic;
@@ -30,8 +31,10 @@ namespace EMPManegment.Inretface.Interface.InvoiceMaster
         Task<PurchaseOrderResponseModel> DisplayInvoiceDetails(string OrderId);
         Task<UserResponceModel> IsDeletedInvoice(Guid InvoiceId);
         Task<UpdateInvoiceModel> EditInvoiceDetails(string InvoiceNo);
-        Task<UserResponceModel> UpdateInvoiceDetails(UpdateInvoiceModel UpdateInvoice);
+        Task<UserResponceModel> UpdateInvoiceDetails(InvoiceMasterModel UpdateInvoice);
         Task<PurchaseOrderResponseModel> ShowInvoiceDetailsByOrderId(string OrderId);
         Task<IEnumerable<InvoiceViewModel>> InvoicActivity(Guid ProId);
+        Task<InvoiceMasterModel> DisplayInvoiceDetailsById(Guid Id);
+        Task<List<InvoiceDetailsViewModel>> GetProductDetailsById(Guid ProductId);
     }
 }

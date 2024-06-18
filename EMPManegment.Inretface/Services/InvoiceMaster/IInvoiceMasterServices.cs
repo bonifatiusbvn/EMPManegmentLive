@@ -26,8 +26,10 @@ namespace EMPManegment.Inretface.Services.InvoiceMaster
         Task<PurchaseOrderResponseModel> DisplayInvoiceDetails(string OrderId);
         Task<UserResponceModel> IsDeletedInvoice(Guid InvoiceId);
         Task<UpdateInvoiceModel> EditInvoiceDetails(string InvoiceNo);
-        Task<UserResponceModel> UpdateInvoiceDetails(UpdateInvoiceModel UpdateInvoice);
+        Task<UserResponceModel> UpdateInvoiceDetails(InvoiceMasterModel UpdateInvoice);
         Task<PurchaseOrderResponseModel> ShowInvoiceDetailsByOrderId(string OrderId);
         Task<IEnumerable<InvoiceViewModel>> InvoicActivity(Guid ProId);
+        Task<InvoiceMasterModel> DisplayInvoiceDetailsById(Guid Id);
+        Task<List<InvoiceDetailsViewModel>> GetProductDetailsById(Guid ProductId);
     }
 }

@@ -93,7 +93,7 @@ namespace EMPManegment.Services.InvoiceMaster
             return await InvoiceMaster.IsDeletedInvoice(InvoiceId);
         }
 
-        public async Task<UserResponceModel> UpdateInvoiceDetails(UpdateInvoiceModel UpdateInvoice)
+        public async Task<UserResponceModel> UpdateInvoiceDetails(InvoiceMasterModel UpdateInvoice)
         {
             return await InvoiceMaster.UpdateInvoiceDetails(UpdateInvoice);
         }
@@ -106,6 +106,16 @@ namespace EMPManegment.Services.InvoiceMaster
         public async Task<IEnumerable<InvoiceViewModel>> InvoicActivity(Guid ProId)
         {
             return await InvoiceMaster.InvoicActivity(ProId);
+        }
+
+        public async Task<InvoiceMasterModel> DisplayInvoiceDetailsById(Guid Id)
+        {
+            return await InvoiceMaster.DisplayInvoiceDetailsById(Id);
+        }
+
+        public async Task<List<InvoiceDetailsViewModel>> GetProductDetailsById(Guid ProductId)
+        {
+            return await InvoiceMaster.GetProductDetailsById(ProductId);
         }
     }
 }
