@@ -117,26 +117,58 @@ namespace EMPManegment.Repository.UserLoginRepository
                             response.Code = (int)HttpStatusCode.OK;
 
 
-                            List<FromPermission> FromPermissionData = (from u in Context.TblRolewiseFormPermissions
-                                                                       join s in Context.TblForms on u.FormId equals s.FormId
-                                                                       where u.RoleId == userModel.RoleId
-                                                                       orderby s.OrderId ascending
-                                                                       select new FromPermission
-                                                                       {
-                                                                           FormName = s.FormName,
-                                                                           GroupName = s.FormGroup,
-                                                                           Controller = s.Controller,
-                                                                           Action = s.Action,
-                                                                           Add = u.IsAddAllow,
-                                                                           View = u.IsViewAllow,
-                                                                           Edit = u.IsEditAllow,
-                                                                           Delete = u.IsDeleteAllow,
-                                                                           isActive = s.IsActive,
-                                                                           isViewAllow = u.IsViewAllow,
-                                                                       }).ToList();
+                            bool userformPermission = await Context.TblUserFormPermissions.AnyAsync(e => e.UserId == userModel.Id);
+
+                            if (userformPermission = true)
+                            {
+                                List<FromPermission> FromPermissionData = (from u in Context.TblUserFormPermissions
+                                                                           join s in Context.TblForms on u.FormId equals s.FormId
+                                                                           where u.UserId == userModel.Id
+                                                                           orderby s.OrderId ascending
+                                                                           select new FromPermission
+                                                                           {
+                                                                               FormName = s.FormName,
+                                                                               GroupName = s.FormGroup,
+                                                                               Controller = s.Controller,
+                                                                               Action = s.Action,
+                                                                               Add = u.IsAddAllow,
+                                                                               View = u.IsViewAllow,
+                                                                               Edit = u.IsEditAllow,
+                                                                               Delete = u.IsDeleteAllow,
+                                                                               isActive = s.IsActive,
+                                                                               isViewAllow = u.IsViewAllow,
+                                                                           }).ToList();
 
 
-                            userModel.FromPermissionData = FromPermissionData;
+                                userModel.FromPermissionData = FromPermissionData;
+
+                            }
+
+
+                            else
+                            {
+                                List<FromPermission> FromPermissionData = (from u in Context.TblRolewiseFormPermissions
+                                                                           join s in Context.TblForms on u.FormId equals s.FormId
+                                                                           where u.RoleId == userModel.RoleId
+                                                                           orderby s.OrderId ascending
+                                                                           select new FromPermission
+                                                                           {
+                                                                               FormName = s.FormName,
+                                                                               GroupName = s.FormGroup,
+                                                                               Controller = s.Controller,
+                                                                               Action = s.Action,
+                                                                               Add = u.IsAddAllow,
+                                                                               View = u.IsViewAllow,
+                                                                               Edit = u.IsEditAllow,
+                                                                               Delete = u.IsDeleteAllow,
+                                                                               isActive = s.IsActive,
+                                                                               isViewAllow = u.IsViewAllow,
+                                                                           }).ToList();
+
+
+                                userModel.FromPermissionData = FromPermissionData;
+                            }
+
 
                             tblUser.User.LastLoginDate = DateTime.Now;
                             Context.TblUsers.Update(tblUser.User);
