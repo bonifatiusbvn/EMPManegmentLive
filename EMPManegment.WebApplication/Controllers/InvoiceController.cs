@@ -24,6 +24,8 @@ using EMPManegment.Web.Helper;
 using Microsoft.AspNetCore.Authorization;
 using Irony.Parsing.Construction;
 using EMPManegment.EntityModels.ViewModels.ManualInvoice;
+using Aspose.Foundation.UriResolver.RequestResponses;
+using DocumentFormat.OpenXml.Spreadsheet;
 
 namespace EMPManegment.Web.Controllers
 {
@@ -49,15 +51,55 @@ namespace EMPManegment.Web.Controllers
         }
 
         [FormPermissionAttribute("Create Invoice-View")]
-        public async Task<IActionResult> CreateInvoice()
+        public async Task<IActionResult> CreateInvoice(Guid? Id)
         {
-            string porjectname = UserSession.ProjectName;
-            ApiResponseModel Response = await APIServices.GetAsync("", "Invoice/CheckInvoiceNo?porjectname=" + porjectname);
-            if (Response.code == 200)
+            InvoiceMasterModel InvoiceDetails = new InvoiceMasterModel();
+            if(Id != null)
             {
-                ViewBag.InvoiceNo = Response.data;
+                ApiResponseModel Response = await APIServices.GetAsync("", "Invoice/DisplayInvoiceDetailsById?Id=" + Id);
+                if (Response.code == 200)
+                {
+                    InvoiceDetails= JsonConvert.DeserializeObject<InvoiceMasterModel>(Response.data.ToString());
+                    ViewBag.InvoiceNo = InvoiceDetails.InvoiceNo;
+                    int rowNumber = 0;
+                    foreach (var item in InvoiceDetails.InvoiceDetails)
+                    {
+                        item.RowNumber = rowNumber++;
+                    }
+                }
             }
-            return View();
+            else
+            {
+                string porjectname = UserSession.ProjectName;
+                ApiResponseModel Response = await APIServices.GetAsync("", "Invoice/CheckInvoiceNo?porjectname=" + porjectname);
+                if (Response.code == 200)
+                {
+                    ViewBag.InvoiceNo = Response.data;
+                }
+            }
+            return View(InvoiceDetails);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DisplayInvoiceProductDetailsListById()
+        {
+            try
+            {
+                string ProductId = HttpContext.Request.Form["ProductId"];
+                var GetProduct = JsonConvert.DeserializeObject<InvoiceDetailsViewModel>(ProductId.ToString());
+                List<InvoiceDetailsViewModel> Product = new List<InvoiceDetailsViewModel>();
+                ApiResponseModel response = await APIServices.GetAsync("", "Invoice/GetProductDetailsById?ProductId=" + GetProduct.ProductId);
+                if (response.code == 200)
+                {
+                    Product = JsonConvert.DeserializeObject<List<InvoiceDetailsViewModel>>(response.data.ToString());
+                    Product.ForEach(a => a.ProductTotal = (a.PerUnitPrice ?? 0) + (a.PerUnitWithGstprice ?? 0));
+                }
+                return PartialView("~/Views/Invoice/_DisplayInvoiceProductDetailsPartial.cshtml", Product);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         [HttpPost]
@@ -223,8 +265,8 @@ namespace EMPManegment.Web.Controllers
                 var draw = Request.Form["draw"].FirstOrDefault();
                 var start = Request.Form["start"].FirstOrDefault();
                 var length = Request.Form["length"].FirstOrDefault();
-                var sortColumn = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
-                var sortColumnDir = Request.Form["order[0][dir]"].FirstOrDefault();
+                //var sortColumn = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
+                //var sortColumnDir = Request.Form["order[0][dir]"].FirstOrDefault();
                 var searchValue = Request.Form["search[value]"].FirstOrDefault();
                 int pageSize = length != null ? Convert.ToInt32(length) : 0;
                 int skip = start != null ? Convert.ToInt32(start) : 0;
@@ -237,8 +279,8 @@ namespace EMPManegment.Web.Controllers
                     skip = skip,
                     lenght = length,
                     searchValue = searchValue,
-                    sortColumn = sortColumn,
-                    sortColumnDir = sortColumnDir
+                    //sortColumn = sortColumn,
+                    //sortColumnDir = sortColumnDir
                 };
                 List<InvoiceViewModel> InvoiceList = new List<InvoiceViewModel>();
                 var data = new jsonData();
@@ -273,6 +315,30 @@ namespace EMPManegment.Web.Controllers
                 var InsertDetails = JsonConvert.DeserializeObject<InvoiceMasterModel>(InvoiceDetails);
 
                 ApiResponseModel postuser = await APIServices.PostAsync(InsertDetails, "Invoice/InsertInvoiceDetails");
+                if (postuser.code == 200)
+                {
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
+                }
+                else
+                {
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateInvoiceDetails()
+        {
+            try
+            {
+                var InvoiceDetails = HttpContext.Request.Form["UPDATEINVOICEDETAILS"];
+                var UpdateDetails = JsonConvert.DeserializeObject<InvoiceMasterModel>(InvoiceDetails);
+
+                ApiResponseModel postuser = await APIServices.PostAsync(UpdateDetails, "Invoice/UpdateInvoiceDetails");
                 if (postuser.code == 200)
                 {
                     return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
@@ -575,27 +641,6 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
-        [FormPermissionAttribute("InvoiceListView-Edit")]
-        [HttpPost]
-        public async Task<IActionResult> UpdateInvoiceDetails(UpdateInvoiceModel invoiceDetails)
-        {
-            try
-            {
-                ApiResponseModel postuser = await APIServices.PostAsync(invoiceDetails, "Invoice/UpdateInvoiceDetails");
-                if (postuser.code == 200)
-                {
-                    return Ok(new { postuser.message, postuser.code });
-                }
-                else
-                {
-                    return Ok(new { postuser.message, postuser.code });
-                }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
 
         [FormPermissionAttribute("InvoiceListView-Delete")]
         [HttpPost]
@@ -638,6 +683,28 @@ namespace EMPManegment.Web.Controllers
             {
                 throw ex;
             }
-        }      
+        }
+
+        public async Task<IActionResult> GetInvoiceAllProductList(string? searchText)
+        {
+            try
+            {
+                string apiUrl = $"ProductMaster/GetAllProductList?searchText={searchText}";
+                ApiResponseModel response = await APIServices.PostAsync("", apiUrl);
+                if (response.code == 200)
+                {
+                    List<ProductDetailsView> Items = JsonConvert.DeserializeObject<List<ProductDetailsView>>(response.data.ToString());
+                    return PartialView("~/Views/Invoice/_showInvoiceAllProductsPartial.cshtml", Items);
+                }
+                else
+                {
+                    return Ok(new { Message = "Failed to retrieve Product list" });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

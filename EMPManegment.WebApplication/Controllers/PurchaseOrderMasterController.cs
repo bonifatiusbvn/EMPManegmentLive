@@ -2,6 +2,7 @@
 using EMPManagment.Web.Models.API;
 using EMPManegment.EntityModels.ViewModels;
 using EMPManegment.EntityModels.ViewModels.ExpenseMaster;
+using EMPManegment.EntityModels.ViewModels.Invoice;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.OrderModels;
 using EMPManegment.EntityModels.ViewModels.ProductMaster;
@@ -240,7 +241,7 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
-        public async Task<IActionResult> GetAllProductList(string? searchText)
+        public async Task<IActionResult> GetAllPOProductList(string? searchText)
         {
             try
             {
@@ -249,7 +250,7 @@ namespace EMPManegment.Web.Controllers
                 if (response.code == 200)
                 {
                     List<ProductDetailsView> Items = JsonConvert.DeserializeObject<List<ProductDetailsView>>(response.data.ToString());
-                    return PartialView("~/Views/PurchaseOrderMaster/_showAllProductsPartial.cshtml", Items);
+                    return PartialView("~/Views/PurchaseOrderMaster/_showAllPOProductsPartial.cshtml", Items);
                 }
                 else
                 {
@@ -259,6 +260,27 @@ namespace EMPManegment.Web.Controllers
             catch (Exception ex)
             {
                 throw ex;
+            }
+        }
+        [HttpPost]
+        public async Task<IActionResult> DisplayPOProductDetailsListById()
+        {
+            try
+            {
+                string ProductId = HttpContext.Request.Form["ProductId"];
+                var GetProduct = JsonConvert.DeserializeObject<InvoiceDetailsViewModel>(ProductId.ToString());
+                List<InvoiceDetailsViewModel> Product = new List<InvoiceDetailsViewModel>();
+                ApiResponseModel response = await APIServices.GetAsync("", "Invoice/GetProductDetailsById?ProductId=" + GetProduct.ProductId);
+                if (response.code == 200)
+                {
+                    Product = JsonConvert.DeserializeObject<List<InvoiceDetailsViewModel>>(response.data.ToString());
+                    Product.ForEach(a => a.ProductTotal = (a.PerUnitPrice ?? 0) + (a.PerUnitWithGstprice ?? 0));
+                }
+                return PartialView("~/Views/PurchaseOrderMaster/_DisplayPOProductDetailsById.cshtml", Product);
+            }
+            catch (Exception ex)
+            {
+                throw ex;   
             }
         }
     }

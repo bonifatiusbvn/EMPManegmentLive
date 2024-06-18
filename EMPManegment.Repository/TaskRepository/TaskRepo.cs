@@ -220,6 +220,9 @@ namespace EMPManegment.Repository.TaskRepository
                                 TaskDetails = d.TaskDetails,
                                 TaskStatus = d.TaskStatus,
                                 UserName = b.UserName,
+                                FirstName= b.FirstName,
+                                LastName= b.LastName,
+                                UserProfile= b.Image,
                                 TaskTypeName = m.TaskType,
                                 CreatedBy = d.CreatedBy
                             }).First();
@@ -327,6 +330,8 @@ namespace EMPManegment.Repository.TaskRepository
                         TaskTitle = a.TaskTitle,
                         UserProfile = b.Image,
                         UserName = b.UserName,
+                        FirstName = b.FirstName,
+                        LastName= b.LastName,
                         TaskTypeName = c.TaskType,
                         CreatedBy = a.CreatedBy,
                     };

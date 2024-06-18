@@ -26,7 +26,7 @@ namespace EMPManegment.EntityModels.ViewModels.Invoice
 
         public DateTime? BuyesOrderDate { get; set; }
 
-        public string DispatchThrough { get; set; } = null!;
+        public string? DispatchThrough { get; set; }
 
         public string? ShippingAddress { get; set; }
 
@@ -36,7 +36,10 @@ namespace EMPManegment.EntityModels.ViewModels.Invoice
 
         public decimal? Igst { get; set; }
 
+        public decimal? TotalDiscount { get; set; }
+
         public decimal? TotalGst { get; set; }
+        public decimal? RoundOff { get; set; }
 
         public decimal? TotalAmount { get; set; }
 
@@ -72,6 +75,17 @@ namespace EMPManegment.EntityModels.ViewModels.Invoice
         public string? VendorBankAccountNo { get; set; } 
 
         public string? VendorBankIfsc { get; set; }
+        public string? PaymentMethodName { get; set; }
+
+        public string? PaymentStatusName { get; set; }
+        public string? VendorAddress { get; set; }
+        public string? VendorCompanyNumber { get; set; }
+        public Guid? CompanyId { get; set; }
+
+        public string? CompnyName { get; set; }
+        public string? CompanyGst { get; set; }
+        public Guid? UpdatedBy { get; set; }
+        public DateTime? Date { get; set; }
 
         public List<InvoiceDetailsViewModel>? InvoiceDetails { get; set; }
     }
