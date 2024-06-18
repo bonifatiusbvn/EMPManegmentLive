@@ -11,6 +11,15 @@ $(document).ready(function () {
             GetUserRoleList();
         }
     });
+    $('#userdropdownButton').click(function () {
+        var dropdown = $('#usercustomDropdown');
+        if (dropdown.is(':visible')) {
+            dropdown.hide();
+        } else {
+            dropdown.show();
+            GetUsernameList();
+        }
+    });
 
     $(document).on('click', '.dropdown-item-custom', function () {
         var selectedText = $(this).text();
@@ -19,21 +28,43 @@ $(document).ready(function () {
         $('#customDropdown').hide();
         EditRoleWiseFormDetails(selectedValue);
     });
-
+    $(document).on('click', '.dropdown-item-custom', function () {
+        var selectedText = $(this).text();
+        var selectedValue = $(this).data('value');
+        $('#userdropdownButton').text(selectedText).attr('data-selected-value', selectedValue);
+        $('#usercustomDropdown').hide();
+       /* EditUserFormDetails(selectedValue);*/
+    });
     $(document).click(function (event) {
         if (!$(event.target).closest('#dropdownButton').length && !$(event.target).closest('#customDropdown').length) {
             $('#customDropdown').hide();
         }
     });
-
-    function GetUserRoleList() {
+    $(document).click(function (event) {
+        if (!$(event.target).closest('#userdropdownButton').length && !$(event.target).closest('#usercustomDropdown').length) {
+            $('#usercustomDropdown').hide();
+        }
+    });
+    function GetUserRoleList() {debugger
         $.ajax({
             url: '/UserProfile/RolewisePermissionListAction',
-            success: function (result) {
+            success: function (result) {debugger
                 var dropdown = $('#customDropdown');
                 dropdown.empty();
                 $.each(result, function (i, data) {
                     dropdown.append('<div class="dropdown-item-custom" data-value="' + data.roleId + '">' + data.role + '</div>');
+                });
+            }
+        });
+    }
+    function GetUsernameList() {
+        $.ajax({
+            url: '/Task/GetUserName',
+            success: function (result) {
+                var dropdown = $('#usercustomDropdown');
+                dropdown.empty();
+                $.each(result, function (i, data) {
+                    dropdown.append('<div class="dropdown-item-custom" data-value="' + data.id + '">' + data.firstName + ' ' + data.lastName +'</div>');
                 });
             }
         });
@@ -57,6 +88,24 @@ $(document).ready(function () {
             },
         });
     }
+    //function EditUserFormDetails(roleId) {
+    //    var RoleId = roleId
+    //    $.ajax({
+    //        url: '/UserProfile/GetUserFormListById?RoleId=' + RoleId,
+    //        type: 'post',
+    //        dataType: 'json',
+    //        processData: false,
+    //        contentType: false,
+    //        complete: function (Result) {
+    //            if (Result.responseText != "{\"code\":400}") {
+    //                document.getElementById("userupdatebtn").style.display = "block";
+    //                $('#dveditUserForm').html(Result.responseText).show();
+    //            } else {
+    //                toastr.error(Result.message);
+    //            }
+    //        },
+    //    });
+    //}
 });
 
 

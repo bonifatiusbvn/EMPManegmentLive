@@ -140,5 +140,32 @@ namespace EMPManagment.API.Controllers
             }
             return StatusCode(response.code, response);
         }
+        [HttpPost]
+        [Route("GetUserFormListById")]
+        public async Task<IActionResult> GetUserFormListById(Guid RoleId)
+        {
+            ApiResponseModel response = new ApiResponseModel();
+            try
+            {
+                List<RolewiseFormPermissionModel> RolewiseFormList = await RolewisePermissionMaster.GetUserFormListById(RoleId);
+
+                if (RolewiseFormList.Count == 0)
+                {
+                    response.code = 400;
+                    response.message = "Error in getting UserList.";
+                }
+                else
+                {
+                    response.code = 200;
+                    response.data = RolewiseFormList.ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                response.code = (int)HttpStatusCode.InternalServerError;
+                response.message = "An error occurred while processing the request.";
+            }
+            return StatusCode(response.code, response);
+        }
     }
 }

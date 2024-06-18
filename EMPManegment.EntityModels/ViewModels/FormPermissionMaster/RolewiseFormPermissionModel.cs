@@ -33,6 +33,7 @@ namespace EMPManegment.EntityModels.ViewModels.FormPermissionMaster
         public string? Role { get; set; }
 
         public string? FullName { get; set; }
+        public string? UserName { get; set; }
 
         public string? FormName { get; set; }
 

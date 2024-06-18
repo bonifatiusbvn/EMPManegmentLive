@@ -1043,6 +1043,36 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
+        [FormPermissionAttribute("User Form Permission-View")]
+        [HttpGet]
+        public IActionResult UserFormPermission()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> GetUserFormListById(Guid RoleId)
+        {
+            try
+            {
+                List<RolewiseFormPermissionModel> RolewiseFormList = new List<RolewiseFormPermissionModel>();
+                ApiResponseModel response = await APIServices.PostAsync("", "FormPermissionMaster/GetUserFormListById?RoleId=" + RoleId);
+                if (response.code == 200)
+                {
+                    RolewiseFormList = JsonConvert.DeserializeObject<List<RolewiseFormPermissionModel>>(response.data.ToString());
+                    return PartialView("~/Views/UserProfile/_UserFormPermissionPartial.cshtml", RolewiseFormList);
+                }
+                else
+                {
+                    return Ok(new { response.code });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
     }
 }
 

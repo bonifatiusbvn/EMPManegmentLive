@@ -243,5 +243,34 @@ namespace EMPManegment.Repository.FormPermissionMasterRepository
             return response;
         }
 
+        public async Task<List<RolewiseFormPermissionModel>> GetUserFormListById(Guid RoleId)
+        {
+            var UserData = new List<RolewiseFormPermissionModel>();
+            var data = await(from e in Context.TblRolewiseFormPermissions.Where(x => x.RoleId == RoleId)
+                             join f in Context.TblForms on e.FormId equals f.FormId
+                             join r in Context.TblRoleMasters on e.RoleId equals r.RoleId
+                             orderby f.OrderId ascending
+                             select new RolewiseFormPermissionModel
+                             {
+                                 Id = e.Id,
+                                 Role = r.Role,
+                                 RoleId = e.RoleId,
+                                 FormId = e.FormId,
+                                 FormName = f.FormName,
+                                 IsViewAllow = e.IsViewAllow,
+                                 IsEditAllow = e.IsEditAllow,
+                                 IsDeleteAllow = e.IsDeleteAllow,
+                                 IsAddAllow = e.IsAddAllow,
+                                 CreatedBy = e.CreatedBy,
+                                 CreatedOn = e.CreatedOn,
+                             }).ToListAsync();
+
+
+            if (data.Count != 0)
+            {
+                UserData.AddRange(data);
+            }
+            return UserData;
+        }
     }
 }
