@@ -1,29 +1,4 @@
-﻿
-$(document).ready(function () {
-    $("#CreateInvoiceForm").validate({
-        rules: {
-            textVendorName: "required",
-            textCompanyName: "required",
-            txtpaymentmethod: "required",
-            textDispatchThrough: "required",
-        },
-        messages: {
-            textVendorName: "Select Vendor Name",
-            textCompanyName: "Select Company Name",
-            txtpaymentmethod: "Select Payment Method",
-            textDispatchThrough: "Please Enter DispatchThrough",
-        }
-    });
-});
-function clearItemErrorMessage() {
-    $("#spnitembutton").text("");
-}
-$(document).on("click", "#addItemButton", function () {
-    clearItemErrorMessage();
-});
-
-
-function GetInvoiceDetailsByOrderId(OrderId) {
+﻿function GetInvoiceDetailsByOrderId(OrderId) {
     $.ajax({
         url: '/Invoice/GetInvoiceDetailsByOrderId/?OrderId=' + OrderId,
         type: 'GET',
@@ -40,7 +15,6 @@ function GetInvoiceDetailsByOrderId(OrderId) {
         }
     });
 }
-
 function ShowInvoiceDetailsByOrderId(OrderId) {
 
     $.ajax({
@@ -59,7 +33,7 @@ function ShowInvoiceDetailsByOrderId(OrderId) {
         }
     });
 }
-function InsertInvoiceDetails() {
+function fn_InsertInvoiceDetails() {
 
     if ($("#CreateInvoiceForm").valid()) {
         if ($('#addnewproductlink tr').length >= 1) {
@@ -149,15 +123,15 @@ function InsertInvoiceDetails() {
         toastr.warning("Kindly fill all datafield");
     }
 }
-function CheckProjectIdIsSelected() {
+function fn_CheckProjectIdIsSelected() {
     var ProjectId = $('#textProjectId').val();
     if (ProjectId == "") {
         toastr.warning('Please Select Project!');
     } else {
-        UpdateInvoiceDetails()
+        fn_UpdateInvoiceDetails()
     }
 }
-function UpdateInvoiceDetails() {
+function fn_UpdateInvoiceDetails() {
 
     if ($("#CreateInvoiceForm").valid()) {
         if ($('#addnewproductlink tr').length >= 1) {
@@ -251,91 +225,7 @@ function UpdateInvoiceDetails() {
     }
 }
 
-
-$(document).ready(function () {
-    $("#generatePDF").click(function () {
-
-        var pdf = new jsPDF();
-
-
-        var htmlContent = "<h1 style='color: #3498db; text-align: center;'>PDF Generated with jQuery</h1>";
-        htmlContent += "<p>This is a dynamically generated PDF content.</p>";
-
-
-        pdf.fromHTML(htmlContent, 15, 15, {
-            'width': 170,
-            'elementHandlers': {
-                '#ignorePDF': function (element, renderer) {
-                    return true;
-                }
-            }
-        });
-
-
-        pdf.save("generated_pdf.pdf");
-    });
-});
-$(document).ready(function () {
-    var itemCounter = 0;
-
-    $("#addItemBtn").click(function () {
-        var newItem = $(".invoice-item:first").clone().removeAttr("style");
-        newItem.find("input").val("");
-        $("#invoiceItems").append(newItem);
-
-        itemCounter++;
-    });
-
-    $("#SubmitInvoiceBtn").click(function (e) {
-
-        e.preventDefault();
-
-        var formData =
-        {
-            CompanyAddress: $("#idStatusCompany").val(),
-            InvoiceNo: $("#InvoiceNo").val(),
-            Date: $("#date-field").val(),
-            PaymentStatus: $("#choices-payment-status").val(),
-            TotalAmount: $("#totalamountInput").val(),
-            BillingName: $("#billingName").val(),
-            BillingAddress: $("#billingAddress").val(),
-            BillingNumber: $("#billingPhoneno").val(),
-            BillingTaxNumber: $("#billingTaxno").val(),
-            ShippingName: $("#shippingName").val(),
-            ShippingAddress: $("#shippingAddress").val(),
-            ShippingNumber: $("#shippingPhoneno").val(),
-            ShippingTaxNumber: $("#shippingTaxno").val(),
-            ProductName: $("#productName-1").val(),
-            ProductDetails: $("#productDetails-1").val(),
-            HSN: $("#productHsn-1").val(),
-            Price: $("#productRate-1").val(),
-            Quantity: $("#product-qty-1").val(),
-            PaymentMethod: $("#choices-payment-type").val(),
-            CardHolderName: $("#cardholderName").val(),
-            CardNumber: $("#cardNumber").val(),
-        };
-
-
-        $.ajax({
-            url: '/Invoice/GenerateInvoice',
-            type: 'POST',
-            data: formData,
-            success: function (response) {
-                if (response) {
-                    generatePdf(response);
-                }
-                else {
-                    toastr.error("Error generating invoice. please try again.");
-                }
-            },
-            error: function () {
-                toastr.error("An error occurred. please try again.");
-            }
-        });
-    });
-});
-
-function deleteInvoice(InvoiceId) {
+function fn_deleteInvoice(InvoiceId) {
     Swal.fire({
         title: "Are you sure want to delete this?",
         text: "You won't be able to revert this!",
@@ -384,73 +274,6 @@ function deleteInvoice(InvoiceId) {
         }
     });
 }
-
-function generatePdf(data) {
-
-    var pdf = new jsPDF();
-
-
-    var htmlContent = '<div class="col-lg-12"><div class="d-flex"><div class="flex-grow-1"><div class="mt-sm-5 mt-4"><h6 class="text-muted text-uppercase fw-semibold">Address</h6><p class="text-muted mb-1" id="address-details">California, United States</p></div></div><div class="flex-shrink-0 mt-sm-0 mt-3"><h6><span class="text-muted fw-normal">Legal Registration No:</span><span id="legal-register-no">987654</span></h6><h6><span class="text-muted fw-normal">Email:</span><span id="email">velzon@themesbrand.com</span></h6><h6 class="mb-0"><span class="text-muted fw-normal">Contact No: </span><span id="contact-no"> +(01) 234 6789</span></h6></div></div></div ></div >';
-    htmlContent += '<div class="col-lg-12"><div class="row g-3"><div class="col-lg-3 col-6"><p class="text-muted mb-2 text-uppercase fw-semibold">Invoice No</p><h5 class="fs-14 mb-0">#VL<span id="invoice-no">' + data.invoiceNo + '</span></h5></div><div class="col-lg-3 col-6"><p class="text-muted mb-2 text-uppercase fw-semibold">Date</p><h5 class="fs-14 mb-0"><span id="invoice-date">23 Nov, 2021</span> <small class="text-muted" id="invoice-time">' + data.date + '</small></h5></div><div class="col-lg-3 col-6"><p class="text-muted mb-2 text-uppercase fw-semibold">Payment Status</p><span class="badge bg-success-subtle text-success fs-11" id="payment-status">' + data.paymentStatus + '</span></div><div class="col-lg-3 col-6"><p class="text-muted mb-2 text-uppercase fw-semibold">Total Amount</p><h5 class="fs-14 mb-0">$<span id="total-amount">' + data.totalAmount + '</span></h5></div></div></div >';
-    pdf.fromHTML(htmlContent, 15, 15, {
-        'width': 170,
-        'elementHandlers': {
-            '#ignorePDF': function (element, renderer) {
-                return true;
-            }
-        }
-    });
-
-    pdf.save("generated_pdf.pdf");
-}
-
-
-$('#idStatus').change(function () {
-    if ($("#idStatus").val() == "Selse") {
-        $("#companyaddress").show();
-        $("#fullcompanyaddress").show();
-        $("#txtvendorname1").show();
-        $("#vendername").hide();
-        $("#CompanyAddress1").hide();
-        $("#fullcompanyaddress1").hide();
-    }
-    if ($("#idStatus").val() == "Purchase") {
-        $("#vendername").show();
-        $("#CompanyAddress1").show();
-        $("#fullcompanyaddress1").show();
-        $("#companyaddress").hide();
-        $("#fullcompanyaddress").hide();
-        $("#txtvendorname1").hide();
-    }
-});
-
-
-
-function downloadPDF() {
-
-    var htmlContent = document.getElementById('printableContent').innerHTML;
-    var form_data = new FormData();
-    form_data.append("DOWNLOADINVOICE", htmlContent);
-
-    $.ajax({
-        url: '/Invoice/DownloadPdf',
-        type: 'POST',
-        data: form_data,
-        contentType: false,
-        processData: false,
-        success: function (data) {
-
-            console.log('PDF generated successfully:', data);
-
-            window.location.href = data;
-        },
-        error: function (xhr, status, error) {
-
-            toastr.error(xhr.responseText);
-        }
-    });
-}
-
 
 var datas = userPermissions
 $(document).ready(function () {
@@ -501,7 +324,7 @@ $(document).ready(function () {
                     }
 
                     if (canDelete) {
-                        buttons += '<a onclick="deleteInvoice(\'' + full.id + '\')" class="btn text-danger btndeletedoc">' +
+                        buttons += '<a onclick="fn_deleteInvoice(\'' + full.id + '\')" class="btn text-danger btndeletedoc">' +
                             '<i class="fas fa-trash"></i></a>';
                     }
 
@@ -530,7 +353,6 @@ $(document).ready(function () {
     }
     data(datas);
 });
-
 function createInvoice() {
     if ($("#txtInvoice").val() == "") {
         Swal.fire({
@@ -546,6 +368,21 @@ function createInvoice() {
 }
 
 $(document).ready(function () {
+
+    $("#CreateInvoiceForm").validate({
+        rules: {
+            textVendorName: "required",
+            textCompanyName: "required",
+            txtpaymentmethod: "required",
+            textDispatchThrough: "required",
+        },
+        messages: {
+            textVendorName: "Select Vendor Name",
+            textCompanyName: "Select Company Name",
+            txtpaymentmethod: "Select Payment Method",
+            textDispatchThrough: "Please Enter DispatchThrough",
+        }
+    });
 
     fn_GetInvoiceVendorNameList()
     $('#textVendorName').change(function () {
@@ -664,7 +501,6 @@ $(document).ready(function () {
         }
     }, 300));
 });
-
 function fn_GetInvoiceVendorNameList() {
     $.ajax({
         url: '/ProductMaster/GetVendorsNameList',
@@ -811,7 +647,6 @@ function SearchInvoiceProductDetailsById(ProductId) {
         }
     });
 }
-
 var count = 0;
 function fn_InvoiceNewRow(Result) {
 
@@ -910,7 +745,6 @@ function fn_updateInvoiceDiscount(that) {debugger
     fn_updateInvoiceProductAmount(row);
     fn_updateInvoiceTotals();
 }
-
 function fn_UpdateInvoiceDiscountPercentage(that) {debugger
     var row = $(that);
     var productPrice = parseFloat(row.find("#productamount").val());

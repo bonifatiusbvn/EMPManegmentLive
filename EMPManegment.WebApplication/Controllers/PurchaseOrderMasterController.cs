@@ -241,7 +241,7 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
-        public async Task<IActionResult> GetAllProductList(string? searchText)
+        public async Task<IActionResult> GetAllPOProductList(string? searchText)
         {
             try
             {
@@ -250,7 +250,7 @@ namespace EMPManegment.Web.Controllers
                 if (response.code == 200)
                 {
                     List<ProductDetailsView> Items = JsonConvert.DeserializeObject<List<ProductDetailsView>>(response.data.ToString());
-                    return PartialView("~/Views/PurchaseOrderMaster/_showAllProductsPartial.cshtml", Items);
+                    return PartialView("~/Views/PurchaseOrderMaster/_showAllPOProductsPartial.cshtml", Items);
                 }
                 else
                 {
@@ -274,8 +274,9 @@ namespace EMPManegment.Web.Controllers
                 if (response.code == 200)
                 {
                     Product = JsonConvert.DeserializeObject<List<InvoiceDetailsViewModel>>(response.data.ToString());
+                    Product.ForEach(a => a.ProductTotal = (a.PerUnitPrice ?? 0) + (a.PerUnitWithGstprice ?? 0));
                 }
-                return PartialView("~/Views/PurchaseOrderMaster/_DisplayProductDetailsById.cshtml", Product);
+                return PartialView("~/Views/PurchaseOrderMaster/_DisplayPOProductDetailsById.cshtml", Product);
             }
             catch (Exception ex)
             {

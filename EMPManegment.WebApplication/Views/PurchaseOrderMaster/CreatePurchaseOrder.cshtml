@@ -118,7 +118,7 @@
                                             <h5 class="card-title mb-0 flex-grow-1">Purchase Order</h5>
                                             <div class="flex-shrink-0">
                                                 <div class="d-flex flex-wrap gap-2">
-                                                    <a class="btn btn-block btn-warning" style="margin-left: 665px;" id="AddVendorModelButton" onclick="fn_OpenAddproductmodal()"><i class="ri-add-fill me-1 align-bottom"></i>Add Product</a>
+                                                    <a class="btn btn-block btn-warning" style="margin-left: 665px;" id="AddVendorModelButton" onclick="fn_OpenAddPOproductmodal()"><i class="ri-add-fill me-1 align-bottom"></i>Add Product</a>
                                                     <span id="spnitembutton" class="text-danger"></span>
                                                 </div>
                                             </div>
@@ -285,7 +285,7 @@
                                                 </a>
                                             </h5>
                                             <div class="card-body">
-                                                <input type="checkbox" id="hideShippingAddress" name="hideShippingAddress" onchange="toggleShippingAddress()" checked>
+                                                <input type="checkbox" id="hideShippingAddress" name="hideShippingAddress" onchange="fn_POtoggleShippingAddress()" checked>
                                                 <label for="hideShippingAddress"><b>Is Your Billing Address is same as Shipping Address?</b></label>
                                                 <div id="shippingAddressFields" style="display:none;">
                                                     <textarea type="text" id="textShippingAddress" name="textShippingAddress" class="form-control" placeholder="Shipping Address"></textarea>
@@ -304,86 +304,6 @@
                                     <div class="card-body">
                                         <div class="hstack gap-2 justify-content-end d-print-none mt-4">
                                             <button type="button" class="btn btn-lg btn-success" id="SavePOButton" onclick="InsertMultiplePurchaseOrderDetails()" style="width: 160px;height: 50px;"><i class="ri-printer-line align-bottom me-1"></i>Create</button>
-                                            @*                                            @if (Model.Id == Guid.Empty)
-                                            {
-                                            }
-                                            }
-                                            </tbody>
-                                            </table>
-                                            <div class="noresult" style="display: none">
-                                            <div class="text-center">
-                                            <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#25a0e2,secondary:#0ab39c" style="width:75px;height:75px">
-                                            </lord-icon>
-                                            <h5 class="mt-2">Sorry! No Result Found</h5>
-                                            <p class="text-muted">
-                                            We've searched more than 150+ Orders We did
-                                            not find any
-                                            orders for you search.
-                                            </p>
-                                            </div>
-                                            </div>
-                                            </div>
-                                            <div class="d-flex justify-content-end">
-                                            <div class="pagination-wrap hstack gap-2">
-                                            <a class="page-item pagination-prev disabled" href="#">
-                                            Previous
-                                            </a>
-                                            <ul class="pagination listjs-pagination mb-0"></ul>
-                                            <a class="page-item pagination-next" href="#">
-                                            Next
-                                            </a>
-                                            </div>
-                                            </div>
-                                            </div>
-                                            </div>
-                                            </div>
-                                            </div>
-                                            </div>
-                                            <div class="row">
-                                            <div class="col-lg-12">
-                                            <div class="tab-content text-muted">
-                                            <div class="tab-pane" id="status-cancelled" role="tabpanel">
-                                            <div class="tab-pane" id="status-all" role="tabpanel">
-                                            <div class="table-responsive table-card mb-1">
-                                            <table class="table table-bordered dt-responsive nowrap table-striped align-middle dataTable no-footer dtr-inline" id="orderTable">
-                                            <thead class="text-muted table-light">
-                                            <tr class="text-uppercase">
-
-                                            <th>Order ID</th>
-                                            <th>Company</th>
-                                            <th>Product</th>
-                                            <th>Order Date</th>
-                                            <th>Amount</th>
-                                            <th>Payment Method</th>
-                                            <th>Delivery Status</th>
-                                            <th>Action</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody class="list form-check-all">
-                                            @foreach (var item in Model)
-                                            {
-                                            if (item.DeliveryStatus == "Cancelled")
-                                            {
-                                            <tr>
-
-                                            <td class="id"><a href="/OrderMaster/GetPurchaseOrderDetailsByOrderId/?OrderId=@item.OrderId" class="fw-medium link-primary">@item.OrderId</a></td>
-                                            <td class="company_name">@item.CompanyName</td>
-                                            <td class="product_name">@item.ProductName</td>
-                                            <td class="date">@CommonHelper.GetCommonDateFormat(item.OrderDate)</td>
-                                            <td class="total_amount">@item.TotalAmount</td>
-                                            <td class="payment">@item.PaymentMethodName</td>
-                                            <td class="status" id="DeliveryStatus">
-                                            <span class="badge bg-warning-subtle text-warning text-uppercase">@item.DeliveryStatus</span>
-                                            </td>
-                                            <td>
-                                            <ul class="list-inline hstack gap-2 mb-0">
-
-                                            <button type="button" class="btn btn-lg btn-primary px-5" id="SavePOButton" onclick="InsertMultiplePurchaseOrderDetails()"><i class="ri-printer-line align-bottom me-1"></i> Add Purchase Order</button>
-                                            }
-                                            else
-                                            {
-                                            <button type="button" class="btn btn-lg btn-primary px-5" id="UpdatePOButton" onclick="UpdateMultiplePurchaseOrderDetails()"><i class="ri-printer-line align-bottom me-1"></i> Update</button>
-                                            }*@
                                         </div>
                                     </div>
                                 </div>

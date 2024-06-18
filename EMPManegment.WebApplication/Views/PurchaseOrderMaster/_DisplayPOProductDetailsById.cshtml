@@ -16,28 +16,28 @@
             <div class="">
                 @if(item.Quantity != 0)
                 {
-                    <input type="text" class="product-quantity form-control" id="txtproductquantity" value="@item.Quantity" oninput="preventEmptyValue(this)" style="width:80px;">
+                    <input type="text" class="product-quantity form-control" id="txtproductquantity" value="@item.Quantity" oninput="preventPOEmptyValue(this)" style="width:80px;">
                 }
                 else
                 {
-                    <input type="text" class="product-quantity form-control" id="txtproductquantity" value="1" oninput="preventEmptyValue(this)" style="width:80px;">
+                    <input type="text" class="product-quantity form-control" id="txtproductquantity" value="1" oninput="preventPOEmptyValue(this)" style="width:80px;">
                 }
             </div>
         </td>
         <td class="text-start">
             <div class="">
                 <input type="hidden" id="txtunittype_@item.ProductId" value="@item.ProductType" />
-                <select class="form-control" id="txtPOProductType_@item.ProductId" style="width: 151px;" onclick="ProductTypeDropdown('@item.ProductId')">
+                <select class="form-control" id="txtPOProductType_@item.ProductId" style="width: 151px;" onclick="fn_POProductTypeDropdown('@item.ProductId')">
                     <option value="@item.ProductType" selected>@item.ProductTypeName</option>
                 </select>
             </div>
         </td>
         <td class="text-start">
-            <input type="text" class="form-control" id="txtproductamount" value="@item.PerUnitPrice" oninput="preventEmptyValue(this)" />
+            <input type="text" class="form-control" id="txtproductamount" value="@item.PerUnitPrice" oninput="preventPOEmptyValue(this)" />
             <input type="hidden" class="form-control bg-light border-0" id="hiddenproductamount" value="@item.PerUnitPrice" />
         </td>
         <td class="text-start">
-            <input type="text" class="form-control" id="txtgst" max="99" value="@item.Gst" maxlength="4" oninput="preventEmptyValue(this)" />
+            <input type="text" class="form-control" id="txtgst" max="99" value="@item.Gst" maxlength="4" oninput="preventPOEmptyValue(this)" />
         </td>
         <td class="text-start">
             <input type="number" class="form-control" id="txtgstAmount" value="@item.PerUnitWithGstprice" readonly />
@@ -48,7 +48,7 @@
             </div>
         </td>
         <td class="product-removal">
-            <a class="btn text-danger remove-btn" onclick="removeItem(this)"><i class="fas fa-trash"></i></a>
+            <a class="btn text-danger remove-btn" onclick="fn_POremoveItem(this)"><i class="fas fa-trash"></i></a>
         </td>
     </tr>
 }

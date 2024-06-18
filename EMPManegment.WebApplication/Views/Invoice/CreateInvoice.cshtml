@@ -400,11 +400,11 @@
                                         <div class="hstack gap-2 justify-content-end d-print-none mt-4">
                                             @if (Model.InvoiceDetails != null)
                                             {
-                                                <button type="button" class="btn btn-lg btn-success" id="UpdateInvoiceButton" onclick="CheckProjectIdIsSelected()" style="width: 160px;height: 50px;"><i class="ri-printer-line align-bottom me-1"></i>Update</button>
+                                                <button type="button" class="btn btn-lg btn-success" id="UpdateInvoiceButton" onclick="fn_CheckProjectIdIsSelected()" style="width: 160px;height: 50px;"><i class="ri-printer-line align-bottom me-1"></i>Update</button>
                                             }
                                             else
                                             {
-                                                <button type="button" class="btn btn-lg btn-success" id="SavePOButton" onclick="InsertInvoiceDetails()" style="width: 160px;height: 50px;"><i class="ri-printer-line align-bottom me-1"></i>Create</button>
+                                                <button type="button" class="btn btn-lg btn-success" id="SavePOButton" onclick="fn_InsertInvoiceDetails()" style="width: 160px;height: 50px;"><i class="ri-printer-line align-bottom me-1"></i>Create</button>
                                             }
 
                                         </div>
