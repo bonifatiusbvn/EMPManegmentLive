@@ -11,6 +11,8 @@ public partial class TblInvoice
 
     public Guid VandorId { get; set; }
 
+    public Guid? CompanyId { get; set; }
+
     public string? InvoiceNo { get; set; }
 
     public Guid? ProjectId { get; set; }
@@ -31,6 +33,8 @@ public partial class TblInvoice
 
     public decimal? Igst { get; set; }
 
+    public decimal? TotalDiscount { get; set; }
+
     public decimal? TotalGst { get; set; }
 
     public decimal? TotalAmount { get; set; }
@@ -43,6 +47,8 @@ public partial class TblInvoice
 
     public string? ShippingAddress { get; set; }
 
+    public DateTime? Date { get; set; }
+
     public bool? IsDeleted { get; set; }
 
     public DateTime CreatedOn { get; set; }
@@ -52,6 +58,8 @@ public partial class TblInvoice
     public DateTime? UpdatedOn { get; set; }
 
     public Guid? UpdatedBy { get; set; }
+
+    public virtual TblCompanyMaster? Company { get; set; }
 
     public virtual TblPaymentMethodType? PaymentMethodNavigation { get; set; }
 

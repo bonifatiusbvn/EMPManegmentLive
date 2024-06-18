@@ -273,7 +273,7 @@ namespace EMPManagment.API.Controllers
 
         [HttpPost]
         [Route("UpdateInvoiceDetails")]
-        public async Task<IActionResult> UpdateInvoiceDetails(UpdateInvoiceModel invoiceDetails)
+        public async Task<IActionResult> UpdateInvoiceDetails(InvoiceMasterModel invoiceDetails)
         {
             UserResponceModel response = new UserResponceModel();
             try
@@ -331,6 +331,22 @@ namespace EMPManagment.API.Controllers
         {
             IEnumerable<InvoiceViewModel> emplist = await InvoiceMaster.InvoicActivity(ProId);
             return Ok(new { code = 200, data = emplist.ToList() });
+        }
+
+        [HttpGet]
+        [Route("DisplayInvoiceDetailsById")]
+        public async Task<IActionResult> DisplayInvoiceDetailsById(Guid Id)
+        {
+            var emplist = await InvoiceMaster.DisplayInvoiceDetailsById(Id);
+            return Ok(new { code = 200, data = emplist });
+        }
+
+        [HttpGet]
+        [Route("GetProductDetailsById")]
+        public async Task<IActionResult> GetProductDetailsById(Guid ProductId)
+        {
+            var Product = await InvoiceMaster.GetProductDetailsById(ProductId);
+            return Ok(new { code = 200, data = Product });
         }
     }
 }

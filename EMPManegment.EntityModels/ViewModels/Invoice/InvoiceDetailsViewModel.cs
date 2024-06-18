@@ -8,13 +8,13 @@ namespace EMPManegment.EntityModels.ViewModels.Invoice
 {
     public class InvoiceDetailsViewModel
     {
-        public int Id { get; set; }
+        public int? Id { get; set; }
 
-        public Guid InvoiceRefId { get; set; }
+        public Guid? InvoiceRefId { get; set; }
 
         public Guid ProductId { get; set; }
 
-        public string Product { get; set; } = null!;
+        public string? Product { get; set; } 
 
         public int ProductType { get; set; }
 
@@ -22,7 +22,9 @@ namespace EMPManegment.EntityModels.ViewModels.Invoice
 
         public decimal Price { get; set; }
 
-        public decimal? Discount { get; set; }
+        public decimal? DiscountPer { get; set; }
+
+        public decimal? DiscountAmount { get; set; }
 
         public decimal Gst { get; set; }
 
@@ -36,7 +38,8 @@ namespace EMPManegment.EntityModels.ViewModels.Invoice
 
         public decimal? PerUnitWithGstprice { get; set; }
         public string? ProductTypeName { get; set; }
-
+        public int? RowNumber { get; set; }
+        public string? ProductDescription { get; set; }
         public Guid CreatedBy { get; set; }
 
         public DateTime CreatedOn { get; set; }

@@ -401,27 +401,6 @@ namespace EMPManegment.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> DisplayProductDetailsListById()
-        {
-            try
-            {
-                string ProductId = HttpContext.Request.Form["ProductId"];
-                var GetProduct = JsonConvert.DeserializeObject<ProductDetailsView>(ProductId.ToString());
-                List<ProductDetailsView> Product = new List<ProductDetailsView>();
-                ApiResponseModel response = await APIServices.GetAsync("", "ProductMaster/GetProductById?ProductId=" + GetProduct.Id);
-                if (response.code == 200)
-                {
-                    Product = JsonConvert.DeserializeObject<List<ProductDetailsView>>(response.data.ToString());
-                }
-                return PartialView("~/Views/PurchaseOrderMaster/_DisplayProductDetailsById.cshtml", Product);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        [HttpPost]
         public async Task<IActionResult> DisplayProductDetailById()
         {
             try

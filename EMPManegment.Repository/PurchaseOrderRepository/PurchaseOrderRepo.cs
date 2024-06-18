@@ -172,17 +172,21 @@ namespace EMPManegment.Repository.OrderRepository
                 var currentYear = DateTime.Now.Year;
                 var lastYear = currentYear - 1;
 
+                int startIndex = projectname.IndexOf('(');
+                int endIndex = projectname.IndexOf(')');
+
+                var Projectsubparts = projectname.Substring(startIndex + 1, endIndex - startIndex - 1);
                 string UserOrderId;
                 if (LastOrder == null)
                 {
-                    UserOrderId = $"BTPL/PO/{projectname}/{lastYear % 100}-{currentYear % 100}-001";
+                    UserOrderId = $"BTPL/PO/{Projectsubparts}/{lastYear % 100}-{currentYear % 100}-001";
                 }
                 else
                 {
                     if (LastOrder.OrderId.Length >= 25)
                     {
                         int orderNumber = int.Parse(LastOrder.OrderId.Substring(24)) + 1;
-                        UserOrderId = $"BTPL/PO/{projectname}/{lastYear % 100}-{currentYear % 100}-" + orderNumber.ToString("D3");
+                        UserOrderId = $"BTPL/PO/{Projectsubparts}/{lastYear % 100}-{currentYear % 100}-" + orderNumber.ToString("D3");
                     }
                     else
                     {

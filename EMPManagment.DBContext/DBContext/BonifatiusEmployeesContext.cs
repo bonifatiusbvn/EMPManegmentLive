@@ -263,6 +263,7 @@ public partial class BonifatiusEmployeesContext : DbContext
                 .HasColumnType("numeric(18, 2)")
                 .HasColumnName("CGST");
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.Date).HasColumnType("datetime");
             entity.Property(e => e.DispatchThrough).HasMaxLength(20);
             entity.Property(e => e.Igst)
                 .HasColumnType("numeric(18, 2)")
@@ -276,10 +277,15 @@ public partial class BonifatiusEmployeesContext : DbContext
                 .HasColumnName("SGST");
             entity.Property(e => e.Status).HasMaxLength(50);
             entity.Property(e => e.TotalAmount).HasColumnType("numeric(18, 2)");
+            entity.Property(e => e.TotalDiscount).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.TotalGst)
                 .HasColumnType("numeric(18, 2)")
                 .HasColumnName("TotalGST");
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+
+            entity.HasOne(d => d.Company).WithMany(p => p.TblInvoices)
+                .HasForeignKey(d => d.CompanyId)
+                .HasConstraintName("FK_tblInvoices_tblCompanyMaster");
 
             entity.HasOne(d => d.PaymentMethodNavigation).WithMany(p => p.TblInvoices)
                 .HasForeignKey(d => d.PaymentMethod)
@@ -299,8 +305,10 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.ToTable("tblInvoiceDetails");
 
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
-            entity.Property(e => e.Discount).HasColumnType("numeric(18, 2)");
+            entity.Property(e => e.DiscountAmount).HasColumnType("numeric(18, 2)");
+            entity.Property(e => e.DiscountPer).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.Gst).HasColumnType("numeric(18, 2)");
+            entity.Property(e => e.Hsn).HasColumnName("HSN");
             entity.Property(e => e.Price).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.Product).HasMaxLength(100);
             entity.Property(e => e.ProductTotal).HasColumnType("numeric(18, 2)");
