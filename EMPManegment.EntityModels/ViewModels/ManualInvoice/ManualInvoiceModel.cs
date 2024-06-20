@@ -1,5 +1,4 @@
-﻿using EMPManegment.EntityModels.ViewModels.Invoice;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace EMPManegment.EntityModels.ViewModels.ManualInvoice
 {
-    public class ManualInvoiceMasterModel
+    public class ManualInvoiceModel
     {
         public Guid Id { get; set; }
 
@@ -72,7 +71,5 @@ namespace EMPManegment.EntityModels.ViewModels.ManualInvoice
         public string? PaymentStatusName { get; set; }
 
         public string? PaymentMethodName { get; set; }
-
-        public List<ManualInvoiceDetailsModel>? ManualInvoiceDetails { get; set; }
     }
 }
