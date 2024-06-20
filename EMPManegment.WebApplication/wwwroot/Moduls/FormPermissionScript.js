@@ -99,14 +99,14 @@ function GetUsernameForm() {
     $.ajax({
         url: '/Task/GetUserName',
         success: function (result) {
-            debugger
+            
             $.each(result, function (i, data) {
                 $('#drpAttusername').append('<option value=' + data.id + '>' + data.firstName + ' ' + data.lastName + ' (' + data.userName + ')</option>');
             });
         }
     });
 }
-$('#drpAttusername').change(function () {debugger
+$('#drpAttusername').change(function () {
     var Text = $("#drpAttusername Option:Selected").text();
     var StateId = $(this).val();
     $("#textUserIdfrm").val(Text);
@@ -276,11 +276,11 @@ function SaveFormDetails() {
     });
 
 }
-function CreateUserForm() {debugger
+function CreateUserForm() {
     if ($("#addUserForm").valid()) {
         //var formData = new FormData();
         //formData.append("User", $("#textUserName").val());
-        var UserId = $("#txtuserId").val();
+        var UserId = $("#textuserId").val();
 
         $.ajax({
             url: '/UserProfile/CreateUserForm?UserId='+UserId,
@@ -288,7 +288,7 @@ function CreateUserForm() {debugger
             dataType: 'json',
             contentType: false,
             processData: false,
-            success: function (Result) {debugger
+            success: function (Result) {
                 if (Result.code == 200) {
                     Swal.fire({
                         title: Result.message,
