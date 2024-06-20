@@ -42,26 +42,38 @@
                                                         <div class="row">
                                                             <div class="col-6 col-lg-6 ">
                                                                 <label for="textVendorName" class="form-label">Vendor Name</label>
-                                                                <select class="form-control form-select valid" id="textVendorName" name="textVendorName">
-                                                                    <option selected value="">--Select Vendor--</option>
-                                                                </select>
+                                                                @if(Model.VendorId != null)
+                                                                {
+                                                                    <select class="form-control form-select valid" id="textVendorName" name="textVendorName">
+                                                                        <option selected value="@Model.VendorId">@Model.VendorCompanyName</option>
+                                                                    </select>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <select class="form-control form-select valid" id="textVendorName" name="textVendorName">
+                                                                        <option selected value="">--Select Vendor--</option>
+                                                                    </select>
+                                                                }
                                                             </div>
                                                             <div class="col-6 col-lg-6 ">
                                                                 <label for="textVendorMobile" class="form-label ">Mobile No</label>
-                                                                <input type="text" id="textVendorMobile" class="form-control" placeholder="Mobile No" readonly />
+                                                                <input type="text" id="textVendorMobile" class="form-control" placeholder="Mobile No" value="@Model.VendorCompanyNumber" readonly />
                                                             </div>
                                                         </div>
                                                         <div class="row mt-3">
                                                             <div class="col-6 col-lg-6">
                                                                 <label for="textVendorAddress" class="form-label ">Address</label>
-                                                                <input type="text" id="textVendorAddress" class="form-control" placeholder="Address" readonly />
+                                                                <input type="text" id="textVendorAddress" class="form-control" placeholder="Address" value="@Model.VendorAddress" readonly />
                                                             </div>
                                                             <div class="col-6 col-lg-6">
                                                                 <label for="textVendorGSTNumber" class="form-label ">GST NO</label>
-                                                                <input type="text" id="textVendorGSTNumber" class="form-control" placeholder="GST No" readonly />
+                                                                <input type="text" id="textVendorGSTNumber" class="form-control" placeholder="GST No" value="@Model.VendorGstnumber" readonly />
                                                             </div>
                                                             <input type="text" id="textProjectId" class="form-control" hidden value="@UserSession.ProjectId" />
                                                             <input type="text" id="textCreatedById" class="form-control" hidden value="@_userSession.UserId" />
+                                                            <input type="text" id="textCreatedOnVal" class="form-control" hidden value="@Model.CreatedOn" />
+                                                            <input type="text" id="textCreatedByVal" class="form-control" hidden value="@Model.CreatedBy" />
+                                                            <input type="text" id="txtID" class="form-control" hidden value="@Model.Id" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -77,9 +89,18 @@
                                                                     <label for="textCompanyName" class="form-label">Company Name</label>
                                                                 </div>
                                                                 <div class="ms-auto">
-                                                                    <select class="form-control form-select valid" id="textCompanyName" name="textCompanyName">
-                                                                        <option selected value="">--Select Company--</option>
-                                                                    </select>
+                                                                    @if (Model.CompanyName != null)
+                                                                    {
+                                                                        <select class="form-control form-select valid" id="textCompanyName" name="textCompanyName">
+                                                                            <option selected value="@Model.CompanyId">@Model.CompanyName</option>
+                                                                        </select>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <select class="form-control form-select valid" id="textCompanyName" name="textCompanyName">
+                                                                            <option selected value="">--Select Company--</option>
+                                                                        </select>
+                                                                    }
                                                                 </div>
                                                             </div>
                                                             <div class="col-5 col-lg-5">
@@ -88,17 +109,21 @@
                                                             </div>
                                                             <div class="col-3 col-lg-3 ">
                                                                 <label for="textOrderDate" class="form-label">Order Date</label>
-                                                                <input type="text" id="textOrderDate" class="form-control" name="textOrderDate" placeholder="Select Order-Date">
+                                                                @{
+                                                                    DateTime invoiceDate = Model.OrderDate != DateTime.MinValue ? Model.OrderDate : DateTime.Now;
+                                                                    string formattedDate = invoiceDate.ToString("yyyy-MM-dd");
+                                                                }
+                                                                <input type="date" id="textOrderDate" class="form-control" name="textOrderDate" placeholder="Select Order-Date" value="@formattedDate">
                                                             </div>
                                                         </div>
                                                         <div class="row mt-3">
                                                             <div class="col-6 col-lg-6">
                                                                 <label for="textCompanyBillingAddress" class="form-label ">Billing Address</label>
-                                                                <input type="text" id="textCompanyBillingAddress" name="textCompanyBillingAddress" class="form-control" placeholder="Billing Address" readonly />
+                                                                <input type="text" id="textCompanyBillingAddress" name="textCompanyBillingAddress" class="form-control" placeholder="Billing Address" value="@Model.CompanyFullAddress" readonly />
                                                             </div>
                                                             <div class="col-6 col-lg-6">
                                                                 <label class="form-label ">GST NO</label>
-                                                                <input type="text" id="textCompanyGstNo" class="form-control" placeholder="GST No" readonly />
+                                                                <input type="text" id="textCompanyGstNo" class="form-control" value="@Model.CompanyGst" placeholder="GST No" readonly />
                                                             </div>
                                                         </div>
                                                     </div>
@@ -142,8 +167,18 @@
                                                         <th>Action</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody id="addnewproductlink" class="table-body">
-                                                </tbody>
+                                                @if (Model.ProductList != null)
+                                                {
+                                                    <tbody id="addnewproductlink" class="table-body">
+                                                        @Html.Partial("_DisplayPOProductDetailsById.cshtml",Model.ProductList)
+                                                    </tbody>
+                                                }
+                                                else
+                                                {
+                                                    <tbody id="addnewproductlink" class="table-body">
+                                                    </tbody>
+                                                }
+                                                
                                             </table>
                                             <div class="noresult" style="display: none">
                                                 <div class="text-center">
@@ -195,26 +230,27 @@
                                                         <div class="col-lg-12 col-sm-12">
                                                             <div class="input-group">
                                                                 <label class="input-group-text" for="textDeliveryStatus">Delivery Status</label>
-                                                                <input type="text" class="form-control" id="textDeliveryStatus" name="textDeliveryStatus" placeholder="Enter Delivery Status">
+                                                                <input type="text" class="form-control" id="textDeliveryStatus" name="textDeliveryStatus" value="@Model.DeliveryStatus" placeholder="Enter Delivery Status">
                                                             </div>
                                                             <label id="textDeliveryStatus-error" class="error" for="textDeliveryStatus"></label>
                                                         </div>
                                                         <div class="col-lg-12 col-sm-12 mt-2">
                                                             <div class="mb-2">
                                                                 <div class="input-group">
-                                                                    <label class="input-group-text" for="textDescription">Product Short Description</label>
-                                                                    <textarea type="text" id="textShortDescription" rows="3" class="form-control" placeholder="Enter Product Short Description" name="textDescription"></textarea>
-                                                                </div>
-                                                                <label id="textShortDescription-error" class="error" for="textShortDescription"></label>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-lg-12 col-sm-12 mt-2">
-                                                            <div class="mb-2">
-                                                                <div class="input-group">
                                                                     <label for="txtpaymentmethod" class="input-group-text">Payment Method </label>
-                                                                    <select class="form-control form-select valid" id="txtpaymentmethod" name="txtpaymentmethod">
-                                                                        <option selected value="">--Select Payment Method--</option>
-                                                                    </select>
+                                                                    @if (Model.PaymentMethod != null)
+                                                                    {
+                                                                        <select class="form-control form-select valid" id="txtpaymentmethod" name="txtpaymentmethod">
+                                                                            <option selected value="@Model.PaymentMethod">@Model.PaymentMethodName</option>
+                                                                        </select>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <select class="form-control form-select valid" id="txtpaymentmethod" name="txtpaymentmethod">
+                                                                            <option selected value="">--Select Payment Method--</option>
+                                                                        </select>
+                                                                    }
+                                                                    
                                                                 </div>
                                                                 <label id="txtpaymentmethod-error" class="error" for="txtpaymentmethod"></label>
                                                             </div>
@@ -223,9 +259,19 @@
                                                             <div class="mb-2">
                                                                 <div class="input-group mb-3">
                                                                     <label for="txtpaymenttype" class="input-group-text">Payment Status</label>
-                                                                    <select class="form-control form-select valid" id="txtpaymenttype" name="txtpaymenttype">
+                                                                    @if (Model.PaymentStatus != null)
+                                                                    {
+                                                                        <select class="form-control form-select valid" id="txtpaymenttype" name="txtpaymenttype">
+                                                                        <option selected value="@Model.PaymentStatus">@Model.PaymentStatusName</option>
+                                                                    </select>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <select class="form-control form-select valid" id="txtpaymenttype" name="txtpaymenttype">
                                                                         <option selected value="">--Select Payment Status--</option>
                                                                     </select>
+                                                                    }
+                                                                    
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -240,19 +286,19 @@
                                                                 <tr>
                                                                     <th>Sub Total</th>
                                                                     <td style="width:150px;">
-                                                                        <input type="text" class="form-control bg-light border-0" id="cart-subtotal" placeholder="₹0.00" readonly />
+                                                                        <input type="text" class="form-control bg-light border-0" id="cart-subtotal" value="@Model.SubTotal" placeholder="₹0.00" readonly />
                                                                     </td>
                                                                 </tr>
                                                                 <tr>
                                                                     <th>Total GST</th>
                                                                     <td>
-                                                                        <input type="text" class="form-control bg-light border-0" id="totalgst" placeholder="₹0.00" readonly />
+                                                                        <input type="text" class="form-control bg-light border-0" id="totalgst" placeholder="₹0.00" value="@Model.TotalGst" readonly />
                                                                     </td>
                                                                 </tr>
                                                                 <tr class="border-top border-top-dashed">
                                                                     <th>Total Amount</th>
                                                                     <td>
-                                                                        <input type="text" class="form-control bg-light border-0" id="cart-total" placeholder="₹0.00" readonly />
+                                                                        <input type="text" class="form-control bg-light border-0" id="cart-total" placeholder="₹0.00" value="@Model.TotalAmount" readonly />
                                                                     </td>
                                                                 </tr>
                                                             </tbody>
@@ -303,7 +349,14 @@
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="hstack gap-2 justify-content-end d-print-none mt-4">
-                                            <button type="button" class="btn btn-lg btn-success" id="SavePOButton" onclick="InsertMultiplePurchaseOrderDetails()" style="width: 160px;height: 50px;"><i class="ri-printer-line align-bottom me-1"></i>Create</button>
+                                            @if (Model.ProductList != null)
+                                            {
+                                                <button type="button" class="btn btn-lg btn-success" id="UpdatePOButton" onclick="fn_CheckPOProjectIdIsSelected()" style="width: 160px;height: 50px;"><i class="ri-printer-line align-bottom me-1"></i>Update</button>
+                                            }
+                                            else
+                                            {
+                                                <button type="button" class="btn btn-lg btn-success" id="SavePOButton" onclick="InsertMultiplePurchaseOrderDetails()" style="width: 160px;height: 50px;"><i class="ri-printer-line align-bottom me-1"></i>Create</button>
+                                            }
                                         </div>
                                     </div>
                                 </div>

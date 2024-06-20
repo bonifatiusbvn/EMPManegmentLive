@@ -21,10 +21,6 @@ namespace EMPManegment.Services.OrderDetails
 
         public IPurchaseOrderDetails PurchaseOrderDetails { get; }
 
-        public async Task<UserResponceModel> CreatePurchaseOrder(PurchaseOrderDetailView CreatePurchaseOrder)
-        {
-            return await PurchaseOrderDetails.CreatePurchaseOrder(CreatePurchaseOrder);
-        }
         public async Task<IEnumerable<PurchaseOrderDetailView>> GetPurchaseOrderList()
         {
             return await PurchaseOrderDetails.GetPurchaseOrderList();
@@ -54,12 +50,12 @@ namespace EMPManegment.Services.OrderDetails
             return await PurchaseOrderDetails.GetAllPaymentMethod();
         }
 
-        public async Task<UpdatePurchaseOrderView> EditPurchaseOrderDetails(Guid Id)
+        public async Task<PurchaseOrderMasterView> EditPurchaseOrderDetails(Guid Id)
         {
             return await PurchaseOrderDetails.EditPurchaseOrderDetails(Id);
         }
 
-        public async Task<UserResponceModel> UpdatePurchaseOrderDetails(UpdatePurchaseOrderView UpdatePurchaseorder)
+        public async Task<UserResponceModel> UpdatePurchaseOrderDetails(PurchaseOrderMasterView UpdatePurchaseorder)
         {
             return await PurchaseOrderDetails.UpdatePurchaseOrderDetails(UpdatePurchaseorder);
         }
@@ -67,6 +63,11 @@ namespace EMPManegment.Services.OrderDetails
         public async Task<UserResponceModel> DeletePurchaseOrderDetails(Guid Id)
         {
             return await PurchaseOrderDetails.DeletePurchaseOrderDetails(Id);
+        }
+
+        public async Task<List<PurchaseOrderDetailsModel>> GetPOProductDetailsById(Guid ProductId)
+        {
+            return await PurchaseOrderDetails.GetPOProductDetailsById(ProductId);
         }
     }
 }

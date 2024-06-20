@@ -50,88 +50,6 @@
                 </div>
                 <div class="card-body border border-dashed border-end-0 border-start-0">
                 </div>
-                <div class="modal fade" id="UpdateOrderModel" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content">
-                            <div class="modal-header bg-light p-3">
-                                <h5 class="modal-title" id="exampleModalLabel">Edit Order Details</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"></button>
-                            </div>
-                            <form class="tablelist-form" autocomplete="off" id="UpdateOrderDetailsForm">
-                                <div class="modal-body">
-
-                                    <div class="mb-3">
-                                        <label for="date-field" class="form-label">Order Date</label>
-                                        <input type="datetime-local" data-date-format="d M, Y" data-enable-time id="txtorderdate" name="txtorderdate" class="form-control" />
-                                        <input type="hidden" id="txtorderid" class="form-control" style="border:hidden;" />
-                                        <input type="hidden" id="txtUpdatedby" value="@_userSession.UserId" />
-                                        <input type="hidden" id="POId" />
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label for="customername-field" class="form-label">Company Name</label>
-                                        <input type="text" id="txtcompanyname" name="txtcompanyname" class="form-control" placeholder="Enter Company name" />
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label for="customername-field" class="form-label">Product Details</label>
-                                        <input type="text" id="txtorderdetails" name="txtorderdetails" class="form-control" placeholder="Enter Product name" />
-                                    </div>
-
-                                    <div class="row gy-4 mb-3">
-                                        <div class="col-md-6">
-                                            <div>
-                                                <label for="amount-field" class="form-label">Amount</label>
-                                                <input type="text" id="txtamount" name="txtamount" class="form-control" placeholder="Total amount" />
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div>
-                                                <label for="payment-field" class="form-label">Payment Method</label>
-                                                <select class="form-control" data-trigger name="txtpaymentmethod" id="txtpaymentmethod">
-                                                    <option selected disabled value="">---Select Payment Method---</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="row gy-4 mb-3">
-                                        <div class="col-md-6">
-                                            <div>
-                                                <label for="amount-field" class="form-label">Delivery Status</label>
-                                                <select class="form-control" data-trigger name="txtdeliverystatus" id="txtdeliverystatus">
-                                                    <option selected disabled value="">Select Delivery Status</option>
-                                                    <option value="Pending">Pending</option>
-                                                    <option value="Pickups">Pickups</option>
-                                                    <option value="Delivered">Delivered</option>
-                                                    <option value="Returns">Returns</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div>
-                                                <label for="payment-field" class="form-label">Order Status</label>
-                                                <select class="form-control" data-trigger name="txtorderstatus" id="txtorderstatus">
-                                                    <option selected disabled value="">Select Order Status</option>
-                                                    <option value="Confirm">Confirm</option>
-                                                    <option value="Complete">Complete</option>
-                                                    <option value="Cancel">Cancel</option>
-                                                    <option value="Return">Return</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <div class="hstack gap-2 justify-content-end">
-                                        <button type="button" class="btn btn-danger btn-default m-1" id="close-modal" data-bs-dismiss="modal">Close</button>
-                                        <button type="button" class="btn btn-success" onclick="UpdatePurchaseOrderDetails()" id="updatedetailbtn">Update</button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
                 <div class="card-body pt-0">
                     <div>
                         <ul class="nav nav-tabs nav-tabs-custom nav-primary mb-3" role="tablist">
@@ -183,7 +101,6 @@
 
                                                             <th>Order ID</th>
                                                             <th>Company</th>
-                                                            <th>Product</th>
                                                             <th>Order Date</th>
                                                             <th>Amount</th>
                                                             <th>Payment Method</th>
@@ -201,7 +118,6 @@
 
                                                                 <td class="id"><a href="/PurchaseOrderMaster/PurchaseOrderDetails/?OrderId=@item.OrderId" class="fw-medium link-primary">@item.OrderId</a></td>
                                                                 <td class="company_name">@item.CompanyName</td>
-                                                                <td class="product_name">@item.ProductName</td>
                                                                 <td class="date">@CommonHelper.GetCommonDateFormat(item.OrderDate)</td>
                                                                 <td class="total_amount">@item.TotalAmount</td>
                                                                 <td class="payment">@item.PaymentMethodName</td>
@@ -215,7 +131,7 @@
                                                                             @if (UserSession.FormPermisionData.Any(a => a.FormName == "Create Purchase Order" && (a.Edit == true)))
                                                                             {
                                                                                 <li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">
-                                                                                    <a onclick="EditPurchaseOrderDetails('@item.Id')" data-bs-toggle="modal" class="btn text-primary d-inline-block edit-item-btn">
+                                                                                    <a href="/PurchaseOrderMaster/CreatePurchaseOrder?id=@item.Id" class="btn text-primary d-inline-block edit-item-btn">
                                                                                         <i class="fa-regular fa-pen-to-square"></i>
                                                                                     </a>
                                                                                 </li>
@@ -279,7 +195,6 @@
 
                                                             <th>Order ID</th>
                                                             <th>Company</th>
-                                                            <th>Product</th>
                                                             <th>Order Date</th>
                                                             <th>Amount</th>
                                                             <th>Payment Method</th>
@@ -296,7 +211,6 @@
 
                                                                     <td class="id"><a href="/PurchaseOrderMaster/PurchaseOrderDetails/?OrderId=@item.OrderId" class="fw-medium link-primary">@item.OrderId</a></td>
                                                                     <td class="company_name">@item.CompanyName</td>
-                                                                    <td class="product_name">@item.ProductName</td>
                                                                     <td class="date">@CommonHelper.GetCommonDateFormat(item.OrderDate)</td>
                                                                     <td class="total_amount">@item.TotalAmount</td>
                                                                     <td class="payment">@item.PaymentMethodName</td>
@@ -363,7 +277,6 @@
 
                                                             <th>Order ID</th>
                                                             <th>Company</th>
-                                                            <th>Product</th>
                                                             <th>Order Date</th>
                                                             <th>Amount</th>
                                                             <th>Payment Method</th>
@@ -380,7 +293,6 @@
 
                                                                     <td class="id"><a href="/PurchaseOrderMaster/PurchaseOrderDetails/?OrderId=@item.OrderId" class="fw-medium link-primary">@item.OrderId</a></td>
                                                                     <td class="company_name">@item.CompanyName</td>
-                                                                    <td class="product_name">@item.ProductName</td>
                                                                     <td class="date">@CommonHelper.GetCommonDateFormat(item.OrderDate)</td>
                                                                     <td class="total_amount">@item.TotalAmount</td>
                                                                     <td class="payment">@item.PaymentMethodName</td>
@@ -448,7 +360,6 @@
 
                                                             <th>Order ID</th>
                                                             <th>Company</th>
-                                                            <th>Product</th>
                                                             <th>Order Date</th>
                                                             <th>Amount</th>
                                                             <th>Payment Method</th>
@@ -465,7 +376,6 @@
 
                                                                     <td class="id"><a href="/PurchaseOrderMaster/PurchaseOrderDetails/?OrderId=@item.OrderId" class="fw-medium link-primary">@item.OrderId</a></td>
                                                                     <td class="company_name">@item.CompanyName</td>
-                                                                    <td class="product_name">@item.ProductName</td>
                                                                     <td class="date">@CommonHelper.GetCommonDateFormat(item.OrderDate)</td>
                                                                     <td class="total_amount">@item.TotalAmount</td>
                                                                     <td class="payment">@item.PaymentMethodName</td>
@@ -533,7 +443,6 @@
 
                                                             <th>Order ID</th>
                                                             <th>Company</th>
-                                                            <th>Product</th>
                                                             <th>Order Date</th>
                                                             <th>Amount</th>
                                                             <th>Payment Method</th>
@@ -550,7 +459,6 @@
 
                                                                     <td class="id"><a href="/PurchaseOrderMaster/PurchaseOrderDetails/?OrderId=@item.OrderId" class="fw-medium link-primary">@item.OrderId</a></td>
                                                                     <td class="company_name">@item.CompanyName</td>
-                                                                    <td class="product_name">@item.ProductName</td>
                                                                     <td class="date">@CommonHelper.GetCommonDateFormat(item.OrderDate)</td>
                                                                     <td class="total_amount">@item.TotalAmount</td>
                                                                     <td class="payment">@item.PaymentMethodName</td>
@@ -618,7 +526,6 @@
 
                                                             <th>Order ID</th>
                                                             <th>Company</th>
-                                                            <th>Product</th>
                                                             <th>Order Date</th>
                                                             <th>Amount</th>
                                                             <th>Payment Method</th>
@@ -635,7 +542,6 @@
 
                                                                     <td class="id"><a href="/PurchaseOrderMaster/PurchaseOrderDetails/?OrderId=@item.OrderId" class="fw-medium link-primary">@item.OrderId</a></td>
                                                                     <td class="company_name">@item.CompanyName</td>
-                                                                    <td class="product_name">@item.ProductName</td>
                                                                     <td class="date">@CommonHelper.GetCommonDateFormat(item.OrderDate)</td>
                                                                     <td class="total_amount">@item.TotalAmount</td>
                                                                     <td class="payment">@item.PaymentMethodName</td>
@@ -703,7 +609,6 @@
 
                                                             <th>Order ID</th>
                                                             <th>Company</th>
-                                                            <th>Product</th>
                                                             <th>Order Date</th>
                                                             <th>Amount</th>
                                                             <th>Payment Method</th>
@@ -720,7 +625,6 @@
 
                                                                     <td class="id"><a href="/PurchaseOrderMaster/PurchaseOrderDetails/?OrderId=@item.OrderId" class="fw-medium link-primary">@item.OrderId</a></td>
                                                                     <td class="company_name">@item.CompanyName</td>
-                                                                    <td class="product_name">@item.ProductName</td>
                                                                     <td class="date">@CommonHelper.GetCommonDateFormat(item.OrderDate)</td>
                                                                     <td class="total_amount">@item.TotalAmount</td>
                                                                     <td class="payment">@item.PaymentMethodName</td>
@@ -791,4 +695,3 @@
 <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
 <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
 <script src="~/moduls/purchaseorderdetailsscript.js" asp-append-version="true"></script>
-<script src="~/moduls/productmasterscript.js" asp-append-version="true"></script>

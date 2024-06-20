@@ -100,10 +100,6 @@
         $("#statusform").validate();
     });
 
-    today = getCommonDateformat(new Date());
-    $("#textOrderDate").val(today);
-    $("#textOrderDate").prop("disabled", true);
-
     $('#textVendorName').change(function () {
         fn_getPOVendorDetail($(this).val());
     });
@@ -133,15 +129,15 @@
         fn_updatePOTotals();
     }).on('keydown', '#txtproductamount', function (event) {
         var row = $(this).closest(".product");
-        var productFocus = row.find('#txtgst');
+        var productFocus = row.find('#txtgstPercentage');
         handleFocus(event, productFocus);
     });
 
-    $(document).on('input', '#txtgst', function () {
+    $(document).on('input', '#txtgstPercentage', function () {
         var row = $(this).closest('.product');
         fn_updatePOProductAmount(row);
         fn_updatePOTotals();
-    }).on('keydown', '#txtgst', function (event) {
+    }).on('keydown', '#txtgstPercentage', function (event) {
         if (event.key === 'Enter') {
             $(this).blur();
         }
@@ -384,49 +380,64 @@ function deletePurchaseOrderDetails(Id) {
         }
     });
 }
-function EditPurchaseOrderDetails(Id) {
-    $.ajax({
-        url: '/PurchaseOrderMaster/EditPurchaseOrderDetails?Id=' + Id,
-        type: "Get",
-        contentType: 'application/json;charset=utf-8;',
-        dataType: 'json',
-        success: function (response) {
-            $('#UpdateOrderModel').modal('show');
-            $('#POId').val(response.id);
-            $('#txtproduct').val(response.product);
-            $('#txtorderno').html(response.orderId);
-            $('#txtorderdate').val(response.orderDate);
-            $('#txtcompanyname').val(response.companyName);
-            $('#txtorderdetails').val(response.productShortDescription);
-            $('#txtamount').val(response.totalAmount);
-            $('#txtpaymentmethod').val(response.paymentMethod);
-            $('#txtdeliverystatus').val(response.deliveryStatus);
-            $('#txtorderstatus').val(response.orderStatus);
-        },
-        error: function () {
-            toastr.error("Can't get Data");
-        }
-    });
+function fn_CheckPOProjectIdIsSelected() {
+    var ProjectId = $('#textProjectId').val();
+    if (ProjectId == "") {
+        toastr.warning('Please Select Project!');
+    } else {
+        fn_UpdatePurchaseOrderDetails()
+    }
 }
-function UpdatePurchaseOrderDetails() {
-    if ($('#UpdateOrderDetailsForm').valid()) {
-        var formData = new FormData();
-        formData.append("Id", $("#POId").val());
-        formData.append("Product", $("#txtproduct").val());
-        formData.append("orderId", $("#txtorderno").val());
-        formData.append("orderDate", $("#txtorderdate").val());
-        formData.append("companyName", $("#txtcompanyname").val());
-        formData.append("ProductShortDescription", $("#txtorderdetails").val());
-        formData.append("totalAmount", $("#txtamount").val());
-        formData.append("paymentMethod", $("#txtpaymentmethod").val());
-        formData.append("deliveryStatus", $("#txtdeliverystatus").val());
-        formData.append("orderStatus", $("#txtorderstatus").val());
-        formData.append("UpdatedBy", $("#txtUpdatedby").val());
+function fn_UpdatePurchaseOrderDetails() {
+    if ($("#CreatePOForm").valid()) {
 
+        var ProductDetails = [];
+        $(".product").each(function () {
+            var orderRow = $(this);
+            var productName = orderRow.find("#textProductName").text().trim();
+            var productId = orderRow.find("#textProductId").val().trim();
+            var objData = {
+                Product: productName,
+                ProductId: productId,
+                ProductType: orderRow.find("#textProductType").val(),
+                Quantity: orderRow.find("#txtproductquantity").val(),
+                Price: orderRow.find("#txtproductamount").val(),
+                Gstamount: orderRow.find("#txtgstAmount").val(),
+                Gstper: orderRow.find("#txtgstPercentage").val(),
+                Hsn: orderRow.find("#txtHSNcode").val(),
+                ProductTotal: orderRow.find("#txtproducttotalamount").val(),
+            };
+            ProductDetails.push(objData);
+        });
+        var PONumber = $("#textPoId").val();
+        var PODetails = {
+            Id: $("#txtID").val(),
+            ProjectId: $("#textProjectId").val(),
+            OrderId: $("#textPoId").val(),
+            VendorId: $("#textVendorName").val(),
+            CompanyId: $("#textCompanyName").val(),
+            TotalGst: $("#totalgst").val(),
+            SubTotal: $("#cart-subtotal").val(),
+            TotalAmount: $("#cart-total").val(),
+            DeliveryDate: $("#UnitTypeId").val(),
+            OrderDate: $("#textOrderDate").val(),
+            OrderStatus: $("#UnitTypeId").val(),
+            PaymentMethod: $("#txtpaymentmethod").val(),
+            PaymentStatus: $("#txtpaymenttype").val(),
+            DeliveryStatus: $("#textDeliveryStatus").val(),
+            CreatedBy: $("#textCreatedByVal").val(),
+            CreatedOn: $("#textCreatedOnId").val(),
+            UpdatedBy: $("#textCreatedById").val(),
+            Address: $('#hideShippingAddress').is(':checked') ? $('#textCompanyBillingAddress').val() : $('#textShippingAddress').val(),
+            ProductList: ProductDetails,
+        }
+
+        var form_data = new FormData();
+        form_data.append("PurchaseOrder", JSON.stringify(PODetails));
         $.ajax({
             url: '/PurchaseOrderMaster/UpdatePurchaseOrderDetails',
-            type: 'Post',
-            data: formData,
+            type: 'POST',
+            data: form_data,
             dataType: 'json',
             contentType: false,
             processData: false,
@@ -436,18 +447,23 @@ function UpdatePurchaseOrderDetails() {
                         title: Result.message,
                         icon: 'success',
                         confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'OK',
+                        confirmButtonText: 'OK'
                     }).then(function () {
-                        window.location = '/PurchaseOrderMaster/PurchaseOrders';
+                        window.location = '/PurchaseOrderMaster/PurchaseOrderDetails/?OrderId=' + PONumber;
                     });
-                } else {
+                }
+                else {
                     toastr.error(Result.message);
                 }
+            },
+            error: function () {
+                toastr.error('An error occurred while processing your request.');
             }
-        })
+        });
+
     }
     else {
-        toastr.warning("Kindly fill all datafield");
+        toastr.warning("Kindly fill all data fields");
     }
 }
 $("#txtProducts").change(function () {
@@ -505,18 +521,16 @@ function fn_updatePORowNumbers() {
         $(this).text(index + 1);
     });
 }
-function fn_updatePOProductAmount() {
-    $(".product").each(function () {
-        var row = $(this);
+function fn_updatePOProductAmount(that) {
+        var row = $(that);
         var productPrice = parseFloat(row.find("#txtproductamount").val());
         var quantity = parseInt(row.find("#txtproductquantity").val());
-        var gst = parseFloat(row.find("#txtgst").val());
+        var gst = parseFloat(row.find("#txtgstPercentage").val());
         var totalGst = (productPrice * quantity * gst) / 100;
         var totalAmount = productPrice * quantity + totalGst;
 
         row.find("#txtgstAmount").val(totalGst.toFixed(2));
         row.find("#txtproducttotalamount").val(totalAmount.toFixed(2));
-    });
 }
 function fn_updatePOProductQuantity(row, increment) {
     var quantityInput = parseInt(row.find(".product-quantity").val());
@@ -608,7 +622,9 @@ function InsertMultiplePurchaseOrderDetails() {
                 ProductType: orderRow.find("#textProductType").val(),
                 Quantity: orderRow.find("#txtproductquantity").val(),
                 Price: orderRow.find("#txtproductamount").val(),
-                Gst: orderRow.find("#txtgstAmount").val(),
+                Gstamount: orderRow.find("#txtgstAmount").val(),
+                Gstper: orderRow.find("#txtgstPercentage").val(),
+                Hsn: orderRow.find("#txtHSNcode").val(),
                 ProductTotal: orderRow.find("#txtproducttotalamount").val(),
             };
             ProductDetails.push(objData);
@@ -617,15 +633,9 @@ function InsertMultiplePurchaseOrderDetails() {
         var PODetails = {
             ProjectId: $("#textProjectId").val(),
             OrderId: $("#textPoId").val(),
-            Type: $("#textProductType").val(),
             VendorId: $("#textVendorName").val(),
-            CompanyName: $("#textCompanyName").val(),
-            ProductShortDescription: $("#textDeliveryStatus").val(),
-            ProductType: $("#textProductType").val(),
-            Quantity: $("#txtproductquantity").val(),
-            GstPerUnit: $("#txtgstAmount").val(),
+            CompanyId: $("#textCompanyName").val(),
             TotalGst: $("#totalgst").val(),
-            AmountPerUnit: $("#txtproductamount").val(),
             SubTotal: $("#cart-subtotal").val(),
             TotalAmount: $("#cart-total").val(),
             DeliveryDate: $("#UnitTypeId").val(),

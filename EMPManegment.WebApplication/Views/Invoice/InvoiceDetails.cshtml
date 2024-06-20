@@ -243,14 +243,14 @@
                             @foreach (var item in Model.InvoiceDetails)
                             {
                                 subTotal = (item.Quantity * item.PerUnitPrice);
-                                GstAmount = (subtotal * item.Gst) / 100;
+                                GstAmount = (subtotal * item.GstPer) / 100;
                                 <tr>
                                     <td class="border" id="txtHSN">@item.Hsn</td>
                                     <td class="border" id="txtTaxablevalue">₹@subtotal</td>
                                     <td class="border" id="txtgstpercentage">
                                         <div class="d-flex">
                                             <div class="flex-grow-1 col-5">
-                                                <label class="form-label">@item.Gst%</label>
+                                                <label class="form-label">@item.GstPer%</label>
                                             </div>
                                             <div class="flex-grow-1 col-5">
                                                 <label class="form-label">@GstAmount?.ToString("0.00")</label>

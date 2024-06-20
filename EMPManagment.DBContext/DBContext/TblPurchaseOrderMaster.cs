@@ -11,27 +11,11 @@ public partial class TblPurchaseOrderMaster
 
     public string? OrderId { get; set; }
 
-    public string? Type { get; set; }
-
     public Guid? VendorId { get; set; }
 
-    public string? CompanyName { get; set; }
-
-    public string? ProductName { get; set; }
-
-    public string? ProductShortDescription { get; set; }
-
-    public Guid? ProductId { get; set; }
-
-    public int ProductType { get; set; }
-
-    public string Quantity { get; set; } = null!;
-
-    public decimal? GstPerUnit { get; set; }
+    public Guid? CompanyId { get; set; }
 
     public decimal? TotalGst { get; set; }
-
-    public decimal? AmountPerUnit { get; set; }
 
     public decimal? SubTotal { get; set; }
 
@@ -62,10 +46,6 @@ public partial class TblPurchaseOrderMaster
     public virtual TblPaymentMethodType? PaymentMethodNavigation { get; set; }
 
     public virtual TblPaymentType? PaymentStatusNavigation { get; set; }
-
-    public virtual TblProductDetailsMaster? Product { get; set; }
-
-    public virtual TblProductTypeMaster ProductTypeNavigation { get; set; } = null!;
 
     public virtual ICollection<TblPurchaseOrderDetail> TblPurchaseOrderDetails { get; set; } = new List<TblPurchaseOrderDetail>();
 }

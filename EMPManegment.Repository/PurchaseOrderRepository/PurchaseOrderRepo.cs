@@ -3,10 +3,12 @@ using EMPManagment.API;
 using EMPManagment.Web.Models.API;
 using EMPManegment.EntityModels.ViewModels;
 using EMPManegment.EntityModels.ViewModels.ExpenseMaster;
+using EMPManegment.EntityModels.ViewModels.Invoice;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.OrderModels;
 using EMPManegment.EntityModels.ViewModels.ProductMaster;
 using EMPManegment.EntityModels.ViewModels.ProjectModels;
+using EMPManegment.EntityModels.ViewModels.Purchase_Request;
 using EMPManegment.EntityModels.ViewModels.PurchaseOrderModels;
 using EMPManegment.EntityModels.ViewModels.TaskModels;
 using EMPManegment.EntityModels.ViewModels.VendorModels;
@@ -33,56 +35,18 @@ namespace EMPManegment.Repository.OrderRepository
         public BonifatiusEmployeesContext Context { get; }
 
 
-        public async Task<UserResponceModel> CreatePurchaseOrder(PurchaseOrderDetailView CreatePurchaseOrder)
-        {
-            UserResponceModel response = new UserResponceModel();
-            try
-            {
-                var ordermodel = new TblPurchaseOrderMaster()
-                {
-                    Id = Guid.NewGuid(),
-                    OrderId = "Order_" + CreatePurchaseOrder.OrderId,
-                    Type = CreatePurchaseOrder.Type,
-                    CompanyName = CreatePurchaseOrder.CompanyName,
-                    VendorId = CreatePurchaseOrder.VendorId,
-                    ProductType = CreatePurchaseOrder.Product,
-                    Quantity = CreatePurchaseOrder.Quantity,
-                    AmountPerUnit = CreatePurchaseOrder.AmountPerUnit,
-                    TotalAmount = CreatePurchaseOrder.TotalAmount,
-                    OrderDate = CreatePurchaseOrder.OrderDate,
-                    DeliveryDate = CreatePurchaseOrder.DeliveryDate,
-                    PaymentMethod = CreatePurchaseOrder.PaymentMethod,
-                    DeliveryStatus = CreatePurchaseOrder.DeliveryStatus,
-                    CreatedOn = DateTime.Now,
-                    CreatedBy = CreatePurchaseOrder.CreatedBy,
-                };
-                response.Code = 200;
-                response.Message = "Order created successfully!";
-                Context.TblPurchaseOrderMasters.Add(ordermodel);
-                Context.SaveChanges();
-            }
-            catch (Exception ex)
-            {
-                response.Code = 404;
-                response.Message = "Error in creating order.";
-            }
-            return response;
-        }
-
         public async Task<IEnumerable<PurchaseOrderDetailView>> GetPurchaseOrderList()
         {
             try
             {
                 var data = await (from a in Context.TblPurchaseOrderMasters
                                   join b in Context.TblVendorMasters on a.VendorId equals b.Vid
-                                  join c in Context.TblProductTypeMasters on a.ProductType equals c.Id
                                   join d in Context.TblPaymentMethodTypes on a.PaymentMethod equals d.Id
                                   where a.IsDeleted != true
                                   select new
                                   {
                                       Order = a,
                                       Vendor = b,
-                                      ProductType = c,
                                       PaymentMethod = d,
                                       CreatedOn = a.CreatedOn,
                                   }).ToListAsync();
@@ -94,14 +58,10 @@ namespace EMPManegment.Repository.OrderRepository
                                     {
                                         Id = item.Order.Id,
                                         OrderId = item.Order.OrderId,
-                                        ProductId = item.Order.ProductId,
-                                        CompanyName = item.Vendor.VendorCompany,
+                                        CompanyId = item.Order.CompanyId,
                                         VendorId = item.Order.VendorId,
-                                        ProductName = item.ProductType.Type,
-                                        Quantity = item.Order.Quantity,
                                         OrderDate = item.Order.OrderDate,
                                         TotalAmount = item.Order.TotalAmount,
-                                        AmountPerUnit = item.Order.AmountPerUnit,
                                         PaymentMethod = item.Order.PaymentMethod,
                                         PaymentMethodName = item.PaymentMethod.PaymentMethod,
                                         DeliveryStatus = item.Order.DeliveryStatus,
@@ -124,14 +84,12 @@ namespace EMPManegment.Repository.OrderRepository
             {
                 var data = await (from a in Context.TblPurchaseOrderMasters
                                   join b in Context.TblVendorMasters on a.VendorId equals b.Vid
-                                  join c in Context.TblProductTypeMasters on a.ProductType equals c.Id
                                   join d in Context.TblPaymentMethodTypes on a.PaymentMethod equals d.Id
                                   where a.IsDeleted != true && a.DeliveryStatus == DeliveryStatus
                                   select new
                                   {
                                       Order = a,
                                       Vendor = b,
-                                      ProductType = c,
                                       PaymentMethod = d
                                   }).ToListAsync();
 
@@ -139,14 +97,10 @@ namespace EMPManegment.Repository.OrderRepository
                 {
                     Id = item.Order.Id,
                     OrderId = item.Order.OrderId,
-                    ProductId = item.Order.ProductId,
-                    CompanyName = item.Vendor.VendorCompany,
+                    CompanyId = item.Order.CompanyId,
                     VendorId = item.Order.VendorId,
-                    ProductName = item.ProductType.Type,
-                    Quantity = item.Order.Quantity,
                     OrderDate = item.Order.OrderDate,
                     TotalAmount = item.Order.TotalAmount,
-                    AmountPerUnit = item.Order.AmountPerUnit,
                     PaymentMethod = item.Order.PaymentMethod,
                     PaymentMethodName = item.PaymentMethod.PaymentMethod,
                     DeliveryStatus = item.Order.DeliveryStatus,
@@ -210,19 +164,11 @@ namespace EMPManegment.Repository.OrderRepository
                 var PurchaseOrder = new TblPurchaseOrderMaster()
                 {
                     Id = Guid.NewGuid(),
-                    ProductId = InsertPurchaseOrder.ProductId,
                     OrderId = InsertPurchaseOrder.OrderId,
-                    Type = InsertPurchaseOrder.Type,
                     VendorId = InsertPurchaseOrder.VendorId,
-                    CompanyName = InsertPurchaseOrder.CompanyName,
-                    ProductName = InsertPurchaseOrder.ProductName,
-                    ProductShortDescription = InsertPurchaseOrder.ProductShortDescription,
+                    CompanyId = InsertPurchaseOrder.CompanyId,
                     ProjectId = InsertPurchaseOrder.ProjectId,
-                    ProductType = InsertPurchaseOrder.ProductType,
-                    Quantity = InsertPurchaseOrder.Quantity,
-                    GstPerUnit = InsertPurchaseOrder.GstPerUnit,
                     TotalGst = InsertPurchaseOrder.TotalGst,
-                    AmountPerUnit = InsertPurchaseOrder.AmountPerUnit,
                     SubTotal = InsertPurchaseOrder.SubTotal,
                     TotalAmount = InsertPurchaseOrder.TotalAmount,
                     DeliveryDate = InsertPurchaseOrder.DeliveryDate,
@@ -243,12 +189,13 @@ namespace EMPManegment.Repository.OrderRepository
                     {
                         PorefId = PurchaseOrder.Id,
                         ProductId = item.ProductId,
-                        Product = item.Product,
                         ProductType = item.ProductType,
+                        Hsn = item.Hsn,
                         Quantity = item.Quantity,
                         Price = item.Price,
-                        Discount = item.Discount,
-                        Gst = item.Gst,
+                        DiscountAmt = item.Discount,
+                        Gstamount = item.Gstamount,
+                        Gstper=item.Gstper,
                         ProductTotal = item.ProductTotal,
                         IsDeleted = false,
                         CreatedBy = InsertPurchaseOrder.CreatedBy,
@@ -256,14 +203,12 @@ namespace EMPManegment.Repository.OrderRepository
                     };
                     Context.TblPurchaseOrderDetails.Add(PurchaseOrderDetail);
                 }
-                
                     var PurchaseAddress = new TblPodeliveryAddress()
                     {
                         Poid = PurchaseOrder.Id,
                         Address = InsertPurchaseOrder.Address,
                         IsDeleted = false
                     };
-
                     Context.TblPodeliveryAddresses.Add(PurchaseAddress);
 
                 await Context.SaveChangesAsync();
@@ -285,7 +230,7 @@ namespace EMPManegment.Repository.OrderRepository
             {
                 orderDetails = (from a in Context.TblPurchaseOrderMasters.Where(x => x.OrderId == OrderId)
                                 join b in Context.TblVendorMasters on a.VendorId equals b.Vid
-                                join d in Context.TblCompanyMasters on a.CompanyName equals d.CompnyName
+                                join d in Context.TblCompanyMasters on a.CompanyId equals d.Id
                                 join e in Context.TblCities on d.City equals e.Id
                                 join f in Context.TblStates on d.State equals f.Id
                                 join Vst in Context.TblStates on b.VendorState equals Vst.Id
@@ -298,22 +243,20 @@ namespace EMPManegment.Repository.OrderRepository
                                     Id = a.Id,
                                     OrderId = a.OrderId,
                                     VendorId = a.VendorId,
-                                    Type = a.Type,
-                                    CompanyName = a.CompanyName,
+                                    CompanyName = d.CompnyName,
+                                    CompanyId = a.CompanyId,
                                     CompanyFullAddress = d.Address + "," + e.City + "," + f.State,
                                     CompanyGstNumber = d.Gst,
-                                    VendorName = b.VendorFirstName + " " + b.VendorLastName,
+                                    VendorCompanyName = b.VendorFirstName + " " + b.VendorLastName,
                                     VendorFullAddress = b.VendorAddress + "," + Vct.City + "," + Vst.State + "-" + b.VendorPinCode,
-                                    VendorContact = b.VendorContact,
-                                    VendorEmail = b.VendorCompanyEmail,
+                                    VendorCompanyNumber = b.VendorCompanyNumber,
+                                    VendorCompanyEmail = b.VendorCompanyEmail,
                                     VendorAccountHolderName = b.VendorAccountHolderName,
                                     VendorBankAccountNo = b.VendorBankAccountNo,
                                     SubTotal = a.SubTotal,
                                     TotalGst = a.TotalGst,
-                                    ProductShortDescription = a.ProductShortDescription,
                                     OrderDate = a.OrderDate,
                                     TotalAmount = a.TotalAmount,
-                                    AmountPerUnit = a.AmountPerUnit,
                                     PaymentMethod = a.PaymentMethod,
                                     PaymentMethodName = h.PaymentMethod,
                                     PaymentStatus = a.PaymentStatus,
@@ -325,16 +268,20 @@ namespace EMPManegment.Repository.OrderRepository
                                 }).FirstOrDefault();
                 List<PurchaseOrderDetailsModel> productList = (from a in Context.TblPurchaseOrderDetails.Where(a => a.PorefId == orderDetails.Id)
                                                                join b in Context.TblProductTypeMasters on a.ProductType equals b.Id
+                                                               join c in Context.TblProductDetailsMasters on a.ProductId equals c.Id
                                                                select new PurchaseOrderDetailsModel
                                                                {
                                                                    ProductId = a.ProductId,
-                                                                   Product = a.Product,
                                                                    ProductType = a.ProductType,
                                                                    ProductTotal = a.ProductTotal,
                                                                    Quantity = a.Quantity,
                                                                    ProductTypeName = b.Type,
                                                                    Price = a.Price,
-                                                                   Gst = a.Gst,
+                                                                   Gstamount = a.Gstamount,
+                                                                   Gstper=a.Gstper,
+                                                                   Hsn=a.Hsn,
+                                                                   Product=c.ProductName,
+                                                                   
                                                                }).ToList();
                 orderDetails.ProductList = productList;
                 return orderDetails;
@@ -362,68 +309,66 @@ namespace EMPManegment.Repository.OrderRepository
             }
         }
 
-        public async Task<UpdatePurchaseOrderView> EditPurchaseOrderDetails(Guid Id)
+        public async Task<PurchaseOrderMasterView> EditPurchaseOrderDetails(Guid Id)
         {
+            PurchaseOrderMasterView POList = new PurchaseOrderMasterView();
             try
             {
-                var OrderDetails = new UpdatePurchaseOrderView();
-                var data = Context.TblPurchaseOrderMasters.Where(x => x.Id == Id).SingleOrDefault();
-                if (data != null)
-                {
+                POList = (from a in Context.TblPurchaseOrderMasters.Where(x => x.Id == Id)
+                               join c in Context.TblCompanyMasters on a.CompanyId equals c.Id
+                               join d in Context.TblVendorMasters on a.VendorId equals d.Vid
+                               join f in Context.TblPaymentMethodTypes on a.PaymentMethod equals f.Id
+                               join g in Context.TblPaymentTypes on a.PaymentStatus equals g.Id
+                               select new PurchaseOrderMasterView
+                               {
+                                   Id = Id,
+                                   OrderId = a.OrderId,
+                                   VendorId = a.VendorId,
+                                   ProjectId = a.ProjectId,
+                                   CompanyName = c.CompnyName,
+                                   CompanyId = a.CompanyId,
+                                   TotalAmount = a.TotalAmount,
+                                   OrderDate = a.OrderDate,
+                                   OrderStatus = a.OrderStatus,
+                                   DeliveryDate = a.DeliveryDate,
+                                   DeliveryStatus = a.DeliveryStatus,
+                                   PaymentMethod = a.PaymentMethod,
+                                   PaymentStatus = a.PaymentStatus,
+                                   PaymentMethodName = f.PaymentMethod,
+                                   PaymentStatusName = g.Type,
+                                   CompanyGst = c.Gst,
+                                   CompanyFullAddress =c.Address,
+                                   VendorCompanyName = d.VendorCompany,
+                                   VendorCompanyNumber = d.VendorCompanyNumber,
+                                   VendorGstnumber = d.VendorGstnumber,
+                                   VendorAddress = d.VendorAddress,
+                                   CreatedOn = a.CreatedOn,
+                                   CreatedBy= (Guid)a.CreatedBy,
+                               }).FirstOrDefault();
+                List<PurchaseOrderDetailsModel> Productlist = (from a in Context.TblPurchaseOrderDetails.Where(a => a.PorefId == POList.Id)
+                                                             join b in Context.TblProductTypeMasters on a.ProductType equals b.Id
+                                                             join c in Context.TblProductDetailsMasters on a.ProductId equals c.Id
+                                                             select new PurchaseOrderDetailsModel
+                                                             {
+                                                                 ProductId = a.ProductId,
+                                                                 Product = c.ProductName,
+                                                                 Hsn = a.Hsn,
+                                                                 Quantity = a.Quantity,
+                                                                 ProductType = a.ProductType,
+                                                                 ProductTypeName = b.Type,
+                                                                 Price = a.Price,
+                                                                 Gstper = a.Gstper,
+                                                                 Gstamount = a.Gstamount,
+                                                                 ProductTotal = a.ProductTotal,
+                                                             }).ToList();
 
-                    OrderDetails = new UpdatePurchaseOrderView()
-                    {
-                        Id = data.Id,
-                        OrderId = data.OrderId,
-                        OrderDate = data.OrderDate,
-                        CompanyName = data.CompanyName,
-                        ProductName = data.ProductName,
-                        ProductShortDescription = data.ProductShortDescription,
-                        TotalAmount = data.TotalAmount,
-                        PaymentMethod = data.PaymentMethod,
-                        DeliveryStatus = data.DeliveryStatus,
-                        OrderStatus = data.OrderStatus,
-                    };
-                }
-
-                return OrderDetails;
+                POList.ProductList = Productlist;
+                return POList;
             }
             catch (Exception ex)
             {
                 throw ex;
             }
-        }
-
-        public async Task<UserResponceModel> UpdatePurchaseOrderDetails(UpdatePurchaseOrderView UpdatePurchaseorder)
-        {
-            UserResponceModel model = new UserResponceModel();
-            var orderdetails = Context.TblPurchaseOrderMasters.Where(e => e.Id == UpdatePurchaseorder.Id).FirstOrDefault();
-            try
-            {
-                if (orderdetails != null)
-                {
-                    orderdetails.Id = UpdatePurchaseorder.Id;
-                    orderdetails.OrderDate = UpdatePurchaseorder.OrderDate;
-                    orderdetails.CompanyName = UpdatePurchaseorder.CompanyName;
-                    orderdetails.ProductName = UpdatePurchaseorder.ProductName;
-                    orderdetails.TotalAmount = UpdatePurchaseorder.TotalAmount;
-                    orderdetails.PaymentMethod = UpdatePurchaseorder.PaymentMethod;
-                    orderdetails.DeliveryStatus = UpdatePurchaseorder.DeliveryStatus;
-                    orderdetails.OrderStatus = UpdatePurchaseorder.OrderStatus;
-                    orderdetails.UpdatedBy=UpdatePurchaseorder.UpdatedBy;
-                    orderdetails.UpdatedOn=DateTime.Now;
-                }
-                Context.TblPurchaseOrderMasters.Update(orderdetails);
-                Context.SaveChanges();
-                model.Code = 200;
-                model.Message = "Order details updated successfully!";
-            }
-            catch (Exception ex)
-            {
-                model.Code = 400;
-                model.Message = "Error in updating order details.";
-            }
-            return model;
         }
 
         public async Task<UserResponceModel> DeletePurchaseOrderDetails(Guid Id)
@@ -472,6 +417,146 @@ namespace EMPManegment.Repository.OrderRepository
             {
                 response.Code = 400;
                 response.Message = "Error in deleting purchase order.";
+            }
+            return response;
+        }
+
+        public async Task<List<PurchaseOrderDetailsModel>> GetPOProductDetailsById(Guid ProductId)
+        {
+            try
+            {
+                var productDetails = new List<PurchaseOrderDetailsModel>();
+                var data = await(from a in Context.TblProductDetailsMasters.Where(x => x.Id == ProductId)
+                                 join b in Context.TblProductTypeMasters on a.ProductType equals b.Id
+                                 select new PurchaseOrderDetailsModel
+                                 {
+                                     ProductType = b.Id,
+                                     Product = a.ProductName,
+                                     ProductId = a.Id,
+                                     Price = a.PerUnitPrice,
+                                     Gstamount = a.GstAmount ?? 0,
+                                     Gstper =a.GstPercentage,
+                                     ProductTypeName = b.Type,
+                                     Hsn=a.Hsn,
+                                 }).ToListAsync();
+                if (data != null)
+                {
+                    foreach (var item in data)
+                    {
+                        productDetails.Add(new PurchaseOrderDetailsModel()
+                        {
+                            ProductId = item.ProductId,
+                            ProductType = item.ProductType,
+                            Product = item.Product,
+                            Price = item.Price,
+                            Gstamount = item.Gstamount,
+                            Gstper = item.Gstper,
+                            ProductTypeName = item.ProductTypeName,
+                            Hsn = item.Hsn,
+                        });
+                    }
+                }
+                return productDetails;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<UserResponceModel> UpdatePurchaseOrderDetails(PurchaseOrderMasterView UpdatePurchaseorder)
+        {
+            UserResponceModel response = new UserResponceModel();
+            try
+            {
+                var PurchaseOrder = Context.TblPurchaseOrderMasters.FirstOrDefault(po => po.Id == UpdatePurchaseorder.Id);
+                {
+                    PurchaseOrder.OrderId = UpdatePurchaseorder.OrderId;
+                    PurchaseOrder.VendorId = UpdatePurchaseorder.VendorId;
+                    PurchaseOrder.CompanyId = UpdatePurchaseorder.CompanyId;
+                    PurchaseOrder.ProjectId = UpdatePurchaseorder.ProjectId;
+                    PurchaseOrder.TotalGst = UpdatePurchaseorder.TotalGst;
+                    PurchaseOrder.SubTotal = UpdatePurchaseorder.SubTotal;
+                    PurchaseOrder.TotalAmount = UpdatePurchaseorder.TotalAmount;
+                    PurchaseOrder.DeliveryDate = UpdatePurchaseorder.DeliveryDate;
+                    PurchaseOrder.OrderDate = UpdatePurchaseorder.OrderDate;
+                    PurchaseOrder.OrderStatus = UpdatePurchaseorder.OrderStatus;
+                    PurchaseOrder.PaymentMethod = UpdatePurchaseorder.PaymentMethod;
+                    PurchaseOrder.PaymentStatus = UpdatePurchaseorder.PaymentStatus;
+                    PurchaseOrder.DeliveryStatus = UpdatePurchaseorder.DeliveryStatus;
+                    PurchaseOrder.IsDeleted = false;
+                    PurchaseOrder.CreatedBy = UpdatePurchaseorder.CreatedBy;
+                    PurchaseOrder.CreatedOn = DateTime.Now;
+                    PurchaseOrder.UpdatedOn = DateTime.Now;
+                    PurchaseOrder.UpdatedBy = UpdatePurchaseorder.UpdatedBy;
+                };
+                Context.TblPurchaseOrderMasters.Update(PurchaseOrder);
+
+                foreach (var item in UpdatePurchaseorder.ProductList)
+                {
+                    var existingPOProductDetails=Context.TblPurchaseOrderDetails.FirstOrDefault(e=>e.PorefId == PurchaseOrder.Id && e.ProductId == item.ProductId);
+                    if (existingPOProductDetails != null)
+                    {
+                        existingPOProductDetails.PorefId = PurchaseOrder.Id;
+                        existingPOProductDetails.ProductId = item.ProductId;
+                        existingPOProductDetails.ProductType = item.ProductType;
+                        existingPOProductDetails.Hsn = item.Hsn;
+                        existingPOProductDetails.Quantity = item.Quantity;
+                        existingPOProductDetails.Price = item.Price;
+                        existingPOProductDetails.DiscountAmt = item.Discount;
+                        existingPOProductDetails.Gstamount = item.Gstamount;
+                        existingPOProductDetails.Gstper = item.Gstper;
+                        existingPOProductDetails.ProductTotal = item.ProductTotal;
+                        existingPOProductDetails.IsDeleted = false;
+                        existingPOProductDetails.CreatedBy = UpdatePurchaseorder.CreatedBy;
+                        existingPOProductDetails.CreatedOn = DateTime.Now;
+                        existingPOProductDetails.UpdatedOn = DateTime.Now;
+                        existingPOProductDetails.UpdatedBy = UpdatePurchaseorder.UpdatedBy;
+
+                        Context.TblPurchaseOrderDetails.Update(existingPOProductDetails);
+                    }
+                    else
+                    {
+                        var PurchaseOrderDetail = new TblPurchaseOrderDetail()
+                        {
+                            PorefId = PurchaseOrder.Id,
+                            ProductId = item.ProductId,
+                            ProductType = item.ProductType,
+                            Hsn = item.Hsn,
+                            Quantity = item.Quantity,
+                            Price = item.Price,
+                            DiscountAmt = item.Discount,
+                            Gstamount = item.Gstamount,
+                            Gstper = item.Gstper,
+                            ProductTotal = item.ProductTotal,
+                            IsDeleted = false,
+                            CreatedBy = UpdatePurchaseorder.CreatedBy,
+                            CreatedOn = DateTime.Now,
+                        };
+                        Context.TblPurchaseOrderDetails.Add(PurchaseOrderDetail);
+                    }  
+                }
+
+                var POProduct=UpdatePurchaseorder.ProductList.Select(p => p.ProductId).ToList();
+                var ProductToRemove = Context.TblPurchaseOrderDetails.Where(e => e.PorefId == PurchaseOrder.Id && !POProduct.Contains(e.ProductId)).ToList();
+                Context.TblPurchaseOrderDetails.RemoveRange(ProductToRemove);
+
+                var PurchaseAddress = new TblPodeliveryAddress()
+                {
+                    Poid = PurchaseOrder.Id,
+                    Address = UpdatePurchaseorder.Address,
+                    IsDeleted = false
+                };
+                Context.TblPodeliveryAddresses.Update(PurchaseAddress);
+
+                await Context.SaveChangesAsync();
+                response.Code = (int)HttpStatusCode.OK;
+                response.Message = "Purchase order successfully inserted.";
+            }
+            catch (Exception ex)
+            {
+                response.Code = 400;
+                response.Message = "Error in creating purchase orders.";
             }
             return response;
         }

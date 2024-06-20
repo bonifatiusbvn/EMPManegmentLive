@@ -29,33 +29,6 @@ namespace EMPManagment.API.Controllers
 
         public IPurchaseOrderDetailsServices PurchaseOrderDetails { get; }
 
-        [HttpPost]
-        [Route("CreatePurchaseOrder")]
-        public async Task<IActionResult> CreatePurchaseOrder(PurchaseOrderDetailView orderDetails)
-        {
-            UserResponceModel response = new UserResponceModel();
-            try
-            {
-                var createOrder = PurchaseOrderDetails.CreatePurchaseOrder(orderDetails);
-                if (createOrder.Result.Code == 200)
-                {
-                    response.Code = (int)HttpStatusCode.OK;
-                    response.Message = createOrder.Result.Message;
-                }
-                else
-                {
-                    response.Message = createOrder.Result.Message;
-                    response.Code = createOrder.Result.Code;
-                }
-            }
-            catch (Exception ex)
-            {
-                response.Code = (int)HttpStatusCode.InternalServerError;
-                response.Message = "An error occurred while processing the request.";
-            }
-            return StatusCode(response.Code, response);
-        }
-
         [HttpGet]
         [Route("GetPurchaseOrderList")]
         public async Task<IActionResult> GetPurchaseOrderList()
@@ -141,7 +114,7 @@ namespace EMPManagment.API.Controllers
 
         [HttpPost]
         [Route("UpdatePurchaseOrderDetails")]
-        public async Task<IActionResult> UpdatePurchaseOrderDetails(UpdatePurchaseOrderView PurchaseorderDetails)
+        public async Task<IActionResult> UpdatePurchaseOrderDetails(PurchaseOrderMasterView PurchaseorderDetails)
         {
             UserResponceModel response = new UserResponceModel();
             try
@@ -191,6 +164,13 @@ namespace EMPManagment.API.Controllers
                 responseModel.Message = "An error occurred while processing the request.";
             }
             return StatusCode(responseModel.Code, responseModel);
+        }
+        [HttpGet]
+        [Route("GetPOProductDetailsById")]
+        public async Task<IActionResult> GetPOProductDetailsById(Guid ProductId)
+        {
+            var getorderDetails = await PurchaseOrderDetails.GetPOProductDetailsById(ProductId);
+            return Ok(new { code = 200, data = getorderDetails });
         }
     }
 }

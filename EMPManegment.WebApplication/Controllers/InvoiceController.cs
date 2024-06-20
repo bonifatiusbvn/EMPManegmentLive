@@ -92,7 +92,7 @@ namespace EMPManegment.Web.Controllers
                 if (response.code == 200)
                 {
                     Product = JsonConvert.DeserializeObject<List<InvoiceDetailsViewModel>>(response.data.ToString());
-                    Product.ForEach(a => a.ProductTotal = (a.PerUnitPrice ?? 0) + (a.PerUnitWithGstprice ?? 0));
+                    Product.ForEach(a => a.ProductTotal = (a.PerUnitPrice ?? 0) + (a.GstAmount ?? 0));
                 }
                 return PartialView("~/Views/Invoice/_DisplayInvoiceProductDetailsPartial.cshtml", Product);
             }
@@ -689,11 +689,16 @@ namespace EMPManegment.Web.Controllers
         {
             try
             {
-                string apiUrl = $"ProductMaster/GetAllProductList?searchText={searchText}";
+                string apiUrl = $"ProductMaster/GetAllProductList";
                 ApiResponseModel response = await APIServices.PostAsync("", apiUrl);
                 if (response.code == 200)
                 {
                     List<ProductDetailsView> Items = JsonConvert.DeserializeObject<List<ProductDetailsView>>(response.data.ToString());
+                    if (!string.IsNullOrEmpty(searchText))
+                    {
+                        searchText = searchText.ToLower();
+                        Items = Items.Where(u => u.ProductName.ToLower().Contains(searchText)).ToList();
+                    }
                     return PartialView("~/Views/Invoice/_showInvoiceAllProductsPartial.cshtml", Items);
                 }
                 else

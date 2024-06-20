@@ -17,7 +17,7 @@
 @foreach (var item in Model)
 {
     totalAmount = item.TotalAmount;
-    totalGst += item.PerUnitWithGstprice;
+   @*  totalGst += item.PerUnitWithGstprice; *@
 }
 
 <div class="row" style="margin-top:80px;">
@@ -77,7 +77,7 @@
                                 <div class="col-lg-3 col-6">
                                     <p class="text-muted mb-2 text-uppercase fw-semibold">Date</p>
                                     <h5 class="fs-14 mb-0" id="txtdate">@firstItem.OrderDate.ToString("dd/MM/yyyy")</h5>
-                                    <h5 class="fs-14 mb-0" id="txtinvoicetype" hidden>@firstItem.Type</h5>
+                                    <h5 class="fs-14 mb-0" id="txtinvoicetype" hidden>@* @firstItem.Type *@</h5>
                                     <h5 class="fs-14 mb-0" id="txtorderid" hidden>@firstItem.OrderId</h5>
                                 </div>
                                 <!--end col-->
@@ -143,14 +143,14 @@
                                     @foreach (var item in Model)
                                     {
                                         <tr class="product">
-                                            <td class="text-start">
+                                            @* <td class="text-start">
                                                 <span class="fw-medium" id="txtproductname">@item.ProductName</span>
                                                 <span class="fw-medium" id="txtproductid" hidden>@item.ProductId</span>
                                                 <p class="text-muted mb-0" id="txtdescription">@item.ProductShortDescription</p>
                                             </td>
                                             <td id="txtperunitprice">@item.PerUnitPrice</td>
                                             <td id="txtquantity">@item.Quantity</td>
-                                            <td id="txtperunitwithgstprice">@item.GstPerUnit</td>
+                                            <td id="txtperunitwithgstprice">@item.GstPerUnit</td> *@
                                             <td class="text-end" id="txttotal">@item.SubTotal</td>
                                         </tr>
                                     }

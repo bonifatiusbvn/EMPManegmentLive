@@ -26,7 +26,9 @@ namespace EMPManegment.EntityModels.ViewModels.Invoice
 
         public decimal? DiscountAmount { get; set; }
 
-        public decimal Gst { get; set; }
+        public decimal GstPer { get; set; }
+
+        public decimal? GstAmount { get; set; }
 
         public decimal ProductTotal { get; set; }
 
@@ -36,7 +38,6 @@ namespace EMPManegment.EntityModels.ViewModels.Invoice
 
         public int? Hsn { get; set; }
 
-        public decimal? PerUnitWithGstprice { get; set; }
         public string? ProductTypeName { get; set; }
         public int? RowNumber { get; set; }
         public string? ProductDescription { get; set; }

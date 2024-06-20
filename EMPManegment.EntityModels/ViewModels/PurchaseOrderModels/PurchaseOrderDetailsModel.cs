@@ -15,6 +15,7 @@ namespace EMPManegment.EntityModels.ViewModels.PurchaseOrderModels
         public Guid ProductId { get; set; }
 
         public string Product { get; set; } = null!;
+        public int? Hsn { get; set; }
 
         public int ProductType { get; set; }
 
@@ -24,8 +25,10 @@ namespace EMPManegment.EntityModels.ViewModels.PurchaseOrderModels
 
         public decimal? Discount { get; set; }
 
-        public decimal Gst { get; set; }
+        public decimal? Gstper { get; set; }
 
+        public decimal Gstamount { get; set; }
+     
         public decimal ProductTotal { get; set; }
 
         public bool? IsDeleted { get; set; }
@@ -39,5 +42,6 @@ namespace EMPManegment.EntityModels.ViewModels.PurchaseOrderModels
         public DateTime? UpdatedOn { get; set; }
 
         public string? ProductTypeName { get; set; }
+        public int? RowNumber { get; set; }
     }
 }

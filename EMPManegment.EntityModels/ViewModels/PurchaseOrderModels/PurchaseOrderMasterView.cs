@@ -15,27 +15,12 @@ namespace EMPManegment.EntityModels.ViewModels.PurchaseOrderModels
 
         public string? OrderId { get; set; }
 
-        public string? Type { get; set; }
-
         public Guid? VendorId { get; set; }
 
+        public Guid? CompanyId { get; set; }
         public string? CompanyName { get; set; }
 
-        public string? ProductName { get; set; }
-
-        public string? ProductShortDescription { get; set; }
-
-        public Guid? ProductId { get; set; }
-
-        public int ProductType { get; set; }
-
-        public string Quantity { get; set; } = null!;
-
-        public decimal? GstPerUnit { get; set; }
-
         public decimal? TotalGst { get; set; }
-
-        public decimal? AmountPerUnit { get; set; }
 
         public decimal? SubTotal { get; set; }
 
@@ -58,6 +43,9 @@ namespace EMPManegment.EntityModels.ViewModels.PurchaseOrderModels
         public DateTime? CreatedOn { get; set; }
 
         public Guid CreatedBy { get; set; }
+        public Guid? UpdatedBy { get; set; }
+
+        public DateTime? UpdatedOn { get; set; }
 
         public Guid Poid { get; set; }
 
@@ -67,13 +55,9 @@ namespace EMPManegment.EntityModels.ViewModels.PurchaseOrderModels
 
         public string? CompanyGstNumber { get; set; }
 
-        public string? VendorName { get; set; }
-
         public string? VendorFullAddress { get; set; }
 
-        public string? VendorContact { get; set; }
-
-        public string? VendorEmail { get; set; }
+        public string? VendorCompanyEmail { get; set; }
 
         public string? VendorAccountHolderName { get; set; }
 
@@ -81,7 +65,11 @@ namespace EMPManegment.EntityModels.ViewModels.PurchaseOrderModels
 
         public string? PaymentMethodName { get; set; }
         public string? PaymentStatusName { get; set; }
-
+        public string? CompanyGst { get; set; }
+        public string? VendorCompanyName { get; set; }
+        public string? VendorCompanyNumber { get; set; }
+        public string? VendorGstnumber { get; set; }
+        public string? VendorAddress { get; set; }
         public List<PurchaseOrderDetailsModel>? ProductList { get; set; }
 
     }

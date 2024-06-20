@@ -32,7 +32,7 @@ namespace EMPManegment.Web.Controllers
 
         [FormPermissionAttribute("Purchase Order List -View")]
         [HttpGet]
-        public async Task<IActionResult> PurchaseOrders(int? page)
+        public async Task<IActionResult> PurchaseOrders()
         {
             try
             {
@@ -44,25 +44,6 @@ namespace EMPManegment.Web.Controllers
                     ViewBag.ordersList = orderList.Count;
                 }
                 return View(orderList);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        [FormPermissionAttribute("Create Purchase Order-Add")]
-        [HttpPost]
-        public async Task<IActionResult> CreatePurchaseOrder(PurchaseOrderDetailView orderDetail)
-        {
-            try
-            {
-                ApiResponseModel postuser = await APIServices.PostAsync(orderDetail, "PurchaseOrderDetails/CreatePurchaseOrder");
-                if (postuser.code == 200)
-                {
-                    return Ok(new { postuser.message });
-                }
-                return View(orderDetail);
             }
             catch (Exception ex)
             {
@@ -111,17 +92,35 @@ namespace EMPManegment.Web.Controllers
 
         [FormPermissionAttribute("Create Purchase Order-View")]
         [HttpGet]
-        public async Task<IActionResult> CreatePurchaseOrder()
+        public async Task<IActionResult> CreatePurchaseOrder(Guid? Id)
         {
             try
             {
-                string porjectname = UserSession.ProjectName;
-                ApiResponseModel Response = await APIServices.GetAsync("", "PurchaseOrderDetails/CheckPurchaseOrder?projectname=" + porjectname);
-                if (Response.code == 200)
+                PurchaseOrderMasterView order = new PurchaseOrderMasterView();
+                if (Id == null)
                 {
-                    ViewBag.PoId = Response.data;
+                    string porjectname = UserSession.ProjectName;
+                    ApiResponseModel Response = await APIServices.GetAsync("", "PurchaseOrderDetails/CheckPurchaseOrder?projectname=" + porjectname);
+                    if (Response.code == 200)
+                    {
+                        ViewBag.PoId = Response.data;
+                    }
                 }
-                return View();
+                else
+                {
+                    ApiResponseModel response = await APIServices.GetAsync("", "PurchaseOrderDetails/EditPurchaseOrderDetails?Id=" + Id);
+                    if (response.code == 200)
+                    {
+                        order = JsonConvert.DeserializeObject<PurchaseOrderMasterView>(response.data.ToString());
+                        ViewBag.PoId = order.OrderId;
+                        var rowNumber = 0;
+                        foreach (var item in order.ProductList)
+                        {
+                            item.RowNumber = rowNumber++;
+                        }
+                    }
+                }
+                return View(order);
             }
             catch (Exception ex)
             {
@@ -178,32 +177,15 @@ namespace EMPManegment.Web.Controllers
             return View();
         }
 
-        [HttpGet]
-        public async Task<JsonResult> EditPurchaseOrderDetails(Guid Id)
-        {
-            try
-            {
-                UpdatePurchaseOrderView order = new UpdatePurchaseOrderView();
-                ApiResponseModel response = await APIServices.GetAsync("", "PurchaseOrderDetails/EditPurchaseOrderDetails?Id=" + Id);
-                if (response.code == 200)
-                {
-                    order = JsonConvert.DeserializeObject<UpdatePurchaseOrderView>(response.data.ToString());
-                }
-                return new JsonResult(order);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
         [FormPermissionAttribute("Create Purchase Order-Edit")]
         [HttpPost]
-        public async Task<IActionResult> UpdatePurchaseOrderDetails(UpdatePurchaseOrderView orderDetail)
+        public async Task<IActionResult> UpdatePurchaseOrderDetails()
         {
             try
             {
-                ApiResponseModel postuser = await APIServices.PostAsync(orderDetail, "PurchaseOrderDetails/UpdatePurchaseOrderDetails");
+                var OrderDetails = HttpContext.Request.Form["PurchaseOrder"];
+                var PODetails = JsonConvert.DeserializeObject<PurchaseOrderMasterView>(OrderDetails.ToString());
+                ApiResponseModel postuser = await APIServices.PostAsync(PODetails, "PurchaseOrderDetails/UpdatePurchaseOrderDetails");
                 if (postuser.code == 200)
                 {
                     return Ok(new { postuser.message, postuser.code });
@@ -245,11 +227,16 @@ namespace EMPManegment.Web.Controllers
         {
             try
             {
-                string apiUrl = $"ProductMaster/GetAllProductList?searchText={searchText}";
+                string apiUrl = $"ProductMaster/GetAllProductList";
                 ApiResponseModel response = await APIServices.PostAsync("", apiUrl);
                 if (response.code == 200)
                 {
                     List<ProductDetailsView> Items = JsonConvert.DeserializeObject<List<ProductDetailsView>>(response.data.ToString());
+                    if (!string.IsNullOrEmpty(searchText))
+                    {
+                        searchText = searchText.ToLower();
+                        Items = Items.Where(u => u.ProductName.ToLower().Contains(searchText)).ToList();
+                    }
                     return PartialView("~/Views/PurchaseOrderMaster/_showAllPOProductsPartial.cshtml", Items);
                 }
                 else
@@ -268,13 +255,13 @@ namespace EMPManegment.Web.Controllers
             try
             {
                 string ProductId = HttpContext.Request.Form["ProductId"];
-                var GetProduct = JsonConvert.DeserializeObject<InvoiceDetailsViewModel>(ProductId.ToString());
-                List<InvoiceDetailsViewModel> Product = new List<InvoiceDetailsViewModel>();
-                ApiResponseModel response = await APIServices.GetAsync("", "Invoice/GetProductDetailsById?ProductId=" + GetProduct.ProductId);
+                var GetProduct = JsonConvert.DeserializeObject<PurchaseOrderDetailsModel>(ProductId.ToString());
+                List<PurchaseOrderDetailsModel> Product = new List<PurchaseOrderDetailsModel>();
+                ApiResponseModel response = await APIServices.GetAsync("", "PurchaseOrderDetails/GetPOProductDetailsById?ProductId=" + GetProduct.ProductId);
                 if (response.code == 200)
                 {
-                    Product = JsonConvert.DeserializeObject<List<InvoiceDetailsViewModel>>(response.data.ToString());
-                    Product.ForEach(a => a.ProductTotal = (a.PerUnitPrice ?? 0) + (a.PerUnitWithGstprice ?? 0));
+                    Product = JsonConvert.DeserializeObject<List<PurchaseOrderDetailsModel>>(response.data.ToString());
+                    Product.ForEach(a => a.ProductTotal = (a.Price) + (a.Gstamount));
                 }
                 return PartialView("~/Views/PurchaseOrderMaster/_DisplayPOProductDetailsById.cshtml", Product);
             }

@@ -1,8 +1,8 @@
-﻿@model List<EMPManegment.EntityModels.ViewModels.Invoice.InvoiceDetailsViewModel>
+﻿@model List<EMPManegment.EntityModels.ViewModels.PurchaseOrderModels.PurchaseOrderDetailsModel>
 
 @foreach (var item in Model)
 {
-    <tr id="templateRow_@Convert.ToInt64(item.RowNumber + 1)" class="product" data-product-id="@item.ProductId">
+    <tr id="templateRow_@Convert.ToInt64(item.RowNumber + 1)" class="product" data-product-id="@item.ProductId" onclick="fn_updatePOProductAmount(this)">
         <td scope="row" class="product-id">@Convert.ToInt64(item.RowNumber + 1)</td>
         <td class="text-start">
             <label id="textProductName" style="width: 160px;height: 30px;padding-top:5px !important;">@item.Product</label>
@@ -33,14 +33,14 @@
             </div>
         </td>
         <td class="text-start">
-            <input type="text" class="form-control" id="txtproductamount" value="@item.PerUnitPrice" oninput="preventPOEmptyValue(this)" />
-            <input type="hidden" class="form-control bg-light border-0" id="hiddenproductamount" value="@item.PerUnitPrice" />
+            <input type="text" class="form-control" id="txtproductamount" value="@item.Price" oninput="preventPOEmptyValue(this)" />
+            <input type="hidden" class="form-control bg-light border-0" id="hiddenproductamount" value="@item.Price" />
         </td>
         <td class="text-start">
-            <input type="text" class="form-control" id="txtgst" max="99" value="@item.Gst" maxlength="4" oninput="preventPOEmptyValue(this)" />
+            <input type="text" class="form-control" id="txtgstPercentage" max="99" value="@item.Gstper" maxlength="4" oninput="preventPOEmptyValue(this)" />
         </td>
         <td class="text-start">
-            <input type="number" class="form-control" id="txtgstAmount" value="@item.PerUnitWithGstprice" readonly />
+            <input type="number" class="form-control" id="txtgstAmount" value="@item.Gstamount" readonly />
         </td>
         <td class="text-start">
             <div>

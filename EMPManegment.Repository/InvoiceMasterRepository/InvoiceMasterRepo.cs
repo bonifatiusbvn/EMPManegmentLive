@@ -201,13 +201,13 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                                                               Quantity = a.Quantity,
                                                               ProductTypeName = b.Type,
                                                               ProductTotal = a.ProductTotal,
-                                                              Gst = a.Gst,
+                                                              GstPer = a.GstPer,
+                                                              GstAmount = a.GstAmount,
                                                               ProductType = a.ProductType,
                                                               Hsn = c.Hsn,
                                                               PerUnitPrice = c.PerUnitPrice,
                                                               DiscountAmount=a.DiscountAmount,
                                                               DiscountPer=a.DiscountPer,
-                                                              //PerUnitWithGstprice = c.PerUnitWithGstprice,
                                                               Price = a.Price,
                                                           }).ToList();
                 invoice.InvoiceDetails = Itemlist;
@@ -234,7 +234,6 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                 {
                     var orderDetails = new List<PurchaseOrderDetailView>();
                     var data = await (from a in Context.TblPurchaseOrderMasters
-                                      join c in Context.TblProductDetailsMasters on a.ProductId equals c.Id
                                       join d in Context.TblPaymentMethodTypes on a.PaymentMethod equals d.Id
                                       join b in Context.TblVendorMasters on a.VendorId equals b.Vid
                                       where a.OrderId == OrderId
@@ -243,22 +242,13 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                                           Id = a.Id,
                                           OrderId = a.OrderId,
                                           VendorId = a.VendorId,
-                                          Type = a.Type,
-                                          CompanyName = a.CompanyName,
-                                          ProductId = a.ProductId,
+                                          CompanyId=a.CompanyId,
                                           VendorAddress = b.VendorAddress,
                                           VendorContact = b.VendorContact,
                                           VendorEmail = b.VendorCompanyEmail,
-                                          ProductImage = c.ProductImage,
-                                          ProductName = a.ProductName,
-                                          ProductShortDescription = a.ProductShortDescription,
-                                          Quantity = a.Quantity,
                                           OrderDate = a.OrderDate,
-                                          PerUnitPrice = c.PerUnitPrice,
                                           SubTotal = a.SubTotal,
-                                          GstPerUnit = a.GstPerUnit,
                                           TotalAmount = a.TotalAmount,
-                                          AmountPerUnit = a.AmountPerUnit,
                                           PaymentMethod = a.PaymentMethod,
                                           PaymentMethodName = d.PaymentMethod,
                                           PaymentStatus = a.PaymentStatus,
@@ -276,27 +266,17 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                                 OrderId = item.OrderId,
                                 CompanyName = item.CompanyName,
                                 VendorId = item.VendorId,
-                                ProductId = item.ProductId,
                                 PaymentMethod = item.PaymentMethod,
                                 VendorEmail = item.VendorEmail,
                                 VendorContact = item.VendorContact,
                                 VendorAddress = item.VendorAddress,
-                                ProductName = item.ProductName,
-                                ProductImage = item.ProductImage,
-                                ProductShortDescription = item.ProductShortDescription,
-                                Quantity = item.Quantity,
                                 OrderDate = item.OrderDate,
-                                PerUnitPrice = item.PerUnitPrice,
-                                PerUnitWithGstprice = item.PerUnitWithGstprice,
                                 SubTotal = item.SubTotal,
-                                GstPerUnit = item.GstPerUnit,
                                 TotalAmount = item.TotalAmount,
-                                AmountPerUnit = item.AmountPerUnit,
                                 PaymentMethodName = item.PaymentMethodName,
                                 DeliveryStatus = item.DeliveryStatus,
                                 DeliveryDate = item.DeliveryDate,
                                 CreatedOn = item.CreatedOn,
-                                Type = item.Type,
                                 PaymentStatus = item.PaymentStatus,
                             });
                         }
@@ -541,7 +521,8 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                         Price = item.Price,
                         DiscountPer = item.DiscountPer,
                         DiscountAmount= item.DiscountAmount,
-                        Gst = item.Gst,
+                        GstAmount = item.GstAmount,
+                        GstPer=item.GstPer,
                         ProductTotal = item.ProductTotal,
                         Hsn = item.Hsn,
                         IsDeleted = false,
@@ -618,7 +599,6 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
             {
                 var orderDetails = new List<PurchaseOrderDetailView>();
                 var data = await (from a in Context.TblPurchaseOrderMasters
-                                  join c in Context.TblProductDetailsMasters on a.ProductId equals c.Id
                                   join b in Context.TblVendorMasters on a.VendorId equals b.Vid
                                   join d in Context.TblInvoices on a.OrderId equals d.OrderId
                                   join e in Context.TblPaymentMethodTypes on a.PaymentMethod equals e.Id
@@ -629,21 +609,12 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                                       OrderId = a.OrderId,
                                       InvoiceNo = d.InvoiceNo,
                                       VendorId = a.VendorId,
-                                      Type = a.Type,
-                                      CompanyName = a.CompanyName,
-                                      ProductId = a.ProductId,
+                                      CompanyId = a.CompanyId,
                                       VendorAddress = b.VendorAddress,
                                       VendorContact = b.VendorContact,
                                       VendorEmail = b.VendorCompanyEmail,
-                                      ProductImage = c.ProductImage,
-                                      ProductName = a.ProductName,
-                                      ProductShortDescription = a.ProductShortDescription,
-                                      Quantity = a.Quantity,
                                       OrderDate = a.OrderDate,
-                                      PerUnitPrice = c.PerUnitPrice,
-                                      //PerUnitWithGstprice = c.PerUnitWithGstprice,
                                       TotalAmount = a.TotalAmount,
-                                      AmountPerUnit = a.AmountPerUnit,
                                       PaymentMethod = a.PaymentMethod,
                                       PaymentStatus = a.PaymentStatus,
                                       DeliveryStatus = a.DeliveryStatus,
@@ -662,24 +633,15 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                             InvoiceNo = item.InvoiceNo,
                             CompanyName = item.CompanyName,
                             VendorId = item.VendorId,
-                            ProductId = item.ProductId,
                             VendorEmail = item.VendorEmail,
                             VendorContact = item.VendorContact,
                             VendorAddress = item.VendorAddress,
-                            ProductName = item.ProductName,
-                            ProductImage = item.ProductImage,
-                            ProductShortDescription = item.ProductShortDescription,
-                            Quantity = item.Quantity,
                             OrderDate = item.OrderDate,
-                            PerUnitPrice = item.PerUnitPrice,
-                            PerUnitWithGstprice = item.PerUnitWithGstprice,
                             TotalAmount = item.TotalAmount,
-                            AmountPerUnit = item.AmountPerUnit,
                             PaymentMethod = item.PaymentMethod,
                             DeliveryStatus = item.DeliveryStatus,
                             DeliveryDate = item.DeliveryDate,
                             CreatedOn = item.CreatedOn,
-                            Type = item.Type,
                             PaymentStatus = item.PaymentStatus,
                             PaymentMethodName = item.PaymentMethodName,
                         });
@@ -814,7 +776,8 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                         existingInvoice.Price = item.Price;
                         existingInvoice.DiscountPer = item.DiscountPer;
                         existingInvoice.DiscountAmount=item.DiscountAmount;
-                        existingInvoice.Gst = item.Gst;
+                        existingInvoice.GstPer = item.GstPer;
+                        existingInvoice.GstAmount = item.GstAmount;
                         existingInvoice.ProductTotal = item.ProductTotal;
                         existingInvoice.UpdatedOn = DateTime.Now;
                         existingInvoice.UpdatedBy = UpdateInvoice.UpdatedBy;
@@ -836,7 +799,8 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                             Price = item.Price,
                             DiscountPer = item.DiscountPer,
                             DiscountAmount = item.DiscountAmount,
-                            Gst = item.Gst,
+                            GstAmount = item.GstAmount,
+                            GstPer = item.GstPer,
                             ProductTotal = item.ProductTotal,
                             Hsn = item.Hsn,
                             IsDeleted = false,
@@ -880,7 +844,6 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                 {
                     var orderDetails = new List<PurchaseOrderDetailView>();
                     var data = await (from a in Context.TblPurchaseOrderMasters
-                                      join c in Context.TblProductDetailsMasters on a.ProductId equals c.Id
                                       join b in Context.TblVendorMasters on a.VendorId equals b.Vid
                                       where a.OrderId == OrderId
                                       select new PurchaseOrderDetailView
@@ -888,20 +851,12 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                                           Id = a.Id,
                                           OrderId = a.OrderId,
                                           VendorId = a.VendorId,
-                                          Type = a.Type,
-                                          CompanyName = a.CompanyName,
-                                          ProductId = a.ProductId,
+                                          CompanyId = a.CompanyId,
                                           VendorAddress = b.VendorAddress,
                                           VendorContact = b.VendorContact,
                                           VendorEmail = b.VendorCompanyEmail,
-                                          ProductImage = c.ProductImage,
-                                          ProductName = a.ProductName,
-                                          ProductShortDescription = a.ProductShortDescription,
-                                          Quantity = a.Quantity,
                                           OrderDate = a.OrderDate,
-                                          PerUnitPrice = c.PerUnitPrice,
                                           TotalAmount = a.TotalAmount,
-                                          AmountPerUnit = a.AmountPerUnit,
                                           PaymentMethod = a.PaymentMethod,
                                           PaymentStatus = a.PaymentStatus,
                                           DeliveryStatus = a.DeliveryStatus,
@@ -918,24 +873,15 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                                 OrderId = item.OrderId,
                                 CompanyName = item.CompanyName,
                                 VendorId = item.VendorId,
-                                ProductId = item.ProductId,
                                 VendorEmail = item.VendorEmail,
                                 VendorContact = item.VendorContact,
                                 VendorAddress = item.VendorAddress,
-                                ProductName = item.ProductName,
-                                ProductImage = item.ProductImage,
-                                ProductShortDescription = item.ProductShortDescription,
-                                Quantity = item.Quantity,
                                 OrderDate = item.OrderDate,
-                                PerUnitPrice = item.PerUnitPrice,
-                                PerUnitWithGstprice = item.PerUnitWithGstprice,
                                 TotalAmount = item.TotalAmount,
-                                AmountPerUnit = item.AmountPerUnit,
                                 PaymentMethod = item.PaymentMethod,
                                 DeliveryStatus = item.DeliveryStatus,
                                 DeliveryDate = item.DeliveryDate,
                                 CreatedOn = item.CreatedOn,
-                                Type = item.Type,
                                 PaymentStatus = item.PaymentStatus,
                             });
                         }
@@ -1110,8 +1056,8 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                                                                  ProductType = a.ProductType,
                                                                  ProductTypeName = b.Type,
                                                                  PerUnitPrice = a.Price,
-                                                                 Gst = a.Gst,
-                                                                 PerUnitWithGstprice = a.Gst,
+                                                                 GstAmount = a.GstAmount,
+                                                                 GstPer=a.GstPer,
                                                                  ProductTotal = a.ProductTotal,
                                                                  DiscountPer=a.DiscountPer,
                                                                  DiscountAmount=a.DiscountAmount,
@@ -1141,8 +1087,8 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                                      Product = a.ProductName,
                                      Hsn = a.Hsn,
                                      PerUnitPrice = a.PerUnitPrice,
-                                     Gst = (decimal)a.GstPercentage,
-                                     PerUnitWithGstprice = a.GstAmount,
+                                     GstPer = (decimal)a.GstPercentage,
+                                     GstAmount = a.GstAmount,
                                      ProductTypeName = b.Type,
                                  }).ToListAsync();
                 if (data != null)
@@ -1158,8 +1104,8 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                             ProductId = item.ProductId,
                             Hsn = item.Hsn,
                             PerUnitPrice = item.PerUnitPrice,
-                            Gst = item.Gst,
-                            PerUnitWithGstprice = item.PerUnitWithGstprice,
+                            GstAmount = item.GstAmount,
+                            GstPer = item.GstPer,
                             ProductTypeName = item.ProductTypeName,
                         });
                     }
