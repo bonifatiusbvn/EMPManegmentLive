@@ -4,6 +4,7 @@ using EMPManagment.Web.Models.API;
 using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 using EMPManegment.EntityModels.ViewModels.Invoice;
 using EMPManegment.EntityModels.ViewModels.ManualInvoice;
+using EMPManegment.EntityModels.ViewModels.ProductMaster;
 using EMPManegment.Web.Helper;
 using EMPManegment.Web.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -55,13 +56,13 @@ namespace EMPManegment.Web.Controllers
                     sortColumn = sortColumn,
                     sortColumnDir = sortColumnDir
                 };
-                List<ManualInvoiceMasterModel> InvoiceList = new List<ManualInvoiceMasterModel>();
+                List<ManualInvoiceModel> InvoiceList = new List<ManualInvoiceModel>();
                 var data = new jsonData();
                 ApiResponseModel postuser = await APIServices.PostAsync(dataTable, "ManualInvoice/GetManualInvoiceList");
                 if (postuser.data != null)
                 {
                     data = JsonConvert.DeserializeObject<jsonData>(postuser.data.ToString());
-                    InvoiceList = JsonConvert.DeserializeObject<List<ManualInvoiceMasterModel>>(data.data.ToString());
+                    InvoiceList = JsonConvert.DeserializeObject<List<ManualInvoiceModel>>(data.data.ToString());
                 }
                 var jsonData = new
                 {
@@ -79,9 +80,31 @@ namespace EMPManegment.Web.Controllers
         }
 
         [FormPermissionAttribute("CreateInvoiceManual-View")]
-        public IActionResult CreateInvoiceManual()
+        public async Task<IActionResult> CreateInvoiceManual(Guid? InvoiceId)
         {
-            return View();
+            try
+            {
+                ManualInvoiceMasterModel invoiceDetails = new ManualInvoiceMasterModel();
+                if (InvoiceId != null)
+                {
+                    ApiResponseModel response = await APIServices.GetAsync("", "ManualInvoice/GetManualInvoiceDetails?InvoiceId=" + InvoiceId);
+                    if (response.code == 200)
+                    {
+                        invoiceDetails = JsonConvert.DeserializeObject<ManualInvoiceMasterModel>(response.data.ToString());
+                        var row = 0;
+                        foreach(var item in invoiceDetails.ManualInvoiceDetails)
+                        {
+                            item.RowNumber = row++;
+                        }
+                    }
+                }
+                return View(invoiceDetails);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+
+            }
         }
 
         [FormPermissionAttribute("CreateInvoiceManual-Add")]
@@ -96,7 +119,7 @@ namespace EMPManegment.Web.Controllers
                 ApiResponseModel postuser = await APIServices.PostAsync(InsertDetails, "ManualInvoice/InsertManualInvoice");
                 if (postuser.code == 200)
                 {
-                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code, Data = postuser.data });
                 }
                 else
                 {
@@ -201,6 +224,50 @@ namespace EMPManegment.Web.Controllers
                 }
             }
             return words;
+        }
+
+
+        [FormPermissionAttribute("CreateInvoiceManual-Edit")]
+        [HttpPost]
+        public async Task<IActionResult> UpdateManualInvoice()
+        {
+            try
+            {
+                var InvoiceDetails = HttpContext.Request.Form["UpdateManualInvoice"];
+                var UpdateDetails = JsonConvert.DeserializeObject<ManualInvoiceMasterModel>(InvoiceDetails);
+
+                ApiResponseModel postuser = await APIServices.PostAsync(UpdateDetails, "ManualInvoice/UpdateManualInvoice");
+                if (postuser.code == 200)
+                {
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
+                }
+                else
+                {
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> DisplayProducts()
+        {
+            try
+            {
+                List<ManualInvoiceDetailsModel> products = new List<ManualInvoiceDetailsModel>
+                {
+                    new ManualInvoiceDetailsModel() 
+                };
+                return PartialView("~/Views/ManualInvoice/_AddProductPartialView.cshtml", products);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
     }
 }

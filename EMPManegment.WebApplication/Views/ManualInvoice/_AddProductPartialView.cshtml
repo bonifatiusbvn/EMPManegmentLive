@@ -1,0 +1,105 @@
+﻿@model List<EMPManegment.EntityModels.ViewModels.ManualInvoice.ManualInvoiceDetailsModel>
+@using EMPManegment.Web.Models
+@inject IHttpContextAccessor Accessor;
+@inject UserSession _userSession
+
+
+@foreach (var item in Model)
+{
+    <tr id="templateRow_@Convert.ToInt64(item.RowNumber + 1)" class="product" data-product-id="@item.Id">
+        <td scope="row" class="product-id" id="rowno" name="rowno">@Convert.ToInt64(item.RowNumber + 1)</td>
+        <td class="text-start">
+            <input id="textProductName" class="product-quantity form-control" value="@item.Product" />
+            <input id="textRefId" type="hidden" value="@item.RefId" />
+        </td>
+        <td class="text-start">
+            <input type="text" class="form-control" id="txtHSNcode" style="width: 75px;" value="@item.Hsn" />
+        </td>
+        <td class="text-start">
+            <div>
+                @if (item.Quantity != 0)
+                {
+                    <input type="number" class="product-quantity form-control" id="txtproductquantity" style="width:80px;" value="@item.Quantity" oninput="preventEmptyValue(this)">
+                }
+                else
+                {
+                    <input type="number" class="product-quantity form-control" id="txtproductquantity" style="width:80px;" value="1" oninput="preventEmptyValue(this)">
+                }
+            </div>
+        </td>
+        <td class="text-start">
+            <div>
+                @if (item.ProductType != null)
+                {
+                    <input type="hidden" id="txtproducttype_@Convert.ToInt64(item.RowNumber + 1)" value="@item.RowNumber" />
+                    <select class="form-control" id="txtPOProductType_@Convert.ToInt64(item.RowNumber + 1)" onclick="ProductTypeDropdown(@Convert.ToInt64(item.RowNumber + 1))" style="width: 151px;">
+                        <option selected value="@item.ProductType">@item.ProductTypeName</option>
+                    </select>
+                }
+                else
+                {
+                    <select class="form-control" id="txtPOProductType_@Convert.ToInt64(item.RowNumber + 1)" style="width: 151px;">
+                        <option selected value="">--Select Type--</option>
+                    </select>
+                }
+            </div>
+        </td>
+        <td class="text-start">
+            <div>
+                <input type="text" class="form-control" id="txtproductamount" name="txtproductamount" value="@item.Price" oninput="preventEmptyValue(this)" />
+                <input type="hidden" class="form-control bg-light border-0" id="productamount" value="@item.Price" />
+            </div>
+        </td>
+        <td class="text-start">
+            <div class="row">
+                <div class="col-sm-6">
+                    @if (item.Discount != null)
+                    {
+                        <input type="text" class="form-control" id="txtdiscountamount" oninput="preventEmptyValue(this)" value="@item.Discount" />
+                    }
+                    else
+                    {
+                        <input type="text" class="form-control" id="txtdiscountamount" oninput="preventEmptyValue(this)" value="0" />
+                    }
+
+                </div>
+                <div class="col-sm-6">
+                    @if (item.DiscountPercent != null)
+                    {
+                        <input type="text" class="form-control" id="txtdiscountpercentage" value="@item.DiscountPercent" oninput="preventEmptyValue(this)" />
+                    }
+                    else
+                    {
+                        <input type="text" class="form-control" id="txtdiscountpercentage" value="0" oninput="preventEmptyValue(this)" />
+
+                    }
+                </div>
+            </div>
+        </td>
+        <td class="text-start">
+            <div class="row">
+                <div class="col-sm-6">
+                    <input type="text" class="product-Gstper form-control" id="txtgst" oninput="preventEmptyValue(this)" value="@item.Gst" />
+                </div>
+                <div class="col-sm-6">
+                    @if (item.GstAmount != null)
+                    {
+                        <input type="number" class="product-Gstamount form-control bg-light" id="txtgstAmount" value="@item.GstAmount" readonly />
+                    }
+                    else
+                    {
+                        <input type="number" class="product-Gstamount form-control bg-light" id="txtgstAmount" value="0" readonly />
+                    }
+                </div>
+            </div>
+        </td>
+        <td class="text-start">
+            <div>
+                <input type="text" class="product-producttotalamount form-control bg-light" id="txtproducttotalamount" readonly value="@item.ProductTotal" />
+            </div>
+        </td>
+        <td class="product-removal">
+            <a class="btn text-danger remove-btn" onclick="removeItem(this)"><i class="fas fa-trash"></i></a>
+        </td>
+    </tr>
+}

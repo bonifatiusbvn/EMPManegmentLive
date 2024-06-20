@@ -94,6 +94,7 @@ public partial class BonifatiusEmployeesContext : DbContext
     public virtual DbSet<TblVendorType> TblVendorTypes { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<TblAttendance>(entity =>
@@ -783,7 +784,6 @@ public partial class BonifatiusEmployeesContext : DbContext
 
             entity.ToTable("tblUserFormPermissions");
 
-            entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
 

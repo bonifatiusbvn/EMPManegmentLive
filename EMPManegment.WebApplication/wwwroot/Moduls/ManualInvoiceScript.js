@@ -10,67 +10,6 @@
     function showErrorMessage(selector, message) {
         $(selector).text(message).show();
     }
-
-    let rowCount = 0;
-    $('#AddVendorModelButton').on('click', function () {
-        rowCount++;
-        const newRow = `
-            <tr id="templateRow_${rowCount}" class="product" data-product-id="@item.ItemId">
-                <td scope="row" class="product-id" id="rowno" name="rowno">${rowCount}</td>
-                <td class="text-start">
-                    <input id="textProductName" class="product-quantity form-control"  name="textProductName"/>
-                </td>
-                <td class="text-start">
-                    <input type="text" class="form-control" id="txtHSNcode" style="width: 75px;" />
-                </td>
-                <td class="text-start">
-                    <div class="">
-                         <input type="text" class="product-quantity form-control" id="txtproductquantity" value="1" oninput="preventEmptyValue(this)" style="width:80px;">
-                    </div>
-                </td>
-                <td class="text-start">
-                    <div class="">
-                   <select class="form-control" id="txtPOProductType_${rowCount}" style="width: 151px;">
-                    </select>
-                    </div>
-                </td>
-                <td class="text-start">
-                    <input type="text" class="form-control" id="txtproductamount" name="txtproductamount" value="0" oninput="preventEmptyValue(this)"/>
-                </td>
-                <td class="text-start">
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <input type="text" class="form-control" id="txtdiscountamount" value="0" oninput="preventEmptyValue(this)"/>
-                        </div>
-                        <div class="col-sm-6">
-                            <input type="text" class="form-control" id="txtdiscountpercentage" value="0" oninput="preventEmptyValue(this)"/>
-                        </div>
-                    </div>
-                </td>
-                <td class="text-start">
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <input type="text" class="product-Gstper form-control" id="txtgst" value="0" oninput="preventEmptyValue(this)"/>
-                        </div>
-                        <div class="col-sm-6">
-                            <input type="number" class="product-Gstamount form-control bg-light" id="txtgstAmount" value="0" readonly/>
-                        </div>
-                    </div>
-                </td>
-                <td class="text-start">
-                    <div>
-                        <input type="text" class="product-producttotalamount form-control bg-light" id="txtproducttotalamount" readonly/>
-                    </div>
-                </td>
-                <td class="product-removal">
-                    <a class="btn text-danger remove-btn" onclick="removeItem(this)"><i class="fas fa-trash"></i></a>
-                </td>
-            </tr>`;
-        $('#addnewproductlink').append(newRow);
-        updateRowNumbers();
-        ProductTypeDropdown(rowCount);
-    });
-
     $(document).on('input', '#textProductName', function () {
         var productRow = $(this).closest(".product");
     }).on('keydown', '#textProductName', function (event) {
@@ -87,7 +26,7 @@
         handleFocus(event, productFocus);
     });
 
-    $(document).on('input', '#txtproductquantity', function () {    
+    $(document).on('input', '#txtproductquantity', function () {
         var productRow = $(this).closest(".product");
         updateProductTotalAmount(productRow);
         updateTotals();
@@ -176,7 +115,7 @@
             productRow.find("#txtdiscountpercentage").val(0);
         }
 
-        productRow.find("#txtproductamount").val(productAmount.toFixed(2));
+        productRow.find("#productamount").val(productAmount.toFixed(2));
         updateProductTotalAmount(productRow);
         updateTotals();
 
@@ -199,9 +138,13 @@
 });
 
 function updateRowNumbers() {
-    $(".product-id").each(function (index) {
-        $(this).text(index + 1);
+    $('#addnewproductlink tr').each(function (index) {
+        $(this).find('.product-id').text(index + 1);
+        $(this).find('select').attr('id', 'txtPOProductType_' + (index + 1));
     });
+
+    let rowCount = $('#addnewproductlink tr').length;
+    ProductTypeDropdown(rowCount);
 }
 
 function preventEmptyValue(input) {
@@ -211,7 +154,6 @@ function preventEmptyValue(input) {
 }
 
 function updateProductTotalAmount(that) {
-
     var row = $(that);
     var productPrice = parseFloat(row.find("#txtproductamount").val());
     var quantity = parseFloat(row.find("#txtproductquantity").val());
@@ -223,10 +165,17 @@ function updateProductTotalAmount(that) {
     var gstAmount = (totalAmount * gst / 100);
     var productTotalAmount = totalAmount + gstAmount;
 
+    if (!isNaN(totalAmount)) {
+        row.find("#txtproducttotalamount").val(productTotalAmount.toFixed(2));
+    }
+    else {
+        row.find("#txtproducttotalamount").val(0);
+    }
+
     if (!isNaN(gstAmount)) {
         row.find("#txtgstAmount").val(gstAmount.toFixed(2));
     }
-    row.find("#txtproducttotalamount").val(productTotalAmount.toFixed(2));
+    updateTotals();
 }
 
 function updateDiscount(that) {
@@ -298,11 +247,9 @@ function updateTotals() {
     var totalAmount = 0;
     var TotalItemQuantity = 0;
     var TotalDiscount = 0;
-
     var roundoffvalue = $('#cart-roundOff').val();
 
     $(".product").each(function () {
-
         var row = $(this);
         var subtotal = parseFloat(row.find("#txtproductamount").val());
         var gst = parseFloat(row.find("#txtgstAmount").val());
@@ -311,9 +258,9 @@ function updateTotals() {
 
         totalSubtotal += subtotal * totalquantity;
         totalGst += gst;
-        totalAmount = totalSubtotal + totalGst;
         TotalItemQuantity += totalquantity;
         TotalDiscount += discountprice;
+        totalAmount = (totalSubtotal + totalGst) - TotalDiscount;
     });
 
     $("#cart-subtotal").val(totalSubtotal.toFixed(2));
@@ -335,6 +282,7 @@ function updateTotals() {
 }
 
 function removeItem(element) {
+    debugger
     $(element).closest('tr').remove();
     updateRowNumbers();
     updateTotals();
@@ -359,13 +307,26 @@ function GetPaymentMethodList() {
 }
 
 function ProductTypeDropdown(rowId) {
-    $('#txtPOProductType_' + rowId).append('<option value="" selected>--Select Type--</option>');
+    if ($('#txtPOProductType_' + rowId + ' option').length > 1) {
+        return;
+    }
+
     $.ajax({
         url: '/ProductMaster/GetProduct',
         success: function (result) {
+            var $dropdown = $('#txtPOProductType_' + rowId);
+            var selectedValue = $dropdown.val(); 
+
+            $dropdown.empty();
+            $dropdown.append('<option value="">--Select Type--</option>');
+
             $.each(result, function (i, data) {
-                $('#txtPOProductType_' + rowId).append('<option value="' + data.id + '">' + data.productName + '</option>');
-            });
+                $dropdown.append('<option value="' + data.id + '">' + data.productName + '</option>');
+            });    
+            $dropdown.val(selectedValue);
+            if ($dropdown.val() === '') {
+                $dropdown.val($("#txtproducttype_" + rowId).val());
+            }
         }
     });
 }
@@ -400,13 +361,9 @@ $(document).ready(function () {
     });
 });
 
-
-
-
 function InsertManualInvoiceDetails() {
     if ($("#CreateManualInvoiceForm").valid()) {
         if ($('#addnewproductlink tr').length >= 1) {
-
             var ProductDetails = [];
             var isValidProduct = true;
             $(".product").each(function () {
@@ -417,10 +374,13 @@ function InsertManualInvoiceDetails() {
                     Product: orderRow.find("#textProductName").val(),
                     Quantity: orderRow.find("#txtproductquantity").val(),
                     Price: orderRow.find("#txtproductamount").val(),
+                    Hsn: orderRow.find("#txtHSNcode").val(),
                     Gst: orderRow.find("#txtgst").val(),
+                    GstAmount: orderRow.find("#txtgstAmount").val(),
                     Discount: orderRow.find("#txtdiscountamount").val(),
+                    DiscountPercent: orderRow.find("#txtdiscountpercentage").val(),
                     ProductTotal: orderRow.find("#txtproducttotalamount").val(),
-                    ProductType: $('[id^="txtPOProductType_"]').val(),
+                    ProductType: orderRow.find('[id^="txtPOProductType_"]').val(),
                 };
                 orderRow.find("#textProductName").on('input', function () {
                     $(this).css("border", "1px solid #ced4da");
@@ -468,11 +428,12 @@ function InsertManualInvoiceDetails() {
                     DispatchThrough: $("#textDispatchThrough").val(),
                     BuyesOrderNo: $("#textBuysOrderNo").val(),
                     BuyesOrderDate: $("#textBuysOrderDate").val(),
-                    InvoiceDate: $("#textInvoiceDate").val(),
+                    InvoiceDate: $("#textInvoiceDate1").val(),
                     OrderStatus: $("#UnitTypeId").val(),
                     PaymentMethod: $("#txtpaymentmethod").val(),
                     PaymentStatus: $("#txtpaymenttype").val(),
                     CreatedBy: $("#textCreatedById").val(),
+                    RoundOff: $("#cart-roundOff").val(),
                     ShippingAddress: $('#hideShippingAddress').is(':checked') ? $('#textCompanyBillingAddress').val() : $('#textShippingAddress').val(),
                     ManualInvoiceDetails: ProductDetails,
                 };
@@ -506,8 +467,7 @@ function InsertManualInvoiceDetails() {
                     }
                 });
             }
-            else
-            {
+            else {
                 toastr.warning("Kindly fill all data fields");
             }
         } else {
@@ -563,7 +523,7 @@ $(document).ready(function () {
                     buttons += '<ul class="list-inline mb-0">';
 
                     if (canEdit) {
-                        buttons += '<a onclick="EditInvoiceDetails(\'' + full.invoiceNo + '\')" class="btn text-primary list-inline-item">' +
+                        buttons += '<a href="/ManualInvoice/CreateInvoiceManual?InvoiceId=' + full.id + '" class="btn text-primary list-inline-item">' +
                             '<i class="fa-regular fa-pen-to-square"></i></a>';
                     }
 
@@ -632,7 +592,7 @@ function deleteManualInvoice(InvoiceId) {
                     }
                 },
                 error: function () {
-                    toastr.error("Can't delete Invoice!"); 
+                    toastr.error("Can't delete Invoice!");
                 }
             })
         } else if (result.dismiss === Swal.DismissReason.cancel) {
@@ -644,4 +604,156 @@ function deleteManualInvoice(InvoiceId) {
             );
         }
     });
+}
+
+function UpdateManualInvoiceDetails() {
+    if ($("#CreateManualInvoiceForm").valid()) {
+        if ($('#addnewproductlink tr').length >= 1) {
+
+            var ProductDetails = [];
+            var isValidProduct = true;
+            $(".product").each(function () {
+                debugger
+                var orderRow = $(this);
+                var objData = {
+                    RefId: orderRow.find("#textRefId").val(),
+                    row: orderRow.find("#rowno").text(),
+                    Product: orderRow.find("#textProductName").val(),
+                    Quantity: orderRow.find("#txtproductquantity").val(),
+                    Price: orderRow.find("#txtproductamount").val(),
+                    Hsn: orderRow.find("#txtHSNcode").val(),
+                    Gst: orderRow.find("#txtgst").val(),
+                    GstAmount: orderRow.find("#txtgstAmount").val(),
+                    Discount: orderRow.find("#txtdiscountamount").val(),
+                    DiscountPercent: orderRow.find("#txtdiscountpercentage").val(),
+                    ProductTotal: orderRow.find("#txtproducttotalamount").val(),
+                    ProductType: orderRow.find('[id^="txtPOProductType_"]').val(),
+                };
+                orderRow.find("#textProductName").on('input', function () {
+                    $(this).css("border", "1px solid #ced4da");
+                });
+                orderRow.find("#txtproductamount").on('input', function () {
+                    $(this).css("border", "1px solid #ced4da");
+                });
+                orderRow.find('[id^="txtPOProductType_"]').on('input', function () {
+                    $(this).css("border", "1px solid #ced4da");
+                });
+
+                if (!objData.Product.trim() || objData.Price == 0 || objData.ProductType == 0) {
+                    isValidProduct = false;
+                    if (!objData.Product.trim()) {
+                        orderRow.find("#textProductName").css("border", "2px solid red");
+                    }
+                    if (objData.Price == 0) {
+                        orderRow.find("#txtproductamount").css("border", "2px solid red");
+                    }
+                    if (objData.ProductType == 0) {
+                        orderRow.find('[id^="txtPOProductType_"]').css("border", "2px solid red");
+                    }
+                } else {
+                    ProductDetails.push(objData);
+                }
+            });
+
+            if (isValidProduct) {
+
+                var formatedDate = $("#textCreatedOn").val(),
+                    Createdon = moment.utc(formatedDate, "DD-MM-YYYY HH:mm:ss").local().toDate();
+
+                var Invoicedetails = {
+                    Id: $("#textMIid").val(),
+                    ProjectId: $("#textProjectId").val(),
+                    InvoiceNo: $("#textInvoiceNo").val(),
+                    VendorName: $("#textVendorName").val(),
+                    VendorPhoneNo: $("#textVendorMobile").val(),
+                    VendorGstNo: $("#textVendorGSTNumber").val(),
+                    VendorAddress: $("#textVendorAddress").val(),
+                    CompanyName: $("#textCompanyName").val(),
+                    CompanyAddress: $("#textCompanyBillingAddress").val(),
+                    CompanyGstNo: $("#textCompanyGstNo").val(),
+                    TotalGst: $("#totalgst").val(),
+                    Cgst: $("#textCGst").val(),
+                    Sgst: $("#textSGst").val(),
+                    Igst: $("#textIGst").val(),
+                    SubTotal: $("#cart-subtotal").val(),
+                    TotalAmount: $("#cart-total").val(),
+                    DispatchThrough: $("#textDispatchThrough").val(),
+                    BuyesOrderNo: $("#textBuysOrderNo").val(),
+                    BuyesOrderDate: $("#textBuysOrderDate1").val(),
+                    InvoiceDate: $("#textInvoiceDate1").val(),
+                    OrderStatus: $("#UnitTypeId").val(),
+                    PaymentMethod: $("#txtpaymentmethod").val(),
+                    PaymentStatus: $("#txtpaymenttype").val(),
+                    UpdatedBy: $("#textCreatedById").val(),
+                    CreatedBy: $("#textCreatedBy").val(),
+                    RoundOff: $("#cart-roundOff").val(),
+                    CreatedOn: Createdon,
+                    ShippingAddress: $('#hideShippingAddress').is(':checked') ? $('#textCompanyBillingAddress').val() : $('#textShippingAddress').val(),
+                    ManualInvoiceDetails: ProductDetails,
+                };
+
+                var form_data = new FormData();
+                form_data.append("UpdateManualInvoice", JSON.stringify(Invoicedetails));
+
+                $.ajax({
+                    url: '/ManualInvoice/UpdateManualInvoice',
+                    type: 'POST',
+                    data: form_data,
+                    dataType: 'json',
+                    contentType: false,
+                    processData: false,
+                    success: function (Result) {
+                        debugger
+                        if (Result.code == 200) {
+                            Swal.fire({
+                                title: Result.message,
+                                icon: 'success',
+                                confirmButtonColor: '#3085d6',
+                                confirmButtonText: 'OK'
+                            }).then(function () {
+                                window.location = '/ManualInvoice/ManualInvoiceDetails?InvoiceId=' + Invoicedetails.Id;
+                            });
+                        } else {
+                            toastr.error(Result.message);
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        toastr.error("An error occurred while processing your request.");
+                    }
+                });
+            }
+            else {
+                toastr.warning("Kindly fill all data fields");
+            }
+        } else {
+            toastr.warning("Please select a product!");
+        }
+    } else {
+        toastr.warning("Kindly fill all data fields");
+    }
+}
+
+function AddProductButton() {
+    $.ajax({
+        url: '/ManualInvoice/DisplayProducts',
+        type: 'Post',
+        datatype: 'json',
+        processData: false,
+        contentType: false,
+        complete: function (Result) {
+            if (Result.statusText === "success") {
+                AddNewRow(Result.responseText);
+            }
+            else {
+                toastr.error("Error in display product");
+            }
+        }
+    });
+}
+
+function AddNewRow(Result) {
+    let rowCount = $('#addnewproductlink tr').length;
+    rowCount++;
+    $('#addnewproductlink').append(Result);
+    updateRowNumbers();
 }
