@@ -6,6 +6,8 @@ using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.ProductMaster;
 using EMPManegment.EntityModels.ViewModels.UserModels;
 using EMPManegment.Inretface.Interface.FormPermissionMaster;
+using EMPManegment.Inretface.Interface.UserList;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.SqlServer.Server;
 using System;
@@ -243,34 +245,56 @@ namespace EMPManegment.Repository.FormPermissionMasterRepository
             return response;
         }
 
-        public async Task<List<RolewiseFormPermissionModel>> GetUserFormListById(Guid RoleId)
+        
+        [HttpPost]
+        public async Task<ApiResponseModel> CreateUserForm(Guid UserId)
         {
-            var UserData = new List<RolewiseFormPermissionModel>();
-            var data = await(from e in Context.TblRolewiseFormPermissions.Where(x => x.RoleId == RoleId)
-                             join f in Context.TblForms on e.FormId equals f.FormId
-                             join r in Context.TblRoleMasters on e.RoleId equals r.RoleId
-                             orderby f.OrderId ascending
-                             select new RolewiseFormPermissionModel
-                             {
-                                 Id = e.Id,
-                                 Role = r.Role,
-                                 RoleId = e.RoleId,
-                                 FormId = e.FormId,
-                                 FormName = f.FormName,
-                                 IsViewAllow = e.IsViewAllow,
-                                 IsEditAllow = e.IsEditAllow,
-                                 IsDeleteAllow = e.IsDeleteAllow,
-                                 IsAddAllow = e.IsAddAllow,
-                                 CreatedBy = e.CreatedBy,
-                                 CreatedOn = e.CreatedOn,
-                             }).ToListAsync();
-
-
-            if (data.Count != 0)
+            ApiResponseModel response = new ApiResponseModel();
+            try
             {
-                UserData.AddRange(data);
+
+                bool isRoleAlreadyExists = Context.TblUserFormPermissions.Any(x => x.UserId == UserId);
+                if (isRoleAlreadyExists == true)
+                {
+                        response.message = "User already exists";
+                        response.code = 404;
+                }
+
+                else
+                {
+
+                    var forms = Context.TblForms.ToList();
+                    var userFormPermissions = new List<TblUserFormPermission>();
+
+                    foreach (var form in forms)
+                    {
+                        var permissions = new TblUserFormPermission
+                        {
+                            UserId = UserId,
+                            FormId = form.FormId,
+                            IsAddAllow = true,
+                            IsViewAllow = true,
+                            IsEditAllow = true,
+                            IsDeleteAllow = true,
+                            CreatedOn = DateTime.Now,
+                            CreatedBy = UserId,
+                        };
+                        userFormPermissions.Add(permissions);
+                    }
+                    Context.TblUserFormPermissions.AddRange(userFormPermissions);
+                    Context.SaveChanges();
+
+                    response.code = 200;
+                    response.message = "User add successfully!";
+                    
+                }
             }
-            return UserData;
+            catch (Exception ex)
+            {
+                response.code = 400;
+                response.message = "Error in creating user";
+            }
+            return response;
         }
     }
 }

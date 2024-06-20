@@ -126,7 +126,7 @@ namespace EMPManegment.Web.Controllers
                 {
                     AddUser.Image = null;
                 }
-                              
+
                 ApiResponseModel postuser = await APIServices.PostAsync(AddUser, "User/UserSingUp");
                 if (postuser.code == 200)
                 {
@@ -1027,8 +1027,8 @@ namespace EMPManegment.Web.Controllers
         {
             try
             {
-                var userId=@_userSession.UserId;
-                ApiResponseModel postuser = await APIServices.PostAsync("", "FormPermissionMaster/CreateRolewisePermissionForm?FormId="+ FormId+ "&userId=" + userId);
+                var userId = @_userSession.UserId;
+                ApiResponseModel postuser = await APIServices.PostAsync("", "FormPermissionMaster/CreateRolewisePermissionForm?FormId=" + FormId + "&userId=" + userId);
                 if (postuser.code == 200)
                 {
                     return Ok(new { postuser.message, postuser.code });
@@ -1050,21 +1050,41 @@ namespace EMPManegment.Web.Controllers
             return View();
         }
 
+        //[HttpPost]
+        //public async Task<IActionResult> GetUserFormListById(Guid RoleId)
+        //{
+        //    try
+        //    {
+        //        List<RolewiseFormPermissionModel> RolewiseFormList = new List<RolewiseFormPermissionModel>();
+        //        ApiResponseModel response = await APIServices.PostAsync("", "FormPermissionMaster/GetUserFormListById?RoleId=" + RoleId);
+        //        if (response.code == 200)
+        //        {
+        //            RolewiseFormList = JsonConvert.DeserializeObject<List<RolewiseFormPermissionModel>>(response.data.ToString());
+        //            return PartialView("~/Views/UserProfile/_UserFormPermissionPartial.cshtml", RolewiseFormList);
+        //        }
+        //        else
+        //        {
+        //            return Ok(new { response.code });
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw ex;
+        //    }
+        [FormPermissionAttribute("User Form Permission-Add")]
         [HttpPost]
-        public async Task<IActionResult> GetUserFormListById(Guid RoleId)
+        public async Task<IActionResult> CreateUserForm(Guid UserId)
         {
             try
             {
-                List<RolewiseFormPermissionModel> RolewiseFormList = new List<RolewiseFormPermissionModel>();
-                ApiResponseModel response = await APIServices.PostAsync("", "FormPermissionMaster/GetUserFormListById?RoleId=" + RoleId);
-                if (response.code == 200)
+                ApiResponseModel postuser = await APIServices.PostAsync("", "FormPermissionMaster/CreateUserForm?UserId=" + UserId);
+                if (postuser.code == 200)
                 {
-                    RolewiseFormList = JsonConvert.DeserializeObject<List<RolewiseFormPermissionModel>>(response.data.ToString());
-                    return PartialView("~/Views/UserProfile/_UserFormPermissionPartial.cshtml", RolewiseFormList);
+                    return Ok(new { postuser.message, postuser.code });
                 }
                 else
                 {
-                    return Ok(new { response.code });
+                    return Ok(new { postuser.message, postuser.code });
                 }
             }
             catch (Exception ex)
@@ -1072,7 +1092,5 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
-
     }
 }
-

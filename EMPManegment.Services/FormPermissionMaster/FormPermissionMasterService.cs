@@ -45,9 +45,14 @@ namespace EMPManegment.Services.FormPermissionMaster
             return await FormPermissionMaster.CreateRolewisePermissionForm(FormId,userId);
         }
 
-        public async Task<List<RolewiseFormPermissionModel>> GetUserFormListById(Guid RoleId)
+        public async Task<ApiResponseModel> CreateUserForm(Guid UserId)
         {
-            return await FormPermissionMaster.GetUserFormListById(RoleId);
+           return await FormPermissionMaster.CreateUserForm(UserId);
         }
+
+        //public async Task<List<RolewiseFormPermissionModel>> GetUserFormListById(Guid RoleId)
+        //{
+        //    return await FormPermissionMaster.GetUserFormListById(RoleId);
+        //}
     }
 }

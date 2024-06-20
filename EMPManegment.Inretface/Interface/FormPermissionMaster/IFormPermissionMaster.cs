@@ -20,7 +20,8 @@ namespace EMPManegment.Inretface.Interface.FormPermissionMaster
         Task<IEnumerable<FormMasterModel>> FormList();
 
         Task<ApiResponseModel> CreateRolewisePermissionForm(int FormId, Guid userId);
-        Task<List<RolewiseFormPermissionModel>> GetUserFormListById(Guid RoleId);
+        Task<ApiResponseModel> CreateUserForm(Guid UserId);
+        //Task<List<RolewiseFormPermissionModel>> GetUserFormListById(Guid RoleId);
 
 
     }

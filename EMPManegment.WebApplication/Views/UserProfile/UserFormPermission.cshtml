@@ -22,10 +22,10 @@
     </div>
 </div>
 <!-- end page title -->
-<div id="createRoleModal" class="modal fade flip" tabindex="-1" role="dialog" aria-labelledby="createRoleModalLabel" aria-hidden="true">
+<div id="createUserModal" class="modal fade flip" tabindex="-1" role="dialog" aria-labelledby="createRoleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <form id="addUserRole">
+            <form id="addUserForm">
                 <div class="modal-header bg-primary-subtle p-3">
                     <h5 class="modal-title" id="createRoleModalLabel">Create User</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -33,20 +33,18 @@
                 <div class="modal-body">
                     <div class="hstack gap-3 align-items-start">
                         <div class="flex-grow-1">
-                            <label for="textRoleName" class="form-label">User</label>
-                            <input type="text" value="@_userSession.UserId" id="txtUserId" hidden />
-                            <button id="userdropdownButton" class="from-control select-from" type="button" aria-haspopup="true" aria-expanded="false" style="width: 220px;">
-                                Select-User
-                            </button>
-                            <div id="usercustomDropdown" class="dropdown-menu p-2" style="display: none;">
-                            </div>
-                            <input type="text" class="form-control" id="textRoleId" name="textRoleId" hidden />
+                            <label for="textUserName" class="form-label">User</label>
+                            <input type="text" value="@_userSession.UserId" id="txtuserId" hidden />
+                            <select class="form-control from-select" id="drpAttusername" name="drpAttddlusername">
+                                <option selected disabled value="">---Select Username---</option>
+                            </select>
+                            <input type="text" class="form-control" id="textUserIdfrm" name="textUserId " hidden />
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-success" onclick="validateAndCreateRole()">Create</button>
+                    <button type="button" class="btn btn-success" onclick="validateAndCreateUser()">Create</button>
                 </div>
             </form>
         </div>
@@ -74,7 +72,7 @@
                                 @if (UserSession.FormPermisionData.Any(a => a.FormName == "User Form Permission" && (a.Add == true)))
                                 {
 
-                                    <button type="button" class="btn btn-block btn-info btn-md" data-bs-toggle="modal" data-bs-target="#createRoleModal" onclick="clearTextRoleName()" style="margin-top:-65px;"><i class="ri-add-line align-bottom me-1"></i>New UserPermission</button>
+                                    <button type="button" class="btn btn-block btn-info btn-md" data-bs-toggle="modal" data-bs-target="#createRoleModal" onclick="clearTextUserName()" style="margin-top:-65px;"><i class="ri-add-line align-bottom me-1"></i>New UserPermission</button>
                                 }
                             </form>
 

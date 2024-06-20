@@ -1,5 +1,4 @@
-﻿
-
+﻿GetUsernameForm();
 $(document).ready(function () {
     GetFormList();
     $('#dropdownButton').click(function () {
@@ -11,13 +10,13 @@ $(document).ready(function () {
             GetUserRoleList();
         }
     });
-    $('#userdropdownButton').click(function () {
-        var dropdown = $('#usercustomDropdown');
+    $('#frmuserdropdownButton').click(function () {
+        var dropdown = $('#frmusercustomDropdown');
         if (dropdown.is(':visible')) {
             dropdown.hide();
         } else {
             dropdown.show();
-            GetUsernameList();
+            GetUsernameForm();
         }
     });
 
@@ -31,9 +30,8 @@ $(document).ready(function () {
     $(document).on('click', '.dropdown-item-custom', function () {
         var selectedText = $(this).text();
         var selectedValue = $(this).data('value');
-        $('#userdropdownButton').text(selectedText).attr('data-selected-value', selectedValue);
-        $('#usercustomDropdown').hide();
-       /* EditUserFormDetails(selectedValue);*/
+        $('#frmuserdropdownButton').text(selectedText).attr('data-selected-value', selectedValue);
+        $('#frmusercustomDropdown').hide();
     });
     $(document).click(function (event) {
         if (!$(event.target).closest('#dropdownButton').length && !$(event.target).closest('#customDropdown').length) {
@@ -41,30 +39,18 @@ $(document).ready(function () {
         }
     });
     $(document).click(function (event) {
-        if (!$(event.target).closest('#userdropdownButton').length && !$(event.target).closest('#usercustomDropdown').length) {
-            $('#usercustomDropdown').hide();
+        if (!$(event.target).closest('#frmuserdropdownButton').length && !$(event.target).closest('#frmusercustomDropdown').length) {
+            $('#frmusercustomDropdown').hide();
         }
     });
-    function GetUserRoleList() {debugger
+    function GetUserRoleList() {
         $.ajax({
             url: '/UserProfile/RolewisePermissionListAction',
-            success: function (result) {debugger
+            success: function (result) {
                 var dropdown = $('#customDropdown');
                 dropdown.empty();
                 $.each(result, function (i, data) {
                     dropdown.append('<div class="dropdown-item-custom" data-value="' + data.roleId + '">' + data.role + '</div>');
-                });
-            }
-        });
-    }
-    function GetUsernameList() {
-        $.ajax({
-            url: '/Task/GetUserName',
-            success: function (result) {
-                var dropdown = $('#usercustomDropdown');
-                dropdown.empty();
-                $.each(result, function (i, data) {
-                    dropdown.append('<div class="dropdown-item-custom" data-value="' + data.id + '">' + data.firstName + ' ' + data.lastName +'</div>');
                 });
             }
         });
@@ -108,8 +94,23 @@ $(document).ready(function () {
     //}
 });
 
-
-
+function GetUsernameForm() {
+    debugger
+    $.ajax({
+        url: '/Task/GetUserName',
+        success: function (result) {
+            debugger
+            $.each(result, function (i, data) {
+                $('#drpAttusername').append('<option value=' + data.id + '>' + data.firstName + ' ' + data.lastName + ' (' + data.userName + ')</option>');
+            });
+        }
+    });
+}
+$('#drpAttusername').change(function () {debugger
+    var Text = $("#drpAttusername Option:Selected").text();
+    var StateId = $(this).val();
+    $("#textUserIdfrm").val(Text);
+});
 
 function UpdateRolewiseFormPermission() {
 
@@ -217,10 +218,19 @@ function clearTextRoleName() {
     document.getElementById("textRoleName").value = "";
     $('#createRoleModal').modal('show');
 }
-
+function clearTextUserName() {
+    ResetUserForm();
+    document.getElementById("textUserName");
+    $('#createUserModal').modal('show');
+}
 function ResetUserRoleForm() {
     if (UserRoleForm) {
         UserRoleForm.resetForm();
+    }
+}
+function ResetUserForm() {
+    if (UserForm) {
+        UserForm.resetForm();
     }
 }
 
@@ -266,4 +276,52 @@ function SaveFormDetails() {
     });
 
 }
+function CreateUserForm() {debugger
+    if ($("#addUserForm").valid()) {
+        //var formData = new FormData();
+        //formData.append("User", $("#textUserName").val());
+        var UserId = $("#txtuserId").val();
 
+        $.ajax({
+            url: '/UserProfile/CreateUserForm?UserId='+UserId,
+            type: 'Post',
+            dataType: 'json',
+            contentType: false,
+            processData: false,
+            success: function (Result) {debugger
+                if (Result.code == 200) {
+                    Swal.fire({
+                        title: Result.message,
+                        icon: 'success',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK'
+                    }).then(function () {
+                        window.location = '/UserProFile/UserFormPermission';
+                    });
+                }
+                else {
+                    toastr.error(Result.message);
+                }
+            }
+        });
+    }
+    else {
+        toastr.warning("Kindly fill user");
+    }
+}
+var UserForm;
+function validateAndCreateUser() {
+    UserForm = $("#addUserForm").validate({
+        rules: {
+            textUserName: "required",
+        },
+        messages: {
+            textUserName: "Please enter role",
+        }
+    })
+    var isValid = true;
+
+    if (isValid) {
+        CreateUserForm();
+    }
+}
