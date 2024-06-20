@@ -93,8 +93,8 @@ public partial class BonifatiusEmployeesContext : DbContext
 
     public virtual DbSet<TblVendorType> TblVendorTypes { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
-
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    { }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<TblAttendance>(entity =>
@@ -790,7 +790,12 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.HasOne(d => d.Form).WithMany(p => p.TblUserFormPermissions)
                 .HasForeignKey(d => d.FormId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_tblUserFormPermissions_tblUsers1");
+                .HasConstraintName("FK_tblUserFormPermissions_tblForm");
+
+            entity.HasOne(d => d.User).WithMany(p => p.TblUserFormPermissions)
+                .HasForeignKey(d => d.UserId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_tblUserFormPermissions_tblUsers");
         });
 
         modelBuilder.Entity<TblVendorMaster>(entity =>
