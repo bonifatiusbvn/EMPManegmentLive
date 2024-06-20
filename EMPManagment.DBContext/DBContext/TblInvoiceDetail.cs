@@ -25,7 +25,9 @@ public partial class TblInvoiceDetail
 
     public decimal? DiscountAmount { get; set; }
 
-    public decimal Gst { get; set; }
+    public decimal GstPer { get; set; }
+
+    public decimal? GstAmount { get; set; }
 
     public decimal ProductTotal { get; set; }
 

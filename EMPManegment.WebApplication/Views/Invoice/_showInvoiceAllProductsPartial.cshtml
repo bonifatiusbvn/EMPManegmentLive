@@ -3,17 +3,24 @@
 @foreach (var item in Model)
 {
     <tr>
+        <td>1</td>
         <td>
-            <div class="avatar-md bg-light rounded p-1">
-                <img src="~/@item.ProductImage" alt="" class="img-fluid d-block">
+            <div class="d-flex align-items-center">
+                <div class="flex-shrink-0 me-3">
+                    <div class="avatar-sm bg-light rounded p-1">
+                        <img src="~/@item.ProductImage" alt="" class="img-fluid d-block">
+                    </div>
+                </div>
+                <div class="flex-grow-1">
+                    <h5 class="fs-14 mb-1">
+                        @item.ProductName
+                    </h5>
+                </div>
             </div>
         </td>
+        <td>@item.PerUnitPrice</td>
         <td>
-            <h5 class="fs-14">
-                @item.ProductName
-            </h5>
-            <p class="text-muted mb-0">@item.PerUnitPrice</p>
+            <a id="addItemButton" class="btn btn-warning" onclick="SearchInvoiceProductDetailsById('@item.Id')"><i class="ri-add-line align-bottom me-1"></i>Adds</a>
         </td>
-        <td class="text-end"><a id="addItemButton" class="btn btn-warning" onclick="SearchInvoiceProductDetailsById('@item.Id')"><i class="ri-add-line align-bottom me-1"></i>Add</a></td>
     </tr>
 }

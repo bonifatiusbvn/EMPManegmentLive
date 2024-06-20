@@ -93,7 +93,8 @@ public partial class BonifatiusEmployeesContext : DbContext
 
     public virtual DbSet<TblVendorType> TblVendorTypes { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    { }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<TblAttendance>(entity =>
@@ -310,7 +311,8 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
             entity.Property(e => e.DiscountAmount).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.DiscountPer).HasColumnType("numeric(18, 2)");
-            entity.Property(e => e.Gst).HasColumnType("numeric(18, 2)");
+            entity.Property(e => e.GstAmount).HasColumnType("numeric(18, 2)");
+            entity.Property(e => e.GstPer).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.Hsn).HasColumnName("HSN");
             entity.Property(e => e.Price).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.Product).HasMaxLength(100);
@@ -351,6 +353,7 @@ public partial class BonifatiusEmployeesContext : DbContext
                 .HasColumnName("IGST");
             entity.Property(e => e.InvoiceDate).HasColumnType("date");
             entity.Property(e => e.InvoiceNo).HasMaxLength(100);
+            entity.Property(e => e.RoundOff).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.Sgst)
                 .HasColumnType("numeric(18, 2)")
                 .HasColumnName("SGST");
@@ -520,13 +523,17 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.ToTable("tblPurchaseOrderDetails");
 
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
-            entity.Property(e => e.Discount).HasColumnType("numeric(18, 2)");
-            entity.Property(e => e.Gst)
+            entity.Property(e => e.DiscountAmt).HasColumnType("numeric(18, 2)");
+            entity.Property(e => e.DiscountPer).HasColumnType("numeric(18, 2)");
+            entity.Property(e => e.Gstamount)
                 .HasColumnType("numeric(18, 2)")
-                .HasColumnName("GST");
+                .HasColumnName("GSTAmount");
+            entity.Property(e => e.Gstper)
+                .HasColumnType("numeric(18, 2)")
+                .HasColumnName("GSTPer");
+            entity.Property(e => e.Hsn).HasColumnName("HSN");
             entity.Property(e => e.PorefId).HasColumnName("PORefId");
             entity.Property(e => e.Price).HasColumnType("numeric(18, 2)");
-            entity.Property(e => e.Product).HasMaxLength(100);
             entity.Property(e => e.ProductTotal).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.Quantity).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
@@ -536,7 +543,7 @@ public partial class BonifatiusEmployeesContext : DbContext
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_tblPurchaseOrderDetails_tblPurchaseOrderMaster1");
 
-            entity.HasOne(d => d.ProductNavigation).WithMany(p => p.TblPurchaseOrderDetails)
+            entity.HasOne(d => d.Product).WithMany(p => p.TblPurchaseOrderDetails)
                 .HasForeignKey(d => d.ProductId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_tblPurchaseOrderDetails_tblPurchaseOrderMaster");
@@ -554,22 +561,15 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.ToTable("tblPurchaseOrderMaster");
 
             entity.Property(e => e.Id).ValueGeneratedNever();
-            entity.Property(e => e.AmountPerUnit).HasColumnType("decimal(18, 0)");
-            entity.Property(e => e.CompanyName).HasMaxLength(50);
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
             entity.Property(e => e.DeliveryDate).HasColumnType("date");
             entity.Property(e => e.DeliveryStatus).HasMaxLength(50);
-            entity.Property(e => e.GstPerUnit).HasColumnType("decimal(18, 0)");
             entity.Property(e => e.OrderDate).HasColumnType("date");
             entity.Property(e => e.OrderId).HasMaxLength(50);
             entity.Property(e => e.OrderStatus).HasMaxLength(20);
-            entity.Property(e => e.ProductName).HasMaxLength(50);
-            entity.Property(e => e.ProductShortDescription).HasMaxLength(50);
-            entity.Property(e => e.Quantity).HasMaxLength(50);
             entity.Property(e => e.SubTotal).HasColumnType("decimal(18, 0)");
             entity.Property(e => e.TotalAmount).HasColumnType("decimal(18, 0)");
             entity.Property(e => e.TotalGst).HasColumnType("decimal(18, 0)");
-            entity.Property(e => e.Type).HasMaxLength(20);
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
 
             entity.HasOne(d => d.PaymentMethodNavigation).WithMany(p => p.TblPurchaseOrderMasters)
@@ -579,15 +579,6 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.HasOne(d => d.PaymentStatusNavigation).WithMany(p => p.TblPurchaseOrderMasters)
                 .HasForeignKey(d => d.PaymentStatus)
                 .HasConstraintName("FK_tblPurchaseOrderMaster_tblPaymentType");
-
-            entity.HasOne(d => d.Product).WithMany(p => p.TblPurchaseOrderMasters)
-                .HasForeignKey(d => d.ProductId)
-                .HasConstraintName("FK_OrderMaster_tblProductDetailsMaster");
-
-            entity.HasOne(d => d.ProductTypeNavigation).WithMany(p => p.TblPurchaseOrderMasters)
-                .HasForeignKey(d => d.ProductType)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_tblOrderMaster_tblProductTypeMaster");
         });
 
         modelBuilder.Entity<TblPurchaseRequest>(entity =>
@@ -793,7 +784,6 @@ public partial class BonifatiusEmployeesContext : DbContext
 
             entity.ToTable("tblUserFormPermissions");
 
-            entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
 
