@@ -161,6 +161,8 @@
                                                         <th>Quantity</th>
                                                         <th>Qty Type</th>
                                                         <th>Price</th>
+                                                        <th>Discount(₹)</th>
+                                                        <th>Discount(%)</th>
                                                         <th>GST (%)</th>
                                                         <th>GST Amt (₹)</th>
                                                         <th>Amount (₹)</th>
@@ -203,6 +205,8 @@
                                                         <th id="TotalProductQuantity"></th>
                                                         <th></th>
                                                         <th id="TotalProductPrice"></th>
+                                                        <th></th>
+                                                        <th id="TotalDiscountPrice"></th>
                                                         <th></th>
                                                         <th></th>
                                                         <th id="TotalProductGST"></th>
@@ -293,6 +297,28 @@
                                                                     <th>Total GST</th>
                                                                     <td>
                                                                         <input type="text" class="form-control bg-light border-0" id="totalgst" placeholder="₹0.00" value="@Model.TotalGst" readonly />
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th scope="row">Discount <small class="text-muted"></small></th>
+                                                                    <td>
+                                                                        <input type="text" class="form-control border-0" id="cart-discount" placeholder="₹0.00" value="@Model.TotalDiscount" readonly />
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th>
+                                                                        Roundoff
+                                                                    </th>
+                                                                    <td>
+                                                                        @if (Model.RoundOff != null)
+                                                                        {
+                                                                            <input type="text" class="form-control bg-light border-0" id="cart-roundOff" value="@Model.RoundOff" placeholder="₹0.00" min="-0.99" max="0.99" />
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <input type="text" class="form-control bg-light border-0" name="txtroundOff" id="cart-roundOff" placeholder="₹0.00" min="-0.99" max="0.99" />
+
+                                                                        }
                                                                     </td>
                                                                 </tr>
                                                                 <tr class="border-top border-top-dashed">

@@ -34,7 +34,31 @@
         </td>
         <td class="text-start">
             <input type="text" class="form-control" id="txtproductamount" value="@item.Price" oninput="preventPOEmptyValue(this)" />
-            <input type="hidden" class="form-control bg-light border-0" id="hiddenproductamount" value="@item.Price" />
+            <input type="hidden" class="form-control bg-light border-0" id="productamount" value="@item.Price" />
+        </td>
+        <td class="text-start">
+            <div class="">
+                @if (item.DiscountAmt != null)
+                {
+                    <input type="text" class="form-control" id="txtPOdiscountamount" value="@item.DiscountAmt" />
+                }
+                else
+                {
+                    <input type="text" class="form-control" id="txtPOdiscountamount" value="0" />
+                }
+            </div>
+        </td>
+        <td class="text-start">
+            <div class="">
+                @if (item.DiscountPer != null)
+                {
+                    <input type="text" class="form-control" id="txtPOdiscountpercentage" value="@item.DiscountPer" />
+                }
+                else
+                {
+                    <input type="text" class="form-control" id="txtPOdiscountpercentage" value="0" />
+                }
+            </div>
         </td>
         <td class="text-start">
             <input type="text" class="form-control" id="txtgstPercentage" max="99" value="@item.Gstper" maxlength="4" oninput="preventPOEmptyValue(this)" />

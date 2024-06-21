@@ -170,6 +170,8 @@ namespace EMPManegment.Repository.OrderRepository
                     ProjectId = InsertPurchaseOrder.ProjectId,
                     TotalGst = InsertPurchaseOrder.TotalGst,
                     SubTotal = InsertPurchaseOrder.SubTotal,
+                    TotalDiscount = InsertPurchaseOrder.TotalDiscount,
+                    RoundOff = InsertPurchaseOrder.RoundOff,
                     TotalAmount = InsertPurchaseOrder.TotalAmount,
                     DeliveryDate = InsertPurchaseOrder.DeliveryDate,
                     OrderDate = InsertPurchaseOrder.OrderDate,
@@ -193,7 +195,8 @@ namespace EMPManegment.Repository.OrderRepository
                         Hsn = item.Hsn,
                         Quantity = item.Quantity,
                         Price = item.Price,
-                        DiscountAmt = item.Discount,
+                        DiscountAmt = item.DiscountAmt,
+                        DiscountPer=item.DiscountPer,
                         Gstamount = item.Gstamount,
                         Gstper=item.Gstper,
                         ProductTotal = item.ProductTotal,
@@ -255,6 +258,8 @@ namespace EMPManegment.Repository.OrderRepository
                                     VendorBankAccountNo = b.VendorBankAccountNo,
                                     SubTotal = a.SubTotal,
                                     TotalGst = a.TotalGst,
+                                    TotalDiscount = a.TotalDiscount,
+                                    RoundOff = a.RoundOff,
                                     OrderDate = a.OrderDate,
                                     TotalAmount = a.TotalAmount,
                                     PaymentMethod = a.PaymentMethod,
@@ -277,6 +282,8 @@ namespace EMPManegment.Repository.OrderRepository
                                                                    Quantity = a.Quantity,
                                                                    ProductTypeName = b.Type,
                                                                    Price = a.Price,
+                                                                   DiscountPer=a.DiscountPer,
+                                                                   DiscountAmt=a.DiscountAmt,
                                                                    Gstamount = a.Gstamount,
                                                                    Gstper=a.Gstper,
                                                                    Hsn=a.Hsn,
@@ -327,6 +334,8 @@ namespace EMPManegment.Repository.OrderRepository
                                    ProjectId = a.ProjectId,
                                    CompanyName = c.CompnyName,
                                    CompanyId = a.CompanyId,
+                                   TotalDiscount = a.TotalDiscount,
+                                   RoundOff = a.RoundOff,
                                    TotalAmount = a.TotalAmount,
                                    OrderDate = a.OrderDate,
                                    OrderStatus = a.OrderStatus,
@@ -357,6 +366,8 @@ namespace EMPManegment.Repository.OrderRepository
                                                                  ProductType = a.ProductType,
                                                                  ProductTypeName = b.Type,
                                                                  Price = a.Price,
+                                                                 DiscountAmt = a.DiscountAmt,
+                                                                 DiscountPer = a.DiscountPer,
                                                                  Gstper = a.Gstper,
                                                                  Gstamount = a.Gstamount,
                                                                  ProductTotal = a.ProductTotal,
@@ -477,6 +488,8 @@ namespace EMPManegment.Repository.OrderRepository
                     PurchaseOrder.ProjectId = UpdatePurchaseorder.ProjectId;
                     PurchaseOrder.TotalGst = UpdatePurchaseorder.TotalGst;
                     PurchaseOrder.SubTotal = UpdatePurchaseorder.SubTotal;
+                    PurchaseOrder.TotalDiscount = UpdatePurchaseorder.TotalDiscount;
+                    PurchaseOrder.RoundOff = UpdatePurchaseorder.RoundOff;
                     PurchaseOrder.TotalAmount = UpdatePurchaseorder.TotalAmount;
                     PurchaseOrder.DeliveryDate = UpdatePurchaseorder.DeliveryDate;
                     PurchaseOrder.OrderDate = UpdatePurchaseorder.OrderDate;
@@ -486,7 +499,7 @@ namespace EMPManegment.Repository.OrderRepository
                     PurchaseOrder.DeliveryStatus = UpdatePurchaseorder.DeliveryStatus;
                     PurchaseOrder.IsDeleted = false;
                     PurchaseOrder.CreatedBy = UpdatePurchaseorder.CreatedBy;
-                    PurchaseOrder.CreatedOn = DateTime.Now;
+                    PurchaseOrder.CreatedOn = UpdatePurchaseorder.CreatedOn;
                     PurchaseOrder.UpdatedOn = DateTime.Now;
                     PurchaseOrder.UpdatedBy = UpdatePurchaseorder.UpdatedBy;
                 };
@@ -503,7 +516,8 @@ namespace EMPManegment.Repository.OrderRepository
                         existingPOProductDetails.Hsn = item.Hsn;
                         existingPOProductDetails.Quantity = item.Quantity;
                         existingPOProductDetails.Price = item.Price;
-                        existingPOProductDetails.DiscountAmt = item.Discount;
+                        existingPOProductDetails.DiscountAmt = item.DiscountAmt;
+                        existingPOProductDetails.DiscountPer= item.DiscountPer;
                         existingPOProductDetails.Gstamount = item.Gstamount;
                         existingPOProductDetails.Gstper = item.Gstper;
                         existingPOProductDetails.ProductTotal = item.ProductTotal;
@@ -525,7 +539,8 @@ namespace EMPManegment.Repository.OrderRepository
                             Hsn = item.Hsn,
                             Quantity = item.Quantity,
                             Price = item.Price,
-                            DiscountAmt = item.Discount,
+                            DiscountAmt = item.DiscountAmt,
+                            DiscountPer = item.DiscountPer,
                             Gstamount = item.Gstamount,
                             Gstper = item.Gstper,
                             ProductTotal = item.ProductTotal,

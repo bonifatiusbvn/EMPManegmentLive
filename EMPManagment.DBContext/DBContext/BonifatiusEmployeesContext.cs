@@ -94,7 +94,6 @@ public partial class BonifatiusEmployeesContext : DbContext
     public virtual DbSet<TblVendorType> TblVendorTypes { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<TblAttendance>(entity =>
@@ -567,8 +566,10 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.Property(e => e.OrderDate).HasColumnType("date");
             entity.Property(e => e.OrderId).HasMaxLength(50);
             entity.Property(e => e.OrderStatus).HasMaxLength(20);
+            entity.Property(e => e.RoundOff).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.SubTotal).HasColumnType("decimal(18, 0)");
             entity.Property(e => e.TotalAmount).HasColumnType("decimal(18, 0)");
+            entity.Property(e => e.TotalDiscount).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.TotalGst).HasColumnType("decimal(18, 0)");
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
 
@@ -790,7 +791,12 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.HasOne(d => d.Form).WithMany(p => p.TblUserFormPermissions)
                 .HasForeignKey(d => d.FormId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_tblUserFormPermissions_tblUsers1");
+                .HasConstraintName("FK_tblUserFormPermissions_tblForm");
+
+            entity.HasOne(d => d.User).WithMany(p => p.TblUserFormPermissions)
+                .HasForeignKey(d => d.UserId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_tblUserFormPermissions_tblUsers");
         });
 
         modelBuilder.Entity<TblVendorMaster>(entity =>

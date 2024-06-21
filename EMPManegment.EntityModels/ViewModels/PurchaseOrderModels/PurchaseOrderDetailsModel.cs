@@ -23,7 +23,9 @@ namespace EMPManegment.EntityModels.ViewModels.PurchaseOrderModels
 
         public decimal Price { get; set; }
 
-        public decimal? Discount { get; set; }
+        public decimal? DiscountAmt { get; set; }
+
+        public decimal? DiscountPer { get; set; }
 
         public decimal? Gstper { get; set; }
 
