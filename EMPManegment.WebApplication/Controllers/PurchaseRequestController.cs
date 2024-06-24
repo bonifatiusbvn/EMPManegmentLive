@@ -82,7 +82,7 @@ namespace EMPManegment.Web.Controllers
                     var pageNumber = page ?? 1;
 
                     var pagedList = Items.ToPagedList(pageNumber, pageSize);
-                    return PartialView("~/Views/PurchaseRequest/_showAllProductPartial.cshtml", pagedList);
+                    return PartialView("~/Views/PurchaseRequest/_showAllPRProductPartial.cshtml", pagedList);
                 }
                 else
                 {
