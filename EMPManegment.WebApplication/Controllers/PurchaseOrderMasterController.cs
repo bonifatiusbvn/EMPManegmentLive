@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis;
 using Newtonsoft.Json;
 using System.Diagnostics;
+using X.PagedList;
 
 namespace EMPManegment.Web.Controllers
 {
@@ -223,7 +224,7 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
-        public async Task<IActionResult> GetAllPOProductList(string? searchText)
+        public async Task<IActionResult> GetAllPOProductList(string? searchText, int? page)
         {
             try
             {
@@ -237,7 +238,11 @@ namespace EMPManegment.Web.Controllers
                         searchText = searchText.ToLower();
                         Items = Items.Where(u => u.ProductName.ToLower().Contains(searchText)).ToList();
                     }
-                    return PartialView("~/Views/PurchaseOrderMaster/_showAllPOProductsPartial.cshtml", Items);
+                    int pageSize = 5;
+                    var pageNumber = page ?? 1;
+
+                    var pagedList = Items.ToPagedList(pageNumber, pageSize);
+                    return PartialView("~/Views/PurchaseOrderMaster/_showAllPOProductsPartial.cshtml", pagedList);
                 }
                 else
                 {

@@ -1,6 +1,6 @@
 ﻿@model EMPManegment.EntityModels.ViewModels.Invoice.InvoiceMasterModel
 @using EMPManegment.Web.Models;
- @inject IHttpContextAccessor Accessor;
+@inject IHttpContextAccessor Accessor;
 @inject UserSession _userSession
 @inject EMPManegment.Web.Helper.Common CommonHelper
 
@@ -71,7 +71,7 @@
                             </div>
                             <div class="flex-shrink-0 mt-sm-0 mt-3 border">
                                 <label class="form-label">Buyer's Order No</label>
-                                <p class="text-muted text-uppercase"><b></b></p>
+                                <p class="text-muted text-uppercase">@firstItem.BuyesOrderNo</p>
                             </div>
                             <div class="flex-shrink-0 mt-sm-0 mt-3 border">
                                 <label class="form-label">Dispatch Doc No.</label>
@@ -100,8 +100,8 @@
                                 <p class="text-muted"></p>
                             </div>
                             <div class="flex-shrink-0 mt-sm-0 mt-3 border">
-                                <label class="form-label">Date</label>
-                                <p class="text-muted text-uppercase"><b></b></p>
+                                <label class="form-label">Buy's Order Date</label>
+                                <p class="text-muted text-uppercase">@CommonHelper.GetCommonDateFormat(@firstItem?.BuyesOrderDate ?? DateTime.MinValue)</p>
                             </div>
                             <div class="flex-shrink-0 mt-sm-0 mt-3 border">
                                 <label class="form-label">Delivery Note Date</label>
@@ -118,7 +118,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="card-body" id="cardbody2" style="margin-top:-33px;">
+                <div class="card-body" id="cardbody2">
                     <div class="d-flex">
                         <div class="flex-grow-1 col-6 border">
                             <p class="text-muted"><b>Buyer (Bill to)</b></p>
@@ -132,16 +132,16 @@
                         </div>
                     </div>
                 </div>
-                <div class="card-body" id="cardbody3" style="margin-top:-33px;">
+                <div class="card-body" id="cardbody3">
                     <table class="table table-border text-center table-nowrap align-middle mb-0">
-                        <thead class="table-info text-muted">
+                        <thead class="table-info text-muted border">
                             <tr class="table-active">
-                                <th>SINo.</th>
-                                <th>Product Details</th>
-                                <th>Price</th>
-                                <th>Quantity</th>
-                                <th>Unit</th>
-                                <th>Amount</th>
+                                <th class="border">SINo.</th>
+                                <th class="border">Product Details</th>
+                                <th class="border">Price</th>
+                                <th class="border">Quantity</th>
+                                <th class="border">Unit</th>
+                                <th class="border">Amount</th>
                             </tr>
                         </thead>
                         <tbody id="products-list">
@@ -216,22 +216,14 @@
                         <p class="text-muted text-capitalize"><b>INR @ViewData["TotalAmountInWords"]</b></p>
                     </div>
                 </div>
-                <div class="card-body" id="cardbody4" style="margin-top:-33px;">
+                <div class="card-body" id="cardbody4">
                     <table class="table table-border text-center table-nowrap align-middle mb-0">
-                        <thead class="table-info text-muted">
+                        <thead class="table-info text-muted border">
                             <tr class="table-active">
-                                <th>HSN / SAC</th>
-                                <th>Taxable value</th>
-                                <th>
-                                    <div class="d-flex">
-                                        <div class="flex-grow-1 col-5">
-                                            <label class="form-label">GST%</label>
-                                        </div>
-                                        <div class="flex-grow-1 col-7">
-                                            <label class="form-label">Amount</label>
-                                        </div>
-                                    </div>
-                                </th>
+                                <th class="border">HSN / SAC</th>
+                                <th class="border">Taxable value</th>
+                                <th class="border">GST%</th>
+                                <th class="border">Amount</th>
                                 <th class="text-end border col-2">Total Tax Amount</th>
                             </tr>
                         </thead>
@@ -247,17 +239,9 @@
                                 <tr>
                                     <td class="border" id="txtHSN">@item.Hsn</td>
                                     <td class="border" id="txtTaxablevalue">₹@subtotal</td>
-                                    <td class="border" id="txtgstpercentage">
-                                        <div class="d-flex">
-                                            <div class="flex-grow-1 col-5">
-                                                <label class="form-label">@item.GstPer%</label>
-                                            </div>
-                                            <div class="flex-grow-1 col-5">
-                                                <label class="form-label">@GstAmount?.ToString("0.00")</label>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="border" id="txtgsttotal">₹@GstAmount?.ToString("0.00")</td>
+                                    <td class="border" id="txtgstpercentage">@item.GstPer%</td>
+                                    <td class="border" id="txtgstpercentage">₹@GstAmount?.ToString("0.00")</td>
+                                    <td class="border" id="txtgsttotal"></td>
                                 </tr>
                                 index++;
                             }
@@ -314,6 +298,7 @@
                         <div class="card-body">
                             <div class="d-lg-flex align-items-center gap-3">
                                 <a href="javascript:window.print()" class="btn btn-primary btn-ecomm" style="margin-left: 950px;width: 185px;"><i class="fadeIn animated bx bx-printer"></i>Print</a>
+                                @*  <a onclick="fn_PrintInvoicePage()" class="btn btn-primary btn-ecomm" style="margin-left: 950px;width: 185px;"><i class="fadeIn animated bx bx-printer"></i>Print</a>*@
                             </div>
                         </div>
                     </div>
@@ -324,8 +309,12 @@
     </div>
 </div>
 
+<script type="text/javascript">
+    var userPermissions = '@Html.Raw(Json.Serialize(UserSession.FormPermisionData))';
+</script>
+<!--Invoice create init js-->
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script src="~/assets/js/pages/invoicedetails.js" asp-append-version="true"></script>
+<script src="~/moduls/invoicemasterscript.js" asp-append-version="true"></script>
 
 
 

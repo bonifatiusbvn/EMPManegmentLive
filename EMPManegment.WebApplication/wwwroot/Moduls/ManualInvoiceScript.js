@@ -456,7 +456,7 @@ function InsertManualInvoiceDetails() {
                                 confirmButtonColor: '#3085d6',
                                 confirmButtonText: 'OK'
                             }).then(function () {
-                                window.location = '/ManualInvoice/ManualInvoices';
+                                window.location = '/ManualInvoice/ManualInvoiceDetails?InvoiceId=' + Result.data;
                             });
                         } else {
                             toastr.error(Result.message);
@@ -757,3 +757,62 @@ function AddNewRow(Result) {
     $('#addnewproductlink').append(Result);
     updateRowNumbers();
 }
+
+//function fn_printManualInvoice() {
+//    var printContents = document.getElementById('cardbody1').innerHTML + document.getElementById('cardbody2').innerHTML +
+//                        document.getElementById('cardbody3').innerHTML + document.getElementById('cardbody4').innerHTML;
+//    var originalContents = document.body.innerHTML;
+//    document.body.innerHTML = printContents;  
+//    document.body.innerHTML = originalContents;
+//    window.print();
+//}
+
+//function fn_printManualInvoice() {
+//    var originalContents = document.body.innerHTML;
+//    var printContents = document.getElementById('printManualInvoicePage').innerHTML;
+//    var printWindow = window.open('', '_blank');
+//    var style = `
+//        <style>
+//            body {
+//                font-size: 12px;
+//            }
+//            .card-body {
+//                page-break-inside: avoid;
+//            }
+//            table {
+//                width: 100%;
+//                border-collapse: collapse;
+//                margin-bottom: 10px;
+//            }
+//            table, th, td {
+//                border: 1px solid black;
+//            }
+//            thead {
+//                background-color: #bee5eb !important;
+//            }
+//        </style>
+//    `;
+
+//    var stylesheets = document.querySelectorAll('link[rel="stylesheet"]');
+//    var stylesheetHTML = '';
+
+//    stylesheets.forEach(function (stylesheet) {
+//        if (stylesheet.href.includes('~/assets/css/') || stylesheet.href.includes('https://')) {
+//            stylesheetHTML += '<link rel="stylesheet" type="text/css" href="' + stylesheet.href + '">';
+//        }
+//    });
+
+//    printWindow.document.write('<html><head>' + stylesheetHTML + style + '</head><body>' + printContents + '</body></html>');
+//    printWindow.document.close(); 
+
+//    printWindow.onload = function () {
+//        document.body.innerHTML = originalContents;
+//        printWindow.focus();
+//        printWindow.print();
+//    };
+//}
+
+
+
+
+

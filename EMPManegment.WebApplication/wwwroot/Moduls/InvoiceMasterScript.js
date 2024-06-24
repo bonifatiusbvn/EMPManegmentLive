@@ -84,7 +84,7 @@ function fn_InsertInvoiceDetails() {
             }
             var form_data = new FormData();
             form_data.append("INVOICEDETAILS", JSON.stringify(Invoicedetails));
-            
+
             $.ajax({
                 url: '/Invoice/InsertInvoiceDetails',
                 type: 'POST',
@@ -183,7 +183,7 @@ function fn_UpdateInvoiceDetails() {
                 ShippingAddress: $('#hideShippingAddress').is(':checked') ? $('#textCompanyBillingAddress').val() : $('#textShippingAddress').val(),
                 InvoiceDetails: ProductDetails,
             }
-            
+
             var form_data = new FormData();
             form_data.append("UPDATEINVOICEDETAILS", JSON.stringify(Invoicedetails));
 
@@ -418,7 +418,8 @@ $(document).ready(function () {
         };
     }
 
-    $(document).on('input', '#txtdiscountpercentage', debounce(function () {debugger
+    $(document).on('input', '#txtdiscountpercentage', debounce(function () {
+        debugger
         var value = $(this).val();
         var productRow = $(this).closest(".product");
         if (value > 100) {
@@ -604,10 +605,10 @@ function fn_OpenAddInvoiceproductmodal() {
     $('#mdProductSearch').val('');
     $('#mdInvoiceproductModal').modal('show');
 }
-function fn_GetInvoiceProductDetailsList() {
+function fn_GetInvoiceProductDetailsList(page) {
     var searchText = $('#mdProductSearch').val();
 
-    $.get("/Invoice/GetInvoiceAllProductList", { searchText: searchText })
+    $.get("/Invoice/GetInvoiceAllProductList", { searchText: searchText, page: page })
         .done(function (result) {
             $("#mdlistofInvoiceItem").html(result);
         })
@@ -615,6 +616,43 @@ function fn_GetInvoiceProductDetailsList() {
             console.error("Error:", error);
         });
 }
+
+
+fn_GetInvoiceProductDetailsList(1);
+
+
+$(document).on("click", ".pagination a", function (e) {
+    e.preventDefault();
+    var page = $(this).text();
+    fn_GetInvoiceProductDetailsList(page);
+});
+
+$(document).on("click", "#backButton", function (e) {
+    e.preventDefault();
+    var page = $(this).text();
+    fn_GetInvoiceProductDetailsList(page);
+});
+
+function fn_clearInvoiceSearchText() {
+    $('#mdProductSearch').val('');
+    fn_GetInvoiceProductDetailsList();
+}
+
+function fn_filterallInvoiceProducts() {
+    var searchText = $('#mdProductSearch').val();
+
+    $.ajax({
+        url: '/Invoice/GetInvoiceAllProductList',
+        type: 'GET',
+        data: {
+            searchText: searchText,
+        },
+        success: function (result) {
+            $("#mdlistofInvoiceItem").html(result);
+        },
+    });
+}
+
 function SearchInvoiceProductDetailsById(ProductId) {
     var GetProductId = {
         ProductId: ProductId,
@@ -719,7 +757,8 @@ function fn_updateInvoiceProductAmount(that) {
     row.find("#txtgstAmount").val(totalGst.toFixed(2));
     row.find("#txtproducttotalamount").val(TotalAmountAfterDiscount.toFixed(2));
 }
-function fn_updateInvoiceDiscount(that) {debugger
+function fn_updateInvoiceDiscount(that) {
+    debugger
     var row = $(that);
     var productPrice = parseFloat(row.find("#productamount").val());
     var quantity = parseFloat(row.find("#txtproductquantity").val());
@@ -745,7 +784,8 @@ function fn_updateInvoiceDiscount(that) {debugger
     fn_updateInvoiceProductAmount(row);
     fn_updateInvoiceTotals();
 }
-function fn_UpdateInvoiceDiscountPercentage(that) {debugger
+function fn_UpdateInvoiceDiscountPercentage(that) {
+    debugger
     var row = $(that);
     var productPrice = parseFloat(row.find("#productamount").val());
     var quantity = parseFloat(row.find("#txtproductquantity").val());
@@ -822,3 +862,10 @@ function tn_toggleInvoiceShippingAddress() {
         shippingFields.style.display = "block";
     }
 }
+//function fn_PrintInvoicePage() {
+//    var printContents = document.getElementById('displayInvoiceDetail').innerHTML;
+//    var originalContents = document.body.innerHTML;
+//    document.body.innerHTML = printContents;
+//    document.body.innerHTML = originalContents;
+//    window.print();
+//}
