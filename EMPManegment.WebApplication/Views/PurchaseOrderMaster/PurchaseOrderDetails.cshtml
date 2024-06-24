@@ -121,8 +121,10 @@
                                         <th class="border">Product Details</th>
                                         <th class="border">Quantity</th>
                                         <th class="border">Price</th>
+                                        <th class="border">Discount</th>
+                                        <th class="border">Discount(%)</th>
                                         <th class="border">GST</th>
-                                        <th class="border">GST(%)</th>
+                                        <th class="border">GST(%)</thclass="border">
                                         <th class="border">Amount</th>
                                     </tr>
                                 </thead>
@@ -134,7 +136,7 @@
                                     {
                                         <tr>
 
-                                            <th scope="row" class="border">@index</th>
+                                            <th class="border" scope="row">@index</th>
                                             <td class="text-start border">@item.Product</td>
                                             <td class="border">@item.Quantity</td>
                                             <td class="border">@item.Price</td>
@@ -168,6 +170,14 @@
                                     <tr>
                                         <td class="border">Total GST</td>
                                         <td class="text-end border">₹@Model.TotalGst</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Total Discount</td>
+                                        <td class="text-end">₹@Model.TotalDiscount</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RoundOff</td>
+                                        <td class="text-end">₹@Model.RoundOff</td>
                                     </tr>
                                     <tr class="border-top border-top-dashed fs-15">
                                         <th class="border">Total Amount</th>

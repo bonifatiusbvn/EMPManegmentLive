@@ -92,4 +92,6 @@ public partial class TblUser
     public virtual ICollection<TblTaskDetail> TblTaskDetails { get; set; } = new List<TblTaskDetail>();
 
     public virtual ICollection<TblUserDocument> TblUserDocuments { get; set; } = new List<TblUserDocument>();
+
+    public virtual ICollection<TblUserFormPermission> TblUserFormPermissions { get; set; } = new List<TblUserFormPermission>();
 }

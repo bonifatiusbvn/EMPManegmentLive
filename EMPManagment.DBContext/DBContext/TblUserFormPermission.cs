@@ -28,4 +28,6 @@ public partial class TblUserFormPermission
     public DateTime? UpdatedOn { get; set; }
 
     public virtual TblForm Form { get; set; } = null!;
+
+    public virtual TblUser User { get; set; } = null!;
 }
