@@ -4,7 +4,6 @@
     fn_GetPOVendorNameList();
     fn_GetPOCompanyNameList();
     fn_GetPOProductDetailsList();
-    fn_GetPOProductsList();
     fn_GetPOPaymentMethodList();
     fn_updatePOTotals();
     $('#txtvendorname').change(function () {
@@ -157,17 +156,60 @@ function preventPOEmptyValue(input) {
 function showPaymentDetails() {
     $("#PaymentDetails").modal("show")
 }
-function fn_GetPOProductDetailsList() {
-    var searchText = $('#mdProductSearch').val();
 
-    $.get("/PurchaseOrderMaster/GetAllPOProductList", { searchText: searchText })
+function fn_OpenAddPOproductmodal() {
+
+    $('#mdPOProductSearch').val('');
+    $('#mdPoproductModal').modal('show');
+}
+
+function fn_GetPOProductDetailsList(page) {
+    var searchText = $('#mdPOProductSearch').val();
+
+    $.get("/PurchaseOrderMaster/GetAllPOProductList", { searchText: searchText, page: page })
         .done(function (result) {
-            $("#mdlistofItem").html(result);
+            $("#mdlistofPOItem").html(result);
         })
         .fail(function (xhr, status, error) {
             console.error("Error:", error);
         });
 }
+
+fn_GetPOProductDetailsList(1);
+
+$(document).on("click", ".pagination a", function (e) {
+    e.preventDefault();
+    var page = $(this).text();
+    fn_GetPOProductDetailsList(page);
+});
+
+$(document).on("click", "#backButton", function (e) {
+    e.preventDefault();
+    var page = $(this).text();
+    fn_GetPOProductDetailsList(page);
+});
+
+function fn_clearPOSearchText() {
+    $('#mdPOProductSearch').val('');
+    fn_GetPOProductDetailsList();
+}
+
+function fn_filterallPOProducts() {
+    var searchText = $('#mdPOProductSearch').val();
+
+    $.ajax({
+        url: '/PurchaseOrderMaster/GetAllPOProductList',
+        type: 'GET',
+        data: {
+            searchText: searchText,
+        },
+        success: function (result) {
+            $("#mdlistofPOItem").html(result);
+        },
+    });
+}
+
+
 function fn_GetPOVendorNameList() {
     $.ajax({
         url: '/ProductMaster/GetVendorsNameList',
@@ -591,11 +633,6 @@ function fn_mdAddPOAddress() {
 }
 function fn_removeShippingAdd(that) {
     $(that).closest('.ac-invoice-shippingadd').remove();
-}
-function fn_OpenAddPOproductmodal() {
-
-    $('#mdProductSearch').val('');
-    $('#mdPoproductModal').modal('show');
 }
 function fn_POtoggleShippingAddress() {
     var checkbox = document.getElementById("hideShippingAddress");

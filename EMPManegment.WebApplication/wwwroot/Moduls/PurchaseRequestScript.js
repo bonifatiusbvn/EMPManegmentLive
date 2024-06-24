@@ -37,7 +37,7 @@ function clearsearchtext() {
     GetAllItemDetailsList();
 }
 
-function filterallItemTable() {
+function fn_filterallPRProducts() {
     var searchText = $('#mdProductSearch').val();
 
     $.ajax({

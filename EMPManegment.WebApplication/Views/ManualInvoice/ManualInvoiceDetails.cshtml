@@ -26,20 +26,19 @@
 
             <div class="page-title-right">
                 <ol class="breadcrumb m-0">
-                    <li class="breadcrumb-item"><a href="javascript: void(0);">Manual Invoices</a></li>
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">InvoicesManual</a></li>
                     <li class="breadcrumb-item active">Manual Invoices Details</li>
                 </ol>
             </div>
         </div>
     </div>
 </div>
-<div class="row justify-content-center">
+<div class="row justify-content-center" id="printManualInvoicePage">
     <div class="col-xxl-9">
         <div class="card border">
             <div class="row">
                 <div class="card-body" id="cardbody1">
                     <div class="d-flex">
-
                         <div class="flex-grow-1 col-6 border">
                             <img src="~/assets/images/logo - bonifatius.jpeg" style="height: 25px;" />
                             <div class="flex-shrink-0 mt-sm-0 mt-3 border">
@@ -70,7 +69,7 @@
                             </div>
                             <div class="flex-shrink-0 mt-sm-0 mt-3 border">
                                 <label class="form-label">Buyer's Order No</label>
-                                <p class="text-muted text-uppercase"><b></b></p>
+                                <p class="text-muted text-uppercase"><b>@firstItem.BuyesOrderNo</b></p>
                             </div>
                             <div class="flex-shrink-0 mt-sm-0 mt-3 border">
                                 <label class="form-label">Dispatch Doc No.</label>
@@ -99,8 +98,8 @@
                                 <p class="text-muted"></p>
                             </div>
                             <div class="flex-shrink-0 mt-sm-0 mt-3 border">
-                                <label class="form-label">Date</label>
-                                <p class="text-muted text-uppercase"><b></b></p>
+                                <label class="form-label">Buy's Order Date</label>
+                                <p class="text-muted text-uppercase">@CommonHelper.GetCommonDateFormat(@firstItem?.BuyesOrderDate ?? DateTime.MinValue)</p>
                             </div>
                             <div class="flex-shrink-0 mt-sm-0 mt-3 border">
                                 <label class="form-label">Delivery Note Date</label>
@@ -117,7 +116,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="card-body" id="cardbody2" style="margin-top:-33px;">
+                <div class="card-body" id="cardbody2">
                     <div class="d-flex">
                         <div class="flex-grow-1 col-6 border">
                             <p class="text-muted"><b>Buyer (Bill to)</b></p>
@@ -131,18 +130,18 @@
                         </div>
                     </div>
                 </div>
-                <div class="card-body" id="cardbody3" style="margin-top:-33px;">
+                <div class="card-body" id="cardbody3">
                     <table class="table table-border text-center table-nowrap align-middle mb-0 border">
-                        <thead class="table-info text-muted">
-                            <tr class="table-active">
-                                <th>SINo.</th>
-                                <th>Product Details</th>
-                                <th>Price</th>
-                                <th>Quantity</th>
-                                <th>Product Type</th>
-                                <th>Discount</th>
-                                <th>Amount</th>
-                                <th>Total Amount</th>
+                        <thead class="table-info text-muted border">
+                            <tr class="table-active border">
+                                <th class="border">SINo.</th>
+                                <th class="border">Product Details</th>
+                                <th class="border">Price</th>
+                                <th class="border">Quantity</th>
+                                <th class="border">Product Type</th>
+                                <th class="border">Discount</th>
+                                <th class="border">Amount</th>
+                                <th class="border">Total Amount</th>
                             </tr>
                         </thead>
                         <tbody id="products-list">
@@ -215,29 +214,18 @@
                             </tr>
                         </tbody>
                     </table><!--end table-->
-                    <div class="noresult" style="display: none">
-                        <div class="text-center">
-                            <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#25a0e2,secondary:#00bd9d" style="width:75px;height:75px">
-                            </lord-icon>
-                            <h5 class="mt-2">Sorry! No Result Found</h5>
-                            <p class="text-muted mb-0">
-                                We've searched more than 150+ transactions We did not find any
-                                transactions for you search.
-                            </p>
-                        </div>
-                    </div>
                     <div class="flex-grow-1 col-12">
                         <span class="text-muted">Amount Chargeable (in words)</span><br />
                         <p class="text-muted text-capitalize"><b>INR @ViewData["TotalAmountInWords"]</b></p>
                     </div>
                 </div>
-                <div class="card-body" id="cardbody4" style="margin-top:-33px;">
+                <div class="card-body" id="cardbody4">
                     <table class="table table-border text-center table-nowrap align-middle mb-0 border">
-                        <thead class="table-info text-muted">
-                            <tr class="table-active">
-                                <th>HSN / SAC</th>
-                                <th>Taxable value</th>
-                                <th>Discount</th>
+                        <thead class="table-info text-muted border">
+                            <tr class="table-active border">
+                                <th class="border">HSN / SAC</th>
+                                <th class="border">Taxable value</th>
+                                <th class="border">Discount</th>
                                 <th class="border">
                                     <div class="d-flex">
                                         <div class="flex-grow-1 col-5 ">
@@ -248,7 +236,7 @@
                                         </div>
                                     </div>
                                 </th>
-                                <th class="text-end col-2">Total Tax Amount</th>
+                                <th class="border text-end col-2">Total Tax Amount</th>
                             </tr>
                         </thead>
                         <tbody id="products-list">
@@ -301,50 +289,25 @@
                             </tr>
                         </tbody>
                     </table><!--end table-->
-                    <div class="noresult" style="display: none">
-                        <div class="text-center">
-                            <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#25a0e2,secondary:#00bd9d" style="width:75px;height:75px">
-                            </lord-icon>
-                            <h5 class="mt-2">Sorry! No Result Found</h5>
-                            <p class="text-muted mb-0">
-                                We've searched more than 150+ transactions We did not find any
-                                transactions for you search.
-                            </p>
-                        </div>
-                    </div>
                     <span class="text-muted">Tax Amount (in words) : </span>
                     <span class="text-muted text-capitalize"><b>INR @ViewData["TotalAmountInWords"]</b></span>
-                    <div class="d-flex">
-                        @*<div class="flex-grow-1 col-6">
-                        <p class="text-muted">Company's PAN : <span> </span><span class="text-muted"><b></b></span></p>
-                        <span class="text-muted"><u>Description</u></span><br />
-                        <span class="text-muted"></span><br />
-                        </div>
-                        <div class="flex-grow-1 col-6">
-                        <span class="form-label">Company's Bank Details</span><br />
-                        <span class="text-muted"> Bank Name :  <span><b>@firstItem.VendorBankName</b></span></span> <br />
-                        <span class="text-muted"> A/c No :  <span><b>@firstItem.VendorBankAccountNo</b></span></span> <br />
-                        <p class="text-muted">Branch & IFS Code  :       <span><b>@firstItem.VendorBankBranch/@firstItem.VendorBankIfsc</b></span></p>
-                        <div class="border border-box text-end p-1" style="border: solid black">
-                        <p class="text-muted"><b>@firstItem.VendorAccountHolderName</b></p>
-                        <br />
-                        <br />
-                        <p class="text-muted">Authorised Signatory</p>
-                        </div>
-                        </div>*@
-                    </div>
                     <div class="card d-print-none">
                         <div class="card-body">
                             <div class="d-lg-flex align-items-center gap-3">
                                 <a href="javascript:window.print()" class="btn btn-primary btn-ecomm" style="margin-left: 950px;width: 185px;"><i class="fadeIn animated bx bx-printer"></i>Print</a>
+@*                                <a onclick="fn_printManualInvoice()" class="btn btn-primary btn-ecomm" style="margin-left: 950px;width: 185px;"><i class="fadeIn animated bx bx-printer"></i>Print</a>*@
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
     </div>
 </div>
 
+<script type="text/javascript">
+    var userPermissions = '@Html.Raw(Json.Serialize(UserSession.FormPermisionData))';
+</script>
+
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/moduls/manualinvoicescript.js" asp-append-version="true"></script>

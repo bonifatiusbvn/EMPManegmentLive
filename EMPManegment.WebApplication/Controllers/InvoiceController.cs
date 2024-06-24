@@ -26,6 +26,7 @@ using Irony.Parsing.Construction;
 using EMPManegment.EntityModels.ViewModels.ManualInvoice;
 using Aspose.Foundation.UriResolver.RequestResponses;
 using DocumentFormat.OpenXml.Spreadsheet;
+using X.PagedList;
 
 namespace EMPManegment.Web.Controllers
 {
@@ -685,7 +686,7 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
-        public async Task<IActionResult> GetInvoiceAllProductList(string? searchText)
+        public async Task<IActionResult> GetInvoiceAllProductList(string? searchText, int? page)
         {
             try
             {
@@ -693,13 +694,17 @@ namespace EMPManegment.Web.Controllers
                 ApiResponseModel response = await APIServices.PostAsync("", apiUrl);
                 if (response.code == 200)
                 {
-                    List<ProductDetailsView> Items = JsonConvert.DeserializeObject<List<ProductDetailsView>>(response.data.ToString());
+                    List<ProductDetailsView> Products = JsonConvert.DeserializeObject<List<ProductDetailsView>>(response.data.ToString());
                     if (!string.IsNullOrEmpty(searchText))
                     {
                         searchText = searchText.ToLower();
-                        Items = Items.Where(u => u.ProductName.ToLower().Contains(searchText)).ToList();
+                        Products = Products.Where(u => u.ProductName.ToLower().Contains(searchText)).ToList();
                     }
-                    return PartialView("~/Views/Invoice/_showInvoiceAllProductsPartial.cshtml", Items);
+                    int pageSize = 5;
+                    var pageNumber = page ?? 1;
+
+                    var pagedList = Products.ToPagedList(pageNumber, pageSize);
+                    return PartialView("~/Views/Invoice/_showInvoiceAllProductsPartial.cshtml", pagedList);
                 }
                 else
                 {

@@ -199,9 +199,9 @@ namespace EMPManagment.API.Controllers
 
         [HttpPost]
         [Route("GetAllProductList")]
-        public async Task<IActionResult> GetAllProductList(string? sortBy)
+        public async Task<IActionResult> GetAllProductList(string? searchText)
         {
-            IEnumerable<ProductDetailsView> getProductList = await productMaster.GetAllProductList(sortBy);
+            IEnumerable<ProductDetailsView> getProductList = await productMaster.GetAllProductList(searchText);
             return Ok(new { code = 200, data = getProductList.ToList() });
         }
     }
