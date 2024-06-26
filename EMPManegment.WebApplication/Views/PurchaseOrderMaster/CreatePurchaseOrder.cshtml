@@ -6,7 +6,12 @@
     ViewData["Title"] = "CreateOrderView";
     Layout = "~/Views/Shared/_HomeLayout.cshtml";
 }
+<style>
+    .is-invalid {
+        border: 2px solid red;
+    }
 
+</style>
 
 
 <div class="row" style="margin-top:80px;">
@@ -232,14 +237,16 @@
                                                 <div class="col-lg-6 col-sm-12">
                                                     <div class="row">
                                                         <div class="col-lg-12 col-sm-12">
-                                                            <div class="input-group">
-                                                                <label class="input-group-text" for="textDeliveryStatus">Delivery Status</label>
-                                                                <input type="text" class="form-control" id="textDeliveryStatus" name="textDeliveryStatus" value="@Model.DeliveryStatus" placeholder="Enter Delivery Status">
+                                                            <div class="mb-3">
+                                                                <div class="input-group">
+                                                                    <label class="input-group-text" for="textDeliveryStatus">Delivery Status</label>
+                                                                    <input type="text" class="form-control" id="textDeliveryStatus" name="textDeliveryStatus" value="@Model.DeliveryStatus" placeholder="Enter Delivery Status">
+                                                                </div>
                                                             </div>
-                                                            <label id="textDeliveryStatus-error" class="error" for="textDeliveryStatus"></label>
+                                                            
                                                         </div>
                                                         <div class="col-lg-12 col-sm-12 mt-2">
-                                                            <div class="mb-2">
+                                                            <div class="mb-3">
                                                                 <div class="input-group">
                                                                     <label for="txtpaymentmethod" class="input-group-text">Payment Method </label>
                                                                     @if (Model.PaymentMethod != null)
@@ -256,11 +263,10 @@
                                                                     }
                                                                     
                                                                 </div>
-                                                                <label id="txtpaymentmethod-error" class="error" for="txtpaymentmethod"></label>
                                                             </div>
                                                         </div>
                                                         <div class="col-lg-12 col-sm-12 mt-2">
-                                                            <div class="mb-2">
+                                                            <div class="mb-3">
                                                                 <div class="input-group mb-3">
                                                                     <label for="txtpaymenttype" class="input-group-text">Payment Status</label>
                                                                     @if (Model.PaymentStatus != null)
