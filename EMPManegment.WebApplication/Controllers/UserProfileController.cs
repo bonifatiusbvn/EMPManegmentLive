@@ -1050,27 +1050,6 @@ namespace EMPManegment.Web.Controllers
             return View();
         }
 
-        //[HttpPost]
-        //public async Task<IActionResult> GetUserFormListById(Guid RoleId)
-        //{
-        //    try
-        //    {
-        //        List<RolewiseFormPermissionModel> RolewiseFormList = new List<RolewiseFormPermissionModel>();
-        //        ApiResponseModel response = await APIServices.PostAsync("", "FormPermissionMaster/GetUserFormListById?RoleId=" + RoleId);
-        //        if (response.code == 200)
-        //        {
-        //            RolewiseFormList = JsonConvert.DeserializeObject<List<RolewiseFormPermissionModel>>(response.data.ToString());
-        //            return PartialView("~/Views/UserProfile/_UserFormPermissionPartial.cshtml", RolewiseFormList);
-        //        }
-        //        else
-        //        {
-        //            return Ok(new { response.code });
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw ex;
-        //    }
         [FormPermissionAttribute("User Form Permission-Add")]
         [HttpPost]
         public async Task<IActionResult> CreateUserForm(Guid UserId)
@@ -1078,6 +1057,53 @@ namespace EMPManegment.Web.Controllers
             try
             {
                 ApiResponseModel postuser = await APIServices.PostAsync("", "FormPermissionMaster/CreateUserForm?UserId=" + UserId);
+                if (postuser.code == 200)
+                {
+                    return Ok(new { postuser.message, postuser.code });
+                }
+                else
+                {
+                    return Ok(new { postuser.message, postuser.code });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        [HttpPost]
+        public async Task<IActionResult> GetUserFormListById(Guid UserId)
+        {
+            try
+            {
+                List<UserPermissionModel> UserFormList = new List<UserPermissionModel>();
+                ApiResponseModel response = await APIServices.PostAsync("", "FormPermissionMaster/GetUserFormListById?UserId=" + UserId);
+                
+                if (response.code == 200)
+                {
+                   UserFormList = JsonConvert.DeserializeObject<List<UserPermissionModel>>(response.data.ToString());
+                    return PartialView("~/Views/UserProfile/_UserFormPermissionPartial.cshtml", UserFormList);
+                }
+                else
+                {
+                    return Ok();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        [FormPermissionAttribute("User Form Permission-Edit")]
+        [HttpPost]
+        public async Task<IActionResult> UpdateUserPermission()
+        {
+            try
+            {
+                var userFormPermission = HttpContext.Request.Form["UserPermissionDetails"];
+                var UpdateDetails = JsonConvert.DeserializeObject<List<UserPermissionModel>>(userFormPermission.ToString());
+
+                ApiResponseModel postuser = await APIServices.PostAsync(UpdateDetails, "FormPermissionMaster/UpdateMultipleUserFormPermission");
                 if (postuser.code == 200)
                 {
                     return Ok(new { postuser.message, postuser.code });

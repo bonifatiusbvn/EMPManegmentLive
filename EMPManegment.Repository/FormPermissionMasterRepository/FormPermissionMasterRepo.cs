@@ -245,7 +245,7 @@ namespace EMPManegment.Repository.FormPermissionMasterRepository
             return response;
         }
 
-        
+
         [HttpPost]
         public async Task<ApiResponseModel> CreateUserForm(Guid UserId)
         {
@@ -256,8 +256,8 @@ namespace EMPManegment.Repository.FormPermissionMasterRepository
                 bool isRoleAlreadyExists = Context.TblUserFormPermissions.Any(x => x.UserId == UserId);
                 if (isRoleAlreadyExists == true)
                 {
-                        response.message = "User already exists";
-                        response.code = 404;
+                    response.message = "User already exists";
+                    response.code = 404;
                 }
 
                 else
@@ -286,13 +286,81 @@ namespace EMPManegment.Repository.FormPermissionMasterRepository
 
                     response.code = 200;
                     response.message = "User add successfully!";
-                    
+
                 }
             }
             catch (Exception ex)
             {
                 response.code = 400;
                 response.message = "Error in creating user";
+            }
+            return response;
+        }
+        public async Task<List<UserPermissionModel>> GetUserFormListById(Guid UserId)
+        {
+            var UserData = new List<UserPermissionModel>();
+            var data = await (from e in Context.TblUserFormPermissions.Where(x => x.UserId == UserId)
+                              join f in Context.TblForms on e.FormId equals f.FormId
+                              orderby f.OrderId ascending
+                              select new UserPermissionModel
+                              {
+                                  Id = e.Id,
+                                  UserId = e.UserId,
+                                  FormId = e.FormId,
+                                  FormName = f.FormName,
+                                  IsViewAllow = e.IsViewAllow,
+                                  IsEditAllow = e.IsEditAllow,
+                                  IsDeleteAllow = e.IsDeleteAllow,
+                                  IsAddAllow = e.IsAddAllow,
+                                  CreatedBy = e.CreatedBy,
+                                  CreatedOn = e.CreatedOn,
+                              }).ToListAsync();
+
+
+            if (data.Count != 0)
+            {
+                UserData.AddRange(data);
+            }
+            return UserData;
+        }
+
+        public async Task<ApiResponseModel> UpdateMultipleUserFormPermission(List<UserPermissionModel> UpdatedUserFormPermissions)
+        {
+            ApiResponseModel response = new ApiResponseModel();
+            try
+            {
+                foreach (var updatedUserPermission in UpdatedUserFormPermissions)
+                {
+                    var existingPermissions = await Context.TblUserFormPermissions
+                        .Where(up => up.UserId == updatedUserPermission.UserId && up.FormId == updatedUserPermission.FormId)
+                        .FirstOrDefaultAsync();
+
+                    if (existingPermissions != null)
+                    {
+                        existingPermissions.IsAddAllow = updatedUserPermission.IsAddAllow;
+                        existingPermissions.IsViewAllow = updatedUserPermission.IsViewAllow;
+                        existingPermissions.IsEditAllow = updatedUserPermission.IsEditAllow;
+                        existingPermissions.IsDeleteAllow = updatedUserPermission.IsDeleteAllow;
+                        existingPermissions.UpdatedBy = updatedUserPermission.CreatedBy;
+                        existingPermissions.UpdatedOn = DateTime.Now;
+                        Context.Entry(existingPermissions).State = EntityState.Modified;
+                    }
+                    else
+                    {
+                        response.code = 404;
+                        response.message = $"Permissions with UserId {updatedUserPermission.UserId} and FormId {updatedUserPermission.FormId} not found.";
+                        return response;
+                    }
+                }
+
+                await Context.SaveChangesAsync();
+                response.code = 200;
+                response.message = "User permissions successfully updated.";
+            }
+            catch (Exception ex)
+            {
+                response.code = 400;
+                response.message = "Error in updating user permissions";
             }
             return response;
         }

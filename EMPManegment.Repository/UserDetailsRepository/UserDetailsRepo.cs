@@ -537,7 +537,7 @@ namespace EMPManegment.Repository.UserListRepository
 
         public async Task<IEnumerable<EmpDetailsView>> GetUsersNameList()
         {
-            IEnumerable<EmpDetailsView> GetUserNameList = Context.TblUsers.ToList().Select(a => new EmpDetailsView
+            IEnumerable<EmpDetailsView> GetUserNameList = Context.TblUsers.Where(a=>a.IsActive==true).ToList().Select(a => new EmpDetailsView
             {
                 Id = a.Id,
                 UserName = a.UserName,

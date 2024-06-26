@@ -140,33 +140,7 @@ namespace EMPManagment.API.Controllers
             }
             return StatusCode(response.code, response);
         }
-        //[HttpPost]
-        //[Route("GetUserFormListById")]
-        //public async Task<IActionResult> GetUserFormListById(Guid RoleId)
-        //{
-        //    ApiResponseModel response = new ApiResponseModel();
-        //    try
-        //    {
-        //        List<RolewiseFormPermissionModel> RolewiseFormList = await RolewisePermissionMaster.GetUserFormListById(RoleId);
-
-        //        if (RolewiseFormList.Count == 0)
-        //        {
-        //            response.code = 400;
-        //            response.message = "Error in getting UserList.";
-        //        }
-        //        else
-        //        {
-        //            response.code = 200;
-        //            response.data = RolewiseFormList.ToList();
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        response.code = (int)HttpStatusCode.InternalServerError;
-        //        response.message = "An error occurred while processing the request.";
-        //    }
-        //    return StatusCode(response.code, response);
-        //}
+        
         [HttpPost]
         [Route("CreateUserForm")]
         public async Task<IActionResult> CreateUserForm(Guid UserId)
@@ -184,6 +158,59 @@ namespace EMPManagment.API.Controllers
                 {
                     response.message = UserDetail.Result.message;
                     response.code = UserDetail.Result.code;
+                }
+            }
+            catch (Exception ex)
+            {
+                response.code = (int)HttpStatusCode.InternalServerError;
+                response.message = "An error occurred while processing the request.";
+            }
+            return StatusCode(response.code, response);
+        }
+        [HttpPost]
+        [Route("GetUserFormListById")]
+        public async Task<IActionResult> GetUserFormListById(Guid UserId)
+        {
+            ApiResponseModel response = new ApiResponseModel();
+            try
+            {
+                List<UserPermissionModel> UserFormList = await RolewisePermissionMaster.GetUserFormListById(UserId);
+
+                if (UserFormList.Count == 0)
+                {
+                    response.code = 400;
+                    response.message = "No data found.";
+                }
+                else
+                {
+                    response.code = 200;
+                    response.data = UserFormList.ToList();
+                }
+            }
+            catch (Exception)
+            {
+                response.code = (int)HttpStatusCode.InternalServerError;
+                response.message = "An error occurred while processing the request.";
+            }
+            return StatusCode(response.code, response);
+        }
+        [HttpPost]
+        [Route("UpdateMultipleUserFormPermission")]
+        public async Task<IActionResult> UpdateMultipleUserFormPermission(List<UserPermissionModel> UpdatedUserFormPermissions)
+        {
+            ApiResponseModel response = new ApiResponseModel();
+            try
+            {
+                var userFormPermission = RolewisePermissionMaster.UpdateMultipleUserFormPermission(UpdatedUserFormPermissions);
+                if (userFormPermission.Result.code == 200)
+                {
+                    response.code = (int)HttpStatusCode.OK;
+                    response.message = userFormPermission.Result.message;
+                }
+                else
+                {
+                    response.message = userFormPermission.Result.message;
+                    response.code = userFormPermission.Result.code;
                 }
             }
             catch (Exception ex)

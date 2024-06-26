@@ -10,8 +10,8 @@ $(document).ready(function () {
             GetUserRoleList();
         }
     });
-    $('#frmuserdropdownButton').click(function () {
-        var dropdown = $('#frmusercustomDropdown');
+    $('#userdropdownButton').click(function () {
+        var dropdown = $('#usercustomDropdown');
         if (dropdown.is(':visible')) {
             dropdown.hide();
         } else {
@@ -19,19 +19,19 @@ $(document).ready(function () {
             GetUsernameForm();
         }
     });
-
-    $(document).on('click', '.dropdown-item-custom', function () {
+    $(document).on('click', '.Role-dropdown-item-custom', function () {
         var selectedText = $(this).text();
         var selectedValue = $(this).data('value');
         $('#dropdownButton').text(selectedText).attr('data-selected-value', selectedValue);
         $('#customDropdown').hide();
         EditRoleWiseFormDetails(selectedValue);
     });
-    $(document).on('click', '.dropdown-item-custom', function () {
+    $(document).on('click', '.User-dropdown-item-custom', function () {
         var selectedText = $(this).text();
         var selectedValue = $(this).data('value');
-        $('#frmuserdropdownButton').text(selectedText).attr('data-selected-value', selectedValue);
-        $('#frmusercustomDropdown').hide();
+        $('#userdropdownButton').text(selectedText).attr('data-selected-value', selectedValue);
+        $('#usercustomDropdown').hide();
+        EditUserFormDetails(selectedValue);
     });
     $(document).click(function (event) {
         if (!$(event.target).closest('#dropdownButton').length && !$(event.target).closest('#customDropdown').length) {
@@ -39,8 +39,8 @@ $(document).ready(function () {
         }
     });
     $(document).click(function (event) {
-        if (!$(event.target).closest('#frmuserdropdownButton').length && !$(event.target).closest('#frmusercustomDropdown').length) {
-            $('#frmusercustomDropdown').hide();
+        if (!$(event.target).closest('#userdropdownButton').length && !$(event.target).closest('#usercustomDropdown').length) {
+            $('#usercustomDropdown').hide();
         }
     });
     function GetUserRoleList() {
@@ -50,7 +50,19 @@ $(document).ready(function () {
                 var dropdown = $('#customDropdown');
                 dropdown.empty();
                 $.each(result, function (i, data) {
-                    dropdown.append('<div class="dropdown-item-custom" data-value="' + data.roleId + '">' + data.role + '</div>');
+                    dropdown.append('<div class="Role-dropdown-item-custom" data-value="' + data.roleId + '">' + data.role + '</div>');
+                });
+            }
+        });
+    }
+    function GetUsernameForm() {
+        $.ajax({
+            url: '/Task/GetUserName',
+            success: function (result) {
+                var dropdown = $('#usercustomDropdown');
+                dropdown.empty();
+                $.each(result, function (i, data) {
+                    dropdown.append('<option class="User-dropdown-item-custom" data-value=' + data.id + '>' + data.firstName + ' ' + data.lastName + '</option>');
                 });
             }
         });
@@ -74,32 +86,34 @@ $(document).ready(function () {
             },
         });
     }
-    //function EditUserFormDetails(roleId) {
-    //    var RoleId = roleId
-    //    $.ajax({
-    //        url: '/UserProfile/GetUserFormListById?RoleId=' + RoleId,
-    //        type: 'post',
-    //        dataType: 'json',
-    //        processData: false,
-    //        contentType: false,
-    //        complete: function (Result) {
-    //            if (Result.responseText != "{\"code\":400}") {
-    //                document.getElementById("userupdatebtn").style.display = "block";
-    //                $('#dveditUserForm').html(Result.responseText).show();
-    //            } else {
-    //                toastr.error(Result.message);
-    //            }
-    //        },
-    //    });
-    //}
+
 });
+function EditUserFormDetails(userId) {
+    var UserId = userId
+    $.ajax({
+        url: '/UserProfile/GetUserFormListById?UserId=' + UserId,
+        type: 'post',
+        dataType: 'json',
+        processData: false,
+        contentType: false,
+        complete: function (Result) {
+            if (Result.responseText == "") {
+                toastr.warning("No data found");
+                $('#dveditUserForm').html(Result.responseText).show();
+                $('#userupdatebtn').hide();
+            } else {
+                document.getElementById("userupdatebtn").style.display = "block";
+                $('#dveditUserForm').html(Result.responseText).show();
+            }
+        }
+    });
+}
 
 function GetUsernameForm() {
-    debugger
     $.ajax({
         url: '/Task/GetUserName',
         success: function (result) {
-            
+
             $.each(result, function (i, data) {
                 $('#drpAttusername').append('<option value=' + data.id + '>' + data.firstName + ' ' + data.lastName + ' (' + data.userName + ')</option>');
             });
@@ -108,7 +122,6 @@ function GetUsernameForm() {
 }
 $('#drpAttusername').change(function () {
     var Text = $("#drpAttusername Option:Selected").text();
-    var StateId = $(this).val();
     $("#textUserIdfrm").val(Text);
 });
 
@@ -159,7 +172,49 @@ function UpdateRolewiseFormPermission() {
         }
     });
 }
+function UpdateUserFormPermission() {
+    var formPermissions = [];
+    $(".forms").each(function () {
 
+        var userformRow = $(this);
+        var objData = {
+            UserId: $('#textUserId').val(),
+            FormId: userformRow.find('#textFormId').val(),
+            IsAddAllow: userformRow.find('#txtIsAdd').prop('checked'),
+            IsViewAllow: userformRow.find('#txtIsView').prop('checked'),
+            IsEditAllow: userformRow.find('#txtIsEdit').prop('checked'),
+            IsDeleteAllow: userformRow.find('#txtIsDelete').prop('checked'),
+        };
+        formPermissions.push(objData);
+    });
+    var form_data = new FormData();
+    form_data.append("UserPermissionDetails", JSON.stringify(formPermissions));
+
+    $.ajax({
+        url: '/UserProfile/UpdateUserPermission',
+        type: 'post',
+        data: form_data,
+        processData: false,
+        contentType: false,
+        dataType: 'json',
+        success: function (Result) {
+
+            if (Result.code == 200) {
+                Swal.fire({
+                    title: Result.message,
+                    icon: 'success',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'OK'
+                })
+            } else {
+                toastr.error(Result.message);
+            }
+        },
+        error: function (xhr, status, error) {
+            toastr.error(error);
+        }
+    });
+}
 function createRole() {
     if ($("#addUserRole").valid()) {
         var formData = new FormData();
@@ -220,7 +275,7 @@ function clearTextRoleName() {
 }
 function clearTextUserName() {
     ResetUserForm();
-    document.getElementById("textUserName");
+    document.getElementById("drpAttusername").value = "";
     $('#createUserModal').modal('show');
 }
 function ResetUserRoleForm() {
@@ -278,12 +333,10 @@ function SaveFormDetails() {
 }
 function CreateUserForm() {
     if ($("#addUserForm").valid()) {
-        //var formData = new FormData();
-        //formData.append("User", $("#textUserName").val());
-        var UserId = $("#textuserId").val();
+        var UserId = $("#drpAttusername").val();
 
         $.ajax({
-            url: '/UserProfile/CreateUserForm?UserId='+UserId,
+            url: '/UserProfile/CreateUserForm?UserId=' + UserId,
             type: 'Post',
             dataType: 'json',
             contentType: false,
@@ -300,7 +353,7 @@ function CreateUserForm() {
                     });
                 }
                 else {
-                    toastr.error(Result.message);
+                    toastr.warning(Result.message);
                 }
             }
         });
@@ -313,10 +366,10 @@ var UserForm;
 function validateAndCreateUser() {
     UserForm = $("#addUserForm").validate({
         rules: {
-            textUserName: "required",
+            drpAttusername: "required",
         },
         messages: {
-            textUserName: "Please enter role",
+            drpAttusername: "Please enter user",
         }
     })
     var isValid = true;
