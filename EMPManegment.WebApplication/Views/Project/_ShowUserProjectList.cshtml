@@ -14,7 +14,33 @@
     var initials = (firstNameInitial + lastNameInitial).ToUpper();
     var defaultImagePath = "~/content/image/image-b2.jpg";
 }
+<style>
+    span.deleteicon {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+    }
 
+        span.deleteicon span {
+            position: absolute;
+            display: block;
+            right: 3px;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            color: red;
+            background-color: #ccc;
+            font: 13px monospace;
+            text-align: center;
+            line-height: 1em;
+            cursor: pointer;
+        }
+
+        span.deleteicon input {
+            padding-right: 18px;
+            box-sizing: border-box;
+        }
+</style>
 
 <div class="tab-pane" role="tabpanel">
     <div class="card">

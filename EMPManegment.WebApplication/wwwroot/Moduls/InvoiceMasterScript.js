@@ -395,6 +395,7 @@ $(document).ready(function () {
     fn_GetInvoiceProductDetailsList()
     fn_GetInvoicePaymentMethodList()
     fn_GetInvoicePaymentTypeList()
+    fn_updateInvoiceTotals()
     function handleFocus(event, selector) {
         if (event.keyCode == 13 || event.keyCode == 9) {
             event.preventDefault();
@@ -768,6 +769,7 @@ function fn_updateInvoiceDiscount(that) {
     if (isNaN(discountprice)) {
         row.find("#txtdiscountamount").val(0);
         row.find("#txtdiscountpercentage").val(0);
+        row.find("#txtproductamount").val(productPrice.toFixed(2));
         fn_updateInvoiceProductAmount(row);
         fn_updateInvoiceTotals();
         return;
@@ -780,7 +782,8 @@ function fn_updateInvoiceDiscount(that) {
         var discountperbyamount = discountprice / productPrice * 100;
         row.find("#txtdiscountpercentage").val(discountperbyamount.toFixed(2));
     }
-
+    var AmountAfterDisc = productPrice - discountprice;
+    row.find("#txtproductamount").val(AmountAfterDisc.toFixed(2));
     fn_updateInvoiceProductAmount(row);
     fn_updateInvoiceTotals();
 }
@@ -795,6 +798,7 @@ function fn_UpdateInvoiceDiscountPercentage(that) {
     if (isNaN(discountPercentage)) {
         row.find("#txtdiscountamount").val(0);
         row.find("#txtdiscountpercentage").val(0);
+        row.find("#txtproductamount").val(productPrice.toFixed(2));
         fn_updateInvoiceProductAmount(row);
         fn_updateInvoiceTotals();
         return;
@@ -807,6 +811,8 @@ function fn_UpdateInvoiceDiscountPercentage(that) {
         discountprice = productPrice * discountPercentage / 100;
         row.find("#txtdiscountamount").val(discountprice.toFixed(2));
     }
+    var AmountAfterDisc = productPrice - discountprice;
+    row.find("#txtproductamount").val(AmountAfterDisc.toFixed(2));
     fn_updateInvoiceProductAmount(row);
     fn_updateInvoiceTotals();
 }
@@ -826,9 +832,9 @@ function fn_updateInvoiceTotals() {
 
         totalSubtotal += subtotal * totalquantity;
         totalGst += gst;
-        totalAmount = totalSubtotal + totalGst;
+        totalAmount = totalSubtotal + totalGst - discountprice;
         TotalItemQuantity += totalquantity;
-        TotalDiscount += discountprice;
+        TotalDiscount += discountprice * totalquantity;
     });
     $("#cart-subtotal").val(totalSubtotal.toFixed(2));
     $("#totalgst").val(totalGst.toFixed(2));

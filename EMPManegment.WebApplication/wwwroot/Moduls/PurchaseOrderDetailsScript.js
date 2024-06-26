@@ -657,6 +657,7 @@ function fn_updatePODiscount(that) {
     if (isNaN(discountprice)) {
         row.find("#txtPOdiscountamount").val(0);
         row.find("#txtPOdiscountpercentage").val(0);
+        row.find("#txtproductamount").val(productPrice.toFixed(2));
         fn_updatePOProductAmount(row);
         fn_updatePOTotals();
         return;
@@ -669,7 +670,8 @@ function fn_updatePODiscount(that) {
         var discountperbyamount = discountprice / productPrice * 100;
         row.find("#txtPOdiscountpercentage").val(discountperbyamount.toFixed(2));
     }
-
+    var AmountAfterDisc = productPrice - discountprice;
+    row.find("#txtproductamount").val(AmountAfterDisc.toFixed(2));
     fn_updatePOProductAmount(row);
     fn_updatePOTotals();
 }
@@ -682,6 +684,7 @@ function fn_UpdatePODiscountPercentage(that) {
     if (isNaN(discountPercentage)) {
         row.find("#txtPOdiscountamount").val(0);
         row.find("#txtPOdiscountpercentage").val(0);
+        row.find("#txtproductamount").val(productPrice.toFixed(2));
         fn_updatePOProductAmount(row);
         fn_updatePOTotals();
         return;
@@ -694,6 +697,8 @@ function fn_UpdatePODiscountPercentage(that) {
         discountprice = productPrice * discountPercentage / 100;
         row.find("#txtPOdiscountamount").val(discountprice.toFixed(2));
     }
+    var AmountAfterDisc = productPrice - discountprice;
+    row.find("#txtproductamount").val(AmountAfterDisc.toFixed(2));
     fn_updatePOProductAmount(row);
     fn_updatePOTotals();
 }
@@ -717,7 +722,7 @@ function fn_updatePOTotals() {
         totalGst += gst;
         totalAmount = totalSubtotal + totalGst;
         TotalItemQuantity += totalquantity;
-        TotalDiscount += discountprice;
+        TotalDiscount += discountprice * totalquantity;
     });
     $("#cart-subtotal").val(totalSubtotal.toFixed(2));
     $("#totalgst").val(totalGst.toFixed(2));

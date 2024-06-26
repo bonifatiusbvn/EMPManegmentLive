@@ -15,7 +15,6 @@
     }
 </style>
 @{
-    var firstItem = Model;
     decimal? totalAmount = 0;
     decimal? totalGst = 0;
 }
@@ -44,22 +43,22 @@
                         <div class="flex-grow-1 col-6 border">
                             <img src="~/assets/images/logo - bonifatius.jpeg" style="height: 25px;" />
                             <div class="flex-shrink-0 mt-sm-0 mt-3 border">
-                                <span class="text-muted"><b>@firstItem.VendorName</b></span> <br />
-                                <span class="text-muted">@firstItem.VendorFullAddress</span><br />
-                                <span class="text-muted text-uppercase">GSTIN/UIN :@firstItem.VendorGstnumber</span><br />
-                                <p class="text-muted text-uppercase">Email :@firstItem.VendorEmail</p>
+                                <span class="text-muted"><b>@Model.VendorName</b></span> <br />
+                                <span class="text-muted">@Model.VendorFullAddress</span><br />
+                                <span class="text-muted text-uppercase">GSTIN/UIN :@Model.VendorGstnumber</span><br />
+                                <p class="text-muted text-uppercase">Email :@Model.VendorEmail</p>
                             </div>
                             <div class="flex-shrink-0 mt-sm-0 mt-3 border">
                                 <p class="text-muted"><b>Consignee (Ship to):</b></p>
-                                <span class="text-muted text-uppercase"><b>@firstItem.ProjectName</b></span><br />
-                                <span class="text-muted">@firstItem.ShippingAddress</span><br />
+                                <span class="text-muted text-uppercase"><b>@Model.ProjectName</b></span><br />
+                                <span class="text-muted">@Model.ShippingAddress</span><br />
                                 <span class="text-muted">GSTIN:- </span>
                             </div>
                         </div>
                         <div class="flex-grow-1 col-3">
                             <div class="flex-shrink-0 mt-sm-0 mt-3 border">
                                 <label class="form-label">Invoice No</label>
-                                <p class="text-muted text-uppercase"><b>@firstItem.InvoiceNo</b></p>
+                                <p class="text-muted text-uppercase"><b>@Model.InvoiceNo</b></p>
                             </div>
                             <div class="flex-shrink-0 mt-sm-0 mt-3 border">
                                 <label class="form-label">Delivery Note</label>
@@ -71,7 +70,7 @@
                             </div>
                             <div class="flex-shrink-0 mt-sm-0 mt-3 border">
                                 <label class="form-label">Buyer's Order No</label>
-                                <p class="text-muted text-uppercase">@firstItem.BuyesOrderNo</p>
+                                <p class="text-muted text-uppercase">@Model.BuyesOrderNo</p>
                             </div>
                             <div class="flex-shrink-0 mt-sm-0 mt-3 border">
                                 <label class="form-label">Dispatch Doc No.</label>
@@ -79,7 +78,7 @@
                             </div>
                             <div class="flex-shrink-0 mt-sm-0 mt-3 border">
                                 <label class="form-label">Dispatched Through</label>
-                                <p class="text-muted text-uppercase"><b>@firstItem.DispatchThrough</b></p>
+                                <p class="text-muted text-uppercase"><b>@Model.DispatchThrough</b></p>
                             </div>
                             <div class="flex-shrink-0 mt-sm-0 mt-3 border">
                                 <label class="form-label">Bill of Landing/LR-RR No.</label>
@@ -89,7 +88,7 @@
                         <div class="flex-grow-1 col-3">
                             <div class="flex-shrink-0 mt-sm-0 mt-3 border">
                                 <label class="form-label">Date</label>
-                                <p><span class="text-muted fw-normal">@CommonHelper.GetCommonDateFormat(firstItem.InvoiceDate)</span></p>
+                                <p><span class="text-muted fw-normal">@CommonHelper.GetCommonDateFormat(Model.InvoiceDate)</span></p>
                             </div>
                             <div class="flex-shrink-0 mt-sm-0 mt-3 border">
                                 <label class="form-label">Mode/Terms of Payment</label>
@@ -101,7 +100,7 @@
                             </div>
                             <div class="flex-shrink-0 mt-sm-0 mt-3 border">
                                 <label class="form-label">Buy's Order Date</label>
-                                <p class="text-muted text-uppercase">@CommonHelper.GetCommonDateFormat(@firstItem?.BuyesOrderDate ?? DateTime.MinValue)</p>
+                                <p class="text-muted text-uppercase">@CommonHelper.GetCommonDateFormat(Model?.BuyesOrderDate ?? DateTime.MinValue)</p>
                             </div>
                             <div class="flex-shrink-0 mt-sm-0 mt-3 border">
                                 <label class="form-label">Delivery Note Date</label>
@@ -109,11 +108,11 @@
                             </div>
                             <div class="flex-shrink-0 mt-sm-0 mt-3 border">
                                 <label class="form-label">Destination</label>
-                                <p class="text-muted text-uppercase"><b></b></p>
+                                <p class="text-muted text-uppercase"><b>@Model.ShippingAddress</b></p>
                             </div>
                             <div class="flex-shrink-0 mt-sm-0 mt-3 border">
                                 <label class="form-label">Motor Vehicle No</label>
-                                <p class="text-muted text-uppercase"><b>GJ27TT6505</b></p>
+                                <p class="text-muted text-uppercase"><b>@Model.DispatchThrough</b></p>
                             </div>
                         </div>
                     </div>
@@ -122,9 +121,9 @@
                     <div class="d-flex">
                         <div class="flex-grow-1 col-6 border">
                             <p class="text-muted"><b>Buyer (Bill to)</b></p>
-                            <span class="text-muted text-uppercase"><b>@firstItem.VendorCompanyName</b></span><br />
-                            <span class="text-muted text-uppercase">@firstItem.ShippingAddress</span><br />
-                            <p class="text-muted text-uppercase"><b>GSTIN/UIN :@firstItem.VendorGstnumber</b></p>
+                            <span class="text-muted text-uppercase"><b>@Model.VendorCompanyName</b></span><br />
+                            <span class="text-muted text-uppercase">@Model.ShippingAddress</span><br />
+                            <p class="text-muted text-uppercase"><b>GSTIN/UIN :@Model.VendorGstnumber</b></p>
                         </div>
                         <div class="flex-grow-1 col-6 border">
                             <label class="form-label">Terms of Delivery</label>
@@ -139,6 +138,7 @@
                                 <th class="border">SINo.</th>
                                 <th class="border">Product Details</th>
                                 <th class="border">Price</th>
+                                <th class="border">Discount</th>
                                 <th class="border">Quantity</th>
                                 <th class="border">Unit</th>
                                 <th class="border">Amount</th>
@@ -158,6 +158,7 @@
                                         <span class="fw-medium" id="txtproductname">@item.Product</span>
                                     </td>
                                     <td class="border" id="txtHSN">@item.Price</td>
+                                    <td class="border" id="txtHSN">@item.DiscountAmount</td>
                                     <td class="border" id="txtquantity">@item.Quantity</td>
                                     <td class="border" id="txtper">@item.ProductTypeName</td>
                                     <td class="border" id="txttotal">₹@subtotal</td>
@@ -180,7 +181,7 @@
                                 <td class="border"></td>
                                 <td class="border"></td>
                                 <td class="border"></td>
-                                <td class="border">₹@firstItem.TotalGst</td>
+                                <td class="border">₹@Model.TotalGst</td>
                             </tr>
                             <tr>
                                 <td class="border"></td>
@@ -188,7 +189,7 @@
                                 <td class="border"></td>
                                 <td class="border"></td>
                                 <td class="border"></td>
-                                <td class="border"></td>
+                                <td class="border">@Model.RoundOff</td>
                             </tr>
                             <tr>
                                 <td class="border"></td>
@@ -196,7 +197,7 @@
                                 <td class="border"></td>
                                 <td class="border"></td>
                                 <td class="border"></td>
-                                <td class="border">₹@firstItem.TotalAmount</td>
+                                <td class="border">₹@Model.TotalAmount</td>
                             </tr>
                         </tbody>
                     </table><!--end table-->
@@ -230,17 +231,15 @@
                         <tbody id="products-list">
                             @{
                                 decimal? subTotal = 0;
-                                decimal? GstAmount = 0;
                             }
                             @foreach (var item in Model.InvoiceDetails)
                             {
                                 subTotal = (item.Quantity * item.PerUnitPrice);
-                                GstAmount = (subtotal * item.GstPer) / 100;
                                 <tr>
                                     <td class="border" id="txtHSN">@item.Hsn</td>
                                     <td class="border" id="txtTaxablevalue">₹@subtotal</td>
                                     <td class="border" id="txtgstpercentage">@item.GstPer%</td>
-                                    <td class="border" id="txtgstpercentage">₹@GstAmount?.ToString("0.00")</td>
+                                    <td class="border" id="txtgstpercentage">₹@item.GstAmount</td>
                                     <td class="border" id="txtgsttotal"></td>
                                 </tr>
                                 index++;
@@ -258,7 +257,7 @@
                                         </div>
                                     </div>
                                 </td>
-                                <td class="border">₹@firstItem.TotalGst</td>
+                                <td class="border">₹@Model.TotalGst</td>
                             </tr>
                         </tbody>
                     </table><!--end table-->
@@ -283,11 +282,11 @@
                         </div>
                         <div class="flex-grow-1 col-6">
                             <span class="form-label">Company's Bank Details</span><br />
-                            <span class="text-muted"> Bank Name :  <span><b>@firstItem.VendorBankName</b></span></span> <br />
-                            <span class="text-muted"> A/c No :  <span><b>@firstItem.VendorBankAccountNo</b></span></span> <br />
-                            <p class="text-muted">Branch & IFS Code  :       <span><b>@firstItem.VendorBankBranch/@firstItem.VendorBankIfsc</b></span></p>
+                            <span class="text-muted"> Bank Name :  <span><b>@Model.VendorBankName</b></span></span> <br />
+                            <span class="text-muted"> A/c No :  <span><b>@Model.VendorBankAccountNo</b></span></span> <br />
+                            <p class="text-muted">Branch & IFS Code  :       <span><b>@Model.VendorBankBranch/@Model.VendorBankIfsc</b></span></p>
                             <div class="border border-box text-end p-1" style="border: solid black">
-                                <p class="text-muted"><b>@firstItem.VendorAccountHolderName</b></p>
+                                <p class="text-muted"><b>@Model.VendorAccountHolderName</b></p>
                                 <br />
                                 <br />
                                 <p class="text-muted">Authorised Signatory</p>

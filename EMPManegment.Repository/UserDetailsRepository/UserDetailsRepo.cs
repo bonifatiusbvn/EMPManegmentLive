@@ -338,7 +338,7 @@ namespace EMPManegment.Repository.UserListRepository
                                                                  UserId = a.UserId,
                                                                  DocumentType = c.DocumentType,
                                                                  DocumentName = a.DocumentName,
-                                                                 CreatedOn = DateTime.Now,
+                                                                 CreatedOn = a.CreatedOn,
                                                                  CreatedBy = a.CreatedBy,
                                                              };
                 return DocumentList;

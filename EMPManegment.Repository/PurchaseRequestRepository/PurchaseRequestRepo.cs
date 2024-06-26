@@ -399,7 +399,7 @@ namespace EMPManegment.Repository.PurchaseRequestRepository
                             foreach (var pr in prList)
                             {
                                 pr.IsApproved = true;
-                                response.Message = "Purchase request with PR No. {pr.PrNo} is approved successfully.";
+                                response.Message = "Purchase request is approved successfully.";
                                 response.Code = 200;
                                 Context.TblPurchaseRequests.Update(pr);
                             }
@@ -407,7 +407,7 @@ namespace EMPManegment.Repository.PurchaseRequestRepository
                         }
                         else
                         {
-                            response.Message = "Purchase request with PR No. {item} already approved!";
+                            response.Message = "Purchase request is already approved!";
                             response.Code = 404;
                         }
                     }
