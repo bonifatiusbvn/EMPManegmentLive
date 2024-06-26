@@ -44,5 +44,20 @@ namespace EMPManegment.Services.FormPermissionMaster
         {
             return await FormPermissionMaster.CreateRolewisePermissionForm(FormId,userId);
         }
+
+        public async Task<ApiResponseModel> CreateUserForm(Guid UserId)
+        {
+           return await FormPermissionMaster.CreateUserForm(UserId);
+        }
+
+        public async Task<List<UserPermissionModel>> GetUserFormListById(Guid UserId)
+        {
+            return await FormPermissionMaster.GetUserFormListById(UserId);
+        }
+
+        public async Task<ApiResponseModel> UpdateMultipleUserFormPermission(List<UserPermissionModel> UpdatedUserFormPermissions)
+        {
+            return await FormPermissionMaster.UpdateMultipleUserFormPermission(UpdatedUserFormPermissions);
+        }
     }
 }

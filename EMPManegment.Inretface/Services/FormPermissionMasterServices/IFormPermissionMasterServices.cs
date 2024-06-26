@@ -17,6 +17,9 @@ namespace EMPManegment.Inretface.Services.FormPermissionMasterServices
         Task<ApiResponseModel> CreateUserRole(UserRoleModel roleDetails);
         Task<IEnumerable<FormMasterModel>> FormList();
         Task<ApiResponseModel> CreateRolewisePermissionForm(int FormId, Guid userId);
+        Task<ApiResponseModel> CreateUserForm(Guid UserId);
+        Task<List<UserPermissionModel>> GetUserFormListById(Guid UserId);
+        Task<ApiResponseModel> UpdateMultipleUserFormPermission(List<UserPermissionModel> UpdatedUserFormPermissions);
 
     }
 }
