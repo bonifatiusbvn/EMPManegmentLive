@@ -194,7 +194,7 @@ $(document).ready(function () {
                         }
                         if (canDelete) {
                             buttons += '<li class="btn text-danger list-inline-item delete" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Delete" style="margin-left:12px;">' +
-                                '<a onclick="DeletePurchaseRequest(\'' + full.prNo + '\')">' +
+                                '<a class="text-danger" onclick="DeletePurchaseRequest(\'' + full.prNo + '\')">' +
                                 '<i class="fas fa-trash"></i></a></li>';
                         }
                         buttons += '</ul>';
@@ -363,14 +363,7 @@ function CreatePurchaseRequest() {
         toastr.warning("Kindly add the products");
     }
 }
-function CheckProjectIdIsSelected() {
-    var ProjectId = $('#txtProjectId').val();
-    if (ProjectId == "") {
-        toastr.warning('Please Select Project!');
-    } else {
-        UpdatePurchaseRequestDetails()
-    }
-}
+
 function UpdatePurchaseRequestDetails() {
 
     var TotalAmount = $("#dsptotalAmount").text();
@@ -380,7 +373,7 @@ function UpdatePurchaseRequestDetails() {
             var orderRow = $(this);
             var objData = {
                 UserId: orderRow.find("#txtuserId").val(),
-                ProjectId: orderRow.find("#txtprojectId").val(),
+                ProjectId: orderRow.find("#textPRProjectId").val(),
                 ProductId: orderRow.find("#txtproductId").val(),
                 ProductName: orderRow.find("#txtProductName").val(),
                 ProductTypeId: orderRow.find("#txtproducttype").val(),

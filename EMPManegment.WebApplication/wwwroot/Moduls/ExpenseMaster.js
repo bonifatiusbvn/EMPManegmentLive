@@ -66,6 +66,8 @@ $(document).ready(function () {
                         select: function (event, ui) {
                             $(inputId).val(ui.item.label);
                             $(hiddenId).val(ui.item.value);
+                            event.preventDefault();         
+                            return false;
                         }
                     }).focus(function () {
                         $(this).autocomplete("search");
