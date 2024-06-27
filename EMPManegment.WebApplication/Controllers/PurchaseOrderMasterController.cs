@@ -224,36 +224,6 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
-        public async Task<IActionResult> GetAllPOProductList(string? searchText, int? page)
-        {
-            try
-            {
-                string apiUrl = $"ProductMaster/GetAllProductList";
-                ApiResponseModel response = await APIServices.PostAsync("", apiUrl);
-                if (response.code == 200)
-                {
-                    List<ProductDetailsView> Items = JsonConvert.DeserializeObject<List<ProductDetailsView>>(response.data.ToString());
-                    if (!string.IsNullOrEmpty(searchText))
-                    {
-                        searchText = searchText.ToLower();
-                        Items = Items.Where(u => u.ProductName.ToLower().Contains(searchText)).ToList();
-                    }
-                    int pageSize = 5;
-                    var pageNumber = page ?? 1;
-
-                    var pagedList = Items.ToPagedList(pageNumber, pageSize);
-                    return PartialView("~/Views/PurchaseOrderMaster/_showAllPOProductsPartial.cshtml", pagedList);
-                }
-                else
-                {
-                    return Ok(new { Message = "Failed to retrieve Product list" });
-                }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
         [HttpPost]
         public async Task<IActionResult> DisplayPOProductDetailsListById()
         {

@@ -4,7 +4,6 @@
 }
 
 $(document).ready(function () {
-    GetExpenseTypeList();
     GetPaymentTypeList();
     GetExpenseTotalAmount();
     GetAllUserExpenseList();
@@ -20,13 +19,6 @@ function clearText() {
     $("#txtdate").val('');
     $("#txttotalamount").val('');
     $("#txtimage").val('');
-    $('#txtexpensetype').select2({
-        theme: 'bootstrap4',
-        width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
-        placeholder: $(this).data('placeholder'),
-        allowClear: Boolean($(this).data('allow-clear')),
-        dropdownParent: $("#AddExpenseModel")
-    });
 }
 
 function resetForm() {
@@ -49,20 +41,49 @@ function preventEmptyValue(input) {
         input.value = 1;
     }
 }
-function GetExpenseTypeList() {
 
-    $.ajax({
-        url: '/ExpenseMaster/GetExpenseTypeList',
-        success: function (result) {
-            $('#txtexpensetype').empty().append('<option selected disabled value="">---Select Expense Type---</option>');
-            $('#Editexpensetype').empty().append('<option selected disabled value="">---Select Expense Type---</option>');
-            $.each(result, function (i, data) {
-                $('#txtexpensetype').append('<Option value=' + data.id + '>' + data.type + '</Option>')
-                $('#Editexpensetype').append('<Option value=' + data.id + '>' + data.type + '</Option>')
-            });
-        }
-    });
-}
+$(document).ready(function () {
+    function GetExpenseTypeList() {
+        $.ajax({
+            url: '/ExpenseMaster/GetExpenseTypeList',
+            method: 'GET',
+            success: function (result) {
+                var expenseTypes = result.map(function (data) {
+                    return {
+                        label: data.type,
+                        value: data.id
+                    };
+                });
+
+                function setupAutocomplete(inputId, hiddenId) {
+                    $(inputId).autocomplete({
+                        source: expenseTypes,
+                        minLength: 0,
+                        focus: function (event, ui) {
+                            event.preventDefault();
+                            $(inputId).val(ui.item.label);
+                        },
+                        select: function (event, ui) {
+                            $(inputId).val(ui.item.label);
+                            $(hiddenId).val(ui.item.value);
+                        }
+                    }).focus(function () {
+                        $(this).autocomplete("search");
+                    });
+                }
+
+                setupAutocomplete("#txtexpensetype", "#txtexpensetypeHidden");
+                setupAutocomplete("#Editexpensetype", "#EditexpensetypeHidden");
+            },
+            error: function (err) {
+                toastr.error("Failed to fetch expense types: ", err);
+            }
+        });
+    }
+
+    GetExpenseTypeList();
+});
+
 function SelectExpenseTypeId() {
     document.getElementById("txtexpensetypeid").value = document.getElementById("txtexpensetype").value;
     document.getElementById("Editexpensetypeid").value = document.getElementById("Editexpensetype").value;
@@ -107,7 +128,7 @@ function GetParameterByName(name, url) {
 function AddExpenseDetails() {
     if ($('#formexpensedetails').valid()) {
         var formData = new FormData();
-        formData.append("ExpenseType", $("#txtexpensetype").val());
+        formData.append("ExpenseType", $("#txtexpensetypeHidden").val());
         formData.append("Description", $("#txtDescription").val());
         formData.append("BillNumber", $("#txtbillno").val());
         formData.append("Date", $("#txtdate").val());
@@ -144,7 +165,7 @@ function AddExpenseDetails() {
 function AddUserExpenseDetails() {
     if ($('#userexpenseform').valid()) {
         var formData = new FormData();
-        formData.append("ExpenseType", $("#txtexpensetype").val());
+        formData.append("ExpenseType", $("#txtexpensetypeHidden").val());
         formData.append("Description", $("#txtDescription").val());
         formData.append("BillNumber", $("#txtbillno").val());
         formData.append("Date", $("#txtdate").val());
@@ -195,9 +216,9 @@ function EditExpenseDetails(Id) {
         contentType: 'application/json;charset=utf-8;',
         dataType: 'json',
         success: function (response) {
-
             $('#EditExpenseModel').modal('show');
-            $('#Editexpensetype').val(response.expenseType);
+            $('#Editexpensetype').val(response.expenseTypeName);
+            $('#EditexpensetypeHidden').val(response.expenseType);
             $('#Editid').val(response.id);
             $('#EditDescription').val(response.description);
             $('#Editbillno').val(response.billNumber);
@@ -208,15 +229,6 @@ function EditExpenseDetails(Id) {
             $('#Editpaymenttypeid').val(response.paymentType);
             $('#EditIsPaid').val(response.isPaid ? "True" : "False");
             $('#EditIsApproved').val(response.isApproved ? "True" : "False");
-
-            $('#Editexpensetype').select2({
-                theme: 'bootstrap4',
-                width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
-                placeholder: $(this).data('placeholder'),
-                allowClear: Boolean($(this).data('allow-clear')),
-                dropdownParent: $("#EditExpenseModel")
-            });
-
         },
         error: function () {
             toastr.error("Data not found");
@@ -227,7 +239,7 @@ function UpdateExpenseDetails() {
     if ($('#EditExpenseForm').valid()) {
         var formData = new FormData();
         formData.append("Id", $("#Editid").val());
-        formData.append("ExpenseType", $("#Editexpensetype").val());
+        formData.append("ExpenseType", $("#EditexpensetypeHidden").val());
         formData.append("Description", $("#EditDescription").val());
         formData.append("BillNumber", $("#Editbillno").val());
         formData.append("Date", $("#Editdate").val());
@@ -269,7 +281,7 @@ function UpdateExpenseListDetails() {
     if ($('#EditExpenseForm').valid()) {
         var formData = new FormData();
         formData.append("Id", $("#Editid").val());
-        formData.append("ExpenseType", $("#Editexpensetype").val());
+        formData.append("ExpenseType", $("#EditexpensetypeHidden").val());
         formData.append("Description", $("#EditDescription").val());
         formData.append("BillNumber", $("#Editbillno").val());
         formData.append("Date", $("#Editdate").val());

@@ -299,8 +299,9 @@ namespace EMPManegment.Repository.ExponseMasterRepository
             {
                 ExpenseDetailsView ExpenseDetail = new ExpenseDetailsView();
                 ExpenseDetail = (from a in Context.TblExpenseMasters.Where(x => x.Id == Id)
-                                 join b in Context.TblPaymentTypes
-                                 on a.PaymentType equals b.Id
+                                 join b in Context.TblPaymentTypes on a.PaymentType equals b.Id
+                                 join c in Context.TblExpenseTypes on a.ExpenseType equals c.Id
+                                
                                  select new ExpenseDetailsView
                                  {
                                      Id = a.Id,
@@ -321,6 +322,7 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                                      ApprovedByName = a.ApprovedByName,
                                      CreatedBy = a.CreatedBy,
                                      CreatedOn = a.CreatedOn,
+                                     ExpenseTypeName = c.Type,
                                  }).First();
                 response.Code = 200;
                 response.Data = ExpenseDetail;

@@ -291,8 +291,9 @@ namespace EMPManegment.Web.Controllers
                 return StatusCode(500, new { Message = "An error occurred while processing your request.", Code = 500 });
             }
         }
+
         [HttpPost]
-        public async Task<IActionResult> DisplayProductDetilsListById(Guid ProductId)
+        public async Task<IActionResult> DisplayProductDetailsListById(Guid ProductId)
         {
             try
             {

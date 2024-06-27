@@ -685,36 +685,5 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
-
-        public async Task<IActionResult> GetInvoiceAllProductList(string? searchText, int? page)
-        {
-            try
-            {
-                string apiUrl = $"ProductMaster/GetAllProductList";
-                ApiResponseModel response = await APIServices.PostAsync("", apiUrl);
-                if (response.code == 200)
-                {
-                    List<ProductDetailsView> Products = JsonConvert.DeserializeObject<List<ProductDetailsView>>(response.data.ToString());
-                    if (!string.IsNullOrEmpty(searchText))
-                    {
-                        searchText = searchText.ToLower();
-                        Products = Products.Where(u => u.ProductName.ToLower().Contains(searchText)).ToList();
-                    }
-                    int pageSize = 5;
-                    var pageNumber = page ?? 1;
-
-                    var pagedList = Products.ToPagedList(pageNumber, pageSize);
-                    return PartialView("~/Views/Invoice/_showInvoiceAllProductsPartial.cshtml", pagedList);
-                }
-                else
-                {
-                    return Ok(new { Message = "Failed to retrieve Product list" });
-                }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
     }
 }
