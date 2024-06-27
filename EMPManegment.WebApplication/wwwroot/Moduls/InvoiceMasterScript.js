@@ -420,7 +420,7 @@ $(document).ready(function () {
     }
 
     $(document).on('input', '#txtdiscountpercentage', debounce(function () {
-        debugger
+        
         var value = $(this).val();
         var productRow = $(this).closest(".product");
         if (value > 100) {
@@ -759,7 +759,6 @@ function fn_updateInvoiceProductAmount(that) {
     row.find("#txtproducttotalamount").val(TotalAmountAfterDiscount.toFixed(2));
 }
 function fn_updateInvoiceDiscount(that) {
-    debugger
     var row = $(that);
     var productPrice = parseFloat(row.find("#productamount").val());
     var quantity = parseFloat(row.find("#txtproductquantity").val());
@@ -788,7 +787,6 @@ function fn_updateInvoiceDiscount(that) {
     fn_updateInvoiceTotals();
 }
 function fn_UpdateInvoiceDiscountPercentage(that) {
-    debugger
     var row = $(that);
     var productPrice = parseFloat(row.find("#productamount").val());
     var quantity = parseFloat(row.find("#txtproductquantity").val());

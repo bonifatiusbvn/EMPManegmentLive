@@ -302,9 +302,9 @@ namespace EMPManagment.API.Controllers
 
         [HttpGet]
         [Route("ProjectActivityByUserId")]
-        public async Task<IActionResult> ProjectActivityByUserId(Guid ProId, Guid UserId)
+        public async Task<IActionResult> ProjectActivityByUserId(Guid UserId)
         {
-            IEnumerable<TaskDetailsView> UserTask = await TaskServices.ProjectActivityByUserId(ProId, UserId);
+            IEnumerable<TaskDetailsView> UserTask = await TaskServices.ProjectActivityByUserId(UserId);
             return Ok(new { code = 200, data = UserTask.ToList() });
         }
     }

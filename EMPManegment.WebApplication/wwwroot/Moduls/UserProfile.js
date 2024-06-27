@@ -127,11 +127,11 @@ function GetProjectList() {
         processData: false,
         contentType: false,
         complete: function (Result) {
-
             $('#dvuserprojectlist').html(Result.responseText);
         },
     })
 }
+
 
 
 $(document).ready(function () {
@@ -183,18 +183,30 @@ function serrchproject() {
     loadPartialView(1);
     GetUserProjectList(1);
 }
-function UserProjectActivity(ProId) {
+function UserProjectActivity() {    
 
     $.ajax({
-        url: '/Task/ProjectActivityByUserId?ProId=' + ProId,
+        url: '/UserProfile/GetInvoiceActivityByUserId',
         type: 'Get',
         dataType: 'json',
         processData: false,
         contentType: false,
         complete: function (Result) {
-
             $('#UserProjectActivity').html(Result.responseText);
+            UserTaskActivity();
         },
     })
 }
+function UserTaskActivity() {
 
+    $.ajax({
+        url: '/Task/ProjectActivityByUserId',
+        type: 'Get',
+        dataType: 'json',
+        processData: false,
+        contentType: false,
+        complete: function (Result) {
+            $('#UserTaskActivity').html(Result.responseText);
+        },
+    })
+}

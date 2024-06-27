@@ -81,7 +81,7 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link fs-14" data-bs-toggle="tab" onclick="UserProjectActivity('@Model.ProjectId')" href="#activities" role="tab">
+                                <a class="nav-link fs-14" data-bs-toggle="tab" onclick="UserProjectActivity()" href="#activities" role="tab">
                                     <i class="ri-list-unordered d-inline-block d-md-none"></i> <span class="d-none d-md-inline-block">Activities</span>
                                 </a>
                             </li>
@@ -268,6 +268,8 @@
                         <div class="tab-pane fade" id="activities" role="tabpanel">
                             <div class="card">
                                 <div class="card-body">
+                                    <div id="UserTaskActivity">
+                                    </div>
                                     <div id="UserProjectActivity">
                                     </div>
                                 </div>

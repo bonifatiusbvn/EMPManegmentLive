@@ -352,13 +352,13 @@ namespace EMPManegment.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> ProjectActivityByUserId(Guid ProId)
+        public async Task<IActionResult> ProjectActivityByUserId()
         {
             try
             {
                 Guid UserId = _userSession.UserId;
                 List<TaskDetailsView> activity = new List<TaskDetailsView>();
-                ApiResponseModel postuser = await APIServices.GetAsync("", "UserHome/ProjectActivityByUserId?ProId=" + ProId + "&UserId=" + UserId);
+                ApiResponseModel postuser = await APIServices.GetAsync("", "UserHome/ProjectActivityByUserId?UserId=" + UserId);
                 if (postuser.data != null)
                 {
                     activity = JsonConvert.DeserializeObject<List<TaskDetailsView>>(postuser.data.ToString());
@@ -369,7 +369,7 @@ namespace EMPManegment.Web.Controllers
                     activity = new List<TaskDetailsView>();
                     ViewBag.Error = "note found";
                 }
-                return PartialView("~/Views/UserProfile/_UserActivityPartial.cshtml", activity);
+                return PartialView("~/Views/Project/_ProjectActivityPartial.cshtml", activity);
             }
             catch (Exception ex)
             {

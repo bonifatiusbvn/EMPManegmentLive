@@ -43,6 +43,7 @@ using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
 using EMPManegment.EntityModels.ViewModels.VendorModels;
 using EMPManegment.EntityModels.ViewModels.FormMaster;
 using iTextSharp.text.pdf;
+using EMPManegment.EntityModels.ViewModels.Invoice;
 
 namespace EMPManegment.Web.Controllers
 {
@@ -1112,6 +1113,30 @@ namespace EMPManegment.Web.Controllers
                 {
                     return Ok(new { postuser.message, postuser.code });
                 }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        [HttpGet]
+        public async Task<IActionResult> GetInvoiceActivityByUserId()
+        {
+            try
+            {
+                var UserId=_userSession.UserId;
+                List<InvoiceViewModel> activity = new List<InvoiceViewModel>();
+                ApiResponseModel postuser = await APIServices.GetAsync("", "Invoice/InvoicActivityByUserId?UserId=" + UserId);
+                if (postuser.data != null)
+                {
+                    activity = JsonConvert.DeserializeObject<List<InvoiceViewModel>>(postuser.data.ToString());
+                }
+                else
+                {
+                    activity = new List<InvoiceViewModel>();
+                    ViewBag.Error = "note found";
+                }
+                return PartialView("~/Views/UserProfile/_UserActivityPartial.cshtml", activity);
             }
             catch (Exception ex)
             {

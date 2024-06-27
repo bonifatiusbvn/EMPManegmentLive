@@ -271,14 +271,14 @@ namespace EMPManegment.Repository.TaskRepository
             }
         }
 
-        public async Task<IEnumerable<TaskDetailsView>> ProjectActivityByUserId(Guid ProId, Guid UserId)
+        public async Task<IEnumerable<TaskDetailsView>> ProjectActivityByUserId(Guid UserId)
         {
             try
             {
                 var activity = (from a in Context.TblTaskDetails
                                 join b in Context.TblUsers on a.User.Id equals b.Id
                                 join c in Context.TblTaskMasters on a.TaskType equals c.Id
-                                where a.ProjectId == ProId && a.UserId == UserId
+                                where a.UserId == UserId
                                 orderby a.UpdatedOn ascending
                                 select new TaskDetailsView
                                 {
@@ -298,7 +298,7 @@ namespace EMPManegment.Repository.TaskRepository
                                     CreatedBy = a.CreatedBy,
                                     UpdatedOn = a.UpdatedOn,
 
-                                }).ToList();
+                                }).Take(3);
 
                 return activity;
             }

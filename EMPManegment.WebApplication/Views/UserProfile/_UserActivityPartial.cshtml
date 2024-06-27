@@ -1,14 +1,16 @@
 ﻿@using EMPManegment.Web.Models
-@model IEnumerable<EMPManegment.EntityModels.ViewModels.TaskModels.TaskDetailsView>
+@model IEnumerable<EMPManegment.EntityModels.ViewModels.Invoice.InvoiceViewModel>
 @inject UserSession _userSession
-
+@inject EMPManegment.Web.Helper.Common CommonHelper
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
 
 @foreach (var item in Model)
 {
-    var imageUrl = !string.IsNullOrEmpty(item.UserProfile) ? Url.Content($"~/{item.UserProfile}") : null;
+    var imageUrl = !string.IsNullOrEmpty(item.UserImage) ? Url.Content($"~/{item.UserImage}") : null;
     var initials = (!string.IsNullOrEmpty(item.FirstName) && !string.IsNullOrEmpty(item.LastName)) ? $"{item.FirstName[0]}{item.LastName[0]}".ToUpper() : null;
-
-    <div class="acitivity-item d-flex">
+    <div class="acitivity-item py-3 d-flex">
         <div class="flex-shrink-0">
             @if (!string.IsNullOrEmpty(imageUrl))
             {
@@ -22,31 +24,24 @@
             }
         </div>
         <div class="flex-grow-1 ms-3">
-            <h6 class="mb-1">
-                @item.TaskTitle
-                @if (item.TaskStatus == "Working")
-                {
-                    <a class="badge bg-warning text-uppercase">@item.TaskStatus</a>
-                }
-                else if (item.TaskStatus == "Completed")
-                {
-                    <a class="badge bg-success text-uppercase">@item.TaskStatus</a>
-                }
-                else if (item.TaskStatus == "Pending")
-                {
-                    <a class="badge  bg-primary  text-uppercase">@item.TaskStatus</a>
-                }
-                else if (item.TaskStatus == "InReview")
-                {
-                    <a class="badge  bg-secondary text-uppercase">@item.TaskStatus</a>
-                }
-                else
-                {
-                    <a class="badge  bg-secondary text-uppercase">@item.TaskStatus</a>
-                }
-            </h6>
-            <p class="text-muted mb-2">@item.TaskDetails</p>
-            <small class="mb-0 text-muted">@item.UpdatedOn</small>
+            <h6 class="mb-1">@item.UserName</h6>
+            <p class="text-muted mb-2">Create Invoice @item.InvoiceNo</p>
+            <small class="mb-0 text-muted">@item.CreatedOn</small>
         </div>
     </div>
+    <div class="acitivity-item py-3 d-flex">
+        <div class="flex-shrink-0">
+            <div class="avatar-xs acitivity-avatar">
+                <div class="avatar-title rounded-circle bg-primary-subtle text-primary">
+                    <i class="ri-shopping-bag-line"></i>
+                </div>
+            </div>
+        </div>
+        <div class="flex-grow-1 ms-3">
+            <h6 class="mb-1">Your order is placed <span class="badge bg-danger-subtle text-danger align-middle ms-1">@item.Status</span></h6>
+            <p class="text-muted mb-2">@item.ShippingAddress</p>
+            <small class="mb-0 text-muted">@CommonHelper.GetCommonDateFormat(item?.InvoiceDate ?? DateTime.MinValue)</small>
+        </div>
+    </div>
+
 }
