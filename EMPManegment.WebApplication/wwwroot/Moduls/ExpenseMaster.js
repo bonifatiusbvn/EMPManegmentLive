@@ -5,7 +5,6 @@
 
 $(document).ready(function () {
     GetExpenseTypeList();
-    GetPaymentTypeList();
     GetExpenseTotalAmount();
     GetAllUserExpenseList();
     ApprovedExpenseList();
@@ -67,24 +66,9 @@ function SelectExpenseTypeId() {
     document.getElementById("txtexpensetypeid").value = document.getElementById("txtexpensetype").value;
     document.getElementById("Editexpensetypeid").value = document.getElementById("Editexpensetype").value;
 }
-function GetPaymentTypeList() {
-    $.ajax({
-        url: '/ExpenseMaster/GetPaymentTypeList',
-        success: function (result) {
-
-            $.each(result, function (i, data) {
-                $('#txtpaymenttype').append('<Option value=' + data.id + '>' + data.type + '</Option>')
-                $('#Editpaymenttype').append('<Option value=' + data.id + '>' + data.type + '</Option>')
-            });
-            var firstPaymentMethod = result[0];
-
-
-        }
-    });
-}
 function SelectPaymentTypeId() {
-    document.getElementById("txtpaymenttypeid").value = document.getElementById("txtpaymenttype").value;
-    document.getElementById("Editpaymenttypeid").value = document.getElementById("Editpaymenttype").value;
+    document.getElementById("txtpaymenttypeid").value = document.getElementById("txtExpensepaymenttype").value;
+    document.getElementById("Editpaymenttypeid").value = document.getElementById("EditExpensepaymenttype").value;
 }
 function GetParameterByName(name, url) {
 
@@ -204,8 +188,8 @@ function EditExpenseDetails(Id) {
             $('#Editdate').val(response.date);
             $('#Edittotalamount').val(response.totalAmount);
             $('#Editaccount').val(response.account);
-            $('#Editpaymenttype').val(response.paymentType);
-            $('#Editpaymenttypeid').val(response.paymentType);
+            $('#txtExpensepaymenttype').val(response.paymentType);
+            $('#EditExpensepaymenttypeid').val(response.paymentTypeName);
             $('#EditIsPaid').val(response.isPaid ? "True" : "False");
             $('#EditIsApproved').val(response.isApproved ? "True" : "False");
 
@@ -232,7 +216,7 @@ function UpdateExpenseDetails() {
         formData.append("BillNumber", $("#Editbillno").val());
         formData.append("Date", $("#Editdate").val());
         formData.append("TotalAmount", $("#Edittotalamount").val());
-        formData.append("PaymentType", $("#Editpaymenttype").val());
+        formData.append("PaymentType", $("#EditExpensepaymenttype").val());
         formData.append("IsPaid", $("#EditIsPaid").val());
         formData.append("IsApproved", $("#EditIsApproved").val());
         formData.append("Account", $("#Editaccount").val());
@@ -274,7 +258,7 @@ function UpdateExpenseListDetails() {
         formData.append("BillNumber", $("#Editbillno").val());
         formData.append("Date", $("#Editdate").val());
         formData.append("TotalAmount", $("#Edittotalamount").val());
-        formData.append("PaymentType", $("#Editpaymenttype").val());
+        formData.append("PaymentType", $("#EditExpensepaymenttype").val());
         formData.append("IsPaid", $("#EditIsPaid").val());
         formData.append("IsApproved", $("#EditIsApproved").val());
         formData.append("Account", $("#Editaccount").val());
@@ -1223,7 +1207,7 @@ function GetPayExpense() {
         formData.append("ApprovedBy", $("#txtuseraproveid").val());
         formData.append("ApprovedByName", $("#txtuseraprovename").val());
         formData.append("TotalAmount", $("#txtcreditamount").val());
-        formData.append("PaymentType", $("#txtpaymenttype").val());
+        formData.append("PaymentType", $("#txtExpensepaymenttype").val());
         formData.append("CreatedBy", $("#txtuseraproveid").val());
         $.ajax({
             url: '/ExpenseMaster/PayExpense',
@@ -1255,11 +1239,11 @@ $(document).ready(function () {
     $("#GetPayForm").validate({
         rules: {
             txtcreditamount: "required",
-            txtpaymenttype: "required",
+            txtExpensepaymenttype: "required",
         },
         messages: {
             txtcreditamount: "Please Enter Amount",
-            txtpaymenttype: "Please Select Payment Type",
+            txtExpensepaymenttype: "Please Select Payment Type",
         }
     })
 });

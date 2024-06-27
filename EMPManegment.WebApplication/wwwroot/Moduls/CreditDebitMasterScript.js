@@ -1,7 +1,5 @@
 ﻿$(document).ready(function () {
     GetAllVendorData();
-    GetPaymentMethodList();
-    GetPaymentTypeList();
     AllTransactionData();
     getVendorTransactionList();
 });
@@ -65,33 +63,7 @@ function GetAllVendorData() {
     });
 }
 
-function GetPaymentMethodList() {
 
-    $.ajax({
-        url: '/PurchaseOrderMaster/GetPaymentMethodList',
-        success: function (result) {
-            $.each(result, function (i, data) {
-                $('#txtpaymentmethod').append('<Option value=' + data.id + '>' + data.paymentMethod + '</Option>')
-            });
-            var firstPaymentMethod = result[0];
-
-            $('#txtpaymentmethod').val(firstPaymentMethod.id);
-        }
-    });
-}
-function GetPaymentTypeList() {
-    $.ajax({
-        url: '/ExpenseMaster/GetPaymentTypeList',
-        success: function (result) {
-            $.each(result, function (i, data) {
-                $('#paymenttype').append('<Option value=' + data.id + '>' + data.type + '</Option>')
-            });
-            var firstPaymentType = result[0];
-
-            $('#paymenttype').val(firstPaymentType.id);
-        }
-    });
-}
 
 function InsertCreditDebitDetails() {
 
@@ -107,8 +79,8 @@ function InsertCreditDebitDetails() {
         var objData = {
             VendorId: document.getElementById("txtvendorid").textContent,
             InvoiceNo: document.getElementById("txtinvoiceno").textContent,
-            PaymentType: $("#paymenttype").val(),
-            PaymentMethod: $("#txtpaymentmethod").val(),
+            PaymentType: $("#drpcreditdebitpaymenttype").val(),
+            PaymentMethod: $("#drpcreditdebitpaymentmethod").val(),
             CreditDebitAmount: $("#txtcreditdebitamount").val(),
             PendingAmount: $("#txtpendingamount").val(),
             TotalAmount: $("#txttotalamount").val(),
@@ -288,16 +260,7 @@ $(document).ready(function () {
 });
 
 
-function GetCompanyNameList() {
-    $.ajax({
-        url: '/ProductMaster/GetVendorsNameList',
-        success: function (result) {
-            $.each(result, function (i, data) {
-                $('#textCompanyName').append('<option value="' + data.id + '">' + data.vendorCompany + '</option>');
-            });
-        },
-    });
-}
+
 function AllTransactionData() {
     $.ajax({
         url: '/Invoice/AllVendorTransaction',
@@ -313,13 +276,11 @@ function AllTransactionData() {
 }
 
 $(document).ready(function () {
-    GetCompanyNameList();
-
-    $('#textCompanyName').on('change', SortCompanyName);
+    $('#textTransactionCompanyName').on('change', SortCompanyName);
 });
 
 function SortCompanyName() {
-    var CompanyId = $('#textCompanyName').val();
+    var CompanyId = $('#textTransactionCompanyName').val();
     if (CompanyId == "AllCompany") {
         $.ajax({
             url: '/Invoice/AllVendorTransaction',
@@ -350,7 +311,7 @@ function SortCompanyName() {
 function SearchDatesInVendorCreditDebitList() {
     var StartDate = $('#vendorstartdate').val();
     var EndDate = $('#vendorenddate').val();
-    var CompanyId = $('#textCompanyName').val();
+    var CompanyId = $('#textTransactionCompanyName').val();
     if (StartDate == "" && EndDate == "") {
         toastr.warning("Select dates");
     } else if (StartDate == "") {

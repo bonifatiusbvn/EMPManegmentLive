@@ -10,16 +10,6 @@ $("#backbtn").hide();
 $("#startdatebox").hide();
 $("#enddatebox").hide();
 
-function GetUsernameList() {
-    $.ajax({
-        url: '/Task/GetUserName',
-        success: function (result) {
-            $.each(result, function (i, data) {
-                $('#drpAttusername').append('<option value=' + data.id + '>' + data.firstName + ' ' + data.lastName + ' (' + data.userName + ')</option>');
-            });
-        }
-    });
-}
 function cleartextBox() {
     $("#drpAttusername").find("option").remove().end().append(
         '<option selected value="" >--Select Username--</option>');

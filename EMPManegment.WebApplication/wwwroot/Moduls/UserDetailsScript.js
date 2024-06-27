@@ -692,33 +692,6 @@ function clearSelectedBox() {
         '<option selected disabled value="">--Select Department--</option>');
 }
 
-function GetUsername() {
-    $.ajax({
-        url: '/Task/GetUserName',
-        success: function (result) {
-            $('#ddlusername').empty();
-            $('#ddlusername').append('<option selected disabled value="">--Select Username--</option>');
-            $.each(result, function (i, data) {
-                $('#ddlusername').append('<option value=' + data.id + '>' + data.firstName + ' ' + data.lastName + ' (' + data.userName + ')</option>');
-            });
-        }
-    });
-
-}
-
-function GetDepartment() {
-    $.ajax({
-        url: '/Authentication/GetDepartment',
-        success: function (result) {
-            $('#ddlDepartment').empty();
-            $('#ddlDepartment').append('<option selected disabled value="">--Select Department--</option>');
-            $.each(result, function (i, data) {
-                $('#ddlDepartment').append('<option value=' + data.id + '>' + data.departments + '</option>');
-            });
-        }
-    });
-}
-
 function GetActiveDeactiveList(page) {
     DepartmentId = $("#ddlDepartment").val();
     Id = $("#ddlusername").val();
@@ -758,7 +731,7 @@ $('.dropdown-item').click(function () {
 
     if (selectedValue === "UserName") {
         clearsearchtextbox();
-        GetUsername();
+        GetUsernameList();
         $("#usernamebox").show();
         $("#departmentbox").hide();
     }
@@ -972,94 +945,4 @@ function CreateUser() {
     else {
         toastr.warning("Kindly Fill all Datafields.")
     }
-}
-$(document).ready(function () {
-
-    GetUserDepartment();
-    GetUserCountry();
-
-    $('#dropUserState').change(function () {
-
-        var Text = $("#dropUserState Option:Selected").text();
-        var txtUserid = $(this).val();
-        $("#txtUserstate").val(txtUserid);
-    });
-
-    $('#drpCuCity').change(function () {
-
-        var Text = $("#UserCity Option:Selected").text();
-        var txtUsercity = $(this).val();
-        $("#txtUserCity").val(txtUsercity);
-    });
-
-});
-
-function fn_getUserState(drpUserstate, countryId, that) {
-    var cid = countryId;
-    if (cid == undefined || cid == null) {
-        var cid = $(that).val();
-    }
-
-
-    $('#' + drpUserstate).empty();
-    $('#' + drpUserstate).append('<Option >--Select State--</Option>');
-    $.ajax({
-        url: '/Authentication/GetState?StateId=' + cid,
-        success: function (result) {
-
-            $.each(result, function (i, data) {
-                $('#' + drpUserstate).append('<Option value=' + data.id + '>' + data.stateName + '</Option>')
-            });
-        }
-    });
-}
-
-function fn_getUsercitiesbystateId(drpUsercity, stateid, that) {
-
-    var sid = stateid;
-    if (sid == undefined || sid == null) {
-        var sid = $(that).val();
-    }
-
-
-    $('#' + drpUsercity).empty();
-    $('#' + drpUsercity).append('<Option >--Select City--</Option>');
-    $.ajax({
-        url: '/Authentication/GetCity?CityId=' + sid,
-        success: function (result) {
-
-            $.each(result, function (i, data) {
-                $('#' + drpUsercity).append('<Option value=' + data.id + '>' + data.cityName + '</Option>');
-
-            });
-        }
-    });
-}
-
-function GetUserCountry() {
-    $.ajax({
-        url: '/Authentication/GetCountrys',
-        success: function (result) {
-            var $countryDropdown = $("#drpCuCountry");
-            $countryDropdown.empty();
-            $countryDropdown.append('<option selected value="">--Select Country--</option>');
-            $.each(result, function (i, data) {
-                $countryDropdown.append('<option value="' + data.id + '">' + data.countryName + '</option>');
-            });
-        }
-    });
-}
-
-function GetUserDepartment() {
-    $.ajax({
-        url: '/Authentication/GetDepartment',
-        success: function (result) {
-            var $departmentDropdown = $("#drpCuDepartment");
-            $departmentDropdown.empty();
-            $departmentDropdown.append('<option selected value="">--Select Department--</option>');
-            $.each(result, function (i, data) {
-                $departmentDropdown.append('<Option value=' + data.id + '>' + data.departments + '</Option>')
-            });
-        }
-    });
 }

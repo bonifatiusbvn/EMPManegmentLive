@@ -7,7 +7,7 @@
 function showadddetails() {
     ClearTextBox();
     GetTaskType();
-    GetUsername();
+    GetUsernameList();
     $('#addtasks').modal('show');
 }
 
@@ -87,17 +87,6 @@ function btnSaveTaskDetail() {
         siteloaderhide();
         toastr.warning("Kindly fill all datafield");
     }
-}
-
-function GetUsername() {
-    $.ajax({
-        url: '/Task/GetUserName',
-        success: function (result) {
-            $.each(result, function (i, data) {
-                $('#ddlusername').append('<Option value=' + data.id + '>' + data.firstName + " " + data.lastName + " " + "(" + data.userName + ")" + '</Option>')
-            });
-        }
-    });
 }
 
 function Usernametext(sel) {

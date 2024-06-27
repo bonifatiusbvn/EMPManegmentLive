@@ -1,4 +1,4 @@
-﻿GetUsernameForm();
+﻿
 $(document).ready(function () {
     GetFormList();
     $('#dropdownButton').click(function () {
@@ -55,18 +55,6 @@ $(document).ready(function () {
             }
         });
     }
-    function GetUsernameForm() {
-        $.ajax({
-            url: '/Task/GetUserName',
-            success: function (result) {
-                var dropdown = $('#usercustomDropdown');
-                dropdown.empty();
-                $.each(result, function (i, data) {
-                    dropdown.append('<option class="User-dropdown-item-custom" data-value=' + data.id + '>' + data.firstName + ' ' + data.lastName + '</option>');
-                });
-            }
-        });
-    }
 
     function EditRoleWiseFormDetails(roleId) {
         var RoleId = roleId
@@ -105,18 +93,6 @@ function EditUserFormDetails(userId) {
                 document.getElementById("userupdatebtn").style.display = "block";
                 $('#dveditUserForm').html(Result.responseText).show();
             }
-        }
-    });
-}
-
-function GetUsernameForm() {
-    $.ajax({
-        url: '/Task/GetUserName',
-        success: function (result) {
-
-            $.each(result, function (i, data) {
-                $('#drpAttusername').append('<option value=' + data.id + '>' + data.firstName + ' ' + data.lastName + ' (' + data.userName + ')</option>');
-            });
         }
     });
 }

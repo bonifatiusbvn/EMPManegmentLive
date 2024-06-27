@@ -1,24 +1,9 @@
 ﻿$(document).ready(function () {
-    GetVendorNameList()
     GetProducts()
     GetAllProductDetailsList();
 });
 
-function GetVendorNameList() {
-    $.ajax({
-        url: '/ProductMaster/GetVendorsNameList',
-        success: function (result) {
-            $.each(result, function (i, data) {
-                $('#txtvendorname').append('<Option value=' + data.id + '>' + data.vendorCompany + '</Option>')
-            });
 
-            $.each(result, function (i, data) {
-                $('#txtvendornamed').append('<Option value=' + data.id + '>' + data.vendorCompany + '</Option>')
-            });
-
-        }
-    });
-}
 function selectvendorId() {
     document.getElementById("txtvendorTypeid").value = document.getElementById("txtvendorname").value;
 }
@@ -60,8 +45,6 @@ function AddProductType() {
         toastr.warning("Kindly fill the product type")
     }
 }
-
-
 
 function GetProducts() {
     $.ajax({

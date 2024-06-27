@@ -419,82 +419,6 @@ function deleteProjectMember(userId) {
     })
 }
 
-
-$(document).ready(function () {
-
-    GetProjectCountry();
-
-    $('#dropProjectState').change(function () {
-
-        var Text = $("#dropProjectState Option:Selected").text();
-        var txtProjectid = $(this).val();
-        $("#txtProjectstate").val(txtProjectid);
-    });
-
-    $('#ProjectCity').change(function () {
-
-        var Text = $("#projectCity Option:Selected").text();
-        var txtProjectcity = $(this).val();
-        $("#txtProjectCity").val(txtProjectcity);
-    });
-
-});
-
-function fn_getProjectState(drpProjectstate, countryId, that) {
-    var cid = countryId;
-    if (cid == undefined || cid == null) {
-        var cid = $(that).val();
-    }
-
-
-    $('#' + drpProjectstate).empty();
-    $('#' + drpProjectstate).append('<Option >--Select State--</Option>');
-    $.ajax({
-        url: '/Authentication/GetState?StateId=' + cid,
-        success: function (result) {
-
-            $.each(result, function (i, data) {
-                $('#' + drpProjectstate).append('<Option value=' + data.id + '>' + data.stateName + '</Option>')
-            });
-        }
-    });
-}
-
-function fn_getProjectcitiesbystateId(drpProjectcity, stateid, that) {
-
-    var sid = stateid;
-    if (sid == undefined || sid == null) {
-        var sid = $(that).val();
-    }
-
-
-    $('#' + drpProjectcity).empty();
-    $('#' + drpProjectcity).append('<Option >--Select City--</Option>');
-    $.ajax({
-        url: '/Authentication/GetCity?CityId=' + sid,
-        success: function (result) {
-
-            $.each(result, function (i, data) {
-                $('#' + drpProjectcity).append('<Option value=' + data.id + '>' + data.cityName + '</Option>');
-
-            });
-        }
-    });
-}
-
-function GetProjectCountry() {
-    $.ajax({
-        url: '/Authentication/GetCountrys',
-        success: function (result) {
-            $.each(result, function (i, data) {
-
-                $('#projectCountry').append('<option value=' + data.id + '>' + data.countryName + '</option>')
-
-            });
-        }
-    });
-}
-
 $(document).ready(function () {
     var ProId = $('#txtprojectid').val();
     projectActivity(ProId);
@@ -678,6 +602,3 @@ $(document).ready(function () {
         toggleImagePreview(true);
     }
 });
-
-
-

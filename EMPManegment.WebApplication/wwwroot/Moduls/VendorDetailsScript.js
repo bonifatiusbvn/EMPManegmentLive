@@ -1,5 +1,4 @@
 ﻿$(document).ready(function () {
-    GetVendorType()
     $('#VendorDetailsModel').modal('hide');
 });
 
@@ -242,23 +241,9 @@ function AddVendorDetails() {
             },
         })
     }
-
     else {
         toastr.warning("Kindly fill all datafield");
     }
-}
-
-function GetVendorType() {
-
-    $.ajax({
-        url: '/Vendor/GetVendorType',
-        success: function (result) {
-            $.each(result, function (i, data) {
-                $('#ddlVendorType').append('<Option value=' + data.id + '>' + data.vendorType + '</Option>')
-
-            });
-        }
-    });
 }
 
 $(document).ready(function () {
@@ -408,96 +393,5 @@ function editnexttoBankDetails() {
             confirmButtonText: 'OK',
         })
     }
-}
-
-
-function GetVendorTypes() {
-
-    $.ajax({
-        url: '/Vendor/GetVendorType',
-        success: function (result) {
-            $.each(result, function (i, data) {
-                $('#textVendorType').append('<Option value=' + data.id + '>' + data.vendorType + '</Option>')
-
-            });
-        }
-    });
-}
-
-
-$(document).ready(function () {
-
-    GetVendorCountry();
-
-    $('#dropVendorState').change(function () {
-
-        var Text = $("#dropVendorState Option:Selected").text();
-        var txtVendorid = $(this).val();
-        $("#txtVendorstate").val(txtVendorid);
-    });
-
-    $('#VendorCity').change(function () {
-
-        var Text = $("#VendorCity Option:Selected").text();
-        var txtVendorcity = $(this).val();
-        $("#txtVendorCity").val(txtVendorcity);
-    });
-
-});
-
-function fn_getVendorState(drpVendorstate, countryId, that) {
-    var cid = countryId;
-    if (cid == undefined || cid == null) {
-        var cid = $(that).val();
-    }
-
-
-    $('#' + drpVendorstate).empty();
-    $('#' + drpVendorstate).append('<Option >--Select State--</Option>');
-    $.ajax({
-        url: '/Authentication/GetState?StateId=' + cid,
-        success: function (result) {
-
-            $.each(result, function (i, data) {
-                $('#' + drpVendorstate).append('<Option value=' + data.id + '>' + data.stateName + '</Option>')
-            });
-        }
-    });
-}
-
-function fn_getVendorcitiesbystateId(drpVendorcity, stateid, that) {
-
-    var sid = stateid;
-    if (sid == undefined || sid == null) {
-        var sid = $(that).val();
-    }
-
-
-    $('#' + drpVendorcity).empty();
-    $('#' + drpVendorcity).append('<Option >--Select City--</Option>');
-    $.ajax({
-        url: '/Authentication/GetCity?CityId=' + sid,
-        success: function (result) {
-
-            $.each(result, function (i, data) {
-                $('#' + drpVendorcity).append('<Option value=' + data.id + '>' + data.cityName + '</Option>');
-
-            });
-        }
-    });
-}
-
-function GetVendorCountry() {
-    $.ajax({
-        url: '/Authentication/GetCountrys',
-        success: function (result) {
-            var selectedid = $("#txtcountryId").val();
-            $.each(result, function (i, data) {
-                if (data.id != selectedid) {
-                    $('#VendorCountry').append('<option value="' + data.id + '">' + data.countryName + '</option>');
-                }
-            });
-        }
-    });
 }
 
