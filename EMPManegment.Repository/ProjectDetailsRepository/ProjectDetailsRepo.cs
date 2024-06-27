@@ -370,6 +370,7 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
                                   projectMaster.ProjectDescription,
                                   projectDetail.IsDeleted,
                                   projectMaster.ProjectImage,
+                                  projectMaster.ShortName,
                               }).ToListAsync();
 
             if (data != null)
@@ -389,6 +390,7 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
                         ProjectDeadline = item.ProjectDeadline,
                         ProjectDescription = item.ProjectDescription,
                         ProjectImage = item.ProjectImage,
+                        ShortName = item.ShortName,
                     });
                 }
             }
