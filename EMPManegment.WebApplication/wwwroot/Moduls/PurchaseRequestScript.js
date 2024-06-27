@@ -1,60 +1,13 @@
 ﻿$(document).ready(function () {
-    GetAllItemDetailsList();
     fn_updatePRProductAmount();
     GetPurchaseRequestList();
     showHidebtn();
     fn_updatePRTotals();
     CountCartTotalItems();
 });
-
-function GetAllItemDetailsList(page) {
-    var searchText = $('#mdProductSearch').val();
-
-    $.get("/PurchaseRequest/GetAllProductDetailsList", { searchText: searchText, page: page })
-        .done(function (result) {
-            $("#mdlistofItem").html(result);
-        })
-}
-
-GetAllItemDetailsList(1);
-
-
-$(document).on("click", ".pagination a", function (e) {
-    e.preventDefault();
-    var page = $(this).text();
-    GetAllItemDetailsList(page);
-});
-
-$(document).on("click", "#backButton", function (e) {
-    e.preventDefault();
-    var page = $(this).text();
-    GetAllItemDetailsList(page);
-});
-
-
-function clearsearchtext() {
-    $('#mdProductSearch').val('');
-    GetAllItemDetailsList();
-}
-
-function fn_filterallPRProducts() {
-    var searchText = $('#mdProductSearch').val();
-
+function fn_SearchItemDetailsById(Id) {
     $.ajax({
-        url: '/PurchaseRequest/GetAllProductDetailsList',
-        type: 'GET',
-        data: {
-            searchText: searchText,
-        },
-        success: function (result) {
-            $("#mdlistofItem").html(result);
-        },
-    });
-}
-
-function SerchItemDetailsById(Id) {
-    $.ajax({
-        url: '/PurchaseRequest/DisplayProductDetilsListById?ProductId=' + Id,
+        url: '/PurchaseRequest/DisplayProductDetailsListById?ProductId=' + Id,
         type: 'Post',
         datatype: 'json',
         processData: false,
@@ -241,7 +194,7 @@ $(document).ready(function () {
                         }
                         if (canDelete) {
                             buttons += '<li class="btn text-danger list-inline-item delete" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Delete" style="margin-left:12px;">' +
-                                '<a onclick="DeletePurchaseRequest(\'' + full.prNo + '\')">' +
+                                '<a class="text-danger" onclick="DeletePurchaseRequest(\'' + full.prNo + '\')">' +
                                 '<i class="fas fa-trash"></i></a></li>';
                         }
                         buttons += '</ul>';
@@ -410,14 +363,7 @@ function CreatePurchaseRequest() {
         toastr.warning("Kindly add the products");
     }
 }
-function CheckProjectIdIsSelected() {
-    var ProjectId = $('#txtProjectId').val();
-    if (ProjectId == "") {
-        toastr.warning('Please Select Project!');
-    } else {
-        UpdatePurchaseRequestDetails()
-    }
-}
+
 function UpdatePurchaseRequestDetails() {
 
     var TotalAmount = $("#dsptotalAmount").text();
@@ -427,7 +373,7 @@ function UpdatePurchaseRequestDetails() {
             var orderRow = $(this);
             var objData = {
                 UserId: orderRow.find("#txtuserId").val(),
-                ProjectId: orderRow.find("#txtprojectId").val(),
+                ProjectId: orderRow.find("#textPRProjectId").val(),
                 ProductId: orderRow.find("#txtproductId").val(),
                 ProductName: orderRow.find("#txtProductName").val(),
                 ProductTypeId: orderRow.find("#txtproducttype").val(),

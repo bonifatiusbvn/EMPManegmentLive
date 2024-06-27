@@ -50,7 +50,7 @@ $(document).ready(function () {
                 var dropdown = $('#customDropdown');
                 dropdown.empty();
                 $.each(result, function (i, data) {
-                    dropdown.append('<div class="Role-dropdown-item-custom" data-value="' + data.roleId + '">' + data.role + '</div>');
+                    dropdown.append('<div class="Role-dropdown-item-custom dropdown-item" data-value="' + data.roleId + '">' + data.role + '</div>');
                 });
             }
         });

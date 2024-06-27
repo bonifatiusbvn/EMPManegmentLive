@@ -3,7 +3,6 @@
     fn_GetPOPaymentTypeList();
     fn_GetPOVendorNameList();
     fn_GetPOCompanyNameList();
-    fn_GetPOProductDetailsList();
     fn_GetPOPaymentMethodList();
     fn_updatePOTotals();
     $('#txtvendorname').change(function () {
@@ -237,62 +236,10 @@ function preventPOEmptyValue(input) {
         input.value = 1;
     }
 }
+
 function showPaymentDetails() {
     $("#PaymentDetails").modal("show")
 }
-
-function fn_OpenAddPOproductmodal() {
-
-    $('#mdPOProductSearch').val('');
-    $('#mdPoproductModal').modal('show');
-}
-
-function fn_GetPOProductDetailsList(page) {
-    var searchText = $('#mdPOProductSearch').val();
-
-    $.get("/PurchaseOrderMaster/GetAllPOProductList", { searchText: searchText, page: page })
-        .done(function (result) {
-            $("#mdlistofPOItem").html(result);
-        })
-        .fail(function (xhr, status, error) {
-            console.error("Error:", error);
-        });
-}
-
-fn_GetPOProductDetailsList(1);
-
-$(document).on("click", ".pagination a", function (e) {
-    e.preventDefault();
-    var page = $(this).text();
-    fn_GetPOProductDetailsList(page);
-});
-
-$(document).on("click", "#backButton", function (e) {
-    e.preventDefault();
-    var page = $(this).text();
-    fn_GetPOProductDetailsList(page);
-});
-
-function fn_clearPOSearchText() {
-    $('#mdPOProductSearch').val('');
-    fn_GetPOProductDetailsList();
-}
-
-function fn_filterallPOProducts() {
-    var searchText = $('#mdPOProductSearch').val();
-
-    $.ajax({
-        url: '/PurchaseOrderMaster/GetAllPOProductList',
-        type: 'GET',
-        data: {
-            searchText: searchText,
-        },
-        success: function (result) {
-            $("#mdlistofPOItem").html(result);
-        },
-    });
-}
-
 
 function fn_GetPOVendorNameList() {
     $.ajax({
@@ -420,9 +367,9 @@ function fn_POProductTypeDropdown(productId) {
 
         }
     });
-
 }
-function fn_SearchPOProductDetailsById(ProductId) {
+
+function fn_SearchItemDetailsById(ProductId) {
     var GetProductId = {
         ProductId: ProductId,
     }
@@ -453,6 +400,7 @@ function fn_SearchPOProductDetailsById(ProductId) {
         }
     });
 }
+
 function deletePurchaseOrderDetails(Id) {
     Swal.fire({
         title: "Are you sure want to delete this?",
@@ -733,6 +681,7 @@ function fn_updatePOTotals() {
         totalGst += gst;
         TotalItemQuantity += totalquantity;
         TotalDiscount += discountprice * totalquantity;
+        totalAmount = totalSubtotal + totalGst;
     });
     $("#cart-subtotal").val(totalSubtotal.toFixed(2));
     $("#totalgst").val(totalGst.toFixed(2));

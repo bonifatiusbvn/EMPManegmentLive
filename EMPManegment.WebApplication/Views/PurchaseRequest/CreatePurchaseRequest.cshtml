@@ -43,8 +43,7 @@
                             else
                             {
                                 <input type="date" class="form-control" id="txtUpdatePrDate" style="width:200px;" value="@formattedDate" />
-                            }
-                            
+                            }                  
                             <a class="btn btn-warning" onclick="fn_OpenAddproductmodal()"><i class="ri-add-line align-bottom me-1"></i> Add Product</a>
                             <input type="text" class="form-control" id="prNo" value="@ViewData["PrNo"].ToString()" hidden />
                         </div>
@@ -68,7 +67,7 @@
                 <div class="text-end mb-4">
                     @if (Model.PRList != null)
                     {
-                        <a id="btnUpdatepurchaserequest" onclick="CheckProjectIdIsSelected()" class="btn btn-success btn-lg" style="margin-bottom: -30px;margin-right: 15px;width: 160px;height: 50px;">Update<i class="ri-arrow-right-line label-icon align-bottom fs-16 ms-2"></i></a>
+                        <a id="btnUpdatepurchaserequest" onclick="UpdatePurchaseRequestDetails()" class="btn btn-success btn-lg" style="margin-bottom: -30px;margin-right: 15px;width: 160px;height: 50px;">Update<i class="ri-arrow-right-line label-icon align-bottom fs-16 ms-2"></i></a>
                     }
                     else
                     {
@@ -120,11 +119,11 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Select Product</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="clearsearchtext()"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="clearProductListSearchText()"></button>
             </div>
             <div class="modal-header">
                 <label class="form-label">Search Product</label>
-                <input class="form-control" id="mdProductSearch" onkeyup="fn_filterallPRProducts()" />
+                <input class="form-control" id="mdProductSearch" onkeyup="fn_filterallProducts()"  />
             </div>
             <div class="modal-body" id="mdlistofItem" style="overflow-x: hidden">
             </div>
@@ -132,13 +131,8 @@
     </div>
 </div>
 
-
-
 <script type="text/javascript">
-    function fn_OpenAddproductmodal() {
-        $('#mdProductSearch').val('');
-        $('#mdPoproductModal').modal('show');
-    }
+    var userPermissions = '@Html.Raw(Json.Serialize(UserSession.FormPermisionData))';
 </script>
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>

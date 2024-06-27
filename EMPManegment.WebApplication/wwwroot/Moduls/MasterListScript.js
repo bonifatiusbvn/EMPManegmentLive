@@ -225,9 +225,6 @@ function Departmenttext(sel) {
 }
 
 
-function Questiontext(sel) {
-    $("#txtquestionid").val((sel.options[sel.selectedIndex].text));
-}
 function GetDepartment() {
 
     $.ajax({
@@ -254,17 +251,51 @@ function GetDepartment() {
     });
 }
 
-function GetQuestion() {
+
+
+function fn_OpenAddproductmodal() {
+    $('#mdProductSearch').val('');
+    $('#mdPoproductModal').modal('show');
+    fn_GetProductDetailsList(1);
+}
+
+function fn_GetProductDetailsList(page) {
+    var searchText = $('#mdProductSearch').val();
+
+    $.get("/PurchaseRequest/GetAllProductDetailsList", { searchText: searchText, page: page })
+        .done(function (result) {
+            $("#mdlistofItem").html(result);
+        })
+        .fail(function (xhr, status, error) {
+            console.error("Error:", error);
+        });
+}
+
+$(document).on("click", ".pagination a", function (e) {
+    e.preventDefault();
+    var page = $(this).text();
+    fn_GetProductDetailsList(page);
+});
+
+$(document).on("click", "#backButton", function (e) {
+    e.preventDefault();
+    var page = $(this).text();
+    fn_GetProductDetailsList(page);
+});
+
+
+function fn_filterallProducts() {
+    var searchText = $('#mdProductSearch').val();
 
     $.ajax({
-        url: '/Authentication/GetQuestion',
+        url: '/PurchaseRequest/GetAllProductDetailsList',
+        type: 'GET',
+        data: {
+            searchText: searchText,
+        },
         success: function (result) {
-
-            $.each(result, function (i, data) {
-                $('#ddlQuestion').append('<Option value=' + data.id + '>' + data.questions + '</Option>')
-
-            });
-        }
+            $("#mdlistofItem").html(result);
+        },
     });
 }
 function GetVendorTypes() {

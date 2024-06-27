@@ -123,14 +123,6 @@ function fn_InsertInvoiceDetails() {
         toastr.warning("Kindly fill all datafield");
     }
 }
-function fn_CheckProjectIdIsSelected() {
-    var ProjectId = $('#textProjectId').val();
-    if (ProjectId == "") {
-        toastr.warning('Please Select Project!');
-    } else {
-        fn_UpdateInvoiceDetails()
-    }
-}
 function fn_UpdateInvoiceDetails() {
 
     if ($("#CreateInvoiceForm").valid()) {
@@ -158,7 +150,7 @@ function fn_UpdateInvoiceDetails() {
             });
             var Invoicedetails = {
                 Id: $("#textInvoiceId").val(),
-                ProjectId: $("#textProjectId").val(),
+                ProjectId: $("#textinvoiceProjectId").val(),
                 InvoiceNo: $("#textInvoiceNo").val(),
                 VandorId: $("#textVendorName").val(),
                 CompanyId: $("#textCompanyName").val(),
@@ -410,7 +402,6 @@ $(document).ready(function () {
     $('#textCompanyName').change(function () {
         fn_getInvoiceCompanyDetail($(this).val());
     });
-    fn_GetInvoiceProductDetailsList()
     fn_GetInvoicePaymentMethodList()
     fn_GetInvoicePaymentTypeList()
     fn_updateInvoiceTotals()
@@ -619,66 +610,13 @@ function preventInvoiceEmptyValue(input) {
         input.value = 1;
     }
 }
-function fn_OpenAddInvoiceproductmodal() {
 
-    $('#mdProductSearch').val('');
-    $('#mdInvoiceproductModal').modal('show');
-}
-function fn_GetInvoiceProductDetailsList(page) {
-    var searchText = $('#mdProductSearch').val();
-
-    $.get("/Invoice/GetInvoiceAllProductList", { searchText: searchText, page: page })
-        .done(function (result) {
-            $("#mdlistofInvoiceItem").html(result);
-        })
-        .fail(function (xhr, status, error) {
-            console.error("Error:", error);
-        });
-}
-
-
-fn_GetInvoiceProductDetailsList(1);
-
-
-$(document).on("click", ".pagination a", function (e) {
-    e.preventDefault();
-    var page = $(this).text();
-    fn_GetInvoiceProductDetailsList(page);
-});
-
-$(document).on("click", "#backButton", function (e) {
-    e.preventDefault();
-    var page = $(this).text();
-    fn_GetInvoiceProductDetailsList(page);
-});
-
-function fn_clearInvoiceSearchText() {
-    $('#mdProductSearch').val('');
-    fn_GetInvoiceProductDetailsList();
-}
-
-function fn_filterallInvoiceProducts() {
-    var searchText = $('#mdProductSearch').val();
-
-    $.ajax({
-        url: '/Invoice/GetInvoiceAllProductList',
-        type: 'GET',
-        data: {
-            searchText: searchText,
-        },
-        success: function (result) {
-            $("#mdlistofInvoiceItem").html(result);
-        },
-    });
-}
-
-function SearchInvoiceProductDetailsById(ProductId) {
+function fn_SearchItemDetailsById(ProductId) {
     var GetProductId = {
         ProductId: ProductId,
     }
     var form_data = new FormData();
     form_data.append("ProductId", JSON.stringify(GetProductId));
-
 
     $.ajax({
         url: '/Invoice/DisplayInvoiceProductDetailsListById',
