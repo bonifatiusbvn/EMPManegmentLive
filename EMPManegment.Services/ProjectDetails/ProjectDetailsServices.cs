@@ -80,5 +80,9 @@ namespace EMPManegment.Services.ProjectDetails
         {
             return await ProjectDetails.GetProjectsList();
         }
+        public async Task<UserResponceModel> UpdateProjectDetails(ProjectDetailView updateProject)
+        {
+            return await ProjectDetails.UpdateProjectDetails(updateProject);
+        }
     }
 }

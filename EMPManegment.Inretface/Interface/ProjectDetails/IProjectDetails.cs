@@ -2,6 +2,7 @@
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.ProjectModels;
 using EMPManegment.EntityModels.ViewModels.TaskModels;
+using EMPManegment.EntityModels.ViewModels.VendorModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,5 +27,6 @@ namespace EMPManegment.Inretface.Interface.ProjectDetails
         Task<UserResponceModel> MemberIsDeleted(ProjectMemberUpdate projectMember);
         Task<UserResponceModel> DeleteProjectDocument(Guid DocumentId);
         Task<IEnumerable<ProjectDetailView>> GetProjectsList();
+        Task<UserResponceModel> UpdateProjectDetails(ProjectDetailView updateProject);
     }
 }

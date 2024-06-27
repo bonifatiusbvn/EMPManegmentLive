@@ -6,14 +6,17 @@ using EMPManegment.EntityModels.ViewModels.ProjectModels;
 using EMPManegment.EntityModels.ViewModels.TaskModels;
 using EMPManegment.EntityModels.ViewModels.UserModels;
 using EMPManegment.Inretface.Interface.ProjectDetails;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.Metrics;
 using System.Linq;
 using System.Net;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using static System.Runtime.InteropServices.JavaScript.JSType;
@@ -150,7 +153,7 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
                         EndDate = item.EndDate,
                         ProjectDescription = item.ProjectDescription,
                         ShortName = item.ShortName,
-                        
+
                     });
                 }
             }
@@ -159,32 +162,45 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
 
         public async Task<ProjectDetailView> GetProjectDetailsById(Guid ProjectId)
         {
-            var projectDetail = await Context.TblProjectMasters.SingleOrDefaultAsync(x => x.ProjectId == ProjectId);
-            ProjectDetailView model = new ProjectDetailView()
+            try
             {
-                ProjectId = projectDetail.ProjectId,
-                ProjectTitle = projectDetail.ProjectTitle,
-                ProjectImage = projectDetail.ProjectImage,
-                ShortName = projectDetail.ShortName,
-                BuildingName = projectDetail.BuildingName,
-                Area = projectDetail.Area,
-                Country = projectDetail.Country,
-                State = projectDetail.State,
-                City = projectDetail.City,
-                PinCode = projectDetail.PinCode,
-                ProjectPath = projectDetail.ProjectPath,
-                ProjectDeadline = projectDetail.ProjectDeadline,
-                ProjectHead = projectDetail.ProjectHead,
-                CreatedOn = projectDetail.CreatedOn,
-                ProjectEndDate = projectDetail.ProjectEndDate,
-                ProjectStatus = projectDetail.ProjectStatus,
-                ProjectPriority = projectDetail.ProjectPriority,
-                ProjectStartDate = projectDetail.ProjectStartDate,
-                ProjectDescription = projectDetail.ProjectDescription,
-                ProjectType = projectDetail.ProjectType,
-
-            };
-            return model;
+                ProjectDetailView projectDetail = new ProjectDetailView();
+                projectDetail = (from a in Context.TblProjectMasters.Where(x => x.ProjectId == ProjectId)
+                                 join c in Context.TblCountries on a.Country equals c.Id
+                                 join s in Context.TblStates on a.State equals s.Id
+                                 join ct in Context.TblCities on a.City equals ct.Id
+                                 select new ProjectDetailView
+                                 {
+                                     ProjectId = a.ProjectId,
+                                     ProjectTitle = a.ProjectTitle,
+                                     ProjectImage = a.ProjectImage,
+                                     ShortName = a.ShortName,
+                                     BuildingName = a.BuildingName,
+                                     Area = a.Area,
+                                     Country = a.Country,
+                                     State = a.State,
+                                     City = a.City,
+                                     PinCode = a.PinCode,
+                                     ProjectPath = a.ProjectPath,
+                                     ProjectDeadline = a.ProjectDeadline,
+                                     ProjectHead = a.ProjectHead,
+                                     CreatedOn = a.CreatedOn,
+                                     ProjectEndDate = a.ProjectEndDate,
+                                     ProjectStatus = a.ProjectStatus,
+                                     ProjectPriority = a.ProjectPriority,
+                                     ProjectStartDate = a.ProjectStartDate,
+                                     ProjectDescription = a.ProjectDescription,
+                                     ProjectType = a.ProjectType,
+                                     CountryName = c.Country,
+                                     StateName = s.State,
+                                     CityName = ct.City,
+                                 }).First(); ;
+                return projectDetail;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         public async Task<IEnumerable<EmpDetailsView>> GetAllMembers()
@@ -434,17 +450,17 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
                 if (GetUserdata != null)
                 {
 
-                if (GetUserdata.IsDeleted == true)
-                {
-                    GetUserdata.IsDeleted = false;
-                    GetUserdata.UpdatedOn = DateTime.Now;
-                    GetUserdata.UpdatedBy = projectMember.UpdatedBy;
-                    Context.TblProjectMembers.Update(GetUserdata);
-                    Context.SaveChanges();
-                    response.Code = 200;
-                    response.Data = GetUserdata;
-                    response.Message = "Project member is deactive succesfully";
-                }
+                    if (GetUserdata.IsDeleted == true)
+                    {
+                        GetUserdata.IsDeleted = false;
+                        GetUserdata.UpdatedOn = DateTime.Now;
+                        GetUserdata.UpdatedBy = projectMember.UpdatedBy;
+                        Context.TblProjectMembers.Update(GetUserdata);
+                        Context.SaveChanges();
+                        response.Code = 200;
+                        response.Data = GetUserdata;
+                        response.Message = "Project member is deactive succesfully";
+                    }
 
                     else
                     {
@@ -489,7 +505,7 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
         }
 
         public async Task<IEnumerable<ProjectDetailView>> GetProjectsList()
-        { 
+        {
             try
             {
                 IEnumerable<ProjectDetailView> ProjectList = Context.TblProjectMasters.Select(a => new ProjectDetailView
@@ -500,10 +516,57 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
                 }).ToList();
                 return ProjectList;
             }
-            catch(Exception ex) 
+            catch (Exception ex)
             {
                 throw ex;
             }
+        }
+        public async Task<UserResponceModel> UpdateProjectDetails(ProjectDetailView updateProject)
+        {
+            UserResponceModel response = new UserResponceModel();
+            try
+            {
+                var projectData = await Context.TblProjectMasters.FirstOrDefaultAsync(a => a.ProjectId == updateProject.ProjectId);
+                if (projectData != null)
+                {
+                    projectData.ProjectTitle = updateProject.ProjectTitle;
+                    projectData.ShortName = updateProject.ShortName;
+                    projectData.ProjectDescription = updateProject.ProjectDescription;
+                    projectData.ProjectPath = updateProject.ProjectPath;
+                    projectData.ProjectPriority = updateProject.ProjectPriority;
+                    projectData.BuildingName = updateProject.BuildingName;
+                    projectData.Area = updateProject.Area;
+                    projectData.Country = updateProject.Country;
+                    projectData.City = updateProject.City;
+                    projectData.State = updateProject.State;
+                    projectData.PinCode = updateProject.PinCode;
+                    projectData.ProjectStatus = updateProject.ProjectStatus;
+                    projectData.ProjectDeadline = updateProject.ProjectDeadline;
+                    projectData.ProjectEndDate = updateProject.ProjectEndDate;
+                    projectData.ProjectStartDate = updateProject.ProjectStartDate;
+                    projectData.ProjectType = updateProject.ProjectType;
+                    projectData.ProjectHead = updateProject.ProjectHead;
+                    projectData.UpdatedBy = updateProject.UpdatedBy;
+                    projectData.UpdatedOn = DateTime.Now;
+                    projectData.ProjectImage = updateProject.ProjectImage;
+                    Context.Update(projectData);
+                    await Context.SaveChangesAsync();
+                    response.Code = 200;
+                    response.Message = "Project updated succesfully!";
+                }
+                else
+                {
+                    response.Code = 404;
+                    response.Message = "Project does not found.";
+                }
+
+            }
+            catch (Exception ex)
+            {
+                response.Message = "Error in generating invoice.";
+                response.Code = 400;
+            }
+            return response;
         }
     }
 }

@@ -51,31 +51,25 @@
                 </div><!--end col-->
                 <div class="col-lg-12">
                     <div class="card-body p-4">
-                        <div class="row g-3">
-                                <div class="col-lg-3 col-6">
-                                    <p class="text-muted mb-2 text-uppercase fw-semibold">Purchase Order No</p>
-                                    <h5 class="fs-14 mb-0"><span id="invoice-no">@Model.OrderId</span></h5>
-                                </div>
-                                <!--end col-->
-                                <div class="col-lg-3 col-6">
-                                    <p class="text-muted mb-2 text-uppercase fw-semibold">Date</p>
-                                    <h5 class="fs-14 mb-0"><span id="invoice-date">@CommonHelper.GetCommonDateFormat(Model.OrderDate)</span></h5>
-                                </div>
-                                <!--end col-->
-                                <div class="col-lg-3 col-6">
-                                    <p class="text-muted mb-2 text-uppercase fw-semibold">Payment Status</p>
+                        <div class="d-flex flex-wrap">
+                            <div class="flex-grow-1 p-2">
+                                <p class="text-muted mb-2 text-uppercase fw-semibold">Purchase Order No</p>
+                                <h5 class="fs-14 mb-0"><span id="invoice-no">@Model.OrderId</span></h5>
+                            </div>
+                            <div class="flex-grow-1 p-2">
+                                <p class="text-muted mb-2 text-uppercase fw-semibold">Date</p>
+                                <h5 class="fs-14 mb-0"><span id="invoice-date">@CommonHelper.GetCommonDateFormat(Model.OrderDate)</span></h5>
+                            </div>
+                            <div class="flex-grow-1 p-2">
+                                <p class="text-muted mb-2 text-uppercase fw-semibold">Payment Status</p>
                                 <span class="badge bg-success-subtle text-success fs-11" id="payment-status" style="width: 100px;height: 18px;">@Model.PaymentStatusName</span>
-                                </div>
-                                <!--end col-->
-                                <div class="col-lg-3 col-6">
-                                    <p class="text-muted mb-2 text-uppercase fw-semibold">Total Amount</p>
-                                    <h5 class="fs-14 mb-0">₹<span id="total-amount">@Model.TotalAmount</span></h5>
-                                </div>
-                                <!--end col-->
+                            </div>
+                            <div class="flex-grow-1 p-2">
+                                <p class="text-muted mb-2 text-uppercase fw-semibold">Total Amount</p>
+                                <h5 class="fs-14 mb-0">₹<span id="total-amount">@Model.TotalAmount</span></h5>
+                            </div>
                         </div>
-                        <!--end row-->
                     </div>
-                    <!--end card-body-->
                 </div><!--end col-->
                 <div class="col-lg-12">
                     <div class="card-body p-4 border-top border-top-dashed">
@@ -124,7 +118,7 @@
                                         <th class="border">Discount</th>
                                         <th class="border">Discount(%)</th>
                                         <th class="border">GST</th>
-                                        <th class="border">GST(%)</thclass="border">
+                                        <th class="border">GST(%)</th>
                                         <th class="border">Amount</th>
                                     </tr>
                                 </thead>
@@ -140,6 +134,8 @@
                                             <td class="text-start border">@item.Product</td>
                                             <td class="border">@item.Quantity</td>
                                             <td class="border">@item.Price</td>
+                                            <td class="border">@item.DiscountAmt</td>
+                                            <td class="border">@item.DiscountPer</td>
                                             <td class="border">@item.Gstamount</td>
                                             <td class="border">@item.Gstper</td>
                                             <td class="text-end border">@item.ProductTotal</td>
@@ -148,19 +144,8 @@
                                     }
                                 </tbody>
                             </table><!--end table-->
-                            <div class="noresult" style="display: none">
-                                <div class="text-center">
-                                    <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#25a0e2,secondary:#00bd9d" style="width:75px;height:75px">
-                                    </lord-icon>
-                                    <h5 class="mt-2">Sorry! No Result Found</h5>
-                                    <p class="text-muted mb-0">
-                                        We've searched more than 150+ invoices We did not find any
-                                        invoices for you search.
-                                    </p>
-                                </div>
-                            </div>
                         </div>
-                        <div class="border-top border-top-dashed mt-2">
+                        <div class="mt-2">
                             <table class="table table-borderless table-nowrap align-middle mb-0 ms-auto" style="width:250px">
                                 <tbody>
                                     <tr>
@@ -172,16 +157,16 @@
                                         <td class="text-end border">₹@Model.TotalGst</td>
                                     </tr>
                                     <tr>
-                                        <td>Total Discount</td>
-                                        <td class="text-end">₹@Model.TotalDiscount</td>
+                                        <td class="border">Total Discount</td>
+                                        <td class="text-end border">₹@Model.TotalDiscount</td>
                                     </tr>
                                     <tr>
-                                        <td>RoundOff</td>
-                                        <td class="text-end">₹@Model.RoundOff</td>
+                                        <td class="border">RoundOff</td>
+                                        <td class="text-end border">₹@Model.RoundOff</td>
                                     </tr>
-                                    <tr class="border-top border-top-dashed fs-15">
-                                        <th class="border">Total Amount</th>
-                                        <th class="text-end border">₹@Model.TotalAmount</th>
+                                    <tr class="border-top">
+                                        <td class="border">Total Amount</td>
+                                        <td class="text-end border">₹@Model.TotalAmount</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -216,6 +201,7 @@
     </div>
     <!--end col-->
 </div>
+
 <!--end row-->
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/moduls/invoicemasterscript.js" asp-append-version="true"></script>

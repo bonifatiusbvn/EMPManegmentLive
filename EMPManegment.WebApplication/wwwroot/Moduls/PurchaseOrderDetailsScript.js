@@ -506,14 +506,6 @@ function deletePurchaseOrderDetails(Id) {
         }
     });
 }
-function fn_CheckPOProjectIdIsSelected() {
-    var ProjectId = $('#textProjectId').val();
-    if (ProjectId == "") {
-        toastr.warning('Please Select Project!');
-    } else {
-        fn_UpdatePurchaseOrderDetails()
-    }
-}
 function fn_UpdatePurchaseOrderDetails() {
     if ($("#CreatePOForm").valid()) {
 
@@ -540,7 +532,7 @@ function fn_UpdatePurchaseOrderDetails() {
         var PONumber = $("#textPoId").val();
         var PODetails = {
             Id: $("#txtID").val(),
-            ProjectId: $("#textProjectId").val(),
+            ProjectId: $("#txtPOProjectId").val(),
             OrderId: $("#textPoId").val(),
             VendorId: $("#textVendorName").val(),
             CompanyId: $("#textCompanyName").val(),
@@ -739,7 +731,6 @@ function fn_updatePOTotals() {
 
         totalSubtotal += subtotal * totalquantity;
         totalGst += gst;
-        totalAmount = totalSubtotal + totalGst;
         TotalItemQuantity += totalquantity;
         TotalDiscount += discountprice * totalquantity;
     });
@@ -795,7 +786,7 @@ function fn_POtoggleShippingAddress() {
         shippingFields.style.display = "block";
     }
 }
-function InsertMultiplePurchaseOrderDetails() {
+function fn_InsertPurchaseOrderDetails() {
    
     if ($("#CreatePOForm").valid()) {
 

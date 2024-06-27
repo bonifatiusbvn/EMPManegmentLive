@@ -42,13 +42,16 @@ namespace EMPManegment.Repository.OrderRepository
                 var data = await (from a in Context.TblPurchaseOrderMasters
                                   join b in Context.TblVendorMasters on a.VendorId equals b.Vid
                                   join d in Context.TblPaymentMethodTypes on a.PaymentMethod equals d.Id
+                                  join e in Context.TblCompanyMasters on a.CompanyId equals e.Id
                                   where a.IsDeleted != true
                                   select new
                                   {
                                       Order = a,
                                       Vendor = b,
                                       PaymentMethod = d,
+                                      Company = e,
                                       CreatedOn = a.CreatedOn,
+                                      CompanyName = e,
                                   }).ToListAsync();
 
                 var orderList = data.GroupBy(x => x.Order.OrderId)
@@ -59,6 +62,7 @@ namespace EMPManegment.Repository.OrderRepository
                                         Id = item.Order.Id,
                                         OrderId = item.Order.OrderId,
                                         CompanyId = item.Order.CompanyId,
+                                        CompanyName=item.Company.CompnyName,
                                         VendorId = item.Order.VendorId,
                                         OrderDate = item.Order.OrderDate,
                                         TotalAmount = item.Order.TotalAmount,
@@ -67,6 +71,7 @@ namespace EMPManegment.Repository.OrderRepository
                                         DeliveryStatus = item.Order.DeliveryStatus,
                                         DeliveryDate = item.Order.DeliveryDate,
                                         CreatedOn = item.Order.CreatedOn,
+                                        CompanyName = item.CompanyName.CompnyName,
                                     });
 
                 return orderList.ToList();

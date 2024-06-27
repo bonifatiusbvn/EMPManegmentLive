@@ -71,40 +71,14 @@ function GetProducts() {
                 $('#txtProducts').append('<Option value=' + data.id + '>' + data.productName + '</Option>')
             });
             $.each(result, function (i, data) {
-                $('#txtProductList').append('<Option value=' + data.id + '>' + data.productName + '</Option>')
+                $('#txtProductList').append('<option value=' + data.id + '>' + data.productName + '</option>')
             });
         }
     });
 }
 
-function selectProductId() {
-
-    $("#table-product-list-all").hide();
-    $("#getallproductlist").hide();
-    document.getElementById("txtProductListId").value = document.getElementById("txtProductList").value;
-}
 function selectProductTypeId() {
     document.getElementById("txtProductTypeid").value = document.getElementById("txtProducts").value;
-}
-
-
-$("#txtProductList").change(function () {
-    ProductDetailsByProductTypeId()
-})
-function ProductDetailsByProductTypeId() {
-
-    var productId = $('#txtProductList').val();
-    $.ajax({
-        url: '/ProductMaster/GetAllProductList?ProductId=' + productId,
-        type: 'Get',
-        datatype: 'json',
-        complete: function (Result) {
-            $("#table-product-list-all").hide();
-            $("#dvproductdetails").html(Result.responseText);
-        }, error: function () {
-            toastr.error(Result.responseText);
-        }
-    });
 }
 
 $(document).ready(function () {
@@ -137,10 +111,10 @@ $(document).ready(function () {
 
     $("#addproduct").validate({
         rules: {
-            txtProductType:"required"
+            txtProductType: "required"
         },
-        messages :{
-        txtProductType :"Enter Product Type"
+        messages: {
+            txtProductType: "Enter Product Type"
         }
     })
 });
@@ -356,7 +330,7 @@ function DeleteProductDetails(ProductId) {
                         })
                     } else {
                         toastr.error(Result.message);
-                    }                  
+                    }
                 },
                 error: function () {
                     Swal.fire({
@@ -414,30 +388,28 @@ function SearchProductName() {
     var searchValue = $('#txtsearch').val();
 
     $.ajax({
-        url: '/ProductMaster/GetAllProductList?ProductName='+searchValue,
+        url: '/ProductMaster/GetAllProductList?ProductName=' + searchValue,
         type: 'Get',
         datatype: 'json',
         complete: function (Result) {
             $("#dvproductdetails").html(Result.responseText);
         }
-    });    
-}
-function sortProductTable() {
-    var sortBy = $('#ddlSortBy').val();
-    $.ajax({
-        url: '/ProductMaster/GetAllProductList?sortBy=' + sortBy,
-        type: 'GET',
-        
-        success: function (result) {
-            $("#dvproductdetails").html(result);
-        },
-        error: function (xhr, status, error) {
-            toastr.error(error);
-        }
     });
 }
-function GetAllProductDetailsList(page) {
-    $.get("/ProductMaster/GetAllProductList", { page: page})
+
+function selectProductId() {
+    var ProductId = document.getElementById("txtProductList").value;
+    $('#ddlSortBy').val("");
+    GetAllProductDetailsList(1, null, ProductId);
+}
+
+function sortProductTable() {
+    var sortBy = $('#ddlSortBy').val();
+    document.getElementById("txtProductList").value = "";
+    GetAllProductDetailsList(1, sortBy, null);
+}
+function GetAllProductDetailsList(page, sortBy, ProductId) {
+    $.get("/ProductMaster/GetAllProductList", { page: page, sortBy: sortBy, ProductId: ProductId })
         .done(function (result) {
             $("#dvproductdetails").html(result);
         })
@@ -447,13 +419,21 @@ function GetAllProductDetailsList(page) {
 }
 
 $(document).ready(function () {
-    GetAllProductDetailsList(1, "");
+    GetAllProductDetailsList(1, null, null); 
 });
-
 $(document).on("click", ".pagination a", function (e) {
     e.preventDefault();
-    var page = $(this).data("page") || $(this).attr("href").split('page=')[1]; 
-    GetAllProductDetailsList(page);
+    var page = $(this).data("page") || $(this).attr("href").split('page=')[1];
+    var sortBy = $('#ddlSortBy').val() || null;
+    var ProductId = document.getElementById("txtProductList").value || null;
+    GetAllProductDetailsList(page, sortBy, ProductId);
+});
+$(document).on("click", "#backButton", function (e) {
+    e.preventDefault();
+    var page = $(this).text();
+    var sortBy = $('#ddlSortBy').val() || null;
+    var ProductId = document.getElementById("txtProductList").value || null;
+    GetAllProductDetailsList(page, sortBy, ProductId);
 });
 
 
@@ -496,5 +476,5 @@ function clearSearchInput() {
     var input = document.getElementById('txtsearch');
     input.value = '';
     input.focus();
-    GetAllProductDetailsList(1); 
+    GetAllProductDetailsList(1);
 }

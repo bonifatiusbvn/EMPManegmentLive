@@ -19,6 +19,10 @@ using System.Linq;
 using EMPManegment.Web.Helper;
 using System.Collections.Generic;
 using Aspose.Foundation.UriResolver.RequestResponses;
+using Microsoft.CodeAnalysis;
+using DocumentFormat.OpenXml.Drawing.Charts;
+using EMPManegment.EntityModels.ViewModels.PurchaseOrderModels;
+using Microsoft.Build.Evaluation;
 
 namespace EMPManegment.Web.Controllers
 {
@@ -44,16 +48,29 @@ namespace EMPManegment.Web.Controllers
 
         [FormPermissionAttribute("Create Project-View")]
         [HttpGet]
-        public async Task<IActionResult> CreateProject()
+        public async Task<IActionResult> CreateProject(Guid? ProjectId)
         {
             try
             {
-                ApiResponseModel Response = await APIServices.GetAsync("", "ProjectDetails/CheckProjectName");
-                if (Response.code == 200)
+                ProjectDetailView projectDetails = new ProjectDetailView();
+                if (ProjectId != null)
                 {
-                    ViewBag.ProjectName = Response.data;
+                    ApiResponseModel response = await APIServices.GetAsync("", "ProjectDetails/GetProjectDetailsById?ProjectId=" + ProjectId);
+                    if (response.code == 200)
+                    {
+                        projectDetails = JsonConvert.DeserializeObject<ProjectDetailView>(response.data.ToString());
+                        ViewBag.ProjectName = projectDetails.ShortName;
+                    }
                 }
-                return View();
+                else
+                {
+                    ApiResponseModel Response = await APIServices.GetAsync("", "ProjectDetails/CheckProjectName");
+                    if (Response.code == 200)
+                    {
+                        ViewBag.ProjectName = Response.data;
+                    }
+                }
+                return View(projectDetails);
             }
             catch (Exception ex)
             {
@@ -186,11 +203,6 @@ namespace EMPManegment.Web.Controllers
         {
             try
             {
-                var ProjectImg = Guid.NewGuid() + "_" + project.ProjectImage.FileName;
-                var path = Environment.WebRootPath;
-                var filepath = "Content/Projects/" + ProjectImg;
-                var fullpath = Path.Combine(path, filepath);
-                UploadFile(project.ProjectImage, fullpath);
                 var ProjectDetails = new ProjectDetailView()
                 {
                     ProjectId = Guid.NewGuid(),
@@ -211,9 +223,22 @@ namespace EMPManegment.Web.Controllers
                     ProjectPriority = project.ProjectPriority,
                     ProjectStartDate = project.ProjectStartDate,
                     ProjectStatus = project.ProjectStatus,
-                    ProjectImage = filepath,
                     CreatedBy = _userSession.FullName,
                 };
+                if(project.ProjectImage != null)
+                {
+                    var ProjectImg = Guid.NewGuid() + "_" + project.ProjectImage.FileName;
+                    var path = Environment.WebRootPath;
+                    var filepath = "Content/Projects/" + ProjectImg;
+                    var fullpath = Path.Combine(path, filepath);
+                    UploadFile(project.ProjectImage, fullpath);
+
+                    ProjectDetails.ProjectImage = ProjectImg;
+                }
+                else
+                {
+                    ProjectDetails.ProjectImage = null;
+                }
                 ApiResponseModel postuser = await APIServices.PostAsync(ProjectDetails, "ProjectDetails/CreateProject");
                 UserResponceModel responseModel = new UserResponceModel();
                 if (postuser.code == 200)
@@ -592,6 +617,66 @@ namespace EMPManegment.Web.Controllers
                     projectlist = JsonConvert.DeserializeObject<List<ProjectView>>(response.data.ToString());
                 }
                 return new JsonResult(projectlist);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [FormPermissionAttribute("Create Project-Edit")]
+        [HttpPost]
+        public async Task<IActionResult> UpdateProjectDetails(ProjectDetailRequestModel UpdateProject)
+        {
+            try
+            {
+                var ProjectDetails = new ProjectDetailView()
+                {
+                    ProjectId = UpdateProject.ProjectId,
+                    ProjectType = UpdateProject.ProjectType,
+                    ProjectDeadline = UpdateProject.ProjectDeadline,
+                    ProjectTitle = UpdateProject.ProjectTitle,
+                    ShortName = UpdateProject.ShortName,
+                    ProjectEndDate = UpdateProject.ProjectEndDate,
+                    ProjectDescription = UpdateProject.ProjectDescription,
+                    ProjectHead = UpdateProject.ProjectHead,
+                    BuildingName = UpdateProject.BuildingName,
+                    Area = UpdateProject.Area,
+                    City = UpdateProject.City,
+                    State = UpdateProject.State,
+                    PinCode = UpdateProject.PinCode,
+                    Country = UpdateProject.Country,
+                    ProjectPath = UpdateProject.ProjectPath,
+                    ProjectPriority = UpdateProject.ProjectPriority,
+                    ProjectStartDate = UpdateProject.ProjectStartDate,
+                    ProjectStatus = UpdateProject.ProjectStatus,
+                    UpdatedBy = UpdateProject.UpdatedBy,
+                };
+                if(UpdateProject.ProjectImage != null)
+                {
+                    var ProjectImg = Guid.NewGuid() + "_" + UpdateProject.ProjectImage.FileName;
+                    var path = Environment.WebRootPath;
+                    var filepath = "Content/Projects/" + ProjectImg;
+                    var fullpath = Path.Combine(path, filepath);
+                    UploadFile(UpdateProject.ProjectImage, fullpath);
+
+                    ProjectDetails.ProjectImage = ProjectImg;
+                }
+                else
+                {
+                    ProjectDetails.ProjectImage = UpdateProject.ProjectImageName;
+                }
+
+                ApiResponseModel postuser = await APIServices.PostAsync(ProjectDetails, "ProjectDetails/UpdateProjectDetails");
+                if (postuser.code == 200)
+                {
+
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
+                }
+                else
+                {
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
+                }
             }
             catch (Exception ex)
             {

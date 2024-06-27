@@ -388,7 +388,7 @@ namespace EMPManegment.Repository.ProductMaster
             }
         }
 
-        public async Task<IEnumerable<ProductDetailsView>> GetAllProductList(string? searchText)
+        public async Task<IEnumerable<ProductDetailsView>> GetAllProductList(string? sortBy)
         {
             List<ProductDetailsView> Product = new List<ProductDetailsView>();
             try
@@ -413,19 +413,19 @@ namespace EMPManegment.Repository.ProductMaster
                                Hsn = a.Hsn,
                                CreatedBy = a.CreatedBy,
                            }).ToList();
-                if (string.IsNullOrEmpty(searchText))
+                if (string.IsNullOrEmpty(sortBy))
                 {
                     Product = Product.OrderByDescending(a => a.CreatedOn).ToList();
                 }
                 else
                 {
-                    string sortOrder = searchText.StartsWith("Ascending", StringComparison.OrdinalIgnoreCase) ? "ascending" :
-                                       searchText.StartsWith("Descending", StringComparison.OrdinalIgnoreCase) ? "descending" :
+                    string sortOrder = sortBy.StartsWith("Ascending", StringComparison.OrdinalIgnoreCase) ? "ascending" :
+                                       sortBy.StartsWith("Descending", StringComparison.OrdinalIgnoreCase) ? "descending" :
                                        string.Empty;
 
                     if (!string.IsNullOrEmpty(sortOrder))
                     {
-                        string field = searchText.Substring(sortOrder.Length).Trim();
+                        string field = sortBy.Substring(sortOrder.Length).Trim();
                         switch (field.ToLower())
                         {
                             case "productname":
