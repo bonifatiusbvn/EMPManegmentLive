@@ -132,6 +132,7 @@ function InsertCreditDebitDetails() {
                         confirmButtonText: 'OK',
                     }).then(function () {
                         window.location = '/Invoice/PayVendors?Vid=' + VendorId;
+                        GetCreditDebitTotalAmount(VendorId);
                     });
                 }
                 else {
@@ -144,28 +145,16 @@ function InsertCreditDebitDetails() {
         });
     }
 }
-
-//function GetVendorDetails(Vid) {
-//    GetCreditDebitTotalAmount(Vid);
-//    window.location = '/Invoice/PayVendors?Vid=' + Vid;
-//}
-//$(document).ready(function () {
-//    var Vid = $("#textvendorId").val();
-///*    GetCreditDebitTotalAmount(Vid);*/
-//})
 function GetCreditDebitTotalAmount(Vid) {
-
     $.ajax({
         url: '/Invoice/GetCreditDebitDetailsByVendorId?VendorId=' + Vid,
         type: 'POST',
         dataType: 'json',
         success: function (result) {
             if (result.length == 0) {
-                toastr.warning('There is no data for selected vendor.')
-                return
-            }
-            else {
-                window.location = '/Invoice/PayVendors?Vid=' + Vid;
+                toastr.warning('There is no data for selected vendor.');
+                return;
+            } else {
                 var total = 0;
                 result.forEach(function (obj) {
                     if (obj.creditDebitAmount) {
@@ -173,32 +162,10 @@ function GetCreditDebitTotalAmount(Vid) {
                     }
                 });
 
-                $("#txttotalcreditamount").text('₹' + total);
-                var totalAmount = parseFloat($('#txttotalamount').val());
-                var totalpendingAmount = totalAmount - total;
-
-                $("#txttotalpendingamount").text('₹' + totalpendingAmount);
-                $("#pendingamount").text('₹' + totalpendingAmount);
-
-                $('#txtcreditdebitamount').off('input').on('input', function () {
-                    var enteredAmount = parseFloat($(this).val());
-
-                    if (!isNaN(enteredAmount)) {
-                        var pendingAmount = totalpendingAmount - enteredAmount;
-
-                        if (enteredAmount > totalpendingAmount) {
-                            $('#warningMessage').text('Entered amount cannot exceed pending amount.');
-                        } else {
-                            $('#warningMessage').text('');
-                            $('#txtpendingamount').val(pendingAmount.toFixed(2));
-                        }
-                    } else {
-                        $('#warningMessage').text('');
-                        $('#txtpendingamount').val('');
-                    }
-                });
+                localStorage.setItem('creditDebitDetails', JSON.stringify(result));
+                localStorage.setItem('totalCreditAmount', total);
+                window.location = '/Invoice/PayVendors?Vid=' + Vid;
             }
-            
         },
         error: function (xhr, status, error) {
             toastr.error("Error in AJAX request:", status, error);
@@ -206,6 +173,38 @@ function GetCreditDebitTotalAmount(Vid) {
     });
 }
 
+$(document).ready(function () {
+
+    var creditDebitDetails = JSON.parse(localStorage.getItem('creditDebitDetails'));
+    var total = parseFloat(localStorage.getItem('totalCreditAmount'));
+
+    if (creditDebitDetails) {
+        $("#txttotalcreditamount").text('₹' + total);
+        var totalAmount = parseFloat($('#txttotalamount').val());
+        var totalpendingAmount = totalAmount - total;
+
+        $("#txttotalpendingamount").text('₹' + totalpendingAmount);
+        $("#pendingamount").text('₹' + totalpendingAmount);
+
+        $('#txtcreditdebitamount').off('input').on('input', function () {
+            var enteredAmount = parseFloat($(this).val());
+
+            if (!isNaN(enteredAmount)) {
+                var pendingAmount = totalpendingAmount - enteredAmount;
+
+                if (enteredAmount > totalpendingAmount) {
+                    $('#warningMessage').text('Entered amount cannot exceed pending amount.');
+                } else {
+                    $('#warningMessage').text('');
+                    $('#txtpendingamount').val(pendingAmount.toFixed(2));
+                }
+            } else {
+                $('#warningMessage').text('');
+                $('#txtpendingamount').val('');
+            }
+        });
+    }
+});
 
 
 function getLastTransaction(Vid) {
