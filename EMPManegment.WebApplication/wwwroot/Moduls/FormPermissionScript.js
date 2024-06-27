@@ -50,7 +50,7 @@ $(document).ready(function () {
                 var dropdown = $('#customDropdown');
                 dropdown.empty();
                 $.each(result, function (i, data) {
-                    dropdown.append('<div class="Role-dropdown-item-custom" data-value="' + data.roleId + '">' + data.role + '</div>');
+                    dropdown.append('<div class="Role-dropdown-item-custom dropdown-item" data-value="' + data.roleId + '">' + data.role + '</div>');
                 });
             }
         });
@@ -62,7 +62,7 @@ $(document).ready(function () {
                 var dropdown = $('#usercustomDropdown');
                 dropdown.empty();
                 $.each(result, function (i, data) {
-                    dropdown.append('<option class="User-dropdown-item-custom" data-value=' + data.id + '>' + data.firstName + ' ' + data.lastName + '</option>');
+                    dropdown.append('<option class="User-dropdown-item-custom dropdown-item" data-value=' + data.id + '>' + data.firstName + ' ' + data.lastName + '</option>');
                 });
             }
         });

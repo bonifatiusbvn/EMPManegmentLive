@@ -55,10 +55,10 @@
         <div class="card-header">
             <div class="d-flex align-items-center">
                 <div class="card-title mb-0 flex-grow-1 text-info">
-                    <button id="userdropdownButton" class="btn btn-primary btn-lg dropdown-toggle" type="button" aria-haspopup="true" aria-expanded="false" style="width: 220px;">
+                    <button id="userdropdownButton" class="btn btn-primary btn-lg form-select" type="button" aria-haspopup="true" aria-expanded="false" style="width: 220px;">
                         Select-User
                     </button>
-                    <div id="usercustomDropdown" class="dropdown-menu p-2" style="display: none;">
+                    <div id="usercustomDropdown" class="dropdown-menu" style="display: none;width: 180px;">
                     </div>
 
                 </div>
@@ -66,11 +66,9 @@
                     <form class="position-relative">
                         @if (UserSession.FormPermisionData.Any(a => a.FormName == "User Form Permission" && (a.Add == true)))
                         {
-
                             <button type="button" class="btn btn-block btn-info btn-md" data-bs-toggle="modal" data-bs-target="#createUserModal" onclick="clearTextUserName()" style="margin-top:0px;"><i class="ri-add-line align-bottom me-1"></i>UserPermission</button>
                         }
                     </form>
-
                 </div>
             </div>
         </div>
