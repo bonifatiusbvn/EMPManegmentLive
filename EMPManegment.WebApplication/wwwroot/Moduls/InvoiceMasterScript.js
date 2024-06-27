@@ -123,14 +123,6 @@ function fn_InsertInvoiceDetails() {
         toastr.warning("Kindly fill all datafield");
     }
 }
-function fn_CheckProjectIdIsSelected() {
-    var ProjectId = $('#textProjectId').val();
-    if (ProjectId == "") {
-        toastr.warning('Please Select Project!');
-    } else {
-        fn_UpdateInvoiceDetails()
-    }
-}
 function fn_UpdateInvoiceDetails() {
 
     if ($("#CreateInvoiceForm").valid()) {
@@ -158,7 +150,7 @@ function fn_UpdateInvoiceDetails() {
             });
             var Invoicedetails = {
                 Id: $("#textInvoiceId").val(),
-                ProjectId: $("#textProjectId").val(),
+                ProjectId: $("#textinvoiceProjectId").val(),
                 InvoiceNo: $("#textInvoiceNo").val(),
                 VandorId: $("#textVendorName").val(),
                 CompanyId: $("#textCompanyName").val(),
