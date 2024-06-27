@@ -101,6 +101,7 @@
                                     </div>
                                     <div class="col-lg-3">
                                         <select class="form-select" id="ddlSortBy" onchange="sortProductTable()" style="margin-left:23px; width:-10px;">
+                                            <option value="" selected disabled>--Select SortBy--</option>
                                             <option value="AscendingProductName">ProductName(a-z)</option>
                                             <option value="DescendingProductName">ProductName(z-a)</option>
                                             <option value="AscendingPerUnitPrice">PerUnitPrice-Asc </option>
@@ -111,7 +112,7 @@
                                     <div class="col-xxl-3 ms-auto">
                                         <div>
                                             <select class="form-control form-select" id="txtProductList" onchange="selectProductId()">
-                                                <option selected>All Products</option>
+                                                <option value="" selected disabled>All Products</option>
                                             </select>
                                         </div>
                                     </div>
@@ -125,10 +126,6 @@
                                 </div>
                                 <!--end row-->
                             </div>
-
-
-
-
                         </div>
 
                         <!-- end card header -->

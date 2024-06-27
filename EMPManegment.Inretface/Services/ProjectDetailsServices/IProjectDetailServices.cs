@@ -25,5 +25,6 @@ namespace EMPManegment.Inretface.Services.ProjectDetailsServices
         Task<UserResponceModel> MemberIsDeleted(ProjectMemberUpdate projectMember);
         Task<UserResponceModel> DeleteProjectDocument(Guid DocumentId);
         Task<IEnumerable<ProjectDetailView>> GetProjectsList();
+        Task<UserResponceModel> UpdateProjectDetails(ProjectDetailView updateProject);
     }
 }

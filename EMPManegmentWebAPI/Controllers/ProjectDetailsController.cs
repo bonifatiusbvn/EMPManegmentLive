@@ -228,5 +228,32 @@ namespace EMPManagment.API.Controllers
             IEnumerable<ProjectDetailView> ProjectList = await ProjectDetail.GetProjectsList();
             return Ok(new { code = 200, data = ProjectList.ToList() });
         }
+
+        [HttpPost]
+        [Route("UpdateProjectDetails")]
+        public async Task<IActionResult> UpdateProjectDetails(ProjectDetailView updateProject)
+        {
+            UserResponceModel response = new UserResponceModel();
+            try
+            {
+                var projectDetails = await ProjectDetail.UpdateProjectDetails(updateProject);
+                if(projectDetails.Code == 200) 
+                {
+                    response.Code = projectDetails.Code;
+                    response.Message = projectDetails.Message;
+                }
+                else
+                {
+                    response.Code = projectDetails.Code;
+                    response.Message = projectDetails.Message;
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Code = (int)HttpStatusCode.InternalServerError;
+                response.Message = "An error occurred while processing the request.";
+            }
+            return StatusCode(response.Code, response);
+        }
     }
 }

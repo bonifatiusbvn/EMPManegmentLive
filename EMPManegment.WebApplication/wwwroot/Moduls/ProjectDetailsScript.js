@@ -488,7 +488,7 @@ function GetProjectCountry() {
         success: function (result) {
             $.each(result, function (i, data) {
 
-                $('#projectCountry').append('<Option value=' + data.id + '>' + data.countryName + '</Option>')
+                $('#projectCountry').append('<option value=' + data.id + '>' + data.countryName + '</option>')
 
             });
         }
@@ -583,3 +583,101 @@ function deleteProjectDocument(DocumentId) {
         }
     });
 }
+
+function fn_UpdateProjectDetail()
+{
+    if ($('#formprojectdetails').valid()) {
+        var formData = new FormData();
+        formData.append("ProjectTitle", $("#projectTitle").val());
+        formData.append("ProjectId", $("#textprojectId").val());
+        formData.append("ProjectPriority", $("#projectPriority").val());
+        formData.append("ProjectDescription", $("#projectDescription").val());
+        formData.append("ProjectStatus", $("#projectStatus").val());
+        formData.append("ProjectDeadline", $("#projectdeadline").val());
+        formData.append("ProjectType", $("#projectType").val());
+        formData.append("ShortName", $("#projectname").val());
+        formData.append("ProjectHead", $("#projectHead").val());
+        formData.append("ProjectStartDate", $("#projectStartDate").val());
+        formData.append("ProjectEndDate", $("#projectEndDate").val());
+        formData.append("Area", $("#txtProjectArea").val());
+        formData.append("BuildingName", $("#txtBuildingName").val());
+        formData.append("State", $("#ProjectState").val());
+        formData.append("City", $("#ProjectCity").val());
+        formData.append("Country", $("#projectCountry").val());
+        formData.append("Pincode", $("#txtProjectPincode").val());
+        formData.append("ProjectPath", $("#projectPath").val());
+        formData.append("UpdatedBy", $("#textProjectUserId").val());
+        var imageName = $("#currentImageName").text().trim();
+        var imageFile = $("#projectImage")[0].files[0];
+        if (imageName && !imageFile) {
+            formData.append("ProjectImageName", imageName);
+        } else if (imageFile) {
+            formData.append("ProjectImage", imageFile);
+        }
+
+        $.ajax({
+            url: '/Project/UpdateProjectDetails',
+            type: 'Post',
+            data: formData,
+            dataType: 'json',
+            contentType: false,
+            processData: false,
+            success: function (Result) {
+                if (Result.code == 200) {
+                    Swal.fire({
+                        title: Result.message,
+                        icon: 'success',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK',
+                    }).then(function () {
+                        window.location = '/Project/ProjectList';
+                    });
+                }
+                else {
+                    toastr.error(Result.message);
+                }
+            }
+        })
+    }
+    else {
+        toastr.warning("Kindly fill all datafield");
+    }
+}
+$(document).ready(function () {
+    function toggleImagePreview(show) {
+        if (show) {
+            $('#imagePreviewContainer').show();
+        } else {
+            $('#imagePreviewContainer').hide();
+        }
+    }
+
+    $('#deleteImageButton').click(function () {
+        $('#projectImagePreview').attr('src', '');
+        $('#projectImage').val('');
+        $("#currentImageName").text('');
+        toggleImagePreview(false);
+    });
+    $('#projectImage').change(function () {
+        var input = this;
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $('#projectImagePreview').attr('src', e.target.result);
+                toggleImagePreview(true);
+            }
+            reader.readAsDataURL(input.files[0]);
+        } else {
+            toggleImagePreview(false);
+        }
+    });
+
+    if ($('#projectImagePreview').attr('src') === '' || $('#projectImagePreview').attr('src') === '#') {
+        toggleImagePreview(false);
+    } else {
+        toggleImagePreview(true);
+    }
+});
+
+
+

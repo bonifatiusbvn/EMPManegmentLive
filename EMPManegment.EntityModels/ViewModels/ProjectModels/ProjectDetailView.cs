@@ -45,7 +45,9 @@ namespace EMPManegment.EntityModels.ViewModels.ProjectModels
         public DateTime ProjectDeadline { get; set; }
 
         public string? ProjectImage { get; set; }
+
         public string? FirstName { get; set; }
+
         public string? LastName { get; set; }
 
         public string? ProjectPath { get; set; }
@@ -57,10 +59,20 @@ namespace EMPManegment.EntityModels.ViewModels.ProjectModels
         public Guid? UpdatedBy { get; set; }
 
         public DateTime? UpdatedOn { get; set; }
+
         public Guid? UserId { get; set; }
+
         public Guid? Id { get; set; }
 
         public int? TaskCount { get; set; }
+
+        public string? CountryName { get; set; }
+
+        public string? StateName { get; set; }
+
+        public string? CityName { get; set; }
+        public string? ProjectImageName { get; set; }
+
     }
     public class ProjectDetailRequestModel
     {
@@ -112,5 +124,7 @@ namespace EMPManegment.EntityModels.ViewModels.ProjectModels
         public Guid? Id { get; set; }
 
         public IFormFile? ProjectImage { get; set; }
+
+        public string? ProjectImageName { get; set;}
     }
 }
