@@ -51,7 +51,6 @@ namespace EMPManegment.Repository.OrderRepository
                                       PaymentMethod = d,
                                       Company = e,
                                       CreatedOn = a.CreatedOn,
-                                      CompanyName = e,
                                   }).ToListAsync();
 
                 var orderList = data.GroupBy(x => x.Order.OrderId)
@@ -71,7 +70,6 @@ namespace EMPManegment.Repository.OrderRepository
                                         DeliveryStatus = item.Order.DeliveryStatus,
                                         DeliveryDate = item.Order.DeliveryDate,
                                         CreatedOn = item.Order.CreatedOn,
-                                        CompanyName = item.CompanyName.CompnyName,
                                     });
 
                 return orderList.ToList();
