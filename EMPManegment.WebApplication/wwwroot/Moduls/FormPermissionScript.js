@@ -16,7 +16,6 @@ $(document).ready(function () {
             dropdown.hide();
         } else {
             dropdown.show();
-            GetUsernameForm();
         }
     });
     $(document).on('click', '.Role-dropdown-item-custom', function () {

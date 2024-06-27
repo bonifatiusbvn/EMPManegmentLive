@@ -74,8 +74,8 @@ function fn_InsertInvoiceDetails() {
                 BuyesOrderDate: $("#textBuysOrderDate").val(),
                 InvoiceDate: $("#textInvoiceDate").val(),
                 OrderStatus: $("#UnitTypeId").val(),
-                PaymentMethod: $("#txtpaymentmethod").val(),
-                PaymentStatus: $("#txtpaymenttype").val(),
+                PaymentMethod: $("#txtInvoicepaymentmethod").val(),
+                PaymentStatus: $("#txtInvoicepaymenttype").val(),
                 CreatedBy: $("#textCreatedById").val(),
                 RoundOff: $('#cart-roundOff').val(),
                 TotalDiscount: $('#cart-discount').val(),
@@ -165,8 +165,8 @@ function fn_UpdateInvoiceDetails() {
                 BuyesOrderDate: $("#textBuysOrderDate").val(),
                 InvoiceDate: $("#textInvoiceDate").val(),
                 OrderStatus: $("#UnitTypeId").val(),
-                PaymentMethod: $("#txtpaymentmethod").val(),
-                PaymentStatus: $("#txtpaymenttype").val(),
+                PaymentMethod: $("#txtInvoicepaymentmethod").val(),
+                PaymentStatus: $("#txtInvoicepaymenttype").val(),
                 CreatedBy: $("#textCreatedById").val(),
                 CreatedOn: $("#txtCreatedOn").val(),
                 RoundOff: $('#cart-roundOff').val(),
@@ -365,16 +365,16 @@ $(document).ready(function () {
         rules: {
             textVendorName: "required",
             textCompanyName: "required",
-            txtpaymentmethod: "required",
+            txtInvoicepaymentmethod: "required",
             textDispatchThrough: "required",
         },
         highlight: function (element) {
-            if (element.id === "txtpaymentmethod" || element.id === "textDispatchThrough") {
+            if (element.id === "txtInvoicepaymentmethod" || element.id === "textDispatchThrough") {
                 $(element).addClass('is-invalid');
             }
         },
         unhighlight: function (element) {
-            if (element.id === "txtpaymentmethod" || element.id === "textDispatchThrough") {
+            if (element.id === "txtInvoicepaymentmethod" || element.id === "textDispatchThrough") {
                 $(element).removeClass('is-invalid');
             }
         },
@@ -386,7 +386,7 @@ $(document).ready(function () {
         messages: {
             textVendorName: "Select Vendor Name",
             textCompanyName: "Select Company Name",
-            txtpaymentmethod: "",
+            txtInvoicepaymentmethod: "",
             textDispatchThrough: "",
         }
     });
@@ -578,10 +578,10 @@ function fn_GetInvoicePaymentMethodList() {
     $.ajax({
         url: '/PurchaseOrderMaster/GetPaymentMethodList',
         success: function (result) {
-            var selectedValue = $('#txtpaymentmethod').find('option:first').val();
+            var selectedValue = $('#txtInvoicepaymentmethod').find('option:first').val();
             $.each(result, function (i, data) {
                 if (data.id != selectedValue) {
-                    $('#txtpaymentmethod').append('<Option value=' + data.id + '>' + data.paymentMethod + '</Option>')
+                    $('#txtInvoicepaymentmethod').append('<Option value=' + data.id + '>' + data.paymentMethod + '</Option>')
                 }
 
             });
@@ -592,12 +592,12 @@ function fn_GetInvoicePaymentTypeList() {
     $.ajax({
         url: '/ExpenseMaster/GetPaymentTypeList',
         success: function (result) {
-            var selectedValue = $('#txtpaymenttype').find('option:first').val();
+            var selectedValue = $('#txtInvoicepaymenttype').find('option:first').val();
             $.each(result, function (i, data) {
                 $('#textPaymentMethod').append('<Option value=' + data.id + '>' + data.type + '</Option>')
                 if (data.id != selectedValue) {
 
-                    $('#txtpaymenttype').append('<Option value=' + data.id + '>' + data.type + '</Option>')
+                    $('#txtInvoicepaymenttype').append('<Option value=' + data.id + '>' + data.type + '</Option>')
                 }
             });
         }

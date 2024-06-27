@@ -249,16 +249,16 @@
                                                         <div class="col-lg-12 col-sm-12 mt-2">
                                                             <div class="mb-3">
                                                                 <div class="input-group">
-                                                                    <label for="txtpaymentmethod" class="input-group-text">Payment Method </label>
+                                                                    <label for="txtPOpaymentmethod" class="input-group-text">Payment Method </label>
                                                                     @if (Model.PaymentMethod != null)
                                                                     {
-                                                                        <select class="form-control form-select valid" id="txtpaymentmethod" name="txtpaymentmethod">
+                                                                        <select class="form-control form-select valid" id="txtPOpaymentmethod" name="txtPOpaymentmethod">
                                                                             <option selected value="@Model.PaymentMethod">@Model.PaymentMethodName</option>
                                                                         </select>
                                                                     }
                                                                     else
                                                                     {
-                                                                        <select class="form-control form-select valid" id="txtpaymentmethod" name="txtpaymentmethod">
+                                                                        <select class="form-control form-select valid" id="txtPOpaymentmethod" name="txtPOpaymentmethod">
                                                                             <option selected value="">--Select Payment Method--</option>
                                                                         </select>
                                                                     }
@@ -269,16 +269,16 @@
                                                         <div class="col-lg-12 col-sm-12 mt-2">
                                                             <div class="mb-3">
                                                                 <div class="input-group mb-3">
-                                                                    <label for="txtpaymenttype" class="input-group-text">Payment Status</label>
+                                                                    <label for="txtPOpaymenttype" class="input-group-text">Payment Status</label>
                                                                     @if (Model.PaymentStatus != null)
                                                                     {
-                                                                        <select class="form-control form-select valid" id="txtpaymenttype" name="txtpaymenttype">
+                                                                        <select class="form-control form-select valid" id="txtPOpaymenttype" name="txtPOpaymenttype">
                                                                         <option selected value="@Model.PaymentStatus">@Model.PaymentStatusName</option>
                                                                     </select>
                                                                     }
                                                                     else
                                                                     {
-                                                                        <select class="form-control form-select valid" id="txtpaymenttype" name="txtpaymenttype">
+                                                                        <select class="form-control form-select valid" id="txtPOpaymenttype" name="txtPOpaymenttype">
                                                                         <option selected value="">--Select Payment Status--</option>
                                                                     </select>
                                                                     }

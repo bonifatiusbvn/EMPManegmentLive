@@ -25,17 +25,17 @@
         rules: {
             textVendorName: "required",
             textCompanyName: "required",
-            txtpaymentmethod: "required",
+            txtPOpaymentmethod: "required",
             textDescription: "required",
             textDeliveryStatus: "required",
         },
         highlight: function (element) {
-            if (element.id === "txtpaymentmethod" || element.id === "textDeliveryStatus") {
+            if (element.id === "txtPOpaymentmethod" || element.id === "textDeliveryStatus") {
                 $(element).addClass('is-invalid');
             }
         },
         unhighlight: function (element) {
-            if (element.id === "txtpaymentmethod" || element.id === "textDeliveryStatus") {
+            if (element.id === "txtPOpaymentmethod" || element.id === "textDeliveryStatus") {
                 $(element).removeClass('is-invalid');
             }
         },
@@ -49,7 +49,7 @@
         messages: {
             textVendorName: "Select Vendor Name",
             textCompanyName: "Select Company Name",
-            txtpaymentmethod: "",
+            txtPOpaymentmethod: "",
             textDescription: "Please Enter Description",
             textDeliveryStatus: "",
         }
@@ -63,7 +63,7 @@
             txtcompanyname: "required",
             txtorderdetails: "required",
             txtamount: "required",
-            txtpaymentmethod: "required",
+            txtPOpaymentmethod: "required",
             txtdeliverystatus: "required",
             txtorderstatus: "required"
         },
@@ -72,7 +72,7 @@
             txtcompanyname: "Please enter company name",
             txtorderdetails: "Please enter order details",
             txtamount: "Please enter order Amount",
-            txtpaymentmethod: "Please Enter Payment method",
+            txtPOpaymentmethod: "Please Enter Payment method",
             txtdeliverystatus: "Please Enter Delivery status",
             txtorderstatus: "Plese enter orderstatus"
         }
@@ -321,12 +321,12 @@ function fn_GetPOPaymentTypeList() {
     $.ajax({
         url: '/ExpenseMaster/GetPaymentTypeList',
         success: function (result) {
-            var selectedValue = $('#txtpaymenttype').find('option:first').val();
+            var selectedValue = $('#txtPOpaymenttype').find('option:first').val();
             $.each(result, function (i, data) {
                 $('#textPaymentMethod').append('<Option value=' + data.id + '>' + data.type + '</Option>')
                 if (data.id != selectedValue) {
                     
-                    $('#txtpaymenttype').append('<Option value=' + data.id + '>' + data.type + '</Option>')
+                    $('#txtPOpaymenttype').append('<Option value=' + data.id + '>' + data.type + '</Option>')
                 }  
             });
         }
@@ -337,10 +337,10 @@ function fn_GetPOPaymentMethodList() {
     $.ajax({
         url: '/PurchaseOrderMaster/GetPaymentMethodList',
         success: function (result) {
-            var selectedValue = $('#txtpaymentmethod').find('option:first').val();
+            var selectedValue = $('#txtPOpaymentmethod').find('option:first').val();
             $.each(result, function (i, data) {
                 if (data.id != selectedValue) {
-                    $('#txtpaymentmethod').append('<Option value=' + data.id + '>' + data.paymentMethod + '</Option>')
+                    $('#txtPOpaymentmethod').append('<Option value=' + data.id + '>' + data.paymentMethod + '</Option>')
                 }
                
             });
@@ -490,8 +490,8 @@ function fn_UpdatePurchaseOrderDetails() {
             DeliveryDate: $("#UnitTypeId").val(),
             OrderDate: $("#textOrderDate").val(),
             OrderStatus: $("#UnitTypeId").val(),
-            PaymentMethod: $("#txtpaymentmethod").val(),
-            PaymentStatus: $("#txtpaymenttype").val(),
+            PaymentMethod: $("#txtPOpaymentmethod").val(),
+            PaymentStatus: $("#txtPOpaymenttype").val(),
             DeliveryStatus: $("#textDeliveryStatus").val(),
             RoundOff: $('#cart-roundOff').val(),
             TotalDiscount: $('#cart-discount').val(),
@@ -771,8 +771,8 @@ function fn_InsertPurchaseOrderDetails() {
             DeliveryDate: $("#UnitTypeId").val(),
             OrderDate: $("#textOrderDate").val(),
             OrderStatus: $("#UnitTypeId").val(),
-            PaymentMethod: $("#txtpaymentmethod").val(),
-            PaymentStatus: $("#txtpaymenttype").val(),
+            PaymentMethod: $("#txtPOpaymentmethod").val(),
+            PaymentStatus: $("#txtPOpaymenttype").val(),
             DeliveryStatus: $("#textDeliveryStatus").val(),
             RoundOff: $('#cart-roundOff').val(),
             TotalDiscount: $('#cart-discount').val(),

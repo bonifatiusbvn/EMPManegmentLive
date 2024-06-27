@@ -1,6 +1,4 @@
 ﻿$(document).ready(function () {
-    GetPaymentMethodList()
-    GetPaymentTypeList()
     function handleFocus(event, selector) {
         if (event.keyCode == 13 || event.keyCode == 9) {
             event.preventDefault();
@@ -293,18 +291,6 @@ function preventEmptyValue(input) {
     }
 }
 
-
-function GetPaymentMethodList() {
-    $.ajax({
-        url: '/PurchaseOrderMaster/GetPaymentMethodList',
-        success: function (result) {
-            $.each(result, function (i, data) {
-                $('#txtpaymentmethod').append('<Option value=' + data.id + '>' + data.paymentMethod + '</Option>')
-            });
-        }
-    });
-}
-
 function ProductTypeDropdown(rowId) {
     if ($('#txtPOProductType_' + rowId + ' option').length > 1) {
         return;
@@ -326,18 +312,6 @@ function ProductTypeDropdown(rowId) {
             if ($dropdown.val() === '') {
                 $dropdown.val($("#txtproducttype_" + rowId).val());
             }
-        }
-    });
-}
-
-function GetPaymentTypeList() {
-    $.ajax({
-        url: '/ExpenseMaster/GetPaymentTypeList',
-        success: function (result) {
-            $.each(result, function (i, data) {
-                $('#textPaymentMethod').append('<Option value=' + data.id + '>' + data.type + '</Option>')
-                $('#txtpaymenttype').append('<Option value=' + data.id + '>' + data.type + '</Option>')
-            });
         }
     });
 }
