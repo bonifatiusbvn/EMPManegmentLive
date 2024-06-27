@@ -117,5 +117,10 @@ namespace EMPManegment.Services.InvoiceMaster
         {
             return await InvoiceMaster.GetProductDetailsById(ProductId);
         }
+
+        public async Task<IEnumerable<InvoiceViewModel>> InvoicActivityByUserId(Guid UserId)
+        {
+            return await InvoiceMaster.InvoicActivityByUserId(UserId);
+        }
     }
 }

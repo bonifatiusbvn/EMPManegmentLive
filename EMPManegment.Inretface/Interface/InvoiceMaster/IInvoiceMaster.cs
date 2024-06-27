@@ -36,5 +36,6 @@ namespace EMPManegment.Inretface.Interface.InvoiceMaster
         Task<IEnumerable<InvoiceViewModel>> InvoicActivity(Guid ProId);
         Task<InvoiceMasterModel> DisplayInvoiceDetailsById(Guid Id);
         Task<List<InvoiceDetailsViewModel>> GetProductDetailsById(Guid ProductId);
+        Task<IEnumerable<InvoiceViewModel>> InvoicActivityByUserId(Guid UserId);
     }
 }

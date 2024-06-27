@@ -1226,7 +1226,7 @@ function GetPayExpense() {
         formData.append("PaymentType", $("#txtpaymenttype").val());
         formData.append("CreatedBy", $("#txtuseraproveid").val());
         $.ajax({
-            url: '/ExpenseMaster/GetPayExpense',
+            url: '/ExpenseMaster/PayExpense',
             type: 'Post',
             data: formData,
             dataType: 'json',
@@ -1240,7 +1240,7 @@ function GetPayExpense() {
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'OK',
                     }).then(function () {
-                        window.location = '/ExpenseMaster/GetPayExpense';
+                        window.location = '/ExpenseMaster/PayExpense';
                     });
                 }
             }

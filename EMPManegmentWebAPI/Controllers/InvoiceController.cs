@@ -348,5 +348,12 @@ namespace EMPManagment.API.Controllers
             var Product = await InvoiceMaster.GetProductDetailsById(ProductId);
             return Ok(new { code = 200, data = Product });
         }
+        [HttpGet]
+        [Route("InvoicActivityByUserId")]
+        public async Task<IActionResult> InvoicActivityByUserId(Guid UserId)
+        {
+            IEnumerable<InvoiceViewModel> invoicelist = await InvoiceMaster.InvoicActivityByUserId(UserId);
+            return Ok(new { code = 200, data = invoicelist.ToList() });
+        }
     }
 }

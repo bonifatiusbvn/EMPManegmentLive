@@ -136,9 +136,12 @@
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                         @foreach (var group in UserSession.FormPermisionData.Select(a => a.GroupName).Distinct())
                         {
-                            @if (group == "Dashboard" && UserSession.FormPermisionData.Count(e => e.GroupName == group) > 0)
+                            var groupData = UserSession.FormPermisionData.Where(e => e.GroupName == group && e.isActive == true).ToList();
+                            var hasViewPermission = groupData.Any(e => e.isViewAllow == true);
+
+                            @if (group == "Dashboard" && groupData.Count > 0)
                             {
-                                @foreach (var item in UserSession.FormPermisionData.Where(e => e.GroupName == group && e.isActive == true))
+                                @foreach (var item in groupData)
                                 {
                                     <li class="nav-item">
                                         <a asp-action="@item.Action" asp-controller="@item.Controller" class="nav-link">
@@ -151,7 +154,7 @@
                                     </li>
                                 }
                             }
-                            @if (group == "Projects" && UserSession.FormPermisionData.Count(e => e.GroupName == group) > 0 && UserSession.FormPermisionData.Any(e => e.GroupName == group && e.isViewAllow == true))
+                            else if (group == "Projects" && hasViewPermission)
                             {
                                 <li class="nav-item">
                                     <a href="#" class="nav-link">
@@ -163,11 +166,10 @@
                                     </a>
 
                                     <ul class="nav nav-treeview" style="display: none;">
-                                        @foreach (var item in UserSession.FormPermisionData.Where(e => e.GroupName == group && e.isActive == true))
+                                        @foreach (var item in groupData)
                                         {
                                             @if (item.View)
                                             {
-
                                                 <li class="nav-item">
                                                     <a asp-action="@item.Action" asp-controller="@item.Controller" class="nav-link">
                                                         <i class="far fa-circle nav-icon"></i>
@@ -179,7 +181,7 @@
                                     </ul>
                                 </li>
                             }
-                            @if (group == "Product Master" && UserSession.FormPermisionData.Count(e => e.GroupName == group) > 0 && UserSession.FormPermisionData.Any(e => e.GroupName == group && e.isViewAllow == true))
+                            else if (group == "Product Master" && hasViewPermission)
                             {
                                 <li class="nav-item">
                                     <a href="#" class="nav-link">
@@ -190,11 +192,10 @@
                                         </p>
                                     </a>
                                     <ul class="nav nav-treeview" style="display: none;">
-                                        @foreach (var item in UserSession.FormPermisionData.Where(e => e.GroupName == group && e.isActive == true))
+                                        @foreach (var item in groupData)
                                         {
                                             @if (item.View)
                                             {
-
                                                 <li class="nav-item">
                                                     <a asp-action="@item.Action" asp-controller="@item.Controller" class="nav-link">
                                                         <i class="far fa-circle nav-icon"></i>
@@ -206,7 +207,7 @@
                                     </ul>
                                 </li>
                             }
-                            @if (group == "Expense" && UserSession.FormPermisionData.Count(e => e.GroupName == group) > 0 && UserSession.FormPermisionData.Any(e => e.GroupName == group && e.isViewAllow == true))
+                            else if (group == "Expense" && hasViewPermission)
                             {
                                 <li class="nav-item">
                                     <a href="#" class="nav-link">
@@ -217,7 +218,7 @@
                                         </p>
                                     </a>
                                     <ul class="nav nav-treeview" style="display: none;">
-                                        @foreach (var item in UserSession.FormPermisionData.Where(e => e.GroupName == group && e.isActive == true))
+                                        @foreach (var item in groupData)
                                         {
                                             @if (item.View)
                                             {
@@ -232,7 +233,7 @@
                                     </ul>
                                 </li>
                             }
-                            @if (group == "InvoicesManual" && UserSession.FormPermisionData.Count(e => e.GroupName == group) > 0 && UserSession.FormPermisionData.Any(e => e.GroupName == group && e.isViewAllow == true))
+                            else if (group == "InvoicesManual" && hasViewPermission)
                             {
                                 <li class="nav-item">
                                     <a href="#" class="nav-link">
@@ -243,7 +244,7 @@
                                         </p>
                                     </a>
                                     <ul class="nav nav-treeview" style="display: none;">
-                                        @foreach (var item in UserSession.FormPermisionData.Where(e => e.GroupName == group && e.isActive == true))
+                                        @foreach (var item in groupData)
                                         {
                                             @if (item.View)
                                             {
@@ -258,7 +259,7 @@
                                     </ul>
                                 </li>
                             }
-                            @if (group == "User" && UserSession.FormPermisionData.Count(e => e.GroupName == group) > 0 && UserSession.FormPermisionData.Any(e => e.GroupName == group && e.isViewAllow == true))
+                            else if (group == "User" && hasViewPermission)
                             {
                                 <li class="nav-item">
                                     <a href="#" class="nav-link">
@@ -269,7 +270,7 @@
                                         </p>
                                     </a>
                                     <ul class="nav nav-treeview" style="display: none;">
-                                        @foreach (var item in UserSession.FormPermisionData.Where(e => e.GroupName == group && e.isActive == true))
+                                        @foreach (var item in groupData)
                                         {
                                             @if (item.View)
                                             {
@@ -284,9 +285,8 @@
                                     </ul>
                                 </li>
                             }
-                            @if (group == "Authentication" && UserSession.FormPermisionData.Count(e => e.GroupName == group) > 0 && UserSession.FormPermisionData.Any(e => e.GroupName == group && e.isViewAllow == true))
+                            else if (group == "Authentication" && hasViewPermission)
                             {
-
                                 <li class="nav-item">
                                     <a href="#" class="nav-link">
                                         <i class="fa-solid fa-key icon"></i>
@@ -296,17 +296,14 @@
                                         </p>
                                     </a>
                                     <ul class="nav nav-treeview" style="display: none;">
-                                        @foreach (var item in UserSession.FormPermisionData.Where(e => e.GroupName == group && e.isActive == true))
+                                        @foreach (var item in groupData)
                                         {
                                             @if (item.View)
                                             {
-
                                                 <li class="nav-item">
                                                     <a asp-action="@item.Action" asp-controller="@item.Controller" class="nav-link">
                                                         <i class="far fa-circle nav-icon"></i>
-                                                        <p>
-                                                            @item.FormName
-                                                        </p>
+                                                        <p>@item.FormName</p>
                                                     </a>
                                                 </li>
                                             }
@@ -314,7 +311,7 @@
                                     </ul>
                                 </li>
                             }
-                            @if (group == "Vendor" && UserSession.FormPermisionData.Count(e => e.GroupName == group) > 0 && UserSession.FormPermisionData.Any(e => e.GroupName == group && e.isViewAllow == true))
+                            else if (group == "Vendor" && hasViewPermission)
                             {
                                 <li class="nav-item">
                                     <a href="#" class="nav-link">
@@ -325,35 +322,7 @@
                                         </p>
                                     </a>
                                     <ul class="nav nav-treeview" style="display: none;">
-                                        @foreach (var item in UserSession.FormPermisionData.Where(e => e.GroupName == group && e.isActive == true))
-                                        {
-                                            @if (item.View)
-                                            {
-                                                <li class="nav-item">
-                                                    <a asp-action="@item.Action" asp-controller="@item.Controller" class="nav-link">
-                                                        <i class="far fa-circle nav-icon"></i>
-                                                        <p>
-                                                            @item.FormName
-                                                        </p>
-                                                    </a>
-                                                </li>
-                                            }
-                                        }
-                                    </ul>
-                                </li>
-                            }
-                            @if (group == "Payment Transaction" && UserSession.FormPermisionData.Count(e => e.GroupName == group) > 0 && UserSession.FormPermisionData.Any(e => e.GroupName == group && e.isViewAllow == true))
-                            {
-                                <li class="nav-item">
-                                    <a href="#" class="nav-link">
-                                        <i class="fa-regular fa-credit-card icon"></i>
-                                        <p class="text">
-                                            Payment Transaction
-                                            <i class="right fas fa-angle-left"></i>
-                                        </p>
-                                    </a>
-                                    <ul class="nav nav-treeview" style="display: none;">
-                                        @foreach (var item in UserSession.FormPermisionData.Where(e => e.GroupName == group && e.isActive == true))
+                                        @foreach (var item in groupData)
                                         {
                                             @if (item.View)
                                             {
@@ -368,7 +337,33 @@
                                     </ul>
                                 </li>
                             }
-                            @if (group == "Purchase Request" && UserSession.FormPermisionData.Count(e => e.GroupName == group) > 0 && UserSession.FormPermisionData.Any(e => e.GroupName == group && e.isViewAllow == true))
+                            else if (group == "Payment Transaction" && hasViewPermission)
+                            {
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="fa-regular fa-credit-card icon"></i>
+                                        <p class="text">
+                                            Payment Transaction
+                                            <i class="right fas fa-angle-left"></i>
+                                        </p>
+                                    </a>
+                                    <ul class="nav nav-treeview" style="display: none;">
+                                        @foreach (var item in groupData)
+                                        {
+                                            @if (item.View)
+                                            {
+                                                <li class="nav-item">
+                                                    <a asp-action="@item.Action" asp-controller="@item.Controller" class="nav-link">
+                                                        <i class="far fa-circle nav-icon"></i>
+                                                        <p>@item.FormName</p>
+                                                    </a>
+                                                </li>
+                                            }
+                                        }
+                                    </ul>
+                                </li>
+                            }
+                            else if (group == "Purchase Request" && hasViewPermission)
                             {
                                 <li class="nav-item">
                                     <a href="#" class="nav-link">
@@ -379,7 +374,7 @@
                                         </p>
                                     </a>
                                     <ul class="nav nav-treeview" style="display: none;">
-                                        @foreach (var item in UserSession.FormPermisionData.Where(e => e.GroupName == group && e.isActive == true))
+                                        @foreach (var item in groupData)
                                         {
                                             @if (item.View)
                                             {
@@ -394,7 +389,7 @@
                                     </ul>
                                 </li>
                             }
-                            @if (group == "Purchase Order" && UserSession.FormPermisionData.Count(e => e.GroupName == group) > 0 && UserSession.FormPermisionData.Any(e => e.GroupName == group && e.isViewAllow == true))
+                            else if (group == "Purchase Order" && hasViewPermission)
                             {
                                 <li class="nav-item">
                                     <a href="#" class="nav-link">
@@ -405,7 +400,7 @@
                                         </p>
                                     </a>
                                     <ul class="nav nav-treeview" style="display: none;">
-                                        @foreach (var item in UserSession.FormPermisionData.Where(e => e.GroupName == group && e.isActive == true))
+                                        @foreach (var item in groupData)
                                         {
                                             @if (item.View)
                                             {
@@ -420,7 +415,7 @@
                                     </ul>
                                 </li>
                             }
-                            @if (group == "Invoices" && UserSession.FormPermisionData.Count(e => e.GroupName == group) > 0 && UserSession.FormPermisionData.Any(e => e.GroupName == group && e.isViewAllow == true))
+                            else if (group == "Invoices" && hasViewPermission)
                             {
                                 <li class="nav-item">
                                     <a href="#" class="nav-link">
@@ -431,11 +426,10 @@
                                         </p>
                                     </a>
                                     <ul class="nav nav-treeview" style="display: none;">
-                                        @foreach (var item in UserSession.FormPermisionData.Where(e => e.GroupName == group && e.isActive == true))
+                                        @foreach (var item in groupData)
                                         {
                                             @if (item.View)
                                             {
-
                                                 <li class="nav-item">
                                                     <a asp-action="@item.Action" asp-controller="@item.Controller" class="nav-link">
                                                         <i class="far fa-circle nav-icon"></i>
@@ -447,9 +441,8 @@
                                     </ul>
                                 </li>
                             }
-                            @if (group == "Tasks" && UserSession.FormPermisionData.Count(e => e.GroupName == group) > 0 && UserSession.FormPermisionData.Any(e => e.GroupName == group && e.isViewAllow == true))
+                            else if (group == "Tasks" && hasViewPermission)
                             {
-
                                 <li class="nav-item">
                                     <a href="#" class="nav-link">
                                         <i class="fas fa-tasks icon"></i>
@@ -459,7 +452,7 @@
                                         </p>
                                     </a>
                                     <ul class="nav nav-treeview" style="display: none;">
-                                        @foreach (var item in UserSession.FormPermisionData.Where(e => e.GroupName == group && e.isActive == true))
+                                        @foreach (var item in groupData)
                                         {
                                             @if (item.View)
                                             {
@@ -471,11 +464,11 @@
                                                 </li>
                                             }
                                         }
-
                                     </ul>
                                 </li>
                             }
                         }
+
                     </ul>
                 </nav>
             </div>

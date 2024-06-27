@@ -79,9 +79,9 @@ namespace EMPManegment.Services.TaskDetails
             return await TaskDetails.ProjectActivity(ProId);
         }
 
-        public async Task<IEnumerable<TaskDetailsView>> ProjectActivityByUserId(Guid ProId, Guid UserId)
+        public async Task<IEnumerable<TaskDetailsView>> ProjectActivityByUserId(Guid UserId)
         {
-            return await TaskDetails.ProjectActivityByUserId(ProId, UserId);
+            return await TaskDetails.ProjectActivityByUserId(UserId);
         }
     }
 }

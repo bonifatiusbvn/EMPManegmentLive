@@ -282,7 +282,6 @@ function updateTotals() {
 }
 
 function removeItem(element) {
-    debugger
     $(element).closest('tr').remove();
     updateRowNumbers();
     updateTotals();
@@ -428,7 +427,7 @@ function InsertManualInvoiceDetails() {
                     DispatchThrough: $("#textDispatchThrough").val(),
                     BuyesOrderNo: $("#textBuysOrderNo").val(),
                     BuyesOrderDate: $("#textBuysOrderDate").val(),
-                    InvoiceDate: $("#textInvoiceDate1").val(),
+                    InvoiceDate: $("#textInvoiceDate").val(),
                     OrderStatus: $("#UnitTypeId").val(),
                     PaymentMethod: $("#txtpaymentmethod").val(),
                     PaymentStatus: $("#txtpaymenttype").val(),
@@ -613,7 +612,6 @@ function UpdateManualInvoiceDetails() {
             var ProductDetails = [];
             var isValidProduct = true;
             $(".product").each(function () {
-                debugger
                 var orderRow = $(this);
                 var objData = {
                     RefId: orderRow.find("#textRefId").val(),
@@ -680,7 +678,7 @@ function UpdateManualInvoiceDetails() {
                     DispatchThrough: $("#textDispatchThrough").val(),
                     BuyesOrderNo: $("#textBuysOrderNo").val(),
                     BuyesOrderDate: $("#textBuysOrderDate1").val(),
-                    InvoiceDate: $("#textInvoiceDate1").val(),
+                    InvoiceDate: $("#textInvoiceDate").val(),
                     OrderStatus: $("#UnitTypeId").val(),
                     PaymentMethod: $("#txtpaymentmethod").val(),
                     PaymentStatus: $("#txtpaymenttype").val(),
@@ -703,7 +701,6 @@ function UpdateManualInvoiceDetails() {
                     contentType: false,
                     processData: false,
                     success: function (Result) {
-                        debugger
                         if (Result.code == 200) {
                             Swal.fire({
                                 title: Result.message,

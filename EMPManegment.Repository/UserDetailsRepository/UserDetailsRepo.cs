@@ -338,7 +338,7 @@ namespace EMPManegment.Repository.UserListRepository
                                                                  UserId = a.UserId,
                                                                  DocumentType = c.DocumentType,
                                                                  DocumentName = a.DocumentName,
-                                                                 CreatedOn = DateTime.Now,
+                                                                 CreatedOn = a.CreatedOn,
                                                                  CreatedBy = a.CreatedBy,
                                                              };
                 return DocumentList;
@@ -537,7 +537,7 @@ namespace EMPManegment.Repository.UserListRepository
 
         public async Task<IEnumerable<EmpDetailsView>> GetUsersNameList()
         {
-            IEnumerable<EmpDetailsView> GetUserNameList = Context.TblUsers.ToList().Select(a => new EmpDetailsView
+            IEnumerable<EmpDetailsView> GetUserNameList = Context.TblUsers.Where(a=>a.IsActive==true).ToList().Select(a => new EmpDetailsView
             {
                 Id = a.Id,
                 UserName = a.UserName,

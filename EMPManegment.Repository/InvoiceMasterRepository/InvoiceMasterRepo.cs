@@ -1117,5 +1117,40 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                 throw ex;
             }
         }
+
+        public async Task<IEnumerable<InvoiceViewModel>> InvoicActivityByUserId(Guid UserId)
+        {
+            try
+            {
+                var invoices = (from a in Context.TblInvoices
+                                join b in Context.TblVendorMasters on a.VandorId equals b.Vid
+                                join u in Context.TblUsers on a.CreatedBy equals u.Id
+                                where a.CreatedBy == UserId
+                                orderby a.UpdatedOn ascending
+                                select new InvoiceViewModel
+                                {
+                                    Id = a.Id,
+                                    InvoiceNo = a.InvoiceNo,
+                                    VendorName = b.VendorCompany,
+                                    VandorId = a.VandorId,
+                                    UserName = u.UserName,
+                                    FirstName = u.FirstName,
+                                    LastName = u.LastName,
+                                    UserImage = u.Image,
+                                    Status = a.Status,
+                                    ShippingAddress = a.ShippingAddress,
+                                    TotalAmount = a.TotalAmount,
+                                    CreatedOn = a.CreatedOn,
+                                    CreatedBy = a.CreatedBy,
+                                    UpdatedOn = a.UpdatedOn,
+                                    UpdatedBy = a.UpdatedBy
+                                }).Take(3);
+                return await invoices.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

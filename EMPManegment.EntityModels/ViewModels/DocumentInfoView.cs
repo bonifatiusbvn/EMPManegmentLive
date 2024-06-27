@@ -17,7 +17,7 @@ namespace EMPManegment.EntityModels.ViewModels
         [RegularExpression("^.+(.pdf|.PDF)$",ErrorMessage ="You can Only add pdf files")]
         public string DocumentName { get; set; } = "";
         public string DocumentType { get; set; } = "";
-        public DateTime CreatedOn { get; set; }
+        public DateTime? CreatedOn { get; set; }
         public string CreatedBy { get; set; } = "";
         public string UserName { get; set; } = "";
     }

@@ -1,9 +1,9 @@
 ﻿$(document).ready(function () {
     GetAllItemDetailsList();
-    updateTotals();
+    fn_updatePRProductAmount();
     GetPurchaseRequestList();
     showHidebtn();
-    updateCartTotal();
+    fn_updatePRTotals();
     CountCartTotalItems();
 });
 
@@ -60,13 +60,13 @@ function SerchItemDetailsById(Id) {
         processData: false,
         contentType: false,
         complete: function (Result) {
-            AddNewRow(Result.responseText);
+            fn_AddNewPRRow(Result.responseText);
         }
     });
 }
 
 var count = 0;
-function AddNewRow(Result) {
+function fn_AddNewPRRow(Result) {
     var newProductRow = $(Result);
     var newProductId = newProductRow.find('.card-body').data('product-id');
     var isDuplicate = false;
@@ -83,8 +83,8 @@ function AddNewRow(Result) {
     if (!isDuplicate) {
         count++;
         $("#displayPurchaseRequest").append(Result);
-        updateTotals();
-        updateCartTotal();
+        fn_updatePRProductAmount();
+        fn_updatePRTotals();
         showHidebtn();
         CountCartTotalItems();
     } else {
@@ -95,7 +95,7 @@ function AddNewRow(Result) {
 
 $(document).ready(function () {
     $(document).on('input', '.product-quantity', function () {
-        updateTotals()
+        fn_updatePRProductAmount()
     });
 
     $(document).on('keydown', '.product-quantity', function (event) {
@@ -118,7 +118,7 @@ $(document).ready(function () {
    
 });
 
-function updateTotals() {
+function fn_updatePRProductAmount() {
 
     $(".products").each(function () {
         var row = $(this);
@@ -132,10 +132,10 @@ function updateTotals() {
         row.find("#dsptotalAmount").text('₹' + TotalAmount.toFixed(2));
 
     });
-    updateCartTotal();
+    fn_updatePRTotals();
 }
 
-function updateCartTotal() {
+function fn_updatePRTotals() {
 
     var cartSubtotal = 0;
     var cartGst = 0;
@@ -165,8 +165,8 @@ function CountCartTotalItems() {
 };
 function removeProduct(btn) {
     $(btn).closest(".products").remove();
-    updateTotals();
-    updateCartTotal();
+    fn_updatePRProductAmount();
+    fn_updatePRTotals();
     CountCartTotalItems();
     showHidebtn();
 }

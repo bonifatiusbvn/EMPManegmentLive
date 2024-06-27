@@ -43,6 +43,7 @@ using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
 using EMPManegment.EntityModels.ViewModels.VendorModels;
 using EMPManegment.EntityModels.ViewModels.FormMaster;
 using iTextSharp.text.pdf;
+using EMPManegment.EntityModels.ViewModels.Invoice;
 
 namespace EMPManegment.Web.Controllers
 {
@@ -126,7 +127,7 @@ namespace EMPManegment.Web.Controllers
                 {
                     AddUser.Image = null;
                 }
-                              
+
                 ApiResponseModel postuser = await APIServices.PostAsync(AddUser, "User/UserSingUp");
                 if (postuser.code == 200)
                 {
@@ -1027,8 +1028,8 @@ namespace EMPManegment.Web.Controllers
         {
             try
             {
-                var userId=@_userSession.UserId;
-                ApiResponseModel postuser = await APIServices.PostAsync("", "FormPermissionMaster/CreateRolewisePermissionForm?FormId="+ FormId+ "&userId=" + userId);
+                var userId = @_userSession.UserId;
+                ApiResponseModel postuser = await APIServices.PostAsync("", "FormPermissionMaster/CreateRolewisePermissionForm?FormId=" + FormId + "&userId=" + userId);
                 if (postuser.code == 200)
                 {
                     return Ok(new { postuser.message, postuser.code });
@@ -1043,6 +1044,104 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
+        [FormPermissionAttribute("User Form Permission-View")]
+        [HttpGet]
+        public IActionResult UserFormPermission()
+        {
+            return View();
+        }
+
+        [FormPermissionAttribute("User Form Permission-Add")]
+        [HttpPost]
+        public async Task<IActionResult> CreateUserForm(Guid UserId)
+        {
+            try
+            {
+                ApiResponseModel postuser = await APIServices.PostAsync("", "FormPermissionMaster/CreateUserForm?UserId=" + UserId);
+                if (postuser.code == 200)
+                {
+                    return Ok(new { postuser.message, postuser.code });
+                }
+                else
+                {
+                    return Ok(new { postuser.message, postuser.code });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        [HttpPost]
+        public async Task<IActionResult> GetUserFormListById(Guid UserId)
+        {
+            try
+            {
+                List<UserPermissionModel> UserFormList = new List<UserPermissionModel>();
+                ApiResponseModel response = await APIServices.PostAsync("", "FormPermissionMaster/GetUserFormListById?UserId=" + UserId);
+                
+                if (response.code == 200)
+                {
+                   UserFormList = JsonConvert.DeserializeObject<List<UserPermissionModel>>(response.data.ToString());
+                    return PartialView("~/Views/UserProfile/_UserFormPermissionPartial.cshtml", UserFormList);
+                }
+                else
+                {
+                    return Ok();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        [FormPermissionAttribute("User Form Permission-Edit")]
+        [HttpPost]
+        public async Task<IActionResult> UpdateUserPermission()
+        {
+            try
+            {
+                var userFormPermission = HttpContext.Request.Form["UserPermissionDetails"];
+                var UpdateDetails = JsonConvert.DeserializeObject<List<UserPermissionModel>>(userFormPermission.ToString());
+
+                ApiResponseModel postuser = await APIServices.PostAsync(UpdateDetails, "FormPermissionMaster/UpdateMultipleUserFormPermission");
+                if (postuser.code == 200)
+                {
+                    return Ok(new { postuser.message, postuser.code });
+                }
+                else
+                {
+                    return Ok(new { postuser.message, postuser.code });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        [HttpGet]
+        public async Task<IActionResult> GetInvoiceActivityByUserId()
+        {
+            try
+            {
+                var UserId=_userSession.UserId;
+                List<InvoiceViewModel> activity = new List<InvoiceViewModel>();
+                ApiResponseModel postuser = await APIServices.GetAsync("", "Invoice/InvoicActivityByUserId?UserId=" + UserId);
+                if (postuser.data != null)
+                {
+                    activity = JsonConvert.DeserializeObject<List<InvoiceViewModel>>(postuser.data.ToString());
+                }
+                else
+                {
+                    activity = new List<InvoiceViewModel>();
+                    ViewBag.Error = "note found";
+                }
+                return PartialView("~/Views/UserProfile/_UserActivityPartial.cshtml", activity);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }
-

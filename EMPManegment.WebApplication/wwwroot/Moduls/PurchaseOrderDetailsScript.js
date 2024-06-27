@@ -23,7 +23,6 @@
         });
     });
     $("#CreatePOForm").validate({
-
         rules: {
             textVendorName: "required",
             textCompanyName: "required",
@@ -31,14 +30,34 @@
             textDescription: "required",
             textDeliveryStatus: "required",
         },
+        highlight: function (element) {
+            if (element.id === "txtpaymentmethod" || element.id === "textDeliveryStatus") {
+                $(element).addClass('is-invalid');
+            }
+        },
+        unhighlight: function (element) {
+            if (element.id === "txtpaymentmethod" || element.id === "textDeliveryStatus") {
+                $(element).removeClass('is-invalid');
+            }
+        },
+        errorPlacement: function (error, element) {
+            if (element.attr("name") === "textVendorName" ||
+                element.attr("name") === "textCompanyName" ||
+                element.attr("name") === "textDescription") {
+                error.insertAfter(element);
+            }
+        },
         messages: {
             textVendorName: "Select Vendor Name",
             textCompanyName: "Select Company Name",
-            txtpaymentmethod: "Select Payment Method",
+            txtpaymentmethod: "",
             textDescription: "Please Enter Description",
-            textDeliveryStatus: "Please Enter Delivery Status",
+            textDeliveryStatus: "",
         }
     });
+
+
+
     $("#UpdateOrderDetailsForm").validate({
         rules: {
             txtorderdate: "required",
@@ -649,6 +668,7 @@ function fn_updatePODiscount(that) {
     if (isNaN(discountprice)) {
         row.find("#txtPOdiscountamount").val(0);
         row.find("#txtPOdiscountpercentage").val(0);
+        row.find("#txtproductamount").val(productPrice.toFixed(2));
         fn_updatePOProductAmount(row);
         fn_updatePOTotals();
         return;
@@ -661,7 +681,8 @@ function fn_updatePODiscount(that) {
         var discountperbyamount = discountprice / productPrice * 100;
         row.find("#txtPOdiscountpercentage").val(discountperbyamount.toFixed(2));
     }
-
+    var AmountAfterDisc = productPrice - discountprice;
+    row.find("#txtproductamount").val(AmountAfterDisc.toFixed(2));
     fn_updatePOProductAmount(row);
     fn_updatePOTotals();
 }
@@ -674,6 +695,7 @@ function fn_UpdatePODiscountPercentage(that) {
     if (isNaN(discountPercentage)) {
         row.find("#txtPOdiscountamount").val(0);
         row.find("#txtPOdiscountpercentage").val(0);
+        row.find("#txtproductamount").val(productPrice.toFixed(2));
         fn_updatePOProductAmount(row);
         fn_updatePOTotals();
         return;
@@ -686,6 +708,8 @@ function fn_UpdatePODiscountPercentage(that) {
         discountprice = productPrice * discountPercentage / 100;
         row.find("#txtPOdiscountamount").val(discountprice.toFixed(2));
     }
+    var AmountAfterDisc = productPrice - discountprice;
+    row.find("#txtproductamount").val(AmountAfterDisc.toFixed(2));
     fn_updatePOProductAmount(row);
     fn_updatePOTotals();
 }
@@ -708,8 +732,7 @@ function fn_updatePOTotals() {
         totalSubtotal += subtotal * totalquantity;
         totalGst += gst;
         TotalItemQuantity += totalquantity;
-        TotalDiscount += discountprice;
-        totalAmount = totalSubtotal + totalGst - TotalDiscount;
+        TotalDiscount += discountprice * totalquantity;
     });
     $("#cart-subtotal").val(totalSubtotal.toFixed(2));
     $("#totalgst").val(totalGst.toFixed(2));
