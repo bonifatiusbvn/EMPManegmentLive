@@ -30,9 +30,11 @@
         display: none;
     }
 
-    .select2-container--bootstrap4 .select2-selection--single {
-        height: 38px;
-        line-height: 36px;
+    .ui-autocomplete {
+        z-index: 1051; 
+        max-height: 150px; 
+        overflow-y: auto; 
+        overflow-x: hidden;
     }
 </style>
 
@@ -154,9 +156,8 @@
                                     <div class="col-lg-6">
                                         <div class="mb-3">
                                             <label for="txtexpensetype" class="form-label">Expense Type</label>
-                                            <select class="form-control form-select valid" id="Editexpensetype" name="Editexpensetype">
-                                                <option selected disabled value="">---Select Expense Type---</option>
-                                            </select>
+                                            <input type="text" class="form-control" id="Editexpensetype" name="Editexpensetype">
+                                            <input type="hidden" id="EditexpensetypeHidden" name="EditexpensetypeHidden">
                                             <input type="hidden" class="text-muted text-uppercase fw-semibold" id="Editexpensetypeid" />
                                         </div>
                                         <label id="Editexpensetype-error" class="error" for="Editexpensetype"></label>
@@ -317,10 +318,8 @@
                                                     </p>
                                                 </div>
                                                 <div class="d-flex justify-content-between align-items-center" style="margin-top:-12px;">
-                                                    <select class="form-control form-select valid select-margin-top" id="txtexpensetype" name="txtexpensetype">
-                                                        <option selected disabled value="">---Select Expense Type---</option>
-                                                    </select>
-                                                    <input type="hidden" class="text-muted text-uppercase fw-semibold" id="txtexpensetypeid">
+                                                    <input type="text" class="form-control" id="txtexpensetype" name="txtexpensetype">
+                                                    <input type="hidden" id="txtexpensetypeHidden" name="txtexpensetypeHidden">
                                                     <input type="hidden" class="text-muted text-uppercase fw-semibold" id="txtaccount" value="Debit">
                                                 </div>
                                                 <label id="txtexpensetype-error" class="error" for="txtexpensetype"></label>

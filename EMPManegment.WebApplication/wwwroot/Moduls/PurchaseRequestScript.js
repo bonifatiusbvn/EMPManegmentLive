@@ -1,60 +1,13 @@
 ﻿$(document).ready(function () {
-    GetAllItemDetailsList();
     fn_updatePRProductAmount();
     GetPurchaseRequestList();
     showHidebtn();
     fn_updatePRTotals();
     CountCartTotalItems();
 });
-
-function GetAllItemDetailsList(page) {
-    var searchText = $('#mdProductSearch').val();
-
-    $.get("/PurchaseRequest/GetAllProductDetailsList", { searchText: searchText, page: page })
-        .done(function (result) {
-            $("#mdlistofItem").html(result);
-        })
-}
-
-GetAllItemDetailsList(1);
-
-
-$(document).on("click", ".pagination a", function (e) {
-    e.preventDefault();
-    var page = $(this).text();
-    GetAllItemDetailsList(page);
-});
-
-$(document).on("click", "#backButton", function (e) {
-    e.preventDefault();
-    var page = $(this).text();
-    GetAllItemDetailsList(page);
-});
-
-
-function clearsearchtext() {
-    $('#mdProductSearch').val('');
-    GetAllItemDetailsList();
-}
-
-function fn_filterallPRProducts() {
-    var searchText = $('#mdProductSearch').val();
-
+function fn_SearchItemDetailsById(Id) {
     $.ajax({
-        url: '/PurchaseRequest/GetAllProductDetailsList',
-        type: 'GET',
-        data: {
-            searchText: searchText,
-        },
-        success: function (result) {
-            $("#mdlistofItem").html(result);
-        },
-    });
-}
-
-function SerchItemDetailsById(Id) {
-    $.ajax({
-        url: '/PurchaseRequest/DisplayProductDetilsListById?ProductId=' + Id,
+        url: '/PurchaseRequest/DisplayProductDetailsListById?ProductId=' + Id,
         type: 'Post',
         datatype: 'json',
         processData: false,

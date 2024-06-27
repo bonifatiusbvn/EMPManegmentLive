@@ -7,11 +7,12 @@
     Layout = "~/Views/Shared/_HomeLayout.cshtml";
 }
 <style>
-    .select2-container--bootstrap4 .select2-selection--single {
-        height: 38px;
-        line-height: 36px;
+    .ui-autocomplete {
+        z-index: 1051;
+        max-height: 150px;
+        overflow-y: auto;
+        overflow-x: hidden;
     }
-
 </style>
 
 <input type="hidden" id="txtgetUserName" value="@ViewBag.UserName" hidden />
@@ -78,9 +79,8 @@
                                                 </p>
                                             </div>
                                             <div class="d-flex justify-content-between align-items-center" style="margin-top:-12px;">
-                                                <select class="form-control form-select valid select-margin-top" id="txtexpensetype" name="txtexpensetype">
-                                                    <option selected disabled value="">---Select Expense Type---</option>
-                                                </select>
+                                                <input type="text" class="form-control" id="txtexpensetype" name="txtexpensetype">
+                                                <input type="hidden" id="txtexpensetypeHidden" name="txtexpensetypeHidden">
                                                 <input type="hidden" class="text-muted text-uppercase fw-semibold" id="txtexpensetypeid">
                                                 <input type="hidden" class="text-muted text-uppercase fw-semibold" id="txtaccount" value="Debit">
                                             </div>

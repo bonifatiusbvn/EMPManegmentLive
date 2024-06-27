@@ -154,7 +154,7 @@
                                             <h5 class="card-title mb-0 flex-grow-1">Product Details</h5>
                                             <div class="flex-shrink-0">
                                                 <div class="d-flex flex-wrap gap-2">
-                                                    <a class="btn btn-block btn-warning" style="margin-left: 665px;" id="AddVendorModelButton" onclick="fn_OpenAddInvoiceproductmodal()"><i class="ri-add-fill me-1 align-bottom"></i>Add Product</a>
+                                                    <a class="btn btn-block btn-warning" style="margin-left: 665px;" id="AddVendorModelButton" onclick="fn_OpenAddproductmodal()"><i class="ri-add-fill me-1 align-bottom"></i>Add Product</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -424,18 +424,18 @@
         </div>
     </div>
 </div>
-<div class="modal fade show" tabindex="-1" id="mdInvoiceproductModal" role="dialog" aria-labelledby="myLargeModalLabel" aria-modal="true" aria-hidden="true">
+<div class="modal fade show" tabindex="-1" id="mdPoproductModal" role="dialog" aria-labelledby="myLargeModalLabel" aria-modal="true" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Select Product</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="fn_clearInvoiceSearchText()"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="clearProductListSearchText()"></button>
             </div>
             <div class="modal-header">
                 <label class="form-label">Search Product</label>
-                <input class="form-control" id="mdProductSearch" onkeyup="fn_filterallInvoiceProducts()" />
+                <input class="form-control" id="mdProductSearch" onkeyup="fn_filterallProducts()" />
             </div>
-            <div class="modal-body" id="mdlistofInvoiceItem" style="overflow-x: hidden">
+            <div class="modal-body" id="mdlistofItem" style="overflow-x: hidden">
             </div>
         </div>
     </div>

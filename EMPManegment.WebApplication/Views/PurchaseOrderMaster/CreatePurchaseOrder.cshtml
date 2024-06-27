@@ -149,7 +149,7 @@
                                             <h5 class="card-title mb-0 flex-grow-1">Purchase Order</h5>
                                             <div class="flex-shrink-0">
                                                 <div class="d-flex flex-wrap gap-2">
-                                                    <a class="btn btn-block btn-warning" style="margin-left: 665px;" id="AddVendorModelButton" onclick="fn_OpenAddPOproductmodal()"><i class="ri-add-fill me-1 align-bottom"></i>Add Product</a>
+                                                    <a class="btn btn-block btn-warning" style="margin-left: 665px;" id="AddVendorModelButton" onclick="fn_OpenAddproductmodal()"><i class="ri-add-fill me-1 align-bottom"></i>Add Product</a>
                                                     <span id="spnitembutton" class="text-danger"></span>
                                                 </div>
                                             </div>
@@ -450,14 +450,13 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Select Product</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="fn_clearPOSearchText()"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="clearProductListSearchText()"></button>
             </div>
             <div class="modal-header">
                 <label class="form-label">Search Product</label>
-                <input class="form-control" id="mdPOProductSearch" onkeyup="fn_filterallPOProducts()" />
+                <input class="form-control" id="mdProductSearch" onkeyup="fn_filterallProducts()" />
             </div>
-
-            <div class="modal-body" id="mdlistofPOItem" style="overflow-x: hidden">
+            <div class="modal-body" id="mdlistofItem" style="overflow-x: hidden">
             </div>
         </div>
     </div>
