@@ -5,28 +5,28 @@
 
 @foreach (var item in Model)
 {
-    <tr id="templateRow_@Convert.ToInt64(item.RowNumber + 1)" class="forms" data-product-id="@item.FormId">
-        <td>
+    <tr id="templateRow_@Convert.ToInt64(item.RowNumber + 1)" class="forms gridjs-tr" data-product-id="@item.FormId">
+        <td class="gridjs-td">
             <h6 class="pt-1" id="formName" data-product-id="@item.FormId">@item.FormName</h6>
             <input type="text" id="textUserId" value="@item.UserId" hidden />
             <input type="text" id="textFormId" value="@item.FormId" hidden />
         </td>
-        <td>
+        <td class="gridjs-td">
             <div class="form-check form-switch form-switch-success">
                 <input class="form-check-input" type="checkbox" id="txtIsAdd" name="txtIsAdd" @(item.IsAddAllow ? "checked" : "")>
             </div>
         </td>
-        <td>
+        <td class="gridjs-td">
             <div class="form-check form-switch form-switch-success">
                 <input class="form-check-input" type="checkbox" id="txtIsView" name="txtIsView" @(item.IsViewAllow ? "checked" : "")>
             </div>
         </td>
-        <td>
+        <td class="gridjs-td">
             <div class="form-check form-switch form-switch-success">
                 <input class="form-check-input" type="checkbox" id="txtIsEdit" name="txtIsEdit" @(item.IsEditAllow ? "checked" : "")>
             </div>
         </td>
-        <td>
+        <td class="gridjs-td">
             <div class="form-check form-switch form-switch-success">
                 <input class="form-check-input" type="checkbox" id="txtIsDelete" name="txtIsDelete" @(item.IsDeleteAllow ? "checked" : "")>
             </div>
