@@ -198,7 +198,7 @@ function GetCreditDebitTotalAmount(Vid) {
                     }
                 });
             }
-            
+
         },
         error: function (xhr, status, error) {
             toastr.error("Error in AJAX request:", status, error);
@@ -308,7 +308,7 @@ function AllTransactionData() {
             $("#AllTransactionPartial").html(response);
         },
         error: function () {
-             toastr.error("Can't get Data");
+            toastr.error("Can't get Data");
         }
     });
 }
@@ -351,7 +351,7 @@ function SortCompanyName() {
 function SearchDatesInVendorCreditDebitList() {
     var StartDate = $('#vendorstartdate').val();
     var EndDate = $('#vendorenddate').val();
-
+    var CompanyId = $('#textCompanyName').val();
     if (StartDate == "" && EndDate == "") {
         toastr.warning("Select dates");
     } else if (StartDate == "") {
@@ -360,7 +360,7 @@ function SearchDatesInVendorCreditDebitList() {
         toastr.warning("Select End date");
     } else {
         $.ajax({
-            url: '/Invoice/AllVendorTransaction?Startdate=' + StartDate + '&Enddate=' + EndDate,
+            url: '/Invoice/AllVendorTransaction?Startdate=' + StartDate + '&Enddate=' + EndDate + '&VendorId=' + CompanyId,
             type: 'GET',
             dataType: 'html',
             success: function (response) {
