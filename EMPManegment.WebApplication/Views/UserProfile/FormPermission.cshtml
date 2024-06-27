@@ -48,56 +48,55 @@
         </div>
     </div>
 </div>
-<div class="row">
-    <div class="col-lg-12">
-        <div class="card">
-            <div class="card-body">
-                <div class="listjs-table" id="rolewiseList">
-                    <div class="row g-4 mb-3">
-                        <div class="row g-2">
-                            <div class="col-lg-auto">
-                                <div class="btn-group">
-                                    <button id="dropdownButton" class="btn btn-primary btn-lg dropdown-toggle" type="button" aria-haspopup="true" aria-expanded="false" style="width: 180px;">
-                                        Select-Role
-                                    </button>
-                                    <div id="customDropdown" class="dropdown-menu p-2" style="display: none;">
-                                    </div>
-                                </div>
 
-                            </div>
-                            <div class="col-lg d-flex justify-content-end ">
-                                <form class="position-relative">
-                                    @if (UserSession.FormPermisionData.Any(a => a.FormName == "Form Permission" && (a.Add == true)))
-                                    {
-                                        <button type="button" class="btn btn-block btn-info btn-lg" data-bs-toggle="modal" data-bs-target="#createRoleModal" onclick="clearTextRoleName()"><i class="ri-add-line align-bottom me-1"></i>New Role</button>
-                                    }
-                                </form>
-
-                            </div>
-                        </div>
-                        <div class="table-responsive">
-                            <table class="table table-bordered dt-responsive table-striped align-middle dataTable no-footer dtr-inline">
-                                <thead class="table-light text-muted ">
-                                    <tr class="table-info">
-                                        <th>Form Name</th>
-                                        <th>IsAddAllow</th>
-                                        <th>IsViewAllow</th>
-                                        <th>IsEditAllow</th>
-                                        <th>isDeleteAllow</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="dveditRolePermissionForm">
-                                </tbody>
-                            </table>
-                            <div class="text-end" id="updatebtn" style="display:none;">
-                                <button type="button" class="btn btn-lg btn-primary" onclick="UpdateRolewiseFormPermission()" id="btnUserRolewiseForm" style="width: 160px;height: 50px;">Update</button>
-                            </div>
-                        </div>
+<div class="col-lg-12">
+    <div class="card">
+        <div class="card-header">
+            <div class="d-flex align-items-center">
+                <div class="card-title mb-0 flex-grow-1 text-info">
+                    <button id="dropdownButton" class="btn btn-primary btn-lg form-control form-select" type="button" aria-haspopup="true" aria-expanded="false" style="width: 180px;">
+                        Select-Role
+                    </button>
+                    <div id="customDropdown" class="dropdown-menu p-2" style="display: none;">
                     </div>
+
+
+                </div>
+                <div class="flex-shrink-0">
+                    <form class="position-relative">
+                        @if (UserSession.FormPermisionData.Any(a => a.FormName == "Form Permission" && (a.Add == true)))
+                        {
+                            <button type="button" class="btn btn-block btn-info btn-lg" data-bs-toggle="modal" data-bs-target="#createRoleModal" onclick="clearTextRoleName()"><i class="ri-add-line align-bottom me-1"></i>New Role</button>
+                        }
+                    </form>
+
+
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive" style="position: relative; height: 600px; overflow: auto;">
+                <table class="table table-bordered dt-responsive table-striped align-middle dataTable no-footer dtr-inline">
+                    <thead class="table-light text-muted" style="position: sticky; top: 0; z-index: 1;">
+                        <tr class="table-info">
+                            <th>Form Name</th>
+                            <th>IsAddAllow</th>
+                            <th>IsViewAllow</th>
+                            <th>IsEditAllow</th>
+                            <th>isDeleteAllow</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dveditRolePermissionForm">
+                    </tbody>
+                </table>
+                <div class="text-end" id="updatebtn" style="display:none;">
+                    <button type="button" class="btn btn-lg btn-primary" onclick="UpdateRolewiseFormPermission()" id="btnUserRolewiseForm" style="width: 160px;height: 50px;">Update</button>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/moduls/FormPermissionScript.js" asp-append-version="true"></script>

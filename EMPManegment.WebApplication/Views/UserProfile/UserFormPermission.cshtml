@@ -38,7 +38,7 @@
                             <select class="form-control from-select" id="drpAttusername" name="drpAttusername">
                                 <option value="">---Select Username---</option>
                             </select>
-                            <input type="text" class="form-control" id="textUserIdfrm" name="textUserIdfrm" hidden/>
+                            <input type="text" class="form-control" id="textUserIdfrm" name="textUserIdfrm" hidden />
                         </div>
                     </div>
                 </div>
@@ -50,55 +50,51 @@
         </div>
     </div>
 </div>
-<div class="row">
-    <div class="col-lg-12">
-        <div class="card">
-            <div class="card-body">
-                <div class="listjs-table" id="rolewiseList">
-                    <div class="row g-4 mb-3">
-                        <div class="row g-2">
-                            <div class="col-lg-auto">
-                                <div class="btn-group">
-                                    <button id="userdropdownButton" class="btn btn-primary btn-lg dropdown-toggle" type="button" aria-haspopup="true" aria-expanded="false" style="width: 220px;">
-                                        Select-User
-                                    </button>
-                                    <div id="usercustomDropdown" class="dropdown-menu p-2" style="display: none;">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg d-flex justify-content-end ">
-                            <form class="position-relative">
-                                @if (UserSession.FormPermisionData.Any(a => a.FormName == "User Form Permission" && (a.Add == true)))
-                                {
-
-                                    <button type="button" class="btn btn-block btn-info btn-md" data-bs-toggle="modal" data-bs-target="#createUserModal" onclick="clearTextUserName()" style="margin-top:-65px;"><i class="ri-add-line align-bottom me-1"></i>UserPermission</button>
-                                }
-                            </form>
-
-                        </div>
-                        <div class="table-responsive">
-                            <table class="table table-bordered dt-responsive table-striped align-middle dataTable no-footer dtr-inline">
-                                <thead class="table-light text-muted ">
-                                    <tr class="table-info">
-                                        <th>Form Name</th>
-                                        <th>IsAddAllow</th>
-                                        <th>IsViewAllow</th>
-                                        <th>IsEditAllow</th>
-                                        <th>isDeleteAllow</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="dveditUserForm">
-                                </tbody>
-                            </table>
-                            <div class="text-end" id="userupdatebtn" style="display:none;">
-                                <button type="button" class="btn btn-lg btn-primary" onclick="UpdateUserFormPermission()" style="width: 160px;height: 50px;">Update</button>
-                            </div>
-                        </div>
+<div class="col-lg-12">
+    <div class="card">
+        <div class="card-header">
+            <div class="d-flex align-items-center">
+                <div class="card-title mb-0 flex-grow-1 text-info">
+                    <button id="userdropdownButton" class="btn btn-primary btn-lg dropdown-toggle" type="button" aria-haspopup="true" aria-expanded="false" style="width: 220px;">
+                        Select-User
+                    </button>
+                    <div id="usercustomDropdown" class="dropdown-menu p-2" style="display: none;">
                     </div>
+
+                </div>
+                <div class="flex-shrink-0">
+                    <form class="position-relative">
+                        @if (UserSession.FormPermisionData.Any(a => a.FormName == "User Form Permission" && (a.Add == true)))
+                        {
+
+                            <button type="button" class="btn btn-block btn-info btn-md" data-bs-toggle="modal" data-bs-target="#createUserModal" onclick="clearTextUserName()" style="margin-top:0px;"><i class="ri-add-line align-bottom me-1"></i>UserPermission</button>
+                        }
+                    </form>
+
                 </div>
             </div>
         </div>
+        <div class="card-body">
+            <div class="table-responsive" style="position: relative; height: 600px; overflow: auto;">
+                <table class="table table-bordered dt-responsive table-striped align-middle dataTable no-footer dtr-inline gridjs-table">
+                    <thead class="table-light text-muted gridjs-thead" style="position: sticky; top: 0; z-index: 1;">
+                        <tr class="table-info gridjs-tr">
+                            <th class="gridjs-th gridjs-th-fixed">Form Name</th>
+                            <th class="gridjs-th gridjs-th-fixed">IsAddAllow</th>
+                            <th class="gridjs-th gridjs-th-fixed">IsViewAllow</th>
+                            <th class="gridjs-th gridjs-th-fixed">IsEditAllow</th>
+                            <th class="gridjs-th gridjs-th-fixed">isDeleteAllow</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dveditUserForm" class="gridjs-tbody">
+                    </tbody>
+                </table>
+                <div class="text-end" id="userupdatebtn" style="display:none;">
+                    <button type="button" class="btn btn-lg btn-primary" onclick="UpdateUserFormPermission()" style="width: 160px;height: 50px;">Update</button>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
