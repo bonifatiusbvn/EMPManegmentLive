@@ -112,6 +112,7 @@ namespace EMPManegment.Web.Controllers
                     ProjectStatus = p.ProjectStatus,
                     ProjectDeadline = p.ProjectDeadline,
                     ProjectStartDate = p.ProjectStartDate,
+                    ShortName = p.ShortName,
                 }).ToList();
 
                 int pageSize = 6;

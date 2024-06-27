@@ -19,7 +19,7 @@
                     <div class="p-3 mt-n3 mx-n3 bg-info-subtle rounded-top">
                         <div class="d-flex align-items-center">
                             <div class="flex-grow-1">
-                                <h5 class="mb-0 fs-16" style="font-weight:bold;">@item.ProjectTitle</h5>
+                                <h5 class="mb-0 fs-16" style="font-weight:bold;">@item.ProjectTitle</h5>(@item.ShortName)
                             </div>
                             <div class="flex-shrink-0">
                                 <div class="d-flex gap-1 align-items-center my-n2">
@@ -69,16 +69,14 @@
                     <div class="d-flex align-items-center">
                         <div class="flex-grow-1">
                             <div class="avatar-group d-flex align-items-center">
-                                <div class="avatar-group-item me-2">
-                                    <a class="avatar-xxs d-flex align-items-center justify-content-center text-primary" href="/Project/CreateProject/?ProjectId=@item.ProjectId">
-                                        <i class="fa-regular fa-pen-to-square"></i>
-                                    </a>
-                                </div>
-                                <a href="javascript: void(0);" class="avatar-group-item d-flex align-items-center" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" aria-label="Darline Williams" data-bs-original-title="Darline Williams">
-                                    <div class="avatar-xxs">
-                                        <img src="~/assets/images/users/avatar-2.jpg" alt="" class="rounded-circle img-fluid">
+                                @if (UserSession.FormPermisionData.Any(a => a.FormName == "Create Project" && (a.Add == true)))
+                                {
+                                    <div class="avatar-group-item me-2">
+                                        <a class="avatar-xxs d-flex align-items-center justify-content-center text-primary" href="/Project/CreateProject/?ProjectId=@item.ProjectId">
+                                            <i class="fa-regular fa-pen-to-square"></i>
+                                        </a>
                                     </div>
-                                </a>
+                                }
                             </div>
                         </div>
                         <div class="flex-shrink-0">
