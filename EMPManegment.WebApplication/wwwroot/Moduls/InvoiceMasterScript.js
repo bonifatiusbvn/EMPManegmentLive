@@ -376,13 +376,31 @@ $(document).ready(function () {
             txtpaymentmethod: "required",
             textDispatchThrough: "required",
         },
+        highlight: function (element) {
+            if (element.id === "txtpaymentmethod" || element.id === "textDispatchThrough") {
+                $(element).addClass('is-invalid');
+            }
+        },
+        unhighlight: function (element) {
+            if (element.id === "txtpaymentmethod" || element.id === "textDispatchThrough") {
+                $(element).removeClass('is-invalid');
+            }
+        },
+        errorPlacement: function (error, element) {
+            if (element.attr("id") === "textVendorName" || element.attr("id") === "textCompanyName") {
+                error.insertAfter(element);
+            }
+        },
         messages: {
             textVendorName: "Select Vendor Name",
             textCompanyName: "Select Company Name",
-            txtpaymentmethod: "Select Payment Method",
-            textDispatchThrough: "Please Enter DispatchThrough",
+            txtpaymentmethod: "",
+            textDispatchThrough: "",
         }
     });
+
+
+
 
     fn_GetInvoiceVendorNameList()
     $('#textVendorName').change(function () {

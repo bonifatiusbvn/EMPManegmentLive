@@ -23,7 +23,6 @@
         });
     });
     $("#CreatePOForm").validate({
-
         rules: {
             textVendorName: "required",
             textCompanyName: "required",
@@ -31,14 +30,34 @@
             textDescription: "required",
             textDeliveryStatus: "required",
         },
+        highlight: function (element) {
+            if (element.id === "txtpaymentmethod" || element.id === "textDeliveryStatus") {
+                $(element).addClass('is-invalid');
+            }
+        },
+        unhighlight: function (element) {
+            if (element.id === "txtpaymentmethod" || element.id === "textDeliveryStatus") {
+                $(element).removeClass('is-invalid');
+            }
+        },
+        errorPlacement: function (error, element) {
+            if (element.attr("name") === "textVendorName" ||
+                element.attr("name") === "textCompanyName" ||
+                element.attr("name") === "textDescription") {
+                error.insertAfter(element);
+            }
+        },
         messages: {
             textVendorName: "Select Vendor Name",
             textCompanyName: "Select Company Name",
-            txtpaymentmethod: "Select Payment Method",
+            txtpaymentmethod: "",
             textDescription: "Please Enter Description",
-            textDeliveryStatus: "Please Enter Delivery Status",
+            textDeliveryStatus: "",
         }
     });
+
+
+
     $("#UpdateOrderDetailsForm").validate({
         rules: {
             txtorderdate: "required",
