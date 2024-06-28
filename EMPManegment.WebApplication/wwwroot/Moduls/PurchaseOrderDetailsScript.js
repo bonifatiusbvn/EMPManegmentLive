@@ -145,66 +145,18 @@
             timer = setTimeout(() => func.apply(this, args), delay);
         };
     }
-
-    $(document).on('input', '#txtPOdiscountpercentage', debounce(function () {
-        var value = $(this).val();
-        var productRow = $(this).closest(".product");
-        if (value > 100) {
-            toastr.warning("Discount cannot be greater than 100%");
-            productRow.find("#txtPOdiscountpercentage").val(0);
-            productRow.find("#txtPOdiscountamount").val(0);
-        } else if (value <= 0 || value == "") {
-            productRow.find("#txtPOdiscountamount").val(0);
-            productRow.find("#txtPOdiscountpercentage").val(0);
-            fn_updatePOProductAmount(productRow);
-        } else {
-            fn_UpdatePODiscountPercentage(productRow);
-        }
-    }, 300)).on('keydown', '#txtPOdiscountpercentage', function (event) {
-        var productRow = $(this).closest(".product");
-        var gstFocus = productRow.find('#txtgst');
-        handleFocus(event, gstFocus);
-    });
-
-    $(document).on('input', '#txtPOdiscountamount', debounce(function () {
-        var productRow = $(this).closest(".product");
-        var discountAmount = parseFloat($(this).val());
-        var productAmount = parseFloat($(productRow).find("#productamount").val());
-
-        if (discountAmount > productAmount) {
-            toastr.warning("Amount cannot be greater than Item price");
-            productRow.find("#txtPOdiscountamount").val(0);
-            productRow.find("#txtPOdiscountpercentage").val(0);
-        } else if (discountAmount <= 0 || discountAmount == "") {
-            productRow.find("#txtPOdiscountamount").val(0);
-            productRow.find("#txtPOdiscountpercentage").val(0);
-            fn_updatePOProductAmount(productRow);
-        } else {
-            fn_updatePODiscount(productRow);
-        }
-    }, 300)).on('keydown', '#txtPOdiscountamount', function (event) {
-        var productRow = $(this).closest(".product");
-        var discountPercentagefocus = productRow.find('#txtPOdiscountpercentage');
-        handleFocus(event, discountPercentagefocus);
-    });
-
     $(document).on('input', '#txtproductamount', function () {
         var productRow = $(this).closest(".product");
         var productAmount = parseFloat($(this).val());
-        var discountAmountfocus = productRow.find('#txtPOdiscountamount');
-
-        if (!isNaN(productAmount)) {
-            productRow.find("#txtPOdiscountamount").val(0);
-            productRow.find("#txtPOdiscountpercentage").val(0);
-        }
 
         productRow.find("#productamount").val(productAmount.toFixed(2));
         fn_updatePOProductAmount(productRow);
         fn_updatePOTotals();
+
     }).on('keydown', '#txtproductamount', function (event) {
         var productRow = $(this).closest(".product");
-        var discountAmountfocus = productRow.find('#txtPOdiscountamount');
-        handleFocus(event, discountAmountfocus);
+        var gstFocus = productRow.find('#txtgst');
+        handleFocus(event, gstFocus);
     });
 
     $(document).on('input', '#txtgstPercentage', function () {
@@ -216,15 +168,6 @@
             $(this).blur();
         }
     });
-    $(document).on('input', '#cart-roundOff', debounce(function () {
-        var roundoff = $('#cart-roundOff').val();
-        if (isNaN(roundoff) || (roundoff < -0.99 || roundoff > 0.99)) {
-            toastr.warning("Value must be between -0.99 and 0.99");
-        }
-        else {
-            fn_updatePOTotals();
-        }
-    }, 300));
     $(document).on('focusout', '.product-quantity', function () {
         $(this).trigger('input');
     });
@@ -472,8 +415,6 @@ function fn_UpdatePurchaseOrderDetails() {
                 Gstper: orderRow.find("#txtgstPercentage").val(),
                 Hsn: orderRow.find("#txtHSNcode").val(),
                 ProductTotal: orderRow.find("#txtproducttotalamount").val(),
-                DiscountAmt: orderRow.find("#txtPOdiscountamount").val(),
-                DiscountPer: orderRow.find("#txtPOdiscountpercentage").val(),
             };
             ProductDetails.push(objData);
         });
@@ -493,8 +434,6 @@ function fn_UpdatePurchaseOrderDetails() {
             PaymentMethod: $("#txtPOpaymentmethod").val(),
             PaymentStatus: $("#txtPOpaymenttype").val(),
             DeliveryStatus: $("#textDeliveryStatus").val(),
-            RoundOff: $('#cart-roundOff').val(),
-            TotalDiscount: $('#cart-discount').val(),
             CreatedBy: $("#textCreatedByVal").val(),
             CreatedOn: $("#textCreatedOnId").val(),
             UpdatedBy: $("#textCreatedById").val(),
@@ -593,73 +532,14 @@ function fn_updatePORowNumbers() {
 }
 function fn_updatePOProductAmount(that) {
     var row = $(that);
-    var hiddenproductPrice = parseFloat(row.find("#productamount").val());
-    var quantity = parseFloat(row.find("#txtproductquantity").val());
-    var discountprice = parseFloat(row.find("#txtPOdiscountamount").val());
-    var AmtWithDisc = hiddenproductPrice - discountprice;
-
+    var productPrice = parseFloat(row.find("#txtproductamount").val());
+    var quantity = parseInt(row.find("#txtproductquantity").val());
     var gst = parseFloat(row.find("#txtgstPercentage").val());
-
-    var totalGst = (AmtWithDisc * quantity * gst) / 100;
-
-    var TotalAmountAfterDiscount = AmtWithDisc * quantity + totalGst;
+    var totalGst = (productPrice * quantity * gst) / 100;
+    var totalAmount = productPrice * quantity + totalGst;
 
     row.find("#txtgstAmount").val(totalGst.toFixed(2));
-    row.find("#txtproducttotalamount").val(TotalAmountAfterDiscount.toFixed(2));
-}
-function fn_updatePODiscount(that) {
-    var row = $(that);
-    var productPrice = parseFloat(row.find("#productamount").val());
-    var discountprice = parseFloat(row.find("#txtPOdiscountamount").val());
-    var discountPercentage = parseFloat(row.find("#txtPOdiscountpercentage").val());
-
-    if (isNaN(discountprice)) {
-        row.find("#txtPOdiscountamount").val(0);
-        row.find("#txtPOdiscountpercentage").val(0);
-        row.find("#txtproductamount").val(productPrice.toFixed(2));
-        fn_updatePOProductAmount(row);
-        fn_updatePOTotals();
-        return;
-    }
-
-    if (discountPercentage == 0 && discountprice > 0) {
-        var discountperbyamount = discountprice / productPrice * 100;
-        row.find("#txtPOdiscountpercentage").val(discountperbyamount.toFixed(2));
-    } else if (discountprice > 0 && discountPercentage > 0) {
-        var discountperbyamount = discountprice / productPrice * 100;
-        row.find("#txtPOdiscountpercentage").val(discountperbyamount.toFixed(2));
-    }
-    var AmountAfterDisc = productPrice - discountprice;
-    row.find("#txtproductamount").val(AmountAfterDisc.toFixed(2));
-    fn_updatePOProductAmount(row);
-    fn_updatePOTotals();
-}
-function fn_UpdatePODiscountPercentage(that) {
-    var row = $(that);
-    var productPrice = parseFloat(row.find("#productamount").val());
-    var discountprice = parseFloat(row.find("#txtPOdiscountamount").val());
-    var discountPercentage = parseFloat(row.find("#txtPOdiscountpercentage").val());
-
-    if (isNaN(discountPercentage)) {
-        row.find("#txtPOdiscountamount").val(0);
-        row.find("#txtPOdiscountpercentage").val(0);
-        row.find("#txtproductamount").val(productPrice.toFixed(2));
-        fn_updatePOProductAmount(row);
-        fn_updatePOTotals();
-        return;
-    }
-
-    if (discountprice == 0 && discountPercentage > 0) {
-        discountprice = productPrice * discountPercentage / 100;
-        row.find("#txtPOdiscountamount").val(discountprice.toFixed(2));
-    } else if (discountprice > 0 && discountPercentage > 0) {
-        discountprice = productPrice * discountPercentage / 100;
-        row.find("#txtPOdiscountamount").val(discountprice.toFixed(2));
-    }
-    var AmountAfterDisc = productPrice - discountprice;
-    row.find("#txtproductamount").val(AmountAfterDisc.toFixed(2));
-    fn_updatePOProductAmount(row);
-    fn_updatePOTotals();
+    row.find("#txtproducttotalamount").val(totalAmount.toFixed(2));
 }
 function fn_updatePOTotals() {
  
@@ -667,20 +547,16 @@ function fn_updatePOTotals() {
     var totalGst = 0;
     var totalAmount = 0;
     var TotalItemQuantity = 0;
-    var TotalDiscount = 0;
-    var roundoffvalue = $('#cart-roundOff').val();
     $(".product").each(function () {
      
         var row = $(this);
         var subtotal = parseFloat(row.find("#txtproductamount").val());
         var gst = parseFloat(row.find("#txtgstAmount").val());
         var totalquantity = parseFloat(row.find("#txtproductquantity").val());
-        var discountprice = parseFloat(row.find("#txtPOdiscountamount").val());
 
         totalSubtotal += subtotal * totalquantity;
         totalGst += gst;
         TotalItemQuantity += totalquantity;
-        TotalDiscount += discountprice * totalquantity;
         totalAmount = totalSubtotal + totalGst;
     });
     $("#cart-subtotal").val(totalSubtotal.toFixed(2));
@@ -690,15 +566,6 @@ function fn_updatePOTotals() {
     $("#TotalProductPrice").html(totalSubtotal.toFixed(2));
     $("#TotalProductGST").html(totalGst.toFixed(2));
     $("#TotalProductAmount").html(totalAmount.toFixed(2));
-    $("#TotalDiscountPrice").html(TotalDiscount.toFixed(2));
-    $("#cart-discount").val(TotalDiscount.toFixed(2));
-    if (roundoffvalue != 0) {
-
-        var roundtotal = parseFloat(totalAmount) + parseFloat(roundoffvalue);
-        $("#cart-total").val(roundtotal.toFixed(2))
-    } else {
-        $("#cart-total").val(totalAmount.toFixed(2));
-    }
 }
 function fn_POremoveItem(btn) {
     $(btn).closest("tr").remove();
@@ -754,8 +621,6 @@ function fn_InsertPurchaseOrderDetails() {
                 Gstper: orderRow.find("#txtgstPercentage").val(),
                 Hsn: orderRow.find("#txtHSNcode").val(),
                 ProductTotal: orderRow.find("#txtproducttotalamount").val(),
-                DiscountAmt: orderRow.find("#txtPOdiscountamount").val(),
-                DiscountPer: orderRow.find("#txtPOdiscountpercentage").val(),
             };
             ProductDetails.push(objData);
         });
@@ -774,8 +639,6 @@ function fn_InsertPurchaseOrderDetails() {
             PaymentMethod: $("#txtPOpaymentmethod").val(),
             PaymentStatus: $("#txtPOpaymenttype").val(),
             DeliveryStatus: $("#textDeliveryStatus").val(),
-            RoundOff: $('#cart-roundOff').val(),
-            TotalDiscount: $('#cart-discount').val(),
             CreatedBy: $("#textCreatedById").val(),
             Address: $('#hideShippingAddress').is(':checked') ? $('#textCompanyBillingAddress').val() : $('#textShippingAddress').val(),
             ProductList: ProductDetails,

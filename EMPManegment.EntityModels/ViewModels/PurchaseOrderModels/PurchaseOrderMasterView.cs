@@ -23,9 +23,6 @@ namespace EMPManegment.EntityModels.ViewModels.PurchaseOrderModels
         public decimal? TotalGst { get; set; }
 
         public decimal? SubTotal { get; set; }
-        public decimal? TotalDiscount { get; set; }
-
-        public decimal? RoundOff { get; set; }
 
         public decimal TotalAmount { get; set; }
 

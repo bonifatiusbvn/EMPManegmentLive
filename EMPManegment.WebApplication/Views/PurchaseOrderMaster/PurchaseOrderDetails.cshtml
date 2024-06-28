@@ -115,8 +115,6 @@
                                         <th class="border">Product Details</th>
                                         <th class="border">Quantity</th>
                                         <th class="border">Price</th>
-                                        <th class="border">Discount</th>
-                                        <th class="border">Discount(%)</th>
                                         <th class="border">GST</th>
                                         <th class="border">GST(%)</th>
                                         <th class="border">Amount</th>
@@ -134,8 +132,6 @@
                                             <td class="text-start border">@item.Product</td>
                                             <td class="border">@item.Quantity</td>
                                             <td class="border">@item.Price</td>
-                                            <td class="border">@item.DiscountAmt</td>
-                                            <td class="border">@item.DiscountPer</td>
                                             <td class="border">@item.Gstamount</td>
                                             <td class="border">@item.Gstper</td>
                                             <td class="text-end border">@item.ProductTotal</td>
@@ -155,14 +151,6 @@
                                     <tr>
                                         <td class="border">Total GST</td>
                                         <td class="text-end border">₹@Model.TotalGst</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="border">Total Discount</td>
-                                        <td class="text-end border">₹@Model.TotalDiscount</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="border">RoundOff</td>
-                                        <td class="text-end border">₹@Model.RoundOff</td>
                                     </tr>
                                     <tr class="border-top">
                                         <td class="border">Total Amount</td>
