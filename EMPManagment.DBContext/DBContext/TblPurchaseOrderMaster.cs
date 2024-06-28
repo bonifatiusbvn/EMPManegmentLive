@@ -19,10 +19,6 @@ public partial class TblPurchaseOrderMaster
 
     public decimal? SubTotal { get; set; }
 
-    public decimal? TotalDiscount { get; set; }
-
-    public decimal? RoundOff { get; set; }
-
     public decimal TotalAmount { get; set; }
 
     public DateTime OrderDate { get; set; }

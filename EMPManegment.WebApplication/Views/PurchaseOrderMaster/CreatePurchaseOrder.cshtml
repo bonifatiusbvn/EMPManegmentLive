@@ -47,7 +47,7 @@
                                                         <div class="row">
                                                             <div class="col-6 col-lg-6 ">
                                                                 <label for="textVendorName" class="form-label">Vendor Name</label>
-                                                                @if(Model.VendorId != null)
+                                                                @if (Model.VendorId != null)
                                                                 {
                                                                     <select class="form-control form-select valid" id="textVendorName" name="textVendorName">
                                                                         <option selected value="@Model.VendorId">@Model.VendorCompanyName</option>
@@ -167,8 +167,6 @@
                                                         <th>Quantity</th>
                                                         <th>Qty Type</th>
                                                         <th>Price</th>
-                                                        <th>Discount(₹)</th>
-                                                        <th>Discount(%)</th>
                                                         <th>GST (%)</th>
                                                         <th>GST Amt (₹)</th>
                                                         <th>Amount (₹)</th>
@@ -178,7 +176,7 @@
                                                 @if (Model.ProductList != null)
                                                 {
                                                     <tbody id="addnewproductlink" class="table-body">
-                                                        @Html.Partial("_DisplayPOProductDetailsById.cshtml",Model.ProductList)
+                                                        @Html.Partial("_DisplayPOProductDetailsById.cshtml", Model.ProductList)
                                                     </tbody>
                                                 }
                                                 else
@@ -186,7 +184,7 @@
                                                     <tbody id="addnewproductlink" class="table-body">
                                                     </tbody>
                                                 }
-                                                
+
                                             </table>
                                             <div class="noresult" style="display: none">
                                                 <div class="text-center">
@@ -212,7 +210,6 @@
                                                         <th></th>
                                                         <th id="TotalProductPrice"></th>
                                                         <th></th>
-                                                        <th id="TotalDiscountPrice"></th>
                                                         <th></th>
                                                         <th></th>
                                                         <th id="TotalProductGST"></th>
@@ -244,7 +241,7 @@
                                                                     <input type="text" class="form-control" id="textDeliveryStatus" name="textDeliveryStatus" value="@Model.DeliveryStatus" placeholder="Enter Delivery Status">
                                                                 </div>
                                                             </div>
-                                                            
+
                                                         </div>
                                                         <div class="col-lg-12 col-sm-12 mt-2">
                                                             <div class="mb-3">
@@ -262,7 +259,7 @@
                                                                             <option selected value="">--Select Payment Method--</option>
                                                                         </select>
                                                                     }
-                                                                    
+
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -273,16 +270,16 @@
                                                                     @if (Model.PaymentStatus != null)
                                                                     {
                                                                         <select class="form-control form-select valid" id="txtPOpaymenttype" name="txtPOpaymenttype">
-                                                                        <option selected value="@Model.PaymentStatus">@Model.PaymentStatusName</option>
-                                                                    </select>
+                                                                            <option selected value="@Model.PaymentStatus">@Model.PaymentStatusName</option>
+                                                                        </select>
                                                                     }
                                                                     else
                                                                     {
                                                                         <select class="form-control form-select valid" id="txtPOpaymenttype" name="txtPOpaymenttype">
-                                                                        <option selected value="">--Select Payment Status--</option>
-                                                                    </select>
+                                                                            <option selected value="">--Select Payment Status--</option>
+                                                                        </select>
                                                                     }
-                                                                    
+
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -304,28 +301,6 @@
                                                                     <th>Total GST</th>
                                                                     <td>
                                                                         <input type="text" class="form-control bg-light border-0" id="totalgst" placeholder="₹0.00" value="@Model.TotalGst" readonly />
-                                                                    </td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <th scope="row">Discount <small class="text-muted"></small></th>
-                                                                    <td>
-                                                                        <input type="text" class="form-control border-0" id="cart-discount" placeholder="₹0.00" value="@Model.TotalDiscount" readonly />
-                                                                    </td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <th>
-                                                                        Roundoff
-                                                                    </th>
-                                                                    <td>
-                                                                        @if (Model.RoundOff != null)
-                                                                        {
-                                                                            <input type="text" class="form-control bg-light border-0" id="cart-roundOff" value="@Model.RoundOff" placeholder="₹0.00" min="-0.99" max="0.99" />
-                                                                        }
-                                                                        else
-                                                                        {
-                                                                            <input type="text" class="form-control bg-light border-0" name="txtroundOff" id="cart-roundOff" placeholder="₹0.00" min="-0.99" max="0.99" />
-
-                                                                        }
                                                                     </td>
                                                                 </tr>
                                                                 <tr class="border-top border-top-dashed">

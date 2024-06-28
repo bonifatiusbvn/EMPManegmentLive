@@ -522,8 +522,6 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.ToTable("tblPurchaseOrderDetails");
 
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
-            entity.Property(e => e.DiscountAmt).HasColumnType("numeric(18, 2)");
-            entity.Property(e => e.DiscountPer).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.Gstamount)
                 .HasColumnType("numeric(18, 2)")
                 .HasColumnName("GSTAmount");
@@ -566,10 +564,8 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.Property(e => e.OrderDate).HasColumnType("date");
             entity.Property(e => e.OrderId).HasMaxLength(50);
             entity.Property(e => e.OrderStatus).HasMaxLength(20);
-            entity.Property(e => e.RoundOff).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.SubTotal).HasColumnType("decimal(18, 0)");
             entity.Property(e => e.TotalAmount).HasColumnType("decimal(18, 0)");
-            entity.Property(e => e.TotalDiscount).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.TotalGst).HasColumnType("decimal(18, 0)");
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
 
