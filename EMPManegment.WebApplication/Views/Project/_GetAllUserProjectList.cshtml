@@ -13,6 +13,20 @@
     <!-- start col -->
     @foreach (var item in Model)
     {
+        var CompanyName = item.ProjectTitle;
+        var Titleinitial = string.Empty;
+        var words = CompanyName.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+        if (words.Length > 0)
+        {
+            Titleinitial += char.ToUpper(words[0][0]);
+
+            if (words.Length > 1)
+            {
+                Titleinitial += char.ToUpper(words[1][0]);
+            }
+        }
+        var CompanyInitials = Titleinitial.ToUpper();
+
         <div class="col-xxl-3 col-sm-4 project-card">
             <div class="card card-height-100 border">
                 <div class="card-body">
@@ -35,11 +49,24 @@
                     <br />
                     <div class="d-flex mb-2">
                         <div class="flex-shrink-0 me-3">
-                            <div class="avatar-sm">
-                                <span class="avatar-title bg-warning-subtle rounded p-2">
-                                    <img src="~/Content/Projects/@item.ProjectImage" alt="" class="img-fluid p-1">
-                                </span>
-                            </div>
+                            @if (!string.IsNullOrEmpty(@item.ProjectImage))
+                            {
+                                <div class="avatar-sm">
+                                    <span class="avatar-title bg-warning-subtle rounded p-2">
+                                        <img src="~/Content/Projects/@item.ProjectImage" alt="" class="img-fluid p-1">
+                                    </span>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="avatar-sm">
+                                    <div class="avatar-title bg-warning-subtle">
+                                        <span class="rounded-circle bg-info-subtle p-2 text-success fs-13">
+                                            @CompanyInitials
+                                        </span>
+                                    </div>
+                                </div>
+                            }
                         </div>
                         <div class="flex-grow-1">
                             <h5 class="mb-1 fs-15"><a class="text-body">@item.ProjectTitle</a></h5>

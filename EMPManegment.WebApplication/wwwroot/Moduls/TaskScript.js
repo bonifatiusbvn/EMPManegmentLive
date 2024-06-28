@@ -145,40 +145,46 @@ function GetUserTaskDetails() {
 function btnStatusUpdate(Id) {
 
     if ($("#tasksListform").valid()) {
-        var StausChange = {
-            TaskStatus: $('#ddlStatusReview' + Id).val(),
-            Role: $('#userrole').val(),
-            Id: Id,
-            UserId: $('#userid').val(),
-            UpdatedBy: $("#userid").val(),
-        }
-        var form_data = new FormData();
-        form_data.append("STATUSUPDATE", JSON.stringify(StausChange));
+        var ReviewStatus = $('#ddlStatusReview' + Id).val();
+        if (ReviewStatus != null) {
+            var StausChange = {
+                TaskStatus: $('#ddlStatusReview' + Id).val(),
+                Id: Id,
+                UpdatedBy: $("#textTaskUserId").val(),
+            }
+            var form_data = new FormData();
+            form_data.append("STATUSUPDATE", JSON.stringify(StausChange));
 
-        $.ajax({
-            url: '/Task/UpdateUserTaskStatus',
-            type: 'Post',
-            data: form_data,
-            dataType: 'json',
-            contentType: false,
-            processData: false,
-            success: function (Result) {
-                GetUserTaskDetails();
-                if (Result.code == 200) {
-                    Swal.fire({
-                        title: Result.message,
-                        icon: 'success',
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'OK',
-                    }).then(function () {
-                        window.location = '/Task/UserTasks';
-                    });
-                }
-                else {
-                    toastr.error(Result.message);
-                }
-            },
-        });
+            $.ajax({
+                url: '/Task/UpdateUserTaskStatus',
+                type: 'Post',
+                data: form_data,
+                dataType: 'json',
+                contentType: false,
+                processData: false,
+                success: function (Result) {
+                    GetUserTaskDetails();
+                    if (Result.code == 200) {
+                        Swal.fire({
+                            title: Result.message,
+                            icon: 'success',
+                            confirmButtonColor: '#3085d6',
+                            confirmButtonText: 'OK',
+                        }).then(function () {
+                            window.location = '/Task/UserTasks';
+                        });
+                    }
+                    else {
+                        toastr.error(Result.message);
+                    }
+                },
+            });
+        }
+        else {
+            siteloaderhide();
+            $('#ddlStatusReview' + Id + '-error').text('Kindly select the status').show();
+            toastr.warning("Kindly select the status");
+        }
     }
 
     else {
@@ -209,10 +215,8 @@ function btnStatusUpdateLow(Id) {
 
         var StausChange = {
             TaskStatus: $('#ddlStatus' + Id).val(),
-            Role: $('#userrole').val(),
             Id: Id,
-            UserId: UserId,
-            UpdatedBy: $("#userid").val(),
+            UpdatedBy: $("#textTaskUserId").val(),
         }
         var form_data = new FormData();
         form_data.append("STATUSUPDATE", JSON.stringify(StausChange));
@@ -274,50 +278,54 @@ $(document).ready(function () {
 /*/-------MEDIUMPRIORITY------------*/
 function btnStatusUpdateMedium(Id) {
 
-
     if ($("#tasksListMedium").valid()) {
+        var MediumStatus = $('#ddlStatusMedium' + Id).val();
+        if (MediumStatus != null) {
 
-        var StausChange = {
-            TaskStatus: $('#ddlStatusMedium' + Id).val(),
-            Role: $('#userrole').val(),
-            Id: Id,
-            UserId: UserId,
-            UpdatedBy: $("#userid").val(),
-
-        }
-        var form_data = new FormData();
-        form_data.append("STATUSUPDATE", JSON.stringify(StausChange));
-
-        $.ajax({
-            url: '/Task/UpdateUserTaskStatus',
-            type: 'Post',
-            data: form_data,
-            dataType: 'json',
-            contentType: false,
-            processData: false,
-            success: function (Result) {
-                siteloaderhide();
-                GetUserTaskDetails();
-                if (Result.code == 200) {
-
-                    Swal.fire({
-                        title: Result.message,
-                        icon: 'success',
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'OK',
-                    }).then(function () {
-                        window.location = '/Task/UserTasks';
-                    });
-                }
-                else {
-                    toastr.error(Result.message);
-                }
-            },
-            error: function (error, status) {
-                toastr.error(error);
+            var StausChange = {
+                TaskStatus: $('#ddlStatusMedium' + Id).val(),
+                Id: Id,
+                UpdatedBy: $("#textTaskUserId").val(),
 
             }
-        });
+            var form_data = new FormData();
+            form_data.append("STATUSUPDATE", JSON.stringify(StausChange));
+
+            $.ajax({
+                url: '/Task/UpdateUserTaskStatus',
+                type: 'Post',
+                data: form_data,
+                dataType: 'json',
+                contentType: false,
+                processData: false,
+                success: function (Result) {
+                    siteloaderhide();
+                    GetUserTaskDetails();
+                    if (Result.code == 200) {
+
+                        Swal.fire({
+                            title: Result.message,
+                            icon: 'success',
+                            confirmButtonColor: '#3085d6',
+                            confirmButtonText: 'OK',
+                        }).then(function () {
+                            window.location = '/Task/UserTasks';
+                        });
+                    }
+                    else {
+                        toastr.error(Result.message);
+                    }
+                },
+                error: function (error, status) {
+                    toastr.error(error);
+
+                }
+            });
+        } else {
+            siteloaderhide();
+            $('#ddlStatusMedium' + Id + '-error').text('Kindly select the status').show();
+            toastr.warning("Kindly select the status");
+        }
     }
 
     else {
@@ -344,49 +352,51 @@ $(document).ready(function () {
 });
 /*---------HIGHPRIORITY-----------*/
 function btnStatusUpdateHigh(Id) {
-
     if ($("#tasksListhigh").valid()) {
-
-        var StausChange = {
-            UpdatedBy: $("#userid").val(),
-            TaskStatus: $('#ddlStatusHigh' + Id).val(),
-            Role: $('#userrole').val(),
-            Id: Id,
-            UserId: UserId
-        }
-        var form_data = new FormData();
-        form_data.append("STATUSUPDATE", JSON.stringify(StausChange));
-
-        $.ajax({
-            url: '/Task/UpdateUserTaskStatus',
-            type: 'Post',
-            data: form_data,
-            dataType: 'json',
-            contentType: false,
-            processData: false,
-            success: function (Result) {
-                siteloaderhide();
-                GetUserTaskDetails();
-                if (Result.code == 200) {
-
-                    Swal.fire({
-                        title: Result.message,
-                        icon: 'success',
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'OK',
-                    }).then(function () {
-                        window.location = '/Task/UserTasks';
-                    });
-                }
-                else {
-                    toastr.error(Result.message);
-                }
-            },
-            error: function (error, status) {
-                toastr.error(error);
-
+        var data = $('#ddlStatusHigh' + Id).val();
+        if (data != null) {
+            var StausChange = {
+                TaskStatus: $('#ddlStatusHigh' + Id).val(),
+                Id: Id,
+                UpdatedBy: $("#textTaskUserId").val(),
             }
-        });
+            var form_data = new FormData();
+            form_data.append("STATUSUPDATE", JSON.stringify(StausChange));
+
+            $.ajax({
+                url: '/Task/UpdateUserTaskStatus',
+                type: 'Post',
+                data: form_data,
+                dataType: 'json',
+                contentType: false,
+                processData: false,
+                success: function (Result) {
+                    siteloaderhide();
+                    GetUserTaskDetails();
+                    if (Result.code == 200) {
+
+                        Swal.fire({
+                            title: Result.message,
+                            icon: 'success',
+                            confirmButtonColor: '#3085d6',
+                            confirmButtonText: 'OK',
+                        }).then(function () {
+                            window.location = '/Task/UserTasks';
+                        });
+                    }
+                    else {
+                        toastr.error(Result.message);
+                    }
+                },
+                error: function (error, status) {
+                    toastr.error(error);
+                }
+            });
+        } else {
+            siteloaderhide();
+            $('#ddlStatusHigh' + Id + '-error').text('Kindly select the status').show();
+            toastr.warning("Kindly select the status");
+        }
     }
     else {
         siteloaderhide();
@@ -544,7 +554,7 @@ $(document).ready(function () {
                 },
                 {
                     "data": "taskEndDate", "name": "TaskEndDate",
-                    "render": function (data, type, full, meta) {                      
+                    "render": function (data, type, full, meta) {
                         return getCommonDateformat(data);
                     }
                 },
@@ -668,7 +678,7 @@ function UpdateTaskDetails() {
                 })
             } else {
                 toastr.error(Result.message);
-            }            
+            }
         },
     })
 }

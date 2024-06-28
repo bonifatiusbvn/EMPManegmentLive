@@ -9,6 +9,22 @@
     Layout = "~/Views/Shared/_HomeLayout.cshtml";
 }
 
+@{
+    var CompanyName = Model.ProjectTitle;
+    var Titleinitial = string.Empty;
+    var words = CompanyName.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+    if (words.Length > 0)
+    {
+        Titleinitial += char.ToUpper(words[0][0]);
+
+        if (words.Length > 1)
+        {
+            Titleinitial += char.ToUpper(words[1][0]);
+        }
+    }
+    var CompanyInitials = Titleinitial.ToUpper();
+}
+
 <div class="row" style="margin-top:80px;">
     <div class="col-12">
         <div class="page-title-box d-sm-flex align-items-center justify-content-between">
@@ -35,9 +51,18 @@
                                 <div class="row align-items-center g-3">
                                     <div class="col-md-auto">
                                         <div class="avatar-md">
-                                            <div class="avatar-title bg-white rounded-circle">
-                                                <img src="~/Content/Projects/@Model.ProjectImage" alt="" class="direct-chat-img">
-                                            </div>
+                                            @if (!string.IsNullOrEmpty(Model.ProjectImage))
+                                            {
+                                                <div class="avatar-title bg-white rounded-circle">
+                                                    <img src="~/Content/Projects/@Model.ProjectImage" alt="" class="direct-chat-img">
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="avatar-title bg-white rounded-circle">
+                                                    <div class="avatar-title bg-success-subtle text-success rounded-circle fs-20 border" style="height:50px;width:50px;">@CompanyInitials</div>
+                                                </div>
+                                            }
                                         </div>
                                     </div>
                                     <div class="col-md">

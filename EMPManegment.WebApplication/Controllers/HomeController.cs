@@ -188,7 +188,7 @@ namespace EMPManegment.Web.Controllers
                     projectlist = JsonConvert.DeserializeObject<List<ProjectDetailView>>(response.data.ToString());
                 }
 
-                int pageSize = 4;
+                int pageSize = 6;
                 var pageNumber = page ?? 1;
 
                 var pagedList = projectlist.ToPagedList(pageNumber, pageSize);

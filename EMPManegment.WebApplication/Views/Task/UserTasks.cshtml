@@ -83,6 +83,7 @@
                     <div class="dropdown-menu dropdown-menu-end">
                         <a class="dropdown-item" href="#">Priority</a>
                         <a class="dropdown-item" href="#">Date Added</a>
+                        <input type="hidden" value="@_userSession.UserId" id="textTaskUserId" />
                     </div>
                 </div>
             </div>
@@ -330,6 +331,7 @@
                                                         <option selected disabled value="">---Select Status---</option>
                                                         <option value="Working">Working</option>
                                                     </select>
+                                                    <label id="ddlStatusHigh@(item.Id)-error" class="error"></label>
                                                 </form>
                                             </div>
                                         </div>
@@ -485,6 +487,7 @@
                                                         <option value="Pending">Pending</option>
                                                         <option value="InReview">InReview</option>
                                                     </select>
+                                                    <label id="ddlStatusMedium@(item.Id)-error" class="error"></label>
                                                 </form>
                                             </div>
                                         </div>
@@ -638,6 +641,7 @@
                                                             <option value="Pending">Pendings</option>
                                                             <option value="Working">Working</option>
                                                         </select>
+                                                        <label id="ddlStatusReview@(item.Id)-error" class="error"></label>
                                                     </form>
                                                 }
                                                 else
@@ -850,6 +854,9 @@
     <!--end tasks-list-->
 </div>
 <!--end card-->
+<script type="text/javascript">
+    var userPermissions = '@Html.Raw(Json.Serialize(UserSession.FormPermisionData))';
+</script>
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/moduls/taskscript.js" asp-append-version="true"></script>
