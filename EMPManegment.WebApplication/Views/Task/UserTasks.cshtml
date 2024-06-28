@@ -92,109 +92,111 @@
                 </div>
             </div>
         </div>
-        <div data-simplebar class="tasks-wrapper px-3 mx-n3 bg-info" style="max-height: 400px; overflow-y: auto;">
+        <div data-simplebar class="tasks-wrapper px-3 mx-n3" style="max-height: 600px; overflow-y: auto;">
             <div id="reviews-task" class="tasks">
-                @foreach (var item in Model)
-                {
-                    var imageUrl = !string.IsNullOrEmpty(item.UserProfile) ? Url.Content($"~/{item.UserProfile}") : null;
-                    var initials = $"{item.FirstName[0]}{item.LastName[0]}".ToUpper();
-                    @if (item.TaskStatus == null)
+                <div class="card-body bg-info">
+                    @foreach (var item in Model)
                     {
-                        <div class="card tasks-box mb-3 ">
-                            <div class="card-body">
-                                <div class="d-flex mb-2">
-                                    <div class="flex-grow-1">
-                                        <h6 class="fs-15 mb-0 text-truncate task-title">
-                                            <a href="apps-tasks-details.html" class="link-secondary">@item.TaskTitle</a>
-                                        </h6>
+                        var imageUrl = !string.IsNullOrEmpty(item.UserProfile) ? Url.Content($"~/{item.UserProfile}") : null;
+                        var initials = $"{item.FirstName[0]}{item.LastName[0]}".ToUpper();
+                        @if (item.TaskStatus == null)
+                        {
+                            <div class="card tasks-box mb-3 ">
+                                <div class="card-body">
+                                    <div class="d-flex mb-2">
+                                        <div class="flex-grow-1">
+                                            <h6 class="fs-15 mb-0 text-truncate task-title">
+                                                <a href="apps-tasks-details.html" class="link-secondary">@item.TaskTitle</a>
+                                            </h6>
+                                        </div>
+                                        <div class="dropdown">
+                                            <a href="javascript:void(0);" class="text-muted" id="dropdownMenuLink1" data-bs-toggle="dropdown" aria-expanded="false"><i class="ri-more-fill"></i></a>
+                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink1">
+                                                <li>
+                                                    <a class="dropdown-item" href="apps-tasks-details.html">
+                                                        <i class="ri-eye-fill align-bottom me-2 text-muted"></i>View
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item" href="#">
+                                                        <i class="ri-edit-2-line align-bottom me-2 text-muted"></i>Edit
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item" data-bs-toggle="modal" href="#deleteRecordModal">
+                                                        <i class="ri-delete-bin-5-line align-bottom me-2 text-muted"></i>Delete
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
                                     </div>
-                                    <div class="dropdown">
-                                        <a href="javascript:void(0);" class="text-muted" id="dropdownMenuLink1" data-bs-toggle="dropdown" aria-expanded="false"><i class="ri-more-fill"></i></a>
-                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink1">
-                                            <li>
-                                                <a class="dropdown-item" href="apps-tasks-details.html">
-                                                    <i class="ri-eye-fill align-bottom me-2 text-muted"></i>View
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a class="dropdown-item" href="#">
-                                                    <i class="ri-edit-2-line align-bottom me-2 text-muted"></i>Edit
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a class="dropdown-item" data-bs-toggle="modal" href="#deleteRecordModal">
-                                                    <i class="ri-delete-bin-5-line align-bottom me-2 text-muted"></i>Delete
-                                                </a>
-                                            </li>
-                                        </ul>
+                                    <p class="text-muted">@item.TaskDetails</p>
+                                    <div class="d-flex align-items-center mb-2">
+                                        @if (item.TaskStatus == "Working")
+                                        {
+                                            <a class="badge bg-warning text-uppercase">@item.TaskStatus</a>
+                                        }
+                                        else if (item.TaskStatus == "Completed")
+                                        {
+                                            <a class="badge bg-success text-uppercase">@item.TaskStatus</a>
+                                        }
+                                        else if (item.TaskStatus == "Pending")
+                                        {
+                                            <a class="badge bg-secondary text-uppercase">@item.TaskStatus</a>
+                                        }
+                                        else if (item.TaskStatus == "InReview")
+                                        {
+                                            <a class="badge text-uppercase" style="background-color: orangered;">@item.TaskStatus</a>
+                                        }
+                                        else
+                                        {
+                                            <a class="badge bg-info text-uppercase">@item.TaskStatus</a>
+                                        }
+                                        <div class="flex-grow-1"></div>
+                                        <div class="flex-shrink-0">
+                                            <div class="avatar-group">
+                                                @if (!string.IsNullOrEmpty(imageUrl))
+                                                {
+                                                    <img src="~/@item.UserProfile" alt="" class="direct-chat-img">
+                                                }
+                                                else
+                                                {
+                                                    <div class="avatar-title bg-success-subtle text-success rounded-circle fs-13" style="height: 40px; width: 40px;">@initials</div>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-items-center mb-2">
+                                        <div class="flex-grow-1">
+                                            <span class="text">TaskStatus:</span>
+                                            <form id="tasksListLow">
+                                                <select id="ddlStatus@(item.Id)" class="form-control form-select valid" name="ddlStatus">
+                                                    <option selected disabled value="">---Select Status---</option>
+                                                    <option value="Pending">Pending</option>
+                                                    <option value="Working">Working</option>
+                                                </select>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <button type="submit" class="btn btn-success btn-sm m-2" onclick="btnStatusUpdateLow('@item.Id')" id="StatusUpdate" value="Validate"><i class="bi bi-pencil-fill"></i>Status Update</button>
+                                        <button class="btn btn-primary btn-sm" data-bs-toggle="modal" onclick="btnTaskDetails('@item.Id')"><i class="bi bi-chat-right-dots"></i> Details</button>
                                     </div>
                                 </div>
-                                <p class="text-muted">@item.TaskDetails</p>
-                                <div class="d-flex align-items-center mb-2">
-                                    @if (item.TaskStatus == "Working")
-                                    {
-                                        <a class="badge bg-warning text-uppercase">@item.TaskStatus</a>
-                                    }
-                                    else if (item.TaskStatus == "Completed")
-                                    {
-                                        <a class="badge bg-success text-uppercase">@item.TaskStatus</a>
-                                    }
-                                    else if (item.TaskStatus == "Pending")
-                                    {
-                                        <a class="badge bg-secondary text-uppercase">@item.TaskStatus</a>
-                                    }
-                                    else if (item.TaskStatus == "InReview")
-                                    {
-                                        <a class="badge text-uppercase" style="background-color: orangered;">@item.TaskStatus</a>
-                                    }
-                                    else
-                                    {
-                                        <a class="badge bg-info text-uppercase">@item.TaskStatus</a>
-                                    }
-                                    <div class="flex-grow-1"></div>
-                                    <div class="flex-shrink-0">
-                                        <div class="avatar-group">
-                                            @if (!string.IsNullOrEmpty(imageUrl))
-                                            {
-                                                <img src="~/@item.UserProfile" alt="" class="direct-chat-img">
-                                            }
-                                            else
-                                            {
-                                                <div class="avatar-title bg-success-subtle text-success rounded-circle fs-13" style="height: 40px; width: 40px;">@initials</div>
-                                            }
+                                <div class="card-footer border-top-dashed">
+                                    <div class="d-flex mb-1">
+                                        <div class="flex-grow-1">
+                                            <span class="text-muted"><i class="ri-time-line align-bottom"></i>@CommonHelper.GetCommonDateFormat(item?.TaskDate ?? DateTime.MinValue)</span>
+                                        </div>
+                                        <div class="flex-grow-1">
+                                            <span class="text-muted"><i class="ri-time-line align-bottom"></i>@CommonHelper.GetCommonDateFormat(item?.TaskEndDate ?? DateTime.MinValue)</span>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="d-flex align-items-center mb-2">
-                                    <div class="flex-grow-1">
-                                        <span class="text">TaskStatus:</span>
-                                        <form id="tasksListLow">
-                                            <select id="ddlStatus@(item.Id)" class="form-control form-select valid" name="ddlStatus">
-                                                <option selected disabled value="">---Select Status---</option>
-                                                <option value="Pending">Pending</option>
-                                                <option value="Working">Working</option>
-                                            </select>
-                                        </form>
-                                    </div>
-                                </div>
-                                <div>
-                                    <button type="submit" class="btn btn-success btn-sm m-2" onclick="btnStatusUpdateLow('@item.Id')" id="StatusUpdate" value="Validate"><i class="bi bi-pencil-fill"></i>Status Update</button>
-                                    <button class="btn btn-primary btn-sm" data-bs-toggle="modal" onclick="btnTaskDetails('@item.Id')"><i class="bi bi-chat-right-dots"></i> Details</button>
-                                </div>
                             </div>
-                            <div class="card-footer border-top-dashed">
-                                <div class="d-flex mb-1">
-                                    <div class="flex-grow-1">
-                                        <span class="text-muted"><i class="ri-time-line align-bottom"></i>@CommonHelper.GetCommonDateFormat(item?.TaskDate ?? DateTime.MinValue)</span>
-                                    </div>
-                                    <div class="flex-grow-1">
-                                        <span class="text-muted"><i class="ri-time-line align-bottom"></i>@CommonHelper.GetCommonDateFormat(item?.TaskEndDate ?? DateTime.MinValue)</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        }
                     }
-                }
+                </div>
             </div>
         </div>
     </div>
@@ -219,137 +221,134 @@
         <div data-simplebar class="tasks-wrapper px-3 mx-n3">
             <div id="todo-task" class="tasks">
                 <div class="card tasks-box">
-                    <div class="card-body bg-secondary">
-                        @foreach (var item in Model)
-                        {
-                            var imageUrl = !string.IsNullOrEmpty(item.UserProfile) ? Url.Content($"~/{item.UserProfile}") : null;
-                            var initials = $"{item.FirstName[0]}{item.LastName[0]}".ToUpper();
-                            @if (item.TaskStatus == "Pending")
+                    <div data-simplebar class="tasks-wrapper px-3 mx-n3" style="max-height: 600px; overflow-y: auto;">
+                        <div class="card-body bg-secondary">
+                            @foreach (var item in Model)
                             {
-                                <div class="card tasks-box">
-                                    <div class="card-body">
-                                        <div class="d-flex mb-2">
-                                            <div class="flex-grow-1">
-                                                <h6 class="fs-15 mb-0 text-truncate task-title">
-                                                    <a href="apps-tasks-details.html" class="link-secondary" style="color:darkblue">
-                                                        @item.TaskTitle
-                                                    </a>
-                                                </h6>
-                                            </div>
+                                var imageUrl = !string.IsNullOrEmpty(item.UserProfile) ? Url.Content($"~/{item.UserProfile}") : null;
+                                var initials = $"{item.FirstName[0]}{item.LastName[0]}".ToUpper();
+                                @if (item.TaskStatus == "Pending")
+                                {
+                                    <div class="card tasks-box">
+                                        <div class="card-body">
+                                            <div class="d-flex mb-2">
+                                                <div class="flex-grow-1">
+                                                    <h6 class="fs-15 mb-0 text-truncate task-title">
+                                                        <a href="apps-tasks-details.html" class="link-secondary" style="color:darkblue">
+                                                            @item.TaskTitle
+                                                        </a>
+                                                    </h6>
+                                                </div>
 
-                                            <div class="dropdown">
-                                                <a href="javascript:void(0);" class="text-muted" id="dropdownMenuLink6" data-bs-toggle="dropdown" aria-expanded="false"><i class="ri-more-fill"></i></a>
-                                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink6">
-                                                    <li>
-                                                        <a class="dropdown-item" href="apps-tasks-details.html">
-                                                            <i class="ri-eye-fill align-bottom me-2 text-muted"></i>
-                                                            View
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a class="dropdown-item" href="#">
-                                                            <i class="ri-edit-2-line align-bottom me-2 text-muted"></i>
-                                                            Edit
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a class="dropdown-item" data-bs-toggle="modal" href="#deleteRecordModal">
-                                                            <i class="ri-delete-bin-5-line align-bottom me-2 text-muted"></i>
-                                                            Delete
-                                                        </a>
-                                                    </li>
-                                                </ul>
+                                                <div class="dropdown">
+                                                    <a href="javascript:void(0);" class="text-muted" id="dropdownMenuLink6" data-bs-toggle="dropdown" aria-expanded="false"><i class="ri-more-fill"></i></a>
+                                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink6">
+                                                        <li>
+                                                            <a class="dropdown-item" href="apps-tasks-details.html">
+                                                                <i class="ri-eye-fill align-bottom me-2 text-muted"></i>
+                                                                View
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a class="dropdown-item" href="#">
+                                                                <i class="ri-edit-2-line align-bottom me-2 text-muted"></i>
+                                                                Edit
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a class="dropdown-item" data-bs-toggle="modal" href="#deleteRecordModal">
+                                                                <i class="ri-delete-bin-5-line align-bottom me-2 text-muted"></i>
+                                                                Delete
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <p class="text-muted">
+                                                @item.TaskDetails
+                                            </p>
+                                            <div class="d-flex align-items-center">
+                                                @if (item.TaskStatus == "Working")
+                                                {
+                                                    <a class="badge bg-warning text-uppercase">  @item.TaskStatus  </a>
+                                                }
+                                                else if (item.TaskStatus == "Completed")
+                                                {
+                                                    <a class="badge bg-success text-uppercase">  @item.TaskStatus  </a>
+                                                }
+                                                else if (item.TaskStatus == "Pending")
+                                                {
+                                                    <a class="badge bg-secondary text-uppercase">  @item.TaskStatus  </a>
+                                                }
+                                                else if (item.TaskStatus == "InReview")
+                                                {
+                                                    <a class="badge text-uppercase" style="background-color:orangered">  @item.TaskStatus  </a>
+                                                }
+                                                else
+                                                {
+                                                    <a class="badge bg-info text-uppercase">  @item.TaskStatus  </a>
+                                                }
+                                                <div class="flex-grow-1">
+                                                    @* <span class="badge bg-primary-subtle  text-uppercase">@item.TaskStatus</span> *@
+                                                </div>
+                                                <div class="flex-shrink-0">
+                                                    <div class="avatar-group">
+                                                        @if (!string.IsNullOrEmpty(imageUrl))
+                                                        {
+                                                            <img src="~/@item.UserProfile" alt="" class="direct-chat-img">
+                                                        }
+                                                        else
+                                                        {
+                                                            <div class="avatar-title bg-success-subtle text-success rounded-circle fs-13" style="margin-left:115px;height:40px;width:40px;">@initials</div>
+                                                        }
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex align-items-center">
+                                                <div class="flex-grow-1">
+                                                    <span class="text"> TaskStatus :</span>
+                                                    <form id="tasksListhigh">
+                                                        <select id="ddlStatusHigh@(item.Id)" class="form-control form-select valid" name="ddlStatus">
+                                                            <option selected disabled value="">---Select Status---</option>
+                                                            <option value="Working">Working</option>
+                                                        </select>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <button type="submit" class="btn btn-success btn-sm m-2" onclick="btnStatusUpdateHigh('@item.Id')" id="StatusUpdate" value="Validate"><i class="bi bi-pencil-fill"></i>Status Update</button>
+                                                <button class="btn btn-primary btn-sm" data-bs-toggle="modal" onclick="btnTaskDetails('@item.Id')"> <i class="bi bi-chat-right-dots"></i> Details</button>
                                             </div>
                                         </div>
-                                        <p class="text-muted">
-                                            @item.TaskDetails
-                                        </p>
-                                        <div class="d-flex align-items-center">
-                                            @if (item.TaskStatus == "Working")
-                                            {
-                                                <a class="badge bg-warning text-uppercase">  @item.TaskStatus  </a>
-                                            }
-                                            else if (item.TaskStatus == "Completed")
-                                            {
-                                                <a class="badge bg-success text-uppercase">  @item.TaskStatus  </a>
-                                            }
-                                            else if (item.TaskStatus == "Pending")
-                                            {
-                                                <a class="badge bg-secondary text-uppercase">  @item.TaskStatus  </a>
-                                            }
-                                            else if (item.TaskStatus == "InReview")
-                                            {
-                                                <a class="badge text-uppercase" style="background-color:orangered">  @item.TaskStatus  </a>
-                                            }
-                                            else
-                                            {
-                                                <a class="badge bg-info text-uppercase">  @item.TaskStatus  </a>
-                                            }
-                                            <div class="flex-grow-1">
-                                                @* <span class="badge bg-primary-subtle  text-uppercase">@item.TaskStatus</span> *@
-                                            </div>
-                                            <div class="flex-shrink-0">
-                                                <div class="avatar-group">
-                                                    @if (!string.IsNullOrEmpty(imageUrl))
-                                                    {
-                                                        <img src="~/@item.UserProfile" alt="" class="direct-chat-img">
-                                                    }
-                                                    else
-                                                    {
-                                                        <div class="avatar-title bg-success-subtle text-success rounded-circle fs-13" style="margin-left:115px;height:40px;width:40px;">@initials</div>
-                                                    }
-
+                                        <!--end card-body-->
+                                        <div class="card-footer border-top-dashed">
+                                            <div class="d-flex mb-1">
+                                                <div class="flex-grow-1">
+                                                    <span class="text-muted">
+                                                        <i class="ri-time-line align-bottom"></i>
+                                                        @CommonHelper.GetCommonDateFormat(item?.TaskDate ?? DateTime.MinValue)
+                                                    </span>
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <span class="text-muted">
+                                                        <i class="ri-time-line align-bottom"></i>
+                                                        @CommonHelper.GetCommonDateFormat(item?.TaskEndDate ?? DateTime.MinValue)
+                                                    </span>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="d-flex align-items-center">
-                                            <div class="flex-grow-1">
-                                                <span class="text"> TaskStatus :</span>
-                                                <form id="tasksListhigh">
-                                                    <select id="ddlStatusHigh@(item.Id)" class="form-control form-select valid" name="ddlStatus">
-                                                        <option selected disabled value="">---Select Status---</option>
-                                                        <option value="Working">Working</option>
-                                                    </select>
-                                                </form>
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <button type="submit" class="btn btn-success btn-sm m-2" onclick="btnStatusUpdateHigh('@item.Id')" id="StatusUpdate" value="Validate"><i class="bi bi-pencil-fill"></i>Status Update</button>
-                                            <button class="btn btn-primary btn-sm" data-bs-toggle="modal" onclick="btnTaskDetails('@item.Id')"> <i class="bi bi-chat-right-dots"></i> Details</button>
-                                        </div>
                                     </div>
-                                    <!--end card-body-->
-                                    <div class="card-footer border-top-dashed">
-                                        <div class="d-flex mb-1">
-                                            <div class="flex-grow-1">
-                                                <span class="text-muted">
-                                                    <i class="ri-time-line align-bottom"></i>
-                                                    @CommonHelper.GetCommonDateFormat(item?.TaskDate ?? DateTime.MinValue)
-                                                </span>
-                                            </div>
-                                            <div class="flex-grow-1">
-                                                <span class="text-muted">
-                                                    <i class="ri-time-line align-bottom"></i>
-                                                    @CommonHelper.GetCommonDateFormat(item?.TaskEndDate ?? DateTime.MinValue)
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-
-
+                                }
                             }
-                        }
+                        </div>
                     </div>
                     <!--end card-body-->
-
                 </div>
                 <!--end card-->
                 <!--end card-->
             </div>
         </div>
-
     </div>
     <!--end tasks-list-->
     <div class="tasks-list">
@@ -372,139 +371,138 @@
         <div data-simplebar class="tasks-wrapper px-3 mx-n3">
             <div id="inprogress-task" class="tasks">
                 <div class="card tasks-box">
-                    <div class="card-body bg-warning">
-                        @foreach (var item in Model)
-                        {
-                            var imageUrl = !string.IsNullOrEmpty(item.UserProfile) ? Url.Content($"~/{item.UserProfile}") : null;
-                            var initials = $"{item.FirstName[0]}{item.LastName[0]}".ToUpper();
-                            @if (item.TaskStatus == "Working")
+                    <div data-simplebar class="tasks-wrapper px-3 mx-n3" style="max-height: 600px; overflow-y: auto;">
+                        <div class="card-body bg-warning">
+                            @foreach (var item in Model)
                             {
-                                <div class="card tasks-box">
-                                    <div class="card-body">
+                                var imageUrl = !string.IsNullOrEmpty(item.UserProfile) ? Url.Content($"~/{item.UserProfile}") : null;
+                                var initials = $"{item.FirstName[0]}{item.LastName[0]}".ToUpper();
+                                @if (item.TaskStatus == "Working")
+                                {
+                                    <div class="card tasks-box">
+                                        <div class="card-body">
 
-                                        <div class="d-flex mb-2">
-                                            <div class="flex-grow-1">
-                                                <h6 class="fs-15 mb-0 text-truncate task-title">
+                                            <div class="d-flex mb-2">
+                                                <div class="flex-grow-1">
+                                                    <h6 class="fs-15 mb-0 text-truncate task-title">
 
-                                                    <a href="apps-tasks-details.html" class="link-secondary" style="color:darkblue">
-                                                        @item.TaskTitle
-                                                    </a>
-                                                </h6>
+                                                        <a href="apps-tasks-details.html" class="link-secondary" style="color:darkblue">
+                                                            @item.TaskTitle
+                                                        </a>
+                                                    </h6>
+                                                </div>
+                                                <div class="flex-shrink-0">
+                                                    <a href="javascript:void(0);" class="text-muted" id="dropdownMenuLink4" data-bs-toggle="dropdown" aria-expanded="false"><i class="ri-more-fill"></i></a>
+                                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink4">
+                                                        <li>
+                                                            <a class="dropdown-item" href="apps-tasks-details.html">
+                                                                <i class="ri-eye-fill align-bottom me-2 text-muted"></i>
+                                                                View
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a class="dropdown-item" href="#">
+                                                                <i class="ri-edit-2-line align-bottom me-2 text-muted"></i>
+                                                                Edit
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a class="dropdown-item" data-bs-toggle="modal" href="#deleteRecordModal">
+                                                                <i class="ri-delete-bin-5-line align-bottom me-2 text-muted"></i>
+                                                                Delete
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
                                             </div>
-                                            <div class="flex-shrink-0">
-                                                <a href="javascript:void(0);" class="text-muted" id="dropdownMenuLink4" data-bs-toggle="dropdown" aria-expanded="false"><i class="ri-more-fill"></i></a>
-                                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink4">
-                                                    <li>
-                                                        <a class="dropdown-item" href="apps-tasks-details.html">
-                                                            <i class="ri-eye-fill align-bottom me-2 text-muted"></i>
-                                                            View
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a class="dropdown-item" href="#">
-                                                            <i class="ri-edit-2-line align-bottom me-2 text-muted"></i>
-                                                            Edit
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a class="dropdown-item" data-bs-toggle="modal" href="#deleteRecordModal">
-                                                            <i class="ri-delete-bin-5-line align-bottom me-2 text-muted"></i>
-                                                            Delete
-                                                        </a>
-                                                    </li>
-                                                </ul>
+                                            <p class="text-muted">
+                                                @item.TaskDetails
+                                            </p>
+                                            <div class="d-flex align-items-center">
+                                                @if (item.TaskStatus == "Working")
+                                                {
+                                                    <a class="badge bg-warning text-uppercase">  @item.TaskStatus  </a>
+                                                }
+                                                else if (item.TaskStatus == "Completed")
+                                                {
+                                                    <a class="badge bg-success text-uppercase">  @item.TaskStatus  </a>
+                                                }
+                                                else if (item.TaskStatus == "Pending")
+                                                {
+                                                    <a class="badge bg-secondary text-uppercase">  @item.TaskStatus  </a>
+                                                }
+                                                else if (item.TaskStatus == "InReview")
+                                                {
+                                                    <a class="badge text-uppercase" style="background-color:orangered">  @item.TaskStatus  </a>
+                                                }
+                                                else
+                                                {
+                                                    <a class="badge bg-info text-uppercase">  @item.TaskStatus  </a>
+                                                }
+                                                <div class="flex-grow-1">
+                                                    @* <span class="badge bg-primary-subtle  text-uppercase">@item.TaskStatus</span> *@
+                                                </div>
+                                                <div class="flex-shrink-0">
+                                                    <div class="avatar-group">
+                                                        @if (!string.IsNullOrEmpty(imageUrl))
+                                                        {
+                                                            <img src="~/@item.UserProfile" alt="" class="direct-chat-img">
+                                                        }
+                                                        else
+                                                        {
+                                                            <div class="avatar-title bg-success-subtle text-success rounded-circle fs-13" style="margin-left:115px;height:40px;width:40px;">@initials</div>
+                                                        }
+
+                                                    </div>
+                                                </div>
                                             </div>
+                                            <div class="d-flex align-items-center">
+                                                <div class="flex-grow-1">
+                                                    <span class="text"> TaskStatus :</span>
+                                                    <form id="tasksListMedium">
+                                                        <select id="ddlStatusMedium@(item.Id)" class="form-control form-select valid" name="ddlStatus">
+                                                            <option selected disabled value="">---Select Status---</option>
+                                                            <option value="Pending">Pending</option>
+                                                            <option value="InReview">InReview</option>
+                                                        </select>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <button type="button" class="btn btn-success btn-sm m-2" onclick="btnStatusUpdateMedium('@item.Id')" id="StatusUpdate" value="Validate"><i class="bi bi-pencil-fill"></i>Status Update</button>
+                                                <button class="btn btn-primary btn-sm" data-bs-toggle="modal" onclick="btnTaskDetails('@item.Id')"> <i class="bi bi-chat-right-dots"></i> Details</button>
+                                            </div>
+
                                         </div>
-                                        <p class="text-muted">
-                                            @item.TaskDetails
-                                        </p>
-                                        <div class="d-flex align-items-center">
-                                            @if (item.TaskStatus == "Working")
-                                            {
-                                                <a class="badge bg-warning text-uppercase">  @item.TaskStatus  </a>
-                                            }
-                                            else if (item.TaskStatus == "Completed")
-                                            {
-                                                <a class="badge bg-success text-uppercase">  @item.TaskStatus  </a>
-                                            }
-                                            else if (item.TaskStatus == "Pending")
-                                            {
-                                                <a class="badge bg-secondary text-uppercase">  @item.TaskStatus  </a>
-                                            }
-                                            else if (item.TaskStatus == "InReview")
-                                            {
-                                                <a class="badge text-uppercase" style="background-color:orangered">  @item.TaskStatus  </a>
-                                            }
-                                            else
-                                            {
-                                                <a class="badge bg-info text-uppercase">  @item.TaskStatus  </a>
-                                            }
-                                            <div class="flex-grow-1">
-                                                @* <span class="badge bg-primary-subtle  text-uppercase">@item.TaskStatus</span> *@
-                                            </div>
-                                            <div class="flex-shrink-0">
-                                                <div class="avatar-group">
-                                                    @if (!string.IsNullOrEmpty(imageUrl))
-                                                    {
-                                                        <img src="~/@item.UserProfile" alt="" class="direct-chat-img">
-                                                    }
-                                                    else
-                                                    {
-                                                        <div class="avatar-title bg-success-subtle text-success rounded-circle fs-13" style="margin-left:115px;height:40px;width:40px;">@initials</div>
-                                                    }
 
+                                        <!--end card-body-->
+                                        <div class="card-footer border-top-dashed">
+                                            <div class="d-flex mb-1">
+                                                <div class="flex-grow-1">
+                                                    <span class="text-muted">
+                                                        <i class="ri-time-line align-bottom"></i>
+                                                        @CommonHelper.GetCommonDateFormat(item?.TaskDate ?? DateTime.MinValue)
+                                                    </span>
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <span class="text-muted">
+                                                        <i class="ri-time-line align-bottom"></i>
+                                                        @CommonHelper.GetCommonDateFormat(item?.TaskEndDate ?? DateTime.MinValue)
+                                                    </span>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="d-flex align-items-center">
-                                            <div class="flex-grow-1">
-                                                <span class="text"> TaskStatus :</span>
-                                                <form id="tasksListMedium">
-                                                    <select id="ddlStatusMedium@(item.Id)" class="form-control form-select valid" name="ddlStatus">
-                                                        <option selected disabled value="">---Select Status---</option>
-                                                        <option value="Pending">Pending</option>
-                                                        <option value="InReview">InReview</option>
-                                                    </select>
-                                                </form>
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <button type="button" class="btn btn-success btn-sm m-2" onclick="btnStatusUpdateMedium('@item.Id')" id="StatusUpdate" value="Validate"><i class="bi bi-pencil-fill"></i>Status Update</button>
-                                            <button class="btn btn-primary btn-sm" data-bs-toggle="modal" onclick="btnTaskDetails('@item.Id')"> <i class="bi bi-chat-right-dots"></i> Details</button>
-                                        </div>
-
                                     </div>
-
-                                    <!--end card-body-->
-                                    <div class="card-footer border-top-dashed">
-                                        <div class="d-flex mb-1">
-                                            <div class="flex-grow-1">
-                                                <span class="text-muted">
-                                                    <i class="ri-time-line align-bottom"></i>
-                                                    @CommonHelper.GetCommonDateFormat(item?.TaskDate ?? DateTime.MinValue)
-                                                </span>
-                                            </div>
-                                            <div class="flex-grow-1">
-                                                <span class="text-muted">
-                                                    <i class="ri-time-line align-bottom"></i>
-                                                    @CommonHelper.GetCommonDateFormat(item?.TaskEndDate ?? DateTime.MinValue)
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                }
                             }
-                        }
+                        </div>
                     </div>
-
                     <!--end card-body-->
-
                 </div>
                 <!--end card-->
                 <!--end card-->
             </div>
         </div>
-
     </div>
     <!--end tasks-list-->
     <div class="tasks-list">
@@ -527,149 +525,147 @@
         <div data-simplebar class="tasks-wrapper px-3 mx-n3">
             <div id="reviews-task" class="tasks">
                 <div class="card tasks-box">
-                    <div class="card-body" style="background-color:orangered">
-                        @foreach (var item in Model)
-                        {
-                            var imageUrl = !string.IsNullOrEmpty(item.UserProfile) ? Url.Content($"~/{item.UserProfile}") : null;
-                            var initials = $"{item.FirstName[0]}{item.LastName[0]}".ToUpper();
-                            @if (item.TaskStatus == "InReview")
+                    <div data-simplebar class="tasks-wrapper px-3 mx-n3" style="max-height: 600px; overflow-y: auto;">
+                        <div class="card-body" style="background-color:orangered">
+                            @foreach (var item in Model)
                             {
-                                <div class="card tasks-box">
-                                    <div class="card-body">
-                                        <div class="d-flex mb-2">
-                                            <div class="flex-grow-1">
-                                                <h6 class="fs-15 mb-0 text-truncate task-title">
-                                                    <a href="apps-tasks-details.html" class="link-secondary" style="color:darkblue">
-                                                        @item.TaskTitle
-                                                    </a>
-                                                </h6>
-                                            </div>
-                                            <div class="dropdown">
-                                                <a href="javascript:void(0);" class="text-muted" id="dropdownMenuLink6" data-bs-toggle="dropdown" aria-expanded="false"><i class="ri-more-fill"></i></a>
-                                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink6">
-                                                    <li>
-                                                        <a class="dropdown-item" href="apps-tasks-details.html">
-                                                            <i class="ri-eye-fill align-bottom me-2 text-muted"></i>
-                                                            View
+                                var imageUrl = !string.IsNullOrEmpty(item.UserProfile) ? Url.Content($"~/{item.UserProfile}") : null;
+                                var initials = $"{item.FirstName[0]}{item.LastName[0]}".ToUpper();
+                                @if (item.TaskStatus == "InReview")
+                                {
+                                    <div class="card tasks-box">
+                                        <div class="card-body">
+                                            <div class="d-flex mb-2">
+                                                <div class="flex-grow-1">
+                                                    <h6 class="fs-15 mb-0 text-truncate task-title">
+                                                        <a href="apps-tasks-details.html" class="link-secondary" style="color:darkblue">
+                                                            @item.TaskTitle
                                                         </a>
-                                                    </li>
-                                                    <li>
-                                                        <a class="dropdown-item" href="#">
-                                                            <i class="ri-edit-2-line align-bottom me-2 text-muted"></i>
-                                                            Edit
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a class="dropdown-item" data-bs-toggle="modal" href="#deleteRecordModal">
-                                                            <i class="ri-delete-bin-5-line align-bottom me-2 text-muted"></i>
-                                                            Delete
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <p class="text-muted">
-                                            @item.TaskDetails
-                                        </p>
-                                        <div class="d-flex align-items-center">
-                                            @if (item.TaskStatus == "Working")
-                                            {
-                                                <a class="badge bg-warning text-uppercase">  @item.TaskStatus  </a>
-                                            }
-                                            else if (item.TaskStatus == "Completed")
-                                            {
-                                                <a class="badge bg-success text-uppercase">  @item.TaskStatus  </a>
-                                            }
-                                            else if (item.TaskStatus == "Pending")
-                                            {
-                                                <a class="badge bg-secondary text-uppercase">  @item.TaskStatus  </a>
-                                            }
-                                            else if (item.TaskStatus == "InReview")
-                                            {
-                                                <a class="badge text-uppercase" style="background-color:orangered">  @item.TaskStatus  </a>
-                                            }
-                                            else
-                                            {
-                                                <a class="badge bg-info text-uppercase">  @item.TaskStatus  </a>
-                                            }
-                                            <div class="flex-grow-1">
-                                            </div>
-                                            <div class="flex-shrink-0">
-                                                <div class="avatar-group">
-                                                    @if (!string.IsNullOrEmpty(imageUrl))
-                                                    {
-                                                        <img src="~/@item.UserProfile" alt="" class="direct-chat-img">
-                                                    }
-                                                    else
-                                                    {
-                                                        <div class="avatar-title bg-success-subtle text-success rounded-circle fs-13" style="margin-left:115px;height:40px;width:40px;">@initials</div>
-                                                    }
+                                                    </h6>
+                                                </div>
+                                                <div class="dropdown">
+                                                    <a href="javascript:void(0);" class="text-muted" id="dropdownMenuLink6" data-bs-toggle="dropdown" aria-expanded="false"><i class="ri-more-fill"></i></a>
+                                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink6">
+                                                        <li>
+                                                            <a class="dropdown-item" href="apps-tasks-details.html">
+                                                                <i class="ri-eye-fill align-bottom me-2 text-muted"></i>
+                                                                View
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a class="dropdown-item" href="#">
+                                                                <i class="ri-edit-2-line align-bottom me-2 text-muted"></i>
+                                                                Edit
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a class="dropdown-item" data-bs-toggle="modal" href="#deleteRecordModal">
+                                                                <i class="ri-delete-bin-5-line align-bottom me-2 text-muted"></i>
+                                                                Delete
+                                                            </a>
+                                                        </li>
+                                                    </ul>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="d-flex align-items-center">
-                                            <div class="flex-grow-1">
-                                                <span class="text"> TaskStatus :</span>
-                                                @if (_userSession.UserRoll != "Admin")
+                                            <p class="text-muted">
+                                                @item.TaskDetails
+                                            </p>
+                                            <div class="d-flex align-items-center">
+                                                @if (item.TaskStatus == "Working")
                                                 {
-                                                    <form id="tasksListform">
-                                                        <select id="ddlStatusReview@(item.Id)" class="form-control form-select valid" name="ddlStatus">
-                                                            <option selected disabled value="">---Select Status---</option>
-                                                            <option value="Pending">Pendings</option>
-                                                            <option value="Working">Working</option>
-                                                        </select>
-                                                    </form>
+                                                    <a class="badge bg-warning text-uppercase">  @item.TaskStatus  </a>
+                                                }
+                                                else if (item.TaskStatus == "Completed")
+                                                {
+                                                    <a class="badge bg-success text-uppercase">  @item.TaskStatus  </a>
+                                                }
+                                                else if (item.TaskStatus == "Pending")
+                                                {
+                                                    <a class="badge bg-secondary text-uppercase">  @item.TaskStatus  </a>
+                                                }
+                                                else if (item.TaskStatus == "InReview")
+                                                {
+                                                    <a class="badge text-uppercase" style="background-color:orangered">  @item.TaskStatus  </a>
                                                 }
                                                 else
                                                 {
-                                                    <form id="tasksListform">
-                                                        <select id="ddlStatusReview@(item.Id)" class="form-control form-select valid" name="ddlStatus">
-                                                            <option selected disabled value="">---Select Status---</option>
-                                                            <option value="Pending">Pendings</option>
-                                                            <option value="Working">Working</option>
-                                                            <option value="Completed">Completed</option>
-                                                        </select>
-                                                    </form>
+                                                    <a class="badge bg-info text-uppercase">  @item.TaskStatus  </a>
                                                 }
+                                                <div class="flex-grow-1">
+                                                </div>
+                                                <div class="flex-shrink-0">
+                                                    <div class="avatar-group">
+                                                        @if (!string.IsNullOrEmpty(imageUrl))
+                                                        {
+                                                            <img src="~/@item.UserProfile" alt="" class="direct-chat-img">
+                                                        }
+                                                        else
+                                                        {
+                                                            <div class="avatar-title bg-success-subtle text-success rounded-circle fs-13" style="margin-left:115px;height:40px;width:40px;">@initials</div>
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex align-items-center">
+                                                <div class="flex-grow-1">
+                                                    <span class="text"> TaskStatus :</span>
+                                                    @if (_userSession.UserRoll != "Admin")
+                                                    {
+                                                        <form id="tasksListform">
+                                                            <select id="ddlStatusReview@(item.Id)" class="form-control form-select valid" name="ddlStatus">
+                                                                <option selected disabled value="">---Select Status---</option>
+                                                                <option value="Pending">Pendings</option>
+                                                                <option value="Working">Working</option>
+                                                            </select>
+                                                        </form>
+                                                    }
+                                                    else
+                                                    {
+                                                        <form id="tasksListform">
+                                                            <select id="ddlStatusReview@(item.Id)" class="form-control form-select valid" name="ddlStatus">
+                                                                <option selected disabled value="">---Select Status---</option>
+                                                                <option value="Pending">Pendings</option>
+                                                                <option value="Working">Working</option>
+                                                                <option value="Completed">Completed</option>
+                                                            </select>
+                                                        </form>
+                                                    }
 
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <button type="button" class="btn btn-success btn-sm m-2" onclick="btnStatusUpdate('@item.Id')" id="StatusUpdate" value="Validate"><i class="bi bi-pencil-fill"></i>Status Update</button>
+                                                <button class="btn btn-primary btn-sm" data-bs-toggle="modal" onclick="btnTaskDetails('@item.Id')"> <i class="bi bi-chat-right-dots"></i> Details</button>
                                             </div>
                                         </div>
-                                        <div>
-                                            <button type="button" class="btn btn-success btn-sm m-2" onclick="btnStatusUpdate('@item.Id')" id="StatusUpdate" value="Validate"><i class="bi bi-pencil-fill"></i>Status Update</button>
-                                            <button class="btn btn-primary btn-sm" data-bs-toggle="modal" onclick="btnTaskDetails('@item.Id')"> <i class="bi bi-chat-right-dots"></i> Details</button>
+                                        <!--end card-body-->
+                                        <div class="card-footer border-top-dashed">
+                                            <div class="d-flex mb-1">
+                                                <div class="flex-grow-1">
+                                                    <span class="text-muted">
+                                                        <i class="ri-time-line align-bottom"></i>
+                                                        @CommonHelper.GetCommonDateFormat(item?.TaskDate ?? DateTime.MinValue)
+                                                    </span>
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <span class="text-muted">
+                                                        <i class="ri-time-line align-bottom"></i>
+                                                        @CommonHelper.GetCommonDateFormat(item?.TaskEndDate ?? DateTime.MinValue)
+                                                    </span>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                    <!--end card-body-->
-                                    <div class="card-footer border-top-dashed">
-                                        <div class="d-flex mb-1">
-                                            <div class="flex-grow-1">
-                                                <span class="text-muted">
-                                                    <i class="ri-time-line align-bottom"></i>
-                                                    @CommonHelper.GetCommonDateFormat(item?.TaskDate ?? DateTime.MinValue)
-                                                </span>
-                                            </div>
-                                            <div class="flex-grow-1">
-                                                <span class="text-muted">
-                                                    <i class="ri-time-line align-bottom"></i>
-                                                    @CommonHelper.GetCommonDateFormat(item?.TaskEndDate ?? DateTime.MinValue)
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                }
                             }
-
-
-                        }
+                        </div>
+                        <!--end card-body-->
                     </div>
-                    <!--end card-body-->
-
                 </div>
                 <!--end card-->
                 <!--end card-->
             </div>
         </div>
-
     </div>
     <!--end tasks-list-->
     <div class="tasks-list">
@@ -692,139 +688,140 @@
         <div data-simplebar class="tasks-wrapper px-3 mx-n3">
             <div id="completed-task" class="tasks">
                 <div class="card tasks-box">
-                    <div class="card-body bg-success">
-                        @foreach (var item in Model.TakeLast(11))
-                        {
-                            var imageUrl = !string.IsNullOrEmpty(item.UserProfile) ? Url.Content($"~/{item.UserProfile}") : null;
-                            var initials = $"{item.FirstName[0]}{item.LastName[0]}".ToUpper();
-                            @if (item.TaskStatus == "Completed")
+                    <div data-simplebar class="tasks-wrapper px-3 mx-n3" style="max-height: 600px; overflow-y: auto;">
+                        <div class="card-body bg-success">
+                            @foreach (var item in Model.TakeLast(11))
                             {
-                                <div class="card tasks-box">
-                                    <div class="card-body">
-                                        <div class="d-flex mb-2">
-                                            <h6 class="fs-15 mb-0 text-truncate task-title">
-                                                <a href="apps-tasks-details.html" class="link-secondary" style="color:darkblue">
-                                                    @item.TaskTitle
-                                                </a>
-                                            </h6>
-                                            <div class="dropdown">
-                                                <a href="javascript:void(0);" class="text-muted" id="dropdownMenuLink10" data-bs-toggle="dropdown" aria-expanded="false"><i class="ri-more-fill"></i></a>
-                                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink10">
-                                                    <li>
-                                                        <a class="dropdown-item" href="apps-tasks-details.html">
-                                                            <i class="ri-eye-fill align-bottom me-2 text-muted"></i>
-                                                            View
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a class="dropdown-item" href="#">
-                                                            <i class="ri-edit-2-line align-bottom me-2 text-muted"></i>
-                                                            Edit
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a class="dropdown-item" data-bs-toggle="modal" href="#deleteRecordModal">
-                                                            <i class="ri-delete-bin-5-line align-bottom me-2 text-muted"></i>
-                                                            Delete
-                                                        </a>
-                                                    </li>
-                                                </ul>
+                                var imageUrl = !string.IsNullOrEmpty(item.UserProfile) ? Url.Content($"~/{item.UserProfile}") : null;
+                                var initials = $"{item.FirstName[0]}{item.LastName[0]}".ToUpper();
+                                @if (item.TaskStatus == "Completed")
+                                {
+                                    <div class="card tasks-box">
+                                        <div class="card-body">
+                                            <div class="d-flex mb-2">
+                                                <h6 class="fs-15 mb-0 text-truncate task-title">
+                                                    <a href="apps-tasks-details.html" class="link-secondary" style="color:darkblue">
+                                                        @item.TaskTitle
+                                                    </a>
+                                                </h6>
+                                                <div class="dropdown">
+                                                    <a href="javascript:void(0);" class="text-muted" id="dropdownMenuLink10" data-bs-toggle="dropdown" aria-expanded="false"><i class="ri-more-fill"></i></a>
+                                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink10">
+                                                        <li>
+                                                            <a class="dropdown-item" href="apps-tasks-details.html">
+                                                                <i class="ri-eye-fill align-bottom me-2 text-muted"></i>
+                                                                View
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a class="dropdown-item" href="#">
+                                                                <i class="ri-edit-2-line align-bottom me-2 text-muted"></i>
+                                                                Edit
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a class="dropdown-item" data-bs-toggle="modal" href="#deleteRecordModal">
+                                                                <i class="ri-delete-bin-5-line align-bottom me-2 text-muted"></i>
+                                                                Delete
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <p class="text-muted">
+                                                @item.TaskDetails
+                                            </p>
+                                            <div class="d-flex align-items-center">
+                                                @if (item.TaskStatus == "Working")
+                                                {
+                                                    <a class="badge bg-warning text-uppercase">  @item.TaskStatus  </a>
+                                                }
+                                                else if (item.TaskStatus == "Completed")
+                                                {
+                                                    <a class="badge bg-success text-uppercase">  @item.TaskStatus  </a>
+                                                }
+                                                else if (item.TaskStatus == "Pending")
+                                                {
+                                                    <a class="badge bg-secondary text-uppercase">  @item.TaskStatus  </a>
+                                                }
+                                                else if (item.TaskStatus == "InReview")
+                                                {
+                                                    <a class="badge text-uppercase" style="background-color:orangered">  @item.TaskStatus  </a>
+                                                }
+                                                else
+                                                {
+                                                    <a class="badge bg-info text-uppercase">  @item.TaskStatus  </a>
+                                                }
+                                                <div class="flex-grow-1">
+                                                </div>
+                                                <div class="flex-shrink-0">
+                                                    <div class="avatar-group">
+                                                        @if (!string.IsNullOrEmpty(imageUrl))
+                                                        {
+                                                            <img src="~/@item.UserProfile" alt="" class="direct-chat-img">
+                                                        }
+                                                        else
+                                                        {
+                                                            <div class="avatar-title bg-success-subtle text-success rounded-circle fs-13" style="margin-left:115px;height:40px;width:40px;">@initials</div>
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex align-items-center">
+                                                <div class="flex-grow-1">
+                                                    <span class="text"> TaskStatus :</span>
+
+                                                    <form id="tasksListform">
+                                                        <select id="ddlStatusReview@(item.Id)" class="form-control form-select valid" name="ddlStatus">
+                                                            <option selected disabled value="">---Select Status---</option>
+                                                            <option value="Pending">Pendings</option>
+                                                            <option value="Working">Working</option>
+                                                            <option value="InReview">InReview</option>
+                                                        </select>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                @if (_userSession.UserRoll != "Admin")
+                                                {
+                                                    <button type="button" class="btn btn-success btn-sm m-2" onclick="btnStatusUpdate('@item.Id')" disabled><i class="bi bi-pencil-fill"></i>Status Update</button>
+                                                    <button class="btn btn-primary btn-sm" data-bs-toggle="modal" onclick="btnTaskDetails('@item.Id')"> <i class="bi bi-chat-right-dots"></i> Details</button>
+                                                }
+                                                else
+                                                {
+                                                    <button type="button" class="btn btn-success btn-sm m-2" onclick="btnStatusUpdate('@item.Id')" id="StatusUpdate" value="Validate"><i class="bi bi-pencil-fill"></i>Status Update</button>
+                                                    <button class="btn btn-primary btn-sm" data-bs-toggle="modal" onclick="btnTaskDetails('@item.Id')"> <i class="bi bi-chat-right-dots"></i> Details</button>
+                                                }
                                             </div>
                                         </div>
-                                        <p class="text-muted">
-                                            @item.TaskDetails
-                                        </p>
-                                        <div class="d-flex align-items-center">
-                                            @if (item.TaskStatus == "Working")
-                                            {
-                                                <a class="badge bg-warning text-uppercase">  @item.TaskStatus  </a>
-                                            }
-                                            else if (item.TaskStatus == "Completed")
-                                            {
-                                                <a class="badge bg-success text-uppercase">  @item.TaskStatus  </a>
-                                            }
-                                            else if (item.TaskStatus == "Pending")
-                                            {
-                                                <a class="badge bg-secondary text-uppercase">  @item.TaskStatus  </a>
-                                            }
-                                            else if (item.TaskStatus == "InReview")
-                                            {
-                                                <a class="badge text-uppercase" style="background-color:orangered">  @item.TaskStatus  </a>
-                                            }
-                                            else
-                                            {
-                                                <a class="badge bg-info text-uppercase">  @item.TaskStatus  </a>
-                                            }
-                                            <div class="flex-grow-1">
-                                            </div>
-                                            <div class="flex-shrink-0">
-                                                <div class="avatar-group">
-                                                    @if (!string.IsNullOrEmpty(imageUrl))
-                                                    {
-                                                        <img src="~/@item.UserProfile" alt="" class="direct-chat-img">
-                                                    }
-                                                    else
-                                                    {
-                                                        <div class="avatar-title bg-success-subtle text-success rounded-circle fs-13" style="margin-left:115px;height:40px;width:40px;">@initials</div>
-                                                    }
+                                        <!--end card-body-->
+                                        <div class="card-footer border-top-dashed">
+                                            <div class="d-flex mb-1">
+                                                <div class="flex-grow-1">
+                                                    <span class="text-muted">
+                                                        <i class="ri-time-line align-bottom"></i>
+                                                        @CommonHelper.GetCommonDateFormat(item?.TaskDate ?? DateTime.MinValue)
+                                                    </span>
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <span class="text-muted">
+                                                        <i class="ri-time-line align-bottom"></i>
+                                                        @CommonHelper.GetCommonDateFormat(item?.TaskEndDate ?? DateTime.MinValue)
+                                                    </span>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="d-flex align-items-center">
-                                            <div class="flex-grow-1">
-                                                <span class="text"> TaskStatus :</span>
-
-                                                <form id="tasksListform">
-                                                    <select id="ddlStatusReview@(item.Id)" class="form-control form-select valid" name="ddlStatus">
-                                                        <option selected disabled value="">---Select Status---</option>
-                                                        <option value="Pending">Pendings</option>
-                                                        <option value="Working">Working</option>
-                                                        <option value="InReview">InReview</option>
-                                                    </select>
-                                                </form>
-                                            </div>
-                                        </div>
-                                        <div>
-                                            @if (_userSession.UserRoll != "Admin")
-                                            {
-                                                <button type="button" class="btn btn-success btn-sm m-2" onclick="btnStatusUpdate('@item.Id')" disabled><i class="bi bi-pencil-fill"></i>Status Update</button>
-                                                <button class="btn btn-primary btn-sm" data-bs-toggle="modal" onclick="btnTaskDetails('@item.Id')"> <i class="bi bi-chat-right-dots"></i> Details</button>
-                                            }
-                                            else
-                                            {
-                                                <button type="button" class="btn btn-success btn-sm m-2" onclick="btnStatusUpdate('@item.Id')" id="StatusUpdate" value="Validate"><i class="bi bi-pencil-fill"></i>Status Update</button>
-                                                <button class="btn btn-primary btn-sm" data-bs-toggle="modal" onclick="btnTaskDetails('@item.Id')"> <i class="bi bi-chat-right-dots"></i> Details</button>
-                                            }
-                                        </div>
+                                        <!--end card-body-->
                                     </div>
-                                    <!--end card-body-->
-                                    <div class="card-footer border-top-dashed">
-                                        <div class="d-flex mb-1">
-                                            <div class="flex-grow-1">
-                                                <span class="text-muted">
-                                                    <i class="ri-time-line align-bottom"></i>
-                                                    @CommonHelper.GetCommonDateFormat(item?.TaskDate ?? DateTime.MinValue)
-                                                </span>
-                                            </div>
-                                            <div class="flex-grow-1">
-                                                <span class="text-muted">
-                                                    <i class="ri-time-line align-bottom"></i>
-                                                    @CommonHelper.GetCommonDateFormat(item?.TaskEndDate ?? DateTime.MinValue)
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!--end card-body-->
-                                </div>
+                                }
                             }
-                        }
+                        </div>
+                        <!--end card-body-->
                     </div>
-                    <!--end card-body-->
                 </div>
                 <!--end card-->
             </div>
         </div>
-
     </div>
     <!--end tasks-list-->
     <!--end tasks-list-->
