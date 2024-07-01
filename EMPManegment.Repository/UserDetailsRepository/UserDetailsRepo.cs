@@ -687,6 +687,31 @@ namespace EMPManegment.Repository.UserListRepository
                                                        };
             return GetUsersList;
         }
+
+        public async Task<UserResponceModel> UpdateUserExeperience(EmpDetailsView UpdateDate)
+        {
+            UserResponceModel response = new UserResponceModel();
+            try
+            {
+                var Userdata = await Context.TblUsers.FirstOrDefaultAsync(a => a.Id == UpdateDate.Id);
+                if (Userdata != null)
+                {
+                    Userdata.LastDate = UpdateDate.LastDate;
+                    Userdata.IsActive = false;
+
+                    Context.TblUsers.Update(Userdata);
+                    await Context.SaveChangesAsync();
+                }
+                response.Code = (int)HttpStatusCode.OK;
+                response.Message = "User data updated successfully";
+            }
+            catch (Exception ex)
+            {
+                response.Code = 400;
+                response.Message = "Error in upadting user deatils.";
+            }
+            return response;
+        }
     }
 }
 

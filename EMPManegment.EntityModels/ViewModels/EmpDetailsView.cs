@@ -68,6 +68,7 @@ namespace EMPManegment.EntityModels.View_Model
         public Guid? ProjectId { get; set; }
         public Guid? RoleId { get; set; }
         public string? RoleName { get; set; }
+        public DateTime? LastDate { get; set; }
     }
     public class EmpDetailsModel
     {

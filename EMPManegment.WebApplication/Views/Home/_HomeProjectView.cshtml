@@ -72,7 +72,6 @@
 <div class="row">
     @foreach (var item in Model)
     {
-<<<<<<< HEAD
         var CompanyName = item.ProjectTitle;
         var Titleinitial = string.Empty;
         var words = CompanyName.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
@@ -87,10 +86,7 @@
         }
         var CompanyInitials = Titleinitial.ToUpper();
 
-        <div class="col-xxl-3 col-sm-4 project-card">
-=======
         <div class="col-xxl-3 col-sm-4 project-card" onclick="window.location.href='/Project/ProjectDetails/?Id=@item.ProjectId'">
->>>>>>> Janvi-Error Solve
             <div class="card border rounded-top">
                 <div class="card-body">
                     <div class="p-3 mt-n3 mx-n3 bg-info-subtle rounded-top">

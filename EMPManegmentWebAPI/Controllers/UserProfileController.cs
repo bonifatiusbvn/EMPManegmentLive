@@ -304,5 +304,31 @@ namespace EMPManagment.API.Controllers
             var EmployeeList = await UserListServices.GetSearchEmpList(EmpList);
             return Ok(new { code = 200, data = EmployeeList });
         }
+        [HttpPost]
+        [Route("UpdateUserExeperience")]
+        public async Task<IActionResult> UpdateUserExeperience(EmpDetailsView UpdateDate)
+        {
+            UserResponceModel response = new UserResponceModel();
+            try
+            {
+                var updateUser = await UserListServices.UpdateUserExeperience(UpdateDate);
+                if (updateUser.Code == 200)
+                {
+                    response.Code = (int)HttpStatusCode.OK;
+                    response.Message = updateUser.Message;
+                }
+                else
+                {
+                    response.Code = updateUser.Code;
+                    response.Message = updateUser.Message;
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Code = (int)HttpStatusCode.InternalServerError;
+                response.Message = "An error occurred while processing the request.";
+            }
+            return StatusCode(response.Code, response);
+        }
     }
 }

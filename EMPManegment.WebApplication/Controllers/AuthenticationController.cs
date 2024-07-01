@@ -91,7 +91,6 @@ namespace EMPManegment.Web.Controllers
                         if (responsemodel.code == (int)HttpStatusCode.Forbidden)
                         {
                             TempData["ErrorMessage"] = responsemodel.message;
-                            return Ok(new { Message = string.Format(responsemodel.message), Code = responsemodel.code });
                         }
                         else
                         {
