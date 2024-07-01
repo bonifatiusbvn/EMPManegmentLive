@@ -146,8 +146,7 @@ function ProjectHeadMemberList() {
     })
 }
 function SelectProjectHead(button) {
-
-    var memberName = $(button).closest('.mx-n4').find('.fs-13').text().trim();
+    var memberName = $(button).closest('.mx-n4').find('.full_name').text().trim();
     $('#projectHead').val(memberName);
     document.getElementById("closebtn").click()
 }
