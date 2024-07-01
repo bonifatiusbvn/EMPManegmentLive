@@ -946,3 +946,42 @@ function CreateUser() {
         toastr.warning("Kindly Fill all Datafields.")
     }
 }
+function EditExperienceDate() {
+
+    document.getElementById("experiencedate").removeAttribute("readonly");
+    $("#btnEditExeperience").hide();
+    $("#btnUpdateExeperience").show();
+        
+}
+function updateExperienceDate() {
+    if ($('#frmExperience').valid()) {
+        var UserId = $('#idInput').val()
+        var objData = {
+            Id: UserId,
+            LastDate: $('#experiencedate').val(),
+        }
+        $.ajax({
+            url: '/UserProfile/UpdateUserExeperience',
+            type: 'post',
+            data: objData,
+            datatype: 'json',
+            success: function (Result) {
+                if (Result.code == 200) {
+                    Swal.fire({
+                        title: Result.message,
+                        icon: 'success',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK'
+                    }).then(function () {
+                        window.location = '/UserProfile/UserInfo/?Id=' + UserId;
+                    });
+                }
+                else {
+                    toastr.error(Result.message);
+                }
+            },
+        })
+    } else {
+        toastr.warning("Kindly fill all datafield");
+    }
+}

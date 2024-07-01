@@ -93,7 +93,8 @@ public partial class BonifatiusEmployeesContext : DbContext
 
     public virtual DbSet<TblVendorType> TblVendorTypes { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    { }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<TblAttendance>(entity =>
@@ -726,6 +727,7 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.Property(e => e.FirstName).HasMaxLength(30);
             entity.Property(e => e.Gender).HasMaxLength(8);
             entity.Property(e => e.JoiningDate).HasColumnType("date");
+            entity.Property(e => e.LastDate).HasColumnType("date");
             entity.Property(e => e.LastLoginDate).HasColumnType("datetime");
             entity.Property(e => e.LastName).HasMaxLength(30);
             entity.Property(e => e.PhoneNumber).HasMaxLength(15);

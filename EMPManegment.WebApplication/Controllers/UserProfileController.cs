@@ -1143,5 +1143,31 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
+        [FormPermissionAttribute("Users-Edit")]
+        [HttpPost]
+        public async Task<IActionResult> UpdateUserExeperience(EmpDetailsView UpdateDate)
+        {
+            try
+            {
+                var Updateuser = new EmpDetailsView()
+                {
+                    Id = UpdateDate.Id,
+                    LastDate = UpdateDate.LastDate,
+                };
+                ApiResponseModel postUser = await APIServices.PostAsync(Updateuser, "UserProfile/UpdateUserExeperience");
+                if (postUser.code == 200)
+                {
+                    return Ok(new { Message = postUser.message, Code = postUser.code });
+                }
+                else
+                {
+                    return Ok(new { Message = string.Format(postUser.message), Code = postUser.code });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

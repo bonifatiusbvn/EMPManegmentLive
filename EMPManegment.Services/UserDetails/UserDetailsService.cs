@@ -103,6 +103,11 @@ namespace EMPManegment.Services.UserList
         {
             return await UserList.GetActiveDeactiveUserList();
         }
+
+        public async Task<UserResponceModel> UpdateUserExeperience(EmpDetailsView UpdateDate)
+        {
+           return await UserList.UpdateUserExeperience(UpdateDate);
+        }
     }
 }
 
