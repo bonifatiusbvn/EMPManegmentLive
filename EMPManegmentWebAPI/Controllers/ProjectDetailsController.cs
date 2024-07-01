@@ -89,7 +89,7 @@ namespace EMPManagment.API.Controllers
 
         [HttpPost]
         [Route("AddMemberToProject")]
-        public async Task<IActionResult> AddMemberToProject(ProjectView AddMember)
+        public async Task<IActionResult> AddMemberToProject(ProjectMemberMasterView AddMember)
         {
             UserResponceModel response = new UserResponceModel();
             try

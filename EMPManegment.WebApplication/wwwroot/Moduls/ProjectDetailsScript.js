@@ -3,8 +3,27 @@ $(document).ready(function () {
     GetAllUserProjectDetailsList();
     document.getElementById("showProjectMembers").click()
     document.getElementById("showProjectDocuments").click()
+    GetMemberList();
 });
 
+function GetMemberList() {
+    $.ajax({
+        url: '/Task/GetUserName',
+        success: function (result) {
+            var dropdown = $('#projectMemberDropdown');
+            dropdown.empty();
+            $.each(result, function (i, data) {
+                dropdown.append('<option class="User-dropdown-item-custom" data-value="' + data.id + '">' + data.firstName + ' ' + data.lastName + '</option>');
+            });
+            dropdown.css("width", "300px");
+            dropdown.select2({
+                placeholder: 'Select Member',
+                allowClear: true,
+                closeOnSelect: false
+            });
+        }
+    });
+}
 function btnCreateProjectDetail() {
 
     if ($('#formprojectdetails').valid()) {
@@ -47,7 +66,7 @@ function btnCreateProjectDetail() {
                 }
                 else {
                     toastr.error(Result.message);
-                }               
+                }
             }
         })
     }
@@ -115,19 +134,28 @@ $(document).ready(function () {
     });
 });
 
+$(document).ready(function () {
+    $('#inviteMembersModal').on('hidden.bs.modal', function () {
+        $('#projectMemberDropdown').val(null).trigger('change');
+    });
+});
+
 function openmemberpop() {
-    showMember()
+    var ProjectId = $('#projectid').val();
+    showMember(ProjectId);
     $("#inviteMembersModal").modal('show');
 }
 
-function showMember() {
-
+function showMember(ProjectId) {
+    var formData = new FormData();
+    formData.append("ProjectId", ProjectId);
     $.ajax({
         url: '/Project/GetMemberList',
         type: 'Post',
-        dataType: 'json',
+        data: formData,
         processData: false,
         contentType: false,
+        dataType: 'html',
         complete: function (Result) {
             $('#dvinvitemember').html(Result.responseText);
         },
@@ -164,7 +192,21 @@ $('#SearchBtn').keyup(function () {
     });
 });
 
-function invitemember(Id) {
+function invitemember() {
+    var selectElement = document.getElementById('projectMemberDropdown');
+    var MemberDetails = [];
+
+    $(selectElement.options).each(function () {
+        var option = this;
+        if (option.selected) {
+            var memberName = option.value.trim();
+
+            var objData = {
+                Fullname: memberName
+            };
+            MemberDetails.push(objData);
+        }
+    });
 
     var protitel = document.getElementById("projecttitle").textContent;
     var proStartDate = $('#projectenddate').val();
@@ -181,7 +223,7 @@ function invitemember(Id) {
         StartDate: proStartDate,
         Status: proStatus,
         UpdatedBy: UpdatedBy,
-
+        ProjectMemberList: MemberDetails,
     }
     var form_data = new FormData();
     form_data.append("InviteMember", JSON.stringify(MemberData));
@@ -205,7 +247,6 @@ function invitemember(Id) {
                 });
             }
             else {
-                $("#inviteMembersModal").modal('hide');
                 toastr.warning(Result.message);
             }
         },
@@ -410,7 +451,7 @@ function deleteProjectMember(userId) {
             else {
                 toastr.error(Result.message);
             }
-           
+
         },
         error: function () {
             toastr.error("Can't remove member");
@@ -507,8 +548,7 @@ function deleteProjectDocument(DocumentId) {
     });
 }
 
-function fn_UpdateProjectDetail()
-{
+function fn_UpdateProjectDetail() {
     if ($('#formprojectdetails').valid()) {
         var formData = new FormData();
         formData.append("ProjectTitle", $("#projectTitle").val());

@@ -9,6 +9,12 @@
     Layout = "~/Views/Shared/_HomeLayout.cshtml";
 }
 
+<style>
+    .select2.select2-container {
+        width: 300px !important;
+    }
+</style>
+
 @{
     var CompanyName = Model.ProjectTitle;
     var Titleinitial = string.Empty;
@@ -249,14 +255,20 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <div class="search-box mb-3">
-                    <input type="text" class="form-control bg-light border-light" id="SearchBtn" placeholder="Search here...">
-                    <i class="ri-search-line search-icon"></i>
+                <div class="row">
+                    <div class="col-md-8 mb-3">
+                        <label class="form-label">Select Multiple Members</label>
+                        <select class="multiple-select" data-placeholder="Select Member" multiple="multiple" id="projectMemberDropdown"></select>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">&nbsp;</label>
+                        <button type="button" class="btn btn-block btn-success btn-sm " onclick="invitemember()" style="width:90px;">Add</button>
+                    </div>
                 </div>
 
                 <div class="mb-4 d-flex align-items-center">
                     <div class="me-2">
-                        <h5 class="mb-0 fs-13">Add Members :</h5>
+                        <h5 class="mb-0 fs-13">Project Members :</h5>
                     </div>
                 </div>
                 <div id="dvinvitemember">

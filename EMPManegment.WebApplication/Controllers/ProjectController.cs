@@ -279,24 +279,23 @@ namespace EMPManegment.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> GetMemberList()
+        public async Task<IActionResult> GetMemberList(Guid ProjectId)
         {
             try
             {
-                List<EmpDetailsView> MembersList = new List<EmpDetailsView>();
-                ApiResponseModel postuser = await APIServices.PostAsync("", "ProjectDetails/GetMemberList");
+                List<ProjectView> ProjectMembersList = new List<ProjectView>();
+                ApiResponseModel postuser = await APIServices.PostAsync("", "ProjectDetails/GetProjectMember?ProjectId=" + ProjectId);
                 if (postuser.data != null)
                 {
-                    MembersList = JsonConvert.DeserializeObject<List<EmpDetailsView>>(postuser.data.ToString());
-
+                    ProjectMembersList = JsonConvert.DeserializeObject<List<ProjectView>>(postuser.data.ToString());
+                    ProjectMembersList = ProjectMembersList.Take(5).ToList();
                 }
                 else
                 {
-                    MembersList = new List<EmpDetailsView>();
+                    ProjectMembersList = new List<ProjectView>();
                     ViewBag.Error = "note found";
                 }
-                MembersList = MembersList.Take(10).ToList();
-                return PartialView("~/Views/Project/_inviteprojectmember.cshtml", MembersList);
+                return PartialView("~/Views/Project/_inviteprojectmember.cshtml", ProjectMembersList);
             }
             catch (Exception ex)
             {
@@ -337,7 +336,7 @@ namespace EMPManegment.Web.Controllers
             try
             {
                 var membersinvited = HttpContext.Request.Form["InviteMember"];
-                var memberDetails = JsonConvert.DeserializeObject<ProjectView>(membersinvited);
+                var memberDetails = JsonConvert.DeserializeObject<ProjectMemberMasterView>(membersinvited);
                 ApiResponseModel postuser = await APIServices.PostAsync(memberDetails, "ProjectDetails/AddMemberToProject");
                 UserResponceModel responseModel = new UserResponceModel();
                 if (postuser.code == 200)

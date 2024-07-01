@@ -1,4 +1,4 @@
-﻿@model List<EMPManegment.EntityModels.View_Model.EmpDetailsView>
+﻿@model List<EMPManegment.EntityModels.ViewModels.ProjectModels.ProjectView>
 
 @if (Model.Count > 0)
 {
@@ -25,9 +25,9 @@
                     <div class="flex-grow-1">
                         <h5 class="fs-13 mb-0"><a href="#" class="text-body d-block">@m.FirstName @m.LastName</a></h5>
                     </div>
-                    <div class="flex-shrink-0">
+                   @* <div class="flex-shrink-0">
                         <button type="button" class="btn btn-block btn-success btn-sm" onclick="invitemember('@m.Id')" style="width:90px;">Add</button>
-                    </div>
+                    </div>*@
                 </div>
                 <!-- end member item -->
             </div>

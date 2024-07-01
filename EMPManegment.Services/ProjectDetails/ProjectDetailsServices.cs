@@ -40,7 +40,7 @@ namespace EMPManegment.Services.ProjectDetails
         {
             return await ProjectDetails.GetAllMembers();
         }
-        public async Task<UserResponceModel> AddMemberToProject(ProjectView AddMember)
+        public async Task<UserResponceModel> AddMemberToProject(ProjectMemberMasterView AddMember)
         {
             return await ProjectDetails.AddMemberToProject(AddMember);
         }

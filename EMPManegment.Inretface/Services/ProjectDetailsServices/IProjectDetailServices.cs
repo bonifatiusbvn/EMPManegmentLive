@@ -17,7 +17,7 @@ namespace EMPManegment.Inretface.Services.ProjectDetailsServices
         Task<List<ProjectView>> GetUserProjectList(Guid UserId);
         Task<ProjectDetailView> GetProjectDetailsById(Guid ProjectId);
         Task<IEnumerable<EmpDetailsView>> GetAllMembers();
-        Task<UserResponceModel> AddMemberToProject(ProjectView AddMemberToProject);
+        Task<UserResponceModel> AddMemberToProject(ProjectMemberMasterView AddMemberToProject);
         Task<IEnumerable<ProjectView>> GetProjectMember(Guid ProjectId);
         Task<UserResponceModel> AddDocumentToProject(ProjectDocumentView AddDocumentToProject);
         Task<IEnumerable<ProjectDocumentView>> GetProjectDocument(Guid ProjectId);

@@ -117,7 +117,7 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
             var data = await (from a in Context.TblProjectMembers
                               join b in Context.TblProjectMasters
                               on a.ProjectId equals b.ProjectId
-                              where a.UserId == UserId && a.IsDeleted != false
+                              where a.UserId == UserId && a.IsDeleted != true
                               select new
                               {
                                   a.Id,
@@ -215,51 +215,76 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
             return data;
         }
 
-        public async Task<UserResponceModel> AddMemberToProject(ProjectView AddMember)
+        public async Task<UserResponceModel> AddMemberToProject(ProjectMemberMasterView AddMember)
         {
             UserResponceModel response = new UserResponceModel();
             try
             {
-                bool isMemberAlreadyExists = Context.TblProjectMembers.Any(x => x.UserId == AddMember.UserId && x.ProjectId == AddMember.ProjectId);
-                if (isMemberAlreadyExists == true)
+                var project = await Context.TblProjectMasters.FirstOrDefaultAsync(e => e.ProjectId == AddMember.ProjectId);
+
+                if (project != null)
                 {
-                    var projectDetail = await Context.TblProjectMembers.SingleOrDefaultAsync(x => x.UserId == AddMember.UserId && x.ProjectId == AddMember.ProjectId);
-                    if (projectDetail.IsDeleted == true)
+                    foreach (var item in AddMember.ProjectMemberList)
                     {
-                        response.Message = "Member already exists";
-                        response.Code = 404;
+                        var userId = await Context.TblUsers.FirstOrDefaultAsync(a => (a.FirstName + " " + a.LastName) == item.Fullname);
+                        bool isMemberAlreadyExists = Context.TblProjectMembers.Any(x => x.UserId == userId.Id && x.ProjectId == AddMember.ProjectId);
+
+                        if (isMemberAlreadyExists)
+                        {
+                            var projectDetail = await Context.TblProjectMembers.SingleOrDefaultAsync(x => x.UserId == userId.Id && x.ProjectId == AddMember.ProjectId);
+
+                            if (projectDetail.IsDeleted == false)
+                            {
+                                response.Message = item.Fullname + " already exists in project.";
+                                response.Code = 404;
+                                return response;
+                            }
+                            else
+                            {
+                                projectDetail.IsDeleted = false;
+                                projectDetail.ProjectId = project.ProjectId;
+                                projectDetail.ProjectType = project.ProjectType;
+                                projectDetail.ProjectTitle = project.ProjectTitle;
+                                projectDetail.StartDate = project.ProjectStartDate;
+                                projectDetail.EndDate = project.ProjectEndDate;
+                                projectDetail.Status = project.ProjectStatus;
+                                projectDetail.UpdatedOn = DateTime.Now;
+                                projectDetail.UpdatedBy = AddMember.UpdatedBy;
+                                Context.TblProjectMembers.Update(projectDetail);
+                                await Context.SaveChangesAsync();
+                                response.Code = 200;
+                                response.Message = "Project member is added successfully!";
+                            }
+                        }
+                        else
+                        {
+                            var projectmodel = new TblProjectMember()
+                            {
+                                Id = Guid.NewGuid(),
+                                ProjectId = project.ProjectId,
+                                ProjectType = project.ProjectType,
+                                ProjectTitle = project.ProjectTitle,
+                                UserId = userId.Id,
+                                StartDate = project.ProjectStartDate,
+                                EndDate = project.ProjectEndDate,
+                                Status = project.ProjectStatus,
+                                IsDeleted = false, 
+                                CreatedBy = AddMember.UpdatedBy,
+                                CreatedOn = DateTime.Now,
+                            };
+
+                            Context.TblProjectMembers.Add(projectmodel);
+                            await Context.SaveChangesAsync();
+                            response.Code = 200;
+                            response.Message = "Project member is added successfully!";
+                        }
                     }
-                    else
-                    {
-                        var GetUserdata = Context.TblProjectMembers.Where(a => a.UserId == AddMember.UserId && a.ProjectId == AddMember.ProjectId).FirstOrDefault();
-                        GetUserdata.IsDeleted = true;
-                        GetUserdata.UpdatedOn = DateTime.Now;
-                        GetUserdata.UpdatedBy = AddMember.UpdatedBy;
-                        Context.TblProjectMembers.Update(GetUserdata);
-                        Context.SaveChanges();
-                        response.Code = 200;
-                        response.Data = AddMember;
-                        response.Message = "Project member is added succesfully!";
-                    }
+                    response.Data = project; 
                 }
                 else
                 {
-                    var projectmodel = new TblProjectMember()
-                    {
-                        Id = Guid.NewGuid(),
-                        ProjectId = AddMember.ProjectId,
-                        ProjectType = AddMember.ProjectType,
-                        ProjectTitle = AddMember.ProjectTitle,
-                        UserId = AddMember.UserId,
-                        StartDate = AddMember.StartDate,
-                        EndDate = AddMember.EndDate,
-                        Status = AddMember.Status,
-                        IsDeleted = true,
-                    };
-                    response.Code = 200;
-                    response.Message = "Project member is added succesfully!";
-                    Context.TblProjectMembers.Add(projectmodel);
-                    Context.SaveChanges();
+                    response.Code = 404;
+                    response.Message = "Project not found.";
                 }
             }
             catch (Exception ex)
@@ -269,6 +294,7 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
             }
             return response;
         }
+
         public async Task<IEnumerable<ProjectView>> GetProjectMember(Guid ProjectId)
         {
             try
@@ -276,7 +302,7 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
                 var result = (from e in Context.TblProjectMembers
                               where e.ProjectId == ProjectId
                               join d in Context.TblUsers on e.UserId equals d.Id
-                              where e.IsDeleted != false
+                              where e.IsDeleted != true
                               select new ProjectView
                               {
                                   Id = e.Id,
@@ -353,7 +379,7 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
             var data = await (from projectDetail in Context.TblProjectMembers
                               join projectMaster in Context.TblProjectMasters
                               on projectDetail.ProjectId equals projectMaster.ProjectId
-                              where projectDetail.UserId == UserId && projectDetail.IsDeleted != false
+                              where projectDetail.UserId == UserId && projectDetail.IsDeleted != true
                               select new
                               {
                                   projectDetail.Id,
