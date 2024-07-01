@@ -57,6 +57,8 @@ public partial class TblUser
 
     public int? DepartmentId { get; set; }
 
+    public DateTime? LastDate { get; set; }
+
     public DateTime? CreatedOn { get; set; }
 
     public string? CreatedBy { get; set; }
