@@ -30,6 +30,6 @@ namespace EMPManegment.Inretface.Interface.UserList
         Task<IEnumerable<EmpDetailsView>> GetActiveDeactiveUserList();
         Task<IEnumerable<EmpDetailsView>> GetSearchEmpList(EmpDetailsModel GetSearchEmpList);
         Task<UserResponceModel> UpdateUserExeperience(EmpDetailsView UpdateDate);
-       
+        Task<UserResponceModel> UserProfilePhoto(EmpDetailsView Profile);
     }
 }

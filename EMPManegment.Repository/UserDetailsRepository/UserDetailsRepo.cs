@@ -712,6 +712,29 @@ namespace EMPManegment.Repository.UserListRepository
             }
             return response;
         }
+
+        public async Task<UserResponceModel> UserProfilePhoto(EmpDetailsView Profile)
+        {
+            UserResponceModel response = new UserResponceModel();
+            try
+            {
+                var UploadImage = await Context.TblUsers.FirstOrDefaultAsync(a => a.Id == Profile.Id);
+                if (UploadImage != null)
+                {
+                    UploadImage.Image=Profile.Image;
+
+                    Context.TblUsers.Update(UploadImage);
+                    await Context.SaveChangesAsync();
+                }
+                response.Code = (int)HttpStatusCode.OK;               
+            }
+            catch (Exception ex)
+            {
+                response.Code = 400;
+                response.Message = "Error in upadting user deatils.";
+            }
+            return response;
+        }
     }
 }
 

@@ -108,6 +108,11 @@ namespace EMPManegment.Services.UserList
         {
            return await UserList.UpdateUserExeperience(UpdateDate);
         }
+
+        public async Task<UserResponceModel> UserProfilePhoto(EmpDetailsView Profile)
+        {
+            return await UserList.UserProfilePhoto(Profile);
+        }
     }
 }
 

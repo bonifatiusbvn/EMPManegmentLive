@@ -44,6 +44,7 @@ using EMPManegment.EntityModels.ViewModels.VendorModels;
 using EMPManegment.EntityModels.ViewModels.FormMaster;
 using iTextSharp.text.pdf;
 using EMPManegment.EntityModels.ViewModels.Invoice;
+using Aspose.Pdf.Operators;
 
 namespace EMPManegment.Web.Controllers
 {
@@ -1168,6 +1169,44 @@ namespace EMPManegment.Web.Controllers
             {
                 throw ex;
             }
+        }
+        [HttpPost]
+        public async Task<IActionResult> UserProfilePhoto(LoginDetailsView Profile)
+        {
+            try
+            {
+                if (Profile.Image != null)
+                {
+                    
+                    var UserImg = Guid.NewGuid() + "_" + Profile.Image.FileName;
+                    var path = Environment.WebRootPath;
+                    var filepath = "Content/Image/" + UserImg;
+                    var fullpath = Path.Combine(path, filepath);
+                    UploadFile(Profile.Image, fullpath);
+                    var UploadImage = new EmpDetailsView()
+                    {
+                        Id = _userSession.UserId,
+                        Image = filepath,
+
+                    };
+                    ApiResponseModel postUser = await APIServices.PostAsync(UploadImage, "UserProfile/UserProfilePhoto");
+                    if (postUser.code == 200)
+                    {
+                        return Ok(new { Message = "Profile Uploaded Successfully!", Code = postUser.code });
+                    }
+                    else
+                    {
+                        return Ok(new { Message = string.Format(postUser.message), Code = postUser.code });
+                    }
+                }
+                return BadRequest();
+                
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
         }
     }
 }
