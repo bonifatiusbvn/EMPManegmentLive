@@ -20,7 +20,9 @@ using EMPManegment.Web.Models;
 using DocumentFormat.OpenXml.Spreadsheet;
 using EMPManegment.EntityModels.ViewModels.ProjectModels;
 using X.PagedList;
+using System.Net.Http.Headers;
 using Microsoft.CodeAnalysis;
+using EMPManegment.EntityModels.ViewModels.Weather;
 
 namespace EMPManegment.Web.Controllers
 {
@@ -211,6 +213,31 @@ namespace EMPManegment.Web.Controllers
             UserSession.ProjectId = ProjectId.ToString();
             UserSession.ProjectName = ProjectId == null ? " " : ProjectName.ToString();
             return new JsonResult("Project Name updated succesfully!");
+        }
+
+
+        public async Task<IActionResult> GetWeatherinfo(string city)
+        {
+
+            var client = new HttpClient();
+            var request = new HttpRequestMessage
+            {
+                Method = HttpMethod.Get,
+                RequestUri = new Uri("https://weatherapi-com.p.rapidapi.com/current.json?q=" + city),
+                Headers =
+    {
+        { "x-rapidapi-key", "53a9c22907msh20b4c28bfb3bf4bp1cabf0jsn54f99e1b7c3d" },
+        { "x-rapidapi-host", "weatherapi-com.p.rapidapi.com" },
+    },
+            };
+            using (var response = await client.SendAsync(request))
+            {
+                response.EnsureSuccessStatusCode();
+                var body = await response.Content.ReadAsStringAsync();
+                List<Current> myDeserializedClass = JsonConvert.DeserializeObject<List<Current>>(body);
+                return Json(myDeserializedClass);
+
+            }
         }
     }
 }
