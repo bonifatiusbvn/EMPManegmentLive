@@ -32,18 +32,29 @@
 
             </div>
         </div>
-        <div class="pt-4 mb-4 mb-lg-3 pb-lg-4 profile-wrapper">
+        <div class="card-body p-4">
             <div class="row g-4">
-                <div class="col-auto" style="margin: auto;position: revert-layer;">
-                    <div class="avatar-lg">
+                <div class="col-auto" style="margin: auto; position: revert-layer;">
+                    <div class="profile-user position-relative d-inline-block mx-auto mb-4" style="height: 119px; width: 111px;">
                         @if (!string.IsNullOrEmpty(imageUrl))
                         {
-                            <img src="@imageUrl" class="rounded-circle avatar-xl img-thumbnail user-profile-image" alt="user-profile-image">
+                            <img id="user-profile-image" src="@imageUrl" class="rounded-circle avatar-xl img-thumbnail user-profile-image" alt="user-profile-image">
                         }
                         else
                         {
-                            <div class="avatar-title bg-success-subtle text-success rounded-circle fs-13" style="height:95px;width:95px;"><h5>@initials</h5></div>
+                            <img id="user-profile-image" src="#" class="rounded-circle avatar-xl img-thumbnail user-profile-image" alt="user-profile-image" style="display: none;">
+                            <div class="avatar-title bg-success-subtle text-success rounded-circle fs-13" id="default-avatar">
+                                <h5>@initials</h5>
+                            </div>
                         }
+                        <div class="avatar-xs p-0 rounded-circle profile-photo-edit">
+                            <input id="profile-img-file-input" type="file" class="profile-img-file-input" onchange="showHidebtn()">
+                            <label for="profile-img-file-input" class="profile-photo-edit avatar-xs">
+                                <span class="avatar-title rounded-circle bg-light text-body">
+                                    <i class="ri-camera-fill"></i>
+                                </span>
+                            </label>
+                        </div>
                     </div>
                 </div>
                 <!--end col-->
@@ -96,8 +107,11 @@
                                 </a>
                             </li>
                         </ul>
-                        @*<div class="flex-shrink-0">
-                        <a href="pages-profile-settings.html" class="btn btn-success"><i class="ri-edit-box-line align-bottom"></i> Edit Profile</a>
+                        <div class="flex-shrink-0">
+                            <button type="button" class="btn btn-success btn-lg" onclick="UserProfilePhoto()" id="btnSave" style="display: none;">Save</button>
+                        </div>
+                      @*   <div class="flex-shrink-0">
+                        <a href="pages-profile-settings.html" class="btn btn-success">Save</a>
                         </div> *@
                     </div>
                     <!-- Tab panes -->
@@ -361,4 +375,18 @@
 
 <script>
     var UserId = '@Accessor.HttpContext.Session.GetString("UserID")';
+    document.getElementById('profile-img-file-input').addEventListener('change', function (event) {
+        var input = event.target;
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                var img = document.getElementById('user-profile-image');
+                img.src = e.target.result;
+                img.style.display = 'block';
+                document.getElementById('default-avatar');
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+        showHidebtn();
+    });
 </script>

@@ -330,5 +330,12 @@ namespace EMPManagment.API.Controllers
             }
             return StatusCode(response.Code, response);
         }
+        [HttpPost]
+        [Route("UserProfilePhoto")]
+        public async Task<IActionResult> UserProfilePhoto(EmpDetailsView Profile)
+        {
+            var UploadImage = await UserListServices.UserProfilePhoto(Profile);
+            return Ok(new { code = 200, data = UploadImage });
+        }
     }
 }

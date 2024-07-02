@@ -5,6 +5,7 @@ $(document).ready(function () {
     GetDocumentType();
     GetProjectList();
     loadPartialView();
+    showHidebtn();
 });
 
 function GetDocumentType() {
@@ -183,7 +184,7 @@ function serrchproject() {
     loadPartialView(1);
     GetUserProjectList(1);
 }
-function UserProjectActivity() {    
+function UserProjectActivity() {
 
     $.ajax({
         url: '/UserProfile/GetInvoiceActivityByUserId',
@@ -210,3 +211,46 @@ function UserTaskActivity() {
         },
     })
 }
+function UserProfilePhoto() {
+    var formData = new FormData();
+    formData.append("UserId", $("#UserID").val());
+    var fileInput = document.getElementById("profile-img-file-input");
+    if (fileInput.files.length > 0) {
+        formData.append("Image", fileInput.files[0]);
+    }
+    $.ajax({
+        url: '/UserProfile/UserProfilePhoto',
+        type: 'post',
+        data: formData,
+        processData: false,
+        contentType: false,
+        datatype: 'json',
+        success: function (Result) {
+            if (Result.code == 200) {
+                Swal.fire({
+                    title: Result.message,
+                    icon: 'success',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'OK'
+                    
+                }).then(function () {
+                    window.location = '/UserProfile/UserProfile';
+                });
+            } else {
+                toastr.error(Result.message);
+            }
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            toastr.error('An error occurred: ' + textStatus);
+        }
+    });
+}
+function showHidebtn() {
+    var fileInput = document.getElementById('profile-img-file-input');
+    if (fileInput.files && fileInput.files.length > 0) {
+        document.getElementById('btnSave').style.display = 'block';
+    } else {
+        document.getElementById('btnSave').style.display = 'none';
+    }
+}
+
