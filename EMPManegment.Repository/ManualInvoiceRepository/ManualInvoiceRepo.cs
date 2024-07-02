@@ -1,29 +1,37 @@
 ﻿using EMPManagment.API;
 using EMPManagment.Web.Models.API;
+using EMPManegment.EntityModels.Common;
 using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 using EMPManegment.EntityModels.ViewModels.Invoice;
 using EMPManegment.EntityModels.ViewModels.ManualInvoice;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.Inretface.Interface.ManualInvoice;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using System.Data;
+using System.Data.SqlClient;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using System.Security.Cryptography.Xml;
+
 #nullable disable
 
 namespace EMPManegment.Repository.ManualInvoiceRepository
 {
     public class ManualInvoiceRepo : IManualInvoice
     {
-        public ManualInvoiceRepo(BonifatiusEmployeesContext context)
+        public ManualInvoiceRepo(BonifatiusEmployeesContext context, IConfiguration configuration)
         {
             Context = context;
+            _configuration = configuration;
         }
 
         public BonifatiusEmployeesContext Context { get; }
+        public IConfiguration _configuration { get; }
 
         public async Task<UserResponceModel> InsertManualInvoice(ManualInvoiceMasterModel InvoiceDetails)
         {
@@ -175,71 +183,80 @@ namespace EMPManegment.Repository.ManualInvoiceRepository
 
         public async Task<ManualInvoiceMasterModel> GetManualInvoiceDetails(Guid InvoiceId)
         {
-            ManualInvoiceMasterModel manualInvoice = new ManualInvoiceMasterModel();
             try
             {
-                manualInvoice = (from a in Context.TblManualInvoices.Where(x => x.Id == InvoiceId)
-                                 join c in Context.TblPaymentMethodTypes on a.PaymentMethod equals c.Id
-                                 join d in Context.TblPaymentTypes on a.PaymentStatus equals d.Id
-                                 select new ManualInvoiceMasterModel
-                                 {
-                                     Id = a.Id,
-                                     InvoiceNo = a.InvoiceNo,
-                                     VendorName = a.VendorName,
-                                     VendorAddress = a.VendorAddress,
-                                     VendorGstNo = a.VendorGstNo,
-                                     VendorPhoneNo = a.VendorPhoneNo,
-                                     CompanyName = a.CompanyName,
-                                     CompanyAddress = a.CompanyAddress,
-                                     CompanyGstNo = a.CompanyGstNo,
-                                     ProjectId = a.ProjectId,
-                                     InvoiceDate = a.InvoiceDate,
-                                     BuyesOrderDate = a.BuyesOrderDate,
-                                     BuyesOrderNo = a.BuyesOrderNo,
-                                     DispatchThrough = a.DispatchThrough,
-                                     TotalGst = a.TotalGst,
-                                     TotalAmount = a.TotalAmount,
-                                     PaymentMethod = a.PaymentMethod,
-                                     PaymentStatus = a.PaymentStatus,
-                                     ShippingAddress = a.ShippingAddress,
-                                     PaymentMethodName = c.PaymentMethod,
-                                     PaymentStatusName = d.Type,
-                                     Cgst = a.Cgst,
-                                     Sgst = a.Sgst,
-                                     Igst = a.Igst,
-                                     CreatedBy = a.CreatedBy,
-                                     CreatedOn = a.CreatedOn,
-                                     RoundOff = a.RoundOff,
+                string dbConnectionStr = _configuration.GetConnectionString("EMPDbconn");
+                var sqlPar = new SqlParameter[]
+                {
+            new SqlParameter("@InvoiceId", InvoiceId),
+                };
+                var DS = DbHelper.GetDataSet("[GetManualInvoiceDetails]", System.Data.CommandType.StoredProcedure, sqlPar, dbConnectionStr);
 
-                                 }).FirstOrDefault();
-                List<ManualInvoiceDetailsModel> manualInvoiceDetails = (from a in Context.TblManualInvoiceDetails.Where(a => a.RefId == manualInvoice.Id)
-                                                                        join b in Context.TblProductTypeMasters on a.ProductType equals b.Id
-                                                                        select new ManualInvoiceDetailsModel
-                                                                        {
+                ManualInvoiceMasterModel masterInvoiceDetails = new ManualInvoiceMasterModel();
 
-                                                                            RefId = a.RefId,
-                                                                            Product = a.Product,
-                                                                            ProductType = a.ProductType,
-                                                                            ProductTypeName = b.Type,
-                                                                            Quantity = a.Quantity,
-                                                                            Price = a.Price,
-                                                                            Gst = a.Gst,
-                                                                            DiscountPercent = a.DiscountPercent,
-                                                                            ProductTotal = a.ProductTotal,
-                                                                            GstAmount = a.GstAmount,
-                                                                            Discount = a.Discount,
-                                                                            Hsn = a.Hsn,
-                                                                        }).ToList();
+                if (DS != null && DS.Tables.Count > 0)
+                {
+                    if (DS.Tables[1].Rows.Count > 0)
+                    {
+                        masterInvoiceDetails.Id = DS.Tables[1].Rows[0]["Id"] != DBNull.Value ? (Guid)DS.Tables[1].Rows[0]["Id"] : Guid.Empty;
+                        masterInvoiceDetails.InvoiceNo = DS.Tables[1].Rows[0]["InvoiceNo"]?.ToString();
+                        masterInvoiceDetails.VendorName = DS.Tables[1].Rows[0]["VendorName"]?.ToString();
+                        masterInvoiceDetails.VendorAddress = DS.Tables[1].Rows[0]["VendorAddress"]?.ToString();
+                        masterInvoiceDetails.VendorGstNo = DS.Tables[1].Rows[0]["VendorGstNo"]?.ToString();
+                        masterInvoiceDetails.VendorPhoneNo = DS.Tables[1].Rows[0]["VendorPhoneNo"]?.ToString();
+                        masterInvoiceDetails.CompanyName = DS.Tables[1].Rows[0]["CompanyName"]?.ToString();
+                        masterInvoiceDetails.CompanyAddress = DS.Tables[1].Rows[0]["CompanyAddress"]?.ToString();
+                        masterInvoiceDetails.CompanyGstNo = DS.Tables[1].Rows[0]["CompanyGstNo"]?.ToString();
+                        masterInvoiceDetails.ProjectId = DS.Tables[1].Rows[0]["ProjectId"] != DBNull.Value ? (Guid)DS.Tables[1].Rows[0]["ProjectId"] : Guid.Empty;
+                        masterInvoiceDetails.InvoiceDate = DS.Tables[1].Rows[0]["InvoiceDate"] != DBNull.Value ? (DateTime)DS.Tables[1].Rows[0]["InvoiceDate"] : DateTime.MinValue;
+                        masterInvoiceDetails.BuyesOrderDate = DS.Tables[1].Rows[0]["BuyesOrderDate"] != DBNull.Value ? (DateTime)DS.Tables[1].Rows[0]["BuyesOrderDate"] : DateTime.MinValue;
+                        masterInvoiceDetails.BuyesOrderNo = DS.Tables[1].Rows[0]["BuyesOrderNo"]?.ToString();
+                        masterInvoiceDetails.DispatchThrough = DS.Tables[1].Rows[0]["DispatchThrough"]?.ToString();
+                        masterInvoiceDetails.TotalGst = DS.Tables[1].Rows[0]["TotalGst"] != DBNull.Value ? (decimal)DS.Tables[1].Rows[0]["TotalGst"] : 0m;
+                        masterInvoiceDetails.TotalAmount = DS.Tables[1].Rows[0]["TotalAmount"] != DBNull.Value ? (decimal)DS.Tables[1].Rows[0]["TotalAmount"] : 0m;
+                        masterInvoiceDetails.PaymentMethod = DS.Tables[1].Rows[0]["PaymentMethod"] != DBNull.Value ? (int)DS.Tables[1].Rows[0]["PaymentMethod"] : 0;
+                        masterInvoiceDetails.PaymentStatus = DS.Tables[1].Rows[0]["PaymentStatus"] != DBNull.Value ? (int)DS.Tables[1].Rows[0]["PaymentStatus"] : 0;
+                        masterInvoiceDetails.ShippingAddress = DS.Tables[1].Rows[0]["ShippingAddress"]?.ToString();
+                        masterInvoiceDetails.PaymentMethodName = DS.Tables[1].Rows[0]["PaymentMethodName"]?.ToString();
+                        masterInvoiceDetails.PaymentStatusName = DS.Tables[1].Rows[0]["PaymentStatusName"]?.ToString();
+                        masterInvoiceDetails.RoundOff = DS.Tables[1].Rows[0]["RoundOff"] != DBNull.Value ? (decimal)DS.Tables[1].Rows[0]["RoundOff"] : 0m;
+                    }
 
+                    masterInvoiceDetails.ManualInvoiceDetails = new List<ManualInvoiceDetailsModel>();
 
-                manualInvoice.ManualInvoiceDetails = manualInvoiceDetails;
-                return manualInvoice;
+                    foreach (DataRow row in DS.Tables[0].Rows)
+                    {
+                        var invoiceDetail = new ManualInvoiceDetailsModel
+                        {
+                            RefId = row["RefId"] != DBNull.Value ? (Guid)row["RefId"] : Guid.Empty,
+                            Product = row["Product"]?.ToString(),
+                            ProductType = row["ProductType"] != DBNull.Value ? (int)row["ProductType"] : 0,
+                            ProductTypeName = row["ProductTypeName"]?.ToString(),
+                            Quantity = row["Quantity"] != DBNull.Value ? (decimal)row["Quantity"] : 0,
+                            Price = row["Price"] != DBNull.Value ? (decimal)row["Price"] : 0m,
+                            Gst = row["Gst"] != DBNull.Value ? (decimal)row["Gst"] : 0m,
+                            DiscountPercent = row["DiscountPercent"] != DBNull.Value ? (decimal)row["DiscountPercent"] : 0m,
+                            ProductTotal = row["ProductTotal"] != DBNull.Value ? (decimal)row["ProductTotal"] : 0m,
+                            GstAmount = row["GstAmount"] != DBNull.Value ? (decimal)row["GstAmount"] : 0m,
+                            Discount = row["Discount"] != DBNull.Value ? (decimal)row["Discount"] : 0m,
+                            Hsn = row["Hsn"] != DBNull.Value ? (int)row["Hsn"] : 0
+                        };
+
+                        masterInvoiceDetails.ManualInvoiceDetails.Add(invoiceDetail);
+                    }
+                }
+
+                return masterInvoiceDetails;
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw new Exception("Error fetching manual invoice details", ex);
             }
         }
+
+
+
+
 
         public async Task<UserResponceModel> DeleteManualInvoice(Guid InvoiceId)
         {
