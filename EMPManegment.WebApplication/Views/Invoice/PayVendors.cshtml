@@ -22,7 +22,7 @@
 {
     foreach (var item in Model.InvoicePaymentTransaction)
     {
-        TotalAmount += item.TotalAmount ?? 0; 
+        TotalAmount += item.TotalAmount ?? 0;
     }
 }
 <!-- start page title -->
@@ -44,86 +44,69 @@
 <!-- end page title -->
 
 <div class="row">
-    <div class="col-xxl-3 col-md-6">
+    <div class="col-xxl-4 col-md-4">
         <div class="card card-animate">
             <div class="card-body">
-                <div class="d-flex mb-3">
-                    <div class="flex-grow-1">
-                        <lord-icon src="https://cdn.lordicon.com/fhtaantg.json" trigger="loop" colors="primary:#25a0e2,secondary:#00bd9d" style="width:55px;height:55px">
-                        </lord-icon>
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <p class="fw-medium text-muted mb-0">Credited Amount</p>
+                        <h2 class="mt-4 ff-secondary fw-semibold text-success" id="txttotalcreditamount"><span class="counter-value"></span></h2>
+                        <p class="mb-0 text-muted">
+                        </p>
                     </div>
-                    <div class="flex-shrink-0">
-                    </div>
-                </div>
-                <h3 class="mb-2">₹<span class="counter-value">0</span><small class="text-muted fs-13"></small></h3>
-                <h6 class="text-muted mb-0"></h6>
-                <h6 class="text-muted mb-0" id="textvendorId" hidden>@Model.VendorId</h6>
-            </div>
-        </div>
-        <!--end card-->
-    </div>
-    <!--end col-->
-    <div class="col-xxl-3 col-md-6">
-        <div class="card card-animate">
-            <div class="card-body">
-                <div class="d-flex mb-3">
-                    <div class="flex-grow-1">
-                        <lord-icon src="https://cdn.lordicon.com/qhviklyi.json" trigger="loop" colors="primary:#25a0e2,secondary:#00bd9d" style="width:55px;height:55px"></lord-icon>
-                    </div>
-                    <div class="flex-shrink-0">
-                    </div>
-                </div>
-                <h3 class="mb-2" id="txttotalcreditamount">₹0</h3>
-                <h6 class="text-muted mb-0">Credited Amount</h6>
-            </div>
-        </div>
-        <!--end card-->
-    </div>
-    <!--end col-->
-    <div class="col-xxl-3 col-md-6">
-        <div class="card card-animate">
-            <div class="card-body">
-                <div class="d-flex mb-3">
-                    <div class="flex-grow-1">
-                        <lord-icon src="https://cdn.lordicon.com/yeallgsa.json" trigger="loop" colors="primary:#25a0e2,secondary:#00bd9d" style="width:55px;height:55px">
-                        </lord-icon>
-                    </div>
-                    <div class="flex-shrink-0">
-                    </div>
-                </div>
-                <h3 class="mb-2" id="txttotalpendingamount">₹0</h3>
-                <h6 class="text-muted mb-0">Pending Amount</h6>
-            </div>
-        </div>
-        <!--end card-->
-    </div>
-    <!--end col-->
-    <div class="col-xxl-3 col-md-6">
-        <div class="swiper default-swiper rounded">
-            <div class="swiper-wrapper">
-                <div class="swiper-slide">
-                    <div class="card card-animate border-0 overflow-hidden">
-                        <div class="card-body bg-primary-subtle">
-                            <div class="d-flex mb-3">
-                                <div class="flex-grow-1">
-                                    <lord-icon src="https://cdn.lordicon.com/vaeagfzc.json" trigger="loop" colors="primary:#25a0e2,secondary:#00bd9d" style="width:55px;height:55px">
-                                    </lord-icon>
-                                </div>
-                                <div class="flex-shrink-0">
-                                    <a href="javascript:void(0);" class="fw-medium">Total Outstanding</a>
-                                </div>
-                            </div>
-                            <h3 class="mb-2 text-success">₹@TotalAmount</h3>
-                            <h6 class="text-muted mb-0">Send - Receive (Previous Month)</h6>
+                    <div>
+                        <div class="avatar-sm flex-shrink-0">
+                            <span class="avatar-title bg-primary-subtle text-primary rounded-circle fs-4 text-success">
+                                <i class="mdi mdi-trending-up align-middle me-1"></i>
+                            </span>
                         </div>
                     </div>
-                    <!--end card-->
                 </div>
-
-
             </div>
         </div>
-        <!--end swiper-->
+        <!--end card-->
+    </div>
+    <!--end col-->
+    <!--end col-->
+    <div class="col-xxl-4 col-md-4">
+        <div class="card card-animate">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <p class="fw-medium text-muted mb-0">Pending Amount</p>
+                        <h2 class="mt-4 ff-secondary fw-semibold text-danger" id="txttotalpendingamount"><span class="counter-value"></span></h2>
+                        <p class="mb-0 text-muted">
+                        </p>
+                    </div>
+                    <div>
+                        <div class="text-danger avatar-sm flex-shrink-0">
+                            <span class="avatar-title bg-primary-subtle text-primary rounded-circle fs-4 text-danger">
+                                <i class="mdi mdi-trending-down align-middle me-1"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--end card-->
+    </div>
+    <!--end col-->
+    <div class="col-xxl-4 col-md-4">
+        <div class="card card-animate">
+            <div class="card-body bg-primary-subtle">
+                <div class="d-flex justify-content-between">
+                    <div class="flex-grow-1">
+                        <h6 class="text-muted mb-0">Send - Receive (Previous Month)</h6>
+                    </div>
+                    <div class="avatar-sm flex-shrink-0">
+                        <span class="avatar-title bg-primary-subtle text-primary rounded-circle fs-4 text-success border">
+                            <i class="ri-ticket-2-line"></i>
+                        </span>
+                    </div>
+                </div>
+                <h3 class="mb-2 text-success">₹@TotalAmount</h3>
+            </div>
+        </div>
     </div>
     <!--end col-->
 </div>

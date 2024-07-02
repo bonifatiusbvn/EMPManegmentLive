@@ -34,6 +34,10 @@
             padding-right: 18px;
             box-sizing: border-box;
         }
+
+    div.project-card {
+        cursor: pointer;
+    }
 </style>
 
 
@@ -98,10 +102,10 @@
                     </div>
                     <div class="card-body p-0">
                         <ul class="products-list product-list-in-card pl-2 pr-2">
-                            <li class="item">
+                            <li class="item d-flex align-items-center">
                                 @if (!string.IsNullOrEmpty(@item.ProjectImage))
                                 {
-                                    <div class="avatar-sm">
+                                    <div class="avatar-sm mr-2">
                                         <span class="avatar-title bg-warning-subtle rounded p-2">
                                             <img src="~/Content/Projects/@item.ProjectImage" alt="" class="img-fluid p-1">
                                         </span>
@@ -109,7 +113,7 @@
                                 }
                                 else
                                 {
-                                    <div class="avatar-sm">
+                                    <div class="avatar-sm mr-2">
                                         <div class="avatar-title bg-warning-subtle">
                                             <span class="rounded-circle bg-info-subtle p-2 text-success fs-13">
                                                 @CompanyInitials
@@ -117,29 +121,28 @@
                                         </div>
                                     </div>
                                 }
-                                <div class="product-info">
+                                <div class="product-info flex-grow-1">
                                     <p>
                                         @item.ProjectDescription
-
+                                    </p>
+                                    <div>
                                         @if (item.ProjectStatus == "Inprogress")
                                         {
-                                            <div class="badge bg-warning-subtle text-warning fs-12">@item.ProjectStatus</div>
+                                            <span class="badge bg-warning-subtle text-warning fs-12">@item.ProjectStatus</span>
                                         }
                                         else
                                         {
-                                            <div class="badge bg-success-subtle text-success fs-12">@item.ProjectStatus</div>
+                                            <span class="badge bg-success-subtle text-success fs-12">@item.ProjectStatus</span>
                                         }
-
-                                    </p>
-                                    <span class="product-description">
-                                        Deadline  <h5 class="fs-14">@CommonHelper.GetCommonDateFormat(item.ProjectDeadline)</h5>
-
-                                    </span>
+                                    </div>
                                 </div>
                             </li>
-
                         </ul>
+                        <span class="product-description">
+                            Deadline <h5 class="fs-14">@CommonHelper.GetCommonDateFormat(item.ProjectDeadline)</h5>
+                        </span>
                     </div>
+
                     <div class="card-footer bg-transparent border-top-dashed py-2">
                         <div class="d-flex align-items-center">
                             <div class="flex-grow-1">
@@ -180,9 +183,9 @@
         searchfor = @Context.Request.Query["searchfor"],
         searchby = @Context.Request.Query["searchby"]
     }),
-                                                new X.PagedList.Web.Common.PagedListRenderOptions
-                                            {
-                                                LiElementClasses = new string[] { "page-item" },
-                                                PageClasses = new string[] { "page-link" }
-                                            }
-                                        )
+                                                    new X.PagedList.Web.Common.PagedListRenderOptions
+                                                {
+                                                    LiElementClasses = new string[] { "page-item" },
+                                                    PageClasses = new string[] { "page-link" }
+                                                }
+                                            )

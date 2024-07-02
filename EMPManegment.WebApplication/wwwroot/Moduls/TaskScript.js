@@ -151,6 +151,9 @@ function btnStatusUpdate(Id) {
                 TaskStatus: $('#ddlStatusReview' + Id).val(),
                 Id: Id,
                 UpdatedBy: $("#textTaskUserId").val(),
+                UserId: $("#textTaskUserId").val(),
+                ProjectHead: $("#textTaskUserName").val(),
+                ProjectId: $("#textTaskProjectId").val(),
             }
             var form_data = new FormData();
             form_data.append("STATUSUPDATE", JSON.stringify(StausChange));
@@ -217,6 +220,9 @@ function btnStatusUpdateLow(Id) {
             TaskStatus: $('#ddlStatus' + Id).val(),
             Id: Id,
             UpdatedBy: $("#textTaskUserId").val(),
+            UserId: $("#textTaskUserId").val(),
+            ProjectHead: $("#textTaskUserName").val(),
+            ProjectId: $("#textTaskProjectId").val(),
         }
         var form_data = new FormData();
         form_data.append("STATUSUPDATE", JSON.stringify(StausChange));
@@ -286,7 +292,9 @@ function btnStatusUpdateMedium(Id) {
                 TaskStatus: $('#ddlStatusMedium' + Id).val(),
                 Id: Id,
                 UpdatedBy: $("#textTaskUserId").val(),
-
+                UserId: $("#textTaskUserId").val(),
+                ProjectHead: $("#textTaskUserName").val(),
+                ProjectId: $("#textTaskProjectId").val(),
             }
             var form_data = new FormData();
             form_data.append("STATUSUPDATE", JSON.stringify(StausChange));
@@ -359,6 +367,9 @@ function btnStatusUpdateHigh(Id) {
                 TaskStatus: $('#ddlStatusHigh' + Id).val(),
                 Id: Id,
                 UpdatedBy: $("#textTaskUserId").val(),
+                UserId: $("#textTaskUserId").val(),
+                ProjectHead: $("#textTaskUserName").val(),
+                ProjectId: $("#textTaskProjectId").val(),
             }
             var form_data = new FormData();
             form_data.append("STATUSUPDATE", JSON.stringify(StausChange));
