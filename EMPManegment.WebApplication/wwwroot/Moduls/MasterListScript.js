@@ -77,7 +77,7 @@ function GetCountry() {
                 $('#ddlCountry').append('<Option value=' + data.id + '>' + data.countryName + '</Option>')
             });
             $.each(result, function (i, data) {
-                    $('#VendorCountry').append('<option value="' + data.id + '">' + data.countryName + '</option>');
+                $('#VendorCountry').append('<option value="' + data.id + '">' + data.countryName + '</option>');
             });
             $.each(result, function (i, data) {
                 $('#projectCountry').append('<option value=' + data.id + '>' + data.countryName + '</option>')
@@ -367,7 +367,7 @@ function GetUsernameList() {
             var dropdown = $('#usercustomDropdown');
             dropdown.empty();
             $.each(result, function (i, data) {
-                dropdown.append('<option class="User-dropdown-item-custom" data-value=' + data.id + '>' + data.firstName + ' ' + data.lastName + '</option>');
+                dropdown.append('<option class="User-dropdown-item-custom dropdown-item" data-value=' + data.id + '>' + data.firstName + ' ' + data.lastName + '</option>');
             });
             $.each(result, function (i, data) {
                 $('#drpAttusername').append('<option value=' + data.id + '>' + data.firstName + ' ' + data.lastName + ' (' + data.userName + ')</option>');
