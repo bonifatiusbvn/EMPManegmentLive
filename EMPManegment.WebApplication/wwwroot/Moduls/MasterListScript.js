@@ -9,6 +9,7 @@ $(document).ready(function () {
     GetCompanyNameList();
     GetUsernameList();
     GetVendorNameList();
+    showWeatherAPI();
     $('#ddlCountry').change(function () {
         var Text = $("#ddlCountry Option:Selected").text();
         var StateId = $(this).val();
@@ -395,3 +396,30 @@ function GetVendorNameList() {
         }
     });
 }
+
+function showWeatherAPI() {
+    var city = 'Vadodara'
+    siteloadershow();
+    $.ajax({
+        url: '/Home/GetWeatherinfo?city=' + city,
+        type: "GET",
+        contentType: 'application/json;charset=utf-8;',
+        traditional: true,
+
+        success: function (result) {
+            debugger;
+            siteloaderhide();
+            $('#getweather').html(result.temp_c + ' °C');
+            $('#weathericon').attr('src', result.condition.icon);
+        },
+        complete: function (data) {
+            // $('#searchresult').html(data.responseText);
+        },
+        error: function (response) {
+            siteloaderhide();
+            console.error("Error fetching weather information:", response);
+        }
+    });
+}
+
+

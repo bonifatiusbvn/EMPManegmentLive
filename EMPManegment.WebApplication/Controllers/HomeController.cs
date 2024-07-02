@@ -218,26 +218,45 @@ namespace EMPManegment.Web.Controllers
 
         public async Task<IActionResult> GetWeatherinfo(string city)
         {
-
             var client = new HttpClient();
             var request = new HttpRequestMessage
             {
                 Method = HttpMethod.Get,
                 RequestUri = new Uri("https://weatherapi-com.p.rapidapi.com/current.json?q=" + city),
                 Headers =
-    {
-        { "x-rapidapi-key", "53a9c22907msh20b4c28bfb3bf4bp1cabf0jsn54f99e1b7c3d" },
-        { "x-rapidapi-host", "weatherapi-com.p.rapidapi.com" },
-    },
+        {
+            { "x-rapidapi-key", "53a9c22907msh20b4c28bfb3bf4bp1cabf0jsn54f99e1b7c3d" },
+            { "x-rapidapi-host", "weatherapi-com.p.rapidapi.com" },
+        },
             };
-            using (var response = await client.SendAsync(request))
-            {
-                response.EnsureSuccessStatusCode();
-                var body = await response.Content.ReadAsStringAsync();
-                List<Current> myDeserializedClass = JsonConvert.DeserializeObject<List<Current>>(body);
-                return Json(myDeserializedClass);
 
+            try
+            {
+                using (var response = await client.SendAsync(request))
+                {
+                    response.EnsureSuccessStatusCode();
+                    var responseContent = await response.Content.ReadAsStringAsync();
+                    var getweather = JsonConvert.DeserializeObject<Root>(responseContent);
+
+                    if (getweather != null)
+                    {
+                        return Json(getweather.current);
+                    }
+                    else
+                    {
+                        return Ok(new { message = "No weather data found." });
+                    }
+                }
+            }
+            catch (HttpRequestException httpRequestException)
+            {
+                return StatusCode(500, new { message = "Error fetching weather data.", detail = httpRequestException.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "An unexpected error occurred.", detail = ex.Message });
             }
         }
+
     }
 }
