@@ -4,13 +4,13 @@
 {
     <tr id="templateRow_@Convert.ToInt64(item.RowNumber + 1)" class="product" data-product-id="@item.ProductId" onclick="fn_updatePOProductAmount(this)">
         <td scope="row" class="product-id">@Convert.ToInt64(item.RowNumber + 1)</td>
-        <td class="text-start">
-            <label id="textProductName" style="width: 160px;height: 30px;padding-top:5px !important;">@item.Product</label>
+        <td class="text-start" style="width:230px">
+            <label id="textProductName">@item.Product</label>
             <input type="hidden" class="form-control bg-light border-0" id="textProductId" readonly value="@item.ProductId" />
             <input type="hidden" class="form-control bg-light border-0" id="textProductType" readonly value="@item.ProductType" />
         </td>
         <td class="text-start">
-            <input type="text" class="form-control" id="txtHSNcode" value="@item.Hsn" />
+            <input type="text" class="form-control" id="txtHSNcode" value="@item.Hsn" style="width: 75px;" />
         </td>
         <td class="text-start">
             <div class="">
@@ -27,23 +27,23 @@
         <td class="text-start">
             <div class="">
                 <input type="hidden" id="txtunittype_@item.ProductId" value="@item.ProductType" />
-                <select class="form-control" id="txtPOProductType_@item.ProductId" style="width: 151px;" onclick="fn_POProductTypeDropdown('@item.ProductId')">
+                <select class="form-control" id="txtPOProductType_@item.ProductId" style="width: 100px;" onclick="fn_POProductTypeDropdown('@item.ProductId')">
                     <option value="@item.ProductType" selected>@item.ProductTypeName</option>
                 </select>
             </div>
         </td>
         <td class="text-start">
-            <input type="text" class="form-control" id="txtproductamount" value="@item.Price" oninput="preventPOEmptyValue(this)" />
+            <input type="text" class="form-control" id="txtproductamount" value="@item.Price" oninput="preventPOEmptyValue(this)" style="width:100px;" />
         </td>
         <td class="text-start">
-            <input type="text" class="form-control" id="txtgstPercentage" max="99" value="@item.Gstper" maxlength="4" oninput="preventPOEmptyValue(this)" />
+            <input type="text" class="form-control" id="txtgstPercentage" max="99" value="@item.Gstper" maxlength="4" oninput="preventPOEmptyValue(this)" style="width:100px;" />
         </td>
         <td class="text-start">
-            <input type="number" class="form-control" id="txtgstAmount" value="@item.Gstamount" readonly />
+            <input type="number" class="form-control" id="txtgstAmount" value="@item.Gstamount" readonly style="width:130px;" />
         </td>
         <td class="text-start">
             <div>
-                <input type="text" class="form-control" id="txtproducttotalamount" value="@item.ProductTotal" readonly />
+                <input type="text" class="form-control" id="txtproducttotalamount" value="@item.ProductTotal" readonly style="width:130px;" />
             </div>
         </td>
         <td class="product-removal">

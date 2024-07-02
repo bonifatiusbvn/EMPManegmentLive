@@ -212,9 +212,8 @@
                         <!--end tab-pane-->
                         <div class="tab-pane" id="changePassword" role="tabpanel">
                             <span class="text-danger">@TempData["ErrorMessage"]</span>
-                            <form id="passwordform">
+                            <form id="UserInfoPasswordForm">
                                 <div class="row g-2">
-
                                     <!--end col-->
                                     <div class="col-lg-4">
                                         <div>
@@ -223,9 +222,10 @@
                                                 Password*
                                             </label>
                                             <div class="position-relative auth-pass-inputgroup">
-                                                <input type="password" class="form-control" id="passwordinput" placeholder="Enter new password" name="passwordinput" onpaste="return false" aria-describedby="passwordInput" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}">
-                                                <div id="passwordInput" class="form-text">Must be at least 8 characters.</div>
+                                                <input type="password" class="form-control pe-5 password-input" id="UserInfopassword" placeholder="Enter new password" name="UserInfopassword" onpaste="return false" aria-describedby="passwordInput" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" required>
+                                                <button class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon" type="button" id="UserInfopassword-addon"><i class="ri-eye-fill align-middle"></i></button>
                                             </div>
+                                            <div id="passwordInput" class="form-text">Must be at least 8 characters.</div>
                                         </div>
                                     </div>
                                     <!--end col-->
@@ -236,7 +236,8 @@
                                                 Password*
                                             </label>
                                             <div class="position-relative auth-pass-inputgroup mb-3">
-                                                <input type="password" class="form-control" id="confirmpasswordinput" placeholder="Confirm password" name="confirmpasswordinput" onpaste="return false" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}">
+                                                <input type="password" class="form-control pe-5 password-input" id="UserInfoconfirmpassword" placeholder="Confirm password" name="UserInfoconfirmpassword" onpaste="return false" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" required>
+                                                <button class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon" type="button" id="UserInfoconfirmpassword"><i class="ri-eye-fill align-middle"></i></button>
                                             </div>
                                         </div>
                                     </div>
@@ -250,7 +251,7 @@
                                     <!--end col-->
                                     <div class="col-lg-12">
                                         <div class="mb-3">
-                                            <button type="submit" class="btn btn-primary" onclick="validateAndPassword()">
+                                            <button type="button" class="btn btn-primary" onclick="fn_UpdateUserPassword()">
                                                 Change
                                                 Password
                                             </button>
@@ -332,7 +333,6 @@
                             </form>
                         </div>
                         <!--end tab-pane-->
-                        <!--end tab-pane-->
                     </div>
                 </div>
             </div>
@@ -340,10 +340,88 @@
         <!--end col-->
     </div>
     <!--end row-->
-
 </div>
 <!-- container-fluid -->
 
-<script src="~/assets/js/pages/passowrd-create.init.js"></script>
+<script type="text/javascript">
+
+    var forms = Array.from(document.querySelectorAll("form .auth-pass-inputgroup"));
+    forms.forEach(function (s) {
+        var addons = Array.from(s.querySelectorAll(".password-addon"));
+        addons.forEach(function (t) {
+
+            t.addEventListener("click", function (t) {
+                var e = s.querySelector(".password-input");
+                if (e.type === "password") {
+                    e.type = "text";
+                } else {
+                    e.type = "password";
+                }
+            });
+        });
+    });
+
+    var password = document.getElementById("UserInfopassword");
+    var confirm_password = document.getElementById("UserInfoconfirmpassword");
+
+    function validatePassword() {
+
+        if (password.value !== confirm_password.value) {
+            confirm_password.setCustomValidity("Passwords Don't Match");
+        } else {
+            confirm_password.setCustomValidity("");
+        }
+    }
+
+    confirm_password.onkeyup = validatePassword;
+
+    var myInput = document.getElementById("UserInfopassword");
+    var letter = document.getElementById("pass-lower");
+    var capital = document.getElementById("pass-upper");
+    var number = document.getElementById("pass-number");
+    var length = document.getElementById("pass-length");
+
+    myInput.onfocus = function () {
+        document.getElementById("password-contain").style.display = "block";
+    };
+    myInput.onblur = function () {
+        document.getElementById("password-contain").style.display = "none";
+    };
+
+    myInput.onkeyup = function () {
+        if (myInput.value.match(/[a-z]/g)) {
+            letter.classList.remove("invalid");
+            letter.classList.add("valid");
+        } else {
+            letter.classList.remove("valid");
+            letter.classList.add("invalid");
+        }
+
+        if (myInput.value.match(/[A-Z]/g)) {
+            capital.classList.remove("invalid");
+            capital.classList.add("valid");
+        } else {
+            capital.classList.remove("valid");
+            capital.classList.add("invalid");
+        }
+
+        if (myInput.value.match(/[0-9]/g)) {
+            number.classList.remove("invalid");
+            number.classList.add("valid");
+        } else {
+            number.classList.remove("valid");
+            number.classList.add("invalid");
+        }
+
+        if (myInput.value.length >= 8) {
+            length.classList.remove("invalid");
+            length.classList.add("valid");
+        } else {
+            length.classList.remove("valid");
+            length.classList.add("invalid");
+        }
+    };
+</script>
+
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/moduls/userdetailsScript.js" asp-append-version="true"></script>

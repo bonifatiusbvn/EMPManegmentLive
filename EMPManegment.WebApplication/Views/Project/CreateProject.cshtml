@@ -84,6 +84,22 @@
                                 {
                                     <select class="form-control form-select valid" data-choices data-choices-search-false id="projectPriority" name="projectPriority">
                                         <option value="@Model.ProjectPriority">@Model.ProjectPriority</option>
+                                        @if(Model.ProjectPriority == "Low")
+                                        {
+                                            <option value="High">High</option>
+                                            <option value="Medium">Medium</option>
+                                        }
+                                        @if (Model.ProjectPriority == "Medium")
+                                        {
+                                            <option value="High">High</option>
+                                            <option value="Low">Low</option>
+                                        }
+                                        @if (Model.ProjectPriority == "High")
+                                        {
+                                            <option value="Medium">Medium</option>
+                                            <option value="Low">Low</option>
+                                        }
+                                        
                                     </select>
                                 }
                                 else
@@ -94,6 +110,7 @@
                                         <option value="Medium">Medium</option>
                                         <option value="Low">Low</option>
                                     </select>
+
                                 }
                             </div>
                         </div>
@@ -104,6 +121,14 @@
                                 {
                                     <select class="form-control form-select valid" data-choices data-choices-search-false id="projectStatus" name="projectStatus">
                                         <option value="@Model.ProjectStatus">@Model.ProjectStatus</option>
+                                        @if (Model.ProjectStatus != "Inprogress")
+                                        {
+                                            <option value="Inprogress">Inprogress</option>
+                                        }
+                                        @if (Model.ProjectStatus != "Completed")
+                                        {
+                                            <option value="Completed">Completed</option>
+                                        }
                                     </select>
                                 }
                                 else

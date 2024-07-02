@@ -985,3 +985,38 @@ function updateExperienceDate() {
         toastr.warning("Kindly fill all datafield");
     }
 }
+
+function fn_UpdateUserPassword() {
+    var form = document.getElementById('UserInfoPasswordForm');
+    if (form.checkValidity()) {
+        var UserId = $("#idInput").val();
+        var objData = {
+            UserName: $('#txtUserName').val(),
+            Password: $('#UserInfopassword').val(),
+            ConfirmPassword: $('#UserInfoconfirmpassword').val(),
+        }
+        $.ajax({
+            url: '/UserProfile/ResetUserPassword',
+            type: 'post',
+            data: objData,
+            datatype: 'json',
+            success: function (Result) {
+                if (Result.code == 200) {
+                    Swal.fire({
+                        title: Result.message,
+                        icon: 'success',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK'
+                    }).then(function () {
+                        window.location = '/UserProfile/UserInfo/?Id=' + UserId;
+                    });
+                }
+                else {
+                    toastr.error(Result.message);
+                }
+            },
+        })
+    } else {
+        form.reportValidity();
+    }
+}

@@ -87,10 +87,11 @@ namespace EMPManegment.Repository.TaskRepository
             UserResponceModel responcemodel = new UserResponceModel();
             if (updatetask.TaskStatus == "Completed")
             {
-                bool gettaskCheck = Context.TblTaskDetails.Any(e => e.Id == updatetask.Id && e.CreatedBy == updatetask.UserId);
+                bool gettaskCheck = Context.TblTaskDetails.Any(e => e.Id == updatetask.Id);
+                bool getProjectHead = Context.TblProjectMasters.Any(e => e.ProjectHead == updatetask.ProjectHead && e.ProjectId == updatetask.ProjectId);
                 try
                 {
-                    if (gettaskCheck == true)
+                    if (gettaskCheck == true && getProjectHead == true)
                     {
                         var taskstatusupdate = Context.TblTaskDetails.Where(e => e.Id == updatetask.Id).FirstOrDefault();
                         try
@@ -308,7 +309,7 @@ namespace EMPManegment.Repository.TaskRepository
             }
         }
 
-        public async Task<IEnumerable<TaskDetailsView>> GetTaskDetails(Guid Taskid, Guid ProjectId)
+        public async Task<IEnumerable<TaskDetailsView>> GetTaskDetails(Guid UserId, Guid ProjectId)
         {
             try
             {
@@ -316,7 +317,8 @@ namespace EMPManegment.Repository.TaskRepository
                     from a in Context.TblTaskDetails
                     join b in Context.TblUsers on a.UserId equals b.Id
                     join c in Context.TblTaskMasters on a.TaskType equals c.Id
-                    where a.UserId == Taskid || a.CreatedBy == Taskid
+                    join d in Context.TblProjectMasters on a.ProjectId equals d.ProjectId
+                    where a.UserId == UserId 
                     where a.ProjectId == ProjectId
                     select new TaskDetailsView
                     {
@@ -334,6 +336,8 @@ namespace EMPManegment.Repository.TaskRepository
                         LastName= b.LastName,
                         TaskTypeName = c.TaskType,
                         CreatedBy = a.CreatedBy,
+                        ProjectHead=d.ProjectHead,
+                        ProjectId=d.ProjectId,
                     };
 
                 return AllTaskDetails;
