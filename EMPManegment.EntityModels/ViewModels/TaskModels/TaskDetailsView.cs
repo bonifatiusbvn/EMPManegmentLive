@@ -34,6 +34,7 @@ namespace EMPManegment.EntityModels.ViewModels.TaskModels
         public string? FirstName { get; set; }
         public string? FullName { get; set; }
         public string? LastName { get; set; }
+        public string? ProjectHead { get; set; }
         public string? Role { get; set; }
         public Guid? UpdatedBy { get; set; }
         public DateTime? UpdatedOn { get; set; }
