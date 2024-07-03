@@ -398,7 +398,7 @@ function GetVendorNameList() {
 }
 
 function showWeatherAPI(city) {
-   
+    debugger
     $.ajax({
         url: '/Home/GetWeatherinfo?city=' + city,
         type: "GET",
@@ -427,7 +427,6 @@ function fn_GetAllCities()
         url: '/Authentication/GetAllCities',
         method: 'GET',
         success: function (result) {
-            debugger
             var allCities = result.map(function (data) {
                 return {
                     label: data.cityName,
@@ -442,25 +441,36 @@ function fn_GetAllCities()
                     event.preventDefault();
                     $("#AllCityDRP").val(ui.item.label);
                     $("#AllCityDRPHidden").val(ui.item.value);
-                    $("#AllCityDRP").change(); 
+                    fn_ChangeCityDrp(ui.item.label); 
                 }
             }).focus(function () {
                 $(this).autocomplete("search");
             });
 
-            var defaultCity = allCities.find(city => city.label === "Vadodara");
-            if (defaultCity) {
-                $("#AllCityDRP").val(defaultCity.label);
-                $("#AllCityDRPHidden").val(defaultCity.value);
-                $("#AllCityDRP").change();
+            var selectedCity = sessionStorage.getItem('SelectedCityName');
+            if (selectedCity) {
+                var defaultCity = allCities.find(city => city.label == selectedCity);
+                if (defaultCity) {
+                    $("#AllCityDRP").val(defaultCity.label);
+                    $("#AllCityDRPHidden").val(defaultCity.value);
+                    fn_ChangeCityDrp(defaultCity.label);
+                }
+            } else {
+                var defaultCity = allCities.find(city => city.label === "Vadodara");
+                if (defaultCity) {
+                    $("#AllCityDRP").val(defaultCity.label);
+                    $("#AllCityDRPHidden").val(defaultCity.value);
+                    fn_ChangeCityDrp(defaultCity.label);
+                }
             }
         },
         error: function (err) {
-            console.error("Failed to fetch unit types: ", err);
+            console.error("Failed to fetch Cities: ", err);
         }
     });
 }
 
-$('#AllCityDRP').change(function () {
-    showWeatherAPI($(this).val());
-});
+function fn_ChangeCityDrp(selectedCity) {
+    sessionStorage.setItem('SelectedCityName', selectedCity);
+    showWeatherAPI(selectedCity);
+}
