@@ -53,11 +53,6 @@ namespace EMPManegment.Services.InvoiceMaster
             return await InvoiceMaster.GetCreditDebitListByVendorId(Vid);
         }
 
-        public async Task<InvoiceMasterModel> GetInvoiceDetailsById(Guid Id)
-        {
-            return await InvoiceMaster.GetInvoiceDetailsById(Id);
-        }
-
         public async Task<PurchaseOrderResponseModel> GetInvoiceDetailsByOrderId(string OrderId)
         {
             return await InvoiceMaster.GetInvoiceDetailsByOrderId(OrderId);

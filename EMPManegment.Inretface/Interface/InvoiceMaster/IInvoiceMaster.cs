@@ -16,7 +16,6 @@ namespace EMPManegment.Inretface.Interface.InvoiceMaster
 {
     public interface IInvoiceMaster
     {
-        Task<InvoiceMasterModel> GetInvoiceDetailsById(Guid Id);
         Task<InvoicePayVendorModel> GetInvoiceListByVendorId(Guid Vid);
         Task<IEnumerable<CreditDebitView>> GetLastTransactionByVendorId(Guid Vid);
         Task<List<CreditDebitView>> GetAllTransaction();

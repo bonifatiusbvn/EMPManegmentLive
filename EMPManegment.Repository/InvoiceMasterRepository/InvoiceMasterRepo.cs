@@ -1,5 +1,6 @@
 ﻿using Azure;
 using EMPManagment.API;
+using EMPManegment.EntityModels.Common;
 using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 using EMPManegment.EntityModels.ViewModels.ExpenseMaster;
 using EMPManegment.EntityModels.ViewModels.Invoice;
@@ -10,7 +11,10 @@ using EMPManegment.EntityModels.ViewModels.TaskModels;
 using EMPManegment.EntityModels.ViewModels.VendorModels;
 using EMPManegment.Inretface.Interface.InvoiceMaster;
 using Microsoft.AspNetCore.Http.HttpResults;
+using System.Data;
+using System.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.FileSystemGlobbing.Internal.PatternContexts;
 using System;
 using System.Collections.Generic;
@@ -26,6 +30,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using EMPManegment.EntityModels.ViewModels.ManualInvoice;
 #nullable disable
 
 namespace EMPManegment.Repository.InvoiceMasterRepository
@@ -34,9 +39,12 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
     {
         private readonly BonifatiusEmployeesContext Context;
 
-        public InvoiceMasterRepo(BonifatiusEmployeesContext context)
+        public IConfiguration Configuration { get; }
+
+        public InvoiceMasterRepo(BonifatiusEmployeesContext context, IConfiguration configuration)
         {
             Context = context;
+            Configuration = configuration;
         }
 
 
@@ -152,73 +160,6 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                 throw ex;
             }
         }
-
-        public async Task<InvoiceMasterModel> GetInvoiceDetailsById(Guid Id)
-        {
-            InvoiceMasterModel invoice = new InvoiceMasterModel();
-            try
-            {
-                invoice = (from a in Context.TblInvoices.Where(x => x.Id == Id)
-                           join b in Context.TblVendorMasters on a.VandorId equals b.Vid
-                           join c in Context.TblCities on b.VendorCity equals c.Id
-                           join d in Context.TblCountries on b.VendorCountry equals d.Id
-                           join e in Context.TblStates on b.VendorState equals e.Id
-                           join f in Context.TblProjectMasters on a.ProjectId equals f.ProjectId
-                           select new InvoiceMasterModel
-                           {
-                               Id = a.Id,
-                               InvoiceNo = a.InvoiceNo,
-                               VendorName = b.VendorCompany,
-                               VandorId = a.VandorId,
-                               DispatchThrough = a.DispatchThrough,
-                               Cgst = a.Cgst,
-                               Igst = a.Igst,
-                               Sgst = a.Sgst,
-                               BuyesOrderNo = a.BuyesOrderNo,
-                               BuyesOrderDate = a.BuyesOrderDate,
-                               TotalAmount = a.TotalAmount,
-                               VendorFullAddress = b.VendorAddress + "-" + c.City + "-" + e.State + "-" + d.Country,
-                               VendorGstnumber = b.VendorGstnumber,
-                               VendorEmail = b.VendorEmail,
-                               ProjectName = f.ProjectTitle,
-                               VendorCompanyName = b.VendorCompany,
-                               VendorBankAccountNo = b.VendorBankAccountNo,
-                               VendorBankIfsc = b.VendorBankIfsc,
-                               VendorBankBranch = b.VendorBankBranch,
-                               VendorAccountHolderName = b.VendorAccountHolderName,
-                               VendorBankName = b.VendorBankName,
-                               TotalGst = a.TotalGst,
-                               RoundOff = a.RoundOff,
-                               TotalDiscount= a.TotalDiscount,
-                               InvoiceDate = a.InvoiceDate,
-                           }).First();
-                List<InvoiceDetailsViewModel> Itemlist = (from a in Context.TblInvoiceDetails.Where(a => a.InvoiceRefId == invoice.Id)
-                                                          join b in Context.TblProductTypeMasters on a.ProductType equals b.Id
-                                                          join c in Context.TblProductDetailsMasters on a.ProductId equals c.Id
-                                                          select new InvoiceDetailsViewModel
-                                                          {
-                                                              Product = a.Product,
-                                                              Quantity = a.Quantity,
-                                                              ProductTypeName = b.Type,
-                                                              ProductTotal = a.ProductTotal,
-                                                              GstPer = a.GstPer,
-                                                              GstAmount = a.GstAmount,
-                                                              ProductType = a.ProductType,
-                                                              Hsn = c.Hsn,
-                                                              PerUnitPrice = c.PerUnitPrice,
-                                                              DiscountAmount=a.DiscountAmount,
-                                                              DiscountPer=a.DiscountPer,
-                                                              Price = a.Price,
-                                                          }).ToList();
-                invoice.InvoiceDetails = Itemlist;
-                return invoice;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
         public async Task<PurchaseOrderResponseModel> GetInvoiceDetailsByOrderId(string OrderId)
         {
             PurchaseOrderResponseModel response = new PurchaseOrderResponseModel();
@@ -1003,74 +944,75 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
 
         public async Task<InvoiceMasterModel> DisplayInvoiceDetailsById(Guid Id)
         {
-            InvoiceMasterModel InvoiceList = new InvoiceMasterModel();
-            try
+            string dbConnectionStr = Configuration.GetConnectionString("EMPDbconn");
+            var sqlPar = new SqlParameter[]
             {
-                InvoiceList = (from a in Context.TblInvoices.Where(x => x.Id == Id)
-                               join c in Context.TblCompanyMasters on a.CompanyId equals c.Id
-                               join d in Context.TblVendorMasters on a.VandorId equals d.Vid
-                               join f in Context.TblPaymentMethodTypes on a.PaymentMethod equals f.Id
-                               join g in Context.TblPaymentTypes on a.PaymentStatus equals g.Id
-                               select new InvoiceMasterModel
-                               {
-                                   Id = Id,
-                                   InvoiceType = a.InvoiceType,
-                                   VandorId = a.VandorId,
-                                   InvoiceNo = a.InvoiceNo,
-                                   ProjectId = a.ProjectId,
-                                   OrderId = a.OrderId,
-                                   InvoiceDate = a.InvoiceDate,
-                                   BuyesOrderNo = a.BuyesOrderNo,
-                                   BuyesOrderDate = a.BuyesOrderDate,
-                                   DispatchThrough = a.DispatchThrough,
-                                   ShippingAddress = a.ShippingAddress,
-                                   Cgst = a.Cgst,
-                                   Sgst = a.Sgst,
-                                   Igst = a.Igst,
-                                   TotalGst = a.TotalGst,
-                                   TotalAmount = a.TotalAmount,
-                                   PaymentMethod = a.PaymentMethod,
-                                   PaymentStatus = a.PaymentStatus,
-                                   PaymentMethodName = f.PaymentMethod,
-                                   PaymentStatusName = g.Type,
-                                   Status = a.Status,
-                                   CompanyId=c.Id,
-                                   CompnyName=c.CompnyName,
-                                   CompanyGst=c.Gst,
-                                   VendorCompanyName = d.VendorCompany,
-                                   VendorCompanyNumber = d.VendorCompanyNumber,
-                                   VendorGstnumber = d.VendorGstnumber,
-                                   VendorAddress = d.VendorAddress,
-                                   CreatedOn = a.CreatedOn,
-                                   RoundOff= a.RoundOff,
-                                   TotalDiscount=a.TotalDiscount,
-                               }).FirstOrDefault();
-                List<InvoiceDetailsViewModel> Productlist = (from a in Context.TblInvoiceDetails.Where(a => a.InvoiceRefId == InvoiceList.Id)
-                                                             join b in Context.TblProductTypeMasters on a.ProductType equals b.Id
-                                                             join c in Context.TblProductDetailsMasters on a.ProductId equals c.Id
-                                                             select new InvoiceDetailsViewModel
-                                                             {
-                                                                 ProductId = a.ProductId,
-                                                                 Product = c.ProductName,
-                                                                 Hsn = a.Hsn,
-                                                                 Quantity = a.Quantity,
-                                                                 ProductType = a.ProductType,
-                                                                 ProductTypeName = b.Type,
-                                                                 PerUnitPrice = a.Price,
-                                                                 GstAmount = a.GstAmount,
-                                                                 GstPer=a.GstPer,
-                                                                 ProductTotal = a.ProductTotal,
-                                                                 DiscountPer=a.DiscountPer,
-                                                                 DiscountAmount=a.DiscountAmount,
-                                                             }).ToList();
+            new SqlParameter("@InvoiceId", Id),
+            };
+            var DS = DbHelper.GetDataSet("[GetInvoiceDetailsById]", System.Data.CommandType.StoredProcedure, sqlPar, dbConnectionStr);
 
-                InvoiceList.InvoiceDetails = Productlist;
-                return InvoiceList;
-            }
-            catch (Exception ex)
+            InvoiceMasterModel InvoiceDetails = new InvoiceMasterModel();
+
+            if (DS != null && DS.Tables.Count > 0)
             {
-                throw ex;
+                if (DS.Tables[0].Rows.Count > 0)
+                {
+                    InvoiceDetails.Id = DS.Tables[0].Rows[0]["Id"] != DBNull.Value ? (Guid)DS.Tables[0].Rows[0]["Id"] : Guid.Empty;
+                    InvoiceDetails.VandorId = DS.Tables[0].Rows[0]["VandorId"] != DBNull.Value ? (Guid)DS.Tables[0].Rows[0]["VandorId"] : Guid.Empty;
+                    InvoiceDetails.CompanyId = DS.Tables[0].Rows[0]["CompanyId"] != DBNull.Value ? (Guid)DS.Tables[0].Rows[0]["CompanyId"] : Guid.Empty;
+                    InvoiceDetails.InvoiceNo = DS.Tables[0].Rows[0]["InvoiceNo"]?.ToString();
+                    InvoiceDetails.ProjectId = DS.Tables[0].Rows[0]["ProjectId"] != DBNull.Value ? (Guid)DS.Tables[0].Rows[0]["ProjectId"] : Guid.Empty;
+                    InvoiceDetails.VendorAddress = DS.Tables[0].Rows[0]["VendorAddress"]?.ToString();
+                    InvoiceDetails.VendorCompanyName = DS.Tables[0].Rows[0]["VendorCompanyName"]?.ToString();
+                    InvoiceDetails.VendorGstnumber = DS.Tables[0].Rows[0]["VendorGstnumber"]?.ToString();
+                    InvoiceDetails.VendorCompanyNumber = DS.Tables[0].Rows[0]["VendorCompanyNumber"]?.ToString();
+                    InvoiceDetails.VendorBankName = DS.Tables[0].Rows[0]["VendorBankName"]?.ToString();
+                    InvoiceDetails.VendorBankBranch = DS.Tables[0].Rows[0]["VendorBankBranch"]?.ToString();
+                    InvoiceDetails.VendorBankAccountNo = DS.Tables[0].Rows[0]["VendorBankAccountNo"]?.ToString();
+                    InvoiceDetails.VendorBankIfsc = DS.Tables[0].Rows[0]["VendorBankIfsc"]?.ToString();
+                    InvoiceDetails.VendorAccountHolderName = DS.Tables[0].Rows[0]["VendorAccountHolderName"]?.ToString();
+                    InvoiceDetails.CompnyName = DS.Tables[0].Rows[0]["CompnyName"]?.ToString();
+                    InvoiceDetails.CompanyGst = DS.Tables[0].Rows[0]["CompanyGst"]?.ToString();
+                    InvoiceDetails.InvoiceDate = DS.Tables[0].Rows[0]["InvoiceDate"] != DBNull.Value ? (DateTime)DS.Tables[0].Rows[0]["InvoiceDate"] : DateTime.MinValue;
+                    InvoiceDetails.BuyesOrderDate = DS.Tables[0].Rows[0]["BuyesOrderDate"] != DBNull.Value ? (DateTime)DS.Tables[0].Rows[0]["BuyesOrderDate"] : DateTime.MinValue;
+                    InvoiceDetails.BuyesOrderNo = DS.Tables[0].Rows[0]["BuyesOrderNo"]?.ToString();
+                    InvoiceDetails.DispatchThrough = DS.Tables[0].Rows[0]["DispatchThrough"]?.ToString();
+                    InvoiceDetails.TotalGst = DS.Tables[0].Rows[0]["TotalGst"] != DBNull.Value ? (decimal)DS.Tables[0].Rows[0]["TotalGst"] : 0m;
+                    InvoiceDetails.TotalAmount = DS.Tables[0].Rows[0]["TotalAmount"] != DBNull.Value ? (decimal)DS.Tables[0].Rows[0]["TotalAmount"] : 0m;
+                    InvoiceDetails.PaymentMethod = DS.Tables[0].Rows[0]["PaymentMethod"] != DBNull.Value ? (int)DS.Tables[0].Rows[0]["PaymentMethod"] : 0;
+                    InvoiceDetails.PaymentStatus = DS.Tables[0].Rows[0]["PaymentStatus"] != DBNull.Value ? (int)DS.Tables[0].Rows[0]["PaymentStatus"] : 0;
+                    InvoiceDetails.ShippingAddress = DS.Tables[0].Rows[0]["ShippingAddress"]?.ToString();
+                    InvoiceDetails.PaymentMethodName = DS.Tables[0].Rows[0]["PaymentMethodName"]?.ToString();
+                    InvoiceDetails.PaymentStatusName = DS.Tables[0].Rows[0]["PaymentStatusName"]?.ToString();
+                    InvoiceDetails.CreatedOn = DS.Tables[0].Rows[0]["CreatedOn"] != DBNull.Value ? (DateTime)DS.Tables[0].Rows[0]["CreatedOn"] : DateTime.MinValue; ;
+                    InvoiceDetails.RoundOff = DS.Tables[0].Rows[0]["RoundOff"] != DBNull.Value ? (decimal)DS.Tables[0].Rows[0]["RoundOff"] : 0m;
+                }
+
+                InvoiceDetails.InvoiceDetails = new List<InvoiceDetailsViewModel>();
+
+                foreach (DataRow row in DS.Tables[1].Rows)
+                {
+                    var invoiceDetail = new InvoiceDetailsViewModel
+                    {
+                        ProductId = row["ProductId"] != DBNull.Value ? (Guid)row["ProductId"] : Guid.Empty,
+                        Product = row["Product"]?.ToString(),
+                        Hsn = row["HSN"] != DBNull.Value ? (int)row["HSN"] : 0,
+                        Quantity = row["Quantity"] != DBNull.Value ? (decimal)row["Quantity"] : 0,
+                        ProductType = row["ProductType"] != DBNull.Value ? (int)row["ProductType"] : 0,
+                        ProductTypeName = row["ProductTypeName"]?.ToString(),
+                        PerUnitPrice = row["PerUnitPrice"] != DBNull.Value ? (decimal)row["PerUnitPrice"] : 0m,
+                        GstAmount = row["GstAmount"] != DBNull.Value ? (decimal)row["GstAmount"] : 0m,
+                        GstPer = row["GstPer"] != DBNull.Value ? (decimal)row["GstPer"] : 0m,
+                        ProductTotal = row["ProductTotal"] != DBNull.Value ? (decimal)row["ProductTotal"] : 0m,
+                        DiscountPer = row["DiscountPer"] != DBNull.Value ? (decimal)row["DiscountPer"] : 0m,
+                        DiscountAmount = row["DiscountAmount"] != DBNull.Value ? (decimal)row["DiscountAmount"] : 0m,
+                    };
+
+                    InvoiceDetails.InvoiceDetails.Add(invoiceDetail);
+                }
             }
+            return InvoiceDetails;  
+
         }
 
         public async Task<List<InvoiceDetailsViewModel>> GetProductDetailsById(Guid ProductId)

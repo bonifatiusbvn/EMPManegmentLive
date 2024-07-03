@@ -151,13 +151,13 @@
                             }
                             @foreach (var item in Model.InvoiceDetails)
                             {
-                                subtotal = (item.Quantity * item.Price);
+                                subtotal = (item.Quantity * item.PerUnitPrice);
                                 <tr class="product">
                                     <td class="border">@index</td>
                                     <td class="text-start border">
                                         <span class="fw-medium" id="txtproductname">@item.Product</span>
                                     </td>
-                                    <td class="border" id="txtHSN">@item.Price</td>
+                                    <td class="border" id="txtHSN">@item.PerUnitPrice</td>
                                     <td class="border" id="txtHSN">@item.DiscountAmount</td>
                                     <td class="border" id="txtquantity">@item.Quantity</td>
                                     <td class="border" id="txtper">@item.ProductTypeName</td>

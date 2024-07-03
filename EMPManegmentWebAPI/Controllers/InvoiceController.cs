@@ -35,14 +35,6 @@ namespace EMPManagment.API.Controllers
             InvoiceMaster = invoiceMaster;
         }
 
-        [HttpGet]
-        [Route("GetInvoiceDetailsById")]
-        public async Task<IActionResult> GetInvoiceDetailsById(Guid Id)
-        {
-            var getInvoice = await InvoiceMaster.GetInvoiceDetailsById(Id);
-            return Ok(new { code = 200, data = getInvoice });
-        }
-
         [HttpPost]
         [Route("GetInvoiceDetailsList")]
         public async Task<IActionResult> GetInvoiceDetailsList(DataTableRequstModel InvoiceList)
