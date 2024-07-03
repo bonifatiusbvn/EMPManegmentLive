@@ -549,6 +549,7 @@ function UserLogout() {
 function logout() {
     sessionStorage.removeItem('SelectedProjectId');
     sessionStorage.removeItem('SelectedUserProjectId');
+    sessionStorage.removeItem('SelectedCityName');
     fetch('/Authentication/Logout', {
         method: 'POST',
         headers: {
