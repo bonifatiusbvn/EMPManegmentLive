@@ -1,5 +1,5 @@
-﻿ @using EMPManegment.Web.Models;
- @inject IHttpContextAccessor Accessor;
+﻿@using EMPManegment.Web.Models;
+@inject IHttpContextAccessor Accessor;
 @inject UserSession _userSession
 <!DOCTYPE html>
 <html lang="en">
@@ -48,6 +48,13 @@
             display: none;
         }
 
+
+        .ui-autocomplete {
+            z-index: 1051;
+            max-height: 150px;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
     </style>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed accent-info">
@@ -74,6 +81,20 @@
             }
             <!-- Right navbar links -->
             <ul class="navbar-nav ml-auto">
+                <div style="display: flex; align-items: center;gap: 6px;">
+                    <div class="location-left dark-font-color">
+                        <input type="text" class="form-control" id="AllCityDRP">
+                        <input type="hidden" id="AllCityDRPHidden">
+                    </div>
+                    <div class="weather-glyph-location text-wrapper-image-hidden">
+                        <img class="icon-svg" id="weathericon" alt="Weather Icon" style="height: 40px;width: 40px;" />
+                    </div>
+                    <div class="weather-temperature dark-font-color">
+                        <span class="weather-text-location-left" id="getweather"></span>
+                    </div>
+                </div>
+
+
                 <li class="nav-item dropdown">
                     <div class="dropdown ms-sm-3 header-item topbar-user" style="height:60px;">
                         <button type="button" class="btn" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -569,4 +590,5 @@
 
     var UserId = '@_userSession.UserId';
     var TodayDate = '@DateTime.Today';
+
 </script>

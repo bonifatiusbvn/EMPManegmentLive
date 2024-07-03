@@ -272,6 +272,24 @@ namespace EMPManegment.Web.Controllers
             ImageFile.CopyTo(stream);
         }
 
+        public async Task<JsonResult> GetAllCities()
+        {
+            try
+            {
+                List<CityView> allCities = new List<CityView>();
+                ApiResponseModel response = await APIServices.GetAsyncId(null, "MasterList/GetAllCities");
+                if (response.code == 200)
+                {
+                    allCities = JsonConvert.DeserializeObject<List<CityView>>(response.data.ToString());
+                }
+                return new JsonResult(allCities);
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }
 

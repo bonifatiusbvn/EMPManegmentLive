@@ -90,5 +90,17 @@ namespace EMPManegment.Services.CSC
                 throw ex;
             }
         }
+
+        public async Task<IEnumerable<CityView>> GetAllCities()
+        {
+            try
+            {
+                return await MasterList.GetAllCities();
+            }
+            catch(Exception ex) 
+            {
+                throw ex;
+            }
+        }
     }
 }

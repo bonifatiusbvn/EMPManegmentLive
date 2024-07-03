@@ -121,5 +121,21 @@ namespace EMPManegment.Repository.CSCRepository
                 throw ex;
             }
         }
+        public async Task<IEnumerable<CityView>> GetAllCities()
+        {
+            try
+            {
+                IEnumerable<CityView> cities = Context.TblCities.ToList().Select(a => new CityView
+                {
+                    Id = a.Id,
+                    CityName = a.City,
+                });
+                return cities;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

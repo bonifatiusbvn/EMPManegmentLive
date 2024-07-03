@@ -20,7 +20,9 @@ using EMPManegment.Web.Models;
 using DocumentFormat.OpenXml.Spreadsheet;
 using EMPManegment.EntityModels.ViewModels.ProjectModels;
 using X.PagedList;
+using System.Net.Http.Headers;
 using Microsoft.CodeAnalysis;
+using EMPManegment.EntityModels.ViewModels.Weather;
 
 namespace EMPManegment.Web.Controllers
 {
@@ -212,5 +214,38 @@ namespace EMPManegment.Web.Controllers
             UserSession.ProjectName = ProjectId == null ? " " : ProjectName.ToString();
             return new JsonResult("Project Name updated succesfully!");
         }
+
+
+        [HttpGet]
+        public async Task<IActionResult> GetWeatherinfo(string city)
+        {
+            try
+            {
+                Root root = new Root();
+                ApiResponseModel response = await APIServices.GetAsync("", "UserHome/GetWeatherinfo?city=" + city);
+                if (response.code == 200)
+                {
+
+                    if (response != null)
+                    {
+                        var data = JsonConvert.SerializeObject(response.data);
+                        response.data = JsonConvert.DeserializeObject<Root>(data);
+                        return Json(response.data);
+                    }
+                    else
+                    {
+                        return Ok(new { message = "No weather data found." });
+                    }
+                }
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
     }
 }

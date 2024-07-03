@@ -9,6 +9,7 @@ $(document).ready(function () {
     GetCompanyNameList();
     GetUsernameList();
     GetVendorNameList();
+    fn_GetAllCities();
     $('#ddlCountry').change(function () {
         var Text = $("#ddlCountry Option:Selected").text();
         var StateId = $(this).val();
@@ -395,3 +396,71 @@ function GetVendorNameList() {
         }
     });
 }
+
+function showWeatherAPI(city) {
+   
+    $.ajax({
+        url: '/Home/GetWeatherinfo?city=' + city,
+        type: "GET",
+        contentType: 'application/json;charset=utf-8;',
+        traditional: true,
+
+        success: function (result) {
+
+
+            $('#getweather').html(result.current.temp_c + ' °C');
+            $('#weathericon').attr('src', result.current.condition.icon);
+        },
+        complete: function (data) {
+            // $('#searchresult').html(data.responseText);
+        },
+        error: function (response) {
+            siteloaderhide();
+            console.error("Error fetching weather information:", response);
+        }
+    });
+}
+
+function fn_GetAllCities()
+{
+    $.ajax({
+        url: '/Authentication/GetAllCities',
+        method: 'GET',
+        success: function (result) {
+            debugger
+            var allCities = result.map(function (data) {
+                return {
+                    label: data.cityName,
+                    value: data.id
+                };
+            });
+
+            $("#AllCityDRP").autocomplete({
+                source: allCities,
+                minLength: 0,
+                select: function (event, ui) {
+                    event.preventDefault();
+                    $("#AllCityDRP").val(ui.item.label);
+                    $("#AllCityDRPHidden").val(ui.item.value);
+                    $("#AllCityDRP").change(); 
+                }
+            }).focus(function () {
+                $(this).autocomplete("search");
+            });
+
+            var defaultCity = allCities.find(city => city.label === "Vadodara");
+            if (defaultCity) {
+                $("#AllCityDRP").val(defaultCity.label);
+                $("#AllCityDRPHidden").val(defaultCity.value);
+                $("#AllCityDRP").change();
+            }
+        },
+        error: function (err) {
+            console.error("Failed to fetch unit types: ", err);
+        }
+    });
+}
+
+$('#AllCityDRP').change(function () {
+    showWeatherAPI($(this).val());
+});

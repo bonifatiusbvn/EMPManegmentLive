@@ -176,7 +176,7 @@ namespace EMPManegment.Repository.ManualInvoiceRepository
             }
             catch (Exception ex)
             {
-                throw ex; 
+                throw ex;
             }
         }
 
@@ -188,7 +188,7 @@ namespace EMPManegment.Repository.ManualInvoiceRepository
                 string dbConnectionStr = _configuration.GetConnectionString("EMPDbconn");
                 var sqlPar = new SqlParameter[]
                 {
-            new SqlParameter("@InvoiceId", InvoiceId),
+                   new SqlParameter("@InvoiceId", InvoiceId),
                 };
                 var DS = DbHelper.GetDataSet("[GetManualInvoiceDetails]", System.Data.CommandType.StoredProcedure, sqlPar, dbConnectionStr);
 
@@ -253,10 +253,6 @@ namespace EMPManegment.Repository.ManualInvoiceRepository
                 throw new Exception("Error fetching manual invoice details", ex);
             }
         }
-
-
-
-
 
         public async Task<UserResponceModel> DeleteManualInvoice(Guid InvoiceId)
         {
