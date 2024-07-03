@@ -146,7 +146,7 @@ namespace EMPManegment.Web.Controllers
             try
             {
                 InvoiceMasterModel invoice = new InvoiceMasterModel();
-                ApiResponseModel response = await APIServices.GetAsync("", "Invoice/GetInvoiceDetailsById?Id=" + InvoiceId);
+                ApiResponseModel response = await APIServices.GetAsync("", "Invoice/DisplayInvoiceDetailsById?Id=" + InvoiceId);
                 if (response.code == 200)
                 {
                     invoice = JsonConvert.DeserializeObject<InvoiceMasterModel>(response.data.ToString());
@@ -239,7 +239,7 @@ namespace EMPManegment.Web.Controllers
             try
             {
                 InvoiceViewModel products = new InvoiceViewModel();
-                ApiResponseModel response = await APIServices.GetAsync("", "Invoice/GetInvoiceDetailsById?Id=" + Id);
+                ApiResponseModel response = await APIServices.GetAsync("", "Invoice/DisplayInvoiceDetailsById?Id=" + Id);
                 if (response.code == 200)
                 {
                     products = JsonConvert.DeserializeObject<InvoiceViewModel>(response.data.ToString());
