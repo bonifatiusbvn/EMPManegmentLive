@@ -409,8 +409,8 @@ function showWeatherAPI() {
         success: function (result) {
 
             siteloaderhide();
-            $('#getweather').html(result.temp_c + ' °C');
-            $('#weathericon').attr('src', result.condition.icon);
+            $('#getweather').html(result.current.temp_c + ' °C');
+            $('#weathericon').attr('src', result.current.condition.icon);
         },
         complete: function (data) {
             // $('#searchresult').html(data.responseText);
