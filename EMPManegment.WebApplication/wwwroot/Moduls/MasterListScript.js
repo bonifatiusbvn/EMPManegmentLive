@@ -399,7 +399,7 @@ function GetVendorNameList() {
 
 function showWeatherAPI() {
     var city = 'Vadodara'
-    siteloadershow();
+
     $.ajax({
         url: '/Home/GetWeatherinfo?city=' + city,
         type: "GET",
@@ -408,7 +408,7 @@ function showWeatherAPI() {
 
         success: function (result) {
 
-            siteloaderhide();
+
             $('#getweather').html(result.current.temp_c + ' °C');
             $('#weathericon').attr('src', result.current.condition.icon);
         },
