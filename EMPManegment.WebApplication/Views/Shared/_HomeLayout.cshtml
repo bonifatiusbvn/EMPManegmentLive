@@ -1,5 +1,5 @@
-﻿ @using EMPManegment.Web.Models;
- @inject IHttpContextAccessor Accessor;
+﻿@using EMPManegment.Web.Models;
+@inject IHttpContextAccessor Accessor;
 @inject UserSession _userSession
 <!DOCTYPE html>
 <html lang="en">
@@ -74,11 +74,16 @@
             }
             <!-- Right navbar links -->
             <ul class="navbar-nav ml-auto">
-                <h5>Vadodara</h5>
-                <br />
-                <p id="getweather"></p>
-                <br />
-                <img src="" id="weathericon" alt="Weather Icon">
+                <div style="display: flex; align-items: center;gap: 6px;">
+                    <div class="location-left dark-font-color">Vadodara</div>
+                    <div class="weather-glyph-location text-wrapper-image-hidden">
+                        <img class="icon-svg" id="weathericon" alt="Weather Icon" style="height: 40px;width: 40px;" />
+                    </div>
+                    <div class="weather-temperature dark-font-color">
+                        <span class="weather-text-location-left" id="getweather"></span>
+                    </div>
+                </div>
+
 
                 <li class="nav-item dropdown">
                     <div class="dropdown ms-sm-3 header-item topbar-user" style="height:60px;">

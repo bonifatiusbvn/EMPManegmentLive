@@ -407,7 +407,7 @@ function showWeatherAPI() {
         traditional: true,
 
         success: function (result) {
-            debugger;
+
             siteloaderhide();
             $('#getweather').html(result.temp_c + ' °C');
             $('#weathericon').attr('src', result.condition.icon);
