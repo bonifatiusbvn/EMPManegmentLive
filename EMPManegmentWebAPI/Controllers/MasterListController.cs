@@ -71,5 +71,12 @@ namespace EMPManagment.API.Controllers
             return Ok(new { code = 200, data = userRole.ToList() });
         }
 
+        [HttpGet]
+        [Route("GetAllCities")]
+        public async Task<IActionResult> GetAllCities()
+        {
+            IEnumerable<CityView> AllCities = await CSC.GetAllCities();
+            return Ok(new { code = 200, data = AllCities.ToList() });
+        }
     }
 }

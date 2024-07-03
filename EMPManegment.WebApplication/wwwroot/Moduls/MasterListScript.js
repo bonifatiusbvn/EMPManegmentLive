@@ -9,7 +9,7 @@ $(document).ready(function () {
     GetCompanyNameList();
     GetUsernameList();
     GetVendorNameList();
-    showWeatherAPI();
+    fn_GetAllCities();
     $('#ddlCountry').change(function () {
         var Text = $("#ddlCountry Option:Selected").text();
         var StateId = $(this).val();
@@ -397,8 +397,7 @@ function GetVendorNameList() {
     });
 }
 
-function showWeatherAPI() {
-    var city = 'Vadodara'
+function showWeatherAPI(city) {
     siteloadershow();
     $.ajax({
         url: '/Home/GetWeatherinfo?city=' + city,
@@ -422,4 +421,46 @@ function showWeatherAPI() {
     });
 }
 
+function fn_GetAllCities()
+{
+    $.ajax({
+        url: '/Authentication/GetAllCities',
+        method: 'GET',
+        success: function (result) {
+            debugger
+            var allCities = result.map(function (data) {
+                return {
+                    label: data.cityName,
+                    value: data.id
+                };
+            });
 
+            $("#AllCityDRP").autocomplete({
+                source: allCities,
+                minLength: 0,
+                select: function (event, ui) {
+                    event.preventDefault();
+                    $("#AllCityDRP").val(ui.item.label);
+                    $("#AllCityDRPHidden").val(ui.item.value);
+                    $("#AllCityDRP").change(); 
+                }
+            }).focus(function () {
+                $(this).autocomplete("search");
+            });
+
+            var defaultCity = allCities.find(city => city.label === "Vadodara");
+            if (defaultCity) {
+                $("#AllCityDRP").val(defaultCity.label);
+                $("#AllCityDRPHidden").val(defaultCity.value);
+                $("#AllCityDRP").change();
+            }
+        },
+        error: function (err) {
+            console.error("Failed to fetch unit types: ", err);
+        }
+    });
+}
+
+$('#AllCityDRP').change(function () {
+    showWeatherAPI($(this).val());
+});

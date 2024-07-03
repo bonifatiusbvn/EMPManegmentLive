@@ -437,38 +437,36 @@ namespace EMPManegment.Repository.OrderRepository
         {
             try
             {
-                var productDetails = new List<PurchaseOrderDetailsModel>();
-                var data = await (from a in Context.TblProductDetailsMasters.Where(x => x.Id == ProductId)
-                                  join b in Context.TblProductTypeMasters on a.ProductType equals b.Id
-                                  select new PurchaseOrderDetailsModel
-                                  {
-                                      ProductType = b.Id,
-                                      Product = a.ProductName,
-                                      ProductId = a.Id,
-                                      Price = a.PerUnitPrice,
-                                      Gstamount = a.GstAmount ?? 0,
-                                      Gstper = a.GstPercentage,
-                                      ProductTypeName = b.Type,
-                                      Hsn = a.Hsn,
-                                  }).ToListAsync();
-                if (data != null)
+                string dbConnectionStr = _configuration.GetConnectionString("EMPDbconn");
+                var sqlPar = new SqlParameter[]
                 {
-                    foreach (var item in data)
+                    new SqlParameter("@ProductId", ProductId),
+                };
+                var DS = DbHelper.GetDataSet("[GetPOProductDetailsById]", System.Data.CommandType.StoredProcedure, sqlPar, dbConnectionStr);
+
+                List<PurchaseOrderDetailsModel> ProductDetailsList = new List<PurchaseOrderDetailsModel>();
+
+                if (DS != null && DS.Tables.Count > 0)
+                {
+                    foreach (DataRow row in DS.Tables[0].Rows)
                     {
-                        productDetails.Add(new PurchaseOrderDetailsModel()
+                        var ProductDetails = new PurchaseOrderDetailsModel
                         {
-                            ProductId = item.ProductId,
-                            ProductType = item.ProductType,
-                            Product = item.Product,
-                            Price = item.Price,
-                            Gstamount = item.Gstamount,
-                            Gstper = item.Gstper,
-                            ProductTypeName = item.ProductTypeName,
-                            Hsn = item.Hsn,
-                        });
+                            ProductId = row["ProductId"] != DBNull.Value ? (Guid)row["ProductId"] : Guid.Empty,
+                            ProductType = row["ProductType"] != DBNull.Value ? (int)row["ProductType"] : 0,
+                            Product = row["Product"]?.ToString(),
+                            Price = row["Price"] != DBNull.Value ? (decimal)row["Price"] : 0m,
+                            Gstamount = row["Gstamount"] != DBNull.Value ? (decimal)row["Gstamount"] : 0m,
+                            Gstper = row["Gstper"] != DBNull.Value ? (decimal)row["Gstper"] : 0m,
+                            ProductTypeName = row["ProductTypeName"]?.ToString(),
+                            Hsn = row["Hsn"] != DBNull.Value ? (int)row["Hsn"] : 0
+                        };
+
+                        ProductDetailsList.Add(ProductDetails);
                     }
                 }
-                return productDetails;
+
+                return ProductDetailsList;
             }
             catch (Exception ex)
             {

@@ -48,6 +48,13 @@
             display: none;
         }
 
+
+        .ui-autocomplete {
+            z-index: 1051;
+            max-height: 150px;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
     </style>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed accent-info">
@@ -75,7 +82,10 @@
             <!-- Right navbar links -->
             <ul class="navbar-nav ml-auto">
                 <div style="display: flex; align-items: center;gap: 6px;">
-                    <div class="location-left dark-font-color">Vadodara</div>
+                    <div class="location-left dark-font-color">
+                        <input type="text" class="form-control" id="AllCityDRP">
+                        <input type="hidden" id="AllCityDRPHidden">
+                    </div>
                     <div class="weather-glyph-location text-wrapper-image-hidden">
                         <img class="icon-svg" id="weathericon" alt="Weather Icon" style="height: 40px;width: 40px;" />
                     </div>

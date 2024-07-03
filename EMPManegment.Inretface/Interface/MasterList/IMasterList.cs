@@ -16,5 +16,6 @@ namespace EMPManegment.Inretface.Interface.CSC
         Task<IEnumerable<CityView>> GetCities(int CityId);
         Task<IEnumerable<Department>> GetDepartment();
         Task<IEnumerable<UserRoleModel>> GetUserRole();
+        Task<IEnumerable<CityView>> GetAllCities();
     }
 }
