@@ -5,6 +5,7 @@ using EMPManegment.EntityModels.ViewModels;
 using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.TaskModels;
+using EMPManegment.EntityModels.ViewModels.Weather;
 using EMPManegment.Inretface.Interface.UserAttendance;
 using EMPManegment.Inretface.Services.TaskServices;
 using EMPManegment.Inretface.Services.UserAttendanceServices;
@@ -16,6 +17,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.EntityFrameworkCore.ValueGeneration;
+using Newtonsoft.Json;
 using System.Net;
 
 namespace EMPManagment.API.Controllers
@@ -306,6 +308,54 @@ namespace EMPManagment.API.Controllers
         {
             IEnumerable<TaskDetailsView> UserTask = await TaskServices.ProjectActivityByUserId(UserId);
             return Ok(new { code = 200, data = UserTask.ToList() });
+        }
+
+        [HttpGet]
+        [Route("GetWeatherinfo")]
+        public async Task<IActionResult> GetWeatherinfo(string city)
+        {
+
+
+            ApiResponseModel responsemodel = new ApiResponseModel();
+            var client = new HttpClient();
+            var request = new HttpRequestMessage
+            {
+                Method = HttpMethod.Get,
+                RequestUri = new Uri("https://weatherapi-com.p.rapidapi.com/current.json?q=" + city),
+                Headers =
+        {
+            { "x-rapidapi-key", "53a9c22907msh20b4c28bfb3bf4bp1cabf0jsn54f99e1b7c3d" },
+            { "x-rapidapi-host", "weatherapi-com.p.rapidapi.com" },
+        },
+            };
+
+            try
+            {
+                using (var response = await client.SendAsync(request))
+                {
+                    response.EnsureSuccessStatusCode();
+                    var responseContent = await response.Content.ReadAsStringAsync();
+                    var getweather = JsonConvert.DeserializeObject<Root>(responseContent);
+
+                    if (getweather != null)
+                    {
+                        responsemodel.data = getweather;
+                        return Ok(responsemodel);
+                    }
+                    else
+                    {
+                        return Ok(new { message = "No weather data found." });
+                    }
+                }
+            }
+            catch (HttpRequestException httpRequestException)
+            {
+                return StatusCode(500, new { message = "Error fetching weather data.", detail = httpRequestException.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "An unexpected error occurred.", detail = ex.Message });
+            }
         }
     }
 }
