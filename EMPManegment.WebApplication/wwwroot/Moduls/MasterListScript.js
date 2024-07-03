@@ -398,7 +398,7 @@ function GetVendorNameList() {
 }
 
 function showWeatherAPI(city) {
-    siteloadershow();
+   
     $.ajax({
         url: '/Home/GetWeatherinfo?city=' + city,
         type: "GET",
@@ -407,7 +407,7 @@ function showWeatherAPI(city) {
 
         success: function (result) {
 
-            siteloaderhide();
+
             $('#getweather').html(result.current.temp_c + ' °C');
             $('#weathericon').attr('src', result.current.condition.icon);
         },

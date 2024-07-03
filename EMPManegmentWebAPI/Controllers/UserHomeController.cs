@@ -323,10 +323,10 @@ namespace EMPManagment.API.Controllers
                 Method = HttpMethod.Get,
                 RequestUri = new Uri("https://weatherapi-com.p.rapidapi.com/current.json?q=" + city),
                 Headers =
-        {
-            { "x-rapidapi-key", "53a9c22907msh20b4c28bfb3bf4bp1cabf0jsn54f99e1b7c3d" },
-            { "x-rapidapi-host", "weatherapi-com.p.rapidapi.com" },
-        },
+                {
+                 {"x-rapidapi-key", "53a9c22907msh20b4c28bfb3bf4bp1cabf0jsn54f99e1b7c3d" },
+                 {"x-rapidapi-host", "weatherapi-com.p.rapidapi.com" },
+                },
             };
 
             try
