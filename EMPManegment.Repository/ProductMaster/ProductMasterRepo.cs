@@ -1,6 +1,7 @@
 ﻿using Azure;
 using EMPManagment.API;
 using EMPManagment.Web.Models.API;
+using EMPManegment.EntityModels.Common;
 using EMPManegment.EntityModels.ViewModels;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.ProductMaster;
@@ -8,9 +9,12 @@ using EMPManegment.EntityModels.ViewModels.TaskModels;
 using EMPManegment.EntityModels.ViewModels.VendorModels;
 using EMPManegment.Inretface.Interface.ProductMaster;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.ComponentModel.Design;
 using System.Linq;
 using System.Linq.Expressions;
@@ -24,11 +28,13 @@ namespace EMPManegment.Repository.ProductMaster
 {
     public class ProductMasterRepo : IProductMaster
     {
-        public ProductMasterRepo(BonifatiusEmployeesContext Context)
+        public ProductMasterRepo(BonifatiusEmployeesContext Context, IConfiguration configuration)
         {
             this.Context = Context;
+            _configuration = configuration;
         }
         public BonifatiusEmployeesContext Context { get; }
+        public IConfiguration _configuration { get; }
 
         public async Task<UserResponceModel> AddProductType(ProductTypeView AddProduct)
         {
@@ -88,7 +94,7 @@ namespace EMPManegment.Repository.ProductMaster
                         ProductShortDescription = AddProduct.ProductShortDescription,
                         ProductImage = AddProduct.ProductImage,
                         PerUnitPrice = AddProduct.PerUnitPrice,
-                        IsWithGst=AddProduct.IsWithGst,
+                        IsWithGst = AddProduct.IsWithGst,
                         GstPercentage = AddProduct.GstPercentage,
                         GstAmount = AddProduct.GstAmount,
                         Hsn = AddProduct.Hsn,
@@ -96,7 +102,7 @@ namespace EMPManegment.Repository.ProductMaster
                         CreatedOn = DateTime.Today,
                         UpdatedBy = AddProduct.UpdatedBy,
                         UpdatedOn = AddProduct.UpdatedOn,
-                        
+
                     };
                     response.Code = 200;
                     response.Message = "Product add successfully!";
@@ -206,7 +212,7 @@ namespace EMPManegment.Repository.ProductMaster
                             ProductImage = item.ProductImage,
                             Hsn = item.Hsn,
                             PerUnitPrice = item.PerUnitPrice,
-                            IsWithGst= item.IsWithGst,
+                            IsWithGst = item.IsWithGst,
                             GstPercentage = item.GstPercentage,
                             GstAmount = item.GstAmount,
                             ProductTypeName = item.ProductTypeName,
@@ -241,8 +247,8 @@ namespace EMPManegment.Repository.ProductMaster
                                ProductImage = a.ProductImage,
                                PerUnitPrice = a.PerUnitPrice,
                                IsWithGst = a.IsWithGst,
-                               GstPercentage= a.GstPercentage,
-                               GstAmount= a.GstAmount,
+                               GstPercentage = a.GstPercentage,
+                               GstAmount = a.GstAmount,
                                Hsn = a.Hsn,
                                CreatedBy = a.CreatedBy,
                            }).First();
@@ -266,7 +272,7 @@ namespace EMPManegment.Repository.ProductMaster
                     getProduct.ProductDescription = UpdateProduct.ProductDescription;
                     getProduct.ProductShortDescription = UpdateProduct.ProductShortDescription;
                     getProduct.PerUnitPrice = UpdateProduct.PerUnitPrice;
-                    getProduct.IsWithGst=UpdateProduct.IsWithGst;
+                    getProduct.IsWithGst = UpdateProduct.IsWithGst;
                     getProduct.GstPercentage = UpdateProduct.GstPercentage;
                     getProduct.GstAmount = UpdateProduct.GstAmount;
                     getProduct.ProductType = UpdateProduct.ProductType;
@@ -274,7 +280,7 @@ namespace EMPManegment.Repository.ProductMaster
                     getProduct.Hsn = UpdateProduct.Hsn;
                     getProduct.Id = UpdateProduct.Id;
                     getProduct.UpdatedBy = UpdateProduct.UpdatedBy;
-                    getProduct.UpdatedOn=DateTime.Now;
+                    getProduct.UpdatedOn = DateTime.Now;
 
                 }
                 Context.TblProductDetailsMasters.Update(getProduct);
@@ -356,27 +362,35 @@ namespace EMPManegment.Repository.ProductMaster
         {
             try
             {
-                var ProductDetails = new ProductDetailsView();
-                var data = Context.TblProductDetailsMasters.Where(x => x.Id == ProductId).SingleOrDefault();
-                if (data != null)
+                string dbConnectionStr = _configuration.GetConnectionString("EMPDbconn");
+                var sqlPar = new SqlParameter[]
                 {
+                    new SqlParameter("@ProductId", ProductId),
+                };
 
-                    ProductDetails = new ProductDetailsView()
+                var DS = DbHelper.GetDataSet("[DisplayProductDetailsById]", System.Data.CommandType.StoredProcedure, sqlPar, dbConnectionStr);
+
+                ProductDetailsView ProductDetails = new ProductDetailsView();
+
+
+                if (DS != null && DS.Tables.Count > 0)
+                {
+                    if (DS.Tables[0].Rows.Count > 0)
                     {
-                        Id = data.Id,
+                        DataRow row = DS.Tables[0].Rows[0];
 
-                        ProductType = data.ProductType,
-                        ProductId = data.Id,
-                        ProductName = data.ProductName,
-                        ProductDescription = data.ProductDescription,
-                        ProductShortDescription = data.ProductShortDescription,
-                        ProductImage = data.ProductImage,
-                        PerUnitPrice = data.PerUnitPrice,
-                        IsWithGst = data.IsWithGst,
-                        GstPercentage = data.GstPercentage,
-                        GstAmount = data.GstAmount,
-                        Hsn = data.Hsn,
-                        CreatedBy = data.CreatedBy,
+                        ProductDetails.Id = row["Id"] != DBNull.Value ? (Guid)row["Id"] : Guid.Empty;
+                        ProductDetails.ProductType = row["ProductType"] != DBNull.Value ? (int)row["ProductType"] : 0;
+                        ProductDetails.ProductId = row["ProductId"] != DBNull.Value ? (Guid)row["ProductId"] : Guid.Empty;
+                        ProductDetails.ProductName = row["ProductName"]?.ToString();
+                        ProductDetails.ProductDescription = row["ProductDescription"]?.ToString();
+                        ProductDetails.ProductShortDescription = row["ProductShortDescription"]?.ToString();
+                        ProductDetails.ProductImage = row["ProductImage"]?.ToString();
+                        ProductDetails.IsWithGst = row["IsWithGst"] != DBNull.Value ? (bool)row["IsWithGst"] : false;
+                        ProductDetails.GstPercentage = row["GstPercentage"] != DBNull.Value ? (decimal)row["GstPercentage"] : 0m;
+                        ProductDetails.GstAmount = row["GstAmount"] != DBNull.Value ? (decimal)row["GstAmount"] : 0m;
+                        ProductDetails.Hsn = row["Hsn"] != DBNull.Value ? (int)row["Hsn"] : 0;
+                        ProductDetails.CreatedBy = row["CreatedBy"] != DBNull.Value ? (Guid)row["CreatedBy"] : Guid.Empty;
                     };
                 }
 
@@ -396,7 +410,7 @@ namespace EMPManegment.Repository.ProductMaster
                 Product = (from a in Context.TblProductDetailsMasters.Where(a => a.IsDeleted == false)
                            join b in Context.TblProductTypeMasters
                            on a.ProductType equals b.Id
-                           orderby a.ProductName ascending 
+                           orderby a.ProductName ascending
                            select new ProductDetailsView
                            {
                                Id = a.Id,
@@ -480,9 +494,9 @@ namespace EMPManegment.Repository.ProductMaster
                 response.Code = 400;
                 response.Message = "Error in deleting product.";
             }
-            
+
             return response;
-            
+
         }
     }
 }
