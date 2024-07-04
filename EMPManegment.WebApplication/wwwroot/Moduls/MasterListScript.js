@@ -398,7 +398,6 @@ function GetVendorNameList() {
 }
 
 function showWeatherAPI(city) {
-    debugger
     $.ajax({
         url: '/Home/GetWeatherinfo?city=' + city,
         type: "GET",

@@ -6,7 +6,19 @@
 @inject UserSession _userSession
 @inject EMPManegment.Web.Helper.Common CommonHelper
 
+<style>
 
+    .switch-success:checked {
+        background-color: green;
+        border-color: green;
+    }
+
+    .switch-danger:checked + .form-check-input {
+        background-color: green !important;
+        border-color: green !important;
+    }
+
+</style>
 
 <div class="card-body" id="allemplist">
     <div class="row row-cols-xl-5 row-cols-lg-3 row-cols-md-2 row-cols-1" style="margin-top:20px;">
@@ -33,34 +45,45 @@
                             }
                             @if (item.IsActive == true)
                             {
-                                <a class="text-success" href="/UserProfile/DisplayUserDetails/?Id=@item.Id">
-                                    <h5 class="mt-2 mb-1 fs-15">@item.FirstName @item.LastName</h5>
+                                <a class="text-success" href="/UserProfile/UserInfo/?Id=@item.Id">
+                                    <h5 class="mt-2 mb-1 fs-16" style="margin-right:25px;" >@item.FirstName @item.LastName</h5>
                                 </a>
                             }
                             else
                             {
-                                <a class="text-danger" href="/UserProfile/DisplayUserDetails/?Id=@item.Id">
-                                    <h5 class="mt-2 mb-1 fs-15">@item.FirstName @item.LastName</h5>
+                                <a class="text-danger" href="/UserProfile/UserInfo/?Id=@item.Id">
+                                    <h5 class="mt-2 mb-1 fs-16" style="margin-right:25px;">@item.FirstName @item.LastName</h5>
                                 </a>
                             }
 
-                            <p class="text-muted fs-14 mb-2">@item.UserName</p>
-                            <p class="text-muted fs-14">
-                                Role:
-                                <span>
-                                    <select id="ddlUserRole_@item.Id">
+                            <p class="text-muted fs-15 mb-2" style="margin-right:25px;">@item.UserName</p>
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <p class="text-muted fs-16" style="margin-left:30px; margin-top:5px;">
+                                        Role:
+                                    </p>
+                                </div>
+                                <div class="col-sm-8">
+                                    <select id="ddlUserRole_@item.Id" class="form-control form-select" style="width: 135px; height:36px;">
                                         <option value="@item.RoleId" selected>@item.RoleName</option>
                                     </select>
-                                </span>
-                            </p>
-                            <p class="text-muted fs-14">
-                                Dept:
-                                <span>
-                                    <select id="ddlDepartment_@item.Id">
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <p class="text-muted fs-16" style="margin-left:30px; margin-top:5px;">
+                                        Dept:
+                                    </p>
+                                </div>
+                                <div class="col-sm-8">
+                                    <select id="ddlDepartment_@item.Id" class="form-control form-select" style="width: 135px; height:36px;">
                                         <option value="@item.DepartmentId" selected>@item.DepartmentName</option>
                                     </select>
-                                </span>
-                            </p>
+                                </div>
+                            </div>
+
+                            
                             <input type="hidden" value="@item.Id" id="txtUserId_@item.Id" />
                             <input type="hidden" value="@CommonHelper.GetCommonDateFormat(item.DateOfBirth)" id="txtDateOfBirth_@item.Id" />
                             <input type="hidden" value="@item.Gender" id="txtGender_@item.Id" />
@@ -71,8 +94,10 @@
                             <input type="hidden" value="@item.Address" id="txtAddress_@item.Id" />
                             <form method="post">
                                 <div class="form-check form-switch text-center font-22">
-                                    <input class="form-check-input" style="font-size:24px; margin-left:-30px;" type="checkbox" id="isAdd_@item.Id" name="isAdd" @(item.IsActive == true ? "checked" : "") onclick="UserActiveDeactive('@item.UserName', this)">
+                                    <input class="form-check-input @(item.IsActive.GetValueOrDefault() ? "switch-success" : "switch-danger")" style="font-size:24px; margin-left:-40px;" type="checkbox" id="isAdd_@item.Id" name="isAdd" @(item.IsActive == true ? "checked" : "") onclick="UserActiveDeactive('@item.UserName', this)">
                                 </div>
+
+
                                 <br />
                                 <a href="#" class="btn btn-block btn-primary btn-lg" onclick="UpdateUserRoleAndDept('@item.Id');">Update</a>
                             </form>
