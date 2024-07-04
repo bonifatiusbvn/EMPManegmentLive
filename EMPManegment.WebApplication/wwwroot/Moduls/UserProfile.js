@@ -5,7 +5,6 @@ $(document).ready(function () {
     GetDocumentType();
     GetProjectList();
     loadPartialView();
-    showHidebtn();
 });
 
 function GetDocumentType() {

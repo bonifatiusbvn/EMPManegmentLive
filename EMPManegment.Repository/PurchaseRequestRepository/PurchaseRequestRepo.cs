@@ -22,17 +22,23 @@ using Microsoft.EntityFrameworkCore;
 using Azure;
 using EMPManegment.EntityModels.ViewModels.ProductMaster;
 using Microsoft.AspNetCore.Http.HttpResults;
+using EMPManegment.EntityModels.Common;
+using EMPManegment.EntityModels.ViewModels.ManualInvoice;
+using Microsoft.Extensions.Configuration;
+using System.Data.SqlClient;
 #nullable disable
 
 namespace EMPManegment.Repository.PurchaseRequestRepository
 {
     public class PurchaseRequestRepo : IPurchaseRequest
     {
-        public PurchaseRequestRepo(BonifatiusEmployeesContext context)
+        public PurchaseRequestRepo(BonifatiusEmployeesContext context, IConfiguration configuration)
         {
             Context = context;
+            Configuration = configuration;
         }
         public BonifatiusEmployeesContext Context { get; }
+        public IConfiguration Configuration { get; }
 
         public async Task<ApiResponseModel> CreatePurchaseRequest(PurchaseRequestMasterView AddPurchaseRequest)
         {
@@ -344,44 +350,58 @@ namespace EMPManegment.Repository.PurchaseRequestRepository
 
         public async Task<PurchaseRequestMasterView> PurchaseRequestDetailsByPrNo(string PrNo)
         {
-            PurchaseRequestMasterView PRDetails = new PurchaseRequestMasterView();
+
             try
             {
-                PRDetails = (from a in Context.TblPurchaseRequests.Where(a => a.PrNo == PrNo)
-                             select new PurchaseRequestMasterView
-                             {
-                                 PrNo = PrNo,
-                                 PrDate=a.PrDate,
-                             }).FirstOrDefault();
-                List<PurchaseRequestModel> PRList = (from a in Context.TblPurchaseRequests.Where(a => a.PrNo == PRDetails.PrNo)
-                                                     join b in Context.TblProductDetailsMasters on a.ProductId equals b.Id
-                                                     join c in Context.TblProductTypeMasters on a.ProductTypeId equals c.Id
-                                                     join d in Context.TblUsers on a.UserId equals d.Id
-                                                     join e in Context.TblProjectMasters on a.ProjectId equals e.ProjectId
-                                                     select new PurchaseRequestModel
-                                                     {
-                                                         PrId=a.PrId,
-                                                         ProductTypeId = a.ProductTypeId,
-                                                         ProductName = a.ProductName,
-                                                         ProductId = a.ProductId,
-                                                         ProductTypeName = c.Type,
-                                                         UserId = a.UserId,
-                                                         FullName = d.FirstName + " " + d.LastName,
-                                                         ProjectId = a.ProjectId,
-                                                         ProjectName = e.ProjectTitle,
-                                                         Quantity = a.Quantity,
-                                                         Price = b.PerUnitPrice,
-                                                         GstAmount = b.GstAmount,
-                                                         ProductImage = b.ProductImage,
-                                                         ProductTotal = b.PerUnitPrice * a.Quantity,
-                                                         ProductDescription = b.ProductShortDescription,
-                                                     }).ToList();
-                PRDetails.PRList = PRList;
+                string dbConnectionStr = Configuration.GetConnectionString("EMPDbconn");
+                var sqlPar = new SqlParameter[]
+                {
+                   new SqlParameter("@PrNo", PrNo),
+                };
+                var PR = DbHelper.GetDataSet("[GetPRDetailsByPRId]", System.Data.CommandType.StoredProcedure, sqlPar, dbConnectionStr);
+
+                PurchaseRequestMasterView PRDetails = new PurchaseRequestMasterView();
+
+                if (PR != null && PR.Tables.Count > 0)
+                {
+                    if (PR.Tables[0].Rows.Count > 0)
+                    {
+                        PRDetails.PrNo = PR.Tables[0].Rows[0]["PrNo"]?.ToString();
+                        PRDetails.PrDate = PR.Tables[0].Rows[0]["PrDate"] != DBNull.Value ? (DateTime)PR.Tables[0].Rows[0]["PrDate"] : DateTime.MinValue;
+                    }
+
+                    PRDetails.PRList = new List<PurchaseRequestModel>();
+
+                    foreach (DataRow row in PR.Tables[1].Rows)
+                    {
+                        var PRList = new PurchaseRequestModel
+                        {
+                            PrId = row["PrId"] != DBNull.Value ? (Guid)row["PrId"] : Guid.Empty,
+                            ProductTypeId = row["ProductTypeId"] != DBNull.Value ? (int)row["ProductTypeId"] : 0,
+                            ProductTypeName = row["ProductTypeName"]?.ToString(),
+                            ProductId = row["ProductId"] != DBNull.Value ? (Guid)row["ProductId"] : Guid.Empty,
+                            ProductName = row["ProductName"]?.ToString(),
+                            UserId = row["UserId"] != DBNull.Value ? (Guid)row["UserId"] : Guid.Empty,
+                            FullName = row["FullName"]?.ToString(),
+                            ProjectId = row["ProjectId"] != DBNull.Value ? (Guid)row["ProjectId"] : Guid.Empty,
+                            ProjectName = row["ProjectName"]?.ToString(),
+                            Quantity = row["Quantity"] != DBNull.Value ? (decimal)row["Quantity"] : 0,
+                            Price = row["Price"] != DBNull.Value ? (decimal)row["Price"] : 0m,
+                            GstAmount = row["GstAmount"] != DBNull.Value ? (decimal)row["GstAmount"] : 0m,
+                            ProductImage = row["ProductImage"]?.ToString(),
+                            ProductTotal = row["ProductTotal"] != DBNull.Value ? (decimal)row["ProductTotal"] : 0m,
+                            ProductDescription = row["ProductDescription"]?.ToString(),
+                        };
+
+                        PRDetails.PRList.Add(PRList);
+                    }
+                }
+
                 return PRDetails;
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw new Exception("Error fetching PR details", ex);
             }
         }
         public async Task<UserResponceModel> ApproveUnapprovePR(List<string> PrNo)

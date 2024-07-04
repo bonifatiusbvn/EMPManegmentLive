@@ -1,7 +1,6 @@
 ﻿$(document).ready(function () {
     fn_updatePRProductAmount();
     GetPurchaseRequestList();
-    showHidebtn();
     fn_updatePRTotals();
     CountCartTotalItems();
 });
@@ -38,7 +37,7 @@ function fn_AddNewPRRow(Result) {
         $("#displayPurchaseRequest").append(Result);
         fn_updatePRProductAmount();
         fn_updatePRTotals();
-        showHidebtn();
+        showHidePRCreatebtn();
         CountCartTotalItems();
     } else {
         toastr.warning("Product already added!");
@@ -121,9 +120,9 @@ function removeProduct(btn) {
     fn_updatePRProductAmount();
     fn_updatePRTotals();
     CountCartTotalItems();
-    showHidebtn();
+    showHidePRCreatebtn();
 }
-function showHidebtn() {
+function showHidePRCreatebtn() {
     var totalAmount = $("#dsptotalAmount").text();
     if (totalAmount != "") {
         $("#btnpurchaserequest").show();
@@ -373,7 +372,7 @@ function UpdatePurchaseRequestDetails() {
             var orderRow = $(this);
             var objData = {
                 UserId: orderRow.find("#txtuserId").val(),
-                ProjectId: orderRow.find("#textPRProjectId").val(),
+                ProjectId: $("#textPRProjectId").val(),
                 ProductId: orderRow.find("#txtproductId").val(),
                 ProductName: orderRow.find("#txtProductName").val(),
                 ProductTypeId: orderRow.find("#txtproducttype").val(),
