@@ -23,6 +23,8 @@ public partial class TblTaskDetail
 
     public string? TaskStatus { get; set; }
 
+    public string? Document { get; set; }
+
     public string? IsCompleted { get; set; }
 
     public Guid? CompletedBy { get; set; }

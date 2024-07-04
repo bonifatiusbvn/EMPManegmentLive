@@ -679,6 +679,7 @@ public partial class BonifatiusEmployeesContext : DbContext
 
             entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.Document).HasMaxLength(500);
             entity.Property(e => e.IsCompleted).HasMaxLength(20);
             entity.Property(e => e.TaskDate).HasColumnType("datetime");
             entity.Property(e => e.TaskEndDate).HasColumnType("datetime");
