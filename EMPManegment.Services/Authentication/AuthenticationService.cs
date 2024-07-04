@@ -40,9 +40,9 @@ namespace EMPManegment.Services.AddEmployee
         }
 
 
-        public async Task<EmpDetailsView> GetById(Guid userId)
+        public async Task<EmpDetailsView> GetEmployeeById(Guid userId)
         {
-            return await UserDetails.GetById(userId);
+            return await UserDetails.GetEmployeeById(userId);
         }
         public async Task<LoginResponseModel> LoginUser(LoginRequest LoginUser)
         {
