@@ -8,12 +8,12 @@ using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.Inretface.Interface.UserAttendance;
 using EMPManegment.Inretface.Interface.UserList;
-
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Linq.Dynamic.Core;
@@ -24,6 +24,9 @@ using static System.Net.Mime.MediaTypeNames;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using EMPManegment.EntityModels.ViewModels.UserModels;
 using EMPManegment.EntityModels.ViewModels.ProductMaster;
+using Microsoft.Extensions.Configuration;
+using EMPManegment.EntityModels.Common;
+using System.Security.Cryptography;
 #nullable disable
 
 namespace EMPManegment.Repository.UserListRepository
@@ -31,10 +34,12 @@ namespace EMPManegment.Repository.UserListRepository
     public class UserDetailsRepo : IUserDetails
     {
         public BonifatiusEmployeesContext Context { get; }
+        public IConfiguration _configuration { get; }
 
-        public UserDetailsRepo(BonifatiusEmployeesContext context)
+        public UserDetailsRepo(BonifatiusEmployeesContext context, IConfiguration configuration)
         {
             Context = context;
+            _configuration = configuration;
 
         }
 
@@ -98,11 +103,12 @@ namespace EMPManegment.Repository.UserListRepository
 
         }
 
-        public async Task<UserResponceModel> ActiveDeactiveUsers(string UserName,Guid UpdatedBy)
+        public async Task<UserResponceModel> ActiveDeactiveUsers(string UserName, Guid UpdatedBy)
         {
             UserResponceModel response = new UserResponceModel();
-            try { 
-            var GetUserdta = Context.TblUsers.Where(a => a.UserName == UserName).FirstOrDefault();
+            try
+            {
+                var GetUserdta = Context.TblUsers.Where(a => a.UserName == UserName).FirstOrDefault();
 
                 if (GetUserdta != null)
                 {
@@ -137,7 +143,7 @@ namespace EMPManegment.Repository.UserListRepository
                     response.Message = "Can't find the User";
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 response.Code = 400;
                 response.Message = "Error in active-deactive of the user";
@@ -266,7 +272,7 @@ namespace EMPManegment.Repository.UserListRepository
                     }
                 }
             }
-            catch(Exception ex) 
+            catch (Exception ex)
             {
                 response.Code = 400;
                 response.Message = "Error occur at entering the time out.";
@@ -298,7 +304,7 @@ namespace EMPManegment.Repository.UserListRepository
                     response.Code = 404;
                     response.Message = "Can't found User";
                 }
-               
+
             }
             catch (Exception ex)
             {
@@ -380,7 +386,7 @@ namespace EMPManegment.Repository.UserListRepository
                         response.Code = (int)HttpStatusCode.OK;
                     }
                     else
-                    { 
+                    {
                         response.Code = 400;
                         response.Message = "Your password is wrong";
                     }
@@ -453,45 +459,53 @@ namespace EMPManegment.Repository.UserListRepository
             return UserEdit;
         }
 
-        public async Task<EmpDetailsView> GetById(Guid Userid)
+        public async Task<EmpDetailsView> GetEmployeeById(Guid Userid)
         {
-            EmpDetailsView Userdata = new EmpDetailsView();
             try
             {
-                Userdata = (from e in Context.TblUsers.Where(x => x.Id == Userid)
-                            join d in Context.TblDepartments on e.DepartmentId equals d.Id
-                            join c in Context.TblCountries on e.CountryId equals c.Id
-                            join s in Context.TblStates on e.StateId equals s.Id
-                            join ct in Context.TblCities on e.CityId equals ct.Id
-                            join b in Context.TblProjectMembers on e.Id equals b.UserId into project
-                            from p in project.DefaultIfEmpty()
-                            select new EmpDetailsView
-                            {
-                                Id = e.Id,
-                                IsActive = e.IsActive,
-                                UserName = e.UserName,
-                                FirstName = e.FirstName,
-                                LastName = e.LastName,
-                                Image = e.Image,
-                                Gender = e.Gender,
-                                DateOfBirth = e.DateOfBirth,
-                                Email = e.Email,
-                                PhoneNumber = e.PhoneNumber,
-                                Address = e.Address,
-                                CityName = ct.City,
-                                StateName = s.State,
-                                CountryName = c.Country,
-                                DepartmentName = d.Department,
-                                JoiningDate = e.JoiningDate,
-                                Pincode = e.Pincode,
-                                Designation = e.Designation,
-                                DepartmentId = e.DepartmentId,
-                                CityId = e.CityId,
-                                StateId = e.StateId,
-                                CountryId = e.CountryId,
-                                RoleId = e.RoleId,
-                                ProjectId = p != null ? p.ProjectId : (Guid?)null,
-                            }).FirstOrDefault();
+                string dbConnectionStr = _configuration.GetConnectionString("EMPDbconn");
+                var sqlPar = new SqlParameter[]
+                {
+                    new SqlParameter("@Userid", Userid),
+                };
+
+                var DS = DbHelper.GetDataSet("[GetEmployeeById]", System.Data.CommandType.StoredProcedure, sqlPar, dbConnectionStr);
+
+                EmpDetailsView Userdata = new EmpDetailsView();
+
+
+                if (DS != null && DS.Tables.Count > 0)
+                {
+                    if (DS.Tables[0].Rows.Count > 0)
+                    {
+                        DataRow row = DS.Tables[0].Rows[0];
+
+                        Userdata.Id = row["Id"] != DBNull.Value ? (Guid)row["Id"] : Guid.Empty;
+                        Userdata.IsActive = row["IsActive"] != DBNull.Value ? (bool)row["IsActive"] : false; ;
+                        Userdata.UserName = row["UserName"]?.ToString(); 
+                        Userdata.FirstName = row["FirstName"]?.ToString();
+                        Userdata.LastName = row["LastName"]?.ToString();
+                        Userdata.Image = row["Image"]?.ToString();
+                        Userdata.Gender = row["Gender"]?.ToString();
+                        Userdata.DateOfBirth = row["DateOfBirth"] != DBNull.Value ? (DateTime)row["DateOfBirth"] : DateTime.MinValue; ;
+                        Userdata.Email = row["Email"]?.ToString();
+                        Userdata.PhoneNumber = row["PhoneNumber"]?.ToString();
+                        Userdata.Address = row["Address"]?.ToString();
+                        Userdata.CityName = row["CityName"]?.ToString();
+                        Userdata.StateName = row["StateName"]?.ToString();
+                        Userdata.CountryName = row["CountryName"]?.ToString();
+                        Userdata.DepartmentName = row["DepartmentName"]?.ToString();
+                        Userdata.JoiningDate = row["JoiningDate"] != DBNull.Value ? (DateTime)row["JoiningDate"] : DateTime.MinValue; ;
+                        Userdata.Pincode = row["Pincode"]?.ToString();
+                        Userdata.Designation = row["Designation"]?.ToString();
+                        Userdata.DepartmentId = row["DepartmentId"] != DBNull.Value ? (Int32)row["DepartmentId"] : 0;
+                        Userdata.CityId = row["CityId"] != DBNull.Value ? (Int32)row["CityId"] : 0;
+                        Userdata.StateId = row["StateId"] != DBNull.Value ? (Int32)row["StateId"] : 0;
+                        Userdata.CountryId = row["CountryId"] != DBNull.Value ? (Int32)row["CountryId"] : 0;
+                        Userdata.RoleId = row["RoleId"] != DBNull.Value ? (Guid)row["RoleId"] : Guid.Empty; ;
+                        Userdata.ProjectId = row["ProjectId"] != DBNull.Value ? (Guid)row["ProjectId"] : Guid.Empty;
+                    };
+                }
                 return Userdata;
             }
             catch (Exception ex)
@@ -537,7 +551,7 @@ namespace EMPManegment.Repository.UserListRepository
 
         public async Task<IEnumerable<EmpDetailsView>> GetUsersNameList()
         {
-            IEnumerable<EmpDetailsView> GetUserNameList = Context.TblUsers.Where(a=>a.IsActive==true).ToList().Select(a => new EmpDetailsView
+            IEnumerable<EmpDetailsView> GetUserNameList = Context.TblUsers.Where(a => a.IsActive == true).ToList().Select(a => new EmpDetailsView
             {
                 Id = a.Id,
                 UserName = a.UserName,
@@ -721,12 +735,12 @@ namespace EMPManegment.Repository.UserListRepository
                 var UploadImage = await Context.TblUsers.FirstOrDefaultAsync(a => a.Id == Profile.Id);
                 if (UploadImage != null)
                 {
-                    UploadImage.Image=Profile.Image;
+                    UploadImage.Image = Profile.Image;
 
                     Context.TblUsers.Update(UploadImage);
                     await Context.SaveChangesAsync();
                 }
-                response.Code = (int)HttpStatusCode.OK;               
+                response.Code = (int)HttpStatusCode.OK;
             }
             catch (Exception ex)
             {

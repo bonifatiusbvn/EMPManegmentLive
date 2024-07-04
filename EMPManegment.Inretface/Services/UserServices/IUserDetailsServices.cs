@@ -25,7 +25,7 @@ namespace EMPManegment.Inretface.Services.UserListServices
         Task<UserResponceModel> UserLockScreen(LoginRequest UserLockScreen);
         Task<UserResponceModel> UserBirsthDayWish(Guid UserId);
         Task<IEnumerable<EmpDetailsView>> UserEdit();
-        Task<EmpDetailsView> GetById(Guid UserId);
+        Task<EmpDetailsView> GetEmployeeById(Guid UserId);
         Task<UserResponceModel> UpdateUserDetails(UserEditViewModel UpdateUser);
         Task<IEnumerable<EmpDetailsView>> GetUsersDetails();
         Task<IEnumerable<EmpDetailsView>> GetActiveDeactiveUserList();

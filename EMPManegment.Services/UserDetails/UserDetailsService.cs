@@ -75,9 +75,9 @@ namespace EMPManegment.Services.UserList
             return await UserList.UserEdit();
         }
 
-        public async Task<EmpDetailsView> GetById(Guid userId)
+        public async Task<EmpDetailsView> GetEmployeeById(Guid userId)
         {
-            return await UserList.GetById(userId);
+            return await UserList.GetEmployeeById(userId);
         }
 
         public async Task<UserResponceModel> UpdateUserDetails(UserEditViewModel UpdateUser)

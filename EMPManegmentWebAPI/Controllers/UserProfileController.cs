@@ -242,7 +242,7 @@ namespace EMPManagment.API.Controllers
         [Route("GetEmployeeById")]
         public async Task<IActionResult> GetEmployeeById(Guid id)
         {
-            var userProfile = await UserListServices.GetById(id);
+            var userProfile = await UserListServices.GetEmployeeById(id);
             return Ok(new { code = 200, data = userProfile });
         }
 
