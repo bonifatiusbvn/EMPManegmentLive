@@ -95,7 +95,7 @@ builder.Services.AddScoped<ITaskDetails, TaskRepo>();
 builder.Services.AddScoped<IProjectDetails, ProjectDetailsRepo>();
 builder.Services.AddScoped<IPurchaseOrderDetails, PurchaseOrderRepo>();
 builder.Services.AddScoped<IProductMaster, ProductMasterRepo>();
-builder.Services.AddScoped<IPurchaseRequest,PurchaseRequestRepo>();
+builder.Services.AddScoped<IPurchaseRequest, PurchaseRequestRepo>();
 builder.Services.AddScoped<IInvoiceMaster, InvoiceMasterRepo>();
 builder.Services.AddScoped<IExpenseMaster, ExpenseMasterRepo>();
 builder.Services.AddScoped<IFormMaster, FormMasterRepo>();
@@ -114,7 +114,7 @@ builder.Services.AddScoped<ITaskServices, DealTaskServices>();
 builder.Services.AddScoped<IProjectDetailServices, ProjectDetailsServices>();
 builder.Services.AddScoped<IPurchaseOrderDetailsServices, PurchaseOrderDetailsServices>();
 builder.Services.AddScoped<IProductMasterServices, ProductMasterServices>();
-builder.Services.AddScoped<IPurchaseRequestServices,PurchaseRequestServices>();
+builder.Services.AddScoped<IPurchaseRequestServices, PurchaseRequestServices>();
 builder.Services.AddScoped<IInvoiceMasterServices, InvoiceMasterServices>();
 builder.Services.AddScoped<IExpenseMasterServices, ExpenseMasterServices>();
 builder.Services.AddScoped<IFormMasterServices, FormMasterService>();
@@ -148,7 +148,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+app.UseSwagger();
+app.UseSwaggerUI();
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
