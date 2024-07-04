@@ -319,9 +319,9 @@ namespace EMPManagment.API.Controllers
 
         [HttpGet]
         [Route("InvoiceActivity")]
-        public async Task<IActionResult> InvoiceActivity(Guid ProId)
+        public async Task<IActionResult> InvoiceActivity(Guid ProjectId)
         {
-            IEnumerable<InvoiceViewModel> emplist = await InvoiceMaster.InvoicActivity(ProId);
+            IEnumerable<InvoiceViewModel> emplist = await InvoiceMaster.InvoiceActivity(ProjectId);
             return Ok(new { code = 200, data = emplist.ToList() });
         }
 

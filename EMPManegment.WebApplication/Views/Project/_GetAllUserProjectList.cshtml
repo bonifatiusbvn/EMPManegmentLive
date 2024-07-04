@@ -77,7 +77,14 @@
                             <div class="col-6">
                                 <div>
                                     <p class="text-muted mb-1">Status</p>
-                                    <div class="badge bg-warning-subtle text-warning fs-12">@item.ProjectStatus</div>
+                                    @if (item.ProjectStatus == "Inprogress")
+                                    {
+                                        <div class="badge bg-warning-subtle text-warning fs-12">@item.ProjectStatus</div>
+                                    }
+                                    else
+                                    {
+                                        <div class="badge bg-success-subtle text-success fs-12">@item.ProjectStatus</div>
+                                    }
                                 </div>
                             </div>
                             <div class="col-6">

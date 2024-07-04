@@ -406,8 +406,7 @@ function showWeatherAPI(city) {
         traditional: true,
 
         success: function (result) {
-
-
+            debugger
             $('#getweather').html(result.current.temp_c + ' °C');
             $('#weathericon').attr('src', result.current.condition.icon);
         },

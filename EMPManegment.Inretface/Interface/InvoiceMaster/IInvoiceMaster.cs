@@ -32,7 +32,7 @@ namespace EMPManegment.Inretface.Interface.InvoiceMaster
         Task<UpdateInvoiceModel> EditInvoiceDetails(string InvoiceNo);
         Task<UserResponceModel> UpdateInvoiceDetails(InvoiceMasterModel UpdateInvoice);
         Task<PurchaseOrderResponseModel> ShowInvoiceDetailsByOrderId(string OrderId);
-        Task<IEnumerable<InvoiceViewModel>> InvoicActivity(Guid ProId);
+        Task<IEnumerable<InvoiceViewModel>> InvoiceActivity(Guid ProjectId);
         Task<InvoiceMasterModel> DisplayInvoiceDetailsById(Guid Id);
         Task<List<InvoiceDetailsViewModel>> GetProductDetailsById(Guid ProductId);
         Task<IEnumerable<InvoiceViewModel>> InvoicActivityByUserId(Guid UserId);

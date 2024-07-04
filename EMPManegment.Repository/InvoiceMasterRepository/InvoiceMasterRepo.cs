@@ -31,6 +31,7 @@ using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using EMPManegment.EntityModels.ViewModels.ManualInvoice;
+using EMPManegment.EntityModels.ViewModels.PurchaseOrderModels;
 #nullable disable
 
 namespace EMPManegment.Repository.InvoiceMasterRepository
@@ -59,7 +60,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                 int startIndex = projectname.IndexOf('(');
                 int endIndex = projectname.IndexOf(')');
 
-                var Projectsubparts=   projectname.Substring(startIndex + 1, endIndex - startIndex - 1);
+                var Projectsubparts = projectname.Substring(startIndex + 1, endIndex - startIndex - 1);
 
                 string INVOICEId;
                 if (LastOrder == null)
@@ -183,7 +184,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                                           Id = a.Id,
                                           OrderId = a.OrderId,
                                           VendorId = a.VendorId,
-                                          CompanyId=a.CompanyId,
+                                          CompanyId = a.CompanyId,
                                           VendorAddress = b.VendorAddress,
                                           VendorContact = b.VendorContact,
                                           VendorEmail = b.VendorCompanyEmail,
@@ -437,7 +438,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                     Igst = InsertInvoice.Igst,
                     TotalDiscount = InsertInvoice.TotalDiscount,
                     TotalGst = InsertInvoice.TotalGst,
-                    RoundOff= InsertInvoice.RoundOff,
+                    RoundOff = InsertInvoice.RoundOff,
                     TotalAmount = InsertInvoice.TotalAmount,
                     PaymentMethod = InsertInvoice.PaymentMethod,
                     Status = InsertInvoice.Status,
@@ -461,9 +462,9 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                         Quantity = item.Quantity,
                         Price = item.Price,
                         DiscountPer = item.DiscountPer,
-                        DiscountAmount= item.DiscountAmount,
+                        DiscountAmount = item.DiscountAmount,
                         GstAmount = item.GstAmount,
-                        GstPer=item.GstPer,
+                        GstPer = item.GstPer,
                         ProductTotal = item.ProductTotal,
                         Hsn = item.Hsn,
                         IsDeleted = false,
@@ -472,7 +473,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                     };
                     Context.TblInvoiceDetails.Add(InvoiceDetails);
                 }
-                if(InsertInvoice.PaymentStatus == 7)
+                if (InsertInvoice.PaymentStatus == 7)
                 {
                     var craditdebit = new TblCreditDebitMaster()
                     {
@@ -689,22 +690,22 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                     Igst = UpdateInvoice.Igst,
                     TotalDiscount = UpdateInvoice.TotalDiscount,
                     TotalGst = UpdateInvoice.TotalGst,
-                    RoundOff=UpdateInvoice.RoundOff,
+                    RoundOff = UpdateInvoice.RoundOff,
                     TotalAmount = UpdateInvoice.TotalAmount,
                     PaymentMethod = UpdateInvoice.PaymentMethod,
                     Status = UpdateInvoice.Status,
                     PaymentStatus = UpdateInvoice.PaymentStatus,
-                    CompanyId= UpdateInvoice.CompanyId,
-                    CreatedOn=UpdateInvoice.CreatedOn,
-                    UpdatedOn=DateTime.Now,
-                    UpdatedBy=UpdateInvoice.UpdatedBy,
-                    CreatedBy=UpdateInvoice.CreatedBy,
+                    CompanyId = UpdateInvoice.CompanyId,
+                    CreatedOn = UpdateInvoice.CreatedOn,
+                    UpdatedOn = DateTime.Now,
+                    UpdatedBy = UpdateInvoice.UpdatedBy,
+                    CreatedBy = UpdateInvoice.CreatedBy,
                     Date = DateTime.Now,
                     IsDeleted = false,
                 };
                 Context.TblInvoices.Update(invoice);
 
-                foreach(var item in UpdateInvoice.InvoiceDetails)
+                foreach (var item in UpdateInvoice.InvoiceDetails)
                 {
                     var existingInvoice = Context.TblInvoiceDetails.FirstOrDefault(e => e.InvoiceRefId == invoice.Id && e.ProductId == item.ProductId);
 
@@ -717,7 +718,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                         existingInvoice.Quantity = item.Quantity;
                         existingInvoice.Price = item.Price;
                         existingInvoice.DiscountPer = item.DiscountPer;
-                        existingInvoice.DiscountAmount=item.DiscountAmount;
+                        existingInvoice.DiscountAmount = item.DiscountAmount;
                         existingInvoice.GstPer = item.GstPer;
                         existingInvoice.GstAmount = item.GstAmount;
                         existingInvoice.ProductTotal = item.ProductTotal;
@@ -840,37 +841,47 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
             return response;
         }
 
-        public async Task<IEnumerable<InvoiceViewModel>> InvoicActivity(Guid ProId)
+        public async Task<IEnumerable<InvoiceViewModel>> InvoiceActivity(Guid ProjectId)
         {
             try
             {
-                var invoices = (from a in Context.TblInvoices
-                                join b in Context.TblVendorMasters on a.VandorId equals b.Vid
-                                join u in Context.TblUsers on a.CreatedBy equals u.Id
-                                where a.ProjectId == ProId
-                                orderby a.UpdatedOn ascending
-                                select new InvoiceViewModel
-                                {
-                                    Id = a.Id,
-                                    InvoiceNo = a.InvoiceNo,
-                                    VendorName = b.VendorCompany,
-                                    VandorId = a.VandorId,
-                                    UserName = u.UserName,
-                                    FirstName = u.FirstName,
-                                    LastName = u.LastName,
-                                    UserImage = u.Image,
-                                    Status = a.Status,
-                                    ShippingAddress = a.ShippingAddress,
-                                    TotalAmount = a.TotalAmount,
-                                    CreatedOn = a.CreatedOn,
-                                    CreatedBy = a.CreatedBy,
-                                    UpdatedOn = a.UpdatedOn,
-                                    UpdatedBy = a.UpdatedBy
-                                }).Take(3);
+                string dbConnectionStr = Configuration.GetConnectionString("EMPDbconn");
+                var sqlPar = new SqlParameter[]
+                {
+                    new SqlParameter("@ProjectId", ProjectId),
+                };
+                var DS = DbHelper.GetDataSet("[InvoiceActivity]", System.Data.CommandType.StoredProcedure, sqlPar, dbConnectionStr);
 
-                return await invoices.ToListAsync();
+                List<InvoiceViewModel> ActivityList = new List<InvoiceViewModel>();
+
+                if (DS != null && DS.Tables.Count > 0)
+                {
+                    foreach (DataRow row in DS.Tables[0].Rows)
+                    {
+                        var ActivityDetails = new InvoiceViewModel
+                        {
+
+                            Id = row["Id"] != DBNull.Value ? (Guid)row["Id"] : Guid.Empty,
+                            InvoiceNo = row["InvoiceNo"]?.ToString(),
+                            VendorName = row["VendorCompany"]?.ToString(),
+                            VandorId = row["VandorId"] != DBNull.Value ? (Guid)row["VandorId"] : Guid.Empty,
+                            UserName = row["UserName"]?.ToString(),
+                            FirstName = row["FirstName"]?.ToString(),
+                            LastName = row["LastName"]?.ToString(),
+                            UserImage = row["Image"]?.ToString(),
+                            Status = row["Status"]?.ToString(),
+                            ShippingAddress = row["ShippingAddress"]?.ToString(),
+                            TotalAmount = row["TotalAmount"] != DBNull.Value ? (decimal)row["TotalAmount"] : 0m,
+                            CreatedOn = row["CreatedOn"] != DBNull.Value ? (DateTime)row["CreatedOn"] : DateTime.MinValue,
+                            CreatedBy = row["CreatedBy"] != DBNull.Value ? (Guid)row["CreatedBy"] : Guid.Empty,
+                            UpdatedOn = row["UpdatedOn"] != DBNull.Value ? (DateTime)row["UpdatedOn"] : DateTime.MinValue,
+                            UpdatedBy = row["UpdatedBy"] != DBNull.Value ? (Guid)row["UpdatedBy"] : Guid.Empty
+                        };
+                        ActivityList.Add(ActivityDetails);
+                    }
+                }
+                return ActivityList.Take(3);
             }
-
             catch (Exception ex)
             {
 
@@ -1011,7 +1022,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                     InvoiceDetails.InvoiceDetails.Add(invoiceDetail);
                 }
             }
-            return InvoiceDetails;  
+            return InvoiceDetails;
 
         }
 
@@ -1020,20 +1031,20 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
             try
             {
                 var productDetails = new List<InvoiceDetailsViewModel>();
-                var data = await(from a in Context.TblProductDetailsMasters.Where(x => x.Id == ProductId)
-                                 join b in Context.TblProductTypeMasters on a.ProductType equals b.Id
-                                 select new InvoiceDetailsViewModel
-                                 {
-                                     ProductId = a.Id,
-                                     ProductType = b.Id,
-                                     ProductDescription = a.ProductDescription,
-                                     Product = a.ProductName,
-                                     Hsn = a.Hsn,
-                                     PerUnitPrice = a.PerUnitPrice,
-                                     GstPer = (decimal)a.GstPercentage,
-                                     GstAmount = a.GstAmount,
-                                     ProductTypeName = b.Type,
-                                 }).ToListAsync();
+                var data = await (from a in Context.TblProductDetailsMasters.Where(x => x.Id == ProductId)
+                                  join b in Context.TblProductTypeMasters on a.ProductType equals b.Id
+                                  select new InvoiceDetailsViewModel
+                                  {
+                                      ProductId = a.Id,
+                                      ProductType = b.Id,
+                                      ProductDescription = a.ProductDescription,
+                                      Product = a.ProductName,
+                                      Hsn = a.Hsn,
+                                      PerUnitPrice = a.PerUnitPrice,
+                                      GstPer = (decimal)a.GstPercentage,
+                                      GstAmount = a.GstAmount,
+                                      ProductTypeName = b.Type,
+                                  }).ToListAsync();
                 if (data != null)
                 {
                     foreach (var item in data)

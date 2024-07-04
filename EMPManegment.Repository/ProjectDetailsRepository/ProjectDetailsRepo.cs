@@ -1,5 +1,6 @@
 ﻿using Azure;
 using EMPManagment.API;
+using EMPManegment.EntityModels.Common;
 using EMPManegment.EntityModels.View_Model;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.ProjectModels;
@@ -9,10 +10,12 @@ using EMPManegment.Inretface.Interface.ProjectDetails;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
-
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Diagnostics.Metrics;
 using System.Linq;
 using System.Net;
@@ -25,12 +28,14 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
 {
     public class ProjectDetailsRepo : IProjectDetails
     {
-        public ProjectDetailsRepo(BonifatiusEmployeesContext context)
+        public ProjectDetailsRepo(BonifatiusEmployeesContext context, IConfiguration configuration)
         {
             Context = context;
+            _configuration = configuration;
         }
 
         public BonifatiusEmployeesContext Context { get; }
+        public IConfiguration _configuration { get; }
 
         public async Task<UserResponceModel> CreateProject(ProjectDetailView createproject)
         {
@@ -164,37 +169,47 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
         {
             try
             {
+                string dbConnectionStr = _configuration.GetConnectionString("EMPDbconn");
+                var sqlPar = new SqlParameter[]
+                {
+                    new SqlParameter("@ProjectId", ProjectId),
+                };
+
+                var DS = DbHelper.GetDataSet("[GetProjectDetailsById]", System.Data.CommandType.StoredProcedure, sqlPar, dbConnectionStr);
+
                 ProjectDetailView projectDetail = new ProjectDetailView();
-                projectDetail = (from a in Context.TblProjectMasters.Where(x => x.ProjectId == ProjectId)
-                                 join c in Context.TblCountries on a.Country equals c.Id
-                                 join s in Context.TblStates on a.State equals s.Id
-                                 join ct in Context.TblCities on a.City equals ct.Id
-                                 select new ProjectDetailView
-                                 {
-                                     ProjectId = a.ProjectId,
-                                     ProjectTitle = a.ProjectTitle,
-                                     ProjectImage = a.ProjectImage,
-                                     ShortName = a.ShortName,
-                                     BuildingName = a.BuildingName,
-                                     Area = a.Area,
-                                     Country = a.Country,
-                                     State = a.State,
-                                     City = a.City,
-                                     PinCode = a.PinCode,
-                                     ProjectPath = a.ProjectPath,
-                                     ProjectDeadline = a.ProjectDeadline,
-                                     ProjectHead = a.ProjectHead,
-                                     CreatedOn = a.CreatedOn,
-                                     ProjectEndDate = a.ProjectEndDate,
-                                     ProjectStatus = a.ProjectStatus,
-                                     ProjectPriority = a.ProjectPriority,
-                                     ProjectStartDate = a.ProjectStartDate,
-                                     ProjectDescription = a.ProjectDescription,
-                                     ProjectType = a.ProjectType,
-                                     CountryName = c.Country,
-                                     StateName = s.State,
-                                     CityName = ct.City,
-                                 }).First(); ;
+
+                if (DS != null && DS.Tables.Count > 0)
+                {
+                    if (DS.Tables[0].Rows.Count > 0)
+                    {
+                        DataRow row = DS.Tables[0].Rows[0];
+
+                        projectDetail.ProjectId = row["ProjectId"] != DBNull.Value ? (Guid)row["ProjectId"] : Guid.Empty;
+                        projectDetail.ProjectTitle = row["ProjectTitle"]?.ToString();
+                        projectDetail.ProjectImage = row["ProjectImage"]?.ToString();
+                        projectDetail.ShortName = row["ShortName"]?.ToString();
+                        projectDetail.BuildingName = row["BuildingName"]?.ToString();
+                        projectDetail.Area = row["Area"]?.ToString();
+                        projectDetail.Country = row["Country"] != DBNull.Value ? (int)row["Country"] : 0;
+                        projectDetail.State = row["State"] != DBNull.Value ? (int)row["State"] : 0;
+                        projectDetail.City = row["City"] != DBNull.Value ? (int)row["City"] : 0;
+                        projectDetail.PinCode = row["PinCode"]?.ToString();
+                        projectDetail.ProjectPath = row["ProjectPath"]?.ToString();
+                        projectDetail.ProjectDeadline = row["ProjectDeadline"] != DBNull.Value ? (DateTime)row["ProjectDeadline"] : DateTime.MinValue;
+                        projectDetail.ProjectHead = row["ProjectHead"]?.ToString();
+                        projectDetail.CreatedOn = row["CreatedOn"] != DBNull.Value ? (DateTime)row["CreatedOn"] : DateTime.MinValue;
+                        projectDetail.ProjectEndDate = row["ProjectEndDate"] != DBNull.Value ? (DateTime)row["ProjectEndDate"] : DateTime.MinValue;
+                        projectDetail.ProjectStatus = row["ProjectStatus"]?.ToString();
+                        projectDetail.ProjectPriority = row["ProjectPriority"]?.ToString();
+                        projectDetail.ProjectStartDate = row["ProjectStartDate"] != DBNull.Value ? (DateTime)row["ProjectStartDate"] : DateTime.MinValue;
+                        projectDetail.ProjectDescription = row["ProjectDescription"]?.ToString();
+                        projectDetail.ProjectType = row["ProjectType"]?.ToString();
+                        projectDetail.CountryName = row["Country"]?.ToString();
+                        projectDetail.StateName = row["State"]?.ToString();
+                        projectDetail.CityName = row["City"]?.ToString();
+                    }
+                }
                 return projectDetail;
             }
             catch (Exception ex)
@@ -268,7 +283,7 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
                                 StartDate = project.ProjectStartDate,
                                 EndDate = project.ProjectEndDate,
                                 Status = project.ProjectStatus,
-                                IsDeleted = false, 
+                                IsDeleted = false,
                                 CreatedBy = AddMember.UpdatedBy,
                                 CreatedOn = DateTime.Now,
                             };
@@ -279,7 +294,7 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
                             response.Message = "Project member is added successfully!";
                         }
                     }
-                    response.Data = project; 
+                    response.Data = project;
                 }
                 else
                 {
@@ -299,22 +314,35 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
         {
             try
             {
-                var result = (from e in Context.TblProjectMembers
-                              where e.ProjectId == ProjectId
-                              join d in Context.TblUsers on e.UserId equals d.Id
-                              where e.IsDeleted != true
-                              select new ProjectView
-                              {
-                                  Id = e.Id,
-                                  ProjectId = e.ProjectId,
-                                  Fullname = d.FirstName + " " + d.LastName,
-                                  FirstName = d.FirstName,
-                                  LastName = d.LastName,
-                                  Image = d.Image,
-                                  UserId = e.UserId,
-                                  Designation = d.Designation,
-                              }).ToList();
-                return result;
+                string dbConnectionStr = _configuration.GetConnectionString("EMPDbconn");
+                var sqlPar = new SqlParameter[]
+                {
+                    new SqlParameter("@ProjectId", ProjectId),
+                };
+
+                var DS = DbHelper.GetDataSet("[GetProjectMember]", System.Data.CommandType.StoredProcedure, sqlPar, dbConnectionStr);
+
+                List<ProjectView> projectMemberList = new List<ProjectView>();
+
+                if (DS != null && DS.Tables.Count > 0)
+                {
+                    foreach (DataRow row in DS.Tables[0].Rows)
+                    {
+                        var ProjectMember = new ProjectView
+                        {
+                            Id = row["Id"] != DBNull.Value ? (Guid)row["Id"] : Guid.Empty,
+                            ProjectId = row["ProjectId"] != DBNull.Value ? (Guid)row["ProjectId"] : Guid.Empty,
+                            Fullname = row["Fullname"]?.ToString(),
+                            FirstName = row["FirstName"]?.ToString(),
+                            LastName = row["LastName"]?.ToString(),
+                            Image = row["Image"]?.ToString(),
+                            UserId = row["UserId"] != DBNull.Value ? (Guid)row["UserId"] : Guid.Empty,
+                            Designation = row["Designation"]?.ToString(),
+                        };
+                        projectMemberList.Add(ProjectMember);
+                    }
+                }
+                return projectMemberList;
             }
             catch (Exception ex)
             {
@@ -354,18 +382,33 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
         {
             try
             {
-                var result = (from e in Context.TblProjectDocuments
-                              where e.ProjectId == ProjectId
-                              join d in Context.TblUsers on e.UserId equals d.Id
-                              select new ProjectDocumentView
-                              {
-                                  Id = e.Id,
-                                  ProjectId = ProjectId,
-                                  DocumentName = e.DocumentName,
-                                  FullName = d.FirstName + " " + d.LastName,
-                                  Date = e.Date
-                              }).ToList();
-                return result;
+                string dbConnectionStr = _configuration.GetConnectionString("EMPDbconn");
+                var sqlPar = new SqlParameter[]
+                {
+                    new SqlParameter("@ProjectId", ProjectId),
+                };
+
+                var DS = DbHelper.GetDataSet("[GetProjectDocument]", System.Data.CommandType.StoredProcedure, sqlPar, dbConnectionStr);
+
+                List<ProjectDocumentView> projectDocumentList = new List<ProjectDocumentView>();
+
+                if (DS != null && DS.Tables.Count > 0)
+                {
+                    foreach (DataRow row in DS.Tables[0].Rows)
+                    {
+                        var ProjectDocument = new ProjectDocumentView
+                        {
+
+                            Id = row["Id"] != DBNull.Value ? (Guid)row["Id"] : Guid.Empty,
+                            ProjectId = row["ProjectId"] != DBNull.Value ? (Guid)row["ProjectId"] : Guid.Empty,
+                            DocumentName = row["DocumentName"]?.ToString(),
+                            FullName = row["FullName"]?.ToString(),
+                            Date = row["Date"] != DBNull.Value ? (DateTime)row["Date"] : DateTime.MinValue,
+                        };
+                        projectDocumentList.Add(ProjectDocument);
+                    }
+                }
+                return projectDocumentList;
             }
             catch (Exception ex)
             {

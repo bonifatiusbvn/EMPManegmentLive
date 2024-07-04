@@ -547,7 +547,7 @@ namespace EMPManegment.Web.Controllers
             {
 
                 List<InvoiceViewModel> activity = new List<InvoiceViewModel>();
-                ApiResponseModel postuser = await APIServices.GetAsync("", "Invoice/InvoiceActivity?ProId=" + ProId);
+                ApiResponseModel postuser = await APIServices.GetAsync("", "Invoice/InvoiceActivity?ProjectId=" + ProId);
                 if (postuser.data != null)
                 {
                     activity = JsonConvert.DeserializeObject<List<InvoiceViewModel>>(postuser.data.ToString());
