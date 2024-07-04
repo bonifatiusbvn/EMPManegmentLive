@@ -1,8 +1,7 @@
 ﻿
 $(document).ready(function () {
     GetAllUserProjectDetailsList();
-    document.getElementById("showProjectMembers").click()
-    document.getElementById("showProjectDocuments").click()
+   
     GetMemberList();
 });
 

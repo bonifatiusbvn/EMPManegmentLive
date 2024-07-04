@@ -373,6 +373,8 @@
     </div>
 </div>
 
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/moduls/userprofile.js" asp-append-version="true"></script>
 <script>
     var UserId = '@Accessor.HttpContext.Session.GetString("UserID")';
     document.getElementById('profile-img-file-input').addEventListener('change', function (event) {
