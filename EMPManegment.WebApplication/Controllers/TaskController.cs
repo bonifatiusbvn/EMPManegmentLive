@@ -416,6 +416,25 @@ namespace EMPManegment.Web.Controllers
 
             return Ok(new { memory = base64Memory, contentType, fileName });
         }
+        public async Task<IActionResult> DeleteTask(Guid Id)
+        {
+            try
+            {
+                ApiResponseModel postuser = await APIServices.PostAsync("", "UserHome/DeleteTask?Id=" + Id);
+                if (postuser.code == 200)
+                {
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
+                }
+                else
+                {
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
 
     }
 }

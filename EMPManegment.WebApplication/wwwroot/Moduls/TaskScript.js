@@ -520,6 +520,7 @@ $(document).ready(function () {
         var userPermission = datas;
         AllTaskDetailsList(userPermission);
     }
+
     function AllTaskDetailsList(userPermission) {
         $('#tasksTableData').DataTable({
             processing: false,
@@ -527,7 +528,7 @@ $(document).ready(function () {
             filter: true,
             "bDestroy": true,
             ajax: {
-                type: "Post",
+                type: "POST",
                 url: '/Task/TaskDetailsDataTable',
                 dataType: 'json',
             },
@@ -539,11 +540,24 @@ $(document).ready(function () {
                     "data": "taskTitle", "name": "TaskTitle"
                 },
                 {
-                    "data": "taskDetails",
-                    "name": "TaskDetails",
-                    "render": function (data, type, row) {
-                        if (type === 'display' && data.length > 50) {
-                            return '<span title="' + data + '">' + data.substr(0, 50) + '...</span>';
+                    "data": "taskDetails", "name": "TaskDetails",
+                    "render": function (data, type, full) {
+                        if (type === 'display') {
+                            let taskDetails = data;
+                            if (data.length > 50) {
+                                taskDetails = '<span title="' + data + '">' + data.substr(0, 50) + '...</span>';
+                            }
+                            let documentLink = '<div class="d-flex align-items-center">' +
+                                '<div class="flex-grow-1">' + taskDetails + '</div>' +
+                                '<div class="flex-shrink-0 ms-4 task-icons">' +
+                                '<li class="list-inline tasks-list-menu mb-0" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Document">' +
+                                '<a class="flex-shrink-0 ms-4 task-icons" onclick="DownloadTaskDocument(\'' + full.document + '\')">' +
+                                '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">' +
+                                '<path fill="currentColor" d="M13 12h3l-4 4l-4-4h3V8h2v4Zm2-8H5v16h14V8h-4V4ZM3 2.992C3 2.444 3.447 2 3.999 2H16l5 5v13.993A1 1 0 0 1 20.007 22H3.993A1 1 0 0 1 3 21.008V2.992Z" />' +
+                                '</svg></a></li>' +
+                                '</div>' +
+                                '</div>';
+                            return documentLink;
                         }
                         return data;
                     }
@@ -551,14 +565,11 @@ $(document).ready(function () {
                 {
                     "data": "taskType", "name": "TaskType",
                     "render": function (data, type, full) {
-
                         if (full.taskTypeName == "HighPriority") {
                             return '<a class="badge bg-danger-subtle text-danger text-uppercase">' + full.taskTypeName + '</a>';
-                        }
-                        else if (full.taskTypeName == "MediumPriority") {
+                        } else if (full.taskTypeName == "MediumPriority") {
                             return '<a class="badge bg-warning-subtle text-warning text-uppercase">' + full.taskTypeName + '</a>';
-                        }
-                        else {
+                        } else {
                             return '<a class="badge bg-success-subtle text-success text-uppercase">' + full.taskTypeName + '</a>';
                         }
                     }
@@ -595,13 +606,11 @@ $(document).ready(function () {
                         return '<a class="badge ' + badgeClass + ' text-uppercase">' + full.taskStatus + '</a>';
                     }
                 },
-
                 {
                     "data": "action",
                     "name": "Action",
                     "render": function (data, type, full, meta) {
-                        var userPermissionArray = [];
-                        userPermissionArray = JSON.parse(userPermission);
+                        var userPermissionArray = JSON.parse(userPermission);
 
                         var canEdit = false;
                         var canDelete = false;
@@ -617,25 +626,25 @@ $(document).ready(function () {
 
                         var buttons = '<ul class="list-inline hstack gap-2 mb-0">';
 
+                        buttons += '<li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="View">' +
+                            '<a class="text-primary" onclick="btnTaskDetails(\'' + full.id + '\')"><i class="ri-eye-fill fs-16"></i></a></li>';
+
                         if (canEdit) {
                             buttons += '<li class="btn list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">' +
                                 '<a class="text-primary" onclick="EditTaskDetails(\'' + full.id + '\')">' +
                                 '<i class="fa-regular fa-pen-to-square"></i></a></li>';
                         }
 
-                        buttons += '<li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="View">' +
-                            '<a class="text-primary" onclick="btnTaskDetails(\'' + full.id + '\')"><i class="ri-eye-fill fs-16"></i></a></li>';
-
-                        buttons += '<li class="btn list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Document">' +
-                            '<a class="btn btn-info" onclick="DownloadTaskDocument(\'' + full.document + '\')"><i class="fas fa-cloud-download-alt"></i></a></li>';
+                        if (canDelete) {
+                            buttons += '<li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Delete">' +
+                                '<a class="btn text-danger btndeletedoc" onclick="DeleteTask(\'' + full.id + '\')"><i class="fas fa-trash"></i></a></li>';
+                        }
 
                         buttons += '</ul>';
 
                         return buttons;
                     }
                 }
-
-
             ],
             columnDefs: [{
                 "defaultContent": "",
@@ -643,8 +652,10 @@ $(document).ready(function () {
             }]
         });
     }
+
     data(datas);
 });
+
 function DownloadTaskDocument(taskDocument) {
     $.ajax({
         url: '/Task/DownloadTaskDocument?TaskDocument=' + taskDocument,
@@ -684,11 +695,6 @@ function DownloadTaskDocument(taskDocument) {
         }
     });
 }
-
-
-
-
-
 function EditTaskDetails(Id) {
     $.ajax({
         url: '/Task/GetTaskDetailsById?Id=' + Id,
@@ -821,4 +827,58 @@ function CheckValidation() {
         $('#ValidateEndDate').text('');
         $('#EditEndDate').css('border-color', 'lightgray');
     }
+}
+function DeleteTask(Id) {
+    Swal.fire({
+        title: "Are you sure want to Delete This?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, Delete it!",
+        cancelButtonText: "No, cancel!",
+        confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
+        cancelButtonClass: "btn btn-danger w-xs mt-2",
+        buttonsStyling: false,
+        showCloseButton: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: '/Task/DeleteTask?Id=' + Id,
+                type: 'POST',
+                dataType: 'json',
+                success: function (Result) {
+                    if (Result.code) {
+                        Swal.fire({
+                            title: Result.message,
+                            icon: 'success',
+                            confirmButtonColor: '#3085d6',
+                            confirmButtonText: 'OK'
+                        }).then(function () {
+                            window.location = '/Task/AllTaskDetails';
+                        })
+                    }
+                    else {
+                        toastr.error(Result.message);
+                    }
+                },
+                error: function () {
+                    Swal.fire({
+                        title: "Can't delete task!",
+                        icon: 'warning',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK',
+                    }).then(function () {
+                        window.location = '/Task/AllTaskDetails';
+                    })
+                }
+            })
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+
+            Swal.fire(
+                'Cancelled',
+                'Tasks have no changes.!!😊',
+                'error'
+            );
+        }
+    });
 }

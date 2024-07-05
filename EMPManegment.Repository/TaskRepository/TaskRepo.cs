@@ -200,6 +200,7 @@ namespace EMPManegment.Repository.TaskRepository
                                                               LastName = b.LastName,
                                                               TaskTypeName = c.TaskType,
                                                               ProjectId = a.ProjectId,
+
                                                           };
             return AllTaskDetails;
         }
@@ -452,5 +453,33 @@ namespace EMPManegment.Repository.TaskRepository
             return model;
         }
 
+        public async Task<UserResponceModel> DeleteTask(Guid Id)
+        {
+            UserResponceModel response = new UserResponceModel();
+            try
+            {
+                var GetTaskdata = Context.TblTaskDetails.Where(a => a.Id == Id).FirstOrDefault();
+
+                if (GetTaskdata != null)
+                {
+                    Context.TblTaskDetails.Remove(GetTaskdata);
+                    Context.SaveChanges();
+                    response.Code = 200;
+                    response.Data = GetTaskdata;
+                    response.Message = "Task is deleted successfully";
+                }
+                else
+                {
+                    response.Code = 404;
+                    response.Message = "Can not found";
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Code = 400;
+                response.Message = "Error deleting tasks";
+            }
+            return response;
+        }
     }
 }
