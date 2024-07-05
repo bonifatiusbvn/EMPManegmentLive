@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Data;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace EMPManegment.Web.Controllers
 {
@@ -84,34 +85,44 @@ namespace EMPManegment.Web.Controllers
 
         [FormPermissionAttribute("Tasks List-Add")]
         [HttpPost]
-        public async Task<IActionResult> AddTaskDetails(TaskDetailsView task)
+        public async Task<IActionResult> AddTaskDetails(TaskImageDetailsModel task)
         {
             try
             {
-                var TaskDetails = new TaskDetailsView
+                if (task.Image != null)
                 {
-                    CreatedBy = _userSession.UserId,
-                    TaskStatus = task.TaskStatus,
-                    TaskType = task.TaskType,
-                    TaskTypeName = task.TaskTypeName,
-                    TaskDate = task.TaskDate,
-                    TaskEndDate = task.TaskEndDate,
-                    TaskDetails = task.TaskDetails,
-                    UserId = task.UserId,
-                    TaskTitle = task.TaskTitle,
-                    ProjectId = task.ProjectId,
-                };
-                ApiResponseModel postuser = await APIServices.PostAsync(TaskDetails, "UserHome/AddTaskDetails");
-                UserResponceModel responseModel = new UserResponceModel();
-                if (postuser.code == 200)
-                {
-                    return Ok(new { postuser.message, postuser.code });
-                }
-                else
-                {
+                    var TaskImg = Guid.NewGuid() + "_" + task.Image.FileName;
+                    var path = Environment.WebRootPath;
+                    var filepath = "Content/TaskDocuments/" + TaskImg;
+                    var fullpath = Path.Combine(path, filepath);
+                    UploadTaskFile(task.Image, fullpath);
+                    var TaskDetails = new TaskDetailsView
+                    {
+                        CreatedBy = _userSession.UserId,
+                        TaskStatus = task.TaskStatus,
+                        TaskType = task.TaskType,
+                        TaskTypeName = task.TaskTypeName,
+                        TaskDate = task.TaskDate,
+                        TaskEndDate = task.TaskEndDate,
+                        TaskDetails = task.TaskDetails,
+                        UserId = task.UserId,
+                        TaskTitle = task.TaskTitle,
+                        ProjectId = task.ProjectId,
+                        Document= filepath,
+                    };
+                    ApiResponseModel postuser = await APIServices.PostAsync(TaskDetails, "UserHome/AddTaskDetails");
+                    if (postuser.code == 200)
+                    {
+                        return Ok(new { Message = "Task Uploaded Successfully!", Code = postuser.code });
+                    }
+                    else
+                    {
 
-                    return Ok(new { postuser.message, postuser.code });
+                        return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
+                    }
+
                 }
+                return BadRequest();
             }
             catch (Exception ex)
             {
@@ -179,7 +190,7 @@ namespace EMPManegment.Web.Controllers
                 UserResponceModel userResponceModel = new UserResponceModel();
                 if (postuser.code == 200)
                 {
-                    return Ok(new { postuser.message, postuser.code});
+                    return Ok(new { postuser.message, postuser.code });
                 }
                 else
                 {
@@ -375,6 +386,35 @@ namespace EMPManegment.Web.Controllers
             {
                 throw ex;
             }
+        }
+        public void UploadTaskFile(IFormFile file, string path)
+        {
+            FileStream stream = new FileStream(path, FileMode.Create);
+            file.CopyTo(stream);
+        }
+        [HttpGet]
+        public async Task<IActionResult> DownloadTaskDocument(string TaskDocument)
+        {
+            var filepath = TaskDocument;
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", filepath);
+            if (!System.IO.File.Exists(path))
+            {
+                return Ok(new { Message = "File not found" });
+            }
+
+            var memory = new MemoryStream();
+            await using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read))
+            {
+                await stream.CopyToAsync(memory);
+            }
+
+            memory.Position = 0;
+            var contentType = "application/pdf";
+            var fileName = Path.GetFileName(path);
+
+            var base64Memory = Convert.ToBase64String(memory.ToArray());
+
+            return Ok(new { memory = base64Memory, contentType, fileName });
         }
 
     }

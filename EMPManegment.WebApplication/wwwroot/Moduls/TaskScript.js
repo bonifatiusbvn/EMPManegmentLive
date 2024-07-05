@@ -21,6 +21,7 @@ function ClearTextBox() {
         '<option selected disabled value = "">--Select Username--</option>');
     $("#txtdatetime").val('');
     $("#txtenddatetime").val('');
+    $("#txtdocument").val('');
     $("#contactDescription").val('');
 }
 
@@ -47,8 +48,8 @@ function TaskTypetext(sel) {
 }
 
 function btnSaveTaskDetail() {
+    siteloadershow();
 
-    siteloadershow()
     if ($('#frmtaskdetails').valid()) {
         var formData = new FormData();
         formData.append("TaskType", $("#taskType").val());
@@ -58,16 +59,20 @@ function btnSaveTaskDetail() {
         formData.append("TaskEndDate", $("#txtenddatetime").val());
         formData.append("TaskDetails", $("#contactDescription").val());
         formData.append("ProjectId", $("#txtprojectid").val());
+        var fileInput = document.getElementById("txtdocument");
+        if (fileInput.files.length > 0) {
+            formData.append("Image", fileInput.files[0]);
+        }
         $.ajax({
             url: '/Task/AddTaskDetails',
-            type: 'Post',
+            type: 'POST',
             data: formData,
             dataType: 'json',
             contentType: false,
             processData: false,
             success: function (Result) {
-                siteloaderhide()
-                if (Result.code == 200) {
+                siteloaderhide();
+                if (Result.code === 200) {
                     Swal.fire({
                         title: Result.message,
                         icon: 'success',
@@ -76,16 +81,18 @@ function btnSaveTaskDetail() {
                     }).then(function () {
                         window.location = '/Task/AllTaskDetails';
                     });
-                }
-                else {
+                } else {
                     toastr.error(Result.message);
                 }
+            },
+            error: function (xhr, status, error) {
+                siteloaderhide();
+                toastr.error('An error occurred while processing your request.');
             }
-        })
-    }
-    else {
+        });
+    } else {
         siteloaderhide();
-        toastr.warning("Kindly fill all datafield");
+        toastr.warning("Kindly fill all data fields");
     }
 }
 
@@ -536,7 +543,6 @@ $(document).ready(function () {
                     "name": "TaskDetails",
                     "render": function (data, type, row) {
                         if (type === 'display' && data.length > 50) {
-                            // Truncate the TaskDetails text and add a tooltip
                             return '<span title="' + data + '">' + data.substr(0, 50) + '...</span>';
                         }
                         return data;
@@ -570,23 +576,44 @@ $(document).ready(function () {
                     }
                 },
                 {
-                    "data": "taskStatus", "name": "TaskStatus",
+                    "data": "taskStatus",
+                    "name": "TaskStatus",
                     "render": function (data, type, full) {
+                        var badgeClass = 'bg-info';
+                        if (full.taskStatus === "Working") {
+                            badgeClass = 'bg-warning';
+                        } else if (full.taskStatus === "Completed") {
+                            badgeClass = 'bg-success';
+                        } else if (full.taskStatus === "Pending") {
+                            badgeClass = 'bg-secondary';
+                        } else if (full.taskStatus === "InReview") {
+                            badgeClass = 'bg-orange';
+                        } else if (full.taskStatus === "InReview") {
+                            badgeClass = 'bg-danger';
+                        }
 
+                        return '<a class="badge ' + badgeClass + ' text-uppercase">' + full.taskStatus + '</a>';
+                    }
+                },
+
+                {
+                    "data": "action",
+                    "name": "Action",
+                    "render": function (data, type, full, meta) {
                         var userPermissionArray = [];
                         userPermissionArray = JSON.parse(userPermission);
 
                         var canEdit = false;
+                        var canDelete = false;
 
                         for (var i = 0; i < userPermissionArray.length; i++) {
                             var permission = userPermissionArray[i];
-                            if (permission.formName == "Tasks List") {
+                            if (permission.formName === "Tasks List") {
                                 canEdit = permission.edit;
                                 canDelete = permission.delete;
                                 break;
                             }
                         }
-
 
                         var buttons = '<ul class="list-inline hstack gap-2 mb-0">';
 
@@ -596,28 +623,19 @@ $(document).ready(function () {
                                 '<i class="fa-regular fa-pen-to-square"></i></a></li>';
                         }
 
+                        buttons += '<li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="View">' +
+                            '<a class="text-primary" onclick="btnTaskDetails(\'' + full.id + '\')"><i class="ri-eye-fill fs-16"></i></a></li>';
+
+                        buttons += '<li class="btn list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Document">' +
+                            '<a class="btn btn-info" onclick="DownloadTaskDocument(\'' + full.document + '\')"><i class="fas fa-cloud-download-alt"></i></a></li>';
+
                         buttons += '</ul>';
 
-                        if (full.taskStatus == "Working") {
-                            return ('<ul class="list-inline hstack gap-2 mb-0"><li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="View"><a class="badge bg-warning text-uppercase">' + full.taskStatus + '</a></li><li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="View" style="margin-left:7px;"><a class="text-primary" onclick="btnTaskDetails(\'' + full.id + '\')"><i class="ri-eye-fill fs-16"></i></a></li>' + buttons + '</ul >');
-                        }
-                        else if (full.taskStatus == "Completed") {
-                            return ('<ul class="list-inline hstack gap-2 mb-0"><a class="badge bg-success text-uppercase">' + full.taskStatus + '</a><li class="list-inline-item" data-bs-toggle="tooltip" data-bs-success="hover" data-bs-placement="top" title="View" style="margin-left:3px;"><a class="text-primary" onclick="btnTaskDetails(\'' + full.id + '\')"><i class="ri-eye-fill fs-16"></i></a></li>' + buttons + '</ul >');
-                        }
-                        else if (full.taskStatus == "Pending") {
-                            return ('<ul class="list-inline hstack gap-2 mb-0"><li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="View"><a class="badge bg-secondary text-uppercase">' + full.taskStatus + '</a></li><li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="View" style="margin-left:10px;"><a class="text-primary" onclick="btnTaskDetails(\'' + full.id + '\')"><i class="ri-eye-fill fs-16"></i></a></li>' + buttons + '</ul >');
-                        }
-                        else if (full.taskStatus == "InReview") {
-                            return ('<ul class="list-inline hstack gap-2 mb-0"><li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="View"><a class="badge bg-orange text-uppercase">' + full.taskStatus + '</a></li><li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="View" style="margin-left:7px;"><a class="text-primary" onclick="btnTaskDetails(\'' + full.id + '\')"><i class="ri-eye-fill fs-16"></i></a></li>' + buttons + '</ul >');
-                        }
-                        else if (full.taskStatus == "InReview") {
-                            return ('<a class="badge bg-danger text-uppercase">' + full.taskStatus + '</a>' + '<a class="text-primary" onclick="btnTaskDetails(\'' + full.id + '\')"><i class="ri-eye-fill align-bottom me-2 text-muted"></i></a>' + buttons);
-                        }
-                        else {
-                            return ('<ul class="list-inline hstack gap-2 mb-0"><li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="View"><a class="badge bg-info text-uppercase">' + full.taskStatus + '</a></li><li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="View" style="margin-left:29px;"><a class="text-primary" onclick="btnTaskDetails(\'' + full.id + '\')"><i class="ri-eye-fill fs-16"></i></a></li>' + buttons + '</ul >');
-                        }
+                        return buttons;
                     }
-                },
+                }
+
+
             ],
             columnDefs: [{
                 "defaultContent": "",
@@ -627,6 +645,48 @@ $(document).ready(function () {
     }
     data(datas);
 });
+function DownloadTaskDocument(taskDocument) {
+    $.ajax({
+        url: '/Task/DownloadTaskDocument?TaskDocument=' + taskDocument,
+        type: "get",
+        contentType: 'application/json;charset=utf-8',
+        dataType: 'json',
+        success: function (result) {
+            siteloaderhide();
+
+            if (result.fileName && result.memory) {
+
+                var byteCharacters = atob(result.memory);
+                var byteNumbers = new Array(byteCharacters.length);
+                for (var i = 0; i < byteCharacters.length; i++) {
+                    byteNumbers[i] = byteCharacters.charCodeAt(i);
+                }
+                var byteArray = new Uint8Array(byteNumbers);
+
+                var blob = new Blob([byteArray], { type: result.contentType });
+
+                var link = document.createElement('a');
+                link.href = window.URL.createObjectURL(blob);
+                link.setAttribute('download', result.fileName);
+
+                document.body.appendChild(link);
+
+                link.click();
+
+                document.body.removeChild(link);
+            } else {
+                toastr.warning(result.Message || "No document found for selected task");
+            }
+        },
+        error: function () {
+            siteloaderhide();
+            toastr.error("Can't get Data");
+        }
+    });
+}
+
+
+
 
 
 function EditTaskDetails(Id) {
