@@ -43,8 +43,8 @@
                             </td>
                             <td>@CommonHelper.GetCommonDateFormat(item.Date)</td>
                             <td>
-                                <div class="btn-group btn-group-sm">
-                                    <a href="/Project/DownloadProjectDocument/?DocumentName=@item.DocumentName" class="btn btn-info"><i class="fas fa-cloud-download-alt"></i></a>
+                                <div class="btn-group-sm">
+                                    <a onclick="DownloadProjectDocument('@item.DocumentName')" class="btn btn-info"><i class="fas fa-cloud-download-alt"></i></a>
                                     @if (UserSession.FormPermisionData.Any(a => a.FormName == "GetProjectDetails" && (a.Delete == true)))
                                     {
                                         <a href="#" class="btn btn-danger" onclick="deleteProjectDocument('@item.Id')"><i class="fas fa-trash"></i></a>

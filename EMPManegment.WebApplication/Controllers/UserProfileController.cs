@@ -731,19 +731,19 @@ namespace EMPManegment.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<FileResult> DownloadDocument(string documentName)
+        public async Task<IActionResult> DownloadDocument(string documentName)
         {
-            var filepath = "Content/UserDocuments/" + documentName;
-            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", filepath);
-            var memory = new MemoryStream();
-            using (var stream = new FileStream(path, FileMode.Open))
+            var filepath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Content/UserDocuments", documentName);
+
+            if (!System.IO.File.Exists(filepath))
             {
-                await stream.CopyToAsync(memory);
+                return NotFound();
             }
-            memory.Position = 0;
-            var ContentType = "application/pdf";
-            var fileName = Path.GetFileName(path);
-            return File(memory, ContentType, fileName);
+
+            byte[] bytes = await System.IO.File.ReadAllBytesAsync(filepath);
+            string base64String = Convert.ToBase64String(bytes);
+
+            return Json(new { memory = base64String, contentType = "application/pdf", fileName = documentName });
         }
 
         [HttpPost]

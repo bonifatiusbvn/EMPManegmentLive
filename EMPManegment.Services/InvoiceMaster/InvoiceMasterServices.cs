@@ -117,5 +117,10 @@ namespace EMPManegment.Services.InvoiceMaster
         {
             return await InvoiceMaster.InvoicActivityByUserId(UserId);
         }
+
+        public async Task<UserResponceModel> DeleteTransaction(int Id)
+        {
+            return await InvoiceMaster.DeleteTransaction(Id);
+        }
     }
 }

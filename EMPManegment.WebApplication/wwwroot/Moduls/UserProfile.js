@@ -36,7 +36,7 @@ function GetDocumentList() {
                 object += '<td>' + extractedDocumentName + '</td>';
                 object += '<td>' + getCommonDateformat(item.createdOn) + '</td>';
                 object += '<td>' + item.createdBy + '</td>';
-                object += '<td><a href="/UserProfile/DownloadDocument/?documentName=' + item.documentName + '"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M13 12h3l-4 4l-4-4h3V8h2v4Zm2-8H5v16h14V8h-4V4ZM3 2.992C3 2.444 3.447 2 3.999 2H16l5 5v13.993A1 1 0 0 1 20.007 22H3.993A1 1 0 0 1 3 21.008V2.992Z"/></svg></a></td>';
+                object += '<td><a onclick="DownloadDocument(\'' + item.documentName + '\')"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M13 12h3l-4 4l-4-4h3V8h2v4Zm2-8H5v16h14V8h-4V4ZM3 2.992C3 2.444 3.447 2 3.999 2H16l5 5v13.993A1 1 0 0 1 20.007 22H3.993A1 1 0 0 1 3 21.008V2.992Z"/></svg></a></td>';
                 object += '</tr>';
             });
             $('#TableData').html(object);
@@ -253,3 +253,44 @@ function showHidebtn() {
     }
 }
 
+function DownloadDocument(documentName) {
+    $.ajax({
+        url: '/UserProfile/DownloadDocument?DocumentName=' + documentName,
+        type: "GET",
+        dataType: 'json',
+        success: function (result) {
+            siteloaderhide();
+
+            if (result && result.memory) {
+                try {
+                    var binaryString = window.atob(result.memory);
+                    var length = binaryString.length;
+                    var bytes = new Uint8Array(length);
+
+                    for (var i = 0; i < length; i++) {
+                        bytes[i] = binaryString.charCodeAt(i);
+                    }
+
+                    var blob = new Blob([bytes], { type: result.contentType });
+
+                    var link = document.createElement('a');
+                    link.href = window.URL.createObjectURL(blob);
+                    link.setAttribute('download', result.fileName);
+
+                    document.body.appendChild(link);
+                    link.click();
+
+                    document.body.removeChild(link);
+                } catch (e) {
+                    toastr.error("Error decoding file: " + e.message);
+                }
+            } else {
+                toastr.warning(result.Message || "No document found for selected");
+            }
+        },
+        error: function () {
+            siteloaderhide();
+            toastr.error("Can't get data");
+        }
+    });
+}

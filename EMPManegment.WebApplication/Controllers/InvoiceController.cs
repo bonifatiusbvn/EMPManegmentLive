@@ -685,5 +685,25 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
+        [HttpPost]
+        public async Task<IActionResult> DeleteTransaction(int Id)
+        {
+            try
+            {
+                ApiResponseModel postuser = await APIServices.PostAsync("", "Invoice/DeleteTransaction?Id=" + Id);
+                if (postuser.code == 200)
+                {
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
+                }
+                else
+                {
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }
