@@ -11,7 +11,6 @@ namespace EMPManegment.EntityModels.ViewModels.VendorModels
     public class AddVendorDetailsView
     {
         public int Id { get; set; }
-
         public string VendorFirstName { get; set; } = null!;
         public string VendorLastName { get; set; } = null!;
         public string? VendorEmail { get; set; }
@@ -36,5 +35,7 @@ namespace EMPManegment.EntityModels.ViewModels.VendorModels
         public int VendorTypeId { get; set; }
         public DateTime? CreatedOn { get; set; }
         public string? CreatedBy { get; set; }
+        public string? VendorImageName { get; set; }
+        public Guid Vid { get; set; }
     }
 }

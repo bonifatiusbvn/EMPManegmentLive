@@ -1,16 +1,22 @@
 ﻿using Azure;
 using EMPManagment.API;
+using EMPManegment.EntityModels.Common;
 using EMPManegment.EntityModels.View_Model;
 using EMPManegment.EntityModels.ViewModels;
 using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.ProductMaster;
+using EMPManegment.EntityModels.ViewModels.ProjectModels;
 using EMPManegment.EntityModels.ViewModels.TaskModels;
 using EMPManegment.EntityModels.ViewModels.VendorModels;
 using EMPManegment.Inretface.Interface.VendorDetails;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Net;
@@ -23,9 +29,12 @@ namespace EMPManegment.Repository.VendorDetailsRepository
     public class AddVendorRepo : IAddVendorDetails
     {
         public BonifatiusEmployeesContext Context { get; }
-        public AddVendorRepo(BonifatiusEmployeesContext context)
+        public IConfiguration _configuration { get; }
+
+        public AddVendorRepo(BonifatiusEmployeesContext context, IConfiguration configuration)
         {
             Context = context;
+            _configuration = configuration;
         }
 
         public async Task<UserResponceModel> AddVendor(VendorDetailsView vendor)
@@ -171,54 +180,63 @@ namespace EMPManegment.Repository.VendorDetailsRepository
 
         public async Task<VendorDetailsView> GetVendorById(Guid VendorId)
         {
-            VendorDetailsView vendordata = new VendorDetailsView();
+
             try
             {
-                vendordata = (from d in Context.TblVendorMasters.Where(x => x.Vid == VendorId)
-                              join c in Context.TblCountries on d.VendorCountry equals c.Id
-                              join s in Context.TblStates on d.VendorState equals s.Id
-                              join ct in Context.TblCities on d.VendorCity equals ct.Id
-                              join t in Context.TblVendorTypes on d.VendorTypeId equals t.Id
-                              select new VendorDetailsView
-                              {
-                                  Vid = d.Vid,
-                                  VendorFirstName = d.VendorFirstName,
-                                  VendorLastName = d.VendorLastName,
-                                  VendorEmail = d.VendorEmail,
-                                  VendorPhone = d.VendorPhone,
-                                  VendorContectNo = d.VendorContact,
-                                  VendorCountry = d.VendorCountry,
-                                  VendorCountryName = c.Country,
-                                  VendorState = d.VendorState,
-                                  VendorStateName = s.State,
-                                  VendorCity = d.VendorCity,
-                                  VendorCityName = ct.City,
-                                  VendorPinCode = d.VendorPinCode,
-                                  VendorAddress = d.VendorAddress,
-                                  VendorCompany = d.VendorCompany,
-                                  VendorCompanyType = d.VendorCompanyType,
-                                  VendorCompanyEmail = d.VendorCompanyEmail,
-                                  VendorCompanyNumber = d.VendorCompanyNumber,
-                                  VendorCompanyLogo = d.VendorCompanyLogo,
-                                  VendorBankAccountNo = d.VendorBankAccountNo,
-                                  VendorBankName = d.VendorBankName,
-                                  VendorBankBranch = d.VendorBankBranch,
-                                  VendorAccountHolderName = d.VendorAccountHolderName,
-                                  VendorBankIfsc = d.VendorBankIfsc,
-                                  VendorGstnumber = d.VendorGstnumber,
-                                  VendorTypeId = d.VendorTypeId,
-                                  VendorTypeName = t.VendorName,
-                                  FullAddress = d.VendorAddress + "," + ct.City + "," + s.State + "-" + d.VendorPinCode,
-                              }).First();
+                string dbConnectionStr = _configuration.GetConnectionString("EMPDbconn");
+                var sqlPar = new SqlParameter[]
+                {
+                    new SqlParameter("@VendorId", VendorId),
+                };
+
+                var DS = DbHelper.GetDataSet("[GetVendorById]", System.Data.CommandType.StoredProcedure, sqlPar, dbConnectionStr);
+
+                VendorDetailsView vendordata = new VendorDetailsView();
+
+                if (DS != null && DS.Tables.Count > 0)
+                {
+                    if (DS.Tables[0].Rows.Count > 0)
+                    {
+                        DataRow row = DS.Tables[0].Rows[0];
+                        {
+                            vendordata.Vid = row["Vid"] != DBNull.Value ? (Guid)row["Vid"] : Guid.Empty; ;
+                            vendordata.VendorFirstName = row["VendorFirstName"]?.ToString();
+                            vendordata.VendorLastName = row["VendorLastName"]?.ToString(); ;
+                            vendordata.VendorEmail = row["VendorEmail"]?.ToString();
+                            vendordata.VendorPhone = row["VendorPhone"]?.ToString();
+                            vendordata.VendorContectNo = row["VendorContectNo"]?.ToString();
+                            vendordata.VendorCountry = row["VendorCountry"] != DBNull.Value ? (int)row["VendorCountry"] : 0; ;
+                            vendordata.VendorCountryName = row["VendorCountryName"]?.ToString();
+                            vendordata.VendorState = row["VendorState"] != DBNull.Value ? (int)row["VendorState"] : 0; ;
+                            vendordata.VendorStateName = row["VendorStateName"]?.ToString();
+                            vendordata.VendorCity = row["VendorCity"] != DBNull.Value ? (int)row["VendorCity"] : 0; ;
+                            vendordata.VendorCityName = row["VendorCityName"]?.ToString();
+                            vendordata.VendorPinCode = row["VendorPinCode"]?.ToString();
+                            vendordata.VendorAddress = row["VendorAddress"]?.ToString();
+                            vendordata.VendorCompany = row["VendorCompany"]?.ToString();
+                            vendordata.VendorCompanyType = row["VendorCompanyType"]?.ToString();
+                            vendordata.VendorCompanyEmail = row["VendorCompanyEmail"]?.ToString();
+                            vendordata.VendorCompanyNumber = row["VendorCompanyNumber"]?.ToString();
+                            vendordata.VendorCompanyLogo = row["VendorCompanyLogo"]?.ToString();
+                            vendordata.VendorBankAccountNo = row["VendorBankAccountNo"]?.ToString();
+                            vendordata.VendorBankName = row["VendorBankName"]?.ToString();
+                            vendordata.VendorBankBranch = row["VendorBankBranch"]?.ToString();
+                            vendordata.VendorAccountHolderName = row["VendorAccountHolderName"]?.ToString();
+                            vendordata.VendorBankIfsc = row["VendorBankIfsc"]?.ToString();
+                            vendordata.VendorGstnumber = row["VendorGstnumber"]?.ToString();
+                            vendordata.VendorTypeId = row["VendorTypeId"] != DBNull.Value ? (int)row["VendorTypeId"] : 0; ;
+                            vendordata.VendorTypeName = row["VendorTypeName"]?.ToString();
+                            vendordata.FullAddress = row["FullAddress"]?.ToString();
+                        };
+                    }  
+                }
+                return vendordata;
             }
             catch (Exception ex)
             {
                 throw ex;
             }
-            return vendordata;
         }
-
-
 
         public async Task<IEnumerable<VendorListDetailsView>> GetVendorNameList()
         {
@@ -242,6 +260,7 @@ namespace EMPManegment.Repository.VendorDetailsRepository
                 {
 
                     Vendordata.Vid = updateVendor.Vid;
+                    Vendordata.VendorCompanyLogo = updateVendor.VendorCompanyLogo;
                     Vendordata.VendorFirstName = updateVendor.VendorFirstName;
                     Vendordata.VendorLastName = updateVendor.VendorLastName;
                     Vendordata.VendorEmail = updateVendor.VendorEmail;
@@ -265,6 +284,7 @@ namespace EMPManegment.Repository.VendorDetailsRepository
                     Vendordata.VendorTypeId = updateVendor.VendorTypeId;
                     Vendordata.UpdatedOn = DateTime.Now;
                     Vendordata.UpdatedBy = updateVendor.UpdatedBy;
+
                     Context.TblVendorMasters.Update(Vendordata);
                     await Context.SaveChangesAsync();
                     response.Code = 200;

@@ -18,5 +18,8 @@
         <td class="status">
             <span class="badge bg-primary-subtle text-primary fs-11"><i class="ri-time-line align-bottom"></i> Processing</span>
         </td>
+        <td>
+            <span href="#showModal" onclick="DeleteTransaction('AllTransaction','@item.Id',this)" data-bs-toggle="modal" class="btn text-danger d-inline-block remove-item-btn" title="Delete"> <i class="fas fa-trash"></i></span>           
+        </td>
     </tr>
 }

@@ -190,24 +190,48 @@
                             </div>
                         </div>
                         <!--end col-->
-                        <div class="col-lg-6">
-                            <div class="mb-3">
-                                <label for="pincodeidInput" class="form-label">PinCode</label>
-                                <input type="number" class="form-control" autocomplete="off" value="@Model.VendorPinCode" id="pincodeidInput" name="pincodeidInput" placeholder="Enter your Pincode">
+                        <div class="col-lg-12">
+                            <div class="row mb-3">
+                                <div class="col-lg-6">
+                                    <label for="pincodeidInput" class="form-label">PinCode</label>
+                                    <input type="number" class="form-control" autocomplete="off" value="@Model.VendorPinCode" id="pincodeidInput" name="pincodeidInput" placeholder="Enter your Pincode">
+                                </div>
                             </div>
                         </div>
-                        <div class="col-lg-6">
-                            <div class="mb-3">
-                                <label for="companylogoInput" class="form-label">Logo</label>
-                                @if (Model.VendorCompanyLogo != null)
-                                {
-                                    <img src="~/Content/Image/@Model.VendorCompanyLogo" class="form-control" alt="Company Logo" id="companylogoInput" name="companylogoInput" style="height:200px;width:200px;">
-                                }
-                                else
-                                {
+                        <div class="col-lg-12">
+                            <div class="row mb-3">
+                                <div class="col-lg-6">
+                                    <label for="companylogoInput" class="form-label">Logo</label>
                                     <input type="file" class="form-control" autocomplete="off" id="companylogoInput" name="companylogoInput">
-                                }
+                                </div>
+                                <div class="col-lg-6 d-flex flex-column justify-content-center">
+                                    @if (Model.VendorCompanyLogo != "")
+                                    {
+                                        <div id="VendorImageContainer" style="align-self: center;">
+                                            <div id="currentVendorImageName" style="margin-bottom: 10px;" hidden>
+                                                @System.IO.Path.GetFileName(Model.VendorCompanyLogo)
+                                            </div>
+                                            <div style="position: relative; display: inline-block;gap:10px;">
+                                                <img src="~/Content/Image/@Model.VendorCompanyLogo" class="form-control" id="vendorImagePreview" style="height: 200px;width: 200px;border:2px solid grey; margin-top: -65px;">
+                                                <div style="position: absolute; top: -65px; right: 5px;">
+                                                    <button type="button" id="deleteVendorImageButton" style="background-color: transparent; border: none; font-size: 16px; cursor: pointer; color:red;">&times;</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div id="VendorImageContainer" style="display: none;">
+                                            <div style="position: relative;">
+                                                <img src="#" id="vendorImagePreview" style="height: 200px;width: 200px;border:2px solid grey;margin-top: -65px;" />
+                                                <div style="position: absolute; top: -65px; right: 5px;">
+                                                    <button type="button" id="deleteVendorImageButton" style="background-color: transparent; border: none; font-size: 16px; cursor: pointer; color: red;margin-right: 320px;">&times;</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
 
+                                </div>
                             </div>
                         </div>
                         <!--end col-->
@@ -224,7 +248,7 @@
                 {
                     @if (UserSession.FormPermisionData.Any(a => a.FormName == "Vendor List" && (a.Edit == true)))
                     {
-                        <button type="button" class="btn btn-primary btn-lg" onclick="UpdateVendorDetails()('@Model.Vid')" id="updateVendorbtn" style="width: 230px;height: 50px;">Update</button>
+                        <button type="button" class="btn btn-primary btn-lg" onclick="UpdateVendorDetails('@Model.Vid')" id="updateVendorbtn" style="width: 230px;height: 50px;">Update</button>
                         <button type="button" class="btn btn-primary btn-lg" onclick="EditVendor()" id="editVendorbtn" style="display: none;width: 230px;height: 50px;">Edit</button>
                     }
                 }

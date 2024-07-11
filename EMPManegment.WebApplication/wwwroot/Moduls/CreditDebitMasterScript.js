@@ -211,7 +211,7 @@ function getVendorTransactionList() {
         columns: [
             {
                 "render": function (data, type, row) {
-                    return '<div class="avatar-xs" > <div class="avatar-title bg-danger-subtle text-danger rounded-circle fs-16"><i class="ri-arrow-right-up-fill"></i></div></div>';
+                    return '<div class="avatar-xs"><div class="avatar-title bg-danger-subtle text-danger rounded-circle fs-16"><i class="ri-arrow-right-up-fill"></i></div></div>';
                 }
             },
             { "data": "vendorName", "name": "VendorName" },
@@ -230,6 +230,16 @@ function getVendorTransactionList() {
                     return '<span class="badge bg-primary-subtle text-primary fs-11"><i class="ri-time-line align-bottom"></i> Processing</span>';
                 }
             },
+            {
+                "data": "action", "name": "Action",
+                "render": function (data, type, row) {
+                    return '<span data-bs-toggle="modal" data-bs-target="#showModal" ' +
+                        'onclick="DeleteTransaction(\'VendorTransactions\', ' + row.id + ', this)" ' +
+                        'class="btn text-danger d-inline-block remove-item-btn" ' +
+                        'title="Delete"><i class="fas fa-trash"></i></span>';
+                }
+
+            },
         ],
         columnDefs: [{
             "defaultContent": "",
@@ -237,6 +247,7 @@ function getVendorTransactionList() {
         }]
     });
 }
+
 
 $(document).ready(function () {
     $('#searchcreditdebitlist').on('keyup', function () {
@@ -334,5 +345,67 @@ function SearchDatesInVendorCreditDebitList() {
         });
     }
 }
+
+function DeleteTransaction(Transaction, VendorId, that) {
+    Swal.fire({
+        title: "Are you sure you want to delete this?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, delete it!",
+        cancelButtonText: "No, cancel!",
+        confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
+        cancelButtonClass: "btn btn-danger w-xs mt-2",
+        buttonsStyling: false,
+        showCloseButton: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: '/Invoice/DeleteTransaction?Id=' + VendorId,
+                type: 'POST',
+                dataType: 'json',
+                success: function (Result) {
+                    if (Result.code) {
+                        Swal.fire({
+                            title: Result.message,
+                            icon: 'success',
+                            confirmButtonColor: '#3085d6',
+                            confirmButtonText: 'OK'
+                        }).then(function () {
+                            if (Transaction == "AllTransaction") {
+                                window.location = '/Invoice/AllTransaction';
+                            } else if (Transaction == "VendorTransactions") {
+                                window.location = '/Invoice/VendorAllTransaction?Vid=' + Vid;
+                            }
+                        });
+                    } else {
+                        toastr.error(Result.message);
+                    }
+                },
+                error: function () {
+                    Swal.fire({
+                        title: "Can't delete transaction!",
+                        icon: 'warning',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK',
+                    }).then(function () {
+                        if (Transaction == "AllTransaction") {
+                            window.location = '/Invoice/AllTransaction';
+                        } else if (Transaction == "VendorTransactions") {
+                            window.location = '/Invoice/VendorAllTransaction?Vid=' + Vid;
+                        }
+                    });
+                }
+            });
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+            Swal.fire(
+                'Cancelled',
+                'Transactions have no changes.!!😊',
+                'error'
+            );
+        }
+    });
+}
+
 
 
