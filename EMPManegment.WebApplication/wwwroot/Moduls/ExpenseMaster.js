@@ -211,7 +211,7 @@ function EditExpenseDetails(Id) {
             $('#Editdate').val(response.date);
             $('#Edittotalamount').val(response.totalAmount);
             $('#Editaccount').val(response.account);
-            $('#txtExpensepaymenttype').val(response.paymentType);
+            $('#EditExpensepaymenttype').val(response.paymentType);
             $('#EditExpensepaymenttypeid').val(response.paymentTypeName);
             $('#EditIsPaid').val(response.isPaid ? "True" : "False");
             $('#EditIsApproved').val(response.isApproved ? "True" : "False");

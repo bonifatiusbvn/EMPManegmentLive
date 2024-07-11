@@ -6,6 +6,7 @@ using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.TaskModels;
 using EMPManegment.EntityModels.ViewModels.Weather;
+using EMPManegment.Inretface.Interface.ExpenseMaster;
 using EMPManegment.Inretface.Interface.UserAttendance;
 using EMPManegment.Inretface.Services.TaskServices;
 using EMPManegment.Inretface.Services.UserAttendanceServices;
@@ -356,6 +357,31 @@ namespace EMPManagment.API.Controllers
             {
                 return StatusCode(500, new { message = "An unexpected error occurred.", detail = ex.Message });
             }
+        }
+        [HttpPost]
+        [Route("DeleteTask")]
+        public async Task<IActionResult> DeleteTask(Guid Id)
+        {
+            UserResponceModel responseModel = new UserResponceModel();
+            var GetTaskdata = await TaskServices.DeleteTask(Id);
+            try
+            {
+                if (GetTaskdata != null)
+                {
+                    responseModel.Code = (int)HttpStatusCode.OK;
+                    responseModel.Message = GetTaskdata.Message;
+                }
+                else
+                {
+                    responseModel.Message = GetTaskdata.Message;
+                    responseModel.Code = GetTaskdata.Code;
+                }
+            }
+            catch (Exception)
+            {
+                responseModel.Code = (int)HttpStatusCode.InternalServerError;
+            }
+            return StatusCode(responseModel.Code, responseModel);
         }
     }
 }

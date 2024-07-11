@@ -83,5 +83,10 @@ namespace EMPManegment.Services.TaskDetails
         {
             return await TaskDetails.ProjectActivityByUserId(UserId);
         }
+
+        public async Task<UserResponceModel> DeleteTask(Guid Id)
+        {
+            return await TaskDetails.DeleteTask(Id);
+        }
     }
 }

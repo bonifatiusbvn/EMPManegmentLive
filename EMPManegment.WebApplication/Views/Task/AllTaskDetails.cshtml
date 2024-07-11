@@ -142,7 +142,7 @@
                     <div id="tasksTableData_filter" class="dataTables_filter">@* <label>Search:<input type="search" class="form-control form-control-sm" placeholder="" aria-controls="tasksTableData"></label> *@</div>
                 </div>
                 <table id="tasksTableData" class="table table-bordered dt-responsive nowrap table-striped align-middle dataTable no-footer dtr-inline">
-                    <thead class="table-light text-muted text-center">
+                    <thead class="text-muted table-info">
                         <tr>
                             <th>UserName</th>
                             <th>TaskTitle</th>
@@ -151,6 +151,7 @@
                             <th>TaskDate</th>
                             <th>TaskEndDate</th>
                             <th>TaskStatus</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody> </tbody>
@@ -211,6 +212,12 @@
                                 <label for="dealEmail" class="form-label">Task End-Date</label>
                                 <input type="datetime-local" class="form-control material_blue" id="txtenddatetime" name="txtenddatetime">
 
+                            </div>
+                            <div>
+                                <div class="mb-3">
+                                    <label class="form-label">Document</label>
+                                    <input type="file" id="txtdocument" class="form-control material_blue" name="txtdocument" placeholder="Enter Image" />
+                                </div>
                             </div>
                             <div class="mb-3">
                                 <label for="contactDescription" class="form-label">Task Description</label>

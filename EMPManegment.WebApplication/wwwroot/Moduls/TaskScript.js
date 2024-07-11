@@ -21,6 +21,7 @@ function ClearTextBox() {
         '<option selected disabled value = "">--Select Username--</option>');
     $("#txtdatetime").val('');
     $("#txtenddatetime").val('');
+    $("#txtdocument").val('');
     $("#contactDescription").val('');
 }
 
@@ -47,8 +48,8 @@ function TaskTypetext(sel) {
 }
 
 function btnSaveTaskDetail() {
+    siteloadershow();
 
-    siteloadershow()
     if ($('#frmtaskdetails').valid()) {
         var formData = new FormData();
         formData.append("TaskType", $("#taskType").val());
@@ -58,16 +59,20 @@ function btnSaveTaskDetail() {
         formData.append("TaskEndDate", $("#txtenddatetime").val());
         formData.append("TaskDetails", $("#contactDescription").val());
         formData.append("ProjectId", $("#txtprojectid").val());
+        var fileInput = document.getElementById("txtdocument");
+        if (fileInput.files.length > 0) {
+            formData.append("Image", fileInput.files[0]);
+        }
         $.ajax({
             url: '/Task/AddTaskDetails',
-            type: 'Post',
+            type: 'POST',
             data: formData,
             dataType: 'json',
             contentType: false,
             processData: false,
             success: function (Result) {
-                siteloaderhide()
-                if (Result.code == 200) {
+                siteloaderhide();
+                if (Result.code === 200) {
                     Swal.fire({
                         title: Result.message,
                         icon: 'success',
@@ -76,16 +81,18 @@ function btnSaveTaskDetail() {
                     }).then(function () {
                         window.location = '/Task/AllTaskDetails';
                     });
-                }
-                else {
+                } else {
                     toastr.error(Result.message);
                 }
+            },
+            error: function (xhr, status, error) {
+                siteloaderhide();
+                toastr.error('An error occurred while processing your request.');
             }
-        })
-    }
-    else {
+        });
+    } else {
         siteloaderhide();
-        toastr.warning("Kindly fill all datafield");
+        toastr.warning("Kindly fill all data fields");
     }
 }
 
@@ -513,6 +520,7 @@ $(document).ready(function () {
         var userPermission = datas;
         AllTaskDetailsList(userPermission);
     }
+
     function AllTaskDetailsList(userPermission) {
         $('#tasksTableData').DataTable({
             processing: false,
@@ -520,7 +528,7 @@ $(document).ready(function () {
             filter: true,
             "bDestroy": true,
             ajax: {
-                type: "Post",
+                type: "POST",
                 url: '/Task/TaskDetailsDataTable',
                 dataType: 'json',
             },
@@ -532,12 +540,24 @@ $(document).ready(function () {
                     "data": "taskTitle", "name": "TaskTitle"
                 },
                 {
-                    "data": "taskDetails",
-                    "name": "TaskDetails",
-                    "render": function (data, type, row) {
-                        if (type === 'display' && data.length > 50) {
-                            // Truncate the TaskDetails text and add a tooltip
-                            return '<span title="' + data + '">' + data.substr(0, 50) + '...</span>';
+                    "data": "taskDetails", "name": "TaskDetails",
+                    "render": function (data, type, full) {
+                        if (type === 'display') {
+                            let taskDetails = data;
+                            if (data.length > 50) {
+                                taskDetails = '<span title="' + data + '">' + data.substr(0, 50) + '...</span>';
+                            }
+                            let documentLink = '<div class="d-flex align-items-center">' +
+                                '<div class="flex-grow-1">' + taskDetails + '</div>' +
+                                '<div class="flex-shrink-0 ms-4 task-icons">' +
+                                '<li class="list-inline tasks-list-menu mb-0" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Document">' +
+                                '<a class="flex-shrink-0 ms-4 task-icons" onclick="DownloadTaskDocument(\'' + full.document + '\')">' +
+                                '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">' +
+                                '<path fill="currentColor" d="M13 12h3l-4 4l-4-4h3V8h2v4Zm2-8H5v16h14V8h-4V4ZM3 2.992C3 2.444 3.447 2 3.999 2H16l5 5v13.993A1 1 0 0 1 20.007 22H3.993A1 1 0 0 1 3 21.008V2.992Z" />' +
+                                '</svg></a></li>' +
+                                '</div>' +
+                                '</div>';
+                            return documentLink;
                         }
                         return data;
                     }
@@ -545,14 +565,11 @@ $(document).ready(function () {
                 {
                     "data": "taskType", "name": "TaskType",
                     "render": function (data, type, full) {
-
                         if (full.taskTypeName == "HighPriority") {
                             return '<a class="badge bg-danger-subtle text-danger text-uppercase">' + full.taskTypeName + '</a>';
-                        }
-                        else if (full.taskTypeName == "MediumPriority") {
+                        } else if (full.taskTypeName == "MediumPriority") {
                             return '<a class="badge bg-warning-subtle text-warning text-uppercase">' + full.taskTypeName + '</a>';
-                        }
-                        else {
+                        } else {
                             return '<a class="badge bg-success-subtle text-success text-uppercase">' + full.taskTypeName + '</a>';
                         }
                     }
@@ -570,25 +587,47 @@ $(document).ready(function () {
                     }
                 },
                 {
-                    "data": "taskStatus", "name": "TaskStatus",
+                    "data": "taskStatus",
+                    "name": "TaskStatus",
                     "render": function (data, type, full) {
+                        var badgeClass = 'bg-info';
+                        if (full.taskStatus === "Working") {
+                            badgeClass = 'bg-warning';
+                        } else if (full.taskStatus === "Completed") {
+                            badgeClass = 'bg-success';
+                        } else if (full.taskStatus === "Pending") {
+                            badgeClass = 'bg-secondary';
+                        } else if (full.taskStatus === "InReview") {
+                            badgeClass = 'bg-orange';
+                        } else if (full.taskStatus === "InReview") {
+                            badgeClass = 'bg-danger';
+                        }
 
-                        var userPermissionArray = [];
-                        userPermissionArray = JSON.parse(userPermission);
+                        return '<a class="badge ' + badgeClass + ' text-uppercase">' + full.taskStatus + '</a>';
+                    }
+                },
+                {
+                    "data": "action",
+                    "name": "Action",
+                    "render": function (data, type, full, meta) {
+                        var userPermissionArray = JSON.parse(userPermission);
 
                         var canEdit = false;
+                        var canDelete = false;
 
                         for (var i = 0; i < userPermissionArray.length; i++) {
                             var permission = userPermissionArray[i];
-                            if (permission.formName == "Tasks List") {
+                            if (permission.formName === "Tasks List") {
                                 canEdit = permission.edit;
                                 canDelete = permission.delete;
                                 break;
                             }
                         }
 
-
                         var buttons = '<ul class="list-inline hstack gap-2 mb-0">';
+
+                        buttons += '<li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="View">' +
+                            '<a class="text-primary" onclick="btnTaskDetails(\'' + full.id + '\')"><i class="ri-eye-fill fs-16"></i></a></li>';
 
                         if (canEdit) {
                             buttons += '<li class="btn list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">' +
@@ -596,28 +635,16 @@ $(document).ready(function () {
                                 '<i class="fa-regular fa-pen-to-square"></i></a></li>';
                         }
 
+                        if (canDelete) {
+                            buttons += '<li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Delete">' +
+                                '<a class="btn text-danger btndeletedoc" onclick="DeleteTask(\'' + full.id + '\')"><i class="fas fa-trash"></i></a></li>';
+                        }
+
                         buttons += '</ul>';
 
-                        if (full.taskStatus == "Working") {
-                            return ('<ul class="list-inline hstack gap-2 mb-0"><li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="View"><a class="badge bg-warning text-uppercase">' + full.taskStatus + '</a></li><li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="View" style="margin-left:7px;"><a class="text-primary" onclick="btnTaskDetails(\'' + full.id + '\')"><i class="ri-eye-fill fs-16"></i></a></li>' + buttons + '</ul >');
-                        }
-                        else if (full.taskStatus == "Completed") {
-                            return ('<ul class="list-inline hstack gap-2 mb-0"><a class="badge bg-success text-uppercase">' + full.taskStatus + '</a><li class="list-inline-item" data-bs-toggle="tooltip" data-bs-success="hover" data-bs-placement="top" title="View" style="margin-left:3px;"><a class="text-primary" onclick="btnTaskDetails(\'' + full.id + '\')"><i class="ri-eye-fill fs-16"></i></a></li>' + buttons + '</ul >');
-                        }
-                        else if (full.taskStatus == "Pending") {
-                            return ('<ul class="list-inline hstack gap-2 mb-0"><li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="View"><a class="badge bg-secondary text-uppercase">' + full.taskStatus + '</a></li><li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="View" style="margin-left:10px;"><a class="text-primary" onclick="btnTaskDetails(\'' + full.id + '\')"><i class="ri-eye-fill fs-16"></i></a></li>' + buttons + '</ul >');
-                        }
-                        else if (full.taskStatus == "InReview") {
-                            return ('<ul class="list-inline hstack gap-2 mb-0"><li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="View"><a class="badge bg-orange text-uppercase">' + full.taskStatus + '</a></li><li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="View" style="margin-left:7px;"><a class="text-primary" onclick="btnTaskDetails(\'' + full.id + '\')"><i class="ri-eye-fill fs-16"></i></a></li>' + buttons + '</ul >');
-                        }
-                        else if (full.taskStatus == "InReview") {
-                            return ('<a class="badge bg-danger text-uppercase">' + full.taskStatus + '</a>' + '<a class="text-primary" onclick="btnTaskDetails(\'' + full.id + '\')"><i class="ri-eye-fill align-bottom me-2 text-muted"></i></a>' + buttons);
-                        }
-                        else {
-                            return ('<ul class="list-inline hstack gap-2 mb-0"><li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="View"><a class="badge bg-info text-uppercase">' + full.taskStatus + '</a></li><li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="View" style="margin-left:29px;"><a class="text-primary" onclick="btnTaskDetails(\'' + full.id + '\')"><i class="ri-eye-fill fs-16"></i></a></li>' + buttons + '</ul >');
-                        }
+                        return buttons;
                     }
-                },
+                }
             ],
             columnDefs: [{
                 "defaultContent": "",
@@ -625,10 +652,49 @@ $(document).ready(function () {
             }]
         });
     }
+
     data(datas);
 });
 
+function DownloadTaskDocument(taskDocument) {
+    $.ajax({
+        url: '/Task/DownloadTaskDocument?TaskDocument=' + taskDocument,
+        type: "get",
+        contentType: 'application/json;charset=utf-8',
+        dataType: 'json',
+        success: function (result) {
+            siteloaderhide();
 
+            if (result.fileName && result.memory) {
+
+                var byteCharacters = atob(result.memory);
+                var byteNumbers = new Array(byteCharacters.length);
+                for (var i = 0; i < byteCharacters.length; i++) {
+                    byteNumbers[i] = byteCharacters.charCodeAt(i);
+                }
+                var byteArray = new Uint8Array(byteNumbers);
+
+                var blob = new Blob([byteArray], { type: result.contentType });
+
+                var link = document.createElement('a');
+                link.href = window.URL.createObjectURL(blob);
+                link.setAttribute('download', result.fileName);
+
+                document.body.appendChild(link);
+
+                link.click();
+
+                document.body.removeChild(link);
+            } else {
+                toastr.warning(result.Message || "No document found for selected task");
+            }
+        },
+        error: function () {
+            siteloaderhide();
+            toastr.error("Can't get Data");
+        }
+    });
+}
 function EditTaskDetails(Id) {
     $.ajax({
         url: '/Task/GetTaskDetailsById?Id=' + Id,
@@ -761,4 +827,58 @@ function CheckValidation() {
         $('#ValidateEndDate').text('');
         $('#EditEndDate').css('border-color', 'lightgray');
     }
+}
+function DeleteTask(Id) {
+    Swal.fire({
+        title: "Are you sure want to Delete This?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, Delete it!",
+        cancelButtonText: "No, cancel!",
+        confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
+        cancelButtonClass: "btn btn-danger w-xs mt-2",
+        buttonsStyling: false,
+        showCloseButton: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: '/Task/DeleteTask?Id=' + Id,
+                type: 'POST',
+                dataType: 'json',
+                success: function (Result) {
+                    if (Result.code) {
+                        Swal.fire({
+                            title: Result.message,
+                            icon: 'success',
+                            confirmButtonColor: '#3085d6',
+                            confirmButtonText: 'OK'
+                        }).then(function () {
+                            window.location = '/Task/AllTaskDetails';
+                        })
+                    }
+                    else {
+                        toastr.error(Result.message);
+                    }
+                },
+                error: function () {
+                    Swal.fire({
+                        title: "Can't delete task!",
+                        icon: 'warning',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK',
+                    }).then(function () {
+                        window.location = '/Task/AllTaskDetails';
+                    })
+                }
+            })
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+
+            Swal.fire(
+                'Cancelled',
+                'Tasks have no changes.!!😊',
+                'error'
+            );
+        }
+    });
 }

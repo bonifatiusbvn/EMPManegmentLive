@@ -20,6 +20,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Azure;
 using Azure.Identity;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace EMPManegment.Repository.TaskRepository
 {
@@ -56,6 +57,7 @@ namespace EMPManegment.Repository.TaskRepository
             UserResponceModel response = new UserResponceModel();
             try
             {
+                var taskImage = await Context.TblTaskDetails.FirstOrDefaultAsync(a => a.Id == addtask.Id);
                 var taskmodel = new TblTaskDetail()
                 {
                     Id = Guid.NewGuid(),
@@ -68,6 +70,7 @@ namespace EMPManegment.Repository.TaskRepository
                     CreatedOn = DateTime.Now,
                     TaskEndDate = addtask.TaskEndDate,
                     ProjectId = addtask.ProjectId,
+                    Document = addtask.Document,
                 };
                 response.Code = 200;
                 response.Message = "Task add successfully!";
@@ -197,6 +200,7 @@ namespace EMPManegment.Repository.TaskRepository
                                                               LastName = b.LastName,
                                                               TaskTypeName = c.TaskType,
                                                               ProjectId = a.ProjectId,
+
                                                           };
             return AllTaskDetails;
         }
@@ -221,9 +225,9 @@ namespace EMPManegment.Repository.TaskRepository
                                 TaskDetails = d.TaskDetails,
                                 TaskStatus = d.TaskStatus,
                                 UserName = b.UserName,
-                                FirstName= b.FirstName,
-                                LastName= b.LastName,
-                                UserProfile= b.Image,
+                                FirstName = b.FirstName,
+                                LastName = b.LastName,
+                                UserProfile = b.Image,
                                 TaskTypeName = m.TaskType,
                                 CreatedBy = d.CreatedBy
                             }).First();
@@ -318,7 +322,7 @@ namespace EMPManegment.Repository.TaskRepository
                     join b in Context.TblUsers on a.UserId equals b.Id
                     join c in Context.TblTaskMasters on a.TaskType equals c.Id
                     join d in Context.TblProjectMasters on a.ProjectId equals d.ProjectId
-                    where a.UserId == UserId 
+                    where a.UserId == UserId
                     where a.ProjectId == ProjectId
                     select new TaskDetailsView
                     {
@@ -333,11 +337,11 @@ namespace EMPManegment.Repository.TaskRepository
                         UserProfile = b.Image,
                         UserName = b.UserName,
                         FirstName = b.FirstName,
-                        LastName= b.LastName,
+                        LastName = b.LastName,
                         TaskTypeName = c.TaskType,
                         CreatedBy = a.CreatedBy,
-                        ProjectHead=d.ProjectHead,
-                        ProjectId=d.ProjectId,
+                        ProjectHead = d.ProjectHead,
+                        ProjectId = d.ProjectId,
                     };
 
                 return AllTaskDetails;
@@ -365,6 +369,7 @@ namespace EMPManegment.Repository.TaskRepository
                                               UserProfile = b.Image,
                                               UserName = b.UserName,
                                               TaskTypeName = c.TaskType,
+                                              Document = a.Document,
                                           };
             if (!string.IsNullOrEmpty(AllUserTaskDetails.sortColumn) && !string.IsNullOrEmpty(AllUserTaskDetails.sortColumnDir))
             {
@@ -438,7 +443,7 @@ namespace EMPManegment.Repository.TaskRepository
                 {
                     model.Code = 404;
                     model.Message = "Task id doesn't found";
-                }        
+                }
             }
             catch (Exception ex)
             {
@@ -448,5 +453,33 @@ namespace EMPManegment.Repository.TaskRepository
             return model;
         }
 
+        public async Task<UserResponceModel> DeleteTask(Guid Id)
+        {
+            UserResponceModel response = new UserResponceModel();
+            try
+            {
+                var GetTaskdata = Context.TblTaskDetails.Where(a => a.Id == Id).FirstOrDefault();
+
+                if (GetTaskdata != null)
+                {
+                    Context.TblTaskDetails.Remove(GetTaskdata);
+                    Context.SaveChanges();
+                    response.Code = 200;
+                    response.Data = GetTaskdata;
+                    response.Message = "Task is deleted successfully";
+                }
+                else
+                {
+                    response.Code = 404;
+                    response.Message = "Can not found";
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Code = 400;
+                response.Message = "Error deleting tasks";
+            }
+            return response;
+        }
     }
 }

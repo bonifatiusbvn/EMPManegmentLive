@@ -1,8 +1,7 @@
 ﻿
 $(document).ready(function () {
     GetAllUserProjectDetailsList();
-    document.getElementById("showProjectMembers").click()
-    document.getElementById("showProjectDocuments").click()
+   
     GetMemberList();
 });
 
@@ -300,7 +299,7 @@ function addProjectDocument() {
 
     $.ajax({
         url: '/Project/AddDocumentToProject',
-        type: 'Post',
+        type: 'POST', 
         dataType: 'json',
         data: formData,
         processData: false,
@@ -314,16 +313,15 @@ function addProjectDocument() {
                     confirmButtonText: 'OK',
                 }).then(function () {
                     window.location = '/Project/ProjectDetails/?Id=' + data6;
-                })
-            }
-            else {
+                });
+            } else {
                 toastr.error(Result.message);
             }
         },
         error: function () {
             toastr.error("Can't get Data");
         }
-    })
+    });
 }
 
 function showProjectDocuments(ProjectId) {
@@ -640,3 +638,45 @@ $(document).ready(function () {
         toggleImagePreview(true);
     }
 });
+
+function DownloadProjectDocument(documentName) {
+    $.ajax({
+        url: '/Project/DownloadProjectDocument?DocumentName=' + documentName,
+        type: "GET",
+        dataType: 'json',
+        success: function (result) {
+            siteloaderhide();
+
+            if (result && result.memory) {
+                try {
+                    var binaryString = window.atob(result.memory);
+                    var length = binaryString.length;
+                    var bytes = new Uint8Array(length);
+
+                    for (var i = 0; i < length; i++) {
+                        bytes[i] = binaryString.charCodeAt(i);
+                    }
+
+                    var blob = new Blob([bytes], { type: result.contentType });
+
+                    var link = document.createElement('a');
+                    link.href = window.URL.createObjectURL(blob);
+                    link.setAttribute('download', result.fileName);
+
+                    document.body.appendChild(link);
+                    link.click();
+
+                    document.body.removeChild(link);
+                } catch (e) {
+                    toastr.error("Error decoding file: " + e.message);
+                }
+            } else {
+                toastr.warning(result.Message || "No document found for selected");
+            }
+        },
+        error: function () {
+            siteloaderhide();
+            toastr.error("Can't get data");
+        }
+    });
+}

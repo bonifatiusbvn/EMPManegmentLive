@@ -347,5 +347,30 @@ namespace EMPManagment.API.Controllers
             IEnumerable<InvoiceViewModel> invoicelist = await InvoiceMaster.InvoicActivityByUserId(UserId);
             return Ok(new { code = 200, data = invoicelist.ToList() });
         }
+        [HttpPost]
+        [Route("DeleteTransaction")]
+        public async Task<IActionResult> DeleteTransaction(int Id)
+        {
+            UserResponceModel responseModel = new UserResponceModel();
+            var GetTrandata = await InvoiceMaster.DeleteTransaction(Id);
+            try
+            {
+                if (GetTrandata != null)
+                {
+                    responseModel.Code = (int)HttpStatusCode.OK;
+                    responseModel.Message = GetTrandata.Message;
+                }
+                else
+                {
+                    responseModel.Message = GetTrandata.Message;
+                    responseModel.Code = GetTrandata.Code;
+                }
+            }
+            catch (Exception)
+            {
+                responseModel.Code = (int)HttpStatusCode.InternalServerError;
+            }
+            return StatusCode(responseModel.Code, responseModel);
+        }
     }
 }

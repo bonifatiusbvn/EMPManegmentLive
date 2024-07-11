@@ -1105,6 +1105,35 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
             {
                 throw ex;
             }
+        }       
+
+        public async Task<UserResponceModel> DeleteTransaction(int Id)
+        {
+            UserResponceModel response = new UserResponceModel();
+            try
+            {
+                var GetTrandata = Context.TblCreditDebitMasters.Where(a => a.Id == Id).FirstOrDefault();
+
+                if (GetTrandata != null)
+                {
+                    Context.TblCreditDebitMasters.Remove(GetTrandata);
+                    Context.SaveChanges();
+                    response.Code = 200;
+                    response.Data = GetTrandata;
+                    response.Message = "Transaction is deleted successfully";
+                }
+                else
+                {
+                    response.Code = 404;
+                    response.Message = "Can not found";
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Code = 400;
+                response.Message = "Error deleting transactions";
+            }
+            return response;
         }
     }
 }
