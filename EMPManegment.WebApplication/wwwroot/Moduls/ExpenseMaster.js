@@ -111,7 +111,7 @@ function GetParameterByName(name, url) {
     return decodeURIComponent(results[2].replace(/\+/g, " "));
 }
 
-function AddExpenseDetails() {
+function AddMyExpenseDetails() {
     if ($('#formexpensedetails').valid()) {
         var formData = new FormData();
         formData.append("ExpenseType", $("#txtexpensetypeHidden").val());
@@ -148,7 +148,7 @@ function AddExpenseDetails() {
         toastr.warning("Kindly fill all datafield");
     }
 }
-function AddUserExpenseDetails() {
+function AddAllUserExpenseDetails() {
     if ($('#userexpenseform').valid()) {
         var formData = new FormData();
         formData.append("ExpenseType", $("#txtexpensetypeHidden").val());
@@ -211,8 +211,8 @@ function EditExpenseDetails(Id) {
             $('#Editdate').val(response.date);
             $('#Edittotalamount').val(response.totalAmount);
             $('#Editaccount').val(response.account);
-            $('#txtExpensepaymenttype').val(response.paymentType);
-            $('#EditExpensepaymenttypeid').val(response.paymentTypeName);
+            $('#txtExpensepaymenttype').val(response.paymentTypeName);
+            $('#EditExpensepaymenttypeid').val(response.paymentType);
             $('#EditIsPaid').val(response.isPaid ? "True" : "False");
             $('#EditIsApproved').val(response.isApproved ? "True" : "False");
         },
@@ -230,7 +230,7 @@ function UpdateExpenseDetails() {
         formData.append("BillNumber", $("#Editbillno").val());
         formData.append("Date", $("#Editdate").val());
         formData.append("TotalAmount", $("#Edittotalamount").val());
-        formData.append("PaymentType", $("#EditExpensepaymenttype").val());
+        formData.append("PaymentType", $("#EditExpensepaymenttypeid").val());
         formData.append("IsPaid", $("#EditIsPaid").val());
         formData.append("IsApproved", $("#EditIsApproved").val());
         formData.append("Account", $("#Editaccount").val());
@@ -272,7 +272,7 @@ function UpdateExpenseListDetails() {
         formData.append("BillNumber", $("#Editbillno").val());
         formData.append("Date", $("#Editdate").val());
         formData.append("TotalAmount", $("#Edittotalamount").val());
-        formData.append("PaymentType", $("#EditExpensepaymenttype").val());
+        formData.append("PaymentType", $("#EditExpensepaymenttypeid").val());
         formData.append("IsPaid", $("#EditIsPaid").val());
         formData.append("IsApproved", $("#EditIsApproved").val());
         formData.append("Account", $("#Editaccount").val());

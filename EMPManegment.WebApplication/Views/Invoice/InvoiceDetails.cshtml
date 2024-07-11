@@ -10,8 +10,37 @@
 }
 
 <style>
-    .border-right {
-        border-right: 2px solid black;
+
+    @@media print {
+        .invoice-table tbody {
+            height: auto;
+        }
+
+        .invoice-table td {
+            border: none !important;
+            padding: 2px;
+        }
+        .card.d-print-none {
+            display: none;
+        }
+        .invoice-table, .invoice-table tbody, .invoice-table tr, .invoice-table td, .invoice-table th {
+            page-break-inside: avoid !important;
+            page-break-before:avoid !important;
+            page-break-after:avoid !important;
+        }
+
+        @@page {
+            margin: 1cm;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+        }
+        html, body {
+            width: 100%;
+            height: 100%;
+        }
     }
 </style>
 @{
@@ -39,7 +68,6 @@
             <div class="row">
                 <div class="card-body" id="cardbody1">
                     <div class="d-flex">
-
                         <div class="flex-grow-1 col-6 border">
                             <img src="~/assets/images/logo - bonifatius.jpeg" style="height: 25px;" />
                             <div class="flex-shrink-0 mt-sm-0 mt-3 border">
@@ -52,7 +80,6 @@
                                 <p class="text-muted"><b>Consignee (Ship to):</b></p>
                                 <span class="text-muted text-uppercase"><b>@Model.ProjectName</b></span><br />
                                 <span class="text-muted">@Model.ShippingAddress</span><br />
-                                <span class="text-muted">GSTIN:- </span>
                             </div>
                         </div>
                         <div class="flex-grow-1 col-3">
@@ -61,78 +88,50 @@
                                 <p class="text-muted text-uppercase"><b>@Model.InvoiceNo</b></p>
                             </div>
                             <div class="flex-shrink-0 mt-sm-0 mt-3 border">
-                                <label class="form-label">Delivery Note</label>
-                                <p class="text-muted"></p>
-                            </div>
-                            <div class="flex-shrink-0 mt-sm-0 mt-3 border">
-                                <label class="form-label">Reference No. & Date</label>
-                                <p><span class="text-muted"><b></b></span></p>
-                            </div>
-                            <div class="flex-shrink-0 mt-sm-0 mt-3 border">
                                 <label class="form-label">Buyer's Order No</label>
                                 <p class="text-muted text-uppercase">@Model.BuyesOrderNo</p>
                             </div>
                             <div class="flex-shrink-0 mt-sm-0 mt-3 border">
-                                <label class="form-label">Dispatch Doc No.</label>
-                                <p class="text-muted text-uppercase"><b></b></p>
-                            </div>
-                            <div class="flex-shrink-0 mt-sm-0 mt-3 border">
                                 <label class="form-label">Dispatched Through</label>
-                                <p class="text-muted text-uppercase"><b>@Model.DispatchThrough</b></p>
-                            </div>
-                            <div class="flex-shrink-0 mt-sm-0 mt-3 border">
-                                <label class="form-label">Bill of Landing/LR-RR No.</label>
-                                <p class="text-muted text-uppercase"><b></b></p>
+                                <p class="text-muted text-uppercase">@Model.DispatchThrough</p>
                             </div>
                         </div>
                         <div class="flex-grow-1 col-3">
                             <div class="flex-shrink-0 mt-sm-0 mt-3 border">
                                 <label class="form-label">Date</label>
-                                <p><span class="text-muted fw-normal">@CommonHelper.GetCommonDateFormat(Model.InvoiceDate)</span></p>
-                            </div>
-                            <div class="flex-shrink-0 mt-sm-0 mt-3 border">
-                                <label class="form-label">Mode/Terms of Payment</label>
-                                <p><span class="text-muted text-uppercase"><b>7 days</b></span></p>
-                            </div>
-                            <div class="flex-shrink-0 mt-sm-0 mt-3 border">
-                                <label class="form-label">Other Reference</label>
-                                <p class="text-muted"></p>
+                                <p><span class="text-muted text-uppercase">@CommonHelper.GetCommonDateFormat(Model.InvoiceDate)</span></p>
                             </div>
                             <div class="flex-shrink-0 mt-sm-0 mt-3 border">
                                 <label class="form-label">Buy's Order Date</label>
                                 <p class="text-muted text-uppercase">@CommonHelper.GetCommonDateFormat(Model?.BuyesOrderDate ?? DateTime.MinValue)</p>
                             </div>
                             <div class="flex-shrink-0 mt-sm-0 mt-3 border">
-                                <label class="form-label">Delivery Note Date</label>
-                                <p class="text-muted text-uppercase"><b></b></p>
-                            </div>
-                            <div class="flex-shrink-0 mt-sm-0 mt-3 border">
-                                <label class="form-label">Destination</label>
-                                <p class="text-muted text-uppercase"><b>@Model.ShippingAddress</b></p>
-                            </div>
-                            <div class="flex-shrink-0 mt-sm-0 mt-3 border">
                                 <label class="form-label">Motor Vehicle No</label>
-                                <p class="text-muted text-uppercase"><b>@Model.DispatchThrough</b></p>
+                                <p class="text-muted text-uppercase">@Model.DispatchThrough</p>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="card-body" id="cardbody2">
                     <div class="d-flex">
                         <div class="flex-grow-1 col-6 border">
                             <p class="text-muted"><b>Buyer (Bill to)</b></p>
-                            <span class="text-muted text-uppercase"><b>@Model.VendorCompanyName</b></span><br />
+                            <span class="text-muted text-uppercase">@Model.VendorCompanyName</span><br />
                             <span class="text-muted text-uppercase">@Model.ShippingAddress</span><br />
-                            <p class="text-muted text-uppercase"><b>GSTIN/UIN :@Model.VendorGstnumber</b></p>
+                            <p class="text-muted text-uppercase">GSTIN/UIN :@Model.VendorGstnumber</p>
+                        </div>
+                        <div class="flex-grow-1 col-6 border">
+                            <label class="form-label">Destination</label>
+                            <p class="text-muted text-uppercase">@Model.ShippingAddress</p>
+                        </div>
+                    </div>
+                    <div class="d-flex">
+                        <div class="flex-grow-1 col-6">
                         </div>
                         <div class="flex-grow-1 col-6 border">
                             <label class="form-label">Terms of Delivery</label>
-                            <p class="text-muted"><b>Dispatched from Rakhial,Ahemdabad</b></p>
+                            <p class="text-muted">Dispatched from Rakhial, Ahemdabad</p>
                         </div>
                     </div>
-                </div>
-                <div class="card-body" id="cardbody3">
-                    <table class="table table-border text-center table-nowrap align-middle mb-0">
+                    <table class="table table-border text-center table-nowrap align-middle mb-0 invoice-table">
                         <thead class="table-info text-muted border">
                             <tr class="table-active">
                                 <th class="border">SINo.</th>
@@ -152,7 +151,7 @@
                             @foreach (var item in Model.InvoiceDetails)
                             {
                                 subtotal = (item.Quantity * item.PerUnitPrice);
-                                <tr class="product">
+                                <tr>
                                     <td class="border">@index</td>
                                     <td class="text-start border">
                                         <span class="fw-medium" id="txtproductname">@item.Product</span>
@@ -166,14 +165,6 @@
                                 index++;
                             }
                             <tr>
-                            </tr>
-                            <tr>
-                                <td class="border"></td>
-                                <td class="text-end border">FREIGHT CHARGES</td>
-                                <td class="border"></td>
-                                <td class="border"></td>
-                                <td class="border"></td>
-                                <td class="border"></td>
                             </tr>
                             <tr>
                                 <td class="border"></td>
@@ -216,33 +207,38 @@
                         <span class="text-muted">Amount Chargeable (in words)</span><br />
                         <p class="text-muted text-capitalize"><b>INR @ViewData["TotalAmountInWords"]</b></p>
                     </div>
-                </div>
-                <div class="card-body" id="cardbody4">
-                    <table class="table table-border text-center table-nowrap align-middle mb-0">
+                    <table class="table table-border text-center table-nowrap align-middle mb-0 invoice-table">
                         <thead class="table-info text-muted border">
                             <tr class="table-active">
                                 <th class="border">HSN / SAC</th>
                                 <th class="border">Taxable value</th>
                                 <th class="border">GST%</th>
                                 <th class="border">Amount</th>
-                                <th class="text-end border col-2">Total Tax Amount</th>
                             </tr>
                         </thead>
-                        <tbody id="products-list">
+                        <tbody>
                             @{
-                                decimal? subTotal = 0;
+                                var groupedItems = Model.InvoiceDetails
+                                .GroupBy(item => item.GstPer)
+                                .Select(group => new
+                                {
+                                    GstPer = group.Key,
+                                    TotalGstAmount = group.Sum(item => item.GstAmount)
+                                })
+                                .ToList();
                             }
-                            @foreach (var item in Model.InvoiceDetails)
+                            @foreach (var item in groupedItems)
                             {
-                                subTotal = (item.Quantity * item.PerUnitPrice);
                                 <tr>
-                                    <td class="border" id="txtHSN">@item.Hsn</td>
-                                    <td class="border" id="txtTaxablevalue">₹@subtotal</td>
-                                    <td class="border" id="txtgstpercentage">@item.GstPer%</td>
-                                    <td class="border" id="txtgstpercentage">₹@item.GstAmount</td>
-                                    <td class="border" id="txtgsttotal"></td>
+                                    <td class="border">
+                                        @Model.InvoiceDetails.FirstOrDefault(item => item.GstPer == item.GstPer)?.Hsn
+                                    </td>
+                                    <td class="border">
+                                        ₹@Model.InvoiceDetails.Where(item => item.GstPer == item.GstPer).Sum(item => item.Quantity * item.PerUnitPrice)
+                                    </td>
+                                    <td class="border">@item.GstPer%</td>
+                                    <td class="border">₹@item.TotalGstAmount</td>
                                 </tr>
-                                index++;
                             }
                             <tr>
                                 <td class="border">Total</td>
@@ -260,6 +256,7 @@
                                 <td class="border">₹@Model.TotalGst</td>
                             </tr>
                         </tbody>
+
                     </table><!--end table-->
                     <div class="noresult" style="display: none">
                         <div class="text-center">
@@ -273,7 +270,7 @@
                         </div>
                     </div>
                     <span class="text-muted">Tax Amount (in words) : </span>
-                    <span class="text-muted text-capitalize"><b>INR @ViewData["TotalAmountInWords"]</b></span>
+                    <span class="text-muted text-capitalize"><b>INR @ViewData["TotalGstInWords"]</b></span>
                     <div class="d-flex">
                         <div class="flex-grow-1 col-6">
                             <p class="text-muted">Company's PAN : <span> </span><span class="text-muted"><b></b></span></p>
@@ -288,7 +285,6 @@
                             <div class="border border-box text-end p-1" style="border: solid black">
                                 <p class="text-muted"><b>@Model.VendorAccountHolderName</b></p>
                                 <br />
-                                <br />
                                 <p class="text-muted">Authorised Signatory</p>
                             </div>
                         </div>
@@ -296,12 +292,10 @@
                     <div class="card d-print-none">
                         <div class="card-body">
                             <div class="d-lg-flex align-items-center gap-3">
-                                <a href="javascript:window.print()" class="btn btn-primary btn-ecomm" style="margin-left: 950px;width: 185px;"><i class="fadeIn animated bx bx-printer"></i>Print</a>
-                                @*  <a onclick="fn_PrintInvoicePage()" class="btn btn-primary btn-ecomm" style="margin-left: 950px;width: 185px;"><i class="fadeIn animated bx bx-printer"></i>Print</a>*@
+                                <a onclick="fn_PrintInvoicePage();" class="btn btn-primary btn-ecomm" style="margin-left: 950px;width: 185px;"><i class="fadeIn animated bx bx-printer"></i>Print</a>
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>

@@ -216,7 +216,6 @@ function invitemember() {
 
     var MemberData = {
         ProjectId: proProjectId,
-        UserId: Id,
         ProjectType: proProjectType,
         ProjectTitle: protitel,
         StartDate: proStartDate,

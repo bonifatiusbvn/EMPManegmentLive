@@ -408,11 +408,11 @@ namespace EMPManegment.Web.Controllers
                 ApiResponseModel postuser = await APIServices.PostAsync(uploadDocument, "UserProfile/UploadDocument");
                 if (postuser.code == 200)
                 {
-                    return new JsonResult(postuser.message = "Document Uploaded Successfully!", postuser.code);
+                    return Json(new { code = 200, message = "Document Uploaded Successfully!" });
                 }
                 else
                 {
-                    return new JsonResult(postuser.code = 400, postuser.message = "Error in saving the uploaded document");
+                    return Json(new { code = 400, message = "Error in saving the uploaded document" });
                 }
             }
             catch (Exception ex)

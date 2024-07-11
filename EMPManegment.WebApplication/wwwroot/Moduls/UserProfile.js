@@ -72,10 +72,9 @@ function UploadDocument() {
                     confirmButtonColor: '#3085d6',
                     confirmButtonText: 'OK',
                 }).then(function () {
-                    GetDocumentList();
+                    window.location = '/UserProfile/UserProfile';
                 });
-            }
-            else {
+            } else {
                 toastr.error(Result.message);
             }
         }

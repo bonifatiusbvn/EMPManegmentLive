@@ -179,11 +179,11 @@ namespace EMPManegment.Web.Controllers
             try
             {
                 Guid UserId = _userSession.UserId;
-                List<ProjectView> projectlist = new List<ProjectView>();
+                List<ProjectDetailView> projectlist = new List<ProjectDetailView>();
                 ApiResponseModel response = await APIServices.PostAsync("", "ProjectDetails/GetProjectListById?searchby=" + searchby + "&searchfor=" + searchfor + "&UserId=" + UserId);
                 if (response.code == 200)
                 {
-                    projectlist = JsonConvert.DeserializeObject<List<ProjectView>>(response.data.ToString());
+                    projectlist = JsonConvert.DeserializeObject<List<ProjectDetailView>>(response.data.ToString());
                 }
                 int pageSize = 4;
                 var pageNumber = page ?? 1;

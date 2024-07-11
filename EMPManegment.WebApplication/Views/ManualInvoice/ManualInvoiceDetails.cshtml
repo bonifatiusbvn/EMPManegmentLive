@@ -10,8 +10,40 @@
 }
 
 <style>
-    .border-right {
-        border-right: 2px solid black;
+
+    @@media print {
+        .manual_invoice-table tbody {
+            height: auto;
+        }
+
+        .manual_invoice-table td {
+            border: none !important;
+            padding: 2px;
+        }
+
+        .card.d-print-none {
+            display: none;
+        }
+
+        .manual_invoice-table, .manual_invoice-table tbody, .manual_invoice-table tr, .manual_invoice-table td, .manual_invoice-table th {
+            page-break-inside: avoid !important;
+            page-break-before: avoid !important;
+            page-break-after: avoid !important;
+        }
+
+        @@page {
+            margin: 1cm;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+        }
     }
 </style>
 @{
@@ -80,7 +112,7 @@
                             {
                                 <div class="flex-shrink-0 mt-sm-0 mt-3 border">
                                     <label class="form-label">Payment Status</label>
-                                    <p class="text-muted text-uppercase"><b>@firstItem.PaymentStatusName</b></p>
+                                    <p class="text-muted text-uppercase">@firstItem.PaymentStatusName</p>
                                 </div>
                             }
                         </div>
@@ -96,14 +128,14 @@
                             {
                                 <div class="flex-shrink-0 mt-sm-0 mt-3 border">
                                     <label class="form-label">Buyer's Order No</label>
-                                    <p class="text-muted text-uppercase"><b>@firstItem.BuyesOrderNo</b></p>
+                                    <p class="text-muted text-uppercase">@firstItem.BuyesOrderNo</p>
                                 </div>
                             }
                             @if (!string.IsNullOrEmpty(firstItem.PaymentMethodName))
                             {
                                 <div class="flex-shrink-0 mt-sm-0 mt-3 border">
                                     <label class="form-label">Payment Method</label>
-                                    <p class="text-muted"><b>@firstItem.PaymentMethodName</b></p>
+                                    <p class="text-muted">@firstItem.PaymentMethodName</p>
                                 </div>
                             }
                         </div>
@@ -120,12 +152,12 @@
                         </div>
                         <div class="flex-grow-1 col-6 border">
                             <label class="form-label">Terms of Delivery</label>
-                            <p class="text-muted"><b>Dispatched from Rakhial,Ahemdabad</b></p>
+                            <p class="text-muted">Dispatched from Rakhial,Ahemdabad</p>
                         </div>
                     </div>
                 </div>
                 <div class="card-body" id="cardbody3">
-                    <table class="table table-border text-center table-nowrap align-middle mb-0 border">
+                    <table class="table table-border text-center table-nowrap align-middle mb-0 border manual_invoice-table">
                         <thead class="table-info text-muted border">
                             <tr class="table-active border">
                                 <th class="border">SINo.</th>
@@ -138,7 +170,7 @@
                                 <th class="border">Total Amount</th>
                             </tr>
                         </thead>
-                        <tbody id="products-list">
+                        <tbody>
                             @{
                                 int index = 1;
                                 decimal? subtotal = 0;
@@ -150,7 +182,7 @@
                                 var SubTotal = string.Format("{0:n2}", subtotal);
                                 totalAmt = (item.Quantity * item.Price) - item.Discount;
 
-                                <tr class="product">
+                                <tr>
                                     <td class="border">@index</td>
                                     <td class="text-start border">
                                         <span class="fw-medium" id="txtproductname">@item.Product</span>
@@ -165,16 +197,6 @@
                                 index++;
                             }
                             <tr>
-                            </tr>
-                            <tr>
-                                <td class="border"></td>
-                                <td class="text-end border">FREIGHT CHARGES</td>
-                                <td class="border"></td>
-                                <td class="border"></td>
-                                <td class="border"></td>
-                                <td class="border"></td>
-                                <td class="border"></td>
-                                <td class="border"></td>
                             </tr>
                             <tr>
                                 <td class="border"></td>
@@ -214,7 +236,7 @@
                     </div>
                 </div>
                 <div class="card-body" id="cardbody4">
-                    <table class="table table-border text-center table-nowrap align-middle mb-0 border">
+                    <table class="table table-border text-center table-nowrap align-middle mb-0 border manual_invoice-table">
                         <thead class="table-info text-muted border">
                             <tr class="table-active border">
                                 <th class="border">HSN / SAC</th>
@@ -233,7 +255,7 @@
                                 <th class="border text-end col-2">Total Tax Amount</th>
                             </tr>
                         </thead>
-                        <tbody id="products-list">
+                        <tbody>
                             @{
                                 int? Index = 1;
                                 decimal? subTotal = 0;
@@ -248,7 +270,7 @@
                                 TotalofSubtotal += subTotal;
                                 DiscountTotal += item.Discount;
                                 <tr>
-                                    <td class="border" id="txtHSN"></td>
+                                    <td class="border" id="txtHSN">@item.Hsn</td>
                                     <td class="border" id="txtTaxablevalue">₹@subTotal</td>
                                     <td class="border" id="txtTaxablevalue">₹@item.Discount</td>
                                     <td class="border" id="txtgstpercentage">
@@ -284,12 +306,11 @@
                         </tbody>
                     </table><!--end table-->
                     <span class="text-muted">Tax Amount (in words) : </span>
-                    <span class="text-muted text-capitalize"><b>INR @ViewData["TotalAmountInWords"]</b></span>
+                    <span class="text-muted text-capitalize"><b>INR @ViewData["TotalGstInWords"]</b></span>
                     <div class="card d-print-none">
                         <div class="card-body">
                             <div class="d-lg-flex align-items-center gap-3">
-                                <a href="javascript:window.print()" class="btn btn-primary btn-ecomm" style="margin-left: 950px;width: 185px;"><i class="fadeIn animated bx bx-printer"></i>Print</a>
-@*                                <a onclick="fn_printManualInvoice()" class="btn btn-primary btn-ecomm" style="margin-left: 950px;width: 185px;"><i class="fadeIn animated bx bx-printer"></i>Print</a>*@
+                                <a onclick="fn_printManualInvoice()" class="btn btn-primary btn-ecomm" style="margin-left: 950px;width: 185px;"><i class="fadeIn animated bx bx-printer"></i>Print</a>
                             </div>
                         </div>
                     </div>

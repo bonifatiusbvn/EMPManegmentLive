@@ -102,7 +102,7 @@ namespace EMPManegment.Repository.ProductMaster
                         CreatedOn = DateTime.Today,
                         UpdatedBy = AddProduct.UpdatedBy,
                         UpdatedOn = AddProduct.UpdatedOn,
-
+                        IsDeleted = false
                     };
                     response.Code = 200;
                     response.Message = "Product add successfully!";
@@ -388,6 +388,7 @@ namespace EMPManegment.Repository.ProductMaster
                         ProductDetails.ProductImage = row["ProductImage"]?.ToString();
                         ProductDetails.IsWithGst = row["IsWithGst"] != DBNull.Value ? (bool)row["IsWithGst"] : false;
                         ProductDetails.GstPercentage = row["GstPercentage"] != DBNull.Value ? (decimal)row["GstPercentage"] : 0m;
+                        ProductDetails.PerUnitPrice = row["PerUnitPrice"] != DBNull.Value ? (decimal)row["PerUnitPrice"] : 0m;
                         ProductDetails.GstAmount = row["GstAmount"] != DBNull.Value ? (decimal)row["GstAmount"] : 0m;
                         ProductDetails.Hsn = row["Hsn"] != DBNull.Value ? (int)row["Hsn"] : 0;
                         ProductDetails.CreatedBy = row["CreatedBy"] != DBNull.Value ? (Guid)row["CreatedBy"] : Guid.Empty;
