@@ -68,7 +68,45 @@ $(document).ready(function () {
     });
 });
 
+function UserLogout() {
+    Swal.fire({
+        title: 'Logout confirmation',
+        text: 'Are you sure you want to logout?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, logout'
+    }).then((result) => {
+        if (result.isConfirmed) {
 
+            logout();
+        }
+    });
+}
+
+function logout() {
+    sessionStorage.removeItem('SelectedProjectId');
+    sessionStorage.removeItem('SelectedUserProjectId');
+    sessionStorage.removeItem('SelectedCityName');
+    fetch('/Authentication/Logout', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'RequestVerificationToken': '@Token.Get(Request.HttpContext)'
+
+        },
+        body: ''
+    })
+        .then(response => {
+
+            window.location.href = '/Authentication/Login';
+        })
+        .catch(error => {
+            toastr.error('Error:', error);
+
+        });
+}
 function GetCountry() {
 
     $.ajax({
@@ -418,8 +456,7 @@ function showWeatherAPI(city) {
     });
 }
 
-function fn_GetAllCities()
-{
+function fn_GetAllCities() {
     $.ajax({
         url: '/Authentication/GetAllCities',
         method: 'GET',
@@ -438,7 +475,7 @@ function fn_GetAllCities()
                     event.preventDefault();
                     $("#AllCityDRP").val(ui.item.label);
                     $("#AllCityDRPHidden").val(ui.item.value);
-                    fn_ChangeCityDrp(ui.item.label); 
+                    fn_ChangeCityDrp(ui.item.label);
                 }
             }).focus(function () {
                 $(this).autocomplete("search");

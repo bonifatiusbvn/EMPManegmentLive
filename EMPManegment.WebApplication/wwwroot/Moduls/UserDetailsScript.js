@@ -529,45 +529,9 @@ function EditUserDetails(EmpId) {
 }
 
 
-function UserLogout() {
-    Swal.fire({
-        title: 'Logout confirmation',
-        text: 'Are you sure you want to logout?',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, logout'
-    }).then((result) => {
-        if (result.isConfirmed) {
 
-            logout();
-        }
-    });
-}
 
-function logout() {
-    sessionStorage.removeItem('SelectedProjectId');
-    sessionStorage.removeItem('SelectedUserProjectId');
-    sessionStorage.removeItem('SelectedCityName');
-    fetch('/Authentication/Logout', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'RequestVerificationToken': '@Token.Get(Request.HttpContext)'
 
-        },
-        body: ''
-    })
-        .then(response => {
-
-            window.location.href = '/Authentication/Login';
-        })
-        .catch(error => {
-            toastr.error('Error:', error);
-
-        });
-}
 
 //validation
 
@@ -772,11 +736,11 @@ function GetUserSearchData() {
     } else if (selectedValue === "Department" && $("#ddlDepartment").val() === null) {
         isValid = false;
         errorMessage = "Please select a Department";
-    } 
+    }
     if (isValid) {
 
-            $("#backBtn").show();
-            GetActiveDeactiveList(1);
+        $("#backBtn").show();
+        GetActiveDeactiveList(1);
     }
     else {
         $("#backBtn").hide();
@@ -952,7 +916,7 @@ function EditExperienceDate() {
     document.getElementById("experiencedate").removeAttribute("readonly");
     $("#btnEditExeperience").hide();
     $("#btnUpdateExeperience").show();
-        
+
 }
 function updateExperienceDate() {
     if ($('#frmExperience').valid()) {

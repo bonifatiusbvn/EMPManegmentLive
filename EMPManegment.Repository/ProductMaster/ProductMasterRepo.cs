@@ -383,6 +383,7 @@ namespace EMPManegment.Repository.ProductMaster
                         ProductDetails.ProductType = row["ProductType"] != DBNull.Value ? (int)row["ProductType"] : 0;
                         ProductDetails.ProductId = row["ProductId"] != DBNull.Value ? (Guid)row["ProductId"] : Guid.Empty;
                         ProductDetails.ProductName = row["ProductName"]?.ToString();
+                        ProductDetails.PerUnitPrice = row["PerUnitPrice"] != DBNull.Value ? (decimal)row["PerUnitPrice"] : 0m;
                         ProductDetails.ProductDescription = row["ProductDescription"]?.ToString();
                         ProductDetails.ProductShortDescription = row["ProductShortDescription"]?.ToString();
                         ProductDetails.ProductImage = row["ProductImage"]?.ToString();
