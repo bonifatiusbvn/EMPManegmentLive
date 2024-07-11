@@ -368,6 +368,7 @@ namespace EMPManegment.Repository.PurchaseRequestRepository
                     {
                         PRDetails.PrNo = PR.Tables[0].Rows[0]["PrNo"]?.ToString();
                         PRDetails.PrDate = PR.Tables[0].Rows[0]["PrDate"] != DBNull.Value ? (DateTime)PR.Tables[0].Rows[0]["PrDate"] : DateTime.MinValue;
+                        PRDetails.ProjectId = PR.Tables[0].Rows[0]["ProjectId"] != DBNull.Value ? (Guid)PR.Tables[0].Rows[0]["ProjectId"] : Guid.Empty;
                     }
 
                     PRDetails.PRList = new List<PurchaseRequestModel>();

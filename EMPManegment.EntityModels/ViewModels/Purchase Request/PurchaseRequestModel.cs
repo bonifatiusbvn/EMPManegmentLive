@@ -66,5 +66,6 @@ namespace EMPManegment.EntityModels.ViewModels.Purchase_Request
         public decimal? SubTotal { get; set; }
         public List<PurchaseRequestModel>? PRList { get; set; }
         public DateTime? PrDate { get; set; }
+        public Guid ProjectId { get; set; }
     }   
 }

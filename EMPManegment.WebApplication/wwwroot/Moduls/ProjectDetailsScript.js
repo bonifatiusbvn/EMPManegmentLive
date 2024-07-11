@@ -207,19 +207,11 @@ function invitemember() {
         }
     });
 
-    var protitel = document.getElementById("projecttitle").textContent;
-    var proStartDate = $('#projectenddate').val();
-    var proStatus = document.getElementById('projectstatus').textContent;
-    var proProjectType = document.getElementById('projecttype').textContent;
     var proProjectId = $('#projectid').val();
     var UpdatedBy = $('#memberUpdatedby').val();
 
     var MemberData = {
         ProjectId: proProjectId,
-        ProjectType: proProjectType,
-        ProjectTitle: protitel,
-        StartDate: proStartDate,
-        Status: proStatus,
         UpdatedBy: UpdatedBy,
         ProjectMemberList: MemberDetails,
     }
