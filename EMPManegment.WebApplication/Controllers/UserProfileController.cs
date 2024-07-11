@@ -408,11 +408,11 @@ namespace EMPManegment.Web.Controllers
                 ApiResponseModel postuser = await APIServices.PostAsync(uploadDocument, "UserProfile/UploadDocument");
                 if (postuser.code == 200)
                 {
-                    return new JsonResult(postuser.message = "Document Uploaded Successfully!", postuser.code);
+                    return Json(new { code = 200, message = "Document Uploaded Successfully!" });
                 }
                 else
                 {
-                    return new JsonResult(postuser.code = 400, postuser.message = "Error in saving the uploaded document");
+                    return Json(new { code = 400, message = "Error in saving the uploaded document" });
                 }
             }
             catch (Exception ex)
@@ -731,19 +731,19 @@ namespace EMPManegment.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<FileResult> DownloadDocument(string documentName)
+        public async Task<IActionResult> DownloadDocument(string documentName)
         {
-            var filepath = "Content/UserDocuments/" + documentName;
-            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", filepath);
-            var memory = new MemoryStream();
-            using (var stream = new FileStream(path, FileMode.Open))
+            var filepath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Content/UserDocuments", documentName);
+
+            if (!System.IO.File.Exists(filepath))
             {
-                await stream.CopyToAsync(memory);
+                return NotFound();
             }
-            memory.Position = 0;
-            var ContentType = "application/pdf";
-            var fileName = Path.GetFileName(path);
-            return File(memory, ContentType, fileName);
+
+            byte[] bytes = await System.IO.File.ReadAllBytesAsync(filepath);
+            string base64String = Convert.ToBase64String(bytes);
+
+            return Json(new { memory = base64String, contentType = "application/pdf", fileName = documentName });
         }
 
         [HttpPost]

@@ -75,12 +75,10 @@
                                     </div>
                                 </div>
                             </td>
-                            <td>@ProductAmount</td>
+                            <td>@ProductAmount?.ToString("F2")</td>
                             <td>@item.Quantity</td>
-                            <td>@ProductGst</td>
-                            <td class="fw-medium ">
-                                @ProductTotalAmount
-                            </td>
+                            <td>@ProductGst?.ToString("F2")</td>
+                            <td class="fw-medium">@ProductTotalAmount?.ToString("F2")</td>
                         </tr>
                         subtotal += ProductAmount;
                         totalGst += ProductGst;
@@ -93,15 +91,15 @@
                                 <tbody>
                                     <tr>
                                         <td>Sub Total :</td>
-                                        <td id="subtotal">₹@subtotal</td>
+                                        <td id="subtotal">₹@subtotal?.ToString("F2")</td>
                                     </tr>
                                     <tr>
                                         <td>GST :</td>
-                                        <td id="totalGst">₹@totalGst</td>
+                                        <td id="totalGst">₹@totalGst?.ToString("F2")</td>
                                     </tr>
                                     <tr class="border-top border-top-dashed">
                                         <th>Total :</th>
-                                        <th id="total">₹@totalAmount</th>
+                                        <th id="total">₹@totalAmount?.ToString("F2")</th>
                                     </tr>
                                 </tbody>
                             </table>

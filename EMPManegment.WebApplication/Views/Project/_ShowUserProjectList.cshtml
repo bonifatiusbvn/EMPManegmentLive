@@ -1,4 +1,4 @@
-﻿@model IEnumerable<EMPManegment.EntityModels.ViewModels.ProjectModels.ProjectView>
+﻿@model IEnumerable<EMPManegment.EntityModels.ViewModels.ProjectModels.ProjectDetailView>
 @using EMPManegment.Web.Models
 @using X.PagedList;
 @using X.PagedList.Mvc.Core;
@@ -72,25 +72,25 @@
             <div class="row">
                 @foreach (var item in Model)
                 {
-                    @if (item.Status == "Inprogress")
+                    @if (item.ProjectStatus == "Inprogress")
                     {
                         <div class="col-xxl-3 col-sm-6">
-                            <div class="card profile-project-card shadow-none profile-project-warning">
+                            <div class="card profile-project-card shadow-none profile-project-success">
                                 <div class="card-body p-4">
                                     <div class="d-flex">
                                         <div class="flex-grow-1 text-muted overflow-hidden">
                                             <h5 class="fs-14 text-truncate">
                                                 <a href="#" class="text-body">@item.ProjectTitle</a>
                                             </h5>
+                                            <p class="text-muted text-truncate mb-0">
+                                                Description : <span class="fw-semibold text-body">
+                                                    @item.ProjectDescription
+                                                </span>
+                                            </p>
                                         </div>
-                                        <p class="text-muted text-truncate mb-0">
-                                            Description : <span class="fw-semibold text-body">
-                                                @item.ProjectDescription
-                                            </span>
-                                        </p>
                                         <div class="flex-shrink-0 ms-2">
                                             <div class="badge bg-warning-subtle text-warning fs-12">
-                                                @item.Status
+                                                @item.ProjectStatus
                                             </div>
                                         </div>
                                     </div>
@@ -108,7 +108,7 @@
                                                         <div class="avatar-xxs">
                                                             @if (!string.IsNullOrEmpty(profilePhoto) && !profilePhoto.Equals(defaultImagePath, StringComparison.OrdinalIgnoreCase))
                                                             {
-                                                                <img src="~/Content/Projects/@profilePhoto" style="height:40px;width:40px;" alt="message user image" class="img-circle img-bordered-sm">
+                                                                <img src="~/@profilePhoto" style="height:40px;width:40px;" alt="message user image" class="img-circle img-bordered-sm">
                                                             }
                                                             else
                                                             {
@@ -147,7 +147,7 @@
                                         </div>
                                         <div class="flex-shrink-0 ms-2">
                                             <div class="badge bg-success-subtle text-success fs-12">
-                                                @item.Status
+                                                @item.ProjectStatus
                                             </div>
                                         </div>
                                     </div>

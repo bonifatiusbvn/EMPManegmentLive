@@ -728,7 +728,14 @@ function AddNewRow(Result) {
     $('#addnewproductlink').append(Result);
     updateRowNumbers();
 }
-
+function fn_printManualInvoice() {
+    debugger
+    var printContents = document.getElementById('printManualInvoicePage').innerHTML;
+    var originalContents = document.body.innerHTML;
+    document.body.innerHTML = printContents;
+    document.body.innerHTML = originalContents;
+    window.print();
+}
 //function fn_printManualInvoice() {
 //    var printContents = document.getElementById('cardbody1').innerHTML + document.getElementById('cardbody2').innerHTML +
 //                        document.getElementById('cardbody3').innerHTML + document.getElementById('cardbody4').innerHTML;

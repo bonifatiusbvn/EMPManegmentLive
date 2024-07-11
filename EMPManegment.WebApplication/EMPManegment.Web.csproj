@@ -28,9 +28,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\Content\Image\" />
-    <Folder Include="wwwroot\Content\TaskDocuments\" />
-    <Folder Include="wwwroot\Content\Product\" />
     <Folder Include="wwwroot\unpkg.com\gridjs\plugins\selection\dist\" />
   </ItemGroup>
 

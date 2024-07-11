@@ -179,11 +179,11 @@ namespace EMPManegment.Web.Controllers
             try
             {
                 Guid UserId = _userSession.UserId;
-                List<ProjectView> projectlist = new List<ProjectView>();
+                List<ProjectDetailView> projectlist = new List<ProjectDetailView>();
                 ApiResponseModel response = await APIServices.PostAsync("", "ProjectDetails/GetProjectListById?searchby=" + searchby + "&searchfor=" + searchfor + "&UserId=" + UserId);
                 if (response.code == 200)
                 {
-                    projectlist = JsonConvert.DeserializeObject<List<ProjectView>>(response.data.ToString());
+                    projectlist = JsonConvert.DeserializeObject<List<ProjectDetailView>>(response.data.ToString());
                 }
                 int pageSize = 4;
                 var pageNumber = page ?? 1;
@@ -226,7 +226,7 @@ namespace EMPManegment.Web.Controllers
                     ProjectStatus = project.ProjectStatus,
                     CreatedBy = _userSession.FullName,
                 };
-                if(project.ProjectImage != null)
+                if (project.ProjectImage != null)
                 {
                     var ProjectImg = Guid.NewGuid() + "_" + project.ProjectImage.FileName;
                     var path = Environment.WebRootPath;
@@ -244,7 +244,7 @@ namespace EMPManegment.Web.Controllers
                 UserResponceModel responseModel = new UserResponceModel();
                 if (postuser.code == 200)
                 {
-                    return Ok(new { postuser.message,postuser.code });
+                    return Ok(new { postuser.message, postuser.code });
                 }
                 else
                 {
@@ -499,20 +499,21 @@ namespace EMPManegment.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<FileResult> DownloadProjectDocument(string DocumentName)
+        public async Task<IActionResult> DownloadProjectDocument(string DocumentName)
         {
-            var filepath = "Content/UserDocuments/" + DocumentName;
-            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", filepath);
-            var memory = new MemoryStream();
-            using (var stream = new FileStream(path, FileMode.Open))
+            var filepath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Content/UserDocuments", DocumentName);
+
+            if (!System.IO.File.Exists(filepath))
             {
-                await stream.CopyToAsync(memory);
+                return NotFound();
             }
-            memory.Position = 0;
-            var ContentType = "application/pdf";
-            var fileName = Path.GetFileName(path);
-            return File(memory, ContentType, fileName);
+
+            byte[] bytes = await System.IO.File.ReadAllBytesAsync(filepath);
+            string base64String = Convert.ToBase64String(bytes);
+
+            return Json(new { memory = base64String, contentType = "application/pdf", fileName = DocumentName });
         }
+
 
         [FormPermissionAttribute("GetProjectDetails-Delete")]
         [HttpPost]

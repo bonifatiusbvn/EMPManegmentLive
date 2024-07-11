@@ -268,9 +268,9 @@ function fn_GetPOPaymentTypeList() {
             $.each(result, function (i, data) {
                 $('#textPaymentMethod').append('<Option value=' + data.id + '>' + data.type + '</Option>')
                 if (data.id != selectedValue) {
-                    
+
                     $('#txtPOpaymenttype').append('<Option value=' + data.id + '>' + data.type + '</Option>')
-                }  
+                }
             });
         }
     });
@@ -285,7 +285,7 @@ function fn_GetPOPaymentMethodList() {
                 if (data.id != selectedValue) {
                     $('#txtPOpaymentmethod').append('<Option value=' + data.id + '>' + data.paymentMethod + '</Option>')
                 }
-               
+
             });
         }
     });
@@ -374,7 +374,7 @@ function deletePurchaseOrderDetails(Id) {
                         })
                     } else {
                         toastr.error(Result.message);
-                    }                    
+                    }
                 },
                 error: function () {
                     Swal.fire({
@@ -399,77 +399,83 @@ function deletePurchaseOrderDetails(Id) {
 }
 function fn_UpdatePurchaseOrderDetails() {
     if ($("#CreatePOForm").valid()) {
-
-        var ProductDetails = [];
-        $(".product").each(function () {
-            var orderRow = $(this);
-            var productName = orderRow.find("#textProductName").text().trim();
-            var productId = orderRow.find("#textProductId").val().trim();
-            var objData = {
-                Product: productName,
-                ProductId: productId,
-                ProductType: orderRow.find("#textProductType").val(),
-                Quantity: orderRow.find("#txtproductquantity").val(),
-                Price: orderRow.find("#txtproductamount").val(),
-                Gstamount: orderRow.find("#txtgstAmount").val(),
-                Gstper: orderRow.find("#txtgstPercentage").val(),
-                Hsn: orderRow.find("#txtHSNcode").val(),
-                ProductTotal: orderRow.find("#txtproducttotalamount").val(),
-            };
-            ProductDetails.push(objData);
-        });
-        var PONumber = $("#textPoId").val();
-        var PODetails = {
-            Id: $("#txtID").val(),
-            ProjectId: $("#txtPOProjectId").val(),
-            OrderId: $("#textPoId").val(),
-            VendorId: $("#textVendorName").val(),
-            CompanyId: $("#textCompanyName").val(),
-            TotalGst: $("#totalgst").val(),
-            SubTotal: $("#cart-subtotal").val(),
-            TotalAmount: $("#cart-total").val(),
-            DeliveryDate: $("#UnitTypeId").val(),
-            OrderDate: $("#textOrderDate").val(),
-            OrderStatus: $("#UnitTypeId").val(),
-            PaymentMethod: $("#txtPOpaymentmethod").val(),
-            PaymentStatus: $("#txtPOpaymenttype").val(),
-            DeliveryStatus: $("#textDeliveryStatus").val(),
-            CreatedBy: $("#textCreatedByVal").val(),
-            CreatedOn: $("#textCreatedOnId").val(),
-            UpdatedBy: $("#textCreatedById").val(),
-            Address: $('#hideShippingAddress').is(':checked') ? $('#textCompanyBillingAddress').val() : $('#textShippingAddress').val(),
-            ProductList: ProductDetails,
-        }
-
-        var form_data = new FormData();
-        form_data.append("PurchaseOrder", JSON.stringify(PODetails));
-        $.ajax({
-            url: '/PurchaseOrderMaster/UpdatePurchaseOrderDetails',
-            type: 'POST',
-            data: form_data,
-            dataType: 'json',
-            contentType: false,
-            processData: false,
-            success: function (Result) {
-                if (Result.code == 200) {
-                    Swal.fire({
-                        title: Result.message,
-                        icon: 'success',
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'OK'
-                    }).then(function () {
-                        window.location = '/PurchaseOrderMaster/PurchaseOrderDetails/?OrderId=' + PONumber;
-                    });
-                }
-                else {
-                    toastr.error(Result.message);
-                }
-            },
-            error: function () {
-                toastr.error('An error occurred while processing your request.');
+        if ($('#addnewproductlink tr').length >= 1) {
+            var ProductDetails = [];
+            $(".product").each(function () {
+                var orderRow = $(this);
+                var productName = orderRow.find("#textProductName").text().trim();
+                var productId = orderRow.find("#textProductId").val().trim();
+                var objData = {
+                    Product: productName,
+                    ProductId: productId,
+                    ProductType: orderRow.find("#textProductType").val(),
+                    Quantity: orderRow.find("#txtproductquantity").val(),
+                    Price: orderRow.find("#txtproductamount").val(),
+                    Gstamount: orderRow.find("#txtgstAmount").val(),
+                    Gstper: orderRow.find("#txtgstPercentage").val(),
+                    Hsn: orderRow.find("#txtHSNcode").val(),
+                    ProductTotal: orderRow.find("#txtproducttotalamount").val(),
+                };
+                ProductDetails.push(objData);
+            });
+            var PONumber = $("#textPoId").val();
+            var PODetails = {
+                Id: $("#txtID").val(),
+                ProjectId: $("#txtPOProjectId").val(),
+                OrderId: $("#textPoId").val(),
+                VendorId: $("#textVendorName").val(),
+                CompanyId: $("#textCompanyName").val(),
+                TotalGst: $("#totalgst").val(),
+                SubTotal: $("#cart-subtotal").val(),
+                TotalAmount: $("#cart-total").val(),
+                DeliveryDate: $("#UnitTypeId").val(),
+                OrderDate: $("#textOrderDate").val(),
+                OrderStatus: $("#UnitTypeId").val(),
+                PaymentMethod: $("#txtPOpaymentmethod").val(),
+                PaymentStatus: $("#txtPOpaymenttype").val(),
+                DeliveryStatus: $("#textDeliveryStatus").val(),
+                CreatedBy: $("#textCreatedByVal").val(),
+                CreatedOn: $("#textCreatedOnId").val(),
+                UpdatedBy: $("#textCreatedById").val(),
+                Address: $('#hideShippingAddress').is(':checked') ? $('#textCompanyBillingAddress').val() : $('#textShippingAddress').val(),
+                ProductList: ProductDetails,
             }
-        });
 
+            var form_data = new FormData();
+            form_data.append("PurchaseOrder", JSON.stringify(PODetails));
+            $.ajax({
+                url: '/PurchaseOrderMaster/UpdatePurchaseOrderDetails',
+                type: 'POST',
+                data: form_data,
+                dataType: 'json',
+                contentType: false,
+                processData: false,
+                success: function (Result) {
+                    if (Result.code == 200) {
+                        Swal.fire({
+                            title: Result.message,
+                            icon: 'success',
+                            confirmButtonColor: '#3085d6',
+                            confirmButtonText: 'OK'
+                        }).then(function () {
+                            window.location = '/PurchaseOrderMaster/PurchaseOrderDetails/?OrderId=' + PONumber;
+                        });
+                    }
+                    else {
+                        toastr.error(Result.message);
+                    }
+                },
+                error: function () {
+                    toastr.error('An error occurred while processing your request.');
+                }
+            });
+        }
+        else {
+            if ($('#addnewproductlink tr').length == 0) {
+                $('#AddVendorModelButton').addClass('error-border');
+                toastr.warning("Please select product!");
+            }
+        }
     }
     else {
         toastr.warning("Kindly fill all data fields");
@@ -542,13 +548,13 @@ function fn_updatePOProductAmount(that) {
     row.find("#txtproducttotalamount").val(totalAmount.toFixed(2));
 }
 function fn_updatePOTotals() {
- 
+
     var totalSubtotal = 0;
     var totalGst = 0;
     var totalAmount = 0;
     var TotalItemQuantity = 0;
     $(".product").each(function () {
-     
+
         var row = $(this);
         var subtotal = parseFloat(row.find("#txtproductamount").val());
         var gst = parseFloat(row.find("#txtgstAmount").val());
@@ -603,78 +609,85 @@ function fn_POtoggleShippingAddress() {
     }
 }
 function fn_InsertPurchaseOrderDetails() {
-   
+
     if ($("#CreatePOForm").valid()) {
-
-        var ProductDetails = [];
-        $(".product").each(function () {
-            var orderRow = $(this);
-            var productName = orderRow.find("#textProductName").text().trim();
-            var productId = orderRow.find("#textProductId").val().trim();
-            var objData = {
-                Product: productName,
-                ProductId: productId,
-                ProductType: orderRow.find("#textProductType").val(),
-                Quantity: orderRow.find("#txtproductquantity").val(),
-                Price: orderRow.find("#txtproductamount").val(),
-                Gstamount: orderRow.find("#txtgstAmount").val(),
-                Gstper: orderRow.find("#txtgstPercentage").val(),
-                Hsn: orderRow.find("#txtHSNcode").val(),
-                ProductTotal: orderRow.find("#txtproducttotalamount").val(),
-            };
-            ProductDetails.push(objData);
-        });
-        var PONumber = $("#textPoId").val();
-        var PODetails = {
-            ProjectId: $("#textProjectId").val(),
-            OrderId: $("#textPoId").val(),
-            VendorId: $("#textVendorName").val(),
-            CompanyId: $("#textCompanyName").val(),
-            TotalGst: $("#totalgst").val(),
-            SubTotal: $("#cart-subtotal").val(),
-            TotalAmount: $("#cart-total").val(),
-            DeliveryDate: $("#UnitTypeId").val(),
-            OrderDate: $("#textOrderDate").val(),
-            OrderStatus: $("#UnitTypeId").val(),
-            PaymentMethod: $("#txtPOpaymentmethod").val(),
-            PaymentStatus: $("#txtPOpaymenttype").val(),
-            DeliveryStatus: $("#textDeliveryStatus").val(),
-            CreatedBy: $("#textCreatedById").val(),
-            Address: $('#hideShippingAddress').is(':checked') ? $('#textCompanyBillingAddress').val() : $('#textShippingAddress').val(),
-            ProductList: ProductDetails,
-        }
-
-        var form_data = new FormData();
-        form_data.append("PurchaseOrder", JSON.stringify(PODetails));
-        $.ajax({
-            url: '/PurchaseOrderMaster/InsertMultiplePurchaseOrderDetails',
-            type: 'POST',
-            data: form_data,
-            dataType: 'json',
-            contentType: false,
-            processData: false,
-            success: function (Result) {
-                if (Result.code == 200) {
-                    Swal.fire({
-                        title: Result.message,
-                        icon: 'success',
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'OK'
-                    }).then(function () {
-                        window.location = '/PurchaseOrderMaster/PurchaseOrderDetails/?OrderId=' + PONumber;
-                    });
-                }
-                else {
-                    toastr.error(Result.message);
-                }
-            },
-            error: function () {
-                toastr.error('An error occurred while processing your request.');
+        if ($('#addnewproductlink tr').length >= 1) {
+            var ProductDetails = [];
+            $(".product").each(function () {
+                var orderRow = $(this);
+                var productName = orderRow.find("#textProductName").text().trim();
+                var productId = orderRow.find("#textProductId").val().trim();
+                var objData = {
+                    Product: productName,
+                    ProductId: productId,
+                    ProductType: orderRow.find("#textProductType").val(),
+                    Quantity: orderRow.find("#txtproductquantity").val(),
+                    Price: orderRow.find("#txtproductamount").val(),
+                    Gstamount: orderRow.find("#txtgstAmount").val(),
+                    Gstper: orderRow.find("#txtgstPercentage").val(),
+                    Hsn: orderRow.find("#txtHSNcode").val(),
+                    ProductTotal: orderRow.find("#txtproducttotalamount").val(),
+                };
+                ProductDetails.push(objData);
+            });
+            var PONumber = $("#textPoId").val();
+            var PODetails = {
+                ProjectId: $("#textProjectId").val(),
+                OrderId: $("#textPoId").val(),
+                VendorId: $("#textVendorName").val(),
+                CompanyId: $("#textCompanyName").val(),
+                TotalGst: $("#totalgst").val(),
+                SubTotal: $("#cart-subtotal").val(),
+                TotalAmount: $("#cart-total").val(),
+                DeliveryDate: $("#UnitTypeId").val(),
+                OrderDate: $("#textOrderDate").val(),
+                OrderStatus: $("#UnitTypeId").val(),
+                PaymentMethod: $("#txtPOpaymentmethod").val(),
+                PaymentStatus: $("#txtPOpaymenttype").val(),
+                DeliveryStatus: $("#textDeliveryStatus").val(),
+                CreatedBy: $("#textCreatedById").val(),
+                Address: $('#hideShippingAddress').is(':checked') ? $('#textCompanyBillingAddress').val() : $('#textShippingAddress').val(),
+                ProductList: ProductDetails,
             }
-        });
 
+            var form_data = new FormData();
+            form_data.append("PurchaseOrder", JSON.stringify(PODetails));
+            $.ajax({
+                url: '/PurchaseOrderMaster/InsertMultiplePurchaseOrderDetails',
+                type: 'POST',
+                data: form_data,
+                dataType: 'json',
+                contentType: false,
+                processData: false,
+                success: function (Result) {
+                    if (Result.code == 200) {
+                        Swal.fire({
+                            title: Result.message,
+                            icon: 'success',
+                            confirmButtonColor: '#3085d6',
+                            confirmButtonText: 'OK'
+                        }).then(function () {
+                            window.location = '/PurchaseOrderMaster/PurchaseOrderDetails/?OrderId=' + PONumber;
+                        });
+                    }
+                    else {
+                        toastr.error(Result.message);
+                    }
+                },
+                error: function () {
+                    toastr.error('An error occurred while processing your request.');
+                }
+            });
+        }
+        else {
+            if ($('#addnewproductlink tr').length == 0) {
+                $('#AddVendorModelButton').addClass('error-border');
+                toastr.warning("Please select product!");
+            }
+        }
     }
-    else {
+    else
+    {
         toastr.warning("Kindly fill all data fields");
     }
 }

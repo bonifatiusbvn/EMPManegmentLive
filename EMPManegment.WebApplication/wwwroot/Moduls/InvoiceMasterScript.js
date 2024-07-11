@@ -822,10 +822,10 @@ function tn_toggleInvoiceShippingAddress() {
         shippingFields.style.display = "block";
     }
 }
-//function fn_PrintInvoicePage() {
-//    var printContents = document.getElementById('displayInvoiceDetail').innerHTML;
-//    var originalContents = document.body.innerHTML;
-//    document.body.innerHTML = printContents;
-//    document.body.innerHTML = originalContents;
-//    window.print();
-//}
+function fn_PrintInvoicePage() {debugger
+    var printContents = document.getElementById('displayInvoiceDetail').innerHTML;
+    var originalContents = document.body.innerHTML;
+    document.body.innerHTML = printContents;
+    document.body.innerHTML = originalContents;
+    window.print();
+}
