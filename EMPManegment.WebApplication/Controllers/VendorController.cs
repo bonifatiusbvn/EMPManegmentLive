@@ -84,14 +84,6 @@ namespace EMPManegment.Web.Controllers
         {
             try
             {
-                var fileName = addVandorDetails.VendorCompanyLogo.FileName;
-                if (fileName != null)
-                {
-                    var path = Environment.WebRootPath;
-                    var filepath = "Content/Image/" + fileName;
-                    var fullpath = Path.Combine(path, filepath);
-                    UploadFile(addVandorDetails.VendorCompanyLogo, fullpath);
-                }
                 var addVandor = new VendorDetailsView()
                 {
                     VendorFirstName = addVandorDetails.VendorFirstName,
@@ -116,8 +108,21 @@ namespace EMPManegment.Web.Controllers
                     VendorBankIfsc = addVandorDetails.VendorBankIfsc,
                     VendorTypeId = addVandorDetails.VendorTypeId,
                     CreatedBy = _userSession.FirstName,
-                    VendorCompanyLogo = fileName
                 };
+                if (addVandorDetails.VendorCompanyLogo != null)
+                {
+                    var VendorImg = Guid.NewGuid + "_" + addVandorDetails.VendorCompanyLogo.FileName;
+                    var path = Environment.WebRootPath;
+                    var filepath = "Content/Image/" + VendorImg;
+                    var fullpath = Path.Combine(path, filepath);
+                    UploadFile(addVandorDetails.VendorCompanyLogo, fullpath);
+
+                    addVandor.VendorCompanyLogo = VendorImg;
+                }
+                else
+                {
+                    addVandor.VendorCompanyLogo = null;
+                }
                 ApiResponseModel postuser = await APIServices.PostAsync(addVandor, "Vendor/CreateVendors");
                 if (postuser.code == 200)
                 {
@@ -235,11 +240,52 @@ namespace EMPManegment.Web.Controllers
 
         [FormPermissionAttribute("Vendor List-Edit")]
         [HttpPost]
-        public async Task<IActionResult> UpdateVendorDetails(VendorDetailsView VendorDetails)
+        public async Task<IActionResult> UpdateVendorDetails(AddVendorDetailsView VendorDetails)
         {
             try
             {
-                ApiResponseModel postuser = await APIServices.PostAsync(VendorDetails, "Vendor/UpdateVendorDetails");
+                var updateVendor = new VendorDetailsView()
+                {
+                    Vid  = VendorDetails.Vid,
+                    VendorFirstName = VendorDetails.VendorFirstName,
+                    VendorLastName = VendorDetails.VendorLastName,
+                    VendorContectNo = VendorDetails.VendorContectNo,
+                    VendorPhone = VendorDetails.VendorPhone,
+                    VendorEmail = VendorDetails.VendorEmail,
+                    VendorCountry = VendorDetails.VendorCountry,
+                    VendorState = VendorDetails.VendorState,
+                    VendorCity = VendorDetails.VendorCity,
+                    VendorAddress = VendorDetails.VendorAddress,
+                    VendorPinCode = VendorDetails.VendorPinCode,
+                    VendorCompany = VendorDetails.VendorCompany,
+                    VendorCompanyType = VendorDetails.VendorCompanyType,
+                    VendorCompanyEmail = VendorDetails.VendorCompanyEmail,
+                    VendorCompanyNumber = VendorDetails.VendorCompanyNumber,
+                    VendorBankName = VendorDetails.VendorBankName,
+                    VendorBankBranch = VendorDetails.VendorBankBranch,
+                    VendorAccountHolderName = VendorDetails.VendorAccountHolderName,
+                    VendorBankAccountNo = VendorDetails.VendorBankAccountNo,
+                    VendorGstnumber = VendorDetails.VendorGstnumber,
+                    VendorBankIfsc = VendorDetails.VendorBankIfsc,
+                    VendorTypeId = VendorDetails.VendorTypeId,
+                    UpdatedBy = _userSession.UserId,
+                };
+                if (VendorDetails.VendorCompanyLogo != null)
+                {
+                    var VendorImg = Guid.NewGuid+"_"+ VendorDetails.VendorCompanyLogo.FileName;
+                    var path = Environment.WebRootPath;
+                    var filepath = "Content/Image/" + VendorImg;
+                    var fullpath = Path.Combine(path, filepath);
+                    UploadFile(VendorDetails.VendorCompanyLogo, fullpath);
+
+                    updateVendor.VendorCompanyLogo = VendorImg;
+                }
+                else
+                {
+                    updateVendor.VendorCompanyLogo = VendorDetails.VendorImageName;
+                }
+
+                ApiResponseModel postuser = await APIServices.PostAsync(updateVendor, "Vendor/UpdateVendorDetails");
                 if (postuser.code == 200)
                 {
 

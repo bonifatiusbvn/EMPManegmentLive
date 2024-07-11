@@ -136,42 +136,56 @@ function EditVendor() {
     document.querySelectorAll('#createVendorform input, #createVendorform select, #createVendorform textarea').forEach(function (element) {
         element.disabled = false;
     });
+    document.querySelector('#companylogoInput').disabled = false;
+    var deleteButton = document.querySelector('#deleteVendorImageButton');
+    if (deleteButton) {
+        deleteButton.style.display = 'block';
+        deleteButton.disabled = false;
+    }
     $("#editVendorbtn").hide();
     $("#updateVendorbtn").show();
 }
 
 function UpdateVendorDetails() {
     if ($("#createVendorform").valid()) {
-        var fromData = {
-            "Vid": $("#vendorIdInput").val(),
-            "VendorFirstName": $("#firstnameInput").val(),
-            "VendorLastName": $("#lastnameInput").val(),
-            "VendorContectNo": $('#contactnumberInput').val(),
-            "VendorPhone": $("#phonenumberInput").val(),
-            "VendorEmail": $("#emailidInput").val(),
-            "VendorTypeId": $("#ddlVendorType").val(),
-            "VendorCountry": $("#VendorCountry").val(),
-            "VendorState": $("#VendorState").val(),
-            "VendorCity": $("#VendorCity").val(),
-            "VendorAddress": $("#AddressidInput").val(),
-            "VendorPinCode": $("#pincodeidInput").val(),
-            "VendorCompany": $("#companynameInput").val(),
-            "VendorCompanyType": $("#CompanyType").val(),
-            "VendorCompanyEmail": $("#companyemailInput").val(),
-            "VendorCompanyNumber": $("#worknumberInput").val(),
-            "VendorBankName": $("#banknameInput").val(),
-            "VendorBankBranch": $("#branchInput").val(),
-            "VendorAccountHolderName": $("#accountnameInput").val(),
-            "VendorBankAccountNo": $("#accountnumberInput").val(),
-            "VendorBankIfsc": $("#ifscInput").val(),
-            "VendorGstnumber": $("#GSTNumberInput").val(),
-            "UpdatedBy": $("#txtUpdatedby").val(),
-        };
+        var formData = new FormData();
+        formData.append("Vid", $("#vendorIdInput").val());
+        formData.append("VendorFirstName", $("#firstnameInput").val());
+        formData.append("VendorLastName", $("#lastnameInput").val());
+        formData.append("VendorContectNo", $('#contactnumberInput').val());
+        formData.append("VendorPhone", $("#phonenumberInput").val());
+        formData.append("VendorEmail", $("#emailidInput").val());
+        formData.append("VendorTypeId", $("#ddlVendorType").val());
+        formData.append("VendorCountry", $("#VendorCountry").val());
+        formData.append("VendorState", $("#VendorState").val());
+        formData.append("VendorCity", $("#VendorCity").val());
+        formData.append("VendorAddress", $("#AddressidInput").val());
+        formData.append("VendorPinCode", $("#pincodeidInput").val());
+        formData.append("VendorCompany", $("#companynameInput").val());
+        formData.append("VendorCompanyType", $("#CompanyType").val());
+        formData.append("VendorCompanyEmail", $("#companyemailInput").val());
+        formData.append("VendorCompanyNumber", $("#worknumberInput").val());
+        formData.append("VendorBankName", $("#banknameInput").val());
+        formData.append("VendorBankBranch", $("#branchInput").val());
+        formData.append("VendorAccountHolderName", $("#accountnameInput").val());
+        formData.append("VendorBankAccountNo", $("#accountnumberInput").val());
+        formData.append("VendorBankIfsc", $("#ifscInput").val());
+        formData.append("VendorGstnumber", $("#GSTNumberInput").val());
+        formData.append("UpdatedBy", $("#txtUpdatedby").val());
+        var imageName = $("#currentVendorImageName").text().trim();
+        var imageFile = $("#companylogoInput")[0].files[0];
+        if (imageName && !imageFile) {
+            formData.append("VendorImageName", imageName);
+        } else if (imageFile) {
+            formData.append("VendorCompanyLogo", imageFile);
+        }
         $.ajax({
             url: '/Vendor/UpdateVendorDetails',
-            type: 'post',
-            data: fromData,
-            datatype: 'json',
+            type: 'POST',
+            data: formData,
+            dataType: 'json',
+            processData: false,
+            contentType: false,
             success: function (Result) {
 
                 Swal.fire({
@@ -395,3 +409,37 @@ function editnexttoBankDetails() {
     }
 }
 
+$(document).ready(function () {
+    function toggleImagePreview(show) {
+        if (show) {
+            $('#VendorImageContainer').show();
+        } else {
+            $('#VendorImageContainer').hide();
+        }
+    }
+    $('#deleteVendorImageButton').click(function () {
+        $('#vendorImagePreview').attr('src', '');
+        $('#companylogoInput').val('');
+        $("#currentVendorImageName").text('');
+        toggleImagePreview(false);
+    });
+    $('#companylogoInput').change(function () {
+        var input = this;
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $('#vendorImagePreview').attr('src', e.target.result);
+                toggleImagePreview(true);
+            }
+            reader.readAsDataURL(input.files[0]);
+        } else {
+            toggleImagePreview(false);
+        }
+    });
+
+    if ($('#vendorImagePreview').attr('src') === '' || $('#vendorImagePreview').attr('src') === '#') {
+        toggleImagePreview(false);
+    } else {
+        toggleImagePreview(true);
+    }
+});
