@@ -372,7 +372,7 @@ function UpdatePurchaseRequestDetails() {
             var orderRow = $(this);
             var objData = {
                 UserId: orderRow.find("#txtuserId").val(),
-                ProjectId: $("#textPRProjectId").val(),
+                ProjectId: $("#textModelProjectIdPR").val(),
                 ProductId: orderRow.find("#txtproductId").val(),
                 ProductName: orderRow.find("#txtProductName").val(),
                 ProductTypeId: orderRow.find("#txtproducttype").val(),

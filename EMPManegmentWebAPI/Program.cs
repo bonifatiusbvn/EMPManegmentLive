@@ -1,7 +1,6 @@
 
 
 using EMPManagment.API;
-using EMPManegment.Inretface.EmployeesInterface.AddEmployee;
 using EMPManegment.Inretface.Interface.CompanyMaster;
 using EMPManegment.Inretface.Interface.CSC;
 using EMPManegment.Inretface.Interface.ExpenseMaster;
@@ -18,7 +17,6 @@ using EMPManegment.Inretface.Interface.UserAttendance;
 using EMPManegment.Inretface.Interface.UserList;
 using EMPManegment.Inretface.Interface.UsersLogin;
 using EMPManegment.Inretface.Interface.VendorDetails;
-using EMPManegment.Inretface.Services.AddEmployeeServies;
 using EMPManegment.Inretface.Services.CompanyServices;
 using EMPManegment.Inretface.Services.CSC;
 using EMPManegment.Inretface.Services.ExpenseMaster;
@@ -35,7 +33,6 @@ using EMPManegment.Inretface.Services.UserAttendanceServices;
 using EMPManegment.Inretface.Services.UserListServices;
 using EMPManegment.Inretface.Services.UserLoginServices;
 using EMPManegment.Inretface.Services.VendorDetailsServices;
-using EMPManegment.Repository.AddEmpRepository;
 using EMPManegment.Repository.CompanyRepository;
 using EMPManegment.Repository.CSCRepository;
 using EMPManegment.Repository.ExponseMasterRepository;
@@ -52,7 +49,6 @@ using EMPManegment.Repository.UserAttendanceRepository;
 using EMPManegment.Repository.UserListRepository;
 using EMPManegment.Repository.UserLoginRepository;
 using EMPManegment.Repository.VendorDetailsRepository;
-using EMPManegment.Services.AddEmployee;
 using EMPManegment.Services.Company;
 using EMPManegment.Services.CSC;
 using EMPManegment.Services.ExpenseMaster;
@@ -85,7 +81,7 @@ builder.Services.AddDbContext<BonifatiusEmployeesContext>(option =>
 option.UseSqlServer(builder.Configuration.GetConnectionString("EMPDbconn")));
 
 
-builder.Services.AddScoped<IAuthentication, AddEmpRepo>();
+builder.Services.AddScoped<IUserLogin, UserLoginRepo>();
 builder.Services.AddScoped<IMasterList, MasterListRepo>();
 builder.Services.AddScoped<IUserLogin, UserLoginRepo>();
 builder.Services.AddScoped<IUserDetails, UserDetailsRepo>();
@@ -104,7 +100,7 @@ builder.Services.AddScoped<ICompany, CompanyRepo>();
 builder.Services.AddScoped<IManualInvoice, ManualInvoiceRepo>();
 
 
-builder.Services.AddScoped<IAuthenticationServices, AuthenticationService>();
+builder.Services.AddScoped<IUserLoginServices, UserLoginService>();
 builder.Services.AddScoped<IMasterListServices, MasterListService>();
 builder.Services.AddScoped<IUserLoginServices, UserLoginService>();
 builder.Services.AddScoped<IUserDetailsServices, UserDetailsService>();

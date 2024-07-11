@@ -127,14 +127,13 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
                               {
                                   a.Id,
                                   a.ProjectId,
-                                  a.ProjectType,
-                                  a.ProjectTitle,
-                                  a.Status,
+                                  b.ProjectType,
+                                  b.ProjectTitle,
+                                  b.ProjectStatus,
                                   a.CreatedOn,
                                   a.UserId,
-                                  a.TotalMember,
-                                  a.StartDate,
-                                  a.EndDate,
+                                  b.ProjectStartDate,
+                                  b.ProjectEndDate,
                                   b.ProjectDescription,
                                   b.ProjectImage,
                                   b.ShortName,
@@ -150,12 +149,11 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
                         ProjectId = item.ProjectId,
                         ProjectType = item.ProjectType,
                         ProjectTitle = item.ProjectTitle,
-                        Status = item.Status,
+                        Status = item.ProjectStatus,
                         CreatedOn = item.CreatedOn,
                         UserId = item.UserId,
-                        TotalMember = item.TotalMember,
-                        StartDate = item.StartDate,
-                        EndDate = item.EndDate,
+                        StartDate = item.ProjectStartDate,
+                        EndDate = item.ProjectEndDate,
                         ProjectDescription = item.ProjectDescription,
                         ShortName = item.ShortName,
 
@@ -205,9 +203,9 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
                         projectDetail.ProjectStartDate = row["ProjectStartDate"] != DBNull.Value ? (DateTime)row["ProjectStartDate"] : DateTime.MinValue;
                         projectDetail.ProjectDescription = row["ProjectDescription"]?.ToString();
                         projectDetail.ProjectType = row["ProjectType"]?.ToString();
-                        projectDetail.CountryName = row["Country"]?.ToString();
-                        projectDetail.StateName = row["State"]?.ToString();
-                        projectDetail.CityName = row["City"]?.ToString();
+                        projectDetail.CountryName = row["CountryName"]?.ToString();
+                        projectDetail.StateName = row["StateName"]?.ToString();
+                        projectDetail.CityName = row["CityName"]?.ToString();
                     }
                 }
                 return projectDetail;
@@ -258,11 +256,6 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
                             {
                                 projectDetail.IsDeleted = false;
                                 projectDetail.ProjectId = project.ProjectId;
-                                projectDetail.ProjectType = project.ProjectType;
-                                projectDetail.ProjectTitle = project.ProjectTitle;
-                                projectDetail.StartDate = project.ProjectStartDate;
-                                projectDetail.EndDate = project.ProjectEndDate;
-                                projectDetail.Status = project.ProjectStatus;
                                 projectDetail.UpdatedOn = DateTime.Now;
                                 projectDetail.UpdatedBy = AddMember.UpdatedBy;
                                 Context.TblProjectMembers.Update(projectDetail);
@@ -277,12 +270,7 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
                             {
                                 Id = Guid.NewGuid(),
                                 ProjectId = project.ProjectId,
-                                ProjectType = project.ProjectType,
-                                ProjectTitle = project.ProjectTitle,
                                 UserId = userId.Id,
-                                StartDate = project.ProjectStartDate,
-                                EndDate = project.ProjectEndDate,
-                                Status = project.ProjectStatus,
                                 IsDeleted = false,
                                 CreatedBy = AddMember.UpdatedBy,
                                 CreatedOn = DateTime.Now,
@@ -427,12 +415,11 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
                               {
                                   projectDetail.Id,
                                   projectDetail.ProjectId,
-                                  projectDetail.ProjectType,
-                                  projectDetail.ProjectTitle,
+                                  projectMaster.ProjectType,
+                                  projectMaster.ProjectTitle,
                                   projectMaster.ProjectStatus,
                                   projectDetail.CreatedOn,
                                   projectDetail.UserId,
-                                  projectDetail.TotalMember,
                                   projectMaster.ProjectStartDate,
                                   projectMaster.ProjectEndDate,
                                   projectMaster.ProjectDeadline,

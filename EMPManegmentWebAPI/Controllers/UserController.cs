@@ -4,7 +4,7 @@ using EMPManegment.EntityModels.View_Model;
 using EMPManegment.EntityModels.ViewModels;
 using EMPManegment.EntityModels.ViewModels.ForgetPasswordModels;
 using EMPManegment.EntityModels.ViewModels.Models;
-using EMPManegment.Inretface.Services.AddEmployeeServies;
+using EMPManegment.Inretface.Interface.UsersLogin;
 using EMPManegment.Inretface.Services.UserLoginServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -18,15 +18,12 @@ namespace EMPManagment.API.Controllers
 
     public class UserController : ControllerBase
     {
-        public IAuthenticationServices Authentication { get; }
+        public IUserLoginServices UserLogin { get; }
 
-        public UserController(IAuthenticationServices authentication)
+        public UserController(IUserLoginServices userLogin)
         {
-            Authentication = authentication;
+            UserLogin = userLogin;
         }
-
-
-
 
         [HttpPost("Login")]
         [AllowAnonymous]
@@ -36,7 +33,7 @@ namespace EMPManagment.API.Controllers
             try
             {
 
-                var result = await Authentication.LoginUser(login);
+                var result = await UserLogin.LoginUser(login);
 
                 if (result != null && result.Data != null)
                 {
@@ -64,7 +61,7 @@ namespace EMPManagment.API.Controllers
         [Authorize]
         public IActionResult CheckUser()
         {
-            var checkUser = Authentication.CheckEmloyess();
+            var checkUser = UserLogin.CheckEmloyess();
             return Ok(new { code = 200, data = checkUser });
         }
 
@@ -76,7 +73,7 @@ namespace EMPManagment.API.Controllers
             UserResponceModel response = new UserResponceModel();
             try
             {
-                var addEmployee = Authentication.UserSingUp(AddEmployee);
+                var addEmployee = UserLogin.UserSingUp(AddEmployee);
                 if (addEmployee.Result.Code == 200)
                 {
                     response.Code = (int)HttpStatusCode.OK;
@@ -102,7 +99,7 @@ namespace EMPManagment.API.Controllers
         public async Task<IActionResult> ForgetPassword(SendEmailModel ForgetPassword)
         {
             ApiResponseModel responseModel = new ApiResponseModel();
-            var forgetPassword = await Authentication.FindByEmailAsync(ForgetPassword);
+            var forgetPassword = await UserLogin.FindByEmailAsync(ForgetPassword);
             try
             {
 
@@ -115,7 +112,7 @@ namespace EMPManagment.API.Controllers
                     htmlString = htmlString.Replace("{{FirstName}}", forgetPassword.Data.FirstName);
                     htmlString = htmlString.Replace("{{LastName}}", forgetPassword.Data.LastName);
                     htmlString = htmlString.Replace("{{url}}", "https://localhost:7204/UserProfile/ResetUserPassword");
-                    bool status = await Authentication.EmailSendAsync(ForgetPassword.Email, "Click Here to Reset Your Password ", htmlString);
+                    bool status = await UserLogin.EmailSendAsync(ForgetPassword.Email, "Click Here to Reset Your Password ", htmlString);
                     responseModel.code = (int)HttpStatusCode.OK;
                     responseModel.message = forgetPassword.Message;
                 }

@@ -93,8 +93,8 @@ public partial class BonifatiusEmployeesContext : DbContext
 
     public virtual DbSet<TblVendorType> TblVendorTypes { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    { }
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<TblAttendance>(entity =>
@@ -501,13 +501,7 @@ public partial class BonifatiusEmployeesContext : DbContext
 
             entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.CreatedOn).HasColumnType("date");
-            entity.Property(e => e.EndDate).HasColumnType("date");
-            entity.Property(e => e.ProjectTitle).HasMaxLength(50);
-            entity.Property(e => e.ProjectType).HasMaxLength(20);
-            entity.Property(e => e.StartDate).HasColumnType("date");
-            entity.Property(e => e.Status).HasMaxLength(20);
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
-            entity.Property(e => e.UserRole).HasMaxLength(20);
 
             entity.HasOne(d => d.Project).WithMany(p => p.TblProjectMembers)
                 .HasForeignKey(d => d.ProjectId)
@@ -820,7 +814,7 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.Property(e => e.VendorBankName).HasMaxLength(50);
             entity.Property(e => e.VendorCompany).HasMaxLength(50);
             entity.Property(e => e.VendorCompanyEmail).HasMaxLength(50);
-            entity.Property(e => e.VendorCompanyLogo).HasMaxLength(15);
+            entity.Property(e => e.VendorCompanyLogo).HasMaxLength(150);
             entity.Property(e => e.VendorCompanyNumber).HasMaxLength(15);
             entity.Property(e => e.VendorCompanyType).HasMaxLength(20);
             entity.Property(e => e.VendorContact).HasMaxLength(12);

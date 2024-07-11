@@ -11,20 +11,6 @@ public partial class TblProjectMember
 
     public Guid? UserId { get; set; }
 
-    public string? ProjectType { get; set; }
-
-    public string? ProjectTitle { get; set; }
-
-    public string? UserRole { get; set; }
-
-    public DateTime? StartDate { get; set; }
-
-    public DateTime? EndDate { get; set; }
-
-    public int? TotalMember { get; set; }
-
-    public string? Status { get; set; }
-
     public bool? IsDeleted { get; set; }
 
     public DateTime? CreatedOn { get; set; }
