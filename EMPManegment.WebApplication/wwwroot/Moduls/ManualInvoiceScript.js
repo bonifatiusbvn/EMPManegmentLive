@@ -732,7 +732,6 @@ function AddNewRow(Result) {
     updateRowNumbers();
 }
 function fn_printManualInvoice() {
-    debugger
     var printContents = document.getElementById('printManualInvoicePage').innerHTML;
     var originalContents = document.body.innerHTML;
     document.body.innerHTML = printContents;

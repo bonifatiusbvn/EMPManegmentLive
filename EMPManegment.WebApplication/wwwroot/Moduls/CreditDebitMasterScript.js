@@ -151,21 +151,30 @@ $(document).ready(function () {
     var total = parseFloat(localStorage.getItem('totalCreditAmount'));
 
     if (creditDebitDetails) {
-        $("#txttotalcreditamount").text('₹' + total);
         var totalAmount = parseFloat($('#txttotalamount').val());
-        var totalpendingAmount = totalAmount - total;
+        var totalPendingAmount = totalAmount - total;
 
-        $("#txttotalpendingamount").text('₹' + totalpendingAmount);
-        $("#pendingamount").text('₹' + totalpendingAmount);
+        if (!$("#txttotalcreditamount").text().trim()) {
+            $("#txttotalcreditamount").text('₹' + total.toFixed(2));
+        }
+
+        if (!$("#txttotalpendingamount").text().trim()) {
+            $("#txttotalpendingamount").text('₹' + totalPendingAmount.toFixed(2));
+        }
+
+        if (!$("#pendingamount").text().trim()) {
+            $("#pendingamount").text('₹' + totalPendingAmount.toFixed(2));
+        }
 
         $('#txtcreditdebitamount').off('input').on('input', function () {
             var enteredAmount = parseFloat($(this).val());
 
             if (!isNaN(enteredAmount)) {
-                var pendingAmount = totalpendingAmount - enteredAmount;
+                var pendingAmount = totalPendingAmount - enteredAmount;
 
-                if (enteredAmount > totalpendingAmount) {
+                if (enteredAmount > totalPendingAmount) {
                     $('#warningMessage').text('Entered amount cannot exceed pending amount.');
+                    $('#txtpendingamount').val('');
                 } else {
                     $('#warningMessage').text('');
                     $('#txtpendingamount').val(pendingAmount.toFixed(2));
