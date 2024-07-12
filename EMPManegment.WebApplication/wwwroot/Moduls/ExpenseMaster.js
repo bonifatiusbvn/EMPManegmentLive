@@ -1058,12 +1058,12 @@ $(document).ready(function () {
 });
 
 function GetExpenseTotalAmount() {
-
     var userId = {
         UserId: $("#txtuserid").val(),
     }
     var form_data = new FormData();
     form_data.append("USERID", JSON.stringify(userId));
+
     $.ajax({
         url: '/ExpenseMaster/GetExpenseDetailsByUserId',
         type: 'Post',
@@ -1072,50 +1072,49 @@ function GetExpenseTotalAmount() {
         contentType: false,
         processData: false,
         success: function (result) {
+            var total = 0, creditamount = 0, debitamount = 0;
 
-            var total = 0;
             result.forEach(function (obj) {
                 if (obj.totalAmount) {
                     total += obj.totalAmount;
                 }
-            });
-            var creditamount = 0;
-            result.forEach(function (obj) {
-                if (obj.account == "Credit") {
-                    creditamount += obj.totalAmount;
+                if (obj.account === "Credit") {
+                    creditamount += obj.totalAmount || 0;
+                }
+                if (obj.account === "Debit") {
+                    debitamount += obj.totalAmount || 0;
                 }
             });
-            $("#txttotalcreditamount").text('₹' + creditamount);
-            var Dabitamount = 0;
-            result.forEach(function (obj) {
-                if (obj.account == "Debit") {
-                    Dabitamount += obj.totalAmount;
-                }
-            });
-            $("#txtTotalAmount").text('₹' + Dabitamount);
-            var PendingAmount = Dabitamount - creditamount;
-            $("#pendingamount").text('₹' + PendingAmount);
-            $("#txttotaldebitedamount").text('₹' + PendingAmount);
+
+            $("#txttotalcreditamount").text('₹' + creditamount.toFixed(2));
+            $("#txtTotalAmount").text('₹' + debitamount.toFixed(2));
+
+            var pendingAmount = debitamount - creditamount;
+            $("#pendingamount").text('₹' + pendingAmount.toFixed(2));
+            $("#txttotaldebitedamount").text('₹' + pendingAmount.toFixed(2));
+
             $('#txtcreditamount').on('input', function () {
                 var enteredAmount = parseFloat($(this).val());
-
                 if (!isNaN(enteredAmount)) {
-                    var pendingAmount = PendingAmount - enteredAmount;
-
-                    if (enteredAmount > PendingAmount) {
+                    var newPendingAmount = pendingAmount - enteredAmount;
+                    if (enteredAmount > pendingAmount) {
                         $('#warningMessage').text('Entered amount cannot exceed pending amount.');
                     } else {
-                        $('#txtpendingamount').val(pendingAmount.toFixed(2));
+                        $('#warningMessage').text('');
+                        $('#txtpendingamount').val(newPendingAmount.toFixed(2));
                     }
                 } else {
                     $('#warningMessage').text('');
                     $('#txtpendingamount').val('');
                 }
             });
-
         },
+        error: function (error) {
+            console.log("Error:", error);
+        }
     });
 }
+
 
 function ApproveExpense() {
     var userId = $("#txtgetUserId").val();
