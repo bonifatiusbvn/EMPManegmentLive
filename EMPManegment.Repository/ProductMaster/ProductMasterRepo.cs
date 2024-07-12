@@ -47,7 +47,6 @@ namespace EMPManegment.Repository.ProductMaster
                     response.Message = "This product is already exists";
                     response.Data = AddProduct;
                     response.Code = (int)HttpStatusCode.NotFound;
-                    response.Icone = "warning";
                 }
                 else
                 {
@@ -55,7 +54,6 @@ namespace EMPManegment.Repository.ProductMaster
                     {
                         Type = AddProduct.ProductName,
                     };
-                    response.Code = (int)HttpStatusCode.OK;
                     response.Message = "Product successfully inserted";
                     Context.TblProductTypeMasters.Add(Product);
                     Context.SaveChanges();
@@ -80,7 +78,6 @@ namespace EMPManegment.Repository.ProductMaster
                     response.Message = "This product is already exists";
                     response.Data = AddProduct;
                     response.Code = (int)HttpStatusCode.NotFound;
-                    response.Icone = "warning";
                 }
 
                 else

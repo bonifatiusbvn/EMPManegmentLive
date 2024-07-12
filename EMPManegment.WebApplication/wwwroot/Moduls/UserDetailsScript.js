@@ -307,10 +307,38 @@ function EnterInTime() {
 }
 
 function EnterOutTime() {
-    if ($("#todayouttime").text() == "Pending") {
+    const isPending = $("#todayouttime").text() === "Pending";
+    const userId = $("#txtuserid").val();
+    const formData = new FormData();
+    formData.append("UserId", userId);
 
+    const ajaxCall = () => {
+        $.ajax({
+            url: '/Home/EnterUserOutTime',
+            type: 'POST',
+            data: formData,
+            dataType: 'json',
+            processData: false,
+            contentType: false,
+            success: function (Result) {
+                if (Result.code === 200) {
+                    Swal.fire({
+                        text: Result.message,
+                        icon: "success",
+                        confirmButtonClass: "btn btn-primary w-xs mt-2",
+                        buttonsStyling: false
+                    });
+                    GetUserAttendanceInTime();
+                } else {
+                    toastr.warning(Result.message);
+                }
+            }
+        });
+    };
+
+    if (isPending) {
         Swal.fire({
-            title: "Are you sure want to enter out-time..?",
+            title: "Are you sure you want to enter out-time?",
             text: "You won't be able to revert this!",
             icon: "warning",
             showCancelButton: true,
@@ -321,69 +349,21 @@ function EnterOutTime() {
             buttonsStyling: false,
             showCloseButton: true
         }).then((result) => {
-
             if (result.isConfirmed) {
-                var formData = new FormData();
-                formData.append("UserId", $("#txtuserid").val());
-
-                $.ajax({
-                    url: '/Home/EnterUserOutTime',
-                    type: 'Post',
-                    data: formData,
-                    dataType: 'json',
-                    processData: false,
-                    contentType: false,
-                    success: function (Result) {
-                        if (Result.code == 200) {
-                            Swal.fire({
-                                text: Result.message,
-                                icon: "success",
-                                confirmButtonClass: "btn btn-primary w-xs mt-2",
-                                buttonsStyling: false
-                            });
-                            GetUserAttendanceInTime();
-                        }
-                        else {
-                            toastr.warning(Result.message);
-                        }
-                    }
-                });
+                ajaxCall();
             } else if (result.dismiss === Swal.DismissReason.cancel) {
-
                 Swal.fire(
                     'Cancelled',
-                    'User have no changes.!!😊',
+                    'No changes were made!',
                     'error'
                 );
             }
         });
     } else {
-        var formData = new FormData();
-        formData.append("UserId", $("#txtuserid").val());
-        $.ajax({
-            url: '/Home/EnterUserOutTime',
-            type: 'Post',
-            data: formData,
-            dataType: 'json',
-            processData: false,
-            contentType: false,
-            success: function (Result) {
-                if (Result.code == 200) {
-                    Swal.fire({
-                        title: Result.message,
-                        icon: "success",
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'OK'
-                    });
-                    GetUserAttendanceInTime();
-                }
-                else {
-                    toastr.warning(Result.message);
-                }
-            }
-        });
+        ajaxCall();
     }
 }
+
 function ResetPassword() {
     var form = document.getElementById('resetPasswordForm');
     if (form.checkValidity()) {

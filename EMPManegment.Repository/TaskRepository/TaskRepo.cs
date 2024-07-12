@@ -72,7 +72,6 @@ namespace EMPManegment.Repository.TaskRepository
                     ProjectId = addtask.ProjectId,
                     Document = addtask.Document,
                 };
-                response.Code = 200;
                 response.Message = "Task add successfully!";
                 Context.TblTaskDetails.Add(taskmodel);
                 Context.SaveChanges();
