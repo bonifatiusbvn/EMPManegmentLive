@@ -300,14 +300,14 @@ function ProductTypeDropdown(rowId) {
         url: '/ProductMaster/GetProduct',
         success: function (result) {
             var $dropdown = $('#txtPOProductType_' + rowId);
-            var selectedValue = $dropdown.val(); 
+            var selectedValue = $dropdown.val();
 
             $dropdown.empty();
             $dropdown.append('<option value="">--Select Type--</option>');
 
             $.each(result, function (i, data) {
                 $dropdown.append('<option value="' + data.id + '">' + data.productName + '</option>');
-            });    
+            });
             $dropdown.val(selectedValue);
             if ($dropdown.val() === '') {
                 $dropdown.val($("#txtproducttype_" + rowId).val());
@@ -445,6 +445,7 @@ function InsertManualInvoiceDetails() {
             }
         } else {
             toastr.warning("Please select a product!");
+            $('#ManualInvoiceAddproduct').addClass('error-border');
         }
     } else {
         toastr.warning("Kindly fill all data fields");
@@ -698,6 +699,7 @@ function UpdateManualInvoiceDetails() {
             }
         } else {
             toastr.warning("Please select a product!");
+            $('#ManualInvoiceAddproduct').addClass('error-border');
         }
     } else {
         toastr.warning("Kindly fill all data fields");
@@ -740,7 +742,7 @@ function fn_printManualInvoice() {
 //    var printContents = document.getElementById('cardbody1').innerHTML + document.getElementById('cardbody2').innerHTML +
 //                        document.getElementById('cardbody3').innerHTML + document.getElementById('cardbody4').innerHTML;
 //    var originalContents = document.body.innerHTML;
-//    document.body.innerHTML = printContents;  
+//    document.body.innerHTML = printContents;
 //    document.body.innerHTML = originalContents;
 //    window.print();
 //}
@@ -781,7 +783,7 @@ function fn_printManualInvoice() {
 //    });
 
 //    printWindow.document.write('<html><head>' + stylesheetHTML + style + '</head><body>' + printContents + '</body></html>');
-//    printWindow.document.close(); 
+//    printWindow.document.close();
 
 //    printWindow.onload = function () {
 //        document.body.innerHTML = originalContents;

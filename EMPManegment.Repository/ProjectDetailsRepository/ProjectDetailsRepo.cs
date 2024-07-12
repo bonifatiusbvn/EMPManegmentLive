@@ -326,6 +326,7 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
                             Image = row["Image"]?.ToString(),
                             UserId = row["UserId"] != DBNull.Value ? (Guid)row["UserId"] : Guid.Empty,
                             Designation = row["Designation"]?.ToString(),
+                            ProjectTitle = row["ProjectTitle"]?.ToString(),
                         };
                         projectMemberList.Add(ProjectMember);
                     }

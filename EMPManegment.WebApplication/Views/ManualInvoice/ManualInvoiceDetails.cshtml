@@ -10,42 +10,18 @@
 }
 
 <style>
+    .VerticalBorder {
+        border-left: 2px solid lightgray;
+        height: 100%;
+    }
 
-    @@media print {
-        .manual_invoice-table tbody {
-            height: auto;
-        }
-
-        .manual_invoice-table td {
-            border: none !important;
-            padding: 2px;
-        }
-
-        .card.d-print-none {
-            display: none;
-        }
-
-        .manual_invoice-table, .manual_invoice-table tbody, .manual_invoice-table tr, .manual_invoice-table td, .manual_invoice-table th {
-            page-break-inside: avoid !important;
-            page-break-before: avoid !important;
-            page-break-after: avoid !important;
-        }
-
-        @@page {
-            margin: 1cm;
-        }
-
-        body {
-            margin: 0;
-            padding: 0;
-        }
-
-        html, body {
-            width: 100%;
-            height: 100%;
-        }
+    .Address-Details {
+        display: flex;
+        border: 1px solid lightgray;
+        height: 155px;
     }
 </style>
+
 @{
     var firstItem = Model;
     decimal? totalAmount = 0;
@@ -67,99 +43,116 @@
 </div>
 <div class="row justify-content-center" id="printManualInvoicePage">
     <div class="col-xxl-9">
-        <div class="card border">
+        <div class="card">
             <div class="row">
                 <div class="card-body" id="cardbody1">
                     <div class="d-flex">
-                        <div class="flex-grow-1 col-6 border">
+                        <div class="flex-grow-1 col-6" style="border: 1px solid lightgray;">
                             <img src="~/assets/images/logo - bonifatius.jpeg" style="height: 25px;" />
-                            <div class="flex-shrink-0 mt-sm-0 mt-3 border">
+                            <div class="flex-shrink-0 mt-sm-0 mt-3">
                                 <span class="text-muted"><b>@firstItem.VendorName</b></span> <br />
                                 <span class="text-muted">@firstItem.VendorAddress</span><br />
                                 <span class="text-muted text-uppercase">GSTIN/UIN :@firstItem.VendorGstNo</span><br />
                                 <p class="text-muted text-uppercase">Phone No. :@firstItem.VendorPhoneNo</p>
                             </div>
-                            <div class="flex-shrink-0 mt-sm-0 mt-3 border">
+                            <div style="border: 0px solid lightgray;border-width:0.5px;margin:-8px;width:102.5%;"></div>
+                            <br />
+                            <div class="flex-shrink-0 mt-sm-0 mt-3">
                                 <p class="text-muted"><b>Consignee (Ship to):</b></p>
                                 <span class="text-muted text-uppercase"><b>@firstItem.ProjectName</b></span><br />
                                 <span class="text-muted">@firstItem.ShippingAddress</span><br />
                                 <span class="text-muted">GSTIN:- </span>
                             </div>
                         </div>
-                        <div class="flex-grow-1 col-3">
-                            @if (!string.IsNullOrEmpty(firstItem.InvoiceNo))
-                            {
-                                <div class="flex-shrink-0 mt-sm-0 mt-3 border">
-                                    <label class="form-label">Invoice No</label>
-                                    <p class="text-muted text-uppercase"><b>@firstItem.InvoiceNo</b></p>
+                        <div class="flex-grow-1 col-6" style="border: 1px solid lightgray;">
+                            <div class="row">
+                                <div class="col-6">
+                                    @if (!string.IsNullOrEmpty(firstItem.InvoiceNo))
+                                    {
+                                        <div class="flex-shrink-0 mt-sm-0 mt-3 ">
+                                            <label class="form-label">Invoice No</label>
+                                            <p class="text-muted text-uppercase"><b>@firstItem.InvoiceNo</b></p>
+                                        </div>
+                                        <div style="border: 0px solid lightgray;border-width:0.5px;margin:-8px;width:105%;"></div>
+                                        <br />
+                                    }
+                                    @if (!string.IsNullOrEmpty(firstItem.DispatchThrough))
+                                    {
+                                        <div class="flex-shrink-0 mt-sm-0 mt-3 ">
+                                            <label class="form-label">Dispatched Through</label>
+                                            <p class="text-muted text-uppercase"><b>@firstItem.DispatchThrough</b></p>
+                                        </div>
+                                        <div style="border: 0px solid lightgray;border-width:0.5px;margin:-8px;width:105%;"></div>
+                                        <br />
+                                    }
+                                    @if (firstItem?.BuyesOrderDate != null)
+                                    {
+                                        <div class="flex-shrink-0 mt-sm-0 mt-3 ">
+                                            <label class="form-label">Buy's Order Date</label>
+                                            <p class="text-muted text-uppercase">@CommonHelper.GetCommonDateFormat(@firstItem.BuyesOrderDate ?? DateTime.MinValue)</p>
+                                        </div>
+                                        <div style="border: 0px solid lightgray;border-width:0.5px;margin:-8px;width:105%;"></div>
+                                        <br />
+                                    }
+                                    @if (!string.IsNullOrEmpty(firstItem.PaymentStatusName))
+                                    {
+                                        <div class="flex-shrink-0 mt-sm-0 mt-3 ">
+                                            <label class="form-label">Payment Status</label>
+                                            <p class="text-muted text-uppercase">@firstItem.PaymentStatusName</p>
+                                        </div>
+                                    }
                                 </div>
-                            }
-                            @if (!string.IsNullOrEmpty(firstItem.DispatchThrough))
-                            {
-                                <div class="flex-shrink-0 mt-sm-0 mt-3 border">
-                                    <label class="form-label">Dispatched Through</label>
-                                    <p class="text-muted text-uppercase"><b>@firstItem.DispatchThrough</b></p>
+                                <div style="border-left: 2px solid lightgray; height: 100%;position: absolute;left: 50%;"></div>
+                                <div class="col-6">
+                                    @if (firstItem?.InvoiceDate != null)
+                                    {
+                                        <div class="flex-shrink-0 mt-sm-0 mt-3 ">
+                                            <label class="form-label">Date</label>
+                                            <p><span class="text-muted fw-normal">@CommonHelper.GetCommonDateFormat(firstItem.InvoiceDate)</span></p>
+                                        </div>
+                                        <div style="border: 0px solid lightgray;border-width:0.5px;margin:-8px;width:105%;"></div>
+                                        <br />
+                                    }
+                                    @if (!string.IsNullOrEmpty(firstItem.BuyesOrderNo))
+                                    {
+                                        <div class="flex-shrink-0 mt-sm-0 mt-3 ">
+                                            <label class="form-label">Buyer's Order No</label>
+                                            <p class="text-muted text-uppercase">@firstItem.BuyesOrderNo</p>
+                                        </div>
+                                        <div style="border: 0px solid lightgray;border-width:0.5px;margin:-8px;width:105%;"></div>
+                                        <br />
+                                    }
+                                    @if (!string.IsNullOrEmpty(firstItem.PaymentMethodName))
+                                    {
+                                        <div class="flex-shrink-0 mt-sm-0 mt-3">
+                                            <label class="form-label">Payment Method</label>
+                                            <p class="text-muted">@firstItem.PaymentMethodName</p>
+                                        </div>
+                                        <div style="border: 0px solid lightgray;border-width:0.5px;margin:-8px;width:105%;"></div>
+                                        <br />
+                                    }
                                 </div>
-                            }
-                            @if (firstItem?.BuyesOrderDate != null)
-                            {
-                                <div class="flex-shrink-0 mt-sm-0 mt-3 border">
-                                    <label class="form-label">Buy's Order Date</label>
-                                    <p class="text-muted text-uppercase">@CommonHelper.GetCommonDateFormat(@firstItem.BuyesOrderDate ?? DateTime.MinValue)</p>
-                                </div>
-                            }
-                            @if (!string.IsNullOrEmpty(firstItem.PaymentStatusName))
-                            {
-                                <div class="flex-shrink-0 mt-sm-0 mt-3 border">
-                                    <label class="form-label">Payment Status</label>
-                                    <p class="text-muted text-uppercase">@firstItem.PaymentStatusName</p>
-                                </div>
-                            }
-                        </div>
-                        <div class="flex-grow-1 col-3">
-                            @if (firstItem?.InvoiceDate != null)
-                            {
-                                <div class="flex-shrink-0 mt-sm-0 mt-3 border">
-                                    <label class="form-label">Date</label>
-                                    <p><span class="text-muted fw-normal">@CommonHelper.GetCommonDateFormat(firstItem.InvoiceDate)</span></p>
-                                </div>
-                            }
-                            @if (!string.IsNullOrEmpty(firstItem.BuyesOrderNo))
-                            {
-                                <div class="flex-shrink-0 mt-sm-0 mt-3 border">
-                                    <label class="form-label">Buyer's Order No</label>
-                                    <p class="text-muted text-uppercase">@firstItem.BuyesOrderNo</p>
-                                </div>
-                            }
-                            @if (!string.IsNullOrEmpty(firstItem.PaymentMethodName))
-                            {
-                                <div class="flex-shrink-0 mt-sm-0 mt-3 border">
-                                    <label class="form-label">Payment Method</label>
-                                    <p class="text-muted">@firstItem.PaymentMethodName</p>
-                                </div>
-                            }
+                            </div>
                         </div>
                     </div>
 
-                </div>
-                <div class="card-body" id="cardbody2">
-                    <div class="d-flex">
-                        <div class="flex-grow-1 col-6 border">
+                    <div class="d-flex Address-Details">
+                        <div class="flex-grow-1 col-6">
                             <p class="text-muted"><b>Buyer (Bill to)</b></p>
                             <span class="text-muted text-uppercase"><b>@firstItem.CompanyName</b></span><br />
                             <span class="text-muted text-uppercase">@firstItem.CompanyAddress</span><br />
                             <p class="text-muted text-uppercase"><b>GSTIN/UIN :@firstItem.CompanyGstNo</b></p>
                         </div>
-                        <div class="flex-grow-1 col-6 border">
+                        <div class="VerticalBorder"></div>
+                        <div class="flex-grow-1 col-6">
                             <label class="form-label">Terms of Delivery</label>
                             <p class="text-muted">Dispatched from Rakhial,Ahemdabad</p>
                         </div>
                     </div>
-                </div>
-                <div class="card-body" id="cardbody3">
-                    <table class="table table-border text-center table-nowrap align-middle mb-0 border manual_invoice-table">
-                        <thead class="table-info text-muted border">
-                            <tr class="table-active border">
+                    <br />
+                    <table class="table text-center align-middle manual_invoice-table" style="border: 1px solid lightgray;">
+                        <thead class="table-info text-muted">
+                            <tr class="table-active" style="border: 1px solid lightgray;">
                                 <th class="border">SINo.</th>
                                 <th class="border">Product Details</th>
                                 <th class="border">Price</th>
@@ -197,6 +190,14 @@
                                 index++;
                             }
                             <tr>
+                                <td><div class="ProductTotalHR"></div></td>
+                                <td><div class="ProductTotalHR"></div></td>
+                                <td><div class="ProductTotalHR"></div></td>
+                                <td><div class="ProductTotalHR"></div></td>
+                                <td><div class="ProductTotalHR"></div></td>
+                                <td><div class="ProductTotalHR"></div></td>
+                                <td><div class="ProductTotalHR"></div></td>
+                                <td><div class="ProductTotalHR"></div></td>
                             </tr>
                             <tr>
                                 <td class="border"></td>
@@ -234,25 +235,15 @@
                         <span class="text-muted">Amount Chargeable (in words)</span><br />
                         <p class="text-muted text-capitalize"><b>INR @ViewData["TotalAmountInWords"]</b></p>
                     </div>
-                </div>
-                <div class="card-body" id="cardbody4">
-                    <table class="table table-border text-center table-nowrap align-middle mb-0 border manual_invoice-table">
-                        <thead class="table-info text-muted border">
-                            <tr class="table-active border">
+                    <table class="table text-center align-middle manual_invoice-table" style="border: 1px solid lightgray;">
+                        <thead class="table-info text-muted">
+                            <tr class="table-active" style="border: 1px solid lightgray;">
                                 <th class="border">HSN / SAC</th>
                                 <th class="border">Taxable value</th>
                                 <th class="border">Discount</th>
-                                <th class="border">
-                                    <div class="d-flex">
-                                        <div class="flex-grow-1 col-5 ">
-                                            <label class="form-label text-muted">GST%</label>
-                                        </div>
-                                        <div class="flex-grow-1 col-7 ">
-                                            <label class="form-label text-muted">Amount</label>
-                                        </div>
-                                    </div>
-                                </th>
-                                <th class="border text-end col-2">Total Tax Amount</th>
+                                <th class="border">GST%</th>
+                                <th class="border">Amount</th>
+                                <th class="border">Total Tax Amount</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -270,20 +261,12 @@
                                 TotalofSubtotal += subTotal;
                                 DiscountTotal += item.Discount;
                                 <tr>
-                                    <td class="border" id="txtHSN">@item.Hsn</td>
-                                    <td class="border" id="txtTaxablevalue">₹@subTotal</td>
-                                    <td class="border" id="txtTaxablevalue">₹@item.Discount</td>
-                                    <td class="border" id="txtgstpercentage">
-                                        <div class="d-flex">
-                                            <div class="flex-grow-1 col-5">
-                                                <label class="form-label text-muted">@item.Gst%</label>
-                                            </div>
-                                            <div class="flex-grow-1 col-7">
-                                                <label class="form-label text-muted">@GstAmount?.ToString("0.00")</label>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="border" id="txtgsttotal"><b>₹@GstAmount?.ToString("0.00")</b></td>
+                                    <td class="border">@item.Hsn</td>
+                                    <td class="border">₹@subTotal</td>
+                                    <td class="border">₹@item.Discount</td>
+                                    <td class="border">@item.Gst%</td>
+                                    <td class="border">@GstAmount?.ToString("0.00")</td>
+                                    <td class="border"><b>₹@GstAmount?.ToString("0.00")</b></td>
                                 </tr>
                                 Index++;
                             }
@@ -291,26 +274,37 @@
                                 <td class="border">Total</td>
                                 <td class="border"><b>₹@TotalofSubtotal</b></td>
                                 <td class="border"><b>₹@DiscountTotal</b></td>
-                                <td class="border">
-                                    <div class="d-flex">
-                                        <div class="flex-grow-1 col-5">
-                                            <label class="form-label"></label>
-                                        </div>
-                                        <div class="flex-grow-1 col-7">
-                                            <label class="form-label"><b>@firstItem.TotalGst</b></label>
-                                        </div>
-                                    </div>
-                                </td>
+                                <td class="border"><b>₹@DiscountTotal</b></td>
+                                <td class="border"><b>@firstItem.TotalGst</b></td>
                                 <td class="border"><b>₹@firstItem.TotalGst</b></td>
                             </tr>
                         </tbody>
                     </table><!--end table-->
                     <span class="text-muted">Tax Amount (in words) : </span>
                     <span class="text-muted text-capitalize"><b>INR @ViewData["TotalGstInWords"]</b></span>
+                    <br />
+                    <div class="d-flex" style="border: 1px solid lightgray;">
+                        <div class="flex-grow-1 col-6">
+                            <p class="text-muted">Company's PAN : <span> </span><span class="text-muted"><b></b></span></p>
+                            <span class="text-muted"><u>Description</u></span><br />
+                            <span class="text-muted"></span><br />
+                        </div>
+                        <div class="flex-grow-1 col-6">
+                            <span class="form-label">Company's Bank Details</span><br />
+                            <span class="text-muted"> Bank Name :  <span><b></b></span></span> <br />
+                            <span class="text-muted"> A/c No :  <span><b></b></span></span> <br />
+                            <p class="text-muted">Branch & IFS Code  :       <span><b></b></span></p>
+                            <div class="text-end p-1" style="border: 1px solid lightgray; height:70px;">
+                                <p class="text-muted"><b></b></p>
+                                <br />
+                                <p class="text-muted" style="margin-bottom:-6px;">Authorised Signatory</p>
+                            </div>
+                        </div>
+                    </div>
                     <div class="card d-print-none">
                         <div class="card-body">
                             <div class="d-lg-flex align-items-center gap-3">
-                                <a onclick="fn_printManualInvoice()" class="btn btn-primary btn-ecomm" style="margin-left: 950px;width: 185px;"><i class="fadeIn animated bx bx-printer"></i>Print</a>
+                                <a id="PrintManualInvoicePage" class="btn btn-primary btn-ecomm" style="margin-left: 950px;width: 185px;"><i class="fadeIn animated bx bx-printer"></i>Print</a>
                             </div>
                         </div>
                     </div>
@@ -320,9 +314,27 @@
     </div>
 </div>
 
-<script type="text/javascript">
-    var userPermissions = '@Html.Raw(Json.Serialize(UserSession.FormPermisionData))';
-</script>
+@section Scripts {
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/moduls/manualinvoicescript.js" asp-append-version="true"></script>
+    <script type="text/javascript">
+        var userPermissions = '@Html.Raw(Json.Serialize(UserSession.FormPermisionData))';
+    </script>
+    <script>
+        document.getElementById('PrintManualInvoicePage').addEventListener('click', function () {
 
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script src="~/moduls/manualinvoicescript.js" asp-append-version="true"></script>
+            var invoiceId = '@firstItem.Id';
+            fetch(`/ManualInvoice/PrintManualInvoiceDetails?Id=${invoiceId}`)
+                .then(response => response.text())
+                .then(htmlContent => {
+                    var printWindow = window.open('', '', 'width=800,height=600');
+                    printWindow.document.open();
+                    printWindow.document.write(htmlContent);
+                    printWindow.document.close();
+                    printWindow.print();
+                })
+                .catch(error => console.error('Error fetching the invoice details:', error));
+        });
+    </script>
+}
+

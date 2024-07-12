@@ -137,8 +137,7 @@ namespace EMPManagment.API.Controllers
             var resetPassword = await UserListServices.ResetPassword(ResetPassword);
             try
             {
-
-                if (resetPassword != null)
+                if (resetPassword.Code == 200)
                 {
 
                     responseModel.code = (int)HttpStatusCode.OK;

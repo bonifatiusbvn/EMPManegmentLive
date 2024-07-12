@@ -281,7 +281,7 @@ namespace EMPManegment.Repository.UserListRepository
             UserResponceModel response = new UserResponceModel();
             try
             {
-                var userdata = Context.TblUsers.FirstOrDefault(x => x.UserName == ResetPassword.UserName);
+                var userdata = Context.TblUsers.FirstOrDefault(x => x.Id == ResetPassword.UserId);
                 if (userdata != null)
                 {
                     userdata.UpdatedBy = ResetPassword.UpdatedBy;

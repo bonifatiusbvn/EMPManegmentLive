@@ -388,7 +388,7 @@ function ResetPassword() {
     var form = document.getElementById('resetPasswordForm');
     if (form.checkValidity()) {
         var objData = {
-            UserName: $('#txtUserName').val(),
+            UserId: $('#ddlusername').val(),
             Password: $('#password-input').val(),
             ConfirmPassword: $('#confirm-password-input').val(),
         }
@@ -769,7 +769,7 @@ function EdituserDetails() {
 
 function updateuserDetails() {
     if ($('#frmuserDetails').valid()) {
-        var UserId = $('#idInput').val()
+        var UserId = $('#UseridInput').val()
         var objData = {
             Id: UserId,
             FirstName: $('#firstnameInput').val(),
@@ -920,7 +920,7 @@ function EditExperienceDate() {
 }
 function updateExperienceDate() {
     if ($('#frmExperience').valid()) {
-        var UserId = $('#idInput').val()
+        var UserId = $('#UseridInput').val()
         var objData = {
             Id: UserId,
             LastDate: $('#experiencedate').val(),
@@ -954,9 +954,8 @@ function updateExperienceDate() {
 function fn_UpdateUserPassword() {
     var form = document.getElementById('UserInfoPasswordForm');
     if (form.checkValidity()) {
-        var UserId = $("#idInput").val();
         var objData = {
-            UserName: $('#txtUserName').val(),
+            UserId: $('#UseridInput').val(),
             Password: $('#UserInfopassword').val(),
             ConfirmPassword: $('#UserInfoconfirmpassword').val(),
         }
