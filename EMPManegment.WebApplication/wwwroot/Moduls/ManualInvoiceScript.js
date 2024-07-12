@@ -581,6 +581,7 @@ function deleteManualInvoice(InvoiceId) {
 }
 
 function UpdateManualInvoiceDetails() {
+    debugger
     if ($("#CreateManualInvoiceForm").valid()) {
         if ($('#addnewproductlink tr').length >= 1) {
 
@@ -630,7 +631,7 @@ function UpdateManualInvoiceDetails() {
 
             if (isValidProduct) {
 
-                var formatedDate = $("#textCreatedOn").val(),
+                var formatedDate = $("#textModelCreatedOn").val(),
                     Createdon = moment.utc(formatedDate, "DD-MM-YYYY HH:mm:ss").local().toDate();
 
                 var Invoicedetails = {

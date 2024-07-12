@@ -112,7 +112,7 @@ function GetParameterByName(name, url) {
 }
 
 function AddMyExpenseDetails() {
-    if ($('#formexpensedetails').valid()) {
+    if ($('#userexpenseform').valid()) {
         var formData = new FormData();
         formData.append("ExpenseType", $("#txtexpensetypeHidden").val());
         formData.append("Description", $("#txtDescription").val());

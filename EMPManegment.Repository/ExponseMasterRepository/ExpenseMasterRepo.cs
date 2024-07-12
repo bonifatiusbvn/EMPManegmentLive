@@ -54,7 +54,6 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                     };
 
                     response.Message = "Expense type successfully inserted";
-                    response.Icone = "success";
                     Context.TblExpenseTypes.Add(Expense);
                     Context.SaveChanges();
                 }
@@ -77,9 +76,7 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                     Type = AddPayment.Type,
                     CreatedOn = DateTime.Now,
                 };
-                response.Code = (int)HttpStatusCode.OK;
                 response.Message = "PaymentType successfully inserted";
-                response.Icone = "success";
                 Context.TblPaymentTypes.Add(Payment);
                 Context.SaveChanges();
             }
@@ -187,7 +184,6 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                 }
                 Context.TblExpenseTypes.Update(ExpenseType);
                 Context.SaveChanges();
-
                 model.Message = "ExpenseType updated successfully!";
             }
             catch (Exception ex)
@@ -426,11 +422,16 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                     GetExpenseDetail.IsApproved = ExpenseDetails.IsApproved;
                     GetExpenseDetail.ApprovedBy = ExpenseDetails.ApprovedBy;
                     GetExpenseDetail.ApprovedByName = ExpenseDetails.ApprovedByName;
-                }
-                Context.TblExpenseMasters.Update(GetExpenseDetail);
-                Context.SaveChanges();
 
-                model.Message = "Expense details updated successfully!";
+                    Context.TblExpenseMasters.Update(GetExpenseDetail);
+                    Context.SaveChanges();
+                    model.Message = "Expense details updated successfully!";
+                }
+                else
+                {
+                    model.Code = (int)HttpStatusCode.NotFound;
+                    model.Message = "Can't Find Expense Details";
+                }                
             }
             catch (Exception ex)
             {

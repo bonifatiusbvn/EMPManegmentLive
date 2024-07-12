@@ -760,12 +760,12 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
 
                 Context.TblInvoiceDetails.RemoveRange(InvoiceToRemove);
                 await Context.SaveChangesAsync();
-                response.Code = (int)HttpStatusCode.OK;
                 response.Message = "Invoice Update successfully.";
             }
             catch (Exception)
             {
-                throw;
+                response.Message = "Error in updating invoice.";
+                response.Code = (int)HttpStatusCode.InternalServerError;
             }
             return response;
         }
