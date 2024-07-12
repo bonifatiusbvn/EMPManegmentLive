@@ -47,10 +47,6 @@ namespace EMPManegment.Web.Controllers
         {
             try
             {
-                var path = Environment.WebRootPath;
-                var filepath = "Content/Product/" + Guid.NewGuid() + "_" + AddProduct.ProductImage.FileName;
-                var fullpath = Path.Combine(path, filepath);
-                UploadFile(AddProduct.ProductImage, fullpath);
                 var ProductDetails = new ProductDetailsView
                 {
                     CreatedBy = _userSession.UserId,
@@ -58,13 +54,24 @@ namespace EMPManegment.Web.Controllers
                     ProductName = AddProduct.ProductName,
                     ProductDescription = AddProduct.ProductDescription,
                     ProductShortDescription = AddProduct.ProductShortDescription,
-                    ProductImage = filepath,
                     PerUnitPrice = AddProduct.PerUnitPrice,
-                    IsWithGst=AddProduct.IsWithGst,
+                    IsWithGst = AddProduct.IsWithGst,
                     GstPercentage = AddProduct.GstPercentage,
-                    GstAmount= AddProduct.GstAmount,
+                    GstAmount = AddProduct.GstAmount,
                     Hsn = AddProduct.Hsn,
                 };
+                if (AddProduct.ProductImage != null)
+                {
+                    var path = Environment.WebRootPath;
+                    var filepath = "Content/Product/" + Guid.NewGuid() + "_" + AddProduct.ProductImage.FileName;
+                    var fullpath = Path.Combine(path, filepath);
+                    UploadFile(AddProduct.ProductImage, fullpath);
+                    ProductDetails.ProductImage = filepath;
+                }
+                else
+                {
+                    ProductDetails.ProductImage = null;
+                }
                 ApiResponseModel postuser = await APIServices.PostAsync(ProductDetails, "ProductMaster/AddProductDetails");
                 UserResponceModel responseModel = new UserResponceModel();
                 if (postuser.code == 200)

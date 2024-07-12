@@ -149,7 +149,7 @@ function AddMyExpenseDetails() {
     }
 }
 function AddAllUserExpenseDetails() {
-    if ($('#userexpenseform').valid()) {
+    if ($('#formexpensedetails').valid()) {
         var formData = new FormData();
         formData.append("ExpenseType", $("#txtexpensetypeHidden").val());
         formData.append("Description", $("#txtDescription").val());
@@ -221,6 +221,7 @@ function EditExpenseDetails(Id) {
         }
     });
 }
+
 function UpdateExpenseDetails() {
     if ($('#EditExpenseForm').valid()) {
         var formData = new FormData();
@@ -263,6 +264,32 @@ function UpdateExpenseDetails() {
     }
 }
 
+function EditAllUserExpenseDetails(Id) {
+    resetForm();
+    $.ajax({
+        url: '/ExpenseMaster/EditExpenseDetails?ExpenseId=' + Id,
+        type: "Get",
+        contentType: 'application/json;charset=utf-8;',
+        dataType: 'json',
+        success: function (response) {
+            $('#EditExpenseModel').modal('show');
+            $('#Editexpensetype').val(response.expenseTypeName);
+            $('#EditexpensetypeHidden').val(response.expenseType);
+            $('#Editid').val(response.id);
+            $('#EditDescription').val(response.description);
+            $('#Editbillno').val(response.billNumber);
+            $('#Editdate').val(response.date);
+            $('#Edittotalamount').val(response.totalAmount);
+            $('#Editaccount').val(response.account);
+            $('#EditExpensepaymenttype').val(response.paymentType);
+            $('#EditIsPaid').val(response.isPaid ? "True" : "False");
+            $('#EditIsApproved').val(response.isApproved ? "True" : "False");
+        },
+        error: function () {
+            toastr.error("Data not found");
+        }
+    });
+}
 function UpdateExpenseListDetails() {
     if ($('#EditExpenseForm').valid()) {
         var formData = new FormData();
@@ -272,7 +299,7 @@ function UpdateExpenseListDetails() {
         formData.append("BillNumber", $("#Editbillno").val());
         formData.append("Date", $("#Editdate").val());
         formData.append("TotalAmount", $("#Edittotalamount").val());
-        formData.append("PaymentType", $("#EditExpensepaymenttypeid").val());
+        formData.append("PaymentType", $("#EditExpensepaymenttype").val());
         formData.append("IsPaid", $("#EditIsPaid").val());
         formData.append("IsApproved", $("#EditIsApproved").val());
         formData.append("Account", $("#Editaccount").val());
@@ -1013,7 +1040,7 @@ $(document).ready(function () {
                     var buttons = '';
 
                     if (canEdit) {
-                        buttons += '<a class="btn text-primary" onclick="EditExpenseDetails(\'' + full.id + '\')">' +
+                        buttons += '<a class="btn text-primary" onclick="EditAllUserExpenseDetails(\'' + full.id + '\')">' +
                             '<i class="fa-regular fa-pen-to-square"></i></a>';
                     }
 

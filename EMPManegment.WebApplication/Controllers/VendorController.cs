@@ -111,7 +111,7 @@ namespace EMPManegment.Web.Controllers
                 };
                 if (addVandorDetails.VendorCompanyLogo != null)
                 {
-                    var VendorImg = Guid.NewGuid + "_" + addVandorDetails.VendorCompanyLogo.FileName;
+                    var VendorImg = Guid.NewGuid() + "_" + addVandorDetails.VendorCompanyLogo.FileName;
                     var path = Environment.WebRootPath;
                     var filepath = "Content/Image/" + VendorImg;
                     var fullpath = Path.Combine(path, filepath);
@@ -272,7 +272,7 @@ namespace EMPManegment.Web.Controllers
                 };
                 if (VendorDetails.VendorCompanyLogo != null)
                 {
-                    var VendorImg = Guid.NewGuid+"_"+ VendorDetails.VendorCompanyLogo.FileName;
+                    var VendorImg = Guid.NewGuid() +"_"+ VendorDetails.VendorCompanyLogo.FileName;
                     var path = Environment.WebRootPath;
                     var filepath = "Content/Image/" + VendorImg;
                     var fullpath = Path.Combine(path, filepath);

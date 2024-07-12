@@ -73,6 +73,9 @@ $(document).ready(function () {
             txtPerUnitPrice: "required",
             txtGST: "required",
             txtGstPerUnit: "required",
+            txtshortdescription: {
+                maxlength: 50
+            }
         },
         messages: {
             txtproductname: "Please enter product name",
@@ -80,6 +83,9 @@ $(document).ready(function () {
             txtPerUnitPrice: "Please enter price",
             txtGST: "Please enter Gst",
             txtGstPerUnit: "Please enter Gst %",
+            txtshortdescription: {
+                maxlength: "Short description cannot exceed 50 characters"
+            }
         }
     })
     $("#saveproductdetails").on('click', function () {
