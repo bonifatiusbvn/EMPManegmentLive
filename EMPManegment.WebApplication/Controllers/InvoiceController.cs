@@ -55,12 +55,12 @@ namespace EMPManegment.Web.Controllers
         public async Task<IActionResult> CreateInvoice(Guid? Id)
         {
             InvoiceMasterModel InvoiceDetails = new InvoiceMasterModel();
-            if(Id != null)
+            if (Id != null)
             {
                 ApiResponseModel Response = await APIServices.GetAsync("", "Invoice/DisplayInvoiceDetailsById?Id=" + Id);
                 if (Response.code == 200)
                 {
-                    InvoiceDetails= JsonConvert.DeserializeObject<InvoiceMasterModel>(Response.data.ToString());
+                    InvoiceDetails = JsonConvert.DeserializeObject<InvoiceMasterModel>(Response.data.ToString());
                     ViewBag.InvoiceNo = InvoiceDetails.InvoiceNo;
                     int rowNumber = 0;
                     foreach (var item in InvoiceDetails.InvoiceDetails)
@@ -434,7 +434,6 @@ namespace EMPManegment.Web.Controllers
         public async Task<IActionResult> VendorTransactions()
         {
             return View();
-
         }
 
         [HttpPost]

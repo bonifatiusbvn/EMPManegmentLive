@@ -198,10 +198,7 @@ namespace EMPManegment.Repository.UserLoginRepository
 
 
                                 userModel.FromPermissionData = FromPermissionData;
-
                             }
-
-
                             else
                             {
                                 List<FromPermission> FromPermissionData = (from u in Context.TblRolewiseFormPermissions
@@ -222,7 +219,6 @@ namespace EMPManegment.Repository.UserLoginRepository
                                                                                isViewAllow = u.IsViewAllow,
                                                                            }).ToList();
 
-
                                 userModel.FromPermissionData = FromPermissionData;
                             }
 
@@ -232,7 +228,7 @@ namespace EMPManegment.Repository.UserLoginRepository
                         }
                         else
                         {
-                            response.Message = "Invalid credentials";
+                            response.Message = "Invalid Password";
                             response.Code = (int)HttpStatusCode.Unauthorized;
                         }
                     }
@@ -244,7 +240,7 @@ namespace EMPManegment.Repository.UserLoginRepository
                 }
                 else
                 {
-                    response.Message = "User not found";
+                    response.Message = "User not exist";
                     response.Code = (int)HttpStatusCode.NotFound;
                 }
             }
