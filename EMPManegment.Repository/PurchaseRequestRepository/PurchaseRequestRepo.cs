@@ -69,7 +69,6 @@ namespace EMPManegment.Repository.PurchaseRequestRepository
                     Context.TblPurchaseRequests.Add(PRDetailS);
                 }
                 await Context.SaveChangesAsync();
-                response.code = (int)HttpStatusCode.OK;
                 response.message = "PurchaseRequest successfully created..!";
             }
             catch (Exception ex)
@@ -236,7 +235,6 @@ namespace EMPManegment.Repository.PurchaseRequestRepository
 
                 Context.TblPurchaseRequests.RemoveRange(PurchaseRequestToRemove);
                 await Context.SaveChangesAsync();
-                response.code = (int)HttpStatusCode.OK;
                 response.message = "PurchaseRequest updated successfully.";
             }
             catch (Exception ex)

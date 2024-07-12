@@ -49,7 +49,7 @@ namespace EMPManagment.API.Controllers
             try
             {
 
-                if (user.Code == 200)
+                if (user.Code != (int)HttpStatusCode.NotFound && user.Code != (int)HttpStatusCode.InternalServerError)
                 {
                     userresponseModel.Code = (int)HttpStatusCode.OK;
                     userresponseModel.Message = user.Message;
@@ -59,6 +59,7 @@ namespace EMPManagment.API.Controllers
                 {
                     userresponseModel.Message = user.Message;
                     userresponseModel.Code = user.Code;
+                    userresponseModel.Icone = user.Icone;
                 }
             }
             catch (Exception ex)
@@ -78,7 +79,7 @@ namespace EMPManagment.API.Controllers
             var user = await UserDetails.EnterOutTime(InsertOutTime);
             try
             {
-                if (user.Code == 200)
+                if (user.Code != (int)HttpStatusCode.NotFound && user.Code != (int)HttpStatusCode.InternalServerError)
                 {
                     userresponseModel.Code = (int)HttpStatusCode.OK;
                     userresponseModel.Message = user.Message;
@@ -88,6 +89,7 @@ namespace EMPManagment.API.Controllers
                 {
                     userresponseModel.Message = user.Message;
                     userresponseModel.Code = user.Code;
+                    userresponseModel.Icone = user.Icone;
                 }
             }
             catch (Exception ex)
@@ -107,7 +109,7 @@ namespace EMPManagment.API.Controllers
             var user = await AttendanceServices.GetUserAttendanceInTime(GetAttendance);
             try
             {
-                if (user.Code == 200)
+                if (user.Data != null)
                 {
                     userresponseModel.Data = user.Data;
                     userresponseModel.Code = (int)HttpStatusCode.OK;
@@ -137,11 +139,10 @@ namespace EMPManagment.API.Controllers
             try
             {
 
-                if (user.Code == 200)
+                if (user.Code != (int)HttpStatusCode.NotFound && user.Code != (int)HttpStatusCode.InternalServerError)
                 {
                     responsemodel.Message = user.Message;
                     responsemodel.Code = (int)HttpStatusCode.OK;
-
                 }
                 else
                 {
@@ -162,7 +163,7 @@ namespace EMPManagment.API.Controllers
         public async Task<IActionResult> GetTaskType()
         {
             IEnumerable<TaskTypeView> getTask = await TaskServices.GetTaskType();
-            return Ok(new { code = 200, data = getTask.ToList() });
+            return Ok(new { code = (int)HttpStatusCode.OK, data = getTask.ToList() });
         }
 
         [HttpPost]
@@ -173,7 +174,7 @@ namespace EMPManagment.API.Controllers
             try
             {
                 var AddTask = TaskServices.AddTaskDetails(AddtaskDetails);
-                if (AddTask.Result.Code == 200)
+                if (AddTask.Result.Code != (int)HttpStatusCode.InternalServerError)
                 {
                     userresponsemodel.Code = (int)HttpStatusCode.OK;
                     userresponsemodel.Message = AddTask.Result.Message;
@@ -197,7 +198,7 @@ namespace EMPManagment.API.Controllers
         public async Task<IActionResult> GetUserTaskDetails(TaskDetailsView GetTask)
         {
             List<TaskDetailsView> usertaskList = await TaskServices.GetUserTaskDetails(GetTask);
-            return Ok(new { code = 200, data = usertaskList.ToList() });
+            return Ok(new { code = (int)HttpStatusCode.OK, data = usertaskList.ToList() });
         }
 
         [HttpPost]
@@ -208,7 +209,7 @@ namespace EMPManagment.API.Controllers
             try
             {
                 var UpdateTask = TaskServices.UpdateTaskStatus(task);
-                if (UpdateTask.Result.Code == 200)
+                if (UpdateTask.Result.Code != (int)HttpStatusCode.Unauthorized && UpdateTask.Result.Code != (int)HttpStatusCode.InternalServerError)
                 {
                     updateresponsemodel.Code = (int)HttpStatusCode.OK;
                     updateresponsemodel.Message = UpdateTask.Result.Message;
@@ -232,7 +233,7 @@ namespace EMPManagment.API.Controllers
         public async Task<IActionResult> GetTaskDetailsById(Guid Taskid)
         {
             var userTaskDetails = await TaskServices.GetTaskDetailsById(Taskid);
-            return Ok(new { code = 200, data = userTaskDetails });
+            return Ok(new { code = (int)HttpStatusCode.OK, data = userTaskDetails });
         }
 
         [HttpGet]
@@ -240,7 +241,7 @@ namespace EMPManagment.API.Controllers
         public async Task<IActionResult> GetAllUserTaskDetails()
         {
             IEnumerable<TaskDetailsView> AllTaskList = await TaskServices.GetAllUserTaskDetails();
-            return Ok(new { code = 200, data = AllTaskList.ToList() });
+            return Ok(new { code = (int)HttpStatusCode.OK, data = AllTaskList.ToList() });
         }
 
         [HttpPost]
@@ -248,7 +249,7 @@ namespace EMPManagment.API.Controllers
         public async Task<IActionResult> TaskDetailsDataTable(DataTableRequstModel dataTable)
         {
             var AllTaskList = await TaskServices.GetAllUserTaskDetails(dataTable);
-            return Ok(new { code = 200, data = AllTaskList });
+            return Ok(new { code = (int)HttpStatusCode.OK, data = AllTaskList });
         }
 
         [HttpPost]
@@ -256,7 +257,7 @@ namespace EMPManagment.API.Controllers
         public async Task<IActionResult> GetTaskDetails(Guid Taskid, Guid ProjectId)
         {
             IEnumerable<TaskDetailsView> userTaskDetails = await TaskServices.GetTaskDetails(Taskid, ProjectId);
-            return Ok(new { code = 200, data = userTaskDetails.ToList() });
+            return Ok(new { code = (int)HttpStatusCode.OK, data = userTaskDetails.ToList() });
         }
 
         [HttpGet]
@@ -264,7 +265,7 @@ namespace EMPManagment.API.Controllers
         public async Task<IActionResult> GetUserTotalTask(Guid UserId)
         {
             IEnumerable<TaskDetailsView> UserTotalTask = await TaskServices.GetUserTotalTask(UserId);
-            return Ok(new { code = 200, data = UserTotalTask.ToList() });
+            return Ok(new { code = (int)HttpStatusCode.OK, data = UserTotalTask.ToList() });
         }
 
         [HttpPost]
@@ -275,7 +276,7 @@ namespace EMPManagment.API.Controllers
             try
             {
                 var UpdateTask = TaskServices.UpdateTaskDetails(task);
-                if (UpdateTask.Result.Code == 200)
+                if (UpdateTask.Result.Code != (int)HttpStatusCode.NotFound && UpdateTask.Result.Code != (int)HttpStatusCode.InternalServerError)
                 {
                     updateresponsemodel.Code = (int)HttpStatusCode.OK;
                     updateresponsemodel.Message = UpdateTask.Result.Message;
@@ -300,7 +301,7 @@ namespace EMPManagment.API.Controllers
         public async Task<IActionResult> ProjectActivity(Guid ProId)
         {
             IEnumerable<TaskDetailsView> UserTask = await TaskServices.ProjectActivity(ProId);
-            return Ok(new { code = 200, data = UserTask.ToList() });
+            return Ok(new { code = (int)HttpStatusCode.OK, data = UserTask.ToList() });
         }
 
         [HttpGet]
@@ -308,7 +309,7 @@ namespace EMPManagment.API.Controllers
         public async Task<IActionResult> ProjectActivityByUserId(Guid UserId)
         {
             IEnumerable<TaskDetailsView> UserTask = await TaskServices.ProjectActivityByUserId(UserId);
-            return Ok(new { code = 200, data = UserTask.ToList() });
+            return Ok(new { code = (int)HttpStatusCode.OK, data = UserTask.ToList() });
         }
 
         [HttpGet]
@@ -351,11 +352,11 @@ namespace EMPManagment.API.Controllers
             }
             catch (HttpRequestException httpRequestException)
             {
-                return StatusCode(500, new { message = "Error fetching weather data.", detail = httpRequestException.Message });
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { message = "Error fetching weather data.", detail = httpRequestException.Message });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { message = "An unexpected error occurred.", detail = ex.Message });
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { message = "An unexpected error occurred.", detail = ex.Message });
             }
         }
         [HttpPost]

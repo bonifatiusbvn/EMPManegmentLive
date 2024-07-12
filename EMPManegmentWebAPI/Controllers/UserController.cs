@@ -62,7 +62,7 @@ namespace EMPManagment.API.Controllers
         public IActionResult CheckUser()
         {
             var checkUser = UserLogin.CheckEmloyess();
-            return Ok(new { code = 200, data = checkUser });
+            return Ok(new { code = (int)HttpStatusCode.OK, data = checkUser });
         }
 
         [HttpPost]
@@ -74,7 +74,7 @@ namespace EMPManagment.API.Controllers
             try
             {
                 var addEmployee = UserLogin.UserSingUp(AddEmployee);
-                if (addEmployee.Result.Code == 200)
+                if (addEmployee.Result.Code != (int)HttpStatusCode.NotFound)
                 {
                     response.Code = (int)HttpStatusCode.OK;
                     response.Message =  addEmployee.Result.Message;
@@ -103,7 +103,7 @@ namespace EMPManagment.API.Controllers
             try
             {
 
-                if (forgetPassword.Code == 200)
+                if (forgetPassword.Code != (int)HttpStatusCode.NotFound && forgetPassword.Code != (int)HttpStatusCode.InternalServerError)
                 {
                     string path = "F:/BonifatiusLive/EMPManegment.WebApplication/Views/Authentication/PasswordResetTemplate.cshtml";
                     string htmlString = System.IO.File.ReadAllText(path);

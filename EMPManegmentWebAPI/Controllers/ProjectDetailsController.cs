@@ -1,5 +1,6 @@
 ﻿using Azure;
 using EMPManegment.EntityModels.View_Model;
+using EMPManegment.EntityModels.ViewModels;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.ProjectModels;
 using EMPManegment.EntityModels.ViewModels.TaskModels;
@@ -36,7 +37,7 @@ namespace EMPManagment.API.Controllers
             try
             {
                 var result = ProjectDetail.CreateProject(project);
-                if (result.Result.Code == 200)
+                if (result.Result.Code != (int)HttpStatusCode.InternalServerError)
                 {
                     response.Code = (int)HttpStatusCode.OK;
                     response.Message = result.Result.Message;
@@ -60,7 +61,7 @@ namespace EMPManagment.API.Controllers
         public async Task<IActionResult> GetProjectList(string? searchby, string? searchfor)
         {
             IEnumerable<ProjectDetailView> projectlist = await ProjectDetail.GetProjectList(searchby, searchfor);
-            return Ok(new { code = 200, data = projectlist.ToList() });
+            return Ok(new { code = (int)HttpStatusCode.OK, data = projectlist.ToList() });
         }
 
         [HttpPost]
@@ -68,7 +69,7 @@ namespace EMPManagment.API.Controllers
         public async Task<IActionResult> GetUserProjectList(Guid UserId)
         {
             List<ProjectView> userprojectList = await ProjectDetail.GetUserProjectList(UserId);
-            return Ok(new { code = 200, data = userprojectList.ToList() });
+            return Ok(new { code = (int)HttpStatusCode.OK, data = userprojectList.ToList() });
         }
 
         [HttpGet]
@@ -76,7 +77,7 @@ namespace EMPManagment.API.Controllers
         public async Task<IActionResult> GetProjectDetailsById(Guid ProjectId)
         {
             var Projectdata = await ProjectDetail.GetProjectDetailsById(ProjectId);
-            return Ok(new { code = 200, data = Projectdata });
+            return Ok(new { code = (int)HttpStatusCode.OK, data = Projectdata });
         }
 
         [HttpPost]
@@ -84,7 +85,7 @@ namespace EMPManagment.API.Controllers
         public async Task<IActionResult> GetAllMembers()
         {
             IEnumerable<EmpDetailsView> emplist = await ProjectDetail.GetAllMembers();
-            return Ok(new { code = 200, data = emplist.ToList() });
+            return Ok(new { code = (int)HttpStatusCode.OK, data = emplist.ToList() });
         }
 
         [HttpPost]
@@ -95,7 +96,7 @@ namespace EMPManagment.API.Controllers
             try
             {
                 var result = ProjectDetail.AddMemberToProject(AddMember);
-                if (result.Result.Code == 200)
+                if (result.Result.Code != (int)HttpStatusCode.NotFound && result.Result.Code != (int)HttpStatusCode.InternalServerError)
                 {
                     response.Code = (int)HttpStatusCode.OK;
                     response.Message = result.Result.Message;
@@ -119,7 +120,7 @@ namespace EMPManagment.API.Controllers
         public async Task<IActionResult> GetProjectMember(Guid ProjectId)
         {
             IEnumerable<ProjectView> Members = await ProjectDetail.GetProjectMember(ProjectId);
-            return Ok(new { code = 200, data = Members.ToList() });
+            return Ok(new { code = (int)HttpStatusCode.OK, data = Members.ToList() });
         }
 
         [HttpPost]
@@ -130,7 +131,7 @@ namespace EMPManagment.API.Controllers
             try
             {
                 var result = ProjectDetail.AddDocumentToProject(AddDocument);
-                if (result.Result.Code == 200)
+                if (result.Result.Code != (int)HttpStatusCode.InternalServerError)
                 {
                     response.Code = (int)HttpStatusCode.OK;
                     response.Message = result.Result.Message;
@@ -154,7 +155,7 @@ namespace EMPManagment.API.Controllers
         public async Task<IActionResult> GetProjectDocument(Guid ProjectId)
         {
             IEnumerable<ProjectDocumentView> Documents = await ProjectDetail.GetProjectDocument(ProjectId);
-            return Ok(new { code = 200, data = Documents.ToList() });
+            return Ok(new { code = (int)HttpStatusCode.OK, data = Documents.ToList() });
         }
 
         [HttpPost]
@@ -162,7 +163,7 @@ namespace EMPManagment.API.Controllers
         public async Task<IActionResult> GetProjectListById(string? searchby, string? searchfor, Guid UserId)
         {
             List<ProjectDetailView> projectlist = await ProjectDetail.GetProjectListById(searchby, searchfor, UserId);
-            return Ok(new { code = 200, data = projectlist.ToList() });
+            return Ok(new { code = (int)HttpStatusCode.OK, data = projectlist.ToList() });
         }
 
         [HttpGet]
@@ -170,7 +171,7 @@ namespace EMPManagment.API.Controllers
         public IActionResult CheckProjectName()
         {
             var checkProject = ProjectDetail.CheckProjectName();
-            return Ok(new { code = 200, data = checkProject });
+            return Ok(new { code = (int)HttpStatusCode.OK, data = checkProject });
         }
 
         [HttpPost]
@@ -180,11 +181,9 @@ namespace EMPManagment.API.Controllers
             UserResponceModel responseModel = new UserResponceModel();
             try
             {
-
                 var Member = await ProjectDetail.MemberIsDeleted(projectMember);
-                if (Member.Code == 200)
+                if (Member.Code != (int)HttpStatusCode.InternalServerError)
                 {
-
                     responseModel.Code = (int)HttpStatusCode.OK;
                     responseModel.Message = Member.Message;
                 }
@@ -206,17 +205,24 @@ namespace EMPManagment.API.Controllers
         public async Task<IActionResult> DeleteProjectDocument(Guid DocumentId)
         {
             UserResponceModel responseModel = new UserResponceModel();
-
-            var Member = await ProjectDetail.DeleteProjectDocument(DocumentId);
-            if(Member.Code == 200)
+            try
             {
-                responseModel.Code = Member.Code;
-                responseModel.Message=Member.Message;
+                var Member = await ProjectDetail.DeleteProjectDocument(DocumentId);
+                if (Member.Code != (int)HttpStatusCode.NotFound)
+                {
+                    responseModel.Code = (int)HttpStatusCode.OK;
+                    responseModel.Message = Member.Message;
+                }
+                else
+                {
+                    responseModel.Code = Member.Code;
+                    responseModel.Message = Member.Message;
+                }
             }
-            else
+            catch (Exception)
             {
-                responseModel.Code = Member.Code;
-                responseModel.Message = Member.Message;
+                responseModel.Code = (int)HttpStatusCode.InternalServerError;
+                responseModel.Message = "An error occurred while processing the request."; ;
             }
             return StatusCode(responseModel.Code, responseModel);
         }
@@ -226,7 +232,7 @@ namespace EMPManagment.API.Controllers
         public async Task<IActionResult> GetProjectsList()
         {
             IEnumerable<ProjectDetailView> ProjectList = await ProjectDetail.GetProjectsList();
-            return Ok(new { code = 200, data = ProjectList.ToList() });
+            return Ok(new { code = (int)HttpStatusCode.OK, data = ProjectList.ToList() });
         }
 
         [HttpPost]
@@ -237,9 +243,9 @@ namespace EMPManagment.API.Controllers
             try
             {
                 var projectDetails = await ProjectDetail.UpdateProjectDetails(updateProject);
-                if(projectDetails.Code == 200) 
+                if(projectDetails.Code != (int)HttpStatusCode.NotFound && projectDetails.Code != (int)HttpStatusCode.InternalServerError) 
                 {
-                    response.Code = projectDetails.Code;
+                    response.Code = (int)HttpStatusCode.OK;
                     response.Message = projectDetails.Message;
                 }
                 else

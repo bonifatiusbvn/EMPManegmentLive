@@ -45,7 +45,7 @@ namespace EMPManagment.API.Controllers
         public async Task<IActionResult> GetAllUsersDetails()
         {
             var userList = await UserListServices.GetUsersDetails();
-            return Ok(new { code = 200, data = userList });
+            return Ok(new { code = (int)HttpStatusCode.OK, data = userList });
         }
 
         [HttpGet]
@@ -53,7 +53,7 @@ namespace EMPManagment.API.Controllers
         public async Task<IActionResult> GetActiveDeactiveUserList()
         {
             var activedeactive = await UserListServices.GetActiveDeactiveUserList();
-            return Ok(new { code = 200, data = activedeactive });
+            return Ok(new { code = (int)HttpStatusCode.OK, data = activedeactive });
         }
 
 
@@ -62,7 +62,7 @@ namespace EMPManagment.API.Controllers
         public async Task<IActionResult> GetAllUserList(DataTableRequstModel dataTable)
         {
             var userList = await UserListServices.GetUsersList(dataTable);
-            return Ok(new { code = 200, data = userList });
+            return Ok(new { code = (int)HttpStatusCode.OK, data = userList });
         }
 
         [HttpGet]
@@ -70,7 +70,7 @@ namespace EMPManagment.API.Controllers
         public async Task<IActionResult> GetUsersNameList()
         {
             var getUsersNameList = await UserListServices.GetUsersNameList();
-            return Ok(new { code = 200, data = getUsersNameList.ToList() });
+            return Ok(new { code = (int)HttpStatusCode.OK, data = getUsersNameList.ToList() });
         }
 
         [HttpPost]
@@ -109,7 +109,7 @@ namespace EMPManagment.API.Controllers
         public async Task<IActionResult> GetDocumentType()
         {
             IEnumerable<EmpDocumentView> getDocumentType = await UserListServices.GetDocumentType();
-            return Ok(new { code = 200, data = getDocumentType.ToList() });
+            return Ok(new { code = (int)HttpStatusCode.OK, data = getDocumentType.ToList() });
         }
 
         [HttpGet]
@@ -117,7 +117,7 @@ namespace EMPManagment.API.Controllers
         public async Task<IActionResult> GetDocumentList(Guid Userid)
         {
             IEnumerable<DocumentInfoView> getDocumentList = await UserListServices.GetDocumentList(Userid);
-            return Ok(new { code = 200, data = getDocumentList.ToList() });
+            return Ok(new { code = (int)HttpStatusCode.OK, data = getDocumentList.ToList() });
         }
 
         [HttpPost]
@@ -125,7 +125,7 @@ namespace EMPManagment.API.Controllers
         public async Task<IActionResult> UploadDocument(DocumentInfoView UploadDocument)
         {
             var uploadDocument = await UserListServices.UploadDocument(UploadDocument);
-            return Ok(new { code = 200, data = uploadDocument });
+            return Ok(new { code = (int)HttpStatusCode.OK, data = uploadDocument });
         }
 
         [HttpPost]
@@ -137,7 +137,7 @@ namespace EMPManagment.API.Controllers
             var resetPassword = await UserListServices.ResetPassword(ResetPassword);
             try
             {
-                if (resetPassword.Code == 200)
+                if (resetPassword.Code != (int)HttpStatusCode.NotFound && resetPassword.Code != (int)HttpStatusCode.InternalServerError)
                 {
 
                     responseModel.code = (int)HttpStatusCode.OK;
@@ -167,7 +167,7 @@ namespace EMPManagment.API.Controllers
 
                 var unlockScreen = await UserListServices.UserLockScreen(UnlockScreen);
 
-                if (unlockScreen.Code == 200)
+                if (unlockScreen.Code != (int)HttpStatusCode.NotFound && unlockScreen.Code != (int)HttpStatusCode.InternalServerError)
                 {
                     apiResponseModel.Code = (int)HttpStatusCode.OK;
                     apiResponseModel.Message = unlockScreen.Message;
@@ -191,7 +191,7 @@ namespace EMPManagment.API.Controllers
         public async Task<IActionResult> GetUserAttendanceList(DataTableRequstModel dataTable)
         {
             var UserAttendanceList = await UserAttendance.GetUserAttendanceList(dataTable);
-            return Ok(new { code = 200, data = UserAttendanceList });
+            return Ok(new { code = (int)HttpStatusCode.OK, data = UserAttendanceList });
         }
 
         [HttpGet]
@@ -199,7 +199,7 @@ namespace EMPManagment.API.Controllers
         public async Task<IActionResult> UserEdit()
         {
             IEnumerable<EmpDetailsView> userEdit = await UserListServices.UserEdit();
-            return Ok(new { code = 200, data = userEdit.ToList() });
+            return Ok(new { code = (int)HttpStatusCode.OK, data = userEdit.ToList() });
         }
 
         [HttpPost]
@@ -210,7 +210,7 @@ namespace EMPManagment.API.Controllers
             try
             {
                 var updateUserOutTime = UserAttendance.UpdateUserOutTime(UpdateOutTime);
-                if (updateUserOutTime.Result.Code == 200)
+                if (updateUserOutTime.Result.Code != (int)HttpStatusCode.NotFound && updateUserOutTime.Result.Code != (int)HttpStatusCode.InternalServerError)
                 {
                     response.Code = (int)HttpStatusCode.OK;
                     response.Message = updateUserOutTime.Result.Message;
@@ -234,7 +234,7 @@ namespace EMPManagment.API.Controllers
         public async Task<IActionResult> GetUserAttendanceById(int attendanceId)
         {
             IEnumerable<UserAttendanceModel> getUserAttendance = await UserAttendance.GetUserAttendanceById(attendanceId);
-            return Ok(new { code = 200, data = getUserAttendance });
+            return Ok(new { code = (int)HttpStatusCode.OK, data = getUserAttendance });
         }
 
         [HttpGet]
@@ -242,7 +242,7 @@ namespace EMPManagment.API.Controllers
         public async Task<IActionResult> GetEmployeeById(Guid id)
         {
             var userProfile = await UserListServices.GetEmployeeById(id);
-            return Ok(new { code = 200, data = userProfile });
+            return Ok(new { code = (int)HttpStatusCode.OK, data = userProfile });
         }
 
         [HttpPost]
@@ -253,7 +253,7 @@ namespace EMPManagment.API.Controllers
             try
             {
                 var updateUser = await UserListServices.UpdateUserDetails(UpdateUser);
-                if (updateUser.Code == 200)
+                if (updateUser.Code != (int)HttpStatusCode.NotFound)
                 {
                     response.Code = (int)HttpStatusCode.OK;
                     response.Message = updateUser.Message;
@@ -277,7 +277,7 @@ namespace EMPManagment.API.Controllers
         public async Task<IActionResult> GetAttendanceList(SearchAttendanceModel GetAttendanceList)
         {
             IEnumerable<UserAttendanceModel> getAttendanceList = await UserAttendance.GetAttendanceList(GetAttendanceList);
-            return Ok(new { code = 200, data = getAttendanceList.ToList() }); ;
+            return Ok(new { code = (int)HttpStatusCode.OK, data = getAttendanceList.ToList() }); ;
         }
 
         [HttpPost]
@@ -285,7 +285,7 @@ namespace EMPManagment.API.Controllers
         public async Task<IActionResult> GetMemberList()
         {
             var userList = await UserListServices.GetUsersDetails();
-            return Ok(new { code = 200, data = userList });
+            return Ok(new { code = (int)HttpStatusCode.OK, data = userList });
         }
 
         [HttpPost]
@@ -293,7 +293,7 @@ namespace EMPManagment.API.Controllers
         public async Task<IActionResult> GetSearchAttendanceList(searchAttendanceListModel AttendanceList)
         {
             var Attendancelist = await UserAttendance.GetSearchAttendanceList(AttendanceList);
-            return Ok(new { code = 200, data = Attendancelist });
+            return Ok(new { code = (int)HttpStatusCode.OK, data = Attendancelist });
         }
 
         [HttpPost]
@@ -301,7 +301,7 @@ namespace EMPManagment.API.Controllers
         public async Task<IActionResult> GetSearchEmpList(EmpDetailsModel EmpList)
         {
             var EmployeeList = await UserListServices.GetSearchEmpList(EmpList);
-            return Ok(new { code = 200, data = EmployeeList });
+            return Ok(new { code = (int)HttpStatusCode.OK, data = EmployeeList });
         }
         [HttpPost]
         [Route("UpdateUserExeperience")]
@@ -311,7 +311,7 @@ namespace EMPManagment.API.Controllers
             try
             {
                 var updateUser = await UserListServices.UpdateUserExeperience(UpdateDate);
-                if (updateUser.Code == 200)
+                if (updateUser.Code != (int)HttpStatusCode.InternalServerError)
                 {
                     response.Code = (int)HttpStatusCode.OK;
                     response.Message = updateUser.Message;
@@ -334,7 +334,7 @@ namespace EMPManagment.API.Controllers
         public async Task<IActionResult> UserProfilePhoto(EmpDetailsView Profile)
         {
             var UploadImage = await UserListServices.UserProfilePhoto(Profile);
-            return Ok(new { code = 200, data = UploadImage });
+            return Ok(new { code = (int)HttpStatusCode.OK, data = UploadImage });
         }
     }
 }

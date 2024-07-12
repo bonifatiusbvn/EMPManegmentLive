@@ -130,9 +130,7 @@ namespace EMPManegment.Repository.UserAttendanceRepository
                         UserAttendance.TotalHours = UserAttendance.OutTime - UserAttendance.Intime;
                         UserAttendance.UpdatedOn = DateTime.Now;
                         UserAttendance.UpdatedBy = userAttendance.UpdatedBy;
-                        response.Code = (int)HttpStatusCode.OK;
                         response.Message = "User outTime successfully updated";
-                        response.Code = 200;
                         Context.TblAttendances.Update(UserAttendance);
                         Context.SaveChanges();
                     }
