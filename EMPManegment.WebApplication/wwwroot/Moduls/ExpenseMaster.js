@@ -521,7 +521,7 @@ function GetPayUserExpenseCreditList(userId) {
 
 
             $(api.column(4).footer()).html(
-                '<span style="color: black;">Total: ' + '₹' + total + '</span>'
+                '<span style="color: black;">Total: ' + '₹' + total.toFixed(2) + '</span>'
             );
         }
     });
@@ -600,7 +600,7 @@ function GetPayUserExpenseDebitList(userId) {
                 }, 0);
 
             $(api.column(4).footer()).html(
-                '<span style="color: black;">Total: ' + '₹' + total + '</span>'
+                '<span style="color: black;">Total: ' + '₹' + total.toFixed(2) + '</span>'
             );
         }
     });
@@ -1544,7 +1544,7 @@ $(document).ready(function () {
                     }, 0);
 
                 $(api.column(5).footer()).html(
-                    '<span style="color: black;">Total: ' + '₹' + total + '</span>'
+                    '<span style="color: black;">Total: ' + '₹' + total.toFixed(2) + '</span>'
                 );
             }
         });
@@ -1645,7 +1645,7 @@ function GetUserAllExpenseDetails() {
                 }, 0);
 
             $(api.column(4).footer()).html(
-                '<span style="color: black;">Total: ' + '₹' + total + '</span>'
+                '<span style="color: black;">Total: ' + '₹' + total.toFixed(2) + '</span>'
             );
         }
     });
@@ -1746,7 +1746,7 @@ function GetAllUserApproveExpenseList() {
                 }, 0);
 
             $(api.column(4).footer()).html(
-                '<span style="color: black;">Total: ' + '₹' + total + '</span>'
+                '<span style="color: black;">Total: ' + '₹' + total.toFixed(2) + '</span>'
             );
         }
     });
@@ -1848,7 +1848,7 @@ function GetAllUserCreditExpenseList() {
                 }, 0);
 
             $(api.column(4).footer()).html(
-                '<span style="color: black;">Total: ' + '₹' + total + '</span>'
+                '<span style="color: black;">Total: ' + '₹' + total.toFixed(2) + '</span>'
             );
         }
     });
@@ -1950,7 +1950,7 @@ function GetUserLastMonthExpenseList() {
                 }, 0);
 
             $(api.column(4).footer()).html(
-                '<span style="color: black;">Total: ' + '₹' + total + '</span>'
+                '<span style="color: black;">Total: ' + '₹' + total.toFixed(2) + '</span>'
             );
         }
     });
@@ -2052,7 +2052,7 @@ function GetUserCurrentMonthExpenseList() {
                 }, 0);
 
             $(api.column(4).footer()).html(
-                '<span style="color: black;">Total: ' + '₹' + total + '</span>'
+                '<span style="color: black;">Total: ' + '₹' + total.toFixed(2) + '</span>'
             );
         }
     });
@@ -2169,7 +2169,7 @@ function GetUserBetweenMonthsExpenseList(StartDate, EndDate, UserId) {
                 }, 0);
 
             $(api.column(4).footer()).html(
-                '<span style="color: black;">Total: ' + '₹' + total + '</span>'
+                '<span style="color: black;">Total: ' + '₹' + total.toFixed(2) + '</span>'
             );
         }
     });
