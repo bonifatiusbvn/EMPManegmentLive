@@ -47,7 +47,7 @@ namespace EMPManegment.Repository.VendorDetailsRepository
                 {
                     response.Message = "User with this email already exists";
                     response.Data = vendor;
-                    response.Code = 400;
+                    response.Code = (int)HttpStatusCode.NotFound;
                 }
                 else
                 {
@@ -87,7 +87,7 @@ namespace EMPManegment.Repository.VendorDetailsRepository
             }
             catch (Exception ex)
             {
-                response.Code = 400;
+                response.Code = (int)HttpStatusCode.InternalServerError;
                 response.Message = "There is Some error in creating Vendor";
             }
             return response;
@@ -228,7 +228,7 @@ namespace EMPManegment.Repository.VendorDetailsRepository
                             vendordata.VendorTypeName = row["VendorTypeName"]?.ToString();
                             vendordata.FullAddress = row["FullAddress"]?.ToString();
                         };
-                    }  
+                    }
                 }
                 return vendordata;
             }
@@ -287,19 +287,18 @@ namespace EMPManegment.Repository.VendorDetailsRepository
 
                     Context.TblVendorMasters.Update(Vendordata);
                     await Context.SaveChangesAsync();
-                    response.Code = 200;
                     response.Message = "Vendor data updated successfully!";
                 }
                 else
                 {
-                    response.Code = 404;
+                    response.Code = (int)HttpStatusCode.NotFound;
                     response.Message = "Vendor cannot found.";
                     return response;
                 }
             }
             catch (Exception ex)
             {
-                response.Code = 400;
+                response.Code = (int)HttpStatusCode.InternalServerError;
                 response.Message = "There is Some error in updating Vendor";
             }
             return response;

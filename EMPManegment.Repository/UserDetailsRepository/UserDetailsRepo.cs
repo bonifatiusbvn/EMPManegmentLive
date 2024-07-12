@@ -132,20 +132,19 @@ namespace EMPManegment.Repository.UserListRepository
                         GetUserdta.UpdatedBy = UpdatedBy;
                         Context.TblUsers.Update(GetUserdta);
                         Context.SaveChanges();
-                        response.Code = 200;
                         response.Data = GetUserdta;
                         response.Message = "User" + " " + GetUserdta.UserName + " " + "Is Active Succesfully";
                     }
                 }
                 else
                 {
-                    response.Code = 404;
+                    response.Code = (int)HttpStatusCode.NotFound;
                     response.Message = "Can't find the User";
                 }
             }
             catch (Exception ex)
             {
-                response.Code = 400;
+                response.Code = (int)HttpStatusCode.InternalServerError;
                 response.Message = "Error in active-deactive of the user";
             }
             return response;
@@ -164,7 +163,7 @@ namespace EMPManegment.Repository.UserListRepository
                     {
                         response.Message = "You missed out-time of " + Intimedata.Date.ToString("dd/MM/yyyy") + " " + "Kindly contact your admin";
                         response.Icone = "warning";
-                        response.Code = 404;
+                        response.Code = (int)HttpStatusCode.NotFound;
                     }
 
 
@@ -174,7 +173,7 @@ namespace EMPManegment.Repository.UserListRepository
                         {
                             response.Message = "Your already enter in-time";
                             response.Icone = "warning";
-                            response.Code = 404;
+                            response.Code = (int)HttpStatusCode.NotFound;
                         }
 
                         else
@@ -188,7 +187,6 @@ namespace EMPManegment.Repository.UserListRepository
                             tblAttendance.OutTime = null;
                             Context.TblAttendances.Add(tblAttendance);
                             Context.SaveChanges();
-                            response.Code = 200;
                             response.Message = "In-time enter successfully";
                             response.Icone = "success";
 
@@ -208,15 +206,13 @@ namespace EMPManegment.Repository.UserListRepository
                     tblAttendance.OutTime = null;
                     Context.TblAttendances.Add(tblAttendance);
                     Context.SaveChanges();
-                    response.Code = 200;
                     response.Message = "In-time enter successfully";
                     response.Icone = "success";
-
                 }
             }
             catch (Exception ex)
             {
-                response.Code = 400;
+                response.Code = (int)HttpStatusCode.InternalServerError;
                 response.Message = "Error occur at entering the time in.";
             }
 
@@ -233,14 +229,14 @@ namespace EMPManegment.Repository.UserListRepository
                 {
                     response.Message = "You missed out-time of " + Outtimedata.Date.ToString("dd/MM/yyyy") + " " + "Kindly contact your admin";
                     response.Icone = "warning";
-                    response.Code = 404;
+                    response.Code = (int)HttpStatusCode.NotFound;
                 }
 
                 else
                 {
                     if (Outtimedata.Date != DateTime.Today)
                     {
-                        response.Code = 404;
+                        response.Code = (int)HttpStatusCode.NotFound;
                         response.Message = "Please enter in-time first";
                         response.Icone = "warning";
                     }
@@ -256,14 +252,13 @@ namespace EMPManegment.Repository.UserListRepository
                             outtime.TotalHours = outtime.OutTime - outtime.Intime;
                             Context.TblAttendances.Update(outtime);
                             Context.SaveChanges();
-                            response.Code = 200;
                             response.Message = "Out-time enter successfully";
                             response.Icone = "success";
 
                         }
                         else
                         {
-                            response.Code = 404;
+                            response.Code = (int)HttpStatusCode.NotFound;
                             response.Message = "Your already enter out-time";
                             response.Icone = "warning";
 
@@ -274,7 +269,7 @@ namespace EMPManegment.Repository.UserListRepository
             }
             catch (Exception ex)
             {
-                response.Code = 400;
+                response.Code = (int)HttpStatusCode.InternalServerError;
                 response.Message = "Error occur at entering the time out.";
             }
 
@@ -296,19 +291,18 @@ namespace EMPManegment.Repository.UserListRepository
 
                     Context.TblUsers.Update(userdata);
                     Context.SaveChanges();
-                    response.Code = 200;
                     response.Message = "Password updated!";
                 }
                 else
                 {
-                    response.Code = 404;
+                    response.Code = (int)HttpStatusCode.NotFound;
                     response.Message = "Can't found User";
                 }
 
             }
             catch (Exception ex)
             {
-                response.Code = 400;
+                response.Code = (int)HttpStatusCode.InternalServerError;
                 response.Message = "Error in reset password.";
             }
             return response;
@@ -387,14 +381,14 @@ namespace EMPManegment.Repository.UserListRepository
                     }
                     else
                     {
-                        response.Code = 400;
+                        response.Code = (int)HttpStatusCode.NotFound;
                         response.Message = "Your password is wrong";
                     }
                 }
             }
             catch (Exception ex)
             {
-                response.Code = 400;
+                response.Code = (int)HttpStatusCode.InternalServerError;
                 response.Message = "Error in locking the screen";
             }
             return response;
@@ -419,14 +413,14 @@ namespace EMPManegment.Repository.UserListRepository
                     }
                     else
                     {
-                        response.Code = 400;
+                        response.Code = (int)HttpStatusCode.NotFound;
                     }
                 }
             }
             catch (Exception ex)
             {
                 response.Message = "Error in wishing User's Birthday";
-                response.Code = 400;
+                response.Code = (int)HttpStatusCode.InternalServerError;
             }
             return response;
         }
@@ -482,7 +476,7 @@ namespace EMPManegment.Repository.UserListRepository
 
                         Userdata.Id = row["Id"] != DBNull.Value ? (Guid)row["Id"] : Guid.Empty;
                         Userdata.IsActive = row["IsActive"] != DBNull.Value ? (bool)row["IsActive"] : false; ;
-                        Userdata.UserName = row["UserName"]?.ToString(); 
+                        Userdata.UserName = row["UserName"]?.ToString();
                         Userdata.FirstName = row["FirstName"]?.ToString();
                         Userdata.LastName = row["LastName"]?.ToString();
                         Userdata.Image = row["Image"]?.ToString();
@@ -543,7 +537,7 @@ namespace EMPManegment.Repository.UserListRepository
             }
             catch (Exception ex)
             {
-                response.Code = 400;
+                response.Code = (int)HttpStatusCode.InternalServerError;
                 response.Message = "Error in upadting user deatils.";
             }
             return response;
@@ -721,7 +715,7 @@ namespace EMPManegment.Repository.UserListRepository
             }
             catch (Exception ex)
             {
-                response.Code = 400;
+                response.Code = (int)HttpStatusCode.InternalServerError;
                 response.Message = "Error in upadting user deatils.";
             }
             return response;
@@ -744,7 +738,7 @@ namespace EMPManegment.Repository.UserListRepository
             }
             catch (Exception ex)
             {
-                response.Code = 400;
+                response.Code = (int)HttpStatusCode.InternalServerError;
                 response.Message = "Error in upadting user deatils.";
             }
             return response;

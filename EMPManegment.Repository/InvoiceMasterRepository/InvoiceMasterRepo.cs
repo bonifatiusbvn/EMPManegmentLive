@@ -170,7 +170,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                 if (isInvoiceAlredyExists == true)
                 {
                     response.Message = "This invoice is already generated";
-                    response.Code = 400;
+                    response.Code = (int)HttpStatusCode.NotFound;
                 }
                 else
                 {
@@ -223,7 +223,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                             });
                         }
                         response.Data = orderDetails;
-                        response.Code = 200;
+
                         response.Message = "Invoice is generated successfully";
                     }
 
@@ -231,7 +231,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
             }
             catch (Exception ex)
             {
-                response.Code = 400;
+                response.Code = (int)HttpStatusCode.InternalServerError;
                 response.Message = "Error in generating invoice.";
             }
             return response;
@@ -404,12 +404,11 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
 
                 Context.TblCreditDebitMasters.Add(insertcraditdebit);
                 await Context.SaveChangesAsync();
-                response.Code = 200;
                 response.Message = "Details inserted successfully!";
             }
             catch (Exception ex)
             {
-                response.Code = 400;
+                response.Code = (int)HttpStatusCode.InternalServerError;
                 response.Message = "Error in inserting credit debit details.";
             }
             return response;
@@ -497,7 +496,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
             }
             catch (Exception)
             {
-                response.Code = 400;
+                response.Code = (int)HttpStatusCode.InternalServerError;
                 response.Message = "Error in inserting Invoice.";
             }
 
@@ -590,13 +589,13 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                         });
                     }
                     response.Data = orderDetails;
-                    response.Code = 200;
+
                     response.Message = "Invoice is generated successfully";
                 }
             }
             catch (Exception ex)
             {
-                response.Code = 400;
+                response.Code = (int)HttpStatusCode.InternalServerError;
                 response.Message = "Error in generating invoice";
             }
             return response;
@@ -623,18 +622,18 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
 
                     Context.SaveChanges();
 
-                    response.Code = 200;
+
                     response.Message = "Invoice details are successfully deleted.";
                 }
                 else
                 {
-                    response.Code = 404;
+                    response.Code = (int)HttpStatusCode.NotFound;
                     response.Message = "No related records found to delete";
                 }
             }
             catch (Exception ex)
             {
-                response.Code = 400;
+                response.Code = (int)HttpStatusCode.InternalServerError;
                 response.Message = "Error in deleting invoice";
             }
             return response;
@@ -781,7 +780,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                 {
 
                     response.Message = "This invoice is not generated";
-                    response.Code = 400;
+                    response.Code = (int)HttpStatusCode.NotFound;
                 }
                 else
                 {
@@ -829,14 +828,14 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                             });
                         }
                         response.Data = orderDetails;
-                        response.Code = 200;
+
                     }
                 }
             }
             catch (Exception ex)
             {
                 response.Message = "Error in generating invoice.";
-                response.Code = 400;
+                response.Code = (int)HttpStatusCode.InternalServerError;
             }
             return response;
         }
@@ -1105,7 +1104,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
             {
                 throw ex;
             }
-        }       
+        }
 
         public async Task<UserResponceModel> DeleteTransaction(int Id)
         {
@@ -1118,19 +1117,18 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                 {
                     Context.TblCreditDebitMasters.Remove(GetTrandata);
                     Context.SaveChanges();
-                    response.Code = 200;
                     response.Data = GetTrandata;
                     response.Message = "Transaction is deleted successfully";
                 }
                 else
                 {
-                    response.Code = 404;
+                    response.Code = (int)HttpStatusCode.NotFound;
                     response.Message = "Can not found";
                 }
             }
             catch (Exception ex)
             {
-                response.Code = 400;
+                response.Code = (int)HttpStatusCode.InternalServerError;
                 response.Message = "Error deleting transactions";
             }
             return response;

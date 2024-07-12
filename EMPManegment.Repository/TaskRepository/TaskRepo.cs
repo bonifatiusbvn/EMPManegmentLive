@@ -79,7 +79,7 @@ namespace EMPManegment.Repository.TaskRepository
             }
             catch (Exception ex)
             {
-                response.Code = 400;
+                response.Code = (int)HttpStatusCode.InternalServerError;
                 response.Message = "Error in creating task.";
             }
             return response;
@@ -109,7 +109,6 @@ namespace EMPManegment.Repository.TaskRepository
                             }
                             Context.TblTaskDetails.Update(taskstatusupdate);
                             Context.SaveChanges();
-                            responcemodel.Code = 200;
                             responcemodel.Message = "Task status updated successfully!";
                         }
                         catch (Exception ex)
@@ -119,13 +118,13 @@ namespace EMPManegment.Repository.TaskRepository
                     }
                     else
                     {
-                        responcemodel.Code = 401;
+                        responcemodel.Code = (int)HttpStatusCode.Unauthorized;
                         responcemodel.Message = "You aren't authorize!!";
                     }
                 }
                 catch (Exception ex)
                 {
-                    responcemodel.Code = 400;
+                    responcemodel.Code = (int)HttpStatusCode.InternalServerError;
                     responcemodel.Message = "Error in updating task status.";
                 }
             }
@@ -143,12 +142,11 @@ namespace EMPManegment.Repository.TaskRepository
                     }
                     Context.TblTaskDetails.Update(gettask);
                     Context.SaveChanges();
-                    responcemodel.Code = 200;
                     responcemodel.Message = "Task status updated successfully!";
                 }
                 catch (Exception ex)
                 {
-                    responcemodel.Code = 400;
+                    responcemodel.Code = (int)HttpStatusCode.InternalServerError;
                     responcemodel.Message = "Error in updating task status.";
                 }
             }
@@ -436,18 +434,17 @@ namespace EMPManegment.Repository.TaskRepository
 
                     Context.TblTaskDetails.Update(gettask);
                     Context.SaveChanges();
-                    model.Code = 200;
                     model.Message = "Task status updated successfully!";
                 }
                 else
                 {
-                    model.Code = 404;
+                    model.Code = (int)HttpStatusCode.NotFound;
                     model.Message = "Task id doesn't found";
                 }
             }
             catch (Exception ex)
             {
-                model.Code = 400;
+                model.Code = (int)HttpStatusCode.InternalServerError;
                 model.Message = "Error in updating task details.";
             }
             return model;
@@ -464,19 +461,18 @@ namespace EMPManegment.Repository.TaskRepository
                 {
                     Context.TblTaskDetails.Remove(GetTaskdata);
                     Context.SaveChanges();
-                    response.Code = 200;
                     response.Data = GetTaskdata;
                     response.Message = "Task is deleted successfully";
                 }
                 else
                 {
-                    response.Code = 404;
+                    response.Code = (int)HttpStatusCode.NotFound;
                     response.Message = "Can not found";
                 }
             }
             catch (Exception ex)
             {
-                response.Code = 400;
+                response.Code = (int)HttpStatusCode.InternalServerError;
                 response.Message = "Error deleting tasks";
             }
             return response;

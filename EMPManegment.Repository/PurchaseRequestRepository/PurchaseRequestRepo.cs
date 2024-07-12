@@ -63,8 +63,8 @@ namespace EMPManegment.Repository.PurchaseRequestRepository
                         CreatedBy = item.CreatedBy,
                         CreatedOn = DateTime.Now,
                         PrNo = item.PrNo,
-                        Date=DateTime.Now,
-                        PrDate=item.PrDate,
+                        Date = DateTime.Now,
+                        PrDate = item.PrDate,
                     };
                     Context.TblPurchaseRequests.Add(PRDetailS);
                 }
@@ -74,7 +74,7 @@ namespace EMPManegment.Repository.PurchaseRequestRepository
             }
             catch (Exception ex)
             {
-                response.code = 500;
+                response.code = (int)HttpStatusCode.InternalServerError;
                 response.message = "Error in creating purchase request.";
             }
             return response;
@@ -97,19 +97,17 @@ namespace EMPManegment.Repository.PurchaseRequestRepository
 
                     Context.TblPurchaseRequests.UpdateRange(GetPRdata);
                     await Context.SaveChangesAsync();
-
-                    response.code = 200;
                     response.data = GetPRdata;
                 }
                 else
                 {
-                    response.code = 404;
+                    response.code = (int)HttpStatusCode.NotFound;
                     response.message = "Purchase request with PR No. " + PrNo + " not found.";
                 }
             }
             catch
             {
-                response.code = 400;
+                response.code = (int)HttpStatusCode.InternalServerError;
                 response.message = "Error in deleting purchase request.";
             }
             return response;
@@ -134,7 +132,7 @@ namespace EMPManegment.Repository.PurchaseRequestRepository
                                            ProjectName = c.ProjectTitle,
                                            ProductName = a.ProductName,
                                            ProductTypeId = a.ProductTypeId,
-                                           ProductTypeName=a.ProductName,
+                                           ProductTypeName = a.ProductName,
                                            Quantity = a.Quantity,
                                            IsApproved = a.IsApproved,
                                            CreatedBy = a.CreatedBy,
@@ -224,7 +222,7 @@ namespace EMPManegment.Repository.PurchaseRequestRepository
                             CreatedOn = DateTime.Now,
                             PrNo = item.PrNo,
                             Date = DateTime.Now,
-                            PrDate=item.PrDate,
+                            PrDate = item.PrDate,
                         };
                         Context.TblPurchaseRequests.Add(PRDetailS);
                     }
@@ -243,7 +241,7 @@ namespace EMPManegment.Repository.PurchaseRequestRepository
             }
             catch (Exception ex)
             {
-                response.code = 500;
+                response.code = (int)HttpStatusCode.InternalServerError;
                 response.message = "Error updating PR: " + ex.Message;
             }
             return response;
@@ -305,7 +303,7 @@ namespace EMPManegment.Repository.PurchaseRequestRepository
                                       join c in Context.TblProjectMasters on a.ProjectId equals c.ProjectId
                                       where a.IsDeleted == false
                                       group new { a, b, c } by new { a.UserId, b.Image, b.UserName, FullName = b.FirstName + " " + b.LastName, a.PrNo } into userGroup
-                                       
+
                                       select new PurchaseRequestModel
                                       {
                                           PrId = userGroup.Select(x => x.a.PrId).FirstOrDefault(),
@@ -421,7 +419,6 @@ namespace EMPManegment.Repository.PurchaseRequestRepository
                             {
                                 pr.IsApproved = true;
                                 response.Message = "Purchase request is approved successfully.";
-                                response.Code = 200;
                                 Context.TblPurchaseRequests.Update(pr);
                             }
                             await Context.SaveChangesAsync();
@@ -429,20 +426,20 @@ namespace EMPManegment.Repository.PurchaseRequestRepository
                         else
                         {
                             response.Message = "Purchase request is already approved!";
-                            response.Code = 404;
+                            response.Code = (int)HttpStatusCode.NotFound;
                         }
                     }
                     else
                     {
                         response.Message = "Please select purchase request!";
-                        response.Code = 404;
+                        response.Code = (int)HttpStatusCode.NotFound;
                     }
                 }
             }
             catch (Exception ex)
             {
                 response.Message = "Error in approve - unapprove purchase request.";
-                response.Code = 400;
+                response.Code = (int)HttpStatusCode.InternalServerError;
             }
             return response;
         }
@@ -452,19 +449,19 @@ namespace EMPManegment.Repository.PurchaseRequestRepository
             try
             {
                 var productDetails = new List<PurchaseRequestModel>();
-                var data = await(from a in Context.TblProductDetailsMasters.Where(x => x.Id == ProductId)
-                                 join b in Context.TblProductTypeMasters on a.ProductType equals b.Id
-                                 select new PurchaseRequestModel
-                                 {
-                                     ProductTypeId = b.Id,
-                                     ProductDescription = a.ProductDescription,
-                                     ProductName = a.ProductName,
-                                     ProductImage = a.ProductImage,
-                                     ProductId = a.Id,
-                                     Price = a.PerUnitPrice,
-                                     GstAmount = a.GstAmount,
-                                     ProductTypeName = b.Type,
-                                 }).ToListAsync();
+                var data = await (from a in Context.TblProductDetailsMasters.Where(x => x.Id == ProductId)
+                                  join b in Context.TblProductTypeMasters on a.ProductType equals b.Id
+                                  select new PurchaseRequestModel
+                                  {
+                                      ProductTypeId = b.Id,
+                                      ProductDescription = a.ProductDescription,
+                                      ProductName = a.ProductName,
+                                      ProductImage = a.ProductImage,
+                                      ProductId = a.Id,
+                                      Price = a.PerUnitPrice,
+                                      GstAmount = a.GstAmount,
+                                      ProductTypeName = b.Type,
+                                  }).ToListAsync();
                 if (data != null)
                 {
                     foreach (var item in data)

@@ -85,19 +85,18 @@ namespace EMPManegment.Repository.FormPermissionMasterRepository
                     }
                     else
                     {
-                        response.code = 404;
+                        response.code = (int)HttpStatusCode.NotFound;
                         response.message = $"Permissions with RoleId {updatedPermission.RoleId} and FormId {updatedPermission.FormId} not found.";
                         return response;
                     }
                 }
 
                 await Context.SaveChangesAsync();
-                response.code = 200;
                 response.message = "Rolewise permissions successfully updated.";
             }
             catch (Exception ex)
             {
-                response.code = 400;
+                response.code = (int)HttpStatusCode.InternalServerError;
                 response.message = "Error in updating rolewise permissions";
             }
             return response;
@@ -115,7 +114,7 @@ namespace EMPManegment.Repository.FormPermissionMasterRepository
                     if (RoleDetail.IsDelete == null || RoleDetail.IsDelete == false)
                     {
                         response.message = "Role already exists";
-                        response.code = 404;
+                        response.code = (int)HttpStatusCode.NotFound;
                     }
                     else
                     {
@@ -124,7 +123,6 @@ namespace EMPManegment.Repository.FormPermissionMasterRepository
                         GetRoledata.IsDelete = false;
                         Context.TblRoleMasters.Update(GetRoledata);
                         Context.SaveChanges();
-                        response.code = 200;
                         response.data = roleDetails;
                         response.message = "Role add successfully!";
                     }
@@ -162,7 +160,6 @@ namespace EMPManegment.Repository.FormPermissionMasterRepository
                     Context.TblRolewiseFormPermissions.AddRange(roleWiseFormPermissions);
                     Context.SaveChanges();
 
-                    response.code = 200;
                     response.message = "Role add successfully!";
                     Context.TblRoleMasters.Add(rolemodel);
                     Context.SaveChanges();
@@ -170,7 +167,7 @@ namespace EMPManegment.Repository.FormPermissionMasterRepository
             }
             catch (Exception ex)
             {
-                response.code = 400;
+                response.code = (int)HttpStatusCode.InternalServerError;
                 response.message = "Error in creating role";
             }
             return response;
@@ -227,18 +224,17 @@ namespace EMPManegment.Repository.FormPermissionMasterRepository
                 {
                     await Context.TblRolewiseFormPermissions.AddRangeAsync(formDetails);
                     await Context.SaveChangesAsync();
-                    response.code = 200;
                     response.message = "Forms added successfully!";
                 }
                 else
                 {
-                    response.code = 400;
+                    response.code = (int)HttpStatusCode.NotFound;
                     response.message = "Forms already exist!";
                 }
             }
             catch (Exception ex)
             {
-                response.code = 500;
+                response.code = (int)HttpStatusCode.InternalServerError;
                 response.message = $"Error in inserting form: {ex.Message}";
             }
 
@@ -257,7 +253,7 @@ namespace EMPManegment.Repository.FormPermissionMasterRepository
                 if (isRoleAlreadyExists == true)
                 {
                     response.message = "User already exists";
-                    response.code = 404;
+                    response.code = (int)HttpStatusCode.NotFound;
                 }
 
                 else
@@ -284,14 +280,14 @@ namespace EMPManegment.Repository.FormPermissionMasterRepository
                     Context.TblUserFormPermissions.AddRange(userFormPermissions);
                     Context.SaveChanges();
 
-                    response.code = 200;
+
                     response.message = "User add successfully!";
 
                 }
             }
             catch (Exception ex)
             {
-                response.code = 400;
+                response.code = (int)HttpStatusCode.InternalServerError;
                 response.message = "Error in creating user";
             }
             return response;
@@ -347,19 +343,18 @@ namespace EMPManegment.Repository.FormPermissionMasterRepository
                     }
                     else
                     {
-                        response.code = 404;
+                        response.code = (int)HttpStatusCode.NotFound;
                         response.message = $"Permissions with UserId {updatedUserPermission.UserId} and FormId {updatedUserPermission.FormId} not found.";
                         return response;
                     }
                 }
 
                 await Context.SaveChangesAsync();
-                response.code = 200;
                 response.message = "User permissions successfully updated.";
             }
             catch (Exception ex)
             {
-                response.code = 400;
+                response.code = (int)HttpStatusCode.InternalServerError;
                 response.message = "Error in updating user permissions";
             }
             return response;

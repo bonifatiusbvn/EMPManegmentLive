@@ -12,7 +12,7 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace EMPManegment.Repository.CompanyRepository
 {
-    public class CompanyRepo:ICompany
+    public class CompanyRepo : ICompany
     {
         public CompanyRepo(BonifatiusEmployeesContext Context)
         {
@@ -66,7 +66,7 @@ namespace EMPManegment.Repository.CompanyRepository
                                Country = a.Country,
                                CreatedBy = a.CreatedBy,
                                CreatedOn = a.CreatedOn,
-                               FullAddress = a.Address + "," + b.City + "," + c.State 
+                               FullAddress = a.Address + "," + b.City + "," + c.State
                            }).First();
                 return company;
             }
@@ -100,7 +100,7 @@ namespace EMPManegment.Repository.CompanyRepository
             }
             catch (Exception)
             {
-                response.code = 400;
+                response.code = (int)HttpStatusCode.InternalServerError;
                 response.message = "Error in creating company.";
             }
             return response;

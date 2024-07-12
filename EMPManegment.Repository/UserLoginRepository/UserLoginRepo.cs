@@ -112,7 +112,7 @@ namespace EMPManegment.Repository.UserLoginRepository
             catch (Exception ex)
             {
                 response.Message = "Error in creating user.";
-                response.Code = 400;
+                response.Code = (int)HttpStatusCode.InternalServerError;
             }
             return response;
         }
@@ -171,7 +171,7 @@ namespace EMPManegment.Repository.UserLoginRepository
                             };
 
                             response.Data = userModel;
-                            response.Code = (int)HttpStatusCode.OK;
+
 
 
                             bool userformPermission = await Context.TblUserFormPermissions.AnyAsync(e => e.UserId == userModel.Id);
@@ -251,7 +251,7 @@ namespace EMPManegment.Repository.UserLoginRepository
             catch (Exception ex)
             {
                 response.Message = "Error in Login the User.";
-                response.Code = 400;
+                response.Code = (int)HttpStatusCode.InternalServerError;
             }
 
             return response;
@@ -359,19 +359,18 @@ namespace EMPManegment.Repository.UserLoginRepository
                                 }).First();
 
                     responceModel.Data = Userdata;
-                    responceModel.Code = 200;
                     responceModel.Message = "Reset link send on your registered email";
 
                 }
                 else
                 {
-                    responceModel.Code = 400;
+                    responceModel.Code = (int)HttpStatusCode.NotFound;
                     responceModel.Message = "Invalid email id!";
                 }
             }
             catch (Exception ex)
             {
-                responceModel.Code = 404;
+                responceModel.Code = (int)HttpStatusCode.InternalServerError;
                 responceModel.Message = "Error in finding User.";
             }
             return responceModel;

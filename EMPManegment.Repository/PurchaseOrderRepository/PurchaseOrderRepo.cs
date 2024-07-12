@@ -225,7 +225,7 @@ namespace EMPManegment.Repository.OrderRepository
             }
             catch (Exception ex)
             {
-                response.code = 400;
+                response.code = (int)HttpStatusCode.NotFound;
                 response.message = "Error in creating purchase orders.";
             }
             return response;
@@ -410,24 +410,24 @@ namespace EMPManegment.Repository.OrderRepository
 
                         Context.SaveChanges();
 
-                        response.Code = 200;
+                        response.Code = (int)HttpStatusCode.OK;
                         response.Message = "Purchase order details are successfully deleted.";
                     }
                     else
                     {
-                        response.Code = 404;
+                        response.Code = (int)HttpStatusCode.NotFound;
                         response.Message = "No related records found to delete";
                     }
                 }
                 else
                 {
-                    response.Code = 404;
+                    response.Code = (int)HttpStatusCode.NotFound;
                     response.Message = "No related records found to delete";
                 }
             }
             catch (Exception ex)
             {
-                response.Code = 400;
+                response.Code = (int)HttpStatusCode.InternalServerError;
                 response.Message = "Error in deleting purchase order.";
             }
             return response;
@@ -563,7 +563,7 @@ namespace EMPManegment.Repository.OrderRepository
             }
             catch (Exception ex)
             {
-                response.Code = 400;
+                response.Code = (int)HttpStatusCode.InternalServerError;
                 response.Message = "Error in creating purchase orders.";
             }
             return response;

@@ -98,7 +98,7 @@ namespace EMPManegment.Repository.ManualInvoiceRepository
             }
             catch (Exception)
             {
-                response.Code = 400;
+                response.Code = (int)HttpStatusCode.InternalServerError;
                 response.Message = "Error in inserting Invoice.";
             }
 
@@ -276,25 +276,23 @@ namespace EMPManegment.Repository.ManualInvoiceRepository
                         }
 
                         Context.SaveChanges();
-
-                        response.Code = 200;
                         response.Message = "Manual Invoice details are successfully deleted.";
                     }
                     else
                     {
-                        response.Code = 404;
+                        response.Code = (int)HttpStatusCode.NotFound;
                         response.Message = "No related records found to delete";
                     }
                 }
                 else
                 {
-                    response.Code = 404;
+                    response.Code = (int)HttpStatusCode.NotFound;
                     response.Message = "No related records found to delete";
                 }
             }
             catch (Exception ex)
             {
-                response.Code = 400;
+                response.Code = (int)HttpStatusCode.InternalServerError;
                 response.Message = "Error in deleting manual invoice.";
             }
             return response;
@@ -402,7 +400,7 @@ namespace EMPManegment.Repository.ManualInvoiceRepository
             }
             catch (Exception ex)
             {
-                response.Code = 404;
+                response.Code = (int)HttpStatusCode.InternalServerError;
                 response.Message = "Error updating manual invoice";
             }
             return response;

@@ -66,14 +66,14 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
                     CreatedOn = DateTime.Now,
                     CreatedBy = createproject.CreatedBy,
                 };
-                response.Code = 200;
+
                 response.Message = "Project add successfully!";
                 Context.TblProjectMasters.Add(projectmodel);
                 Context.SaveChanges();
             }
             catch (Exception ex)
             {
-                response.Code = 404;
+                response.Code = (int)HttpStatusCode.InternalServerError;
                 response.Message = "Error in creating project.";
             }
             return response;
@@ -249,7 +249,7 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
                             if (projectDetail.IsDeleted == false)
                             {
                                 response.Message = item.Fullname + " already exists in project.";
-                                response.Code = 404;
+                                response.Code = (int)HttpStatusCode.NotFound;
                                 return response;
                             }
                             else
@@ -260,7 +260,7 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
                                 projectDetail.UpdatedBy = AddMember.UpdatedBy;
                                 Context.TblProjectMembers.Update(projectDetail);
                                 await Context.SaveChangesAsync();
-                                response.Code = 200;
+
                                 response.Message = "Project member is added successfully!";
                             }
                         }
@@ -278,7 +278,7 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
 
                             Context.TblProjectMembers.Add(projectmodel);
                             await Context.SaveChangesAsync();
-                            response.Code = 200;
+
                             response.Message = "Project member is added successfully!";
                         }
                     }
@@ -286,13 +286,13 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
                 }
                 else
                 {
-                    response.Code = 404;
+                    response.Code = (int)HttpStatusCode.InternalServerError;
                     response.Message = "Project not found.";
                 }
             }
             catch (Exception ex)
             {
-                response.Code = 400;
+                response.Code = (int)HttpStatusCode.NotFound;
                 response.Message = "Error in adding member to project.";
             }
             return response;
@@ -353,14 +353,13 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
                     CreatdBy = AddDocument.CreatdBy,
                     CreadetOn = DateTime.Now,
                 };
-                response.Code = 200;
                 response.Message = "Document uploaded successfully!";
                 Context.TblProjectDocuments.Add(projectDocumentmodel);
                 Context.SaveChanges();
             }
             catch (Exception ex)
             {
-                response.Code = 400;
+                response.Code = (int)HttpStatusCode.InternalServerError;
                 response.Message = "Error in adding document to project.";
             }
             return response;
@@ -515,7 +514,6 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
                         GetUserdata.UpdatedBy = projectMember.UpdatedBy;
                         Context.TblProjectMembers.Update(GetUserdata);
                         Context.SaveChanges();
-                        response.Code = 200;
                         response.Data = GetUserdata;
                         response.Message = "Project member is deactive succesfully";
                     }
@@ -527,7 +525,6 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
                         GetUserdata.UpdatedBy = projectMember.UpdatedBy;
                         Context.TblProjectMembers.Update(GetUserdata);
                         Context.SaveChanges();
-                        response.Code = 200;
                         response.Data = GetUserdata;
                         response.Message = "Project member is active succesfully";
                     }
@@ -536,7 +533,7 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
             }
             catch (Exception ex)
             {
-                response.Code = 404;
+                response.Code = (int)HttpStatusCode.InternalServerError;
                 response.Message = "Error in active-deactive the project member";
             }
             return response;
@@ -551,12 +548,11 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
             {
                 Context.TblProjectDocuments.Remove(GetDocumentdata);
                 Context.SaveChanges();
-                response.Code = 200;
                 response.Message = "Project document deleted successfully.";
             }
             else
             {
-                response.Code = 404;
+                response.Code = (int)HttpStatusCode.NotFound;
                 response.Message = "There is some problem in your request!";
             }
             return response;
@@ -609,12 +605,11 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
                     projectData.ProjectImage = updateProject.ProjectImage;
                     Context.Update(projectData);
                     await Context.SaveChangesAsync();
-                    response.Code = 200;
                     response.Message = "Project updated succesfully!";
                 }
                 else
                 {
-                    response.Code = 404;
+                    response.Code = (int)HttpStatusCode.NotFound;
                     response.Message = "Project does not found.";
                 }
 
@@ -622,7 +617,7 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
             catch (Exception ex)
             {
                 response.Message = "Error in generating invoice.";
-                response.Code = 400;
+                response.Code = (int)HttpStatusCode.InternalServerError;
             }
             return response;
         }

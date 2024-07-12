@@ -97,18 +97,17 @@ namespace EMPManegment.Repository.UserAttendanceRepository
                         OutTime = UserAttendance.OutTime,
                         AttendanceId = UserAttendance.Id,
                     };
-                    response.Code = 200;
                     response.Data = attendanceModel;
                 }
                 else
                 {
-                    response.Code = 404;
+                    response.Code = (int)HttpStatusCode.NotFound;
                     response.Message = "UserId Doesn't found.";
                 }
             }
             catch (Exception ex)
             {
-                response.Code = 400;
+                response.Code = (int)HttpStatusCode.InternalServerError;
                 response.Message = "Error in getting user attendance in time.";
             }
             return response;
@@ -139,7 +138,7 @@ namespace EMPManegment.Repository.UserAttendanceRepository
                     }
                     else
                     {
-                        response.Code = 404;
+                        response.Code = (int)HttpStatusCode.NotFound;
                         response.Message = "Please select valid date!!";
                     }
 
@@ -147,12 +146,12 @@ namespace EMPManegment.Repository.UserAttendanceRepository
                 else
                 {
                     response.Message = "Please select valid date!!";
-                    response.Code = 404;
+                    response.Code = (int)HttpStatusCode.NotFound;
                 }
             }
             catch (Exception ex)
             {
-                response.Code = 400;
+                response.Code = (int)HttpStatusCode.InternalServerError;
                 response.Message = "Error in updating user out time.";
             }
             return response;

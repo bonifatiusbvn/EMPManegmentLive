@@ -63,7 +63,7 @@ namespace EMPManegment.Repository.ProductMaster
             }
             catch (Exception ex)
             {
-                response.Code = 400;
+                response.Code = (int)HttpStatusCode.InternalServerError;
                 response.Message = "Error in inserting product type";
             }
             return response;
@@ -104,7 +104,6 @@ namespace EMPManegment.Repository.ProductMaster
                         UpdatedOn = AddProduct.UpdatedOn,
                         IsDeleted = false
                     };
-                    response.Code = 200;
                     response.Message = "Product add successfully!";
                     Context.TblProductDetailsMasters.Add(productdetails);
                     Context.SaveChanges();
@@ -112,7 +111,7 @@ namespace EMPManegment.Repository.ProductMaster
             }
             catch (Exception ex)
             {
-                response.Code = 400;
+                response.Code = (int)HttpStatusCode.InternalServerError;
                 response.Message = "Error in inserting product";
             }
             return response;
@@ -285,12 +284,11 @@ namespace EMPManegment.Repository.ProductMaster
                 }
                 Context.TblProductDetailsMasters.Update(getProduct);
                 Context.SaveChanges();
-                model.Code = 200;
                 model.Message = "Product details updated successfully!";
             }
             catch (Exception ex)
             {
-                model.Code = 400;
+                model.Code = (int)HttpStatusCode.InternalServerError;
                 model.Message = "Error in updating product details.";
             }
             return model;
@@ -482,18 +480,17 @@ namespace EMPManegment.Repository.ProductMaster
                     Product.IsDeleted = true;
                     Context.TblProductDetailsMasters.Update(Product);
                     Context.SaveChanges();
-                    response.Code = 200;
                     response.Message = "Product is successfully deleted.";
                 }
                 else
                 {
-                    response.Code = 404;
+                    response.Code = (int)HttpStatusCode.NotFound;
                     response.Message = "ProductId does not found";
                 }
             }
             catch
             {
-                response.Code = 400;
+                response.Code = (int)HttpStatusCode.InternalServerError;
                 response.Message = "Error in deleting product.";
             }
 

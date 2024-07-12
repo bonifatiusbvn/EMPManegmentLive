@@ -42,7 +42,7 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                 if (isExpenseTypeAlreadyExists == true)
                 {
                     response.Message = "Expense type already exists";
-                    response.Code = 404;
+                    response.Code = (int)HttpStatusCode.NotFound;
                 }
                 else
                 {
@@ -52,7 +52,7 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                         Type = AddExpense.Type,
                         CreatedOn = DateTime.Now,
                     };
-                    response.Code = 200;
+
                     response.Message = "Expense type successfully inserted";
                     response.Icone = "success";
                     Context.TblExpenseTypes.Add(Expense);
@@ -61,7 +61,7 @@ namespace EMPManegment.Repository.ExponseMasterRepository
             }
             catch (Exception)
             {
-                response.Code = 400;
+                response.Code = (int)HttpStatusCode.InternalServerError;
                 response.Message = "Error in creating expense type";
             }
             return response;
@@ -85,7 +85,7 @@ namespace EMPManegment.Repository.ExponseMasterRepository
             }
             catch (Exception)
             {
-                response.Code = 400;
+                response.Code = (int)HttpStatusCode.InternalServerError;
                 response.Message = "Error in creating payment type";
             }
             return response;
@@ -139,12 +139,12 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                     Type = ExpenseType.Type,
                     CreatedOn = ExpenseType.CreatedOn,
                 };
-                response.Code = 200;
+
                 response.Data = model;
             }
             catch (Exception ex)
             {
-                response.Code = 400;
+                response.Code = (int)HttpStatusCode.InternalServerError;
                 response.Message = "Error in getting expense by id";
             }
             return response;
@@ -162,12 +162,12 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                     Id = PaymentType.Id,
                     Type = PaymentType.Type,
                 };
-                response.Code = 200;
+
                 response.Data = model;
             }
             catch (Exception ex)
             {
-                response.Code = 400;
+                response.Code = (int)HttpStatusCode.InternalServerError;
                 response.Message = "Error in getting payment by id";
             }
             return response;
@@ -187,12 +187,12 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                 }
                 Context.TblExpenseTypes.Update(ExpenseType);
                 Context.SaveChanges();
-                model.Code = 200;
+
                 model.Message = "ExpenseType updated successfully!";
             }
             catch (Exception ex)
             {
-                model.Code = 400;
+                model.Code = (int)HttpStatusCode.InternalServerError;
                 model.Message = "Error in updating expense type";
             }
             return model;
@@ -212,12 +212,12 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                 }
                 Context.TblPaymentTypes.Update(paymentType);
                 Context.SaveChanges();
-                model.Code = 200;
+
                 model.Message = "PaymentType updated successfully!";
             }
             catch (Exception ex)
             {
-                model.Code = 400;
+                model.Code = (int)HttpStatusCode.InternalServerError;
                 model.Message = "Error in updating payment type";
             }
             return model;
@@ -249,7 +249,7 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                         PaymentType = 1,
 
                     };
-                    response.Code = 200;
+
                     response.Message = "Expense add successfully!";
                     Context.TblExpenseMasters.Add(expense);
                     Context.SaveChanges();
@@ -276,7 +276,7 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                         ApprovedByName = ExpenseDetails.ApprovedByName,
                         ApprovedDate = DateTime.Now,
                     };
-                    response.Code = 200;
+
                     response.Message = "Expense add successfully!";
                     Context.TblExpenseMasters.Add(expense);
                     Context.SaveChanges();
@@ -286,7 +286,7 @@ namespace EMPManegment.Repository.ExponseMasterRepository
             }
             catch (Exception ex)
             {
-                response.Code = 400;
+                response.Code = (int)HttpStatusCode.InternalServerError;
                 response.Message = "Error in adding expense";
             }
             return response;
@@ -301,7 +301,7 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                 ExpenseDetail = (from a in Context.TblExpenseMasters.Where(x => x.Id == Id)
                                  join b in Context.TblPaymentTypes on a.PaymentType equals b.Id
                                  join c in Context.TblExpenseTypes on a.ExpenseType equals c.Id
-                                
+
                                  select new ExpenseDetailsView
                                  {
                                      Id = a.Id,
@@ -324,12 +324,12 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                                      CreatedOn = a.CreatedOn,
                                      ExpenseTypeName = c.Type,
                                  }).First();
-                response.Code = 200;
+
                 response.Data = ExpenseDetail;
             }
             catch (Exception ex)
             {
-                response.Code = 400;
+                response.Code = (int)HttpStatusCode.InternalServerError;
                 response.Message = "Error in getting expense detail by id";
             }
             return response;
@@ -429,12 +429,12 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                 }
                 Context.TblExpenseMasters.Update(GetExpenseDetail);
                 Context.SaveChanges();
-                model.Code = 200;
+
                 model.Message = "Expense details updated successfully!";
             }
             catch (Exception ex)
             {
-                model.Code = 400;
+                model.Code = (int)HttpStatusCode.InternalServerError;
                 model.Message = "Error in updating expense details";
             }
             return model;
@@ -668,7 +668,7 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                     else
                     {
 
-                        response.Code = 404;
+                        response.Code = (int)HttpStatusCode.NotFound;
                         response.Message = "Expense not found for ID: " + item.Id;
                         return response;
                     }
@@ -677,12 +677,12 @@ namespace EMPManegment.Repository.ExponseMasterRepository
 
                 await Context.SaveChangesAsync();
 
-                response.Code = 200;
+
                 response.Message = "All expenses approved successfully!";
             }
             catch (Exception ex)
             {
-                response.Code = 400;
+                response.Code = (int)HttpStatusCode.InternalServerError;
                 response.Message = "Error in updating expenses.";
             }
             return response;
@@ -700,19 +700,19 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                     GetExpensedata.IsDeleted = true;
                     Context.TblExpenseMasters.Update(GetExpensedata);
                     Context.SaveChanges();
-                    response.Code = 200;
+
                     response.Data = GetExpensedata;
                     response.Message = "Expense is deleted successfully";
                 }
                 else
                 {
-                    response.Code = 404;
+                    response.Code = (int)HttpStatusCode.NotFound;
                     response.Message = "Can't find the expense Id";
                 }
             }
-            catch(Exception ex)
-            {  
-                response.Code = 400;
+            catch (Exception ex)
+            {
+                response.Code = (int)HttpStatusCode.InternalServerError;
                 response.Message = "Error deleting expenses";
             }
             return response;
