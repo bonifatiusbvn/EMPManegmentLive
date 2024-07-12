@@ -104,7 +104,6 @@ namespace EMPManegment.Repository.UserLoginRepository
 
                     };
                     response.Message = "User Added Sucessfully!";
-                    response.Code = (int)HttpStatusCode.OK;
                     Context.TblUsers.Add(model);
                     Context.SaveChanges();
                 }

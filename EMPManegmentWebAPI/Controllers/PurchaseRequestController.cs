@@ -36,9 +36,9 @@ namespace EMPManagment.API.Controllers
             try
             {
                 var PurchaseRequest = await purchaseRequest.CreatePurchaseRequest(AddPurchaseRequest);
-                if (PurchaseRequest.code == 200)
+                if (PurchaseRequest.code != (int)HttpStatusCode.InternalServerError)
                 {
-                    response.code = PurchaseRequest.code;
+                    response.code = (int)HttpStatusCode.OK;
                     response.message = PurchaseRequest.message;
                 }
                 else
@@ -60,7 +60,7 @@ namespace EMPManagment.API.Controllers
         public async Task<IActionResult> GetPurchaseRequestList()
         {
             IEnumerable<PurchaseRequestModel> PurchaseRequest = await purchaseRequest.GetPurchaseRequestList();
-            return Ok(new { code = 200, data = PurchaseRequest.ToList() });
+            return Ok(new { code = (int)HttpStatusCode.OK, data = PurchaseRequest.ToList() });
         }
 
         [HttpGet]
@@ -68,7 +68,7 @@ namespace EMPManagment.API.Controllers
         public async Task<IActionResult> GetPurchaseRequestDetailsById(string PrNo)
         {
             var purchaseRequestDetails = await purchaseRequest.PurchaseRequestDetailsByPrNo(PrNo);
-            return Ok(new { code = 200, data = purchaseRequestDetails });
+            return Ok(new { code = (int)HttpStatusCode.OK, data = purchaseRequestDetails });
         }
 
         [HttpPost]
@@ -79,9 +79,9 @@ namespace EMPManagment.API.Controllers
             try
             {
                 var UpdatePurchaseRequest = purchaseRequest.UpdatePurchaseRequestDetails(PurchaseRequestDetails);
-                if (UpdatePurchaseRequest.Result.code == 200)
+                if (UpdatePurchaseRequest.Result.code != (int)HttpStatusCode.InternalServerError)
                 {
-                    response.code = UpdatePurchaseRequest.Result.code;
+                    response.code = (int)HttpStatusCode.OK;
                     response.message = UpdatePurchaseRequest.Result.message;
                 }
                 else
@@ -130,7 +130,7 @@ namespace EMPManagment.API.Controllers
         public IActionResult CheckPRNo()
         {
             var checkPRNo = purchaseRequest.CheckPRNo();
-            return Ok(new { code = 200, data = checkPRNo.ToString() });
+            return Ok(new { code = (int)HttpStatusCode.OK, data = checkPRNo.ToString() });
         }
 
         [HttpPost]
@@ -138,7 +138,7 @@ namespace EMPManagment.API.Controllers
         public async Task<IActionResult> GetPRList(DataTableRequstModel PRdataTable)
         {
             var purchaseRequestList = await purchaseRequest.GetPRList(PRdataTable);
-            return Ok(new { code = 200, data = purchaseRequestList });
+            return Ok(new { code = (int)HttpStatusCode.OK, data = purchaseRequestList });
         }
 
         [HttpGet]
@@ -146,7 +146,7 @@ namespace EMPManagment.API.Controllers
         public async Task<IActionResult> PurchaseRequestDetailsByPrNo(string PrNo)
         {
             var prdetails = await purchaseRequest.PurchaseRequestDetailsByPrNo(PrNo);
-            return Ok(new { code = 200, data = prdetails });
+            return Ok(new { code = (int)HttpStatusCode.OK, data = prdetails });
         }
 
         [HttpPost]
@@ -157,9 +157,9 @@ namespace EMPManagment.API.Controllers
             var PurchaseRequest = await purchaseRequest.ApproveUnapprovePR(PrNo);
             try
             {
-                if (PurchaseRequest.Code == 200)
+                if (PurchaseRequest.Code != (int)HttpStatusCode.NotFound && PurchaseRequest.Code != (int)HttpStatusCode.InternalServerError)
                 {
-                    responseModel.Code = PurchaseRequest.Code;
+                    responseModel.Code = (int)HttpStatusCode.OK;
                     responseModel.Message = PurchaseRequest.Message;
                 }
                 else
@@ -181,7 +181,7 @@ namespace EMPManagment.API.Controllers
         public async Task<IActionResult> ProductDetailsById(Guid ProductId)
         {
             var purchaseRequestDetails = await purchaseRequest.ProductDetailsById(ProductId);
-            return Ok(new { code = 200, data = purchaseRequestDetails });
+            return Ok(new { code = (int)HttpStatusCode.OK, data = purchaseRequestDetails });
         }
     }
 }

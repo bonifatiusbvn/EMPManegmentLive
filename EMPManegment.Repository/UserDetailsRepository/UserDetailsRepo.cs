@@ -120,7 +120,6 @@ namespace EMPManegment.Repository.UserListRepository
                         GetUserdta.UpdatedBy = UpdatedBy;
                         Context.TblUsers.Update(GetUserdta);
                         Context.SaveChanges();
-                        response.Code = 200;
                         response.Data = GetUserdta;
                         response.Message = "User" + " " + GetUserdta.UserName + " " + "Is Deactive Succesfully";
                     }
@@ -377,7 +376,6 @@ namespace EMPManegment.Repository.UserListRepository
                     {
                         LoginView userModel = new LoginView();
                         userModel.UserName = tblUser.UserName;
-                        response.Code = (int)HttpStatusCode.OK;
                     }
                     else
                     {
@@ -409,7 +407,6 @@ namespace EMPManegment.Repository.UserListRepository
                     if (today == checkdate)
                     {
                         response.Message = "Bonifatius wish you a very happy birthday.." + " " + userdata.FirstName + " " + userdata.LastName + " " + "Enjoy your day";
-                        response.Code = (int)HttpStatusCode.OK;
                     }
                     else
                     {
@@ -532,7 +529,6 @@ namespace EMPManegment.Repository.UserListRepository
                     Context.TblUsers.Update(Userdata);
                     await Context.SaveChangesAsync();
                 }
-                response.Code = (int)HttpStatusCode.OK;
                 response.Message = "User data updated successfully";
             }
             catch (Exception ex)
@@ -710,7 +706,6 @@ namespace EMPManegment.Repository.UserListRepository
                     Context.TblUsers.Update(Userdata);
                     await Context.SaveChangesAsync();
                 }
-                response.Code = (int)HttpStatusCode.OK;
                 response.Message = "User data updated successfully";
             }
             catch (Exception ex)
@@ -734,7 +729,6 @@ namespace EMPManegment.Repository.UserListRepository
                     Context.TblUsers.Update(UploadImage);
                     await Context.SaveChangesAsync();
                 }
-                response.Code = (int)HttpStatusCode.OK;
             }
             catch (Exception ex)
             {

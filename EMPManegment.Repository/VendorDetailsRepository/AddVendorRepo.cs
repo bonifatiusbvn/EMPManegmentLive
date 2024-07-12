@@ -79,7 +79,6 @@ namespace EMPManegment.Repository.VendorDetailsRepository
                         CreatedBy = vendor.CreatedBy,
                         CreatedOn = DateTime.Now,
                     };
-                    response.Code = (int)HttpStatusCode.OK;
                     response.Message = "Vendor data successfully inserted";
                     Context.TblVendorMasters.Add(vendormodel);
                     Context.SaveChanges();

@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
+using static TheArtOfDev.HtmlRenderer.Adapters.RGraphicsPath;
 
 namespace EMPManagment.API.Controllers
 {
@@ -39,7 +40,7 @@ namespace EMPManagment.API.Controllers
             try
             {
                 var result = productMaster.AddProductDetails(AddProduct);
-                if (result.Result.Code == 200)
+                if (result.Result.Code != (int)HttpStatusCode.NotFound && result.Result.Code != (int)HttpStatusCode.InternalServerError)
                 {
                     response.Code = (int)HttpStatusCode.OK;
                     response.Message = result.Result.Message;
@@ -67,7 +68,7 @@ namespace EMPManagment.API.Controllers
             try
             {
                 var Product = productMaster.AddProductType(AddProduct);
-                if (Product.Result.Code == 200)
+                if (Product.Result.Code != (int)HttpStatusCode.NotFound && Product.Result.Code != (int)HttpStatusCode.InternalServerError)
                 {
                     response.Code = (int)HttpStatusCode.OK;
                     response.Message = Product.Result.Message;
@@ -91,7 +92,7 @@ namespace EMPManagment.API.Controllers
         public async Task<IActionResult> GetProduct()
         {
             IEnumerable<ProductTypeView> getProduct = await productMaster.GetProduct();
-            return Ok(new { code = 200, data = getProduct.ToList() });
+            return Ok(new { code = (int)HttpStatusCode.OK, data = getProduct.ToList() });
         }
 
         [HttpGet]
@@ -99,7 +100,7 @@ namespace EMPManagment.API.Controllers
         public async Task<IActionResult> GetProductById(Guid ProductId)
         {
             List<ProductDetailsView> getProduct = await productMaster.GetProductById(ProductId);
-            return Ok(new { code = 200, data = getProduct.ToList() });
+            return Ok(new { code = (int)HttpStatusCode.OK, data = getProduct.ToList() });
         }
 
         [HttpPost]
@@ -107,7 +108,7 @@ namespace EMPManagment.API.Controllers
         public async Task<IActionResult> GetProductDetailsByVendorId(Guid VendorId)
         {
             List<ProductDetailsView> VendorProductList = await productMaster.GetProductDetailsByVendorId(VendorId);
-            return Ok(new { code = 200, data = VendorProductList.ToList() });
+            return Ok(new { code = (int)HttpStatusCode.OK, data = VendorProductList.ToList() });
         }
 
         [HttpGet]
@@ -115,7 +116,7 @@ namespace EMPManagment.API.Controllers
         public async Task<IActionResult> GetProductDetailsById(Guid ProductId)
         {
             var getProductDetails = await productMaster.GetProductDetailsById(ProductId);
-            return Ok(new { code = 200, data = getProductDetails });
+            return Ok(new { code = (int)HttpStatusCode.OK, data = getProductDetails });
         }
 
         [HttpPost]
@@ -126,7 +127,7 @@ namespace EMPManagment.API.Controllers
             try
             {
                 var UpdateProduct = productMaster.UpdateProductDetails(Product);
-                if (UpdateProduct.Result.Code == 200)
+                if (UpdateProduct.Result.Code != (int)HttpStatusCode.InternalServerError)
                 {
                     updateresponsemodel.Code = (int)HttpStatusCode.OK;
                     updateresponsemodel.Message = UpdateProduct.Result.Message;
@@ -154,7 +155,7 @@ namespace EMPManagment.API.Controllers
             var order = await productMaster.DeleteProductDetails(ProductId);
             try
             {
-                if (order.Code == 200)
+                if (order.Code != (int)HttpStatusCode.NotFound && order.Code != (int)HttpStatusCode.InternalServerError)
                 {
                     responseModel.Code = (int)HttpStatusCode.OK;
                     responseModel.Message = order.Message;
@@ -178,7 +179,7 @@ namespace EMPManagment.API.Controllers
         public async Task<IActionResult> GetProductDetailsByProductId(int ProductId)
         {
             List<ProductDetailsView> ProductList = await productMaster.GetProductDetailsByProductId(ProductId);
-            return Ok(new { code = 200, data = ProductList.ToList() });
+            return Ok(new { code = (int)HttpStatusCode.OK, data = ProductList.ToList() });
         }
 
         [HttpPost]
@@ -186,7 +187,7 @@ namespace EMPManagment.API.Controllers
         public async Task<IActionResult> SerchProductByVendor(int ProductId, Guid VendorId)
         {
             List<ProductDetailsView> ProductList = await productMaster.SerchProductByVendor(ProductId, VendorId);
-            return Ok(new { code = 200, data = ProductList.ToList() });
+            return Ok(new { code = (int)HttpStatusCode.OK, data = ProductList.ToList() });
         }
 
         [HttpPost]
@@ -194,7 +195,7 @@ namespace EMPManagment.API.Controllers
         public async Task<IActionResult> DisplayProductDetailsById(Guid ProductId)
         {
             ProductDetailsView ProductList = await productMaster.DisplayProductDetailsById(ProductId);
-            return Ok(new { code = 200, data = ProductList });
+            return Ok(new { code = (int)HttpStatusCode.OK, data = ProductList });
         }
 
         [HttpPost]
@@ -202,7 +203,7 @@ namespace EMPManagment.API.Controllers
         public async Task<IActionResult> GetAllProductList(string? sortBy)
         {
             IEnumerable<ProductDetailsView> getProductList = await productMaster.GetAllProductList(sortBy);
-            return Ok(new { code = 200, data = getProductList.ToList() });
+            return Ok(new { code = (int)HttpStatusCode.OK, data = getProductList.ToList() });
         }
     }
 }

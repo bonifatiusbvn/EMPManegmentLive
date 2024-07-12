@@ -220,12 +220,11 @@ namespace EMPManegment.Repository.OrderRepository
                 Context.TblPodeliveryAddresses.Add(PurchaseAddress);
 
                 await Context.SaveChangesAsync();
-                response.code = (int)HttpStatusCode.OK;
                 response.message = "Purchase order successfully inserted.";
             }
             catch (Exception ex)
             {
-                response.code = (int)HttpStatusCode.NotFound;
+                response.code = (int)HttpStatusCode.InternalServerError;
                 response.message = "Error in creating purchase orders.";
             }
             return response;
@@ -558,7 +557,6 @@ namespace EMPManegment.Repository.OrderRepository
                 Context.TblPodeliveryAddresses.Update(PurchaseAddress);
 
                 await Context.SaveChangesAsync();
-                response.Code = (int)HttpStatusCode.OK;
                 response.Message = "Purchase order successfully inserted.";
             }
             catch (Exception ex)

@@ -35,7 +35,7 @@ namespace EMPManagment.API.Controllers
             try
             {
                 var addVendor = vendorServices.AddVendor(AddVendor);
-                if (addVendor.Result.Code == 200)
+                if (addVendor.Result.Code != (int)HttpStatusCode.NotFound && addVendor.Result.Code != (int)HttpStatusCode.InternalServerError)
                 {
                     response.Code = (int)HttpStatusCode.OK;
                     response.Message = addVendor.Result.Message;
@@ -59,7 +59,7 @@ namespace EMPManagment.API.Controllers
         public async Task<IActionResult> GetVendorList(DataTableRequstModel VendorList)
         {
             var GetvendorList = await vendorServices.GetVendorsList(VendorList);
-            return Ok(new { code = 200, data = GetvendorList });
+            return Ok(new { code = (int)HttpStatusCode.OK, data = GetvendorList });
         }
 
         [HttpGet]
@@ -68,7 +68,7 @@ namespace EMPManagment.API.Controllers
         public async Task<IActionResult> GetVendorType()
         {
             IEnumerable<VendorTypeView> VendorType = await vendorServices.GetVendorType();
-            return Ok(new { code = 200, data = VendorType.ToList() });
+            return Ok(new { code = (int)HttpStatusCode.OK, data = VendorType.ToList() });
         }
 
         [HttpGet]
@@ -76,7 +76,7 @@ namespace EMPManagment.API.Controllers
         public async Task<IActionResult> GetVendorDetailsById(Guid vendorId)
         {
             var vendor = await vendorServices.GetVendorById(vendorId);
-            return Ok(new { code = 200, data = vendor });
+            return Ok(new { code = (int)HttpStatusCode.OK, data = vendor });
         }
 
         [HttpGet]
@@ -84,7 +84,7 @@ namespace EMPManagment.API.Controllers
         public async Task<IActionResult> GetVendorNameList()
         {
             var getVendorsNameList = await vendorServices.GetVendorNameList();
-            return Ok(new { code = 200, data = getVendorsNameList.ToList() });
+            return Ok(new { code = (int)HttpStatusCode.OK, data = getVendorsNameList.ToList() });
         }
 
         [HttpPost]
@@ -95,9 +95,9 @@ namespace EMPManagment.API.Controllers
             try
             {
                 var vendordetails = vendorServices.UpdateVendorDetails(updateVendor);
-                if (vendordetails.Result.Code == 200)
+                if (vendordetails.Result.Code != (int)HttpStatusCode.NotFound && vendordetails.Result.Code != (int)HttpStatusCode.InternalServerError)
                 {
-                    response.Code = vendordetails.Result.Code;
+                    response.Code = (int)HttpStatusCode.OK;
                     response.Message = vendordetails.Result.Message;
                 }
                 else

@@ -33,7 +33,7 @@ namespace EMPManagment.API.Controllers
         public async Task<IActionResult> GetPurchaseOrderList()
         {
             IEnumerable<PurchaseOrderDetailView> orderlist = await PurchaseOrderDetails.GetPurchaseOrderList();
-            return Ok(new { code = 200, data = orderlist });
+            return Ok(new { code = (int)HttpStatusCode.OK, data = orderlist });
 
         }
         [HttpPost]
@@ -41,7 +41,7 @@ namespace EMPManagment.API.Controllers
         public async Task<IActionResult> GetPurchaseOrderDetailsByStatus(string DeliveryStatus)
         {
             List<PurchaseOrderDetailView> orderdetails = await PurchaseOrderDetails.GetPurchaseOrderDetailsByStatus(DeliveryStatus);
-            return Ok(new { code = 200, data = orderdetails.ToList() });
+            return Ok(new { code = (int)HttpStatusCode.OK, data = orderdetails.ToList() });
         }
 
         [HttpGet]
@@ -51,11 +51,11 @@ namespace EMPManagment.API.Controllers
             try
             {
                 var checkOrder = PurchaseOrderDetails.CheckPurchaseOrder(projectname);
-                return Ok(new { code = 200, data = checkOrder });
+                return Ok(new { code = (int)HttpStatusCode.OK, data = checkOrder });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { code = 500, message = ex.Message });
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { code = (int)HttpStatusCode.InternalServerError, message = "An error occurred while processing the request." });
             }
         }
 
@@ -64,7 +64,7 @@ namespace EMPManagment.API.Controllers
         public async Task<IActionResult> GetPurchaseOrderDetailsByOrderId(string OrderId)
         {
             var orderdetails = await PurchaseOrderDetails.GetPurchaseOrderDetailsByOrderId(OrderId);
-            return Ok(new { code = 200, data = orderdetails });
+            return Ok(new { code = (int)HttpStatusCode.OK, data = orderdetails });
         }
 
         [HttpPost]
@@ -75,7 +75,7 @@ namespace EMPManagment.API.Controllers
             try
             {
                 var createOrder = await PurchaseOrderDetails.InsertMultiplePurchaseOrder(PODetails);
-                if (createOrder.code == 200)
+                if (createOrder.code != (int)HttpStatusCode.InternalServerError)
                 {
                     response.code = (int)HttpStatusCode.OK;
                     response.message = createOrder.message;
@@ -100,7 +100,7 @@ namespace EMPManagment.API.Controllers
         public async Task<IActionResult> GetAllPaymentMethod()
         {
             IEnumerable<PaymentMethodView> paymentmethod = await PurchaseOrderDetails.GetAllPaymentMethod();
-            return Ok(new { code = 200, data = paymentmethod.ToList() });
+            return Ok(new { code = (int)HttpStatusCode.OK, data = paymentmethod.ToList() });
         }
 
         [HttpGet]
@@ -108,7 +108,7 @@ namespace EMPManagment.API.Controllers
         public async Task<IActionResult> EditPurchaseOrderDetails(Guid Id)
         {
             var getorderDetails = await PurchaseOrderDetails.EditPurchaseOrderDetails(Id);
-            return Ok(new { code = 200, data = getorderDetails });
+            return Ok(new { code = (int)HttpStatusCode.OK, data = getorderDetails });
         }
 
         [HttpPost]
@@ -119,7 +119,7 @@ namespace EMPManagment.API.Controllers
             try
             {
                 var updateorder = PurchaseOrderDetails.UpdatePurchaseOrderDetails(PurchaseorderDetails);
-                if (updateorder.Result.Code == 200)
+                if (updateorder.Result.Code != (int)HttpStatusCode.InternalServerError)
                 {
                     response.Code = (int)HttpStatusCode.OK;
                     response.Message = updateorder.Result.Message;
@@ -169,7 +169,7 @@ namespace EMPManagment.API.Controllers
         public async Task<IActionResult> GetPOProductDetailsById(Guid ProductId)
         {
             var getorderDetails = await PurchaseOrderDetails.GetPOProductDetailsById(ProductId);
-            return Ok(new { code = 200, data = getorderDetails });
+            return Ok(new { code = (int)HttpStatusCode.OK, data = getorderDetails });
         }
     }
 }
