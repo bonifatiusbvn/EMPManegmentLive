@@ -27,6 +27,10 @@ using EMPManegment.EntityModels.ViewModels.ManualInvoice;
 using Aspose.Foundation.UriResolver.RequestResponses;
 using DocumentFormat.OpenXml.Spreadsheet;
 using X.PagedList;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewEngines;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Microsoft.AspNetCore.Mvc.Abstractions;
 
 namespace EMPManegment.Web.Controllers
 {
@@ -719,6 +723,78 @@ namespace EMPManegment.Web.Controllers
             catch (Exception ex)
             {
                 throw ex;
+            }
+        }
+
+        public async Task<IActionResult> InvoicePrintDetails(Guid InvoiceId)
+        {
+            try
+            {
+                InvoiceMasterModel invoice = new InvoiceMasterModel();
+                ApiResponseModel response = await APIServices.GetAsync("", "Invoice/DisplayInvoiceDetailsById?Id=" + InvoiceId);
+                if (response.code == 200)
+                {
+                    invoice = JsonConvert.DeserializeObject<InvoiceMasterModel>(response.data.ToString());
+                    var number = invoice.TotalAmount;
+                    var totalAmountInWords = NumberToWords((decimal)number);
+                    ViewData["TotalAmountInWords"] = totalAmountInWords + " " + "Only";
+                    var gstamt = invoice.TotalGst;
+                    var totalGstInWords = NumberToWords((decimal)gstamt);
+                    ViewData["TotalGstInWords"] = totalGstInWords + " " + "Only";
+                }
+                return View(invoice);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public async Task<IActionResult> PrintInvoiceDetails(Guid Id)
+        {
+            try
+            {
+                IActionResult result = await InvoicePrintDetails(Id);
+
+                if (result is ViewResult viewResult)
+                {
+                    var order = viewResult.Model as InvoiceMasterModel;
+                    var htmlContent = await RenderViewToStringAsync("InvoicePrintDetails", order, viewResult.ViewData);
+                    return Content(htmlContent, "text/html");
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        private async Task<string> RenderViewToStringAsync(string viewName, object model, ViewDataDictionary viewData)
+        {
+            var viewEngine = HttpContext.RequestServices.GetService(typeof(ICompositeViewEngine)) as ICompositeViewEngine;
+            var tempDataProvider = HttpContext.RequestServices.GetService(typeof(ITempDataProvider)) as ITempDataProvider;
+            var tempData = new TempDataDictionary(HttpContext, tempDataProvider);
+            var actionContext = new ActionContext(HttpContext, RouteData, new ActionDescriptor());
+
+            using (var stringWriter = new StringWriter())
+            {
+                var viewResult = viewEngine.FindView(actionContext, viewName, false);
+
+                if (viewResult.View == null)
+                {
+                    throw new ArgumentNullException($"View '{viewName}' was not found.");
+                }
+
+                var viewContext = new ViewContext(
+                    actionContext,
+                    viewResult.View,
+                    viewData,
+                    tempData,
+                    stringWriter,
+                    new HtmlHelperOptions()
+                );
+                await viewResult.View.RenderAsync(viewContext);
+                return stringWriter.ToString();
             }
         }
     }

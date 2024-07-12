@@ -474,7 +474,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                 }
                 if (InsertInvoice.PaymentStatus == 7)
                 {
-                    var craditdebit = new TblCreditDebitMaster()
+                    var creditdebit = new TblCreditDebitMaster()
                     {
                         VendorId = InsertInvoice.VandorId,
                         Type = InsertInvoice.InvoiceType,
@@ -487,7 +487,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                         CreatedOn = DateTime.Now,
                         CreatedBy = InsertInvoice.CreatedBy,
                     };
-                    Context.TblCreditDebitMasters.Add(craditdebit);
+                    Context.TblCreditDebitMasters.Add(creditdebit);
                 }
 
                 await Context.SaveChangesAsync();
