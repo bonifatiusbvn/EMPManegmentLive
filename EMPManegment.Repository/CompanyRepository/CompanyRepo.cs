@@ -93,7 +93,6 @@ namespace EMPManegment.Repository.CompanyRepository
                     CreatedBy = AddCompany.CreatedBy,
 
                 };
-                response.code = (int)HttpStatusCode.OK;
                 response.message = "Company successfully created";
                 Context.TblCompanyMasters.Add(company);
                 Context.SaveChanges();

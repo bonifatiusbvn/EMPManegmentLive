@@ -39,16 +39,32 @@ namespace EMPManagment.API.Controllers
         [Route("GetInvoiceDetailsList")]
         public async Task<IActionResult> GetInvoiceDetailsList(DataTableRequstModel InvoiceList)
         {
-            var AllInvoiceList = await InvoiceMaster.GetInvoiceDetailsList(InvoiceList);
-            return Ok(new { code = 200, data = AllInvoiceList });
+            try
+            {
+                var AllInvoiceList = await InvoiceMaster.GetInvoiceDetailsList(InvoiceList);
+                return Ok(new { code = (int)HttpStatusCode.OK, data = AllInvoiceList });
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { code = (int)HttpStatusCode.InternalServerError, message = "An error occurred while processing the request." });
+            }
         }
 
         [HttpGet]
         [Route("CheckInvoiceNo")]
         public IActionResult CheckInvoiceNo(string porjectname)
         {
-            var checkInvoice = InvoiceMaster.CheckInvoiceNo(porjectname);
-            return Ok(new { code = 200, data = checkInvoice });
+            try
+            {
+                var checkInvoice = InvoiceMaster.CheckInvoiceNo(porjectname);
+                return Ok(new { code = (int)HttpStatusCode.OK, data = checkInvoice });
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { code = (int)HttpStatusCode.InternalServerError, message = "An error occurred while processing the request." });
+            }
         }
 
         [HttpPost]
@@ -59,7 +75,7 @@ namespace EMPManagment.API.Controllers
             try
             {
                 var createInvoice = InvoiceMaster.InsertInvoiceDetails(InvoiceList);
-                if (createInvoice.Result.Code == 200)
+                if (createInvoice.Result.Code != (int)HttpStatusCode.InternalServerError)
                 {
                     response.Code = (int)HttpStatusCode.OK;
                     response.Message = createInvoice.Result.Message;
@@ -86,15 +102,16 @@ namespace EMPManagment.API.Controllers
             try
             {
                 var orderdetails = InvoiceMaster.GetInvoiceDetailsByOrderId(OrderId);
-                if (orderdetails.Result.Code == 400)
-                {
-                    response.Message = orderdetails.Result.Message;
-                    response.Code = orderdetails.Result.Code;
-                }
-                else
+                if (orderdetails.Result.Code != (int)HttpStatusCode.InternalServerError)
                 {
                     response.Data = orderdetails.Result.Data;
                     response.Code = (int)HttpStatusCode.OK;
+
+                }
+                else
+                {
+                    response.Message = orderdetails.Result.Message;
+                    response.Code = orderdetails.Result.Code;
                 }
             }
             catch (Exception ex)
@@ -112,11 +129,11 @@ namespace EMPManagment.API.Controllers
             try
             {
                 InvoicePayVendorModel vendorInloviceList = await InvoiceMaster.GetInvoiceListByVendorId(Vid);
-                return Ok(new { code = 200, data = vendorInloviceList });
+                return Ok(new { code = (int)HttpStatusCode.OK, data = vendorInloviceList });
             }
             catch (Exception ex)
             {
-                return BadRequest(new { code = 500, message = "An error occurred while processing the request." });
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { code = (int)HttpStatusCode.InternalServerError, message = "An error occurred while processing the request." });
             }
         }
 
@@ -127,12 +144,12 @@ namespace EMPManagment.API.Controllers
             try
             {
                 IEnumerable<CreditDebitView> vendorInloviceList = await InvoiceMaster.GetLastTransactionByVendorId(Vid);
-                return Ok(new { code = 200, data = vendorInloviceList });
+                return Ok(new { code = (int)HttpStatusCode.OK, data = vendorInloviceList });
             }
             catch (Exception ex)
             {
 
-                return BadRequest(new { code = 500, message = "An error occurred while processing the request." });
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { code = (int)HttpStatusCode.InternalServerError, message = "An error occurred while processing the request." });
             }
         }
 
@@ -143,11 +160,11 @@ namespace EMPManagment.API.Controllers
             try
             {
                 var CreditList = await InvoiceMaster.GetAllTransactionByVendorId(Vid, dataTable);
-                return Ok(new { code = 200, data = CreditList });
+                return Ok(new { code = (int)HttpStatusCode.OK, data = CreditList });
             }
             catch (Exception ex)
             {
-                return BadRequest(new { code = 500, message = "An error occurred while processing the request." });
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { code = (int)HttpStatusCode.InternalServerError, message = "An error occurred while processing the request." });
             }
         }
 
@@ -158,11 +175,11 @@ namespace EMPManagment.API.Controllers
             try
             {
                 var allCreditList = await InvoiceMaster.GetAllTransaction();
-                return Ok(new { code = 200, data = allCreditList.ToList() });
+                return Ok(new { code = (int)HttpStatusCode.OK, data = allCreditList.ToList() });
             }
             catch (Exception ex)
             {
-                return BadRequest(new { code = 500, message = "An error occurred while processing the request." });
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { code = (int)HttpStatusCode.InternalServerError, message = "An error occurred while processing the request." });
             }
         }
 
@@ -174,7 +191,7 @@ namespace EMPManagment.API.Controllers
             try
             {
                 var insertcreditdebit = InvoiceMaster.InsertCreditDebitDetails(creditdebit);
-                if (insertcreditdebit.Result.Code == 200)
+                if (insertcreditdebit.Result.Code != (int)HttpStatusCode.InternalServerError)
                 {
                     response.Code = (int)HttpStatusCode.OK;
                     response.Message = insertcreditdebit.Result.Message;
@@ -197,8 +214,15 @@ namespace EMPManagment.API.Controllers
         [Route("GetCreditDebitDetailsByVendorId")]
         public async Task<IActionResult> GetCreditDebitDetailsByVendorId(Guid Vid)
         {
-            IEnumerable<CreditDebitView> creditdebit = await InvoiceMaster.GetCreditDebitListByVendorId(Vid);
-            return Ok(new { code = 200, data = creditdebit.ToList() });
+            try
+            {
+                IEnumerable<CreditDebitView> creditdebit = await InvoiceMaster.GetCreditDebitListByVendorId(Vid);
+                return Ok(new { code = (int)HttpStatusCode.OK, data = creditdebit.ToList() });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { code = (int)HttpStatusCode.InternalServerError, message = "An error occurred while processing the request." });
+            }
         }
 
         [HttpGet]
@@ -209,15 +233,15 @@ namespace EMPManagment.API.Controllers
             try
             {
                 var orderdetails = InvoiceMaster.DisplayInvoiceDetails(OrderId);
-                if (orderdetails.Result.Code == 400)
-                {
-                    response.Message = orderdetails.Result.Message;
-                    response.Code = (int)HttpStatusCode.BadRequest;
-                }
-                else
+                if (orderdetails.Result.Code != (int)HttpStatusCode.InternalServerError)
                 {
                     response.Data = orderdetails.Result.Data;
                     response.Code = (int)HttpStatusCode.OK;
+                }
+                else
+                {
+                    response.Message = orderdetails.Result.Message;
+                    response.Code = (int)HttpStatusCode.BadRequest;
                 }
             }
             catch (Exception ex)
@@ -236,7 +260,7 @@ namespace EMPManagment.API.Controllers
             var invoice = await InvoiceMaster.IsDeletedInvoice(InvoiceId);
             try
             {
-                if (invoice.Code == 200)
+                if (invoice.Code != (int)HttpStatusCode.NotFound && invoice.Code != (int)HttpStatusCode.InternalServerError)
                 {
                     responseModel.Code = (int)HttpStatusCode.OK;
                     responseModel.Message = invoice.Message;
@@ -259,8 +283,16 @@ namespace EMPManagment.API.Controllers
         [Route("EditInvoiceDetails")]
         public async Task<IActionResult> EditInvoiceDetails(string InvoiceNo)
         {
-            var getinvoicedetails = await InvoiceMaster.EditInvoiceDetails(InvoiceNo);
-            return Ok(new { code = 200, data = getinvoicedetails });
+            try
+            {
+                var getinvoicedetails = await InvoiceMaster.EditInvoiceDetails(InvoiceNo);
+                return Ok(new { code = (int)HttpStatusCode.OK, data = getinvoicedetails });
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { code = (int)HttpStatusCode.InternalServerError, message = "An error occurred while processing the request." });
+            }
         }
 
         [HttpPost]
@@ -271,7 +303,7 @@ namespace EMPManagment.API.Controllers
             try
             {
                 var updateinvoice = InvoiceMaster.UpdateInvoiceDetails(invoiceDetails);
-                if (updateinvoice.Result.Code == 200)
+                if (updateinvoice.Result.Code != (int)HttpStatusCode.InternalServerError)
                 {
                     response.Code = (int)HttpStatusCode.OK;
                     response.Message = updateinvoice.Result.Message;
@@ -298,15 +330,15 @@ namespace EMPManagment.API.Controllers
             try
             {
                 var orderdetails = InvoiceMaster.ShowInvoiceDetailsByOrderId(OrderId);
-                if (orderdetails.Result.Code == 400)
-                {
-                    response.Message = orderdetails.Result.Message;
-                    response.Code = (int)HttpStatusCode.BadRequest;
-                }
-                else
+                if (orderdetails.Result.Code != (int)HttpStatusCode.NotFound && orderdetails.Result.Code != (int)HttpStatusCode.InternalServerError)
                 {
                     response.Data = orderdetails.Result.Data;
                     response.Code = (int)HttpStatusCode.OK;
+                }
+                else
+                {
+                    response.Message = orderdetails.Result.Message;
+                    response.Code = (int)HttpStatusCode.BadRequest;
                 }
             }
             catch (Exception ex)
@@ -321,32 +353,62 @@ namespace EMPManagment.API.Controllers
         [Route("InvoiceActivity")]
         public async Task<IActionResult> InvoiceActivity(Guid ProjectId)
         {
-            IEnumerable<InvoiceViewModel> emplist = await InvoiceMaster.InvoiceActivity(ProjectId);
-            return Ok(new { code = 200, data = emplist.ToList() });
+            try
+            {
+                IEnumerable<InvoiceViewModel> emplist = await InvoiceMaster.InvoiceActivity(ProjectId);
+                return Ok(new { code = (int)HttpStatusCode.OK, data = emplist.ToList() });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { code = (int)HttpStatusCode.InternalServerError, message = "An error occurred while processing the request." });
+            }
         }
 
         [HttpGet]
         [Route("DisplayInvoiceDetailsById")]
         public async Task<IActionResult> DisplayInvoiceDetailsById(Guid Id)
         {
-            var emplist = await InvoiceMaster.DisplayInvoiceDetailsById(Id);
-            return Ok(new { code = 200, data = emplist });
+            try
+            {
+                var emplist = await InvoiceMaster.DisplayInvoiceDetailsById(Id);
+                return Ok(new { code = (int)HttpStatusCode.OK, data = emplist });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { code = (int)HttpStatusCode.InternalServerError, message = "An error occurred while processing the request." });
+            }
         }
 
         [HttpGet]
         [Route("GetProductDetailsById")]
         public async Task<IActionResult> GetProductDetailsById(Guid ProductId)
         {
-            var Product = await InvoiceMaster.GetProductDetailsById(ProductId);
-            return Ok(new { code = 200, data = Product });
+            try
+            {
+                var Product = await InvoiceMaster.GetProductDetailsById(ProductId);
+                return Ok(new { code = (int)HttpStatusCode.OK, data = Product });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { code = (int)HttpStatusCode.InternalServerError, message = "An error occurred while processing the request." });
+            }
         }
+
         [HttpGet]
         [Route("InvoicActivityByUserId")]
         public async Task<IActionResult> InvoicActivityByUserId(Guid UserId)
         {
-            IEnumerable<InvoiceViewModel> invoicelist = await InvoiceMaster.InvoicActivityByUserId(UserId);
-            return Ok(new { code = 200, data = invoicelist.ToList() });
+            try
+            {
+                IEnumerable<InvoiceViewModel> invoicelist = await InvoiceMaster.InvoicActivityByUserId(UserId);
+                return Ok(new { code = (int)HttpStatusCode.OK, data = invoicelist.ToList() });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { code = (int)HttpStatusCode.InternalServerError, message = "An error occurred while processing the request." });
+            }
         }
+
         [HttpPost]
         [Route("DeleteTransaction")]
         public async Task<IActionResult> DeleteTransaction(int Id)
@@ -355,7 +417,7 @@ namespace EMPManagment.API.Controllers
             var GetTrandata = await InvoiceMaster.DeleteTransaction(Id);
             try
             {
-                if (GetTrandata != null)
+                if (GetTrandata.Code != (int)HttpStatusCode.NotFound && GetTrandata.Code != (int)HttpStatusCode.InternalServerError)
                 {
                     responseModel.Code = (int)HttpStatusCode.OK;
                     responseModel.Message = GetTrandata.Message;
@@ -369,6 +431,7 @@ namespace EMPManagment.API.Controllers
             catch (Exception)
             {
                 responseModel.Code = (int)HttpStatusCode.InternalServerError;
+                responseModel.Message = "An error occurred while processing the request.";
             }
             return StatusCode(responseModel.Code, responseModel);
         }

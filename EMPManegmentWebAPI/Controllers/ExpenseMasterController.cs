@@ -36,7 +36,7 @@ namespace EMPManagment.API.Controllers
             try
             {
                 var result = expenseMaster.AddExpenseDetails(AddExpense);
-                if (result.Result.Code == 200)
+                if (result.Result.Code != (int)HttpStatusCode.InternalServerError)
                 {
                     response.Code = (int)HttpStatusCode.OK;
                     response.Message = result.Result.Message;
@@ -59,8 +59,15 @@ namespace EMPManagment.API.Controllers
         [Route("GetExpenseDetailList")]
         public async Task<IActionResult> GetExpenseDetailList(DataTableRequstModel DataTable)
         {
-            var getExpense = await expenseMaster.GetExpenseDetailList(DataTable);
-            return Ok(new { code = 200, data = getExpense });
+            try
+            {
+                var getExpense = await expenseMaster.GetExpenseDetailList(DataTable);
+                return Ok(new { code = (int)HttpStatusCode.OK, data = getExpense });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { code = (int)HttpStatusCode.InternalServerError, message = "An error occurred while processing the request." });
+            }
         }
 
         [HttpGet]
@@ -69,9 +76,9 @@ namespace EMPManagment.API.Controllers
         {
             UserResponceModel response = new UserResponceModel();
             try
-            { 
+            {
                 var getExpense = await expenseMaster.GetExpenseDetailById(Id);
-                if (getExpense.Code == 200)
+                if (getExpense.Data != null)
                 {
                     response.Code = (int)HttpStatusCode.OK;
                     response.Data = getExpense.Data;
@@ -82,7 +89,7 @@ namespace EMPManagment.API.Controllers
                     response.Code = getExpense.Code;
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 response.Code = (int)HttpStatusCode.InternalServerError;
                 response.Message = "An error occurred while processing the request.";
@@ -98,7 +105,7 @@ namespace EMPManagment.API.Controllers
             try
             {
                 var result = expenseMaster.UpdateExpenseDetail(ExpenseDetail);
-                if (result.Result.Code == 200)
+                if (result.Result.Code != (int)HttpStatusCode.NotFound && result.Result.Code != (int)HttpStatusCode.InternalServerError)
                 {
                     response.Code = (int)HttpStatusCode.OK;
                     response.Message = result.Result.Message;
@@ -122,40 +129,75 @@ namespace EMPManagment.API.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> GetAllExpensType()
         {
-            IEnumerable<ExpenseTypeView> getExpense = await expenseMaster.GetAllExpensType();
-            return Ok(new { code = 200, data = getExpense.ToList() });
+            try
+            {
+                IEnumerable<ExpenseTypeView> getExpense = await expenseMaster.GetAllExpensType();
+                return Ok(new { code = (int)HttpStatusCode.OK, data = getExpense.ToList() });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { code = (int)HttpStatusCode.InternalServerError, message = "An error occurred while processing the request." });
+            }
         }
 
         [HttpGet]
         [Route("GetAllPaymentType")]
         public async Task<IActionResult> GetAllPaymentType()
         {
-            IEnumerable<PaymentTypeView> getExpense = await expenseMaster.GetAllPaymentType();
-            return Ok(new { code = 200, data = getExpense.ToList() });
+            try
+            {
+                IEnumerable<PaymentTypeView> getExpense = await expenseMaster.GetAllPaymentType();
+                return Ok(new { code = (int)HttpStatusCode.OK, data = getExpense.ToList() });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { code = (int)HttpStatusCode.InternalServerError, message = "An error occurred while processing the request." });
+            }
         }
 
         [HttpPost]
         [Route("GetUserExpenseDetail")]
         public async Task<IActionResult> GetUserExpenseDetail(Guid UserId, DataTableRequstModel dataTable)
         {
-            var getUserExpense = await expenseMaster.GetUserExpenseList(UserId, dataTable);
-            return Ok(new { code = 200, data = getUserExpense });
+            try
+            {
+                var getUserExpense = await expenseMaster.GetUserExpenseList(UserId, dataTable);
+                return Ok(new { code = (int)HttpStatusCode.OK, data = getUserExpense });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { code = (int)HttpStatusCode.InternalServerError, message = "An error occurred while processing the request." });
+            }
         }
 
         [HttpPost]
         [Route("GetUserList")]
         public async Task<IActionResult> GetUserList(DataTableRequstModel dataTable)
         {
-            var getUserExpense = await expenseMaster.GetUserList(dataTable);
-            return Ok(new { code = 200, data = getUserExpense });
+            try
+            {
+                var getUserExpense = await expenseMaster.GetUserList(dataTable);
+                return Ok(new { code = (int)HttpStatusCode.OK, data = getUserExpense });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { code = (int)HttpStatusCode.InternalServerError, message = "An error occurred while processing the request." });
+            }
         }
 
         [HttpPost]
         [Route("GetExpenseDetailByUserId")]
         public async Task<IActionResult> GetExpenseDetailByUserId(Guid UserId)
         {
-            List<ExpenseDetailsView> getExpense = await expenseMaster.GetExpenseDetailByUserId(UserId);
-            return Ok(new { code = 200, data = getExpense.ToList() });
+            try
+            {
+                List<ExpenseDetailsView> getExpense = await expenseMaster.GetExpenseDetailByUserId(UserId);
+                return Ok(new { code = (int)HttpStatusCode.OK, data = getExpense.ToList() });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { code = (int)HttpStatusCode.InternalServerError, message = "An error occurred while processing the request." });
+            }
         }
 
         [HttpPost]
@@ -167,7 +209,7 @@ namespace EMPManagment.API.Controllers
             {
                 var result = await expenseMaster.ApprovedExpense(ApprovedallExpense);
 
-                if (result.Code == 200)
+                if (result.Code != (int)HttpStatusCode.NotFound && result.Code != (int)HttpStatusCode.InternalServerError)
                 {
                     response.Code = (int)HttpStatusCode.OK;
                     response.Message = result.Message;
@@ -196,7 +238,7 @@ namespace EMPManagment.API.Controllers
             var expense = await expenseMaster.DeleteExpense(Id);
             try
             {
-                if (expense != null)
+                if (expense.Code != (int)HttpStatusCode.NotFound && expense.Code != (int)HttpStatusCode.InternalServerError)
                 {
                     responseModel.Code = (int)HttpStatusCode.OK;
                     responseModel.Message = expense.Message;
@@ -223,8 +265,8 @@ namespace EMPManagment.API.Controllers
             var expense = await expenseMaster.AddExpenseType(ExpenseDetails);
             try
             {
-                if (expense.Code == 200)
-                { 
+                if (expense.Code != (int)HttpStatusCode.NotFound && expense.Code != (int)HttpStatusCode.InternalServerError)
+                {
                     responseModel.Code = expense.Code;
                     responseModel.Message = expense.Message;
                 }

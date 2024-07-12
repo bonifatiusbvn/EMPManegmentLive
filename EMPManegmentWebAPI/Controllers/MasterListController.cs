@@ -5,6 +5,7 @@ using EMPManegment.Services.CSC;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace EMPManagment.API.Controllers
 {
@@ -25,8 +26,15 @@ namespace EMPManagment.API.Controllers
         [Route("GetCountries")]
         public async Task<IActionResult> GetCountries()
         {
-            IEnumerable<CountryView> getCountries = await CSC.GetCountries();
-            return Ok(new { code = 200, data = getCountries.ToList() });
+            try
+            {
+                IEnumerable<CountryView> getCountries = await CSC.GetCountries();
+                return Ok(new { code = (int)HttpStatusCode.OK, data = getCountries.ToList() });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { code = (int)HttpStatusCode.InternalServerError, message = "An error occurred while processing the request." });
+            }
         }
 
 
@@ -35,48 +43,90 @@ namespace EMPManagment.API.Controllers
         [Route("GetState")]
         public async Task<IActionResult> GetState(int StateId)
         {
-            IEnumerable<StateView> getStates = await CSC.GetStates(StateId);
-            return Ok(new { code = 200, data = getStates.ToList() });
+            try
+            {
+                IEnumerable<StateView> getStates = await CSC.GetStates(StateId);
+                return Ok(new { code = (int)HttpStatusCode.OK, data = getStates.ToList() });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { code = (int)HttpStatusCode.InternalServerError, message = "An error occurred while processing the request." });
+            }
         }
 
         [HttpGet]
         [Route("GetCities")]
         public async Task<IActionResult> GetCities(int CityId)
         {
-            IEnumerable<CityView> getCities = await CSC.GetCities(CityId);
-            return Ok(new { code = 200, data = getCities.ToList() });
+            try
+            {
+                IEnumerable<CityView> getCities = await CSC.GetCities(CityId);
+                return Ok(new { code = (int)HttpStatusCode.OK, data = getCities.ToList() });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { code = (int)HttpStatusCode.InternalServerError, message = "An error occurred while processing the request." });
+            }
         }
 
         [HttpGet]
         [Route("GetQuestion")]
         public async Task<IActionResult> GetQuestion()
         {
-            IEnumerable<QuestionView> getQuestion = await CSC.GetQuestion();
-            return Ok(new { code = 200, data = getQuestion.ToList() });
+            try
+            {
+                IEnumerable<QuestionView> getQuestion = await CSC.GetQuestion();
+                return Ok(new { code = (int)HttpStatusCode.OK, data = getQuestion.ToList() });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { code = (int)HttpStatusCode.InternalServerError, message = "An error occurred while processing the request." });
+            }
         }
 
         [HttpGet]
         [Route("GetDepartment")]
         public async Task<IActionResult> GetDepartment()
         {
-            IEnumerable<Department> getDepartment = await CSC.GetDepartment();
-            return Ok(new { code = 200, data = getDepartment.ToList() });
+            try
+            {
+                IEnumerable<Department> getDepartment = await CSC.GetDepartment();
+                return Ok(new { code = (int)HttpStatusCode.OK, data = getDepartment.ToList() });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { code = (int)HttpStatusCode.InternalServerError, message = "An error occurred while processing the request." });
+            }
         }
 
         [HttpPost]
         [Route("GetUserRoleList")]
         public async Task<IActionResult> GetUserRoleList()
         {
-            IEnumerable<UserRoleModel> userRole = await CSC.GetUserRole();
-            return Ok(new { code = 200, data = userRole.ToList() });
+            try
+            {
+                IEnumerable<UserRoleModel> userRole = await CSC.GetUserRole();
+                return Ok(new { code = (int)HttpStatusCode.OK, data = userRole.ToList() });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { code = (int)HttpStatusCode.InternalServerError, message = "An error occurred while processing the request." });
+            }
         }
 
         [HttpGet]
         [Route("GetAllCities")]
         public async Task<IActionResult> GetAllCities()
         {
-            IEnumerable<CityView> AllCities = await CSC.GetAllCities();
-            return Ok(new { code = 200, data = AllCities.ToList() });
+            try
+            {
+                IEnumerable<CityView> AllCities = await CSC.GetAllCities();
+                return Ok(new { code = (int)HttpStatusCode.OK, data = AllCities.ToList() });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { code = (int)HttpStatusCode.InternalServerError, message = "An error occurred while processing the request." });
+            }
         }
     }
 }

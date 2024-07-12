@@ -25,16 +25,30 @@ namespace EMPManagment.API.Controllers
         [Route("GetCompanyNameList")]
         public async Task<IActionResult> GetCompanyNameList()
         {
-            IEnumerable<CompanyModel> company = await Company.GetCompanyNameList();
-            return Ok(new { code = 200, data = company.ToList() });
+            try
+            {
+                IEnumerable<CompanyModel> company = await Company.GetCompanyNameList();
+                return Ok(new { code = (int)HttpStatusCode.OK, data = company.ToList() });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { code = (int)HttpStatusCode.InternalServerError, message = "An error occurred while processing the request." });
+            }
         }
 
         [HttpGet]
         [Route("GetCompanyDetailsById")]
         public async Task<IActionResult> GetCompanyDetailsById(Guid Id)
         {
-            var companyDetails = await Company.GetCompanyDetailsById(Id);
-            return Ok(new { code = 200, data = companyDetails });
+            try
+            {
+                var companyDetails = await Company.GetCompanyDetailsById(Id);
+                return Ok(new { code = (int)HttpStatusCode.OK, data = companyDetails });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { code = (int)HttpStatusCode.InternalServerError, message = "An error occurred while processing the request." });
+            }
         }
 
         [HttpPost]
@@ -45,7 +59,7 @@ namespace EMPManagment.API.Controllers
             try
             {
                 var result = await Company.AddCompany(AddCompany);
-                if (result.code == 200)
+                if (result.code != (int)HttpStatusCode.InternalServerError)
                 {
                     response.code = (int)HttpStatusCode.OK;
                     response.message = result.message;

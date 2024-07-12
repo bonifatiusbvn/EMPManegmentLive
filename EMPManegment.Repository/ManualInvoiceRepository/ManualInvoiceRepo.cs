@@ -92,7 +92,6 @@ namespace EMPManegment.Repository.ManualInvoiceRepository
                     Context.TblManualInvoiceDetails.Add(invoiceDetails);
                 }
                 await Context.SaveChangesAsync();
-                response.Code = (int)HttpStatusCode.OK;
                 response.Message = "Invoice successfully inserted.";
                 response.Data = invoice.Id;
             }
@@ -303,7 +302,6 @@ namespace EMPManegment.Repository.ManualInvoiceRepository
             UserResponceModel response = new UserResponceModel();
             try
             {
-
                 var ManualInvoice = new TblManualInvoice()
                 {
                     Id = UpdateInvoice.Id,

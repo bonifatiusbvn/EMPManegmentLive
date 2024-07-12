@@ -29,7 +29,7 @@ namespace EMPManagment.API.Controllers
             try
             {
                 var createInvoice = ManualInvoice.InsertManualInvoice(InvoiceDetails);
-                if (createInvoice.Result.Code == 200)
+                if (createInvoice.Result.Code != (int)HttpStatusCode.InternalServerError)
                 {
                     response.Code = (int)HttpStatusCode.OK;
                     response.Message = createInvoice.Result.Message;
@@ -53,8 +53,15 @@ namespace EMPManagment.API.Controllers
         [Route("GetManualInvoiceList")]
         public async Task<IActionResult> GetManualInvoiceList(DataTableRequstModel dataTable)
         {
-            var AllInvoiceList = await ManualInvoice.GetManualInvoiceList(dataTable);
-            return Ok(new { code = 200, data = AllInvoiceList });
+            try
+            {
+                var AllInvoiceList = await ManualInvoice.GetManualInvoiceList(dataTable);
+                return Ok(new { code = (int)HttpStatusCode.OK, data = AllInvoiceList });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { code = (int)HttpStatusCode.InternalServerError, message = "An error occurred while processing the request." });
+            }
         }
 
         [HttpGet]
@@ -64,11 +71,11 @@ namespace EMPManagment.API.Controllers
             try
             {
                 var invoiceId = await ManualInvoice.GetManualInvoiceDetails(InvoiceId);
-                return Ok(new { code = 200, data = invoiceId });
+                return Ok(new { code = (int)HttpStatusCode.OK, data = invoiceId });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { code = 500, message = ex.Message });
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { code = (int)HttpStatusCode.InternalServerError, message = ex.Message });
             }
         }
 
@@ -80,9 +87,9 @@ namespace EMPManagment.API.Controllers
             try
             {
                 var invoiceId = await ManualInvoice.DeleteManualInvoice(InvoiceId);
-                if(invoiceId.Code == 200)
+                if (invoiceId.Code != (int)HttpStatusCode.NotFound && invoiceId.Code != (int)HttpStatusCode.InternalServerError)
                 {
-                    response.Code = invoiceId.Code;
+                    response.Code = (int)HttpStatusCode.OK;
                     response.Message = invoiceId.Message;
                 }
                 else
@@ -107,7 +114,7 @@ namespace EMPManagment.API.Controllers
             try
             {
                 var createInvoice = ManualInvoice.UpdateManualInvoice(UpdateInvoice);
-                if (createInvoice.Result.Code == 200)
+                if (createInvoice.Result.Code != (int)HttpStatusCode.InternalServerError)
                 {
                     response.Code = (int)HttpStatusCode.OK;
                     response.Message = createInvoice.Result.Message;

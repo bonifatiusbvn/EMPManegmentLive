@@ -36,12 +36,12 @@ namespace EMPManagment.API.Controllers
 
                 if (RolewiseFormList.Count == 0)
                 {
-                    response.code = 400;
+                    response.code = (int)HttpStatusCode.NotFound;
                     response.message = "Error in getting FormList.";
                 }
                 else
                 {
-                    response.code = 200;
+                    response.code = (int)HttpStatusCode.OK;
                     response.data = RolewiseFormList.ToList();
                 }
             }
@@ -61,7 +61,7 @@ namespace EMPManagment.API.Controllers
             try
             {
                 var rolewiseFormPermission = RolewisePermissionMaster.UpdateMultipleRolewiseFormPermission(RolewiseFormPermission);
-                if (rolewiseFormPermission.Result.code == 200)
+                if (rolewiseFormPermission.Result.code != (int)HttpStatusCode.NotFound && rolewiseFormPermission.Result.code != (int)HttpStatusCode.InternalServerError)
                 {
                     response.code = (int)HttpStatusCode.OK;
                     response.message = rolewiseFormPermission.Result.message;
@@ -88,7 +88,7 @@ namespace EMPManagment.API.Controllers
             try
             {
                 var RoleData = RolewisePermissionMaster.CreateUserRole(roleDetails);
-                if (RoleData.Result.code == 200)
+                if (RoleData.Result.code != (int)HttpStatusCode.NotFound && RoleData.Result.code != (int)HttpStatusCode.InternalServerError)
                 {
                     response.code = (int)HttpStatusCode.OK;
                     response.message = RoleData.Result.message;
@@ -110,19 +110,26 @@ namespace EMPManagment.API.Controllers
         [Route("FormList")]
         public async Task<IActionResult> FormList()
         {
-
-           IEnumerable<FormMasterModel> FormData = await RolewisePermissionMaster.FormList();
-           return Ok(new { code = 200, data = FormData.ToList() });
+            try
+            {
+                IEnumerable<FormMasterModel> FormData = await RolewisePermissionMaster.FormList();
+                return Ok(new { code = (int)HttpStatusCode.OK, data = FormData.ToList() });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { code = (int)HttpStatusCode.InternalServerError, message = "An error occurred while processing the request." });
+            }
         }
+
         [HttpPost]
         [Route("CreateRolewisePermissionForm")]
-        public async Task<IActionResult> CreateRolewisePermissionForm(int FormId,Guid userId)
+        public async Task<IActionResult> CreateRolewisePermissionForm(int FormId, Guid userId)
         {
             ApiResponseModel response = new ApiResponseModel();
             try
             {
                 var Form = RolewisePermissionMaster.CreateRolewisePermissionForm(FormId, userId);
-                if (Form.Result.code == 200)
+                if (Form.Result.code != (int)HttpStatusCode.NotFound || Form.Result.code != (int)HttpStatusCode.InternalServerError)
                 {
                     response.code = (int)HttpStatusCode.OK;
                     response.message = Form.Result.message;
@@ -140,7 +147,7 @@ namespace EMPManagment.API.Controllers
             }
             return StatusCode(response.code, response);
         }
-        
+
         [HttpPost]
         [Route("CreateUserForm")]
         public async Task<IActionResult> CreateUserForm(Guid UserId)
@@ -149,7 +156,7 @@ namespace EMPManagment.API.Controllers
             try
             {
                 var UserDetail = RolewisePermissionMaster.CreateUserForm(UserId);
-                if (UserDetail.Result.code == 200)
+                if (UserDetail.Result.code != (int)HttpStatusCode.NotFound && UserDetail.Result.code != (int)HttpStatusCode.InternalServerError)
                 {
                     response.code = (int)HttpStatusCode.OK;
                     response.message = UserDetail.Result.message;
@@ -178,12 +185,12 @@ namespace EMPManagment.API.Controllers
 
                 if (UserFormList.Count == 0)
                 {
-                    response.code = 400;
+                    response.code = (int)HttpStatusCode.NotFound;
                     response.message = "No data found.";
                 }
                 else
                 {
-                    response.code = 200;
+                    response.code = (int)HttpStatusCode.OK;
                     response.data = UserFormList.ToList();
                 }
             }
@@ -202,7 +209,7 @@ namespace EMPManagment.API.Controllers
             try
             {
                 var userFormPermission = RolewisePermissionMaster.UpdateMultipleUserFormPermission(UpdatedUserFormPermissions);
-                if (userFormPermission.Result.code == 200)
+                if (userFormPermission.Result.code != (int)HttpStatusCode.NotFound && userFormPermission.Result.code != (int)HttpStatusCode.InternalServerError)
                 {
                     response.code = (int)HttpStatusCode.OK;
                     response.message = userFormPermission.Result.message;
