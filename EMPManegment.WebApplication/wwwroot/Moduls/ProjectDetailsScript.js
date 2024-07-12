@@ -17,8 +17,12 @@ function GetMemberList() {
             dropdown.css("width", "300px");
             dropdown.select2({
                 placeholder: 'Select Member',
+                closeOnSelect: false,
                 allowClear: true,
-                closeOnSelect: false
+                tags: false,
+                tokenSeparators: [',', ' ']
+            }).on('select2:select', function (e) {
+                $(this).next('.select2-container').find('.select2-search__field').val('');
             });
         }
     });

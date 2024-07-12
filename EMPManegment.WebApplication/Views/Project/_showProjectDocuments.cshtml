@@ -22,16 +22,8 @@
                     </div>
                     <div class="flex-shrink-0 ms-2">
                         <div class="d-flex gap-1">
-                            <button type="button" class="btn btn-icon text-muted btn-sm fs-18"><i class="ri-download-2-line"></i></button>
-                            <div class="dropdown">
-                                <button class="btn btn-icon text-muted btn-sm fs-18 dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="ri-more-fill"></i>
-                                </button>
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="#"><i class="ri-pencil-fill align-bottom me-2 text-muted"></i> Rename</a></li>
-                                    <li><a class="dropdown-item" onclick="deleteProjectDocument('@item.Id')"><i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i> Delete</a></li>
-                                </ul>
-                            </div>
+                            <button type="button" class="btn btn-icon text-muted btn-sm fs-18" onclick="DownloadProjectDocument('@item.DocumentName')"><i class="ri-download-2-line"></i></button>
+                            <button type="button" class="btn btn-icon text-muted btn-sm fs-18" onclick="deleteProjectDocument('@item.Id')"><i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i></button>
                         </div>
                     </div>
                 </div>

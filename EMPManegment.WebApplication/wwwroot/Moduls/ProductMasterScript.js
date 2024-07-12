@@ -65,12 +65,6 @@ function selectProductTypeId() {
 }
 
 $(document).ready(function () {
-    $('#txtproductimage').change(function () {
-        const [file] = txtproductimage.files;
-        if (file) {
-            imgPreview.src = URL.createObjectURL(file);
-        }
-    });
 
     $("#createproductform").validate({
         rules: {
@@ -174,7 +168,7 @@ function SaveProductDetails() {
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'OK',
                     }).then(function () {
-                        window.location = '/ProductMaster/CreateProduct';
+                        window.location = '/ProductMaster/ProductList';
                     });
                 }
                 else {
@@ -420,44 +414,43 @@ $(document).on("click", "#backButton", function (e) {
 });
 
 
-function clearProductImage() {
-    var inputFile = document.getElementById('txtproductimage');
-    var previewImage = document.getElementById('imgPreview');
-    var clearButton = document.querySelector('.btn-danger');
-
-    inputFile.value = '';
-    previewImage.src = "/assets/images/no-preview.png";
-
-    clearButton.style.display = 'none';
-}
-
-document.addEventListener('DOMContentLoaded', function () {
-    var fileInput = document.getElementById('txtproductimage');
-    var clearButton = document.querySelector('.btn-danger');
-    var previewImage = document.getElementById('imgPreview');
-
-    if (fileInput) {
-        fileInput.addEventListener('change', function () {
-            if (this.files && this.files[0]) {
-                var reader = new FileReader();
-
-                reader.onload = function (e) {
-                    previewImage.src = e.target.result;
-                };
-
-                reader.readAsDataURL(this.files[0]);
-
-                clearButton.style.display = 'block';
-            } else {
-                clearButton.style.display = 'none';
-            }
-        });
-    }
-});
-
 function clearSearchInput() {
     var input = document.getElementById('txtsearch');
     input.value = '';
     input.focus();
     GetAllProductDetailsList(1);
 }
+
+$(document).ready(function () {
+    function toggleProductImagePreview(show) {
+        if (show) {
+            $('#ProductImageContainer').show();
+        } else {
+            $('#ProductImageContainer').hide();
+        }
+    }
+    $('#deleteProductImageButton').click(function () {
+        $('#productImagePreview').attr('src', '');
+        $('#txtproductimage').val('');
+        toggleProductImagePreview(false);
+    });
+    $('#txtproductimage').change(function () {
+        var input = this;
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $('#productImagePreview').attr('src', e.target.result);
+                toggleProductImagePreview(true);
+            }
+            reader.readAsDataURL(input.files[0]);
+        } else {
+            toggleProductImagePreview(false);
+        }
+    });
+
+    if ($('#productImagePreview').attr('src') === '' || $('#productImagePreview').attr('src') === '#') {
+        toggleProductImagePreview(false);
+    } else {
+        toggleProductImagePreview(true);
+    }
+});

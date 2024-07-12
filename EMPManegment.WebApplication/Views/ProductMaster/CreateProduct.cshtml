@@ -59,34 +59,29 @@
                     </ul>
                 </div>
                 <div class="card-body">
-                    <div class="mb-4">
-                        <label class="form-label text-muted">Product Image</label>
-                        <div class="text-center">
-                            <div class="position-relative d-inline-block">
-                                <div class="position-absolute top-0 end-0 translate-middle">
-                                    <button type="button" class="btn btn-danger btn-x btn-sm" onclick="clearProductImage()">X</button>
+                    <div class="col-lg-12">
+                        <div class="mb-4">
+                            <label class="form-label text-muted">Product Image</label>
+                            <div class="row mb-3">
+                                <div class="col-lg-6">
+                                    <input type="file" class="form-control" id="txtproductimage" name="txtproductimage" />
                                 </div>
-                                <div class="avatar-lg">
-                                    <div class="holder m-2">
-                                        <img id="imgPreview" alt="Product image" style="height:200px;width:auto;margin-left:-500px;margin-bottom:-100px;" src="~/assets/images/no-preview.png" />
+                                <div class="col-lg-6 d-flex flex-column justify-content-center">
+                                    <div id="ProductImageContainer" style="display: none;">
+                                        <div style="position: relative; display: inline-block;">
+                                            <img src="#" id="productImagePreview" style="height: 200px; width: 200px; border: 2px solid grey;margin-left: 163px;margin-top: -40px;" />
+                                            <button type="button" id="deleteProductImageButton" style="position: absolute; top: -40px;right: 2px; background-color: transparent; border: none; font-size: 24px; cursor: pointer; color: red;">
+                                                &times;
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div>
-                        <h5 class="fs-14 mb-1" style="margin-top:120px;">Product Gallery</h5>
-                        <p class="text-muted">Add Product Gallery Images.</p>
-                        <label class="form-label text-muted" for="ProductImage"></label>
-                        <div class="mb-3">
-                            <input type="file" class="form-control" id="txtproductimage" name="txtproductimage" />
-                        </div>
-                    </div>
                 </div>
             </div>
             <!-- end card -->
-            <!-- end card -->
-
             <div class="text-end mb-3">
                 <button type="button" class="btn btn-success btn-lg" onclick="SaveProductDetails()" id="saveproductdetails" value="Validation" style="height:50px;width:160px;">Create</button>
             </div>

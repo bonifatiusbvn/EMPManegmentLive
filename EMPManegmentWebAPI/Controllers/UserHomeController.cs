@@ -325,7 +325,7 @@ namespace EMPManagment.API.Controllers
                 RequestUri = new Uri("https://weatherapi-com.p.rapidapi.com/current.json?q=" + city),
                 Headers =
                 {
-                 {"x-rapidapi-key", "53a9c22907msh20b4c28bfb3bf4bp1cabf0jsn54f99e1b7c3d" },
+                 {"x-rapidapi-key", "f12a23d41bmsh3d3c167b925d673p1e2fbcjsn09b999dee74d" },
                  {"x-rapidapi-host", "weatherapi-com.p.rapidapi.com" },
                 },
             };

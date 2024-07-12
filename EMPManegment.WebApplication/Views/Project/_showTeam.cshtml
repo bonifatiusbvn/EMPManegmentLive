@@ -66,8 +66,7 @@
                                 </a>
                             </td>
                             <td>
-                                @UserSession.ProjectName
-
+                                @item.ProjectTitle
                             </td>
 
                             @if (UserSession.FormPermisionData.Any(a => a.FormName == "GetProjectDetails" && (a.Delete == true)))

@@ -445,7 +445,7 @@ namespace EMPManegment.Web.Controllers
                    out byte[] passwordSalt);
                 var resetPass = new PasswordResetView
                 {
-                    UserName = ResetPassword.UserName,
+                    UserId = ResetPassword.UserId,
                     PasswordHash = passwordHash,
                     PasswordSalt = passwordSalt,
                     UpdatedBy = _userSession.UserId
