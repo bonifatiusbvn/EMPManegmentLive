@@ -361,7 +361,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                                                             join c in Context.TblPaymentTypes on a.PaymentType equals c.Id
                                                             join d in Context.TblPaymentMethodTypes on a.PaymentMethod equals d.Id
                                                             where a.VendorId == Vid
-                                                            orderby a.Date descending
+                                                            orderby a.CreatedOn descending
                                                             select new CreditDebitView
                                                             {
                                                                 Id = a.Id,
@@ -896,7 +896,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                                   join c in Context.TblPaymentTypes on a.PaymentType equals c.Id
                                   join d in Context.TblPaymentMethodTypes on a.PaymentMethod equals d.Id
                                   where a.VendorId == Vid
-                                  orderby a.Date descending
+                                  orderby a.CreatedOn descending
                                   select new CreditDebitView
                                   {
                                       Id = a.Id,
