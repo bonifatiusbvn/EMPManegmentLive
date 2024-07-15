@@ -508,27 +508,13 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
                 if (GetUserdata != null)
                 {
 
-                    if (GetUserdata.IsDeleted == true)
-                    {
-                        GetUserdata.IsDeleted = false;
-                        GetUserdata.UpdatedOn = DateTime.Now;
-                        GetUserdata.UpdatedBy = projectMember.UpdatedBy;
-                        Context.TblProjectMembers.Update(GetUserdata);
-                        Context.SaveChanges();
-                        response.Data = GetUserdata;
-                        response.Message = "Project member is deactive succesfully";
-                    }
-
-                    else
-                    {
-                        GetUserdata.IsDeleted = true;
-                        GetUserdata.UpdatedOn = DateTime.Now;
-                        GetUserdata.UpdatedBy = projectMember.UpdatedBy;
-                        Context.TblProjectMembers.Update(GetUserdata);
-                        Context.SaveChanges();
-                        response.Data = GetUserdata;
-                        response.Message = "Project member is active succesfully";
-                    }
+                    GetUserdata.IsDeleted = true;
+                    GetUserdata.UpdatedOn = DateTime.Now;
+                    GetUserdata.UpdatedBy = projectMember.UpdatedBy;
+                    Context.TblProjectMembers.Update(GetUserdata);
+                    Context.SaveChanges();
+                    response.Data = GetUserdata;
+                    response.Message = "Project member is deleted succesfully";
                 }
 
             }

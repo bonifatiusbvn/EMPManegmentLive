@@ -154,7 +154,7 @@ $(document).ready(function () {
                 "orderable": false,
                 "searchable": false,
                 "render": function (data, type, full) {
-                    return '<a onclick="EditUserAttendance(\'' + full.attendanceId + '\')" class="btn text-primary btndeletedoc">' +
+                    return '<a onclick="EditUserAttendance(\'' + full.attendanceId + '\')" class="btn text-primary">' +
                         '<i class="fa-regular fa-pen-to-square"></i></a>';
                 }
             });

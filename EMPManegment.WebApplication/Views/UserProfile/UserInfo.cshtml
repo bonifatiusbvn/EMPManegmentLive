@@ -140,7 +140,7 @@
                                             <label for="birthdateInput" class="form-label">
                                                 Birthdate
                                             </label>
-                                            <input type="datetime" class="form-control" id="birthdateInput" name="birthdateInput" placeholder="Select date" value="@CommonHelper.GetCommonDateFormat(Model.DateOfBirth)" readonly />
+                                            <input type="date" class="form-control" id="birthdateInput" name="birthdateInput" placeholder="Select date" value="@Model.DateOfBirth.ToString("yyyy-MM-dd")" readonly />
                                         </div>
                                     </div>
                                     <!--end col-->
