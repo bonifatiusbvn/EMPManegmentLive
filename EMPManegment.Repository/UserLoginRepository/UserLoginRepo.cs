@@ -97,12 +97,12 @@ namespace EMPManegment.Repository.UserLoginRepository
                         Image = addemp.Image,
                         IsActive = true,
                         JoiningDate = DateTime.Now,
-                        //Role = 4,
+                        RoleId = new Guid("66fa406d-6407-472c-8c1e-f27d347ae9c1"),
                         EmailConfirmed = true,
                         PhoneNumberConfirmed = true,
                         CreatedBy = addemp.CreatedBy
-
                     };
+
                     response.Message = "User Added Sucessfully!";
                     Context.TblUsers.Add(model);
                     Context.SaveChanges();
