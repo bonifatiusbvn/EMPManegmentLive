@@ -245,10 +245,10 @@ namespace EMPManagment.API.Controllers
         }
 
         [HttpPost]
-        [Route("TaskDetailsDataTable")]
-        public async Task<IActionResult> TaskDetailsDataTable(DataTableRequstModel dataTable)
+        [Route("GetAllTaskList")]
+        public async Task<IActionResult> GetAllTaskList(DataTableRequstModel dataTable)
         {
-            var AllTaskList = await TaskServices.GetAllUserTaskDetails(dataTable);
+            var AllTaskList = await TaskServices.GetAllTaskList(dataTable);
             return Ok(new { code = (int)HttpStatusCode.OK, data = AllTaskList });
         }
 

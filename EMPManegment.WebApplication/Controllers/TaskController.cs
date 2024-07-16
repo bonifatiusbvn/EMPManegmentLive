@@ -254,7 +254,7 @@ namespace EMPManegment.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> TaskDetailsDataTable()
+        public async Task<IActionResult> GetAllTaskList()
         {
             try
             {
@@ -279,7 +279,7 @@ namespace EMPManegment.Web.Controllers
                 };
                 List<TaskDetailsView> TaskList = new List<TaskDetailsView>();
                 var data = new jsonData();
-                ApiResponseModel postuser = await APIServices.PostAsync(dataTable, "UserHome/TaskDetailsDataTable");
+                ApiResponseModel postuser = await APIServices.PostAsync(dataTable, "UserHome/GetAllTaskList");
                 if (postuser.data != null)
                 {
                     data = JsonConvert.DeserializeObject<jsonData>(postuser.data.ToString());

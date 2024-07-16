@@ -72,6 +72,7 @@ namespace EMPManegment.EntityModels.ViewModels.ProjectModels
 
         public string? CityName { get; set; }
         public string? ProjectImageName { get; set; }
+        public bool? IsDeleted { get; set; }
 
     }
     public class ProjectDetailRequestModel

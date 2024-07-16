@@ -1,18 +1,22 @@
 ﻿using EMPManagment.API;
 using EMPManagment.Web.Models.API;
+using EMPManegment.EntityModels.Common;
 using EMPManegment.EntityModels.ViewModels.FormMaster;
 using EMPManegment.EntityModels.ViewModels.FormPermissionMaster;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.ProductMaster;
+using EMPManegment.EntityModels.ViewModels.ProjectModels;
 using EMPManegment.EntityModels.ViewModels.UserModels;
 using EMPManegment.Inretface.Interface.FormPermissionMaster;
 using EMPManegment.Inretface.Interface.UserList;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.SqlServer.Server;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -22,41 +26,57 @@ namespace EMPManegment.Repository.FormPermissionMasterRepository
 {
     public class FormPermissionMasterRepo : IFormPermissionMaster
     {
-        public FormPermissionMasterRepo(BonifatiusEmployeesContext context)
+        public FormPermissionMasterRepo(BonifatiusEmployeesContext context, IConfiguration configuration)
         {
             Context = context;
+            _configuration = configuration;
         }
 
         public BonifatiusEmployeesContext Context { get; }
+        public IConfiguration _configuration { get; }
 
         public async Task<List<RolewiseFormPermissionModel>> GetRolewiseFormListById(Guid RoleId)
         {
-            var UserData = new List<RolewiseFormPermissionModel>();
-            var data = await (from e in Context.TblRolewiseFormPermissions.Where(x => x.RoleId == RoleId)
-                              join f in Context.TblForms on e.FormId equals f.FormId
-                              join r in Context.TblRoleMasters on e.RoleId equals r.RoleId
-                              orderby f.OrderId ascending
-                              select new RolewiseFormPermissionModel
-                              {
-                                  Id = e.Id,
-                                  Role = r.Role,
-                                  RoleId = e.RoleId,
-                                  FormId = e.FormId,
-                                  FormName = f.FormName,
-                                  IsViewAllow = e.IsViewAllow,
-                                  IsEditAllow = e.IsEditAllow,
-                                  IsDeleteAllow = e.IsDeleteAllow,
-                                  IsAddAllow = e.IsAddAllow,
-                                  CreatedBy = e.CreatedBy,
-                                  CreatedOn = e.CreatedOn,
-                              }).ToListAsync();
-
-
-            if (data.Count != 0)
+            try
             {
-                UserData.AddRange(data);
+                string dbConnectionStr = _configuration.GetConnectionString("EMPDbconn");
+
+                var sqlPar = new SqlParameter[]
+                {
+                   new SqlParameter("@RoleId", RoleId),
+                };
+
+                var DS = DbHelper.GetDataSet("GetRolewiseFormListById", CommandType.StoredProcedure, sqlPar, dbConnectionStr);
+
+                List<RolewiseFormPermissionModel> UserData = new List<RolewiseFormPermissionModel>();
+
+                if (DS != null && DS.Tables.Count > 0)
+                {
+                    foreach (DataRow row in DS.Tables[0].Rows)
+                    {
+                        var formDetails = new RolewiseFormPermissionModel
+                        {
+                            Id = row["Id"] != DBNull.Value ? (int)row["Id"] : 0,
+                            Role = row["Role"]?.ToString(),
+                            RoleId = row["RoleId"] != DBNull.Value ? (Guid)row["RoleId"] : Guid.Empty,
+                            FormId = row["FormId"] != DBNull.Value ? (int)row["FormId"] : 0,
+                            FormName = row["FormName"]?.ToString(),
+                            IsViewAllow = (bool)row["IsViewAllow"],
+                            IsEditAllow = (bool)row["IsEditAllow"],
+                            IsDeleteAllow = (bool)row["IsDeleteAllow"],
+                            IsAddAllow = (bool)row["IsAddAllow"],
+                            CreatedBy = row["CreatedBy"] != DBNull.Value ? (Guid)row["CreatedBy"] : Guid.Empty,
+                            CreatedOn = row["CreatedOn"] != DBNull.Value ? (DateTime)row["CreatedOn"] : DateTime.MinValue
+                        };
+                        UserData.Add(formDetails);
+                    }
+                }
+                return UserData;
             }
-            return UserData;
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         public async Task<ApiResponseModel> UpdateMultipleRolewiseFormPermission(List<RolewiseFormPermissionModel> UpdatedRolewiseFormPermissions)
@@ -294,30 +314,45 @@ namespace EMPManegment.Repository.FormPermissionMasterRepository
         }
         public async Task<List<UserPermissionModel>> GetUserFormListById(Guid UserId)
         {
-            var UserData = new List<UserPermissionModel>();
-            var data = await (from e in Context.TblUserFormPermissions.Where(x => x.UserId == UserId)
-                              join f in Context.TblForms on e.FormId equals f.FormId
-                              orderby f.OrderId ascending
-                              select new UserPermissionModel
-                              {
-                                  Id = e.Id,
-                                  UserId = e.UserId,
-                                  FormId = e.FormId,
-                                  FormName = f.FormName,
-                                  IsViewAllow = e.IsViewAllow,
-                                  IsEditAllow = e.IsEditAllow,
-                                  IsDeleteAllow = e.IsDeleteAllow,
-                                  IsAddAllow = e.IsAddAllow,
-                                  CreatedBy = e.CreatedBy,
-                                  CreatedOn = e.CreatedOn,
-                              }).ToListAsync();
-
-
-            if (data.Count != 0)
+            try
             {
-                UserData.AddRange(data);
+                string dbConnectionStr = _configuration.GetConnectionString("EMPDbconn");
+
+                var sqlPar = new SqlParameter[]
+                {
+                   new SqlParameter("@UserId", UserId),
+                };
+
+                var DS = DbHelper.GetDataSet("GetUserFormListById", CommandType.StoredProcedure, sqlPar, dbConnectionStr);
+
+                List<UserPermissionModel> UserData = new List<UserPermissionModel>();
+
+                if (DS != null && DS.Tables.Count > 0)
+                {
+                    foreach (DataRow row in DS.Tables[0].Rows)
+                    {
+                        var formDetails = new UserPermissionModel
+                        {
+                            Id = row["Id"] != DBNull.Value ? (int)row["Id"] : 0,
+                            UserId = row["UserId"] != DBNull.Value ? (Guid)row["UserId"] : Guid.Empty,
+                            FormId = row["FormId"] != DBNull.Value ? (int)row["FormId"] : 0,
+                            FormName = row["FormName"]?.ToString(),
+                            IsViewAllow = (bool)row["IsViewAllow"],
+                            IsEditAllow = (bool)row["IsEditAllow"],
+                            IsDeleteAllow = (bool)row["IsDeleteAllow"],
+                            IsAddAllow = (bool)row["IsAddAllow"],
+                            CreatedBy = row["CreatedBy"] != DBNull.Value ? (Guid)row["CreatedBy"] : Guid.Empty,
+                            CreatedOn = row["CreatedOn"] != DBNull.Value ? (DateTime)row["CreatedOn"] : DateTime.MinValue
+                        };
+                        UserData.Add(formDetails);
+                    }
+                }
+                return UserData;
             }
-            return UserData;
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         public async Task<ApiResponseModel> UpdateMultipleUserFormPermission(List<UserPermissionModel> UpdatedUserFormPermissions)

@@ -14,6 +14,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -21,6 +22,10 @@ using System.Threading.Tasks;
 using Azure;
 using Azure.Identity;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using EMPManegment.EntityModels.Common;
+using Microsoft.Extensions.Configuration;
+using EMPManegment.EntityModels.ViewModels.Invoice;
+using EMPManegment.EntityModels.ViewModels.UserModels;
 
 namespace EMPManegment.Repository.TaskRepository
 {
@@ -28,12 +33,14 @@ namespace EMPManegment.Repository.TaskRepository
     {
         private readonly string? pending;
 
-        public TaskRepo(BonifatiusEmployeesContext context)
+        public TaskRepo(BonifatiusEmployeesContext context, IConfiguration configuration)
         {
             Context = context;
+            _configuration = configuration;
         }
 
         public BonifatiusEmployeesContext Context { get; }
+        public IConfiguration _configuration { get; }
 
         public async Task<IEnumerable<TaskTypeView>> GetTaskType()
         {
@@ -349,45 +356,108 @@ namespace EMPManegment.Repository.TaskRepository
             }
         }
 
-        public async Task<jsonData> GetAllUserTaskDetails(DataTableRequstModel AllUserTaskDetails)
+        public async Task<jsonData> GetAllTaskList(DataTableRequstModel dataTable)
         {
-            var AllTaskDetailsDataTable = from a in Context.TblTaskDetails
-                                          join b in Context.TblUsers on a.UserId equals b.Id
-                                          join c in Context.TblTaskMasters on a.TaskType equals c.Id
-                                          select new TaskDetailsView
-                                          {
-                                              Id = a.Id,
-                                              TaskType = a.TaskType,
-                                              TaskStatus = a.TaskStatus,
-                                              TaskDate = a.TaskDate,
-                                              TaskDetails = a.TaskDetails,
-                                              TaskEndDate = a.TaskEndDate,
-                                              TaskTitle = a.TaskTitle,
-                                              UserProfile = b.Image,
-                                              UserName = b.UserName,
-                                              TaskTypeName = c.TaskType,
-                                              Document = a.Document,
-                                          };
-            if (!string.IsNullOrEmpty(AllUserTaskDetails.sortColumn) && !string.IsNullOrEmpty(AllUserTaskDetails.sortColumnDir))
+            try
             {
-                AllTaskDetailsDataTable = AllTaskDetailsDataTable.OrderBy(AllUserTaskDetails.sortColumn + " " + AllUserTaskDetails.sortColumnDir);
+                string dbConnectionStr = _configuration.GetConnectionString("EMPDbconn");
+
+                var dataSet = DbHelper.GetDataSet("GetAllTaskList", CommandType.StoredProcedure, new SqlParameter[] { }, dbConnectionStr);
+
+                var taskList = ConvertDataSetToTaskList(dataSet);
+
+                if (!string.IsNullOrEmpty(dataTable.searchValue.ToLower()))
+                {
+                    taskList = taskList.Where(e =>
+                        e.TaskTitle.Contains(dataTable.searchValue.ToLower(), StringComparison.OrdinalIgnoreCase) ||
+                        e.TaskDetails.Contains(dataTable.searchValue.ToLower(), StringComparison.OrdinalIgnoreCase) ||
+                        e.TaskStatus.Contains(dataTable.searchValue.ToLower(), StringComparison.OrdinalIgnoreCase) ||
+                        e.TaskDate.ToString().Contains(dataTable.searchValue)).ToList();
+                }
+
+                IQueryable<TaskDetailsView> queryabletaskDetails = taskList.AsQueryable();
+
+                if (!string.IsNullOrEmpty(dataTable.sortColumn) && !string.IsNullOrEmpty(dataTable.sortColumnDir))
+                {
+                    switch (dataTable.sortColumn.ToLower())
+                    {
+                        case "createdon":
+                            queryabletaskDetails = dataTable.sortColumnDir == "asc" ? queryabletaskDetails.OrderBy(e => e.CreatedOn) : queryabletaskDetails.OrderByDescending(e => e.CreatedOn);
+                            break;
+                        case "username":
+                            queryabletaskDetails = dataTable.sortColumnDir == "asc" ? queryabletaskDetails.OrderBy(e => e.UserName) : queryabletaskDetails.OrderByDescending(e => e.UserName);
+                            break;
+                        case "tasktitle":
+                            queryabletaskDetails = dataTable.sortColumnDir == "asc" ? queryabletaskDetails.OrderBy(e => e.TaskTitle) : queryabletaskDetails.OrderByDescending(e => e.TaskTitle);
+                            break;
+                        case "taskdetails":
+                            queryabletaskDetails = dataTable.sortColumnDir == "asc" ? queryabletaskDetails.OrderBy(e => e.TaskDetails) : queryabletaskDetails.OrderByDescending(e => e.TaskDetails);
+                            break;
+                        case "tasktype":
+                            queryabletaskDetails = dataTable.sortColumnDir == "asc" ? queryabletaskDetails.OrderBy(e => e.TaskType) : queryabletaskDetails.OrderByDescending(e => e.TaskType);
+                            break;
+                        case "taskdate":
+                            queryabletaskDetails = dataTable.sortColumnDir == "asc" ? queryabletaskDetails.OrderBy(e => e.TaskDate) : queryabletaskDetails.OrderByDescending(e => e.TaskDate);
+                            break;
+                        case "taskenddate":
+                            queryabletaskDetails = dataTable.sortColumnDir == "asc" ? queryabletaskDetails.OrderBy(e => e.TaskEndDate) : queryabletaskDetails.OrderByDescending(e => e.TaskEndDate);
+                            break;
+                        case "taskstatus":
+                            queryabletaskDetails = dataTable.sortColumnDir == "asc" ? queryabletaskDetails.OrderBy(e => e.TaskStatus) : queryabletaskDetails.OrderByDescending(e => e.TaskStatus);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                else
+                {
+                    queryabletaskDetails = queryabletaskDetails.OrderByDescending(e => e.CreatedOn);
+                }
+
+                var totalRecord = queryabletaskDetails.Count();
+                var filteredData = queryabletaskDetails.Skip(dataTable.skip).Take(dataTable.pageSize).ToList();
+
+                var jsonData = new jsonData
+                {
+                    draw = dataTable.draw,
+                    recordsFiltered = totalRecord,
+                    recordsTotal = totalRecord,
+                    data = filteredData
+                };
+
+                return jsonData;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
 
-            if (!string.IsNullOrEmpty(AllUserTaskDetails.searchValue))
-            {
-                AllTaskDetailsDataTable = AllTaskDetailsDataTable.Where(e => e.UserName.Contains(AllUserTaskDetails.searchValue) || e.TaskStatus.Contains(AllUserTaskDetails.searchValue) || e.TaskTypeName.Contains(AllUserTaskDetails.searchValue) || e.TaskEndDate.ToString().ToLower().Contains(AllUserTaskDetails.searchValue.ToLower()));
-            }
-            int totalRecord = AllTaskDetailsDataTable.Count();
-            var cData = AllTaskDetailsDataTable.Skip(AllUserTaskDetails.skip).Take(AllUserTaskDetails.pageSize).ToList();
+        }
 
-            jsonData jsonData = new jsonData
+        private List<TaskDetailsView> ConvertDataSetToTaskList(DataSet dataSet)
+        {
+            var taskDetails = new List<TaskDetailsView>();
+
+            foreach (DataRow row in dataSet.Tables[0].Rows)
             {
-                draw = AllUserTaskDetails.draw,
-                recordsFiltered = totalRecord,
-                recordsTotal = totalRecord,
-                data = cData
-            };
-            return jsonData;
+                var task = new TaskDetailsView
+                {
+                    Id = Guid.Parse(row["Id"].ToString()),
+                    TaskType = Convert.ToInt32(row["TaskType"]),
+                    TaskStatus = row["TaskStatus"].ToString(),
+                    TaskDate = Convert.ToDateTime(row["TaskDate"]),
+                    TaskDetails = row["TaskDetails"].ToString(),
+                    TaskEndDate = Convert.ToDateTime(row["TaskEndDate"]),
+                    TaskTitle = row["TaskTitle"].ToString(),
+                    UserProfile = row["UserProfile"].ToString(),
+                    UserName = row["UserName"].ToString(),
+                    TaskTypeName = row["TaskTypeName"].ToString(),
+                    Document = row["Document"].ToString()
+                };
+                taskDetails.Add(task);
+            }
+
+            return taskDetails;
         }
 
         public async Task<IEnumerable<TaskDetailsView>> GetUserTotalTask(Guid UserId)

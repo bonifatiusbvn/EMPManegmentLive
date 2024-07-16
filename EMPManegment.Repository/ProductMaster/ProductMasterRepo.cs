@@ -23,6 +23,10 @@ using System.Numerics;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using EMPManegment.EntityModels.ViewModels.UserModels;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using EMPManegment.EntityModels.ViewModels.PurchaseOrderModels;
+using EMPManegment.EntityModels.ViewModels.ProjectModels;
 
 namespace EMPManegment.Repository.ProductMaster
 {
@@ -404,43 +408,68 @@ namespace EMPManegment.Repository.ProductMaster
             try
             {
                 string dbConnectionStr = _configuration.GetConnectionString("EMPDbconn");
-                var sqlPar = new SqlParameter[]
-                {
-                   new SqlParameter("@SortBy", sortBy ?? (object)DBNull.Value),
-                };
 
+                var DS = DbHelper.GetDataSet("GetAllProductList", CommandType.StoredProcedure, new SqlParameter[] { }, dbConnectionStr);
 
-                var DS = DbHelper.GetDataSet("GetAllProductList", CommandType.StoredProcedure, sqlPar, dbConnectionStr);
-
-                List<ProductDetailsView> products = new List<ProductDetailsView>();
+                List<ProductDetailsView> productList = new List<ProductDetailsView>();
 
                 if (DS != null && DS.Tables.Count > 0)
                 {
                     foreach (DataRow row in DS.Tables[0].Rows)
                     {
-                        ProductDetailsView product = new ProductDetailsView
+                        var productDetails = new ProductDetailsView
                         {
                             Id = row["Id"] != DBNull.Value ? (Guid)row["Id"] : Guid.Empty,
-                            ProductType = row["ProductType"] != DBNull.Value ? (int)row["ProductType"] : (int?)null,
-                            ProductTypeName = row["ProductTypeName"]?.ToString(),
-                            ProductName = row["ProductName"]?.ToString(),
-                            ProductDescription = row["ProductDescription"]?.ToString(),
-                            ProductShortDescription = row["ProductShortDescription"]?.ToString(),
                             ProductImage = row["ProductImage"]?.ToString(),
-                            PerUnitPrice = row["PerUnitPrice"] != DBNull.Value ? (decimal)row["PerUnitPrice"] : 0m,
-                            IsWithGst = row["IsWithGst"] != DBNull.Value ? (bool)row["IsWithGst"] : false,
-                            GstPercentage = row["GstPercentage"] != DBNull.Value ? (decimal)row["GstPercentage"] : 0m,
-                            GstAmount = row["GstAmount"] != DBNull.Value ? (decimal)row["GstAmount"] : 0m,
-                            Hsn = row["Hsn"] != DBNull.Value ? (int?)row["Hsn"] : null,
+                            ProductDescription = row["ProductDescription"]?.ToString(),
+                            ProductName = row["ProductName"]?.ToString(),
+                            ProductShortDescription = row["ProductShortDescription"]?.ToString(),
+                            ProductTypeName = row["ProductTypeName"]?.ToString(),
+                            ProductType = row["ProductType"] != DBNull.Value ? (int)row["ProductType"] : 0,
+                            PerUnitPrice = Convert.ToDecimal(row["PerUnitPrice"]),
+                            IsWithGst = (bool)(row["IsWithGst"]),
+                            GstAmount = Convert.ToDecimal(row["GstAmount"]),
+                            GstPercentage = Convert.ToDecimal(row["GstPercentage"]),
+                            Hsn = row["Hsn"] != DBNull.Value ? (int)row["Hsn"] : 0,
                             CreatedBy = row["CreatedBy"] != DBNull.Value ? (Guid)row["CreatedBy"] : Guid.Empty,
-                            CreatedOn = row["CreatedOn"] != DBNull.Value ? (DateTime)row["CreatedOn"] : DateTime.MinValue,
                         };
-
-                        products.Add(product);
+                        productList.Add(productDetails);
                     }
                 }
 
-                return products;
+                if (string.IsNullOrEmpty(sortBy))
+                {
+                    productList = productList.OrderByDescending(a => a.CreatedOn).ToList();
+                }
+                else
+                {
+                    string sortOrder = sortBy.StartsWith("Ascending", StringComparison.OrdinalIgnoreCase) ? "ascending" :
+                                       sortBy.StartsWith("Descending", StringComparison.OrdinalIgnoreCase) ? "descending" :
+                                       string.Empty;
+
+                    if (!string.IsNullOrEmpty(sortOrder))
+                    {
+                        string field = sortBy.Substring(sortOrder.Length).Trim();
+                        switch (field.ToLower())
+                        {
+                            case "productname":
+                                if (sortOrder == "ascending")
+                                    productList = productList.OrderBy(a => a.ProductName).ToList();
+                                else if (sortOrder == "descending")
+                                    productList = productList.OrderByDescending(a => a.ProductName).ToList();
+                                break;
+                            case "perunitprice":
+                                if (sortOrder == "ascending")
+                                    productList = productList.OrderBy(a => a.PerUnitPrice).ToList();
+                                else if (sortOrder == "descending")
+                                    productList = productList.OrderByDescending(a => a.PerUnitPrice).ToList();
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
+                return productList;
             }
             catch (Exception ex)
             {
