@@ -91,9 +91,7 @@ function GetUserProjectList(page) {
 
             $("#dvshowprojectdetail").html(result);
         })
-        .fail(function (error) {
-            toastr.error(error);
-        });
+
 }
 
 GetUserProjectList(1);
@@ -156,9 +154,7 @@ function loadPartialView(page) {
 
             $("#projectListContainer").html(result);
         })
-        .fail(function (error) {
-            toastr.error(error);
-        });
+
 }
 
 loadPartialView(1);
@@ -230,7 +226,7 @@ function UserProfilePhoto() {
                     icon: 'success',
                     confirmButtonColor: '#3085d6',
                     confirmButtonText: 'OK'
-                    
+
                 }).then(function () {
                     window.location = '/UserProfile/UserProfile';
                 });
