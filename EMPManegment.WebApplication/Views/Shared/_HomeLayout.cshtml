@@ -68,8 +68,40 @@
                     <a class="btn btn-sm px-3 fs-16 header-item vertical-menu-btn topnav-hamburger" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
                 </li>
             </ul>
-            <h6 id="dashprojectName" class="text-info mb-0 fs-16" style="margin-top: 9px;margin-left: 10px;">
-                @UserSession.ProjectName
+            <h6 class="text-info mb-0 fs-16" style="margin-top: 9px;margin-left: 10px;">
+                <form id="frmdrpdashbord">
+                    @if (_userSession.UserRoll == "Employee")
+                    {
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-info form-select" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="width: 480px;">
+                                --Selected Project--
+                            </button>
+                            <div class="dropdown-menu" id="drpUserProjectListMenu">
+                                <a class="dropdown-item" href="#" data-value="">--Selected Project--</a>
+                            </div>
+                        </div>
+                        <select class="form-select-lg border-0" id="drpUserProjectList" style="display:none;">
+                            <option selected value="">--Selected Project--</option>
+                        </select>
+
+                    }
+                    else
+                    {
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-info form-select" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="width: 480px;">
+                                --All Projects--
+                            </button>
+                            <div class="dropdown-menu" id="drpUserProjectListMenu">
+                                <a class="dropdown-item" href="#" data-value="">--All Projects--</a>
+                            </div>
+                        </div>
+
+                        <select class="form-select-lg border-0" id="drpProjectName" style="display:none;">
+                            <option selected value="">--All Project--</option>
+                        </select>
+
+                    }
+                </form>
             </h6>
             @{
                 var profilePhoto = UserSession.ProfilePhoto;
@@ -577,9 +609,134 @@
 </html>
 
 
-<script lang="ts" setup>
+<script lang="ts" setup type="text/javascript">
 
     var UserId = '@_userSession.UserId';
     var TodayDate = '@DateTime.Today';
 
+
+    var Role = "@_userSession.UserRoll";
+
+    if (Role == "Employee") {
+        UserProjectList();
+    }
+    else {
+        ProjectListDrp();
+    }
+
+    function UserProjectList() {
+        $.ajax({
+            url: '/Project/GetUserProjectLists',
+            success: function (result) {
+                var $projectMenu = $("#drpUserProjectListMenu");
+                var $hiddenDropdown = $("#drpUserProjectList");
+                $projectMenu.empty();
+                $hiddenDropdown.empty();
+
+                $projectMenu.append('<a class="dropdown-item" href="#" data-value="">--Selected Project--</a>');
+                $hiddenDropdown.append('<option selected value="">--Selected Project--</option>');
+
+                $.each(result, function (i, data) {
+                    $projectMenu.append('<a class="dropdown-item" href="#" data-value="' + data.projectId + '">' + data.projectTitle + ' (' + data.shortName + ')</a>');
+                    $hiddenDropdown.append('<option value="' + data.projectId + '">' + data.projectTitle + ' (' + data.shortName + ')</option>');
+                });
+
+                var selectUserProjectId = sessionStorage.getItem('SelectedUserProjectId');
+                if (selectUserProjectId) {
+                    $('#drpUserProjectList').val(selectUserProjectId).trigger('change');
+                    $('.btn-group .btn').text($('#drpUserProjectList option:selected').text());
+                }
+
+                $('#drpUserProjectListMenu .dropdown-item').click(function () {
+                    var selectedProjectId = $(this).data('value');
+                    var ProjectText = $(this).text();
+
+                    $('.btn-group .btn').text(ProjectText);
+                    $('#drpUserProjectList').val(selectedProjectId).trigger('change');
+                    sessionStorage.setItem('SelectedUserProjectId', selectedProjectId);
+                });
+            }
+        });
+    }
+
+    $('#drpUserProjectList').change(function () {
+        var ProjectText = $(this).find('option:selected').text();
+        var selectedProjectId = $(this).val();
+
+        if (selectedProjectId == "") {
+            ProjectText = " ";
+        }
+
+
+        fn_ChangeProject(selectedProjectId, ProjectText);
+        sessionStorage.setItem('SelectedProjectId', selectedProjectId);
+    });
+
+
+    function ProjectListDrp() {
+        $.ajax({
+            url: '/Project/GetUserProjectLists',
+            success: function (result) {
+                var $projectMenu = $("#drpUserProjectListMenu");
+                var $hiddenDropdown = $("#drpProjectName");
+                $projectMenu.empty();
+                $hiddenDropdown.empty();
+
+                $projectMenu.append('<a class="dropdown-item" href="#" data-value="">--All Projects--</a>');
+                $hiddenDropdown.append('<option selected value="">--All Projects--</option>');
+
+                $.each(result, function (i, data) {
+                    $projectMenu.append('<a class="dropdown-item" href="#" data-value="' + data.projectId + '">' + data.projectTitle + ' (' + data.shortName + ')</a>');
+                    $hiddenDropdown.append('<option value="' + data.projectId + '">' + data.projectTitle + ' (' + data.shortName + ')</option>');
+                });
+
+                var selectUserProjectId = sessionStorage.getItem('SelectedUserProjectId');
+                if (selectUserProjectId) {
+                    $('#drpProjectName').val(selectUserProjectId).trigger('change');
+                    $('.btn-group .btn').text($('#drpProjectName option:selected').text());
+                }
+
+                $('#drpUserProjectListMenu .dropdown-item').click(function () {
+                    var selectedProjectId = $(this).data('value');
+                    var ProjectText = $(this).text();
+
+                    $('.btn-group .btn').text(ProjectText);
+                    $('#drpProjectName').val(selectedProjectId).trigger('change');
+                    sessionStorage.setItem('SelectedUserProjectId', selectedProjectId);
+                });
+            }
+        });
+    }
+
+
+    $('#drpProjectName').change(function () {
+        var ProjectText = $(this).find('option:selected').text();
+        var selectedProjectId = $(this).val();
+
+        if (selectedProjectId == "") {
+            ProjectText = " ";
+        }
+
+
+        fn_ChangeProject(selectedProjectId, ProjectText);
+        sessionStorage.setItem('SelectedProjectId', selectedProjectId);
+    });
+
+
+    function fn_ChangeProject(selectedProjectId, ProjectText) {
+        $.ajax({
+            url: '/Home/ProjectList',
+            type: 'GET',
+            data: {
+                ProjectId: selectedProjectId,
+                ProjectName: ProjectText,
+            },
+            success: function (result) {
+
+            },
+        });
+
+    }
+
 </script>
+

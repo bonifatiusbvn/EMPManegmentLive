@@ -23,16 +23,22 @@ using Azure;
 using System.Diagnostics.Eventing.Reader;
 using Microsoft.Extensions.Logging;
 using EMPManegment.EntityModels.ViewModels.ProjectModels;
+using EMPManegment.EntityModels.Common;
+using Microsoft.Extensions.Configuration;
+using System.Data;
+using System.Data.SqlClient;
+using EMPManegment.EntityModels.ViewModels.ProductMaster;
 
 namespace EMPManegment.Repository.UserAttendanceRepository
 {
     public class UserAttendanceRepo : IUserAttendance
     {
-        public UserAttendanceRepo(BonifatiusEmployeesContext context)
+        public UserAttendanceRepo(BonifatiusEmployeesContext context, IConfiguration configuration)
         {
             Context = context;
+            _configuration = configuration;
         }
-
+        public IConfiguration _configuration { get; }
         public BonifatiusEmployeesContext Context { get; }
 
 
@@ -258,128 +264,48 @@ namespace EMPManegment.Repository.UserAttendanceRepository
         {
             try
             {
-                IEnumerable<UserAttendanceModel> userAttendance = null;
-                if (AttendanceList.UserId != null && AttendanceList.Date == DateTime.MinValue && AttendanceList.StartDate == null && AttendanceList.EndDate == null)
+                List<SqlParameter> parameters = new List<SqlParameter>
                 {
-                    IEnumerable<UserAttendanceModel> userAttendance1 = from a in Context.TblAttendances.OrderByDescending(a => a.Date)
-                                                                       join
-                                                                       b in Context.TblUsers on a.User.Id equals b.Id
-                                                                       where (b.Id == AttendanceList.UserId)
-                                                                       orderby a.Date descending
-                                                                       select new UserAttendanceModel
-                                                                       {
-                                                                           UserName = b.FirstName + ' ' + b.LastName,
-                                                                           UserId = a.UserId,
-                                                                           AttendanceId = a.Id,
-                                                                           Date = a.Date,
-                                                                           Intime = a.Intime,
-                                                                           OutTime = a.OutTime,
-                                                                           TotalHours = a.TotalHours,
-                                                                           CreatedBy = a.CreatedBy,
-                                                                           CreatedOn = a.CreatedOn,
-                                                                       };
-                    return userAttendance1;
-                }
-                else
+                    new SqlParameter("@UserId", AttendanceList.UserId ?? (object)DBNull.Value),
+                    new SqlParameter("@Date", AttendanceList.Date != DateTime.MinValue ? (object)AttendanceList.Date : DBNull.Value),
+                    new SqlParameter("@StartDate", AttendanceList.StartDate ?? (object)DBNull.Value),
+                    new SqlParameter("@EndDate", AttendanceList.EndDate ?? (object)DBNull.Value)
+                };
+
+                string dbConnectionStr = _configuration.GetConnectionString("EMPDbconn");
+                var DS = DbHelper.GetDataSet("GetSearchAttendanceList", CommandType.StoredProcedure, parameters.ToArray(), dbConnectionStr);
+
+                List<UserAttendanceModel> userAttendance = new List<UserAttendanceModel>();
+
+                if (DS != null && DS.Tables.Count > 0)
                 {
-                    if (AttendanceList.Date != null && AttendanceList.UserId != null && AttendanceList.Date != DateTime.MinValue)
+                    foreach (DataRow row in DS.Tables[0].Rows)
                     {
-                        userAttendance = from a in Context.TblAttendances.OrderByDescending(a => a.Date)
-                                         join b in Context.TblUsers on a.User.Id equals b.Id
-                                         where (b.Id == AttendanceList.UserId && a.Date == AttendanceList.Date)
-                                         orderby a.Date descending
-                                         select new UserAttendanceModel
-                                         {
-                                             UserName = b.FirstName + ' ' + b.LastName,
-                                             UserId = a.UserId,
-                                             AttendanceId = a.Id,
-                                             Date = a.Date,
-                                             Intime = a.Intime,
-                                             OutTime = a.OutTime,
-                                             TotalHours = a.TotalHours,
-                                             CreatedBy = a.CreatedBy,
-                                             CreatedOn = a.CreatedOn,
-                                         };
-
-                        return userAttendance;
-                    }
-                    else
-                    {
-                        if (AttendanceList.Date != null && AttendanceList.UserId == null && AttendanceList.Date != DateTime.MinValue)
+                        UserAttendanceModel attendance = new UserAttendanceModel
                         {
-                            userAttendance = from a in Context.TblAttendances.OrderByDescending(a => a.Date)
-                                             join b in Context.TblUsers on a.User.Id equals b.Id
-                                             where (a.Date == AttendanceList.Date)
-                                             orderby a.Date descending
-                                             select new UserAttendanceModel
-                                             {
-                                                 UserName = b.FirstName + ' ' + b.LastName,
-                                                 UserId = a.UserId,
-                                                 AttendanceId = a.Id,
-                                                 Date = a.Date,
-                                                 Intime = a.Intime,
-                                                 OutTime = a.OutTime,
-                                                 TotalHours = a.TotalHours,
-                                                 CreatedBy = a.CreatedBy,
-                                                 CreatedOn = a.CreatedOn,
-                                             };
+                            UserName = row["UserName"]?.ToString(),
+                            UserId = row["UserId"] != DBNull.Value ? (Guid)row["UserId"] : Guid.Empty,
+                            AttendanceId = row["AttendanceId"] != DBNull.Value ? (int)row["AttendanceId"] : (int?)null,
+                            Date = row["Date"] != DBNull.Value ? (DateTime)row["Date"] : DateTime.MinValue,
+                            Intime = row["Intime"] != DBNull.Value ? (DateTime)row["Intime"] : DateTime.MinValue,
+                            OutTime = row["OutTime"] != DBNull.Value ? (DateTime?)row["OutTime"] : null,
+                            TotalHours = row["TotalHours"] != DBNull.Value ? (TimeSpan?)row["TotalHours"] : null,
 
-                            return userAttendance;
-                        }
-                        else
-                        {
-                            if (AttendanceList.UserId != null && AttendanceList.StartDate != null && AttendanceList.EndDate != null && AttendanceList.StartDate != DateTime.MinValue && AttendanceList.EndDate != DateTime.MinValue)
-                            {
-                                userAttendance = from a in Context.TblAttendances.OrderByDescending(a => a.Date)
-                                                 join b in Context.TblUsers on a.User.Id equals b.Id
-                                                 where (b.Id == AttendanceList.UserId && a.Date >= AttendanceList.StartDate && a.Date <= AttendanceList.EndDate)
-                                                 orderby a.Date descending
-                                                 select new UserAttendanceModel
-                                                 {
-                                                     UserName = b.FirstName + ' ' + b.LastName,
-                                                     UserId = a.UserId,
-                                                     AttendanceId = a.Id,
-                                                     Date = a.Date,
-                                                     Intime = a.Intime,
-                                                     OutTime = a.OutTime,
-                                                     TotalHours = a.TotalHours,
-                                                     CreatedBy = a.CreatedBy,
-                                                     CreatedOn = a.CreatedOn,
-                                                 };
-
-                                return userAttendance;
-                            }
-                            else
-                            {
-                                var AttendanceDataTable = from a in Context.TblAttendances.OrderByDescending(a => a.Date)
-                                                          join
-                                                          b in Context.TblUsers on a.UserId equals b.Id
-                                                          orderby a.Date descending
-                                                          select new UserAttendanceModel
-                                                          {
-                                                              UserName = b.FirstName + ' ' + b.LastName,
-                                                              UserId = a.UserId,
-                                                              AttendanceId = a.Id,
-                                                              Date = a.Date,
-                                                              Intime = a.Intime,
-                                                              OutTime = a.OutTime,
-                                                              TotalHours = a.TotalHours,
-                                                              CreatedBy = a.CreatedBy,
-                                                              CreatedOn = a.CreatedOn,
-
-                                                          };
-
-                                return AttendanceDataTable;
-                            }
-                        }
+                        };
+                        userAttendance.Add(attendance);
                     }
                 }
+
+                return userAttendance;
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw new Exception("Error fetching attendance list", ex);
             }
         }
+
+
+
     }
 }
 

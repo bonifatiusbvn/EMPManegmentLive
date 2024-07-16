@@ -401,68 +401,54 @@ namespace EMPManegment.Repository.ProductMaster
 
         public async Task<IEnumerable<ProductDetailsView>> GetAllProductList(string? sortBy)
         {
-            List<ProductDetailsView> Product = new List<ProductDetailsView>();
             try
             {
-                Product = (from a in Context.TblProductDetailsMasters.Where(a => a.IsDeleted == false)
-                           join b in Context.TblProductTypeMasters
-                           on a.ProductType equals b.Id
-                           orderby a.ProductName ascending
-                           select new ProductDetailsView
-                           {
-                               Id = a.Id,
-                               ProductType = a.ProductType,
-                               ProductTypeName = b.Type,
-                               ProductName = a.ProductName,
-                               ProductDescription = a.ProductDescription,
-                               ProductShortDescription = a.ProductShortDescription,
-                               ProductImage = a.ProductImage,
-                               PerUnitPrice = a.PerUnitPrice,
-                               IsWithGst = a.IsWithGst,
-                               GstPercentage = a.GstPercentage,
-                               GstAmount = a.GstAmount,
-                               Hsn = a.Hsn,
-                               CreatedBy = a.CreatedBy,
-                           }).ToList();
-                if (string.IsNullOrEmpty(sortBy))
+                string dbConnectionStr = _configuration.GetConnectionString("EMPDbconn");
+                var sqlPar = new SqlParameter[]
                 {
-                    Product = Product.OrderByDescending(a => a.CreatedOn).ToList();
-                }
-                else
-                {
-                    string sortOrder = sortBy.StartsWith("Ascending", StringComparison.OrdinalIgnoreCase) ? "ascending" :
-                                       sortBy.StartsWith("Descending", StringComparison.OrdinalIgnoreCase) ? "descending" :
-                                       string.Empty;
+                   new SqlParameter("@SortBy", sortBy ?? (object)DBNull.Value),
+                };
 
-                    if (!string.IsNullOrEmpty(sortOrder))
+
+                var DS = DbHelper.GetDataSet("GetAllProductList", CommandType.StoredProcedure, sqlPar, dbConnectionStr);
+
+                List<ProductDetailsView> products = new List<ProductDetailsView>();
+
+                if (DS != null && DS.Tables.Count > 0)
+                {
+                    foreach (DataRow row in DS.Tables[0].Rows)
                     {
-                        string field = sortBy.Substring(sortOrder.Length).Trim();
-                        switch (field.ToLower())
+                        ProductDetailsView product = new ProductDetailsView
                         {
-                            case "productname":
-                                if (sortOrder == "ascending")
-                                    Product = Product.OrderBy(a => a.ProductName).ToList();
-                                else if (sortOrder == "descending")
-                                    Product = Product.OrderByDescending(a => a.ProductName).ToList();
-                                break;
-                            case "perunitprice":
-                                if (sortOrder == "ascending")
-                                    Product = Product.OrderBy(a => a.PerUnitPrice).ToList();
-                                else if (sortOrder == "descending")
-                                    Product = Product.OrderByDescending(a => a.PerUnitPrice).ToList();
-                                break;
-                            default:
-                                break;
-                        }
+                            Id = row["Id"] != DBNull.Value ? (Guid)row["Id"] : Guid.Empty,
+                            ProductType = row["ProductType"] != DBNull.Value ? (int)row["ProductType"] : (int?)null,
+                            ProductTypeName = row["ProductTypeName"]?.ToString(),
+                            ProductName = row["ProductName"]?.ToString(),
+                            ProductDescription = row["ProductDescription"]?.ToString(),
+                            ProductShortDescription = row["ProductShortDescription"]?.ToString(),
+                            ProductImage = row["ProductImage"]?.ToString(),
+                            PerUnitPrice = row["PerUnitPrice"] != DBNull.Value ? (decimal)row["PerUnitPrice"] : 0m,
+                            IsWithGst = row["IsWithGst"] != DBNull.Value ? (bool)row["IsWithGst"] : false,
+                            GstPercentage = row["GstPercentage"] != DBNull.Value ? (decimal)row["GstPercentage"] : 0m,
+                            GstAmount = row["GstAmount"] != DBNull.Value ? (decimal)row["GstAmount"] : 0m,
+                            Hsn = row["Hsn"] != DBNull.Value ? (int?)row["Hsn"] : null,
+                            CreatedBy = row["CreatedBy"] != DBNull.Value ? (Guid)row["CreatedBy"] : Guid.Empty,
+                            CreatedOn = row["CreatedOn"] != DBNull.Value ? (DateTime)row["CreatedOn"] : DateTime.MinValue,
+                        };
+
+                        products.Add(product);
                     }
                 }
-                return Product;
+
+                return products;
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw new Exception("Error fetching product list", ex);
             }
         }
+
+
 
         public async Task<UserResponceModel> DeleteProductDetails(Guid ProductId)
         {

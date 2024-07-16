@@ -224,69 +224,66 @@ namespace EMPManegment.Repository.ExponseMasterRepository
             UserResponceModel response = new UserResponceModel();
             try
             {
+                TblExpenseMaster expense = new TblExpenseMaster
+                {
+                    Id = Guid.NewGuid(),
+                    UserId = ExpenseDetails.UserId,
+                    ExpenseType = ExpenseDetails.ExpenseType,
+                    TotalAmount = ExpenseDetails.TotalAmount,
+                    IsDeleted = false,
+                    CreatedBy = ExpenseDetails.CreatedBy,
+                    CreatedOn = DateTime.Now,
+                    PaymentType = 1
+                };
+
                 if (ExpenseDetails.Account == "Debit")
                 {
-                    var expense = new TblExpenseMaster()
+                    expense.BillNumber = ExpenseDetails.BillNumber;
+                    expense.Description = ExpenseDetails.Description;
+                    expense.Date = ExpenseDetails.Date;
+                    expense.Image = ExpenseDetails.Image;
+
+                    if (ExpenseDetails.Role == "Account" || ExpenseDetails.Role == "Super Admin")
                     {
-                        Id = Guid.NewGuid(),
-                        UserId = ExpenseDetails.UserId,
-                        ExpenseType = ExpenseDetails.ExpenseType,
-                        BillNumber = ExpenseDetails.BillNumber,
-                        Description = ExpenseDetails.Description,
-                        Date = ExpenseDetails.Date,
-                        TotalAmount = ExpenseDetails.TotalAmount,
-                        Image = ExpenseDetails.Image,
-                        Account = ExpenseDetails.Account,
-                        IsDeleted = false,
-                        CreatedBy = ExpenseDetails.CreatedBy,
-                        IsPaid = false,
-                        IsApproved = false,
-                        CreatedOn = DateTime.Now,
-                        PaymentType = 1,
-
-                    };
-
-                    response.Message = "Expense add successfully!";
-                    Context.TblExpenseMasters.Add(expense);
-                    Context.SaveChanges();
+                        expense.Account = "Credit";
+                        expense.IsPaid = true;
+                        expense.IsApproved = true;
+                    }
+                    else
+                    {
+                        expense.Account = ExpenseDetails.Account;
+                        expense.IsPaid = false;
+                        expense.IsApproved = false;
+                    }
                 }
                 else
                 {
-                    var expense = new TblExpenseMaster()
-                    {
-                        Id = Guid.NewGuid(),
-                        UserId = ExpenseDetails.UserId,
-                        ExpenseType = ExpenseDetails.ExpenseType,
-                        Description = "Expense Paid",
-                        BillNumber = "BTPLBILL",
-                        Date = DateTime.Today,
-                        TotalAmount = ExpenseDetails.TotalAmount,
-                        Account = ExpenseDetails.Account,
-                        PaymentType = ExpenseDetails.PaymentType,
-                        IsDeleted = false,
-                        CreatedBy = ExpenseDetails.CreatedBy,
-                        IsPaid = false,
-                        CreatedOn = DateTime.Now,
-                        IsApproved = true,
-                        ApprovedBy = ExpenseDetails.ApprovedBy,
-                        ApprovedByName = ExpenseDetails.ApprovedByName,
-                        ApprovedDate = DateTime.Now,
-                    };
-
-                    response.Message = "Expense add successfully!";
-                    Context.TblExpenseMasters.Add(expense);
-                    Context.SaveChanges();
-
+                    expense.BillNumber = "BTPLBILL";
+                    expense.Description = "Expense Paid";
+                    expense.Date = DateTime.Today;
+                    expense.Account = ExpenseDetails.Account;
+                    expense.PaymentType = ExpenseDetails.PaymentType;
+                    expense.IsPaid = false;
+                    expense.IsApproved = true;
+                    expense.ApprovedBy = ExpenseDetails.ApprovedBy;
+                    expense.ApprovedByName = ExpenseDetails.ApprovedByName;
+                    expense.ApprovedDate = DateTime.Now;
                 }
 
+                response.Message = "Expense added successfully!";
+                Context.TblExpenseMasters.Add(expense);
+                await Context.SaveChangesAsync();
             }
             catch (Exception ex)
             {
                 response.Code = (int)HttpStatusCode.InternalServerError;
-                response.Message = "Error in adding expense";
+                response.Message = $"Error in adding expense: {ex.Message}";
             }
             return response;
         }
+
+
+
 
         public async Task<UserResponceModel> GetExpenseDetailById(Guid Id)
         {
@@ -431,7 +428,7 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                 {
                     model.Code = (int)HttpStatusCode.NotFound;
                     model.Message = "Can't Find Expense Details";
-                }                
+                }
             }
             catch (Exception ex)
             {
