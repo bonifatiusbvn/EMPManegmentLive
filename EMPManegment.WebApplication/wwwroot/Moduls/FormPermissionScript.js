@@ -211,7 +211,7 @@ function createRole() {
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'OK'
                     }).then(function () {
-                        window.location = '/UserProfile/RolewisePermission';
+                        window.location = '/UserProfile/FormPermission';
                     });
                 }
                 else {
