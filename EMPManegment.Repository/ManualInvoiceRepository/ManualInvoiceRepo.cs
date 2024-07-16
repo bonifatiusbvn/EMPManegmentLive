@@ -17,6 +17,9 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Security.Cryptography.Xml;
+using EMPManegment.EntityModels.ViewModels.UserModels;
+using EMPManegment.EntityModels.ViewModels.TaskModels;
+using System.Diagnostics;
 
 #nullable disable
 
@@ -108,60 +111,50 @@ namespace EMPManegment.Repository.ManualInvoiceRepository
         {
             try
             {
-                var mInvoicelist = Context.TblManualInvoices
-                    .Where(a => a.IsDeleted != true)
-                    .OrderByDescending(a => a.CreatedOn)
-                    .Select(a => new ManualInvoiceModel
-                    {
-                        Id = a.Id,
-                        InvoiceNo = a.InvoiceNo,
-                        InvoiceDate = a.InvoiceDate,
-                        VendorName = a.VendorName,
-                        VendorPhoneNo = a.VendorPhoneNo,
-                        VendorGstNo = a.VendorGstNo,
-                        CompanyName = a.CompanyName,
-                        CompanyAddress = a.CompanyAddress,
-                        CompanyGstNo = a.CompanyGstNo,
-                        ProjectId = a.ProjectId,
-                        DispatchThrough = a.DispatchThrough,
-                        Cgst = a.Cgst,
-                        Igst = a.Igst,
-                        Sgst = a.Sgst,
-                        BuyesOrderNo = a.BuyesOrderNo,
-                        BuyesOrderDate = a.BuyesOrderDate,
-                        TotalAmount = a.TotalAmount,
-                        CreatedOn = a.CreatedOn,
-                        CreatedBy = a.CreatedBy,
-                        UpdatedOn = a.UpdatedOn,
-                        UpdatedBy = a.UpdatedBy,
-                        TotalGst = a.TotalGst,
-                        PaymentMethod = a.PaymentMethod,
-                        PaymentStatus = a.PaymentStatus,
-                        ShippingAddress = a.ShippingAddress,
-                        RoundOff = a.RoundOff,
-                    });
+                string dbConnectionStr = _configuration.GetConnectionString("EMPDbconn");
 
-                if (!string.IsNullOrEmpty(dataTable.searchValue))
+                var dataSet = DbHelper.GetDataSet("GetManualInvoiceList", CommandType.StoredProcedure, new SqlParameter[] { }, dbConnectionStr);
+
+                var mInvoiceList = ConvertDataSetToMInvoiceList(dataSet);
+
+                if (!string.IsNullOrEmpty(dataTable.searchValue.ToLower()))
                 {
-                    var searchValueLower = dataTable.searchValue.ToLower();
-                    mInvoicelist = mInvoicelist.Where(e =>
-                        e.VendorName.ToLower().Contains(searchValueLower) ||
-                        e.InvoiceNo.ToLower().Contains(searchValueLower) ||
-                        e.ProjectName.ToLower().Contains(searchValueLower) ||
-                        e.TotalAmount.ToString().Contains(searchValueLower)
-                    );
+                    mInvoiceList = mInvoiceList.Where(e =>
+                        e.VendorName.Contains(dataTable.searchValue.ToLower(), StringComparison.OrdinalIgnoreCase) ||
+                        e.CompanyName.Contains(dataTable.searchValue.ToLower(), StringComparison.OrdinalIgnoreCase) ||
+                        e.InvoiceNo.Contains(dataTable.searchValue.ToLower(), StringComparison.OrdinalIgnoreCase) ||
+                        e.ProjectName.Contains(dataTable.searchValue.ToLower(), StringComparison.OrdinalIgnoreCase)).ToList();
                 }
+
+                IQueryable<ManualInvoiceModel> queryablemInvoiceDetails = mInvoiceList.AsQueryable();
 
                 if (!string.IsNullOrEmpty(dataTable.sortColumn) && !string.IsNullOrEmpty(dataTable.sortColumnDir))
                 {
-                    mInvoicelist = dataTable.sortColumnDir == "asc"
-                        ? mInvoicelist.OrderBy(e => EF.Property<object>(e, dataTable.sortColumn))
-                        : mInvoicelist.OrderByDescending(e => EF.Property<object>(e, dataTable.sortColumn));
+                    switch (dataTable.sortColumn.ToLower())
+                    {
+                        case "createdon":
+                            queryablemInvoiceDetails = dataTable.sortColumnDir == "asc" ? queryablemInvoiceDetails.OrderBy(e => e.CreatedOn) : queryablemInvoiceDetails.OrderByDescending(e => e.CreatedOn);
+                            break;
+                        case "companyname":
+                            queryablemInvoiceDetails = dataTable.sortColumnDir == "asc" ? queryablemInvoiceDetails.OrderBy(e => e.CompanyName) : queryablemInvoiceDetails.OrderByDescending(e => e.CompanyName);
+                            break;
+                        case "vendorname":
+                            queryablemInvoiceDetails = dataTable.sortColumnDir == "asc" ? queryablemInvoiceDetails.OrderBy(e => e.VendorName) : queryablemInvoiceDetails.OrderByDescending(e => e.VendorName);
+                            break;
+                        case "invoiceno":
+                            queryablemInvoiceDetails = dataTable.sortColumnDir == "asc" ? queryablemInvoiceDetails.OrderBy(e => e.InvoiceNo) : queryablemInvoiceDetails.OrderByDescending(e => e.InvoiceNo);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                else
+                {
+                    queryablemInvoiceDetails = queryablemInvoiceDetails.OrderByDescending(e => e.CreatedOn);
                 }
 
-                var filteredData = await mInvoicelist.ToListAsync();
-
-                var totalRecord = filteredData.Count;
+                var totalRecord = queryablemInvoiceDetails.Count();
+                var filteredData = queryablemInvoiceDetails.Skip(dataTable.skip).Take(dataTable.pageSize).ToList();
 
                 var jsonData = new jsonData
                 {
@@ -179,6 +172,48 @@ namespace EMPManegment.Repository.ManualInvoiceRepository
             }
         }
 
+        private List<ManualInvoiceModel> ConvertDataSetToMInvoiceList(DataSet dataSet)
+        {
+            var mInvoiceDetails = new List<ManualInvoiceModel>();
+            try
+            {
+                foreach (DataRow row in dataSet.Tables[0].Rows)
+                {
+                    var manualInvoice = new ManualInvoiceModel
+                    {
+                        Id = Guid.Parse(row["Id"].ToString()),
+                        InvoiceNo = row["InvoiceNo"]?.ToString(),
+                        VendorName = row["VendorName"]?.ToString(),
+                        VendorAddress = row["VendorAddress"]?.ToString(),
+                        VendorGstNo = row["VendorGstNo"]?.ToString(),
+                        VendorPhoneNo = row["VendorPhoneNo"]?.ToString(),
+                        CompanyName = row["CompanyName"]?.ToString(),
+                        CompanyAddress = row["CompanyAddress"]?.ToString(),
+                        CompanyGstNo = row["CompanyGstNo"]?.ToString(),
+                        TotalAmount = Convert.ToDecimal(row["TotalAmount"]),
+                        InvoiceDate = Convert.ToDateTime(row["InvoiceDate"]),
+                        ProjectId = row["ProjectId"] != DBNull.Value ? (Guid)row["ProjectId"] : Guid.Empty,
+                        BuyesOrderDate = row["BuyesOrderDate"] != DBNull.Value ? (DateTime)row["BuyesOrderDate"] : DateTime.MinValue,
+                        BuyesOrderNo = row["BuyesOrderNo"]?.ToString(),
+                        DispatchThrough = row["DispatchThrough"]?.ToString(),
+                        TotalGst = Convert.ToDecimal(row["TotalGst"]),
+                        RoundOff = row["RoundOff"] != DBNull.Value ? (decimal)row["RoundOff"] : 0m,
+                        PaymentMethod = row["PaymentMethod"] != DBNull.Value ? (int)row["PaymentMethod"] : 0,
+                        PaymentStatus = row["PaymentStatus"] != DBNull.Value ? (int)row["PaymentStatus"] : 0,
+                        ShippingAddress = row["ShippingAddress"]?.ToString(),
+                        CreatedBy = Guid.Parse(row["CreatedBy"].ToString()),
+                        CreatedOn = Convert.ToDateTime(row["CreatedOn"])
+                    };
+                    mInvoiceDetails.Add(manualInvoice);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            return mInvoiceDetails;
+        }
 
         public async Task<ManualInvoiceMasterModel> GetManualInvoiceDetails(Guid InvoiceId)
         {

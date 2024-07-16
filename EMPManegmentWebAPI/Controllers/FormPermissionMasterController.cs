@@ -129,7 +129,7 @@ namespace EMPManagment.API.Controllers
             try
             {
                 var Form = RolewisePermissionMaster.CreateRolewisePermissionForm(FormId, userId);
-                if (Form.Result.code != (int)HttpStatusCode.NotFound || Form.Result.code != (int)HttpStatusCode.InternalServerError)
+                if (Form.Result.code != (int)HttpStatusCode.NotFound && Form.Result.code != (int)HttpStatusCode.InternalServerError)
                 {
                     response.code = (int)HttpStatusCode.OK;
                     response.message = Form.Result.message;

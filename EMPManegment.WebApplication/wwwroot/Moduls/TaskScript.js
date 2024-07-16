@@ -529,7 +529,7 @@ $(document).ready(function () {
             "bDestroy": true,
             ajax: {
                 type: "POST",
-                url: '/Task/TaskDetailsDataTable',
+                url: '/Task/GetAllTaskList',
                 dataType: 'json',
             },
             columns: [

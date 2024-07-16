@@ -2,7 +2,9 @@
 using EMPManagment.API;
 using EMPManegment.EntityModels.Common;
 using EMPManegment.EntityModels.View_Model;
+using EMPManegment.EntityModels.ViewModels.FormPermissionMaster;
 using EMPManegment.EntityModels.ViewModels.Models;
+using EMPManegment.EntityModels.ViewModels.ProductMaster;
 using EMPManegment.EntityModels.ViewModels.ProjectModels;
 using EMPManegment.EntityModels.ViewModels.TaskModels;
 using EMPManegment.EntityModels.ViewModels.UserModels;
@@ -80,87 +82,104 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
         }
         public async Task<IEnumerable<ProjectDetailView>> GetProjectList(string? searchby, string? searchfor)
         {
+            try
+            {
+                string dbConnectionStr = _configuration.GetConnectionString("EMPDbconn");
 
-            IEnumerable<ProjectDetailView> data = Context.TblProjectMasters.OrderByDescending(x => x.CreatedOn).ToList().Select(a => new ProjectDetailView
-            {
-                ProjectId = a.ProjectId,
-                ProjectType = a.ProjectType,
-                ProjectTitle = a.ProjectTitle,
-                ShortName = a.ShortName,
-                ProjectHead = a.ProjectHead,
-                ProjectDescription = a.ProjectDescription,
-                BuildingName = a.BuildingName,
-                Area = a.Area,
-                City = a.City,
-                State = a.State,
-                Country = a.Country,
-                ProjectImage = a.ProjectImage,
-                PinCode = a.PinCode,
-                ProjectPath = a.ProjectPath,
-                ProjectPriority = a.ProjectPriority,
-                ProjectStatus = a.ProjectStatus,
-                ProjectStartDate = a.ProjectStartDate,
-                ProjectEndDate = a.ProjectEndDate,
-                ProjectDeadline = a.ProjectDeadline,
-                CreatedOn = a.CreatedOn
-            });
+                var DS = DbHelper.GetDataSet("GetProjectList", CommandType.StoredProcedure, new SqlParameter[] { }, dbConnectionStr);
 
-            if (searchby == "ProjectTitle" && searchfor != null)
-            {
-                data = data.Where(ser => ser.ProjectTitle.ToLower().Contains(searchfor.ToLower())).ToList();
+                List<ProjectDetailView> projectList = new List<ProjectDetailView>();
+
+                if (DS != null && DS.Tables.Count > 0)
+                {
+                    foreach (DataRow row in DS.Tables[0].Rows)
+                    {
+                        var projectDetails = new ProjectDetailView
+                        {
+                            ProjectId = row["ProjectId"] != DBNull.Value ? (Guid)row["ProjectId"] : Guid.Empty,
+                            ProjectType = row["ProjectType"]?.ToString(),
+                            ProjectTitle = row["ProjectTitle"]?.ToString(),
+                            ShortName = row["ShortName"]?.ToString(),
+                            ProjectHead = row["ProjectHead"]?.ToString(),
+                            ProjectDescription = row["ProjectDescription"]?.ToString(),
+                            BuildingName = row["BuildingName"]?.ToString(),
+                            Area = row["Area"]?.ToString(),
+                            City = row["City"] != DBNull.Value ? (int)row["City"] : 0,
+                            State = row["State"] != DBNull.Value ? (int)row["State"] : 0,
+                            Country = row["Country"] != DBNull.Value ? (int)row["Country"] : 0,
+                            ProjectImage = row["ProjectImage"]?.ToString(),
+                            ProjectPath = row["ProjectPath"]?.ToString(),
+                            ProjectPriority = row["ProjectPath"]?.ToString(),
+                            ProjectStatus = row["ProjectStatus"]?.ToString(),
+                            ProjectStartDate = row["ProjectStartDate"] != DBNull.Value ? (DateTime)row["ProjectStartDate"] : DateTime.MinValue,
+                            ProjectEndDate = row["ProjectEndDate"] != DBNull.Value ? (DateTime)row["ProjectEndDate"] : DateTime.MinValue,
+                            ProjectDeadline = row["ProjectDeadline"] != DBNull.Value ? (DateTime)row["ProjectDeadline"] : DateTime.MinValue,
+                            CreatedOn = row["CreatedOn"] != DBNull.Value ? (DateTime)row["CreatedOn"] : DateTime.MinValue,
+
+                        };
+                        projectList.Add(projectDetails);
+                    }
+                }
+
+                if (searchby == "ProjectTitle" && searchfor != null)
+                {
+                    projectList = projectList.Where(ser => ser.ProjectTitle.ToLower().Contains(searchfor.ToLower())).ToList();
+                }
+                if (searchby == "ProjectStatus" && searchfor != null)
+                {
+                    projectList = projectList.Where(ser => ser.ProjectStatus.ToLower().Contains(searchfor.ToLower())).ToList();
+                }
+                return projectList;
             }
-            if (searchby == "ProjectStatus" && searchfor != null)
+            catch (Exception ex)
             {
-                data = data.Where(ser => ser.ProjectStatus.ToLower().Contains(searchfor.ToLower())).ToList();
+                throw ex;
             }
-            return data;
         }
 
         public async Task<List<ProjectView>> GetUserProjectList(Guid UserId)
         {
-            var UserData = new List<ProjectView>();
-            var data = await (from a in Context.TblProjectMembers
-                              join b in Context.TblProjectMasters
-                              on a.ProjectId equals b.ProjectId
-                              where a.UserId == UserId && a.IsDeleted != true
-                              select new
-                              {
-                                  a.Id,
-                                  a.ProjectId,
-                                  b.ProjectType,
-                                  b.ProjectTitle,
-                                  b.ProjectStatus,
-                                  a.CreatedOn,
-                                  a.UserId,
-                                  b.ProjectStartDate,
-                                  b.ProjectEndDate,
-                                  b.ProjectDescription,
-                                  b.ProjectImage,
-                                  b.ShortName,
-                              }).ToListAsync();
-
-            if (data != null)
+            try
             {
-                foreach (var item in data)
-                {
-                    UserData.Add(new ProjectView()
-                    {
-                        Id = item.Id,
-                        ProjectId = item.ProjectId,
-                        ProjectType = item.ProjectType,
-                        ProjectTitle = item.ProjectTitle,
-                        Status = item.ProjectStatus,
-                        CreatedOn = item.CreatedOn,
-                        UserId = item.UserId,
-                        StartDate = item.ProjectStartDate,
-                        EndDate = item.ProjectEndDate,
-                        ProjectDescription = item.ProjectDescription,
-                        ShortName = item.ShortName,
+                string dbConnectionStr = _configuration.GetConnectionString("EMPDbconn");
 
-                    });
+                var sqlPar = new SqlParameter[]
+                {
+                   new SqlParameter("@UserId", UserId),
+                };
+
+                var DS = DbHelper.GetDataSet("GetProjectListByUserId", CommandType.StoredProcedure, sqlPar, dbConnectionStr);
+
+                List<ProjectView> ProjectList = new List<ProjectView>();
+
+                if (DS != null && DS.Tables.Count > 0)
+                {
+                    foreach (DataRow row in DS.Tables[0].Rows)
+                    {
+                        var projectDetails = new ProjectView
+                        {
+                            Id = row["Id"] != DBNull.Value ? (Guid)row["Id"] : Guid.Empty,
+                            ProjectId = row["ProjectId"] != DBNull.Value ? (Guid)row["ProjectId"] : Guid.Empty,
+                            ProjectType = row["ProjectType"]?.ToString(),
+                            ProjectTitle = row["ProjectTitle"]?.ToString(),
+                            Status = row["ProjectStatus"]?.ToString(),
+                            ProjectDescription = row["ProjectDescription"]?.ToString(),
+                            Image = row["ProjectImage"]?.ToString(),
+                            ShortName = row["ShortName"]?.ToString(),
+                            UserId = row["UserId"] != DBNull.Value ? (Guid)row["UserId"] : Guid.Empty,
+                            StartDate = row["ProjectStartDate"] != DBNull.Value ? (DateTime)row["ProjectStartDate"] : DateTime.MinValue,
+                            EndDate = row["ProjectEndDate"] != DBNull.Value ? (DateTime)row["ProjectEndDate"] : DateTime.MinValue,
+                            CreatedOn = row["CreatedOn"] != DBNull.Value ? (DateTime)row["CreatedOn"] : DateTime.MinValue
+                        };
+                        ProjectList.Add(projectDetails);
+                    }
                 }
+                return ProjectList;
             }
-            return UserData;
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         public async Task<ProjectDetailView> GetProjectDetailsById(Guid ProjectId)
@@ -218,14 +237,34 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
 
         public async Task<IEnumerable<EmpDetailsView>> GetAllMembers()
         {
-            IEnumerable<EmpDetailsView> data = Context.TblUsers.Where(a => a.IsActive == true).ToList().Select(a => new EmpDetailsView
+            try
             {
-                Id = a.Id,
-                FirstName = a.FirstName,
-                LastName = a.LastName,
-                Image = a.Image,
-            }).Take(10);
-            return data;
+                string dbConnectionStr = _configuration.GetConnectionString("EMPDbconn");
+
+                var DS = DbHelper.GetDataSet("GetActiveDeactiveUserList", CommandType.StoredProcedure, new SqlParameter[] { }, dbConnectionStr);
+
+                List<EmpDetailsView> UserList = new List<EmpDetailsView>();
+
+                if (DS != null && DS.Tables.Count > 0)
+                {
+                    foreach (DataRow row in DS.Tables[0].Rows)
+                    {
+                        var userDetails = new EmpDetailsView
+                        {
+                            Id = row["Id"] != DBNull.Value ? (Guid)row["Id"] : Guid.Empty,
+                            Image = row["Image"]?.ToString(),
+                            FirstName = row["FirstName"]?.ToString(),
+                            LastName = row["LastName"]?.ToString(),
+                        };
+                        UserList.Add(userDetails);
+                    }
+                }
+                return UserList.Take(10);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         public async Task<UserResponceModel> AddMemberToProject(ProjectMemberMasterView AddMember)
@@ -406,59 +445,57 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
 
         public async Task<List<ProjectDetailView>> GetProjectListById(string? searchby, string? searchfor, Guid UserId)
         {
-            var UserData = new List<ProjectDetailView>();
-            var data = await (from projectDetail in Context.TblProjectMembers
-                              join projectMaster in Context.TblProjectMasters
-                              on projectDetail.ProjectId equals projectMaster.ProjectId
-                              where projectDetail.UserId == UserId && projectDetail.IsDeleted != true
-                              select new
-                              {
-                                  projectDetail.Id,
-                                  projectDetail.ProjectId,
-                                  projectMaster.ProjectType,
-                                  projectMaster.ProjectTitle,
-                                  projectMaster.ProjectStatus,
-                                  projectDetail.CreatedOn,
-                                  projectDetail.UserId,
-                                  projectMaster.ProjectStartDate,
-                                  projectMaster.ProjectEndDate,
-                                  projectMaster.ProjectDeadline,
-                                  projectMaster.ProjectDescription,
-                                  projectDetail.IsDeleted,
-                                  projectMaster.ProjectImage,
-                                  projectMaster.ShortName,
-                              }).ToListAsync();
+            try
+            {
+                string dbConnectionStr = _configuration.GetConnectionString("EMPDbconn");
 
-            if (data != null)
-            {
-                foreach (var item in data)
+                var sqlPar = new SqlParameter[]
                 {
-                    UserData.Add(new ProjectDetailView()
+                   new SqlParameter("@UserId", UserId),
+                };
+
+                var DS = DbHelper.GetDataSet("GetProjectListByUserId", CommandType.StoredProcedure, sqlPar, dbConnectionStr);
+
+                List<ProjectDetailView> ProjectList = new List<ProjectDetailView>();
+
+                if (DS != null && DS.Tables.Count > 0)
+                {
+                    foreach (DataRow row in DS.Tables[0].Rows)
                     {
-                        Id = item.Id,
-                        ProjectId = item.ProjectId,
-                        ProjectType = item.ProjectType,
-                        ProjectTitle = item.ProjectTitle,
-                        ProjectStatus = item.ProjectStatus,
-                        CreatedOn = item.CreatedOn,
-                        UserId = item.UserId,
-                        ProjectStartDate = item.ProjectStartDate,
-                        ProjectDeadline = item.ProjectDeadline,
-                        ProjectDescription = item.ProjectDescription,
-                        ProjectImage = item.ProjectImage,
-                        ShortName = item.ShortName,
-                    });
+                        var projectDetails = new ProjectDetailView
+                        {
+                            Id = row["Id"] != DBNull.Value ? (Guid)row["Id"] : Guid.Empty,
+                            ProjectId = row["ProjectId"] != DBNull.Value ? (Guid)row["ProjectId"] : Guid.Empty,
+                            ProjectType = row["ProjectType"]?.ToString(),
+                            ProjectTitle = row["ProjectTitle"]?.ToString(),
+                            ProjectStatus = row["ProjectStatus"]?.ToString(),
+                            ProjectDescription = row["ProjectDescription"]?.ToString(),
+                            ProjectImage = row["ProjectImage"]?.ToString(),
+                            ShortName = row["ShortName"]?.ToString(),
+                            UserId = row["UserId"] != DBNull.Value ? (Guid)row["UserId"] : Guid.Empty,
+                            ProjectStartDate = row["ProjectStartDate"] != DBNull.Value ? (DateTime)row["ProjectStartDate"] : DateTime.MinValue,
+                            ProjectEndDate = row["ProjectEndDate"] != DBNull.Value ? (DateTime)row["ProjectEndDate"] : DateTime.MinValue,
+                            ProjectDeadline = row["ProjectDeadline"] != DBNull.Value ? (DateTime)row["ProjectDeadline"] : DateTime.MinValue,
+                            CreatedOn = row["CreatedOn"] != DBNull.Value ? (DateTime)row["CreatedOn"] : DateTime.MinValue
+                        };
+                        ProjectList.Add(projectDetails);
+                    }
                 }
+
+                if (searchby == "ProjectTitle" && searchfor != null)
+                {
+                    ProjectList = ProjectList.Where(ser => ser.ProjectTitle.ToLower().Contains(searchfor.ToLower())).ToList();
+                }
+                if (searchby == "ProjectStatus" && searchfor != null)
+                {
+                    ProjectList = ProjectList.Where(ser => ser.ProjectStatus.ToLower().Contains(searchfor.ToLower())).ToList();
+                }
+                return ProjectList;
             }
-            if (searchby == "ProjectTitle" && searchfor != null)
+            catch (Exception ex)
             {
-                UserData = UserData.Where(ser => ser.ProjectTitle.ToLower().Contains(searchfor.ToLower())).ToList();
+                throw ex;
             }
-            if (searchby == "ProjectStatus" && searchfor != null)
-            {
-                UserData = UserData.Where(ser => ser.ProjectStatus.ToLower().Contains(searchfor.ToLower())).ToList();
-            }
-            return UserData;
         }
 
         public string CheckProjectName()
@@ -549,19 +586,33 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
         {
             try
             {
-                IEnumerable<ProjectDetailView> ProjectList = Context.TblProjectMasters.Select(a => new ProjectDetailView
+                string dbConnectionStr = _configuration.GetConnectionString("EMPDbconn");
+
+                var DS = DbHelper.GetDataSet("GetProjectList", CommandType.StoredProcedure, new SqlParameter[] { }, dbConnectionStr);
+
+                List<ProjectDetailView> projectList = new List<ProjectDetailView>();
+
+                if (DS != null && DS.Tables.Count > 0)
                 {
-                    ProjectId = a.ProjectId,
-                    ProjectTitle = a.ProjectTitle,
-                    ShortName = a.ShortName,
-                }).ToList();
-                return ProjectList;
+                    foreach (DataRow row in DS.Tables[0].Rows)
+                    {
+                        var projectDetails = new ProjectDetailView
+                        {
+                            ProjectId = row["ProjectId"] != DBNull.Value ? (Guid)row["ProjectId"] : Guid.Empty,
+                            ProjectTitle = row["ProjectTitle"]?.ToString(),
+                            ShortName = row["ShortName"]?.ToString(),
+                        };
+                        projectList.Add(projectDetails);
+                    }
+                }
+                return projectList;
             }
             catch (Exception ex)
             {
                 throw ex;
             }
         }
+
         public async Task<UserResponceModel> UpdateProjectDetails(ProjectDetailView updateProject)
         {
             UserResponceModel response = new UserResponceModel();
