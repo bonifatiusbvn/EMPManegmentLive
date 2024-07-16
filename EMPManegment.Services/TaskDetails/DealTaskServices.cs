@@ -55,9 +55,9 @@ namespace EMPManegment.Services.TaskDetails
             return await TaskDetails.GetTaskDetails(Taskid, ProjectId);
         }
 
-        public async Task<jsonData> GetAllUserTaskDetails(DataTableRequstModel AllUserTaskDetails)
+        public async Task<jsonData> GetAllTaskList(DataTableRequstModel dataTable)
         {
-            return await TaskDetails.GetAllUserTaskDetails(AllUserTaskDetails);
+            return await TaskDetails.GetAllTaskList(dataTable);
         }
 
         public async Task<IEnumerable<TaskDetailsView>> GetAllUserTaskDetails()

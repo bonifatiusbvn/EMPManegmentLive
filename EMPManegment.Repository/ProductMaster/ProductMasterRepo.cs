@@ -23,6 +23,10 @@ using System.Numerics;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using EMPManegment.EntityModels.ViewModels.UserModels;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using EMPManegment.EntityModels.ViewModels.PurchaseOrderModels;
+using EMPManegment.EntityModels.ViewModels.ProjectModels;
 
 namespace EMPManegment.Repository.ProductMaster
 {
@@ -401,32 +405,41 @@ namespace EMPManegment.Repository.ProductMaster
 
         public async Task<IEnumerable<ProductDetailsView>> GetAllProductList(string? sortBy)
         {
-            List<ProductDetailsView> Product = new List<ProductDetailsView>();
             try
             {
-                Product = (from a in Context.TblProductDetailsMasters.Where(a => a.IsDeleted == false)
-                           join b in Context.TblProductTypeMasters
-                           on a.ProductType equals b.Id
-                           orderby a.ProductName ascending
-                           select new ProductDetailsView
-                           {
-                               Id = a.Id,
-                               ProductType = a.ProductType,
-                               ProductTypeName = b.Type,
-                               ProductName = a.ProductName,
-                               ProductDescription = a.ProductDescription,
-                               ProductShortDescription = a.ProductShortDescription,
-                               ProductImage = a.ProductImage,
-                               PerUnitPrice = a.PerUnitPrice,
-                               IsWithGst = a.IsWithGst,
-                               GstPercentage = a.GstPercentage,
-                               GstAmount = a.GstAmount,
-                               Hsn = a.Hsn,
-                               CreatedBy = a.CreatedBy,
-                           }).ToList();
+                string dbConnectionStr = _configuration.GetConnectionString("EMPDbconn");
+
+                var DS = DbHelper.GetDataSet("GetAllProductList", CommandType.StoredProcedure, new SqlParameter[] { }, dbConnectionStr);
+
+                List<ProductDetailsView> productList = new List<ProductDetailsView>();
+
+                if (DS != null && DS.Tables.Count > 0)
+                {
+                    foreach (DataRow row in DS.Tables[0].Rows)
+                    {
+                        var productDetails = new ProductDetailsView
+                        {
+                            Id = row["Id"] != DBNull.Value ? (Guid)row["Id"] : Guid.Empty,
+                            ProductImage = row["ProductImage"]?.ToString(),
+                            ProductDescription = row["ProductDescription"]?.ToString(),
+                            ProductName = row["ProductName"]?.ToString(),
+                            ProductShortDescription = row["ProductShortDescription"]?.ToString(),
+                            ProductTypeName = row["ProductTypeName"]?.ToString(),
+                            ProductType = row["ProductType"] != DBNull.Value ? (int)row["ProductType"] : 0,
+                            PerUnitPrice = Convert.ToDecimal(row["PerUnitPrice"]),
+                            IsWithGst = (bool)(row["IsWithGst"]),
+                            GstAmount = Convert.ToDecimal(row["GstAmount"]),
+                            GstPercentage = Convert.ToDecimal(row["GstPercentage"]),
+                            Hsn = row["Hsn"] != DBNull.Value ? (int)row["Hsn"] : 0,
+                            CreatedBy = row["CreatedBy"] != DBNull.Value ? (Guid)row["CreatedBy"] : Guid.Empty,
+                        };
+                        productList.Add(productDetails);
+                    }
+                }
+
                 if (string.IsNullOrEmpty(sortBy))
                 {
-                    Product = Product.OrderByDescending(a => a.CreatedOn).ToList();
+                    productList = productList.OrderByDescending(a => a.CreatedOn).ToList();
                 }
                 else
                 {
@@ -441,28 +454,30 @@ namespace EMPManegment.Repository.ProductMaster
                         {
                             case "productname":
                                 if (sortOrder == "ascending")
-                                    Product = Product.OrderBy(a => a.ProductName).ToList();
+                                    productList = productList.OrderBy(a => a.ProductName).ToList();
                                 else if (sortOrder == "descending")
-                                    Product = Product.OrderByDescending(a => a.ProductName).ToList();
+                                    productList = productList.OrderByDescending(a => a.ProductName).ToList();
                                 break;
                             case "perunitprice":
                                 if (sortOrder == "ascending")
-                                    Product = Product.OrderBy(a => a.PerUnitPrice).ToList();
+                                    productList = productList.OrderBy(a => a.PerUnitPrice).ToList();
                                 else if (sortOrder == "descending")
-                                    Product = Product.OrderByDescending(a => a.PerUnitPrice).ToList();
+                                    productList = productList.OrderByDescending(a => a.PerUnitPrice).ToList();
                                 break;
                             default:
                                 break;
                         }
                     }
                 }
-                return Product;
+                return productList;
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw new Exception("Error fetching product list", ex);
             }
         }
+
+
 
         public async Task<UserResponceModel> DeleteProductDetails(Guid ProductId)
         {

@@ -43,6 +43,8 @@ namespace EMPManegment.EntityModels.ViewModels.ExpenseMaster
 
         public Guid? CreatedBy { get; set; }
         public string? UserName { get; set; }
+
+        public string? Role { get; set; }
     }
 
     public class ExpenseRequestModel

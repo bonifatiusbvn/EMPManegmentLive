@@ -242,9 +242,11 @@ namespace EMPManegment.Web.Controllers
         {
             try
             {
+                string userrole = _userSession.UserRoll;
                 var ExpenseDetails = new ExpenseDetailsView
                 {
                     UserId = _userSession.UserId,
+                    Role = userrole,
                     ExpenseType = Addexpense.ExpenseType,
                     PaymentType = Addexpense.PaymentType,
                     BillNumber = Addexpense.BillNumber,
@@ -340,7 +342,7 @@ namespace EMPManegment.Web.Controllers
                 ApiResponseModel postuser = await APIServices.PostAsync(ExpenseDetails, "ExpenseMaster/UpdateExpenseDetails");
                 if (postuser.code == 200)
                 {
-                    return Ok(new { postuser.message,postuser.code });
+                    return Ok(new { postuser.message, postuser.code });
                 }
                 else
                 {
@@ -415,11 +417,11 @@ namespace EMPManegment.Web.Controllers
                 ApiResponseModel postuser = await APIServices.PostAsync(UpdateExpense, "ExpenseMaster/ApprovedExpense");
                 if (postuser.code == 200)
                 {
-                    return Ok(new { postuser.message,postuser.code });
+                    return Ok(new { postuser.message, postuser.code });
                 }
                 else
                 {
-                    return Ok(new { postuser.message,postuser.code});
+                    return Ok(new { postuser.message, postuser.code });
                 }
             }
             catch (Exception ex)

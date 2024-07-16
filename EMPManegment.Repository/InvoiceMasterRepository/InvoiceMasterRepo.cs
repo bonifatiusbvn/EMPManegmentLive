@@ -32,6 +32,7 @@ using System.Threading.Tasks.Dataflow;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using EMPManegment.EntityModels.ViewModels.ManualInvoice;
 using EMPManegment.EntityModels.ViewModels.PurchaseOrderModels;
+using EMPManegment.EntityModels.ViewModels.UserModels;
 using X.PagedList;
 #nullable disable
 
@@ -887,64 +888,94 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
         {
             try
             {
-                var CreditList = (from a in Context.TblCreditDebitMasters
-                                  join b in Context.TblVendorMasters on a.VendorId equals b.Vid
-                                  join c in Context.TblPaymentTypes on a.PaymentType equals c.Id
-                                  join d in Context.TblPaymentMethodTypes on a.PaymentMethod equals d.Id
-                                  where a.VendorId == Vid
-                                  orderby a.CreatedOn descending
-                                  select new CreditDebitView
-                                  {
-                                      Id = a.Id,
-                                      VendorName = b.VendorCompany,
-                                      Date = a.Date,
-                                      PaymentTypeName = c.Type,
-                                      PaymentMethodName = d.PaymentMethod,
-                                      PendingAmount = a.PendingAmount,
-                                      CreditDebitAmount = a.CreditDebitAmount,
-                                      TotalAmount = a.TotalAmount,
-                                  });
-
-
-                if (!string.IsNullOrEmpty(dataTable.sortColumn) && !string.IsNullOrEmpty(dataTable.sortColumnDir))
+                string dbConnectionStr = Configuration.GetConnectionString("EMPDbconn");
+                var sqlPar = new SqlParameter[]
                 {
-                    if (dataTable.sortColumnDir == "asc")
-                    {
-                        CreditList = CreditList.OrderBy(e => EF.Property<object>(e, dataTable.sortColumn));
-                    }
-                    else
-                    {
-                        CreditList = CreditList.OrderByDescending(e => EF.Property<object>(e, dataTable.sortColumn));
-                    }
-                }
-                if (!string.IsNullOrEmpty(dataTable.searchValue))
-                {
-                    string searchValue = dataTable.searchValue.ToLower();
-                    DateTime searchDate;
-                    bool isDate = DateTime.TryParseExact(dataTable.searchValue, "dd MMM yy", CultureInfo.InvariantCulture, DateTimeStyles.None, out searchDate);
+                   new SqlParameter("@VendorId", Vid),
+                };
 
-                    CreditList = CreditList.Where(e => e.VendorName.ToLower().Contains(searchValue) ||
-                                                 (isDate && e.Date == searchDate) ||
-                                                 e.CreditDebitAmount.ToString().ToLower().Contains(searchValue) ||
-                                                 e.TotalAmount.ToString().ToLower().Contains(searchValue));
+                var dataSet = DbHelper.GetDataSet("GetAllTransactionByVendorId", CommandType.StoredProcedure, sqlPar, dbConnectionStr);
+
+                var tranactionList = ConvertDataSetToVendorTranactionList(dataSet);
+
+                if (!string.IsNullOrEmpty(dataTable.searchValue.ToLower()))
+                {
+                    tranactionList = tranactionList.Where(e =>
+                        e.VendorName.Contains(dataTable.searchValue.ToLower(), StringComparison.OrdinalIgnoreCase) ||
+                        e.CreditDebitAmount.ToString().Contains(dataTable.searchValue.ToLower(), StringComparison.OrdinalIgnoreCase) ||
+                        e.TotalAmount.ToString().Contains(dataTable.searchValue.ToLower(), StringComparison.OrdinalIgnoreCase) ||
+                        e.Date.ToString().Contains(dataTable.searchValue)).ToList();
                 }
 
-                int totalRecord = await CreditList.CountAsync();
+                var totalRecord = tranactionList.Count;
+                var filteredData = tranactionList.Skip(dataTable.skip).Take(dataTable.pageSize).ToList();
 
-                var cData = await CreditList.Skip(dataTable.skip).Take(dataTable.pageSize).ToListAsync();
-
-                jsonData jsonData = new jsonData
+                var jsonData = new jsonData
                 {
                     draw = dataTable.draw,
                     recordsFiltered = totalRecord,
                     recordsTotal = totalRecord,
-                    data = cData
+                    data = filteredData
                 };
+
                 return jsonData;
             }
             catch (Exception ex)
             {
                 throw ex;
+            }
+        }
+
+        private List<CreditDebitView> ConvertDataSetToVendorTranactionList(DataSet dataSet)
+        {
+            var userDetails = new List<CreditDebitView>();
+            try
+            {
+
+                foreach (DataRow row in dataSet.Tables[0].Rows)
+                {
+                    var userData = new CreditDebitView
+                    {
+                        Id = row["Id"] != DBNull.Value ? (int)row["Id"] : 0,
+                        VendorName = row["VendorName"].ToString(),
+                        Date = Convert.ToDateTime(row["Date"]),
+                        PaymentTypeName = row["PaymentTypeName"].ToString(),
+                        PaymentMethodName = row["PaymentMethodName"].ToString(),
+                        PendingAmount = Convert.ToDecimal(row["PendingAmount"]),
+                        CreditDebitAmount = Convert.ToDecimal(row["CreditDebitAmount"]),
+                        TotalAmount = Convert.ToDecimal(row["TotalAmount"])
+                    };
+                    userDetails.Add(userData);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            return userDetails;
+        }
+
+        private Func<CreditDebitView, object> GetSortExpression(string sortColumn)
+        {
+            switch (sortColumn.ToLower())
+            {
+                case "UserName":
+                    return t => t.VendorName;
+                case "DepartmentName":
+                    return t => t.PaymentTypeName;
+                case "FirstName":
+                    return t => t.PaymentMethodName;
+                case "LastName":
+                    return t => t.Date;
+                case "DateOfBirth":
+                    return t => t.TotalAmount;
+                case "Address":
+                    return t => t.PendingAmount;
+                case "CityName":
+                    return t => t.CreditDebitAmount;
+                default:
+                    return t => t.CreatedOn;
             }
         }
 
