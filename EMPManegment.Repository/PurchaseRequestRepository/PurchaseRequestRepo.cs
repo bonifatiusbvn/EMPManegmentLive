@@ -296,51 +296,55 @@ namespace EMPManegment.Repository.PurchaseRequestRepository
 
         public async Task<jsonData> GetPRList(DataTableRequstModel PRdataTable)
         {
-            var purchaseRequestList = from a in Context.TblPurchaseRequests
-                                      join b in Context.TblUsers on a.UserId equals b.Id
-                                      join c in Context.TblProjectMasters on a.ProjectId equals c.ProjectId
-                                      where a.IsDeleted == false
-                                      group new { a, b, c } by new { a.UserId, b.Image, b.UserName, FullName = b.FirstName + " " + b.LastName, a.PrNo } into userGroup
+            string dbConnectionStr = Configuration.GetConnectionString("EMPDbconn");
+            var dataSet = DbHelper.GetDataSet("[spGetPurchaseRequestList]", System.Data.CommandType.StoredProcedure, new SqlParameter[] { }, dbConnectionStr);
 
-                                      select new PurchaseRequestModel
-                                      {
-                                          PrId = userGroup.Select(x => x.a.PrId).FirstOrDefault(),
-                                          UserId = userGroup.Key.UserId,
-                                          UserName = userGroup.Key.UserName,
-                                          FullName = userGroup.Key.FullName,
-                                          ProjectId = userGroup.Select(x => x.a.ProjectId).FirstOrDefault(),
-                                          ProjectName = userGroup.Select(x => x.c.ProjectTitle).FirstOrDefault(),
-                                          ProductId = userGroup.Select(x => x.a.ProductId).FirstOrDefault(),
-                                          ProductName = userGroup.Select(x => x.a.ProductName).FirstOrDefault(),
-                                          ProductTypeId = userGroup.Select(x => x.a.ProductTypeId).FirstOrDefault(),
-                                          Quantity = userGroup.Select(x => x.a.Quantity).FirstOrDefault(),
-                                          IsApproved = userGroup.Select(x => x.a.IsApproved).FirstOrDefault(),
-                                          IsDeleted = userGroup.Select(x => x.a.IsDeleted).FirstOrDefault(),
-                                          CreatedBy = userGroup.Select(x => x.a.CreatedBy).FirstOrDefault(),
-                                          CreatedOn = userGroup.Select(x => x.a.CreatedOn).FirstOrDefault(),
-                                          PrNo = userGroup.Key.PrNo,
-                                          Date = userGroup.Select(x => x.a.Date).FirstOrDefault()
-                                      };
-            purchaseRequestList = purchaseRequestList.OrderByDescending(pr => pr.Date);
+            var PRList = new List<PurchaseRequestModel>();
 
-            if (!string.IsNullOrEmpty(PRdataTable.sortColumn) && !string.IsNullOrEmpty(PRdataTable.sortColumnDir))
+            foreach (DataRow row in dataSet.Tables[0].Rows)
             {
-                purchaseRequestList = purchaseRequestList.OrderBy(PRdataTable.sortColumn + " " + PRdataTable.sortColumnDir);
+                var PurchaseRequest = new PurchaseRequestModel
+                {
+                    PrId = Guid.Parse(row["PrId"].ToString()),
+                    UserId = Guid.Parse(row["UserId"].ToString()),
+                    UserName = row["UserName"].ToString(),
+                    FullName = row["FullName"].ToString(),
+                    ProjectId = Guid.Parse(row["ProjectId"].ToString()),
+                    ProductId = Guid.Parse(row["ProductId"].ToString()),
+                    ProjectName = row["ProjectName"].ToString(),
+                    ProductName = row["ProductName"].ToString(),
+                    Quantity = Convert.ToDecimal(row["Quantity"]),
+                    ProductTypeId = Convert.ToInt32(row["ProductTypeId"]),
+                    IsApproved = row["IsApproved"] != DBNull.Value ? (bool?)Convert.ToBoolean(row["IsApproved"]) : null,
+                    IsDeleted = row["IsDeleted"] != DBNull.Value ? (bool?)Convert.ToBoolean(row["IsDeleted"]) : null,
+                    PrNo = row["PrNo"].ToString(),
+                    CreatedOn = Convert.ToDateTime(row["CreatedOn"]),
+                    CreatedBy = Guid.Parse(row["CreatedBy"].ToString()),
+                    Date = Convert.ToDateTime(row["Date"]),
+                };
+                PRList.Add(PurchaseRequest);
             }
+
             if (!string.IsNullOrEmpty(PRdataTable.searchValue))
             {
-                purchaseRequestList = purchaseRequestList.Where(e => e.ProjectName.Contains(PRdataTable.searchValue) || e.PrNo.Contains(PRdataTable.searchValue) || e.ProductName.Contains(PRdataTable.searchValue) || e.FullName.Contains(PRdataTable.searchValue));
+                PRList = PRList.Where(e =>
+                    e.ProjectName.Contains(PRdataTable.searchValue, StringComparison.OrdinalIgnoreCase) ||
+                    e.PrNo.Contains(PRdataTable.searchValue) ||
+                    e.ProductName.Contains(PRdataTable.searchValue, StringComparison.OrdinalIgnoreCase) ||
+                    e.FullName.Contains(PRdataTable.searchValue)).ToList();
             }
-            int totalRecord = purchaseRequestList.Count();
-            var cData = purchaseRequestList.Skip(PRdataTable.skip).Take(PRdataTable.pageSize).ToList();
 
-            jsonData jsonData = new jsonData
+            var totalRecord = PRList.Count;
+            var filteredData = PRList.Skip(PRdataTable.skip).Take(PRdataTable.pageSize).ToList();
+
+            var jsonData = new jsonData
             {
                 draw = PRdataTable.draw,
                 recordsFiltered = totalRecord,
                 recordsTotal = totalRecord,
-                data = cData
+                data = filteredData
             };
+
             return jsonData;
         }
 

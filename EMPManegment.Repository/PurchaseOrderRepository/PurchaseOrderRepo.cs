@@ -45,44 +45,34 @@ namespace EMPManegment.Repository.OrderRepository
         {
             try
             {
-                var data = await (from a in Context.TblPurchaseOrderMasters
-                                  join b in Context.TblVendorMasters on a.VendorId equals b.Vid
-                                  join d in Context.TblPaymentMethodTypes on a.PaymentMethod equals d.Id
-                                  join e in Context.TblCompanyMasters on a.CompanyId equals e.Id
-                                  where a.IsDeleted != true
-                                  select new
-                                  {
-                                      Order = a,
-                                      Vendor = b,
-                                      PaymentMethod = d,
-                                      Company = e,
-                                      CreatedOn = a.CreatedOn,
-                                  }).ToListAsync();
+                string dbConnectionStr = _configuration.GetConnectionString("EMPDbconn");
+                var dataSet = DbHelper.GetDataSet("[spGetPODetails]", System.Data.CommandType.StoredProcedure, new SqlParameter[] { }, dbConnectionStr);
 
-                var orderList = data.GroupBy(x => x.Order.OrderId)
-                                    .Select(group => group.First())
-                                    .OrderByDescending(item => item.CreatedOn)
-                                    .Select(item => new PurchaseOrderDetailView
-                                    {
-                                        Id = item.Order.Id,
-                                        OrderId = item.Order.OrderId,
-                                        CompanyId = item.Order.CompanyId,
-                                        CompanyName = item.Company.CompnyName,
-                                        VendorId = item.Order.VendorId,
-                                        OrderDate = item.Order.OrderDate,
-                                        TotalAmount = item.Order.TotalAmount,
-                                        PaymentMethod = item.Order.PaymentMethod,
-                                        PaymentMethodName = item.PaymentMethod.PaymentMethod,
-                                        DeliveryStatus = item.Order.DeliveryStatus,
-                                        DeliveryDate = item.Order.DeliveryDate,
-                                        CreatedOn = item.Order.CreatedOn,
-                                    });
+                var POList = new List<PurchaseOrderDetailView>();
 
-                return orderList.ToList();
+                foreach (DataRow row in dataSet.Tables[0].Rows)
+                {
+                    var PurchaseOrder = new PurchaseOrderDetailView
+                    {
+                        Id = Guid.Parse(row["Id"].ToString()),
+                        OrderId = row["OrderId"].ToString(),
+                        CompanyId = Guid.Parse(row["CompanyId"].ToString()),
+                        VendorId = Guid.Parse(row["VendorId"].ToString()),
+                        CompanyName = row["CompnyName"].ToString(),
+                        PaymentMethodName = row["PaymentMethodName"].ToString(),
+                        DeliveryStatus = row["DeliveryStatus"].ToString(),
+                        TotalAmount = Convert.ToDecimal(row["TotalAmount"]),
+                        PaymentMethod = Convert.ToInt32(row["PaymentMethod"]),
+                        CreatedOn = row["CreatedOn"] != DBNull.Value ? (DateTime)row["CreatedOn"] : DateTime.MinValue,
+                        OrderDate = Convert.ToDateTime(row["OrderDate"]),
+                    };
+                    POList.Add(PurchaseOrder);
+                }
+
+                return POList;
             }
             catch (Exception ex)
             {
-
                 throw ex;
             }
         }

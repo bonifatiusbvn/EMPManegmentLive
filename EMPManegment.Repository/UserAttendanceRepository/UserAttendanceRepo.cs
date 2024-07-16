@@ -23,58 +23,71 @@ using Azure;
 using System.Diagnostics.Eventing.Reader;
 using Microsoft.Extensions.Logging;
 using EMPManegment.EntityModels.ViewModels.ProjectModels;
+using EMPManegment.EntityModels.Common;
+using EMPManegment.EntityModels.ViewModels.Invoice;
+using Microsoft.Extensions.Configuration;
+using System.Data;
+using System.Data.SqlClient;
+using EMPManegment.EntityModels.ViewModels.ExpenseMaster;
 
 namespace EMPManegment.Repository.UserAttendanceRepository
 {
     public class UserAttendanceRepo : IUserAttendance
     {
-        public UserAttendanceRepo(BonifatiusEmployeesContext context)
+        public UserAttendanceRepo(BonifatiusEmployeesContext context, IConfiguration configuration)
         {
             Context = context;
+            Configuration = configuration;
         }
 
         public BonifatiusEmployeesContext Context { get; }
-
+        public IConfiguration Configuration { get; }
 
         public async Task<jsonData> GetUserAttendanceList(DataTableRequstModel dataTable)
         {
-            var AttendanceDataTable = from a in Context.TblAttendances
-                                      join b in Context.TblUsers on a.User.Id equals b.Id
-                                      orderby a.Date descending
-                                      select new UserAttendanceModel
-                                      {
-                                          UserName = b.FirstName + ' ' + b.LastName,
-                                          UserId = a.UserId,
-                                          AttendanceId = a.Id,
-                                          Date = a.Date,
-                                          Intime = a.Intime,
-                                          OutTime = a.OutTime,
-                                          TotalHours = a.TotalHours,
-                                          CreatedBy = a.CreatedBy,
-                                          CreatedOn = a.CreatedOn,
+            string dbConnectionStr = Configuration.GetConnectionString("EMPDbconn");
+            var dataSet = DbHelper.GetDataSet("[spGetAttendanceList]", System.Data.CommandType.StoredProcedure, new SqlParameter[] { }, dbConnectionStr);
 
-                                      };
-            if (!string.IsNullOrEmpty(dataTable.sortColumn) && !string.IsNullOrEmpty(dataTable.sortColumnDir))
+            var AttendanceList = new List<UserAttendanceModel>();
+
+            foreach (DataRow row in dataSet.Tables[0].Rows)
             {
-                AttendanceDataTable = AttendanceDataTable.OrderBy(dataTable.sortColumn + " " + dataTable.sortColumnDir);
-            }
+                var Attendance = new UserAttendanceModel
+                {
 
+                    UserId = Guid.Parse(row["UserId"].ToString()),
+                    UserName = row["UserName"].ToString(),
+                    Date = Convert.ToDateTime(row["Date"]),
+                    AttendanceId = row["AttendanceId"] != DBNull.Value ? Convert.ToInt32(row["AttendanceId"]) : (int?)null,
+                    Intime = Convert.ToDateTime(row["INTime"]),
+                    OutTime = row["OutTime"] != DBNull.Value ? Convert.ToDateTime(row["OutTime"]) : (DateTime?)null,
+                    TotalHours = row["TotalHours"] != DBNull.Value ? TimeSpan.Parse(row["TotalHours"].ToString()) : (TimeSpan?)null,
+                    CreatedOn = row["CreatedOn"] != DBNull.Value ? Convert.ToDateTime(row["CreatedOn"]) : (DateTime?)null,
+                };
+                AttendanceList.Add(Attendance);
+            }
             if (!string.IsNullOrEmpty(dataTable.searchValue))
             {
-                AttendanceDataTable = AttendanceDataTable.Where(e => e.UserName.Contains(dataTable.searchValue) || e.Date.ToString().ToLower().Contains(dataTable.searchValue.ToLower()));
+                AttendanceList = AttendanceList.Where(e => e.UserName.Contains(dataTable.searchValue) || e.Date.ToString().ToLower().Contains(dataTable.searchValue.ToLower())).ToList();
             }
 
-            int totalRecord = AttendanceDataTable.Count();
+            IQueryable<UserAttendanceModel> queryableExpenseDetails = AttendanceList.AsQueryable();
 
-            var cData = AttendanceDataTable.Skip(dataTable.skip).Take(dataTable.pageSize).ToList();
+            if (!string.IsNullOrEmpty(dataTable.sortColumn) && !string.IsNullOrEmpty(dataTable.sortColumnDir))
+            {
+                queryableExpenseDetails = queryableExpenseDetails.OrderBy(dataTable.sortColumn + " " + dataTable.sortColumnDir);
+            }
+            var totalRecord = queryableExpenseDetails.Count();
+            var filteredData = queryableExpenseDetails.Skip(dataTable.skip).Take(dataTable.pageSize).ToList();
 
-            jsonData jsonData = new jsonData
+            var jsonData = new jsonData
             {
                 draw = dataTable.draw,
                 recordsFiltered = totalRecord,
                 recordsTotal = totalRecord,
-                data = cData
+                data = filteredData
             };
+
             return jsonData;
         }
 

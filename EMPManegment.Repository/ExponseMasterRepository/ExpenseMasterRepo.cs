@@ -22,14 +22,21 @@ using Microsoft.AspNetCore.Mvc;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using System.Globalization;
 using Azure;
+using EMPManegment.EntityModels.Common;
+using System.Data;
+using EMPManegment.EntityModels.ViewModels.Purchase_Request;
+using System.Data.SqlClient;
 
 namespace EMPManegment.Repository.ExponseMasterRepository
 {
     public class ExpenseMasterRepo : IExpenseMaster
     {
-        public ExpenseMasterRepo(BonifatiusEmployeesContext Context)
+        private readonly IConfiguration configuration;
+
+        public ExpenseMasterRepo(BonifatiusEmployeesContext Context, IConfiguration configuration)
         {
             this.Context = Context;
+            this.configuration = configuration;
         }
         public BonifatiusEmployeesContext Context { get; }
 
@@ -335,39 +342,30 @@ namespace EMPManegment.Repository.ExponseMasterRepository
         {
             try
             {
-                var Expense = (from a in Context.TblExpenseMasters
-                               join b in Context.TblExpenseTypes on a.ExpenseType equals b.Id
-                               join c in Context.TblPaymentTypes on a.PaymentType equals c.Id
-                               join d in Context.TblUsers on a.UserId equals d.Id
-                               where a.IsDeleted != true
-                               select new ExpenseDetailsView
-                               {
-                                   Id = a.Id,
-                                   UserId = a.UserId,
-                                   UserName = d.FirstName + " " + d.LastName,
-                                   ExpenseType = a.ExpenseType,
-                                   PaymentType = a.PaymentType,
-                                   BillNumber = a.BillNumber,
-                                   Description = a.Description,
-                                   Date = a.Date,
-                                   TotalAmount = a.TotalAmount,
-                                   Image = a.Image,
-                                   Account = a.Account,
-                                   ExpenseTypeName = b.Type,
-                                   PaymentTypeName = c.Type,
-                                   IsApproved = a.IsApproved,
-                               });
+                string dbConnectionStr = configuration.GetConnectionString("EMPDbconn");
+                var dataSet = DbHelper.GetDataSet("[spGetExpenseDetailList]", System.Data.CommandType.StoredProcedure, new SqlParameter[] { }, dbConnectionStr);
+                var ExpenseList = new List<ExpenseDetailsView>();
 
-
-                if (!string.IsNullOrEmpty(dataTable.sortColumn) && !string.IsNullOrEmpty(dataTable.sortColumnDir))
+                foreach (DataRow row in dataSet.Tables[0].Rows)
                 {
-                    Expense = Expense.OrderBy(dataTable.sortColumn + " " + dataTable.sortColumnDir);
+                    var ExpenseDetails = new ExpenseDetailsView
+                    {
+                        Id = Guid.Parse(row["Id"].ToString()),
+                        UserId = Guid.Parse(row["UserId"].ToString()),
+                        UserName = row["UserName"].ToString(),
+                        ExpenseType = Convert.ToInt32(row["ExpenseType"]),
+                        PaymentType = Convert.ToInt32(row["PaymentType"]),
+                        BillNumber = row["BillNumber"].ToString(),
+                        Description = row["Description"].ToString(),
+                        Date = Convert.ToDateTime(row["Date"]),
+                        TotalAmount = Convert.ToDecimal(row["TotalAmount"]),
+                        Account = row["Account"].ToString(),
+                        ExpenseTypeName = row["ExpenseTypeName"].ToString(),
+                        PaymentTypeName = row["PaymentTypeName"].ToString(),
+                        IsApproved = row["IsApproved"] != DBNull.Value ? (bool?)Convert.ToBoolean(row["IsApproved"]) : null,
+                    };
+                    ExpenseList.Add(ExpenseDetails);
                 }
-                else
-                {
-                    Expense = Expense.OrderBy("Date desc");
-                }
-
 
                 if (!string.IsNullOrEmpty(dataTable.searchValue))
                 {
@@ -375,25 +373,35 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                     DateTime searchDate;
                     bool isDate = DateTime.TryParseExact(dataTable.searchValue, "dd MMM yy", CultureInfo.InvariantCulture, DateTimeStyles.None, out searchDate);
 
-                    Expense = Expense.Where(e => e.Description.ToLower().Contains(searchValue) ||
+                    ExpenseList = ExpenseList.Where(e => e.Description.ToLower().Contains(searchValue) ||
                                                  (isDate && e.Date == searchDate) ||
                                                  e.Account.ToLower().Contains(searchValue) ||
                                                  e.BillNumber.ToLower().Contains(searchValue) ||
                                                  e.UserName.ToLower().Contains(searchValue) ||
-                                                 e.TotalAmount.ToString().ToLower().Contains(searchValue));
+                                                 e.TotalAmount.ToString().ToLower().Contains(searchValue)).ToList();
                 }
 
-                int totalRecord = await Expense.CountAsync();
+                IQueryable<ExpenseDetailsView> queryableExpenseDetails = ExpenseList.AsQueryable();
 
-                var cData = await Expense.Skip(dataTable.skip).Take(dataTable.pageSize).ToListAsync();
+                if (!string.IsNullOrEmpty(dataTable.sortColumn) && !string.IsNullOrEmpty(dataTable.sortColumnDir))
+                {
+                    queryableExpenseDetails = queryableExpenseDetails.OrderBy(dataTable.sortColumn + " " + dataTable.sortColumnDir);
+                }
+                else
+                {
+                    queryableExpenseDetails = queryableExpenseDetails.OrderBy("Date desc");
+                }
+                var totalRecord = queryableExpenseDetails.Count();
+                var filteredData = queryableExpenseDetails.Skip(dataTable.skip).Take(dataTable.pageSize).ToList();
 
-                jsonData jsonData = new jsonData
+                var jsonData = new jsonData
                 {
                     draw = dataTable.draw,
                     recordsFiltered = totalRecord,
                     recordsTotal = totalRecord,
-                    data = cData
+                    data = filteredData
                 };
+
                 return jsonData;
             }
             catch (Exception ex)
@@ -401,7 +409,6 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                 throw ex;
             }
         }
-
         public async Task<UserResponceModel> UpdateExpenseDetail(ExpenseDetailsView ExpenseDetails)
         {
             UserResponceModel model = new UserResponceModel();
@@ -445,51 +452,73 @@ namespace EMPManegment.Repository.ExponseMasterRepository
         {
             try
             {
-                var expenses = (from a in Context.TblExpenseMasters
-                                join b in Context.TblExpenseTypes on a.ExpenseType equals b.Id
-                                join c in Context.TblPaymentTypes on a.PaymentType equals c.Id
-                                where a.UserId == UserId && a.IsDeleted == false
-                                select new ExpenseDetailsView
-                                {
-                                    Id = a.Id,
-                                    UserId = a.UserId,
-                                    ExpenseType = a.ExpenseType,
-                                    PaymentType = a.PaymentType,
-                                    BillNumber = a.BillNumber,
-                                    IsApproved = a.IsApproved,
-                                    Description = a.Description,
-                                    Date = a.Date,
-                                    TotalAmount = a.TotalAmount,
-                                    Image = a.Image,
-                                    Account = a.Account,
-                                    ExpenseTypeName = b.Type,
-                                    PaymentTypeName = c.Type,
-                                });
+                string dbConnectionStr = configuration.GetConnectionString("EMPDbconn");
+                var sqlPar = new SqlParameter[]
+                {
+                    new SqlParameter("@UserId", UserId),
+                };
+                var dataSet = DbHelper.GetDataSet("[spGetUserExpenseListByUserId]", System.Data.CommandType.StoredProcedure, sqlPar, dbConnectionStr);
+                var UserExpenseList = new List<ExpenseDetailsView>();
+
+                foreach (DataRow row in dataSet.Tables[0].Rows)
+                {
+                    var UserExpenseDetails = new ExpenseDetailsView
+                    {
+                        Id = Guid.Parse(row["Id"].ToString()),
+                        UserId = Guid.Parse(row["UserId"].ToString()),
+                        ExpenseType = Convert.ToInt32(row["ExpenseType"]),
+                        PaymentType = Convert.ToInt32(row["PaymentType"]),
+                        BillNumber = row["BillNumber"].ToString(),
+                        IsApproved = row["IsApproved"] != DBNull.Value ? (bool?)Convert.ToBoolean(row["IsApproved"]) : null,
+                        Description = row["Description"].ToString(),
+                        Image = row["Image"].ToString(),
+                        Account = row["Account"].ToString(),
+                        ExpenseTypeName = row["ExpenseTypeName"].ToString(),
+                        PaymentTypeName = row["PaymentTypeName"].ToString(),
+                        Date = Convert.ToDateTime(row["Date"]),
+                        TotalAmount = Convert.ToDecimal(row["TotalAmount"]),
+                    };
+                    UserExpenseList.Add(UserExpenseDetails);
+                }
+
+                if (!string.IsNullOrEmpty(dataTable.searchValue))
+                {
+                    string searchValue = dataTable.searchValue.ToLower();
+                    DateTime searchDate;
+                    bool isDate = DateTime.TryParseExact(dataTable.searchValue, "dd MMM yy", CultureInfo.InvariantCulture, DateTimeStyles.None, out searchDate);
+
+                    UserExpenseList = UserExpenseList.Where(e => e.BillNumber.ToLower().Contains(searchValue) ||
+                                                 (isDate && e.Date == searchDate) ||
+                                                 e.Account.ToLower().Contains(searchValue) ||
+                                                 e.TotalAmount.ToString().ToLower().Contains(searchValue)).ToList();
+                }
+
+                IQueryable<ExpenseDetailsView> queryableExpenseDetails = UserExpenseList.AsQueryable();
 
                 if (!string.IsNullOrEmpty(dataTable.sortColumn) && !string.IsNullOrEmpty(dataTable.sortColumnDir))
                 {
                     switch (dataTable.sortColumn)
                     {
                         case "BillNumber":
-                            expenses = dataTable.sortColumnDir == "asc" ? expenses.OrderBy(e => e.BillNumber) : expenses.OrderByDescending(e => e.BillNumber);
+                            queryableExpenseDetails = dataTable.sortColumnDir == "asc" ? queryableExpenseDetails.OrderBy(e => e.BillNumber) : queryableExpenseDetails.OrderByDescending(e => e.BillNumber);
                             break;
                         case "Date":
-                            expenses = dataTable.sortColumnDir == "asc" ? expenses.OrderBy(e => e.Date) : expenses.OrderByDescending(e => e.Date);
+                            queryableExpenseDetails = dataTable.sortColumnDir == "asc" ? queryableExpenseDetails.OrderBy(e => e.Date) : queryableExpenseDetails.OrderByDescending(e => e.Date);
                             break;
                         case "Account":
-                            expenses = dataTable.sortColumnDir == "asc" ? expenses.OrderBy(e => e.Account) : expenses.OrderByDescending(e => e.Account);
+                            queryableExpenseDetails = dataTable.sortColumnDir == "asc" ? queryableExpenseDetails.OrderBy(e => e.Account) : queryableExpenseDetails.OrderByDescending(e => e.Account);
                             break;
                         case "TotalAmount":
-                            expenses = dataTable.sortColumnDir == "asc" ? expenses.OrderBy(e => e.TotalAmount) : expenses.OrderByDescending(e => e.TotalAmount);
+                            queryableExpenseDetails = dataTable.sortColumnDir == "asc" ? queryableExpenseDetails.OrderBy(e => e.TotalAmount) : queryableExpenseDetails.OrderByDescending(e => e.TotalAmount);
                             break;
                         case "Description":
-                            expenses = dataTable.sortColumnDir == "asc" ? expenses.OrderBy(e => e.Description) : expenses.OrderByDescending(e => e.Description);
+                            queryableExpenseDetails = dataTable.sortColumnDir == "asc" ? queryableExpenseDetails.OrderBy(e => e.Description) : queryableExpenseDetails.OrderByDescending(e => e.Description);
                             break;
                         case "ExpenseTypeName":
-                            expenses = dataTable.sortColumnDir == "asc" ? expenses.OrderBy(e => e.ExpenseTypeName) : expenses.OrderByDescending(e => e.ExpenseTypeName);
+                            queryableExpenseDetails = dataTable.sortColumnDir == "asc" ? queryableExpenseDetails.OrderBy(e => e.ExpenseTypeName) : queryableExpenseDetails.OrderByDescending(e => e.ExpenseTypeName);
                             break;
                         case "PaymentTypeName":
-                            expenses = dataTable.sortColumnDir == "asc" ? expenses.OrderBy(e => e.PaymentTypeName) : expenses.OrderByDescending(e => e.PaymentTypeName);
+                            queryableExpenseDetails = dataTable.sortColumnDir == "asc" ? queryableExpenseDetails.OrderBy(e => e.PaymentTypeName) : queryableExpenseDetails.OrderByDescending(e => e.PaymentTypeName);
                             break;
                         default:
                             break;
@@ -497,31 +526,19 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                 }
                 else
                 {
-                    expenses = expenses.OrderBy("Date desc");
+                    queryableExpenseDetails = queryableExpenseDetails.OrderBy("Date desc");
                 }
-                if (!string.IsNullOrEmpty(dataTable.searchValue))
-                {
-                    string searchValue = dataTable.searchValue.ToLower();
-                    DateTime searchDate;
-                    bool isDate = DateTime.TryParseExact(dataTable.searchValue, "dd MMM yy", CultureInfo.InvariantCulture, DateTimeStyles.None, out searchDate);
+                var totalRecord = queryableExpenseDetails.Count();
+                var filteredData = queryableExpenseDetails.Skip(dataTable.skip).Take(dataTable.pageSize).ToList();
 
-                    expenses = expenses.Where(e => e.BillNumber.ToLower().Contains(searchValue) ||
-                                                 (isDate && e.Date == searchDate) ||
-                                                 e.Account.ToLower().Contains(searchValue) ||
-                                                 e.TotalAmount.ToString().ToLower().Contains(searchValue));
-                }
-
-                int totalRecord = await expenses.CountAsync();
-
-                var cData = await expenses.Skip(dataTable.skip).Take(dataTable.pageSize).ToListAsync();
-
-                jsonData jsonData = new jsonData
+                var jsonData = new jsonData
                 {
                     draw = dataTable.draw,
                     recordsFiltered = totalRecord,
                     recordsTotal = totalRecord,
-                    data = cData
+                    data = filteredData
                 };
+
                 return jsonData;
             }
             catch (Exception ex)
@@ -529,59 +546,31 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                 throw ex;
             }
         }
-
         public async Task<jsonData> GetUserList(DataTableRequstModel dataTable)
         {
             try
             {
-                var UserList = from a in Context.TblExpenseMasters
-                               join b in Context.TblUsers on a.UserId equals b.Id
-                               where a.IsDeleted == false
-                               group new { a, b } by new { a.UserId, b.Image, b.UserName, FullName = b.FirstName + " " + b.LastName, b.FirstName, b.LastName } into userGroup
-                               select new UserExpenseDetailsView
-                               {
-                                   UserId = userGroup.Key.UserId,
-                                   FullName = userGroup.Key.FullName,
-                                   FirstName = userGroup.Key.FirstName,
-                                   LastName = userGroup.Key.LastName,
-                                   Image = userGroup.Key.Image,
-                                   UserName = userGroup.Key.UserName,
-                                   Date = userGroup.Max(e => e.a.Date),
-                                   TotalAmount = userGroup.Sum(e => e.a.TotalAmount),
-                                   UnapprovedPendingAmount = userGroup.Where(e => e.a.IsApproved == true && e.a.Account == "Debit").Sum(e => e.a.TotalAmount),
-                                   TotalPendingAmount = userGroup.Where(e => e.a.Account == "Debit").Sum(e => e.a.TotalAmount)
-                               };
+                string dbConnectionStr = configuration.GetConnectionString("EMPDbconn");
+                var dataSet = DbHelper.GetDataSet("[spGetAllUserExpenseDetails]", System.Data.CommandType.StoredProcedure, new SqlParameter[] { }, dbConnectionStr);
+                var UserExpenseList = new List<UserExpenseDetailsView>();
 
-
-                if (!string.IsNullOrEmpty(dataTable.sortColumn) && !string.IsNullOrEmpty(dataTable.sortColumnDir))
+                foreach (DataRow row in dataSet.Tables[0].Rows)
                 {
-                    switch (dataTable.sortColumn)
+                    var UserExpenseDetails = new UserExpenseDetailsView
                     {
-                        case "UserName":
-                            UserList = dataTable.sortColumnDir == "asc" ? UserList.OrderBy(e => e.UserName) : UserList.OrderByDescending(e => e.UserName);
-                            break;
-                        case "Date":
-                            UserList = dataTable.sortColumnDir == "asc" ? UserList.OrderBy(e => e.Date) : UserList.OrderByDescending(e => e.Date);
-                            break;
-                        case "FullName":
-                            UserList = dataTable.sortColumnDir == "asc" ? UserList.OrderBy(e => e.FullName) : UserList.OrderByDescending(e => e.FullName);
-                            break;
-                        case "TotalAmount":
-                            UserList = dataTable.sortColumnDir == "asc" ? UserList.OrderBy(e => e.TotalAmount) : UserList.OrderByDescending(e => e.TotalAmount);
-                            break;
-                        case "UnapprovedPendingAmount":
-                            UserList = dataTable.sortColumnDir == "asc" ? UserList.OrderBy(e => e.UnapprovedPendingAmount) : UserList.OrderByDescending(e => e.UnapprovedPendingAmount);
-                            break;
-                        case "TotalPendingAmount":
-                            UserList = dataTable.sortColumnDir == "asc" ? UserList.OrderBy(e => e.TotalPendingAmount) : UserList.OrderByDescending(e => e.TotalPendingAmount);
-                            break;
-                        default:
-                            break;
-                    }
-                }
-                else
-                {
-                    UserList = UserList.OrderBy("Date desc");
+                        UserId = Guid.Parse(row["UserId"].ToString()),
+                        FullName = row["FullName"].ToString(),
+                        FirstName = row["FirstName"].ToString(),
+                        LastName = row["LastName"].ToString(),
+                        UserName = row["UserName"].ToString(),
+                        Image = row["Image"].ToString(),
+                        Date = Convert.ToDateTime(row["Date"]),
+                        TotalAmount = Convert.ToDecimal(row["TotalAmount"]),
+                        UnapprovedPendingAmount = Convert.ToDecimal(row["UnapprovedPendingAmount"]),
+                        TotalPendingAmount = Convert.ToDecimal(row["TotalPendingAmount"]),
+
+                    };
+                    UserExpenseList.Add(UserExpenseDetails);
                 }
                 if (!string.IsNullOrEmpty(dataTable.searchValue))
                 {
@@ -589,22 +578,33 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                     DateTime searchDate;
                     bool isDate = DateTime.TryParseExact(dataTable.searchValue, "dd MMM yy", CultureInfo.InvariantCulture, DateTimeStyles.None, out searchDate);
 
-                    UserList = UserList.Where(e => e.UserName.ToLower().Contains(searchValue) ||
+                    UserExpenseList = UserExpenseList.Where(e => e.UserName.ToLower().Contains(searchValue) ||
                                                  (isDate && e.Date == searchDate) ||
                                                  e.FullName.ToLower().Contains(searchValue) ||
-                                                 e.TotalAmount.ToString().ToLower().Contains(searchValue));
+                                                 e.TotalAmount.ToString().ToLower().Contains(searchValue)).ToList();
                 }
 
-                int totalRecord = await UserList.CountAsync();
-                var cData = await UserList.Skip(dataTable.skip).Take(dataTable.pageSize).ToListAsync();
+                IQueryable<UserExpenseDetailsView> queryableExpenseDetails = UserExpenseList.AsQueryable();
 
-                jsonData jsonData = new jsonData
+                if (!string.IsNullOrEmpty(dataTable.sortColumn) && !string.IsNullOrEmpty(dataTable.sortColumnDir))
+                {
+                    queryableExpenseDetails = queryableExpenseDetails.OrderBy(dataTable.sortColumn + " " + dataTable.sortColumnDir);
+                }
+                else
+                {
+                    queryableExpenseDetails = queryableExpenseDetails.OrderBy("Date desc");
+                }
+                var totalRecord = queryableExpenseDetails.Count();
+                var filteredData = queryableExpenseDetails.Skip(dataTable.skip).Take(dataTable.pageSize).ToList();
+
+                var jsonData = new jsonData
                 {
                     draw = dataTable.draw,
                     recordsFiltered = totalRecord,
                     recordsTotal = totalRecord,
-                    data = cData
+                    data = filteredData
                 };
+
                 return jsonData;
             }
             catch (Exception ex)
@@ -612,7 +612,6 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                 throw ex;
             }
         }
-
         public async Task<List<ExpenseDetailsView>> GetExpenseDetailByUserId(Guid UserId)
         {
             var ExpenseDetail = new List<ExpenseDetailsView>();

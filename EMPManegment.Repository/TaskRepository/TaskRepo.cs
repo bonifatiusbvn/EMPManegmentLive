@@ -21,6 +21,10 @@ using System.Threading.Tasks;
 using Azure;
 using Azure.Identity;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using EMPManegment.EntityModels.Common;
+using EMPManegment.EntityModels.ViewModels.ExpenseMaster;
+using Microsoft.Extensions.Configuration;
+using System.Data.SqlClient;
 
 namespace EMPManegment.Repository.TaskRepository
 {
@@ -28,12 +32,14 @@ namespace EMPManegment.Repository.TaskRepository
     {
         private readonly string? pending;
 
-        public TaskRepo(BonifatiusEmployeesContext context)
+        public TaskRepo(BonifatiusEmployeesContext context, IConfiguration configuration)
         {
             Context = context;
+            Configuration = configuration;
         }
 
         public BonifatiusEmployeesContext Context { get; }
+        public IConfiguration Configuration { get; }
 
         public async Task<IEnumerable<TaskTypeView>> GetTaskType()
         {
@@ -204,36 +210,39 @@ namespace EMPManegment.Repository.TaskRepository
 
         public async Task<TaskDetailsView> GetTaskDetailsById(Guid Taskid)
         {
-            TaskDetailsView taskdata = new TaskDetailsView();
             try
             {
-                taskdata = (from d in Context.TblTaskDetails.Where(d => d.Id == Taskid)
-                            join m in Context.TblTaskMasters
-                            on d.TaskType equals m.Id
-                            join b in Context.TblUsers on d.UserId equals b.Id
-                            select new TaskDetailsView
-                            {
-                                Id = d.Id,
-                                UserId = d.UserId,
-                                TaskType = d.TaskType,
-                                TaskDate = d.TaskDate,
-                                TaskTitle = d.TaskTitle,
-                                TaskEndDate = d.TaskEndDate,
-                                TaskDetails = d.TaskDetails,
-                                TaskStatus = d.TaskStatus,
-                                UserName = b.UserName,
-                                FirstName = b.FirstName,
-                                LastName = b.LastName,
-                                UserProfile = b.Image,
-                                TaskTypeName = m.TaskType,
-                                CreatedBy = d.CreatedBy
-                            }).First();
+                string dbConnectionStr = Configuration.GetConnectionString("EMPDbconn");
+                var sqlPar = new SqlParameter[]
+                {
+            new SqlParameter("@TaskId", Taskid),
+                };
+                var dataSet = DbHelper.GetDataSet("[spGetTaskDetailsByTaskId]", System.Data.CommandType.StoredProcedure, sqlPar, dbConnectionStr);
+
+                DataRow row = dataSet.Tables[0].Rows[0];
+                var TaskDetails = new TaskDetailsView
+                {
+                    Id = Guid.Parse(row["Id"].ToString()),
+                    UserId = Guid.Parse(row["UserId"].ToString()),
+                    TaskType = Convert.ToInt32(row["TaskType"]),
+                    TaskTitle = row["TaskTitle"].ToString(),
+                    TaskDetails = row["TaskDetails"].ToString(),
+                    TaskStatus = row["TaskStatus"].ToString(),
+                    UserName = row["UserName"].ToString(),
+                    FirstName = row["FirstName"].ToString(),
+                    UserProfile = row["UserProfile"].ToString(),
+                    LastName = row["LastName"].ToString(),
+                    TaskTypeName = row["TaskTypeName"].ToString(),
+                    TaskEndDate = Convert.ToDateTime(row["TaskEndDate"]),
+                    TaskDate = Convert.ToDateTime(row["TaskDate"]),
+                    CreatedBy = Guid.Parse(row["CreatedBy"].ToString()),
+                };
+                return TaskDetails;
             }
             catch (Exception ex)
             {
                 throw ex;
             }
-            return taskdata;
         }
 
         public async Task<IEnumerable<TaskDetailsView>> ProjectActivity(Guid ProId)

@@ -32,6 +32,7 @@ using System.Threading.Tasks.Dataflow;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using EMPManegment.EntityModels.ViewModels.ManualInvoice;
 using EMPManegment.EntityModels.ViewModels.PurchaseOrderModels;
+using X.PagedList;
 #nullable disable
 
 namespace EMPManegment.Repository.InvoiceMasterRepository
@@ -241,59 +242,44 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
         {
             try
             {
-                var invoicelist = from a in Context.TblInvoices
-                                  join b in Context.TblVendorMasters on a.VandorId equals b.Vid
-                                  join c in Context.TblProjectMasters on a.ProjectId equals c.ProjectId
-                                  where a.IsDeleted != true
-                                  orderby a.CreatedOn descending
-                                  select new InvoiceViewModel
-                                  {
-                                      Id = a.Id,
-                                      InvoiceNo = a.InvoiceNo,
-                                      InvoiceType = a.InvoiceType,
-                                      InvoiceDate = a.InvoiceDate,
-                                      VendorName = b.VendorCompany,
-                                      VandorId = a.VandorId,
-                                      OrderId = a.OrderId,
-                                      ProjectId = a.ProjectId,
-                                      ProjectName = c.ShortName,
-                                      DispatchThrough = a.DispatchThrough,
-                                      Cgst = a.Cgst,
-                                      Igst = a.Igst,
-                                      Sgst = a.Sgst,
-                                      BuyesOrderNo = a.BuyesOrderNo,
-                                      BuyesOrderDate = a.BuyesOrderDate,
-                                      TotalAmount = a.TotalAmount,
-                                      CreatedOn = a.CreatedOn,
-                                      CreatedBy = a.CreatedBy,
-                                      UpdatedOn = a.UpdatedOn,
-                                      UpdatedBy = a.UpdatedBy,
-                                      Date = a.Date ?? DateTime.MinValue,
-                                  };
-                invoicelist = invoicelist.OrderByDescending(pr => pr.Date);
+                string dbConnectionStr = Configuration.GetConnectionString("EMPDbconn");
+                var dataSet = DbHelper.GetDataSet("[spGetInvoiceDetailsList]", System.Data.CommandType.StoredProcedure, new SqlParameter[] { }, dbConnectionStr);
+
+                var invoiceList = new List<InvoiceViewModel>();
+
+                foreach (DataRow row in dataSet.Tables[0].Rows)
+                {
+                    var invoice = new InvoiceViewModel
+                    {
+                        Id = Guid.Parse(row["Id"].ToString()),
+                        InvoiceNo = row["InvoiceNo"].ToString(),
+                        InvoiceDate = Convert.ToDateTime(row["InvoiceDate"]),
+                        VendorName = row["VendorName"].ToString(),
+                        VandorId = Guid.Parse(row["VandorId"].ToString()),
+                        ProjectId = Guid.Parse(row["ProjectId"].ToString()),
+                        ProjectName = row["ProjectName"].ToString(),
+                        DispatchThrough = row["DispatchThrough"].ToString(),
+                        BuyesOrderNo = row["BuyesOrderNo"].ToString(),
+                        BuyesOrderDate = Convert.ToDateTime(row["BuyesOrderDate"]),
+                        TotalAmount = Convert.ToDecimal(row["TotalAmount"]),
+                        CreatedOn = Convert.ToDateTime(row["CreatedOn"]),
+                        CreatedBy = Guid.Parse(row["CreatedBy"].ToString()),
+                        Date = Convert.ToDateTime(row["Date"]),
+                    };
+                    invoiceList.Add(invoice);
+                }
 
                 if (!string.IsNullOrEmpty(dataTable.searchValue))
                 {
-                    invoicelist = invoicelist.Where(e =>
-                        e.VendorName.Contains(dataTable.searchValue) ||
-                        e.InvoiceNo.Contains(dataTable.searchValue) ||
-                        e.ProjectName.Contains(dataTable.searchValue) ||
-                        e.TotalAmount.ToString().Contains(dataTable.searchValue)
-                    );
+                    invoiceList = invoiceList.Where(e =>
+                        e.VendorName.Contains(dataTable.searchValue, StringComparison.OrdinalIgnoreCase) ||
+                        e.InvoiceNo.Contains(dataTable.searchValue, StringComparison.OrdinalIgnoreCase) ||
+                        e.ProjectName.Contains(dataTable.searchValue, StringComparison.OrdinalIgnoreCase) ||
+                        e.TotalAmount.ToString().Contains(dataTable.searchValue)).ToList();
                 }
 
-                if (!string.IsNullOrEmpty(dataTable.sortColumn) && !string.IsNullOrEmpty(dataTable.sortColumnDir))
-                {
-                    invoicelist = dataTable.sortColumnDir == "asc"
-                        ? invoicelist.OrderBy(e => EF.Property<object>(e, dataTable.sortColumn))
-                        : invoicelist.OrderByDescending(e => EF.Property<object>(e, dataTable.sortColumn));
-                }
-
-                var filteredData = await invoicelist
-                .ToListAsync();
-
-                var totalRecord = filteredData.Count;
-
+                var totalRecord = invoiceList.Count;
+                var filteredData = invoiceList.Skip(dataTable.skip).Take(dataTable.pageSize).ToList();
 
                 var jsonData = new jsonData
                 {
@@ -311,7 +297,6 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                 return new jsonData { };
             }
         }
-
 
         public async Task<InvoicePayVendorModel> GetInvoiceListByVendorId(Guid Vid)
         {
@@ -356,25 +341,32 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
         {
             try
             {
-                IEnumerable<CreditDebitView> invoiceList = (from a in Context.TblCreditDebitMasters
-                                                            join b in Context.TblVendorMasters on a.VendorId equals b.Vid
-                                                            join c in Context.TblPaymentTypes on a.PaymentType equals c.Id
-                                                            join d in Context.TblPaymentMethodTypes on a.PaymentMethod equals d.Id
-                                                            where a.VendorId == Vid
-                                                            orderby a.CreatedOn descending
-                                                            select new CreditDebitView
-                                                            {
-                                                                Id = a.Id,
-                                                                VendorName = b.VendorCompany,
-                                                                Date = a.Date,
-                                                                PaymentTypeName = c.Type,
-                                                                PaymentMethodName = d.PaymentMethod,
-                                                                PendingAmount = a.PendingAmount,
-                                                                CreditDebitAmount = a.CreditDebitAmount,
-                                                                TotalAmount = a.TotalAmount,
-                                                            }).Take(10);
+                string dbConnectionStr = Configuration.GetConnectionString("EMPDbconn");
+                var sqlPar = new SqlParameter[]
+                {
+                    new SqlParameter("@VendorId", Vid),
+                };
+                var dataSet = DbHelper.GetDataSet("[spGetLastTransactionByVendor]", System.Data.CommandType.StoredProcedure, sqlPar , dbConnectionStr);
 
-                return invoiceList;
+                var VendorTransaction = new List<CreditDebitView>();
+
+                foreach (DataRow row in dataSet.Tables[0].Rows)
+                {
+                    var LastTransactions = new CreditDebitView
+                    {
+                        Id = Convert.ToInt32(row["Id"]),
+                        VendorName = row["VendorName"].ToString(),
+                        PaymentTypeName = row["PaymentTypeName"].ToString(),
+                        PaymentMethodName = row["PaymentMethodName"].ToString(),
+                        Date = Convert.ToDateTime(row["Date"]),
+                        TotalAmount = Convert.ToDecimal(row["TotalAmount"]),
+                        PendingAmount = Convert.ToDecimal(row["PendingAmount"]),
+                        CreditDebitAmount = Convert.ToDecimal(row["CreditDebitAmount"]),        
+                    };
+                    VendorTransaction.Add(LastTransactions);
+                }
+
+                return VendorTransaction;
             }
             catch (Exception ex)
             {
@@ -507,26 +499,30 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
         {
             try
             {
-                var allCreditList = await (from a in Context.TblCreditDebitMasters
-                                           join b in Context.TblVendorMasters on a.VendorId equals b.Vid
-                                           join c in Context.TblPaymentTypes on a.PaymentType equals c.Id
-                                           join d in Context.TblPaymentMethodTypes on a.PaymentMethod equals d.Id
-                                           orderby a.Date descending
-                                           select new CreditDebitView
-                                           {
-                                               Id = a.Id,
-                                               VendorName = b.VendorCompany,
-                                               Date = a.Date,
-                                               PaymentTypeName = c.Type,
-                                               PaymentMethodName = d.PaymentMethod,
-                                               PendingAmount = a.PendingAmount,
-                                               CreditDebitAmount = a.CreditDebitAmount,
-                                               TotalAmount = a.TotalAmount,
-                                               VendorAddress = b.VendorAddress,
-                                               VendorId = b.Vid,
-                                           }).ToListAsync();
+                string dbConnectionStr = Configuration.GetConnectionString("EMPDbconn");
+                var dataSet = DbHelper.GetDataSet("[spGetAllTransaction]", System.Data.CommandType.StoredProcedure, new SqlParameter[] { }, dbConnectionStr);
 
-                return allCreditList;
+                var AllTransactionList = new List<CreditDebitView>();
+
+                foreach (DataRow row in dataSet.Tables[0].Rows)
+                {
+                    var Transactions = new CreditDebitView
+                    {
+                        Id = Convert.ToInt32(row["Id"]),
+                        VendorName = row["VendorCompany"].ToString(),
+                        PaymentTypeName = row["PaymentTypeName"].ToString(),
+                        PaymentMethodName = row["PaymentMethodName"].ToString(),
+                        Date = Convert.ToDateTime(row["Date"]),
+                        VendorId = Guid.Parse(row["VId"].ToString()),
+                        VendorAddress = row["VendorAddress"].ToString(),
+                        PendingAmount = Convert.ToDecimal(row["PendingAmount"]),
+                        CreditDebitAmount = Convert.ToDecimal(row["CreditDebitAmount"]),
+                        TotalAmount = Convert.ToDecimal(row["TotalAmount"]),
+                    };
+                    AllTransactionList.Add(Transactions);
+                }
+
+                return AllTransactionList;
             }
             catch (Exception)
             {
