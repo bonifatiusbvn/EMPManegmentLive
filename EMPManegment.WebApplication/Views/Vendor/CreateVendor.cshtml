@@ -7,6 +7,10 @@
 @{
     ViewData["Title"] = "CreateVendor";
     Layout = "~/Views/Shared/_HomeLayout.cshtml";
+    var imageUrl = Model != null && !string.IsNullOrEmpty(Model.Image) ? Url.Content($"~/{Model.Image}") : null;
+    var Vendorinitials = Model != null && !string.IsNullOrEmpty(Model.VendorCompany)
+                   ? $"{Model.VendorCompany[0]}".ToUpper()
+                   : string.Empty;
 }
 
 
@@ -205,14 +209,17 @@
                                     <input type="file" class="form-control" autocomplete="off" id="companylogoInput" name="companylogoInput">
                                 </div>
                                 <div class="col-lg-6 d-flex flex-column justify-content-center">
-                                    @if (Model.VendorCompanyLogo != "")
+                                    @if (!string.IsNullOrEmpty(Model.VendorCompanyLogo))
                                     {
-                                        <div id="VendorImageContainer" style="align-self: center;">
+                                        <div id="VendorImageContainer" style="align-self:center;">
                                             <div id="currentVendorImageName" style="margin-bottom: 10px;" hidden>
                                                 @System.IO.Path.GetFileName(Model.VendorCompanyLogo)
                                             </div>
-                                            <div style="position: relative; display: inline-block;gap:10px;">
-                                                <img src="~/Content/Image/@Model.VendorCompanyLogo" class="form-control" id="vendorImagePreview" style="height: 200px;width: 200px;border:2px solid grey; margin-top: -65px;">
+                                            <div style="position: relative; display: inline-block; gap:10px;">
+                                                @if (!string.IsNullOrEmpty(Model.VendorCompanyLogo))
+                                                {
+                                                    <img src="~/Content/Image/@Model.VendorCompanyLogo" class="form-control" id="vendorImagePreview" style="height: 200px;width: 200px;border:2px solid grey; margin-top: -65px;">
+                                                }
                                                 <div style="position: absolute; top: -65px; right: 5px;">
                                                     <button type="button" id="deleteVendorImageButton" style="background-color: transparent; border: none; font-size: 16px; cursor: pointer; color:red;">&times;</button>
                                                 </div>
@@ -221,16 +228,18 @@
                                     }
                                     else
                                     {
-                                        <div id="VendorImageContainer" style="display: none;">
-                                            <div style="position: relative;">
-                                                <img src="#" id="vendorImagePreview" style="height: 200px;width: 200px;border:2px solid grey;margin-top: -65px;" />
+                                        <div class="col-lg-6 d-flex flex-column justify-content-center">
+                                            <div id="VendorImageContainer" style="align-self:center; position: relative;">
+                                                <div id="DisplayVendorInitials" class="avatar-title bg-success-subtle text-success fs-20 border" style="height: 200px; width: 200px; border: 2px solid grey; margin-top: -65px; display: flex; align-items: center; justify-content: center;">
+                                                    <h1>@Vendorinitials</h1>
+                                                </div>
+                                                <img id="vendorImagePreview" src="#" style="height: 200px; width: 200px; border: 2px solid grey; margin-top: -65px; display: none;" alt="vendorImagePreview" />
                                                 <div style="position: absolute; top: -65px; right: 5px;">
-                                                    <button type="button" id="deleteVendorImageButton" style="background-color: transparent; border: none; font-size: 16px; cursor: pointer; color: red;margin-right: 320px;">&times;</button>
+                                                    <button type="button" id="deleteVendorImageButton" style="background-color: transparent; border: none; font-size: 16px; cursor: pointer; color: red;">&times;</button>
                                                 </div>
                                             </div>
                                         </div>
                                     }
-
                                 </div>
                             </div>
                         </div>
@@ -388,7 +397,7 @@
             });
         }
     });
-
+   
 </script>
 
 

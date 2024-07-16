@@ -128,23 +128,35 @@
     <script src="~/assets/js/pages/passowrd-create.init.js"></script>
 </body>
 </html>
-<script>
-    $(document).ready(function () {
-        $('#password-toggle').click(function () {
 
-            var passwordInput = $('#LoginPassword');
-            var openIcon = $('#open');
-            var closeIcon = $('#close');
 
-            if (passwordInput.attr('type') === 'password') {
-                passwordInput.attr('type', 'text');
-                openIcon.addClass('d-none');
-                closeIcon.removeClass('d-none');
-            } else {
-                passwordInput.attr('type', 'password');
-                openIcon.removeClass('d-none');
-                closeIcon.addClass('d-none');
-            }
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Toggle</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <script>
+        $(document).ready(function () {
+            $('#password-toggle').click(function () {
+
+                var passwordInput = $('#LoginPassword');
+                var openIcon = $('#open');
+                var closeIcon = $('#close');
+
+                if (passwordInput.attr('type') === 'password') {
+                    passwordInput.attr('type', 'text');
+                    openIcon.addClass('d-none');
+                    closeIcon.removeClass('d-none');
+                } else {
+                    passwordInput.attr('type', 'password');
+                    openIcon.removeClass('d-none');
+                    closeIcon.addClass('d-none');
+                }
+            });
         });
-    });
-</script>
+    </script>
+</body>
+</html>
