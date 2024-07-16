@@ -410,25 +410,48 @@ function editnexttoBankDetails() {
 }
 
 $(document).ready(function () {
-    function toggleImagePreview(show) {
-        if (show) {
-            $('#VendorImageContainer').show();
-        } else {
-            $('#VendorImageContainer').hide();
+    var VId = $('#vendorIdInput').val();
+    if (VId == "00000000-0000-0000-0000-000000000000") {
+        function toggleImagePreview(show) {
+            if (show) {
+                $('#vendorImagePreview').show();
+                $('#DisplayVendorInitials').hide();
+                $("#VendorImageContainer").show();
+            } else {
+                $('#vendorImagePreview').hide();
+                $('#DisplayVendorInitials').show();
+                $("#VendorImageContainer").hide();
+            }
         }
     }
+    else {
+        function toggleImagePreview(show) {
+            if (show) {
+                $('#vendorImagePreview').show();
+                $('#DisplayVendorInitials').hide();
+                $("#VendorImageContainer").show();
+            } else {
+                $('#vendorImagePreview').hide();
+                $('#DisplayVendorInitials').show();
+            }
+        }
+    }
+    
+
     $('#deleteVendorImageButton').click(function () {
-        $('#vendorImagePreview').attr('src', '');
+        $('#vendorImagePreview').attr('src', '#').hide();
         $('#companylogoInput').val('');
         $("#currentVendorImageName").text('');
+        $("#VendorImageContainer").hide();
         toggleImagePreview(false);
     });
+
     $('#companylogoInput').change(function () {
         var input = this;
         if (input.files && input.files[0]) {
             var reader = new FileReader();
             reader.onload = function (e) {
-                $('#vendorImagePreview').attr('src', e.target.result);
+                $('#vendorImagePreview').attr('src', e.target.result).show();
                 toggleImagePreview(true);
             }
             reader.readAsDataURL(input.files[0]);
@@ -443,3 +466,5 @@ $(document).ready(function () {
         toggleImagePreview(true);
     }
 });
+
+

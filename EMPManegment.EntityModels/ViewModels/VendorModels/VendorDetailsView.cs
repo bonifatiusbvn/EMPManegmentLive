@@ -43,7 +43,8 @@ namespace EMPManegment.EntityModels.ViewModels.VendorModels
         public Guid? UpdatedBy { get; set; }
 
         public DateTime? UpdatedOn { get; set; }
-        public string? FullAddress { get; set; }       
+        public string? FullAddress { get; set; }
+        public string? Image { get; set; }
     }
 
 
