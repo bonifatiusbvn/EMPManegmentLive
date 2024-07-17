@@ -511,6 +511,12 @@ namespace EMPManegment.Web.Controllers
                         case "thismonth":
                             expense = expense.Where(e => e.Date.Year == DateTime.Now.Year && e.Date.Month == DateTime.Now.Month).ToList();
                             break;
+                        case "thismonth & debit":
+                            expense = expense.Where(e => e.Date.Year == DateTime.Now.Year && e.Date.Month == DateTime.Now.Month && e.Account.ToLower() == "debit" && e.IsApproved == true).ToList();
+                            break;
+                        case "thismonth & credit":
+                            expense = expense.Where(e => e.Date.Year == DateTime.Now.Year && e.Date.Month == DateTime.Now.Month && e.Account.ToLower() == "credit").ToList();
+                            break;
                         case "lastmonth":
                             var lastMonth = DateTime.Now.AddMonths(-1);
                             expense = expense.Where(e => e.Date.Year == lastMonth.Year && e.Date.Month == lastMonth.Month).ToList();

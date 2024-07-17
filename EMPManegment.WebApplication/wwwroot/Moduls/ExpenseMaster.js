@@ -501,18 +501,22 @@ function deleteExpense(Id) {
 }
 
 function GetPayUserExpenseCreditList(userId) {
-    var filterType = "credit";
+    var filterType = "thismonth & credit";
+    var encodedFilterType = encodeURIComponent(filterType);
     $('#UserPayExpenseTableCredit').DataTable({
         processing: false,
         serverSide: true,
         filter: true,
-        "bDestroy": true,
-        searching: false,
+        destroy: true,
+        order: [[3, 'asc']],
+        pageLength: 30,
         info: false,
-        lengthChange: false,
+        lengthChange: false,  
+        searching: false, 
+        pagingType: "simple",
         ajax: {
             type: "POST",
-            url: '/ExpenseMaster/GetUserExpenseList?UserId=' + userId + '&filterType=' + filterType,
+            url: '/ExpenseMaster/GetUserExpenseList?UserId=' + userId + '&filterType=' + encodedFilterType,
             dataType: 'json',
         },
         columns: [
@@ -542,6 +546,7 @@ function GetPayUserExpenseCreditList(userId) {
             },
             { "data": "account", "name": "Account", "visible": false },
         ],
+        scrollY: 400,
         scrollX: true,
         scrollCollapse: true,
         fixedHeader: {
@@ -552,7 +557,7 @@ function GetPayUserExpenseCreditList(userId) {
         columnDefs: [{
             targets: [0],
             orderable: false,
-            width: "auto"
+            width: "20%"
         }],
         "footerCallback": function (row, data, start, end, display) {
             var api = this.api(), data;
@@ -581,18 +586,22 @@ function GetPayUserExpenseCreditList(userId) {
     });
 }
 function GetPayUserExpenseDebitList(userId) {
-    var filtertype = "debit";
+    var filterType = "thismonth & debit";
+    var encodedFilterType = encodeURIComponent(filterType);
     $('#UserPayExpenseTableDebit').DataTable({
         processing: false,
         serverSide: true,
         filter: true,
-        "bDestroy": true,
-        searching: false,
+        destroy: true,
+        order: [[3, 'asc']],
+        pageLength: 30,
         info: false,
         lengthChange: false,
+        searching: false, 
+        pagingType: "simple",
         ajax: {
             type: "POST",
-            url: '/ExpenseMaster/GetUserExpenseList?UserId=' + userId + '&filterType=' + filtertype,
+            url: '/ExpenseMaster/GetUserExpenseList?UserId=' + userId + '&filterType=' + encodedFilterType,
             dataType: 'json',
         },
         columns: [
@@ -622,6 +631,7 @@ function GetPayUserExpenseDebitList(userId) {
             },
             { "data": "account", "name": "Account", "visible": false },
         ],
+        scrollY: 400,
         scrollX: true,
         scrollCollapse: true,
         fixedHeader: {
@@ -632,7 +642,7 @@ function GetPayUserExpenseDebitList(userId) {
         columnDefs: [{
             targets: [0],
             orderable: false,
-            width: "auto"
+            width: "20%"
         }],
         "footerCallback": function (row, data, start, end, display) {
             var api = this.api(), data;
