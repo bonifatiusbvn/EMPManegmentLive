@@ -85,6 +85,51 @@ $(document).ready(function () {
     GetExpenseTypeList();
 });
 
+
+$(document).ready(function () {
+    function GetUsersList() {
+        $.ajax({
+            url: '/Task/GetUserName',
+            method: 'GET',
+            success: function (result) {
+                var UserList = result.map(function (data) {
+                    return {
+                        label: data.firstName + ' ' + data.lastName + ' (' + data.userName + ')',
+                        value: data.id
+                    };
+                });
+
+                function setupAutocomplete(inputId, hiddenId) {
+                    $(inputId).autocomplete({
+                        source: UserList,
+                        minLength: 0,
+                        focus: function (event, ui) {
+                            event.preventDefault();
+                            $(inputId).val(ui.item.label);
+                        },
+                        select: function (event, ui) {
+                            $(inputId).val(ui.item.label);
+                            $(hiddenId).val(ui.item.value);
+                            event.preventDefault();
+                            return false;
+                        }
+                    }).focus(function () {
+                        $(this).autocomplete("search");
+                    });
+                }
+
+                setupAutocomplete("#txtExpenseUsername", "#txtExpenseUsernameHidden");
+                setupAutocomplete("#EditExpenseUserName", "#EditExpenseUserNameHidden");
+            },
+            error: function (err) {
+                toastr.error("Failed to fetch User List: ", err);
+            }
+        });
+    }
+
+    GetUsersList();
+});
+
 function SelectExpenseTypeId() {
     document.getElementById("txtexpensetypeid").value = document.getElementById("txtexpensetype").value;
     document.getElementById("Editexpensetypeid").value = document.getElementById("Editexpensetype").value;
@@ -120,6 +165,7 @@ function AddMyExpenseDetails() {
         formData.append("Date", $("#txtdate").val());
         formData.append("Account", $("#txtaccount").val());
         formData.append("TotalAmount", $("#txttotalamount").val());
+        formData.append("UserId", $("#txtExpenseUserId").val());
         formData.append("Image", $("#txtimage")[0].files[0]);
         $.ajax({
             url: '/ExpenseMaster/AddexpenseDetails',
@@ -158,6 +204,7 @@ function AddAllUserExpenseDetails() {
         formData.append("Account", $("#txtaccount").val());
         formData.append("TotalAmount", $("#txttotalamount").val());
         formData.append("Image", $("#txtimage")[0].files[0]);
+        formData.append("UserId", $("#txtExpenseUsernameHidden").val());
         $.ajax({
             url: '/ExpenseMaster/AddexpenseDetails',
             type: 'Post',
@@ -235,6 +282,7 @@ function UpdateExpenseDetails() {
         formData.append("IsPaid", $("#EditIsPaid").val());
         formData.append("IsApproved", $("#EditIsApproved").val());
         formData.append("Account", $("#Editaccount").val());
+        formData.append("UserId", $("#txtExpenseUserId").val());
 
         $.ajax({
             url: '/ExpenseMaster/UpdateExpenseDetails',
@@ -282,6 +330,8 @@ function EditAllUserExpenseDetails(Id) {
             $('#Edittotalamount').val(response.totalAmount);
             $('#Editaccount').val(response.account);
             $('#EditExpensepaymenttype').val(response.paymentType);
+            $('#EditExpenseUserName').val(response.fullName);
+            $('#EditExpenseUserNameHidden').val(response.userId);
             $('#EditIsPaid').val(response.isPaid ? "True" : "False");
             $('#EditIsApproved').val(response.isApproved ? "True" : "False");
         },
@@ -303,6 +353,7 @@ function UpdateExpenseListDetails() {
         formData.append("IsPaid", $("#EditIsPaid").val());
         formData.append("IsApproved", $("#EditIsApproved").val());
         formData.append("Account", $("#Editaccount").val());
+        formData.append("UserId", $("#EditExpenseUserNameHidden").val());
 
         $.ajax({
             url: '/ExpenseMaster/UpdateExpenseDetails',
@@ -341,11 +392,13 @@ $(document).ready(function () {
             EditDescription: "required",
             Editbillno: "required",
             Edittotalamount: "required",
+            EditExpenseUserName: "required",
         },
         messages: {
             EditDescription: "Please enter description",
             Editbillno: "Please enter bill no",
-            Edittotalamount: "please enter correct total amount",
+            Edittotalamount: "Please enter correct total amount",
+            EditExpenseUserName: "Please enter UserName",
         }
     })
     $("#updatedetailbtn").on('click', function () {
@@ -379,12 +432,14 @@ $(document).ready(function () {
             txtDescription: "required",
             txtdate: "required",
             txttotalamount: "required",
+            txtExpenseUsername:"required",
         },
         messages: {
             txtexpensetype: "Please Select Expense Type",
             txtDescription: "Please Enter Description",
             txtdate: "Please Select the Date",
             txttotalamount: "Please Enter Correct Total Amount",
+            txtExpenseUsername: "Please Enter UserName",
         }
     })
 });

@@ -245,7 +245,7 @@ namespace EMPManegment.Web.Controllers
                 string userrole = _userSession.UserRoll;
                 var ExpenseDetails = new ExpenseDetailsView
                 {
-                    UserId = _userSession.UserId,
+                    UserId = Addexpense.UserId,
                     Role = userrole,
                     ExpenseType = Addexpense.ExpenseType,
                     PaymentType = Addexpense.PaymentType,

@@ -151,7 +151,6 @@
                         </div>
                         <div class="modal-body">
                             <form id="EditExpenseForm">
-
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="mb-3">
@@ -161,6 +160,7 @@
                                             <input type="hidden" class="text-muted text-uppercase fw-semibold" id="Editexpensetypeid" />
                                         </div>
                                         <label id="Editexpensetype-error" class="error" for="Editexpensetype"></label>
+                                        <input type="hidden" class="text-muted text-uppercase fw-semibold" id="txtExpenseUserId" value="@_userSession.UserId">
                                     </div>
                                     <div class="col-lg-6">
                                         <div class="mb-3">
@@ -321,6 +321,7 @@
                                                     <input type="text" class="form-control" id="txtexpensetype" name="txtexpensetype" placeholder="Enter Expense Type">
                                                     <input type="hidden" id="txtexpensetypeHidden" name="txtexpensetypeHidden">
                                                     <input type="hidden" class="text-muted text-uppercase fw-semibold" id="txtaccount" value="Debit">
+                                                    <input type="hidden" class="text-muted text-uppercase fw-semibold" id="txtExpenseUserId" value="@_userSession.UserId">
                                                 </div>
                                                 <label id="txtexpensetype-error" class="error" for="txtexpensetype"></label>
                                             </div>
