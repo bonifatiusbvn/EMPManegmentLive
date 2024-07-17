@@ -754,7 +754,6 @@ function DisplayAllUserExpenseList() {
             },
             { "data": "id", "name": "Id", "visible": false },
             { "data": "expenseTypeName", "name": "ExpenseTypeName" },
-            { "data": "paymentTypeName", "name": "PaymentTypeName" },
             { "data": "billNumber", "name": "BillNumber" },
             { "data": "description", "name": "Description" },
             {

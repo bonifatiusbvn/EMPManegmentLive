@@ -31,7 +31,7 @@
             <div class="card">
                 <div class="card-body">
                     <div class="mb-3">
-                        <label class="form-label" for="projectTitle">Project Title</label>
+                        <label class="form-label" for="projectTitle">Project Title <span class="text-danger">*</span></label>
                         <input type="text" class="form-control" id="projectTitle" placeholder="Enter project title" name="projectTitle" value="@Model.ProjectTitle">
                         <input type="hidden" id="textprojectId" value="@Model.ProjectId">
                         <input type="hidden" id="textProjectUserId" value="@_userSession.UserId">
@@ -66,7 +66,7 @@
                         }
                     </div>
                     <div class="mb-3">
-                        <label class="form-label" for="projectDescription">Project Description</label>
+                        <label class="form-label" for="projectDescription">Project Description <span class="text-danger">*</span></label>
                         @if (Model.ProjectDescription != null)
                         {
                             <textarea class="form-control " id="projectDescription" rows="3" placeholder="Enter description" name="projectDescription">@Model.ProjectDescription</textarea>
@@ -79,7 +79,7 @@
                     <div class="row">
                         <div class="col-lg-4">
                             <div class="mb-3 mb-lg-0">
-                                <label for="projectPriority" class="form-label">Priority</label>
+                                <label for="projectPriority" class="form-label">Priority <span class="text-danger">*</span></label>
                                 @if (Model.ProjectPriority != null)
                                 {
                                     <select class="form-control form-select valid" data-choices data-choices-search-false id="projectPriority" name="projectPriority">
@@ -116,7 +116,7 @@
                         </div>
                         <div class="col-lg-4">
                             <div class="mb-3 mb-lg-0">
-                                <label for="projectStatus" class="form-label">Status</label>
+                                <label for="projectStatus" class="form-label">Status <span class="text-danger">*</span></label>
                                 @if (Model.ProjectStatus != null)
                                 {
                                     <select class="form-control form-select valid" data-choices data-choices-search-false id="projectStatus" name="projectStatus">
@@ -143,7 +143,7 @@
                         </div>
                         <div class="col-lg-4">
                             <div>
-                                <label for="projectdeadline" class="form-label">Deadline</label>
+                                <label for="projectdeadline" class="form-label">Deadline <span class="text-danger">*</span></label>
                                 @{
                                     DateTime deadlineDate = Model.ProjectDeadline != DateTime.MinValue ? Model.ProjectDeadline : DateTime.Now;
                                     string formattedDeadlineDate = deadlineDate.ToString("yyyy-MM-dd");
@@ -167,7 +167,7 @@
             <div class="card">
                 <div class="card-body">
                     <div class="col-12 mb-3">
-                        <label class="form-label">BuildingName</label> <br />
+                        <label class="form-label">BuildingName <span class="text-danger">*</span></label> <br />
                         @if (Model.BuildingName != null)
                         {
                             <textarea type="text" class="form-control" rows="3" placeholder="BuildingName" id="txtBuildingName" name="txtBuildingName">@Model.BuildingName</textarea>
@@ -179,17 +179,17 @@
                     </div>
                     <div class="row">
                         <div class="col-6 mb-3">
-                            <label class="form-label">Area</label>
+                            <label class="form-label">Area <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" placeholder="Area" id="txtProjectArea" name="txtProjectArea" value="@Model.Area">
                         </div>
                         <div class="col-6 mb-3">
-                            <label class="form-label">Pincode</label>
+                            <label class="form-label">Pincode <span class="text-danger">*</span></label>
                             <input type="number" class="form-control" placeholder="Pincode" id="txtProjectPincode" name="txtProjectPincode" value="@Model.PinCode">
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-4 mb-3">
-                            <label class="form-label">Country</label>
+                            <label class="form-label">Country <span class="text-danger">*</span></label>
                             @if (Model.Country != null)
                             {
                                 <select id="projectCountry" name="projectCountry" class="form-control form-select valid" onchange="fn_getProjectState('ProjectState',null,this)">
@@ -205,7 +205,7 @@
                             <input type="hidden" id="txtprojectCountry" value="" />
                         </div>
                         <div class="col-4 mb-3">
-                            <label class="form-label">State</label>
+                            <label class="form-label">State <span class="text-danger">*</span></label>
                             @if (Model.State != null)
                             {
                                 <select id="ProjectState" name="ProjectState" class="form-control form-select valid" onchange="fn_getProjectcitiesbystateId('ProjectCity', null, this)">
@@ -221,7 +221,7 @@
                             <input type="hidden" id="txtProjectState" value="" />
                         </div>
                         <div class="col-4 mb-3">
-                            <label class="form-label">City</label>
+                            <label class="form-label">City <span class="text-danger">*</span></label>
                             @if (Model.City != null)
                             {
                                 <select id="ProjectCity" name="ProjectCity" class="form-control form-select valid">
@@ -265,12 +265,12 @@
                         <input type="text" class="form-control material_blue" id="projectname" name="projectname" value="@ViewBag.ProjectName" readonly />
                     </div>
                     <div class="mb-3">
-                        <label for="projectType" class="form-label">Project Type</label>
+                        <label for="projectType" class="form-label">Project Type <span class="text-danger">*</span></label>
                         <input type="text" class="form-control material_blue" id="projectType" name="projectType" placeholder="Enter Project Type" value="@Model.ProjectType" />
 
                     </div>
                     <div class="mb-3">
-                        <label for="projectStartDate" class="form-label">Project Start Date</label>
+                        <label for="projectStartDate" class="form-label">Project Start Date <span class="text-danger">*</span></label>
                         @{
                             DateTime startDate = Model.ProjectStartDate != DateTime.MinValue ? Model.ProjectStartDate : DateTime.Now;
                             string formattedStartDate = startDate.ToString("yyyy-MM-dd");
@@ -311,7 +311,7 @@
                 </div>
                 <div class="card-body">
                     <div class="mb-3">
-                        <label for="projectHead" class="form-label">Project Head</label>
+                        <label for="projectHead" class="form-label">Project Head <span class="text-danger">*</span></label>
                         <input type="text" class="form-control material_blue" id="projectHead" name="projectHead" placeholder="Enter Project Head" value="@Model.ProjectHead" />
                     </div>
                 </div>
