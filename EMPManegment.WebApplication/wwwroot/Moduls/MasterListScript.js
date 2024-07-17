@@ -435,26 +435,26 @@ function GetVendorNameList() {
     });
 }
 
-function showWeatherAPI(city) {
-    $.ajax({
-        url: '/Home/GetWeatherinfo?city=' + city,
-        type: "GET",
-        contentType: 'application/json;charset=utf-8;',
-        traditional: true,
+//function showWeatherAPI(city) {
+//    $.ajax({
+//        url: '/Home/GetWeatherinfo?city=' + city,
+//        type: "GET",
+//        contentType: 'application/json;charset=utf-8;',
+//        traditional: true,
 
-        success: function (result) {
-            $('#getweather').html(result.current.temp_c + ' °C');
-            $('#weathericon').attr('src', result.current.condition.icon);
-        },
-        complete: function (data) {
-            // $('#searchresult').html(data.responseText);
-        },
-        error: function (response) {
-            siteloaderhide();
-            console.error("Error fetching weather information:", response);
-        }
-    });
-}
+//        success: function (result) {
+//            $('#getweather').html(result.current.temp_c + ' °C');
+//            $('#weathericon').attr('src', result.current.condition.icon);
+//        },
+//        complete: function (data) {
+//            // $('#searchresult').html(data.responseText);
+//        },
+//        error: function (response) {
+//            siteloaderhide();
+//            console.error("Error fetching weather information:", response);
+//        }
+//    });
+//}
 
 function fn_GetAllCities() {
     $.ajax({
@@ -506,5 +506,5 @@ function fn_GetAllCities() {
 
 function fn_ChangeCityDrp(selectedCity) {
     sessionStorage.setItem('SelectedCityName', selectedCity);
-    showWeatherAPI(selectedCity);
+    /*showWeatherAPI(selectedCity);*/
 }

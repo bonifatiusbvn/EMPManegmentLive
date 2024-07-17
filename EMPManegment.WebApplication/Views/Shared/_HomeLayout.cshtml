@@ -68,41 +68,42 @@
                     <a class="btn btn-sm px-3 fs-16 header-item vertical-menu-btn topnav-hamburger" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
                 </li>
             </ul>
-            <h6 class="text-info mb-0 fs-16" style="margin-top: 9px;margin-left: 10px;">
-                <form id="frmdrpdashbord">
-                    @if (_userSession.UserRoll == "Employee")
-                    {
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-info form-select" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="width: 480px;">
-                                --Selected Project--
-                            </button>
-                            <div class="dropdown-menu" id="drpUserProjectListMenu">
-                                <a class="dropdown-item" href="#" data-value="">--Selected Project--</a>
+            <div class="col-lg-4 col-3" style="width:250px">
+               
+                    <form id="frmdrpdashbord">
+                        @if (_userSession.UserRoll == "Employee")
+                        {
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-info form-select" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="width:180px;">
+                                    --Selected Project--
+                                </button>
+                                <div class="dropdown-menu" id="drpUserProjectListMenu">
+                                    <a class="dropdown-item" href="#" data-value="">--Selected Project--</a>
+                                </div>
                             </div>
-                        </div>
-                        <select class="form-select-lg border-0" id="drpUserProjectList" style="display:none;">
-                            <option selected value="">--Selected Project--</option>
-                        </select>
+                            <select class="form-select-lg border-0" id="drpUserProjectList" style="display:none;">
+                                <option selected value="">--Selected Project--</option>
+                            </select>
 
-                    }
-                    else
-                    {
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-info form-select" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="width: 480px;">
-                                --All Projects--
-                            </button>
-                            <div class="dropdown-menu" id="drpUserProjectListMenu">
-                                <a class="dropdown-item" href="#" data-value="">--All Projects--</a>
+                        }
+                        else
+                        {
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-info form-select" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="width:180px;">
+                                    --All Projects--
+                                </button>
+                                <div class="dropdown-menu" id="drpUserProjectListMenu">
+                                    <a class="dropdown-item" href="#" data-value="">--All Projects--</a>
+                                </div>
                             </div>
-                        </div>
 
-                        <select class="form-select-lg border-0" id="drpProjectName" style="display:none;">
-                            <option selected value="">--All Project--</option>
-                        </select>
+                            <select class="form-select-lg border-0" id="drpProjectName" style="display:none;">
+                                <option selected value="">--All Project--</option>
+                            </select>
 
-                    }
-                </form>
-            </h6>
+                        }
+                    </form>
+            </div>
             @{
                 var profilePhoto = UserSession.ProfilePhoto;
                 var fullName = _userSession.FullName;
@@ -179,7 +180,7 @@
             <!-- Brand Logo -->
             <a asp-action="UserHome" asp-controller="Home" class="brand-link">
                 <img src="~/assets/images/bonifatiusicon.ico" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-                <span class="brand-text font-weight-light">Bonifatius.ERP</span>
+                <span class="brand-text font-weight-light">Bonifatius ERP</span>
             </a>
 
             <!-- Sidebar -->
