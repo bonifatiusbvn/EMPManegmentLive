@@ -16,9 +16,11 @@ using DocumentFormat.OpenXml.Drawing.Charts;
 using EMPManegment.Web.Helper;
 using EMPManegment.EntityModels.ViewModels.ExpenseMaster;
 using Irony.Parsing.Construction;
+using Microsoft.AspNetCore.Authorization;
 #nullable disable
 namespace EMPManegment.Web.Controllers
 {
+    [Authorize]
     public class PurchaseRequestController : Controller
     {
         public PurchaseRequestController(WebAPI webAPI, IWebHostEnvironment environment, APIServices aPIServices)

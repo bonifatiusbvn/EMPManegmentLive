@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 #nullable disable
 namespace EMPManegment.Web.Controllers
 {
+    [Authorize]
     public class CompanyController : Controller
     {
         public CompanyController(WebAPI webAPI, IWebHostEnvironment environment, APIServices aPIServices, UserSession userSession)

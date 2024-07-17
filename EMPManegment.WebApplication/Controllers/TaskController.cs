@@ -20,6 +20,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 #nullable disable
 namespace EMPManegment.Web.Controllers
 {
+    [Authorize]
     public class TaskController : Controller
     {
         public TaskController(WebAPI webAPI, IWebHostEnvironment environment, APIServices aPIServices, UserSession userSession)
