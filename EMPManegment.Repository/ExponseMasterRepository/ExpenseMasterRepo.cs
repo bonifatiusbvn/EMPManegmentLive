@@ -252,7 +252,7 @@ namespace EMPManegment.Repository.ExponseMasterRepository
 
                     if (ExpenseDetails.Role == "Account" || ExpenseDetails.Role == "Super Admin")
                     {
-                        expense.Account = "Credit";
+
                         expense.IsPaid = true;
                         expense.IsApproved = true;
                     }
@@ -267,7 +267,7 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                 {
                     expense.BillNumber = "BTPLBILL";
                     expense.Description = "Expense Paid";
-                    expense.Date = DateTime.Today;
+                    expense.Date = ExpenseDetails.Date;
                     expense.Account = ExpenseDetails.Account;
                     expense.PaymentType = ExpenseDetails.PaymentType;
                     expense.IsPaid = false;
