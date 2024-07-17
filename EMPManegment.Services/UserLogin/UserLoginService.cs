@@ -27,12 +27,12 @@ namespace EMPManegment.Services.UserLogin
         {
             return await UserLogin.LoginUser(LoginUser);
         }
-        public async Task<string> AuthenticateUser(LoginRequest login)
+        public async Task<string> AuthenticateUser(LoginView login)
         {
             return await UserLogin.AuthenticateUser(login);
         }
 
-        public string GenerateToken(LoginRequest model)
+        public string GenerateToken(LoginView model)
         {
             return UserLogin.GenerateToken(model);
         }

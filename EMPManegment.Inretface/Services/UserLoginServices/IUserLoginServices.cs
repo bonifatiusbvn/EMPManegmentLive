@@ -15,7 +15,7 @@ namespace EMPManegment.Inretface.Services.UserLoginServices
     {
         public bool GetUserName(string Username);
 
-        Task<string> AuthenticateUser(LoginRequest login);
+        Task<string> AuthenticateUser(LoginView login);
 
         string CheckEmloyess();
 
@@ -27,6 +27,6 @@ namespace EMPManegment.Inretface.Services.UserLoginServices
 
         Task<UserResponceModel> FindByEmailAsync(SendEmailModel Email);
 
-        string GenerateToken(LoginRequest model);
+        string GenerateToken(LoginView model);
     }
 }
