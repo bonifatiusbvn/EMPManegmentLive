@@ -17,7 +17,7 @@ using Microsoft.AspNetCore.Http;
 using Aspose.Pdf.Operators;
 using EMPManegment.Web.Helper;
 using Microsoft.AspNetCore.Authorization;
-
+#nullable disable
 namespace EMPManegment.Web.Controllers
 {
     [Authorize]
@@ -245,7 +245,7 @@ namespace EMPManegment.Web.Controllers
                 string userrole = _userSession.UserRoll;
                 var ExpenseDetails = new ExpenseDetailsView
                 {
-                    UserId = _userSession.UserId,
+                    UserId = Addexpense.UserId,
                     Role = userrole,
                     ExpenseType = Addexpense.ExpenseType,
                     PaymentType = Addexpense.PaymentType,

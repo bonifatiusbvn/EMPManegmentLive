@@ -13,7 +13,7 @@ using EMPManegment.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using X.PagedList;
-
+#nullable disable
 namespace EMPManegment.Web.Controllers
 {
     public class ProductMasterController : Controller
@@ -133,7 +133,7 @@ namespace EMPManegment.Web.Controllers
                 }
                 else
                 {
-                    return Ok(new { Message = "Please Select Product"});
+                    return Ok(new { Message = "Please Select Product" });
                 }
             }
             catch (Exception ex)
@@ -190,7 +190,7 @@ namespace EMPManegment.Web.Controllers
             try
             {
                 List<ProductDetailsView> productlist = new List<ProductDetailsView>();
-                ApiResponseModel response = await APIServices.PostAsync("", "ProductMaster/GetAllProductList?sortBy="+ sortBy);
+                ApiResponseModel response = await APIServices.PostAsync("", "ProductMaster/GetAllProductList?sortBy=" + sortBy);
                 if (response.code == 200)
                 {
                     productlist = JsonConvert.DeserializeObject<List<ProductDetailsView>>(response.data.ToString());

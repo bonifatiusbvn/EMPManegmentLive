@@ -231,6 +231,13 @@
                                         <input type="hidden" class="form-control" id="txtAccount" value="Credit" readonly>
                                     </div>
                                 </div><!-- end col -->
+                                <div>
+                                    <div class="input-group mb-3">
+                                        <label class="input-group-text" for="txtcreditamount">Date</label>
+                                        <input type="date" class="form-control" id="txtpaydate" value="@DateTime.Now.ToString("yyyy-MM-dd")">
+                                        <span id="warningMessage" style="color: red;"></span>
+                                    </div>
+                                </div><!-- end col -->
 
                                 <div>
                                     <div class="input-group mb-3">

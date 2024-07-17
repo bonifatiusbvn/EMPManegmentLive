@@ -252,7 +252,7 @@ namespace EMPManegment.Repository.ExponseMasterRepository
 
                     if (ExpenseDetails.Role == "Account" || ExpenseDetails.Role == "Super Admin")
                     {
-                        expense.Account = "Credit";
+
                         expense.IsPaid = true;
                         expense.IsApproved = true;
                     }
@@ -267,7 +267,7 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                 {
                     expense.BillNumber = "BTPLBILL";
                     expense.Description = "Expense Paid";
-                    expense.Date = DateTime.Today;
+                    expense.Date = ExpenseDetails.Date;
                     expense.Account = ExpenseDetails.Account;
                     expense.PaymentType = ExpenseDetails.PaymentType;
                     expense.IsPaid = false;
@@ -301,6 +301,7 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                 ExpenseDetail = (from a in Context.TblExpenseMasters.Where(x => x.Id == Id)
                                  join b in Context.TblPaymentTypes on a.PaymentType equals b.Id
                                  join c in Context.TblExpenseTypes on a.ExpenseType equals c.Id
+                                 join d in Context.TblUsers on a.UserId equals d.Id
 
                                  select new ExpenseDetailsView
                                  {
@@ -315,6 +316,7 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                                      TotalAmount = a.TotalAmount,
                                      Image = a.Image,
                                      Account = a.Account,
+                                     FullName = d.FirstName + ' ' + d.LastName + "( " + d.UserName + ")",
                                      IsPaid = a.IsPaid,
                                      IsApproved = a.IsApproved,
                                      ProjectId = a.ProjectId,
@@ -426,6 +428,7 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                     GetExpenseDetail.IsApproved = ExpenseDetails.IsApproved;
                     GetExpenseDetail.ApprovedBy = ExpenseDetails.ApprovedBy;
                     GetExpenseDetail.ApprovedByName = ExpenseDetails.ApprovedByName;
+                    GetExpenseDetail.UserId = ExpenseDetails.UserId;
 
                     Context.TblExpenseMasters.Update(GetExpenseDetail);
                     Context.SaveChanges();

@@ -96,7 +96,7 @@
                                         <div class="mb-3">
                                             <label for="firstnameInput" class="form-label">
                                                 First
-                                                Name
+                                                Name <span class="text-danger">*</span>
                                             </label>
                                             <input type="text" class="form-control" id="firstnameInput" name="firstnameInput" placeholder="Enter your firstname" value="@Model.FirstName" readonly>
                                             <input type="hidden" class="form-control" id="UseridInput" value="@Model.Id" />
@@ -109,7 +109,7 @@
                                         <div class="mb-3">
                                             <label for="lastnameInput" class="form-label">
                                                 Last
-                                                Name
+                                                Name <span class="text-danger">*</span>
                                             </label>
                                             <input type="text" class="form-control" id="lastnameInput" name="lastnameInput" placeholder="Enter your lastname" value="@Model.LastName" readonly>
                                         </div>
@@ -119,7 +119,7 @@
                                         <div class="mb-3">
                                             <label for="phonenumberInput" class="form-label">
                                                 Phone
-                                                Number
+                                                Number <span class="text-danger">*</span>
                                             </label>
                                             <input type="text" class="form-control" id="phonenumberInput" name="phonenumberInput" placeholder="Enter your phone number" value="@Model.PhoneNumber" readonly>
                                         </div>
@@ -129,7 +129,7 @@
                                         <div class="mb-3">
                                             <label for="emailInput" class="form-label">
                                                 Email
-                                                Address
+                                                Address <span class="text-danger">*</span>
                                             </label>
                                             <input type="email" class="form-control" id="emailInput" name="emailInput" placeholder="Enter your email" value="@Model.Email" readonly>
                                         </div>
@@ -138,7 +138,7 @@
                                     <div class="col-lg-6">
                                         <div class="mb-3">
                                             <label for="birthdateInput" class="form-label">
-                                                Birthdate
+                                                Birthdate <span class="text-danger">*</span>
                                             </label>
                                             <input type="date" class="form-control" id="birthdateInput" name="birthdateInput" placeholder="Select date" value="@Model.DateOfBirth.ToString("yyyy-MM-dd")" readonly />
                                         </div>
@@ -155,7 +155,7 @@
                                     <!--end col-->
                                     <div class="col-lg-6">
                                         <div class="mb-3">
-                                            <label for="genderInput" class="form-label">Gender</label>
+                                            <label for="genderInput" class="form-label">Gender <span class="text-danger">*</span></label>
                                             <input type="text" class="form-control" id="genderInput" name="genderInput" placeholder="Gender" value="@Model.Gender" readonly>
                                         </div>
                                     </div>
@@ -219,7 +219,7 @@
                                         <div>
                                             <label for="passwordinput" class="form-label">
                                                 New
-                                                Password*
+                                                Password<span class="text-danger">*</span>
                                             </label>
                                             <div class="position-relative auth-pass-inputgroup">
                                                 <input type="password" class="form-control pe-5 password-input" id="UserInfopassword" placeholder="Enter new password" name="UserInfopassword" onpaste="return false" aria-describedby="passwordInput" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" required>
@@ -233,7 +233,7 @@
                                         <div>
                                             <label for="confirmpasswordinput" class="form-label">
                                                 Confirm
-                                                Password*
+                                                Password <span class="text-danger">*</span>
                                             </label>
                                             <div class="position-relative auth-pass-inputgroup mb-3">
                                                 <input type="password" class="form-control pe-5 password-input" id="UserInfoconfirmpassword" placeholder="Confirm password" name="UserInfoconfirmpassword" onpaste="return false" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" required>

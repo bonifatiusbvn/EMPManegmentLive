@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 using System.Net;
-
+#nullable disable
 namespace EMPManagment.API.Controllers
 {
     [Route("api/[controller]")]
@@ -243,7 +243,7 @@ namespace EMPManagment.API.Controllers
             try
             {
                 var projectDetails = await ProjectDetail.UpdateProjectDetails(updateProject);
-                if(projectDetails.Code != (int)HttpStatusCode.NotFound && projectDetails.Code != (int)HttpStatusCode.InternalServerError) 
+                if (projectDetails.Code != (int)HttpStatusCode.NotFound && projectDetails.Code != (int)HttpStatusCode.InternalServerError)
                 {
                     response.Code = (int)HttpStatusCode.OK;
                     response.Message = projectDetails.Message;

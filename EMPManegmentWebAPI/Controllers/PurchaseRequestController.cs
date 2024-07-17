@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
-
+#nullable disable
 namespace EMPManagment.API.Controllers
 {
     [Route("api/[controller]")]

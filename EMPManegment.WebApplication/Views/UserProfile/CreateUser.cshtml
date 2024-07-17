@@ -32,7 +32,7 @@
             <div class="card-body d-flex justify-content-center">
                 <form id="CreateUserForm" method="post" enctype="multipart/form-data" style="width:750px">
                     <div class="fv-row mb-4">
-                        <label for="drpCuDepartment">Department</label>
+                        <label for="drpCuDepartment">Department <span class="text-danger">*</span></label>
                         <select id="drpCuDepartment" class="form-control form-select" name="drpCuDepartment">
                             <option selected value="">--Select Department--</option>
                         </select>
@@ -44,13 +44,13 @@
                     <div class="row">
                         <div class="col-6">
                             <div class="fv-row mb-4">
-                                <label for="txtCuFirstname">First Name</label>
+                                <label for="txtCuFirstname">First Name <span class="text-danger">*</span></label>
                                 <input type="text" placeholder="First Name" name="txtCuFirstname" class="form-control" id="txtCuFirstname" />
                             </div>
                         </div>
                         <div class="col-6">
                             <div class="fv-row mb-4">
-                                <label for="txtCuLastname">Last Name</label>
+                                <label for="txtCuLastname">Last Name <span class="text-danger">*</span></label>
                                 <input type="text" placeholder="Last Name" name="txtCuLastname" class="form-control" id="txtCuLastname" />
                             </div>
                         </div>
@@ -61,13 +61,13 @@
                                 <div class="row">
                                     <div class="col-6">
                                         <div class="fv-row mb-4">
-                                            <label for="txtCuDOB">Date of Birth</label>
+                                            <label for="txtCuDOB">Date of Birth <span class="text-danger">*</span></label>
                                             <input type="date" placeholder="DOB" id="txtCuDOB" name="txtCuDOB" max="@DateTime.Now.ToString("yyyy-MM-dd")" autocomplete="off" class="form-control bg-transparent" />
                                         </div>
                                     </div>
                                     <div class="col-6">
                                         <div class="fv-row mb-4">
-                                            <label for="drpCuGender">Gender</label>
+                                            <label for="drpCuGender">Gender <span class="text-danger">*</span></label>
                                             <select id="drpCuGender" class="form-control form-select" name="drpCuGender">
                                                 <option value="">--Select Gender--</option>
                                                 <option value="Male">Male</option>
@@ -78,7 +78,7 @@
                                     </div>
                                 </div>
                                 <div class="fv-row mb-4">
-                                    <label for="txtCuEmail">Email</label>
+                                    <label for="txtCuEmail">Email <span class="text-danger">*</span></label>
                                     <input type="email" placeholder="Email" id="txtCuEmail" name="txtCuEmail" autocomplete="off" class="form-control bg-transparent" />
                                 </div>
                             </div>
@@ -88,7 +88,7 @@
                     <div class="row">
                         <div class="col-6">
                             <div class="fv-row mb-4">
-                                <label for="drpCuCountry">Country</label>
+                                <label for="drpCuCountry">Country <span class="text-danger">*</span></label>
                                 <select id="drpCuCountry" name="drpCuCountry" class="form-control form-select bg-transparent valid" onchange="fn_getUserState('drpCuState',null,this)">
                                     <option selected value="">--Select Country--</option>
                                 </select>
@@ -96,7 +96,7 @@
                         </div>
                         <div class="col-6">
                             <div class="fv-row mb-4">
-                                <label for="drpCuState">State</label>
+                                <label for="drpCuState">State <span class="text-danger">*</span></label>
                                 <select id="drpCuState" name="drpCuState" class="form-control form-select bg-transparent valid" onchange="fn_getUsercitiesbystateId('drpCuCity', null, this)">
                                     <option selected value="">--Select State--</option>
                                 </select>
@@ -107,7 +107,7 @@
                         <div class="row">
                             <div class="col-6">
                                 <div class="fv-row mb-4">
-                                    <label for="drpCuCity">City</label>
+                                    <label for="drpCuCity">City <span class="text-danger">*</span></label>
                                     <select id="drpCuCity" name="drpCuCity" class="form-control form-select bg-transparent valid">
                                         <option selected value="">--Select City--</option>
                                     </select>
@@ -115,26 +115,26 @@
                             </div>
                             <div class="col-6">
                                 <div class="fv-row mb-4">
-                                    <label for="textCuPhoneNumber">Mobile Number</label>
+                                    <label for="textCuPhoneNumber">Mobile Number <span class="text-danger">*</span></label>
                                     <input type="number" placeholder="Mobile.NO" id="textCuPhoneNumber" name="textCuPhoneNumber" autocomplete="off" class="form-control bg-transparent" />
                                 </div>
                             </div>
                             <div class="fv-row mb-6">
-                                <label for="textCuAddress">Address</label>
+                                <label for="textCuAddress">Address <span class="text-danger">*</span></label>
                                 <textarea type="text" class="form-control bg-transparent" rows="3" placeholder="Address" id="textCuAddress" name="textCuAddress"></textarea>
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-6">
-                            <label class="form-label" for="passwordinput">Password</label>
+                            <label class="form-label" for="passwordinput">Password <span class="text-danger">*</span></label>
                             <div class="position-relative auth-pass-inputgroup">
                                 <input type="password" class="form-control pe-5 password-input" onpaste="return false" placeholder="Enter password" id="passwordinput" name="passwordinput" aria-describedby="passwordInput" required>
                                 <button class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon" type="button" id="password-addon"><i class="ri-eye-fill align-middle"></i></button>
                             </div>
                         </div>
                         <div class="col-6">
-                            <label class="form-label" for="confirmpasswordinput">Confirm Password</label>
+                            <label class="form-label" for="confirmpasswordinput">Confirm Password <span class="text-danger">*</span></label>
                             <div class="position-relative auth-pass-inputgroup mb-3">
                                 <input type="password" class="form-control pe-5 password-input" onpaste="return false" placeholder="Confirm password" id="confirmpasswordinput" name="confirmpasswordinput" required>
                                 <button class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon" type="button" id="confirm-password-input"><i class="ri-eye-fill align-middle"></i></button>

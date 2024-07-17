@@ -151,7 +151,6 @@
                         </div>
                         <div class="modal-body">
                             <form id="EditExpenseForm">
-
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="mb-3">
@@ -161,6 +160,7 @@
                                             <input type="hidden" class="text-muted text-uppercase fw-semibold" id="Editexpensetypeid" />
                                         </div>
                                         <label id="Editexpensetype-error" class="error" for="Editexpensetype"></label>
+                                        <input type="hidden" class="text-muted text-uppercase fw-semibold" id="txtExpenseUserId" value="@_userSession.UserId">
                                     </div>
                                     <div class="col-lg-6">
                                         <div class="mb-3">
@@ -310,7 +310,7 @@
                                         <div class="col-lg-6">
                                             <div class="mb-3">
                                                 <div class="d-flex justify-content-between align-items-center" style="margin-top:-10px;">
-                                                    <label for="txtexpensetype" class="form-label">Expense Type</label>
+                                                    <label for="txtexpensetype" class="form-label">Expense Type <span class="text-danger">*</span></label>
                                                     <p class="text-muted">
                                                         <button type="button" onclick="DisplayExpenseTypeModal()" class="float-end text-decoration-underline btn btn-link waves-effect">
                                                             Add New-Expense Type
@@ -321,13 +321,14 @@
                                                     <input type="text" class="form-control" id="txtexpensetype" name="txtexpensetype" placeholder="Enter Expense Type">
                                                     <input type="hidden" id="txtexpensetypeHidden" name="txtexpensetypeHidden">
                                                     <input type="hidden" class="text-muted text-uppercase fw-semibold" id="txtaccount" value="Debit">
+                                                    <input type="hidden" class="text-muted text-uppercase fw-semibold" id="txtExpenseUserId" value="@_userSession.UserId">
                                                 </div>
                                                 <label id="txtexpensetype-error" class="error" for="txtexpensetype"></label>
                                             </div>
                                         </div>
                                         <div class="col-lg-6">
                                             <div class="mb-3">
-                                                <label class="form-label">Description</label>
+                                                <label class="form-label">Description <span class="text-danger">*</span></label>
                                                 <input type="text" id="txtDescription" class="form-control" name="txtDescription" placeholder="Enter Description" />
                                             </div>
                                         </div>
@@ -341,15 +342,15 @@
                                         </div>
                                         <div class="col-lg-6">
                                             <div class="mb-3">
-                                                <label class="form-label">Date</label>
-                                                <input type="date" id="txtdate" class="form-control" name="txtdate" />
+                                                <label class="form-label">Date <span class="text-danger">*</span></label>
+                                                <input type="date" id="txtdate" class="form-control" name="txtdate" placeholder="Enter Date" />
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-lg-6">
                                             <div class="mb-3">
-                                                <label class="form-label">Total Amount</label>
+                                                <label class="form-label">Total Amount <span class="text-danger">*</span></label>
                                                 <input type="number" id="txttotalamount" class="form-control" name="txttotalamount" placeholder="Enter Amount" oninput="preventEmptyValue(this)" min="1" value="1" />
                                             </div>
                                         </div>
@@ -386,7 +387,7 @@
                 <div class="modal-body">
                     <div class="hstack gap-3 align-items-start">
                         <div class="flex-grow-1">
-                            <label>Expense Type</label>
+                            <label>Expense Type <span class="text-danger">*</span></label>
                             <input class="form-control" id="textExpenseType" name="textExpenseType" placeholder="Enter Expense Type" type="text" />
                         </div>
                     </div>

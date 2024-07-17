@@ -20,7 +20,7 @@ using System.Net;
 using Microsoft.EntityFrameworkCore.Metadata;
 using EMPManegment.EntityModels.ViewModels.ProjectModels;
 using EMPManegment.Inretface.Interface.ProjectDetails;
-
+#nullable disable
 
 namespace EMPManagment.API.Controllers
 {
@@ -75,11 +75,11 @@ namespace EMPManagment.API.Controllers
 
         [HttpPost]
         [Route("ActiveDeactiveUsers")]
-        public async Task<IActionResult> ActiveDeactiveUsers(string UserName,Guid UpdatedBy)
+        public async Task<IActionResult> ActiveDeactiveUsers(string UserName, Guid UpdatedBy)
         {
             UserResponceModel responseModel = new UserResponceModel();
 
-            var userName = await UserListServices.ActiveDeactiveUsers(UserName,UpdatedBy);
+            var userName = await UserListServices.ActiveDeactiveUsers(UserName, UpdatedBy);
             try
             {
 
@@ -263,7 +263,7 @@ namespace EMPManagment.API.Controllers
                     response.Code = updateUser.Code;
                     response.Message = updateUser.Message;
                 }
-            } 
+            }
             catch (Exception ex)
             {
                 response.Code = (int)HttpStatusCode.InternalServerError;

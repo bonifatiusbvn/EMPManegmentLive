@@ -6,7 +6,7 @@ using EMPManegment.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-
+#nullable disable
 namespace EMPManegment.Web.Controllers
 {
     public class CompanyController : Controller

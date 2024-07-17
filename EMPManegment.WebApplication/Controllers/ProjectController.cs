@@ -46,7 +46,7 @@ namespace EMPManegment.Web.Controllers
         }
 
 
-        [FormPermissionAttribute("Create Project-View")]
+        [FormPermissionAttribute("Create List-Add")]
         [HttpGet]
         public async Task<IActionResult> CreateProject(Guid? ProjectId)
         {
@@ -431,7 +431,7 @@ namespace EMPManegment.Web.Controllers
                 UserResponceModel responseModel = new UserResponceModel();
                 if (postuser.code == 200)
                 {
-                    return Ok(new { postuser.message ,postuser.code});
+                    return Ok(new { postuser.message, postuser.code });
                 }
                 else
                 {
@@ -571,7 +571,7 @@ namespace EMPManegment.Web.Controllers
         {
             try
             {
-                ApiResponseModel postuser = await APIServices.PostAsync("", "ProjectDetails/DeleteProjectDocument?DocumentId="+ DocumentId);
+                ApiResponseModel postuser = await APIServices.PostAsync("", "ProjectDetails/DeleteProjectDocument?DocumentId=" + DocumentId);
                 if (postuser.code == 200)
                 {
                     return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
@@ -593,7 +593,7 @@ namespace EMPManegment.Web.Controllers
             {
                 List<ProjectDetailView> projectList = new List<ProjectDetailView>();
                 ApiResponseModel postuser = await APIServices.GetAsync(null, "ProjectDetails/GetProjectsList");
-                if(postuser.code == 200)
+                if (postuser.code == 200)
                 {
                     projectList = JsonConvert.DeserializeObject<List<ProjectDetailView>>(postuser.data.ToString());
                 }
@@ -653,7 +653,7 @@ namespace EMPManegment.Web.Controllers
                     ProjectStatus = UpdateProject.ProjectStatus,
                     UpdatedBy = UpdateProject.UpdatedBy,
                 };
-                if(UpdateProject.ProjectImage != null)
+                if (UpdateProject.ProjectImage != null)
                 {
                     var ProjectImg = Guid.NewGuid() + "_" + UpdateProject.ProjectImage.FileName;
                     var path = Environment.WebRootPath;

@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
-
+#nullable disable
 namespace EMPManagment.API.Controllers
 {
     [Route("api/[controller]")]
@@ -77,7 +77,7 @@ namespace EMPManagment.API.Controllers
                 if (addEmployee.Result.Code != (int)HttpStatusCode.NotFound)
                 {
                     response.Code = (int)HttpStatusCode.OK;
-                    response.Message =  addEmployee.Result.Message;
+                    response.Message = addEmployee.Result.Message;
 
                 }
                 else
