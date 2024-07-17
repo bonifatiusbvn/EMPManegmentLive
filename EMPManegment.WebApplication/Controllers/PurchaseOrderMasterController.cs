@@ -15,7 +15,7 @@ using Microsoft.CodeAnalysis;
 using Newtonsoft.Json;
 using System.Diagnostics;
 using X.PagedList;
-
+#nullable disable
 namespace EMPManegment.Web.Controllers
 {
     public class PurchaseOrderMasterController : Controller
@@ -242,7 +242,7 @@ namespace EMPManegment.Web.Controllers
             }
             catch (Exception ex)
             {
-                throw ex;   
+                throw ex;
             }
         }
     }

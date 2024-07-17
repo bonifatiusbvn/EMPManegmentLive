@@ -23,7 +23,7 @@ using X.PagedList;
 using System.Net.Http.Headers;
 using Microsoft.CodeAnalysis;
 using EMPManegment.EntityModels.ViewModels.Weather;
-
+#nullable disable
 namespace EMPManegment.Web.Controllers
 {
 

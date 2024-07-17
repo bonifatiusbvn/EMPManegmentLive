@@ -21,7 +21,7 @@ using PdfSharpCore;
 using PdfSharpCore.Pdf;
 using System.Net;
 using TheArtOfDev.HtmlRenderer.PdfSharp;
-
+#nullable disable
 namespace EMPManagment.API.Controllers
 {
     [Route("api/[controller]")]

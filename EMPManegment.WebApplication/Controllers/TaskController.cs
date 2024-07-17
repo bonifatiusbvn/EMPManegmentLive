@@ -17,7 +17,7 @@ using Newtonsoft.Json;
 using System.Data;
 using System.Threading.Tasks;
 using static System.Runtime.InteropServices.JavaScript.JSType;
-
+#nullable disable
 namespace EMPManegment.Web.Controllers
 {
     public class TaskController : Controller
@@ -108,7 +108,7 @@ namespace EMPManegment.Web.Controllers
                         UserId = task.UserId,
                         TaskTitle = task.TaskTitle,
                         ProjectId = task.ProjectId,
-                        Document= filepath,
+                        Document = filepath,
                     };
                     ApiResponseModel postuser = await APIServices.PostAsync(TaskDetails, "UserHome/AddTaskDetails");
                     if (postuser.code == 200)

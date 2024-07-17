@@ -45,7 +45,7 @@ using EMPManegment.EntityModels.ViewModels.FormMaster;
 using iTextSharp.text.pdf;
 using EMPManegment.EntityModels.ViewModels.Invoice;
 using Aspose.Pdf.Operators;
-
+#nullable disable
 namespace EMPManegment.Web.Controllers
 {
     [Authorize]
@@ -1080,10 +1080,10 @@ namespace EMPManegment.Web.Controllers
             {
                 List<UserPermissionModel> UserFormList = new List<UserPermissionModel>();
                 ApiResponseModel response = await APIServices.PostAsync("", "FormPermissionMaster/GetUserFormListById?UserId=" + UserId);
-                
+
                 if (response.code == 200)
                 {
-                   UserFormList = JsonConvert.DeserializeObject<List<UserPermissionModel>>(response.data.ToString());
+                    UserFormList = JsonConvert.DeserializeObject<List<UserPermissionModel>>(response.data.ToString());
                     return PartialView("~/Views/UserProfile/_UserFormPermissionPartial.cshtml", UserFormList);
                 }
                 else
@@ -1125,7 +1125,7 @@ namespace EMPManegment.Web.Controllers
         {
             try
             {
-                var UserId=_userSession.UserId;
+                var UserId = _userSession.UserId;
                 List<InvoiceViewModel> activity = new List<InvoiceViewModel>();
                 ApiResponseModel postuser = await APIServices.GetAsync("", "Invoice/InvoicActivityByUserId?UserId=" + UserId);
                 if (postuser.data != null)
@@ -1177,7 +1177,7 @@ namespace EMPManegment.Web.Controllers
             {
                 if (Profile.Image != null)
                 {
-                    
+
                     var UserImg = Guid.NewGuid() + "_" + Profile.Image.FileName;
                     var path = Environment.WebRootPath;
                     var filepath = "Content/Image/" + UserImg;
@@ -1200,7 +1200,7 @@ namespace EMPManegment.Web.Controllers
                     }
                 }
                 return BadRequest();
-                
+
             }
             catch (Exception ex)
             {

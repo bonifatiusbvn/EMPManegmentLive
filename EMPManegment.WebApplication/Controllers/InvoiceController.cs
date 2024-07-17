@@ -31,7 +31,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Mvc.Abstractions;
-
+#nullable disable
 namespace EMPManegment.Web.Controllers
 {
     public class InvoiceController : Controller
