@@ -308,9 +308,24 @@ function EnterInTime() {
 
 function EnterOutTime() {
     const isPending = $("#todayouttime").text() === "Pending";
+    const InTimeStr = $('#todayintime').text(); 
+    const currentTime = new Date();
+    const InTimeParts = InTimeStr.match(/(\d+):(\d+) (\w+)/);
+    const InTime = new Date(currentTime);
+    InTime.setHours(parseInt(InTimeParts[1]));
+    InTime.setMinutes(parseInt(InTimeParts[2]));
+    const ampm = InTimeParts[3].toUpperCase();
+    if (ampm === 'PM' && InTime.getHours() !== 12) {
+        InTime.setHours(InTime.getHours() + 12);
+    } else if (ampm === 'AM' && InTime.getHours() === 12) {
+        InTime.setHours(0);
+    }
+    const TotalMinutes = (currentTime - InTime) / 60000;
+
     const userId = $("#txtuserid").val();
     const formData = new FormData();
     formData.append("UserId", userId);
+    formData.append("OutTime", currentTime.toISOString());
 
     const ajaxCall = () => {
         $.ajax({
@@ -337,32 +352,39 @@ function EnterOutTime() {
     };
 
     if (isPending) {
-        Swal.fire({
-            title: "Are you sure you want to enter out-time?",
-            text: "You won't be able to revert this!",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonText: "Yes, enter it!",
-            cancelButtonText: "No, cancel!",
-            confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
-            cancelButtonClass: "btn btn-danger w-xs mt-2",
-            buttonsStyling: false,
-            showCloseButton: true
-        }).then((result) => {
-            if (result.isConfirmed) {
-                ajaxCall();
-            } else if (result.dismiss === Swal.DismissReason.cancel) {
-                Swal.fire(
-                    'Cancelled',
-                    'No changes were made!',
-                    'error'
-                );
-            }
-        });
+        if (TotalMinutes < 60) {
+            
+            toastr.warning("You can't enter out-time now!");
+        } else {
+            
+            Swal.fire({
+                title: "Are you sure you want to enter out-time?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Yes, enter it!",
+                cancelButtonText: "No, cancel!",
+                confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
+                cancelButtonClass: "btn btn-danger w-xs mt-2",
+                buttonsStyling: false,
+                showCloseButton: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    ajaxCall();
+                } else if (result.dismiss === Swal.DismissReason.cancel) {
+                    Swal.fire(
+                        'Cancelled',
+                        'No changes were made!',
+                        'error'
+                    );
+                }
+            });
+        }
     } else {
         ajaxCall();
     }
 }
+
 
 function ResetPassword() {
     var form = document.getElementById('resetPasswordForm');

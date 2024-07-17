@@ -83,6 +83,7 @@
                                                 <input type="hidden" id="txtexpensetypeHidden" name="txtexpensetypeHidden">
                                                 <input type="hidden" class="text-muted text-uppercase fw-semibold" id="txtexpensetypeid">
                                                 <input type="hidden" class="text-muted text-uppercase fw-semibold" id="txtaccount" value="Debit">
+                                                <input type="hidden" class="text-muted text-uppercase fw-semibold" id="txtExpenseUserId" value="@ViewBag.UserId">
                                             </div>
                                             <label id="txtexpensetype-error" class="error" for="txtexpensetype"></label>
                                         </div>
@@ -125,7 +126,7 @@
                             </form>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-danger btn-default m-1" id="close-modal" data-bs-dismiss="modal" onclick="ClearTextBox()">Close</button>
+                            <button type="button" class="btn btn-danger btn-default m-1" id="close-modal" data-bs-dismiss="modal">Close</button>
                             <button type="submit" class="btn btn-success" onclick="AddMyExpenseDetails();">Save</button>
                         </div>
                     </div>
@@ -196,6 +197,14 @@
 
 <script type="text/javascript">
     var userPermissions = '@Html.Raw(Json.Serialize(UserSession.FormPermisionData))';
+    document.addEventListener('DOMContentLoaded', function () {
+        var modal = document.getElementById('AddExpenseModel');
+        modal.addEventListener('shown.bs.modal', function () {
+            var dateInput = document.getElementById('txtdate');
+            let today = new Date().toISOString().split('T')[0];
+            dateInput.value = today;
+        });
+    });
 </script>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/moduls/expensemaster.js" asp-append-version="true"></script>

@@ -6,7 +6,15 @@
     ViewData["Title"] = "PayExpense";
     Layout = "~/Views/Shared/_HomeLayout.cshtml";
 }
+<style>
+    .paginate_button.page-item.next.disabled {
+        display: none !important;
+    }
 
+    .paginate_button.page-item.previous.disabled {
+        display: none !important;
+    }
+</style>
 <input type="hidden" class="form-control" id="txtuseraproveid" value="@_userSession.UserId" hidden>
 <input type="hidden" class="form-control" id="txtuseraprovename" value="@_userSession.FullName" hidden>
 <input type="hidden" class="form-control" id="txtexpensetype" value="11" hidden>

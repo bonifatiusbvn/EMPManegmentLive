@@ -151,7 +151,6 @@
                         </div>
                         <div class="modal-body">
                             <form id="EditExpenseForm">
-
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="mb-3">
@@ -161,6 +160,7 @@
                                             <input type="hidden" class="text-muted text-uppercase fw-semibold" id="Editexpensetypeid" />
                                         </div>
                                         <label id="Editexpensetype-error" class="error" for="Editexpensetype"></label>
+                                        <input type="hidden" class="text-muted text-uppercase fw-semibold" id="txtExpenseUserId" value="@_userSession.UserId">
                                     </div>
                                     <div class="col-lg-6">
                                         <div class="mb-3">
@@ -224,7 +224,7 @@
                             </form>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-danger btn-default m-1" id="close-modal" data-bs-dismiss="modal" onclick="ClearTextBox()">Close</button>
+                            <button type="button" class="btn btn-danger btn-default m-1" id="close-modal" data-bs-dismiss="modal">Close</button>
                             <button type="button" class="btn btn-primary m-1" onclick="UpdateExpenseDetails()" id="updatedetailbtn">Update</button>
 
                         </div>
@@ -321,6 +321,7 @@
                                                     <input type="text" class="form-control" id="txtexpensetype" name="txtexpensetype" placeholder="Enter Expense Type">
                                                     <input type="hidden" id="txtexpensetypeHidden" name="txtexpensetypeHidden">
                                                     <input type="hidden" class="text-muted text-uppercase fw-semibold" id="txtaccount" value="Debit">
+                                                    <input type="hidden" class="text-muted text-uppercase fw-semibold" id="txtExpenseUserId" value="@_userSession.UserId">
                                                 </div>
                                                 <label id="txtexpensetype-error" class="error" for="txtexpensetype"></label>
                                             </div>
@@ -363,7 +364,7 @@
                                 </form>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-danger btn-default m-1" id="close-modal" data-bs-dismiss="modal" onclick="ClearTextBox()">Close</button>
+                                <button type="button" class="btn btn-danger btn-default m-1" id="close-modal" data-bs-dismiss="modal">Close</button>
                                 <button type="submit" class="btn btn-success" onclick="AddMyExpenseDetails();">Save</button>
                             </div>
                         </div>
@@ -404,6 +405,15 @@
 
 <script type="text/javascript">
     var userPermissions = '@Html.Raw(Json.Serialize(UserSession.FormPermisionData))';
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var modal = document.getElementById('AddExpenseModel');
+        modal.addEventListener('shown.bs.modal', function () {
+            var dateInput = document.getElementById('txtdate');
+            let today = new Date().toISOString().split('T')[0];
+            dateInput.value = today;
+        });
+    });
 
     document.addEventListener('DOMContentLoaded', function () {
         const betweenMonthRadio = document.getElementById('betweenMonthRadio');

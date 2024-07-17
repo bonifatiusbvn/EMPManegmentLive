@@ -245,7 +245,7 @@ namespace EMPManegment.Web.Controllers
                 string userrole = _userSession.UserRoll;
                 var ExpenseDetails = new ExpenseDetailsView
                 {
-                    UserId = _userSession.UserId,
+                    UserId = Addexpense.UserId,
                     Role = userrole,
                     ExpenseType = Addexpense.ExpenseType,
                     PaymentType = Addexpense.PaymentType,
@@ -510,6 +510,12 @@ namespace EMPManegment.Web.Controllers
                             break;
                         case "thismonth":
                             expense = expense.Where(e => e.Date.Year == DateTime.Now.Year && e.Date.Month == DateTime.Now.Month).ToList();
+                            break;
+                        case "thismonth & debit":
+                            expense = expense.Where(e => e.Date.Year == DateTime.Now.Year && e.Date.Month == DateTime.Now.Month && e.Account.ToLower() == "debit" && e.IsApproved == true).ToList();
+                            break;
+                        case "thismonth & credit":
+                            expense = expense.Where(e => e.Date.Year == DateTime.Now.Year && e.Date.Month == DateTime.Now.Month && e.Account.ToLower() == "credit").ToList();
                             break;
                         case "lastmonth":
                             var lastMonth = DateTime.Now.AddMonths(-1);
