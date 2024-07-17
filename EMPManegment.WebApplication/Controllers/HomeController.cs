@@ -26,7 +26,7 @@ using EMPManegment.EntityModels.ViewModels.Weather;
 #nullable disable
 namespace EMPManegment.Web.Controllers
 {
-
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly UserSession _userSession;

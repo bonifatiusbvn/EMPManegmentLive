@@ -23,9 +23,11 @@ using Microsoft.CodeAnalysis;
 using DocumentFormat.OpenXml.Drawing.Charts;
 using EMPManegment.EntityModels.ViewModels.PurchaseOrderModels;
 using Microsoft.Build.Evaluation;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EMPManegment.Web.Controllers
 {
+    [Authorize]
     public class ProjectController : Controller
     {
         public WebAPI WebAPI { get; }

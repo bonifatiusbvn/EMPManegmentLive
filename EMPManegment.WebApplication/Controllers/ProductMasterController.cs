@@ -10,12 +10,14 @@ using EMPManegment.EntityModels.ViewModels.TaskModels;
 using EMPManegment.EntityModels.ViewModels.VendorModels;
 using EMPManegment.Web.Helper;
 using EMPManegment.Web.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using X.PagedList;
 #nullable disable
 namespace EMPManegment.Web.Controllers
 {
+    [Authorize]
     public class ProductMasterController : Controller
     {
         public WebAPI WebAPI { get; }

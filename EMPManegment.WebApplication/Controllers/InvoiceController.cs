@@ -34,6 +34,7 @@ using Microsoft.AspNetCore.Mvc.Abstractions;
 #nullable disable
 namespace EMPManegment.Web.Controllers
 {
+    [Authorize]
     public class InvoiceController : Controller
     {
         public WebAPI WebAPI { get; }

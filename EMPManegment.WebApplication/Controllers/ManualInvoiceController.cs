@@ -7,6 +7,7 @@ using EMPManegment.EntityModels.ViewModels.ManualInvoice;
 using EMPManegment.EntityModels.ViewModels.ProductMaster;
 using EMPManegment.Web.Helper;
 using EMPManegment.Web.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -16,6 +17,7 @@ using Newtonsoft.Json;
 #nullable disable
 namespace EMPManegment.Web.Controllers
 {
+    [Authorize]
     public class ManualInvoiceController : Controller
     {
         public WebAPI WebAPI { get; }
@@ -32,9 +34,12 @@ namespace EMPManegment.Web.Controllers
         [FormPermissionAttribute("ManualInvoiceList-View")]
         public async Task<IActionResult> ManualInvoices()
         {
+            if(UserSession.ProjectId == null)
+            {
+                RedirectToAction("Login", "Authentication");
+            }
             return View();
         }
-
         [HttpPost]
         public async Task<IActionResult> GetManualInvoiceList()
         {
