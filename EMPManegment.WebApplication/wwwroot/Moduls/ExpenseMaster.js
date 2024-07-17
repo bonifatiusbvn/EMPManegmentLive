@@ -500,9 +500,26 @@ function deleteExpense(Id) {
     });
 }
 
-function GetPayUserExpenseCreditList(userId) {
-    var filterType = "thismonth & credit";
-    var encodedFilterType = encodeURIComponent(filterType);
+function monthlyExpenseListTable()
+{
+    var userId = $("#txtuserid").val();
+    var selectedMonth = $('#selectMonthlyExpense').val();
+    GetPayUserExpenseCreditList(userId, selectedMonth);
+    GetPayUserExpenseDebitList(userId, selectedMonth)
+}
+
+function GetPayUserExpenseCreditList(userId, selectedMonth)
+{
+    var filterType;
+    var selectMonthlyExpense;
+    if (selectedMonth != null) {
+        selectMonthlyExpense = selectedMonth;
+        filterType = "credit";
+    } else {
+        filterType = "thismonth and credit";
+        selectMonthlyExpense = '';
+    }
+
     $('#UserPayExpenseTableCredit').DataTable({
         processing: false,
         serverSide: true,
@@ -516,7 +533,7 @@ function GetPayUserExpenseCreditList(userId) {
         pagingType: "simple",
         ajax: {
             type: "POST",
-            url: '/ExpenseMaster/GetUserExpenseList?UserId=' + userId + '&filterType=' + encodedFilterType,
+            url: '/ExpenseMaster/GetUserExpenseList?UserId=' + userId + '&filterType=' + filterType + '&selectMonthlyExpense=' + selectMonthlyExpense,
             dataType: 'json',
         },
         columns: [
@@ -585,9 +602,19 @@ function GetPayUserExpenseCreditList(userId) {
         }
     });
 }
-function GetPayUserExpenseDebitList(userId) {
-    var filterType = "thismonth & debit";
-    var encodedFilterType = encodeURIComponent(filterType);
+
+function GetPayUserExpenseDebitList(userId, selectedMonth)
+{
+    var filterType;
+    var selectMonthlyExpense;
+    if (selectedMonth != null) {
+        selectMonthlyExpense = selectedMonth;
+        filterType = "debit";
+    } else {
+        filterType = "thismonth and debit"; 
+        selectMonthlyExpense = '';
+    }
+
     $('#UserPayExpenseTableDebit').DataTable({
         processing: false,
         serverSide: true,
@@ -601,7 +628,7 @@ function GetPayUserExpenseDebitList(userId) {
         pagingType: "simple",
         ajax: {
             type: "POST",
-            url: '/ExpenseMaster/GetUserExpenseList?UserId=' + userId + '&filterType=' + encodedFilterType,
+            url: '/ExpenseMaster/GetUserExpenseList?UserId=' + userId + '&filterType=' + filterType + '&selectMonthlyExpense=' + selectMonthlyExpense,
             dataType: 'json',
         },
         columns: [
@@ -1351,13 +1378,15 @@ $(document).ready(function () {
         }
     })
 });
+
 $(document).ready(function () {
     var UserId = $("#txtuserid").val();
     if (UserId) {
-        GetPayUserExpenseCreditList(UserId)
-        GetPayUserExpenseDebitList(UserId)
+        GetPayUserExpenseCreditList(UserId, null)
+        GetPayUserExpenseDebitList(UserId, null)
     }
 });
+
 function UserDebitExpenseList(UserId) {
     var Account = "Debit";
     var filterType = 'debit';

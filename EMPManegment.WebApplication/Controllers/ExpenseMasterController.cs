@@ -462,7 +462,7 @@ namespace EMPManegment.Web.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> GetUserExpenseList(Guid? UserId, string filterType = null, bool? unapprove = null, bool? approve = null, DateTime? startDate = null, DateTime? endDate = null, string account = null)
+        public async Task<IActionResult> GetUserExpenseList(Guid? UserId, string filterType = null, bool? unapprove = null, bool? approve = null, DateTime? startDate = null, DateTime? endDate = null, string account = null, string selectMonthlyExpense = null)
         {
             try
             {
@@ -497,8 +497,22 @@ namespace EMPManegment.Web.Controllers
                     expense = JsonConvert.DeserializeObject<List<ExpenseDetailsView>>(data.data.ToString());
                 }
 
-
-                if (!string.IsNullOrEmpty(filterType))
+                if (!string.IsNullOrEmpty(selectMonthlyExpense))
+                {
+                    var selectedMonth = int.Parse(selectMonthlyExpense);
+                    switch (filterType.ToLower())
+                    {
+                        case "credit":
+                            expense = expense.Where(expense => expense.Account.ToLower() == "credit" && expense.Date.Month == selectedMonth).ToList();
+                            break;
+                        case "debit":
+                            expense = expense.Where(e => e.Account.ToLower() == filterType && e.IsApproved == true && e.Date.Month == selectedMonth).ToList();
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                else if (!string.IsNullOrEmpty(filterType))
                 {
                     switch (filterType.ToLower())
                     {
@@ -511,10 +525,10 @@ namespace EMPManegment.Web.Controllers
                         case "thismonth":
                             expense = expense.Where(e => e.Date.Year == DateTime.Now.Year && e.Date.Month == DateTime.Now.Month).ToList();
                             break;
-                        case "thismonth & debit":
+                        case "thismonth and debit":
                             expense = expense.Where(e => e.Date.Year == DateTime.Now.Year && e.Date.Month == DateTime.Now.Month && e.Account.ToLower() == "debit" && e.IsApproved == true).ToList();
                             break;
-                        case "thismonth & credit":
+                        case "thismonth and credit":
                             expense = expense.Where(e => e.Date.Year == DateTime.Now.Year && e.Date.Month == DateTime.Now.Month && e.Account.ToLower() == "credit").ToList();
                             break;
                         case "lastmonth":

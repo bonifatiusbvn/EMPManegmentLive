@@ -113,7 +113,23 @@
                         <i class="ri-arrow-left-right-fill me-1 align-bottom"></i>@ViewBag.UserName (All Expense)
                     </a>
                 </li>
-
+                <li class="nav-item ml-auto" style="width: 140px;">
+                    <select class="form-control form-select valid" id="selectMonthlyExpense" name="selectMonthlyExpense" onchange="monthlyExpenseListTable()">
+                        <option selected disabled value="">Select Month</option>
+                        <option value="01">January</option>
+                        <option value="02">February</option>
+                        <option value="03">March</option>
+                        <option value="04">April</option>
+                        <option value="05">May</option>
+                        <option value="06">June</option>
+                        <option value="07">July</option>
+                        <option value="08">August</option>
+                        <option value="09">September</option>
+                        <option value="10">October</option>
+                        <option value="11">November</option>
+                        <option value="12">December</option>
+                    </select>
+                </li>
             </ul>
             <div class="row">
                 <div class="col-lg-12">
