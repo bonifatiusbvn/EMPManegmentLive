@@ -49,7 +49,7 @@
                     <div class="row">
                         <div class="col-lg-6">
                             <div class="mb-3">
-                                <label class="form-label" for="companynameInput">Company Name</label>
+                                <label class="form-label" for="companynameInput">Company Name <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" autocomplete="off" id="companynameInput" name="companynameInput" value="@Model.VendorCompany" placeholder="Enter your company name">
                                 <input type="hidden" class="form-control" autocomplete="off" id="vendorIdInput" value="@Model.Vid">
                                 <input type="hidden" id="txtUpdatedby" value="@_userSession.UserId" />
@@ -58,7 +58,7 @@
                         <!--end col-->
                         <div class="col-lg-6">
                             <div class="mb-3">
-                                <label for="CompanyType" class="form-label">Company Type</label>
+                                <label for="CompanyType" class="form-label">Company Type <span class="text-danger">*</span></label>
                                 @if (Model.VendorCompanyType != null)
                                 {
                                     <select class="form-control form-select valid" id="CompanyType" name="CompanyType">
@@ -85,14 +85,14 @@
                         <!--end col-->
                         <div class="col-lg-6">
                             <div class="mb-3">
-                                <label for="emailidInput" class="form-label">Email</label>
+                                <label for="emailidInput" class="form-label">Email <span class="text-danger">*</span></label>
                                 <input type="email" class="form-control" autocomplete="off" id="emailidInput" value="@Model.VendorEmail" name="emailidInput" placeholder="Enter your email">
                             </div>
                         </div>
                         <!--end col-->
                         <div class="col-lg-6">
                             <div class="mb-3">
-                                <label for="ddlVendorType" class="form-label">VendorType</label>
+                                <label for="ddlVendorType" class="form-label">VendorType <span class="text-danger">*</span></label>
                                 @if (Model.VendorTypeName != null)
                                 {
                                     <select id="ddlVendorType" name="ddlVendorType" class="form-control form-select valid">
@@ -111,20 +111,20 @@
                         <!--end col-->
                         <div class="col-lg-6">
                             <div class="mb-3">
-                                <label for="contactnumberInput" class="form-label">Contact Number</label>
+                                <label for="contactnumberInput" class="form-label">Contact Number <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" autocomplete="off" value="@Model.VendorContectNo" id="contactnumberInput" name="contactnumberInput" placeholder="Enter your number">
                             </div>
                         </div>
                         <!--end col-->
                         <div class="col-lg-6">
                             <div class="mb-3">
-                                <label for="phonenumberInput" class="form-label">Phone Number</label>
+                                <label for="phonenumberInput" class="form-label">Phone Number <span class="text-danger">*</span></label>
                                 <input type="number" class="form-control" autocomplete="off" value="@Model.VendorPhone" id="phonenumberInput" name="phonenumberInput" placeholder="Enter your number">
                             </div>
                         </div>
                         <div class="col-lg-4">
                             <div class="mb-3">
-                                <label for="ddlCountry" class="form-label">Country</label>
+                                <label for="ddlCountry" class="form-label">Country <span class="text-danger">*</span></label>
                                 @if (Model.VendorCountryName != null)
                                 {
                                     <select id="VendorCountry" name="VendorCountry" class="form-control form-select valid" onchange="fn_getVendorState('VendorState',null,this)">
@@ -144,7 +144,7 @@
                         <!--end col-->
                         <div class="col-lg-4">
                             <div class="mb-3">
-                                <label for="ddlState" class="form-label">State</label>
+                                <label for="ddlState" class="form-label">State <span class="text-danger">*</span></label>
                                 @if (Model.VendorStateName != null)
                                 {
                                     <select id="VendorState" name="VendorState" class="form-control form-select valid" onchange="fn_getVendorcitiesbystateId('VendorCity', null, this)">
@@ -163,7 +163,7 @@
                         <!--end col-->
                         <div class="col-lg-4">
                             <div class="mb-3">
-                                <label for="ddlCity" class="form-label">City</label>
+                                <label for="ddlCity" class="form-label">City <span class="text-danger">*</span></label>
                                 @if (Model.VendorCityName != null)
                                 {
                                     <select id="VendorCity" name="VendorCity" class="form-control form-select valid">
@@ -182,7 +182,7 @@
                         <!--end col-->
                         <div class="col-lg-12">
                             <div class="mb-3">
-                                <label for="AddressidInput" class="form-label">Address</label>
+                                <label for="AddressidInput" class="form-label">Address <span class="text-danger">*</span></label>
                                 @if (Model.VendorAddress != null)
                                 {
                                     <textarea type="text" class="form-control" id="AddressidInput" name="AddressidInput" rows="3" placeholder="Enter your Address">@Model.VendorAddress</textarea>
@@ -197,7 +197,7 @@
                         <div class="col-lg-12">
                             <div class="row mb-3">
                                 <div class="col-lg-6">
-                                    <label for="pincodeidInput" class="form-label">PinCode</label>
+                                    <label for="pincodeidInput" class="form-label">PinCode <span class="text-danger">*</span></label>
                                     <input type="number" class="form-control" autocomplete="off" value="@Model.VendorPinCode" id="pincodeidInput" name="pincodeidInput" placeholder="Enter your Pincode">
                                 </div>
                             </div>
@@ -279,28 +279,28 @@
                     <div class="row">
                         <div class="col-lg-6">
                             <div class="mb-3">
-                                <label for="firstnameInput" class="form-label">First Name</label>
+                                <label for="firstnameInput" class="form-label">First Name <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" value="@Model.VendorFirstName" autocomplete="off" id="firstnameInput" name="firstnameInput" placeholder="Enter your firstname">
                             </div>
                         </div>
                         <!--end col-->
                         <div class="col-lg-6">
                             <div class="mb-3">
-                                <label for="lastnameInput" class="form-label">Last Name</label>
+                                <label for="lastnameInput" class="form-label">Last Name <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" value="@Model.VendorLastName" autocomplete="off" id="lastnameInput" name="lastnameInput" placeholder="Enter your lastname">
                             </div>
                         </div>
                         <!--end col-->
                         <div class="col-lg-6">
                             <div class="mb-3">
-                                <label for="companyemailInput" class="form-label">Email</label>
+                                <label for="companyemailInput" class="form-label">Email <span class="text-danger">*</span></label>
                                 <input type="email" class="form-control" value="@Model.VendorCompanyEmail" id="companyemailInput" name="companyemailInput" placeholder="Enter your email" autocomplete="off">
                             </div>
                         </div>
                         <!--end col-->
                         <div class="col-lg-6">
                             <div class="mb-3">
-                                <label for="worknumberInput" class="form-label">Number</label>
+                                <label for="worknumberInput" class="form-label">Number <span class="text-danger">*</span></label>
                                 <input type="number" class="form-control" autocomplete="off" value="@Model.VendorCompanyNumber" id="worknumberInput" name="worknumberInput" placeholder="Enter your number">
                             </div>
                         </div>
@@ -326,42 +326,42 @@
                     <div class="row">
                         <div class="col-lg-6">
                             <div class="mb-3">
-                                <label for="banknameInput" class="form-label">Bank Name</label>
+                                <label for="banknameInput" class="form-label">Bank Name <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" value="@Model.VendorBankName" autocomplete="off" id="banknameInput" name="banknameInput" placeholder="Enter your bank name">
                             </div>
                         </div>
                         <!--end col-->
                         <div class="col-lg-6">
                             <div class="mb-3">
-                                <label for="branchInput" class="form-label">Branch</label>
+                                <label for="branchInput" class="form-label">Branch <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" value="@Model.VendorBankBranch" autocomplete="off" id="branchInput" name="branchInput" placeholder="Branch">
                             </div>
                         </div>
                         <!--end col-->
                         <div class="col-lg-12">
                             <div class="mb-3">
-                                <label for="accountnameInput" class="form-label">Account Holder Name</label>
+                                <label for="accountnameInput" class="form-label">Account Holder Name <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" value="@Model.VendorAccountHolderName" autocomplete="off" id="accountnameInput" name="accountnameInput" placeholder="Enter account holder name">
                             </div>
                         </div>
                         <!--end col-->
                         <div class="col-lg-6">
                             <div class="mb-3">
-                                <label for="accountnumberInput" class="form-label">Account Number</label>
+                                <label for="accountnumberInput" class="form-label">Account Number <span class="text-danger">*</span></label>
                                 <input type="number" class="form-control" value="@Model.VendorBankAccountNo" autocomplete="off" id="accountnumberInput" name="accountnumberInput" placeholder="Enter account number">
                             </div>
                         </div>
                         <!--end col-->
                         <div class="col-lg-6">
                             <div class="mb-3">
-                                <label for="ifscInput" class="form-label">IFSC</label>
+                                <label for="ifscInput" class="form-label">IFSC <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" value="@Model.VendorBankIfsc" autocomplete="off" id="ifscInput" name="ifscInput" placeholder="IFSC">
                             </div>
                         </div>
                         <!--end col-->
                         <div class="col-lg-6">
                             <div class="mb-3">
-                                <label for="GSTInput" class="form-label">GSTNumber</label>
+                                <label for="GSTInput" class="form-label">GSTNumber <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" value="@Model.VendorGstnumber" autocomplete="off" id="GSTNumberInput" name="GSTNumberInput" placeholder="GST-Number">
                             </div>
                         </div>

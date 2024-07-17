@@ -16,7 +16,7 @@ using DocumentFormat.OpenXml.Drawing.Charts;
 using EMPManegment.Web.Helper;
 using EMPManegment.EntityModels.ViewModels.ExpenseMaster;
 using Irony.Parsing.Construction;
-
+#nullable disable
 namespace EMPManegment.Web.Controllers
 {
     public class PurchaseRequestController : Controller
@@ -44,7 +44,7 @@ namespace EMPManegment.Web.Controllers
                     {
                         PRDetails = JsonConvert.DeserializeObject<PurchaseRequestMasterView>(res.data.ToString());
                     }
-                    ViewData["PrNo"]=PRDetails.PrNo;
+                    ViewData["PrNo"] = PRDetails.PrNo;
                 }
                 else
                 {
@@ -75,7 +75,7 @@ namespace EMPManegment.Web.Controllers
                     if (!string.IsNullOrEmpty(searchText))
                     {
                         searchText = searchText.ToLower();
-                        Items = Items.Where(u => u.ProductName.ToLower().Contains(searchText)).ToList(); 
+                        Items = Items.Where(u => u.ProductName.ToLower().Contains(searchText)).ToList();
                     }
 
                     int pageSize = 5;
@@ -232,7 +232,7 @@ namespace EMPManegment.Web.Controllers
                     data = JsonConvert.DeserializeObject<jsonData>(res.data.ToString());
                     purchaseRequestList = JsonConvert.DeserializeObject<List<PurchaseRequestModel>>(data.data.ToString());
                 }
-                
+
                 var jsonData = new
                 {
                     draw = data.draw,

@@ -73,7 +73,7 @@
                                     </div>
                                     <div class="col-lg-6">
                                         <div class="mb-3">
-                                            <label for="txtexpensetype" class="form-label">Expense Type</label>
+                                            <label for="txtexpensetype" class="form-label">Expense Type <span class="text-danger">*</span></label>
                                             <input type="text" class="form-control" id="Editexpensetype" name="Editexpensetype">
                                             <input type="hidden" id="EditexpensetypeHidden" name="EditexpensetypeHidden">
                                             <input type="hidden" class="text-muted text-uppercase fw-semibold" id="Editexpensetypeid" />
@@ -84,14 +84,14 @@
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="mb-3">
-                                            <label class="form-label">Description</label>
+                                            <label class="form-label">Description <span class="text-danger">*</span></label>
                                             <input type="text" id="EditDescription" name="EditDescription" class="form-control" />
                                             <input type="hidden" id="Editid" class="form-control" name="txtid" />
                                         </div>
                                     </div>
                                     <div class="col-lg-6">
                                         <div class="mb-3">
-                                            <label class="form-label">Bill Number</label>
+                                            <label class="form-label">Bill Number <span class="text-danger">*</span></label>
                                             <input type="text" id="Editbillno" name="Editbillno" class="form-control" />
                                         </div>
                                     </div>
@@ -99,13 +99,13 @@
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="mb-3">
-                                            <label class="form-label">Date</label>
+                                            <label class="form-label">Date <span class="text-danger">*</span></label>
                                             <input type="datetime-local" id="Editdate" name="Editdate" class="form-control" />
                                         </div>
                                     </div>
                                     <div class="col-lg-6">
                                         <div class="mb-3">
-                                            <label class="form-label">Total Amount</label>
+                                            <label class="form-label">Total Amount <span class="text-danger">*</span></label>
                                             <input type="text" id="Edittotalamount" name="Edittotalamount" class="form-control" oninput="preventEmptyValue(this)" min="1" value="1" />
                                         </div>
                                     </div>
@@ -113,7 +113,7 @@
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="mb-3">
-                                            <label class="form-label">Account</label>
+                                            <label class="form-label">Account <span class="text-danger">*</span></label>
                                             <select class="form-control form-select valid" id="Editaccount" name="Editaccount">
                                                 <option selected disabled value="">Select Account Type</option>
                                                 <option value="Credit">Credit</option>
@@ -124,7 +124,7 @@
                                     </div>
                                     <div class="col-lg-6">
                                         <div class="mb-3">
-                                            <label for="txtpaymenttype" class="form-label">Payment Type</label>
+                                            <label for="txtpaymenttype" class="form-label">Payment Type <span class="text-danger">*</span></label>
                                             <select class="form-control form-select valid" id="EditExpensepaymenttype" name="EditExpensepaymenttype">
                                                 <option selected disabled value="">---Select Payment Type---</option>
                                             </select>
@@ -135,7 +135,7 @@
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="mb-3">
-                                            <label class="form-label">IsPaid</label>
+                                            <label class="form-label">IsPaid <span class="text-danger">*</span></label>
                                             <select class="form-control form-select valid" id="EditIsPaid" name="EditIsPaid">
                                                 <option selected disabled value="">Select Paid Type</option>
                                                 <option value="True">True</option>
@@ -145,7 +145,7 @@
                                     </div>
                                     <div class="col-lg-6">
                                         <div class="mb-3">
-                                            <label class="form-label">IsApproved</label>
+                                            <label class="form-label">IsApproved <span class="text-danger">*</span></label>
                                             <select class="form-control form-select valid" id="EditIsApproved" name="EditIsApproved">
                                                 <option selected disabled value="">Select Approved Type</option>
                                                 <option value="True">True</option>
@@ -188,7 +188,7 @@
                                     <div class="col-lg-6">
                                         <div class="mb-3">
                                             <div class="d-flex justify-content-between align-items-center" style="margin-top:-10px;">
-                                                <label for="txtexpensetype" class="form-label">Expense Type</label>
+                                                <label for="txtexpensetype" class="form-label">Expense Type <span class="text-danger">*</span></label>
                                                 <p class="text-muted">
                                                     <button type="button" onclick="DisplayExpenseTypeModal()" class="float-end text-decoration-underline btn btn-link waves-effect">
                                                         Add New-Expense Type
@@ -208,7 +208,7 @@
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="mb-3">
-                                            <label class="form-label">Description</label>
+                                            <label class="form-label">Description <span class="text-danger">*</span></label>
                                             <input type="text" id="txtDescription" class="form-control" name="txtDescription" placeholder="Enter Description" />
                                         </div>
                                     </div>
@@ -222,13 +222,15 @@
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="mb-3">
-                                            <label class="form-label">Date</label>
-                                            <input type="date" id="txtdate" class="form-control" name="txtdate" placeholder="Enter Date" value=""/>
+                                            <label class="form-label">Date <span class="text-danger">*</span></label>
+                                            <input type="date" id="txtdate" class="form-control" name="txtdate" placeholder="Enter Date" />
                                         </div>
                                     </div>
+                                </div>
+                                <div class="row">
                                     <div class="col-lg-6">
                                         <div class="mb-3">
-                                            <label class="form-label">Total Amount</label>
+                                            <label class="form-label">Total Amount <span class="text-danger">*</span></label>
                                             <input type="number" id="txttotalamount" class="form-control" name="txttotalamount" placeholder="Enter Amount" oninput="preventEmptyValue(this)" min="1" value="1" />
                                         </div>
                                     </div>
@@ -370,7 +372,7 @@
                 <div class="modal-body">
                     <div class="hstack gap-3 align-items-start">
                         <div class="flex-grow-1">
-                            <label>Expense Type</label>
+                            <label>Expense Type <span class="text-danger">*</span></label>
                             <input class="form-control" id="textExpenseType" name="textExpenseType" placeholder="Enter Expense Type" type="text" />
                         </div>
                     </div>

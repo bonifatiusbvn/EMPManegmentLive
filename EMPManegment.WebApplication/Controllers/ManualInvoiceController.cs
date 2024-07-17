@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Newtonsoft.Json;
-
+#nullable disable
 namespace EMPManegment.Web.Controllers
 {
     public class ManualInvoiceController : Controller
@@ -96,7 +96,7 @@ namespace EMPManegment.Web.Controllers
                     {
                         invoiceDetails = JsonConvert.DeserializeObject<ManualInvoiceMasterModel>(response.data.ToString());
                         var row = 0;
-                        foreach(var item in invoiceDetails.ManualInvoiceDetails)
+                        foreach (var item in invoiceDetails.ManualInvoiceDetails)
                         {
                             item.RowNumber = row++;
                         }
@@ -264,7 +264,7 @@ namespace EMPManegment.Web.Controllers
             {
                 List<ManualInvoiceDetailsModel> products = new List<ManualInvoiceDetailsModel>
                 {
-                    new ManualInvoiceDetailsModel() 
+                    new ManualInvoiceDetailsModel()
                 };
                 return PartialView("~/Views/ManualInvoice/_AddProductPartialView.cshtml", products);
             }

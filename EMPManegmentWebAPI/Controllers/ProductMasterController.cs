@@ -18,7 +18,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using static TheArtOfDev.HtmlRenderer.Adapters.RGraphicsPath;
-
+#nullable disable
 namespace EMPManagment.API.Controllers
 {
     [Route("api/[controller]")]

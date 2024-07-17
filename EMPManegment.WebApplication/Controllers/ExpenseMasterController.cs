@@ -17,7 +17,7 @@ using Microsoft.AspNetCore.Http;
 using Aspose.Pdf.Operators;
 using EMPManegment.Web.Helper;
 using Microsoft.AspNetCore.Authorization;
-
+#nullable disable
 namespace EMPManegment.Web.Controllers
 {
     [Authorize]

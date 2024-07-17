@@ -16,7 +16,7 @@ using Microsoft.AspNetCore.Authorization;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.Web.Models;
 using EMPManegment.Web.Helper;
-
+#nullable disable
 namespace EMPManegment.Web.Controllers
 {
     [Authorize]
@@ -246,7 +246,7 @@ namespace EMPManegment.Web.Controllers
             {
                 var updateVendor = new VendorDetailsView()
                 {
-                    Vid  = VendorDetails.Vid,
+                    Vid = VendorDetails.Vid,
                     VendorFirstName = VendorDetails.VendorFirstName,
                     VendorLastName = VendorDetails.VendorLastName,
                     VendorContectNo = VendorDetails.VendorContectNo,
@@ -272,7 +272,7 @@ namespace EMPManegment.Web.Controllers
                 };
                 if (VendorDetails.VendorCompanyLogo != null)
                 {
-                    var VendorImg = Guid.NewGuid() +"_"+ VendorDetails.VendorCompanyLogo.FileName;
+                    var VendorImg = Guid.NewGuid() + "_" + VendorDetails.VendorCompanyLogo.FileName;
                     var path = Environment.WebRootPath;
                     var filepath = "Content/Image/" + VendorImg;
                     var fullpath = Path.Combine(path, filepath);

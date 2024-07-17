@@ -20,7 +20,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.EntityFrameworkCore.ValueGeneration;
 using Newtonsoft.Json;
 using System.Net;
-
+#nullable disable
 namespace EMPManagment.API.Controllers
 {
     [Route("api/[controller]")]

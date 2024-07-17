@@ -16,7 +16,7 @@ using EMPManegment.EntityModels.ViewModels.ForgetPasswordModels;
 using DocumentFormat.OpenXml.Spreadsheet;
 using EMPManegment.EntityModels.Common;
 using EMPManegment.Web.Helper;
-
+#nullable disable
 namespace EMPManegment.Web.Controllers
 {
     public class AuthenticationController : Controller

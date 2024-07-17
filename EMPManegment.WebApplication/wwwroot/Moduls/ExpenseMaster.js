@@ -60,12 +60,13 @@ $(document).ready(function () {
                         minLength: 0,
                         focus: function (event, ui) {
                             event.preventDefault();
-                            $(inputId).val(ui.item.label);
+
+                            // $(inputId).val(ui.item.label);
                         },
                         select: function (event, ui) {
                             $(inputId).val(ui.item.label);
                             $(hiddenId).val(ui.item.value);
-                            event.preventDefault();         
+                            event.preventDefault();
                             return false;
                         }
                     }).focus(function () {
@@ -373,8 +374,7 @@ function UpdateExpenseListDetails() {
                         window.location = '/ExpenseMaster/AllExpense';
                     });
                 }
-                else
-                {
+                else {
                     toastr.error(Result.message);
                 }
             }
@@ -464,8 +464,7 @@ function deleteExpense(Id) {
                 type: 'POST',
                 dataType: 'json',
                 success: function (Result) {
-                    if (Result.code)
-                    {
+                    if (Result.code) {
                         Swal.fire({
                             title: Result.message,
                             icon: 'success',
@@ -477,7 +476,7 @@ function deleteExpense(Id) {
                     }
                     else {
                         toastr.error(Result.message);
-                    }              
+                    }
                 },
                 error: function () {
                     Swal.fire({
@@ -809,7 +808,6 @@ function DisplayAllUserExpenseList() {
             },
             { "data": "id", "name": "Id", "visible": false },
             { "data": "expenseTypeName", "name": "ExpenseTypeName" },
-            { "data": "paymentTypeName", "name": "PaymentTypeName" },
             { "data": "billNumber", "name": "BillNumber" },
             { "data": "description", "name": "Description" },
             {
@@ -1298,6 +1296,7 @@ function GetPayExpense() {
         var formData = new FormData();
         formData.append("ExpenseType", $("#txtexpensetype").val());
         formData.append("Account", $("#txtAccount").val());
+        formData.append("Date", $("#txtpaydate").val());
         formData.append("UserId", $("#txtuserid").val());
         formData.append("ApprovedBy", $("#txtuseraproveid").val());
         formData.append("ApprovedByName", $("#txtuseraprovename").val());
@@ -2288,7 +2287,7 @@ function AddExpenseType() {
         });
     }
     else {
-        toastr.warning("Kindly fill expense type");    
+        toastr.warning("Kindly fill expense type");
     }
 }
 
