@@ -393,13 +393,11 @@ $(document).ready(function () {
     EditExpensesForm = $("#EditExpenseForm").validate({
         rules: {
             EditDescription: "required",
-            Editbillno: "required",
             Edittotalamount: "required",
             EditExpenseUserName: "required",
         },
         messages: {
             EditDescription: "Please enter description",
-            Editbillno: "Please enter bill no",
             Edittotalamount: "Please enter correct total amount",
             EditExpenseUserName: "Please enter UserName",
         }
@@ -1600,7 +1598,7 @@ $(document).ready(function () {
             filter: true,
             "bDestroy": true,
             order: [[3, 'asc']],
-            pageLength: 30,
+            pageLength: 10,
             ajax: {
                 type: "Post",
                 url: '/ExpenseMaster/GetUserExpenseList?unapprove=' + IsApprove + "&UserId=" + UserId,
@@ -1666,7 +1664,7 @@ function GetUserAllExpenseDetails() {
         filter: true,
         destroy: true,
         order: [[3, 'asc']],
-        pageLength: 30,
+        pageLength: 10,
         ajax: {
             type: "Post",
             url: '/ExpenseMaster/GetUserExpenseList?UserId=' + UserId,
@@ -1768,7 +1766,7 @@ function GetAllUserApproveExpenseList() {
         filter: true,
         "bDestroy": true,
         order: [[3, 'asc']],
-        pageLength: 30,
+        pageLength: 10,
         ajax: {
             type: "Post",
             url: '/ExpenseMaster/GetUserExpenseList?approve=' + IsApprove + "&UserId=" + UserId,
@@ -1870,7 +1868,7 @@ function GetAllUserCreditExpenseList() {
         filter: true,
         "bDestroy": true,
         order: [[3, 'asc']],
-        pageLength: 30,
+        pageLength: 10,
         ajax: {
             type: "Post",
             url: '/ExpenseMaster/GetUserExpenseList?Credit=' + Account + "&UserId=" + UserId + '&filterType=' + filterType,
