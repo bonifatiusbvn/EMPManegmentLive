@@ -385,7 +385,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                     VendorId = CreditDebit.VendorId,
                     Type = CreditDebit.Type,
                     InvoiceNo = CreditDebit.InvoiceNo,
-                    Date = DateTime.Now,
+                    Date = CreditDebit.Date,
                     PaymentType = CreditDebit.PaymentType,
                     CreditDebitAmount = CreditDebit.CreditDebitAmount,
                     PendingAmount = CreditDebit.PendingAmount,
