@@ -4,13 +4,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EMPManagment.API;
 
-public partial class BonifatiusEmployeesContext : DbContext
+public partial class BonifatiusErpStageContext : DbContext
 {
-    public BonifatiusEmployeesContext()
+    public BonifatiusErpStageContext()
     {
     }
 
-    public BonifatiusEmployeesContext(DbContextOptions<BonifatiusEmployeesContext> options)
+    public BonifatiusErpStageContext(DbContextOptions<BonifatiusErpStageContext> options)
         : base(options)
     {
     }
@@ -120,16 +120,11 @@ public partial class BonifatiusEmployeesContext : DbContext
 
         modelBuilder.Entity<TblCity>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK_TblCity");
-
             entity.ToTable("tblCity");
 
-            entity.Property(e => e.City).HasMaxLength(50);
+            entity.HasIndex(e => e.StateId, "IX_tblCity_StateId");
 
-            entity.HasOne(d => d.State).WithMany(p => p.TblCities)
-                .HasForeignKey(d => d.StateId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_tblCity_tblState");
+            entity.Property(e => e.City).HasMaxLength(50);
         });
 
         modelBuilder.Entity<TblCompanyMaster>(entity =>
@@ -148,8 +143,6 @@ public partial class BonifatiusEmployeesContext : DbContext
 
         modelBuilder.Entity<TblCountry>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK_TblCountry");
-
             entity.ToTable("tblCountry");
 
             entity.Property(e => e.Country).HasMaxLength(30);
@@ -658,16 +651,11 @@ public partial class BonifatiusEmployeesContext : DbContext
 
         modelBuilder.Entity<TblState>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK_TblState");
-
             entity.ToTable("tblState");
 
-            entity.Property(e => e.State).HasMaxLength(50);
+            entity.HasIndex(e => e.CountryId, "IX_tblState_CountryId");
 
-            entity.HasOne(d => d.Country).WithMany(p => p.TblStates)
-                .HasForeignKey(d => d.CountryId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_tblState_tblCountry");
+            entity.Property(e => e.State).HasMaxLength(50);
         });
 
         modelBuilder.Entity<TblTaskDetail>(entity =>

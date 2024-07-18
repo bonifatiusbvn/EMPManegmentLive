@@ -19,6 +19,8 @@ public partial class TblExpenseMaster
 
     public string? Description { get; set; }
 
+    public string? PaymentDetails { get; set; }
+
     public DateTime Date { get; set; }
 
     public decimal TotalAmount { get; set; }

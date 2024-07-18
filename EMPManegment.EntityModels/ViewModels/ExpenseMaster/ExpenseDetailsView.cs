@@ -46,6 +46,8 @@ namespace EMPManegment.EntityModels.ViewModels.ExpenseMaster
 
         public string? Role { get; set; }
         public string? FullName { get; set; }
+
+        public string? PaymentDetails { get; set; }
     }
 
     public class ExpenseRequestModel

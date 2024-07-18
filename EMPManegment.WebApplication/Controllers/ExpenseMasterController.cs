@@ -41,6 +41,7 @@ namespace EMPManegment.Web.Controllers
         {
             return View();
         }
+
         [HttpPost]
         public async Task<IActionResult> GetExpenseDetailsList()
         {
@@ -589,20 +590,28 @@ namespace EMPManegment.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<FileResult> DownloadBill(string BillName)
+        public async Task<IActionResult> DownloadBill(string BillName)
         {
-            var filepath = "Content/Image/" + BillName;
-            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", filepath);
-            var memory = new MemoryStream();
-            using (var stream = new FileStream(path, FileMode.Open))
+            try
             {
-                await stream.CopyToAsync(memory);
+                var filepath = "Content/Image/" + BillName;
+                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", filepath);
+                var memory = new MemoryStream();
+                using (var stream = new FileStream(path, FileMode.Open))
+                {
+                    await stream.CopyToAsync(memory);
+                }
+                memory.Position = 0;
+                var ContentType = "application/pdf";
+                var fileName = Path.GetFileName(path);
+                return Json(new { fileUrl = Url.Content($"~/{filepath}") });
             }
-            memory.Position = 0;
-            var ContentType = "application/pdf";
-            var fileName = Path.GetFileName(path);
-            return File(memory, ContentType, fileName);
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
+
 
         public async Task<IActionResult> AddExpenseType(ExpenseTypeView ExpenseDetails)
         {

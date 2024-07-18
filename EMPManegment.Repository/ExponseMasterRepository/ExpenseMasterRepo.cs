@@ -240,7 +240,8 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                     IsDeleted = false,
                     CreatedBy = ExpenseDetails.CreatedBy,
                     CreatedOn = DateTime.Now,
-                    PaymentType = 1
+                    PaymentType = 1,
+                    PaymentDetails = ExpenseDetails.PaymentDetails
                 };
 
                 if (ExpenseDetails.Account == "Debit")
@@ -249,6 +250,7 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                     expense.Description = ExpenseDetails.Description;
                     expense.Date = ExpenseDetails.Date;
                     expense.Image = ExpenseDetails.Image;
+                    expense.PaymentDetails = ExpenseDetails.PaymentDetails;
 
                     if (ExpenseDetails.Role == "Account" || ExpenseDetails.Role == "Super Admin")
                     {
@@ -275,6 +277,7 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                     expense.ApprovedBy = ExpenseDetails.ApprovedBy;
                     expense.ApprovedByName = ExpenseDetails.ApprovedByName;
                     expense.ApprovedDate = DateTime.Now;
+                    expense.PaymentDetails = ExpenseDetails.PaymentDetails;
                 }
 
                 response.Message = "Expense added successfully!";
@@ -361,6 +364,7 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                         Account = row["Account"].ToString(),
                         ExpenseTypeName = row["ExpenseTypeName"].ToString(),
                         PaymentTypeName = row["PaymentTypeName"].ToString(),
+                        Image = row["Image"].ToString(),
                         IsApproved = row["IsApproved"] != DBNull.Value ? (bool?)Convert.ToBoolean(row["IsApproved"]) : null,
                     };
                     ExpenseList.Add(ExpenseDetails);

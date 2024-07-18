@@ -432,7 +432,7 @@ $(document).ready(function () {
             txtDescription: "required",
             txtdate: "required",
             txttotalamount: "required",
-            txtExpenseUsername:"required",
+            txtExpenseUsername: "required",
         },
         messages: {
             txtexpensetype: "Please Select Expense Type",
@@ -500,16 +500,18 @@ function deleteExpense(Id) {
     });
 }
 
-function monthlyExpenseListTable()
-{
-    var userId = $("#txtuserid").val();
-    var selectedMonth = $('#selectMonthlyExpense').val();
-    GetPayUserExpenseCreditList(userId, selectedMonth);
-    GetPayUserExpenseDebitList(userId, selectedMonth)
-}
+$(document).ready(function () {
+    $(document).on('click', '.dropdown-menu .dropdown-item', function () {
+        debugger
+        var selectedMonth = $(this).data('value');
+        var userId = $("#txtuserid").val();
+        GetPayUserExpenseCreditList(userId, selectedMonth);
+        GetPayUserExpenseDebitList(userId, selectedMonth);
+    });
+});
 
-function GetPayUserExpenseCreditList(userId, selectedMonth)
-{
+
+function GetPayUserExpenseCreditList(userId, selectedMonth) {
     var filterType;
     var selectMonthlyExpense;
     if (selectedMonth != null) {
@@ -528,8 +530,8 @@ function GetPayUserExpenseCreditList(userId, selectedMonth)
         order: [[3, 'asc']],
         pageLength: 30,
         info: false,
-        lengthChange: false,  
-        searching: false, 
+        lengthChange: false,
+        searching: false,
         pagingType: "simple",
         ajax: {
             type: "POST",
@@ -603,15 +605,14 @@ function GetPayUserExpenseCreditList(userId, selectedMonth)
     });
 }
 
-function GetPayUserExpenseDebitList(userId, selectedMonth)
-{
+function GetPayUserExpenseDebitList(userId, selectedMonth) {
     var filterType;
     var selectMonthlyExpense;
     if (selectedMonth != null) {
         selectMonthlyExpense = selectedMonth;
         filterType = "debit";
     } else {
-        filterType = "thismonth and debit"; 
+        filterType = "thismonth and debit";
         selectMonthlyExpense = '';
     }
 
@@ -624,7 +625,7 @@ function GetPayUserExpenseDebitList(userId, selectedMonth)
         pageLength: 30,
         info: false,
         lengthChange: false,
-        searching: false, 
+        searching: false,
         pagingType: "simple",
         ajax: {
             type: "POST",
@@ -1076,16 +1077,18 @@ $(document).ready(function () {
             {
                 "data": "billNumber", "name": "BillNumber",
                 "render": function (data, type, full) {
-                    if (full.image != null) {
+                    if (full.image != "") {
                         return '<div class="d-flex">' +
                             '<div class="flex-grow-1 tasks_name">' + full['billNumber'] + '</div>' +
                             '<div class="flex-shrink-0 ms-4 task-icons">' +
                             '<ul class="list-inline tasks-list-menu mb-0">' +
-
-                            '<li class="list-inline-item"><a href="/ExpenseMaster/DownloadBill/?BillName=' + full.image + '"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M13 12h3l-4 4l-4-4h3V8h2v4Zm2-8H5v16h14V8h-4V4ZM3 2.992C3 2.444 3.447 2 3.999 2H16l5 5v13.993A1 1 0 0 1 20.007 22H3.993A1 1 0 0 1 3 21.008V2.992Z" /></svg></a></li>'; +
-                                '</ul>' +
-                                '</div>' +
-                                '</div>';
+                            '<a onclick="downloadBill(\'' + full.image + '\')">' +
+                            '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">' +
+                            '<path fill="currentColor" d="M13 12h3l-4 4l-4-4h3V8h2v4Zm2-8H5v16h14V8h-4V4ZM3 2.992C3 2.444 3.447 2 3.999 2H16l5 5v13.993A1 1 0 0 1 20.007 22H3.993A1 1 0 0 1 3 21.008V2.992Z" />' +
+                            '</svg></a></li>' +
+                            '</ul>' +
+                            '</div>' +
+                            '</div>';
                     } else {
                         return '<div class="d-flex">' +
                             '<div class="flex-grow-1 tasks_name">' + full['billNumber'] + '</div>' +
@@ -1340,6 +1343,7 @@ function GetPayExpense() {
         formData.append("TotalAmount", $("#txtcreditamount").val());
         formData.append("PaymentType", $("#txtExpensepaymenttype").val());
         formData.append("CreatedBy", $("#txtuseraproveid").val());
+        formData.append("PaymentDetails", $("#txtpaymentDetails").val());
         $.ajax({
             url: '/ExpenseMaster/PayExpense',
             type: 'Post',
@@ -2330,3 +2334,26 @@ function AddExpenseType() {
     }
 }
 
+function downloadBill(billName) {
+    $.ajax({
+        url: '/ExpenseMaster/DownloadBill',
+        type: 'GET',
+        data: { BillName: billName },
+        success: function (response) {
+            if (response.fileUrl) {
+                var link = document.createElement('a');
+                link.href = response.fileUrl;
+                link.download = billName;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                window.location = '/ExpenseMaster/AllExpense';
+            } else {
+                toastr.error("Error downloading bill.");
+            }
+        },
+        error: function (xhr, status, error) {
+            toastr.error("An error occurred: " + error);
+        }
+    });
+}
