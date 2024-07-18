@@ -562,7 +562,6 @@ function GetPayUserExpenseCreditList(userId, selectedMonth)
                     return '<span style="color: ' + color + ';">' + '₹' + data + '</span>';
                 }
             },
-            { "data": "account", "name": "Account", "visible": false },
         ],
         scrollY: 400,
         scrollX: true,
@@ -657,7 +656,6 @@ function GetPayUserExpenseDebitList(userId, selectedMonth)
                     return '<span style="color: ' + color + ';">' + '₹' + data + '</span>';
                 }
             },
-            { "data": "account", "name": "Account", "visible": false },
         ],
         scrollY: 400,
         scrollX: true,
