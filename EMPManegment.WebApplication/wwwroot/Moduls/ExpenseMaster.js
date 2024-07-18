@@ -8,6 +8,7 @@ $(document).ready(function () {
     GetAllUserExpenseList();
     ApprovedExpenseList();
     UserExpensesDetails();
+    GetExpenseTypeList();
 });
 
 function clearText() {
@@ -41,52 +42,54 @@ function preventEmptyValue(input) {
     }
 }
 
-$(document).ready(function () {
-    function GetExpenseTypeList() {
-        $.ajax({
-            url: '/ExpenseMaster/GetExpenseTypeList',
-            method: 'GET',
-            success: function (result) {
-                var expenseTypes = result.map(function (data) {
-                    return {
-                        label: data.type,
-                        value: data.id
-                    };
-                });
-
-                function setupAutocomplete(inputId, hiddenId) {
-                    $(inputId).autocomplete({
-                        source: expenseTypes,
-                        minLength: 0,
-                        focus: function (event, ui) {
-                            event.preventDefault();
-
-                            // $(inputId).val(ui.item.label);
-                        },
-                        select: function (event, ui) {
-                            $(inputId).val(ui.item.label);
-                            $(hiddenId).val(ui.item.value);
-                            event.preventDefault();
-                            return false;
-                        }
-                    }).focus(function () {
-                        $(this).autocomplete("search");
-                    });
+function GetExpenseTypeList() {
+    $.ajax({
+        url: '/ExpenseMaster/GetExpenseTypeList',
+        method: 'GET',
+        success: function (result) {
+            var expenseTypes = result.map(function (data) {
+                return {
+                    label: data.type,
+                    value: data.id
+                };
+            });
+            expenseTypes.sort(function (a, b) {
+                if (a.label < b.label) {
+                    return -1;
                 }
+                if (a.label > b.label) {
+                    return 1;
+                }
+                return 0;
+            });
+            function setupAutocomplete(inputId, hiddenId) {
+                $(inputId).autocomplete({
+                    source: expenseTypes,
+                    minLength: 0,
+                    focus: function (event, ui) {
+                        event.preventDefault();
 
-                setupAutocomplete("#txtexpensetype", "#txtexpensetypeHidden");
-                setupAutocomplete("#Editexpensetype", "#EditexpensetypeHidden");
-            },
-            error: function (err) {
-                toastr.error("Failed to fetch expense types: ", err);
+                        // $(inputId).val(ui.item.label);
+                    },
+                    select: function (event, ui) {
+                        $(inputId).val(ui.item.label);
+                        $(hiddenId).val(ui.item.value);
+                        event.preventDefault();
+                        return false;
+                    }
+                }).focus(function () {
+                    $(this).autocomplete("search");
+                });
             }
-        });
-    }
 
-    GetExpenseTypeList();
-});
-
-
+            setupAutocomplete("#txtexpensetype", "#txtexpensetypeHidden");
+            setupAutocomplete("#Editexpensetype", "#EditexpensetypeHidden");
+        },
+        error: function (err) {
+            toastr.error("Failed to fetch expense types: ", err);
+        }
+    });
+}
 $(document).ready(function () {
     function GetUsersList() {
         $.ajax({
@@ -2289,7 +2292,7 @@ function clearExpenseTypeText() {
     resetForm();
     $("#textExpenseType").val('');
 }
-function AddExpenseType() {
+function AddExpenseType() { 
     if ($("#addExpenseType").valid()) {
 
         var formData = new FormData();
@@ -2304,15 +2307,9 @@ function AddExpenseType() {
             processData: false,
             success: function (Result) {
                 if (Result.code == 200) {
-                    Swal.fire({
-                        title: Result.message,
-                        icon: 'success',
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'OK'
-                    }).then(function () {
-                        $('#ExpenseTypeModal').modal('hide');
-                        GetExpenseTypeList();
-                    });
+                    toastr.success(Result.message);
+                    $('#ExpenseTypeModal').modal('hide');
+                    GetExpenseTypeList();
                 }
                 else {
                     Swal.fire({
@@ -2323,6 +2320,7 @@ function AddExpenseType() {
                     });
                 }
             }
+
         });
     }
     else {

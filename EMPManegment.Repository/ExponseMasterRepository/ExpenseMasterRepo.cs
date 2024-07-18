@@ -249,6 +249,7 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                     expense.Description = ExpenseDetails.Description;
                     expense.Date = ExpenseDetails.Date;
                     expense.Image = ExpenseDetails.Image;
+                    expense.Account = ExpenseDetails.Account;
 
                     if (ExpenseDetails.Role == "Account" || ExpenseDetails.Role == "Super Admin")
                     {

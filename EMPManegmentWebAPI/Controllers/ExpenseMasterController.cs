@@ -267,7 +267,7 @@ namespace EMPManagment.API.Controllers
             {
                 if (expense.Code != (int)HttpStatusCode.NotFound && expense.Code != (int)HttpStatusCode.InternalServerError)
                 {
-                    responseModel.Code = expense.Code;
+                    responseModel.Code = (int)HttpStatusCode.OK;
                     responseModel.Message = expense.Message;
                 }
                 else
