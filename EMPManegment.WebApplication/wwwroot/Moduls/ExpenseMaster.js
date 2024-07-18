@@ -8,6 +8,7 @@ $(document).ready(function () {
     GetAllUserExpenseList();
     ApprovedExpenseList();
     UserExpensesDetails();
+    GetExpenseTypeList();
 });
 
 function clearText() {
@@ -41,52 +42,54 @@ function preventEmptyValue(input) {
     }
 }
 
-$(document).ready(function () {
-    function GetExpenseTypeList() {
-        $.ajax({
-            url: '/ExpenseMaster/GetExpenseTypeList',
-            method: 'GET',
-            success: function (result) {
-                var expenseTypes = result.map(function (data) {
-                    return {
-                        label: data.type,
-                        value: data.id
-                    };
-                });
-
-                function setupAutocomplete(inputId, hiddenId) {
-                    $(inputId).autocomplete({
-                        source: expenseTypes,
-                        minLength: 0,
-                        focus: function (event, ui) {
-                            event.preventDefault();
-
-                            // $(inputId).val(ui.item.label);
-                        },
-                        select: function (event, ui) {
-                            $(inputId).val(ui.item.label);
-                            $(hiddenId).val(ui.item.value);
-                            event.preventDefault();
-                            return false;
-                        }
-                    }).focus(function () {
-                        $(this).autocomplete("search");
-                    });
+function GetExpenseTypeList() {
+    $.ajax({
+        url: '/ExpenseMaster/GetExpenseTypeList',
+        method: 'GET',
+        success: function (result) {
+            var expenseTypes = result.map(function (data) {
+                return {
+                    label: data.type,
+                    value: data.id
+                };
+            });
+            expenseTypes.sort(function (a, b) {
+                if (a.label < b.label) {
+                    return -1;
                 }
+                if (a.label > b.label) {
+                    return 1;
+                }
+                return 0;
+            });
+            function setupAutocomplete(inputId, hiddenId) {
+                $(inputId).autocomplete({
+                    source: expenseTypes,
+                    minLength: 0,
+                    focus: function (event, ui) {
+                        event.preventDefault();
 
-                setupAutocomplete("#txtexpensetype", "#txtexpensetypeHidden");
-                setupAutocomplete("#Editexpensetype", "#EditexpensetypeHidden");
-            },
-            error: function (err) {
-                toastr.error("Failed to fetch expense types: ", err);
+                        // $(inputId).val(ui.item.label);
+                    },
+                    select: function (event, ui) {
+                        $(inputId).val(ui.item.label);
+                        $(hiddenId).val(ui.item.value);
+                        event.preventDefault();
+                        return false;
+                    }
+                }).focus(function () {
+                    $(this).autocomplete("search");
+                });
             }
-        });
-    }
 
-    GetExpenseTypeList();
-});
-
-
+            setupAutocomplete("#txtexpensetype", "#txtexpensetypeHidden");
+            setupAutocomplete("#Editexpensetype", "#EditexpensetypeHidden");
+        },
+        error: function (err) {
+            toastr.error("Failed to fetch expense types: ", err);
+        }
+    });
+}
 $(document).ready(function () {
     function GetUsersList() {
         $.ajax({
@@ -390,13 +393,11 @@ $(document).ready(function () {
     EditExpensesForm = $("#EditExpenseForm").validate({
         rules: {
             EditDescription: "required",
-            Editbillno: "required",
             Edittotalamount: "required",
             EditExpenseUserName: "required",
         },
         messages: {
             EditDescription: "Please enter description",
-            Editbillno: "Please enter bill no",
             Edittotalamount: "Please enter correct total amount",
             EditExpenseUserName: "Please enter UserName",
         }
@@ -563,7 +564,6 @@ function GetPayUserExpenseCreditList(userId, selectedMonth) {
                     return '<span style="color: ' + color + ';">' + '₹' + data + '</span>';
                 }
             },
-            { "data": "account", "name": "Account", "visible": false },
         ],
         scrollY: 400,
         scrollX: true,
@@ -657,7 +657,6 @@ function GetPayUserExpenseDebitList(userId, selectedMonth) {
                     return '<span style="color: ' + color + ';">' + '₹' + data + '</span>';
                 }
             },
-            { "data": "account", "name": "Account", "visible": false },
         ],
         scrollY: 400,
         scrollX: true,
@@ -926,7 +925,6 @@ function DisplayUnApprovedExpenseList() {
             },
             { "data": "id", "name": "Id", "visible": false },
             { "data": "expenseTypeName", "name": "ExpenseTypeName" },
-            { "data": "paymentTypeName", "name": "PaymentTypeName" },
             { "data": "billNumber", "name": "BillNumber" },
             { "data": "description", "name": "Description" },
             {
@@ -1005,7 +1003,6 @@ function DisplayAllApprovedExpenseList() {
             },
             { "data": "id", "name": "Id", "visible": false },
             { "data": "expenseTypeName", "name": "ExpenseTypeName" },
-            { "data": "paymentTypeName", "name": "PaymentTypeName" },
             { "data": "billNumber", "name": "BillNumber" },
             { "data": "description", "name": "Description" },
             {
@@ -1603,7 +1600,7 @@ $(document).ready(function () {
             filter: true,
             "bDestroy": true,
             order: [[3, 'asc']],
-            pageLength: 30,
+            pageLength: 10,
             ajax: {
                 type: "Post",
                 url: '/ExpenseMaster/GetUserExpenseList?unapprove=' + IsApprove + "&UserId=" + UserId,
@@ -1669,7 +1666,7 @@ function GetUserAllExpenseDetails() {
         filter: true,
         destroy: true,
         order: [[3, 'asc']],
-        pageLength: 30,
+        pageLength: 10,
         ajax: {
             type: "Post",
             url: '/ExpenseMaster/GetUserExpenseList?UserId=' + UserId,
@@ -1771,7 +1768,7 @@ function GetAllUserApproveExpenseList() {
         filter: true,
         "bDestroy": true,
         order: [[3, 'asc']],
-        pageLength: 30,
+        pageLength: 10,
         ajax: {
             type: "Post",
             url: '/ExpenseMaster/GetUserExpenseList?approve=' + IsApprove + "&UserId=" + UserId,
@@ -1873,7 +1870,7 @@ function GetAllUserCreditExpenseList() {
         filter: true,
         "bDestroy": true,
         order: [[3, 'asc']],
-        pageLength: 30,
+        pageLength: 10,
         ajax: {
             type: "Post",
             url: '/ExpenseMaster/GetUserExpenseList?Credit=' + Account + "&UserId=" + UserId + '&filterType=' + filterType,
@@ -2293,7 +2290,7 @@ function clearExpenseTypeText() {
     resetForm();
     $("#textExpenseType").val('');
 }
-function AddExpenseType() {
+function AddExpenseType() { 
     if ($("#addExpenseType").valid()) {
 
         var formData = new FormData();
@@ -2308,15 +2305,9 @@ function AddExpenseType() {
             processData: false,
             success: function (Result) {
                 if (Result.code == 200) {
-                    Swal.fire({
-                        title: Result.message,
-                        icon: 'success',
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'OK'
-                    }).then(function () {
-                        $('#ExpenseTypeModal').modal('hide');
-                        GetExpenseTypeList();
-                    });
+                    toastr.success(Result.message);
+                    $('#ExpenseTypeModal').modal('hide');
+                    GetExpenseTypeList();
                 }
                 else {
                     Swal.fire({
@@ -2327,6 +2318,7 @@ function AddExpenseType() {
                     });
                 }
             }
+
         });
     }
     else {

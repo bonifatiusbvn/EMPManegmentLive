@@ -39,7 +39,6 @@ namespace EMPManegment.Repository.ExponseMasterRepository
             this.configuration = configuration;
         }
         public BonifatiusEmployeesContext Context { get; }
-
         public async Task<UserResponceModel> AddExpenseType(ExpenseTypeView AddExpense)
         {
             UserResponceModel response = new UserResponceModel();
@@ -72,7 +71,6 @@ namespace EMPManegment.Repository.ExponseMasterRepository
             }
             return response;
         }
-
         public async Task<UserResponceModel> AddPaymentType(PaymentTypeView AddPayment)
         {
             UserResponceModel response = new UserResponceModel();
@@ -94,7 +92,6 @@ namespace EMPManegment.Repository.ExponseMasterRepository
             }
             return response;
         }
-
         public async Task<IEnumerable<ExpenseTypeView>> GetAllExpensType()
         {
             try
@@ -112,7 +109,6 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                 throw ex;
             }
         }
-
         public async Task<IEnumerable<PaymentTypeView>> GetAllPaymentType()
         {
             try
@@ -130,7 +126,6 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                 throw ex;
             }
         }
-
         public async Task<UserResponceModel> GetExpenseById(int ExpenseId)
         {
             UserResponceModel response = new UserResponceModel();
@@ -153,7 +148,6 @@ namespace EMPManegment.Repository.ExponseMasterRepository
             }
             return response;
         }
-
         public async Task<UserResponceModel> GetPaymentById(int PaymentId)
         {
             UserResponceModel response = new UserResponceModel();
@@ -176,7 +170,6 @@ namespace EMPManegment.Repository.ExponseMasterRepository
             }
             return response;
         }
-
         public async Task<UserResponceModel> UpdateExpenseType(ExpenseTypeView UpdateExpense)
         {
             UserResponceModel model = new UserResponceModel();
@@ -200,7 +193,6 @@ namespace EMPManegment.Repository.ExponseMasterRepository
             }
             return model;
         }
-
         public async Task<UserResponceModel> UpdatePaymentType(PaymentTypeView UpdatePayment)
         {
             UserResponceModel model = new UserResponceModel();
@@ -225,7 +217,6 @@ namespace EMPManegment.Repository.ExponseMasterRepository
             }
             return model;
         }
-
         public async Task<UserResponceModel> AddExpenseDetails(ExpenseDetailsView ExpenseDetails)
         {
             UserResponceModel response = new UserResponceModel();
@@ -250,6 +241,7 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                     expense.Description = ExpenseDetails.Description;
                     expense.Date = ExpenseDetails.Date;
                     expense.Image = ExpenseDetails.Image;
+                    expense.Account = ExpenseDetails.Account;
                     expense.PaymentDetails = ExpenseDetails.PaymentDetails;
 
                     if (ExpenseDetails.Role == "Account" || ExpenseDetails.Role == "Super Admin")
@@ -291,10 +283,6 @@ namespace EMPManegment.Repository.ExponseMasterRepository
             }
             return response;
         }
-
-
-
-
         public async Task<UserResponceModel> GetExpenseDetailById(Guid Id)
         {
             UserResponceModel response = new UserResponceModel();
@@ -339,7 +327,6 @@ namespace EMPManegment.Repository.ExponseMasterRepository
             }
             return response;
         }
-
         public async Task<jsonData> GetExpenseDetailList(DataTableRequstModel dataTable)
         {
             try
@@ -451,7 +438,6 @@ namespace EMPManegment.Repository.ExponseMasterRepository
             }
             return model;
         }
-
         public async Task<jsonData> GetUserExpenseList(Guid UserId, DataTableRequstModel dataTable)
         {
             try
@@ -648,7 +634,6 @@ namespace EMPManegment.Repository.ExponseMasterRepository
             }
             return ExpenseDetail;
         }
-
         public async Task<UserResponceModel> ApprovedExpense(List<ApprovedExpense> ApprovedallExpense)
         {
             UserResponceModel response = new UserResponceModel();
@@ -691,7 +676,6 @@ namespace EMPManegment.Repository.ExponseMasterRepository
             }
             return response;
         }
-
         public async Task<UserResponceModel> DeleteExpense(Guid Id)
         {
             UserResponceModel response = new UserResponceModel();

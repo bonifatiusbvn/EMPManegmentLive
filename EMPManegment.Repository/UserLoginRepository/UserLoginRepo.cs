@@ -42,7 +42,7 @@ namespace EMPManegment.Repository.UserLoginRepository
         {
             throw new NotImplementedException();
         }
-        public async Task<string> AuthenticateUser(LoginRequest login)
+        public async Task<string> AuthenticateUser(LoginView login)
         {
             var UserLogin = await Context.TblUsers.FirstOrDefaultAsync(l => l.UserName == login.UserName && Crypto.VarifyHash(login.Password, l.PasswordHash, l.PasswordSalt));
             if (UserLogin == null)
@@ -52,10 +52,13 @@ namespace EMPManegment.Repository.UserLoginRepository
             else
             {
 
-                LoginRequest user = new LoginRequest()
+                LoginView user = new LoginView
                 {
+                    Id = UserLogin.Id,
                     UserName = UserLogin.UserName,
-
+                    FirstName = UserLogin.FirstName,
+                    LastName = UserLogin.LastName,
+                    Role = UserLogin.Role.Role,
                 };
 
                 var Jtoken = GenerateToken(user);
@@ -116,13 +119,16 @@ namespace EMPManegment.Repository.UserLoginRepository
             return response;
         }
 
-        public string GenerateToken(LoginRequest model)
+        public string GenerateToken(LoginView model)
         {
             var claims = new List<Claim>();
             claims.Add(new Claim(JwtRegisteredClaimNames.Sub, model.UserName));
             claims.Add(new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()));
             claims.Add(new Claim("UserName", model.UserName));
-            claims.Add(new Claim("Password", model.Password));
+            claims.Add(new Claim("FirstName", model.FirstName));
+            claims.Add(new Claim("LastName", model.LastName));
+            claims.Add(new Claim("Id", model.Id.ToString()));
+            claims.Add(new Claim("Role", model.Role));
 
             var securitykey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]));
             var credentials = new SigningCredentials(securitykey, SecurityAlgorithms.HmacSha256);
@@ -151,7 +157,17 @@ namespace EMPManegment.Repository.UserLoginRepository
                             UserName = tblUser.User.UserName,
                             Password = Loginrequest.Password,
                         };
-                        var authToken = GenerateToken(user);
+
+
+                        LoginView loginView = new LoginView
+                        {
+                            Id = tblUser.User.Id,
+                            UserName = tblUser.User.UserName,
+                            FirstName = tblUser.User.FirstName,
+                            LastName = tblUser.User.LastName,
+                            Role = tblUser.Role.Role,
+                        };
+                        var authToken = GenerateToken(loginView);
 
 
                         if (Crypto.VarifyHash(Loginrequest.Password, tblUser.User.PasswordHash, tblUser.User.PasswordSalt))

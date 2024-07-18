@@ -10,6 +10,7 @@ using EMPManegment.EntityModels.ViewModels.PurchaseOrderModels;
 using EMPManegment.EntityModels.ViewModels.TaskModels;
 using EMPManegment.Web.Helper;
 using EMPManegment.Web.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis;
 using Newtonsoft.Json;
@@ -18,6 +19,7 @@ using X.PagedList;
 #nullable disable
 namespace EMPManegment.Web.Controllers
 {
+    [Authorize]
     public class PurchaseOrderMasterController : Controller
     {
         public PurchaseOrderMasterController(WebAPI webAPI, IWebHostEnvironment environment, APIServices aPIServices)
