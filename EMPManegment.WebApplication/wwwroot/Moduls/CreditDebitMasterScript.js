@@ -85,6 +85,7 @@ function InsertCreditDebitDetails() {
             PendingAmount: $("#txtpendingamount").val(),
             TotalAmount: $("#txttotalamount").val(),
             CreatedBy: $("#txtuserid").val(),
+            Date: $("#txtpaydatevendor").val(),
         };
         var form_data = new FormData();
         form_data.append("CREDITDEBITDETAILS", JSON.stringify(objData));
