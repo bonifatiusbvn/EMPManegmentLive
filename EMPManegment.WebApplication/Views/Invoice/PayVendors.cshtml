@@ -254,7 +254,7 @@
                                 </div><!-- end col -->
                                 <div>
                                     <div class="input-group mb-3">
-                                        <label class="input-group-text" for="txtcreditamount">Date</label>
+                                        <label class="input-group-text" for="txtcreditdebitamount">Date</label>
                                         <input type="date" class="form-control" id="txtpaydatevendor" value="@DateTime.Now.ToString("dd/MM/yyyy")">
                                         <span id="warningMessage" style="color: red;"></span>
                                     </div>
@@ -298,6 +298,11 @@
 <!--end card-->
 <script type="text/javascript">
     var userPermissions = '@Html.Raw(Json.Serialize(UserSession.FormPermisionData))';
+
+    document.addEventListener("DOMContentLoaded", function () {
+        var today = new Date().toISOString().split('T')[0];
+        document.getElementById("txtpaydatevendor").value = today;
+    });
 </script>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/moduls/creditdebitmasterscript.js" asp-append-version="true"></script>
