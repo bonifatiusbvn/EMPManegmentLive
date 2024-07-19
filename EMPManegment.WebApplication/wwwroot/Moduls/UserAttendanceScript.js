@@ -1,94 +1,67 @@
 ﻿
 var datas = userPermissions
 
-$("#monthbox").show();
-$("#datebox").hide();
-$("#datebox1").hide();
-$("#usernamebox").show();
-$("#datesbox").hide();
-$("#backbtn").hide();
-$("#startdatebox").hide();
-$("#enddatebox").hide();
-
-function cleartextBox() {
-    $("#drpAttusername").find("option").remove().end().append(
-        '<option selected value="" >--Select Username--</option>');
-    $("#txtdate").val('');
-}
-
-function CleartextBox() {
-    $("#txtmonth").val('');
-    $("#txtstartdate").val('');
-    $("#txtenddate").val('');
-}
 $(document).ready(function () {
-    GetAttendance();
-});
 
-$('.dropdown-item').click(function () {
-    var selectedValue = $(this).attr('data-value');
-    $('.dropdown-toggle').data('value', selectedValue);
-    cleartextBox();
-    if (selectedValue === "ByUsername") {
-        GetUsernameList()
-        $("#usernamebox").show();
-        $("#datesbox").hide();
-        $("#startdatebox").hide();
-        $("#enddatebox").hide();
+    $("#usernamebox").show();
+    $("#monthbox").show();
+    function clearTextBox() {
+        $('#drpAttusername').find('option').not(':first').remove();
+        $('#ddlmyattendanceser').find('option').not(':first').remove();
+        $('#txtdate').val('');
+        $('#txtstartdatebox').val('');
+        $('#txtenddatebox').val('');
     }
-    if (selectedValue === "ByDate") {
-        $("#usernamebox").hide();
-        $("#datesbox").show();
-        $("#startdatebox").hide();
-        $("#enddatebox").hide();
-    }
-    if (selectedValue === "ByDate&ByUsername") {
-        GetUsernameList()
-        $("#usernamebox").show();
-        $("#datesbox").show();
-        $("#startdatebox").hide();
-        $("#enddatebox").hide();
-    }
-    if (selectedValue === "ByBetweenDates&ByUsername") {
-        GetUsernameList()
-        $("#usernamebox").show();
-        $("#datesbox").hide();
-        $("#startdatebox").show();
-        $("#enddatebox").show();
-    }
-});
-$(document).ready(function () {
-    $('.dropdown-item').on('click', function () {
+
+    $('.dropdown-item').click(function (e) {
+        e.preventDefault();
+
         var selectedValue = $(this).data('value');
-        $('#SelectAttandance').val(selectedValue);
+        $('#ddlatendanceser').data('value', selectedValue).text($(this).text());
+        $('#ddlmyattendanceser').data('value', selectedValue).text($(this).text());
 
-        if (selectedValue == "ByMonth") {
+        clearTextBox();
+        $("#usernamebox").show();
+
+        if (selectedValue === "ByUsername") {
+            GetUsernameList();
+            $("#usernamebox").show();
+            $("#datesbox").hide();
+            $("#startdatebox").hide();
+            $("#enddatebox").hide();
+        }
+        else if (selectedValue === "ByDate") {
+            $("#datesbox").show();
+            $("#usernamebox").hide();
+            $("#startdatebox").hide();
+            $("#enddatebox").hide();
+        }
+        else if (selectedValue === "ByDateAndUser") {
+            GetUsernameList();
+            $("#usernamebox").show();
+            $("#datesbox").show();
+            $("#startdatebox").hide();
+            $("#enddatebox").hide();
+        }
+        else if (selectedValue === "ByDatesAndUser") {
+            GetUsernameList();
+            $("#usernamebox").show();
+            $("#datesbox").hide();
+            $("#startdatebox").show();
+            $("#enddatebox").show();
+        }
+        else if (selectedValue == "ByMonth") {
             $("#monthbox").show();
             $("#datebox").hide();
             $("#datebox1").hide();
-            CleartextBox();
-        } else if (selectedValue == "BetweenDates") {
+        }
+        else if (selectedValue == "BetweenDates") {
             $("#monthbox").hide();
             $("#datebox").show();
             $("#datebox1").show();
-            CleartextBox();
-        } else {
-            $("#monthbox").show();
-            $("#datebox").hide();
-            $("#datebox1").hide();
-            CleartextBox();
         }
-
-
-        $('.btn-group .dropdown-toggle').text($(this).text());
     });
 
-    function CleartextBox() {
-
-        $('#monthbox').val('');
-        $('#datebox').val('');
-        $('#datebox1').val('');
-    }
 });
 
 
@@ -293,7 +266,7 @@ function UpdateUserAttendance() {
 }
 
 
-function GetAttendance() {
+function GetMyAttendance() {
 
     var form_data = new FormData();
     form_data.append("Cmonth", $('#txtmonth').val());
@@ -374,8 +347,8 @@ function formatDate(date) {
 }
 
 function GetSearchAttendanceList() {
- 
-    var selectedValue = $('.dropdown-toggle').data('value');
+
+    var selectedValue = $('#ddlatendanceser').data('value');
     var isValid = true;
     var errorMessage = "Kindly fill all required fields";
 
@@ -388,10 +361,10 @@ function GetSearchAttendanceList() {
     } else if (selectedValue === "ByDate" && $("#txtdate").val() === "") {
         isValid = false;
         errorMessage = "Please select a Date";
-    } else if (selectedValue === "ByDate&ByUsername" && ($("#drpAttusername").val() === "" || $("#txtdate").val() === "")) {
+    } else if (selectedValue === "ByDateAndUser" && ($("#drpAttusername").val() === "" || $("#txtdate").val() === "")) {
         isValid = false;
         errorMessage = "Please select both Username and Date";
-    } else if (selectedValue === "ByBetweenDates&ByUsername" && ($("#drpAttusername").val() === "" || $("#txtstartdatebox").val() === "" || $("#txtenddatebox").val() === "")) {
+    } else if (selectedValue === "ByDatesAndUser" && ($("#drpAttusername").val() === "" || $("#txtstartdatebox").val() === "" || $("#txtenddatebox").val() === "")) {
         isValid = false;
         errorMessage = "Please select Username, Start Date, and End Date";
     }
@@ -405,16 +378,15 @@ function GetSearchAttendanceList() {
 
         $.ajax({
             url: '/UserProfile/GetSearchAttendanceList',
-            type: 'Post',
+            type: 'POST',
             datatype: 'json',
             data: form_data,
             processData: false,
             contentType: false,
             complete: function (Result) {
-
                 $("#attendancedt").hide();
                 $("#backbtn").show();
-                if (Result.responseText != '{\"code\":400}') {
+                if (Result.responseText != '{"code":400}') {
                     $("#dvattendancelist").show();
                     $("#dvattendancelist").html(Result.responseText);
                 } else {
@@ -429,6 +401,7 @@ function GetSearchAttendanceList() {
         toastr.warning(errorMessage);
     }
 }
+
 
 
 $('#backbtn').on('click', function (event) {
@@ -462,7 +435,6 @@ function editUserAttendanceSrc(attandenceId) {
         }
     })
 }
-
 
 function UpdateUserAttendanceSrc() {
     var objData = {

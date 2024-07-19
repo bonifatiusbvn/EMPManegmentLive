@@ -581,7 +581,7 @@ function deleteManualInvoice(InvoiceId) {
 }
 
 function UpdateManualInvoiceDetails() {
-    debugger
+
     if ($("#CreateManualInvoiceForm").valid()) {
         if ($('#addnewproductlink tr').length >= 1) {
 

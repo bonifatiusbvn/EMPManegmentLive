@@ -4,7 +4,7 @@
 <div class="tab-pane" role="tabpanel" style="margin-top:30px;">
     <div class="table-responsive table-card mb-1">
         <table class="table table-bordered dt-responsive table-striped align-middle dataTable no-footer dtr-inline" id="orderTable">
-            <thead class="table-light text-muted text-center">
+            <thead class="table-info text-muted text-center">
                 <tr class="text-uppercase">
                     <th>Name</th>
                     <th>Date</th>
@@ -21,35 +21,35 @@
                         <td>@item.UserName</td>
                         <td>@CommonHelper.GetCommonDateFormat(item.Date)</td>
                         <td>@item.Intime.ToLongTimeString()</td>
-                      
-                            @if(item.OutTime != null)
-                            {
-                            <td>@item.OutTime?.ToLongTimeString()</td>
-                            }
-                            else if(item.OutTime == null && item.Date == DateTime.Today )
-                            {
-                            <td>Pending</td>
-                            }
-                            else
-                            {
-                            <td>Missing</td>
-                            }
 
-                            @if (item.TotalHours != null)
-                            {
+                        @if (item.OutTime != null)
+                        {
+                            <td>@item.OutTime?.ToLongTimeString()</td>
+                        }
+                        else if (item.OutTime == null && item.Date == DateTime.Today)
+                        {
+                            <td>Pending</td>
+                        }
+                        else
+                        {
+                            <td>Missing</td>
+                        }
+
+                        @if (item.TotalHours != null)
+                        {
                             TimeSpan totalDuration = item.TotalHours.Value;
                             string formattedDuration = $"{totalDuration.Hours:00}:{totalDuration.Minutes:00}:{totalDuration.Seconds:00}hr";
 
                             <td>@formattedDuration</td>
-                            }
-                            else if (item.TotalHours == null && item.Date == DateTime.Today)
-                            {
+                        }
+                        else if (item.TotalHours == null && item.Date == DateTime.Today)
+                        {
                             <td>Pending</td>
-                            }
-                            else
-                            {
+                        }
+                        else
+                        {
                             <td>Missing</td>
-                            }
+                        }
 
                         <td><button type="button" class="btn text-primary" onclick="editUserAttendanceSrc('@item.AttendanceId')"><i class="fa-regular fa-pen-to-square"></i></button></td>
                     </tr>
@@ -100,7 +100,7 @@
                 </div>
                 <div class="mb-3">
                     <label for="date-field" class="form-label">OutTime</label>
-                    <input type="datetime-local" id="srcOutTime" class="form-control"/>
+                    <input type="datetime-local" id="srcOutTime" class="form-control" />
                 </div>
             </div>
             <div class="modal-footer">

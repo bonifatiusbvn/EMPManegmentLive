@@ -246,7 +246,6 @@ namespace EMPManegment.Repository.ExponseMasterRepository
 
                     if (ExpenseDetails.Role == "Account" || ExpenseDetails.Role == "Super Admin")
                     {
-
                         expense.IsPaid = true;
                         expense.IsApproved = true;
                     }

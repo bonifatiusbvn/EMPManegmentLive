@@ -503,7 +503,6 @@ function deleteExpense(Id) {
 
 $(document).ready(function () {
     $(document).on('click', '.dropdown-menu .dropdown-item', function () {
-        debugger
         var selectedMonth = $(this).data('value');
         var userId = $("#txtuserid").val();
         GetPayUserExpenseCreditList(userId, selectedMonth);
@@ -2290,7 +2289,7 @@ function clearExpenseTypeText() {
     resetForm();
     $("#textExpenseType").val('');
 }
-function AddExpenseType() { 
+function AddExpenseType() {
     if ($("#addExpenseType").valid()) {
 
         var formData = new FormData();
