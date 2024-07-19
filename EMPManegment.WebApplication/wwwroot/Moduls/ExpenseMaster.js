@@ -754,9 +754,7 @@ function UserExpensesDetails() {
 $(document).ready(function () {
     $('.nav-link').click(function () {
         var targetTab = $(this).attr('href');
-
         if (targetTab === 'AllExpenseList') {
-
             GetAllUserExpenseList();
         } else if (targetTab === 'UnapproveExpenseList') {
             GetAllUserUnapproveExpense();
@@ -764,7 +762,121 @@ $(document).ready(function () {
             GetAllUserApproveExpense();
         }
     });
+
+    $('.nav-btn').click(function () {
+        var targetTab = $(this).attr('href');
+        if (targetTab === '#GetUserBetweenDatesExpenseList') {
+            GetUserBetweenDateExpenseList();
+        }
+    });
 });
+
+function GetUserBetweenDateExpenseList() {
+    $.ajax({
+        url: '/ExpenseMaster/DisplayExpenseList',
+        type: 'GET',
+        success: function (result) {
+            $("#AllUserExpensePartial").html(result);
+            SearchUserBetweenDateExpenseList();
+        },
+        error: function () {
+            alert('Error loading expenses. Please try again.');
+        }
+    });
+}
+
+function SearchUserBetweenDateExpenseList()
+{
+    var startDate = $('#approveExpenseStartDate').val();
+    var endDate = $('#approveExpenseEndDate').val();
+
+    if (startDate == "" && endDate == "") {
+        toastr.warning("Select dates");
+    } else if (startDate == "") {
+        toastr.warning("Select Start date");
+    } else if (endDate == "") {
+        toastr.warning("Select End date");
+    } else {
+        DisplayUserBetweenDateExpenseList(startDate, endDate)
+    }
+}
+
+function DisplayUserBetweenDateExpenseList(startDate, endDate)
+{
+    var userId = GetParameterByName('userId');
+    var filterType = 'daterange';
+    $('#UserallExpenseTable').DataTable({
+        processing: false,
+        serverSide: true,
+        filter: true,
+        destroy: true,
+        order: [[7, 'desc']],
+        ajax: {
+            url: '/ExpenseMaster/GetUserExpenseList?startDate=' + startDate + '&endDate=' + endDate + '&UserId=' + userId + '&filterType=' + filterType,
+            type: 'POST',
+            data: function (d) {
+                d.UserId = userId;
+            }
+        },
+        columns: [
+            {
+                "data": null, "visible": false,
+                "orderable": false
+            },
+            {
+                "data": null,
+                "render": function (data, type, full, meta) {
+                    var account = full.account.toLowerCase();
+                    if (account === "credit") {
+                        return '<div class="avatar-xs"><div class="avatar-title bg-success-subtle text-success rounded-circle fs-16"><i class="ri-arrow-left-down-fill"></i></div></div>';
+                    } else if (account === "debit") {
+                        return '<div class="avatar-xs"><div class="avatar-title bg-danger-subtle text-danger rounded-circle fs-16"><i class="ri-arrow-right-up-fill"></i></div></div>';
+                    } else {
+                        return '';
+                    }
+                },
+                "orderable": false,
+                width: "05%"
+            },
+            { "data": "id", "name": "Id", "visible": false },
+            { "data": "expenseTypeName", "name": "ExpenseTypeName" },
+            { "data": "billNumber", "name": "BillNumber" },
+            { "data": "description", "name": "Description" },
+            {
+                "data": "date",
+                "name": "Date",
+                "render": function (data, type, full, meta) {
+                    return getCommonDateformat(data);
+                }
+            },
+            {
+                "data": "totalAmount",
+                "name": "TotalAmount",
+                "render": function (data, type, full, meta) {
+                    var color = full.account && full.account.toLowerCase() === "credit" ? "green" : "red";
+                    return '<span style="color: ' + color + ';">' + '₹' + data + '</span>';
+                }
+            },
+
+        ],
+        scrollY: 400,
+        scrollX: true,
+        scrollCollapse: true,
+        fixedHeader: {
+            header: true,
+            footer: true
+        },
+        autoWidth: false,
+        columnDefs: [
+            {
+                defaultContent: "",
+                targets: "_all",
+                width: 'auto'
+            }
+        ]
+    });
+}
+
 function GetAllUserExpenseList() {
     $.ajax({
         url: '/ExpenseMaster/DisplayExpenseList',
@@ -1148,6 +1260,8 @@ $(document).ready(function () {
             serverSide: true,
             filter: true,
             "bDestroy": true,
+            pageLength: 30,
+            lengthMenu: [[10, 25, 30, 50, -1], [10, 25, 30, 50, "All"]],
             order: [[3, 'desc']],
             ajax: {
                 type: "POST",

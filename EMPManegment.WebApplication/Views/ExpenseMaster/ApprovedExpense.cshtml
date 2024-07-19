@@ -13,6 +13,12 @@
         overflow-y: auto;
         overflow-x: hidden;
     }
+
+    .form-check-label {
+        margin-bottom: 0;
+        color: #17a2b8;
+    }
+
 </style>
 
 <input type="hidden" id="txtgetUserName" value="@ViewBag.UserName" hidden />
@@ -134,29 +140,51 @@
             </div>
             <!--end modal-->
             <input type="hidden" id="txtgetUserId" value="@ViewBag.UserId" />
-            <div class="card-body pt-0">
+            <div class="card-body p-0">
                 <div>
-                    <ul class="nav nav-tabs nav-tabs-custom nav-primary mb-3" role="tablist">
-                        <li class="nav-item">
-                            <a class="nav-link active All py-3" data-bs-toggle="tab" id="All" role="tab" aria-selected="true" href="AllExpenseList">
-                                <i class="ri-arrow-left-right-fill me-1 align-bottom"></i>All Expense
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link py-3 Returns" data-bs-toggle="tab" role="tab" aria-selected="false" href="UnapproveExpenseList">
-                                <i class="ri-close-circle-line me-1 align-bottom"></i>UnApproved Expense
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link py-3 Returns" data-bs-toggle="tab" id="Returns" role="tab" aria-selected="false" href="ApproveExpenseList">
-                                <i class="ri-checkbox-circle-line me-1 align-bottom"></i>Approved Expense
-                            </a>
-                        </li>
-                    </ul>
-                    <div class="tab-content">
-                        <div class="tab-pane fade show active" role="tabpanel">
-                            <!---Partial View--->
-                            <div id="AllUserExpensePartial">
+                    <div class="row g-3">
+                        <div class="col-xxl-5 col-sm-12">
+                            <ul class="nav nav-tabs nav-tabs-custom nav-primary mb-3 d-flex align-items-center flex-wrap" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active All py-3" data-bs-toggle="tab" id="All" role="tab" href="AllExpenseList">
+                                        <i class="ri-arrow-left-right-fill me-1 align-bottom"></i>All Expense
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link py-3 Returns" data-bs-toggle="tab" role="tab" href="UnapproveExpenseList">
+                                        <i class="ri-close-circle-line me-1 align-bottom"></i>UnApproved Expense
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link py-3 Returns" data-bs-toggle="tab" id="Returns" role="tab" href="ApproveExpenseList">
+                                        <i class="ri-checkbox-circle-line me-1 align-bottom"></i>Approved Expense
+                                    </a>
+                                </li>
+                                <li class="nav-item d-flex align-items-center ms-3">
+                                    <input class="nav-radio form-check-input Returns" type="radio" data-bs-toggle="tab" role="tab" name="flexRadioDefault" id="approveExpensebetweenMonth">
+                                    <label class="form-check-label ms-2" for="approveExpensebetweenMonth">
+                                        Between Date
+                                    </label>
+                                </li>
+                                @{
+                                    var today = DateTime.Now.ToString("yyyy-MM-dd");
+                                }
+                                <li class="nav-item align-items-center ms-3 date-input" style="display:none;">
+                                    <input class="form-control" placeholder="dd-mm-yyyy" type="date" id="approveExpenseStartDate" max="@today">
+                                </li>
+                                <li class="nav-item align-items-center ms-3 date-input" style="display:none;">
+                                    <input class="form-control" placeholder="dd-mm-yyyy" type="date" id="approveExpenseEndDate" max="@today">
+                                </li>
+                                <li class="nav-item d-flex align-items-center ms-3">
+                                    <a class="btn btn-primary nav-btn" id="approveExpenseSearchDate" data-bs-toggle="tab" role="tab" href="#GetUserBetweenDatesExpenseList" style="display:none;"><i class="ri-search-line"></i></a>
+                                </li>
+                            </ul>
+                            <div class="tab-content">
+                                <div class="tab-pane fade show active" role="tabpanel">
+                                    <!---Partial View--->
+                                    <div id="AllUserExpensePartial">
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -205,6 +233,44 @@
             dateInput.value = today;
         });
     });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const approveExpenseBetweenMonth = document.getElementById('approveExpensebetweenMonth');
+        const searchDateInputs = document.querySelectorAll('.date-input');
+        const approveExpenseradios = document.querySelectorAll('input[name="flexRadioDefault"]');
+        const approveExpenseSearchButton = document.getElementById('approveExpenseSearchDate');
+        const navLinks = document.querySelectorAll('.nav-link');
+
+        function toggleApprovedExpenseDateInputs() {
+            clearApprovedExpenseDates();
+            if (approveExpenseBetweenMonth.checked) {
+                searchDateInputs.forEach(input => input.style.display = 'flex');
+                approveExpenseSearchButton.style.display = 'block';
+            } else {
+                searchDateInputs.forEach(input => input.style.display = 'none');
+                approveExpenseSearchButton.style.display = 'none';
+            }
+        }
+
+        approveExpenseradios.forEach(radio => {
+            radio.addEventListener('change', toggleApprovedExpenseDateInputs);
+        });
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', function () {
+                approveExpenseBetweenMonth.checked = false;
+                toggleApprovedExpenseDateInputs();
+            });
+        });
+
+        toggleApprovedExpenseDateInputs();
+    });
+
+    function clearApprovedExpenseDates() {
+        document.getElementById('approveExpenseStartDate').value = '';
+        document.getElementById('approveExpenseEndDate').value = '';
+    }
+
 </script>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/moduls/expensemaster.js" asp-append-version="true"></script>
