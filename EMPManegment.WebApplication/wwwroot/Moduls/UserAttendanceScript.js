@@ -11,6 +11,9 @@ $(document).ready(function () {
         $('#txtdate').val('');
         $('#txtstartdatebox').val('');
         $('#txtenddatebox').val('');
+        $('#txtstartdate').val('');
+        $('#txtenddate').val('');
+        $('#txtmonth').val('');
     }
 
     $('.dropdown-item').click(function (e) {
@@ -268,76 +271,83 @@ function UpdateUserAttendance() {
 
 
 function GetMyAttendance() {
+    if ($('#txtmonth').val() == "" && $("#txtstartdate").val() == "" && $("#txtenddate").val() == "")
+    {
+        toastr.warning("Select the Month or UserName");
+    }
+    else
+    {
+        var form_data = new FormData();
+        form_data.append("Cmonth", $('#txtmonth').val());
+        form_data.append("StartDate", $("#txtstartdate").val());
+        form_data.append("EndDate", $("#txtenddate").val());
+        $.ajax({
+            url: '/UserProfile/GetAttendanceList',
+            type: 'Post',
+            datatype: 'json',
+            data: form_data,
+            processData: false,
+            contentType: false,
+            success: function (Result, status, xhr) {
+                var object = '';
+                $.each(Result, function (index, item) {
+                    var formattedDate = getCommonDateformat(item.date);
+                    var todate = new Date().toLocaleDateString('en-US');
+                    var date = (new Date(item.date)).toLocaleDateString('en-US')
+                    object += '<tr>';
+                    object += '<td>' + item.userName + '</td>';
+                    object += '<td>' + formattedDate + '</td>';
+                    object += '<td>' + (new Date(item.intime)).toLocaleTimeString('en-US') + '</td>';
+                    //---------OutTime---------//
+                    if (item.outTime != null) {
+                        object += '<td>' +
+                            (new Date(item.outTime)).toLocaleTimeString('en-US') + '</td>';
+                    }
+                    else if (item.outTime == null && date == todate) {
 
-    var form_data = new FormData();
-    form_data.append("Cmonth", $('#txtmonth').val());
-    form_data.append("StartDate", $("#txtstartdate").val());
-    form_data.append("EndDate", $("#txtenddate").val());
-    $.ajax({
-        url: '/UserProfile/GetAttendanceList',
-        type: 'Post',
-        datatype: 'json',
-        data: form_data,
-        processData: false,
-        contentType: false,
-        success: function (Result, status, xhr) {
-            var object = '';
-            $.each(Result, function (index, item) {
-                var formattedDate = getCommonDateformat(item.date);
-                var todate = new Date().toLocaleDateString('en-US');
-                var date = (new Date(item.date)).toLocaleDateString('en-US')
-                object += '<tr>';
-                object += '<td>' + item.userName + '</td>';
-                object += '<td>' + formattedDate + '</td>';
-                object += '<td>' + (new Date(item.intime)).toLocaleTimeString('en-US') + '</td>';
-                //---------OutTime---------//
-                if (item.outTime != null) {
-                    object += '<td>' +
-                        (new Date(item.outTime)).toLocaleTimeString('en-US') + '</td>';
-                }
-                else if (item.outTime == null && date == todate) {
-
-                    object += '<td>' +
-                        ("Pending") + '</td>';
-                }
-                else {
-                    object += '<td>' +
-                        ("Missing") + '</td>';
-                }
-                //---------TotalHours--------//
-                if (item.totalHours != null) {
-                    object += '<td>' +
-                        (item.totalHours?.substr(0, 8)) + ('hr') + '</td>';
-                }
-                else if (item.totalHours == null && date == todate) {
-                    object += '<td>' +
-                        ("Pending") + '</td>';
-                }
-                else {
-                    object += '<td>' +
-                        ("Missing") + '</td>';
-                }
-            });
-            if (Result.message != null) {
-                var msg = '';
-                msg += '<td>' +
-                    (Result.message) + '</td>'; msg += '<td>' +
+                        object += '<td>' +
+                            ("Pending") + '</td>';
+                    }
+                    else {
+                        object += '<td>' +
+                            ("Missing") + '</td>';
+                    }
+                    //---------TotalHours--------//
+                    if (item.totalHours != null) {
+                        object += '<td>' +
+                            (item.totalHours?.substr(0, 8)) + ('hr') + '</td>';
+                    }
+                    else if (item.totalHours == null && date == todate) {
+                        object += '<td>' +
+                            ("Pending") + '</td>';
+                    }
+                    else {
+                        object += '<td>' +
+                            ("Missing") + '</td>';
+                    }
+                });
+                if (Result.message != null) {
+                    var msg = '';
+                    msg += '<td>' +
                         (Result.message) + '</td>'; msg += '<td>' +
                             (Result.message) + '</td>'; msg += '<td>' +
-                                (Result.message) + '</td>';
-                msg += '<td>' +
-                    (Result.message) + '</td>';
-                $('#TableDataAttendanceList').html(msg);
-                return
+                                (Result.message) + '</td>'; msg += '<td>' +
+                                    (Result.message) + '</td>';
+                    msg += '<td>' +
+                        (Result.message) + '</td>';
+                    $('#TableDataAttendanceList').html(msg);
+                    $("#attendancepdfexcel").hide();
+                    return
 
+                }
+                else {
+                    $('#TableDataAttendanceList').html(object);
+                    $("#attendancepdfexcel").show();
+                }
             }
-            else {
 
-                $('#TableDataAttendanceList').html(object);
-            }
-        }
-
-    });
+        });
+    }
 };
 function formatDate(date) {
     var day = String(date.getDate()).padStart(2, '0');

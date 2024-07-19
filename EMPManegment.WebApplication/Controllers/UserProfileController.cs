@@ -779,7 +779,7 @@ namespace EMPManegment.Web.Controllers
 
                     Aspose.Pdf.Table table = new Aspose.Pdf.Table
                     {
-                        ColumnWidths = "15% 16% 16% 16% 20% 16%",
+                        ColumnWidths = "19% 19% 19% 19% 23%",
                         DefaultCellPadding = new MarginInfo(5, 5, 5, 5),
                         Border = new BorderInfo(BorderSide.All, .5f, Aspose.Pdf.Color.Black),
                         DefaultCellBorder = new BorderInfo(BorderSide.All, .2f, Aspose.Pdf.Color.Black),
@@ -863,15 +863,47 @@ namespace EMPManegment.Web.Controllers
             foreach (T item in items)
             {
                 var values = new object[propInfo.Length];
-                for (int i = 1; i < propInfo.Length; i++)
+                for (int i = 0; i < propInfo.Length; i++)
                 {
-                    values[i] = propInfo[i].GetValue(item, null);
+                    PropertyInfo prop = propInfo[i];
+                    var value = prop.GetValue(item, null);
+                    if (value is DateTime dateTimeValue)
+                    {
+                        if (prop.Name == "Date")
+                        {
+                            values[i] = dateTimeValue.ToString("dd-MM-yyyy");
+                        }
+                        else if (prop.Name == "Intime" || prop.Name == "OutTime")
+                        {
+                            values[i] = dateTimeValue.ToString("hh:mm tt");
+                        }
+                        else
+                        {
+                            values[i] = value;
+                        }
+                    }
+                    else if (prop.Name == "TotalHours" && value is TimeSpan timeSpanValue)
+                    {
+                        values[i] = $"{timeSpanValue.Hours:D2}:{timeSpanValue.Minutes:D2} hr";
+                    }
+                    else if (prop.Name == "TotalHours" && value is double hoursValue)
+                    {
+                        TimeSpan timeSpan = TimeSpan.FromHours(hoursValue);
+                        values[i] = $"{timeSpan.Hours:D2}:{timeSpan.Minutes:D2} hr";
+                    }
+                    else
+                    {
+                        values[i] = value;
+                    }
                 }
                 dt.Rows.Add(values);
             }
             dt.Columns.Remove("UserId");
             dt.Columns.Remove("CreatedBy");
             dt.Columns.Remove("AttendanceId");
+            dt.Columns.Remove("CreatedOn");
+            dt.Columns.Remove("UpdatedOn");
+            dt.Columns.Remove("UpdatedBy");
             return dt;
         }
 
