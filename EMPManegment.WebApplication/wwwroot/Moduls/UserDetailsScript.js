@@ -308,7 +308,7 @@ function EnterInTime() {
 
 function EnterOutTime() {
     const isPending = $("#todayouttime").text() === "Pending";
-    const InTimeStr = $('#todayintime').text(); 
+    const InTimeStr = $('#todayintime').text();
     const currentTime = new Date();
     const InTimeParts = InTimeStr.match(/(\d+):(\d+) (\w+)/);
     const InTime = new Date(currentTime);
@@ -353,10 +353,10 @@ function EnterOutTime() {
 
     if (isPending) {
         if (TotalMinutes < 60) {
-            
+
             toastr.warning("You can't enter out-time now!");
         } else {
-            
+
             Swal.fire({
                 title: "Are you sure you want to enter out-time?",
                 text: "You won't be able to revert this!",
@@ -694,7 +694,7 @@ function clearsearchtextbox() {
 
 $('.dropdown-item').click(function () {
     var selectedValue = $(this).attr('data-value');
-    $('.dropdown-toggle').data('value', selectedValue);
+    $('#ddluserdepartment').data('value', selectedValue);
 
     if (selectedValue === "UserName") {
         clearsearchtextbox();
@@ -708,7 +708,7 @@ $('.dropdown-item').click(function () {
         $("#usernamebox").hide();
         $("#departmentbox").show();
     }
-    $('.btn-group .dropdown-toggle').text($(this).text());
+    $('.btn-group #ddluserdepartment').text($(this).text());
     $('#ddlusername').select2({
         theme: 'bootstrap4',
         width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
@@ -726,7 +726,7 @@ $('.dropdown-item').click(function () {
 });
 
 function GetUserSearchData() {
-    var selectedValue = $('.dropdown-toggle').data('value');
+    var selectedValue = $('#ddluserdepartment').data('value');
     var isValid = true;
     var errorMessage = "Kindly fill all required fields";
     if (typeof selectedValue === "undefined") {
