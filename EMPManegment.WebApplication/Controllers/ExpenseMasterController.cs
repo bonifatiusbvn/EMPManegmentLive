@@ -43,7 +43,7 @@ namespace EMPManegment.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> GetExpenseDetailsList()
+        public async Task<IActionResult> GetExpenseDetailsList(bool? unapprove = null, DateTime? TodayDate = null)
         {
             try
             {
@@ -69,7 +69,7 @@ namespace EMPManegment.Web.Controllers
                 };
                 List<ExpenseDetailsView> expensedetails = new List<ExpenseDetailsView>();
                 var data = new jsonData();
-                ApiResponseModel postuser = await APIServices.PostAsync(dataTable, "ExpenseMaster/GetExpenseDetailList");
+                ApiResponseModel postuser = await APIServices.PostAsync(dataTable, "ExpenseMaster/GetExpenseDetailList?unapprove="+ unapprove + "&TodayDate=" + TodayDate?.ToString("yyyy-MM-dd"));
                 if (postuser.data != null)
                 {
                     data = JsonConvert.DeserializeObject<jsonData>(postuser.data.ToString());
@@ -487,86 +487,21 @@ namespace EMPManegment.Web.Controllers
                     sortColumn = sortColumn,
                     sortColumnDir = sortColumnDir
                 };
-
                 List<ExpenseDetailsView> expense = new List<ExpenseDetailsView>();
                 var data = new jsonData();
-                ApiResponseModel response = await APIServices.PostAsync(dataTable, "ExpenseMaster/GetUserExpenseDetail?UserId=" + UserId);
-
-                if (response.code == 200)
+                ApiResponseModel postuser = await APIServices.PostAsync(dataTable, "ExpenseMaster/GetUserExpenseDetail?UserId=" + UserId + "&filterType=" + filterType + "&unapprove=" + unapprove + "&approve=" + approve + "&startDate=" + startDate?.ToString("yyyy-MM-dd") + "&endDate=" + endDate?.ToString("yyyy-MM-dd") + "&account="+ account + "&selectMonthlyExpense="+ selectMonthlyExpense);
+                if (postuser.data != null)
                 {
-                    data = JsonConvert.DeserializeObject<jsonData>(response.data.ToString());
+                    data = JsonConvert.DeserializeObject<jsonData>(postuser.data.ToString());
                     expense = JsonConvert.DeserializeObject<List<ExpenseDetailsView>>(data.data.ToString());
                 }
-
-                if (!string.IsNullOrEmpty(selectMonthlyExpense))
-                {
-                    var selectedMonth = int.Parse(selectMonthlyExpense);
-                    switch (filterType.ToLower())
-                    {
-                        case "credit":
-                            expense = expense.Where(expense => expense.Account.ToLower() == "credit" && expense.Date.Month == selectedMonth).ToList();
-                            break;
-                        case "debit":
-                            expense = expense.Where(e => e.Account.ToLower() == filterType && e.IsApproved == true && e.Date.Month == selectedMonth).ToList();
-                            break;
-                        default:
-                            break;
-                    }
-                }
-                else if (!string.IsNullOrEmpty(filterType))
-                {
-                    switch (filterType.ToLower())
-                    {
-                        case "credit":
-                            expense = expense.Where(expense => expense.Account.ToLower() == "credit").ToList();
-                            break;
-                        case "debit":
-                            expense = expense.Where(e => e.Account.ToLower() == filterType && e.IsApproved == true).ToList();
-                            break;
-                        case "thismonth":
-                            expense = expense.Where(e => e.Date.Year == DateTime.Now.Year && e.Date.Month == DateTime.Now.Month).ToList();
-                            break;
-                        case "thismonth and debit":
-                            expense = expense.Where(e => e.Date.Year == DateTime.Now.Year && e.Date.Month == DateTime.Now.Month && e.Account.ToLower() == "debit" && e.IsApproved == true).ToList();
-                            break;
-                        case "thismonth and credit":
-                            expense = expense.Where(e => e.Date.Year == DateTime.Now.Year && e.Date.Month == DateTime.Now.Month && e.Account.ToLower() == "credit").ToList();
-                            break;
-                        case "lastmonth":
-                            var lastMonth = DateTime.Now.AddMonths(-1);
-                            expense = expense.Where(e => e.Date.Year == lastMonth.Year && e.Date.Month == lastMonth.Month).ToList();
-                            break;
-                        case "daterange":
-                            if (startDate.HasValue && endDate.HasValue)
-                            {
-                                expense = expense.Where(e => e.Date >= startDate.Value && e.Date <= endDate.Value).ToList();
-                            }
-                            break;
-                        default:
-                            break;
-                    }
-                }
-                else if (unapprove.HasValue)
-                {
-                    expense = expense.Where(e => e.IsApproved == unapprove && e.Description != "Expense Paid").ToList();
-                }
-                else if (approve.HasValue)
-                {
-                    expense = expense.Where(e => e.IsApproved == approve && e.Description != "Expense Paid").ToList();
-                }
-                else if (!string.IsNullOrEmpty(account))
-                {
-                    expense = expense.Where(e => e.Account == account).ToList();
-                }
-
                 var jsonData = new
                 {
                     draw = data.draw,
-                    recordsFiltered = expense.Count,
+                    recordsFiltered = data.recordsFiltered,
                     recordsTotal = data.recordsTotal,
                     data = expense,
                 };
-
                 return new JsonResult(jsonData);
             }
             catch (Exception ex)
@@ -588,23 +523,27 @@ namespace EMPManegment.Web.Controllers
         {
             return PartialView("~/Views/ExpenseMaster/_UserAllDetailsPartial.cshtml");
         }
+        public IActionResult DisplayAllUserExpenseDetails()
+        {
+            return PartialView("~/Views/ExpenseMaster/_AllUserExpenseDetailsPartial.cshtml");
+        }
 
         [HttpGet]
         public async Task<IActionResult> DownloadBill(string BillName)
         {
             try
             {
-                var filepath = "Content/Image/" + BillName;
-                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", filepath);
-                var memory = new MemoryStream();
-                using (var stream = new FileStream(path, FileMode.Open))
+                var filepath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Content/Image/", BillName);
+
+                if (!System.IO.File.Exists(filepath))
                 {
-                    await stream.CopyToAsync(memory);
+                    return NotFound();
                 }
-                memory.Position = 0;
-                var ContentType = "application/pdf";
-                var fileName = Path.GetFileName(path);
-                return Json(new { fileUrl = Url.Content($"~/{filepath}") });
+
+                byte[] bytes = await System.IO.File.ReadAllBytesAsync(filepath);
+                string base64String = Convert.ToBase64String(bytes);
+
+                return Json(new { memory = base64String, contentType = "application/pdf", fileName = BillName });
             }
             catch (Exception ex)
             {

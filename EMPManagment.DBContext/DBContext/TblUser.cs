@@ -67,17 +67,11 @@ public partial class TblUser
 
     public DateTime? UpdatedOn { get; set; }
 
-    public virtual TblCity? City { get; set; }
-
-    public virtual TblCountry? Country { get; set; }
-
     public virtual TblDepartment? Department { get; set; }
 
     public virtual TblQuestion? Question { get; set; }
 
     public virtual TblRoleMaster? Role { get; set; }
-
-    public virtual TblState? State { get; set; }
 
     public virtual ICollection<TblAttendance> TblAttendances { get; set; } = new List<TblAttendance>();
 

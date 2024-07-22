@@ -70,9 +70,9 @@ namespace EMPManegment.Services.ExpenseMaster
             return await expenseMaster.GetExpenseDetailByUserId(UserId);
         }
 
-        public async Task<jsonData> GetExpenseDetailList(DataTableRequstModel dataTable)
+        public async Task<jsonData> GetExpenseDetailList(DataTableRequstModel dataTable, bool? unapprove = null, DateTime? TodayDate = null)
         {
-            return await expenseMaster.GetExpenseDetailList(dataTable);
+            return await expenseMaster.GetExpenseDetailList(dataTable,unapprove,TodayDate);
         }
 
         public async Task<UserResponceModel> GetPaymentById(int PaymentId)
@@ -80,9 +80,9 @@ namespace EMPManegment.Services.ExpenseMaster
             return await expenseMaster.GetPaymentById(PaymentId);
         }
 
-        public async Task<jsonData> GetUserExpenseList(Guid UserId, DataTableRequstModel dataTable)
+        public async Task<jsonData> GetUserExpenseList(Guid UserId, DataTableRequstModel dataTable, string filterType = null, bool? unapprove = null, bool? approve = null, DateTime? startDate = null, DateTime? endDate = null, string account = null, string selectMonthlyExpense = null)
         {
-            return await expenseMaster.GetUserExpenseList(UserId, dataTable);
+            return await expenseMaster.GetUserExpenseList(UserId, dataTable, filterType, unapprove, approve, startDate, endDate, account, selectMonthlyExpense);
         }
 
         public async Task<jsonData> GetUserList(DataTableRequstModel dataTable)

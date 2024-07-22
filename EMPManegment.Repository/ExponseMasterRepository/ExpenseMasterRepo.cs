@@ -326,7 +326,7 @@ namespace EMPManegment.Repository.ExponseMasterRepository
             }
             return response;
         }
-        public async Task<jsonData> GetExpenseDetailList(DataTableRequstModel dataTable)
+        public async Task<jsonData> GetExpenseDetailList(DataTableRequstModel dataTable, bool? unapprove = null, DateTime? TodayDate = null)
         {
             try
             {
@@ -355,7 +355,14 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                     };
                     ExpenseList.Add(ExpenseDetails);
                 }
-
+                if (unapprove.HasValue)
+                {
+                    ExpenseList = ExpenseList.Where(e => e.IsApproved == unapprove && e.Description != "Expense Paid").ToList();
+                }
+                if (TodayDate.HasValue)
+                {
+                    ExpenseList = ExpenseList.Where(e => e.Date == TodayDate.Value.Date).ToList();
+                }
                 if (!string.IsNullOrEmpty(dataTable.searchValue))
                 {
                     string searchValue = dataTable.searchValue.ToLower();
@@ -437,7 +444,7 @@ namespace EMPManegment.Repository.ExponseMasterRepository
             }
             return model;
         }
-        public async Task<jsonData> GetUserExpenseList(Guid UserId, DataTableRequstModel dataTable)
+        public async Task<jsonData> GetUserExpenseList(Guid UserId, DataTableRequstModel dataTable, string filterType = null, bool? unapprove = null, bool? approve = null, DateTime? startDate = null, DateTime? endDate = null, string account = null, string selectMonthlyExpense = null)
         {
             try
             {
@@ -468,6 +475,66 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                         TotalAmount = Convert.ToDecimal(row["TotalAmount"]),
                     };
                     UserExpenseList.Add(UserExpenseDetails);
+                }
+                if (!string.IsNullOrEmpty(selectMonthlyExpense))
+                {
+                    var selectedMonth = int.Parse(selectMonthlyExpense);
+                    switch (filterType.ToLower())
+                    {
+                        case "credit":
+                            UserExpenseList = UserExpenseList.Where(expense => expense.Account.ToLower() == "credit" && expense.Date.Month == selectedMonth).ToList();
+                            break;
+                        case "debit":
+                            UserExpenseList = UserExpenseList.Where(e => e.Account.ToLower() == filterType && e.IsApproved == true && e.Date.Month == selectedMonth).ToList();
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                else if (!string.IsNullOrEmpty(filterType))
+                {
+                    switch (filterType.ToLower())
+                    {
+                        case "credit":
+                            UserExpenseList = UserExpenseList.Where(expense => expense.Account.ToLower() == "credit").ToList();
+                            break;
+                        case "debit":
+                            UserExpenseList = UserExpenseList.Where(e => e.Account.ToLower() == filterType && e.IsApproved == true).ToList();
+                            break;
+                        case "thismonth":
+                            UserExpenseList = UserExpenseList.Where(e => e.Date.Year == DateTime.Now.Year && e.Date.Month == DateTime.Now.Month).ToList();
+                            break;
+                        case "thismonth and debit":
+                            UserExpenseList = UserExpenseList.Where(e => e.Date.Year == DateTime.Now.Year && e.Date.Month == DateTime.Now.Month && e.Account.ToLower() == "debit" && e.IsApproved == true).ToList();
+                            break;
+                        case "thismonth and credit":
+                            UserExpenseList = UserExpenseList.Where(e => e.Date.Year == DateTime.Now.Year && e.Date.Month == DateTime.Now.Month && e.Account.ToLower() == "credit").ToList();
+                            break;
+                        case "lastmonth":
+                            var lastMonth = DateTime.Now.AddMonths(-1);
+                            UserExpenseList = UserExpenseList.Where(e => e.Date.Year == lastMonth.Year && e.Date.Month == lastMonth.Month).ToList();
+                            break;
+                        case "daterange":
+                            if (startDate.HasValue && endDate.HasValue)
+                            {
+                                UserExpenseList = UserExpenseList.Where(e => e.Date >= startDate.Value && e.Date <= endDate.Value).ToList();
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                else if (unapprove.HasValue)
+                {
+                    UserExpenseList = UserExpenseList.Where(e => e.IsApproved == unapprove && e.Description != "Expense Paid").ToList();
+                }
+                else if (approve.HasValue)
+                {
+                    UserExpenseList = UserExpenseList.Where(e => e.IsApproved == approve && e.Description != "Expense Paid").ToList();
+                }
+                else if (!string.IsNullOrEmpty(account))
+                {
+                    UserExpenseList = UserExpenseList.Where(e => e.Account == account).ToList();
                 }
 
                 if (!string.IsNullOrEmpty(dataTable.searchValue))

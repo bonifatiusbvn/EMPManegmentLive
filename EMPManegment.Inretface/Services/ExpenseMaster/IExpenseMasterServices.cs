@@ -29,11 +29,11 @@ namespace EMPManegment.Inretface.Services.ExpenseMaster
 
         Task<UserResponceModel> AddExpenseDetails(ExpenseDetailsView ExpenseDetails);
 
-        Task<jsonData> GetUserExpenseList(Guid UserId, DataTableRequstModel dataTable);
+        Task<jsonData> GetUserExpenseList(Guid UserId, DataTableRequstModel dataTable, string filterType = null, bool? unapprove = null, bool? approve = null, DateTime? startDate = null, DateTime? endDate = null, string account = null, string selectMonthlyExpense = null);
 
         Task<jsonData> GetUserList(DataTableRequstModel dataTable);
 
-        Task<jsonData> GetExpenseDetailList(DataTableRequstModel dataTable);
+        Task<jsonData> GetExpenseDetailList(DataTableRequstModel dataTable, bool? unapprove = null, DateTime? TodayDate = null);
 
         Task<UserResponceModel> GetExpenseDetailById(Guid Id);
 
