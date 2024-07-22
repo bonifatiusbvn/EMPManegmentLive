@@ -239,14 +239,21 @@ namespace EMPManegment.Repository.VendorDetailsRepository
 
         public async Task<IEnumerable<VendorListDetailsView>> GetVendorNameList()
         {
-            IEnumerable<VendorListDetailsView> GetVendorList = Context.TblVendorMasters.ToList().Select(a => new VendorListDetailsView
+            try
             {
-                Id = a.Vid,
-                VendorCompany = a.VendorCompany,
+                IEnumerable<VendorListDetailsView> GetVendorList = Context.TblVendorMasters.ToList().Select(a => new VendorListDetailsView
+                {
+                    Id = a.Vid,
+                    VendorCompany = a.VendorCompany,
 
 
-            }).ToList();
-            return GetVendorList;
+                }).ToList();
+                return GetVendorList;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         public async Task<UserResponceModel> UpdateVendorDetails(VendorDetailsView updateVendor)

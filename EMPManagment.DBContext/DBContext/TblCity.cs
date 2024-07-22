@@ -12,8 +12,4 @@ public partial class TblCity
     public string City { get; set; } = null!;
 
     public virtual TblState State { get; set; } = null!;
-
-    public virtual ICollection<TblUser> TblUsers { get; set; } = new List<TblUser>();
-
-    public virtual ICollection<TblVendorMaster> TblVendorMasters { get; set; } = new List<TblVendorMaster>();
 }

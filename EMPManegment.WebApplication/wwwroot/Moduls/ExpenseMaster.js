@@ -503,7 +503,6 @@ function deleteExpense(Id) {
 
 $(document).ready(function () {
     $(document).on('click', '.dropdown-menu .dropdown-item', function () {
-        debugger
         var selectedMonth = $(this).data('value');
         var userId = $("#txtuserid").val();
         GetPayUserExpenseCreditList(userId, selectedMonth);
@@ -1040,139 +1039,316 @@ function DisplayAllApprovedExpenseList() {
     });
 }
 
-
-var datas = userPermissions
 $(document).ready(function () {
-    function data(datas) {
-        var userPermission = datas;
-        DisplayAllExpenseList(userPermission);
-    }
-    function DisplayAllExpenseList(userPermission) {
-        var userPermissionArray = [];
-        userPermissionArray = JSON.parse(userPermission);
+    GetAllUserExpenseDetails();
 
-        var canEdit = false;
-        var canDelete = false;
-
-        for (var i = 0; i < userPermissionArray.length; i++) {
-            var permission = userPermissionArray[i];
-            if (permission.formName == "All Expenses List") {
-                canEdit = permission.edit;
-                canDelete = permission.delete;
-                break;
-            }
+    $('.nav-link').click(function () {
+        var targetTab = $(this).attr('href');
+        if (targetTab === '#AllExpenseDetails') {
+            GetAllUserExpenseDetails();
+        } else if (targetTab === '#AllUnapprovedExpenseDetails') {
+            GetAllUserUnapproveExpenseDetails();
+        } else if (targetTab === '#AllTodayExpenseDetails') {
+            GetAllUserTodayExpenseDetails();
         }
-        var columns = [
-            {
-                "data": "userName", "name": "UserName",
-                "className": "text-center"
-            },
-            {
-                "data": "description", "name": "Description",
-                "className": "text-center"
-            },
-            {
-                "data": "billNumber", "name": "BillNumber",
-                "render": function (data, type, full) {
-                    if (full.image != "") {
-                        return '<div class="d-flex">' +
-                            '<div class="flex-grow-1 tasks_name">' + full['billNumber'] + '</div>' +
-                            '<div class="flex-shrink-0 ms-4 task-icons">' +
-                            '<ul class="list-inline tasks-list-menu mb-0">' +
-                            '<a onclick="downloadBill(\'' + full.image + '\')">' +
-                            '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">' +
-                            '<path fill="currentColor" d="M13 12h3l-4 4l-4-4h3V8h2v4Zm2-8H5v16h14V8h-4V4ZM3 2.992C3 2.444 3.447 2 3.999 2H16l5 5v13.993A1 1 0 0 1 20.007 22H3.993A1 1 0 0 1 3 21.008V2.992Z" />' +
-                            '</svg></a></li>' +
-                            '</ul>' +
-                            '</div>' +
-                            '</div>';
-                    } else {
-                        return '<div class="d-flex">' +
-                            '<div class="flex-grow-1 tasks_name">' + full['billNumber'] + '</div>' +
-                            '<div class="flex-shrink-0 ms-4 task-icons">' +
-                            '<ul class="list-inline tasks-list-menu mb-0">' +
-                            '</div>' +
-                            '</div>';
-                    }
+    });
+});
 
+function GetAllUserExpenseDetails() {
+    $.ajax({
+        url: '/ExpenseMaster/DisplayAllUserExpenseDetails',
+        type: 'GET',
+        success: function (result) {
+            $("#AllExpenseDetailsPartial").html(result);
+            DisplayAllExpenseList('#AllExpenseDetailsPartial table');
+        },
+        error: function () {
+            alert('Error loading expenses. Please try again.');
+        }
+    });
+}
+
+function GetAllUserUnapproveExpenseDetails() {
+    $.ajax({
+        url: '/ExpenseMaster/DisplayAllUserExpenseDetails',
+        type: 'GET',
+        success: function (result) {
+            $("#AllUnapprovedExpenseDetailsPartial").html(result);
+            DisplayAllUnApproveExpenseDetails('#AllUnapprovedExpenseDetailsPartial table');
+        },
+        error: function () {
+            alert('Error loading expenses. Please try again.');
+        }
+    });
+}
+
+function GetAllUserTodayExpenseDetails() {
+    $.ajax({
+        url: '/ExpenseMaster/DisplayAllUserExpenseDetails',
+        type: 'GET',
+        success: function (result) {
+            $("#AllTodayExpenseDetailsPartial").html(result);
+            DisplayAllTodayExpenseDetails('#AllTodayExpenseDetailsPartial table');
+        },
+        error: function () {
+            alert('Error loading expenses. Please try again.');
+        }
+    });
+}
+
+function DisplayAllExpenseList(tableId) {
+    $(tableId).DataTable({
+        processing: false,
+        serverSide: true,
+        filter: true,
+        destroy: true,
+        order: [[3, 'asc']],
+        pageLength: 10,
+        ajax: {
+            type: "POST",
+            url: '/ExpenseMaster/GetExpenseDetailsList',
+            dataType: 'json'
+        },
+        columns: [
+            { data: null, visible: false, orderable: false },
+            { data: "userName", name: "UserName", className: "text-center" },
+            { data: "description", name: "Description", className: "text-center" },
+            {
+                data: "billNumber", name: "BillNumber",
+                render: function (data, type, full) {
+                    return full.image
+                        ? `<div class="d-flex">
+                            <div class="flex-grow-1 tasks_name">${full.billNumber}</div>
+                            <div class="flex-shrink-0 ms-4 task-icons">
+                                <ul class="list-inline tasks-list-menu mb-0">
+                                    <a onclick="downloadBill('${full.image}')">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                            <path fill="currentColor" d="M13 12h3l-4 4l-4-4h3V8h2v4Zm2-8H5v16h14V8h-4V4ZM3 2.992C3 2.444 3.447 2 3.999 2H16l5 5v13.993A1 1 0 0 1 20.007 22H3.993A1 1 0 0 1 3 21.008V2.992Z" />
+                                        </svg>
+                                    </a>
+                                </ul>
+                            </div>
+                        </div>`
+                        : `<div class="d-flex">
+                            <div class="flex-grow-1 tasks_name">${full.billNumber}</div>
+                            <div class="flex-shrink-0 ms-4 task-icons"></div>
+                        </div>`;
                 }
             },
             {
-                "data": "date",
-                "name": "Date",
-                "className": "text-center",
-
-                "render": function (data, type, full, meta) {
+                data: "date", name: "Date", className: "text-center",
+                render: function (data) {
                     return getCommonDateformat(data);
                 }
             },
             {
-                "data": "totalAmount", "name": "TotalAmount",
-                "className": "text-center",
-                "render": function (data, type, full, meta) {
+                data: "totalAmount", name: "TotalAmount", className: "text-center",
+                render: function (data, type, full) {
                     var color = full.account && full.account.toLowerCase() === "credit" ? "green" : "red";
-                    return '<span style="color: ' + color + ';">' + '₹' + data + '</span>';
+                    return `<span style="color: ${color};">₹${data}</span>`;
+                }
+            },
+            { data: "account", name: "Account", className: "text-center" },
+            {
+                data: null, orderable: false, searchable: false,
+                render: function (data, type, full) {
+                    return `<a class="btn text-primary" onclick="EditAllUserExpenseDetails('${full.id}')"><i class="fa-regular fa-pen-to-square"></i></a><a class="btn text-danger" onclick="deleteExpense('${full.id}')"><i class="fas fa-trash"></i></a>`;
+                }
+            }
+        ],
+        scrollY: 400,
+        scrollX: true,
+        scrollCollapse: true,
+        fixedHeader: {
+            header: true,
+            footer: true
+        },
+        autoWidth: false,
+        columnDefs: [{
+            targets: [0],
+            orderable: false,
+            width: "auto"
+        }],
+    });
+}
+
+function DisplayAllUnApproveExpenseDetails(tableId) {
+    $(tableId).DataTable({
+        processing: false,
+        serverSide: true,
+        filter: true,
+        destroy: true,
+        order: [[3, 'asc']],
+        ajax: {
+            type: "POST",
+            url: '/ExpenseMaster/GetExpenseDetailsList?unapprove=false',
+            dataType: 'json'
+        },
+        columns: [
+            {
+                data: null,
+                render: function (data, type, full, meta) {
+                    return '<div class="form-check"><input class="form-check-input" data-id="' + full.id + '" type="checkbox" name="check_Box"></div>';
+                },
+                orderable: false
+            },
+            { data: "userName", name: "UserName", className: "text-center" },
+            { data: "description", name: "Description", className: "text-center" },
+            {
+                data: "billNumber", name: "BillNumber",
+                render: function (data, type, full) {
+                    return full.image
+                        ? `<div class="d-flex">
+                            <div class="flex-grow-1 tasks_name">${full.billNumber}</div>
+                            <div class="flex-shrink-0 ms-4 task-icons">
+                                <ul class="list-inline tasks-list-menu mb-0">
+                                    <a onclick="downloadBill('${full.image}')">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                            <path fill="currentColor" d="M13 12h3l-4 4l-4-4h3V8h2v4Zm2-8H5v16h14V8h-4V4ZM3 2.992C3 2.444 3.447 2 3.999 2H16l5 5v13.993A1 1 0 0 1 20.007 22H3.993A1 1 0 0 1 3 21.008V2.992Z" />
+                                        </svg>
+                                    </a>
+                                </ul>
+                            </div>
+                        </div>`
+                        : `<div class="d-flex">
+                            <div class="flex-grow-1 tasks_name">${full.billNumber}</div>
+                            <div class="flex-shrink-0 ms-4 task-icons"></div>
+                        </div>`;
                 }
             },
             {
-                "data": "account", "name": "Account",
-                "className": "text-center"
-            }
-        ];
-
-        if (canEdit || canDelete) {
-            columns.push({
-                "data": null,
-                "orderable": false,
-                "searchable": false,
-                "render": function (data, type, full) {
-
-                    var buttons = '';
-
-                    if (canEdit) {
-                        buttons += '<a class="btn text-primary" onclick="EditAllUserExpenseDetails(\'' + full.id + '\')">' +
-                            '<i class="fa-regular fa-pen-to-square"></i></a>';
-                    }
-
-                    if (canDelete) {
-                        buttons += '<a class="btn text-danger" onclick="deleteExpense(\'' + full.id + '\')">' +
-                            '<i class="fas fa-trash"></i></a>';
-                    }
-                    return buttons;
+                data: "date", name: "Date", className: "text-center",
+                render: function (data) {
+                    return getCommonDateformat(data);
                 }
-
-            });
+            },
+            {
+                data: "totalAmount", name: "TotalAmount", className: "text-center",
+                render: function (data, type, full) {
+                    var color = full.account && full.account.toLowerCase() === "credit" ? "green" : "red";
+                    return `<span style="color: ${color};">₹${data}</span>`;
+                }
+            },
+            { data: "account", name: "Account", className: "text-center" },
+            {
+                data: null, orderable: false, searchable: false,
+                render: function (data, type, full) {
+                    return `<a class="btn text-primary" onclick="EditAllUserExpenseDetails('${full.id}')"><i class="fa-regular fa-pen-to-square"></i></a><a class="btn text-danger" onclick="deleteExpense('${full.id}')"><i class="fas fa-trash"></i></a>`;
+                }
+            }
+        ],
+        scrollY: 400,
+        scrollX: true,
+        scrollCollapse: true,
+        fixedHeader: {
+            header: true,
+            footer: true
+        },
+        autoWidth: false,
+        columnDefs: [{
+            targets: [0],
+            orderable: false,
+            width: "auto"
+        }],
+        drawCallback: function (settings) {
+            console.log('Table redrawn', settings);
         }
+    });
+}
 
-        $('#ExpenseTable').DataTable({
-            processing: false,
-            serverSide: true,
-            filter: true,
-            "bDestroy": true,
-            order: [[3, 'desc']],
-            ajax: {
-                type: "POST",
-                url: '/ExpenseMaster/GetExpenseDetailsList',
-                dataType: 'json',
+function DisplayAllTodayExpenseDetails(tableId) {
+    var todayDate = new Date().toISOString().split('T')[0];
+    $(tableId).DataTable({
+        processing: false,
+        serverSide: true,
+        filter: true,
+        destroy: true,
+       
+      
+        ajax: {
+            type: "POST",
+            url: '/ExpenseMaster/GetExpenseDetailsList?TodayDate=' + todayDate,
+            dataType: 'json'
+        },
+        columns: [
+            { data: null, visible: false, orderable: false },
+            { data: "userName", name: "UserName", className: "text-center" },
+            { data: "description", name: "Description", className: "text-center" },
+            {
+                data: "billNumber", name: "BillNumber",
+                render: function (data, type, full) {
+                    return full.image
+                        ? `<div class="d-flex">
+                            <div class="flex-grow-1 tasks_name">${full.billNumber}</div>
+                            <div class="flex-shrink-0 ms-4 task-icons">
+                                <ul class="list-inline tasks-list-menu mb-0">
+                                    <a onclick="downloadBill('${full.image}')">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                            <path fill="currentColor" d="M13 12h3l-4 4l-4-4h3V8h2v4Zm2-8H5v16h14V8h-4V4ZM3 2.992C3 2.444 3.447 2 3.999 2H16l5 5v13.993A1 1 0 0 1 20.007 22H3.993A1 1 0 0 1 3 21.008V2.992Z" />
+                                        </svg>
+                                    </a>
+                                </ul>
+                            </div>
+                        </div>`
+                        : `<div class="d-flex">
+                            <div class="flex-grow-1 tasks_name">${full.billNumber}</div>
+                            <div class="flex-shrink-0 ms-4 task-icons"></div>
+                        </div>`;
+                }
             },
-            columns: columns,
-            scrollY: 400,
-            scrollX: true,
-            scrollCollapse: true,
-            fixedHeader: {
-                header: true,
-                footer: true
+            {
+                data: "date", name: "Date", className: "text-center",
+                render: function (data) {
+                    return getCommonDateformat(data);
+                }
             },
-            autoWidth: false,
-            columnDefs: [{
-                "defaultContent": "",
-                "targets": "_all",
-            }]
-        });
-    }
-    data(datas);
+            {
+                data: "totalAmount", name: "TotalAmount", className: "text-center",
+                render: function (data, type, full) {
+                    var color = full.account && full.account.toLowerCase() === "credit" ? "green" : "red";
+                    return `<span style="color: ${color};">₹${data}</span>`;
+                }
+            },
+            { data: "account", name: "Account", className: "text-center" },
+            { data: null, visible: false, orderable: false },
+        ],
+        scrollY: 400,
+        scrollX: true,
+        scrollCollapse: true,
+        fixedHeader: {
+            header: true,
+            footer: true
+        },
+        autoWidth: false,
+        columnDefs: [{
+            targets: [0],
+            orderable: false,
+            width: "auto"
+        }],
+        "footerCallback": function (row, data, start, end, display) {
+            var api = this.api(), data;
 
-});
+            var intVal = function (i) {
+                return typeof i === 'string' ?
+                    i.replace(/[\$,]/g, '') * 1 :
+                    typeof i === 'number' ?
+                        i : 0;
+            };
+
+            total = api
+                .column(5)
+                .data()
+                .reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0);
+
+            $(api.column(5).footer()).html(
+                '<span style="color: black;">Total: ' + '₹' + total.toFixed(2) + '</span>'
+            );
+        }
+    });
+}
+
 
 function GetExpenseTotalAmount() {
     var userId = {
@@ -1291,7 +1467,62 @@ function ApproveExpense() {
         }
     });
 }
+function AllUserApproveExpense() {
+    Swal.fire({
+        title: "Are you sure want to approve this?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, approve it!",
+        cancelButtonText: "No, cancel!",
+        confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
+        cancelButtonClass: "btn btn-danger w-xs mt-2",
+        buttonsStyling: false,
+        showCloseButton: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            let val = [];
+            $("input[name=check_Box]:checked").each(function () {
+                val.push($(this).attr("data-id"));
+            });
+            if (val.length > 0) {
+                var form_data = new FormData();
+                form_data.append("EXPENSEID", val);
+                $.ajax({
+                    url: '/ExpenseMaster/ApproveExpense',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: form_data,
+                    processData: false,
+                    contentType: false,
+                    success: function (Result) {
+                        if (Result.message != null) {
+                            Swal.fire({
+                                title: Result.message,
+                                icon: 'success',
+                                confirmButtonColor: '#3085d6',
+                                confirmButtonText: 'OK',
+                            }).then(function () {
+                                window.location = '/ExpenseMaster/AllExpense';
+                            });
+                        }
+                    },
+                    error: function (xhr, textStatus, errorThrown) {
 
+                        console.error(xhr.responseText);
+                    }
+                });
+            }
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+
+            Swal.fire(
+                'Cancelled',
+                'You have no changes.!!😊',
+                'error'
+            );
+        }
+    });
+}
 function ApprovedExpenseList() {
     var UserId = $("#txtuserid").val();
     var approve = true;
@@ -1660,6 +1891,7 @@ function GetMyExpenseList() {
 
 function GetUserAllExpenseDetails() {
     var UserId = $("#txtuserid").val();
+
     $('#DisplayUserAllExpenseList').DataTable({
         processing: false,
         serverSide: true,
@@ -1668,13 +1900,14 @@ function GetUserAllExpenseDetails() {
         order: [[3, 'asc']],
         pageLength: 10,
         ajax: {
-            type: "Post",
+            type: "POST",
             url: '/ExpenseMaster/GetUserExpenseList?UserId=' + UserId,
             dataType: 'json'
         },
         columns: [
             {
                 data: null,
+
                 render: function (data, type, full, meta) {
                     var account = full.account.toLowerCase();
                     if (account === "credit") {
@@ -1707,6 +1940,7 @@ function GetUserAllExpenseDetails() {
                 },
                 width: "20%"
             },
+
         ],
         scrollY: 400,
         scrollX: true,
@@ -1719,7 +1953,7 @@ function GetUserAllExpenseDetails() {
         columnDefs: [{
             targets: [0],
             orderable: false,
-            width: "20%"
+            width: "auto"
         }],
         footerCallback: function (row, data, start, end, display) {
             var api = this.api(), data;
@@ -1744,6 +1978,7 @@ function GetUserAllExpenseDetails() {
         }
     });
 }
+
 
 function GetMyApproveExpenseList() {
     $.ajax({
@@ -1970,9 +2205,7 @@ function GetUserLastMonthExpenseList() {
         filter: true,
         "bDestroy": true,
         order: [[3, 'asc']],
-        searching: false,
-        info: false,
-        lengthChange: false,
+        pageLength: 10,
         ajax: {
             type: "Post",
             url: '/ExpenseMaster/GetUserExpenseList?UserId=' + UserId + '&filterType=' + filterType,
@@ -2072,9 +2305,7 @@ function GetUserCurrentMonthExpenseList() {
         filter: true,
         "bDestroy": true,
         order: [[3, 'asc']],
-        searching: false,
-        info: false,
-        lengthChange: false,
+        pageLength: 10,
         ajax: {
             type: "Post",
             url: '/ExpenseMaster/GetUserExpenseList?UserId=' + UserId + '&filterType=' + filterType,
@@ -2189,9 +2420,7 @@ function GetUserBetweenMonthsExpenseList(StartDate, EndDate, UserId) {
         filter: true,
         "bDestroy": true,
         order: [[3, 'asc']],
-        searching: false,
-        info: false,
-        lengthChange: false,
+        pageLength: 10,
         ajax: {
             type: "Post",
             url: '/ExpenseMaster/GetUserExpenseList?startDate=' + StartDate + '&endDate=' + EndDate + '&UserId=' + UserId + '&filterType=' + filterType,
@@ -2290,7 +2519,7 @@ function clearExpenseTypeText() {
     resetForm();
     $("#textExpenseType").val('');
 }
-function AddExpenseType() { 
+function AddExpenseType() {
     if ($("#addExpenseType").valid()) {
 
         var formData = new FormData();
@@ -2325,27 +2554,44 @@ function AddExpenseType() {
         toastr.warning("Kindly fill expense type");
     }
 }
-
 function downloadBill(billName) {
     $.ajax({
-        url: '/ExpenseMaster/DownloadBill',
-        type: 'GET',
-        data: { BillName: billName },
-        success: function (response) {
-            if (response.fileUrl) {
-                var link = document.createElement('a');
-                link.href = response.fileUrl;
-                link.download = billName;
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                window.location = '/ExpenseMaster/AllExpense';
+        url: '/ExpenseMaster/DownloadBill?BillName=' + billName,
+        type: "GET",
+        dataType: 'json',
+        success: function (result) {
+            siteloaderhide();
+
+            if (result && result.memory) {
+                try {
+                    var binaryString = window.atob(result.memory);
+                    var length = binaryString.length;
+                    var bytes = new Uint8Array(length);
+
+                    for (var i = 0; i < length; i++) {
+                        bytes[i] = binaryString.charCodeAt(i);
+                    }
+
+                    var blob = new Blob([bytes], { type: result.contentType });
+
+                    var link = document.createElement('a');
+                    link.href = window.URL.createObjectURL(blob);
+                    link.setAttribute('download', result.fileName);
+
+                    document.body.appendChild(link);
+                    link.click();
+
+                    document.body.removeChild(link);
+                } catch (e) {
+                    toastr.error("Error decoding file: " + e.message);
+                }
             } else {
-                toastr.error("Error downloading bill.");
+                toastr.warning(result.Message || "No document found for selected");
             }
         },
-        error: function (xhr, status, error) {
-            toastr.error("An error occurred: " + error);
+        error: function () {
+            siteloaderhide();
+            toastr.error("Can't get data");
         }
     });
 }

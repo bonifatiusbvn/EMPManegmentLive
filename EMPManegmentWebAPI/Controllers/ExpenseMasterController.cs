@@ -57,11 +57,11 @@ namespace EMPManagment.API.Controllers
 
         [HttpPost]
         [Route("GetExpenseDetailList")]
-        public async Task<IActionResult> GetExpenseDetailList(DataTableRequstModel DataTable)
+        public async Task<IActionResult> GetExpenseDetailList(DataTableRequstModel DataTable, bool? unapprove = null, DateTime? TodayDate = null)
         {
             try
             {
-                var getExpense = await expenseMaster.GetExpenseDetailList(DataTable);
+                var getExpense = await expenseMaster.GetExpenseDetailList(DataTable,unapprove,TodayDate);
                 return Ok(new { code = (int)HttpStatusCode.OK, data = getExpense });
             }
             catch (Exception ex)
@@ -157,11 +157,11 @@ namespace EMPManagment.API.Controllers
 
         [HttpPost]
         [Route("GetUserExpenseDetail")]
-        public async Task<IActionResult> GetUserExpenseDetail(Guid UserId, DataTableRequstModel dataTable)
+        public async Task<IActionResult> GetUserExpenseDetail(Guid UserId, DataTableRequstModel dataTable, string filterType = null, bool? unapprove = null, bool? approve = null, DateTime? startDate = null, DateTime? endDate = null, string account = null, string selectMonthlyExpense = null)
         {
             try
             {
-                var getUserExpense = await expenseMaster.GetUserExpenseList(UserId, dataTable);
+                var getUserExpense = await expenseMaster.GetUserExpenseList(UserId, dataTable,filterType,unapprove,approve,startDate,endDate,account,selectMonthlyExpense);
                 return Ok(new { code = (int)HttpStatusCode.OK, data = getUserExpense });
             }
             catch (Exception ex)
