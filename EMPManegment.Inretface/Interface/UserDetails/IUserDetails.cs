@@ -14,7 +14,7 @@ namespace EMPManegment.Inretface.Interface.UserList
     {
         Task<jsonData> GetUsersList(DataTableRequstModel GetUsersList);
         Task<IEnumerable<EmpDetailsView>> GetUsersNameList();
-        Task<UserResponceModel> ActiveDeactiveUsers(string UserName, Guid UpdatedBy);
+        Task<UserResponceModel> ActiveDeactiveUsers(Guid UserId, Guid UpdatedBy);
         Task<UserResponceModel> EnterInTime(UserAttendanceModel UserInTime);
         Task<UserResponceModel> EnterOutTime(UserAttendanceModel UserOutTime);
         Task<UserResponceModel> ResetPassword(PasswordResetView ResetPassword);

@@ -6,6 +6,7 @@
 @inject UserSession _userSession
 @inject EMPManegment.Web.Helper.Common CommonHelper
 
+
 <style>
 
     .switch-success:checked {
@@ -20,8 +21,8 @@
 
 </style>
 
-<div class="card-body" id="allemplist">
-    <div class="row row-cols-xl-5 row-cols-lg-3 row-cols-md-2 row-cols-1" style="margin-top:20px;">
+<div id="allemplist">
+    <div class="row row-cols-xl-5 row-cols-lg-3 row-cols-md-2 row-cols-1">
         @if (Model.Count() > 0)
         {
             @foreach (var item in Model)
@@ -29,105 +30,112 @@
                 var imageUrl = !string.IsNullOrEmpty(item.Image) ? Url.Content($"~/{item.Image}") : null;
                 var initials = (!string.IsNullOrEmpty(item.FirstName) && !string.IsNullOrEmpty(item.LastName)) ? $"{item.FirstName[0]}{item.LastName[0]}".ToUpper() : null;
 
-                <div class="col" style="margin-left:60px;">
+                <div class="col">
                     <div class="card">
                         <img src="~/assets/images/nft/img-03.jpg" alt="" class="object-fit-cover card-img-top" height="120">
                         <div class="card-body text-center">
                             @if (!string.IsNullOrEmpty(imageUrl))
                             {
-                                <img class="avatar-title bg-success-subtle text-success rounded-circle fs-13" src="@imageUrl" alt="user image" style="width:110px;height:90px;margin-left:58px;margin-top:-65px;">
+                                <img src="@imageUrl" alt="" class="avatar-md rounded-circle object-fit-cover mt-n5 img-thumbnail border-light mx-auto d-block">
                             }
                             else
                             {
-                                <div class="flex-shrink-0 avatar-xs me-2" style="width:110px;height:90px;margin-left:58px;margin-top:-65px;">
-                                    <div class="avatar-title bg-success-subtle text-success rounded-circle fs-13"><h5>@initials</h5></div>
+                                <div class="flex-shrink-0 avatar-xs me-2" style="width:90px;height:90px;margin-left:100px;margin-top:-65px;">
+                                    <div class="avatar-md rounded-circle bg-success-subtle text-success"><h5 style="padding-top: 23px;marker-end: -11px;">@initials</h5></div>
                                 </div>
                             }
                             @if (item.IsActive == true)
                             {
-                                <a class="text-success" href="/UserProfile/UserInfo/?Id=@item.Id">
-                                    <h5 class="mt-2 mb-1 fs-16" style="margin-right:25px;" >@item.FirstName @item.LastName</h5>
+                                <a class="text-primary" href="/UserProfile/UserInfo/?Id=@item.Id">
+                                    <h5 class="mt-2 mb-1 fs-16" style="margin-right:25px;">@item.FirstName @item.LastName</h5>
                                 </a>
                             }
                             else
                             {
-                                <a class="text-danger" href="/UserProfile/UserInfo/?Id=@item.Id">
+                                <a class="text-primary" href="/UserProfile/UserInfo/?Id=@item.Id">
                                     <h5 class="mt-2 mb-1 fs-16" style="margin-right:25px;">@item.FirstName @item.LastName</h5>
                                 </a>
                             }
 
-                            <p class="text-muted fs-15 mb-2" style="margin-right:25px;">@item.UserName</p>
-                            <div class="row">
-                                <div class="col-sm-4">
-                                    <p class="text-muted fs-16" style="margin-left:30px; margin-top:5px;">
-                                        Role:
-                                    </p>
-                                </div>
-                                <div class="col-sm-8">
-                                    <select id="ddlUserRole_@item.Id" class="form-control form-select" style="width: 135px; height:36px;">
-                                        <option value="@item.RoleId" selected>@item.RoleName</option>
-                                    </select>
-                                </div>
-                            </div>
-                            
+                            <a>
+                                <h5 class="mt-2 mb-1 fs-15">@item.UserName</h5>
+                            </a>
+                            @if (item.IsActive == true)
+                            {
+                                <p class="text-muted fs-14 mb-2">
+                                    <span class="badge badge-label bg-success">
+                                        <i class="mdi mdi-circle-medium"></i>
+                                        Active
+                                    </span>
+                                </p>
+
+                            }
+                            @if (item.IsActive == false)
+                            {
+                                <p class="text-muted fs-14 mb-2">
+                                    <span class="badge badge-label bg-danger">
+                                        <i class="mdi mdi-circle-medium"></i>
+                                        DeActive
+                                    </span>
+                                </p>
+
+                            }
                             <div class="row">
                                 <div class="col-sm-4">
                                     <p class="text-muted fs-16" style="margin-left:30px; margin-top:5px;">
                                         Dept:
                                     </p>
                                 </div>
-                                <div class="col-sm-8">
+                                <div class="col-sm-4">
                                     <select id="ddlDepartment_@item.Id" class="form-control form-select" style="width: 135px; height:36px;">
                                         <option value="@item.DepartmentId" selected>@item.DepartmentName</option>
                                     </select>
                                 </div>
-                            </div>
 
-                            
-                            <input type="hidden" value="@item.Id" id="txtUserId_@item.Id" />
-                            <input type="hidden" value="@CommonHelper.GetCommonDateFormat(item.DateOfBirth)" id="txtDateOfBirth_@item.Id" />
-                            <input type="hidden" value="@item.Gender" id="txtGender_@item.Id" />
-                            <input type="hidden" value="@item.FirstName" id="txtFirstName_@item.Id" />
-                            <input type="hidden" value="@item.LastName" id="txtLastName_@item.Id" />
-                            <input type="hidden" value="@item.Email" id="txtEmail_@item.Id" />
-                            <input type="hidden" value="@item.PhoneNumber" id="txtPhoneNumber_@item.Id" />
-                            <input type="hidden" value="@item.Address" id="txtAddress_@item.Id" />
-                            <form method="post">
+                                <input type="hidden" value="@item.Id" id="txtUserId_@item.Id" />
+                                <input type="hidden" value="@CommonHelper.GetCommonDateFormat(item.DateOfBirth)" id="txtDateOfBirth_@item.Id" />
+                                <input type="hidden" value="@item.Gender" id="txtGender_@item.Id" />
+                                <input type="hidden" value="@item.FirstName" id="txtFirstName_@item.Id" />
+                                <input type="hidden" value="@item.LastName" id="txtLastName_@item.Id" />
+                                <input type="hidden" value="@item.Email" id="txtEmail_@item.Id" />
+                                <input type="hidden" value="@item.PhoneNumber" id="txtPhoneNumber_@item.Id" />
+                                <input type="hidden" value="@item.Address" id="txtAddress_@item.Id" />
                                 <div class="form-check form-switch text-center font-22">
-                                    <input class="form-check-input @(item.IsActive.GetValueOrDefault() ? "switch-success" : "switch-danger")" style="font-size:24px; margin-left:-40px;" type="checkbox" id="isAdd_@item.Id" name="isAdd" @(item.IsActive == true ? "checked" : "") onclick="UserActiveDeactive('@item.UserName', this)">
+                                    <input class="form-check-input @(item.IsActive.GetValueOrDefault() ? "switch-success" : "switch-danger")" style="font-size:24px; margin-left:-40px;" type="checkbox" id="isAdd_@item.Id" name="isAdd" @(item.IsActive == true ? "checked" : "") onclick="UserActiveDeactive('@item.Id', this)">
                                 </div>
 
-
-                                <br />
-                                <a href="#" class="btn btn-block btn-primary btn-lg" onclick="UpdateUserRoleAndDept('@item.Id');">Update</a>
-                            </form>
+                            </div>
+                            <div>
+                                <button type="button" class="btn btn-block btn-info" onclick="UpdateUserRoleAndDept('@item.Id');" style="margin-top: 25px;">Update</button>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <!--end col-->
+
+
                 <script>
                     $(document).ready(function () {
                         GetUserRoleList('@item.Id', '@item.RoleId');
                         GetDepartmentList('@item.Id', '@item.DepartmentId');
                     });
                 </script>
-            }
-        }
 
+            }
+
+        }
     </div>
-    <!--end row-->
 </div>
-<!-- end card body -->
+<!--end row-->
 
 <div id="activedeactivepagination">
     @Html.PagedListPager((IPagedList)Model, page => Url.Action("UserActiveDecative", new
+        {
+            page = page
+        }),
+            new X.PagedList.Web.Common.PagedListRenderOptions
     {
-    page = page
-    }),
-    new X.PagedList.Web.Common.PagedListRenderOptions
-    {
-    LiElementClasses = new string[] { "page-item" },
-    PageClasses = new string[] { "page-link" }
+        LiElementClasses = new string[] { "page-item" },
+        PageClasses = new string[] { "page-link" }
     })
 </div>
 

@@ -1,51 +1,9 @@
-﻿$(document).ready(function () {
+﻿var datas = userPermissions
+$(document).ready(function () {
     fn_updatePRProductAmount();
     GetPurchaseRequestList();
     fn_updatePRTotals();
     CountCartTotalItems();
-});
-function fn_SearchItemDetailsById(Id) {
-    $.ajax({
-        url: '/PurchaseRequest/DisplayProductDetailsListById?ProductId=' + Id,
-        type: 'Post',
-        datatype: 'json',
-        processData: false,
-        contentType: false,
-        complete: function (Result) {
-            fn_AddNewPRRow(Result.responseText);
-        }
-    });
-}
-
-var count = 0;
-function fn_AddNewPRRow(Result) {
-    var newProductRow = $(Result);
-    var newProductId = newProductRow.find('.card-body').data('product-id');
-    var isDuplicate = false;
-
-    $('#displayPurchaseRequest .products .card-body').each(function () {
-        var existingProductRow = $(this);
-        var existingProductId = existingProductRow.data('product-id');
-        if (existingProductId === newProductId) {
-            isDuplicate = true;
-            return false;
-        }
-    });
-
-    if (!isDuplicate) {
-        count++;
-        $("#displayPurchaseRequest").append(Result);
-        fn_updatePRProductAmount();
-        fn_updatePRTotals();
-        showHidePRCreatebtn();
-        CountCartTotalItems();
-    } else {
-        toastr.warning("Product already added!");
-    }
-}
-
-
-$(document).ready(function () {
     $(document).on('input', '.product-quantity', function () {
         fn_updatePRProductAmount()
     });
@@ -55,7 +13,6 @@ $(document).ready(function () {
             $(this).blur();
         }
     });
-
 
     $(document).on('keydown', '#txtproductamount', function (event) {
         if (event.key === 'Enter') {
@@ -67,79 +24,6 @@ $(document).ready(function () {
         $(this).trigger('input');
     });
 
-   
-});
-
-function fn_updatePRProductAmount() {
-
-    $(".products").each(function () {
-        var row = $(this);
-        var subtotal = parseFloat(row.find("#dspperunitprice").text().replace('₹', ''));
-        var totalquantity = parseFloat(row.find("#txtproductquantity").val());
-        var gstAmount = parseFloat(row.find("#txtProductGstAmount").text().replace('₹', ''));
-        var totalGstamount = gstAmount * totalquantity;
-        var Amount = subtotal * totalquantity;
-        var TotalAmount = totalGstamount + Amount;
-
-        row.find("#dsptotalAmount").text('₹' + TotalAmount.toFixed(2));
-
-    });
-    fn_updatePRTotals();
-}
-
-function fn_updatePRTotals() {
-
-    var cartSubtotal = 0;
-    var cartGst = 0;
-    var cartTotalamount = 0;
-
-    $(".products").each(function () {
-        var row = $(this);
-
-        var subtotal = parseFloat(row.find("#dspperunitprice").text().replace('₹', ''));
-        var gst = parseFloat(row.find("#txtProductGstAmount").text().replace('₹', ''));
-        var quantity = parseFloat(row.find("#txtproductquantity").val());
-        var totalGstamount = gst * quantity;
-        var Amount = subtotal * quantity;
-
-        cartSubtotal += Amount;
-        cartGst += totalGstamount;
-        cartTotalamount = cartSubtotal + cartGst;
-    });
-
-    $("#cart-subtotal").html('₹' + cartSubtotal.toFixed(2));
-    $("#cart-Gst").html('₹' + cartGst.toFixed(2));
-    $("#cart-total").html('₹' + cartTotalamount.toFixed(2));
-}
-function CountCartTotalItems() {
-    var totalItems = $('.products').length;
-    $("#cartTotalItemCount").html('Your Select ' + '(' + totalItems + ' ' + 'items)');
-};
-function removeProduct(btn) {
-    $(btn).closest(".products").remove();
-    fn_updatePRProductAmount();
-    fn_updatePRTotals();
-    CountCartTotalItems();
-    showHidePRCreatebtn();
-}
-function showHidePRCreatebtn() {
-    var totalAmount = $("#dsptotalAmount").text();
-    if (totalAmount != "") {
-        $("#btnpurchaserequest").show();
-    } else {
-        $("#btnpurchaserequest").hide();
-    }
-}
-function preventEmptyValue(input) {
-
-    if (input.value === "") {
-
-        input.value = 1;
-    }
-}
-
-var datas = userPermissions
-$(document).ready(function () {
     function data(datas) {
         var userPermission = datas;
         GetPRData(userPermission);
@@ -229,10 +113,112 @@ $(document).ready(function () {
     }
 
     data(datas);
-
 });
+function fn_SearchItemDetailsById(Id) {
+    $.ajax({
+        url: '/PurchaseRequest/DisplayProductDetailsListById?ProductId=' + Id,
+        type: 'Post',
+        datatype: 'json',
+        processData: false,
+        contentType: false,
+        complete: function (Result) {
+            fn_AddNewPRRow(Result.responseText);
+        }
+    });
+}
 
-    
+var count = 0;
+function fn_AddNewPRRow(Result) {
+    var newProductRow = $(Result);
+    var newProductId = newProductRow.find('.card-body').data('product-id');
+    var isDuplicate = false;
+
+    $('#displayPurchaseRequest .products .card-body').each(function () {
+        var existingProductRow = $(this);
+        var existingProductId = existingProductRow.data('product-id');
+        if (existingProductId === newProductId) {
+            isDuplicate = true;
+            return false;
+        }
+    });
+
+    if (!isDuplicate) {
+        count++;
+        $("#displayPurchaseRequest").append(Result);
+        fn_updatePRProductAmount();
+        fn_updatePRTotals();
+        showHidePRCreatebtn();
+        CountCartTotalItems();
+    } else {
+        toastr.warning("Product already added!");
+    }
+}
+function fn_updatePRProductAmount() {
+
+    $(".products").each(function () {
+        var row = $(this);
+        var subtotal = parseFloat(row.find("#dspperunitprice").text().replace('₹', ''));
+        var totalquantity = parseFloat(row.find("#txtproductquantity").val());
+        var gstAmount = parseFloat(row.find("#txtProductGstAmount").text().replace('₹', ''));
+        var totalGstamount = gstAmount * totalquantity;
+        var Amount = subtotal * totalquantity;
+        var TotalAmount = totalGstamount + Amount;
+
+        row.find("#dsptotalAmount").text('₹' + TotalAmount.toFixed(2));
+
+    });
+    fn_updatePRTotals();
+}
+function fn_updatePRTotals() {
+
+    var cartSubtotal = 0;
+    var cartGst = 0;
+    var cartTotalamount = 0;
+
+    $(".products").each(function () {
+        var row = $(this);
+
+        var subtotal = parseFloat(row.find("#dspperunitprice").text().replace('₹', ''));
+        var gst = parseFloat(row.find("#txtProductGstAmount").text().replace('₹', ''));
+        var quantity = parseFloat(row.find("#txtproductquantity").val());
+        var totalGstamount = gst * quantity;
+        var Amount = subtotal * quantity;
+
+        cartSubtotal += Amount;
+        cartGst += totalGstamount;
+        cartTotalamount = cartSubtotal + cartGst;
+    });
+
+    $("#cart-subtotal").html('₹' + cartSubtotal.toFixed(2));
+    $("#cart-Gst").html('₹' + cartGst.toFixed(2));
+    $("#cart-total").html('₹' + cartTotalamount.toFixed(2));
+}
+function CountCartTotalItems() {
+    var totalItems = $('.products').length;
+    $("#cartTotalItemCount").html('Your Select ' + '(' + totalItems + ' ' + 'items)');
+};
+function removeProduct(btn) {
+    $(btn).closest(".products").remove();
+    fn_updatePRProductAmount();
+    fn_updatePRTotals();
+    CountCartTotalItems();
+    showHidePRCreatebtn();
+}
+function showHidePRCreatebtn() {
+    var totalAmount = $("#dsptotalAmount").text();
+    if (totalAmount != "") {
+        $("#btnpurchaserequest").show();
+    } else {
+        $("#btnpurchaserequest").hide();
+    }
+}
+function preventEmptyValue(input) {
+
+    if (input.value === "") {
+
+        input.value = 1;
+    }
+}
 function ApproveUnapprovePR() {
 
     Swal.fire({
@@ -291,7 +277,6 @@ function ApproveUnapprovePR() {
         }
     });
 }
-
 function GetPurchaseRequestList() {
     $.ajax({
         url: '/PurchaseRequest/GetPurchaseRequestList',
@@ -304,7 +289,6 @@ function GetPurchaseRequestList() {
         },
     })
 }
-
 function CreatePurchaseRequest() {
     var TotalAmount = $("#dsptotalAmount").text();
     if (TotalAmount != "") {
@@ -362,7 +346,6 @@ function CreatePurchaseRequest() {
         toastr.warning("Kindly add the products");
     }
 }
-
 function UpdatePurchaseRequestDetails() {
 
     var TotalAmount = $("#dsptotalAmount").text();
@@ -419,7 +402,7 @@ function UpdatePurchaseRequestDetails() {
     else {
         toastr.warning("Please Add Product!");
     }
-   
+
 }
 function DeletePurchaseRequest(PrNo) {
 

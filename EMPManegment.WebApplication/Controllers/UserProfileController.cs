@@ -299,12 +299,12 @@ namespace EMPManegment.Web.Controllers
 
         [FormPermissionAttribute("Active Deactive-Edit")]
         [HttpPost]
-        public async Task<IActionResult> UserActiveDecative(string UserName, Guid UpdatedBy)
+        public async Task<IActionResult> UserActiveDecative(Guid UserId, Guid UpdatedBy)
         {
             try
             {
 
-                ApiResponseModel postuser = await APIServices.PostAsync("", "UserProfile/ActiveDeactiveUsers?UserName=" + UserName + "&UpdatedBy" + UpdatedBy);
+                ApiResponseModel postuser = await APIServices.PostAsync("", "UserProfile/ActiveDeactiveUsers?UserId=" + UserId + "&UpdatedBy" + UpdatedBy);
                 if (postuser.code == 200)
                 {
 

@@ -75,11 +75,11 @@ namespace EMPManagment.API.Controllers
 
         [HttpPost]
         [Route("ActiveDeactiveUsers")]
-        public async Task<IActionResult> ActiveDeactiveUsers(string UserName, Guid UpdatedBy)
+        public async Task<IActionResult> ActiveDeactiveUsers(Guid UserId, Guid UpdatedBy)
         {
             UserResponceModel responseModel = new UserResponceModel();
 
-            var userName = await UserListServices.ActiveDeactiveUsers(UserName, UpdatedBy);
+            var userName = await UserListServices.ActiveDeactiveUsers(UserId, UpdatedBy);
             try
             {
 

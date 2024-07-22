@@ -164,12 +164,12 @@ namespace EMPManegment.Repository.UserListRepository
             return userDetails;
         }
 
-        public async Task<UserResponceModel> ActiveDeactiveUsers(string UserName, Guid UpdatedBy)
+        public async Task<UserResponceModel> ActiveDeactiveUsers(Guid UserId, Guid UpdatedBy)
         {
             UserResponceModel response = new UserResponceModel();
             try
             {
-                var GetUserdta = Context.TblUsers.Where(a => a.UserName == UserName).FirstOrDefault();
+                var GetUserdta = Context.TblUsers.Where(a => a.Id == UserId).FirstOrDefault();
 
                 if (GetUserdta != null)
                 {

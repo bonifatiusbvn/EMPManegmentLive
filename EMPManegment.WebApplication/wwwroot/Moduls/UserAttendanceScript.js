@@ -179,7 +179,6 @@ function formatDateToLocal(date) {
     return `${year}-${month}-${day}T${hours}:${minutes}`;
 }
 
-
 function EditUserAttendance(attandenceId) {
     $('#EditTimeModel').modal('show');
     $.ajax({
@@ -271,12 +270,10 @@ function UpdateUserAttendance() {
 
 
 function GetMyAttendance() {
-    if ($('#txtmonth').val() == "" && $("#txtstartdate").val() == "" && $("#txtenddate").val() == "")
-    {
+    if ($('#txtmonth').val() == "" && $("#txtstartdate").val() == "" && $("#txtenddate").val() == "") {
         toastr.warning("Select the Month or UserName");
     }
-    else
-    {
+    else {
         var form_data = new FormData();
         form_data.append("Cmonth", $('#txtmonth').val());
         form_data.append("StartDate", $("#txtstartdate").val());
