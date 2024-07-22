@@ -27,63 +27,64 @@
 
 <div class="card">
     <input type="text" id="textUpdatedById" class="form-control" hidden value="@_userSession.UserId" />
-    <div class="card-header">
-        <form id="attendanceform" style="margin-bottom: -20px;">
-            <div class="listjs-table">
-                <div class="row g-4 mb-3">
-                    <div class="row g-2 text-align">
-                        <div class="col-lg-auto">
-                            <button type="button" class="btn btn-warning" id="backbtn"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="m5.828 7l2.536 2.535L6.95 10.95L2 6l4.95-4.95l1.414 1.415L5.828 5H13a8 8 0 1 1 0 16H4v-2h9a6 6 0 0 0 0-12z" /></svg></button>
-                            <div class="btn-group">
-                                <button class="btn btn-primary btn-md dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Search By
-                                </button>
-                                <div class="dropdown-menu">
-                                    <a class="dropdown-item" href="#" data-value="ByUsername">Username</a>
-                                    <a class="dropdown-item" href="#" data-value="ByDate">Date</a>
-                                    <a class="dropdown-item" href="#" data-value="ByDate&ByUsername">Username & Date</a>
-                                    <a class="dropdown-item" href="#" data-value="ByBetweenDates&ByUsername">Username & Between-Dates</a>
+    <div class="card-header border">
+        <div class="d-flex align-items-center">
+            <h5 class="card-title mb-0 flex-grow-1">Users Attendance</h5>
+            <div class="flex-shrink-0">
+                <div class="d-flex gap-2 flex-wrap">
+                    <form id="attendanceform">
+                        <div class="row g-2 text-align">
+                            <div class="col-lg-auto">
+                                <div class="btn-group">
+                                    <button class="btn btn-primary btn-md form-select" type="button" id="ddlatendanceser" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width: 205px;">
+                                        Search By
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item" href="#" data-value="ByUsername">Username</a>
+                                        <a class="dropdown-item" href="#" data-value="ByDate">Date</a>
+                                        <a class="dropdown-item" href="#" data-value="ByDateAndUser">Username & Date</a>
+                                        <a class="dropdown-item" href="#" data-value="ByDatesAndUser">Username & Month</a>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="col-sm" id="usernamebox">
-                            <div class="search-box">
-                                <select class="form-control from-select" id="drpAttusername" name="drpAttddlusername">
-                                    <option selected disabled value="">---Select Username---</option>
-                                </select>
-                                <input type="hidden" class="form-control" id="txtguserid">
+                            <div class="col-sm" id="usernamebox" style="display: none;">
+                                <div class="search-box">
+                                    <select class="form-control from-select" id="drpAttusername" name="drpAttddlusername" style="width:250px">
+                                        <option selected disabled value="">---Select Username---</option>
+                                    </select>
+                                    <input type="hidden" class="form-control" id="txtguserid">
+                                </div>
+                            </div>
+                            <div class="col-sm" id="datesbox" style="display: none;">
+                                <div class="search-box">
+                                    <input type="date" id="txtdate" name="txtdate" class="form-control search" placeholder="Search By date">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16" style="margin-top: -60px;margin-left: 10px;">
+                                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="col-sm" id="startdatebox" style="display: none;">
+                                <div class="search-box">
+                                    <input type="date" id="txtstartdatebox" class="form-control search" placeholder="Search By start date">
+                                    <i class="ri-search-line search-icon"></i>
+                                </div>
+                            </div>
+                            <div class="col-sm" id="enddatebox" style="display: none;">
+                                <div class="search-box">
+                                    <input type="date" id="txtenddatebox" class="form-control search" placeholder="Search By end date">
+                                    <i class="ri-search-line search-icon"></i>
+                                </div>
+                            </div>
+                            <div class="col-lg-auto">
+                                <a class="btn btn-success" onclick="GetSearchAttendanceList()" id="searchattendanceform" value="Validate"><i class="ri-search-line"></i></a>
                             </div>
                         </div>
-                        <div class="col-sm" id="datesbox">
-                            <div class="search-box">
-                                <input type="date" id="txtdate" name="txtdate" class="form-control search" placeholder="Search By date">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16" style="margin-top: -60px;margin-left: 10px;">
-                                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
-                                </svg>
-                            </div>
-                        </div>
-                        <div class="col-sm" id="startdatebox">
-                            <div class="search-box">
-                                <input type="date" id="txtstartdatebox" class="form-control search" placeholder="Search By start date">
-                                <i class="ri-search-line search-icon"></i>
-                            </div>
-                        </div>
-                        <div class="col-sm" id="enddatebox">
-                            <div class="search-box">
-                                <input type="date" id="txtenddatebox" class="form-control search" placeholder="Search By end date">
-                                <i class="ri-search-line search-icon"></i>
-                            </div>
-                        </div>
-                        <div class="col-lg-auto">
-                            <button class="btn btn-success" type="button" onclick="GetSearchAttendanceList()" id="searchattendanceform" value="Validate">
-                                Search
-                            </button>
-                        </div>
-                    </div>
+                    </form>
+
                 </div>
             </div>
-        </form>
+        </div>
     </div>
 
     <div class="card-body" id="attendancedt">

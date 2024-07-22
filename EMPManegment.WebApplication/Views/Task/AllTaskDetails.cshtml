@@ -205,12 +205,12 @@
                             </div>
                             <div class="mb-3">
                                 <label for="dueDate" class="form-label">Task Start-Date <span class="text-danger">*</span></label>
-                                <input type="datetime-local" class="form-control material_blue" id="txtdatetime" name="txtdatetime" />
+                                <input type="date" class="form-control material_blue" id="txtdatetime" name="txtdatetime" />
 
                             </div>
                             <div class="mb-3">
                                 <label for="dealEmail" class="form-label">Task End-Date <span class="text-danger">*</span></label>
-                                <input type="datetime-local" class="form-control material_blue" id="txtenddatetime" name="txtenddatetime">
+                                <input type="date" class="form-control material_blue" id="txtenddatetime" name="txtenddatetime" />
 
                             </div>
                             <div>
@@ -405,6 +405,17 @@
 
 <script type="text/javascript">
     var userPermissions = '@Html.Raw(Json.Serialize(UserSession.FormPermisionData))';
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var modal = document.getElementById('addtasks');
+        modal.addEventListener('shown.bs.modal', function () {
+            var dateInputStart = document.getElementById('txtdatetime');
+            var dateInputEnd = document.getElementById('txtenddatetime');
+            let today = new Date().toISOString().split('T')[0];
+            dateInputStart.value = today;
+            dateInputEnd.value = today;
+        });
+    });
 </script>
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>

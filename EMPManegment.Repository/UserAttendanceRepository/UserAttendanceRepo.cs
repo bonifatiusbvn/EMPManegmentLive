@@ -279,7 +279,7 @@ namespace EMPManegment.Repository.UserAttendanceRepository
                     new SqlParameter("@EndDate", AttendanceList.EndDate ?? (object)DBNull.Value)
                 };
 
-                string dbConnectionStr = _configuration.GetConnectionString("EMPDbconn");
+                string dbConnectionStr = Configuration.GetConnectionString("EMPDbconn");
                 var DS = DbHelper.GetDataSet("GetSearchAttendanceList", CommandType.StoredProcedure, parameters.ToArray(), dbConnectionStr);
 
                 List<UserAttendanceModel> userAttendance = new List<UserAttendanceModel>();

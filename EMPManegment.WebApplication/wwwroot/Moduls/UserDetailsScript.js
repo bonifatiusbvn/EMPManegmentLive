@@ -49,8 +49,6 @@ $(document).ready(function () {
         $("#frmuserDetails").validate();
     });
 });
-
-
 function GetAllUserData() {
     var colorClasses = [
         { bgClass: 'bg-primary-subtle', textClass: 'text-primary' },
@@ -142,9 +140,6 @@ function GetAllUserData() {
         }]
     });
 }
-
-
-
 function GetUserRoleList(itemId, selectedRoleId) {
     $.ajax({
         url: '/UserProfile/RolewisePermissionListAction',
@@ -158,7 +153,6 @@ function GetUserRoleList(itemId, selectedRoleId) {
         }
     });
 }
-
 function GetDepartmentList(itemId, selectedDepartmentId) {
     $.ajax({
         url: '/Authentication/GetDepartment',
@@ -172,7 +166,6 @@ function GetDepartmentList(itemId, selectedDepartmentId) {
         }
     });
 }
-
 function UserActiveDeactive(UserId, checkboxElement) {
     UpdatedBy = $("#txtUpdatedById").val();
     var isActive = checkboxElement.checked;
@@ -274,7 +267,6 @@ function UpdateUserRoleAndDept(userId) {
         }
     });
 }
-
 function EnterInTime() {
     var fromData = new FormData();
     fromData.append("UserId", $("#txtuserid").val());
@@ -305,10 +297,9 @@ function EnterInTime() {
         },
     })
 }
-
 function EnterOutTime() {
     const isPending = $("#todayouttime").text() === "Pending";
-    const InTimeStr = $('#todayintime').text(); 
+    const InTimeStr = $('#todayintime').text();
     const currentTime = new Date();
     const InTimeParts = InTimeStr.match(/(\d+):(\d+) (\w+)/);
     const InTime = new Date(currentTime);
@@ -353,10 +344,10 @@ function EnterOutTime() {
 
     if (isPending) {
         if (TotalMinutes < 60) {
-            
+
             toastr.warning("You can't enter out-time now!");
         } else {
-            
+
             Swal.fire({
                 title: "Are you sure you want to enter out-time?",
                 text: "You won't be able to revert this!",
@@ -384,8 +375,6 @@ function EnterOutTime() {
         ajaxCall();
     }
 }
-
-
 function ResetPassword() {
     var form = document.getElementById('resetPasswordForm');
     if (form.checkValidity()) {
@@ -420,8 +409,6 @@ function ResetPassword() {
         form.reportValidity();
     }
 }
-
-
 function GetUserAttendanceInTime() {
 
     $.ajax({
@@ -473,7 +460,6 @@ function GetUserAttendanceInTime() {
         },
     })
 }
-
 function UserBirsthDayWish() {
     if (sessionStorage.getItem('birthdayWishSent')) {
         return;
@@ -503,8 +489,6 @@ function UserBirsthDayWish() {
         }
     });
 }
-
-
 function EditUserDetails(EmpId) {
     $.ajax({
         url: '/UserProfile/EditUserDetails?Id=' + EmpId,
@@ -529,14 +513,7 @@ function EditUserDetails(EmpId) {
         }
     })
 }
-
-
-
-
-
-
 //validation
-
 var firstName, lastName, dateOfBirth, email, phoneNumber, address, pincode;
 var isValid = true;
 
@@ -649,8 +626,6 @@ $('#txtserch').keyup(function () {
         }
     })
 });
-
-
 function clearSelectedBox() {
     $("#ddlusername").find("option").remove().end().append(
         '<option selected disabled value="">--Select Username--</option>');
@@ -658,7 +633,6 @@ function clearSelectedBox() {
     $("#ddlDepartmenrnt").find("option").remove().end().append(
         '<option selected disabled value="">--Select Department--</option>');
 }
-
 function GetActiveDeactiveList(page) {
     DepartmentId = $("#ddlDepartment").val();
     Id = $("#ddlusername").val();
@@ -686,7 +660,6 @@ $(document).on("click", "#backbtn", function (e) {
     var page = $(this).text();
     GetActiveDeactiveList(page);
 });
-
 function clearsearchtextbox() {
     $("#ddlDepartment").val('');
     $("#ddlusername").val('');
@@ -694,7 +667,7 @@ function clearsearchtextbox() {
 
 $('.dropdown-item').click(function () {
     var selectedValue = $(this).attr('data-value');
-    $('.dropdown-toggle').data('value', selectedValue);
+    $('#ddluserdepartment').data('value', selectedValue);
 
     if (selectedValue === "UserName") {
         clearsearchtextbox();
@@ -708,7 +681,7 @@ $('.dropdown-item').click(function () {
         $("#usernamebox").hide();
         $("#departmentbox").show();
     }
-    $('.btn-group .dropdown-toggle').text($(this).text());
+    $('.btn-group #ddluserdepartment').text($(this).text());
     $('#ddlusername').select2({
         theme: 'bootstrap4',
         width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
@@ -724,9 +697,8 @@ $('.dropdown-item').click(function () {
         dropdownParent: $("#SearchEmpForm")
     });
 });
-
 function GetUserSearchData() {
-    var selectedValue = $('.dropdown-toggle').data('value');
+    var selectedValue = $('#ddluserdepartment').data('value');
     var isValid = true;
     var errorMessage = "Kindly fill all required fields";
     if (typeof selectedValue === "undefined") {
@@ -749,8 +721,6 @@ function GetUserSearchData() {
         toastr.warning(errorMessage);
     }
 }
-
-
 function EdituserDetails() {
 
     document.getElementById("firstnameInput").removeAttribute("readonly");
@@ -768,7 +738,6 @@ function EdituserDetails() {
     //  inputs[i].removeAttribute('readonly');
     //};        
 }
-
 function updateuserDetails() {
     if ($('#frmuserDetails').valid()) {
         var UserId = $('#UseridInput').val()
@@ -861,7 +830,6 @@ $(document).ready(function () {
         }
     })
 });
-
 function CreateUser() {
     var form = document.getElementById('CreateUserForm');
     if ($("#CreateUserForm").valid()) {
@@ -952,7 +920,6 @@ function updateExperienceDate() {
         toastr.warning("Kindly fill all datafield");
     }
 }
-
 function fn_UpdateUserPassword() {
     var form = document.getElementById('UserInfoPasswordForm');
     if (form.checkValidity()) {

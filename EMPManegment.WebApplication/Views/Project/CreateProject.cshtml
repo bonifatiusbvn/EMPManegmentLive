@@ -350,5 +350,13 @@
 
 <!-- ckeditor -->
 <!-- dropzone js -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var today = new Date().toISOString().split('T')[0];
+        document.getElementById("projectdeadline").value = today;
+        document.getElementById("projectStartDate").value = today;
+        document.getElementById("projectEndDate").value = today;
+    });
+</script>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/moduls/projectdetailsscript.js" asp-append-version="true"></script>
