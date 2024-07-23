@@ -410,10 +410,38 @@
         var modal = document.getElementById('AddExpenseModel');
         modal.addEventListener('shown.bs.modal', function () {
             var dateInput = document.getElementById('txtdate');
-            let today = new Date().toISOString().split('T')[0];
-            dateInput.value = today;
+
+            const today = new Date();
+            const yyyy = today.getFullYear();
+            const mm = String(today.getMonth() + 1).padStart(2, '0');
+            const dd = String(today.getDate()).padStart(2, '0');
+
+            const formattedToday = `${yyyy}-${mm}-${dd}`;
+
+            dateInput.setAttribute('max', formattedToday);
+
+            dateInput.value = formattedToday;
         });
     });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var modal = document.getElementById('EditExpenseModel');
+        modal.addEventListener('shown.bs.modal', function () {
+            var dateInput = document.getElementById('Editdate');
+
+            const today = new Date();
+            const yyyy = today.getFullYear();
+            const mm = String(today.getMonth() + 1).padStart(2, '0'); 
+            const dd = String(today.getDate()).padStart(2, '0');
+            const hh = String(today.getHours()).padStart(2, '0');
+            const min = String(today.getMinutes()).padStart(2, '0');
+
+            const formattedToday = `${yyyy}-${mm}-${dd}T${hh}:${min}`;
+
+            dateInput.setAttribute('max', formattedToday);
+        });
+    });
+
 
     document.addEventListener('DOMContentLoaded', function () {
         const betweenMonthRadio = document.getElementById('betweenMonthRadio');
