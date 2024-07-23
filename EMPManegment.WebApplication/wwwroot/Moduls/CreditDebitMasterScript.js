@@ -2,8 +2,67 @@
     GetAllVendorData();
     AllTransactionData();
     getVendorTransactionList();
-});
 
+    $('#textTransactionCompanyName').on('change', SortCompanyName);
+
+    var creditDebitDetails = JSON.parse(localStorage.getItem('creditDebitDetails'));
+    var total = parseFloat(localStorage.getItem('totalCreditAmount'));
+
+    if (creditDebitDetails) {
+        var totalAmount = parseFloat($('#txttotalamount').val());
+        var totalPendingAmount = totalAmount - total;
+
+        if (!$("#txttotalcreditamount").text().trim()) {
+            $("#txttotalcreditamount").text('₹' + total.toFixed(2));
+        }
+
+        if (!$("#txttotalpendingamount").text().trim()) {
+            $("#txttotalpendingamount").text('₹' + totalPendingAmount.toFixed(2));
+        }
+
+        if (!$("#pendingamount").text().trim()) {
+            $("#pendingamount").text('₹' + totalPendingAmount.toFixed(2));
+        }
+
+        $('#txtcreditdebitamount').off('input').on('input', function () {
+            var enteredAmount = parseFloat($(this).val());
+
+            if (!isNaN(enteredAmount)) {
+                var pendingAmount = totalPendingAmount - enteredAmount;
+
+                if (enteredAmount > totalPendingAmount) {
+                    $('#warningMessage').text('Entered amount cannot exceed pending amount.');
+                    $('#txtpendingamount').val('');
+                } else {
+                    $('#warningMessage').text('');
+                    $('#txtpendingamount').val(pendingAmount.toFixed(2));
+                }
+            } else {
+                $('#warningMessage').text('');
+                $('#txtpendingamount').val('');
+            }
+        });
+    }
+
+    $('#searchcreditdebitlist').on('keyup', function () {
+        var value = $(this).val().toLowerCase();
+        var hasVisibleItems = false;
+
+        $('#AllVendorCreditDebitList .transaction-item').filter(function () {
+            var isVisible = $(this).text().toLowerCase().indexOf(value) > -1;
+            $(this).toggle(isVisible);
+            if (isVisible) {
+                hasVisibleItems = true;
+            }
+        });
+
+        if (hasVisibleItems) {
+            $('.noresult').hide();
+        } else {
+            $('.noresult').show();
+        }
+    });
+});
 function GetAllVendorData() {
     var colorClasses = [
         { bgClass: 'bg-primary-subtle', textClass: 'text-primary' },
@@ -62,9 +121,6 @@ function GetAllVendorData() {
         }]
     });
 }
-
-
-
 function InsertCreditDebitDetails() {
 
     var value = $('#txtcreditdebitamount').val();
@@ -145,50 +201,6 @@ function GetCreditDebitTotalAmount(Vid) {
         }
     });
 }
-
-$(document).ready(function () {
-
-    var creditDebitDetails = JSON.parse(localStorage.getItem('creditDebitDetails'));
-    var total = parseFloat(localStorage.getItem('totalCreditAmount'));
-
-    if (creditDebitDetails) {
-        var totalAmount = parseFloat($('#txttotalamount').val());
-        var totalPendingAmount = totalAmount - total;
-
-        if (!$("#txttotalcreditamount").text().trim()) {
-            $("#txttotalcreditamount").text('₹' + total.toFixed(2));
-        }
-
-        if (!$("#txttotalpendingamount").text().trim()) {
-            $("#txttotalpendingamount").text('₹' + totalPendingAmount.toFixed(2));
-        }
-
-        if (!$("#pendingamount").text().trim()) {
-            $("#pendingamount").text('₹' + totalPendingAmount.toFixed(2));
-        }
-
-        $('#txtcreditdebitamount').off('input').on('input', function () {
-            var enteredAmount = parseFloat($(this).val());
-
-            if (!isNaN(enteredAmount)) {
-                var pendingAmount = totalPendingAmount - enteredAmount;
-
-                if (enteredAmount > totalPendingAmount) {
-                    $('#warningMessage').text('Entered amount cannot exceed pending amount.');
-                    $('#txtpendingamount').val('');
-                } else {
-                    $('#warningMessage').text('');
-                    $('#txtpendingamount').val(pendingAmount.toFixed(2));
-                }
-            } else {
-                $('#warningMessage').text('');
-                $('#txtpendingamount').val('');
-            }
-        });
-    }
-});
-
-
 function getLastTransaction(Vid) {
 
     $.ajax({
@@ -202,9 +214,6 @@ function getLastTransaction(Vid) {
         },
     });
 }
-
-
-
 function getVendorTransactionList() {
     Vid = $("#inputVendorId").val();
     $('#vendorAllTransactionTable').DataTable({
@@ -257,31 +266,6 @@ function getVendorTransactionList() {
         }]
     });
 }
-
-
-$(document).ready(function () {
-    $('#searchcreditdebitlist').on('keyup', function () {
-        var value = $(this).val().toLowerCase();
-        var hasVisibleItems = false;
-
-        $('#AllVendorCreditDebitList .transaction-item').filter(function () {
-            var isVisible = $(this).text().toLowerCase().indexOf(value) > -1;
-            $(this).toggle(isVisible);
-            if (isVisible) {
-                hasVisibleItems = true;
-            }
-        });
-
-        if (hasVisibleItems) {
-            $('.noresult').hide();
-        } else {
-            $('.noresult').show();
-        }
-    });
-});
-
-
-
 function AllTransactionData() {
     $.ajax({
         url: '/Invoice/AllVendorTransaction',
@@ -295,11 +279,6 @@ function AllTransactionData() {
         }
     });
 }
-
-$(document).ready(function () {
-    $('#textTransactionCompanyName').on('change', SortCompanyName);
-});
-
 function SortCompanyName() {
     var CompanyId = $('#textTransactionCompanyName').val();
     if (CompanyId == "AllCompany") {
@@ -328,7 +307,6 @@ function SortCompanyName() {
         });
     }
 }
-
 function SearchDatesInVendorCreditDebitList() {
     var StartDate = $('#vendorstartdate').val();
     var EndDate = $('#vendorenddate').val();
@@ -355,7 +333,6 @@ function SearchDatesInVendorCreditDebitList() {
         });
     }
 }
-
 function DeleteTransaction(Transaction, VendorId, that) {
     Swal.fire({
         title: "Are you sure you want to delete this?",
@@ -416,6 +393,3 @@ function DeleteTransaction(Transaction, VendorId, that) {
         }
     });
 }
-
-
-

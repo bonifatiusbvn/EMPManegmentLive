@@ -26,9 +26,9 @@ namespace EMPManegment.Services.UserList
             return await UserList.GetUsersList(GetUserlist);
         }
 
-        public Task<UserResponceModel> ActiveDeactiveUsers(string activedeavtiveuser, Guid UpdatedBy)
+        public Task<UserResponceModel> ActiveDeactiveUsers(Guid UserId, Guid UpdatedBy)
         {
-            return UserList.ActiveDeactiveUsers(activedeavtiveuser, UpdatedBy);    
+            return UserList.ActiveDeactiveUsers(UserId, UpdatedBy);
         }
 
 
@@ -106,7 +106,7 @@ namespace EMPManegment.Services.UserList
 
         public async Task<UserResponceModel> UpdateUserExeperience(EmpDetailsView UpdateDate)
         {
-           return await UserList.UpdateUserExeperience(UpdateDate);
+            return await UserList.UpdateUserExeperience(UpdateDate);
         }
 
         public async Task<UserResponceModel> UserProfilePhoto(EmpDetailsView Profile)

@@ -167,6 +167,7 @@ function GetDepartmentList(itemId, selectedDepartmentId) {
     });
 }
 function UserActiveDeactive(UserId, checkboxElement) {
+
     UpdatedBy = $("#txtUpdatedById").val();
     var isActive = checkboxElement.checked;
     var action = isActive ? 'activate' : 'deactivate';
@@ -186,8 +187,9 @@ function UserActiveDeactive(UserId, checkboxElement) {
     }).then((result) => {
 
         if (result.isConfirmed) {
+
             $.ajax({
-                url: '/UserProfile/UserActiveDecative?UserName=' + UserId + '&UpdatedBy=' + UpdatedBy,
+                url: '/UserProfile/UserActiveDecative?UserId=' + UserId + '&UpdatedBy=' + UpdatedBy,
                 type: 'POST',
                 contentType: 'application/json;charset=utf-8',
                 dataType: 'json',
@@ -221,6 +223,7 @@ function UserActiveDeactive(UserId, checkboxElement) {
     });
 }
 function UpdateUserRoleAndDept(userId) {
+
     var objData = {
         UpdatedBy: $("#txtUpdatedById").val(),
         Id: $('#txtUserId_' + userId).val(),
