@@ -502,22 +502,30 @@ function deleteExpense(Id) {
 }
 
 $(document).ready(function () {
-    $(document).on('click', '.dropdown-menu .dropdown-item', function () {
+    $(document).on('click', '#selectMonthlyExpense + .dropdown-menu .dropdown-item', function () {
         var selectedMonth = $(this).data('value');
+        var selectedText = $(this).text();
         var userId = $("#txtuserid").val();
+        $('#selectMonthlyExpense').text(selectedText).attr('data-selected-value', selectedMonth);
         GetPayUserExpenseCreditList(userId, selectedMonth);
         GetPayUserExpenseDebitList(userId, selectedMonth);
     });
 });
 
 
+
 function GetPayUserExpenseCreditList(userId, selectedMonth) {
     var filterType;
     var selectMonthlyExpense;
+    var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    var today = new Date();
+    var monthName = months[today.getMonth()];
+    var monthValue = today.getMonth() + 1;
     if (selectedMonth != null) {
         selectMonthlyExpense = selectedMonth;
         filterType = "credit";
     } else {
+        $('#selectMonthlyExpense').text(monthName).attr('data-selected-value', monthValue);
         filterType = "thismonth and credit";
         selectMonthlyExpense = '';
     }
