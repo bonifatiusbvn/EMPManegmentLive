@@ -488,12 +488,14 @@ namespace EMPManegment.Web.Controllers
                     sortColumnDir = sortColumnDir
                 };
                 List<ExpenseDetailsView> expense = new List<ExpenseDetailsView>();
+                List<UserMonthlyPendingExpense> userPendingExpenseAmount = new List<UserMonthlyPendingExpense>();
                 var data = new jsonData();
                 ApiResponseModel postuser = await APIServices.PostAsync(dataTable, "ExpenseMaster/GetUserExpenseDetail?UserId=" + UserId + "&filterType=" + filterType + "&unapprove=" + unapprove + "&approve=" + approve + "&startDate=" + startDate?.ToString("yyyy-MM-dd") + "&endDate=" + endDate?.ToString("yyyy-MM-dd") + "&account="+ account + "&selectMonthlyExpense="+ selectMonthlyExpense);
                 if (postuser.data != null)
                 {
                     data = JsonConvert.DeserializeObject<jsonData>(postuser.data.ToString());
                     expense = JsonConvert.DeserializeObject<List<ExpenseDetailsView>>(data.data.ToString());
+                    userPendingExpenseAmount = JsonConvert.DeserializeObject<List<UserMonthlyPendingExpense>>(postuser.data.userMonthlyPendingExpense.ToString());
                 }
                 var jsonData = new
                 {
@@ -501,6 +503,7 @@ namespace EMPManegment.Web.Controllers
                     recordsFiltered = data.recordsFiltered,
                     recordsTotal = data.recordsTotal,
                     data = expense,
+                    userPendingExpenseAmount = userPendingExpenseAmount,
                 };
                 return new JsonResult(jsonData);
             }

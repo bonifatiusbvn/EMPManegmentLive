@@ -508,7 +508,7 @@ $(document).ready(function () {
         var userId = $("#txtuserid").val();
         $('#selectMonthlyExpense').text(selectedText).attr('data-selected-value', selectedMonth);
         GetPayUserExpenseCreditList(userId, selectedMonth);
-        GetPayUserExpenseDebitList(userId, selectedMonth);
+        GetPayUserExpenseDebitList(userId, selectedMonth,selectedText);
     });
 });
 
@@ -612,15 +612,31 @@ function GetPayUserExpenseCreditList(userId, selectedMonth) {
     });
 }
 
-function GetPayUserExpenseDebitList(userId, selectedMonth) {
+function GetPayUserExpenseDebitList(userId, selectedMonth, selectedText) {
     var filterType;
     var selectMonthlyExpense;
+    var SelectedMonthName;
+    var PreviousMonthName;
+    var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    var today = new Date();
+    var monthName = months[today.getMonth()];
+
+    function getPreviousMonth(currentMonthName) {
+        var currentIndex = months.indexOf(currentMonthName);
+        var previousIndex = (currentIndex - 1 + months.length) % months.length;
+        return months[previousIndex];
+    }
+
     if (selectedMonth != null) {
         selectMonthlyExpense = selectedMonth;
+        SelectedMonthName = selectedText;
+        PreviousMonthName = getPreviousMonth(SelectedMonthName);
         filterType = "debit";
     } else {
         filterType = "thismonth and debit";
         selectMonthlyExpense = '';
+        SelectedMonthName = monthName;
+        PreviousMonthName = getPreviousMonth(SelectedMonthName);
     }
 
     $('#UserPayExpenseTableDebit').DataTable({
@@ -663,7 +679,7 @@ function GetPayUserExpenseDebitList(userId, selectedMonth) {
                     var color = full.account.toLowerCase() === "credit" ? "red" : "green";
                     return '<span style="color: ' + color + ';">' + '₹' + data + '</span>';
                 }
-            },
+            }
         ],
         scrollY: 400,
         scrollX: true,
@@ -678,31 +694,61 @@ function GetPayUserExpenseDebitList(userId, selectedMonth) {
             orderable: false,
             width: "20%"
         }],
-        "footerCallback": function (row, data, start, end, display) {
-            var api = this.api(), data;
-
+        footerCallback: function (row, data, start, end, display) {
+            var api = this.api();
 
             var intVal = function (i) {
                 return typeof i === 'string' ?
-                    i.replace(/[\$,]/g, '') * 1 :
+                    i.replace(/[\₹,]/g, '') * 1 :
                     typeof i === 'number' ?
                         i : 0;
             };
 
-
-            total = api
+            var total = api
                 .column(4)
                 .data()
                 .reduce(function (a, b) {
                     return intVal(a) + intVal(b);
                 }, 0);
 
-            $(api.column(4).footer()).html(
-                '<span style="color: black;">Total: ' + '₹' + total.toFixed(2) + '</span>'
+            var $cumulativePendingFooterRow = $('#monthlyPendingExpenseFooter');
+            var $cumulativePendingFooterCell = $cumulativePendingFooterRow.find('th').last(); 
+
+            var monthlyDataArray = api.ajax.json().userPendingExpenseAmount;
+
+                    var monthlyDataArray = api.ajax.json().userPendingExpenseAmount;
+
+            if (Array.isArray(monthlyDataArray)) {
+                debugger
+                var isPreviousMonthFound = false;
+                monthlyDataArray.forEach(function (monthlyData) {
+                    if (monthlyData.monthName == PreviousMonthName) {
+
+                        isPreviousMonthFound = true;
+                        $('#monthlyPendingExpenseFooter').show();
+
+                        $cumulativePendingFooterCell.html(
+                            '<span style="color: black;">Last Month Pending:  ₹' + monthlyData.cumulativePending.toFixed(2) + '</span>'
+                        );
+                    }
+                });
+
+                if (!isPreviousMonthFound) {
+                    $('#monthlyPendingExpenseFooter').hide();
+                }
+            }
+
+            var $totalFooterRow = $('#totaldebitExpenseFooter');
+            var $totalFooterCell = $totalFooterRow.find('th').last(); 
+
+            $totalFooterCell.html(
+                '<span style="color: black;">Total: ₹' + total.toFixed(2) + '</span>'
             );
         }
     });
 }
+
+
 
 function UserExpensesDetails() {
     $('#UserListTable').DataTable({

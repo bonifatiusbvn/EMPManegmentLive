@@ -116,7 +116,7 @@
                 <li class="nav-item ml-auto">
                     <div class="card-title mb-0 flex-grow-1 text-info">
                         <div class="dropdown p-3">
-                            <button class="btn btn-primary dropdown-toggle" type="button" id="selectMonthlyExpense" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width: 170px;height: 40px;">
+                            <button type="button" class="btn btn-info form-select" id="selectMonthlyExpense" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="width:150px;">
                                 Select Month
                             </button>
                             <div class="dropdown-menu" aria-labelledby="selectMonthlyExpense">
@@ -200,7 +200,14 @@
                                                 <tbody>
                                                 </tbody>
                                                 <tfoot>
-                                                    <tr>
+                                                    <tr id="monthlyPendingExpenseFooter">  
+                                                        <th></th>
+                                                        <th></th>
+                                                        <th></th>
+                                                        <th></th>
+                                                        <th>Last Month Pending:</th>
+                                                    </tr>
+                                                    <tr id="totaldebitExpenseFooter">
                                                         <th></th>
                                                         <th></th>
                                                         <th></th>
