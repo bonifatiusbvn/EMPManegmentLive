@@ -26,6 +26,7 @@ using EMPManegment.EntityModels.Common;
 using System.Data;
 using EMPManegment.EntityModels.ViewModels.Purchase_Request;
 using System.Data.SqlClient;
+using EMPManegment.EntityModels.ViewModels.PurchaseOrderModels;
 
 namespace EMPManegment.Repository.ExponseMasterRepository
 {
@@ -454,6 +455,11 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                     new SqlParameter("@UserId", UserId),
                 };
                 var dataSet = DbHelper.GetDataSet("[spGetUserExpenseListByUserId]", System.Data.CommandType.StoredProcedure, sqlPar, dbConnectionStr);
+                var sqlPar2 = new SqlParameter[]
+                {
+                 new SqlParameter("@UserId", UserId),
+                };
+                var dataSetofPA = DbHelper.GetDataSet("[GetMonthlyPendingAmounts]", System.Data.CommandType.StoredProcedure, sqlPar2, dbConnectionStr);
                 var UserExpenseList = new List<ExpenseDetailsView>();
 
                 foreach (DataRow row in dataSet.Tables[0].Rows)
@@ -476,6 +482,22 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                     };
                     UserExpenseList.Add(UserExpenseDetails);
                 }
+
+                var userMonthlyPendingExpenseList = new List<UserMonthlyPendingExpense>();
+
+                foreach (DataRow row in dataSetofPA.Tables[0].Rows)
+                {
+                    var UserMonthlyExpenseDetails = new UserMonthlyPendingExpense
+                    {
+                        MonthName = row["MonthName"]?.ToString(),
+                        TotaldebitAmount = Convert.ToDecimal(row["TotaldebitAmount"]),
+                        TotalcreditAmount = Convert.ToDecimal(row["TotalcreditAmount"]),
+                        PendingAmount = Convert.ToDecimal(row["PendingAmount"]),
+                        CumulativePending = Convert.ToDecimal(row["CumulativePending"]),
+                    };
+                    userMonthlyPendingExpenseList.Add(UserMonthlyExpenseDetails);
+                }
+
                 if (!string.IsNullOrEmpty(selectMonthlyExpense))
                 {
                     var selectedMonth = int.Parse(selectMonthlyExpense);
@@ -592,7 +614,8 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                     draw = dataTable.draw,
                     recordsFiltered = totalRecord,
                     recordsTotal = totalRecord,
-                    data = filteredData
+                    data = filteredData,
+                    userMonthlyPendingExpense = userMonthlyPendingExpenseList
                 };
 
                 return jsonData;
