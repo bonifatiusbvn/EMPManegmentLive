@@ -41,14 +41,16 @@
         </div>
     </div>
 </div>
-<div class="row justify-content-center" id="printManualInvoicePage">
+<div class="row justify-content-center">
     <div class="col-xxl-9">
-        <div class="card">
+        <div class="card" >
             <div class="row">
+                <div class="d-flex">
+                    <p style="margin-left: 455px; font-size:22px;"><b>Tax Invoice</b></p>
+                </div>
                 <div class="card-body" id="cardbody1">
                     <div class="d-flex">
                         <div class="flex-grow-1 col-6" style="border: 1px solid lightgray;">
-                            <img src="~/assets/images/logo - bonifatius.jpeg" style="height: 25px;" />
                             <div class="flex-shrink-0 mt-sm-0 mt-3">
                                 <span class="text-muted"><b>@firstItem.VendorName</b></span> <br />
                                 <span class="text-muted">@firstItem.VendorAddress</span><br />
@@ -59,108 +61,113 @@
                             <br />
                             <div class="flex-shrink-0 mt-sm-0 mt-3">
                                 <p class="text-muted"><b>Consignee (Ship to):</b></p>
-                                <span class="text-muted text-uppercase"><b>@firstItem.ProjectName</b></span><br />
+                                <span class="text-muted"><b>@firstItem.CompanyName</b></span><br />
                                 <span class="text-muted">@firstItem.ShippingAddress</span><br />
-                                <span class="text-muted">GSTIN:- </span>
+                                <p class="text-muted text-uppercase">GSTIN/UIN :@firstItem.CompanyGstNo</p>
                             </div>
                         </div>
                         <div class="flex-grow-1 col-6" style="border: 1px solid lightgray;">
                             <div class="row">
                                 <div class="col-6">
-                                    @if (!string.IsNullOrEmpty(firstItem.InvoiceNo))
-                                    {
-                                        <div class="flex-shrink-0 mt-sm-0 mt-3 ">
-                                            <label class="form-label">Invoice No</label>
-                                            <p class="text-muted text-uppercase"><b>@firstItem.InvoiceNo</b></p>
-                                        </div>
-                                        <div style="border: 0px solid lightgray;border-width:0.5px;margin:-8px;width:105%;"></div>
-                                        <br />
-                                    }
-                                    @if (!string.IsNullOrEmpty(firstItem.DispatchThrough))
-                                    {
-                                        <div class="flex-shrink-0 mt-sm-0 mt-3 ">
-                                            <label class="form-label">Dispatched Through</label>
-                                            <p class="text-muted text-uppercase"><b>@firstItem.DispatchThrough</b></p>
-                                        </div>
-                                        <div style="border: 0px solid lightgray;border-width:0.5px;margin:-8px;width:105%;"></div>
-                                        <br />
-                                    }
-                                    @if (firstItem?.BuyesOrderDate != null)
-                                    {
-                                        <div class="flex-shrink-0 mt-sm-0 mt-3 ">
-                                            <label class="form-label">Buy's Order Date</label>
-                                            <p class="text-muted text-uppercase">@CommonHelper.GetCommonDateFormat(@firstItem.BuyesOrderDate ?? DateTime.MinValue)</p>
-                                        </div>
-                                        <div style="border: 0px solid lightgray;border-width:0.5px;margin:-8px;width:105%;"></div>
-                                        <br />
-                                    }
-                                    @if (!string.IsNullOrEmpty(firstItem.PaymentStatusName))
-                                    {
-                                        <div class="flex-shrink-0 mt-sm-0 mt-3 ">
-                                            <label class="form-label">Payment Status</label>
-                                            <p class="text-muted text-uppercase">@firstItem.PaymentStatusName</p>
-                                        </div>
-                                    }
+                                    <div class="flex-shrink-0 mt-sm-0 mt-3 ">
+                                        <p class="text-muted" style="height: 15px;">Invoice No</p>
+                                        <p class="text-muted text-uppercase" style="height: 15px;"><b>@Model.InvoiceNo</b></p>
+                                    </div>
+                                    <div style="border: 0px solid lightgray;border-width:0.5px;margin:-8px;width:107%;"></div>
+                                    <div class="flex-shrink-0 mt-sm-0 mt-3 ">
+                                        <p class="text-muted" style="padding:4px;padding-left: 0px;height: 15px;">Delivery Note</p>
+                                        <p class="text-muted text-uppercase" style="height: 15px;"><b></b></p>
+                                    </div>
+                                    <div style="border: 0px solid lightgray;border-width:0.5px;margin:-8px;width:107%;"></div>
+                                    <div class="flex-shrink-0 mt-sm-0 mt-3 ">
+                                        <p class="text-muted" style="padding:4px;padding-left: 0px;height: 15px;">Reference No. & Date</p>
+                                        <p class="text-muted text-uppercase" style="height: 15px;"><b></b></p>
+                                    </div>
+                                    <div style="border: 0px solid lightgray;border-width:0.5px;margin:-8px;width:107%;"></div>
+                                    <div class="flex-shrink-0 mt-sm-0 mt-3 ">
+                                        <p class="text-muted" style="padding:4px;padding-left: 0px;height: 15px;">Buyer's Order No.</p>
+                                        <p class="text-muted text-uppercase" style="height: 15px;"><b>@Model.BuyesOrderNo</b></p>
+                                    </div>
+                                    <div style="border: 0px solid lightgray;border-width:0.5px;margin:-8px;width:107%;"></div>
+                                    <div class="flex-shrink-0 mt-sm-0 mt-3 ">
+                                        <p class="text-muted" style="padding:4px;padding-left: 0px;height: 15px;">Dispatch Doc No.</p>
+                                        <p class="text-muted text-uppercase" style="height: 15px;"><b></b></p>
+                                    </div>
+                                    <div style="border: 0px solid lightgray;border-width:0.5px;margin:-8px;width:107%;"></div>
+                                    <div class="flex-shrink-0 mt-sm-0 mt-3 ">
+                                        <p class="text-muted" style="padding:4px;padding-left: 0px;height: 15px;">Dispatched Through</p>
+                                        <p class="text-muted text-uppercase" style="height: 15px;"><b>@Model.DispatchThrough</b></p>
+                                    </div>
+                                    <div style="border: 0px solid lightgray;border-width:0.5px;margin:-8px;width:107%;"></div>
+                                    <div class="flex-shrink-0 mt-sm-0 mt-3 ">
+                                        <p class="text-muted" style="padding:4px;padding-left: 0px;height: 15px;">Bill of Landing/LR-PR No.</p>
+                                        <p class="text-muted text-uppercase" style="height: 15px;"><b></b></p>
+                                    </div>
                                 </div>
                                 <div style="border-left: 2px solid lightgray; height: 100%;position: absolute;left: 50%;"></div>
                                 <div class="col-6">
-                                    @if (firstItem?.InvoiceDate != null)
-                                    {
-                                        <div class="flex-shrink-0 mt-sm-0 mt-3 ">
-                                            <label class="form-label">Date</label>
-                                            <p><span class="text-muted fw-normal">@CommonHelper.GetCommonDateFormat(firstItem.InvoiceDate)</span></p>
-                                        </div>
-                                        <div style="border: 0px solid lightgray;border-width:0.5px;margin:-8px;width:105%;"></div>
-                                        <br />
-                                    }
-                                    @if (!string.IsNullOrEmpty(firstItem.BuyesOrderNo))
-                                    {
-                                        <div class="flex-shrink-0 mt-sm-0 mt-3 ">
-                                            <label class="form-label">Buyer's Order No</label>
-                                            <p class="text-muted text-uppercase">@firstItem.BuyesOrderNo</p>
-                                        </div>
-                                        <div style="border: 0px solid lightgray;border-width:0.5px;margin:-8px;width:105%;"></div>
-                                        <br />
-                                    }
-                                    @if (!string.IsNullOrEmpty(firstItem.PaymentMethodName))
-                                    {
-                                        <div class="flex-shrink-0 mt-sm-0 mt-3">
-                                            <label class="form-label">Payment Method</label>
-                                            <p class="text-muted">@firstItem.PaymentMethodName</p>
-                                        </div>
-                                        <div style="border: 0px solid lightgray;border-width:0.5px;margin:-8px;width:105%;"></div>
-                                        <br />
-                                    }
+                                    <div class="flex-shrink-0 mt-sm-0 mt-3 ">
+                                        <p class="text-muted" style="height: 15px;">Dated</p>
+                                        <p style ="height: 15px;"><span class="text-muted fw-normal">@CommonHelper.GetCommonDateFormat(Model.InvoiceDate)</span></p>
+                                    </div>
+                                    <div style="border: 0px solid lightgray;border-width:0.5px;margin:-8px;width:107%;"></div>
+                                    <div class="flex-shrink-0 mt-sm-0 mt-3 ">
+                                        <p class="text-muted" style="padding:4px;padding-left: 0px;height: 15px;">Model/Terms of Payment</p>
+                                        <p class="text-muted text-uppercase" style="height: 15px;"><b></b></p>
+                                    </div>
+                                    <div style="border: 0px solid lightgray;border-width:0.5px;margin:-8px;width:107%;"></div>
+                                    <div class="flex-shrink-0 mt-sm-0 mt-3">
+                                        <p class="text-muted" style="padding:4px;padding-left: 0px;height: 15px;">Other Refrences</p>
+                                        <p class="text-muted text-uppercase" style="height: 15px;"><b></b></p>
+                                    </div>
+                                    <div style="border: 0px solid lightgray;border-width:0.5px;margin:-8px;width:107%;"></div>
+                                    <div class="flex-shrink-0 mt-sm-0 mt-3 ">
+                                        <p class="text-muted" style="padding:4px;padding-left: 0px;height: 15px;">Dated</p>
+                                        <p class="text-muted text-uppercase" style="height: 15px;"><b></b></p>
+                                    </div>
+                                    <div style="border: 0px solid lightgray;border-width:0.5px;margin:-8px;width:107%;"></div>
+                                    <div class="flex-shrink-0 mt-sm-0 mt-3 ">
+                                        <p class="text-muted" style="padding:4px;padding-left: 0px;height: 15px;">Delivery Note Date</p>
+                                        <p class="text-muted text-uppercase" style="height: 15px;"><b></b></p>
+                                    </div>
+                                    <div style="border: 0px solid lightgray;border-width:0.5px;margin:-8px;width:107%;"></div>
+                                    <div class="flex-shrink-0 mt-sm-0 mt-3 ">
+                                        <p class="text-muted" style="padding:4px;padding-left: 0px;height: 15px;">Destination</p>
+                                        <p class="text-muted text-uppercase" style="height: 15px;"><b></b></p>
+                                    </div>
+                                    <div style="border: 0px solid lightgray;border-width:0.5px;margin:-8px;width:107%;"></div>
+                                    <div class="flex-shrink-0 mt-sm-0 mt-3 ">
+                                        <p class="text-muted" style="padding:4px;padding-left: 0px;height: 15px;">Motor Vehicle No.</p>
+                                        <p class="text-muted text-uppercase" style="height: 15px;"><b></b></p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     <div class="d-flex Address-Details">
-                        <div class="flex-grow-1 col-6">
+                        <div class="flex-grow-1 col-6">                 
                             <p class="text-muted"><b>Buyer (Bill to)</b></p>
-                            <span class="text-muted text-uppercase"><b>@firstItem.CompanyName</b></span><br />
-                            <span class="text-muted text-uppercase">@firstItem.CompanyAddress</span><br />
-                            <p class="text-muted text-uppercase"><b>GSTIN/UIN :@firstItem.CompanyGstNo</b></p>
+                            <span class="text-muted"><b>@firstItem.CompanyName</b></span><br />
+                            <span class="text-muted">@firstItem.CompanyAddress</span><br />
+                            <p class="text-muted text-uppercase">GSTIN/UIN :@firstItem.CompanyGstNo</p>
                         </div>
                         <div class="VerticalBorder"></div>
                         <div class="flex-grow-1 col-6">
-                            <label class="form-label">Terms of Delivery</label>
-                            <p class="text-muted">Dispatched from Rakhial,Ahemdabad</p>
+                            <p class="text-muted">Terms of Delivery</p>
+                            <p class="text-muted"></p>
                         </div>
                     </div>
-                    <br />
                     <table class="table text-center align-middle manual_invoice-table" style="border: 1px solid lightgray;">
                         <thead class="table-info text-muted">
                             <tr class="table-active" style="border: 1px solid lightgray;">
                                 <th class="border">SINo.</th>
-                                <th class="border">Product Details</th>
-                                <th class="border">Price</th>
+                                <th class="border">Description of Goods</th>
+                                <th class="border">HSN/SAC</th>
                                 <th class="border">Quantity</th>
-                                <th class="border">Product Type</th>
-                                <th class="border">Discount</th>
+                                <th class="border">Rate</th>
+                                <th class="border">per</th>
                                 <th class="border">Amount</th>
-                                <th class="border">Total Amount</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -168,41 +175,30 @@
                                 int index = 1;
                                 decimal? subtotal = 0;
                                 decimal? totalAmt = 0;
+                                decimal? totalqty = 0;
                             }
                             @foreach (var item in Model.ManualInvoiceDetails)
                             {
                                 subtotal = (item.Quantity * item.Price);
                                 var SubTotal = string.Format("{0:n2}", subtotal);
                                 totalAmt = (item.Quantity * item.Price) - item.Discount;
-
+                                totalqty += item.Quantity;
                                 <tr>
                                     <td class="border">@index</td>
                                     <td class="text-start border">
                                         <span class="fw-medium" id="txtproductname">@item.Product</span>
                                     </td>
+                                    <td class="border" id="txtper">@item.Hsn</td>
+                                    <td class="border" id="txtquantity">@item.Quantity @item.ProductTypeName</td>
                                     <td class="border" id="txtHSN">@item.Price</td>
-                                    <td class="border" id="txtquantity">@item.Quantity</td>
                                     <td class="border" id="txtper">@item.ProductTypeName</td>
-                                    <td class="border" id="txtper">@item.Discount</td>
                                     <td class="border" id="txttotal">₹@SubTotal</td>
-                                    <td class="border" id="txttotal"><b>₹@totalAmt</b></td>
                                 </tr>
                                 index++;
                             }
                             <tr>
-                                <td><div class="ProductTotalHR"></div></td>
-                                <td><div class="ProductTotalHR"></div></td>
-                                <td><div class="ProductTotalHR"></div></td>
-                                <td><div class="ProductTotalHR"></div></td>
-                                <td><div class="ProductTotalHR"></div></td>
-                                <td><div class="ProductTotalHR"></div></td>
-                                <td><div class="ProductTotalHR"></div></td>
-                                <td><div class="ProductTotalHR"></div></td>
-                            </tr>
-                            <tr>
                                 <td class="border"></td>
                                 <td class="text-end border">GST</td>
-                                <td class="border"></td>
                                 <td class="border"></td>
                                 <td class="border"></td>
                                 <td class="border"></td>
@@ -216,31 +212,28 @@
                                 <td class="border"></td>
                                 <td class="border"></td>
                                 <td class="border"></td>
-                                <td class="border"></td>
                                 <td class="border">@firstItem.RoundOff</td>
                             </tr>
                             <tr>
                                 <td class="border"></td>
                                 <td class="text-end border">Total</td>
                                 <td class="border"></td>
-                                <td class="border"></td>
-                                <td class="border"></td>
+                                <td class="border">@totalqty</td>
                                 <td class="border"></td>
                                 <td class="border"></td>
                                 <td class="border"><b>₹@firstItem.TotalAmount</b></td>
                             </tr>
                         </tbody>
                     </table><!--end table-->
-                    <div class="flex-grow-1 col-12">
-                        <span class="text-muted">Amount Chargeable (in words)</span><br />
+                    <div class="flex-grow-1 col-12" style="border: 1px solid lightgray;">
+                        <span class="text-muted">Amount Chargeable (in words)<i style="margin-left: 780px" ;>E. &amp; O.E</i></span><br />
                         <p class="text-muted text-capitalize"><b>INR @ViewData["TotalAmountInWords"]</b></p>
                     </div>
                     <table class="table text-center align-middle manual_invoice-table" style="border: 1px solid lightgray;">
                         <thead class="table-info text-muted">
                             <tr class="table-active" style="border: 1px solid lightgray;">
-                                <th class="border">HSN / SAC</th>
+                                <th class="border">HSN/SAC</th>
                                 <th class="border">Taxable value</th>
-                                <th class="border">Discount</th>
                                 <th class="border">GST%</th>
                                 <th class="border">Amount</th>
                                 <th class="border">Total Tax Amount</th>
@@ -252,18 +245,15 @@
                                 decimal? subTotal = 0;
                                 decimal? GstAmount = 0;
                                 decimal? TotalofSubtotal = 0;
-                                decimal? DiscountTotal = 0;
                             }
                             @foreach (var item in Model.ManualInvoiceDetails)
                             {
                                 subTotal = (item.Quantity * item.Price);
                                 GstAmount = (subtotal * item.Gst) / 100;
                                 TotalofSubtotal += subTotal;
-                                DiscountTotal += item.Discount;
                                 <tr>
                                     <td class="border">@item.Hsn</td>
                                     <td class="border">₹@subTotal</td>
-                                    <td class="border">₹@item.Discount</td>
                                     <td class="border">@item.Gst%</td>
                                     <td class="border">@GstAmount?.ToString("0.00")</td>
                                     <td class="border"><b>₹@GstAmount?.ToString("0.00")</b></td>
@@ -271,43 +261,48 @@
                                 Index++;
                             }
                             <tr>
-                                <td class="border">Total</td>
+                                <td class="text-end border">Total</td>
                                 <td class="border"><b>₹@TotalofSubtotal</b></td>
-                                <td class="border"><b>₹@DiscountTotal</b></td>
-                                <td class="border"><b>₹@DiscountTotal</b></td>
+                                <td class="border"></td>
                                 <td class="border"><b>@firstItem.TotalGst</b></td>
                                 <td class="border"><b>₹@firstItem.TotalGst</b></td>
                             </tr>
                         </tbody>
                     </table><!--end table-->
-                    <span class="text-muted">Tax Amount (in words) : </span>
-                    <span class="text-muted text-capitalize"><b>INR @ViewData["TotalGstInWords"]</b></span>
-                    <br />
-                    <div class="d-flex" style="border: 1px solid lightgray;">
-                        <div class="flex-grow-1 col-6">
-                            <p class="text-muted">Company's PAN : <span> </span><span class="text-muted"><b></b></span></p>
-                            <span class="text-muted"><u>Description</u></span><br />
-                            <span class="text-muted"></span><br />
-                        </div>
-                        <div class="flex-grow-1 col-6">
-                            <span class="form-label">Company's Bank Details</span><br />
-                            <span class="text-muted"> Bank Name :  <span><b></b></span></span> <br />
-                            <span class="text-muted"> A/c No :  <span><b></b></span></span> <br />
-                            <p class="text-muted">Branch & IFS Code  :       <span><b></b></span></p>
-                            <div class="text-end p-1" style="border: 1px solid lightgray; height:70px;">
-                                <p class="text-muted"><b></b></p>
+                    <div class="flex-grow-1 col-12" style="border: 1px solid lightgray;">
+                        <span class="text-muted">Tax Amount (in words) :</span><br />
+                        <p class="text-muted text-capitalize"><b>INR @ViewData["TotalGstInWords"]</b></p>
+                        <div class="d-flex">
+                            <div class="flex-grow-1 col-6">
                                 <br />
-                                <p class="text-muted" style="margin-bottom:-6px;">Authorised Signatory</p>
+                                <br />
+                                <span class="text-muted"><u>Declaration</u></span><br />
+                                <span class="text-muted">We declare that this invoice shows the actual price of the goods and that app particulars are true and correct.</span><br />
+                            </div>
+                            <div class="flex-grow-1 col-6">
+                                <br />
+                                <br />
+                                <div class="text-end p-1" style="border: 1px solid lightgray; height:100px; width:516px;">
+                                    <p class="text-muted"><b>for BONIFATIUS TECHNOLOGIES PRIVATE LIMITED</b></p>
+                                    <p class="text-muted" style="margin-top:45px;">Authorised Signatory</p>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="card d-print-none">
-                        <div class="card-body">
-                            <div class="d-lg-flex align-items-center gap-3">
-                                <a id="PrintManualInvoicePage" class="btn btn-primary btn-ecomm" style="margin-left: 950px;width: 185px;"><i class="fadeIn animated bx bx-printer"></i>Print</a>
-                            </div>
-                        </div>
+                    <div class="d-flex" style="border: 1px solid lightgray;">
+                        
                     </div>
+                </div>
+                <div class="d-flex">
+                    <p style="margin-left: 400px;">This is a Computer Generated Invoice</p>
+                </div>
+            </div>
+        </div>
+       
+        <div class="card d-print-none">
+            <div class="card-body">
+                <div class="d-lg-flex align-items-center gap-3">
+                    <a id="PrintManualInvoicePage" class="btn btn-primary btn-ecomm" style="margin-left: 950px;width: 185px;"><i class="fadeIn animated bx bx-printer"></i>Print</a>
                 </div>
             </div>
         </div>
@@ -315,8 +310,6 @@
 </div>
 
 @section Scripts {
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/moduls/manualinvoicescript.js" asp-append-version="true"></script>
     <script type="text/javascript">
         var userPermissions = '@Html.Raw(Json.Serialize(UserSession.FormPermisionData))';
     </script>
