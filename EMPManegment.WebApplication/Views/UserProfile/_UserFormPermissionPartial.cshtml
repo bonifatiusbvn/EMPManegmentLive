@@ -5,30 +5,35 @@
 
 @foreach (var item in Model)
 {
-    <tr id="templateRow_@Convert.ToInt64(item.RowNumber + 1)" class="forms gridjs-tr" data-product-id="@item.FormId">
-        <td class="gridjs-td">
+    <tr id="templateRow_@Convert.ToInt64(item.RowNumber + 1)" class="forms" data-product-id="@item.FormId">
+        <td>
             <h6 class="pt-1" id="formName" data-product-id="@item.FormId">@item.FormName</h6>
             <input type="text" id="textUserId" value="@item.UserId" hidden />
             <input type="text" id="textFormId" value="@item.FormId" hidden />
         </td>
-        <td class="gridjs-td">
+        <td>
             <div class="form-check form-switch form-switch-success">
-                <input class="form-check-input" type="checkbox" id="txtIsAdd" name="txtIsAdd" @(item.IsAddAllow ? "checked" : "")>
+                <input class="form-check-input user-checkbox" type="checkbox" id="txtIsAdd_@item.FormId" name="txtIsAdd" @(item.IsAddAllow ? "checked" : "") onchange="userUpdateSelectAll('@item.FormId')">
             </div>
         </td>
-        <td class="gridjs-td">
+        <td>
             <div class="form-check form-switch form-switch-success">
-                <input class="form-check-input" type="checkbox" id="txtIsView" name="txtIsView" @(item.IsViewAllow ? "checked" : "")>
+                <input class="form-check-input user-checkbox" type="checkbox" id="txtIsView_@item.FormId" name="txtIsView" @(item.IsViewAllow ? "checked" : "") onchange="userUpdateSelectAll('@item.FormId')">
             </div>
         </td>
-        <td class="gridjs-td">
+        <td>
             <div class="form-check form-switch form-switch-success">
-                <input class="form-check-input" type="checkbox" id="txtIsEdit" name="txtIsEdit" @(item.IsEditAllow ? "checked" : "")>
+                <input class="form-check-input user-checkbox" type="checkbox" id="txtIsEdit_@item.FormId" name="txtIsEdit" @(item.IsEditAllow ? "checked" : "") onchange="userUpdateSelectAll('@item.FormId')">
             </div>
         </td>
-        <td class="gridjs-td">
+        <td>
             <div class="form-check form-switch form-switch-success">
-                <input class="form-check-input" type="checkbox" id="txtIsDelete" name="txtIsDelete" @(item.IsDeleteAllow ? "checked" : "")>
+                <input class="form-check-input user-checkbox" type="checkbox" id="txtIsDelete_@item.FormId" name="txtIsDelete" @(item.IsDeleteAllow ? "checked" : "") onchange="userUpdateSelectAll('@item.FormId')">
+            </div>
+        </td>
+        <td>
+            <div class="form-check">
+                <input class="form-check-input form-check-input-all" type="checkbox" id="userCheckboxAll_@item.FormId" name="chk_child" data-Id="@item.UserId" onclick="userCheckboxes('@item.FormId')" @(item.IsAddAllow && item.IsViewAllow && item.IsEditAllow && item.IsDeleteAllow ? "checked" : "")>
             </div>
         </td>
     </tr>
