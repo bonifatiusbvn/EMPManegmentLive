@@ -16,10 +16,10 @@ namespace EMPManegment.Inretface.Interface.UserAttendance
         Task<UserAttendanceResponseModel> GetUserAttendanceInTime(UserAttendanceRequestModel getAttendanceInTime);
         //Task<IEnumerable<UserAttendanceModel>> EditUserOutTime(UserAttendanceModel userAttendance);
    
-        Task<IEnumerable<UserAttendanceModel>> GetAttendanceList(SearchAttendanceModel GetAttendanceList);
+        Task<jsonData> GetAttendanceList(MyAttendanceRequestDataTableModel AttendanceRequestModel);
         Task<jsonData> GetUserAttendanceList(DataTableRequstModel GetAttendanceList);
         Task<UserResponceModel> UpdateUserOutTime(UserAttendanceModel UpdateUserOutTime);
         Task<IEnumerable<UserAttendanceModel>> GetUserAttendanceById(int attendanceId);
-        Task<IEnumerable<UserAttendanceModel>> GetSearchAttendanceList(searchAttendanceListModel GetSearchAttendanceList);
+        Task<jsonData> GetSearchAttendanceList(AttendanceRequestDataTableModel AttendanceRequestModel);
     }
 }

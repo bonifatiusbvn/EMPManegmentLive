@@ -268,84 +268,6 @@ function UpdateUserAttendance() {
     }
 }
 
-
-function GetMyAttendance() {
-    if ($('#txtmonth').val() == "" && $("#txtstartdate").val() == "" && $("#txtenddate").val() == "") {
-        toastr.warning("Select the Month or UserName");
-    }
-    else {
-        var form_data = new FormData();
-        form_data.append("Cmonth", $('#txtmonth').val());
-        form_data.append("StartDate", $("#txtstartdate").val());
-        form_data.append("EndDate", $("#txtenddate").val());
-        $.ajax({
-            url: '/UserProfile/GetAttendanceList',
-            type: 'Post',
-            datatype: 'json',
-            data: form_data,
-            processData: false,
-            contentType: false,
-            success: function (Result, status, xhr) {
-                var object = '';
-                $.each(Result, function (index, item) {
-                    var formattedDate = getCommonDateformat(item.date);
-                    var todate = new Date().toLocaleDateString('en-US');
-                    var date = (new Date(item.date)).toLocaleDateString('en-US')
-                    object += '<tr>';
-                    object += '<td>' + item.userName + '</td>';
-                    object += '<td>' + formattedDate + '</td>';
-                    object += '<td>' + (new Date(item.intime)).toLocaleTimeString('en-US') + '</td>';
-                    //---------OutTime---------//
-                    if (item.outTime != null) {
-                        object += '<td>' +
-                            (new Date(item.outTime)).toLocaleTimeString('en-US') + '</td>';
-                    }
-                    else if (item.outTime == null && date == todate) {
-
-                        object += '<td>' +
-                            ("Pending") + '</td>';
-                    }
-                    else {
-                        object += '<td>' +
-                            ("Missing") + '</td>';
-                    }
-                    //---------TotalHours--------//
-                    if (item.totalHours != null) {
-                        object += '<td>' +
-                            (item.totalHours?.substr(0, 8)) + ('hr') + '</td>';
-                    }
-                    else if (item.totalHours == null && date == todate) {
-                        object += '<td>' +
-                            ("Pending") + '</td>';
-                    }
-                    else {
-                        object += '<td>' +
-                            ("Missing") + '</td>';
-                    }
-                });
-                if (Result.message != null) {
-                    var msg = '';
-                    msg += '<td>' +
-                        (Result.message) + '</td>'; msg += '<td>' +
-                            (Result.message) + '</td>'; msg += '<td>' +
-                                (Result.message) + '</td>'; msg += '<td>' +
-                                    (Result.message) + '</td>';
-                    msg += '<td>' +
-                        (Result.message) + '</td>';
-                    $('#TableDataAttendanceList').html(msg);
-                    $("#attendancepdfexcel").hide();
-                    return
-
-                }
-                else {
-                    $('#TableDataAttendanceList').html(object);
-                    $("#attendancepdfexcel").show();
-                }
-            }
-
-        });
-    }
-};
 function formatDate(date) {
     var day = String(date.getDate()).padStart(2, '0');
     var month = String(date.getMonth() + 1).padStart(2, '0');
@@ -354,8 +276,26 @@ function formatDate(date) {
     return day + '-' + month + '-' + year;
 }
 
-function GetSearchAttendanceList() {
+var datas = userPermissions;
 
+function GetSearchAttendanceList() {
+    var UserPermissionData = datas;
+    $.ajax({
+        url: '/UserProfile/GetSearchAttendanceList',
+        type: 'GET',
+        success: function (result) {
+            
+            $("#attendancedt").hide();
+            $("#dvattendancelist").html(result);
+            fn_SearchUserAttendanceList(UserPermissionData);
+        },
+        error: function () {
+            alert('Error loading attendance list. Please try again.');
+        }
+    });
+}
+
+function fn_SearchUserAttendanceList(UserPermissionData) {
     var selectedValue = $('#ddlatendanceser').data('value');
     var isValid = true;
     var errorMessage = "Kindly fill all required fields";
@@ -378,40 +318,226 @@ function GetSearchAttendanceList() {
     }
 
     if (isValid) {
-        var form_data = new FormData();
-        form_data.append("Date", $('#txtdate').val());
-        form_data.append("UserId", $("#drpAttusername").val());
-        form_data.append("StartDate", $("#txtstartdatebox").val());
-        form_data.append("EndDate", $("#txtenddatebox").val());
-
-        $.ajax({
-            url: '/UserProfile/GetSearchAttendanceList',
-            type: 'POST',
-            datatype: 'json',
-            data: form_data,
-            processData: false,
-            contentType: false,
-            complete: function (Result) {
-                $("#attendancedt").hide();
-                $("#backbtn").show();
-                if (Result.responseText != '{"code":400}') {
-                    $("#dvattendancelist").show();
-                    $("#dvattendancelist").html(Result.responseText);
-                } else {
-                    toastr.warning("No Data Found On Selected Username Or Dates!!");
-                    $("#dvattendancelist").hide();
-                }
-            }
-        });
+        var FilterData = {
+            Date: $('#txtdate').val(),
+            UserId: $("#drpAttusername").val(),
+            StartDate: $("#txtstartdatebox").val(),
+            EndDate: $("#txtenddatebox").val()
+        }
+        GetUserSearchAttendanceList(FilterData, UserPermissionData);
     } else {
-
         $("#backbtn").hide();
         toastr.warning(errorMessage);
     }
 }
 
+function GetUserSearchAttendanceList(FilterData, UserPermissionData) {
+    var userPermissionArray = JSON.parse(UserPermissionData);
+    var canEdit = userPermissionArray.some(permission => permission.formName === "Users Attendance" && permission.edit);
+    var columns = [
+        { "data": "userName", "name": "UserName" },
+        {
+            "data": "date", "name": "Date",
+            "render": function (data) {
+                return getCommonDateformat(data);
+            }
+        },
+        {
+            "data": "intime", "name": "InTime",
+            "render": function (data) {
+                return new Date(data).toLocaleTimeString('en-US');
+            }
+        },
+        {
+            "data": "outTime", "name": "OutTime",
+            "render": function (data, type, full) {
+                var userDate = new Date(full.date).toLocaleDateString('en-US');
+                var todayDate = new Date().toLocaleDateString('en-US');
+                if (data) {
+                    return new Date(data).toLocaleTimeString('en-US');
+                } else if (userDate === todayDate) {
+                    return "Pending...";
+                } else {
+                    return "Missing";
+                }
+            }
+        },
+        {
+            "data": "totalHours", "name": "TotalHours",
+            "render": function (data, type, full) {
+                var userDate = new Date(full.date).toLocaleDateString('en-US');
+                var todayDate = new Date().toLocaleDateString('en-US');
+                if (full.totalHours) {
+                    return full.totalHours.substr(0, 8) + ' hr';
+                } else if (userDate === todayDate) {
+                    return "Pending...";
+                } else {
+                    return "Missing";
+                }
+            }
+        },
+    ];
 
+    if (canEdit) {
+        columns.push({
+            "data": null,
+            "orderable": false,
+            "searchable": false,
+            "render": function (data, type, full) {
+                return '<a onclick="editUserAttendanceSrc(\'' + full.attendanceId + '\')" class="btn text-primary">' +
+                    '<i class="fa-regular fa-pen-to-square"></i></a>';
+            }
+        });
+    }
 
+    $('#FilterAttendanceTable').DataTable({
+        processing: false,
+        serverSide: true,
+        filter: true,
+        destroy: true,
+        pageLength: 30,
+        lengthMenu: [[10, 25, 30, 50, -1], [10, 25, 30, 50, "All"]],
+        ajax: {
+            type: "POST",
+            url: '/UserProfile/GetUserSearchAttendanceList',
+            dataType: 'json',
+            data: FilterData,
+        },
+        columns: columns,
+        scrollY: 400,
+        scrollX: true,
+        scrollCollapse: true,
+        fixedHeader: {
+            header: true,
+            footer: true
+        },
+        autoWidth: false,
+        columnDefs: [
+            {
+                targets: '_all', width: 'auto'
+            }
+        ],
+        order: [[1, 'asc']]
+    });
+}
+function GetMySearchAttendanceList() {
+    var UserPermissionData = datas;
+    $.ajax({
+        url: '/UserProfile/GetSearchAttendanceList',
+        type: 'GET',
+        success: function (result) {
+
+            $("#attendancedt").hide();
+            $("#GetMyAttendanceList").html(result);
+            fn_SearchMyAttendanceList(UserPermissionData);
+        },
+        error: function () {
+            alert('Error loading attendance list. Please try again.');
+        }
+    });
+}
+function fn_SearchMyAttendanceList(UserPermissionData) {
+    if ($('#txtmonth').val() == "" && $("#txtstartdate").val() == "" && $("#txtenddate").val() == "") {
+        toastr.warning("Select the Month or UserName");
+    } else {
+        var FilterData = {
+            Cmonth: $('#txtmonth').val(),
+            StartDate: $("#txtstartdate").val(),
+            EndDate: $("#txtenddate").val()
+        }
+        MySearchAttendanceList(UserPermissionData, FilterData);
+    }
+}
+
+function MySearchAttendanceList(UserPermissionData, FilterData) {
+    var userPermissionArray = JSON.parse(UserPermissionData);
+    var canEdit = userPermissionArray.some(permission => permission.formName === "Users Attendance" && permission.edit);
+    var columns = [
+        { "data": "userName", "name": "UserName" },
+        {
+            "data": "date", "name": "Date",
+            "render": function (data) {
+                return getCommonDateformat(data);
+            }
+        },
+        {
+            "data": "intime", "name": "InTime",
+            "render": function (data) {
+                return new Date(data).toLocaleTimeString('en-US');
+            }
+        },
+        {
+            "data": "outTime", "name": "OutTime",
+            "render": function (data, type, full) {
+                var userDate = new Date(full.date).toLocaleDateString('en-US');
+                var todayDate = new Date().toLocaleDateString('en-US');
+                if (data) {
+                    return new Date(data).toLocaleTimeString('en-US');
+                } else if (userDate === todayDate) {
+                    return "Pending...";
+                } else {
+                    return "Missing";
+                }
+            }
+        },
+        {
+            "data": "totalHours", "name": "TotalHours",
+            "render": function (data, type, full) {
+                var userDate = new Date(full.date).toLocaleDateString('en-US');
+                var todayDate = new Date().toLocaleDateString('en-US');
+                if (full.totalHours) {
+                    return full.totalHours.substr(0, 8) + ' hr';
+                } else if (userDate === todayDate) {
+                    return "Pending...";
+                } else {
+                    return "Missing";
+                }
+            }
+        },
+    ];
+
+    if (canEdit) {
+        columns.push({
+            "data": null,
+            "orderable": false,
+            "searchable": false,
+            "render": function (data, type, full) {
+                return '<a onclick="editUserAttendanceSrc(\'' + full.attendanceId + '\')" class="btn text-primary">' +
+                    '<i class="fa-regular fa-pen-to-square"></i></a>';
+            }
+        });
+    }
+
+    $('#FilterAttendanceTable').DataTable({
+        processing: false,
+        serverSide: true,
+        filter: true,
+        destroy: true,
+        pageLength: 30,
+        lengthMenu: [[10, 25, 30, 50, -1], [10, 25, 30, 50, "All"]],
+        ajax: {
+            type: "POST",
+            url: '/UserProfile/GetAttendanceList',
+            dataType: 'json',
+            data: FilterData,
+        },
+        columns: columns,
+        scrollY: 400,
+        scrollX: true,
+        scrollCollapse: true,
+        fixedHeader: {
+            header: true,
+            footer: true
+        },
+        autoWidth: false,
+        columnDefs: [
+            {
+                targets: '_all', width: 'auto'
+            }
+        ],
+        order: [[1, 'asc']]
+    });
+}
 $('#backbtn').on('click', function (event) {
     window.location = '/UserProfile/UsersAttendance';
 });
@@ -488,7 +614,7 @@ function UpdateUserAttendanceSrc() {
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'OK'
                     }).then(function () {
-                        window.location = '/UserProfile/GetAllUsersAttendanceList';
+                        window.location = '/UserProfile/UsersAttendance';
                     });
                 }
             },

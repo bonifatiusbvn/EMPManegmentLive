@@ -188,95 +188,79 @@ namespace EMPManegment.Repository.UserAttendanceRepository
                                                               };
             return attendanceById;
         }
-        public async Task<IEnumerable<UserAttendanceModel>> GetAttendanceList(SearchAttendanceModel GetAttendanceList)
-        {
-            try
-            {
-                IEnumerable<UserAttendanceModel> userAttendance = null;
-                if (GetAttendanceList.Cmonth != null && GetAttendanceList.Cmonth != DateTime.MinValue)
-                {
-                    IEnumerable<UserAttendanceModel> userAttendance1 = from a in Context.TblAttendances
-                                                                       join
-                                                                       b in Context.TblUsers on a.User.Id equals b.Id
-                                                                       where (b.Id == GetAttendanceList.UserId && (a.Date.Month == Convert.ToDateTime(GetAttendanceList.Cmonth).Month && a.Date.Year == Convert.ToDateTime(GetAttendanceList.Cmonth).Year))
-                                                                       orderby a.Date descending
-                                                                       select new UserAttendanceModel
-                                                                       {
-                                                                           UserName = b.FirstName + ' ' + b.LastName,
-                                                                           UserId = a.UserId,
-                                                                           AttendanceId = a.Id,
-                                                                           Date = a.Date,
-                                                                           Intime = a.Intime,
-                                                                           OutTime = a.OutTime,
-                                                                           TotalHours = a.TotalHours,
-                                                                           CreatedBy = a.CreatedBy,
-                                                                           CreatedOn = a.CreatedOn,
-                                                                       };
-                    return userAttendance1;
-                }
-                else
-                {
-                    if (GetAttendanceList.StartDate != null && GetAttendanceList.EndDate != null && GetAttendanceList.StartDate != DateTime.MinValue && GetAttendanceList.EndDate != DateTime.MinValue)
-                    {
-                        userAttendance = from a in Context.TblAttendances
-                                         join b in Context.TblUsers on a.User.Id equals b.Id
-                                         where (b.Id == GetAttendanceList.UserId && a.Date >= GetAttendanceList.StartDate && a.Date <= GetAttendanceList.EndDate)
-                                         orderby a.Date descending
-                                         select new UserAttendanceModel
-                                         {
-                                             UserName = b.FirstName + ' ' + b.LastName,
-                                             UserId = a.UserId,
-                                             AttendanceId = a.Id,
-                                             Date = a.Date,
-                                             Intime = a.Intime,
-                                             OutTime = a.OutTime,
-                                             TotalHours = a.TotalHours,
-                                             CreatedBy = a.CreatedBy,
-                                             CreatedOn = a.CreatedOn,
-                                         };
-
-                        return userAttendance;
-                    }
-                    else
-                    {
-                        DateTime date = DateTime.Today;
-                        userAttendance = from a in Context.TblAttendances
-                                         join
-                                         b in Context.TblUsers on a.User.Id equals b.Id
-                                         where (b.Id == GetAttendanceList.UserId && (a.Date.Month == Convert.ToDateTime(date).Month && a.Date.Year == Convert.ToDateTime(date).Year))
-                                         orderby a.Date descending
-                                         select new UserAttendanceModel
-                                         {
-                                             UserName = b.FirstName + ' ' + b.LastName,
-                                             UserId = a.UserId,
-                                             AttendanceId = a.Id,
-                                             Date = a.Date,
-                                             Intime = a.Intime,
-                                             OutTime = a.OutTime,
-                                             TotalHours = a.TotalHours,
-                                             CreatedBy = a.CreatedBy,
-                                             CreatedOn = a.CreatedOn,
-                                         };
-
-                        return userAttendance;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-        public async Task<IEnumerable<UserAttendanceModel>> GetSearchAttendanceList(searchAttendanceListModel AttendanceList)
+        public async Task<jsonData> GetAttendanceList(MyAttendanceRequestDataTableModel AttendanceRequestModel)
         {
             try
             {
                 List<SqlParameter> parameters = new List<SqlParameter>
                 {
-                    new SqlParameter("@UserId", AttendanceList.UserId ?? (object)DBNull.Value),
-                    new SqlParameter("@Date", AttendanceList.Date != DateTime.MinValue ? (object)AttendanceList.Date : DBNull.Value),
-                    new SqlParameter("@StartDate", AttendanceList.StartDate ?? (object)DBNull.Value),
-                    new SqlParameter("@EndDate", AttendanceList.EndDate ?? (object)DBNull.Value)
+                    new SqlParameter("@UserId", AttendanceRequestModel.SearchAttendance.UserId ?? (object)DBNull.Value),
+                    new SqlParameter("@Cmonth", AttendanceRequestModel.SearchAttendance.Cmonth != DateTime.MinValue ? (object)AttendanceRequestModel.SearchAttendance.Cmonth : DBNull.Value),
+                    new SqlParameter("@StartDate", AttendanceRequestModel.SearchAttendance.StartDate ?? (object)DBNull.Value),
+                    new SqlParameter("@EndDate", AttendanceRequestModel.SearchAttendance.EndDate ?? (object)DBNull.Value)
+                };
+
+                string dbConnectionStr = Configuration.GetConnectionString("EMPDbconn");
+                var DS = DbHelper.GetDataSet("spGetMySearchAttendanceList", CommandType.StoredProcedure, parameters.ToArray(), dbConnectionStr);
+
+                List<UserAttendanceModel> userAttendance = new List<UserAttendanceModel>();
+
+                if (DS != null && DS.Tables.Count > 0)
+                {
+                    foreach (DataRow row in DS.Tables[0].Rows)
+                    {
+                        UserAttendanceModel attendance = new UserAttendanceModel
+                        {
+                            UserName = row["UserName"]?.ToString(),
+                            UserId = row["UserId"] != DBNull.Value ? (Guid)row["UserId"] : Guid.Empty,
+                            AttendanceId = row["AttendanceId"] != DBNull.Value ? (int)row["AttendanceId"] : (int?)null,
+                            Date = row["Date"] != DBNull.Value ? (DateTime)row["Date"] : DateTime.MinValue,
+                            Intime = row["Intime"] != DBNull.Value ? (DateTime)row["Intime"] : DateTime.MinValue,
+                            OutTime = row["OutTime"] != DBNull.Value ? (DateTime?)row["OutTime"] : null,
+                            TotalHours = row["TotalHours"] != DBNull.Value ? (TimeSpan?)row["TotalHours"] : null,
+                        };
+                        userAttendance.Add(attendance);
+                    }
+                }
+                if (!string.IsNullOrEmpty(AttendanceRequestModel.DataTable.searchValue))
+                {
+                    userAttendance = userAttendance.Where(e => e.UserName.Contains(AttendanceRequestModel.DataTable.searchValue) || e.Date.ToString().ToLower().Contains(AttendanceRequestModel.DataTable.searchValue.ToLower())).ToList();
+                }
+
+                IQueryable<UserAttendanceModel> queryableExpenseDetails = userAttendance.AsQueryable();
+
+                if (!string.IsNullOrEmpty(AttendanceRequestModel.DataTable.sortColumn) && !string.IsNullOrEmpty(AttendanceRequestModel.DataTable.sortColumnDir))
+                {
+                    queryableExpenseDetails = queryableExpenseDetails.OrderBy(AttendanceRequestModel.DataTable.sortColumn + " " + AttendanceRequestModel.DataTable.sortColumnDir);
+                }
+                var totalRecord = queryableExpenseDetails.Count();
+                var filteredData = queryableExpenseDetails.Skip(AttendanceRequestModel.DataTable.skip).Take(AttendanceRequestModel.DataTable.pageSize).ToList();
+
+                var jsonData = new jsonData
+                {
+                    draw = AttendanceRequestModel.DataTable.draw,
+                    recordsFiltered = totalRecord,
+                    recordsTotal = totalRecord,
+                    data = filteredData
+                };
+
+                return jsonData;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error fetching attendance list", ex);
+            }
+        }
+        public async Task<jsonData> GetSearchAttendanceList(AttendanceRequestDataTableModel AttendanceRequestModel)
+        {
+            try
+            {
+                List<SqlParameter> parameters = new List<SqlParameter>
+                {
+                    new SqlParameter("@UserId", AttendanceRequestModel.SearchAttendance.UserId ?? (object)DBNull.Value),
+                    new SqlParameter("@Date", AttendanceRequestModel.SearchAttendance.Date != DateTime.MinValue ? (object)AttendanceRequestModel.SearchAttendance.Date : DBNull.Value),
+                    new SqlParameter("@StartDate", AttendanceRequestModel.SearchAttendance.StartDate ?? (object)DBNull.Value),
+                    new SqlParameter("@EndDate", AttendanceRequestModel.SearchAttendance.EndDate ?? (object)DBNull.Value)
                 };
 
                 string dbConnectionStr = Configuration.GetConnectionString("EMPDbconn");
@@ -297,22 +281,39 @@ namespace EMPManegment.Repository.UserAttendanceRepository
                             Intime = row["Intime"] != DBNull.Value ? (DateTime)row["Intime"] : DateTime.MinValue,
                             OutTime = row["OutTime"] != DBNull.Value ? (DateTime?)row["OutTime"] : null,
                             TotalHours = row["TotalHours"] != DBNull.Value ? (TimeSpan?)row["TotalHours"] : null,
-
                         };
                         userAttendance.Add(attendance);
                     }
                 }
+                if (!string.IsNullOrEmpty(AttendanceRequestModel.DataTable.searchValue))
+                {
+                    userAttendance = userAttendance.Where(e => e.UserName.Contains(AttendanceRequestModel.DataTable.searchValue) || e.Date.ToString().ToLower().Contains(AttendanceRequestModel.DataTable.searchValue.ToLower())).ToList();
+                }
 
-                return userAttendance;
+                IQueryable<UserAttendanceModel> queryableExpenseDetails = userAttendance.AsQueryable();
+
+                if (!string.IsNullOrEmpty(AttendanceRequestModel.DataTable.sortColumn) && !string.IsNullOrEmpty(AttendanceRequestModel.DataTable.sortColumnDir))
+                {
+                    queryableExpenseDetails = queryableExpenseDetails.OrderBy(AttendanceRequestModel.DataTable.sortColumn + " " + AttendanceRequestModel.DataTable.sortColumnDir);
+                }
+                var totalRecord = queryableExpenseDetails.Count();
+                var filteredData = queryableExpenseDetails.Skip(AttendanceRequestModel.DataTable.skip).Take(AttendanceRequestModel.DataTable.pageSize).ToList();
+
+                var jsonData = new jsonData
+                {
+                    draw = AttendanceRequestModel.DataTable.draw,
+                    recordsFiltered = totalRecord,
+                    recordsTotal = totalRecord,
+                    data = filteredData
+                };
+
+                return jsonData;
             }
             catch (Exception ex)
             {
                 throw new Exception("Error fetching attendance list", ex);
             }
         }
-
-
-
     }
 }
 

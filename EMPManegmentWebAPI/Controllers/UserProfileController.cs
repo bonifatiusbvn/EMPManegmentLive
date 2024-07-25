@@ -274,10 +274,10 @@ namespace EMPManagment.API.Controllers
 
         [HttpPost]
         [Route("GetAttendanceList")]
-        public async Task<IActionResult> GetAttendanceList(SearchAttendanceModel GetAttendanceList)
+        public async Task<IActionResult> GetAttendanceList(MyAttendanceRequestDataTableModel AttendanceRequestModel)
         {
-            IEnumerable<UserAttendanceModel> getAttendanceList = await UserAttendance.GetAttendanceList(GetAttendanceList);
-            return Ok(new { code = (int)HttpStatusCode.OK, data = getAttendanceList.ToList() }); ;
+            var getAttendanceList = await UserAttendance.GetAttendanceList(AttendanceRequestModel);
+            return Ok(new { code = (int)HttpStatusCode.OK, data = getAttendanceList }); ;
         }
 
         [HttpPost]
@@ -290,9 +290,9 @@ namespace EMPManagment.API.Controllers
 
         [HttpPost]
         [Route("GetSearchAttendanceList")]
-        public async Task<IActionResult> GetSearchAttendanceList(searchAttendanceListModel AttendanceList)
+        public async Task<IActionResult> GetSearchAttendanceList(AttendanceRequestDataTableModel AttendanceRequestModel)
         {
-            var Attendancelist = await UserAttendance.GetSearchAttendanceList(AttendanceList);
+            var Attendancelist = await UserAttendance.GetSearchAttendanceList(AttendanceRequestModel);
             return Ok(new { code = (int)HttpStatusCode.OK, data = Attendancelist });
         }
 

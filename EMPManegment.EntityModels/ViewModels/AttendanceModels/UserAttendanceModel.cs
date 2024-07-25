@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EMPManegment.EntityModels.ViewModels.DataTableParameters;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -51,5 +52,15 @@ namespace EMPManegment.EntityModels.ViewModels.Models
         public DateTime? Date { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
+    }
+    public class AttendanceRequestDataTableModel
+    {
+        public searchAttendanceListModel? SearchAttendance { get; set; }
+        public DataTableRequstModel? DataTable { get; set; }
+    }
+    public class MyAttendanceRequestDataTableModel
+    {
+        public SearchAttendanceModel? SearchAttendance { get; set; }
+        public DataTableRequstModel? DataTable { get; set; }
     }
 }

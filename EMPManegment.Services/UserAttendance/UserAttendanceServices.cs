@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 
 namespace EMPManegment.Services.UserAttendance
@@ -41,13 +42,13 @@ namespace EMPManegment.Services.UserAttendance
             return UserAttendance.GetUserAttendanceById(GetattendanceId);
         }
 
-        public Task<IEnumerable<UserAttendanceModel>> GetAttendanceList(SearchAttendanceModel GetAttendanceList)
+        public Task<jsonData> GetAttendanceList(MyAttendanceRequestDataTableModel AttendanceRequestModel)
         {
-            return UserAttendance.GetAttendanceList(GetAttendanceList);
+            return UserAttendance.GetAttendanceList(AttendanceRequestModel);
         }
-        public Task<IEnumerable<UserAttendanceModel>> GetSearchAttendanceList(searchAttendanceListModel AttendanceList)
+        public Task<jsonData> GetSearchAttendanceList(AttendanceRequestDataTableModel AttendanceRequestModel)
         {
-            return UserAttendance.GetSearchAttendanceList(AttendanceList);
+            return UserAttendance.GetSearchAttendanceList(AttendanceRequestModel);
         }
     }
 }

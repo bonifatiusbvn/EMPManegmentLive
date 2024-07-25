@@ -695,39 +695,56 @@ namespace EMPManegment.Web.Controllers
         [HttpPost]
         public async Task<JsonResult> GetAttendanceList(SearchAttendanceModel GetAttendanceList)
         {
-            try
+            var draw = Request.Form["draw"].FirstOrDefault();
+            var start = Request.Form["start"].FirstOrDefault();
+            var length = Request.Form["length"].FirstOrDefault();
+            var sortColumn = Request.Form["columns[" + Request.Form["order[1][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
+            var sortColumnDir = Request.Form["order[0][dir]"].FirstOrDefault();
+            var searchValue = Request.Form["search[value]"].FirstOrDefault();
+            int pageSize = length != null ? Convert.ToInt32(length) : 0;
+            int skip = start != null ? Convert.ToInt32(start) : 0;
+
+            var dataTable = new DataTableRequstModel
             {
-                List<UserAttendanceModel> getAttendanceList = new List<UserAttendanceModel>();
-                var data = new SearchAttendanceModel
-                {
-                    UserId = _userSession.UserId,
-                    Cmonth = GetAttendanceList.Cmonth,
-                    StartDate = GetAttendanceList.StartDate,
-                    EndDate = GetAttendanceList.EndDate,
-                };
-                TempData["Cmonth"] = GetAttendanceList.Cmonth;
-                TempData["StartDate"] = GetAttendanceList.StartDate;
-                TempData["EndDate"] = GetAttendanceList.EndDate;
-
-                HttpClient client = WebAPI.Initil();
-
-                ApiResponseModel response = await APIServices.PostAsync(data, "UserProfile/GetAttendanceList");
-                if (response.data.Count != 0)
-                {
-                    getAttendanceList = JsonConvert.DeserializeObject<List<UserAttendanceModel>>(response.data.ToString());
-                }
-                else
-                {
-                    return new JsonResult(new { Message = "No Data Found On Selected Month Or Dates!!" });
-
-                }
-                return new JsonResult(getAttendanceList);
-
-            }
-            catch (Exception ex)
+                draw = draw,
+                start = start,
+                pageSize = pageSize,
+                skip = skip,
+                lenght = length,
+                searchValue = searchValue,
+                sortColumn = sortColumn,
+                sortColumnDir = sortColumnDir
+            };
+            var AttendanceData = new SearchAttendanceModel
             {
-                throw ex;
+                UserId = _userSession.UserId,
+                Cmonth = GetAttendanceList.Cmonth,
+                StartDate = GetAttendanceList.StartDate,
+                EndDate = GetAttendanceList.EndDate,
+            };
+            var AttendanceRequestModel = new MyAttendanceRequestDataTableModel
+            {
+                SearchAttendance = AttendanceData,
+                DataTable = dataTable
+            };
+
+            List<UserAttendanceModel> getAttendanceList = new List<UserAttendanceModel>();
+            var data = new jsonData();
+            HttpClient client = WebAPI.Initil();
+            ApiResponseModel res = await APIServices.PostAsync(AttendanceRequestModel, "UserProfile/GetAttendanceList");
+            if (res.code == 200)
+            {
+                data = JsonConvert.DeserializeObject<jsonData>(res.data.ToString());
+                getAttendanceList = JsonConvert.DeserializeObject<List<UserAttendanceModel>>(data.data.ToString());
             }
+            var jsonData = new
+            {
+                draw = data.draw,
+                recordsFiltered = data.recordsFiltered,
+                recordsTotal = data.recordsTotal,
+                data = getAttendanceList,
+            };
+            return new JsonResult(jsonData);
         }
 
         [HttpGet]
@@ -907,27 +924,58 @@ namespace EMPManegment.Web.Controllers
             return dt;
         }
 
-        [HttpPost]
-        public async Task<IActionResult> GetSearchAttendanceList(searchAttendanceListModel GetAttendanceList)
+        public IActionResult GetSearchAttendanceList()
         {
-            try
+            return PartialView("~/Views/UserProfile/_SearchAttendanceList.cshtml");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> GetUserSearchAttendanceList(searchAttendanceListModel GetAttendanceList)
+        {
+            var draw = Request.Form["draw"].FirstOrDefault();
+            var start = Request.Form["start"].FirstOrDefault();
+            var length = Request.Form["length"].FirstOrDefault();
+            var sortColumn = Request.Form["columns[" + Request.Form["order[1][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
+            var sortColumnDir = Request.Form["order[0][dir]"].FirstOrDefault();
+            var searchValue = Request.Form["search[value]"].FirstOrDefault();
+            int pageSize = length != null ? Convert.ToInt32(length) : 0;
+            int skip = start != null ? Convert.ToInt32(start) : 0;
+
+            var dataTable = new DataTableRequstModel
             {
-                List<UserAttendanceModel> getAttendanceList = new List<UserAttendanceModel>();
-                ApiResponseModel response = await APIServices.PostAsync(GetAttendanceList, "UserProfile/GetSearchAttendanceList");
-                if (response.data.Count != 0)
-                {
-                    getAttendanceList = JsonConvert.DeserializeObject<List<UserAttendanceModel>>(response.data.ToString());
-                    return PartialView("~/Views/UserProfile/_SearchAttendanceList.cshtml", getAttendanceList);
-                }
-                else
-                {
-                    return new JsonResult(new { Code = 400 });
-                }
-            }
-            catch (Exception ex)
+                draw = draw,
+                start = start,
+                pageSize = pageSize,
+                skip = skip,
+                lenght = length,
+                searchValue = searchValue,
+                sortColumn = sortColumn,
+                sortColumnDir = sortColumnDir
+            };
+
+            var AttendanceRequestModel = new AttendanceRequestDataTableModel
             {
-                throw ex;
+                SearchAttendance = GetAttendanceList,
+                DataTable = dataTable
+            };
+
+            List<UserAttendanceModel> getAttendanceList = new List<UserAttendanceModel>();
+            var data = new jsonData();
+            HttpClient client = WebAPI.Initil();
+            ApiResponseModel res = await APIServices.PostAsync(AttendanceRequestModel, "UserProfile/GetSearchAttendanceList");
+            if (res.code == 200)
+            {
+                data = JsonConvert.DeserializeObject<jsonData>(res.data.ToString());
+                getAttendanceList = JsonConvert.DeserializeObject<List<UserAttendanceModel>>(data.data.ToString());
             }
+            var jsonData = new
+            {
+                draw = data.draw,
+                recordsFiltered = data.recordsFiltered,
+                recordsTotal = data.recordsTotal,
+                data = getAttendanceList,
+            };
+            return new JsonResult(jsonData);
         }
 
         [FormPermissionAttribute("Form Permission-View")]
