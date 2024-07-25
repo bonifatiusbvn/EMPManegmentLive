@@ -107,13 +107,13 @@ function UpdateRolewiseFormPermission() {
 
         var rolewiseformRow = $(this);
         var objData = {
-            RoleId: $('#txtRoleId').val(),
+            RoleId: rolewiseformRow.find('#txtRoleId').val(),
             CreatedBy: $("#txtUserId").val(),
             FormId: rolewiseformRow.find('#formId').val(),
-            IsAddAllow: rolewiseformRow.find('#isAdd').prop('checked'),
-            IsViewAllow: rolewiseformRow.find('#isView').prop('checked'),
-            IsEditAllow: rolewiseformRow.find('#isEdit').prop('checked'),
-            IsDeleteAllow: rolewiseformRow.find('#isDelete').prop('checked'),
+            IsAddAllow: rolewiseformRow.find('#isAdd_' + rolewiseformRow.data('product-id')).prop('checked'),
+            IsViewAllow: rolewiseformRow.find('#isView_' + rolewiseformRow.data('product-id')).prop('checked'),
+            IsEditAllow: rolewiseformRow.find('#isEdit_' + rolewiseformRow.data('product-id')).prop('checked'),
+            IsDeleteAllow: rolewiseformRow.find('#isDelete_' + rolewiseformRow.data('product-id')).prop('checked'),
         };
 
         formPermissions.push(objData);
@@ -353,3 +353,41 @@ function validateAndCreateUser() {
         CreateUserForm();
     }
 }
+
+function toggleCheckboxes(formId) {
+    var isChecked = document.getElementById("checkboxAll_" + formId).checked;
+    document.getElementById("isAdd_" + formId).checked = isChecked;
+    document.getElementById("isView_" + formId).checked = isChecked;
+    document.getElementById("isEdit_" + formId).checked = isChecked;
+    document.getElementById("isDelete_" + formId).checked = isChecked;
+
+    allCheckbox.checked = isAdd && isView && isEdit && isDelete;
+
+}
+function updateSelectAll(formId) {
+    const isAdd = document.getElementById(`isAdd_${formId}`);
+    const isView = document.getElementById(`isView_${formId}`);
+    const isEdit = document.getElementById(`isEdit_${formId}`);
+    const isDelete = document.getElementById(`isDelete_${formId}`);
+    const checkboxAll = document.getElementById(`checkboxAll_${formId}`);
+
+    // Check if all individual checkboxes are checked
+    const allChecked = isAdd.checked && isView.checked && isEdit.checked && isDelete.checked;
+
+    checkboxAll.checked = allChecked;
+}
+
+function toggleAllCheckboxes(masterCheckbox) {
+    var checkboxes = document.querySelectorAll('.form-check-input-all, .toggle-checkbox');
+    checkboxes.forEach(function (checkbox) {
+        checkbox.checked = masterCheckbox.checked;
+    });
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    var allCheckbox = document.getElementById('checkboxAll');
+    var checkboxes = document.querySelectorAll('.form-check-input-all, .toggle-checkbox');
+    allCheckbox.checked = Array.from(checkboxes).every(function (checkbox) {
+        return checkbox.checked;
+    });
+});

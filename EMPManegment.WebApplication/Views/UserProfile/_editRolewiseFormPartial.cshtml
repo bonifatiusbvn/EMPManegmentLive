@@ -5,6 +5,7 @@
 
 @foreach (var item in Model)
 {
+
     <tr id="templateRow_@Convert.ToInt64(item.RowNumber + 1)" class="forms" data-product-id="@item.FormId">
         <td>
             <h6 class="pt-1" id="formName" data-product-id="@item.FormId">@item.FormName</h6>
@@ -13,23 +14,29 @@
         </td>
         <td>
             <div class="form-check form-switch form-switch-success">
-                <input class="form-check-input" type="checkbox" id="isAdd" name="isAdd" @(item.IsAddAllow ? "checked" : "")>
+                <input class="form-check-input toggle-checkbox" type="checkbox" id="isAdd_@item.FormId" name="isAdd" @(item.IsAddAllow ? "checked" : "") onchange="updateSelectAll('@item.FormId')">
             </div>
         </td>
         <td>
             <div class="form-check form-switch form-switch-success">
-                <input class="form-check-input" type="checkbox" id="isView" name="isView" @(item.IsViewAllow ? "checked" : "")>
+                <input class="form-check-input toggle-checkbox" type="checkbox" id="isView_@item.FormId" name="isView" @(item.IsViewAllow ? "checked" : "") onchange="updateSelectAll('@item.FormId')">
             </div>
         </td>
         <td>
             <div class="form-check form-switch form-switch-success">
-                <input class="form-check-input" type="checkbox" id="isEdit" name="isEdit" @(item.IsEditAllow ? "checked" : "")>
+                <input class="form-check-input toggle-checkbox" type="checkbox" id="isEdit_@item.FormId" name="isEdit" @(item.IsEditAllow ? "checked" : "") onchange="updateSelectAll('@item.FormId')">
             </div>
         </td>
         <td>
             <div class="form-check form-switch form-switch-success">
-                <input class="form-check-input" type="checkbox" id="isDelete" name="isDelete" @(item.IsDeleteAllow ? "checked" : "")>
+                <input class="form-check-input toggle-checkbox" type="checkbox" id="isDelete_@item.FormId" name="isDelete" @(item.IsDeleteAllow ? "checked" : "") onchange="updateSelectAll('@item.FormId')">
+            </div>
+        </td>
+        <td>
+            <div class="form-check">
+                <input class="form-check-input form-check-input-all" type="checkbox" id="checkboxAll_@item.FormId" name="chk_child" data-Id="@item.RoleId" onclick="toggleCheckboxes('@item.FormId')" @(item.IsAddAllow && item.IsViewAllow && item.IsEditAllow && item.IsDeleteAllow ? "checked" : "")>
             </div>
         </td>
     </tr>
 }
+

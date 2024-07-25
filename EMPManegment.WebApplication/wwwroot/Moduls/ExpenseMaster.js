@@ -854,8 +854,7 @@ function GetUserBetweenDateExpenseList() {
     });
 }
 
-function SearchUserBetweenDateExpenseList()
-{
+function SearchUserBetweenDateExpenseList() {
     var startDate = $('#approveExpenseStartDate').val();
     var endDate = $('#approveExpenseEndDate').val();
 
@@ -870,8 +869,7 @@ function SearchUserBetweenDateExpenseList()
     }
 }
 
-function DisplayUserBetweenDateExpenseList(startDate, endDate)
-{
+function DisplayUserBetweenDateExpenseList(startDate, endDate) {
     var userId = GetParameterByName('userId');
     var filterType = 'daterange';
     $('#UserallExpenseTable').DataTable({
@@ -1432,7 +1430,7 @@ function DisplayAllUnApproveExpenseDetails(tableId) {
             width: "auto"
         }],
         drawCallback: function (settings) {
-            console.log('Table redrawn', settings);
+
         }
     });
 }
@@ -1444,8 +1442,8 @@ function DisplayAllTodayExpenseDetails(tableId) {
         serverSide: true,
         filter: true,
         destroy: true,
-       
-      
+
+
         ajax: {
             type: "POST",
             url: '/ExpenseMaster/GetExpenseDetailsList?TodayDate=' + todayDate,

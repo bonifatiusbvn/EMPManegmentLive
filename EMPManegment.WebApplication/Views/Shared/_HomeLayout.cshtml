@@ -69,40 +69,39 @@
                 </li>
             </ul>
             <div class="col-lg-4 col-3" style="width:250px">
-               
-                    <form id="frmdrpdashbord">
-                        @if (_userSession.UserRoll == "Employee")
-                        {
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-info form-select" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="width:180px;">
-                                    --Selected Project--
-                                </button>
-                                <div class="dropdown-menu" id="drpUserProjectListMenu">
-                                    <a class="dropdown-item" href="#" data-value="">--Selected Project--</a>
-                                </div>
+                <form id="frmdrpdashbord">
+                    @if (_userSession.UserRoll == "Employee")
+                    {
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-info form-select" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="width:280px;">
+                                --Selected Project--
+                            </button>
+                            <div class="dropdown-menu" id="drpUserProjectListMenu">
+                                <a class="dropdown-item" href="#" data-value="">--Selected Project--</a>
                             </div>
-                            <select class="form-select-lg border-0" id="drpUserProjectList" style="display:none;">
-                                <option selected value="">--Selected Project--</option>
-                            </select>
+                        </div>
+                        <select class="form-select-lg border-0" id="drpUserProjectList" style="display:none;">
+                            <option selected value="">--Selected Project--</option>
+                        </select>
 
-                        }
-                        else
-                        {
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-info form-select" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="width:180px;">
-                                    --All Projects--
-                                </button>
-                                <div class="dropdown-menu" id="drpUserProjectListMenu">
-                                    <a class="dropdown-item" href="#" data-value="">--All Projects--</a>
-                                </div>
+                    }
+                    else
+                    {
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-info form-select" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="width:280px;">
+                                --All Projects--
+                            </button>
+                            <div class="dropdown-menu" id="drpUserProjectListMenu">
+                                <a class="dropdown-item" href="#" data-value="">--All Projects--</a>
                             </div>
+                        </div>
 
-                            <select class="form-select-lg border-0" id="drpProjectName" style="display:none;">
-                                <option selected value="">--All Project--</option>
-                            </select>
+                        <select class="form-select-lg border-0" id="drpProjectName" style="display:none;">
+                            <option selected value="">--All Project--</option>
+                        </select>
 
-                        }
-                    </form>
+                    }
+                </form>
             </div>
             @{
                 var profilePhoto = UserSession.ProfilePhoto;
@@ -114,20 +113,6 @@
             }
             <!-- Right navbar links -->
             <ul class="navbar-nav ml-auto">
-                @* <div style="display: flex; align-items: center;gap: 6px;">
-                <div class="location-left dark-font-color">
-                <input type="text" class="form-select" id="AllCityDRP">
-                <input type="hidden" id="AllCityDRPHidden">
-                </div>
-                <div class="weather-glyph-location text-wrapper-image-hidden">
-                <img class="icon-svg" id="weathericon" alt="Weather Icon" style="max-width: 38px; overflow: hidden;" />
-                </div>
-                <div class="weather-temperature dark-font-color">
-                <span class="weather-text-location-left" id="getweather"></span>
-                </div>
-                </div> *@
-
-
                 <li class="nav-item dropdown">
                     <div class="dropdown ms-sm-3 header-item topbar-user" style="height:60px;">
                         <button type="button" class="btn" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
