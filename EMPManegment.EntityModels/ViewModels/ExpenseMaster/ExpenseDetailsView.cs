@@ -102,6 +102,7 @@ namespace EMPManegment.EntityModels.ViewModels.ExpenseMaster
     }
     public class UserMonthlyPendingExpense
     {
+        public string? YearNumber { get; set; }
         public string? MonthName { get; set; }
         public decimal? TotaldebitAmount { get; set; }
         public decimal? TotalcreditAmount { get; set; }

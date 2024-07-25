@@ -502,17 +502,30 @@ function deleteExpense(Id) {
 }
 
 $(document).ready(function () {
-    $(document).on('click', '#selectMonthlyExpense + .dropdown-menu .dropdown-item', function () {
-        var selectedMonth = $(this).data('value');
-        var selectedText = $(this).text();
+    $(document).on('change', '#textselectedmonth', function () {
+        var selectedMonth = $(this).val();
         var userId = $("#txtuserid").val();
-        $('#selectMonthlyExpense').text(selectedText).attr('data-selected-value', selectedMonth);
+        var monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        var selectedYear = selectedMonth.split('-')[0];
+        var month = parseInt(selectedMonth.split('-')[1], 10);
+        var selectedText = monthNames[month - 1];
         GetPayUserExpenseCreditList(userId, selectedMonth);
-        GetPayUserExpenseDebitList(userId, selectedMonth,selectedText);
+        GetPayUserExpenseDebitList(userId, selectedMonth, selectedText, selectedYear);
     });
 });
 
+function getNextMonth() {
+    const date = new Date();
+    let month = date.getMonth();
+    let year = date.getFullYear();
 
+    if (month > 11) { 
+        month = 0;
+        year += 1;
+    }
+    const formattedMonth = month < 9 ? '0' + (month + 1) : (month + 1); 
+    return `${year}-${formattedMonth}`;
+}
 
 function GetPayUserExpenseCreditList(userId, selectedMonth) {
     var filterType;
@@ -521,13 +534,14 @@ function GetPayUserExpenseCreditList(userId, selectedMonth) {
     var today = new Date();
     var monthName = months[today.getMonth()];
     var monthValue = today.getMonth() + 1;
+
     if (selectedMonth != null) {
         selectMonthlyExpense = selectedMonth;
         filterType = "credit";
     } else {
-        $('#selectMonthlyExpense').text(monthName).attr('data-selected-value', monthValue);
         filterType = "thismonth and credit";
         selectMonthlyExpense = '';
+        document.getElementById('textselectedmonth').value = getNextMonth();
     }
 
     $('#UserPayExpenseTableCredit').DataTable({
@@ -612,14 +626,16 @@ function GetPayUserExpenseCreditList(userId, selectedMonth) {
     });
 }
 
-function GetPayUserExpenseDebitList(userId, selectedMonth, selectedText) {
+function GetPayUserExpenseDebitList(userId, selectedMonth, selectedText, selectedYear) {
     var filterType;
     var selectMonthlyExpense;
     var SelectedMonthName;
     var PreviousMonthName;
+    var Year;
     var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
     var today = new Date();
     var monthName = months[today.getMonth()];
+    var currentYear = today.getFullYear();
 
     function getPreviousMonth(currentMonthName) {
         var currentIndex = months.indexOf(currentMonthName);
@@ -630,12 +646,14 @@ function GetPayUserExpenseDebitList(userId, selectedMonth, selectedText) {
     if (selectedMonth != null) {
         selectMonthlyExpense = selectedMonth;
         SelectedMonthName = selectedText;
+        Year = selectedYear;
         PreviousMonthName = getPreviousMonth(SelectedMonthName);
         filterType = "debit";
     } else {
         filterType = "thismonth and debit";
         selectMonthlyExpense = '';
         SelectedMonthName = monthName;
+        Year = currentYear;
         PreviousMonthName = getPreviousMonth(SelectedMonthName);
     }
 
@@ -716,13 +734,10 @@ function GetPayUserExpenseDebitList(userId, selectedMonth, selectedText) {
 
             var monthlyDataArray = api.ajax.json().userPendingExpenseAmount;
 
-                    var monthlyDataArray = api.ajax.json().userPendingExpenseAmount;
-
             if (Array.isArray(monthlyDataArray)) {
-                debugger
                 var isPreviousMonthFound = false;
                 monthlyDataArray.forEach(function (monthlyData) {
-                    if (monthlyData.monthName == PreviousMonthName) {
+                    if (monthlyData.monthName == PreviousMonthName && monthlyData.yearNumber == Year) {
 
                         isPreviousMonthFound = true;
                         $('#monthlyPendingExpenseFooter').show();
