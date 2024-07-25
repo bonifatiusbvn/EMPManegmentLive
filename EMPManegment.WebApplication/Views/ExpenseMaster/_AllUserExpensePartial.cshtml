@@ -48,7 +48,6 @@
         $('#checkedAll').prop('checked', allChecked);
     }
 
-    // Event listener for individual checkboxes
     $('#UserallExpenseTable').on('change', 'input[name="chk_child"]', function () {
         if (anyCheckboxChecked()) {
             $('#remove-actions').show();
@@ -58,7 +57,6 @@
         updateCheckedAllState();
     });
 
-    // Event listener for the "check all" checkbox
     $('#checkedAll').on('change', function () {
         $('input[name="chk_child"]').prop('checked', $(this).prop('checked'));
         if ($(this).prop('checked')) {
@@ -68,6 +66,5 @@
         }
     });
 
-    // Initialize the DataTable
     DisplayUnApprovedExpenseList();
 </script>
