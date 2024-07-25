@@ -5,6 +5,7 @@ using EMPManegment.Inretface.Interface.InvoiceMaster;
 using EMPManegment.Inretface.Interface.OrderDetails;
 using EMPManegment.Inretface.Services.InvoiceMaster;
 using EMPManegment.Inretface.Services.ManualInvoiceServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -13,6 +14,7 @@ namespace EMPManagment.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ManualInvoiceController : ControllerBase
     {
         private readonly IManualInvoiceServices ManualInvoice;
