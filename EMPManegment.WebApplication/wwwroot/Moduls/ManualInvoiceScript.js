@@ -531,8 +531,6 @@ $(document).ready(function () {
     }
     data(datas);
 });
-
-
 function deleteManualInvoice(InvoiceId) {
     Swal.fire({
         title: "Are you sure want to delete this?",
@@ -579,7 +577,6 @@ function deleteManualInvoice(InvoiceId) {
         }
     });
 }
-
 function UpdateManualInvoiceDetails() {
 
     if ($("#CreateManualInvoiceForm").valid()) {
@@ -716,6 +713,7 @@ function AddProductButton() {
         contentType: false,
         complete: function (Result) {
             if (Result.statusText === "success") {
+
                 AddNewRow(Result.responseText);
             }
             else {
