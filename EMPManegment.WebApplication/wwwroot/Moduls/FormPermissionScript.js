@@ -107,13 +107,13 @@ function UpdateRolewiseFormPermission() {
 
         var rolewiseformRow = $(this);
         var objData = {
-            RoleId: $('#txtRoleId').val(),
+            RoleId: rolewiseformRow.find('#txtRoleId').val(),
             CreatedBy: $("#txtUserId").val(),
             FormId: rolewiseformRow.find('#formId').val(),
-            IsAddAllow: rolewiseformRow.find('#isAdd').prop('checked'),
-            IsViewAllow: rolewiseformRow.find('#isView').prop('checked'),
-            IsEditAllow: rolewiseformRow.find('#isEdit').prop('checked'),
-            IsDeleteAllow: rolewiseformRow.find('#isDelete').prop('checked'),
+            IsAddAllow: rolewiseformRow.find('#isAdd_' + rolewiseformRow.data('product-id')).prop('checked'),
+            IsViewAllow: rolewiseformRow.find('#isView_' + rolewiseformRow.data('product-id')).prop('checked'),
+            IsEditAllow: rolewiseformRow.find('#isEdit_' + rolewiseformRow.data('product-id')).prop('checked'),
+            IsDeleteAllow: rolewiseformRow.find('#isDelete_' + rolewiseformRow.data('product-id')).prop('checked'),
         };
 
         formPermissions.push(objData);
@@ -153,12 +153,13 @@ function UpdateUserFormPermission() {
 
         var userformRow = $(this);
         var objData = {
-            UserId: $('#textUserId').val(),
+            UserId: userformRow.find('#textUserId').val(),
+            CreatedBy: $("#textuserId").val(),
             FormId: userformRow.find('#textFormId').val(),
-            IsAddAllow: userformRow.find('#txtIsAdd').prop('checked'),
-            IsViewAllow: userformRow.find('#txtIsView').prop('checked'),
-            IsEditAllow: userformRow.find('#txtIsEdit').prop('checked'),
-            IsDeleteAllow: userformRow.find('#txtIsDelete').prop('checked'),
+            IsAddAllow: userformRow.find('#txtIsAdd_' + userformRow.data('product-id')).prop('checked'),
+            IsViewAllow: userformRow.find('#txtIsView_' + userformRow.data('product-id')).prop('checked'),
+            IsEditAllow: userformRow.find('#txtIsEdit_' + userformRow.data('product-id')).prop('checked'),
+            IsDeleteAllow: userformRow.find('#txtIsDelete_' + userformRow.data('product-id')).prop('checked'),
         };
         formPermissions.push(objData);
     });
@@ -352,4 +353,58 @@ function validateAndCreateUser() {
     if (isValid) {
         CreateUserForm();
     }
+}
+
+function toggleCheckboxes(formId) {
+    var isChecked = document.getElementById("checkboxAll_" + formId).checked;
+    document.getElementById("isAdd_" + formId).checked = isChecked;
+    document.getElementById("isView_" + formId).checked = isChecked;
+    document.getElementById("isEdit_" + formId).checked = isChecked;
+    document.getElementById("isDelete_" + formId).checked = isChecked;
+
+
+}
+function updateSelectAll(formId) {
+    const isAdd = document.getElementById(`isAdd_${formId}`);
+    const isView = document.getElementById(`isView_${formId}`);
+    const isEdit = document.getElementById(`isEdit_${formId}`);
+    const isDelete = document.getElementById(`isDelete_${formId}`);
+    const checkboxAll = document.getElementById(`checkboxAll_${formId}`);
+
+    const allChecked = isAdd.checked && isView.checked && isEdit.checked && isDelete.checked;
+
+    checkboxAll.checked = allChecked;
+}
+
+function toggleAllCheckboxes(masterCheckbox) {
+    var checkboxes = document.querySelectorAll('.form-check-input-all, .toggle-checkbox');
+    checkboxes.forEach(function (checkbox) {
+        checkbox.checked = masterCheckbox.checked;
+    });
+}
+function userCheckboxes(textFormId) {
+    var isChecked = document.getElementById("userCheckboxAll_" + textFormId).checked;
+    document.getElementById("txtIsAdd_" + textFormId).checked = isChecked;
+    document.getElementById("txtIsView_" + textFormId).checked = isChecked;
+    document.getElementById("txtIsEdit_" + textFormId).checked = isChecked;
+    document.getElementById("txtIsDelete_" + textFormId).checked = isChecked;
+
+}
+function userUpdateSelectAll(textFormId) {
+    const txtIsAdd = document.getElementById(`txtIsAdd_${textFormId}`);
+    const txtIsView = document.getElementById(`txtIsView_${textFormId}`);
+    const txtIsEdit = document.getElementById(`txtIsEdit_${textFormId}`);
+    const txtIsDelete = document.getElementById(`txtIsDelete_${textFormId}`);
+    const userCheckboxAll = document.getElementById(`userCheckboxAll_${textFormId}`);
+
+    const allChecked = txtIsAdd.checked && txtIsView.checked && txtIsEdit.checked && txtIsDelete.checked;
+
+    userCheckboxAll.checked = allChecked;
+}
+
+function userAllCheckboxes(masterCheckbox) {
+    var checkboxes = document.querySelectorAll('.form-check-input-all, .user-checkbox');
+    checkboxes.forEach(function (checkbox) {
+        checkbox.checked = masterCheckbox.checked;
+    });
 }

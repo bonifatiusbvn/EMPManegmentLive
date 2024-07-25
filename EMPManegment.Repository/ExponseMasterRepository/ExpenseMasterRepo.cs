@@ -26,6 +26,7 @@ using EMPManegment.EntityModels.Common;
 using System.Data;
 using EMPManegment.EntityModels.ViewModels.Purchase_Request;
 using System.Data.SqlClient;
+using EMPManegment.EntityModels.ViewModels.PurchaseOrderModels;
 
 namespace EMPManegment.Repository.ExponseMasterRepository
 {
@@ -454,6 +455,11 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                     new SqlParameter("@UserId", UserId),
                 };
                 var dataSet = DbHelper.GetDataSet("[spGetUserExpenseListByUserId]", System.Data.CommandType.StoredProcedure, sqlPar, dbConnectionStr);
+                var sqlPar2 = new SqlParameter[]
+                {
+                 new SqlParameter("@UserId", UserId),
+                };
+                var dataSetofPA = DbHelper.GetDataSet("[GetMonthlyPendingAmounts]", System.Data.CommandType.StoredProcedure, sqlPar2, dbConnectionStr);
                 var UserExpenseList = new List<ExpenseDetailsView>();
 
                 foreach (DataRow row in dataSet.Tables[0].Rows)
@@ -476,19 +482,41 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                     };
                     UserExpenseList.Add(UserExpenseDetails);
                 }
+
+                var userMonthlyPendingExpenseList = new List<UserMonthlyPendingExpense>();
+
+                foreach (DataRow row in dataSetofPA.Tables[0].Rows)
+                {
+                    var UserMonthlyExpenseDetails = new UserMonthlyPendingExpense
+                    {
+                        MonthName = row["MonthName"]?.ToString(),
+                        TotaldebitAmount = Convert.ToDecimal(row["TotaldebitAmount"]),
+                        TotalcreditAmount = Convert.ToDecimal(row["TotalcreditAmount"]),
+                        PendingAmount = Convert.ToDecimal(row["PendingAmount"]),
+                        CumulativePending = Convert.ToDecimal(row["CumulativePending"]),
+                        YearNumber = row["YearNumber"]?.ToString(),
+                    };
+                    userMonthlyPendingExpenseList.Add(UserMonthlyExpenseDetails);
+                }
+
                 if (!string.IsNullOrEmpty(selectMonthlyExpense))
                 {
-                    var selectedMonth = int.Parse(selectMonthlyExpense);
-                    switch (filterType.ToLower())
+                    var selectedYearMonth = selectMonthlyExpense.Split('-');
+                    if (selectedYearMonth.Length == 2 &&
+                        int.TryParse(selectedYearMonth[0], out int selectedYear) &&
+                        int.TryParse(selectedYearMonth[1], out int selectedMonth))
                     {
-                        case "credit":
-                            UserExpenseList = UserExpenseList.Where(expense => expense.Account.ToLower() == "credit" && expense.Date.Month == selectedMonth).ToList();
-                            break;
-                        case "debit":
-                            UserExpenseList = UserExpenseList.Where(e => e.Account.ToLower() == filterType && e.IsApproved == true && e.Date.Month == selectedMonth).ToList();
-                            break;
-                        default:
-                            break;
+                        switch (filterType.ToLower())
+                        {
+                            case "credit":
+                                UserExpenseList = UserExpenseList.Where(expense => expense.Account.ToLower() == "credit" && expense.Date.Year == selectedYear&& expense.Date.Month == selectedMonth).ToList();
+                                break;
+                            case "debit":
+                                UserExpenseList = UserExpenseList.Where(expense => expense.Account.ToLower() == "debit" && expense.IsApproved == true&& expense.Date.Year == selectedYear&& expense.Date.Month == selectedMonth).ToList();
+                                break;
+                            default:
+                                break;
+                        }
                     }
                 }
                 else if (!string.IsNullOrEmpty(filterType))
@@ -592,7 +620,8 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                     draw = dataTable.draw,
                     recordsFiltered = totalRecord,
                     recordsTotal = totalRecord,
-                    data = filteredData
+                    data = filteredData,
+                    userMonthlyPendingExpense = userMonthlyPendingExpenseList
                 };
 
                 return jsonData;

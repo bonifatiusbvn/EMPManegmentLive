@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EMPManegment.EntityModels.ViewModels.ExpenseMaster;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,6 +27,7 @@ namespace EMPManegment.EntityModels.ViewModels.DataTableParameters
         public int recordsFiltered { get; set; }
         public int recordsTotal { get; set; }
         public dynamic data { get; set; }
+        public List<UserMonthlyPendingExpense> userMonthlyPendingExpense { get; set; }
 
     }
 

@@ -502,17 +502,30 @@ function deleteExpense(Id) {
 }
 
 $(document).ready(function () {
-    $(document).on('click', '#selectMonthlyExpense + .dropdown-menu .dropdown-item', function () {
-        var selectedMonth = $(this).data('value');
-        var selectedText = $(this).text();
+    $(document).on('change', '#textselectedmonth', function () {
+        var selectedMonth = $(this).val();
         var userId = $("#txtuserid").val();
-        $('#selectMonthlyExpense').text(selectedText).attr('data-selected-value', selectedMonth);
+        var monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        var selectedYear = selectedMonth.split('-')[0];
+        var month = parseInt(selectedMonth.split('-')[1], 10);
+        var selectedText = monthNames[month - 1];
         GetPayUserExpenseCreditList(userId, selectedMonth);
-        GetPayUserExpenseDebitList(userId, selectedMonth);
+        GetPayUserExpenseDebitList(userId, selectedMonth, selectedText, selectedYear);
     });
 });
 
+function getNextMonth() {
+    const date = new Date();
+    let month = date.getMonth();
+    let year = date.getFullYear();
 
+    if (month > 11) { 
+        month = 0;
+        year += 1;
+    }
+    const formattedMonth = month < 9 ? '0' + (month + 1) : (month + 1); 
+    return `${year}-${formattedMonth}`;
+}
 
 function GetPayUserExpenseCreditList(userId, selectedMonth) {
     var filterType;
@@ -521,13 +534,14 @@ function GetPayUserExpenseCreditList(userId, selectedMonth) {
     var today = new Date();
     var monthName = months[today.getMonth()];
     var monthValue = today.getMonth() + 1;
+
     if (selectedMonth != null) {
         selectMonthlyExpense = selectedMonth;
         filterType = "credit";
     } else {
-        $('#selectMonthlyExpense').text(monthName).attr('data-selected-value', monthValue);
         filterType = "thismonth and credit";
         selectMonthlyExpense = '';
+        document.getElementById('textselectedmonth').value = getNextMonth();
     }
 
     $('#UserPayExpenseTableCredit').DataTable({
@@ -612,15 +626,35 @@ function GetPayUserExpenseCreditList(userId, selectedMonth) {
     });
 }
 
-function GetPayUserExpenseDebitList(userId, selectedMonth) {
+function GetPayUserExpenseDebitList(userId, selectedMonth, selectedText, selectedYear) {
     var filterType;
     var selectMonthlyExpense;
+    var SelectedMonthName;
+    var PreviousMonthName;
+    var Year;
+    var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    var today = new Date();
+    var monthName = months[today.getMonth()];
+    var currentYear = today.getFullYear();
+
+    function getPreviousMonth(currentMonthName) {
+        var currentIndex = months.indexOf(currentMonthName);
+        var previousIndex = (currentIndex - 1 + months.length) % months.length;
+        return months[previousIndex];
+    }
+
     if (selectedMonth != null) {
         selectMonthlyExpense = selectedMonth;
+        SelectedMonthName = selectedText;
+        Year = selectedYear;
+        PreviousMonthName = getPreviousMonth(SelectedMonthName);
         filterType = "debit";
     } else {
         filterType = "thismonth and debit";
         selectMonthlyExpense = '';
+        SelectedMonthName = monthName;
+        Year = currentYear;
+        PreviousMonthName = getPreviousMonth(SelectedMonthName);
     }
 
     $('#UserPayExpenseTableDebit').DataTable({
@@ -663,7 +697,7 @@ function GetPayUserExpenseDebitList(userId, selectedMonth) {
                     var color = full.account.toLowerCase() === "credit" ? "red" : "green";
                     return '<span style="color: ' + color + ';">' + '₹' + data + '</span>';
                 }
-            },
+            }
         ],
         scrollY: 400,
         scrollX: true,
@@ -678,31 +712,58 @@ function GetPayUserExpenseDebitList(userId, selectedMonth) {
             orderable: false,
             width: "20%"
         }],
-        "footerCallback": function (row, data, start, end, display) {
-            var api = this.api(), data;
-
+        footerCallback: function (row, data, start, end, display) {
+            var api = this.api();
 
             var intVal = function (i) {
                 return typeof i === 'string' ?
-                    i.replace(/[\$,]/g, '') * 1 :
+                    i.replace(/[\₹,]/g, '') * 1 :
                     typeof i === 'number' ?
                         i : 0;
             };
 
-
-            total = api
+            var total = api
                 .column(4)
                 .data()
                 .reduce(function (a, b) {
                     return intVal(a) + intVal(b);
                 }, 0);
 
-            $(api.column(4).footer()).html(
-                '<span style="color: black;">Total: ' + '₹' + total.toFixed(2) + '</span>'
+            var $cumulativePendingFooterRow = $('#monthlyPendingExpenseFooter');
+            var $cumulativePendingFooterCell = $cumulativePendingFooterRow.find('th').last(); 
+
+            var monthlyDataArray = api.ajax.json().userPendingExpenseAmount;
+
+            if (Array.isArray(monthlyDataArray)) {
+                var isPreviousMonthFound = false;
+                monthlyDataArray.forEach(function (monthlyData) {
+                    if (monthlyData.monthName == PreviousMonthName && monthlyData.yearNumber == Year) {
+
+                        isPreviousMonthFound = true;
+                        $('#monthlyPendingExpenseFooter').show();
+
+                        $cumulativePendingFooterCell.html(
+                            '<span style="color: black;">Last Month Pending:  ₹' + monthlyData.cumulativePending.toFixed(2) + '</span>'
+                        );
+                    }
+                });
+
+                if (!isPreviousMonthFound) {
+                    $('#monthlyPendingExpenseFooter').hide();
+                }
+            }
+
+            var $totalFooterRow = $('#totaldebitExpenseFooter');
+            var $totalFooterCell = $totalFooterRow.find('th').last(); 
+
+            $totalFooterCell.html(
+                '<span style="color: black;">Total: ₹' + total.toFixed(2) + '</span>'
             );
         }
     });
 }
+
+
 
 function UserExpensesDetails() {
     $('#UserListTable').DataTable({
@@ -793,8 +854,7 @@ function GetUserBetweenDateExpenseList() {
     });
 }
 
-function SearchUserBetweenDateExpenseList()
-{
+function SearchUserBetweenDateExpenseList() {
     var startDate = $('#approveExpenseStartDate').val();
     var endDate = $('#approveExpenseEndDate').val();
 
@@ -809,8 +869,7 @@ function SearchUserBetweenDateExpenseList()
     }
 }
 
-function DisplayUserBetweenDateExpenseList(startDate, endDate)
-{
+function DisplayUserBetweenDateExpenseList(startDate, endDate) {
     var userId = GetParameterByName('userId');
     var filterType = 'daterange';
     $('#UserallExpenseTable').DataTable({
@@ -1371,7 +1430,7 @@ function DisplayAllUnApproveExpenseDetails(tableId) {
             width: "auto"
         }],
         drawCallback: function (settings) {
-            console.log('Table redrawn', settings);
+
         }
     });
 }
@@ -1383,8 +1442,8 @@ function DisplayAllTodayExpenseDetails(tableId) {
         serverSide: true,
         filter: true,
         destroy: true,
-       
-      
+
+
         ajax: {
             type: "POST",
             url: '/ExpenseMaster/GetExpenseDetailsList?TodayDate=' + todayDate,

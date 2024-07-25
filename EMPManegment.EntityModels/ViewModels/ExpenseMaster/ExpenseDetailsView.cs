@@ -48,6 +48,7 @@ namespace EMPManegment.EntityModels.ViewModels.ExpenseMaster
         public string? FullName { get; set; }
 
         public string? PaymentDetails { get; set; }
+
     }
 
     public class ExpenseRequestModel
@@ -98,5 +99,14 @@ namespace EMPManegment.EntityModels.ViewModels.ExpenseMaster
         public string? ApprovedByName { get; set; }
         public DateTime ApprovedDate { get; set; }
 
+    }
+    public class UserMonthlyPendingExpense
+    {
+        public string? YearNumber { get; set; }
+        public string? MonthName { get; set; }
+        public decimal? TotaldebitAmount { get; set; }
+        public decimal? TotalcreditAmount { get; set; }
+        public decimal? PendingAmount { get; set; }
+        public decimal? CumulativePending { get; set; }
     }
 }

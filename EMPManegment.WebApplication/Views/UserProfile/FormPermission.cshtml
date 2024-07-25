@@ -80,6 +80,11 @@
                             <th>IsViewAllow</th>
                             <th>IsEditAllow</th>
                             <th>IsDeleteAllow</th>
+                            <th>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="checkboxAll" onclick="toggleAllCheckboxes(this)">
+                                </div>
+                            </th>
                         </tr>
                     </thead>
                     <tbody id="dveditRolePermissionForm">
@@ -92,7 +97,15 @@
         </div>
     </div>
 </div>
-
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var allCheckbox = document.getElementById('checkboxAll');
+        var checkboxes = document.querySelectorAll('.form-check-input-all, .toggle-checkbox');
+        allCheckbox.checked = Array.from(checkboxes).every(function (checkbox) {
+            return checkbox.checked;
+        });
+    });
+</script>
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/moduls/FormPermissionScript.js" asp-append-version="true"></script>
