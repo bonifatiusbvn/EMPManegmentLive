@@ -97,7 +97,15 @@
         </div>
     </div>
 </div>
-
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var allCheckbox = document.getElementById('checkboxAll');
+        var checkboxes = document.querySelectorAll('.form-check-input-all, .toggle-checkbox');
+        allCheckbox.checked = Array.from(checkboxes).every(function (checkbox) {
+            return checkbox.checked;
+        });
+    });
+</script>
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/moduls/FormPermissionScript.js" asp-append-version="true"></script>

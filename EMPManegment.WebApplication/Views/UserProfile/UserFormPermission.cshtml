@@ -74,14 +74,19 @@
         </div>
         <div class="card-body">
             <div class="table-responsive" style="position: relative; height: 600px; overflow: auto;">
-                <table class="table table-bordered dt-responsive table-striped align-middle dataTable no-footer dtr-inline gridjs-table">
-                    <thead class="table-light text-muted gridjs-thead" style="position: sticky; top: 0; z-index: 1;">
-                        <tr class="table-info gridjs-tr">
-                            <th class="gridjs-th gridjs-th-fixed">Form Name</th>
-                            <th class="gridjs-th gridjs-th-fixed">IsAddAllow</th>
-                            <th class="gridjs-th gridjs-th-fixed">IsViewAllow</th>
-                            <th class="gridjs-th gridjs-th-fixed">IsEditAllow</th>
-                            <th class="gridjs-th gridjs-th-fixed">IsDeleteAllow</th>
+                <table class="table table-bordered dt-responsive table-striped align-middle dataTable no-footer dtr-inline">
+                    <thead class="table-light text-muted" style="position: sticky; top: 0; z-index: 1;">
+                        <tr class="table-info">
+                            <th>Form Name</th>
+                            <th>IsAddAllow</th>
+                            <th>IsViewAllow</th>
+                            <th>IsEditAllow</th>
+                            <th>IsDeleteAllow</th>
+                            <th>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="userCheckboxAll" onclick="userAllCheckboxes(this)">
+                                </div>
+                            </th>
                         </tr>
                     </thead>
                     <tbody id="dveditUserForm" class="gridjs-tbody">
@@ -95,6 +100,15 @@
 
     </div>
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var allCheckbox = document.getElementById('userCheckboxAll');
+        var checkboxes = document.querySelectorAll('.form-check-input-all, .user-checkbox');
+        allCheckbox.checked = Array.from(checkboxes).every(function (checkbox) {
+            return checkbox.checked;
+        });
+    });
+</script>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/moduls/FormPermissionScript.js" asp-append-version="true"></script>
 
