@@ -137,6 +137,7 @@ namespace EMPManegment.Web.Controllers
 
                         UserSession.ProfilePhoto = string.IsNullOrEmpty(userlogin.Data.ProfileImage) ? defaultProfileImage : userlogin.Data.ProfileImage;
                         UserSession.FormPermisionData = userlogin.Data.FromPermissionData;
+                        UserSession.ProjectData=userlogin.Data.ProjectData;
 
                         await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
                         return RedirectToAction("UserHome", "Home");

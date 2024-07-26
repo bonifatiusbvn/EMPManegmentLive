@@ -208,11 +208,24 @@ namespace EMPManegment.Web.Controllers
             return View();
         }
 
-        public async Task<JsonResult> ProjectList(Guid? ProjectId, string? ProjectName)
+        public async Task<IActionResult> ProjectList(Guid? ProjectId, string? ProjectName)
         {
-            UserSession.ProjectId = ProjectId.ToString();
-            UserSession.ProjectName = ProjectId == null ? " " : ProjectName.ToString();
-            return new JsonResult("Project Name updated succesfully!");
+            try
+            {
+
+                UserSession.ProjectId = ProjectId.ToString();
+                UserSession.ProjectName = ProjectId == null ? "All Project" : ProjectName.ToString();
+
+                Guid? projectId = string.IsNullOrEmpty(UserSession.ProjectId) ? null : new Guid(UserSession.ProjectId);
+                string projectName = string.IsNullOrEmpty(UserSession.ProjectName) ? null : new(UserSession.ProjectName);
+                return Ok();
+
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(new { Message = $"An error occurred: {ex.Message}" });
+            }
         }
 
 

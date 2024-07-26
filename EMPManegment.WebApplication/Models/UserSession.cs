@@ -1,8 +1,10 @@
-﻿using EMPManegment.EntityModels.ViewModels.FormMaster;
+﻿using EMPManagment.API;
+using EMPManegment.EntityModels.ViewModels.FormMaster;
 using EMPManegment.EntityModels.ViewModels.FormPermissionMaster;
 using EMPManegment.EntityModels.ViewModels.UserModels;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
+using System.Security.Policy;
 
 namespace EMPManegment.Web.Models
 {
@@ -140,6 +142,20 @@ namespace EMPManegment.Web.Models
                 StaticHttpContext.Session.SetObjectAsJson("FromPermission", value);
             }
 
+        }
+        public static List<TblProjectMaster> ProjectData
+        {
+            get
+            {
+                if (StaticHttpContext.Session.GetObjectFromJson<List<TblProjectMaster>>("ProjectData") == null)
+                    return new List<TblProjectMaster>();
+                else
+                    return StaticHttpContext.Session.GetObjectFromJson<List<TblProjectMaster>>("ProjectData");
+            }
+            set
+            {
+                StaticHttpContext.Session.SetObjectAsJson("ProjectData", value);
+            }
         }
     }
     public static class SessionExtensions

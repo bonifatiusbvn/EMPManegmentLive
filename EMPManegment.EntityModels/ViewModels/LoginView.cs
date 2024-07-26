@@ -1,4 +1,5 @@
-﻿using EMPManegment.EntityModels.ViewModels.FormMaster;
+﻿using EMPManagment.API;
+using EMPManegment.EntityModels.ViewModels.FormMaster;
 using EMPManegment.EntityModels.ViewModels.UserModels;
 using System;
 using System.Collections.Generic;
@@ -28,6 +29,7 @@ namespace EMPManegment.EntityModels.ViewModels
         public string? Token { get; set; }
 
         public List<FromPermission> FromPermissionData { get; set; }
+        public List<TblProjectMaster> ProjectData { get; set; }
     }
     public class LoginResponseModel
     {
