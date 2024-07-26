@@ -146,7 +146,11 @@ namespace EMPManegment.Repository.UserLoginRepository
                                      where a.UserName == Loginrequest.UserName
                                      join b in Context.TblRoleMasters on a.RoleId equals b.RoleId into roles
                                      from role in roles.DefaultIfEmpty()
-                                     select new { User = a, Role = role }).FirstOrDefaultAsync();
+                                     select new
+                                     { 
+                                         User = a,
+                                         Role = role,
+                                     }).FirstOrDefaultAsync();
 
                 if (tblUser != null)
                 {
@@ -168,7 +172,6 @@ namespace EMPManegment.Repository.UserLoginRepository
                             Role = tblUser.Role.Role,
                         };
                         var authToken = GenerateToken(loginView);
-
 
                         if (Crypto.VarifyHash(Loginrequest.Password, tblUser.User.PasswordHash, tblUser.User.PasswordSalt))
                         {
@@ -236,6 +239,33 @@ namespace EMPManegment.Repository.UserLoginRepository
 
                                 userModel.FromPermissionData = FromPermissionData;
                             }
+
+                            if(userModel.Role == "Admin")
+                            {
+                                List<TblProjectMaster> userProjects = await (from a in Context.TblProjectMasters
+                                                                             select new TblProjectMaster
+                                                                             {
+                                                                                 ProjectId = a.ProjectId,
+                                                                                 ProjectTitle = a.ProjectTitle,
+                                                                             }).ToListAsync();
+                                userModel.ProjectData = userProjects;
+                            }
+                            else
+                            {
+                                List<TblProjectMaster> userProjects = await (from a in Context.TblProjectMasters
+                                                                             join b in Context.TblProjectMembers on a.ProjectId equals b.ProjectId
+                                                                             where b.UserId == userModel.Id && b.IsDeleted == false
+                                                                             select new TblProjectMaster
+                                                                             {
+                                                                                 ProjectId = a.ProjectId,
+                                                                                 ProjectTitle = a.ProjectTitle,
+                                                                             }).ToListAsync();
+                                userModel.ProjectData = userProjects;
+                            }
+                            
+
+                            
+
 
                             tblUser.User.LastLoginDate = DateTime.Now;
                             Context.TblUsers.Update(tblUser.User);

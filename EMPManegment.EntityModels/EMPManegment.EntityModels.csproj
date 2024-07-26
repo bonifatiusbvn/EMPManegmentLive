@@ -16,4 +16,8 @@
     <PackageReference Include="X.PagedList" Version="8.4.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\EMPManagment.DBContext\EMPManagment.DBContext.csproj" />
+  </ItemGroup>
+
 </Project>
