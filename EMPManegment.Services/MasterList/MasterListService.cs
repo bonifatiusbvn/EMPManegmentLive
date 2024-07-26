@@ -14,18 +14,18 @@ namespace EMPManegment.Services.CSC
     {
         public IMasterList MasterList { get; }
 
-        public MasterListService(IMasterList masterList) 
+        public MasterListService(IMasterList masterList)
         {
             MasterList = masterList;
         }
 
-      
+
 
         public async Task<IEnumerable<CityView>> GetCities(int cityId)
         {
             try
             {
-               return await MasterList.GetCities(cityId);
+                return await MasterList.GetCities(cityId);
             }
             catch (Exception ex)
             {
@@ -97,7 +97,19 @@ namespace EMPManegment.Services.CSC
             {
                 return await MasterList.GetAllCities();
             }
-            catch(Exception ex) 
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<IEnumerable<InvoiceTypeView>> GetInvoiceType()
+        {
+            try
+            {
+                return await MasterList.GetInvoiceType();
+            }
+            catch (Exception ex)
             {
                 throw ex;
             }

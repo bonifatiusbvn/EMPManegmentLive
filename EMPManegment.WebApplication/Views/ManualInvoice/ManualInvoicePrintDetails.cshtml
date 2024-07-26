@@ -71,12 +71,12 @@
 </head>
 <body>
     <div class="row justify-content-center">
-        <div class="col-xxl-9"> 
-            <div class="card">     
+        <div class="col-xxl-9">
+            <div class="card">
                 <div class="row">
                     <div class="card-body" style="width:1070px;">
                         <div class="d-flex">
-                            <p style="margin-left: 455px; font-size:22px;"><b>Tax Invoice</b></p>
+                            <p style="margin-left: 455px; font-size:22px;"><b>@Model.InvoicesType</b></p>
                         </div>
                         <div class="d-flex">
                             <div class="flex-grow-1 col-6" style="border: 1px solid lightgray;">
@@ -147,7 +147,7 @@
                                         <div style="border: 0px solid lightgray;border-width:0.5px;margin:-8px;width:107%;"></div>
                                         <div class="flex-shrink-0 mt-sm-0 mt-3">
                                             <p class="text-muted" style="padding:4px;padding-left: 0px;height: 15px;">Other Refrences</p>
-                                            <p class="text-muted text-uppercase"style="height: 15px;"></p>
+                                            <p class="text-muted text-uppercase" style="height: 15px;"></p>
                                         </div>
                                         <div style="border: 0px solid lightgray;border-width:0.5px;margin:-8px;width:107%;"></div>
                                         <div class="flex-shrink-0 mt-sm-0 mt-3 ">
@@ -204,6 +204,10 @@
                                     decimal? subtotal = 0;
                                     decimal? totalAmt = 0;
                                     decimal? totalQty = 0;
+                                    decimal? sgst = 0;
+                                    decimal? sgstper = 0;
+                                    decimal? cgst = 0;
+                                    decimal? cgstper = 0;
                                 }
                                 @foreach (var item in Model.ManualInvoiceDetails)
                                 {
@@ -211,7 +215,11 @@
                                     var SubTotal = string.Format("{0:n2}", subtotal);
                                     totalAmt = (item.Quantity * item.Price) - item.Discount;
                                     totalQty += item.Quantity;
+                                    sgst = (item.GstAmount / 2);
+                                    sgstper = (item.Gst / 2);
 
+                                    cgst = (item.GstAmount / 2);
+                                    cgstper = (item.Gst / 2);
                                     <tr>
                                         <td>@index</td>
                                         <td class="text-start">
@@ -245,12 +253,30 @@
                                 </tr>
                                 <tr>
                                     <td></td>
-                                    <td style="text-align: end;">GST</td>
+                                    <td style="text-align: end;">SGST</td>
                                     <td></td>
                                     <td></td>
+                                    <td style="text-align: end;">@sgstper</td>
+                                    <td style="text-align: start;">%</td>
+                                    <td><b>₹@sgst</b></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td style="text-align: end;">CGST</td>
                                     <td></td>
                                     <td></td>
-                                    <td><b>₹@Model.TotalGst</b></td>
+                                    <td style="text-align: end;">@cgstper</td>
+                                    <td style="text-align: start;">%</td>
+                                    <td><b>₹@cgst</b></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td style="text-align: end;">IGST</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td style="text-align: end;">0.0</td>
+                                    <td style="text-align: start;">%</td>
+                                    <td><b></b></td>
                                 </tr>
                                 <tr>
                                     <td></td>
@@ -261,7 +287,16 @@
                                     <td></td>
                                     <td>@Model.RoundOff</td>
                                 </tr>
-                                 <tr>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
                                     <td></td>
                                     <td></td>
                                     <td></td>
@@ -288,7 +323,7 @@
                                     <td></td>
                                     <td></td>
                                 </tr>
-                                 <tr>
+                                <tr>
                                     <td></td>
                                     <td></td>
                                     <td></td>
@@ -297,7 +332,7 @@
                                     <td></td>
                                     <td></td>
                                 </tr>
-                                 <tr>
+                                <tr>
                                     <td></td>
                                     <td></td>
                                     <td></td>
@@ -306,7 +341,7 @@
                                     <td></td>
                                     <td></td>
                                 </tr>
-                                 <tr>
+                                <tr>
                                     <td></td>
                                     <td></td>
                                     <td></td>
@@ -315,7 +350,7 @@
                                     <td></td>
                                     <td></td>
                                 </tr>
-                                 <tr>
+                                <tr>
                                     <td></td>
                                     <td></td>
                                     <td></td>
@@ -324,7 +359,7 @@
                                     <td></td>
                                     <td></td>
                                 </tr>
-                                 <tr>
+                                <tr>
                                     <td></td>
                                     <td></td>
                                     <td></td>
@@ -333,16 +368,7 @@
                                     <td></td>
                                     <td></td>
                                 </tr>
-                                 <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                                 <tr>
+                                <tr>
                                     <td></td>
                                     <td></td>
                                     <td></td>

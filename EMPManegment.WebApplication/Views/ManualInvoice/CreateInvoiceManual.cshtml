@@ -74,7 +74,18 @@
 
                                 <div class="col-6 col-lg-6">
                                     <div class=" card">
-                                        <h5 class="card-header">Invoice Details</h5>
+                                        <div class="card-header">
+                                            <div class="row align-items-center">
+                                                <div class="col">
+                                                    <h6 class="mb-0">Invoice Details</h6>
+                                                </div>
+                                                <div class="col" style="padding-left: 400px;">
+                                                    <select class="form-control form-select valid" id="ddlinvoicetype" name="ddlinvoicetype">
+                                                    </select>
+                                                    <input type="hidden" id="txtinvoicetype" />
+                                                </div>
+                                            </div>
+                                        </div>
                                         <div class="card-body">
                                             <div class="row">
                                                 <div class="col-md-4">
@@ -152,10 +163,13 @@
                                                 </th>
                                                 <th>
                                                     <div class="row">
-                                                        <div class="col-sm-6">
+                                                        <div class="col-sm-4">
                                                             GST (%)
                                                         </div>
-                                                        <div class="col-sm-6">
+                                                        <div class="col-sm-4">
+                                                            IGST (%)
+                                                        </div>
+                                                        <div class="col-sm-4">
                                                             GST Amt (₹)
                                                         </div>
 

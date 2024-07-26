@@ -78,8 +78,11 @@
         </td>
         <td class="text-start">
             <div class="row">
-                <div class="col-sm-6">
+                <div class="col-sm-3">
                     <input type="text" class="product-Gstper form-control" id="txtgst" oninput="preventEmptyValue(this)" value="@item.Gst" />
+                </div>
+                <div class="col-sm-3">
+                    <input type="text" class="product-Gstper form-control" id="txtigst" oninput="preventEmptyValue(this)" />
                 </div>
                 <div class="col-sm-6">
                     @if (item.GstAmount != null)

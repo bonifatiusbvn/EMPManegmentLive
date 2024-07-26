@@ -12,6 +12,7 @@ namespace EMPManegment.EntityModels.ViewModels.ManualInvoice
         public Guid Id { get; set; }
 
         public string? InvoiceNo { get; set; }
+        public int? InvoiceType { get; set; }
 
         public string? VendorName { get; set; }
 
@@ -72,6 +73,7 @@ namespace EMPManegment.EntityModels.ViewModels.ManualInvoice
         public string? PaymentStatusName { get; set; }
 
         public string? PaymentMethodName { get; set; }
+        public string? InvoicesType { get; set; }
 
         public List<ManualInvoiceDetailsModel>? ManualInvoiceDetails { get; set; }
     }

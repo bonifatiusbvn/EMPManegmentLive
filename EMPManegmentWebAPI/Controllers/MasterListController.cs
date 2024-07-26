@@ -128,5 +128,20 @@ namespace EMPManagment.API.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError, new { code = (int)HttpStatusCode.InternalServerError, message = "An error occurred while processing the request." });
             }
         }
+
+        [HttpGet]
+        [Route("GetInvoiceType")]
+        public async Task<IActionResult> GetInvoiceType()
+        {
+            try
+            {
+                IEnumerable<InvoiceTypeView> InvoiceType = await CSC.GetInvoiceType();
+                return Ok(new { code = (int)HttpStatusCode.OK, data = InvoiceType.ToList() });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { code = (int)HttpStatusCode.InternalServerError, message = "An error occurred while processing the request." });
+            }
+        }
     }
 }

@@ -290,6 +290,26 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
+
+        public async Task<JsonResult> GetInvoiceType()
+        {
+
+            try
+            {
+                List<InvoiceTypeView> getDepartment = new List<InvoiceTypeView>();
+                ApiResponseModel response = await APIServices.GetAsync(null, "MasterList/GetInvoiceType");
+                if (response.code == 200)
+                {
+                    getDepartment = JsonConvert.DeserializeObject<List<InvoiceTypeView>>(response.data.ToString());
+                }
+                return new JsonResult(getDepartment);
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }
 

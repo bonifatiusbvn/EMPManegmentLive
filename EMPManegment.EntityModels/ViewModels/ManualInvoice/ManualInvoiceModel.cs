@@ -11,6 +11,7 @@ namespace EMPManegment.EntityModels.ViewModels.ManualInvoice
         public Guid Id { get; set; }
 
         public string? InvoiceNo { get; set; }
+        public string? InvoiceType { get; set; }
 
         public string? VendorName { get; set; }
 

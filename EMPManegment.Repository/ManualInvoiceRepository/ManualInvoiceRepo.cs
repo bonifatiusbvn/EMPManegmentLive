@@ -45,6 +45,7 @@ namespace EMPManegment.Repository.ManualInvoiceRepository
                 {
                     Id = Guid.NewGuid(),
                     InvoiceNo = InvoiceDetails.InvoiceNo,
+                    InvoiceType = InvoiceDetails.InvoiceType,
                     VendorName = InvoiceDetails.VendorName,
                     VendorAddress = InvoiceDetails.VendorAddress,
                     VendorGstNo = InvoiceDetails.VendorGstNo,
@@ -183,6 +184,7 @@ namespace EMPManegment.Repository.ManualInvoiceRepository
                     {
                         Id = Guid.Parse(row["Id"].ToString()),
                         InvoiceNo = row["InvoiceNo"]?.ToString(),
+
                         VendorName = row["VendorName"]?.ToString(),
                         VendorAddress = row["VendorAddress"]?.ToString(),
                         VendorGstNo = row["VendorGstNo"]?.ToString(),
@@ -234,6 +236,7 @@ namespace EMPManegment.Repository.ManualInvoiceRepository
                     {
                         masterInvoiceDetails.Id = DS.Tables[1].Rows[0]["Id"] != DBNull.Value ? (Guid)DS.Tables[1].Rows[0]["Id"] : Guid.Empty;
                         masterInvoiceDetails.InvoiceNo = DS.Tables[1].Rows[0]["InvoiceNo"]?.ToString();
+                        masterInvoiceDetails.InvoicesType = DS.Tables[1].Rows[0]["InvoiceType"]?.ToString();
                         masterInvoiceDetails.VendorName = DS.Tables[1].Rows[0]["VendorName"]?.ToString();
                         masterInvoiceDetails.VendorAddress = DS.Tables[1].Rows[0]["VendorAddress"]?.ToString();
                         masterInvoiceDetails.VendorGstNo = DS.Tables[1].Rows[0]["VendorGstNo"]?.ToString();

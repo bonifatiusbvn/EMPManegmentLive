@@ -385,6 +385,7 @@ function InsertManualInvoiceDetails() {
                 var Invoicedetails = {
                     ProjectId: $("#textProjectId").val(),
                     InvoiceNo: $("#textInvoiceNo").val(),
+                    InvoiceType: $("#txtinvoicetype").val(),
                     VendorName: $("#textVendorName").val(),
                     VendorPhoneNo: $("#textVendorMobile").val(),
                     VendorGstNo: $("#textVendorGSTNumber").val(),

@@ -94,8 +94,7 @@ public partial class BonifatiusEmployeesContext : DbContext
     public virtual DbSet<TblVendorType> TblVendorTypes { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-    }
+    { }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<TblAttendance>(entity =>
@@ -334,8 +333,7 @@ public partial class BonifatiusEmployeesContext : DbContext
         {
             entity.ToTable("tblInvoiceTypeMaster");
 
-            entity.Property(e => e.Id).ValueGeneratedNever();
-            entity.Property(e => e.InvoiceType).HasMaxLength(10);
+            entity.Property(e => e.InvoiceType).HasMaxLength(50);
         });
 
         modelBuilder.Entity<TblManualInvoice>(entity =>
@@ -370,6 +368,10 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.Property(e => e.VendorGstNo).HasMaxLength(50);
             entity.Property(e => e.VendorName).HasMaxLength(150);
             entity.Property(e => e.VendorPhoneNo).HasMaxLength(12);
+
+            entity.HasOne(d => d.InvoiceTypeNavigation).WithMany(p => p.TblManualInvoices)
+                .HasForeignKey(d => d.InvoiceType)
+                .HasConstraintName("FK_tblManualInvoices_tblManualInvoices");
         });
 
         modelBuilder.Entity<TblManualInvoiceDetail>(entity =>

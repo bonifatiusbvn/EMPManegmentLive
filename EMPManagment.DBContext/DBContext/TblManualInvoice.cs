@@ -9,6 +9,8 @@ public partial class TblManualInvoice
 
     public string? InvoiceNo { get; set; }
 
+    public int? InvoiceType { get; set; }
+
     public string? VendorName { get; set; }
 
     public string? VendorPhoneNo { get; set; }
@@ -62,4 +64,6 @@ public partial class TblManualInvoice
     public DateTime? UpdatedOn { get; set; }
 
     public Guid? UpdatedBy { get; set; }
+
+    public virtual TblInvoiceTypeMaster? InvoiceTypeNavigation { get; set; }
 }

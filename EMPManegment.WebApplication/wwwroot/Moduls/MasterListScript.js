@@ -10,6 +10,7 @@ $(document).ready(function () {
     GetUsernameList();
     GetVendorNameList();
     fn_GetAllCities();
+    GetGetInvoiceType();
     $('#ddlCountry').change(function () {
         var Text = $("#ddlCountry Option:Selected").text();
         var StateId = $(this).val();
@@ -435,27 +436,6 @@ function GetVendorNameList() {
     });
 }
 
-//function showWeatherAPI(city) {
-//    $.ajax({
-//        url: '/Home/GetWeatherinfo?city=' + city,
-//        type: "GET",
-//        contentType: 'application/json;charset=utf-8;',
-//        traditional: true,
-
-//        success: function (result) {
-//            $('#getweather').html(result.current.temp_c + ' °C');
-//            $('#weathericon').attr('src', result.current.condition.icon);
-//        },
-//        complete: function (data) {
-//            // $('#searchresult').html(data.responseText);
-//        },
-//        error: function (response) {
-//            siteloaderhide();
-//            console.error("Error fetching weather information:", response);
-//        }
-//    });
-//}
-
 function fn_GetAllCities() {
     $.ajax({
         url: '/Authentication/GetAllCities',
@@ -508,3 +488,20 @@ function fn_ChangeCityDrp(selectedCity) {
     sessionStorage.setItem('SelectedCityName', selectedCity);
     /*showWeatherAPI(selectedCity);*/
 }
+
+function GetGetInvoiceType() {
+    $.ajax({
+        url: '/Authentication/GetInvoiceType',
+        success: function (result) {
+            $.each(result, function (i, data) {
+                $('#ddlinvoicetype').append('<option value="' + data.id + '">' + data.invoiceType + '</option>');
+            });
+        },
+    });
+}
+
+$('#ddlinvoicetype').change(function () {
+    debugger
+    var txttype = $(this).val();
+    $("#txtinvoicetype").val(txttype);
+});

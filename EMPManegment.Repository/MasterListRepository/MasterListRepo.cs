@@ -12,7 +12,7 @@ namespace EMPManegment.Repository.CSCRepository
 {
     public class MasterListRepo : IMasterList
     {
-        public MasterListRepo (BonifatiusEmployeesContext context)
+        public MasterListRepo(BonifatiusEmployeesContext context)
         {
             Context = context;
         }
@@ -113,7 +113,7 @@ namespace EMPManegment.Repository.CSCRepository
                         RoleId = a.RoleId,
                         Role = a.Role,
                     })
-                    .ToList(); 
+                    .ToList();
                 return role;
             }
             catch (Exception ex)
@@ -131,6 +131,24 @@ namespace EMPManegment.Repository.CSCRepository
                     CityName = a.City,
                 });
                 return cities;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<IEnumerable<InvoiceTypeView>> GetInvoiceType()
+        {
+
+            try
+            {
+                IEnumerable<InvoiceTypeView> invoicetype = Context.TblInvoiceTypeMasters.ToList().Select(a => new InvoiceTypeView
+                {
+                    Id = a.Id,
+                    InvoiceType = a.InvoiceType,
+                });
+                return invoicetype;
             }
             catch (Exception ex)
             {
