@@ -59,9 +59,6 @@ namespace EMPManegment.Repository.ManualInvoiceRepository
                     BuyesOrderDate = InvoiceDetails.BuyesOrderDate,
                     DispatchThrough = InvoiceDetails.DispatchThrough,
                     ShippingAddress = InvoiceDetails.ShippingAddress,
-                    Cgst = InvoiceDetails.Cgst,
-                    Sgst = InvoiceDetails.Sgst,
-                    Igst = InvoiceDetails.Igst,
                     TotalGst = InvoiceDetails.TotalGst,
                     TotalAmount = InvoiceDetails.TotalAmount,
                     PaymentMethod = InvoiceDetails.PaymentMethod,
@@ -85,6 +82,7 @@ namespace EMPManegment.Repository.ManualInvoiceRepository
                         Price = item.Price,
                         DiscountPercent = item.DiscountPercent,
                         Gst = item.Gst,
+                        Igst = item.IGst ?? 0.0m,
                         ProductTotal = item.ProductTotal,
                         IsDeleted = false,
                         CreatedBy = invoice.CreatedBy,
@@ -272,6 +270,7 @@ namespace EMPManegment.Repository.ManualInvoiceRepository
                             Quantity = row["Quantity"] != DBNull.Value ? (decimal)row["Quantity"] : 0,
                             Price = row["Price"] != DBNull.Value ? (decimal)row["Price"] : 0m,
                             Gst = row["Gst"] != DBNull.Value ? (decimal)row["Gst"] : 0m,
+                            IGst = row["IGst"] != DBNull.Value ? (decimal)row["IGst"] : 0m,
                             DiscountPercent = row["DiscountPercent"] != DBNull.Value ? (decimal)row["DiscountPercent"] : 0m,
                             ProductTotal = row["ProductTotal"] != DBNull.Value ? (decimal)row["ProductTotal"] : 0m,
                             GstAmount = row["GstAmount"] != DBNull.Value ? (decimal)row["GstAmount"] : 0m,
@@ -357,9 +356,6 @@ namespace EMPManegment.Repository.ManualInvoiceRepository
                     BuyesOrderDate = UpdateInvoice.BuyesOrderDate,
                     DispatchThrough = UpdateInvoice.DispatchThrough,
                     ShippingAddress = UpdateInvoice.ShippingAddress,
-                    Cgst = UpdateInvoice.Cgst,
-                    Sgst = UpdateInvoice.Sgst,
-                    Igst = UpdateInvoice.Igst,
                     TotalGst = UpdateInvoice.TotalGst,
                     TotalAmount = UpdateInvoice.TotalAmount,
                     PaymentMethod = UpdateInvoice.PaymentMethod,
@@ -388,6 +384,7 @@ namespace EMPManegment.Repository.ManualInvoiceRepository
                         existingInvoice.Price = item.Price;
                         existingInvoice.DiscountPercent = item.DiscountPercent;
                         existingInvoice.Gst = item.Gst;
+                        existingInvoice.Igst = item.IGst;
                         existingInvoice.ProductTotal = item.ProductTotal;
                         existingInvoice.IsDeleted = false;
                         existingInvoice.UpdatedOn = DateTime.Now;

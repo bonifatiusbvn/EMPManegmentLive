@@ -53,6 +53,17 @@
         updateTotals();
     })
 
+    $(document).on('input', '#txtigst', function () {
+        var productRow = $(this).closest(".product");
+        var gstvalue = $('#txtigst').val();
+        if (gstvalue > 100) {
+            toastr.warning("IGST% cannot be greater than 100%");
+            $(this).val(100);
+        }
+        updateProductTotalAmount(productRow);
+        updateTotals();
+    })
+
     function debounce(func, delay) {
         let timer;
         return function (...args) {
@@ -152,15 +163,18 @@ function preventEmptyValue(input) {
 }
 
 function updateProductTotalAmount(that) {
+    debugger
     var row = $(that);
     var productPrice = parseFloat(row.find("#txtproductamount").val());
     var quantity = parseFloat(row.find("#txtproductquantity").val());
     var gst = parseFloat(row.find("#txtgst").val());
+    var igst = parseFloat(row.find("#txtigst").val());
     var gstAmount = parseFloat(row.find("#txtgstAmount").val());
     var discount = parseFloat(row.find("#txtdiscountamount").val());
 
     var totalAmount = (productPrice * quantity) - discount;
-    var gstAmount = (totalAmount * gst / 100);
+    var igstcount = (totalAmount * igst / 100);
+    var gstAmount = (totalAmount * gst / 100) + igstcount;
     var productTotalAmount = totalAmount + gstAmount;
 
     if (!isNaN(totalAmount)) {
@@ -349,6 +363,7 @@ function InsertManualInvoiceDetails() {
                     Price: orderRow.find("#txtproductamount").val(),
                     Hsn: orderRow.find("#txtHSNcode").val(),
                     Gst: orderRow.find("#txtgst").val(),
+                    IGst: orderRow.find("#txtigst").val(),
                     GstAmount: orderRow.find("#txtgstAmount").val(),
                     Discount: orderRow.find("#txtdiscountamount").val(),
                     DiscountPercent: orderRow.find("#txtdiscountpercentage").val(),

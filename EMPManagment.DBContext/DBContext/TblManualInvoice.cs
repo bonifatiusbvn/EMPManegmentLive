@@ -35,12 +35,6 @@ public partial class TblManualInvoice
 
     public string DispatchThrough { get; set; } = null!;
 
-    public decimal? Cgst { get; set; }
-
-    public decimal? Sgst { get; set; }
-
-    public decimal? Igst { get; set; }
-
     public decimal? TotalGst { get; set; }
 
     public decimal? RoundOff { get; set; }
