@@ -712,8 +712,11 @@ function AddProductButton() {
         processData: false,
         contentType: false,
         complete: function (Result) {
-            if (Result.statusText === "OK") {
+            if (Result.statusText === "success") {
 
+                AddNewRow(Result.responseText);
+            }
+            else if (Result.statusText === "OK") {
                 AddNewRow(Result.responseText);
             }
             else {
