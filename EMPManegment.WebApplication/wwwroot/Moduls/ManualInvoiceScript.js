@@ -483,7 +483,7 @@ $(document).ready(function () {
 
         for (var i = 0; i < userPermissionArray.length; i++) {
             var permission = userPermissionArray[i];
-            if (permission.formName == "ManualInvoiceList") {
+            if (permission.formName == "Manual Invoices") {
                 canEdit = permission.edit;
                 canDelete = permission.delete;
                 break;

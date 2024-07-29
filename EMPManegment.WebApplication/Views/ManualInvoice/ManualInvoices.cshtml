@@ -53,7 +53,7 @@
                                     <th>VendorName</th>
                                     <th>CompanyName</th>
                                     <th>TotalAmount</th>
-                                    @if (UserSession.FormPermisionData.Any(a => a.FormName == "ManualInvoiceList" && (a.Edit == true || a.Delete == true)))
+                                    @if (UserSession.FormPermisionData.Any(a => a.FormName == "Manual Invoices" && (a.Edit == true || a.Delete == true)))
                                     {
                                         <th>Action</th>
                                     }
@@ -77,7 +77,7 @@
                 </div>
                 <!-- container-fluid -->
             </div>
-        </div> 
+        </div>
     </div>
 </div>
 
