@@ -489,7 +489,6 @@ $(document).ready(function () {
                 break;
             }
         }
-
         var columns = [
             {
                 "data": "invoiceNo",
@@ -719,7 +718,6 @@ function UpdateManualInvoiceDetails() {
         toastr.warning("Kindly fill all data fields");
     }
 }
-
 function AddProductButton() {
     $.ajax({
         url: '/ManualInvoice/DisplayProducts',
@@ -741,7 +739,6 @@ function AddProductButton() {
         }
     });
 }
-
 function AddNewRow(Result) {
     let rowCount = $('#addnewproductlink tr').length;
     rowCount++;

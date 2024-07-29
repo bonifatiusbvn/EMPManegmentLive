@@ -55,6 +55,15 @@
             overflow-y: auto;
             overflow-x: hidden;
         }
+
+        .custom-select {
+            width: 330px;
+            background-color: white; /* Warning color */
+            color: black; /* Text color */
+            border: 1px solid mediumaquamarine;
+            padding: 0.375rem 1.75rem 0.375rem 0.75rem;
+            border-radius: 0.25rem;
+        }
     </style>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed accent-info">
@@ -75,7 +84,7 @@
                 <form id="frmdrpdashbord">
                     @if (_userSession.UserRoll != "Admin")
                     {
-                        <select class="btn btn-info form-select" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="width:330px;" id="drpProjectName" name="drpProjectName">
+                        <select class="custom-select" style="width:330px;" id="drpProjectName" name="drpProjectName">
                             @if (UserProjects != null)
                             {
                                 foreach (var Project in UserProjects)
@@ -96,10 +105,11 @@
                                 }
                             }
                         </select>
+
                     }
                     else
                     {
-                        <select class="btn btn-info form-select" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="width:330px;" id="drpProjectName" name="drpProjectName">
+                        <select class="custom-select" style="width:330px;" id="drpProjectName" name="drpProjectName">
                             <option value="">All Project</option>
                             @if (UserProjects != null)
                             {
@@ -176,8 +186,6 @@
                         </div>
                     </div>
                 </li>
-
-
             </ul>
         </nav>
         <!-- /.navbar -->
@@ -188,7 +196,6 @@
                 <img src="~/assets/images/bonifatiusicon.ico" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
                 <span class="brand-text font-weight-light">Bonifatius ERP</span>
             </a>
-
             <!-- Sidebar -->
             <div class="sidebar">
                 <!-- Sidebar Menu -->
