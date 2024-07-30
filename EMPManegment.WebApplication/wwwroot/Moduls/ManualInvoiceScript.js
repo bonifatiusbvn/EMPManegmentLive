@@ -53,6 +53,17 @@
         updateTotals();
     })
 
+    $(document).on('input', '#txtigst', function () {
+        var productRow = $(this).closest(".product");
+        var gstvalue = $('#txtigst').val();
+        if (gstvalue > 100) {
+            toastr.warning("IGST% cannot be greater than 100%");
+            $(this).val(100);
+        }
+        updateProductTotalAmount(productRow);
+        updateTotals();
+    })
+
     function debounce(func, delay) {
         let timer;
         return function (...args) {
@@ -134,7 +145,6 @@
         }
     }, 300));
 });
-
 function updateRowNumbers() {
     $('#addnewproductlink tr').each(function (index) {
         $(this).find('.product-id').text(index + 1);
@@ -144,23 +154,24 @@ function updateRowNumbers() {
     let rowCount = $('#addnewproductlink tr').length;
     ProductTypeDropdown(rowCount);
 }
-
 function preventEmptyValue(input) {
     if (input.value === "") {
         input.value = 1;
     }
 }
-
 function updateProductTotalAmount(that) {
+    debugger
     var row = $(that);
     var productPrice = parseFloat(row.find("#txtproductamount").val());
     var quantity = parseFloat(row.find("#txtproductquantity").val());
     var gst = parseFloat(row.find("#txtgst").val());
+    var igst = parseFloat(row.find("#txtigst").val());
     var gstAmount = parseFloat(row.find("#txtgstAmount").val());
     var discount = parseFloat(row.find("#txtdiscountamount").val());
 
     var totalAmount = (productPrice * quantity) - discount;
-    var gstAmount = (totalAmount * gst / 100);
+    var igstcount = (totalAmount * igst / 100);
+    var gstAmount = (totalAmount * gst / 100) + igstcount;
     var productTotalAmount = totalAmount + gstAmount;
 
     if (!isNaN(totalAmount)) {
@@ -175,7 +186,6 @@ function updateProductTotalAmount(that) {
     }
     updateTotals();
 }
-
 function updateDiscount(that) {
     var row = $(that);
     var productPrice = parseFloat(row.find("#txtproductamount").val());
@@ -202,7 +212,6 @@ function updateDiscount(that) {
     updateProductTotalAmount(row);
     updateTotals();
 }
-
 function UpdateDiscountPercentage(that) {
     var row = $(that);
     var productPrice = parseFloat(row.find("#txtproductamount").val());
@@ -228,7 +237,6 @@ function UpdateDiscountPercentage(that) {
     updateProductTotalAmount(row);
     updateTotals();
 }
-
 function updateProductQuantity(row, increment) {
     var quantityInput = parseInt(row.find(".product-quantity").val());
     var newQuantity = quantityInput + increment;
@@ -278,7 +286,6 @@ function updateTotals() {
         $("#cart-total").val(totalAmount.toFixed(2));
     }
 }
-
 function removeItem(element) {
     $(element).closest('tr').remove();
     updateRowNumbers();
@@ -290,7 +297,6 @@ function preventEmptyValue(input) {
         input.value = 0;
     }
 }
-
 function ProductTypeDropdown(rowId) {
     if ($('#txtPOProductType_' + rowId + ' option').length > 1) {
         return;
@@ -316,7 +322,6 @@ function ProductTypeDropdown(rowId) {
     });
 }
 
-
 $(document).ready(function () {
     $("#CreateManualInvoiceForm").validate({
         rules: {
@@ -333,7 +338,6 @@ $(document).ready(function () {
         }
     });
 });
-
 function InsertManualInvoiceDetails() {
     if ($("#CreateManualInvoiceForm").valid()) {
         if ($('#addnewproductlink tr').length >= 1) {
@@ -455,7 +459,6 @@ function InsertManualInvoiceDetails() {
         toastr.warning("Kindly fill all data fields");
     }
 }
-
 var datas = userPermissions
 $(document).ready(function () {
     function data(datas) {
@@ -477,7 +480,6 @@ $(document).ready(function () {
                 break;
             }
         }
-
         var columns = [
             {
                 "data": "invoiceNo",
@@ -711,7 +713,6 @@ function UpdateManualInvoiceDetails() {
         toastr.warning("Kindly fill all data fields");
     }
 }
-
 function AddProductButton() {
     $.ajax({
         url: '/ManualInvoice/DisplayProducts',
@@ -733,7 +734,6 @@ function AddProductButton() {
         }
     });
 }
-
 function AddNewRow(Result) {
     let rowCount = $('#addnewproductlink tr').length;
     rowCount++;

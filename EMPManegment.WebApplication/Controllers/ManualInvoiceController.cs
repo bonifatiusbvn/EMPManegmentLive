@@ -31,10 +31,10 @@ namespace EMPManegment.Web.Controllers
             APIServices = aPIServices;
         }
 
-        [FormPermissionAttribute("ManualInvoiceList-View")]
+        [FormPermissionAttribute("Manual Invoices-View")]
         public async Task<IActionResult> ManualInvoices()
         {
-            if(UserSession.ProjectId == null)
+            if (UserSession.ProjectId == null)
             {
                 RedirectToAction("Login", "Authentication");
             }
@@ -235,7 +235,6 @@ namespace EMPManegment.Web.Controllers
             return words;
         }
 
-
         [FormPermissionAttribute("CreateInvoiceManual-Edit")]
         [HttpPost]
         public async Task<IActionResult> UpdateManualInvoice()
@@ -260,7 +259,6 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
-
 
         [HttpPost]
         public async Task<IActionResult> DisplayProducts()
@@ -320,7 +318,6 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
-
         private async Task<string> RenderViewToStringAsync(string viewName, object model, ViewDataDictionary viewData)
         {
             var viewEngine = HttpContext.RequestServices.GetService(typeof(ICompositeViewEngine)) as ICompositeViewEngine;

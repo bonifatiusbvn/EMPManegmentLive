@@ -195,6 +195,8 @@
                                 decimal? sgstper = 0;
                                 decimal? cgst = 0;
                                 decimal? cgstper = 0;
+                                decimal? igst = 0;
+
                             }
                             @foreach (var item in Model.ManualInvoiceDetails)
                             {
@@ -204,7 +206,7 @@
                                 totalqty += item.Quantity;
                                 sgst = (item.GstAmount / 2);
                                 sgstper = (item.Gst / 2);
-
+                                igst = item.IGst;
                                 cgst = (item.GstAmount / 2);
                                 cgstper = (item.Gst / 2);
                                 <tr>
@@ -243,7 +245,7 @@
                                 <td class="border" style="text-align: end;">IGST</td>
                                 <td class="border"></td>
                                 <td class="border"></td>
-                                <td class="border" style="text-align: end;">0.0</td>
+                                <td class="border" style="text-align: end;">@igst</td>
                                 <td class="border" style="text-align: start;">%</td>
                                 <td class="border"><b></b></td>
                             </tr>
