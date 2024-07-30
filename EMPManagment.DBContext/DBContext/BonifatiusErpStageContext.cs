@@ -337,22 +337,13 @@ public partial class BonifatiusErpStageContext : DbContext
             entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.BuyesOrderDate).HasColumnType("date");
             entity.Property(e => e.BuyesOrderNo).HasMaxLength(100);
-            entity.Property(e => e.Cgst)
-                .HasColumnType("numeric(18, 2)")
-                .HasColumnName("CGST");
             entity.Property(e => e.CompanyGstNo).HasMaxLength(50);
             entity.Property(e => e.CompanyName).HasMaxLength(150);
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
             entity.Property(e => e.DispatchThrough).HasMaxLength(20);
-            entity.Property(e => e.Igst)
-                .HasColumnType("numeric(18, 2)")
-                .HasColumnName("IGST");
             entity.Property(e => e.InvoiceDate).HasColumnType("date");
             entity.Property(e => e.InvoiceNo).HasMaxLength(100);
             entity.Property(e => e.RoundOff).HasColumnType("numeric(18, 2)");
-            entity.Property(e => e.Sgst)
-                .HasColumnType("numeric(18, 2)")
-                .HasColumnName("SGST");
             entity.Property(e => e.Status).HasMaxLength(50);
             entity.Property(e => e.TotalAmount).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.TotalGst)

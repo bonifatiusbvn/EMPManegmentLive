@@ -238,7 +238,7 @@ function updateProductQuantity(row, increment) {
         updateTotals();
     }
 }
-
+updateTotals();
 function updateTotals() {
     var totalSubtotal = 0;
     var totalGst = 0;
@@ -349,6 +349,7 @@ function InsertManualInvoiceDetails() {
                     Price: orderRow.find("#txtproductamount").val(),
                     Hsn: orderRow.find("#txtHSNcode").val(),
                     Gst: orderRow.find("#txtgst").val(),
+                    IGst: orderRow.find("#txtigst").val(),
                     GstAmount: orderRow.find("#txtgstAmount").val(),
                     Discount: orderRow.find("#txtdiscountamount").val(),
                     DiscountPercent: orderRow.find("#txtdiscountpercentage").val(),
@@ -380,12 +381,15 @@ function InsertManualInvoiceDetails() {
                     ProductDetails.push(objData);
                 }
             });
-
+            var dateInput = $("#textBuysOrderDate").val();
+            if (dateInput === "") {
+                dateInput = null;
+            }
             if (isValidProduct) {
                 var Invoicedetails = {
                     ProjectId: $("#textProjectId").val(),
                     InvoiceNo: $("#textInvoiceNo").val(),
-                    InvoiceType: $("#txtinvoicetype").val(),
+                    InvoiceType: $("#ddlinvoicetype").val(),
                     VendorName: $("#textVendorName").val(),
                     VendorPhoneNo: $("#textVendorMobile").val(),
                     VendorGstNo: $("#textVendorGSTNumber").val(),
@@ -394,24 +398,23 @@ function InsertManualInvoiceDetails() {
                     CompanyAddress: $("#textCompanyBillingAddress").val(),
                     CompanyGstNo: $("#textCompanyGstNo").val(),
                     TotalGst: $("#totalgst").val(),
-                    Cgst: $("#textCGst").val(),
-                    Sgst: $("#textSGst").val(),
-                    Igst: $("#textIGst").val(),
+                    DispatchDocNo: $("#textDispatchDocNo").val(),
+                    Destination: $("#textDestination").val(),
+                    MotorVehicleNo: $("#textMotorVehicleNo").val(),
                     SubTotal: $("#cart-subtotal").val(),
                     TotalAmount: $("#cart-total").val(),
                     DispatchThrough: $("#textDispatchThrough").val(),
                     BuyesOrderNo: $("#textBuysOrderNo").val(),
-                    BuyesOrderDate: $("#textBuysOrderDate").val(),
+                    BuyesOrderDate: dateInput,
                     InvoiceDate: $("#textInvoiceDate").val(),
                     OrderStatus: $("#UnitTypeId").val(),
                     PaymentMethod: $("#txtpaymentmethod").val(),
                     PaymentStatus: $("#txtpaymenttype").val(),
                     CreatedBy: $("#textCreatedById").val(),
                     RoundOff: $("#cart-roundOff").val(),
-                    ShippingAddress: $('#hideShippingAddress').is(':checked') ? $('#textCompanyBillingAddress').val() : $('#textShippingAddress').val(),
+                    ShippingAddress: $('#hideShippingAddress').is(':checked') ? $('#textVendorAddress').val() : $('#textShippingAddress').val(),
                     ManualInvoiceDetails: ProductDetails,
                 };
-
                 var form_data = new FormData();
                 form_data.append("ManualInvoiceDetails", JSON.stringify(Invoicedetails));
 
@@ -468,7 +471,7 @@ $(document).ready(function () {
 
         for (var i = 0; i < userPermissionArray.length; i++) {
             var permission = userPermissionArray[i];
-            if (permission.formName == "ManualInvoiceList") {
+            if (permission.formName == "Manual Invoices") {
                 canEdit = permission.edit;
                 canDelete = permission.delete;
                 break;
@@ -595,6 +598,7 @@ function UpdateManualInvoiceDetails() {
                     Price: orderRow.find("#txtproductamount").val(),
                     Hsn: orderRow.find("#txtHSNcode").val(),
                     Gst: orderRow.find("#txtgst").val(),
+                    IGst: orderRow.find("#txtigst").val(),
                     GstAmount: orderRow.find("#txtgstAmount").val(),
                     Discount: orderRow.find("#txtdiscountamount").val(),
                     DiscountPercent: orderRow.find("#txtdiscountpercentage").val(),
@@ -626,7 +630,10 @@ function UpdateManualInvoiceDetails() {
                     ProductDetails.push(objData);
                 }
             });
-
+            var dateInput = $("#textBuysOrderDate1").val();
+            if (dateInput ===  "0001-01-01") {
+                dateInput = null;
+            }
             if (isValidProduct) {
 
                 var formatedDate = $("#textModelCreatedOn").val(),
@@ -636,6 +643,7 @@ function UpdateManualInvoiceDetails() {
                     Id: $("#textMIid").val(),
                     ProjectId: $("#textProjectId").val(),
                     InvoiceNo: $("#textInvoiceNo").val(),
+                    InvoiceType: $("#ddlinvoicetype").val(),
                     VendorName: $("#textVendorName").val(),
                     VendorPhoneNo: $("#textVendorMobile").val(),
                     VendorGstNo: $("#textVendorGSTNumber").val(),
@@ -644,14 +652,14 @@ function UpdateManualInvoiceDetails() {
                     CompanyAddress: $("#textCompanyBillingAddress").val(),
                     CompanyGstNo: $("#textCompanyGstNo").val(),
                     TotalGst: $("#totalgst").val(),
-                    Cgst: $("#textCGst").val(),
-                    Sgst: $("#textSGst").val(),
-                    Igst: $("#textIGst").val(),
+                    DispatchDocNo: $("#textDispatchDocNo").val(),
+                    Destination: $("#textDestination").val(),
+                    MotorVehicleNo: $("#textMotorVehicleNo").val(),
                     SubTotal: $("#cart-subtotal").val(),
                     TotalAmount: $("#cart-total").val(),
                     DispatchThrough: $("#textDispatchThrough").val(),
                     BuyesOrderNo: $("#textBuysOrderNo").val(),
-                    BuyesOrderDate: $("#textBuysOrderDate1").val(),
+                    BuyesOrderDate: dateInput,
                     InvoiceDate: $("#textInvoiceDate").val(),
                     OrderStatus: $("#UnitTypeId").val(),
                     PaymentMethod: $("#txtpaymentmethod").val(),
@@ -660,10 +668,9 @@ function UpdateManualInvoiceDetails() {
                     CreatedBy: $("#textCreatedBy").val(),
                     RoundOff: $("#cart-roundOff").val(),
                     CreatedOn: Createdon,
-                    ShippingAddress: $('#hideShippingAddress').is(':checked') ? $('#textCompanyBillingAddress').val() : $('#textShippingAddress').val(),
+                    ShippingAddress: $('#hideShippingAddress').is(':checked') ? $('#textVendorAddress').val() : $('#textShippingAddress').val(),
                     ManualInvoiceDetails: ProductDetails,
                 };
-
                 var form_data = new FormData();
                 form_data.append("UpdateManualInvoice", JSON.stringify(Invoicedetails));
 
@@ -732,4 +739,14 @@ function AddNewRow(Result) {
     rowCount++;
     $('#addnewproductlink').append(Result);
     updateRowNumbers();
+}
+
+function toggleShippingAddress() {
+    var checkbox = document.getElementById("hideShippingAddress");
+    var shippingAddressFields = document.getElementById("shippingAddressFields");
+    if (checkbox.checked) {
+        shippingAddressFields.style.display = "none";
+    } else {
+        shippingAddressFields.style.display = "block";
+    }
 }

@@ -81,18 +81,18 @@
                         <div class="d-flex">
                             <div class="flex-grow-1 col-6" style="border: 1px solid lightgray;">
                                 <div class="flex-shrink-0 mt-sm-0 mt-3">
-                                    <span class="text-muted"><b>@Model.VendorName</b></span> <br />
-                                    <span class="text-muted">@Model.VendorAddress</span><br />
-                                    <span class="text-muted text-uppercase">GSTIN/UIN :@Model.VendorGstNo</span><br />
-                                    <p class="text-muted text-uppercase">Phone No. :@Model.VendorPhoneNo</p>
+                                    <span class="text-muted"><b>@Model.CompanyName</b></span> <br />
+                                    <span class="text-muted">@Model.CompanyAddress</span><br />
+                                    <span class="text-muted text-uppercase">GSTIN/UIN :@Model.CompanyGstNo</span><br />
+                                    <p class="text-muted text-uppercase"></p>
                                 </div>
                                 <div style="border: 0px solid lightgray;border-width:0.5px;margin:-8px;width:103.5%;"></div>
                                 <br />
                                 <div class="flex-shrink-0 mt-sm-0 mt-3">
                                     <p class="text-muted">Consignee (Ship to):</p>
-                                    <span class="text-muted"><b>@Model.CompanyName</b></span><br />
+                                    <span class="text-muted"><b>@Model.VendorName</b></span><br />
                                     <span class="text-muted">@Model.ShippingAddress</span><br />
-                                    <p class="text-muted text-uppercase">GSTIN/UIN :@Model.CompanyGstNo</p>
+                                    <p class="text-muted text-uppercase">GSTIN/UIN :@Model.VendorGstNo</p>
                                 </div>
                             </div>
                             <div class="flex-grow-1 col-6" style="border: 1px solid lightgray;">
@@ -120,7 +120,7 @@
                                         <div style="border: 0px solid lightgray;border-width:0.5px;margin:-8px;width:107%;"></div>
                                         <div class="flex-shrink-0 mt-sm-0 mt-3 ">
                                             <p class="text-muted" style="padding:4px;padding-left: 0px;height: 15px;">Dispatch Doc No.</p>
-                                            <p class="text-muted text-uppercase" style="height: 15px;"><b></b></p>
+                                            <p class="text-muted text-uppercase" style="height: 15px;"><b>@Model.DispatchDocNo</b></p>
                                         </div>
                                         <div style="border: 0px solid lightgray;border-width:0.5px;margin:-8px;width:107%;"></div>
                                         <div class="flex-shrink-0 mt-sm-0 mt-3 ">
@@ -152,7 +152,20 @@
                                         <div style="border: 0px solid lightgray;border-width:0.5px;margin:-8px;width:107%;"></div>
                                         <div class="flex-shrink-0 mt-sm-0 mt-3 ">
                                             <p class="text-muted" style="padding:4px;padding-left: 0px;height: 15px;">Dated</p>
-                                            <p class="text-muted text-uppercase" style="height: 15px;"><b></b></p>
+                                            <p class="text-muted text-uppercase" style="height: 15px;">
+                                                @{
+                                                    string formattedDate = string.Empty;
+                                                    if (!Model.BuyesOrderDate.HasValue || Model.BuyesOrderDate.Value == DateTime.MinValue)
+                                                    {
+                                                        formattedDate = "";
+                                                    }
+                                                    else
+                                                    {
+                                                        formattedDate = CommonHelper.GetCommonDateFormat(Model.BuyesOrderDate.Value);
+                                                    }
+                                                }
+                                                <b>@formattedDate</b>
+                                            </p>
                                         </div>
                                         <div style="border: 0px solid lightgray;border-width:0.5px;margin:-8px;width:107%;"></div>
                                         <div class="flex-shrink-0 mt-sm-0 mt-3 ">
@@ -162,12 +175,12 @@
                                         <div style="border: 0px solid lightgray;border-width:0.5px;margin:-8px;width:107%;"></div>
                                         <div class="flex-shrink-0 mt-sm-0 mt-3 ">
                                             <p class="text-muted" style="padding:4px;padding-left: 0px;height: 15px;">Destination</p>
-                                            <p class="text-muted text-uppercase" style="height: 15px;"><b></b></p>
+                                            <p class="text-muted text-uppercase" style="height: 15px;"><b>@Model.Destination</b></p>
                                         </div>
                                         <div style="border: 0px solid lightgray;border-width:0.5px;margin:-8px;width:107%;"></div>
                                         <div class="flex-shrink-0 mt-sm-0 mt-3 ">
                                             <p class="text-muted" style="padding:4px;padding-left: 0px;height: 15px;">Motor Vehicle No.</p>
-                                            <p class="text-muted text-uppercase" style="height: 15px;"><b></b></p>
+                                            <p class="text-muted text-uppercase" style="height: 15px;"><b>@Model.MotorVehicleNo</b></p>
                                         </div>
                                     </div>
                                 </div>
@@ -176,9 +189,9 @@
                         <div class="d-flex Address-Details">
                             <div class="flex-grow-1 col-6">
                                 <p class="text-muted">Buyer (Bill to)</p>
-                                <span class="text-muted"><b>@Model.CompanyName</b></span><br />
-                                <span class="text-muted">@Model.CompanyAddress</span><br />
-                                <p class="text-muted text-uppercase"><b>GSTIN/UIN :@Model.CompanyGstNo</b></p>
+                                <span class="text-muted"><b>@Model.VendorName</b></span><br />
+                                <span class="text-muted">@Model.VendorAddress</span><br />
+                                <p class="text-muted text-uppercase"><b>GSTIN/UIN :@Model.VendorGstNo</b></p>
                             </div>
                             <div class="VerticalBorder"></div>
                             <div class="flex-grow-1 col-6">

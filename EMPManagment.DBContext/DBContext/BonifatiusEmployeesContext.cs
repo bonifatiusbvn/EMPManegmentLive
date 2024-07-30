@@ -93,8 +93,8 @@ public partial class BonifatiusEmployeesContext : DbContext
 
     public virtual DbSet<TblVendorType> TblVendorTypes { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    { }
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder){ }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<TblAttendance>(entity =>
@@ -343,22 +343,16 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.BuyesOrderDate).HasColumnType("date");
             entity.Property(e => e.BuyesOrderNo).HasMaxLength(100);
-            entity.Property(e => e.Cgst)
-                .HasColumnType("numeric(18, 2)")
-                .HasColumnName("CGST");
             entity.Property(e => e.CompanyGstNo).HasMaxLength(50);
             entity.Property(e => e.CompanyName).HasMaxLength(150);
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.Destination).HasMaxLength(50);
+            entity.Property(e => e.DispatchDocNo).HasMaxLength(50);
             entity.Property(e => e.DispatchThrough).HasMaxLength(20);
-            entity.Property(e => e.Igst)
-                .HasColumnType("numeric(18, 2)")
-                .HasColumnName("IGST");
             entity.Property(e => e.InvoiceDate).HasColumnType("date");
             entity.Property(e => e.InvoiceNo).HasMaxLength(100);
+            entity.Property(e => e.MotorVehicleNo).HasMaxLength(50);
             entity.Property(e => e.RoundOff).HasColumnType("numeric(18, 2)");
-            entity.Property(e => e.Sgst)
-                .HasColumnType("numeric(18, 2)")
-                .HasColumnName("SGST");
             entity.Property(e => e.Status).HasMaxLength(50);
             entity.Property(e => e.TotalAmount).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.TotalGst)
@@ -386,6 +380,9 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.Property(e => e.Gst).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.GstAmount).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.Hsn).HasColumnName("HSN");
+            entity.Property(e => e.Igst)
+                .HasColumnType("numeric(18, 2)")
+                .HasColumnName("IGst");
             entity.Property(e => e.Price).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.Product).HasMaxLength(100);
             entity.Property(e => e.ProductTotal).HasColumnType("numeric(18, 2)");
