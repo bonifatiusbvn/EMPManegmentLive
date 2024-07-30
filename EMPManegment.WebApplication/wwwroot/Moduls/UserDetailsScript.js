@@ -665,6 +665,7 @@ function clearsearchtextbox() {
     $("#UADDepartmentList").val('');
     $("#UADUserList").val('');
     $("#UADUserListHidden").val('');
+    $("#ddlUACSearch").val('');
 }
 
 function GetAllUserList() {
@@ -740,7 +741,8 @@ function UADBackbtn()
     $("#backBtn").hide();
     $("#usernamebox").hide();
     $("#departmentbox").hide();
-    $("#UADSearchbtn").hide();
+    $("#ddlUACSearch").show();
+    $("#ddlUACSearch").text("Search By");
     GetActiveDeactiveList(1);
 }
 $('.dropdown-item').click(function () {
