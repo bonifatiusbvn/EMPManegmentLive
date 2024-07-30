@@ -107,7 +107,6 @@ namespace EMPManagment.Web.Helper
 
             try
             {
-
                 StringContent data = new StringContent("");
                 if (input != null)
                 {

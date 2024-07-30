@@ -145,7 +145,6 @@
         }
     }, 300));
 });
-
 function updateRowNumbers() {
     $('#addnewproductlink tr').each(function (index) {
         $(this).find('.product-id').text(index + 1);
@@ -155,13 +154,11 @@ function updateRowNumbers() {
     let rowCount = $('#addnewproductlink tr').length;
     ProductTypeDropdown(rowCount);
 }
-
 function preventEmptyValue(input) {
     if (input.value === "") {
         input.value = 1;
     }
 }
-
 function updateProductTotalAmount(that) {
     debugger
     var row = $(that);
@@ -189,7 +186,6 @@ function updateProductTotalAmount(that) {
     }
     updateTotals();
 }
-
 function updateDiscount(that) {
     var row = $(that);
     var productPrice = parseFloat(row.find("#txtproductamount").val());
@@ -216,7 +212,6 @@ function updateDiscount(that) {
     updateProductTotalAmount(row);
     updateTotals();
 }
-
 function UpdateDiscountPercentage(that) {
     var row = $(that);
     var productPrice = parseFloat(row.find("#txtproductamount").val());
@@ -242,7 +237,6 @@ function UpdateDiscountPercentage(that) {
     updateProductTotalAmount(row);
     updateTotals();
 }
-
 function updateProductQuantity(row, increment) {
     var quantityInput = parseInt(row.find(".product-quantity").val());
     var newQuantity = quantityInput + increment;
@@ -252,7 +246,6 @@ function updateProductQuantity(row, increment) {
         updateTotals();
     }
 }
-
 function updateTotals() {
     var totalSubtotal = 0;
     var totalGst = 0;
@@ -292,7 +285,6 @@ function updateTotals() {
         $("#cart-total").val(totalAmount.toFixed(2));
     }
 }
-
 function removeItem(element) {
     $(element).closest('tr').remove();
     updateRowNumbers();
@@ -304,7 +296,6 @@ function preventEmptyValue(input) {
         input.value = 0;
     }
 }
-
 function ProductTypeDropdown(rowId) {
     if ($('#txtPOProductType_' + rowId + ' option').length > 1) {
         return;
@@ -330,7 +321,6 @@ function ProductTypeDropdown(rowId) {
     });
 }
 
-
 $(document).ready(function () {
     $("#CreateManualInvoiceForm").validate({
         rules: {
@@ -347,7 +337,6 @@ $(document).ready(function () {
         }
     });
 });
-
 function InsertManualInvoiceDetails() {
     if ($("#CreateManualInvoiceForm").valid()) {
         if ($('#addnewproductlink tr').length >= 1) {
@@ -467,7 +456,6 @@ function InsertManualInvoiceDetails() {
         toastr.warning("Kindly fill all data fields");
     }
 }
-
 var datas = userPermissions
 $(document).ready(function () {
     function data(datas) {
