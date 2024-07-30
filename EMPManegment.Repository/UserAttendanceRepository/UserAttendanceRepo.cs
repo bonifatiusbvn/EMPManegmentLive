@@ -139,15 +139,24 @@ namespace EMPManegment.Repository.UserAttendanceRepository
 
                     if (today == checkdate)
                     {
-                        UserAttendance.Intime = userAttendance.Intime;
-                        UserAttendance.OutTime = userAttendance.OutTime;
-                        UserAttendance.TotalHours = UserAttendance.OutTime - UserAttendance.Intime;
-                        UserAttendance.UpdatedOn = DateTime.Now;
-                        UserAttendance.UpdatedBy = userAttendance.UpdatedBy;
-                        response.Message = "User updated successfully!";
-                        Context.TblAttendances.Update(UserAttendance);
-                        Context.SaveChanges();
+                        if (userAttendance.Intime <= userAttendance.OutTime)
+                        {
+                            UserAttendance.Intime = userAttendance.Intime;
+                            UserAttendance.OutTime = userAttendance.OutTime;
+                            UserAttendance.TotalHours = UserAttendance.OutTime - UserAttendance.Intime;
+                            UserAttendance.UpdatedOn = DateTime.Now;
+                            UserAttendance.UpdatedBy = userAttendance.UpdatedBy;
+                            response.Message = "User updated successfully!";
+                            Context.TblAttendances.Update(UserAttendance);
+                            Context.SaveChanges();
+                        }
+                        else
+                        {
+                            response.Code = (int)HttpStatusCode.InternalServerError;
+                            response.Message = "Intime cannot be greater than OutTime.";
+                        }
                     }
+
                     else
                     {
                         response.Code = (int)HttpStatusCode.NotFound;
