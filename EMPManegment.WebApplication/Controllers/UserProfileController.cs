@@ -262,7 +262,7 @@ namespace EMPManegment.Web.Controllers
                     ActiveDecative = ActiveDecative.Where(a => a.DepartmentId == DepartmentId).ToList();
                 }
 
-                int pageSize = 4;
+                int pageSize = 5;
                 var pageNumber = page ?? 1;
 
                 var pagedList = ActiveDecative.ToPagedList(pageNumber, pageSize);

@@ -8,12 +8,7 @@
     ViewData["Title"] = "UserActiveDecative";
     Layout = "~/Views/Shared/_HomeLayout.cshtml";
 }
-<style>
-    .select2-container--bootstrap4 .select2-selection--single {
-        height: 38px;
-        line-height: 36px;
-    }
-</style>
+
 <!-- start page title -->
 <div class="row" style="margin-top:80px;">
     <div class="col-12">
@@ -42,8 +37,8 @@
                                 <div class="row g-2">
                                     <div class="col-lg-auto">
                                         <div class="btn-group">
-                                            <a type="button" href="/UserProfile/UserActiveDecative" class="btn btn-warning" id="backBtn" style="display:none;"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="m5.828 7l2.536 2.535L6.95 10.95L2 6l4.95-4.95l1.414 1.415L5.828 5H13a8 8 0 1 1 0 16H4v-2h9a6 6 0 0 0 0-12z" /></svg> </a>
-                                            <button class="btn btn-primary btn-md form-select" id="ddluserdepartment" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width:150px">
+                                            <a onclick="UADBackbtn()" class="btn btn-warning" id="backBtn" style="display:none;"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="m5.828 7l2.536 2.535L6.95 10.95L2 6l4.95-4.95l1.414 1.415L5.828 5H13a8 8 0 1 1 0 16H4v-2h9a6 6 0 0 0 0-12z" /></svg> </a>
+                                            <button class="btn btn-primary btn-md form-select" id="ddlUACSearch" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width:150px">
                                                 Search By
                                             </button>
                                             <div class="dropdown-menu">
@@ -53,21 +48,15 @@
                                         </div>
                                         <input type="hidden" id="SelectDropdown" name="SelectDropdown">
                                     </div>
-                                    <div class="col-sm" id="departmentbox">
-                                        <div class="search-box">
-                                            <select class="form-control" id="ddlDepartment" name="ddlDepartment" style="width:230px">
-                                                <option selected value="">---Select Department---</option>
-                                            </select>
-                                        </div>
+                                    <div class="col" id="departmentbox" style="display:none;">
+                                        <input type="text" class="form-control text-center" id="UADDepartmentList" name="UADDepartmentList" placeholder="--select department--" style="width: 170px;">
+                                        <input type="hidden" id="UADDepartmentListHidden" name="UADDepartmentListHidden">
                                     </div>
-                                    <div class="col-sm" id="usernamebox">
-                                        <div class="search-box">
-                                            <select class="form-control" id="ddlusername" name="ddlusername" style="width:150px">
-                                                <option selected value="">---Select Username---</option>
-                                            </select>
-                                        </div>
+                                    <div class="col" id="usernamebox" style="display:none;">
+                                        <input type="text" class="form-control text-center" id="UADUserList" name="UADUserList" placeholder="--select userName--" style="width: 250px;">
+                                        <input type="hidden" id="UADUserListHidden" name="UADUserListHidden">
                                     </div>
-                                    <div class="col-lg-auto">
+                                    <div class="col-lg-auto" style="display:none;" id="UADSearchbtn">
                                         <a class="btn btn-success" onclick="GetUserSearchData()" value="Validate"><i class="ri-search-line"></i></a>
                                     </div>
                                 </div>
