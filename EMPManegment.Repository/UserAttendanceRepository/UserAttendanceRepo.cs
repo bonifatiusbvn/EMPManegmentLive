@@ -134,29 +134,46 @@ namespace EMPManegment.Repository.UserAttendanceRepository
                 var UserAttendance = Context.TblAttendances.FirstOrDefault(a => a.Id == userAttendance.AttendanceId);
                 if (UserAttendance != null)
                 {
-                    string today = UserAttendance.Date.ToString("dd/MM/yyyy");
-                    string checkdate = userAttendance.OutTime?.ToString("dd/MM/yyyy");
+                    string today = DateTime.Now.ToString("dd/MM/yyyy");
+                    string intimeDate = userAttendance.Intime.ToString("dd/MM/yyyy");
+                    string outTimeDate = userAttendance.OutTime?.ToString("dd/MM/yyyy");
 
-                    if (today == checkdate)
+                    if (today == intimeDate)
                     {
-                        UserAttendance.OutTime = userAttendance.OutTime;
-                        UserAttendance.TotalHours = UserAttendance.OutTime - UserAttendance.Intime;
-                        UserAttendance.UpdatedOn = DateTime.Now;
-                        UserAttendance.UpdatedBy = userAttendance.UpdatedBy;
-                        response.Message = "User outTime successfully updated";
-                        Context.TblAttendances.Update(UserAttendance);
-                        Context.SaveChanges();
+                        if (userAttendance.OutTime == null || today == outTimeDate)
+                        {
+                            if (userAttendance.OutTime == null || userAttendance.Intime <= userAttendance.OutTime)
+                            {
+                                UserAttendance.Intime = userAttendance.Intime;
+                                UserAttendance.OutTime = userAttendance.OutTime;
+                                UserAttendance.TotalHours = UserAttendance.OutTime.HasValue ? UserAttendance.OutTime - UserAttendance.Intime : (TimeSpan?)null;
+                                UserAttendance.UpdatedOn = DateTime.Now;
+                                UserAttendance.UpdatedBy = userAttendance.UpdatedBy;
+                                response.Message = "User updated successfully!";
+                                Context.TblAttendances.Update(UserAttendance);
+                                Context.SaveChanges();
+                            }
+                            else
+                            {
+                                response.Code = (int)HttpStatusCode.InternalServerError;
+                                response.Message = "Intime cannot be greater than OutTime.";
+                            }
+                        }
+                        else
+                        {
+                            response.Code = (int)HttpStatusCode.NotFound;
+                            response.Message = "Please select valid date for OutTime!";
+                        }
                     }
                     else
                     {
                         response.Code = (int)HttpStatusCode.NotFound;
-                        response.Message = "Please select valid date!!";
+                        response.Message = "Please select valid date for Intime!";
                     }
-
                 }
                 else
                 {
-                    response.Message = "Please select valid date!!";
+                    response.Message = "Please select valid date!";
                     response.Code = (int)HttpStatusCode.NotFound;
                 }
             }
@@ -167,6 +184,7 @@ namespace EMPManegment.Repository.UserAttendanceRepository
             }
             return response;
         }
+
 
         public async Task<IEnumerable<UserAttendanceModel>> GetUserAttendanceById(int attendanceId)
         {

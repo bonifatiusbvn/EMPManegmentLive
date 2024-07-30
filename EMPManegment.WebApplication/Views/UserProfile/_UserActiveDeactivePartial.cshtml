@@ -100,6 +100,7 @@
                                 <input type="hidden" value="@item.Email" id="txtEmail_@item.Id" />
                                 <input type="hidden" value="@item.PhoneNumber" id="txtPhoneNumber_@item.Id" />
                                 <input type="hidden" value="@item.Address" id="txtAddress_@item.Id" />
+                                <input type="hidden" value="@item.RoleId" id="ddlUserRole_@item.Id" />
                                 <div class="form-check form-switch text-center font-22">
                                     <input class="form-check-input @(item.IsActive.GetValueOrDefault() ? "switch-success" : "switch-danger")" style="font-size:24px; margin-left:-40px;" type="checkbox" id="isAdd_@item.Id" name="isAdd" @(item.IsActive == true ? "checked" : "") onclick="UserActiveDeactive('@item.Id', this)">
                                 </div>

@@ -46,8 +46,8 @@
             </div>
             <div class="modal-body">
                 <div class="mb-3">
-                    <label for="customername-field" class="form-label">AttandanceId</label>
-                    <input id="srcAttandanceId" class="form-control" disabled />
+                    <label for="customername-field" class="form-label" hidden>AttandanceId</label>
+                    <input id="srcAttandanceId" class="form-control" hidden />
                     <input id="UserId" class="form-control" hidden />
                 </div>
 
@@ -63,7 +63,7 @@
 
                 <div class="mb-3">
                     <label for="phone-field" class="form-label">Intime</label>
-                    <input id="srcIntime" class="form-control" disabled />
+                    <input type="datetime-local" id="srcIntime" class="form-control" />
                 </div>
                 <div class="mb-3">
                     <label for="date-field" class="form-label">OutTime</label>
@@ -74,6 +74,49 @@
                 <div class="hstack gap-2 justify-content-end">
                     <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-success" onclick="UpdateUserAttendanceSrc()" id="SubmitButton">Update Time</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="editMyAttendanceTime" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-light p-3">
+                <h5 class="modal-title" id="exampleModalLabel"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="customername-field" class="form-label" hidden>AttandanceId</label>
+                    <input id="txtmyAttandanceId" class="form-control" hidden />
+                    <input id="UserId" class="form-control" hidden />
+                </div>
+
+                <div class="mb-3">
+                    <label for="customername-field" class="form-label">UserName</label>
+                    <input id="txtmyUserName" class="form-control" disabled />
+                </div>
+
+                <div class="mb-3">
+                    <label for="email-field" class="form-label">Date</label>
+                    <input id="txtmyDate" class="form-control" disabled />
+                </div>
+
+                <div class="mb-3">
+                    <label for="phone-field" class="form-label">Intime</label>
+                    <input type="datetime-local" id="txtmyIntime" class="form-control" />
+                </div>
+                <div class="mb-3">
+                    <label for="date-field" class="form-label">OutTime</label>
+                    <input type="datetime-local" id="txtmyOutTime" class="form-control" />
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="hstack gap-2 justify-content-end">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-success" onclick="updateMyAttendance()" id="SubmitButton">Update Time</button>
                 </div>
             </div>
         </div>

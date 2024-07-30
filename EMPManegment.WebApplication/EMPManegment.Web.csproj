@@ -24,6 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\EMPManagment.DBContext\EMPManagment.DBContext.csproj" />
     <ProjectReference Include="..\EMPManegment.EntityModels\EMPManegment.EntityModels.csproj" />
   </ItemGroup>
 

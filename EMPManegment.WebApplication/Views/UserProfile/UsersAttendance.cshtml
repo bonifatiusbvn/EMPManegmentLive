@@ -38,18 +38,18 @@
                                         Search By
                                     </button>
                                     <div class="dropdown-menu">
-                                        <a class="dropdown-item" href="#" data-value="ByUsername">Username</a>
-                                        <a class="dropdown-item" href="#" data-value="ByDate">Date</a>
-                                        <a class="dropdown-item" href="#" data-value="ByDateAndUser">Username & Date</a>
-                                        <a class="dropdown-item" href="#" data-value="ByDatesAndUser">Username & Month</a>
+                                        <a class="dropdown-item" data-value="ByUsername">Username</a>
+                                        <a class="dropdown-item" data-value="ByDate">Date</a>
+                                        <a class="dropdown-item" data-value="ByDateAndUser">Username & Date</a>
+                                        <a class="dropdown-item" data-value="ByDatesAndUser">Username & Between Dates</a>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="col-sm" id="usernamebox" style="display: none;">
                                 <div class="search-box">
-                                    <select class="form-control from-select" id="drpAttusername" name="drpAttddlusername" style="width:250px">
-                                        <option selected disabled value="">---Select Username---</option>
+                                    <select class="form-control from-select" id="drpAttusername" name="drpAttddlusername" style="width:270px">
+                                        <option selected value="">---Select Username---</option>
                                     </select>
                                     <input type="hidden" class="form-control" id="txtguserid">
                                 </div>
@@ -74,7 +74,7 @@
                                     <i class="ri-search-line search-icon"></i>
                                 </div>
                             </div>
-                            <div class="col-lg-auto">
+                            <div class="col-lg-auto" id="searchUserAttendancebtn" style="display: none;">
                                 <a class="btn btn-success" onclick="GetSearchAttendanceList()" id="searchattendanceform" value="Validate"><i class="ri-search-line"></i></a>
                             </div>
                         </div>
@@ -117,7 +117,7 @@
 
                                 <div class="mb-3">
                                     <label for="phone-field" class="form-label">Intime</label>
-                                    <input id="Intime" class="form-control" disabled />
+                                    <input type="datetime-local" id="Intime" class="form-control" />
                                 </div>
 
                                 <div class="mb-3">

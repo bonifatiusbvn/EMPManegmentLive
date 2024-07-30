@@ -1,6 +1,4 @@
-﻿$("#usernamebox").hide();
-$("#departmentbox").show();
-$(document).ready(function () {
+﻿$(document).ready(function () {
     GetUserAttendanceInTime();
     UserBirsthDayWish();
     GetAllUserData();
@@ -223,7 +221,6 @@ function UserActiveDeactive(UserId, checkboxElement) {
     });
 }
 function UpdateUserRoleAndDept(userId) {
-
     var objData = {
         UpdatedBy: $("#txtUpdatedById").val(),
         Id: $('#txtUserId_' + userId).val(),
@@ -637,8 +634,8 @@ function clearSelectedBox() {
         '<option selected disabled value="">--Select Department--</option>');
 }
 function GetActiveDeactiveList(page) {
-    DepartmentId = $("#ddlDepartment").val();
-    Id = $("#ddlusername").val();
+    DepartmentId = $("#UADDepartmentListHidden").val();
+    Id = $("#UADUserListHidden").val();
 
     $.get("/UserProfile/UserActiveDecativeList", { DepartmentId: DepartmentId, Id: Id, page: page })
         .done(function (result) {
@@ -664,53 +661,122 @@ $(document).on("click", "#backbtn", function (e) {
     GetActiveDeactiveList(page);
 });
 function clearsearchtextbox() {
-    $("#ddlDepartment").val('');
-    $("#ddlusername").val('');
+    $("#UADDepartmentListHidden").val('');
+    $("#UADDepartmentList").val('');
+    $("#UADUserList").val('');
+    $("#UADUserListHidden").val('');
+    $("#ddlUACSearch").val('');
 }
 
+function GetAllUserList() {
+    $.ajax({
+        url: '/Task/GetUserName',
+        method: 'GET',
+        success: function (result) {
+            var unitTypes = result.map(function (data) {
+                return {
+                    label: data.firstName + ' ' + data.lastName + ' (' + data.userName + ')',
+                    value: data.id
+                };
+            });
+
+
+            $("#UADUserList").autocomplete({
+                source: unitTypes,
+                minLength: 0,
+                select: function (event, ui) {
+
+                    event.preventDefault();
+                    $("#UADUserList").val(ui.item.label);
+                    $("#UADUserListHidden").val(ui.item.value);
+
+                }
+            }).focus(function () {
+                $(this).autocomplete("search");
+            });
+        },
+        error: function (err) {
+            console.error("Failed to fetch user list: ", err);
+        }
+    });
+}
+
+
+function GetAllDepartmentList() {
+    $.ajax({
+        url: '/Authentication/GetDepartment',
+        method: 'GET',
+        success: function (result) {
+            var unitTypes = result.map(function (data) {
+                return {
+                    label: data.departments,
+                    value: data.id
+                };
+            });
+
+
+            $("#UADDepartmentList").autocomplete({
+                source: unitTypes,
+                minLength: 0,
+                select: function (event, ui) {
+
+                    event.preventDefault();
+                    $("#UADDepartmentList").val(ui.item.label);
+                    $("#UADDepartmentListHidden").val(ui.item.value);
+
+                }
+            }).focus(function () {
+                $(this).autocomplete("search");
+            });
+        },
+        error: function (err) {
+            console.error("Failed to fetch department list: ", err);
+        }
+    });
+}
+
+function UADBackbtn()
+{
+    clearsearchtextbox();
+    $("#backBtn").hide();
+    $("#usernamebox").hide();
+    $("#departmentbox").hide();
+    $("#ddlUACSearch").show();
+    $("#ddlUACSearch").text("Search By");
+    GetActiveDeactiveList(1);
+}
 $('.dropdown-item').click(function () {
     var selectedValue = $(this).attr('data-value');
-    $('#ddluserdepartment').data('value', selectedValue);
+    $('#ddlUACSearch').data('value', selectedValue);
 
     if (selectedValue === "UserName") {
         clearsearchtextbox();
-        GetUsernameList();
+        GetAllUserList();
         $("#usernamebox").show();
         $("#departmentbox").hide();
+        $("#UADSearchbtn").show();
     }
     if (selectedValue === "Department") {
         clearsearchtextbox();
-        GetDepartment();
+        GetAllDepartmentList();
         $("#usernamebox").hide();
         $("#departmentbox").show();
+        $("#UADSearchbtn").show();
     }
-    $('.btn-group #ddluserdepartment').text($(this).text());
-    $('#ddlusername').select2({
-        theme: 'bootstrap4',
-        width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
-        placeholder: $(this).data('placeholder'),
-        allowClear: Boolean($(this).data('allow-clear')),
-        dropdownParent: $("#SearchEmpForm")
-    });
-    $('#ddlDepartment').select2({
-        theme: 'bootstrap4',
-        width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
-        placeholder: $(this).data('placeholder'),
-        allowClear: Boolean($(this).data('allow-clear')),
-        dropdownParent: $("#SearchEmpForm")
-    });
+    $('.btn-group #ddlUACSearch').text($(this).text());
 });
+
 function GetUserSearchData() {
-    var selectedValue = $('#ddluserdepartment').data('value');
+    var selectedValue = $('#ddlUACSearch').data('value');
     var isValid = true;
     var errorMessage = "Kindly fill all required fields";
     if (typeof selectedValue === "undefined") {
         isValid = false;
         errorMessage = "Please select a search criteria";
-    } else if (selectedValue === "UserName" && $("#ddlusername").val() === null) {
+    } else if (selectedValue === "UserName" && $("#UADUserListHidden").val() === "") {
         isValid = false;
         errorMessage = "Please select a Username";
-    } else if (selectedValue === "Department" && $("#ddlDepartment").val() === null) {
+    } else if (selectedValue === "Department" && $("#UADDepartmentListHidden").val() === "") {
         isValid = false;
         errorMessage = "Please select a Department";
     }

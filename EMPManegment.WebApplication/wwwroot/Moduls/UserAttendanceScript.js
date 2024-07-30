@@ -1,10 +1,11 @@
 ﻿
 var datas = userPermissions
-
+var selectedUserName = null;
+var selectedDate = null;
+var selectedStartDate = null;
+var selectedEndDate = null;
+var selectedMonth = null;
 $(document).ready(function () {
-
-    $("#usernamebox").show();
-    $("#monthbox").show();
     function clearTextBox() {
         $('#drpAttusername').find('option').not(':first').remove();
         $('#ddlmyattendanceser').find('option').not(':first').remove();
@@ -32,12 +33,14 @@ $(document).ready(function () {
             $("#datesbox").hide();
             $("#startdatebox").hide();
             $("#enddatebox").hide();
+            $("#searchUserAttendancebtn").show();
         }
         else if (selectedValue === "ByDate") {
             $("#datesbox").show();
             $("#usernamebox").hide();
             $("#startdatebox").hide();
             $("#enddatebox").hide();
+            $("#searchUserAttendancebtn").show();
         }
         else if (selectedValue === "ByDateAndUser") {
             GetUsernameList();
@@ -45,6 +48,7 @@ $(document).ready(function () {
             $("#datesbox").show();
             $("#startdatebox").hide();
             $("#enddatebox").hide();
+            $("#searchUserAttendancebtn").show();
         }
         else if (selectedValue === "ByDatesAndUser") {
             GetUsernameList();
@@ -52,16 +56,19 @@ $(document).ready(function () {
             $("#datesbox").hide();
             $("#startdatebox").show();
             $("#enddatebox").show();
+            $("#searchUserAttendancebtn").show();
         }
         else if (selectedValue == "ByMonth") {
             $("#monthbox").show();
             $("#datebox").hide();
             $("#datebox1").hide();
+            $("#myattendanceseachbtn").show();
         }
         else if (selectedValue == "BetweenDates") {
             $("#monthbox").hide();
             $("#datebox").show();
             $("#datebox1").show();
+            $("#myattendanceseachbtn").show();
         }
     });
 
@@ -183,47 +190,25 @@ function EditUserAttendance(attandenceId) {
     $('#EditTimeModel').modal('show');
     $.ajax({
         url: '/UserProfile/EditOutTime?attendanceId=' + attandenceId,
-        type: 'Get',
+        type: 'GET',
         dataType: 'json',
-        processData: false,
-        contentType: false,
         success: function (response) {
             $.each(response, function (index, item) {
                 $('#AttandanceId').val(item.attendanceId);
                 $('#UserName').val(item.userName);
-                $('#Date').val((new Date(item.date)).toLocaleDateString('en-GB'));
-                $('#Intime').val((new Date(item.intime)).toLocaleTimeString('en-GB'));
-                if (item.outTime == null) {
+                $('#Date').val(getCommonDateformat(item.date));
 
-                    var MinDate = new Date(item.date);
-                    var MaxDate = new Date(MinDate);
-                    MaxDate.setDate(MinDate.getDate() + 7);
+                var intime = item.intime ? getCommonDatetime(item.date, item.intime) : '';
+                $('#Intime').val(intime);
 
-                    var formattedMinDate = formatDateToLocal(MinDate);
-                    var formattedMaxDate = formatDateToLocal(MaxDate);
-
-                    $('#OutTime').attr('min', formattedMinDate);
-                    $('#OutTime').attr('max', formattedMaxDate);
-                    $('#OutTime').val(formattedMinDate);
-                }
-                else {
-                    var MinDate = new Date(item.date);
-                    var MaxDate = new Date(MinDate);
-                    MaxDate.setDate(MinDate.getDate() + 7);
-
-                    var formattedMinDate = formatDateToLocal(MinDate);
-                    var formattedMaxDate = formatDateToLocal(MaxDate);
-
-                    $('#OutTime').attr('min', formattedMinDate);
-                    $('#OutTime').attr('max', formattedMaxDate);
-                    $('#OutTime').val(item.outTime);
-                }
+                var outTime = item.outTime ? getCommonDatetime(item.date, item.outTime) : '';
+                $('#OutTime').val(outTime);
             });
         },
         error: function () {
             toastr.error("Can't get Data");
         }
-    })
+    });
 }
 
 function UpdateUserAttendance() {
@@ -284,7 +269,7 @@ function GetSearchAttendanceList() {
         url: '/UserProfile/GetSearchAttendanceList',
         type: 'GET',
         success: function (result) {
-            
+
             $("#attendancedt").hide();
             $("#dvattendancelist").html(result);
             fn_SearchUserAttendanceList(UserPermissionData);
@@ -318,12 +303,16 @@ function fn_SearchUserAttendanceList(UserPermissionData) {
     }
 
     if (isValid) {
+        selectedUserName = $("#drpAttusername").val();
+        selectedDate = $('#txtdate').val();
+        selectedStartDate = $("#txtstartdatebox").val();
+        selectedEndDate = $("#txtenddatebox").val();
         var FilterData = {
-            Date: $('#txtdate').val(),
-            UserId: $("#drpAttusername").val(),
-            StartDate: $("#txtstartdatebox").val(),
-            EndDate: $("#txtenddatebox").val()
-        }
+            Date: selectedDate,
+            UserId: selectedUserName,
+            StartDate: selectedStartDate,
+            EndDate: selectedEndDate
+        };
         GetUserSearchAttendanceList(FilterData, UserPermissionData);
     } else {
         $("#backbtn").hide();
@@ -440,11 +429,14 @@ function fn_SearchMyAttendanceList(UserPermissionData) {
     if ($('#txtmonth').val() == "" && $("#txtstartdate").val() == "" && $("#txtenddate").val() == "") {
         toastr.warning("Select the Month or UserName");
     } else {
+        selectedMonth = $('#txtmonth').val();
+        selectedStartDate = $("#txtstartdate").val();
+        selectedEndDate = $("#txtenddate").val();
         var FilterData = {
-            Cmonth: $('#txtmonth').val(),
-            StartDate: $("#txtstartdate").val(),
-            EndDate: $("#txtenddate").val()
-        }
+            Cmonth: selectedMonth,
+            StartDate: selectedStartDate,
+            EndDate: selectedEndDate
+        };
         MySearchAttendanceList(UserPermissionData, FilterData);
     }
 }
@@ -502,7 +494,7 @@ function MySearchAttendanceList(UserPermissionData, FilterData) {
             "orderable": false,
             "searchable": false,
             "render": function (data, type, full) {
-                return '<a onclick="editUserAttendanceSrc(\'' + full.attendanceId + '\')" class="btn text-primary">' +
+                return '<a onclick="editMyAttendance(\'' + full.attendanceId + '\')" class="btn text-primary">' +
                     '<i class="fa-regular fa-pen-to-square"></i></a>';
             }
         });
@@ -553,14 +545,48 @@ function editUserAttendanceSrc(attandenceId) {
             $.each(response, function (index, item) {
                 $('#srcAttandanceId').val(item.attendanceId);
                 $('#srcUserName').val(item.userName);
-                $('#srcDate').val((new Date(item.date)).toLocaleDateString('en-GB'));
-                $('#srcIntime').val((new Date(item.intime)).toLocaleTimeString('en-GB'));
+                $('#srcDate').val(getCommonDateformat(item.date));
+                function formatDateToLocal(date) {
+                    var yyyy = date.getFullYear();
+                    var mm = (date.getMonth() + 1).toString().padStart(2, '0');
+                    var dd = date.getDate().toString().padStart(2, '0');
+                    var hh = date.getHours().toString().padStart(2, '0');
+                    var mi = date.getMinutes().toString().padStart(2, '0');
+                    var ss = date.getMinutes().toString().padStart(2, '0');
+
+                    return `${yyyy}-${mm}-${dd}T${hh}:${mi}:${ss}`;
+                }
+                function setDateAttributes(selector, date, time) {
+                    var minDate = new Date(date);
+                    var maxDate = new Date(minDate);
+                    maxDate.setDate(minDate.getDate() + 7);
+
+                    var formattedMinDate = formatDateToLocal(minDate);
+                    var formattedMaxDate = formatDateToLocal(maxDate);
+
+                    $(selector).attr('min', formattedMinDate);
+                    $(selector).attr('max', formattedMaxDate);
+
+                    if (time) {
+                        var timeDate = new Date(time);
+                        var formattedTime = formatDateToLocal(timeDate);
+                        $(selector).val(formattedTime);
+                    } else {
+                        $(selector).val(formattedMinDate);
+                    }
+                }
+                if (item.intime == null) {
+                    setDateAttributes('#srcIntime', item.date, null);
+                } else {
+                    setDateAttributes('#srcIntime', item.date, item.intime);
+                }
+
                 if (item.outTime == null) {
-                    $('#srcOutTime').val(item.date);
+                    setDateAttributes('#srcOutTime', item.date, null);
+                } else {
+                    setDateAttributes('#srcOutTime', item.date, item.outTime);
                 }
-                else {
-                    $('#srcOutTime').val(item.outTime);
-                }
+
             });
             $('#editTimeModelsearch').modal('show');
         },
@@ -570,6 +596,69 @@ function editUserAttendanceSrc(attandenceId) {
     })
 }
 
+function editMyAttendance(attandenceId) {
+    $.ajax({
+        url: '/UserProfile/EditOutTime?attendanceId=' + attandenceId,
+        type: 'Get',
+        dataType: 'json',
+        processData: false,
+        contentType: false,
+        success: function (response) {
+            $.each(response, function (index, item) {
+                $('#txtmyAttandanceId').val(item.attendanceId);
+                $('#txtmyUserName').val(item.userName);
+                $('#txtmyDate').val(getCommonDateformat(item.date));
+                function formatDateToLocal(date) {
+                    var yyyy = date.getFullYear();
+                    var mm = (date.getMonth() + 1).toString().padStart(2, '0');
+                    var dd = date.getDate().toString().padStart(2, '0');
+                    var hh = date.getHours().toString().padStart(2, '0');
+                    var mi = date.getMinutes().toString().padStart(2, '0');
+                    var ss = date.getMinutes().toString().padStart(2, '0');
+
+                    return `${yyyy}-${mm}-${dd}T${hh}:${mi}:${ss}`;
+                }
+                function setDateAttributes(selector, date, time) {
+                    var minDate = new Date(date);
+                    var maxDate = new Date(minDate);
+                    maxDate.setDate(minDate.getDate() + 7);
+
+                    var formattedMinDate = formatDateToLocal(minDate);
+                    var formattedMaxDate = formatDateToLocal(maxDate);
+
+                    $(selector).attr('min', formattedMinDate);
+                    $(selector).attr('max', formattedMaxDate);
+
+                    if (time) {
+                        var timeDate = new Date(time);
+                        var formattedTime = formatDateToLocal(timeDate);
+                        $(selector).val(formattedTime);
+                    } else {
+                        $(selector).val(formattedMinDate);
+                    }
+                }
+                if (item.intime == null) {
+                    setDateAttributes('#txtmyIntime', item.date, null);
+                } else {
+                    setDateAttributes('#txtmyIntime', item.date, item.intime);
+                }
+
+                if (item.outTime == null) {
+                    setDateAttributes('#txtmyOutTime', item.date, null);
+                } else {
+                    setDateAttributes('#txtmyOutTime', item.date, item.outTime);
+                }
+
+            });
+            $('#editMyAttendanceTime').modal('show');
+        },
+        error: function () {
+            toastr.error("Can't get Data");
+        }
+    })
+}
+
+var UserPermissionData = userPermissions;
 function UpdateUserAttendanceSrc() {
     var objData = {
         AttendanceId: $("#srcAttandanceId").val(),
@@ -607,38 +696,48 @@ function UpdateUserAttendanceSrc() {
                 }
 
                 else {
-
                     Swal.fire({
                         title: Result.message,
-                        icon: Result.icone,
+                        icon: "success",
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'OK'
-                    }).then(function () {
-                        window.location = '/UserProfile/UsersAttendance';
+                    }).then(function ()
+                    {
+                        $('#editTimeModelsearch').modal('hide');
+
+                        var FilterData = {
+                            Date: selectedDate,
+                            UserId: selectedUserName,
+                            StartDate: selectedStartDate,
+                            EndDate: selectedEndDate
+                        };
+                        GetUserSearchAttendanceList(FilterData, UserPermissionData);
                     });
                 }
             },
         })
     }
 }
+
 function updateUserAttendance() {
+    var date = $("#Date").val();
+    var intime = $("#Intime").val();
+    var outTime = $("#OutTime").val();
+
     var objData = {
         AttendanceId: $("#AttandanceId").val(),
-        OutTime: $("#OutTime").val(),
-        Intime: $("#Intime").val(),
+        Intime: moment(intime).format('YYYY-MM-DD HH:mm:ss'),
+        OutTime: outTime ? moment(outTime).format('YYYY-MM-DD HH:mm:ss') : null,
         UserName: $("#UserName").val(),
-        Date: $("#Date").val(),
+        Date: moment(date).format('YYYY-MM-DD'),
         UpdatedBy: $("#textUpdatedById").val(),
-    }
+    };
 
-
-    if (objData.OutTime == null) {
-        $("#OutTime").css('border-color', 'red');
-        $("#OutTime").focus();
-    }
-
-    else {
-        $("#OutTime").css('border-color', 'lightgray');
+    if (!objData.Intime) {
+        $("#Intime").css('border-color', 'red');
+        $("#Intime").focus();
+    } else {
+        $("#Intime").css('border-color', 'lightgray');
         $.ajax({
             url: '/UserProfile/UpdateOutTime',
             type: 'Post',
@@ -654,12 +753,70 @@ function updateUserAttendance() {
                     }).then(function () {
                         window.location = '/UserProfile/UsersAttendance';
                     });
-                }
-                else {
-                    toastr.error(Result.message);
+                } else {
+                    toastr.warning(Result.message);
                 }
             },
+            error: function () {
+                toastr.error("An error occurred while updating the attendance.");
+            }
+        });
+    }
+}
 
+function updateMyAttendance() {
+    var objData = {
+        AttendanceId: $("#txtmyAttandanceId").val(),
+        OutTime: $("#txtmyOutTime").val(),
+        Intime: $("#txtmyIntime").val(),
+        UserName: $("#txtmyUserName").val(),
+        Date: $("#txtmyDate").val(),
+    }
+
+    if (objData.OutTime == "") {
+        $("#OutTime").css('border-color', 'red');
+        $("#OutTime").focus();
+    }
+
+    else {
+        $("#OutTime").css('border-color', 'lightgray');
+        $.ajax({
+            url: '/UserProfile/UpdateOutTime',
+            type: 'Post',
+            data: objData,
+            dataType: 'json',
+            success: function (Result) {
+
+                var ricon = "warning";
+
+                if (Result.icone == ricon) {
+
+                    Swal.fire({
+                        title: Result.message,
+                        icon: Result.icone,
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK'
+                    })
+                }
+
+                else {
+                    Swal.fire({
+                        title: Result.message,
+                        icon: "success",
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK'
+                    }).then(function () {
+                        $('#editMyAttendanceTime').modal('hide');
+                        var FilterData = {
+                            Cmonth: selectedMonth,
+                            StartDate: selectedStartDate,
+                            EndDate: selectedEndDate
+                        };
+                        MySearchAttendanceList(UserPermissionData, FilterData);
+
+                    });
+                }
+            },
         })
     }
 }
