@@ -170,7 +170,7 @@ $(document).ready(function () {
     data(datas);
 });
 
-function formatDateToLocal(date) {debugger
+function formatDateToLocal(date) {
     var year = date.getFullYear();
     var month = (date.getMonth() + 1).toString().padStart(2, '0');
     var day = date.getDate().toString().padStart(2, '0');
@@ -190,10 +190,10 @@ function EditUserAttendance(attandenceId) {
                 $('#AttandanceId').val(item.attendanceId);
                 $('#UserName').val(item.userName);
                 $('#Date').val(getCommonDateformat(item.date));
-
+                debugger
                 var intime = item.intime ? getCommonDatetime(item.date, item.intime) : '';
                 $('#Intime').val(intime);
-
+                debugger
                 var outTime = item.outTime ? getCommonDatetime(item.date, item.outTime) : '';
                 $('#OutTime').val(outTime);
             });
@@ -204,7 +204,7 @@ function EditUserAttendance(attandenceId) {
     });
 }
 
-function UpdateUserAttendance() {  
+function UpdateUserAttendance() {
     var objData = {
         AttendanceId: $("#AttandanceId").val(),
         OutTime: $("#OutTime").val(),
@@ -262,7 +262,7 @@ function GetSearchAttendanceList() {
         url: '/UserProfile/GetSearchAttendanceList',
         type: 'GET',
         success: function (result) {
-            
+
             $("#attendancedt").hide();
             $("#dvattendancelist").html(result);
             fn_SearchUserAttendanceList(UserPermissionData);
@@ -634,29 +634,28 @@ function UpdateUserAttendanceSrc() {
     }
 }
 function updateUserAttendance() {
-    
-    var updateintime = $("#Intime").val();
-    var intime = formatDateToLocal(updateintime);
+    debugger
+    var date = $("#Date").val();
+    var intime = $("#Intime").val();
+    var outTime = $("#OutTime").val();
+
     var objData = {
         AttendanceId: $("#AttandanceId").val(),
-        OutTime: $("#OutTime").val(),
-        Intime: intime,
+        OutTime: moment(outTime).format('YYYY-MM-DD HH:mm:ss'),
+        Intime: moment(intime).format('YYYY-MM-DD HH:mm:ss'),
         UserName: $("#UserName").val(),
-        Date: $("#Date").val(),
+        Date: moment(date).format('YYYY-MM-DD'),
         UpdatedBy: $("#textUpdatedById").val(),
-    }
+    };
 
-
-    if (objData.OutTime == null) {
+    if (!objData.OutTime) {
         $("#OutTime").css('border-color', 'red');
         $("#OutTime").focus();
-    }
-
-    else {
+    } else {
         $("#OutTime").css('border-color', 'lightgray');
         $.ajax({
             url: '/UserProfile/UpdateOutTime',
-            type: 'Post',
+            type: 'POST',
             data: objData,
             dataType: 'json',
             success: function (Result) {
@@ -669,15 +668,17 @@ function updateUserAttendance() {
                     }).then(function () {
                         window.location = '/UserProfile/UsersAttendance';
                     });
-                }
-                else {
+                } else {
                     toastr.error(Result.message);
                 }
             },
-
-        })
+            error: function () {
+                toastr.error("An error occurred while updating the attendance.");
+            }
+        });
     }
 }
+
 
 function ExportToExcel() {
     siteloadershow();
