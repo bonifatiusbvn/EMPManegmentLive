@@ -190,10 +190,10 @@ function EditUserAttendance(attandenceId) {
                 $('#AttandanceId').val(item.attendanceId);
                 $('#UserName').val(item.userName);
                 $('#Date').val(getCommonDateformat(item.date));
-                debugger
+
                 var intime = item.intime ? getCommonDatetime(item.date, item.intime) : '';
                 $('#Intime').val(intime);
-                debugger
+
                 var outTime = item.outTime ? getCommonDatetime(item.date, item.outTime) : '';
                 $('#OutTime').val(outTime);
             });
@@ -634,7 +634,6 @@ function UpdateUserAttendanceSrc() {
     }
 }
 function updateUserAttendance() {
-    debugger
     var date = $("#Date").val();
     var intime = $("#Intime").val();
     var outTime = $("#OutTime").val();
@@ -669,7 +668,7 @@ function updateUserAttendance() {
                         window.location = '/UserProfile/UsersAttendance';
                     });
                 } else {
-                    toastr.error(Result.message);
+                    toastr.warning(Result.message);
                 }
             },
             error: function () {

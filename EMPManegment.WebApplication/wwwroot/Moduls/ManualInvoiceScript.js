@@ -160,7 +160,6 @@ function preventEmptyValue(input) {
     }
 }
 function updateProductTotalAmount(that) {
-    debugger
     var row = $(that);
     var productPrice = parseFloat(row.find("#txtproductamount").val());
     var quantity = parseFloat(row.find("#txtproductquantity").val());
