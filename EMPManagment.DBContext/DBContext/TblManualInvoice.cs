@@ -35,6 +35,12 @@ public partial class TblManualInvoice
 
     public string DispatchThrough { get; set; } = null!;
 
+    public string? DispatchDocNo { get; set; }
+
+    public string? Destination { get; set; }
+
+    public string? MotorVehicleNo { get; set; }
+
     public decimal? TotalGst { get; set; }
 
     public decimal? RoundOff { get; set; }

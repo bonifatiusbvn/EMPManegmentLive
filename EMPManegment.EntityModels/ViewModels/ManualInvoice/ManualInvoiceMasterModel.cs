@@ -37,6 +37,11 @@ namespace EMPManegment.EntityModels.ViewModels.ManualInvoice
         public DateTime? BuyesOrderDate { get; set; }
 
         public string DispatchThrough { get; set; } = null!;
+        public string? DispatchDocNo { get; set; }
+
+        public string? Destination { get; set; }
+
+        public string? MotorVehicleNo { get; set; }
 
         public decimal? Cgst { get; set; }
 

@@ -46,8 +46,8 @@
             </div>
             <div class="modal-body">
                 <div class="mb-3">
-                    <label for="customername-field" class="form-label">AttandanceId</label>
-                    <input id="srcAttandanceId" class="form-control" disabled />
+                    <label for="customername-field" class="form-label" hidden>AttandanceId</label>
+                    <input id="srcAttandanceId" class="form-control" hidden />
                     <input id="UserId" class="form-control" hidden />
                 </div>
 
@@ -63,7 +63,7 @@
 
                 <div class="mb-3">
                     <label for="phone-field" class="form-label">Intime</label>
-                    <input id="srcIntime" class="form-control" disabled />
+                    <input type="datetime-local" id="srcIntime" class="form-control" />
                 </div>
                 <div class="mb-3">
                     <label for="date-field" class="form-label">OutTime</label>

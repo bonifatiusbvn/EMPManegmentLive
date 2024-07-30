@@ -58,6 +58,9 @@ namespace EMPManegment.Repository.ManualInvoiceRepository
                     BuyesOrderNo = InvoiceDetails.BuyesOrderNo,
                     BuyesOrderDate = InvoiceDetails.BuyesOrderDate,
                     DispatchThrough = InvoiceDetails.DispatchThrough,
+                    DispatchDocNo = InvoiceDetails.DispatchDocNo,
+                    Destination= InvoiceDetails.Destination,
+                    MotorVehicleNo = InvoiceDetails.MotorVehicleNo,
                     ShippingAddress = InvoiceDetails.ShippingAddress,
                     TotalGst = InvoiceDetails.TotalGst,
                     TotalAmount = InvoiceDetails.TotalAmount,
@@ -196,6 +199,9 @@ namespace EMPManegment.Repository.ManualInvoiceRepository
                         BuyesOrderDate = row["BuyesOrderDate"] != DBNull.Value ? (DateTime)row["BuyesOrderDate"] : DateTime.MinValue,
                         BuyesOrderNo = row["BuyesOrderNo"]?.ToString(),
                         DispatchThrough = row["DispatchThrough"]?.ToString(),
+                        DispatchDocNo = row["DispatchDocNo"]?.ToString(),
+                        Destination = row["Destination"]?.ToString(),
+                        MotorVehicleNo = row["MotorVehicleNo"]?.ToString(),
                         TotalGst = Convert.ToDecimal(row["TotalGst"]),
                         RoundOff = row["RoundOff"] != DBNull.Value ? (decimal)row["RoundOff"] : 0m,
                         PaymentMethod = row["PaymentMethod"] != DBNull.Value ? (int)row["PaymentMethod"] : 0,
@@ -247,6 +253,9 @@ namespace EMPManegment.Repository.ManualInvoiceRepository
                         masterInvoiceDetails.BuyesOrderDate = DS.Tables[1].Rows[0]["BuyesOrderDate"] != DBNull.Value ? (DateTime)DS.Tables[1].Rows[0]["BuyesOrderDate"] : DateTime.MinValue;
                         masterInvoiceDetails.BuyesOrderNo = DS.Tables[1].Rows[0]["BuyesOrderNo"]?.ToString();
                         masterInvoiceDetails.DispatchThrough = DS.Tables[1].Rows[0]["DispatchThrough"]?.ToString();
+                        masterInvoiceDetails.DispatchDocNo = DS.Tables[1].Rows[0]["DispatchDocNo"]?.ToString();
+                        masterInvoiceDetails.Destination = DS.Tables[1].Rows[0]["Destination"]?.ToString();
+                        masterInvoiceDetails.MotorVehicleNo = DS.Tables[1].Rows[0]["MotorVehicleNo"]?.ToString();
                         masterInvoiceDetails.TotalGst = DS.Tables[1].Rows[0]["TotalGst"] != DBNull.Value ? (decimal)DS.Tables[1].Rows[0]["TotalGst"] : 0m;
                         masterInvoiceDetails.TotalAmount = DS.Tables[1].Rows[0]["TotalAmount"] != DBNull.Value ? (decimal)DS.Tables[1].Rows[0]["TotalAmount"] : 0m;
                         masterInvoiceDetails.PaymentMethod = DS.Tables[1].Rows[0]["PaymentMethod"] != DBNull.Value ? (int)DS.Tables[1].Rows[0]["PaymentMethod"] : 0;
@@ -343,6 +352,7 @@ namespace EMPManegment.Repository.ManualInvoiceRepository
                 {
                     Id = UpdateInvoice.Id,
                     InvoiceNo = UpdateInvoice.InvoiceNo,
+                    InvoiceType = UpdateInvoice.InvoiceType,
                     VendorName = UpdateInvoice.VendorName,
                     VendorAddress = UpdateInvoice.VendorAddress,
                     VendorGstNo = UpdateInvoice.VendorGstNo,
@@ -356,6 +366,9 @@ namespace EMPManegment.Repository.ManualInvoiceRepository
                     BuyesOrderDate = UpdateInvoice.BuyesOrderDate,
                     DispatchThrough = UpdateInvoice.DispatchThrough,
                     ShippingAddress = UpdateInvoice.ShippingAddress,
+                    DispatchDocNo = UpdateInvoice.DispatchDocNo,
+                    Destination= UpdateInvoice.Destination,
+                    MotorVehicleNo = UpdateInvoice.MotorVehicleNo,
                     TotalGst = UpdateInvoice.TotalGst,
                     TotalAmount = UpdateInvoice.TotalAmount,
                     PaymentMethod = UpdateInvoice.PaymentMethod,

@@ -118,7 +118,6 @@ namespace EMPManegment.Web.Controllers
                     }
                     else
                     {
-
                         return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
                     }
 
@@ -155,7 +154,6 @@ namespace EMPManegment.Web.Controllers
         {
             try
             {
-
                 TaskDetailsView responceModel = new TaskDetailsView
                 {
                     UserId = _userSession.UserId,

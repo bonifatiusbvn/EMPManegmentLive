@@ -145,7 +145,6 @@
         }
     }, 300));
 });
-
 function updateRowNumbers() {
     $('#addnewproductlink tr').each(function (index) {
         $(this).find('.product-id').text(index + 1);
@@ -155,13 +154,11 @@ function updateRowNumbers() {
     let rowCount = $('#addnewproductlink tr').length;
     ProductTypeDropdown(rowCount);
 }
-
 function preventEmptyValue(input) {
     if (input.value === "") {
         input.value = 1;
     }
 }
-
 function updateProductTotalAmount(that) {
     debugger
     var row = $(that);
@@ -189,7 +186,6 @@ function updateProductTotalAmount(that) {
     }
     updateTotals();
 }
-
 function updateDiscount(that) {
     var row = $(that);
     var productPrice = parseFloat(row.find("#txtproductamount").val());
@@ -216,7 +212,6 @@ function updateDiscount(that) {
     updateProductTotalAmount(row);
     updateTotals();
 }
-
 function UpdateDiscountPercentage(that) {
     var row = $(that);
     var productPrice = parseFloat(row.find("#txtproductamount").val());
@@ -242,7 +237,6 @@ function UpdateDiscountPercentage(that) {
     updateProductTotalAmount(row);
     updateTotals();
 }
-
 function updateProductQuantity(row, increment) {
     var quantityInput = parseInt(row.find(".product-quantity").val());
     var newQuantity = quantityInput + increment;
@@ -252,7 +246,7 @@ function updateProductQuantity(row, increment) {
         updateTotals();
     }
 }
-
+updateTotals();
 function updateTotals() {
     var totalSubtotal = 0;
     var totalGst = 0;
@@ -292,7 +286,6 @@ function updateTotals() {
         $("#cart-total").val(totalAmount.toFixed(2));
     }
 }
-
 function removeItem(element) {
     $(element).closest('tr').remove();
     updateRowNumbers();
@@ -304,7 +297,6 @@ function preventEmptyValue(input) {
         input.value = 0;
     }
 }
-
 function ProductTypeDropdown(rowId) {
     if ($('#txtPOProductType_' + rowId + ' option').length > 1) {
         return;
@@ -330,7 +322,6 @@ function ProductTypeDropdown(rowId) {
     });
 }
 
-
 $(document).ready(function () {
     $("#CreateManualInvoiceForm").validate({
         rules: {
@@ -347,7 +338,6 @@ $(document).ready(function () {
         }
     });
 });
-
 function InsertManualInvoiceDetails() {
     if ($("#CreateManualInvoiceForm").valid()) {
         if ($('#addnewproductlink tr').length >= 1) {
@@ -395,12 +385,15 @@ function InsertManualInvoiceDetails() {
                     ProductDetails.push(objData);
                 }
             });
-
+            var dateInput = $("#textBuysOrderDate").val();
+            if (dateInput === "") {
+                dateInput = null;
+            }
             if (isValidProduct) {
                 var Invoicedetails = {
                     ProjectId: $("#textProjectId").val(),
                     InvoiceNo: $("#textInvoiceNo").val(),
-                    InvoiceType: $("#txtinvoicetype").val(),
+                    InvoiceType: $("#ddlinvoicetype").val(),
                     VendorName: $("#textVendorName").val(),
                     VendorPhoneNo: $("#textVendorMobile").val(),
                     VendorGstNo: $("#textVendorGSTNumber").val(),
@@ -409,24 +402,23 @@ function InsertManualInvoiceDetails() {
                     CompanyAddress: $("#textCompanyBillingAddress").val(),
                     CompanyGstNo: $("#textCompanyGstNo").val(),
                     TotalGst: $("#totalgst").val(),
-                    Cgst: $("#textCGst").val(),
-                    Sgst: $("#textSGst").val(),
-                    Igst: $("#textIGst").val(),
+                    DispatchDocNo: $("#textDispatchDocNo").val(),
+                    Destination: $("#textDestination").val(),
+                    MotorVehicleNo: $("#textMotorVehicleNo").val(),
                     SubTotal: $("#cart-subtotal").val(),
                     TotalAmount: $("#cart-total").val(),
                     DispatchThrough: $("#textDispatchThrough").val(),
                     BuyesOrderNo: $("#textBuysOrderNo").val(),
-                    BuyesOrderDate: $("#textBuysOrderDate").val(),
+                    BuyesOrderDate: dateInput,
                     InvoiceDate: $("#textInvoiceDate").val(),
                     OrderStatus: $("#UnitTypeId").val(),
                     PaymentMethod: $("#txtpaymentmethod").val(),
                     PaymentStatus: $("#txtpaymenttype").val(),
                     CreatedBy: $("#textCreatedById").val(),
                     RoundOff: $("#cart-roundOff").val(),
-                    ShippingAddress: $('#hideShippingAddress').is(':checked') ? $('#textCompanyBillingAddress').val() : $('#textShippingAddress').val(),
+                    ShippingAddress: $('#hideShippingAddress').is(':checked') ? $('#textVendorAddress').val() : $('#textShippingAddress').val(),
                     ManualInvoiceDetails: ProductDetails,
                 };
-
                 var form_data = new FormData();
                 form_data.append("ManualInvoiceDetails", JSON.stringify(Invoicedetails));
 
@@ -467,7 +459,6 @@ function InsertManualInvoiceDetails() {
         toastr.warning("Kindly fill all data fields");
     }
 }
-
 var datas = userPermissions
 $(document).ready(function () {
     function data(datas) {
@@ -489,7 +480,6 @@ $(document).ready(function () {
                 break;
             }
         }
-
         var columns = [
             {
                 "data": "invoiceNo",
@@ -610,6 +600,7 @@ function UpdateManualInvoiceDetails() {
                     Price: orderRow.find("#txtproductamount").val(),
                     Hsn: orderRow.find("#txtHSNcode").val(),
                     Gst: orderRow.find("#txtgst").val(),
+                    IGst: orderRow.find("#txtigst").val(),
                     GstAmount: orderRow.find("#txtgstAmount").val(),
                     Discount: orderRow.find("#txtdiscountamount").val(),
                     DiscountPercent: orderRow.find("#txtdiscountpercentage").val(),
@@ -641,7 +632,10 @@ function UpdateManualInvoiceDetails() {
                     ProductDetails.push(objData);
                 }
             });
-
+            var dateInput = $("#textBuysOrderDate1").val();
+            if (dateInput ===  "0001-01-01") {
+                dateInput = null;
+            }
             if (isValidProduct) {
 
                 var formatedDate = $("#textModelCreatedOn").val(),
@@ -651,6 +645,7 @@ function UpdateManualInvoiceDetails() {
                     Id: $("#textMIid").val(),
                     ProjectId: $("#textProjectId").val(),
                     InvoiceNo: $("#textInvoiceNo").val(),
+                    InvoiceType: $("#ddlinvoicetype").val(),
                     VendorName: $("#textVendorName").val(),
                     VendorPhoneNo: $("#textVendorMobile").val(),
                     VendorGstNo: $("#textVendorGSTNumber").val(),
@@ -659,14 +654,14 @@ function UpdateManualInvoiceDetails() {
                     CompanyAddress: $("#textCompanyBillingAddress").val(),
                     CompanyGstNo: $("#textCompanyGstNo").val(),
                     TotalGst: $("#totalgst").val(),
-                    Cgst: $("#textCGst").val(),
-                    Sgst: $("#textSGst").val(),
-                    Igst: $("#textIGst").val(),
+                    DispatchDocNo: $("#textDispatchDocNo").val(),
+                    Destination: $("#textDestination").val(),
+                    MotorVehicleNo: $("#textMotorVehicleNo").val(),
                     SubTotal: $("#cart-subtotal").val(),
                     TotalAmount: $("#cart-total").val(),
                     DispatchThrough: $("#textDispatchThrough").val(),
                     BuyesOrderNo: $("#textBuysOrderNo").val(),
-                    BuyesOrderDate: $("#textBuysOrderDate1").val(),
+                    BuyesOrderDate: dateInput,
                     InvoiceDate: $("#textInvoiceDate").val(),
                     OrderStatus: $("#UnitTypeId").val(),
                     PaymentMethod: $("#txtpaymentmethod").val(),
@@ -675,10 +670,9 @@ function UpdateManualInvoiceDetails() {
                     CreatedBy: $("#textCreatedBy").val(),
                     RoundOff: $("#cart-roundOff").val(),
                     CreatedOn: Createdon,
-                    ShippingAddress: $('#hideShippingAddress').is(':checked') ? $('#textCompanyBillingAddress').val() : $('#textShippingAddress').val(),
+                    ShippingAddress: $('#hideShippingAddress').is(':checked') ? $('#textVendorAddress').val() : $('#textShippingAddress').val(),
                     ManualInvoiceDetails: ProductDetails,
                 };
-
                 var form_data = new FormData();
                 form_data.append("UpdateManualInvoice", JSON.stringify(Invoicedetails));
 
@@ -719,7 +713,6 @@ function UpdateManualInvoiceDetails() {
         toastr.warning("Kindly fill all data fields");
     }
 }
-
 function AddProductButton() {
     $.ajax({
         url: '/ManualInvoice/DisplayProducts',
@@ -741,10 +734,19 @@ function AddProductButton() {
         }
     });
 }
-
 function AddNewRow(Result) {
     let rowCount = $('#addnewproductlink tr').length;
     rowCount++;
     $('#addnewproductlink').append(Result);
     updateRowNumbers();
+}
+
+function toggleShippingAddress() {
+    var checkbox = document.getElementById("hideShippingAddress");
+    var shippingAddressFields = document.getElementById("shippingAddressFields");
+    if (checkbox.checked) {
+        shippingAddressFields.style.display = "none";
+    } else {
+        shippingAddressFields.style.display = "block";
+    }
 }

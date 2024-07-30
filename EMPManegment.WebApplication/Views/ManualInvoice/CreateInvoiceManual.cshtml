@@ -37,7 +37,13 @@
                             <div class="row">
                                 <div class="col-6 col-lg-6">
                                     <div class=" card">
-                                        <h5 class="card-header">Vendor Details</h5>
+                                        <div class="card-header">
+                                            <div class="row align-items-center">
+                                                <div class="col">
+                                                    <h6 class="mb-0">Vendor Details (To:)</h6>
+                                                </div>
+                                            </div>
+                                        </div>
                                         <div class="card-body">
                                             <div class="row">
                                                 <div class="col-6 col-lg-6 ">
@@ -51,7 +57,7 @@
                                             </div>
                                             <div class="row mt-3">
                                                 <div class="col-6 col-lg-6">
-                                                    <label for="textVendorAddress" class="form-label ">Address</label>
+                                                    <label for="textVendorAddress" class="form-label ">Billing Address</label>
                                                     <input type="text" id="textVendorAddress" class="form-control" placeholder="Address" value="@Model.VendorAddress" />
                                                 </div>
                                                 <div class="col-6 col-lg-6">
@@ -77,7 +83,7 @@
                                         <div class="card-header">
                                             <div class="row align-items-center">
                                                 <div class="col">
-                                                    <h6 class="mb-0">Invoice Details</h6>
+                                                    <h6 class="mb-0">Invoice Details (From:)</h6>
                                                 </div>
                                                 <div class="col" style="padding-left: 400px;">
                                                     <select class="form-control form-select valid" id="ddlinvoicetype" name="ddlinvoicetype">
@@ -93,7 +99,7 @@
                                                         <label for="textCompanyName" class="form-label">Company Name <span class="text-danger">*</span></label>
                                                     </div>
                                                     <div class="ms-auto">
-                                                        <input class="form-control valid" id="textCompanyName" name="textCompanyName" placeholder="Company Name" value="@Model.CompanyName" />
+                                                        <input class="form-control valid" id="textCompanyName" name="textCompanyName" placeholder="Company Name" value="BONIFATIUS TECHNOLOGIES PRIVATE LIMITED" readonly/>
                                                     </div>
                                                 </div>
                                                 <div class="col-5 col-lg-5">
@@ -113,12 +119,12 @@
                                             </div>
                                             <div class="row mt-3">
                                                 <div class="col-6 col-lg-6">
-                                                    <label for="textCompanyBillingAddress" class="form-label ">Billing Address</label>
-                                                    <input type="text" id="textCompanyBillingAddress" name="textCompanyBillingAddress" class="form-control" placeholder="Billing Address" value="@Model.CompanyAddress" />
+                                                    <label for="textCompanyBillingAddress" class="form-label ">Address</label>
+                                                    <input type="text" id="textCompanyBillingAddress" name="textCompanyBillingAddress" class="form-control" placeholder="Billing Address" value="SF-203, Peridot Complex, B/S, Gail Office, Akota, Vadodara-390020" readonly/>
                                                 </div>
                                                 <div class="col-6 col-lg-6">
                                                     <label class="form-label ">GST NO</label>
-                                                    <input type="text" id="textCompanyGstNo" class="form-control" placeholder="GST No" value="@Model.CompanyGstNo" />
+                                                    <input type="text" id="textCompanyGstNo" class="form-control" placeholder="GST No" value="24AAKCB0366M1ZJ" readonly/>
                                                 </div>
                                             </div>
                                         </div>
@@ -217,76 +223,103 @@
                                     <div class="row card-body">
                                         <div class="col-lg-6 col-sm-12">
                                             <div class="row">
-                                                <div class="col-lg-12 col-sm-12 mt-2">
-                                                    <div class="mb-2">
-                                                        <div class="input-group">
-                                                            <label class="input-group-text" for="textDispatchThrough">Dispatch Through</label>
-                                                            <input type="text" class="form-control" id="textDispatchThrough" name="textDispatchThrough" placeholder="Dispatch Through" value="@Model.DispatchThrough">
+                                                <div class="col-lg-6 col-sm-12">
+                                                    <div class="col-lg-12 mt-2">
+                                                        <div class="mb-2">
+                                                            <div class="input-group">
+                                                                <label class="input-group-text" for="textBuysOrderNo">Buys OrderNo</label>
+                                                                <input type="text" id="textBuysOrderNo" class="form-control" placeholder="Buys OrderNo" name="textBuysOrderNo" value="@Model.BuyesOrderNo" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-12 mt-2">
+                                                        <div class="mb-2">
+                                                            <div class="input-group" style="margin-top:15px;">
+                                                                <label class="input-group-text" for="textDispatchDocNo">Dispatch Doc No.</label>
+                                                                <input type="text" class="form-control" id="textDispatchDocNo" name="textDispatchDocNo" placeholder="Dispatch Doc No." value="@Model.DispatchDocNo">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-12 mt-2">
+                                                        <div class="mb-2">
+                                                            <div class="input-group" style="margin-top:15px;">
+                                                                <label class="input-group-text" for="textDispatchThrough">Dispatch Through</label>
+                                                                <input type="text" class="form-control" id="textDispatchThrough" name="textDispatchThrough" placeholder="Dispatch Through" value="@Model.DispatchThrough">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-12 mt-2">
+                                                        <div class="mb-2">
+                                                            <div class="input-group" style="margin-top:15px;">
+                                                                <label class="input-group-text" for="textDestination">Destination</label>
+                                                                <input type="text" class="form-control" id="textDestination" name="textDestination" placeholder="Destination" value="@Model.Destination">
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-lg-12 col-sm-12 mt-2">
-                                                    <div class="mb-2">
-                                                        <div class="input-group">
-                                                            <label class="input-group-text" for="textBuysOrderNo">Buys OrderNo</label>
-                                                            <input type="text" id="textBuysOrderNo" class="form-control" placeholder="Buys OrderNo" name="textBuysOrderNo" value="@Model.BuyesOrderNo" />
+                                                <div class="col-lg-6 col-sm-12">
+                                                    <div class="col-lg-12 col-sm-12 mt-2">
+                                                        <div class="mb-2">
+                                                            <div class="input-group">
+                                                                <label class="input-group-text" for="textBuysOrderDate">Buys OrderDate</label>
+                                                                @{
+                                                                    string Dateformat = Model?.BuyesOrderDate.HasValue ?? false ? Model.BuyesOrderDate.Value.ToString("yyyy-MM-dd") : string.Empty;
+                                                                }
+                                                                @if (Model.BuyesOrderDate != null)
+                                                                {
+                                                                    <input type="date" id="textBuysOrderDate1" class="form-control" placeholder="Buys OrderDate" name="textBuysOrderDate" value="@Dateformat" />
+                                                                }
+                                                                else
+                                                                {
+                                                                    <input type="date" id="textBuysOrderDate" class="form-control" placeholder="Buys OrderDate" name="textBuysOrderDate" />
+                                                                }
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <div class="col-lg-12 col-sm-12 mt-2">
-                                                    <div class="mb-2">
-                                                        <div class="input-group">
-                                                            <label class="input-group-text" for="textBuysOrderDate">Buys OrderDate</label>
-                                                            @{
-                                                                string Dateformat = Model?.BuyesOrderDate.HasValue ?? false ? Model.BuyesOrderDate.Value.ToString("yyyy-MM-dd") : string.Empty;
-                                                            }
-                                                            @if (Model.BuyesOrderDate != null)
-                                                            {
-                                                                <input type="date" id="textBuysOrderDate1" class="form-control" placeholder="Buys OrderDate" name="textBuysOrderDate" value="@Dateformat" />
-                                                            }
-                                                            else
-                                                            {
-                                                                <input type="date" id="textBuysOrderDate" class="form-control" placeholder="Buys OrderDate" name="textBuysOrderDate" />
-                                                            }
+                                                    <div class="col-lg-12 mt-2">
+                                                        <div class="mb-2">
+                                                            <div class="input-group" style="margin-top:15px;">
+                                                                <label class="input-group-text" for="textMotorVehicleNo">Motor Vehicle No.</label>
+                                                                <input type="text" class="form-control" id="textMotorVehicleNo" name="textMotorVehicleNo" placeholder="Motor Vehicle No." value="@Model.MotorVehicleNo">
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <div class="col-lg-12 col-sm-12 mt-2">
-                                                    <div class="mb-2">
-                                                        <div class="input-group">
-                                                            <label for="txtpaymentmethod" class="input-group-text">Payment Method </label>
-                                                            @if (Model.PaymentMethod != null)
-                                                            {
-                                                                <select class="form-control form-select valid" id="txtpaymentmethod" name="txtpaymentmethod">
-                                                                    <option selected value="@Model.PaymentMethod">@Model.PaymentMethodName</option>
-                                                                </select>
-                                                            }
-                                                            else
-                                                            {
-                                                                <select class="form-control form-select valid" id="txtpaymentmethod" name="txtpaymentmethod">
-                                                                    <option selected value="">--Select Payment Method--</option>
-                                                                </select>
-                                                            }
+                                                    <div class="col-lg-12 col-sm-12 mt-2">
+                                                        <div class="mb-2">
+                                                            <div class="input-group" style="margin-top:15px;">
+                                                                <label for="txtpaymentmethod" class="input-group-text">Payment Method </label>
+                                                                @if (Model.PaymentMethod != null)
+                                                                {
+                                                                    <select class="form-control form-select valid" id="txtpaymentmethod" name="txtpaymentmethod">
+                                                                        <option selected value="@Model.PaymentMethod">@Model.PaymentMethodName</option>
+                                                                    </select>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <select class="form-control form-select valid" id="txtpaymentmethod" name="txtpaymentmethod">
+                                                                        <option selected value="">--Payment Method--</option>
+                                                                    </select>
+                                                                }
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <div class="col-lg-12 col-sm-12 mt-2">
-                                                    <div class="mb-2">
-                                                        <div class="input-group">
-                                                            <label for="txtpaymenttype" class="input-group-text">Payment Status</label>
-                                                            @if (Model.PaymentStatus != null)
-                                                            {
-                                                                <select class="form-control form-select valid" id="txtpaymenttype" name="txtpaymenttype">
-                                                                    <option selected value="@Model.PaymentStatus">@Model.PaymentStatusName</option>
-                                                                </select>
-                                                            }
-                                                            else
-                                                            {
-                                                                <select class="form-control form-select valid" id="txtpaymenttype" name="txtpaymenttype">
-                                                                    <option selected value="">--Select Payment Status--</option>
-                                                                </select>
-                                                            }
-
+                                                    <div class="col-lg-12 col-sm-12 mt-2">
+                                                        <div class="mb-2">
+                                                            <div class="input-group" style="margin-top:15px;">
+                                                                <label for="txtpaymenttype" class="input-group-text">Payment Status</label>
+                                                                @if (Model.PaymentStatus != null)
+                                                                {
+                                                                    <select class="form-control form-select valid" id="txtpaymenttype" name="txtpaymenttype">
+                                                                        <option selected value="@Model.PaymentStatus">@Model.PaymentStatusName</option>
+                                                                    </select>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <select class="form-control form-select valid" id="txtpaymenttype" name="txtpaymenttype">
+                                                                        <option selected value="">--Payment Status--</option>
+                                                                    </select>
+                                                                }
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -345,10 +378,13 @@
                                         Shipping Addresses
                                     </h5>
                                     <div class="card-body">
-                                        <input type="checkbox" id="hideShippingAddress" name="hideShippingAddress" onchange="toggleShippingAddress()" checked>
-                                        <label for="hideShippingAddress"><b>Is Your Billing Address is same as Shipping Address?</b></label>
-                                        <div id="shippingAddressFields" style="display:none;">
-                                            <textarea type="text" id="textShippingAddress" name="textShippingAddress" class="form-control" placeholder="Shipping Address"></textarea>
+                                        @{
+                                            bool isSameAddress = Model.VendorAddress == Model.ShippingAddress;
+                                        }
+                                        <input type="checkbox" id="hideShippingAddress" name="hideShippingAddress" onchange="toggleShippingAddress()" @(isSameAddress ? "checked" : "")>
+                                        <label for="hideShippingAddress"><b>Is Your Billing Address the same as Shipping Address?</b></label>
+                                        <div id="shippingAddressFields" style="display:@(isSameAddress ? "none" : "block");">
+                                            <textarea type="text" id="textShippingAddress" name="textShippingAddress" class="form-control" placeholder="Shipping Address">@Model.ShippingAddress</textarea>
                                         </div>
                                     </div>
                                 </div>

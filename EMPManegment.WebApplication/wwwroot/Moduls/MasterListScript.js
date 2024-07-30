@@ -501,7 +501,6 @@ function GetGetInvoiceType() {
 }
 
 $('#ddlinvoicetype').change(function () {
-    debugger
     var txttype = $(this).val();
     $("#txtinvoicetype").val(txttype);
 });

@@ -52,18 +52,18 @@
                     <div class="d-flex">
                         <div class="flex-grow-1 col-6" style="border: 1px solid lightgray;">
                             <div class="flex-shrink-0 mt-sm-0 mt-3">
-                                <span class="text-muted"><b>@firstItem.VendorName</b></span> <br />
-                                <span class="text-muted">@firstItem.VendorAddress</span><br />
-                                <span class="text-muted text-uppercase">GSTIN/UIN :@firstItem.VendorGstNo</span><br />
-                                <p class="text-muted text-uppercase">Phone No. :@firstItem.VendorPhoneNo</p>
+                                <span class="text-muted"><b>@firstItem.CompanyName</b></span> <br />
+                                <span class="text-muted">@firstItem.CompanyAddress</span><br />
+                                <span class="text-muted text-uppercase">GSTIN/UIN :@firstItem.CompanyGstNo</span><br />
+                                <p class="text-muted text-uppercase"</p>
                             </div>
                             <div style="border: 0px solid lightgray;border-width:0.5px;margin:-8px;width:102.5%;"></div>
                             <br />
                             <div class="flex-shrink-0 mt-sm-0 mt-3">
                                 <p class="text-muted"><b>Consignee (Ship to):</b></p>
-                                <span class="text-muted"><b>@firstItem.CompanyName</b></span><br />
+                                <span class="text-muted"><b>@firstItem.VendorName</b></span><br />
                                 <span class="text-muted">@firstItem.ShippingAddress</span><br />
-                                <p class="text-muted text-uppercase">GSTIN/UIN :@firstItem.CompanyGstNo</p>
+                                <p class="text-muted text-uppercase">GSTIN/UIN :@firstItem.VendorGstNo</p>
                             </div>
                         </div>
                         <div class="flex-grow-1 col-6" style="border: 1px solid lightgray;">
@@ -91,7 +91,7 @@
                                     <div style="border: 0px solid lightgray;border-width:0.5px;margin:-8px;width:107%;"></div>
                                     <div class="flex-shrink-0 mt-sm-0 mt-3 ">
                                         <p class="text-muted" style="padding:4px;padding-left: 0px;height: 15px;">Dispatch Doc No.</p>
-                                        <p class="text-muted text-uppercase" style="height: 15px;"><b></b></p>
+                                        <p class="text-muted text-uppercase" style="height: 15px;"><b>@Model.DispatchDocNo</b></p>
                                     </div>
                                     <div style="border: 0px solid lightgray;border-width:0.5px;margin:-8px;width:107%;"></div>
                                     <div class="flex-shrink-0 mt-sm-0 mt-3 ">
@@ -108,7 +108,7 @@
                                 <div class="col-6">
                                     <div class="flex-shrink-0 mt-sm-0 mt-3 ">
                                         <p class="text-muted" style="height: 15px;">Dated</p>
-                                        <p style="height: 15px;"><span class="text-muted fw-normal">@CommonHelper.GetCommonDateFormat(Model.InvoiceDate)</span></p>
+                                        <p style="height: 15px;"><span class="text-muted fw-normal"><b>@CommonHelper.GetCommonDateFormat(Model.InvoiceDate)</b></span></p>
                                     </div>
                                     <div style="border: 0px solid lightgray;border-width:0.5px;margin:-8px;width:107%;"></div>
                                     <div class="flex-shrink-0 mt-sm-0 mt-3 ">
@@ -123,7 +123,22 @@
                                     <div style="border: 0px solid lightgray;border-width:0.5px;margin:-8px;width:107%;"></div>
                                     <div class="flex-shrink-0 mt-sm-0 mt-3 ">
                                         <p class="text-muted" style="padding:4px;padding-left: 0px;height: 15px;">Dated</p>
-                                        <p class="text-muted text-uppercase" style="height: 15px;"><b></b></p>
+                                        <p class="text-muted text-uppercase" style="height: 15px;">
+                                            @{
+                                                string formattedDate = string.Empty;
+                                                if (!Model.BuyesOrderDate.HasValue || Model.BuyesOrderDate.Value == DateTime.MinValue)
+                                                {
+                                                    formattedDate = "";
+                                                }
+                                                else
+                                                {
+                                                    formattedDate = CommonHelper.GetCommonDateFormat(Model.BuyesOrderDate.Value);
+                                                }
+                                            }
+                                            <b>@formattedDate</b>
+
+                                        </p>
+
                                     </div>
                                     <div style="border: 0px solid lightgray;border-width:0.5px;margin:-8px;width:107%;"></div>
                                     <div class="flex-shrink-0 mt-sm-0 mt-3 ">
@@ -133,12 +148,12 @@
                                     <div style="border: 0px solid lightgray;border-width:0.5px;margin:-8px;width:107%;"></div>
                                     <div class="flex-shrink-0 mt-sm-0 mt-3 ">
                                         <p class="text-muted" style="padding:4px;padding-left: 0px;height: 15px;">Destination</p>
-                                        <p class="text-muted text-uppercase" style="height: 15px;"><b></b></p>
+                                        <p class="text-muted text-uppercase" style="height: 15px;"><b>@Model.Destination</b></p>
                                     </div>
                                     <div style="border: 0px solid lightgray;border-width:0.5px;margin:-8px;width:107%;"></div>
                                     <div class="flex-shrink-0 mt-sm-0 mt-3 ">
                                         <p class="text-muted" style="padding:4px;padding-left: 0px;height: 15px;">Motor Vehicle No.</p>
-                                        <p class="text-muted text-uppercase" style="height: 15px;"><b></b></p>
+                                        <p class="text-muted text-uppercase" style="height: 15px;"><b>@Model.MotorVehicleNo</b></p>
                                     </div>
                                 </div>
                             </div>
@@ -148,9 +163,9 @@
                     <div class="d-flex Address-Details">
                         <div class="flex-grow-1 col-6">
                             <p class="text-muted"><b>Buyer (Bill to)</b></p>
-                            <span class="text-muted"><b>@firstItem.CompanyName</b></span><br />
-                            <span class="text-muted">@firstItem.CompanyAddress</span><br />
-                            <p class="text-muted text-uppercase">GSTIN/UIN :@firstItem.CompanyGstNo</p>
+                            <span class="text-muted"><b>@firstItem.VendorName</b></span><br />
+                            <span class="text-muted">@firstItem.VendorAddress</span><br />
+                            <p class="text-muted text-uppercase">GSTIN/UIN :@firstItem.VendorGstNo</p>
                         </div>
                         <div class="VerticalBorder"></div>
                         <div class="flex-grow-1 col-6">
@@ -255,7 +270,7 @@
                         </tbody>
                     </table><!--end table-->
                     <div class="flex-grow-1 col-12" style="border: 1px solid lightgray;">
-                        <span class="text-muted">Amount Chargeable (in words)<i style="margin-left: 780px" ;>E. &amp; O.E</i></span><br />
+                        <span class="text-muted">Amount Chargeable (in words)<i style="margin-left: 905px" ;>E. &amp; O.E</i></span><br />
                         <p class="text-muted text-capitalize"><b>INR @ViewData["TotalAmountInWords"]</b></p>
                     </div>
                     <table class="table text-center align-middle manual_invoice-table" style="border: 1px solid lightgray;">
@@ -311,7 +326,7 @@
                             <div class="flex-grow-1 col-6">
                                 <br />
                                 <br />
-                                <div class="text-end p-1" style="border: 1px solid lightgray; height:100px; width:516px;">
+                                <div class="text-end p-1" style="border: 1px solid lightgray; height:100px; width:582px;">
                                     <p class="text-muted"><b>for BONIFATIUS TECHNOLOGIES PRIVATE LIMITED</b></p>
                                     <p class="text-muted" style="margin-top:45px;">Authorised Signatory</p>
                                 </div>
