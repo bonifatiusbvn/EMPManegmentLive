@@ -139,11 +139,12 @@ namespace EMPManegment.Repository.UserAttendanceRepository
 
                     if (today == checkdate)
                     {
+                        UserAttendance.Intime = userAttendance.Intime;
                         UserAttendance.OutTime = userAttendance.OutTime;
                         UserAttendance.TotalHours = UserAttendance.OutTime - UserAttendance.Intime;
                         UserAttendance.UpdatedOn = DateTime.Now;
                         UserAttendance.UpdatedBy = userAttendance.UpdatedBy;
-                        response.Message = "User outTime successfully updated";
+                        response.Message = "User updated successfully!";
                         Context.TblAttendances.Update(UserAttendance);
                         Context.SaveChanges();
                     }
