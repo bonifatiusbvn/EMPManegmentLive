@@ -205,12 +205,12 @@
                             </div>
                             <div class="mb-3">
                                 <label for="dueDate" class="form-label">Task Start-Date <span class="text-danger">*</span></label>
-                                <input type="date" class="form-control material_blue" id="txtdatetime" name="txtdatetime" />
+                                <input type="datetime-local" class="form-control material_blue" id="txtdatetime" name="txtdatetime" />
 
                             </div>
                             <div class="mb-3">
                                 <label for="dealEmail" class="form-label">Task End-Date <span class="text-danger">*</span></label>
-                                <input type="date" class="form-control material_blue" id="txtenddatetime" name="txtenddatetime" />
+                                <input type="datetime-local" class="form-control material_blue" id="txtenddatetime" name="txtenddatetime" />
 
                             </div>
                             <div>
@@ -268,13 +268,13 @@
                                 <!--end col-->
                                 <div class="col-lg-6">
                                     <label for="TaskDate" class="form-label">Start Date</label>
-                                    <input type="date" id="EditStartDate" class="form-control" required />
+                                    <input type="datetime-local" id="EditStartDate" class="form-control" required />
                                     <span id="ValidateStartDate" class="text-danger"></span>
                                 </div>
                                 <!--end col-->
                                 <div class="col-lg-6">
                                     <label for="TaskEndDate" class="form-label">Due Date</label>
-                                    <input type="date" id="EditEndDate" class="form-control" data-provider="flatpickr" placeholder="Due date" required />
+                                    <input type="datetime-local" id="EditEndDate" class="form-control" data-provider="flatpickr" placeholder="Due date" required />
                                     <span id="ValidateEndDate" class="text-danger"></span>
                                 </div>
                                 <!--end col-->
@@ -335,11 +335,6 @@
                                     </div>
                                 </div>
                                 <!--end col-->
-                                <div class="col-lg-12">
-                                    <label for="TaskDescription" class="form-label">Description</label>
-                                    <textarea class="form-control " id="taskDescription-field" rows="3" readonly></textarea>
-                                </div>
-                                <!--end col-->
                                 <div class="col-lg-6">
                                     <label for="TaskDate" class="form-label">Start Date</label>
                                     <span id="taskstartdate-field" class="form-control"> </span>
@@ -358,6 +353,11 @@
                                 <div class="col-lg-6">
                                     <label for="TaskStatus" class="form-label">Status</label>
                                     <span id="taskstatus-field" class="form-control"></span>
+                                </div>
+                                <!--end col-->
+                                <div class="col-lg-12">
+                                    <label for="TaskDescription" class="form-label">Description</label>
+                                    <textarea class="form-control " id="taskDescription-field" rows="3" readonly></textarea>
                                 </div>
                                 <!--end col-->
                             </div>
@@ -407,15 +407,17 @@
     var userPermissions = '@Html.Raw(Json.Serialize(UserSession.FormPermisionData))';
 
     document.addEventListener('DOMContentLoaded', function () {
-        var modal = document.getElementById('addtasks');
-        modal.addEventListener('shown.bs.modal', function () {
-            var dateInputStart = document.getElementById('txtdatetime');
-            var dateInputEnd = document.getElementById('txtenddatetime');
-            let today = new Date().toISOString().split('T')[0];
-            dateInputStart.value = today;
-            dateInputEnd.value = today;
+        var modalElement = document.getElementById('addtasks');
+        modalElement.addEventListener('show.bs.modal', function (event) {
+            var now = moment().format('YYYY-MM-DD HH:mm');
+            document.getElementById('txtdatetime').value = now;
+            document.getElementById('txtenddatetime').value = now;
         });
     });
+
+    function formatDateTime(dateTimeString) {
+        return dateTimeString.replace(' ', 'T');
+    }
 </script>
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
