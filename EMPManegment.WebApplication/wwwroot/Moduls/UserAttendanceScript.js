@@ -726,18 +726,18 @@ function updateUserAttendance() {
 
     var objData = {
         AttendanceId: $("#AttandanceId").val(),
-        OutTime: moment(outTime).format('YYYY-MM-DD HH:mm:ss'),
         Intime: moment(intime).format('YYYY-MM-DD HH:mm:ss'),
+        OutTime: outTime ? moment(outTime).format('YYYY-MM-DD HH:mm:ss') : null,
         UserName: $("#UserName").val(),
         Date: moment(date).format('YYYY-MM-DD'),
         UpdatedBy: $("#textUpdatedById").val(),
     };
 
-    if (!objData.OutTime) {
-        $("#OutTime").css('border-color', 'red');
-        $("#OutTime").focus();
+    if (!objData.Intime) {
+        $("#Intime").css('border-color', 'red');
+        $("#Intime").focus();
     } else {
-        $("#OutTime").css('border-color', 'lightgray');
+        $("#Intime").css('border-color', 'lightgray');
         $.ajax({
             url: '/UserProfile/UpdateOutTime',
             type: 'Post',

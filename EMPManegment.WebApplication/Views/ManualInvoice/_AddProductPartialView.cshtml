@@ -82,7 +82,15 @@
                     <input type="text" class="product-Gstper form-control" id="txtgst" oninput="preventEmptyValue(this)" value="@item.Gst" />
                 </div>
                 <div class="col-sm-4">
-                    <input type="text" class="product-Gstper form-control" id="txtigst" oninput="preventEmptyValue(this)" value="@item.IGst"/>
+                    @if(item.IGst != null)
+                    {
+                        <input type="text" class="product-Gstper form-control" id="txtigst" oninput="preventEmptyValue(this)" value="@item.IGst" />
+                    }
+                    else
+                    {
+                        <input type="text" class="product-Gstper form-control" id="txtigst" oninput="preventEmptyValue(this)" value="0" />
+                    }
+
                 </div>
                 <div class="col-sm-4">
                     @if (item.GstAmount != null)
