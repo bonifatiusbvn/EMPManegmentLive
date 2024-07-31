@@ -405,38 +405,27 @@ namespace EMPManegment.Repository.PurchaseRequestRepository
                 throw new Exception("Error fetching PR details", ex);
             }
         }
-        public async Task<UserResponceModel> ApproveUnapprovePR(List<string> PrNo)
+        public async Task<UserResponceModel> ApproveUnapprovePR(PRIsApprovedMasterModel PRIdList)
         {
             UserResponceModel response = new UserResponceModel();
             try
             {
-                foreach (var item in PrNo)
+                var allPurchaseRequests = await Context.TblPurchaseRequests.ToListAsync();
+                var approvalDict = PRIdList.PRList.ToDictionary(x => x.PrId, x => x.IsApproved);
+
+                foreach (var pr in allPurchaseRequests)
                 {
-                    if (item != "")
+                    if (approvalDict.TryGetValue(pr.PrId, out var isApproved))
                     {
-                        var prList = await Context.TblPurchaseRequests.Where(a => a.PrNo == item).ToListAsync();
-                        if (prList.Any())
-                        {
-                            foreach (var pr in prList)
-                            {
-                                pr.IsApproved = true;
-                                response.Message = "Purchase request is approved successfully.";
-                                Context.TblPurchaseRequests.Update(pr);
-                            }
-                            await Context.SaveChangesAsync();
-                        }
-                        else
-                        {
-                            response.Message = "Purchase request is already approved!";
-                            response.Code = (int)HttpStatusCode.NotFound;
-                        }
+                        pr.IsApproved = isApproved;
                     }
-                    else
-                    {
-                        response.Message = "Please select purchase request!";
-                        response.Code = (int)HttpStatusCode.NotFound;
-                    }
+
+                    Context.TblPurchaseRequests.Update(pr);
                 }
+                await Context.SaveChangesAsync();
+
+                response.Message = "Purchase requests approved/unapproved successfully.";
+                response.Code = (int)HttpStatusCode.OK;
             }
             catch (Exception ex)
             {
