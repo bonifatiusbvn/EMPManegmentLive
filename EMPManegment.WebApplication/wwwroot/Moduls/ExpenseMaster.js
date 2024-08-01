@@ -519,11 +519,11 @@ function getNextMonth() {
     let month = date.getMonth();
     let year = date.getFullYear();
 
-    if (month > 11) { 
+    if (month > 11) {
         month = 0;
         year += 1;
     }
-    const formattedMonth = month < 9 ? '0' + (month + 1) : (month + 1); 
+    const formattedMonth = month < 9 ? '0' + (month + 1) : (month + 1);
     return `${year}-${formattedMonth}`;
 }
 
@@ -609,8 +609,6 @@ function GetPayUserExpenseCreditList(userId, selectedMonth) {
                     typeof i === 'number' ?
                         i : 0;
             };
-
-
             total = api
                 .column(4)
                 .data()
@@ -730,7 +728,7 @@ function GetPayUserExpenseDebitList(userId, selectedMonth, selectedText, selecte
                 }, 0);
 
             var $cumulativePendingFooterRow = $('#monthlyPendingExpenseFooter');
-            var $cumulativePendingFooterCell = $cumulativePendingFooterRow.find('th').last(); 
+            var $cumulativePendingFooterCell = $cumulativePendingFooterRow.find('th').last();
 
             var monthlyDataArray = api.ajax.json().userPendingExpenseAmount;
 
@@ -754,7 +752,7 @@ function GetPayUserExpenseDebitList(userId, selectedMonth, selectedText, selecte
             }
 
             var $totalFooterRow = $('#totaldebitExpenseFooter');
-            var $totalFooterCell = $totalFooterRow.find('th').last(); 
+            var $totalFooterCell = $totalFooterRow.find('th').last();
 
             $totalFooterCell.html(
                 '<span style="color: black;">Total: ₹' + total.toFixed(2) + '</span>'
