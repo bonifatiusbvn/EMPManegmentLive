@@ -1,6 +1,6 @@
 ﻿@using EMPManegment.Web.Models
 @inject IHttpContextAccessor Accessor;
-@inject UserSession _userSessio
+@inject UserSession _userSession
 
 @{
     ViewData["Title"] = "MyAttendance";
@@ -43,6 +43,7 @@
                                         </div>
                                     </div>
                                     <input type="hidden" id="SelectAttandance" name="SelectAttandance">
+                                    <input type="hidden" id="AttandanceUserId" value="@_userSession.UserId">
                                 </div>
                                 <div class="col-sm" id="monthbox" style="display:none;">
                                     <div class="search-box">

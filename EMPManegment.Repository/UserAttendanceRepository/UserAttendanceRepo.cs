@@ -332,6 +332,86 @@ namespace EMPManegment.Repository.UserAttendanceRepository
                 throw new Exception("Error fetching attendance list", ex);
             }
         }
+
+        public async Task<IEnumerable<UserAttendanceModel>> GetMySearchAttendanceList(SearchAttendanceModel GetSearchAttendanceList)
+        {
+            try
+            {
+                IEnumerable<UserAttendanceModel> userAttendance = null;
+                if (GetSearchAttendanceList.Cmonth != null && GetSearchAttendanceList.Cmonth != DateTime.MinValue)
+                {
+                    IEnumerable<UserAttendanceModel> userAttendance1 = from a in Context.TblAttendances
+                                                                       join
+                                                                       b in Context.TblUsers on a.User.Id equals b.Id
+                                                                       where (b.Id == GetSearchAttendanceList.UserId && (a.Date.Month == Convert.ToDateTime(GetSearchAttendanceList.Cmonth).Month && a.Date.Year == Convert.ToDateTime(GetSearchAttendanceList.Cmonth).Year))
+                                                                       orderby a.Date descending
+                                                                       select new UserAttendanceModel
+                                                                       {
+                                                                           UserName = b.FirstName + ' ' + b.LastName,
+                                                                           UserId = a.UserId,
+                                                                           AttendanceId = a.Id,
+                                                                           Date = a.Date,
+                                                                           Intime = a.Intime,
+                                                                           OutTime = a.OutTime,
+                                                                           TotalHours = a.TotalHours,
+                                                                           CreatedBy = a.CreatedBy,
+                                                                           CreatedOn = a.CreatedOn,
+                                                                       };
+                    return userAttendance1;
+                }
+                else
+                {
+                    if (GetSearchAttendanceList.StartDate != null && GetSearchAttendanceList.EndDate != null && GetSearchAttendanceList.StartDate != DateTime.MinValue && GetSearchAttendanceList.EndDate != DateTime.MinValue)
+                    {
+                        userAttendance = from a in Context.TblAttendances
+                                         join b in Context.TblUsers on a.User.Id equals b.Id
+                                         where (b.Id == GetSearchAttendanceList.UserId && a.Date >= GetSearchAttendanceList.StartDate && a.Date <= GetSearchAttendanceList.EndDate)
+                                         orderby a.Date descending
+                                         select new UserAttendanceModel
+                                         {
+                                             UserName = b.FirstName + ' ' + b.LastName,
+                                             UserId = a.UserId,
+                                             AttendanceId = a.Id,
+                                             Date = a.Date,
+                                             Intime = a.Intime,
+                                             OutTime = a.OutTime,
+                                             TotalHours = a.TotalHours,
+                                             CreatedBy = a.CreatedBy,
+                                             CreatedOn = a.CreatedOn,
+                                         };
+
+                        return userAttendance;
+                    }
+                    else
+                    {
+                        DateTime date = DateTime.Today;
+                        userAttendance = from a in Context.TblAttendances
+                                         join
+                                         b in Context.TblUsers on a.User.Id equals b.Id
+                                         where (b.Id == GetSearchAttendanceList.UserId && (a.Date.Month == Convert.ToDateTime(date).Month && a.Date.Year == Convert.ToDateTime(date).Year))
+                                         orderby a.Date descending
+                                         select new UserAttendanceModel
+                                         {
+                                             UserName = b.FirstName + ' ' + b.LastName,
+                                             UserId = a.UserId,
+                                             AttendanceId = a.Id,
+                                             Date = a.Date,
+                                             Intime = a.Intime,
+                                             OutTime = a.OutTime,
+                                             TotalHours = a.TotalHours,
+                                             CreatedBy = a.CreatedBy,
+                                             CreatedOn = a.CreatedOn,
+                                         };
+
+                        return userAttendance;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }
 

@@ -442,12 +442,12 @@
         });
     });
 
-
     document.addEventListener('DOMContentLoaded', function () {
         const betweenMonthRadio = document.getElementById('betweenMonthRadio');
         const dateInputs = document.querySelectorAll('.date-input');
         const radios = document.querySelectorAll('input[name="flexRadioDefault"]');
         const searchButton = document.getElementById('addproduct-btn');
+        const navLinks = document.querySelectorAll('.nav-link');
 
         function toggleDateInputs() {
             clearDates();
@@ -464,9 +464,16 @@
             radio.addEventListener('change', toggleDateInputs);
         });
 
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', function () {
+                radios.forEach(radio => radio.checked = false);
+                toggleDateInputs();
+            });
+        });
+
         toggleDateInputs();
     });
-
 
     function clearDates() {
         $("#startDate").val('');
