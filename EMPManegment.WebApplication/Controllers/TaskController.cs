@@ -90,6 +90,19 @@ namespace EMPManegment.Web.Controllers
         {
             try
             {
+                var TaskDetails = new TaskDetailsView
+                {
+                    CreatedBy = _userSession.UserId,
+                    TaskStatus = task.TaskStatus,
+                    TaskType = task.TaskType,
+                    TaskTypeName = task.TaskTypeName,
+                    TaskDate = task.TaskDate,
+                    TaskEndDate = task.TaskEndDate,
+                    TaskDetails = task.TaskDetails,
+                    UserId = task.UserId,
+                    TaskTitle = task.TaskTitle,
+                    ProjectId = task.ProjectId,
+                };
                 if (task.Image != null)
                 {
                     var TaskImg = Guid.NewGuid() + "_" + task.Image.FileName;
@@ -97,32 +110,22 @@ namespace EMPManegment.Web.Controllers
                     var filepath = "Content/TaskDocuments/" + TaskImg;
                     var fullpath = Path.Combine(path, filepath);
                     UploadTaskFile(task.Image, fullpath);
-                    var TaskDetails = new TaskDetailsView
-                    {
-                        CreatedBy = _userSession.UserId,
-                        TaskStatus = task.TaskStatus,
-                        TaskType = task.TaskType,
-                        TaskTypeName = task.TaskTypeName,
-                        TaskDate = task.TaskDate,
-                        TaskEndDate = task.TaskEndDate,
-                        TaskDetails = task.TaskDetails,
-                        UserId = task.UserId,
-                        TaskTitle = task.TaskTitle,
-                        ProjectId = task.ProjectId,
-                        Document = filepath,
-                    };
-                    ApiResponseModel postuser = await APIServices.PostAsync(TaskDetails, "UserHome/AddTaskDetails");
-                    if (postuser.code == 200)
-                    {
-                        return Ok(new { Message = "Task Uploaded Successfully!", Code = postuser.code });
-                    }
-                    else
-                    {
-                        return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
-                    }
-
+                    TaskDetails.Document = TaskImg;
                 }
-                return BadRequest();
+                else
+                {
+                    TaskDetails.Document = null;
+                }
+                ApiResponseModel postuser = await APIServices.PostAsync(TaskDetails, "UserHome/AddTaskDetails");
+                UserResponceModel responceModel = new UserResponceModel();
+                if (postuser.code == 200)
+                {
+                    return Ok(new { Message = "Task Uploaded Successfully!", Code = postuser.code });
+                }
+                else
+                {
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
+                }
             }
             catch (Exception ex)
             {

@@ -764,24 +764,12 @@ namespace EMPManegment.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> ExportToPdf()
+        public async Task<IActionResult> ExportToPdf(SearchAttendanceModel searchAttendanceData)
         {
             try
             {
-                DateTime Cmonth = Convert.ToDateTime(TempData["Cmonth"]);
-                DateTime StartDate = Convert.ToDateTime(TempData["StartDate"]);
-                DateTime EndDate = Convert.ToDateTime(TempData["EndDate"]);
-
-                var data = new SearchAttendanceModel
-                {
-                    UserId = _userSession.UserId,
-                    Cmonth = Cmonth,
-                    StartDate = StartDate,
-                    EndDate = EndDate,
-                };
-
                 HttpClient client = WebAPI.Initil();
-                ApiResponseModel response = await APIServices.PostAsync(data, "UserProfile/GetAttendanceList");
+                ApiResponseModel response = await APIServices.PostAsync(searchAttendanceData, "UserProfile/GetMySearchAttendanceList");
 
                 if (response.data.Count != 0)
                 {
@@ -825,24 +813,13 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
-        public async Task<IActionResult> ExportToExcel()
+        public async Task<IActionResult> ExportToExcel(SearchAttendanceModel searchAttendanceData)
         {
             try
             {
-                DateTime Cmonth = Convert.ToDateTime(TempData["Cmonth"]);
-                DateTime StartDate = Convert.ToDateTime(TempData["StartDate"]);
-                DateTime EndDate = Convert.ToDateTime(TempData["EndDate"]);
-
-                var data = new SearchAttendanceModel
-                {
-                    UserId = _userSession.UserId,
-                    Cmonth = Cmonth,
-                    StartDate = StartDate,
-                    EndDate = EndDate,
-                };
 
                 HttpClient client = WebAPI.Initil();
-                ApiResponseModel response = await APIServices.PostAsync(data, "UserProfile/GetAttendanceList");
+                ApiResponseModel response = await APIServices.PostAsync(searchAttendanceData, "UserProfile/GetMySearchAttendanceList");
 
                 if (response.data.Count != 0)
                 {

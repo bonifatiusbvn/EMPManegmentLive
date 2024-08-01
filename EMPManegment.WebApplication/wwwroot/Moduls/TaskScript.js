@@ -450,10 +450,10 @@ function btnTaskDetails(Id) {
             $('#taskDescription-field').text(response.taskDetails);
             //var startdate = response.taskDate;
             //var StartDate = startdate.substr(0, 10);
-            $('#taskstartdate-field').text(response.taskDate);
+            $('#taskstartdate-field').text(moment(response.taskDate).format('DD MMM YY HH:mm'));
             //var enddate = response.taskEndDate;
             //var EndDate = enddate.substr(0, 10);
-            $('#taskenddate-field').text(response.taskEndDate);
+            $('#taskenddate-field').text(moment(response.taskEndDate).format('DD MMM YY HH:mm'));
             $('#taskpriority-field').text(response.taskTypeName);
             $('#taskstatus-field').text(response.taskStatus);
         },
@@ -547,17 +547,23 @@ $(document).ready(function () {
                             if (data.length > 50) {
                                 taskDetails = '<span title="' + data + '">' + data.substr(0, 50) + '...</span>';
                             }
-                            let documentLink = '<div class="d-flex align-items-center">' +
+                            if (full.document) {
+                                let documentLink = '<div class="d-flex align-items-center">' +
+                                    '<div class="flex-grow-1">' + taskDetails + '</div>' +
+                                    '<div class="flex-shrink-0 ms-4 task-icons">' +
+                                    '<li class="list-inline tasks-list-menu mb-0" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Document">' +
+                                    '<a class="flex-shrink-0 ms-4 task-icons" onclick="DownloadTaskDocument(\'' + full.document + '\')">' +
+                                    '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">' +
+                                    '<path fill="currentColor" d="M13 12h3l-4 4l-4-4h3V8h2v4Zm2-8H5v16h14V8h-4V4ZM3 2.992C3 2.444 3.447 2 3.999 2H16l5 5v13.993A1 1 0 0 1 20.007 22H3.993A1 1 0 0 1 3 21.008V2.992Z" />' +
+                                    '</svg></a></li>' +
+                                    '</div>' +
+                                    '</div>';
+                                return documentLink;
+                            }
+
+                            return '<div class="d-flex align-items-center">' +
                                 '<div class="flex-grow-1">' + taskDetails + '</div>' +
-                                '<div class="flex-shrink-0 ms-4 task-icons">' +
-                                '<li class="list-inline tasks-list-menu mb-0" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Document">' +
-                                '<a class="flex-shrink-0 ms-4 task-icons" onclick="DownloadTaskDocument(\'' + full.document + '\')">' +
-                                '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">' +
-                                '<path fill="currentColor" d="M13 12h3l-4 4l-4-4h3V8h2v4Zm2-8H5v16h14V8h-4V4ZM3 2.992C3 2.444 3.447 2 3.999 2H16l5 5v13.993A1 1 0 0 1 20.007 22H3.993A1 1 0 0 1 3 21.008V2.992Z" />' +
-                                '</svg></a></li>' +
-                                '</div>' +
                                 '</div>';
-                            return documentLink;
                         }
                         return data;
                     }
@@ -707,12 +713,10 @@ function EditTaskDetails(Id) {
             $('#EditUserName').val(response.userName);
             $('#EditTaskTitle').val(response.taskTitle);
             $('#EditDescription').val(response.taskDetails);
-            var startdate = response.taskDate;
-            var StartDate = startdate.substr(0, 10);
-            $('#EditStartDate').val(StartDate);
-            var enddate = response.taskEndDate;
-            var EndDate = enddate.substr(0, 10);
-            $('#EditEndDate').val(EndDate);
+            var startDateTime = response.taskDate;
+            $('#EditStartDate').val(formatDateTime(startDateTime));
+            var endDateTime = response.taskEndDate;
+            $('#EditEndDate').val(formatDateTime(endDateTime));
             $('#EditTaskType').val(response.taskTypeName);
             $('#EditTaskTypeId').val(response.taskType);
             $('#EditStatus').val(response.taskStatus);
@@ -721,7 +725,6 @@ function EditTaskDetails(Id) {
         error: function () {
             toastr.error("Can't get Data");
         }
-
     });
 }
 
@@ -732,8 +735,8 @@ function UpdateTaskDetails() {
         UserName: $("#EditUserName").val(),
         TaskTitle: $("#EditTaskTitle").val(),
         TaskDetails: $("#EditDescription").val(),
-        TaskDate: $("#EditStartDate").val(),
-        TaskEndDate: $("#EditEndDate").val(),
+        TaskDate: $("#EditStartDate").val(), 
+        TaskEndDate: $("#EditEndDate").val(), 
         TaskTypeName: $("#EditTaskType").val(),
         TaskType: $("#EditTaskTypeId").val(),
         TaskStatus: $("#EditStatus").val(),
@@ -751,13 +754,13 @@ function UpdateTaskDetails() {
                     confirmButtonColor: '#3085d6',
                     confirmButtonText: 'OK',
                 }).then(function () {
-                    window.location = '/Task/AllTaskDetails';
+                    window.location = '/Task/AllTaskDetails'; 
                 })
             } else {
                 toastr.error(Result.message);
             }
         },
-    })
+    });
 }
 
 $('#UpdateDetailsForm').on('change', function () {

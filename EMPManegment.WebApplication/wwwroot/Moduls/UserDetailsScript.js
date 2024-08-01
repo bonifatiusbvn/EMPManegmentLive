@@ -741,6 +741,7 @@ function UADBackbtn()
     $("#backBtn").hide();
     $("#usernamebox").hide();
     $("#departmentbox").hide();
+    $("#UADSearchbtn").hide();
     $("#ddlUACSearch").show();
     $("#ddlUACSearch").text("Search By");
     GetActiveDeactiveList(1);
