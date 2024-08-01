@@ -59,9 +59,9 @@ namespace EMPManegment.Services.PurchaseRequest
         {
             return await purchaseRequest.PurchaseRequestDetailsByPrNo(PrNo);
         }
-        public async Task<UserResponceModel> ApproveUnapprovePR(List<string> PrNo)
+        public async Task<UserResponceModel> ApproveUnapprovePR(PRIsApprovedMasterModel PRIdList)
         {
-            return await purchaseRequest.ApproveUnapprovePR(PrNo);
+            return await purchaseRequest.ApproveUnapprovePR(PRIdList);
         }
 
         public Task<PurchaseRequestModel> GetPurchaseRequestDetailsById(string PrId)

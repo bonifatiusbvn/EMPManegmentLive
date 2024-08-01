@@ -504,3 +504,8 @@ $('#ddlinvoicetype').change(function () {
     var txttype = $(this).val();
     $("#txtinvoicetype").val(txttype);
 });
+
+function clearProductListSearchText() {
+    $('#mdProductSearch').val('');
+    fn_GetProductDetailsList();
+}

@@ -270,14 +270,15 @@ namespace EMPManegment.Web.Controllers
             return View();
         }
 
+        [HttpPost]
         public async Task<IActionResult> ApproveUnapprovePR()
         {
             try
             {
-                var PR = HttpContext.Request.Form["PrNo"];
-                List<string> PrNo = PR.ToString().Split(',').ToList();
+                var isApprovedDetails = HttpContext.Request.Form["PRIsApproved"];
+                var PRIdList = JsonConvert.DeserializeObject<PRIsApprovedMasterModel>(isApprovedDetails);
 
-                ApiResponseModel response = await APIServices.PostAsync(PrNo, "PurchaseRequest/ApproveUnapprovePR");
+                ApiResponseModel response = await APIServices.PostAsync(PRIdList, "PurchaseRequest/ApproveUnapprovePR");
 
                 if (response.code == 200)
                 {

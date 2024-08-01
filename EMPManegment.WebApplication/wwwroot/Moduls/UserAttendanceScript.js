@@ -1,5 +1,4 @@
-﻿
-var datas = userPermissions
+﻿var datas = userPermissions
 var selectedUserName = null;
 var selectedDate = null;
 var selectedStartDate = null;
@@ -527,9 +526,19 @@ function MySearchAttendanceList(UserPermissionData, FilterData) {
                 targets: '_all', width: 'auto'
             }
         ],
-        order: [[1, 'asc']]
+        order: [[1, 'asc']],
+        drawCallback: function (settings) {
+            var api = this.api();
+            var count = api.data().count();
+            if (count > 0) {
+                $("#attendancepdfexcel").show();
+            } else {
+                $("#attendancepdfexcel").hide();
+            }
+        }
     });
 }
+
 $('#backbtn').on('click', function (event) {
     window.location = '/UserProfile/UsersAttendance';
 });
@@ -682,17 +691,8 @@ function UpdateUserAttendanceSrc() {
             data: objData,
             dataType: 'json',
             success: function (Result) {
-
-                var ricon = "warning";
-
-                if (Result.icone == ricon) {
-
-                    Swal.fire({
-                        title: Result.message,
-                        icon: Result.icone,
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'OK'
-                    })
+                if (Result.code != 200) {
+                    toastr.warning(Result.message);
                 }
 
                 else {
@@ -786,20 +786,11 @@ function updateMyAttendance() {
             data: objData,
             dataType: 'json',
             success: function (Result) {
-
-                var ricon = "warning";
-
-                if (Result.icone == ricon) {
-
-                    Swal.fire({
-                        title: Result.message,
-                        icon: Result.icone,
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'OK'
-                    })
+                if (Result.code != 200) {
+                    toastr.warning(Result.message);
                 }
-
-                else {
+                else
+                {
                     Swal.fire({
                         title: Result.message,
                         icon: "success",
@@ -823,9 +814,17 @@ function updateMyAttendance() {
 
 function ExportToExcel() {
     siteloadershow();
+    var objData = {
+        Cmonth: selectedMonth,
+        StartDate: selectedStartDate,
+        EndDate: selectedEndDate,
+        UserId : $("#AttandanceUserId").val()
+    };
+
     $.ajax({
         url: '/UserProfile/ExportToExcel',
         type: 'GET',
+        data: objData,
         success: function (data, status, xhr) {
             siteloaderhide();
             var filename = "";
@@ -873,9 +872,17 @@ function ExportToExcel() {
 
 function ExportToPDF() {
     siteloadershow();
+    var objData = {
+        Cmonth: selectedMonth,
+        StartDate: selectedStartDate,
+        EndDate: selectedEndDate,
+        UserId: $("#AttandanceUserId").val()
+    };
+
     $.ajax({
         url: '/UserProfile/ExportToPdf',
         type: 'POST',
+        data: objData,
         success: function (data, status, xhr) {
             siteloaderhide();
             var filename = "";

@@ -67,5 +67,17 @@ namespace EMPManegment.EntityModels.ViewModels.Purchase_Request
         public List<PurchaseRequestModel>? PRList { get; set; }
         public DateTime? PrDate { get; set; }
         public Guid ProjectId { get; set; }
-    }   
+    }
+
+    public class PRIsApprovedMasterModel
+    {
+        public List<PRIsApprovedModel>? PRList { get; set; }
+    }
+
+    public class PRIsApprovedModel
+    {
+        public Guid PrId { get; set; }
+        public bool? IsApproved { get; set; }
+    }
 }
+

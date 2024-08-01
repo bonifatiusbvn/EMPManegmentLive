@@ -336,5 +336,13 @@ namespace EMPManagment.API.Controllers
             var UploadImage = await UserListServices.UserProfilePhoto(Profile);
             return Ok(new { code = (int)HttpStatusCode.OK, data = UploadImage });
         }
+
+        [HttpPost]
+        [Route("GetMySearchAttendanceList")]
+        public async Task<IActionResult> GetMySearchAttendanceList(SearchAttendanceModel GetSearchAttendanceList)
+        {
+            IEnumerable<UserAttendanceModel> getAttendanceList = await UserAttendance.GetMySearchAttendanceList(GetSearchAttendanceList);
+            return Ok(new { code = (int)HttpStatusCode.OK, data = getAttendanceList.ToList() }); ;
+        }
     }
 }
