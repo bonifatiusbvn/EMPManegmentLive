@@ -252,20 +252,20 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                 {
                     var invoice = new InvoiceViewModel
                     {
-                        Id = Guid.Parse(row["Id"].ToString()),
-                        InvoiceNo = row["InvoiceNo"].ToString(),
-                        InvoiceDate = Convert.ToDateTime(row["InvoiceDate"]),
-                        VendorName = row["VendorName"].ToString(),
-                        VandorId = Guid.Parse(row["VandorId"].ToString()),
-                        ProjectId = Guid.Parse(row["ProjectId"].ToString()),
-                        ProjectName = row["ProjectName"].ToString(),
-                        DispatchThrough = row["DispatchThrough"].ToString(),
-                        BuyesOrderNo = row["BuyesOrderNo"].ToString(),
-                        BuyesOrderDate = Convert.ToDateTime(row["BuyesOrderDate"]),
-                        TotalAmount = Convert.ToDecimal(row["TotalAmount"]),
-                        CreatedOn = Convert.ToDateTime(row["CreatedOn"]),
-                        CreatedBy = Guid.Parse(row["CreatedBy"].ToString()),
-                        Date = Convert.ToDateTime(row["Date"]),
+                        Id = Guid.Parse(row["Id"]?.ToString() ?? Guid.Empty.ToString()),
+                        InvoiceNo = row["InvoiceNo"]?.ToString() ?? string.Empty,
+                        InvoiceDate = row["InvoiceDate"] == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(row["InvoiceDate"]),
+                        VendorName = row["VendorName"]?.ToString() ?? string.Empty,
+                        VandorId = Guid.Parse(row["VandorId"]?.ToString() ?? Guid.Empty.ToString()),
+                        ProjectId = Guid.Parse(row["ProjectId"]?.ToString() ?? Guid.Empty.ToString()),
+                        ProjectName = row["ProjectName"]?.ToString() ?? string.Empty,
+                        DispatchThrough = row["DispatchThrough"]?.ToString() ?? string.Empty,
+                        BuyesOrderNo = row["BuyesOrderNo"]?.ToString() ?? string.Empty,
+                        BuyesOrderDate = row["BuyesOrderDate"] == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(row["BuyesOrderDate"]),
+                        TotalAmount = row["TotalAmount"] == DBNull.Value ? 0 : Convert.ToDecimal(row["TotalAmount"]),
+                        CreatedOn = row["CreatedOn"] == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(row["CreatedOn"]),
+                        CreatedBy = Guid.Parse(row["CreatedBy"]?.ToString() ?? Guid.Empty.ToString()),
+                        Date = row["Date"] == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(row["Date"]),
                     };
                     invoiceList.Add(invoice);
                 }
@@ -424,10 +424,10 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                     BuyesOrderNo = InsertInvoice.BuyesOrderNo,
                     BuyesOrderDate = InsertInvoice.BuyesOrderDate,
                     DispatchThrough = InsertInvoice.DispatchThrough,
+                    DispatchDocNo= InsertInvoice.DispatchDocNo,
+                    Destination= InsertInvoice.Destination,
+                    MotorVehicleNo= InsertInvoice.MotorVehicleNo,
                     ShippingAddress = InsertInvoice.ShippingAddress,
-                    Cgst = InsertInvoice.Cgst,
-                    Sgst = InsertInvoice.Sgst,
-                    Igst = InsertInvoice.Igst,
                     TotalDiscount = InsertInvoice.TotalDiscount,
                     TotalGst = InsertInvoice.TotalGst,
                     RoundOff = InsertInvoice.RoundOff,
@@ -457,6 +457,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                         DiscountAmount = item.DiscountAmount,
                         GstAmount = item.GstAmount,
                         GstPer = item.GstPer,
+                        Igst = item.Igst,
                         ProductTotal = item.ProductTotal,
                         Hsn = item.Hsn,
                         IsDeleted = false,
@@ -680,10 +681,10 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                     BuyesOrderNo = UpdateInvoice.BuyesOrderNo,
                     BuyesOrderDate = UpdateInvoice.BuyesOrderDate,
                     DispatchThrough = UpdateInvoice.DispatchThrough,
+                    DispatchDocNo = UpdateInvoice.DispatchDocNo,
+                    Destination=UpdateInvoice.Destination,
+                    MotorVehicleNo = UpdateInvoice.MotorVehicleNo,
                     ShippingAddress = UpdateInvoice.ShippingAddress,
-                    Cgst = UpdateInvoice.Cgst,
-                    Sgst = UpdateInvoice.Sgst,
-                    Igst = UpdateInvoice.Igst,
                     TotalDiscount = UpdateInvoice.TotalDiscount,
                     TotalGst = UpdateInvoice.TotalGst,
                     RoundOff = UpdateInvoice.RoundOff,
@@ -717,6 +718,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                         existingInvoice.DiscountAmount = item.DiscountAmount;
                         existingInvoice.GstPer = item.GstPer;
                         existingInvoice.GstAmount = item.GstAmount;
+                        existingInvoice.Igst = item.Igst;
                         existingInvoice.ProductTotal = item.ProductTotal;
                         existingInvoice.UpdatedOn = DateTime.Now;
                         existingInvoice.UpdatedBy = UpdateInvoice.UpdatedBy;
@@ -740,6 +742,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                             DiscountAmount = item.DiscountAmount,
                             GstAmount = item.GstAmount,
                             GstPer = item.GstPer,
+                            Igst = item.Igst,
                             ProductTotal = item.ProductTotal,
                             Hsn = item.Hsn,
                             IsDeleted = false,
@@ -1010,10 +1013,14 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                     InvoiceDetails.VendorAccountHolderName = DS.Tables[0].Rows[0]["VendorAccountHolderName"]?.ToString();
                     InvoiceDetails.CompnyName = DS.Tables[0].Rows[0]["CompnyName"]?.ToString();
                     InvoiceDetails.CompanyGst = DS.Tables[0].Rows[0]["CompanyGst"]?.ToString();
+                    InvoiceDetails.CompanyAddress = DS.Tables[0].Rows[0]["CompanyAddress"]?.ToString();
                     InvoiceDetails.InvoiceDate = DS.Tables[0].Rows[0]["InvoiceDate"] != DBNull.Value ? (DateTime)DS.Tables[0].Rows[0]["InvoiceDate"] : DateTime.MinValue;
                     InvoiceDetails.BuyesOrderDate = DS.Tables[0].Rows[0]["BuyesOrderDate"] != DBNull.Value ? (DateTime)DS.Tables[0].Rows[0]["BuyesOrderDate"] : DateTime.MinValue;
                     InvoiceDetails.BuyesOrderNo = DS.Tables[0].Rows[0]["BuyesOrderNo"]?.ToString();
                     InvoiceDetails.DispatchThrough = DS.Tables[0].Rows[0]["DispatchThrough"]?.ToString();
+                    InvoiceDetails.DispatchDocNo = DS.Tables[0].Rows[0]["DispatchDocNo"]?.ToString();
+                    InvoiceDetails.Destination = DS.Tables[0].Rows[0]["Destination"]?.ToString();
+                    InvoiceDetails.MotorVehicleNo = DS.Tables[0].Rows[0]["MotorVehicleNo"]?.ToString();
                     InvoiceDetails.TotalGst = DS.Tables[0].Rows[0]["TotalGst"] != DBNull.Value ? (decimal)DS.Tables[0].Rows[0]["TotalGst"] : 0m;
                     InvoiceDetails.TotalAmount = DS.Tables[0].Rows[0]["TotalAmount"] != DBNull.Value ? (decimal)DS.Tables[0].Rows[0]["TotalAmount"] : 0m;
                     InvoiceDetails.PaymentMethod = DS.Tables[0].Rows[0]["PaymentMethod"] != DBNull.Value ? (int)DS.Tables[0].Rows[0]["PaymentMethod"] : 0;
@@ -1040,6 +1047,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                         PerUnitPrice = row["PerUnitPrice"] != DBNull.Value ? (decimal)row["PerUnitPrice"] : 0m,
                         GstAmount = row["GstAmount"] != DBNull.Value ? (decimal)row["GstAmount"] : 0m,
                         GstPer = row["GstPer"] != DBNull.Value ? (decimal)row["GstPer"] : 0m,
+                        Igst = row["IGst"] != DBNull.Value ? (decimal)row["IGst"] : 0m,
                         ProductTotal = row["ProductTotal"] != DBNull.Value ? (decimal)row["ProductTotal"] : 0m,
                         DiscountPer = row["DiscountPer"] != DBNull.Value ? (decimal)row["DiscountPer"] : 0m,
                         DiscountAmount = row["DiscountAmount"] != DBNull.Value ? (decimal)row["DiscountAmount"] : 0m,
@@ -1049,7 +1057,6 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                 }
             }
             return InvoiceDetails;
-
         }
 
         public async Task<List<InvoiceDetailsViewModel>> GetProductDetailsById(Guid ProductId)

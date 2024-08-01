@@ -96,11 +96,11 @@
 
                                     if (selected == "selected")
                                     {
-                                        <option value="@Project.ProjectId" selected>@Project.ProjectTitle</option>
+                                        <option value="@Project.ProjectId" selected>@Project.ProjectTitle (@Project.ShortName)</option>
                                     }
                                     else
                                     {
-                                        <option value="@Project.ProjectId">@Project.ProjectTitle</option>
+                                        <option value="@Project.ProjectId">@Project.ProjectTitle (@Project.ShortName)</option>
                                     }
                                 }
                             }
@@ -122,11 +122,11 @@
 
                                     if (selected == "selected")
                                     {
-                                        <option value="@Project.ProjectId" selected>@Project.ProjectTitle</option>
+                                        <option value="@Project.ProjectId" selected>@Project.ProjectTitle (@Project.ShortName)</option>
                                     }
                                     else
                                     {
-                                        <option value="@Project.ProjectId">@Project.ProjectTitle</option>
+                                        <option value="@Project.ProjectId">@Project.ProjectTitle (@Project.ShortName)</option>
                                     }
                                 }
                             }
@@ -628,7 +628,6 @@
         var Role = "@_userSession.UserRoll";
         var ProjectId = "@UserSession.ProjectId";
         var ProjectName = "@UserSession.ProjectName";
-
 
 
         $('#drpProjectName').change(function () {

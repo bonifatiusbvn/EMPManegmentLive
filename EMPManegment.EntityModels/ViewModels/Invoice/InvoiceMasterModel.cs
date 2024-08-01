@@ -28,13 +28,13 @@ namespace EMPManegment.EntityModels.ViewModels.Invoice
 
         public string? DispatchThrough { get; set; }
 
+        public string? DispatchDocNo { get; set; }
+
+        public string? Destination { get; set; }
+
+        public string? MotorVehicleNo { get; set; }
+
         public string? ShippingAddress { get; set; }
-
-        public decimal? Cgst { get; set; }
-
-        public decimal? Sgst { get; set; }
-
-        public decimal? Igst { get; set; }
 
         public decimal? TotalDiscount { get; set; }
 
@@ -84,6 +84,7 @@ namespace EMPManegment.EntityModels.ViewModels.Invoice
 
         public string? CompnyName { get; set; }
         public string? CompanyGst { get; set; }
+        public string? CompanyAddress { get; set; }
         public Guid? UpdatedBy { get; set; }
         public DateTime? Date { get; set; }
 

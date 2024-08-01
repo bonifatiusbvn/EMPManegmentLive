@@ -39,8 +39,6 @@ public partial class TblPurchaseRequest
 
     public virtual TblProductDetailsMaster? Product { get; set; }
 
-    public virtual TblProductTypeMaster ProductType { get; set; } = null!;
-
     public virtual TblProjectMaster Project { get; set; } = null!;
 
     public virtual TblUser User { get; set; } = null!;

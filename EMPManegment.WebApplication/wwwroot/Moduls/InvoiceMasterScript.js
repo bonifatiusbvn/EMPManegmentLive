@@ -52,12 +52,17 @@ function fn_InsertInvoiceDetails() {
                     Price: orderRow.find("#txtproductamount").val(),
                     GstAmount: orderRow.find("#txtgstAmount").val(),
                     GstPer: orderRow.find("#txtgst").val(),
+                    IGst: orderRow.find("#txtigst").val(),
                     ProductTotal: orderRow.find("#txtproducttotalamount").val(),
                     DiscountAmount: orderRow.find("#txtdiscountamount").val(),
                     DiscountPer: orderRow.find("#txtdiscountpercentage").val(),
                 };
                 ProductDetails.push(objData);
             });
+            var dateInput = $("#textBuysOrderDate").val();
+            if (dateInput === "") {
+                dateInput = null;
+            }
             var Invoicedetails = {
                 ProjectId: $("#textProjectId").val(),
                 InvoiceNo: $("#textInvoiceNo").val(),
@@ -70,8 +75,11 @@ function fn_InsertInvoiceDetails() {
                 SubTotal: $("#cart-subtotal").val(),
                 TotalAmount: $("#cart-total").val(),
                 DispatchThrough: $("#textDispatchThrough").val(),
+                DispatchDocNo: $("#textDispatchDocNo").val(),
+                Destination: $("#textDestination").val(),
+                MotorVehicleNo: $("#textMotorVehicleNo").val(),
                 BuyesOrderNo: $("#textBuysOrderNo").val(),
-                BuyesOrderDate: $("#textBuysOrderDate").val(),
+                BuyesOrderDate: dateInput,
                 InvoiceDate: $("#textInvoiceDate").val(),
                 OrderStatus: $("#UnitTypeId").val(),
                 PaymentMethod: $("#txtInvoicepaymentmethod").val(),
@@ -79,7 +87,7 @@ function fn_InsertInvoiceDetails() {
                 CreatedBy: $("#textCreatedById").val(),
                 RoundOff: $('#cart-roundOff').val(),
                 TotalDiscount: $('#cart-discount').val(),
-                ShippingAddress: $('#hideShippingAddress').is(':checked') ? $('#textCompanyBillingAddress').val() : $('#textShippingAddress').val(),
+                ShippingAddress: $('#hideShippingAddress').is(':checked') ? $('#textVendorAddress').val() : $('#textShippingAddress').val(),
                 InvoiceDetails: ProductDetails,
             }
             var form_data = new FormData();
@@ -142,12 +150,17 @@ function fn_UpdateInvoiceDetails() {
                     Price: orderRow.find("#txtproductamount").val(),
                     GstAmount: orderRow.find("#txtgstAmount").val(),
                     GstPer: orderRow.find("#txtgst").val(),
+                    IGst: orderRow.find("#txtigst").val(),
                     ProductTotal: orderRow.find("#txtproducttotalamount").val(),
                     DiscountAmount: orderRow.find("#txtdiscountamount").val(),
                     DiscountPer: orderRow.find("#txtdiscountpercentage").val(),
                 };
                 ProductDetails.push(objData);
             });
+            var dateInput = $("#textBuysOrderDate1").val();
+            if (dateInput === "0001-01-01") {
+                dateInput = null;
+            }
             var Invoicedetails = {
                 Id: $("#textInvoiceId").val(),
                 ProjectId: $("#textinvoiceProjectId").val(),
@@ -155,14 +168,14 @@ function fn_UpdateInvoiceDetails() {
                 VandorId: $("#textVendorName").val(),
                 CompanyId: $("#textCompanyName").val(),
                 TotalGst: $("#totalgst").val(),
-                Cgst: $("#textCGst").val(),
-                Sgst: $("#textSGst").val(),
-                Igst: $("#textIGst").val(),
                 SubTotal: $("#cart-subtotal").val(),
                 TotalAmount: $("#cart-total").val(),
                 DispatchThrough: $("#textDispatchThrough").val(),
+                DispatchDocNo: $("#textDispatchDocNo").val(),
+                Destination: $("#textDestination").val(),
+                MotorVehicleNo: $("#textMotorVehicleNo").val(),
                 BuyesOrderNo: $("#textBuysOrderNo").val(),
-                BuyesOrderDate: $("#textBuysOrderDate").val(),
+                BuyesOrderDate: dateInput,
                 InvoiceDate: $("#textInvoiceDate").val(),
                 OrderStatus: $("#UnitTypeId").val(),
                 PaymentMethod: $("#txtInvoicepaymentmethod").val(),
@@ -172,7 +185,7 @@ function fn_UpdateInvoiceDetails() {
                 RoundOff: $('#cart-roundOff').val(),
                 TotalDiscount: $('#cart-discount').val(),
                 UpdatedBy: $("#textCreatedById").val(),
-                ShippingAddress: $('#hideShippingAddress').is(':checked') ? $('#textCompanyBillingAddress').val() : $('#textShippingAddress').val(),
+                ShippingAddress: $('#hideShippingAddress').is(':checked') ? $('#textVendorAddress').val() : $('#textShippingAddress').val(),
                 InvoiceDetails: ProductDetails,
             }
 
@@ -402,6 +415,7 @@ $(document).ready(function () {
     $('#textCompanyName').change(function () {
         fn_getInvoiceCompanyDetail($(this).val());
     });
+
     fn_GetInvoicePaymentMethodList()
     fn_GetInvoicePaymentTypeList()
     fn_updateInvoiceTotals()
@@ -499,6 +513,16 @@ $(document).ready(function () {
             $(this).blur();
         }
     });
+    $(document).on('input', '#txtigst', function () {
+        var row = $(this).closest('.product');
+        var gstvalue = $('#txtigst').val();
+        if (gstvalue > 100) {
+            toastr.warning("IGST% cannot be greater than 100%");
+            $(this).val(100);
+        }
+        fn_updateInvoiceProductAmount(row);
+        fn_updateInvoiceTotals();
+    })
     $(document).on('focusout', '.product-quantity', function () {
         $(this).trigger('input');
     });
@@ -706,8 +730,10 @@ function fn_updateInvoiceProductAmount(that) {
     var AmtWithDisc = hiddenproductPrice - discountprice;
 
     var gst = parseFloat(row.find("#txtgst").val());
+    var igst = parseFloat(row.find("#txtigst").val());
 
-    var totalGst = (AmtWithDisc * quantity * gst) / 100;
+    var igstcount = (AmtWithDisc * igst / 100);
+    var totalGst = (AmtWithDisc * quantity * gst) / 100 + igstcount;
 
     var TotalAmountAfterDiscount = AmtWithDisc * quantity + totalGst;
 

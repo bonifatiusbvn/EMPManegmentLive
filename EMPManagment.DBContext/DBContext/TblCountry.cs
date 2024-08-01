@@ -12,4 +12,6 @@ public partial class TblCountry
     public string? Country { get; set; }
 
     public virtual ICollection<TblState> TblStates { get; set; } = new List<TblState>();
+
+    public virtual ICollection<TblUser> TblUsers { get; set; } = new List<TblUser>();
 }

@@ -27,11 +27,11 @@ public partial class TblInvoice
 
     public string DispatchThrough { get; set; } = null!;
 
-    public decimal? Cgst { get; set; }
+    public string? DispatchDocNo { get; set; }
 
-    public decimal? Sgst { get; set; }
+    public string? Destination { get; set; }
 
-    public decimal? Igst { get; set; }
+    public string? MotorVehicleNo { get; set; }
 
     public decimal? TotalDiscount { get; set; }
 

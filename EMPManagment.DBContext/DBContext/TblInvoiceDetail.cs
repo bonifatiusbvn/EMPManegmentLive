@@ -29,6 +29,8 @@ public partial class TblInvoiceDetail
 
     public decimal? GstAmount { get; set; }
 
+    public decimal? Igst { get; set; }
+
     public decimal ProductTotal { get; set; }
 
     public bool? IsDeleted { get; set; }

@@ -247,6 +247,7 @@ namespace EMPManegment.Repository.UserLoginRepository
                                                                              {
                                                                                  ProjectId = a.ProjectId,
                                                                                  ProjectTitle = a.ProjectTitle,
+                                                                                 ShortName = a.ShortName,
                                                                              }).ToListAsync();
                                 userModel.ProjectData = userProjects;
                             }
@@ -259,6 +260,7 @@ namespace EMPManegment.Repository.UserLoginRepository
                                                                              {
                                                                                  ProjectId = a.ProjectId,
                                                                                  ProjectTitle = a.ProjectTitle,
+                                                                                 ShortName = a.ShortName,
                                                                              }).ToListAsync();
                                 userModel.ProjectData = userProjects;
                             }

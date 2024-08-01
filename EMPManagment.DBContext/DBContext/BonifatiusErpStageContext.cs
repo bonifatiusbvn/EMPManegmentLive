@@ -4,13 +4,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EMPManagment.API;
 
-public partial class BonifatiusEmployeesContext : DbContext
+public partial class BonifatiusErpStageContext : DbContext
 {
-    public BonifatiusEmployeesContext()
+    public BonifatiusErpStageContext()
     {
     }
 
-    public BonifatiusEmployeesContext(DbContextOptions<BonifatiusEmployeesContext> options)
+    public BonifatiusErpStageContext(DbContextOptions<BonifatiusErpStageContext> options)
         : base(options)
     {
     }
@@ -93,8 +93,7 @@ public partial class BonifatiusEmployeesContext : DbContext
 
     public virtual DbSet<TblVendorType> TblVendorTypes { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-     {}
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }  
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<TblAttendance>(entity =>
@@ -120,16 +119,11 @@ public partial class BonifatiusEmployeesContext : DbContext
 
         modelBuilder.Entity<TblCity>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK_TblCity");
-
             entity.ToTable("tblCity");
 
-            entity.Property(e => e.City).HasMaxLength(50);
+            entity.HasIndex(e => e.StateId, "IX_tblCity_StateId");
 
-            entity.HasOne(d => d.State).WithMany(p => p.TblCities)
-                .HasForeignKey(d => d.StateId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_tblCity_tblState");
+            entity.Property(e => e.City).HasMaxLength(50);
         });
 
         modelBuilder.Entity<TblCompanyMaster>(entity =>
@@ -148,8 +142,6 @@ public partial class BonifatiusEmployeesContext : DbContext
 
         modelBuilder.Entity<TblCountry>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK_TblCountry");
-
             entity.ToTable("tblCountry");
 
             entity.Property(e => e.Country).HasMaxLength(30);
@@ -362,7 +354,7 @@ public partial class BonifatiusEmployeesContext : DbContext
 
             entity.HasOne(d => d.InvoiceTypeNavigation).WithMany(p => p.TblManualInvoices)
                 .HasForeignKey(d => d.InvoiceType)
-                .HasConstraintName("FK_tblManualInvoices_tblManualInvoices");
+                .HasConstraintName("FK_tblManualInvoices_tblInvoiceTypeMaster");
         });
 
         modelBuilder.Entity<TblManualInvoiceDetail>(entity =>
@@ -444,7 +436,7 @@ public partial class BonifatiusEmployeesContext : DbContext
         {
             entity.ToTable("tblProductTypeMaster");
 
-            entity.Property(e => e.Type).HasMaxLength(50);
+            entity.Property(e => e.Type).HasMaxLength(20);
         });
 
         modelBuilder.Entity<TblProjectDocument>(entity =>
@@ -533,12 +525,14 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.HasOne(d => d.Poref).WithMany(p => p.TblPurchaseOrderDetails)
                 .HasForeignKey(d => d.PorefId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_tblPurchaseOrderDetails_tblPurchaseOrderMaster2");
+                .HasConstraintName("FK_tblPurchaseOrderDetails_tblPurchaseOrderMaster1");
 
             entity.HasOne(d => d.Product).WithMany(p => p.TblPurchaseOrderDetails)
                 .HasForeignKey(d => d.ProductId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_tblPurchaseOrderDetails_tblProductDetailsMaster");
+                .HasConstraintName("FK_tblPurchaseOrderDetails_tblPurchaseOrderMaster");
+
+            
         });
 
         modelBuilder.Entity<TblPurchaseOrderMaster>(entity =>
@@ -586,6 +580,8 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.HasOne(d => d.Product).WithMany(p => p.TblPurchaseRequests)
                 .HasForeignKey(d => d.ProductId)
                 .HasConstraintName("FK_tblPurchaseRequest_tblProductDetailsMaster");
+
+            
 
             entity.HasOne(d => d.Project).WithMany(p => p.TblPurchaseRequests)
                 .HasForeignKey(d => d.ProjectId)
@@ -645,16 +641,11 @@ public partial class BonifatiusEmployeesContext : DbContext
 
         modelBuilder.Entity<TblState>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK_TblState");
-
             entity.ToTable("tblState");
 
-            entity.Property(e => e.State).HasMaxLength(50);
+            entity.HasIndex(e => e.CountryId, "IX_tblState_CountryId");
 
-            entity.HasOne(d => d.Country).WithMany(p => p.TblStates)
-                .HasForeignKey(d => d.CountryId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_tblState_tblCountry");
+            entity.Property(e => e.State).HasMaxLength(50);
         });
 
         modelBuilder.Entity<TblTaskDetail>(entity =>
@@ -720,14 +711,6 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
             entity.Property(e => e.UserName).HasMaxLength(20);
 
-            entity.HasOne(d => d.City).WithMany(p => p.TblUsers)
-                .HasForeignKey(d => d.CityId)
-                .HasConstraintName("FK_tblUsers_tblCity");
-
-            entity.HasOne(d => d.Country).WithMany(p => p.TblUsers)
-                .HasForeignKey(d => d.CountryId)
-                .HasConstraintName("FK_tblUsers_tblCountry");
-
             entity.HasOne(d => d.Department).WithMany(p => p.TblUsers)
                 .HasForeignKey(d => d.DepartmentId)
                 .HasConstraintName("FK_tbl_BoniUsers_tbl_Departmen");
@@ -735,14 +718,6 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.HasOne(d => d.Question).WithMany(p => p.TblUsers)
                 .HasForeignKey(d => d.QuestionId)
                 .HasConstraintName("FK_tblUsers_tblQuestion");
-
-            entity.HasOne(d => d.Role).WithMany(p => p.TblUsers)
-                .HasForeignKey(d => d.RoleId)
-                .HasConstraintName("FK_tblUsers_tblRoleMaster");
-
-            entity.HasOne(d => d.State).WithMany(p => p.TblUsers)
-                .HasForeignKey(d => d.StateId)
-                .HasConstraintName("FK_tblUsers_tblState");
         });
 
         modelBuilder.Entity<TblUserDocument>(entity =>
@@ -779,7 +754,7 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.HasOne(d => d.User).WithMany(p => p.TblUserFormPermissions)
                 .HasForeignKey(d => d.UserId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_tblUserFormPermissions_tblUsers1");
+                .HasConstraintName("FK_tblUserFormPermissions_tblUsers");
         });
 
         modelBuilder.Entity<TblVendorMaster>(entity =>

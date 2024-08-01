@@ -64,6 +64,16 @@
             <input type="text" class="form-control" id="txtgst" max="99" value="@item.GstPer" maxlength="4" oninput="preventInvoiceEmptyValue(this)" style="width:100px;" />
         </td>
         <td class="text-start">
+            @if (item.Igst != null)
+            {
+                <input type="text" class="product-Gstper form-control" id="txtigst" oninput="preventInvoiceEmptyValue(this)" value="@item.Igst" />
+            }
+            else
+            {
+                <input type="text" class="product-Gstper form-control" id="txtigst" oninput="preventInvoiceEmptyValue(this)" value="0" />
+            }
+        </td>
+        <td class="text-start">
             <input type="number" class="form-control" id="txtgstAmount" value="@item.GstAmount" readonly style="width:130px;" />
         </td>
         <td class="text-start">

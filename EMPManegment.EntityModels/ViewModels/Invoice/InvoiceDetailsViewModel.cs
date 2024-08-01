@@ -29,6 +29,7 @@ namespace EMPManegment.EntityModels.ViewModels.Invoice
         public decimal GstPer { get; set; }
 
         public decimal? GstAmount { get; set; }
+        public decimal? Igst { get; set; }
 
         public decimal ProductTotal { get; set; }
 
