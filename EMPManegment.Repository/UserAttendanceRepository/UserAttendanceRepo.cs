@@ -1,35 +1,17 @@
 ﻿using EMPManagment.API;
-using EMPManegment.EntityModels.View_Model;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.Inretface.Interface.UserAttendance;
-using Microsoft.VisualBasic;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
-
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using System.Net;
 using System.Linq.Dynamic.Core;
 using EMPManegment.EntityModels.ViewModels.DataTableParameters;
-
-using System.Drawing;
-using System.Globalization;
-using Azure;
-using System.Diagnostics.Eventing.Reader;
-using Microsoft.Extensions.Logging;
-using EMPManegment.EntityModels.ViewModels.ProjectModels;
 using EMPManegment.EntityModels.Common;
-using EMPManegment.EntityModels.ViewModels.Invoice;
 using Microsoft.Extensions.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using EMPManegment.EntityModels.ViewModels.ExpenseMaster;
-
+#nullable disable
 namespace EMPManegment.Repository.UserAttendanceRepository
 {
     public class UserAttendanceRepo : IUserAttendance
