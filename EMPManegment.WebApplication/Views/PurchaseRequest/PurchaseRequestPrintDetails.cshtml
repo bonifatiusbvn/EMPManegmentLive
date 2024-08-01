@@ -1,0 +1,146 @@
+﻿@model EMPManegment.EntityModels.ViewModels.Purchase_Request.PurchaseRequestMasterView
+@using EMPManegment.Web.Models;
+@inject IHttpContextAccessor Accessor;
+@inject UserSession _userSession
+
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width" />
+    <link href="~/lteassets/dist/css/site.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/lteassets/dist/css/adminlte.min.css">
+    <style>
+        .card {
+            border: 1px solid #000;
+            padding: 20px;
+        }
+
+        .card-header, .card-body {
+            page-break-inside: avoid;
+        }
+
+        .table-bordered {
+            border: 1px solid #000;
+        }
+
+            .table-bordered th, .table-bordered td {
+                border: 1px solid #000;
+            }
+
+        .btn {
+            display: none !important;
+        }
+    </style>
+
+</head>
+<body>
+    <div class="card">
+        <div class="card-header">
+            <div class="d-flex align-items-center">
+                <h5 class="card-title flex-grow-1 mb-0">Purchase Request NO : @Model.PrNo</h5>
+                <div class="flex-shrink-0 d-print-none">
+                    <a id="PrintPRPage" class="btn btn-primary btn-sm" style="margin-bottom:14px; margin-left:15px;"><i class="ri-download-2-fill align-middle me-1"></i> Invoice</a>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive table-card">
+                <table class="table table-nowrap align-middle table-borderless mb-0">
+                    <thead class="table-info text-muted border">
+                        <tr>
+                            <th class="border">Product Details</th>
+                            <th class="border">Item Price</th>
+                            <th class="border">Quantity</th>
+                            <th class="border">GST</th>
+                            <th class="border">Total Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            decimal? subtotal = 0;
+                            decimal? totalGst = 0;
+                            decimal? totalAmount = 0;
+                            decimal? ProductAmount = 0;
+                            decimal? ProductGst = 0;
+                            decimal? ProductTotalAmount = 0;
+                        }
+                        @foreach (var item in Model.PRList)
+                        {
+                            ProductAmount = item.Price * item.Quantity;
+                            ProductGst = item.GstAmount * item.Quantity;
+                            ProductTotalAmount = ProductAmount + ProductGst;
+                            <tr>
+                                <td class="border">
+                                    <div class="d-flex">
+                                        <div class="flex-shrink-0 avatar-md bg-light rounded p-1">
+                                            <img src="~/@item.ProductImage" alt="" class="img-fluid d-block" style="height:120px; width:116px;">
+                                        </div>
+                                        <div class="flex-grow-1 ms-3">
+                                            <h5 class="fs-15"><a>@item.ProductName</a></h5>
+                                            <p class="text-muted mb-0">Category: <span class="fw-medium">@item.ProductTypeName</span></p>
+                                            <p class="text-muted mb-0">Description: <span class="fw-medium">@item.ProductDescription</span></p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="border">@ProductAmount?.ToString("F2")</td>
+                                <td class="border">@item.Quantity</td>
+                                <td class="border">@ProductGst?.ToString("F2")</td>
+                                <td class="border">@ProductTotalAmount?.ToString("F2")</td>
+                            </tr>
+                            subtotal += ProductAmount;
+                            totalGst += ProductGst;
+                            totalAmount = subtotal + totalGst;
+                        }
+                        <tr class="border-top border-top-dashed">
+                            <td colspan="3"></td>
+                            <td colspan="2" class="fw-medium p-0">
+                                <table class="table table-borderless mb-0">
+                                    <tbody>
+                                        <tr>
+                                            <td class="border">Sub Total :</td>
+                                            <td class="border" id="subtotal">₹@subtotal?.ToString("F2")</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="border">GST :</td>
+                                            <td class="border" id="totalGst">₹@totalGst?.ToString("F2")</td>
+                                        </tr>
+                                        <tr class="border-top border-top-dashed">
+                                            <th class="border">Total :</th>
+                                            <th class="border" id="total">₹@totalAmount?.ToString("F2")</th>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div class="noresult" style="display: none">
+                                    <div class="text-center">
+                                        <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#25a0e2,secondary:#00bd9d" style="width:75px;height:75px">
+                                        </lord-icon>
+                                        <h5 class="mt-2">Sorry! No Result Found</h5>
+                                        <p class="text-muted mb-0">
+                                            We've searched more than 150+ invoices We did not find any
+                                            invoices for you search.
+                                        </p>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="noresult" style="display: none">
+                    <div class="text-center">
+                        <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#25a0e2,secondary:#00bd9d" style="width:75px;height:75px">
+                        </lord-icon>
+                        <h5 class="mt-2">Sorry! No Result Found</h5>
+                        <p class="text-muted mb-0">
+                            We've searched more than 150+ invoices We did not find any
+                            invoices for you search.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

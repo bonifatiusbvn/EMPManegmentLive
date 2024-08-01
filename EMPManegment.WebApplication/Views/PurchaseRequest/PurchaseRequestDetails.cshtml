@@ -31,21 +31,21 @@
     <div class="card-header">
         <div class="d-flex align-items-center">
             <h5 class="card-title flex-grow-1 mb-0">Purchase Request NO : @firstItem.PrNo</h5>
-            <div class="flex-shrink-0">
-                <a href="javascript:window.print()" class="btn btn-primary btn-sm"><i class="ri-download-2-fill align-middle me-1"></i> Invoice</a>
+            <div class="flex-shrink-0 d-print-none">
+                <a id="PrintPRPage" class="btn btn-primary btn-sm"><i class="ri-download-2-fill align-middle me-1"></i> Invoice</a>
             </div>
         </div>
     </div>
     <div class="card-body">
         <div class="table-responsive table-card">
             <table class="table table-nowrap align-middle table-borderless mb-0">
-                <thead class="table-light text-muted">
+                <thead class="table-info text-muted border">
                     <tr>
-                        <th>Product Details</th>
-                        <th>Item Price</th>
-                        <th>Quantity</th>
-                        <th>GST</th>
-                        <th>Total Amount</th>
+                        <th class="border">Product Details</th>
+                        <th class="border">Item Price</th>
+                        <th class="border">Quantity</th>
+                        <th class="border">GST</th>
+                        <th class="border">Total Amount</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -63,7 +63,7 @@
                         ProductGst = item.GstAmount * item.Quantity;
                         ProductTotalAmount = ProductAmount + ProductGst;
                         <tr>
-                            <td>
+                            <td class="border">
                                 <div class="d-flex">
                                     <div class="flex-shrink-0 avatar-md bg-light rounded p-1">
                                         <img src="~/@item.ProductImage" alt="" class="img-fluid d-block">
@@ -75,10 +75,10 @@
                                     </div>
                                 </div>
                             </td>
-                            <td>@ProductAmount?.ToString("F2")</td>
-                            <td>@item.Quantity</td>
-                            <td>@ProductGst?.ToString("F2")</td>
-                            <td class="fw-medium">@ProductTotalAmount?.ToString("F2")</td>
+                            <td class="border">@ProductAmount?.ToString("F2")</td>
+                            <td class="border">@item.Quantity</td>
+                            <td class="border">@ProductGst?.ToString("F2")</td>
+                            <td class="border">@ProductTotalAmount?.ToString("F2")</td>
                         </tr>
                         subtotal += ProductAmount;
                         totalGst += ProductGst;
@@ -90,16 +90,16 @@
                             <table class="table table-borderless mb-0">
                                 <tbody>
                                     <tr>
-                                        <td>Sub Total :</td>
-                                        <td id="subtotal">₹@subtotal?.ToString("F2")</td>
+                                        <td class="border">Sub Total :</td>
+                                        <td class="border" id="subtotal">₹@subtotal?.ToString("F2")</td>
                                     </tr>
                                     <tr>
-                                        <td>GST :</td>
-                                        <td id="totalGst">₹@totalGst?.ToString("F2")</td>
+                                        <td class="border">GST :</td>
+                                        <td class="border" id="totalGst">₹@totalGst?.ToString("F2")</td>
                                     </tr>
                                     <tr class="border-top border-top-dashed">
-                                        <th>Total :</th>
-                                        <th id="total">₹@totalAmount?.ToString("F2")</th>
+                                        <th class="border">Total :</th>
+                                        <th class="border" id="total">₹@totalAmount?.ToString("F2")</th>
                                     </tr>
                                 </tbody>
                             </table>
@@ -138,7 +138,22 @@
     var totalGst = parseFloat(document.getElementById('totalGst').textContent.replace('₹', ''));
     var total = subtotal + totalGst;
     document.getElementById('total').textContent = '₹' + total.toFixed(2);
-    var userPermissions = '@Html.Raw(Json.Serialize(UserSession.FormPermisionData))';
+    var userPermissions = '@Html.Raw(Json.Serialize(UserSession.FormPermisionData))';    
+</script>
+<script>
+    document.getElementById('PrintPRPage').addEventListener('click', function () {
+        var PrNo = '@firstItem.PrNo';
+        fetch(`/PurchaseRequest/PrintPurchaseRequestDetails?PrNo=${PrNo}`)
+            .then(response => response.text())
+            .then(htmlContent => {
+                var printWindow = window.open('', '', 'width=800,height=600');
+                printWindow.document.open();
+                printWindow.document.write(htmlContent);
+                printWindow.document.close();
+                printWindow.print();
+            })
+            .catch(error => console.error('Error fetching the purchase request details:', error));
+    });
 </script>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/moduls/purchaserequestscript.js"></script>
