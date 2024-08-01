@@ -21,12 +21,12 @@
             .manual_invoice-table th, .manual_invoice-table td {
                 border-left: 1px solid lightgray;
                 border-right: 1px solid lightgray;
-                padding: 2px;
+                padding: 0px;
             }
 
-            .manual_invoice-table th[colspan] {
-                text-align: center;
-            }
+                .manual_invoice-table th[colspan] {
+                    text-align: center;
+                }
 
             .manual_invoice-table thead th {
                 border-top: 1px solid lightgray;
@@ -221,24 +221,31 @@
                                     int index = 1;
                                     decimal? subtotal = 0;
                                     decimal? totalAmt = 0;
-                                    decimal? totalQty = 0;
-                                    decimal? sgst = 0;
-                                    decimal? sgstper = 0;
-                                    decimal? cgst = 0;
-                                    decimal? cgstper = 0;
-                                    decimal? igst = 0;
+                                    decimal? totalqty = 0;
+                                    decimal? StateTax = 0;
+                                    decimal? CenteralTax = 0;
+                                    decimal? IntegratedTax = 0;
+                                    decimal? TotalCenteralTax = 0;
+                                    decimal? TotalStateTax = 0;
+                                    decimal? TotalIntegratedTax = 0;
+                                    decimal? TotalofSubtotal = 0;
+                                    decimal? groupTotalCenteralTax = 0;
+                                    decimal? groupTotalStateTax = 0;
+                                    decimal? groupTotalIntegratedTax = 0;
+                                    var groupedItems = Model.ManualInvoiceDetails.GroupBy(item => item.Gst);
                                 }
                                 @foreach (var item in Model.ManualInvoiceDetails)
                                 {
                                     subtotal = (item.Quantity * item.Price);
                                     var SubTotal = string.Format("{0:n2}", subtotal);
                                     totalAmt = (item.Quantity * item.Price) - item.Discount;
-                                    totalQty += item.Quantity;
-                                    sgst = (item.GstAmount / 2);
-                                    sgstper = (item.Gst / 2);
-                                    igst = item.IGst;
-                                    cgst = (item.GstAmount / 2);
-                                    cgstper = (item.Gst / 2);
+                                    totalqty += item.Quantity;
+                                    StateTax = (item.GstAmount / 2);
+                                    CenteralTax = (item.GstAmount / 2);
+                                    IntegratedTax = (item.Price * item.IGst / 100);
+                                    TotalStateTax += StateTax;
+                                    TotalCenteralTax += CenteralTax;
+                                    TotalIntegratedTax += IntegratedTax;
                                     <tr>
                                         <td>@index</td>
                                         <td class="text-start">
@@ -246,7 +253,7 @@
                                         </td>
                                         <td id="txtper">@item.Hsn</td>
                                         <td id="txtquantity">@item.Quantity @item.ProductTypeName</td>
-                                        <td id="txtHSN">@item.Price</td>
+                                        <td id="txtHSN">@item.Price.ToString("F2")</td>
                                         <td id="txtper">@item.ProductTypeName</td>
                                         <td id="txttotal">₹@SubTotal</td>
                                     </tr>
@@ -275,34 +282,31 @@
                                     <td style="text-align: end;">SGST</td>
                                     <td></td>
                                     <td></td>
-                                    <td style="text-align: end;">@sgstper</td>
-                                    <td style="text-align: start;">%</td>
-                                    <td><b>₹@sgst</b></td>
+                                    <td style="text-align: end;"></td>
+                                    <td style="text-align: start;"></td>
+                                    <td><b>₹@TotalStateTax?.ToString("F2")</b></td>
                                 </tr>
                                 <tr>
                                     <td></td>
                                     <td style="text-align: end;">CGST</td>
                                     <td></td>
                                     <td></td>
-                                    <td style="text-align: end;">@cgstper</td>
-                                    <td style="text-align: start;">%</td>
-                                    <td><b>₹@cgst</b></td>
+                                    <td style="text-align: end;"></td>
+                                    <td style="text-align: start;"></td>
+                                    <td><b>₹@TotalCenteralTax?.ToString("F2")</b></td>
                                 </tr>
-                                <tr>
-                                    <td></td>
-                                    <td style="text-align: end;">IGST</td>
-                                    <td></td>
-                                    <td></td> @if (Model.ManualInvoiceDetails.Any(a => a.IGst > 0))
-                                    {
-                                        <td style="text-align: end;">18</td>
-                                    }
-                                    else
-                                    {
-                                        <td style="text-align: end;">0</td>
-                                    }
-                                    <td style="text-align: start;">%</td>
-                                    <td><b></b></td>
-                                </tr>
+                                @if (Model.ManualInvoiceDetails.Any(a => a.IGst > 0))
+                                {
+                                    <tr>
+                                        <td></td>
+                                        <td style="text-align: end;">IGST</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td style="text-align: start;"></td>
+                                        <td><b>₹@TotalIntegratedTax?.ToString("F2")</b></td>
+                                    </tr>
+                                }
                                 <tr>
                                     <td></td>
                                     <td style="text-align: end;">Round Off</td>
@@ -312,6 +316,7 @@
                                     <td></td>
                                     <td>@Model.RoundOff</td>
                                 </tr>
+
                                 <tr>
                                     <td></td>
                                     <td></td>
@@ -422,12 +427,12 @@
                                 </tr>
                                 <tr>
                                     <td></td>
-                                    <td style="text-align: end;">Total</td>
+                                    <td class="text-end ">Total</td>
                                     <td></td>
-                                    <td>@totalQty</td>
+                                    <td>@totalqty</td>
                                     <td></td>
                                     <td></td>
-                                    <td><b>₹@Model.TotalAmount</b></td>
+                                    <td><b>₹@Model.TotalAmount?.ToString("F2")</b></td>
                                 </tr>
                             </tbody>
                         </table><!--end table-->
@@ -461,69 +466,44 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @{
-                                    int? Index = 1;
-                                    decimal? subTotal = 0;
-                                    decimal? GstAmount = 0;
-                                    decimal? TotalofSubtotal = 0;
-                                    decimal? StateTaxPer = 0;
-                                    decimal? StateTax = 0;
-                                    decimal? CenteralTax = 0;
-                                    decimal? CenteralTaxPer = 0;
-                                    decimal? IntegratedTax = 0;
-                                    decimal? IntegratedTaxPer = 0;
-                                    decimal? TotalCenteralTax = 0;
-                                    decimal? TotalStateTax = 0;
-                                    decimal? TotalIntegratedTax = 0;
-                                    decimal? TotalGSTAmount = 0;
-                                }
-                                @foreach (var item in Model.ManualInvoiceDetails)
+                                @foreach (var group in groupedItems)
                                 {
-                                    subTotal = (item.Quantity * item.Price);
-                                    GstAmount = (subTotal * item.Gst) / 100;
-                                    TotalofSubtotal += subTotal;
-                                    StateTaxPer = (item.Gst / 2);
-                                    StateTax = (item.Price * StateTaxPer / 100);
-                                    CenteralTaxPer = (item.Gst / 2);
-                                    CenteralTax = (item.Price * CenteralTaxPer / 100);
-                                    IntegratedTaxPer = (item.IGst);
-                                    IntegratedTax = (item.Price * item.IGst / 100);
-                                    TotalCenteralTax += CenteralTax;
-                                    TotalStateTax += StateTax;
-                                    TotalIntegratedTax += IntegratedTax;
-                                    TotalGSTAmount = TotalIntegratedTax + TotalCenteralTax + TotalStateTax;
+                                    decimal? groupSubTotal = 0;
+                                    decimal? groupCenteralTax = 0;
+                                    decimal? groupStateTax = 0;
+                                    decimal? groupIntegratedTax = 0;
+
+
+                                    foreach (var item in group)
+                                    {
+                                        var subTotal = item.Quantity * item.Price;
+                                        var GrpCgst = (item.GstAmount / 2);
+                                        var GrpSgst = (item.GstAmount / 2);
+                                        groupSubTotal += subTotal;
+                                        groupCenteralTax += GrpCgst;
+                                        groupStateTax += GrpSgst;
+                                        groupTotalIntegratedTax += IntegratedTax;
+                                    }
+
+                                    TotalofSubtotal += groupSubTotal;
+                                    groupTotalCenteralTax += groupCenteralTax;
+                                    groupTotalStateTax += groupStateTax;
+                                    TotalIntegratedTax += groupIntegratedTax;
 
                                     <tr>
-                                        <td>@item.Hsn</td>
-                                        <td>₹@subTotal</td>
-                                        <td>@CenteralTaxPer%</td>
-                                        <td>@CenteralTax</td>
-                                        <td>@StateTaxPer%</td>
-                                        <td>@StateTax</td>
-                                        @if (Model.ManualInvoiceDetails.Count > 1 && Model.ManualInvoiceDetails.Any(a => a.IGst > 0))
+                                        <td>@group.First().Hsn</td>
+                                        <td>₹@groupSubTotal?.ToString("F2")</td>
+                                        <td>@(group.Key / 2) %</td>
+                                        <td>₹@groupCenteralTax?.ToString("F2")</td>
+                                        <td>@(group.Key / 2) %</td>
+                                        <td>₹@groupStateTax?.ToString("F2")</td>
+                                        @if (group.Any(a => a.IGst > 0))
                                         {
-                                            @if (item.IGst != 0)
-                                            {
-                                                <td>@IntegratedTaxPer%</td>
-                                                <td>@IntegratedTax</td>
-                                            }
-                                            else
-                                            {
-                                                <td></td>
-                                                <td></td>
-                                            }
+                                            <td>@group.First().IGst %</td>
+                                            <td>₹@groupIntegratedTax?.ToString("F2")</td>
                                         }
-                                        else
-                                        {
-                                            @if (item.IGst != 0)
-                                            {
-                                                <td>@IntegratedTaxPer%</td>
-                                                <td>@IntegratedTax</td>
-                                            }
-                                        }
-                                        <td><b>₹@item.GstAmount?.ToString("0.00")</b></td>
+                                        <td><b>₹@((groupCenteralTax + groupStateTax + groupIntegratedTax)?.ToString("F2"))</b></td>
                                     </tr>
-                                    Index++;
                                 }
                                 <tr>
                                     <td><div class="GSTTotalHR"></div></td>
@@ -540,18 +520,18 @@
                                     <td><div class="GSTTotalHR"></div></td>
                                 </tr>
                                 <tr>
-                                    <td style="text-align: end;">Total</td>
-                                    <td><b>₹@TotalofSubtotal</b></td>
+                                    <td class="text-end ">Total</td>
+                                    <td><b>₹@TotalofSubtotal?.ToString("F2")</b></td>
                                     <td></td>
-                                    <td><b>@TotalCenteralTax</b></td>
+                                    <td><b>₹@groupTotalCenteralTax?.ToString("F2")</b></td>
                                     <td></td>
-                                    <td><b>@TotalStateTax</b></td>
+                                    <td><b>₹@groupTotalStateTax?.ToString("F2")</b></td>
                                     @if (Model.ManualInvoiceDetails.Any(a => a.IGst > 0))
                                     {
                                         <td></td>
-                                        <td><b>@TotalIntegratedTax</b></td>
+                                        <td><b>₹@groupTotalIntegratedTax?.ToString("F2")</b></td>
                                     }
-                                    <td><b>₹@TotalGSTAmount</b></td>
+                                    <td><b>₹@((groupTotalCenteralTax + groupTotalStateTax + groupTotalIntegratedTax)?.ToString("F2"))</b></td>
                                 </tr>
                             </tbody>
                         </table><!--end table-->
