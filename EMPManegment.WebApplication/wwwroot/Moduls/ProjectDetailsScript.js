@@ -1,7 +1,7 @@
 ﻿
 $(document).ready(function () {
     GetAllUserProjectDetailsList();
-   
+
     GetMemberList();
 });
 
@@ -210,41 +210,44 @@ function invitemember() {
             MemberDetails.push(objData);
         }
     });
+    if (MemberDetails.length > 0) {
+        var proProjectId = $('#projectid').val();
+        var UpdatedBy = $('#memberUpdatedby').val();
 
-    var proProjectId = $('#projectid').val();
-    var UpdatedBy = $('#memberUpdatedby').val();
+        var MemberData = {
+            ProjectId: proProjectId,
+            UpdatedBy: UpdatedBy,
+            ProjectMemberList: MemberDetails,
+        }
+        var form_data = new FormData();
+        form_data.append("InviteMember", JSON.stringify(MemberData));
 
-    var MemberData = {
-        ProjectId: proProjectId,
-        UpdatedBy: UpdatedBy,
-        ProjectMemberList: MemberDetails,
+        $.ajax({
+            url: '/Project/InviteMemberToProject',
+            type: 'Post',
+            data: form_data,
+            dataType: 'json',
+            processData: false,
+            contentType: false,
+            success: function (Result) {
+                if (Result.code == 200) {
+                    Swal.fire({
+                        title: Result.message,
+                        icon: 'success',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK',
+                    }).then(function () {
+                        window.location = '/Project/ProjectDetails/?Id=' + proProjectId;
+                    });
+                }
+                else {
+                    toastr.warning(Result.message);
+                }
+            },
+        })
+    } else {
+        toastr.warning("Select member you want to add!");
     }
-    var form_data = new FormData();
-    form_data.append("InviteMember", JSON.stringify(MemberData));
-
-    $.ajax({
-        url: '/Project/InviteMemberToProject',
-        type: 'Post',
-        data: form_data,
-        dataType: 'json',
-        processData: false,
-        contentType: false,
-        success: function (Result) {
-            if (Result.code == 200) {
-                Swal.fire({
-                    title: Result.message,
-                    icon: 'success',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK',
-                }).then(function () {
-                    window.location = '/Project/ProjectDetails/?Id=' + proProjectId;
-                });
-            }
-            else {
-                toastr.warning(Result.message);
-            }
-        },
-    })
 }
 
 function showProjectMembers(ProjectId) {
@@ -295,7 +298,7 @@ function addProjectDocument() {
 
     $.ajax({
         url: '/Project/AddDocumentToProject',
-        type: 'POST', 
+        type: 'POST',
         dataType: 'json',
         data: formData,
         processData: false,

@@ -276,52 +276,60 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
 
                 if (project != null)
                 {
-                    foreach (var item in AddMember.ProjectMemberList)
+                    if (AddMember.ProjectMemberList.Count > 0)
                     {
-                        var userId = await Context.TblUsers.FirstOrDefaultAsync(a => (a.FirstName + " " + a.LastName) == item.Fullname);
-                        bool isMemberAlreadyExists = Context.TblProjectMembers.Any(x => x.UserId == userId.Id && x.ProjectId == AddMember.ProjectId);
-
-                        if (isMemberAlreadyExists)
+                        foreach (var item in AddMember.ProjectMemberList)
                         {
-                            var projectDetail = await Context.TblProjectMembers.SingleOrDefaultAsync(x => x.UserId == userId.Id && x.ProjectId == AddMember.ProjectId);
+                            var userId = await Context.TblUsers.FirstOrDefaultAsync(a => (a.FirstName + " " + a.LastName) == item.Fullname);
+                            bool isMemberAlreadyExists = Context.TblProjectMembers.Any(x => x.UserId == userId.Id && x.ProjectId == AddMember.ProjectId);
 
-                            if (projectDetail.IsDeleted == false)
+                            if (isMemberAlreadyExists)
                             {
-                                response.Message = item.Fullname + " already exists in project.";
-                                response.Code = (int)HttpStatusCode.NotFound;
-                                return response;
+                                var projectDetail = await Context.TblProjectMembers.SingleOrDefaultAsync(x => x.UserId == userId.Id && x.ProjectId == AddMember.ProjectId);
+
+                                if (projectDetail.IsDeleted == false)
+                                {
+                                    response.Message = item.Fullname + " already exists in project.";
+                                    response.Code = (int)HttpStatusCode.NotFound;
+                                    return response;
+                                }
+                                else
+                                {
+                                    projectDetail.IsDeleted = false;
+                                    projectDetail.ProjectId = project.ProjectId;
+                                    projectDetail.UpdatedOn = DateTime.Now;
+                                    projectDetail.UpdatedBy = AddMember.UpdatedBy;
+                                    Context.TblProjectMembers.Update(projectDetail);
+                                    await Context.SaveChangesAsync();
+
+                                    response.Message = "Project member is added successfully!";
+                                }
                             }
                             else
                             {
-                                projectDetail.IsDeleted = false;
-                                projectDetail.ProjectId = project.ProjectId;
-                                projectDetail.UpdatedOn = DateTime.Now;
-                                projectDetail.UpdatedBy = AddMember.UpdatedBy;
-                                Context.TblProjectMembers.Update(projectDetail);
+                                var projectmodel = new TblProjectMember()
+                                {
+                                    Id = Guid.NewGuid(),
+                                    ProjectId = project.ProjectId,
+                                    UserId = userId.Id,
+                                    IsDeleted = false,
+                                    CreatedBy = AddMember.UpdatedBy,
+                                    CreatedOn = DateTime.Now,
+                                };
+
+                                Context.TblProjectMembers.Add(projectmodel);
                                 await Context.SaveChangesAsync();
 
                                 response.Message = "Project member is added successfully!";
                             }
                         }
-                        else
-                        {
-                            var projectmodel = new TblProjectMember()
-                            {
-                                Id = Guid.NewGuid(),
-                                ProjectId = project.ProjectId,
-                                UserId = userId.Id,
-                                IsDeleted = false,
-                                CreatedBy = AddMember.UpdatedBy,
-                                CreatedOn = DateTime.Now,
-                            };
-
-                            Context.TblProjectMembers.Add(projectmodel);
-                            await Context.SaveChangesAsync();
-
-                            response.Message = "Project member is added successfully!";
-                        }
+                        response.Data = project;
                     }
-                    response.Data = project;
+                    else
+                    {
+                        response.Code = (int)HttpStatusCode.NotFound;
+                        response.Message = "Select member you want to add.";
+                    }
                 }
                 else
                 {
