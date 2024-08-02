@@ -23,6 +23,7 @@ using X.PagedList;
 using System.Net.Http.Headers;
 using Microsoft.CodeAnalysis;
 using EMPManegment.EntityModels.ViewModels.Weather;
+using EMPManegment.EntityModels.ViewModels.Chat;
 #nullable disable
 namespace EMPManegment.Web.Controllers
 {
@@ -259,6 +260,74 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
+        public async Task<IActionResult> ChatMessages()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetChateMembes()
+        {
+            try
+            {
+                Guid userId = _userSession.UserId;
+                List<ChatMessagesView> userChat = new List<ChatMessagesView>();
+                ApiResponseModel response = await APIServices.GetAsync("", "UserHome/GetChatMembers?UserId=" + userId);
+                if (response.code == 200)
+                {
+                    userChat = JsonConvert.DeserializeObject<List<ChatMessagesView>>(response.data.ToString());
+                }
+
+                return PartialView("~/Views/Home/_ChatBoradPartial.cshtml", userChat);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> GetChateConversation()
+        {
+            try
+            {
+                Guid userId = _userSession.UserId;
+                List<ChatMessagesView> userChat = new List<ChatMessagesView>();
+                ApiResponseModel response = await APIServices.GetAsync("", "UserHome/GetChatMembers?UserId=" + userId);
+                if (response.code == 200)
+                {
+                    userChat = JsonConvert.DeserializeObject<List<ChatMessagesView>>(response.data.ToString());
+                }
+
+                return PartialView("~/Views/Home/_ChatBoradPartial.cshtml", userChat);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> GetChatConversation(Guid id)
+        {
+            try
+            {
+                List<ChatMessagesView> userChat = new List<ChatMessagesView>();
+                ApiResponseModel response = await APIServices.GetAsync("", "UserHome/GetChatConversation?Id=" + id);
+                if (response.code == 200)
+                {
+                    userChat = JsonConvert.DeserializeObject<List<ChatMessagesView>>(response.data.ToString());
+                }
+
+                return PartialView("~/Views/Home/_ChatConversationPartial.cshtml", userChat);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error.");
+            }
+        }
 
     }
 }

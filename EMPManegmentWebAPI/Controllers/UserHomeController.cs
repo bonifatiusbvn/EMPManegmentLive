@@ -2,12 +2,14 @@
 using EMPManagment.Web.Models.API;
 using EMPManegment.EntityModels.View_Model;
 using EMPManegment.EntityModels.ViewModels;
+using EMPManegment.EntityModels.ViewModels.Chat;
 using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.TaskModels;
 using EMPManegment.EntityModels.ViewModels.Weather;
 using EMPManegment.Inretface.Interface.ExpenseMaster;
 using EMPManegment.Inretface.Interface.UserAttendance;
+using EMPManegment.Inretface.Services.Home;
 using EMPManegment.Inretface.Services.TaskServices;
 using EMPManegment.Inretface.Services.UserAttendanceServices;
 using EMPManegment.Inretface.Services.UserListServices;
@@ -28,16 +30,18 @@ namespace EMPManagment.API.Controllers
     [Authorize]
     public class UserHomeController : ControllerBase
     {
-        public UserHomeController(IUserDetailsServices userDetails, IUserAttendanceServices attendanceServices, ITaskServices taskServices)
+        public UserHomeController(IUserDetailsServices userDetails, IUserAttendanceServices attendanceServices, ITaskServices taskServices, IUserHomeServices homeServices)
         {
             UserDetails = userDetails;
             AttendanceServices = attendanceServices;
             TaskServices = taskServices;
+            HomeServices = homeServices;
         }
 
         public IUserDetailsServices UserDetails { get; }
         public IUserAttendanceServices AttendanceServices { get; }
         public ITaskServices TaskServices { get; }
+        public IUserHomeServices HomeServices { get; }
 
         [HttpPost]
         [Route("InsertINTime")]
@@ -383,6 +387,22 @@ namespace EMPManagment.API.Controllers
                 responseModel.Code = (int)HttpStatusCode.InternalServerError;
             }
             return StatusCode(responseModel.Code, responseModel);
+        }
+
+        [HttpGet]
+        [Route("GetChatMembers")]
+        public async Task<IActionResult> GetChatMembers(Guid UserId)
+        {
+            IEnumerable<ChatMessagesView> ChatMembers = await HomeServices.GetMyConversationList(UserId);
+            return Ok(new { code = (int)HttpStatusCode.OK, data = ChatMembers.ToList() });
+        }
+
+        [HttpGet]
+        [Route("GetChatConversation")]
+        public async Task<IActionResult> GetChatConversation(Guid Id)
+        {
+            IEnumerable<ChatMessagesView> conversation = await HomeServices.GetMyConversation(Id);
+            return Ok(new { code = (int)HttpStatusCode.OK, data = conversation.ToList() });
         }
     }
 }
