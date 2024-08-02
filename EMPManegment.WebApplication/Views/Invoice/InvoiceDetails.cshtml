@@ -17,8 +17,9 @@
 
     .Address-Details {
         display: flex;
+        align-items: stretch;
         border: 1px solid lightgray;
-        height: 155px;
+        height: 185px;
     }
 </style>
 
@@ -53,7 +54,7 @@
                                 <span class="text-muted"><b>@firstItem.CompnyName</b></span> <br />
                                 <span class="text-muted">@firstItem.CompanyAddress</span><br />
                                 <span class="text-muted text-uppercase">GSTIN/UIN :@firstItem.CompanyGst</span><br />
-                                <p class="text-muted text-uppercase"></p>
+                                <p class="text-muted">State Name : @firstItem.CompanyState, Code : @firstItem.CompanyStateCode</p>
                             </div>
                             <div style="border: 0px solid lightgray;border-width:0.5px;margin:-8px;width:-1%;"></div>
                             <br />
@@ -61,7 +62,8 @@
                                 <p class="text-muted"><b>Consignee (Ship to):</b></p>
                                 <span class="text-muted text-uppercase"><b>@firstItem.VendorCompanyName</b></span><br />
                                 <span class="text-muted">@firstItem.ShippingAddress</span><br />
-                                <p class="text-muted text-uppercase"><b>GSTIN/UIN :@firstItem.VendorGstnumber</b></p>
+                                <span class="text-muted">GSTIN/UIN :@firstItem.VendorGstnumber</span><br />
+                                <p class="text-muted">State Name : @firstItem.VendorState, Code : @firstItem.VendorStateCode</p>
                             </div>
                         </div>
                         <div class="flex-grow-1 col-6" style="border: 1px solid lightgray;">
@@ -163,7 +165,8 @@
                             <p class="text-muted"><b>Buyer (Bill to)</b></p>
                             <span class="text-muted text-uppercase"><b>@firstItem.VendorCompanyName</b></span><br />
                             <span class="text-muted text-uppercase">@firstItem.VendorAddress</span><br />
-                            <p class="text-muted text-uppercase"><b>GSTIN/UIN :@firstItem.VendorGstnumber</b></p>
+                            <span class="text-muted">GSTIN/UIN :@firstItem.VendorGstnumber</span><br />
+                            <p class="text-muted">State Name : @firstItem.VendorState, Code : @firstItem.VendorStateCode</p>
                         </div>
                         <div class="VerticalBorder"></div>
                         <div class="flex-grow-1 col-6">

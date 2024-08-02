@@ -9,6 +9,8 @@ public partial class TblState
 
     public int CountryId { get; set; }
 
+    public int? StateCode { get; set; }
+
     public string State { get; set; } = null!;
 
     public virtual TblCountry Country { get; set; } = null!;
