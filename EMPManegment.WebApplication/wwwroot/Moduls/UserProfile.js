@@ -49,36 +49,43 @@ function GetDocumentList() {
 
 
 function UploadDocument() {
-    var fromData = new FormData();
-    fromData.append("documentType", $("#Documents").val());
-    fromData.append("documentTypeId", $("#Documents").val());
-    fromData.append("DocumentName", $("#formFile")[0].files[0]);
-    fromData.append("CreatedBy", $("#CreatedBy").val());
-    fromData.append("Id", $("#Id").val());
-    fromData.append("UserId", $("#UserID").val());
+    var document = $("#formFile")[0].files[0];
+    var documentType = $("#Documents").val();
+    if (document != undefined && documentType != "--Document Type--") {
+        var fromData = new FormData();
+        fromData.append("documentType", $("#Documents").val());
+        fromData.append("documentTypeId", $("#Documents").val());
+        fromData.append("DocumentName", $("#formFile")[0].files[0]);
+        fromData.append("CreatedBy", $("#CreatedBy").val());
+        fromData.append("Id", $("#Id").val());
+        fromData.append("UserId", $("#UserID").val());
 
-    $.ajax({
-        url: '/UserProfile/UploadDocument',
-        type: 'Post',
-        data: fromData,
-        dataType: 'json',
-        processData: false,
-        contentType: false,
-        success: function (Result) {
-            if (Result.code == 200) {
-                Swal.fire({
-                    title: Result.message,
-                    icon: 'success',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK',
-                }).then(function () {
-                    window.location = '/UserProfile/UserProfile';
-                });
-            } else {
-                toastr.error(Result.message);
+        $.ajax({
+            url: '/UserProfile/UploadDocument',
+            type: 'Post',
+            data: fromData,
+            dataType: 'json',
+            processData: false,
+            contentType: false,
+            success: function (Result) {
+                if (Result.code == 200) {
+                    Swal.fire({
+                        title: Result.message,
+                        icon: 'success',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK',
+                    }).then(function () {
+                        window.location = '/UserProfile/UserProfile';
+                    });
+                } else {
+                    toastr.error(Result.message);
+                }
             }
-        }
-    });
+        });
+    }
+    else {
+        toastr.warning('Please select document and documentType!');
+    }
 }
 
 function GetUserProjectList(page) {

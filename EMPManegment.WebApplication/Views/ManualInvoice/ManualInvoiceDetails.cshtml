@@ -219,15 +219,17 @@
                                 TotalStateTax += StateTax;
                                 TotalCenteralTax += CenteralTax;
                                 TotalIntegratedTax += IntegratedTax;
+                                var ProductType = item.ProductTypeName.Split('-')[0];
+
                                 <tr>
                                     <td class="border">@index</td>
                                     <td class="text-start border">
                                         <span class="fw-medium" id="txtproductname">@item.Product</span>
                                     </td>
                                     <td class="border" id="txtper">@item.Hsn</td>
-                                    <td class="border" id="txtquantity">@item.Quantity @item.ProductTypeName</td>
+                                    <td class="border" id="txtquantity">@item.Quantity @ProductType</td>
                                     <td class="border" id="txtHSN">@item.Price.ToString("F2")</td>
-                                    <td class="border" id="txtper">@item.ProductTypeName</td>
+                                    <td class="border" id="txtper">@ProductType</td>
                                     <td class="border" id="txttotal">₹@SubTotal</td>
                                 </tr>
                                 index++;
