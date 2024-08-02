@@ -119,7 +119,7 @@ namespace EMPManegment.Repository.UserAttendanceRepository
                     string today = DateTime.Now.ToString("dd/MM/yyyy");
                     string intimeDate = userAttendance.Intime.ToString("dd/MM/yyyy");
                     string outTimeDate = userAttendance.OutTime?.ToString("dd/MM/yyyy");
-                    if(outTimeDate == intimeDate)
+                    if(outTimeDate == intimeDate || intimeDate==today)
                     {
                         if (userAttendance.OutTime == null || userAttendance.Intime <= userAttendance.OutTime)
                         {

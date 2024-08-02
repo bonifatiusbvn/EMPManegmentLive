@@ -75,6 +75,8 @@ namespace EMPManegment.EntityModels.ViewModels.Invoice
         public string? VendorBankAccountNo { get; set; } 
 
         public string? VendorBankIfsc { get; set; }
+        public string? VendorState { get; set; }
+        public int? VendorStateCode { get; set; }
         public string? PaymentMethodName { get; set; }
 
         public string? PaymentStatusName { get; set; }
@@ -85,6 +87,8 @@ namespace EMPManegment.EntityModels.ViewModels.Invoice
         public string? CompnyName { get; set; }
         public string? CompanyGst { get; set; }
         public string? CompanyAddress { get; set; }
+        public string? CompanyState { get; set; }
+        public int? CompanyStateCode { get; set; }
         public Guid? UpdatedBy { get; set; }
         public DateTime? Date { get; set; }
 

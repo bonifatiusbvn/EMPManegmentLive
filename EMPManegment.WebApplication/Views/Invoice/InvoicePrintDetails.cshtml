@@ -67,8 +67,9 @@
 
         .Address-Details {
             display: flex;
+            align-items: stretch;
             border: 1px solid lightgray;
-            height: 155px;
+            height: 185px;
         }
     </style>
 </head>
@@ -84,7 +85,7 @@
                                     <span class="text-muted"><b>@Model.CompnyName</b></span> <br />
                                     <span class="text-muted">@Model.CompanyAddress</span><br />
                                     <span class="text-muted text-uppercase">GSTIN/UIN :@Model.CompanyGst</span><br />
-                                    <p class="text-muted text-uppercase"></p>
+                                    <p class="text-muted text-uppercase">State Name : @Model.CompanyState, Code : @Model.CompanyStateCode</p>
                                 </div>
                                 <div style="border: 0px solid lightgray;border-width:0.5px;margin:-8px;width:-1%;"></div>
                                 <br />
@@ -93,6 +94,8 @@
                                     <span class="text-muted text-uppercase"><b>@Model.VendorCompanyName</b></span><br />
                                     <span class="text-muted">@Model.ShippingAddress</span><br />
                                     <p class="text-muted text-uppercase"><b>GSTIN/UIN :@Model.VendorGstnumber</b></p>
+                                    <span class="text-muted">GSTIN/UIN :@Model.VendorGstnumber</span><br />
+                                    <p class="text-muted">State Name : @Model.VendorState, Code : @Model.VendorStateCode</p>
                                 </div>
                             </div>
                             <div class="flex-grow-1 col-6" style="border: 1px solid lightgray;">
@@ -188,13 +191,13 @@
                                 </div>
                             </div>
                         </div>
-
                         <div class="d-flex Address-Details">
                             <div class="flex-grow-1 col-6">
-                                <p class="text-muted"><b>Buyer (Bill to)</b></p>
-                                <span class="text-muted text-uppercase"><b>@Model.VendorCompanyName</b></span><br />
-                                <span class="text-muted text-uppercase">@Model.VendorAddress</span><br />
-                                <p class="text-muted text-uppercase"><b>GSTIN/UIN :@Model.VendorGstnumber</b></p>
+                                    <p class="text-muted"><b>Buyer (Bill to)</b></p>
+                                    <span class="text-muted text-uppercase"><b>@Model.VendorCompanyName</b></span><br />
+                                    <span class="text-muted text-uppercase">@Model.VendorAddress</span><br />
+                                    <span class="text-muted text-uppercase">GSTIN/UIN :@Model.VendorGstnumber</span><br />
+                                    <p class="text-muted">State Name : @Model.VendorState, Code : @Model.VendorStateCode</p>
                             </div>
                             <div class="VerticalBorder"></div>
                             <div class="flex-grow-1 col-6">
@@ -238,15 +241,16 @@
                                     igst = item.Igst;
                                     cgst = (item.GstAmount / 2);
                                     cgstper = (item.GstPer / 2);
+                                    var ProductType = item.ProductTypeName.Split('-')[0];
                                     <tr>
                                         <td>@index</td>
                                         <td class="text-start">
                                             <span class="fw-medium" id="txtproductname">@item.Product</span>
                                         </td>
                                         <td id="txtper">@item.Hsn</td>
-                                        <td id="txtquantity">@item.Quantity @item.ProductTypeName</td>
+                                        <td id="txtquantity">@item.Quantity @ProductType</td>
                                         <td id="txtHSN">@item.PerUnitPrice</td>
-                                        <td id="txtper">@item.ProductTypeName</td>
+                                        <td id="txtper">@ProductType</td>
                                         <td id="txttotal">₹@SubTotal</td>
                                     </tr>
                                     index++;
