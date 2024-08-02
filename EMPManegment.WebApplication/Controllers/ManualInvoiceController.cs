@@ -174,10 +174,10 @@ namespace EMPManegment.Web.Controllers
                 {
                     invoice = JsonConvert.DeserializeObject<ManualInvoiceMasterModel>(response.data.ToString());
                     var number = invoice.TotalAmount;
-                    var totalAmountInWords = NumberToWords((int)number);
+                    var totalAmountInWords = NumberToWords((decimal)number);
                     ViewData["TotalAmountInWords"] = totalAmountInWords + " " + "Only";
                     var gstamt = invoice.TotalGst;
-                    var totalGstInWords = NumberToWords((int)gstamt);
+                    var totalGstInWords = NumberToWords((decimal)gstamt);
                     ViewData["TotalGstInWords"] = totalGstInWords + " " + "Only";
                 }
                 return View(invoice);
@@ -187,51 +187,67 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
-        public static string NumberToWords(int number)
+        public static string NumberToWords(decimal number)
         {
-            if (number == 0)
-                return "zero";
-
-            if (number < 0)
-                return "minus " + NumberToWords(Math.Abs(number));
+            int integerPart = (int)Math.Floor(number);
+            decimal decimalPart = number - integerPart;
 
             string words = "";
 
-            if ((number / 1000000) > 0)
+            if (integerPart == 0)
             {
-                words += NumberToWords(number / 1000000) + " million ";
-                number %= 1000000;
+                words = "zero";
             }
-
-            if ((number / 1000) > 0)
+            else if (integerPart < 0)
             {
-                words += NumberToWords(number / 1000) + " thousand ";
-                number %= 1000;
+                words = "minus " + NumberToWords(Math.Abs(integerPart));
             }
-
-            if ((number / 100) > 0)
+            else
             {
-                words += NumberToWords(number / 100) + " hundred ";
-                number %= 100;
-            }
-
-            if (number > 0)
-            {
-                if (words != "")
-                    words += "and ";
-
-                var unitsMap = new[] { "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen" };
-                var tensMap = new[] { "zero", "ten", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety" };
-
-                if (number < 20)
-                    words += unitsMap[number];
-                else
+                if ((integerPart / 1000000) > 0)
                 {
-                    words += tensMap[number / 10];
-                    if ((number % 10) > 0)
-                        words += "-" + unitsMap[number % 10];
+                    words += NumberToWords(integerPart / 1000000) + " million ";
+                    integerPart %= 1000000;
+                }
+
+                if ((integerPart / 1000) > 0)
+                {
+                    words += NumberToWords(integerPart / 1000) + " thousand ";
+                    integerPart %= 1000;
+                }
+
+                if ((integerPart / 100) > 0)
+                {
+                    words += NumberToWords(integerPart / 100) + " hundred ";
+                    integerPart %= 100;
+                }
+
+
+                if (integerPart > 0)
+                {
+                    var unitsMap = new[] { "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen" };
+                    var tensMap = new[] { "zero", "ten", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety" };
+
+                    if (words != "")
+                        words += " ";
+
+                    if (integerPart < 20)
+                        words += unitsMap[integerPart];
+                    else
+                    {
+                        words += tensMap[integerPart / 10];
+                        if ((integerPart % 10) > 0)
+                            words += "-" + unitsMap[integerPart % 10];
+                    }
                 }
             }
+
+            if (decimalPart > 0)
+            {
+                decimalPart *= 100;
+                words += " and " + NumberToWords((int)decimalPart) + " paisa";
+            }
+
             return words;
         }
 
@@ -286,10 +302,10 @@ namespace EMPManegment.Web.Controllers
                 {
                     invoice = JsonConvert.DeserializeObject<ManualInvoiceMasterModel>(response.data.ToString());
                     var number = invoice.TotalAmount;
-                    var totalAmountInWords = NumberToWords((int)number);
+                    var totalAmountInWords = NumberToWords((decimal)number);
                     ViewData["TotalAmountInWords"] = totalAmountInWords + " " + "Only";
                     var gstamt = invoice.TotalGst;
-                    var totalGstInWords = NumberToWords((int)gstamt);
+                    var totalGstInWords = NumberToWords((decimal)gstamt);
                     ViewData["TotalGstInWords"] = totalGstInWords + " " + "Only";
                 }
                 return View(invoice);

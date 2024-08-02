@@ -17,6 +17,11 @@ using EMPManegment.Web.Helper;
 using EMPManegment.EntityModels.ViewModels.ExpenseMaster;
 using Irony.Parsing.Construction;
 using Microsoft.AspNetCore.Authorization;
+using EMPManegment.EntityModels.ViewModels.ManualInvoice;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewEngines;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Microsoft.AspNetCore.Mvc.Abstractions;
 #nullable disable
 namespace EMPManegment.Web.Controllers
 {
@@ -267,7 +272,6 @@ namespace EMPManegment.Web.Controllers
             {
                 throw ex;
             }
-            return View();
         }
 
         [HttpPost]
@@ -311,6 +315,70 @@ namespace EMPManegment.Web.Controllers
             catch (Exception ex)
             {
                 throw ex;
+            }
+        }
+        public async Task<IActionResult> PurchaseRequestPrintDetails(string prNo)
+        {
+            try
+            {
+                PurchaseRequestMasterView PRDetails = new PurchaseRequestMasterView();
+                ApiResponseModel response = await APIServices.GetAsync("", "PurchaseRequest/PurchaseRequestDetailsByPrNo?prNo=" + prNo);
+                if (response.code == 200)
+                {
+                    PRDetails = JsonConvert.DeserializeObject<PurchaseRequestMasterView>(response.data.ToString());
+                }
+                return View("PurchaseRequestDetails", PRDetails);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public async Task<IActionResult> PrintPurchaseRequestDetails(string prNo)
+        {
+            try
+            {
+                IActionResult result = await PurchaseRequestPrintDetails(prNo);
+
+                if (result is ViewResult viewResult)
+                {
+                    var order = viewResult.Model as PurchaseRequestMasterView;
+                    var htmlContent = await RenderViewToStringAsync("PurchaseRequestPrintDetails", order, viewResult.ViewData);
+                    return Content(htmlContent, "text/html");
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        private async Task<string> RenderViewToStringAsync(string viewName, object model, ViewDataDictionary viewData)
+        {
+            var viewEngine = HttpContext.RequestServices.GetService(typeof(ICompositeViewEngine)) as ICompositeViewEngine;
+            var tempDataProvider = HttpContext.RequestServices.GetService(typeof(ITempDataProvider)) as ITempDataProvider;
+            var tempData = new TempDataDictionary(HttpContext, tempDataProvider);
+            var actionContext = new ActionContext(HttpContext, RouteData, new ActionDescriptor());
+
+            using (var stringWriter = new StringWriter())
+            {
+                var viewResult = viewEngine.FindView(actionContext, viewName, false);
+
+                if (viewResult.View == null)
+                {
+                    throw new ArgumentNullException($"View '{viewName}' was not found.");
+                }
+
+                var viewContext = new ViewContext(
+                    actionContext,
+                    viewResult.View,
+                    viewData,
+                    tempData,
+                    stringWriter,
+                    new HtmlHelperOptions()
+                );
+                await viewResult.View.RenderAsync(viewContext);
+                return stringWriter.ToString();
             }
         }
     }
