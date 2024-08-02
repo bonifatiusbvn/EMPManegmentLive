@@ -83,9 +83,42 @@
                     </div>
                 </div>
             </div>
-            <div class="card-body">
-                <div class="listjs-table" id="GetMyAttendanceList">
+            <div class="card-body" id="attendancedt">
+                <div class="listjs-table" >
+                    <div class="fixTableHead table-responsive table-card mt-3 mb-1">
+                        <table id="MyAttendanceData" class="table table-bordered dt-responsive table-striped align-middle dataTable no-footer dtr-inline">
+                            <thead class="table-info text-muted text-center">
+                                <tr class="text-uppercase">
+                                    <th>UserName</th>
+                                    <th>Date</th>
+                                    <th>InTime</th>
+                                    <th>OutTime</th>
+                                    <th>TotalHours</th>
+                                    @if (UserSession.FormPermisionData.Any(a => a.FormName == "Users Attendance" && (a.Edit == true)))
+                                    {
+                                        <th>Action</th>
+                                    }
+                                </tr>
+                            </thead>
+                            <tbody class="text-center"> </tbody>
+                        </table>
+                        <div class="noresult" style="display: none">
+                            <div class="text-center">
+                                <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#25a0e2,secondary:#00bd9d" style="width:75px;height:75px">
+                                </lord-icon>
+                                <h5 class="mt-2">Sorry! No Result Found</h5>
+                                <p class="text-muted mb-0">
+                                    We've searched more than 150+ Orders We did not find any
+                                    orders for you search.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+            </div>
+            <div class="card-body">
+                <!--Partail View-->
+                <div id="GetMyAttendanceList"></div>
             </div>
         </div>
     </div>
