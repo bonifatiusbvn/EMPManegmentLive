@@ -17,6 +17,8 @@ public partial class BonifatiusEmployeesContext : DbContext
 
     public virtual DbSet<TblAttendance> TblAttendances { get; set; }
 
+    public virtual DbSet<TblChatMessage> TblChatMessages { get; set; }
+
     public virtual DbSet<TblCity> TblCities { get; set; }
 
     public virtual DbSet<TblCompanyMaster> TblCompanyMasters { get; set; }
@@ -93,8 +95,8 @@ public partial class BonifatiusEmployeesContext : DbContext
 
     public virtual DbSet<TblVendorType> TblVendorTypes { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-     {}
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<TblAttendance>(entity =>
@@ -116,6 +118,23 @@ public partial class BonifatiusEmployeesContext : DbContext
                 .HasForeignKey(d => d.UserId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_tblAttendance_tblUsers");
+        });
+
+        modelBuilder.Entity<TblChatMessage>(entity =>
+        {
+            entity.HasKey(e => e.MessageId).HasName("PK__tblChatM__C87C0C9CBF970E25");
+
+            entity.ToTable("tblChatMessages");
+
+            entity.Property(e => e.IsDeleted).HasDefaultValueSql("((0))");
+            entity.Property(e => e.IsRead).HasDefaultValueSql("((0))");
+            entity.Property(e => e.SentDateTime).HasColumnType("datetime");
+            entity.Property(e => e.UserName).HasMaxLength(100);
+
+            entity.HasOne(d => d.User).WithMany(p => p.TblChatMessages)
+                .HasForeignKey(d => d.UserId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_tblChatMessages_tblUsers");
         });
 
         modelBuilder.Entity<TblCity>(entity =>

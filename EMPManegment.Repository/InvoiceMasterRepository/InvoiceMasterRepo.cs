@@ -984,79 +984,90 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
 
         public async Task<InvoiceMasterModel> DisplayInvoiceDetailsById(Guid Id)
         {
-            string dbConnectionStr = Configuration.GetConnectionString("EMPDbconn");
-            var sqlPar = new SqlParameter[]
+            try
             {
+                string dbConnectionStr = Configuration.GetConnectionString("EMPDbconn");
+                var sqlPar = new SqlParameter[]
+                {
             new SqlParameter("@InvoiceId", Id),
-            };
-            var DS = DbHelper.GetDataSet("[GetInvoiceDetailsById]", System.Data.CommandType.StoredProcedure, sqlPar, dbConnectionStr);
+                };
+                var DS = DbHelper.GetDataSet("[GetInvoiceDetailsById]", System.Data.CommandType.StoredProcedure, sqlPar, dbConnectionStr);
 
-            InvoiceMasterModel InvoiceDetails = new InvoiceMasterModel();
+                InvoiceMasterModel InvoiceDetails = new InvoiceMasterModel();
 
-            if (DS != null && DS.Tables.Count > 0)
-            {
-                if (DS.Tables[0].Rows.Count > 0)
+                if (DS != null && DS.Tables.Count > 0)
                 {
-                    InvoiceDetails.Id = DS.Tables[0].Rows[0]["Id"] != DBNull.Value ? (Guid)DS.Tables[0].Rows[0]["Id"] : Guid.Empty;
-                    InvoiceDetails.VandorId = DS.Tables[0].Rows[0]["VandorId"] != DBNull.Value ? (Guid)DS.Tables[0].Rows[0]["VandorId"] : Guid.Empty;
-                    InvoiceDetails.CompanyId = DS.Tables[0].Rows[0]["CompanyId"] != DBNull.Value ? (Guid)DS.Tables[0].Rows[0]["CompanyId"] : Guid.Empty;
-                    InvoiceDetails.InvoiceNo = DS.Tables[0].Rows[0]["InvoiceNo"]?.ToString();
-                    InvoiceDetails.ProjectId = DS.Tables[0].Rows[0]["ProjectId"] != DBNull.Value ? (Guid)DS.Tables[0].Rows[0]["ProjectId"] : Guid.Empty;
-                    InvoiceDetails.VendorAddress = DS.Tables[0].Rows[0]["VendorAddress"]?.ToString();
-                    InvoiceDetails.VendorCompanyName = DS.Tables[0].Rows[0]["VendorCompanyName"]?.ToString();
-                    InvoiceDetails.VendorGstnumber = DS.Tables[0].Rows[0]["VendorGstnumber"]?.ToString();
-                    InvoiceDetails.VendorCompanyNumber = DS.Tables[0].Rows[0]["VendorCompanyNumber"]?.ToString();
-                    InvoiceDetails.VendorBankName = DS.Tables[0].Rows[0]["VendorBankName"]?.ToString();
-                    InvoiceDetails.VendorBankBranch = DS.Tables[0].Rows[0]["VendorBankBranch"]?.ToString();
-                    InvoiceDetails.VendorBankAccountNo = DS.Tables[0].Rows[0]["VendorBankAccountNo"]?.ToString();
-                    InvoiceDetails.VendorBankIfsc = DS.Tables[0].Rows[0]["VendorBankIfsc"]?.ToString();
-                    InvoiceDetails.VendorAccountHolderName = DS.Tables[0].Rows[0]["VendorAccountHolderName"]?.ToString();
-                    InvoiceDetails.CompnyName = DS.Tables[0].Rows[0]["CompnyName"]?.ToString();
-                    InvoiceDetails.CompanyGst = DS.Tables[0].Rows[0]["CompanyGst"]?.ToString();
-                    InvoiceDetails.CompanyAddress = DS.Tables[0].Rows[0]["CompanyAddress"]?.ToString();
-                    InvoiceDetails.InvoiceDate = DS.Tables[0].Rows[0]["InvoiceDate"] != DBNull.Value ? (DateTime)DS.Tables[0].Rows[0]["InvoiceDate"] : DateTime.MinValue;
-                    InvoiceDetails.BuyesOrderDate = DS.Tables[0].Rows[0]["BuyesOrderDate"] != DBNull.Value ? (DateTime)DS.Tables[0].Rows[0]["BuyesOrderDate"] : DateTime.MinValue;
-                    InvoiceDetails.BuyesOrderNo = DS.Tables[0].Rows[0]["BuyesOrderNo"]?.ToString();
-                    InvoiceDetails.DispatchThrough = DS.Tables[0].Rows[0]["DispatchThrough"]?.ToString();
-                    InvoiceDetails.DispatchDocNo = DS.Tables[0].Rows[0]["DispatchDocNo"]?.ToString();
-                    InvoiceDetails.Destination = DS.Tables[0].Rows[0]["Destination"]?.ToString();
-                    InvoiceDetails.MotorVehicleNo = DS.Tables[0].Rows[0]["MotorVehicleNo"]?.ToString();
-                    InvoiceDetails.TotalGst = DS.Tables[0].Rows[0]["TotalGst"] != DBNull.Value ? (decimal)DS.Tables[0].Rows[0]["TotalGst"] : 0m;
-                    InvoiceDetails.TotalAmount = DS.Tables[0].Rows[0]["TotalAmount"] != DBNull.Value ? (decimal)DS.Tables[0].Rows[0]["TotalAmount"] : 0m;
-                    InvoiceDetails.PaymentMethod = DS.Tables[0].Rows[0]["PaymentMethod"] != DBNull.Value ? (int)DS.Tables[0].Rows[0]["PaymentMethod"] : 0;
-                    InvoiceDetails.PaymentStatus = DS.Tables[0].Rows[0]["PaymentStatus"] != DBNull.Value ? (int)DS.Tables[0].Rows[0]["PaymentStatus"] : 0;
-                    InvoiceDetails.ShippingAddress = DS.Tables[0].Rows[0]["ShippingAddress"]?.ToString();
-                    InvoiceDetails.PaymentMethodName = DS.Tables[0].Rows[0]["PaymentMethodName"]?.ToString();
-                    InvoiceDetails.PaymentStatusName = DS.Tables[0].Rows[0]["PaymentStatusName"]?.ToString();
-                    InvoiceDetails.CreatedOn = DS.Tables[0].Rows[0]["CreatedOn"] != DBNull.Value ? (DateTime)DS.Tables[0].Rows[0]["CreatedOn"] : DateTime.MinValue; ;
-                    InvoiceDetails.RoundOff = DS.Tables[0].Rows[0]["RoundOff"] != DBNull.Value ? (decimal)DS.Tables[0].Rows[0]["RoundOff"] : 0m;
-                }
-
-                InvoiceDetails.InvoiceDetails = new List<InvoiceDetailsViewModel>();
-
-                foreach (DataRow row in DS.Tables[1].Rows)
-                {
-                    var invoiceDetail = new InvoiceDetailsViewModel
+                    if (DS.Tables[0].Rows.Count > 0)
                     {
-                        ProductId = row["ProductId"] != DBNull.Value ? (Guid)row["ProductId"] : Guid.Empty,
-                        Product = row["Product"]?.ToString(),
-                        Hsn = row["HSN"] != DBNull.Value ? (int)row["HSN"] : 0,
-                        Quantity = row["Quantity"] != DBNull.Value ? (decimal)row["Quantity"] : 0,
-                        ProductType = row["ProductType"] != DBNull.Value ? (int)row["ProductType"] : 0,
-                        ProductTypeName = row["ProductTypeName"]?.ToString(),
-                        PerUnitPrice = row["PerUnitPrice"] != DBNull.Value ? (decimal)row["PerUnitPrice"] : 0m,
-                        GstAmount = row["GstAmount"] != DBNull.Value ? (decimal)row["GstAmount"] : 0m,
-                        GstPer = row["GstPer"] != DBNull.Value ? (decimal)row["GstPer"] : 0m,
-                        Igst = row["IGst"] != DBNull.Value ? (decimal)row["IGst"] : 0m,
-                        ProductTotal = row["ProductTotal"] != DBNull.Value ? (decimal)row["ProductTotal"] : 0m,
-                        DiscountPer = row["DiscountPer"] != DBNull.Value ? (decimal)row["DiscountPer"] : 0m,
-                        DiscountAmount = row["DiscountAmount"] != DBNull.Value ? (decimal)row["DiscountAmount"] : 0m,
-                    };
+                        InvoiceDetails.Id = DS.Tables[0].Rows[0]["Id"] != DBNull.Value ? (Guid)DS.Tables[0].Rows[0]["Id"] : Guid.Empty;
+                        InvoiceDetails.VandorId = DS.Tables[0].Rows[0]["VandorId"] != DBNull.Value ? (Guid)DS.Tables[0].Rows[0]["VandorId"] : Guid.Empty;
+                        InvoiceDetails.CompanyId = DS.Tables[0].Rows[0]["CompanyId"] != DBNull.Value ? (Guid)DS.Tables[0].Rows[0]["CompanyId"] : Guid.Empty;
+                        InvoiceDetails.InvoiceNo = DS.Tables[0].Rows[0]["InvoiceNo"]?.ToString();
+                        InvoiceDetails.ProjectId = DS.Tables[0].Rows[0]["ProjectId"] != DBNull.Value ? (Guid)DS.Tables[0].Rows[0]["ProjectId"] : Guid.Empty;
+                        InvoiceDetails.VendorAddress = DS.Tables[0].Rows[0]["VendorAddress"]?.ToString();
+                        InvoiceDetails.VendorCompanyName = DS.Tables[0].Rows[0]["VendorCompanyName"]?.ToString();
+                        InvoiceDetails.VendorGstnumber = DS.Tables[0].Rows[0]["VendorGstnumber"]?.ToString();
+                        InvoiceDetails.VendorCompanyNumber = DS.Tables[0].Rows[0]["VendorCompanyNumber"]?.ToString();
+                        InvoiceDetails.VendorBankName = DS.Tables[0].Rows[0]["VendorBankName"]?.ToString();
+                        InvoiceDetails.VendorBankBranch = DS.Tables[0].Rows[0]["VendorBankBranch"]?.ToString();
+                        InvoiceDetails.VendorBankAccountNo = DS.Tables[0].Rows[0]["VendorBankAccountNo"]?.ToString();
+                        InvoiceDetails.VendorBankIfsc = DS.Tables[0].Rows[0]["VendorBankIfsc"]?.ToString();
+                        InvoiceDetails.VendorAccountHolderName = DS.Tables[0].Rows[0]["VendorAccountHolderName"]?.ToString();
+                        InvoiceDetails.CompnyName = DS.Tables[0].Rows[0]["CompnyName"]?.ToString();
+                        InvoiceDetails.CompanyGst = DS.Tables[0].Rows[0]["CompanyGst"]?.ToString();
+                        InvoiceDetails.CompanyAddress = DS.Tables[0].Rows[0]["CompanyAddress"]?.ToString();
+                        InvoiceDetails.InvoiceDate = DS.Tables[0].Rows[0]["InvoiceDate"] != DBNull.Value ? (DateTime)DS.Tables[0].Rows[0]["InvoiceDate"] : DateTime.MinValue;
+                        InvoiceDetails.BuyesOrderDate = DS.Tables[0].Rows[0]["BuyesOrderDate"] != DBNull.Value ? (DateTime)DS.Tables[0].Rows[0]["BuyesOrderDate"] : DateTime.MinValue;
+                        InvoiceDetails.BuyesOrderNo = DS.Tables[0].Rows[0]["BuyesOrderNo"]?.ToString();
+                        InvoiceDetails.DispatchThrough = DS.Tables[0].Rows[0]["DispatchThrough"]?.ToString();
+                        InvoiceDetails.DispatchDocNo = DS.Tables[0].Rows[0]["DispatchDocNo"]?.ToString();
+                        InvoiceDetails.Destination = DS.Tables[0].Rows[0]["Destination"]?.ToString();
+                        InvoiceDetails.MotorVehicleNo = DS.Tables[0].Rows[0]["MotorVehicleNo"]?.ToString();
+                        InvoiceDetails.CompanyState = DS.Tables[0].Rows[0]["CompanyState"]?.ToString();
+                        InvoiceDetails.VendorState = DS.Tables[0].Rows[0]["VendorState"]?.ToString();
+                        InvoiceDetails.TotalGst = DS.Tables[0].Rows[0]["TotalGst"] != DBNull.Value ? (decimal)DS.Tables[0].Rows[0]["TotalGst"] : 0m;
+                        InvoiceDetails.TotalAmount = DS.Tables[0].Rows[0]["TotalAmount"] != DBNull.Value ? (decimal)DS.Tables[0].Rows[0]["TotalAmount"] : 0m;
+                        InvoiceDetails.PaymentMethod = DS.Tables[0].Rows[0]["PaymentMethod"] != DBNull.Value ? (int)DS.Tables[0].Rows[0]["PaymentMethod"] : 0;
+                        InvoiceDetails.PaymentStatus = DS.Tables[0].Rows[0]["PaymentStatus"] != DBNull.Value ? (int)DS.Tables[0].Rows[0]["PaymentStatus"] : 0;
+                        InvoiceDetails.ShippingAddress = DS.Tables[0].Rows[0]["ShippingAddress"]?.ToString();
+                        InvoiceDetails.PaymentMethodName = DS.Tables[0].Rows[0]["PaymentMethodName"]?.ToString();
+                        InvoiceDetails.PaymentStatusName = DS.Tables[0].Rows[0]["PaymentStatusName"]?.ToString();
+                        InvoiceDetails.CreatedOn = DS.Tables[0].Rows[0]["CreatedOn"] != DBNull.Value ? (DateTime)DS.Tables[0].Rows[0]["CreatedOn"] : DateTime.MinValue;
+                        InvoiceDetails.RoundOff = DS.Tables[0].Rows[0]["RoundOff"] != DBNull.Value ? (decimal)DS.Tables[0].Rows[0]["RoundOff"] : 0m;
+                        InvoiceDetails.CompanyStateCode = DS.Tables[0].Rows[0]["CompanyStateCode"] != DBNull.Value ? (Int32)DS.Tables[0].Rows[0]["CompanyStateCode"] : 0;
+                        InvoiceDetails.VendorStateCode = DS.Tables[0].Rows[0]["VendorStateCode"] != DBNull.Value ? (Int32)DS.Tables[0].Rows[0]["VendorStateCode"] : 0;
+                    }
 
-                    InvoiceDetails.InvoiceDetails.Add(invoiceDetail);
+                    InvoiceDetails.InvoiceDetails = new List<InvoiceDetailsViewModel>();
+
+                    foreach (DataRow row in DS.Tables[1].Rows)
+                    {
+                        var invoiceDetail = new InvoiceDetailsViewModel
+                        {
+                            ProductId = row["ProductId"] != DBNull.Value ? (Guid)row["ProductId"] : Guid.Empty,
+                            Product = row["Product"]?.ToString(),
+                            Hsn = row["HSN"] != DBNull.Value ? (int)row["HSN"] : 0,
+                            Quantity = row["Quantity"] != DBNull.Value ? (decimal)row["Quantity"] : 0,
+                            ProductType = row["ProductType"] != DBNull.Value ? (int)row["ProductType"] : 0,
+                            ProductTypeName = row["ProductTypeName"]?.ToString(),
+                            PerUnitPrice = row["PerUnitPrice"] != DBNull.Value ? (decimal)row["PerUnitPrice"] : 0m,
+                            GstAmount = row["GstAmount"] != DBNull.Value ? (decimal)row["GstAmount"] : 0m,
+                            GstPer = row["GstPer"] != DBNull.Value ? (decimal)row["GstPer"] : 0m,
+                            Igst = row["IGst"] != DBNull.Value ? (decimal)row["IGst"] : 0m,
+                            ProductTotal = row["ProductTotal"] != DBNull.Value ? (decimal)row["ProductTotal"] : 0m,
+                            DiscountPer = row["DiscountPer"] != DBNull.Value ? (decimal)row["DiscountPer"] : 0m,
+                            DiscountAmount = row["DiscountAmount"] != DBNull.Value ? (decimal)row["DiscountAmount"] : 0m,
+                        };
+
+                        InvoiceDetails.InvoiceDetails.Add(invoiceDetail);
+                    }
                 }
+                return InvoiceDetails;
             }
-            return InvoiceDetails;
+            catch(Exception ex)
+            {
+                throw ex;
+            }
         }
 
         public async Task<List<InvoiceDetailsViewModel>> GetProductDetailsById(Guid ProductId)
