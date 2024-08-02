@@ -52,6 +52,13 @@ function UploadDocument() {
     var document = $("#formFile")[0].files[0];
     var documentType = $("#Documents").val();
     if (document != undefined && documentType != "--Document Type--") {
+        var fileName = document.name;
+        var fileExtension = fileName.split('.').pop().toLowerCase();
+
+        if (fileExtension !== 'pdf') {
+            toastr.error('Only PDF files are allowed!');
+            return;
+        }
         var fromData = new FormData();
         fromData.append("documentType", $("#Documents").val());
         fromData.append("documentTypeId", $("#Documents").val());
