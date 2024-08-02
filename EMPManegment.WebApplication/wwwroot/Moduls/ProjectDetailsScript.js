@@ -290,37 +290,42 @@ function showTeams(ProjectId, page) {
 
 
 function addProjectDocument() {
+    var document = $("#txtDocumentName")[0].files[0];
+    if (document != undefined) {
+        var formData = new FormData();
+        var ProjectId = $('#projectid').val();
+        formData.append("ProjectId", ProjectId);
+        formData.append("DocumentName", $("#txtDocumentName")[0].files[0]);
 
-    var formData = new FormData();
-    const data6 = document.getElementById('projectid').value;
-    formData.append("ProjectId", data6);
-    formData.append("DocumentName", $("#txtDocumentName")[0].files[0]);
-
-    $.ajax({
-        url: '/Project/AddDocumentToProject',
-        type: 'POST',
-        dataType: 'json',
-        data: formData,
-        processData: false,
-        contentType: false,
-        success: function (Result) {
-            if (Result.code == 200) {
-                Swal.fire({
-                    title: Result.message,
-                    icon: 'success',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK',
-                }).then(function () {
-                    window.location = '/Project/ProjectDetails/?Id=' + data6;
-                });
-            } else {
-                toastr.error(Result.message);
+        $.ajax({
+            url: '/Project/AddDocumentToProject',
+            type: 'POST',
+            dataType: 'json',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (Result) {
+                if (Result.code == 200) {
+                    Swal.fire({
+                        title: Result.message,
+                        icon: 'success',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK',
+                    }).then(function () {
+                        window.location = '/Project/ProjectDetails/?Id=' + ProjectId;
+                    });
+                } else {
+                    toastr.error(Result.message);
+                }
+            },
+            error: function () {
+                toastr.error("Can't get Data");
             }
-        },
-        error: function () {
-            toastr.error("Can't get Data");
-        }
-    });
+        });
+    }
+    else {
+        toastr.warning('Please select document!');
+    }
 }
 
 function showProjectDocuments(ProjectId) {
