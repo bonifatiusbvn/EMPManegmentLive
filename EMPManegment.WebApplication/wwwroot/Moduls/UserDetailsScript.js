@@ -799,14 +799,30 @@ function EdituserDetails() {
     document.getElementById("emailInput").removeAttribute("readonly");
     document.getElementById("birthdateInput").removeAttribute("readonly");
     document.getElementById("addressInput").removeAttribute("readonly");
-    document.getElementById("genderInput").removeAttribute("readonly");
+    document.getElementById("genderInput").removeAttribute("disabled");
+
+    //document.querySelectorAll('#frmuserDetails input, #frmuserDetails select, #frmuserDetails textarea').forEach(function (element) {
+    //    element.disabled = false;
+    //});
+
+        populateGenderOptions();
     $("#btnEdit").hide();
     $("#btnUpdateDetails").show();
+}
 
-    //var inputs = document.querySelectorAll('input[readonly], textarea[readonly]');
-    //for (var i = 0; i < inputs.length; i++) {
-    //  inputs[i].removeAttribute('readonly');
-    //};        
+function populateGenderOptions() {
+
+    var genderSelect = document.getElementById("genderInput");
+    var selectedGender = genderSelect.value;
+
+    if (genderSelect.options.length === 2) {
+        genderSelect.innerHTML = `
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+        `;
+        genderSelect.value = selectedGender;
+    }
 }
 function updateuserDetails() {
     if ($('#frmuserDetails').valid()) {

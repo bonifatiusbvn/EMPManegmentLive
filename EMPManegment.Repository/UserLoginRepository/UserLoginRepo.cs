@@ -100,7 +100,7 @@ namespace EMPManegment.Repository.UserLoginRepository
                         Image = addemp.Image,
                         IsActive = true,
                         JoiningDate = DateTime.Now,
-                        RoleId = new Guid("66fa406d-6407-472c-8c1e-f27d347ae9c1"),
+                        RoleId = new Guid("3d4d74b7-8ef1-43dc-8838-e459887e6cb2"),
                         EmailConfirmed = true,
                         PhoneNumberConfirmed = true,
                         CreatedBy = addemp.CreatedBy

@@ -54,7 +54,7 @@
         <div class="card-header">
             <div class="d-flex align-items-center">
                 <div class="card-title mb-0 flex-grow-1 text-info">
-                    <button id="dropdownButton" class="btn btn-primary btn-lg form-select" type="button" aria-haspopup="true" aria-expanded="false" style="width: 180px;">
+                    <button id="dropdownButton" class="btn btn-primary form-select" type="button" aria-haspopup="true" aria-expanded="false" style="width: 180px;">
                         Select-Role
                     </button>
                     <div id="customDropdown" class="dropdown-menu" style="display: none;width: 180px;">
@@ -64,7 +64,7 @@
                     <form class="position-relative">
                         @if (UserSession.FormPermisionData.Any(a => a.FormName == "Form Permission" && (a.Add == true)))
                         {
-                            <button type="button" class="btn btn-block btn-info btn-lg" data-bs-toggle="modal" data-bs-target="#createRoleModal" onclick="clearTextRoleName()"><i class="ri-add-line align-bottom me-1"></i>New Role</button>
+                            <button type="button" class="btn btn-block btn-info" data-bs-toggle="modal" data-bs-target="#createRoleModal" onclick="clearTextRoleName()"><i class="ri-add-line align-bottom me-1"></i>New Role</button>
                         }
                     </form>
                 </div>

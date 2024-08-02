@@ -74,7 +74,7 @@ namespace EMPManagment.API.Controllers
             try
             {
                 var addEmployee = UserLogin.UserSingUp(AddEmployee);
-                if (addEmployee.Result.Code != (int)HttpStatusCode.NotFound)
+                if (addEmployee.Result.Code != (int)HttpStatusCode.InternalServerError)
                 {
                     response.Code = (int)HttpStatusCode.OK;
                     response.Message = addEmployee.Result.Message;

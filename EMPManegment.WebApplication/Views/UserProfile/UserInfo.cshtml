@@ -156,7 +156,13 @@
                                     <div class="col-lg-6">
                                         <div class="mb-3">
                                             <label for="genderInput" class="form-label">Gender <span class="text-danger">*</span></label>
-                                            <input type="text" class="form-control" id="genderInput" name="genderInput" placeholder="Gender" value="@Model.Gender" readonly>
+                                            <select id="genderInput" class="form-control form-select" name="genderInput" disabled>
+                                                @if (Model.Gender != null)
+                                                {
+                                                    <option value="@Model.Gender" selected>@Model.Gender</option>
+                                                }
+                                                <option value="">--Select Gender--</option>
+                                            </select>
                                         </div>
                                     </div>
                                     <!--end col-->
