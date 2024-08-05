@@ -42,6 +42,11 @@
                                                 <div class="col">
                                                     <h6 class="mb-0">Vendor Details (To:)</h6>
                                                 </div>
+                                                <div class="col" style="padding-left: 400px;">
+                                                    <select class="form-control form-select valid" id="ddlinvoicetype" name="ddlinvoicetype">
+                                                    </select>
+                                                    <input type="hidden" id="txtinvoicetype" />
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="card-body">
@@ -79,16 +84,21 @@
                                 </div>
 
                                 <div class="col-6 col-lg-6">
-                                    <div class=" card">
+                                    <div class="card">
                                         <div class="card-header">
                                             <div class="row align-items-center">
                                                 <div class="col">
                                                     <h6 class="mb-0">Invoice Details (From:)</h6>
                                                 </div>
-                                                <div class="col" style="padding-left: 400px;">
-                                                    <select class="form-control form-select valid" id="ddlinvoicetype" name="ddlinvoicetype">
-                                                    </select>
-                                                    <input type="hidden" id="txtinvoicetype" />
+                                                <div class="text-center">
+                                                    @if (Model.CompanyName == "BONIFATIUS TECHNOLOGIES PRIVATE LIMITED")
+                                                    {
+                                                        <input class="form-check-input" type="checkbox" id="manualCheckedAll" onclick="fillDetails()" style="margin-left:352px; margin-top:-19px;" checked>
+                                                    }
+                                                    else
+                                                    {
+                                                        <input class="form-check-input" type="checkbox" id="manualCheckedAll" onclick="fillDetails()" style="margin-left:352px; margin-top:-19px;">
+                                                    }
                                                 </div>
                                             </div>
                                         </div>
@@ -99,11 +109,18 @@
                                                         <label for="textCompanyName" class="form-label">Company Name <span class="text-danger">*</span></label>
                                                     </div>
                                                     <div class="ms-auto">
-                                                        <input class="form-control valid" id="textCompanyName" name="textCompanyName" placeholder="Company Name" value="BONIFATIUS TECHNOLOGIES PRIVATE LIMITED" readonly/>
+                                                        @if (Model.CompanyName == "BONIFATIUS TECHNOLOGIES PRIVATE LIMITED")
+                                                        {
+                                                            <input class="form-control valid" id="textCompanyName" name="textCompanyName" placeholder="Company Name" value="@Model.CompanyName" readonly />
+                                                        }
+                                                        else
+                                                        {
+                                                            <input class="form-control valid" id="textCompanyName" name="textCompanyName" placeholder="Company Name" value="@Model.CompanyName" />
+                                                        }
                                                     </div>
                                                 </div>
                                                 <div class="col-5 col-lg-5">
-                                                    <label for="textPoId " class="form-label">Invoice No <span class="text-danger">*</span></label>
+                                                    <label for="textPoId" class="form-label">Invoice No <span class="text-danger">*</span></label>
                                                     <input type="text" class="form-control" id="textInvoiceNo" name="textInvoiceNo" placeholder="Invoice No" value="@Model.InvoiceNo" />
                                                 </div>
                                                 <div class="col-3 col-lg-3 ">
@@ -112,19 +129,31 @@
                                                         DateTime invoiceDate = Model.InvoiceDate != DateTime.MinValue ? Model.InvoiceDate : DateTime.Now;
                                                         string formattedDate = invoiceDate.ToString("yyyy-MM-dd");
                                                     }
-
                                                     <input type="date" id="textInvoiceDate" class="form-control" name="textInvoiceDate" placeholder="Select Order-Date" value="@formattedDate">
-
                                                 </div>
                                             </div>
                                             <div class="row mt-3">
                                                 <div class="col-6 col-lg-6">
-                                                    <label for="textCompanyBillingAddress" class="form-label ">Address</label>
-                                                    <input type="text" id="textCompanyBillingAddress" name="textCompanyBillingAddress" class="form-control" placeholder="Billing Address" value="SF-203, Peridot Complex, B/S, Gail Office, Akota, Vadodara-390020" readonly/>
+                                                    <label for="textCompanyBillingAddress" class="form-label">Address</label>
+                                                    @if (Model.CompanyAddress == "SF-203, Peridot Complex, B/S, Gail Office, Akota, Vadodara-390020")
+                                                    {
+                                                        <input type="text" id="textCompanyBillingAddress" name="textCompanyBillingAddress" class="form-control" placeholder="Billing Address" value="@Model.CompanyAddress" readonly />
+                                                    }
+                                                    else
+                                                    {
+                                                        <input type="text" id="textCompanyBillingAddress" name="textCompanyBillingAddress" class="form-control" placeholder="Billing Address" value="@Model.CompanyAddress" />
+                                                    }
                                                 </div>
                                                 <div class="col-6 col-lg-6">
-                                                    <label class="form-label ">GST NO</label>
-                                                    <input type="text" id="textCompanyGstNo" class="form-control" placeholder="GST No" value="24AAKCB0366M1ZJ" readonly/>
+                                                    <label class="form-label">GST NO</label>
+                                                    @if (Model.CompanyGstNo == "24AAKCB0366M1ZJ")
+                                                    {
+                                                        <input type="text" id="textCompanyGstNo" class="form-control" placeholder="GST No" value="@Model.CompanyGstNo" readonly/>
+                                                    }
+                                                    else
+                                                    {
+                                                        <input type="text" id="textCompanyGstNo" class="form-control" placeholder="GST No" value="@Model.CompanyGstNo" />
+                                                    }
                                                 </div>
                                             </div>
                                         </div>
@@ -420,6 +449,34 @@
 <!--end col-->
 <script type="text/javascript">
     var userPermissions = '@Html.Raw(Json.Serialize(UserSession.FormPermisionData))';
+
+    function fillDetails() {
+        var isChecked = document.getElementById("manualCheckedAll").checked;
+        var companyName = document.getElementById("textCompanyName");
+        var billingAddress = document.getElementById("textCompanyBillingAddress");
+        var gstNo = document.getElementById("textCompanyGstNo");
+
+        if (isChecked) {
+            companyName.value = "BONIFATIUS TECHNOLOGIES PRIVATE LIMITED";
+            billingAddress.value = "SF-203, Peridot Complex, B/S, Gail Office, Akota, Vadodara-390020";
+            gstNo.value = "24AAKCB0366M1ZJ";
+
+            companyName.readOnly = true;
+            billingAddress.readOnly = true;
+            gstNo.readOnly = true;
+        } else {
+            companyName.value = "";
+            billingAddress.value = "";
+            gstNo.value = "";
+
+            companyName.readOnly = false;
+            billingAddress.readOnly = false;
+            gstNo.readOnly = false;
+        }
+    }
+
+
+
 </script>
 <!--Invoice create init js-->
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
