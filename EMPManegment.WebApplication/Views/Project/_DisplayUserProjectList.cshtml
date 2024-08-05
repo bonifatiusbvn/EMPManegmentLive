@@ -110,9 +110,16 @@
                                                 </div>
                                                 <div class="avatar-group">
                                                     <a href="javascript: void(0);" class="avatar-group-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="@Accessor.HttpContext.Session.GetString("FullName")">
-                                                        <div class="avatar-xxs">
-                                                            <img src="~/@UserSession.ProfilePhoto" alt="" class="avatar-xs rounded-circle">
-                                                        </div>
+                                                        @if (!string.IsNullOrEmpty(profilePhoto) && !profilePhoto.Equals(defaultImagePath, StringComparison.OrdinalIgnoreCase))
+                                                        {
+                                                            <img src="~/@profilePhoto" style="height:40px;width:40px;" alt="message user image" class="img-circle img-bordered-sm">
+                                                        }
+                                                        else
+                                                        {
+                                                            <div class="flex-shrink-0 avatar-xs me-2">
+                                                                <div class="avatar-title bg-success-subtle text-success rounded-circle fs-13" style="height:40px;width:40px;">@initials</div>
+                                                            </div>
+                                                        }
                                                     </a>
                                                 </div>
                                             </div>
