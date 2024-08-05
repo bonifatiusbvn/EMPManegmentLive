@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using EMPManagment.API;
 using EMPManegment.EntityModels.ViewModels.Chat;
+using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.Inretface.Interface.Home;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,28 +14,39 @@ namespace EMPManegment.Repository.Home
 {
     public class UserHomerepo : IUserHome
     {
-        public UserHomerepo(BonifatiusEmployeesContext context)
+        public UserHomerepo(BonifatiusEmployeesContext Context)
         {
-            Context = context;
+            this.Context = Context;
         }
 
         public BonifatiusEmployeesContext Context { get; }
 
-        public async Task SendMessageAsync(ChatMessagesView chatMessages)
+        public async Task<UserResponceModel> SendMessageAsync(ChatMessagesView chatMessages)
         {
-            var message = new TblChatMessage
+            var response = new UserResponceModel();
+            try
             {
-                UserId = chatMessages.UserId,
-                UserName = chatMessages.UserName,
-                MessageText = chatMessages.MessageText,
-                SentDateTime = DateTime.UtcNow,
-                IsRead = false,
-                IsDeleted = false,
-                ConversationId = chatMessages.ConversationId
-            };
+                var message = new TblChatMessage
+                {
+                    UserId = chatMessages.UserId,
+                    UserName = chatMessages.UserName,
+                    MessageText = chatMessages.MessageText,
+                    SentDateTime = DateTime.UtcNow,
+                    IsRead = false,
+                    IsDeleted = false,
+                    ConversationId = chatMessages.ConversationId
+                };
+                response.Message = "Message Successfully Sent.";
 
-            Context.TblChatMessages.Add(message);
-            await Context.SaveChangesAsync();
+                Context.TblChatMessages.Add(message);
+                await Context.SaveChangesAsync();  
+            }
+            catch (Exception)
+            {
+                response.Code = (int)HttpStatusCode.InternalServerError;
+                response.Message = "Error in sending message!";
+            }
+            return response;
         }
         public async Task MarkMessagesAsReadAsync(Guid userId, Guid? conversationId)
         {

@@ -29,6 +29,17 @@
         secondMessageId = lastMessageFromSecondUser.MessageId;
     }
 }
+
+<style>
+    .chat-conversation-details {
+        height: 620px; 
+        overflow-y: auto;
+    }
+
+</style>
+
+<input type="hidden" id="txtChatUserId" value="@_userSession.UserId" />
+<input type="hidden" id="txtChatUserName" value="@_userSession.UserName" />
 <div class="position-relative" id="users-chat">
     <div class="p-3 user-chat-topbar border-bottom border-bottom-dashed">
         <div class="row align-items-center">
@@ -59,7 +70,7 @@
     <div class="chat-conversation p-3 p-lg-4 " id="chat-conversation" data-simplebar>
         <div>
             <div id="users-chat">
-                <div class="chat-conversation p-3" id="chat-conversation" data-simplebar style="height: 250px;">
+                <div class="chat-conversation-details p-3" id="chat-conversation" data-simplebar >
                     <ul class="list-unstyled chat-conversation-list chat-sm" id="users-conversation">
                         @foreach (var item in Model)
                         {
@@ -85,7 +96,7 @@
                                             </div>
                                         </div>
                                         <div class="conversation-name">
-                                            <small class="text-muted time">@item.SentDateTime.ToString("hh:mm tt")</small>
+                                            <small class="text-muted time">@(item.SentDateTime.HasValue ? item.SentDateTime.Value.ToString("hh:mm tt") : "")</small>
                                             @if (item.IsRead == true)
                                             {
                                                 <span class="text-success check-message-icon">
@@ -95,6 +106,7 @@
                                         </div>
                                     </div>
                                 </div>
+                                <input type="hidden" id="txtChatConversationId" value="@item.ConversationId" hidden />
                             </li>
                         }
                     </ul>
@@ -125,12 +137,12 @@
                 <div class="chat-input-feedback">
                     Please Enter a Message
                 </div>
-                <input type="text" class="form-control chat-input bg-light border-light fs-13" id="chat-input" placeholder="Type your message..." autocomplete="off">
+                <input type="text" class="form-control chat-input bg-light border-light fs-13" id="txtChatMessage" placeholder="Type your message..." autocomplete="off">
             </div>
             <div class="col-auto">
                 <div class="chat-input-links ms-2">
                     <div class="links-list-item">
-                        <button type="submit" class="btn btn-success chat-send waves-effect waves-light fs-13">
+                        <button type="submit" class="btn btn-success chat-send waves-effect waves-light fs-13" onclick="fn_SendMessage()">
                             <i class="ri-send-plane-2-fill align-bottom"></i>
                         </button>
                     </div>

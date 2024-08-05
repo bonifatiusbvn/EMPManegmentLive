@@ -22,6 +22,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.EntityFrameworkCore.ValueGeneration;
 using Newtonsoft.Json;
 using System.Net;
+using System.Threading.Tasks;
 #nullable disable
 namespace EMPManagment.API.Controllers
 {
@@ -403,6 +404,32 @@ namespace EMPManagment.API.Controllers
         {
             IEnumerable<ChatMessagesView> conversation = await HomeServices.GetMyConversation(Id);
             return Ok(new { code = (int)HttpStatusCode.OK, data = conversation.ToList() });
+        }
+
+        [HttpPost]
+        [Route("SendMessageAsync")]
+        public async Task<IActionResult> SendMessageAsync(ChatMessagesView ChatMessage)
+        {
+            UserResponceModel responseModel = new UserResponceModel();
+            var SendMessage = HomeServices.SendMessageAsync(ChatMessage);
+            try
+            {
+                if (SendMessage != null)
+                {
+                    responseModel.Code = (int)HttpStatusCode.OK;
+                    responseModel.Message = SendMessage.Result.Message;
+                }
+                else
+                {
+                    responseModel.Message = SendMessage.Result.Message;
+                    responseModel.Code = SendMessage.Result.Code;
+                }
+            }
+            catch (Exception)
+            {
+                responseModel.Code = (int)HttpStatusCode.InternalServerError;
+            }
+            return StatusCode(responseModel.Code, responseModel);
         }
     }
 }
