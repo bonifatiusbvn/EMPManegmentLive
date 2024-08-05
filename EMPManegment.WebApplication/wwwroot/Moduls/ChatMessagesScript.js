@@ -1,7 +1,7 @@
 ﻿
 GetChateMembes();
 function GetChateMembes() {
-    debugger
+
     $.ajax({
         url: '/Home/GetChateMembes',
         type: 'Get',
@@ -13,7 +13,7 @@ function GetChateMembes() {
 }
 
 function GetConversation(conversationId) {
-    debugger
+
     $.ajax({
         url: '/Home/GetChatConversation',
         type: 'GET',
@@ -22,10 +22,10 @@ function GetConversation(conversationId) {
         success: function (result) {
             $("#userconversation").html(result);
         },
-        error: function (xhr, status, error) {
-            console.error("Error fetching conversation: ", error);
-        }
+
     });
 }
+
+
 
 

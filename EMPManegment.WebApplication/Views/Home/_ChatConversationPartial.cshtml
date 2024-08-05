@@ -7,22 +7,26 @@
     var conversationId = Guid.Empty;
     var secondUserImage = string.Empty;
     var secondUserName = string.Empty;
+    var secondUserId = Guid.Empty;
+    var secondMessageId = 0;
 
-    // Assigning conversationId from the first message in the conversation
     var firstMessage = Model.FirstOrDefault();
     if (firstMessage != null)
     {
         conversationId = firstMessage.ConversationId ?? Guid.Empty;
     }
 
-    foreach (var item in Model)
+    var lastMessageFromSecondUser = Model
+        .Where(m => m.UserId != _userSession.UserId)
+        .OrderByDescending(m => m.SentDateTime)
+        .FirstOrDefault();
+
+    if (lastMessageFromSecondUser != null)
     {
-        if (item.UserId != _userSession.UserId)
-        {
-            secondUserImage = item.UserImage;
-            secondUserName = item.UserName;
-            break;
-        }
+        secondUserId = lastMessageFromSecondUser.UserId;
+        secondUserImage = lastMessageFromSecondUser.UserImage;
+        secondUserName = lastMessageFromSecondUser.UserName;
+        secondMessageId = lastMessageFromSecondUser.MessageId;
     }
 }
 <div class="position-relative" id="users-chat">
@@ -82,9 +86,12 @@
                                         </div>
                                         <div class="conversation-name">
                                             <small class="text-muted time">@item.SentDateTime.ToString("hh:mm tt")</small>
-                                            <span class="text-success check-message-icon">
-                                                <i class="ri-check-double-line align-bottom"></i>
-                                            </span>
+                                            @if (item.IsRead == true)
+                                            {
+                                                <span class="text-success check-message-icon">
+                                                    <i class="ri-check-double-line align-bottom"></i>
+                                                </span>
+                                            }
                                         </div>
                                     </div>
                                 </div>
@@ -152,6 +159,8 @@
 
 <script type="text/javascript">
     var conversationId = '@conversationId';
+    var secondUserId = '@secondUserId';
+    var secondMessageId = '@secondMessageId';
     setInterval(function () {
         GetConversation(conversationId);
     }, 5000);
