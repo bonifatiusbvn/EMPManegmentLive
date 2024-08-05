@@ -32,7 +32,7 @@
 
 <style>
     .chat-conversation-details {
-        height: 620px; 
+        height: 620px;
         overflow-y: auto;
     }
 
@@ -70,7 +70,7 @@
     <div class="chat-conversation p-3 p-lg-4 " id="chat-conversation" data-simplebar>
         <div>
             <div id="users-chat">
-                <div class="chat-conversation-details p-3" id="chat-conversation" data-simplebar >
+                <div class="chat-conversation-details p-3" id="chat-conversation" data-simplebar>
                     <ul class="list-unstyled chat-conversation-list chat-sm" id="users-conversation">
                         @foreach (var item in Model)
                         {
@@ -173,7 +173,19 @@
     var conversationId = '@conversationId';
     var secondUserId = '@secondUserId';
     var secondMessageId = '@secondMessageId';
+
     setInterval(function () {
-        GetConversation(conversationId);
+        fn_ReadMessage(conversationId, secondUserId, secondMessageId);
+        updateChatConversation();
     }, 5000);
+
+    function updateChatConversation() {
+        var chatConversationElement = document.getElementById('chat-conversation');
+        var previousScrollHeight = chatConversationElement.scrollHeight;
+        var previousScrollTop = chatConversationElement.scrollTop;
+        GetConversation(conversationId);
+        setTimeout(function () {
+            chatConversationElement.scrollTop = chatConversationElement.scrollHeight - previousScrollHeight + previousScrollTop;
+        }, 100);
+    }
 </script>

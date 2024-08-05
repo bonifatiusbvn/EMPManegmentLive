@@ -25,7 +25,7 @@ function GetConversation(conversationId) {
 }
 
 function fn_SendMessage() {
-    event.preventDefault(); 
+    event.preventDefault();
     var ConversationId = $('#txtChatConversationId').val();
     var ChatData = {
         UserId: $('#txtChatUserId').val(),
@@ -41,13 +41,39 @@ function fn_SendMessage() {
         dataType: 'json',
         success: function (result) {
             if (result.code == 200) {
-                GetConversation(ConversationId); 
+                GetConversation(ConversationId);
             } else {
                 toastr.warning(result.message);
             }
         },
     });
 }
+
+
+//function fn_ReadMessage(conversationId, secondUserId, secondMessageId) {
+//    debugger
+
+
+//    var ChatData = {
+//        UserId: secondUserId,
+//        MessageId: secondMessageId,
+//        ConversationId: conversationId,
+//    }
+
+//    $.ajax({
+//        url: '/Home/SendMessage',
+//        type: 'POST',
+//        data: ChatData,
+//        dataType: 'json',
+//        success: function (result) {
+//            if (result.code == 200) {
+//                GetConversation(ConversationId);
+//            } else {
+//                toastr.warning(result.message);
+//            }
+//        },
+//    });
+//}
 
 
 
