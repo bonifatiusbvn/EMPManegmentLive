@@ -328,6 +328,18 @@ namespace EMPManegment.Web.Controllers
                 return StatusCode(500, "Internal server error.");
             }
         }
-
+        [HttpPost]
+        public async Task<IActionResult> SendMessage(ChatMessagesView ChatMessage)
+        {
+            ApiResponseModel postuser = await APIServices.PostAsync(ChatMessage, "UserHome/SendMessageAsync");
+            if (postuser.code == 200)
+            {
+                return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
+            }
+            else
+            {
+                return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
+            }
+        }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using EMPManagment.API;
 using EMPManegment.EntityModels.ViewModels.Chat;
+using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.Inretface.Interface.Home;
 using EMPManegment.Inretface.Services.Home;
 using System;
@@ -39,7 +40,7 @@ namespace EMPManegment.Services.Home
             return await UserHome.ReceiveMessagesAsync(userId, conversationId);
         }
 
-        public Task SendMessageAsync(ChatMessagesView chatMessages)
+        public Task<UserResponceModel> SendMessageAsync(ChatMessagesView chatMessages)
         {
             return UserHome.SendMessageAsync(chatMessages);
         }

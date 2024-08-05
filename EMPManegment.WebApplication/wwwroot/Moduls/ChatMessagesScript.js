@@ -1,7 +1,6 @@
 ﻿
 GetChateMembes();
 function GetChateMembes() {
-    debugger
     $.ajax({
         url: '/Home/GetChateMembes',
         type: 'Get',
@@ -13,7 +12,6 @@ function GetChateMembes() {
 }
 
 function GetConversation(conversationId) {
-    debugger
     $.ajax({
         url: '/Home/GetChatConversation',
         type: 'GET',
@@ -28,4 +26,28 @@ function GetConversation(conversationId) {
     });
 }
 
+function fn_SendMessage() {
+    event.preventDefault(); 
+    var ConversationId = $('#txtChatConversationId').val();
+    var ChatData = {
+        UserId: $('#txtChatUserId').val(),
+        UserName: $('#txtChatUserName').val(),
+        MessageText: $('#txtChatMessage').val(),
+        ConversationId: $('#txtChatConversationId').val(),
+    }
+
+    $.ajax({
+        url: '/Home/SendMessage',
+        type: 'POST',
+        data: ChatData,
+        dataType: 'json',
+        success: function (result) {
+            if (result.code == 200) {
+                GetConversation(ConversationId); 
+            } else {
+                toastr.warning(result.message);
+            }
+        },
+    });
+}
 
