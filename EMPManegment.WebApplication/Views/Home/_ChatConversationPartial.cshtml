@@ -28,12 +28,14 @@
         secondUserName = lastMessageFromSecondUser.UserName;
         secondMessageId = lastMessageFromSecondUser.MessageId;
     }
+    var secondUserimageUrl = !string.IsNullOrEmpty(@secondUserImage) ? Url.Content($"~/{@secondUserImage}") : null;
+    var secondUserinitials = (!string.IsNullOrEmpty(@secondUserName)) ? $"{@secondUserName[0]}".ToUpper() : null;
 }
 
 <style>
     .chat-conversation-details {
         height: 620px;
-        overflow-y: auto;
+        overflow: scroll;
     }
 
 </style>
@@ -51,7 +53,17 @@
                     <div class="flex-grow-1 overflow-hidden">
                         <div class="d-flex align-items-center">
                             <div class="flex-shrink-0 chat-user-img online user-own-img align-self-center me-3 ms-0">
-                                <img src="~/@secondUserImage" class="rounded-circle avatar-xs" alt="">
+                                @if (!string.IsNullOrEmpty(secondUserimageUrl))
+                                {
+                                    <img src="~/@secondUserImage" class="rounded-circle avatar-xs" alt="" style="height:35px;width:35px;">
+                                }
+                                else
+                                {
+                                    <div class="flex-shrink-0 avatar-xs me-2">
+                                        <div class="avatar-title bg-success-subtle text-success rounded-circle fs-15" style="height:35px;width:35px;">@secondUserinitials</div>
+                                    </div>
+                                }
+                                
                                 <span class="user-status"></span>
                             </div>
                             <div class="flex-grow-1 overflow-hidden">
@@ -70,14 +82,26 @@
     <div class="chat-conversation p-3 p-lg-4 " id="chat-conversation" data-simplebar>
         <div>
             <div id="users-chat">
-                <div class="chat-conversation-details p-3" id="chat-conversation" data-simplebar>
+                <div class="chat-conversation-details p-3" id="chat-conversation-details" data-simplebar>
                     <ul class="list-unstyled chat-conversation-list chat-sm" id="users-conversation">
                         @foreach (var item in Model)
                         {
+                            var imageUrl = !string.IsNullOrEmpty(@item.UserImage) ? Url.Content($"~/{@item.UserImage}") : null;
+                            var initials = (!string.IsNullOrEmpty(@item.UserName)) ? $"{@item.UserName[0]}".ToUpper() : null;
                             <li class="chat-list @(item.UserId == _userSession.UserId ? "right" : "left")">
                                 <div class="conversation-list">
                                     <div class="chat-avatar">
-                                        <img src="~/@item.UserImage" alt="">
+                                        @if (!string.IsNullOrEmpty(imageUrl))
+                                        {
+                                            <img src="~/@item.UserImage" alt="">
+                                        }
+                                        else
+                                        {
+                                            <div class="flex-shrink-0 avatar-xs me-2">
+                                                <div class="avatar-title bg-success-subtle text-success rounded-circle fs-13" style="height:30px;width:30px;">@initials</div>
+                                            </div>
+                                        }
+                                        
                                     </div>
                                     <div class="user-chat-content">
                                         <div class="ctext-wrap">
@@ -121,36 +145,7 @@
         Message copied
     </div>
 </div>
-<div class="chat-input-section p-3 p-lg-4">
-    <form id="chatinput-form" enctype="multipart/form-data">
-        <div class="row g-0 align-items-center">
-            <div class="col-auto">
-                <div class="chat-input-links me-2">
-                    <div class="links-list-item">
-                        <button type="button" class="btn btn-link text-decoration-none emoji-btn" id="emoji-btn">
-                            <i class="bx bx-smile align-middle"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="chat-input-feedback">
-                    Please Enter a Message
-                </div>
-                <input type="text" class="form-control chat-input bg-light border-light fs-13" id="txtChatMessage" placeholder="Type your message..." autocomplete="off">
-            </div>
-            <div class="col-auto">
-                <div class="chat-input-links ms-2">
-                    <div class="links-list-item">
-                        <button type="submit" class="btn btn-success chat-send waves-effect waves-light fs-13" onclick="fn_SendMessage()">
-                            <i class="ri-send-plane-2-fill align-bottom"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </form>
-</div>
+
 <div class="replyCard">
     <div class="card mb-0">
         <div class="card-body py-3">
@@ -175,17 +170,12 @@
     var secondMessageId = '@secondMessageId';
 
     setInterval(function () {
-        fn_ReadMessage(conversationId, secondUserId, secondMessageId);
         updateChatConversation();
-    }, 5000);
+    }, 10000);
 
     function updateChatConversation() {
-        var chatConversationElement = document.getElementById('chat-conversation');
-        var previousScrollHeight = chatConversationElement.scrollHeight;
-        var previousScrollTop = chatConversationElement.scrollTop;
         GetConversation(conversationId);
-        setTimeout(function () {
-            chatConversationElement.scrollTop = chatConversationElement.scrollHeight - previousScrollHeight + previousScrollTop;
-        }, 100);
     }
+    $('#chat-conversation-details').scrollTop($('#chat-conversation-details')[0].scrollHeight);
+
 </script>

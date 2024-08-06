@@ -7,9 +7,21 @@
 
 @foreach (var item in Model)
 {
+    var imageUrl = !string.IsNullOrEmpty(@item.UserImage) ? Url.Content($"~/{@item.UserImage}") : null;
+    var initials = (!string.IsNullOrEmpty(@item.UserName)) ? $"{@item.UserName[0]}".ToUpper() : null;
+
     <a href="javascript:void(0);" onclick="GetConversation('@item.ConversationId')" class="d-flex align-items-center">
         <div class="flex-shrink-0 me-2 avatar-xxs chatlist-user-image">
-            <img class="img-fluid rounded-circle" src="~/@item.UserImage" alt="">
+            @if (!string.IsNullOrEmpty(imageUrl))
+            {
+                <img class="img-fluid rounded-circle" src="~/@item.UserImage" alt="">
+            }
+            else
+            {
+                <div class="flex-shrink-0 avatar-xs me-2">
+                    <div class="avatar-title bg-success-subtle text-success rounded-circle fs-13" style="height:25px;width:25px;">@initials</div>
+                </div>
+            }
         </div>
 
         <div class="flex-grow-1 chat-user-box overflow-hidden">

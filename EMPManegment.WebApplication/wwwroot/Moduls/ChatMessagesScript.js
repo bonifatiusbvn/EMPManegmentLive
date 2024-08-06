@@ -19,6 +19,7 @@ function GetConversation(conversationId) {
         datatype: 'html',
         success: function (result) {
             $("#userconversation").html(result);
+            $('#ChatConversationBtn').removeClass('d-none');
         },
 
     });
@@ -42,6 +43,7 @@ function fn_SendMessage() {
         success: function (result) {
             if (result.code == 200) {
                 GetConversation(ConversationId);
+                $('#txtChatMessage').val('');
             } else {
                 toastr.warning(result.message);
             }
