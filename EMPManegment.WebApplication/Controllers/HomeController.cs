@@ -341,5 +341,19 @@ namespace EMPManegment.Web.Controllers
                 return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
             }
         }
+
+        [HttpPost]
+        public async Task<IActionResult> ReadMessage(ChatMessagesView ChatMessage)
+        {
+            ApiResponseModel postuser = await APIServices.PostAsync(ChatMessage, "UserHome/ReadMessageAsync");
+            if (postuser.code == 200)
+            {
+                return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
+            }
+            else
+            {
+                return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
+            }
+        }
     }
 }

@@ -30,9 +30,9 @@ namespace EMPManegment.Services.Home
             return await UserHome.GetMyConversationList(userId);
         }
 
-        public Task MarkMessagesAsReadAsync(Guid userId, Guid? conversationId)
+        public Task<UserResponceModel> MarkMessagesAsReadAsync(ChatMessagesView ChatMessage)
         {
-            return UserHome.MarkMessagesAsReadAsync(userId, conversationId);
+            return UserHome.MarkMessagesAsReadAsync(ChatMessage);
         }
 
         public async Task<List<TblChatMessage>> ReceiveMessagesAsync(Guid userId, Guid? conversationId)
