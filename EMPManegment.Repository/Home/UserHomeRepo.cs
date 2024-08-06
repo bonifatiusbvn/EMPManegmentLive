@@ -31,7 +31,7 @@ namespace EMPManegment.Repository.Home
                     UserId = chatMessages.UserId,
                     UserName = chatMessages.UserName,
                     MessageText = chatMessages.MessageText,
-                    SentDateTime = DateTime.UtcNow,
+                    SentDateTime = DateTime.Now,
                     IsRead = false,
                     IsDeleted = false,
                     ConversationId = chatMessages.ConversationId
