@@ -78,4 +78,60 @@ function fn_SendMessage() {
 //}
 
 
+function DisplayUserListForChat() {
+    $.ajax({
+        url: '/Home/AllUserListForChat',
+        type: 'Post',
+        dataType: 'json',
+        processData: false,
+        contentType: false,
+        complete: function (Result) {
+            $('#showAllUserforChat').html(Result.responseText);
+        },
+    })
+}
+
+var activenavlink = null;
+function SearchChatUserName() {
+    var searchUserName = $("#searchUserNameforchat").val();
+    var activeTabLink = $('.userlistnav-link .nav-link.active');
+    activenavlink = activeTabLink.attr('href').substring(1);
+
+    if (activenavlink == "chats") {
+        $.ajax({
+            url: '/Home/GetChateMembes?searchUserName=' + searchUserName,
+            type: 'Get',
+            datatype: 'json',
+            complete: function (Result) {
+                $("#chatmebmer").html(Result.responseText);
+            }
+        });
+
+    }
+    else if (activenavlink == "contacts") {
+
+        $.ajax({
+            url: '/Home/AllUserListForChat?searchUserName=' + searchUserName,
+            type: 'POST',
+            dataType: 'json',
+            processData: false,
+            contentType: false,
+            complete: function (Result) {
+
+                $('#showAllUserforChat').html(Result.responseText);
+            }
+        });
+    }
+}
+
+function clearUsernameSearchInput() {
+    $("#searchUserNameforchat").val('');
+    if (activenavlink == "chats") {
+        GetChateMembes()
+    }
+    else {
+        DisplayUserListForChat();
+    }
+}
+
 

@@ -2,6 +2,41 @@
     ViewData["Title"] = "ChatMessages";
     Layout = "~/Views/Shared/_HomeLayout.cshtml";
 }
+<style>
+    .search-box {
+        position: relative;
+        display: inline-block;
+    }
+
+        .search-box input {
+            padding-right: 30px;
+            box-sizing: border-box;
+        }
+
+
+        .search-box .deleteicon {
+            position: absolute;
+            display: inline-flex;
+            align-items: center;
+            top: 50%;
+            transform: translateY(-50%);
+            right: 10px;
+        }
+
+            .search-box .deleteicon span {
+                position: relative;
+                display: block;
+                width: 14px;
+                height: 15px;
+                border-radius: 50%;
+                background-color: #ccc;
+                color: red;
+                font: 14px monospace;
+                text-align: center;
+                line-height: 1em;
+                cursor: pointer;
+            }
+</style>
 
 <div class="row" style="margin-top:80px;">
     <div class="col-12">
@@ -38,19 +73,22 @@
                         </div>
                     </div>
                     <div class="search-box">
-                        <input type="text" class="form-control bg-light border-light" placeholder="Search here...">
+                        <input type="text" class="form-control bg-light border-light" placeholder="Search here..." onkeyup="SearchChatUserName()" id="searchUserNameforchat">
                         <i class="ri-search-2-line search-icon"></i>
+                        <div class="deleteicon" onclick="clearUsernameSearchInput()">
+                            <span>x</span>
+                        </div>
                     </div>
                 </div> <!-- .p-4 -->
 
                 <ul class="nav nav-tabs nav-tabs-custom nav-info nav-justified" role="tablist">
-                    <li class="nav-item">
+                    <li class="nav-item userlistnav-link">
                         <a class="nav-link active" data-bs-toggle="tab" href="#chats" role="tab">
                             Chats
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" data-bs-toggle="tab" href="#contacts" role="tab">
+                    <li class="nav-item userlistnav-link">
+                        <a class="nav-link" data-bs-toggle="tab" href="#contacts" role="tab" onclick="DisplayUserListForChat()">
                             Contacts
                         </a>
                     </li>
@@ -80,8 +118,8 @@
                         </div>
                     </div>
                     <div class="tab-pane" id="contacts" role="tabpanel">
-                        <div class="chat-room-list pt-3" data-simplebar style="max-height: calc(100vh - 305px);">
-                            <div class="sort-contact">
+                        <div class="chat-room-list pt-3" data-simplebar>
+                            <div class="sort-contact" id="showAllUserforChat" style="overflow-x: hidden">
                             </div>
                         </div>
                     </div>
