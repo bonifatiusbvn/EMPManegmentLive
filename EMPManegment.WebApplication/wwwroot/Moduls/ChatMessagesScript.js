@@ -145,3 +145,33 @@ function clearUsernameSearchInput() {
 }
 
 
+function searchChatMessages() {
+    var searchTerm = document.getElementById('searchChatMessage').value.toLowerCase();
+    var chatGroups = document.querySelectorAll('#users-chat .chat-date-separator, #users-chat .chat-list');
+
+    var groupVisibility = new Map();
+    chatGroups.forEach(function (element) {
+        if (element.classList.contains('chat-date-separator')) {
+            groupVisibility.set(element, false);
+        } else if (element.classList.contains('chat-list')) {
+            var messageText = element.querySelector('.ctext-content').textContent.toLowerCase();
+
+            if (messageText.includes(searchTerm)) {
+                element.style.display = '';
+                var groupSeparator = element.previousElementSibling;
+                while (groupSeparator && !groupSeparator.classList.contains('chat-date-separator')) {
+                    groupSeparator = groupSeparator.previousElementSibling;
+                }
+                if (groupSeparator) {
+                    groupVisibility.set(groupSeparator, true);
+                }
+            } else {
+                element.style.display = 'none';
+            }
+        }
+    });
+    
+    groupVisibility.forEach((isVisible, separator) => {
+        separator.style.display = isVisible ? '' : 'none';
+    });
+}

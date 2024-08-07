@@ -88,16 +88,15 @@
                             <div class="dropdown-menu p-0 dropdown-menu-end dropdown-menu-lg">
                                 <div class="p-2">
                                     <div class="search-box">
-                                        <input type="text" class="form-control bg-light border-light" placeholder="Search here..." onkeyup="searchMessages()" id="searchMessage">
+                                        <input type="text" class="form-control bg-light border-light" placeholder="Search here..." onkeyup="searchChatMessages()" id="searchChatMessage">
                                         <i class="ri-search-2-line search-icon"></i>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </li>
-
                     <li class="list-inline-item d-lg-inline-block m-0">
-                        <button type="button" class="btn btn-ghost-secondary btn-icon" data-bs-toggle="offcanvas" data-bs-target="#userProfileCanvasExample" aria-controls="userProfileCanvasExample">
+                        <button type="button" class="btn btn-ghost-secondary btn-icon" data-bs-toggle="offcanvas" onclick="fn_GetChatUserInformation('@secondUserId')" href="#userProfileCanvasExample" aria-controls="userProfileCanvasExample">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-info icon-sm">
                                 <circle cx="12" cy="12" r="10"></circle>
                                 <line x1="12" y1="16" x2="12" y2="12"></line>
@@ -129,69 +128,91 @@
     <!-- Other header elements -->
 </div>
 <!-- end chat user head -->
+@{
+    var groupedMessages = Model.GroupBy(m => m.SentDateTime.HasValue ? m.SentDateTime.Value.Date : DateTime.MinValue).OrderBy(g => g.Key);
+}
 
-<div class="chat-conversation p-3 p-lg-4 " id="chat-conversation" data-simplebar>
+<div class="chat-conversation p-3 p-lg-4" id="chat-conversation" data-simplebar>
     <div>
         <div id="users-chat">
             <div class="chat-conversation-details p-3" id="chat-conversation-details" data-simplebar>
                 <ul class="list-unstyled chat-conversation-list chat-sm" id="users-conversation">
-                    @foreach (var item in Model)
+                    @foreach (var group in groupedMessages)
                     {
-                        var imageUrl = !string.IsNullOrEmpty(@item.UserImage) ? Url.Content($"~/{@item.UserImage}") : null;
-                        var initials = (!string.IsNullOrEmpty(@item.UserName)) ? $"{@item.UserName[0]}".ToUpper() : null;
-                        <li class="chat-list @(item.UserId == _userSession.UserId ? "right" : "left")">
-                            <div class="conversation-list">
-                                <div class="chat-avatar">
-                                    @if (!string.IsNullOrEmpty(imageUrl))
+                        <li class="chat-date-separator text-center">
+                            <small class="badge bg-primary-subtle text-muted" style="margin-left:580px;">
+                                @{
+                                    if (group.Key.Date == DateTime.Today)
                                     {
-                                        <img src="~/@item.UserImage" alt="">
+                                        @:Today
+                                    }
+                                    else if (group.Key.Date == DateTime.Today.AddDays(-1))
+                                    {
+                                        @:Yesterday
                                     }
                                     else
                                     {
-                                        <div class="flex-shrink-0 avatar-xs me-2">
-                                            <div class="avatar-title bg-success-subtle text-success rounded-circle fs-13" style="height:30px;width:30px;">@initials</div>
-                                        </div>
+                                        @group.Key.ToString("dddd, dd MMM")
                                     }
-
-                                </div>
-                                <div class="user-chat-content">
-                                    <div class="ctext-wrap">
-                                        <div class="ctext-wrap-content">
-                                            <p class="mb-0 ctext-content">@item.MessageText</p>
-                                        </div>
-                                        <div class="dropdown align-self-start message-box-drop">
-                                            <a class="dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                <i class="ri-more-2-fill"></i>
-                                            </a>
-                                            <div class="dropdown-menu">
-                                                <a class="dropdown-item" href="#"><i class="ri-reply-line me-2 text-muted align-bottom"></i>Reply</a>
-                                                <a class="dropdown-item" href="#"><i class="ri-file-copy-line me-2 text-muted align-bottom"></i>Copy</a>
-                                                <a class="dropdown-item delete-item" href="#"><i class="ri-delete-bin-5-line me-2 text-muted align-bottom"></i>Delete</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="conversation-name">
-                                        <small class="text-muted time">@(item.SentDateTime.HasValue ? item.SentDateTime.Value.ToString("hh:mm tt") : "")</small>
-                                        @if (item.IsRead == true)
+                                }
+                            </small>
+                        </li>
+                        <br />
+                        @foreach (var item in group)
+                        {
+                            var imageUrl = !string.IsNullOrEmpty(@item.UserImage) ? Url.Content($"~/{@item.UserImage}") : null;
+                            var initials = (!string.IsNullOrEmpty(@item.UserName)) ? $"{@item.UserName[0]}".ToUpper() : null;
+                            <li class="chat-list @(item.UserId == _userSession.UserId ? "right" : "left")">
+                                <div class="conversation-list">
+                                    <div class="chat-avatar">
+                                        @if (!string.IsNullOrEmpty(imageUrl))
                                         {
-                                            <span class="text-success check-message-icon">
-                                                <i class="ri-check-double-line align-bottom"></i>
-                                            </span>
+                                            <img src="~/@item.UserImage" alt="">
+                                        }
+                                        else
+                                        {
+                                            <div class="flex-shrink-0 avatar-xs me-2">
+                                                <div class="avatar-title bg-success-subtle text-success rounded-circle fs-13" style="height:30px;width:30px;">@initials</div>
+                                            </div>
                                         }
                                     </div>
+                                    <div class="user-chat-content">
+                                        <div class="ctext-wrap">
+                                            <div class="ctext-wrap-content">
+                                                <p class="mb-0 ctext-content">@item.MessageText</p>
+                                            </div>
+                                            <div class="dropdown align-self-start message-box-drop">
+                                                <a class="dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <i class="ri-more-2-fill"></i>
+                                                </a>
+                                                <div class="dropdown-menu">
+                                                    <a class="dropdown-item" href="#"><i class="ri-reply-line me-2 text-muted align-bottom"></i>Reply</a>
+                                                    <a class="dropdown-item" href="#"><i class="ri-file-copy-line me-2 text-muted align-bottom"></i>Copy</a>
+                                                    <a class="dropdown-item delete-item" href="#"><i class="ri-delete-bin-5-line me-2 text-muted align-bottom"></i>Delete</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="conversation-name">
+                                            <small class="text-muted time">@(item.SentDateTime.HasValue ? item.SentDateTime.Value.ToString("hh:mm tt") : "")</small>
+                                            @if (item.IsRead == true)
+                                            {
+                                                <span class="text-success check-message-icon">
+                                                    <i class="ri-check-double-line align-bottom"></i>
+                                                </span>
+                                            }
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <input type="hidden" id="txtChatConversationId" value="@item.ConversationId" hidden />
-                        </li>
+                                <input type="hidden" id="txtChatConversationId" value="@item.ConversationId" hidden />
+                            </li>
+                        }
                     }
                 </ul>
             </div>
         </div>
     </div>
-    <ul class="list-unstyled chat-conversation-list" id="users-conversation">
-    </ul>
-    <!-- end chat-conversation-list -->
 </div>
+
 <div class="alert alert-warning alert-dismissible copyclipboard-alert px-4 fade show " id="copyClipBoard" role="alert">
     Message copied
 </div>
@@ -220,9 +241,9 @@
     var secondUserId = '@secondUserId';
     var secondMessageId = '@secondMessageId';
 
-    setInterval(function () {
-        updateChatConversation();
-    }, 10000);
+    // setInterval(function () {
+    //     updateChatConversation();
+    // }, 10000);
 
     function updateChatConversation() {
         GetConversation(conversationId);
