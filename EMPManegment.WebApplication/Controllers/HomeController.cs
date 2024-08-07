@@ -266,7 +266,7 @@ namespace EMPManegment.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetChateMembes()
+        public async Task<IActionResult> GetChateMembes(string searchUserName)
         {
             try
             {
@@ -278,6 +278,12 @@ namespace EMPManegment.Web.Controllers
                     userChat = JsonConvert.DeserializeObject<List<ChatMessagesView>>(response.data.ToString());
                 }
 
+                if (!string.IsNullOrEmpty(searchUserName))
+                {
+                    searchUserName = searchUserName.ToLower();
+                    userChat = userChat.Where(u => u.UserName.ToLower().Contains(searchUserName)).ToList();
+                }
+
                 return PartialView("~/Views/Home/_ChatBoradPartial.cshtml", userChat);
             }
             catch (Exception ex)
@@ -285,6 +291,7 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
+
 
 
         [HttpGet]
@@ -355,6 +362,32 @@ namespace EMPManegment.Web.Controllers
                 return PartialView("~/Views/Home/_ContactPartial.cshtml", UserDetails);
             }
 
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AllUserListForChat(string searchUserName)
+        {
+            try
+            {
+                List<EmpDetailsView> AllUserList = new List<EmpDetailsView>();
+                ApiResponseModel res = await APIServices.GetAsync("", "UserProfile/GetActiveDeactiveUserList");
+                if (res.code == 200)
+                {
+                    AllUserList = JsonConvert.DeserializeObject<List<EmpDetailsView>>(res.data.ToString());
+                }
+
+                if (!string.IsNullOrEmpty(searchUserName))
+                {
+                    searchUserName = searchUserName.ToLower();
+                    AllUserList = AllUserList.Where(u => u.FirstName.ToLower().Contains(searchUserName) || u.LastName.ToLower().Contains(searchUserName)).ToList();
+                }
+
+                return PartialView("~/Views/Home/_UserListForChatPartial.cshtml", AllUserList);
+            }
             catch (Exception ex)
             {
                 throw ex;
