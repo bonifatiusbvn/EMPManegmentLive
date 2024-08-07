@@ -50,7 +50,17 @@ function fn_SendMessage() {
         },
     });
 }
-
+function fn_GetChatUserInformation(UserId) {
+    $.ajax({
+        url: '/Home/GetChatUserInformation?UserId=' + UserId,
+        type: 'GET',
+        datatype: 'html',
+        success: function (result) {
+            $('#userProfileCanvasExample').removeClass('d-none');
+            $("#contactinfo").html(result);
+        },
+    });
+}
 
 //function fn_ReadMessage(conversationId, secondUserId, secondMessageId) {
 //    debugger

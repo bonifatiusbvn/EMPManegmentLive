@@ -341,5 +341,24 @@ namespace EMPManegment.Web.Controllers
                 return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
             }
         }
+        [HttpGet]
+        public async Task<IActionResult> GetChatUserInformation(Guid UserId)
+        {
+            try
+            {
+                EmpDetailsView UserDetails = new EmpDetailsView();
+                ApiResponseModel res = await APIServices.GetAsync("", "UserProfile/GetEmployeeById?id=" + UserId);
+                if (res.code == 200)
+                {
+                    UserDetails = JsonConvert.DeserializeObject<EmpDetailsView>(res.data.ToString());
+                }
+                return PartialView("~/Views/Home/_ContactPartial.cshtml", UserDetails);
+            }
+
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }
