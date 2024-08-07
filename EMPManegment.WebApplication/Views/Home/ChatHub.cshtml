@@ -1,0 +1,70 @@
+﻿@{
+    ViewData["Title"] = "ChatHub";
+    Layout = "~/Views/Shared/_HomeLayout.cshtml";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Application</title>
+
+</head>
+<body>
+    <div class="container mt-5">
+        <div>
+            <h1>Welcome</h1>
+        </div>
+        <div class="form-group">
+            <label for="displayname">Username</label>
+            <input type="text" class="form-control" id="displayname" autocomplete="off">
+        </div>
+        <div class="form-group mt-3">
+            <label for="message">Message</label>
+            <input type="text" class="form-control" id="message" autocomplete="off">
+        </div>
+        <div class="form-group mt-3">
+            <input type="button" id="sendmessage" value="Send" class="btn btn-primary">
+        </div>
+        <div class="mt-3">
+            <ul id="discussion" class="list-group">
+            </ul>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.3/signalr.min.js"></script>
+
+    <script>
+
+        var connection = new signalR.HubConnectionBuilder().withUrl("/chat").build();
+        debugger
+        connection.start().catch(function (err) {
+            return console.error(err.toString())
+
+        });
+
+        document.getElementById("sendmessage").addEventListener("click", function (event) {
+            debugger
+            var user = document.getElementById("displayname").value;
+            var message = document.getElementById("message").value;
+
+
+            connection.invoke("SendMessage", user, message).catch(function (err) {
+                return console.error(err.toString());
+            });
+            event.preventDefault();
+        });
+
+        connection.on("ReceiveMessage", function (user, message) {
+            debugger
+            var encodeMsg = user + " says: " + message;
+            var li = document.createElement("li");
+            li.textContent = encodeMsg;
+            document.getElementById("discussion").appendChild(li);
+        });
+
+
+    </script>
+</body>
+</html>

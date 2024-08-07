@@ -62,30 +62,31 @@ function fn_GetChatUserInformation(UserId) {
     });
 }
 
-//function fn_ReadMessage(conversationId, secondUserId, secondMessageId) {
-//    debugger
+function fn_ReadMessage(conversationId, secondUserId) {
 
+    var chatData = {
+        UserId: secondUserId,
+        ConversationId: conversationId
+    };
 
-//    var ChatData = {
-//        UserId: secondUserId,
-//        MessageId: secondMessageId,
-//        ConversationId: conversationId,
-//    }
+    $.ajax({
+        url: '/Home/ReadMessage',
+        type: 'POST',
+        data: chatData,
+        dataType: 'json',
+        success: function (result) {
+            if (result.code == 200) {
 
-//    $.ajax({
-//        url: '/Home/SendMessage',
-//        type: 'POST',
-//        data: ChatData,
-//        dataType: 'json',
-//        success: function (result) {
-//            if (result.code == 200) {
-//                GetConversation(ConversationId);
-//            } else {
-//                toastr.warning(result.message);
-//            }
-//        },
-//    });
-//}
+            } else {
+                toastr.warning(result.message);
+            }
+        },
+        error: function (xhr, status, error) {
+            toastr.error("An error occurred while marking messages as read.");
+        }
+    });
+}
+
 
 
 function DisplayUserListForChat() {
