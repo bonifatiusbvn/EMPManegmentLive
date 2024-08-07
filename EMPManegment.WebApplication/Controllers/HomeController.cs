@@ -53,7 +53,6 @@ namespace EMPManegment.Web.Controllers
         {
             try
             {
-
                 var postuser = await APIServices.PostAsync(userAttendance, "UserHome/InsertINTime");
                 UserResponceModel result = new UserResponceModel();
                 if (postuser.code == 200)
@@ -355,5 +354,11 @@ namespace EMPManegment.Web.Controllers
                 return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
             }
         }
+
+        public IActionResult ChatHub()
+        {
+            return View();
+        }
+
     }
 }

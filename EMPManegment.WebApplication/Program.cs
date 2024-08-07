@@ -19,7 +19,7 @@ builder.Services.AddScoped<UserSession>();
 builder.Services.AddScoped<EMPManegment.Web.Helper.Common>();
 builder.Services.AddScoped<APIServices, APIServices>();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-
+builder.Services.AddSignalR();
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
         .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
@@ -45,6 +45,7 @@ builder.Services.AddSession(option =>
 
 });
 
+
 builder.Services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
 
 var app = builder.Build();
@@ -64,6 +65,11 @@ app.UseSession();
 app.UseCookiePolicy();
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapHub<ChatHub>("/chat");
+
+});
 UserSession.Configure(app.Services.GetRequiredService<IHttpContextAccessor>());
 app.MapControllerRoute(
     name: "default",

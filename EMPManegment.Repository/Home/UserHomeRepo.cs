@@ -76,9 +76,6 @@ namespace EMPManegment.Repository.Home
 
             return response;
         }
-
-
-
         public async Task<List<TblChatMessage>> ReceiveMessagesAsync(Guid userId, Guid? conversationId)
         {
             var query = Context.TblChatMessages
@@ -92,7 +89,6 @@ namespace EMPManegment.Repository.Home
             return await query.OrderBy(m => m.SentDateTime).ToListAsync();
 
         }
-
         public async Task<IEnumerable<ChatMessagesView>> GetMyConversation(Guid conversationId)
         {
             var messages = await (from cm in Context.TblChatMessages
@@ -113,7 +109,6 @@ namespace EMPManegment.Repository.Home
 
             return messages;
         }
-
         public async Task<IEnumerable<ChatMessagesView>> GetMyConversationList(Guid userId)
         {
             var result = await (from cm in Context.TblChatMessages
