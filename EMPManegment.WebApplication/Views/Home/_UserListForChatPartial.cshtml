@@ -1,0 +1,30 @@
+﻿@model IEnumerable<EMPManegment.EntityModels.View_Model.EmpDetailsView>
+@inject EMPManegment.Web.Helper.Common CommonHelper
+@using EMPManegment.Web.Models;
+@inject IHttpContextAccessor Accessor;
+@inject UserSession _userSession
+@foreach (var item in Model)
+{
+    var imageUrl = !string.IsNullOrEmpty(item.Image) ? Url.Content($"~/{item.Image}") : null;
+    var initials = (!string.IsNullOrEmpty(item.FirstName) && !string.IsNullOrEmpty(item.LastName)) ? $"{item.FirstName[0]}{item.LastName[0]}".ToUpper() : null;
+    <div class="justify-content-center align-items-center mb-3" style="padding-left:20px;">
+        <a href="javascript:void(0);" class="d-flex align-items-center">
+            <div class="flex-shrink-0 me-2 avatar-xxs chatlist-user-image">
+                @if (!string.IsNullOrEmpty(imageUrl))
+                {
+
+                    <img class="img-fluid rounded-circle" src="~/@item.Image" style="width: 23px;height: 23px;">
+                }
+                else
+                {
+                    <div class="rounded-circle bg-success-subtle p-1 text-success fs-13" style="width: 23px;height: 23px;display:flex;align-items:center">@initials</div>
+                }
+            </div>
+            <div class="flex-grow-1 chat-user-box overflow-hidden">
+                <h5 class="text-truncate mb-0 chatlist-user-name" style="font-size:13px;">@item.FirstName @item.LastName</h5>
+            </div>
+        </a>
+    </div>
+}
+
+
