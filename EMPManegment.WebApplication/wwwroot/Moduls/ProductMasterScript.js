@@ -49,19 +49,59 @@ function AddProductType() {
 function GetProducts() {
     $.ajax({
         url: '/ProductMaster/GetProduct',
+        method: 'GET',
         success: function (result) {
-            $.each(result, function (i, data) {
-                $('#txtProducts').append('<Option value=' + data.id + '>' + data.productName + '</Option>')
+            var productType = result.map(function (data) {
+                return {
+                    label: data.productName,
+                    value: data.id
+                };
             });
-            $.each(result, function (i, data) {
-                $('#txtProductList').append('<option value=' + data.id + '>' + data.productName + '</option>')
+
+
+            $("#txtProducts").autocomplete({
+                source: productType,
+                minLength: 0,
+                select: function (event, ui) {
+
+                    event.preventDefault();
+                    $("#txtProducts").val(ui.item.label);
+                    $("#txtProductTypeidHidden").val(ui.item.value);
+
+                },
+                focus: function () {
+                    return false;
+                }
+            }).focus(function () {
+                $(this).autocomplete("search", "");
             });
+
+            $("#txtProductList").autocomplete({
+                source: productType,
+                minLength: 0,
+                select: function (event, ui) {
+
+                    event.preventDefault();
+                    $("#txtProductList").val(ui.item.label);
+                    $("#txtProductTypeHidden").val(ui.item.value);
+                    selectProductId();
+                },
+                focus: function () {
+                    return false;
+                }
+            }).focus(function () {
+                $(this).autocomplete("search", "");
+            });
+        },
+        error: function (err) {
+            console.error("Failed to fetch unit types: ", err);
         }
     });
 }
 
+
 function selectProductTypeId() {
-    document.getElementById("txtProductTypeid").value = document.getElementById("txtProducts").value;
+    document.getElementById("txtProductTypeidHidden").value = document.getElementById("txtProducts").value;
 }
 
 $(document).ready(function () {
@@ -148,7 +188,7 @@ function SaveProductDetails() {
 
         var formData = new FormData();
         formData.append("ProductName", $("#txtproductname").val());
-        formData.append("ProductType", $("#txtProductTypeid").val());
+        formData.append("ProductType", $("#txtProductTypeidHidden").val());
         formData.append("ProductDescription", $("#txtproductdescription").val());
         formData.append("ProductShortDescription", $("#txtshortdescription").val());
         formData.append("ProductImage", $("#txtproductimage")[0].files[0]);
@@ -229,7 +269,8 @@ function EditProductDetails(Id) {
             $('#txtGstPerUnit').val(response.gstPercentage);
             $('#txtGstAmount').val(response.gstAmount);
             $('#txtHSN').val(response.hsn);
-            $('#txtProducts').val(response.productType);
+            $('#txtProducts').val(response.productTypeName);
+            $('#txtProductTypeidHidden').val(response.productType);
             $('#txtshortdescription').val(response.productShortDescription);
             $('#txtproductImage').val(response.productImage);
         },
@@ -244,7 +285,7 @@ function UpdateProductDetails() {
         var formData = new FormData();
         formData.append("Id", $("#txtProductId").val());
         formData.append("ProductName", $("#txtProductName").val());
-        formData.append("ProductType", $("#txtProducts").val());
+        formData.append("ProductType", $("#txtProductTypeidHidden").val());
         formData.append("ProductDescription", $("#txtProductDescription").val());
         formData.append("ProductShortDescription", $("#txtshortdescription").val());
         formData.append("PerUnitPrice", $("#txtPerUnitPrice").val());
@@ -381,7 +422,7 @@ function SearchProductName() {
 }
 
 function selectProductId() {
-    var ProductId = document.getElementById("txtProductList").value;
+    var ProductId = document.getElementById("txtProductTypeHidden").value;
     $('#ddlSortBy').val("");
     GetAllProductDetailsList(1, null, ProductId);
 }

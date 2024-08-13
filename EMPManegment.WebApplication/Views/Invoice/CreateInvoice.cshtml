@@ -50,15 +50,13 @@
                                                                 <label for="textVendorName" class="form-label">Vendor Name <span class="text-danger">*</span></label>
                                                                 @if (Model.VendorCompanyName != null)
                                                                 {
-                                                                    <select class="form-control form-select valid" id="textVendorName" name="textVendorName">
-                                                                        <option selected value="@Model.VandorId">@Model.VendorCompanyName</option>
-                                                                    </select>
+                                                                    <input type="text" id="textVendorName" name="textVendorName" class="form-control" placeholder="Vendor Name" value="@Model.VendorCompanyName" />
+                                                                    <input type="hidden" id="textVendorNameHidden" name="textVendorNameHidden" value="@Model.VandorId"/>
                                                                 }
                                                                 else
                                                                 {
-                                                                    <select class="form-control form-select valid" id="textVendorName" name="textVendorName">
-                                                                        <option selected value="">--Select Vendor--</option>
-                                                                    </select>
+                                                                    <input type="text" id="textVendorName" name="textVendorName" class="form-control" placeholder="Vendor Name" />
+                                                                    <input type="hidden" id="textVendorNameHidden" name="textVendorNameHidden"/>
                                                                 }
 
                                                             </div>
@@ -104,15 +102,13 @@
                                                                 <div class="ms-auto">
                                                                     @if (Model.CompanyId != null)
                                                                     {
-                                                                        <select class="form-control form-select valid" id="textCompanyName" name="textCompanyName">
-                                                                            <option selected value="@Model.CompanyId">@Model.CompnyName</option>
-                                                                        </select>
+                                                                        <input type="text" id="textCompanyName" name="textCompanyName" class="form-control" placeholder="Company Name" value="@Model.CompnyName" />
+                                                                        <input type="hidden" id="textCompanyNameHidden" name="textCompanyNameHidden" value="@Model.CompanyId"/>
                                                                     }
                                                                     else
                                                                     {
-                                                                        <select class="form-control form-select valid" id="textCompanyName" name="textCompanyName">
-                                                                            <option selected value="">--Select Company--</option>
-                                                                        </select>
+                                                                        <input type="text" id="textCompanyName" name="textCompanyName" class="form-control" placeholder="Company Name" />
+                                                                        <input type="hidden" id="textCompanyNameHidden" name="textCompanyNameHidden"/>
                                                                     }
 
                                                                 </div>

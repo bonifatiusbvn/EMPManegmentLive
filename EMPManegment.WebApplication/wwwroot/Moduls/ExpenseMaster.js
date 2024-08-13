@@ -69,7 +69,6 @@ function GetExpenseTypeList() {
                     focus: function (event, ui) {
                         event.preventDefault();
 
-                        // $(inputId).val(ui.item.label);
                     },
                     select: function (event, ui) {
                         $(inputId).val(ui.item.label);

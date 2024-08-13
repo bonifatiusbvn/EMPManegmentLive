@@ -105,11 +105,9 @@
                             Add New-Type
                         </button>
                     </p>
-                    <label for="ProductType" class="form-label text-muted">Product Type</label>
-                    <select id="txtProducts" class="form-control bg-transparent" onchange="selectProductTypeId()">
-                        <option selected disabled value="">----Select Product Type---</option>
-                    </select>
-                    <input type="hidden" class="form-control" id="txtProductTypeid">
+                    <label class="form-label">Product Type</label>
+                    <input type="text" id="txtProducts" name="txtProducts" class="form-control" placeholder="Product Type">
+                    <input type="hidden" id="txtProductTypeidHidden" name="txtProductTypeidHidden">
                 </div>
                 <!-- end card body -->
             </div>

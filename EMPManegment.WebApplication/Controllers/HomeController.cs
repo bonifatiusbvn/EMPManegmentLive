@@ -412,6 +412,31 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
+        [HttpGet]
+        public async Task<IActionResult> GetUserTaskNotification()
+        {
+            try
+            {
+                Guid UserId = _userSession.UserId;
+                List<TaskDetailsView> activity = new List<TaskDetailsView>();
+                ApiResponseModel postuser = await APIServices.GetAsync("", "UserHome/ProjectActivityByUserId?UserId=" + UserId);
+                if (postuser.data != null)
+                {
+                    activity = JsonConvert.DeserializeObject<List<TaskDetailsView>>(postuser.data.ToString());
+
+                }
+                else
+                {
+                    activity = new List<TaskDetailsView>();
+                    ViewBag.Error = "note found";
+                }
+                return PartialView("~/Views/Home/_UserTaskNotificationPartial.cshtml", activity);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
 
         [HttpGet]
         public async Task<IActionResult> CheckUserConversationId(Guid userId, Guid selectedUserId)

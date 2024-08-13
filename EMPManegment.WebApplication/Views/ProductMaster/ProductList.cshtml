@@ -109,9 +109,8 @@
                             <!--end col-->
                             <div class="col-xxl-3 ms-auto">
                                 <div>
-                                    <select class="form-control form-select" id="txtProductList" onchange="selectProductId()">
-                                        <option value="" selected disabled>All Products</option>
-                                    </select>
+                                    <input type="text" id="txtProductList" name="txtProductList" class="form-control" placeholder="All Products">
+                                    <input type="hidden" id="txtProductTypeHidden" name="txtProductTypeHidden">
                                 </div>
                             </div>
                             <div class="col-lg-auto">
@@ -219,10 +218,8 @@
                         <!--end col-->
                         <div class="col-lg-6">
                             <label for="ProductType" class="form-label">Product Type</label>
-                            <select id="txtProducts" class="form-control bg-transparent" name="txtProducts" required>
-                                <option selected disabled value="">----Select Product Type---</option>
-                            </select>
-                            <input type="hidden" class="form-control" id="txtProductType">
+                            <input type="text" id="txtProducts" name="txtProducts" class="form-control">
+                            <input type="hidden" class="form-control" id="txtProductTypeidHidden" name="txtProductTypeidHidden">
                         </div>
                         <!--end col-->
                         <div class="col-lg-6">

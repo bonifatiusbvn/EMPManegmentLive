@@ -66,8 +66,8 @@ function fn_InsertInvoiceDetails() {
             var Invoicedetails = {
                 ProjectId: $("#textProjectId").val(),
                 InvoiceNo: $("#textInvoiceNo").val(),
-                VandorId: $("#textVendorName").val(),
-                CompanyId: $("#textCompanyName").val(),
+                VandorId: $("#textVendorNameHidden").val(),
+                CompanyId: $("#textCompanyNameHidden").val(),
                 TotalGst: $("#totalgst").val(),
                 Cgst: $("#textCGst").val(),
                 Sgst: $("#textSGst").val(),
@@ -165,8 +165,8 @@ function fn_UpdateInvoiceDetails() {
                 Id: $("#textInvoiceId").val(),
                 ProjectId: $("#textinvoiceProjectId").val(),
                 InvoiceNo: $("#textInvoiceNo").val(),
-                VandorId: $("#textVendorName").val(),
-                CompanyId: $("#textCompanyName").val(),
+                VandorId: $("#textVendorNameHidden").val(),
+                CompanyId: $("#textCompanyNameHidden").val(),
                 TotalGst: $("#totalgst").val(),
                 SubTotal: $("#cart-subtotal").val(),
                 TotalAmount: $("#cart-total").val(),
@@ -408,11 +408,12 @@ $(document).ready(function () {
 
 
     fn_GetInvoiceVendorNameList()
-    $('#textVendorName').change(function () {
+    $('#textVendorNameHidden').change(function () {
         fn_getInvoiceVendorDetail($(this).val());
     });
+
     fn_GetInvoiceCompanyNameList()
-    $('#textCompanyName').change(function () {
+    $('#textCompanyNameHidden').change(function () {
         fn_getInvoiceCompanyDetail($(this).val());
     });
 
@@ -443,7 +444,7 @@ $(document).ready(function () {
     }
 
     $(document).on('input', '#txtdiscountpercentage', debounce(function () {
-        
+
         var value = $(this).val();
         var productRow = $(this).closest(".product");
         if (value > 100) {
@@ -536,19 +537,42 @@ $(document).ready(function () {
         }
     }, 300));
 });
+
 function fn_GetInvoiceVendorNameList() {
     $.ajax({
         url: '/ProductMaster/GetVendorsNameList',
+        method: 'GET',
         success: function (result) {
-            var selectedValue = $('#textVendorName').find('option:first').val();
-            $.each(result, function (i, data) {
-                if (data.id !== selectedValue) {
-                    $('#textVendorName').append('<Option value=' + data.id + '>' + data.vendorCompany + '</Option>')
-                }
+            var vendorTypes = result.map(function (data) {
+                return {
+                    label: data.vendorCompany,
+                    value: data.id
+                };
             });
+
+
+            $("#textVendorName").autocomplete({
+                source: vendorTypes,
+                minLength: 0,
+                select: function (event, ui) {
+
+                    event.preventDefault();
+                    $("#textVendorName").val(ui.item.label);
+                    $("#textVendorNameHidden").val(ui.item.value);
+
+                    $("#textVendorNameHidden").trigger('change');
+                }
+            }).focus(function () {
+                $(this).autocomplete("search");
+            });
+        },
+        error: function (err) {
+            console.error("Failed to fetch vendor types: ", err);
         }
     });
 }
+
+
 function fn_getInvoiceVendorDetail(VendorId) {
     $.ajax({
         url: '/Vendor/GetVendorDetailsById?vendorId=' + VendorId,
@@ -566,19 +590,42 @@ function fn_getInvoiceVendorDetail(VendorId) {
         },
     });
 }
+
+
 function fn_GetInvoiceCompanyNameList() {
     $.ajax({
         url: '/Company/GetCompanyNameList',
+        method: 'GET',
         success: function (result) {
-            var selectedValue = $('#textCompanyName').find('option:first').val();
-            $.each(result, function (i, data) {
-                if (data.id !== selectedValue) {
-                    $('#textCompanyName').append('<Option value=' + data.id + '>' + data.compnyName + '</Option>')
-                }
+            var companyTypes = result.map(function (data) {
+                return {
+                    label: data.compnyName,
+                    value: data.id
+                };
             });
+
+
+            $("#textCompanyName").autocomplete({
+                source: companyTypes,
+                minLength: 0,
+                select: function (event, ui) {
+
+                    event.preventDefault();
+                    $("#textCompanyName").val(ui.item.label);
+                    $("#textCompanyNameHidden").val(ui.item.value);
+
+                    $("#textCompanyNameHidden").trigger('change');
+                }
+            }).focus(function () {
+                $(this).autocomplete("search");
+            });
+        },
+        error: function (err) {
+            console.error("Failed to fetch company types: ", err);
         }
     });
 }
+
 function fn_getInvoiceCompanyDetail(CompanyName) {
     var CompanyId = CompanyName;
     $.ajax({

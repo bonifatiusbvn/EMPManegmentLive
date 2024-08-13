@@ -145,6 +145,31 @@ function clearUsernameSearchInput() {
     }
 }
 
+function UserTaskNotification() {
+    const taskCount = document.querySelectorAll('.acitivity-item').length;
+
+    const taskTab = document.querySelector('.nav-link[href="#alerts-tab"]');
+    if (taskTab) {
+        taskTab.innerHTML = `Task (${taskCount})`;
+    }
+
+    $.ajax({
+        url: '/Home/GetUserTaskNotification',
+        type: 'Get',
+        dataType: 'json',
+        processData: false,
+        contentType: false,
+
+        complete: function (Result) {
+
+            $('#userTaskNotificationId').html(Result.responseText);
+        },
+    })
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    UserTaskNotification();
+});
 
 function searchChatMessages() {
     var searchTerm = document.getElementById('searchChatMessage').value.toLowerCase();
