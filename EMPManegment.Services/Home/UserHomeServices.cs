@@ -44,5 +44,9 @@ namespace EMPManegment.Services.Home
         {
             return UserHome.SendMessageAsync(chatMessages);
         }
+        public Task<IEnumerable<ChatMessagesView>> CheckUserConversationId(NewChatMessageModel newChatMessage)
+        {
+            return UserHome.CheckUserConversationId(newChatMessage);
+        }
     }
 }

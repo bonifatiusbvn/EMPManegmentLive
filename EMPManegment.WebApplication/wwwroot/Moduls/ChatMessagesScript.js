@@ -145,4 +145,19 @@ function clearUsernameSearchInput() {
     }
 }
 
-
+function GetUserForChat(selectedUserId) {
+    var userId = $("#textchatsessionUserId").val();
+    $.ajax({
+        url: '/Home/CheckUserConversationId',
+        type: 'GET',
+        data: { userId: userId, selectedUserId: selectedUserId },
+        datatype: 'html',
+        success: function (result) {
+            debugger
+            $("#userconversation").html(result);
+            $('#ChatConversationBtn').removeClass('d-none');
+            var conversationId = $('#txtChatConversationId').val();
+            GetConversation(conversationId);
+        }
+    });
+}
