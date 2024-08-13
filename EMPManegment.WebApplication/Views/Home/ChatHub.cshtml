@@ -37,7 +37,7 @@
 
     <script>
 
-        var connection = new signalR.HubConnectionBuilder().withUrl("/chat").build();
+        var connection = new signalR.HubConnectionBuilder().withUrl("http://192.168.0.126/chat").build();
         debugger
         connection.start().catch(function (err) {
             return console.error(err.toString())
