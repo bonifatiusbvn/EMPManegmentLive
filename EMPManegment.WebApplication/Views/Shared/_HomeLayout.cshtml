@@ -344,14 +344,13 @@
                                 </div>
                             </div>
                             <div class="tab-pane fade p-3" id="alerts-tab" role="tabpanel" aria-labelledby="alerts-tab">
-                                
-                                    <div id="userTaskNotificationId">
-                                    </div>
-                               
+
+                                <div id="userTaskNotificationId">
+                                </div>
+
                                 <div class="my-3 text-center view-all">
-                                    <button type="button" class="btn btn-soft-info waves-effect waves-light">
-                                        View
-                                        All Task <i class="ri-arrow-right-line align-middle"></i>
+                                    <button type="button" class="btn btn-soft-info waves-effect waves-light" onclick="viewAllTaskbtn()">
+                                        View All Task <i class="ri-arrow-right-line align-middle"></i>
                                     </button>
                                 </div>
                             </div>
@@ -910,5 +909,8 @@
         checkbox.addEventListener('change', updateNotificationActions);
     });
 
+    function viewAllTaskbtn() {
+        window.location.href = '/Task/UserTasks';
+    }
 </script>
 
