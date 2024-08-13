@@ -43,8 +43,17 @@
                                                     <h6 class="mb-0">Vendor Details (To:)</h6>
                                                 </div>
                                                 <div class="col" style="padding-left: 400px;">
-                                                    <select class="form-control form-select valid" id="ddlinvoicetype" name="ddlinvoicetype">
-                                                    </select>
+                                                    @if (Model.InvoicesType != null)
+                                                    {
+                                                        <select class="form-control form-select valid" id="ddlinvoicetype" name="ddlinvoicetype">
+                                                            <option value="@Model.InvoiceType">@Model.InvoicesType</option>
+                                                        </select>
+                                                    }
+                                                    else
+                                                    {
+                                                        <select class="form-control form-select valid" id="ddlinvoicetype" name="ddlinvoicetype">
+                                                        </select>
+                                                    }
                                                     <input type="hidden" id="txtinvoicetype" />
                                                 </div>
                                             </div>

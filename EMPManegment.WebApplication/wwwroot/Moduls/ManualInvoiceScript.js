@@ -369,20 +369,37 @@ function InsertManualInvoiceDetails() {
                     $(this).css("border", "1px solid #ced4da");
                 });
 
-                if (!objData.Product.trim() || objData.Price == 0 || objData.ProductType == 0) {
-                    isValidProduct = false;
-                    if (!objData.Product.trim()) {
-                        orderRow.find("#textProductName").css("border", "2px solid red");
+                if ($("#ddlinvoicetype").val() == 3) {
+
+                    if (!objData.Product.trim() || objData.ProductType == 0) {
+                        isValidProduct = false;
+                        if (!objData.Product.trim()) {
+                            orderRow.find("#textProductName").css("border", "2px solid red");
+                        }
+                        if (objData.ProductType == 0) {
+                            orderRow.find('[id^="txtPOProductType_"]').css("border", "2px solid red");
+                        }
+                    } else {
+                        ProductDetails.push(objData);
                     }
-                    if (objData.Price == 0) {
-                        orderRow.find("#txtproductamount").css("border", "2px solid red");
-                    }
-                    if (objData.ProductType == 0) {
-                        orderRow.find('[id^="txtPOProductType_"]').css("border", "2px solid red");
-                    }
-                } else {
-                    ProductDetails.push(objData);
                 }
+                else {
+                    if (!objData.Product.trim() || objData.Price == 0 || objData.ProductType == 0) {
+                        isValidProduct = false;
+                        if (!objData.Product.trim()) {
+                            orderRow.find("#textProductName").css("border", "2px solid red");
+                        }
+                        if (objData.Price == 0) {
+                            orderRow.find("#txtproductamount").css("border", "2px solid red");
+                        }
+                        if (objData.ProductType == 0) {
+                            orderRow.find('[id^="txtPOProductType_"]').css("border", "2px solid red");
+                        }
+                    } else {
+                        ProductDetails.push(objData);
+                    }
+                }
+                
             });
             var dateInput = $("#textBuysOrderDate").val();
             if (dateInput === "") {
@@ -616,19 +633,35 @@ function UpdateManualInvoiceDetails() {
                     $(this).css("border", "1px solid #ced4da");
                 });
 
-                if (!objData.Product.trim() || objData.Price == 0 || objData.ProductType == 0) {
-                    isValidProduct = false;
-                    if (!objData.Product.trim()) {
-                        orderRow.find("#textProductName").css("border", "2px solid red");
+                if ($("#ddlinvoicetype").val() == 3) {
+
+                    if (!objData.Product.trim() || objData.ProductType == 0) {
+                        isValidProduct = false;
+                        if (!objData.Product.trim()) {
+                            orderRow.find("#textProductName").css("border", "2px solid red");
+                        }
+                        if (objData.ProductType == 0) {
+                            orderRow.find('[id^="txtPOProductType_"]').css("border", "2px solid red");
+                        }
+                    } else {
+                        ProductDetails.push(objData);
                     }
-                    if (objData.Price == 0) {
-                        orderRow.find("#txtproductamount").css("border", "2px solid red");
+                }
+                else {
+                    if (!objData.Product.trim() || objData.Price == 0 || objData.ProductType == 0) {
+                        isValidProduct = false;
+                        if (!objData.Product.trim()) {
+                            orderRow.find("#textProductName").css("border", "2px solid red");
+                        }
+                        if (objData.Price == 0) {
+                            orderRow.find("#txtproductamount").css("border", "2px solid red");
+                        }
+                        if (objData.ProductType == 0) {
+                            orderRow.find('[id^="txtPOProductType_"]').css("border", "2px solid red");
+                        }
+                    } else {
+                        ProductDetails.push(objData);
                     }
-                    if (objData.ProductType == 0) {
-                        orderRow.find('[id^="txtPOProductType_"]').css("border", "2px solid red");
-                    }
-                } else {
-                    ProductDetails.push(objData);
                 }
             });
             var dateInput = $("#textBuysOrderDate1").val();

@@ -240,7 +240,8 @@ namespace EMPManegment.Repository.ManualInvoiceRepository
                     {
                         masterInvoiceDetails.Id = DS.Tables[1].Rows[0]["Id"] != DBNull.Value ? (Guid)DS.Tables[1].Rows[0]["Id"] : Guid.Empty;
                         masterInvoiceDetails.InvoiceNo = DS.Tables[1].Rows[0]["InvoiceNo"]?.ToString();
-                        masterInvoiceDetails.InvoicesType = DS.Tables[1].Rows[0]["InvoiceType"]?.ToString();
+                        masterInvoiceDetails.InvoicesType = DS.Tables[1].Rows[0]["InvoicesType"]?.ToString();
+                        masterInvoiceDetails.InvoiceType = DS.Tables[1].Rows[0]["InvoiceType"]!= DBNull.Value ? (Int32)DS.Tables[1].Rows[0]["InvoiceType"] : 0; ;
                         masterInvoiceDetails.VendorName = DS.Tables[1].Rows[0]["VendorName"]?.ToString();
                         masterInvoiceDetails.VendorAddress = DS.Tables[1].Rows[0]["VendorAddress"]?.ToString();
                         masterInvoiceDetails.VendorGstNo = DS.Tables[1].Rows[0]["VendorGstNo"]?.ToString();
