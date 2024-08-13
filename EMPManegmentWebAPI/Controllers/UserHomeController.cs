@@ -433,6 +433,33 @@ namespace EMPManagment.API.Controllers
         }
 
         [HttpPost]
+        [Route("ReadMessageAsync")]
+        public async Task<IActionResult> ReadMessageAsync(ChatMessagesView ChatMessage)
+        {
+            UserResponceModel responseModel = new UserResponceModel();
+            try
+            {
+                var SendMessage = HomeServices.MarkMessagesAsReadAsync(ChatMessage);
+                if (SendMessage != null)
+                {
+                    responseModel.Code = (int)HttpStatusCode.OK;
+                }
+                else
+                {
+                    responseModel.Message = SendMessage.Result.Message;
+                    responseModel.Code = SendMessage.Result.Code;
+                }
+            }
+            catch (Exception)
+            {
+                responseModel.Code = (int)HttpStatusCode.InternalServerError;
+            }
+
+            return StatusCode(responseModel.Code, responseModel);
+        }
+
+
+        [HttpPost]
         [Route("CheckUserConversationId")]
         public async Task<IActionResult> CheckUserConversationId(NewChatMessageModel newChatMessage)
         {

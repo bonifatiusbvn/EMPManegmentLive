@@ -53,7 +53,6 @@ namespace EMPManegment.Web.Controllers
         {
             try
             {
-
                 var postuser = await APIServices.PostAsync(userAttendance, "UserHome/InsertINTime");
                 UserResponceModel result = new UserResponceModel();
                 if (postuser.code == 200)
@@ -346,6 +345,45 @@ namespace EMPManegment.Web.Controllers
             else
             {
                 return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ReadMessage(ChatMessagesView ChatMessage)
+        {
+            ApiResponseModel postuser = await APIServices.PostAsync(ChatMessage, "UserHome/ReadMessageAsync");
+            if (postuser.code == 200)
+            {
+                return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
+            }
+            else
+            {
+                return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
+            }
+        }
+
+        public IActionResult ChatHub()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetChatUserInformation(Guid UserId)
+        {
+            try
+            {
+                EmpDetailsView UserDetails = new EmpDetailsView();
+                ApiResponseModel res = await APIServices.GetAsync("", "UserProfile/GetEmployeeById?id=" + UserId);
+                if (res.code == 200)
+                {
+                    UserDetails = JsonConvert.DeserializeObject<EmpDetailsView>(res.data.ToString());
+                }
+                return PartialView("~/Views/Home/_ContactPartial.cshtml", UserDetails);
+            }
+
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
 

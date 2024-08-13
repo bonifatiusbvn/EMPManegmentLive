@@ -49,24 +49,34 @@ namespace EMPManegment.Repository.Home
             }
             return response;
         }
-        public async Task MarkMessagesAsReadAsync(Guid userId, Guid? conversationId)
+        public async Task<UserResponceModel> MarkMessagesAsReadAsync(ChatMessagesView chatMessage)
         {
-            var messages = Context.TblChatMessages
-             .Where(m => m.UserId == userId && !m.IsRead.Value);
-
-            if (conversationId.HasValue)
+            var response = new UserResponceModel();
+            try
             {
-                messages = messages.Where(m => m.ConversationId == conversationId);
+                var messages = Context.TblChatMessages
+                    .Where(m => m.UserId != chatMessage.UserId &&
+                                m.ConversationId == chatMessage.ConversationId &&
+                                (!m.IsRead.HasValue || !m.IsRead.Value));
+
+                foreach (var message in messages)
+                {
+                    message.IsRead = true;
+                }
+
+                await Context.SaveChangesAsync();
+
+                response.Code = (int)HttpStatusCode.OK;
+                response.Message = "Messages marked as read successfully!";
+            }
+            catch (Exception ex)
+            {
+                response.Code = (int)HttpStatusCode.InternalServerError;
+                response.Message = "Error marking messages as read: " + ex.Message;
             }
 
-            foreach (var message in messages)
-            {
-                message.IsRead = true;
-            }
-
-            await Context.SaveChangesAsync();
+            return response;
         }
-
         public async Task<List<TblChatMessage>> ReceiveMessagesAsync(Guid userId, Guid? conversationId)
         {
             var query = Context.TblChatMessages
@@ -80,7 +90,6 @@ namespace EMPManegment.Repository.Home
             return await query.OrderBy(m => m.SentDateTime).ToListAsync();
 
         }
-
         public async Task<IEnumerable<ChatMessagesView>> GetMyConversation(Guid conversationId)
         {
             var messages = await (from cm in Context.TblChatMessages
@@ -101,7 +110,6 @@ namespace EMPManegment.Repository.Home
 
             return messages;
         }
-
         public async Task<IEnumerable<ChatMessagesView>> GetMyConversationList(Guid userId)
         {
             var result = await (from cm in Context.TblChatMessages

@@ -50,32 +50,43 @@ function fn_SendMessage() {
         },
     });
 }
+function fn_GetChatUserInformation(UserId) {
+    $.ajax({
+        url: '/Home/GetChatUserInformation?UserId=' + UserId,
+        type: 'GET',
+        datatype: 'html',
+        success: function (result) {
+            $('#userProfileCanvasExample').removeClass('d-none');
+            $("#contactinfo").html(result);
+        },
+    });
+}
 
+function fn_ReadMessage(conversationId, secondUserId) {
 
-//function fn_ReadMessage(conversationId, secondUserId, secondMessageId) {
-//    debugger
+    var chatData = {
+        UserId: secondUserId,
+        ConversationId: conversationId
+    };
 
+    $.ajax({
+        url: '/Home/ReadMessage',
+        type: 'POST',
+        data: chatData,
+        dataType: 'json',
+        success: function (result) {
+            if (result.code == 200) {
 
-//    var ChatData = {
-//        UserId: secondUserId,
-//        MessageId: secondMessageId,
-//        ConversationId: conversationId,
-//    }
+            } else {
+                toastr.warning(result.message);
+            }
+        },
+        error: function (xhr, status, error) {
+            toastr.error("An error occurred while marking messages as read.");
+        }
+    });
+}
 
-//    $.ajax({
-//        url: '/Home/SendMessage',
-//        type: 'POST',
-//        data: ChatData,
-//        dataType: 'json',
-//        success: function (result) {
-//            if (result.code == 200) {
-//                GetConversation(ConversationId);
-//            } else {
-//                toastr.warning(result.message);
-//            }
-//        },
-//    });
-//}
 
 
 function DisplayUserListForChat() {
