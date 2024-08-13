@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using Azure;
 using EMPManagment.API;
 using EMPManegment.EntityModels.ViewModels.Chat;
 using EMPManegment.EntityModels.ViewModels.Models;
@@ -39,7 +40,7 @@ namespace EMPManegment.Repository.Home
                 response.Message = "Message Successfully Sent.";
 
                 Context.TblChatMessages.Add(message);
-                await Context.SaveChangesAsync();  
+                await Context.SaveChangesAsync();
             }
             catch (Exception)
             {
@@ -127,5 +128,83 @@ namespace EMPManegment.Repository.Home
             return result;
 
         }
+
+        public async Task<IEnumerable<ChatMessagesView>> CheckUserConversationId(NewChatMessageModel newChatMessage)
+        {
+            var conversationIds = await Context.TblChatMessages
+                .Where(cm => cm.UserId == newChatMessage.MyUserId)
+                .Select(cm => cm.ConversationId)
+                .Distinct()
+                .ToListAsync();
+
+            var messages = await (from cm in Context.TblChatMessages
+                                  join user in Context.TblUsers on cm.UserId equals user.Id
+                                  where conversationIds.Contains(cm.ConversationId) && cm.UserId == newChatMessage.SelectedUserId
+                                  select new ChatMessagesView
+                                  {
+                                      MessageId = cm.MessageId,
+                                      UserId = cm.UserId,
+                                      UserName = user.FirstName + " " + user.LastName,
+                                      MessageText = cm.MessageText,
+                                      SentDateTime = cm.SentDateTime,
+                                      IsRead = cm.IsRead,
+                                      IsDeleted = cm.IsDeleted,
+                                      ConversationId = cm.ConversationId,
+                                      UserImage = user.Image
+                                  })
+                                  .OrderByDescending(cm => cm.SentDateTime)
+                                  .ToListAsync();
+
+            if (!messages.Any())
+            {
+                var userInfo = await (from user in Context.TblUsers
+                                      where user.Id == newChatMessage.SelectedUserId
+                                      select new ChatMessagesView
+                                      {
+                                          UserId = user.Id,
+                                          UserName = user.FirstName + " " + user.LastName,
+                                          ConversationId = Guid.NewGuid(),
+                                          UserImage = user.Image,
+                                          UserIdentity = user.UserName
+                                      })
+                                      .SingleOrDefaultAsync();
+
+                var selectedUserChatMessage = new TblChatMessage
+                {
+                    UserId = newChatMessage.SelectedUserId,
+                    UserName = userInfo.UserIdentity,
+                    MessageText = "Hello!",
+                    SentDateTime = DateTime.Now,
+                    IsRead = false,
+                    IsDeleted = false,
+                    ConversationId = userInfo.ConversationId
+                };
+
+                Context.TblChatMessages.Add(selectedUserChatMessage);
+                await Context.SaveChangesAsync();
+
+                var myChatMessage = new TblChatMessage
+                {
+                    UserId = newChatMessage.MyUserId,
+                    UserName = newChatMessage.MyUserIdentity,
+                    MessageText = "Hello!",
+                    SentDateTime = DateTime.Now,
+                    IsRead = false,
+                    IsDeleted = false,
+                    ConversationId = userInfo.ConversationId
+                };
+
+                Context.TblChatMessages.Add(myChatMessage);
+                await Context.SaveChangesAsync();
+
+
+                if (userInfo != null)
+                {
+                    return new List<ChatMessagesView> { userInfo };
+                }
+            }
+            return messages;
+        }
     }
 }
+

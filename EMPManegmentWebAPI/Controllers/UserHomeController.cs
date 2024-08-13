@@ -431,5 +431,13 @@ namespace EMPManagment.API.Controllers
             }
             return StatusCode(responseModel.Code, responseModel);
         }
+
+        [HttpPost]
+        [Route("CheckUserConversationId")]
+        public async Task<IActionResult> CheckUserConversationId(NewChatMessageModel newChatMessage)
+        {
+            IEnumerable<ChatMessagesView> conversation = await HomeServices.CheckUserConversationId(newChatMessage);
+            return Ok(new { code = (int)HttpStatusCode.OK, data = conversation.ToList() });
+        }
     }
 }

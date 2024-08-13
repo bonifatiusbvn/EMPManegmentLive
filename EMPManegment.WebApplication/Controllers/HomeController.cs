@@ -374,5 +374,31 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
+
+        [HttpGet]
+        public async Task<IActionResult> CheckUserConversationId(Guid userId, Guid selectedUserId)
+        {
+            try
+            {
+                List<ChatMessagesView> userChat = new List<ChatMessagesView>();
+                var chatconversation = new NewChatMessageModel()
+                {
+                    MyUserId = userId,
+                    SelectedUserId = selectedUserId,
+                    MyUserIdentity = _userSession.UserName,
+                };
+                ApiResponseModel response = await APIServices.PostAsync(chatconversation,"UserHome/CheckUserConversationId");
+                if (response.code == 200)
+                {
+                    userChat = JsonConvert.DeserializeObject<List<ChatMessagesView>>(response.data.ToString());
+                }
+
+                return PartialView("~/Views/Home/_ChatConversationPartial.cshtml", userChat);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error.");
+            }
+        }
     }
 }
