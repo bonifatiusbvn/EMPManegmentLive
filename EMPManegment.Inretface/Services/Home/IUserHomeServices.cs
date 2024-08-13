@@ -16,5 +16,6 @@ namespace EMPManegment.Inretface.Services.Home
         Task<UserResponceModel> MarkMessagesAsReadAsync(ChatMessagesView ChatMessage);
         Task<IEnumerable<ChatMessagesView>> GetMyConversation(Guid userId);
         Task<IEnumerable<ChatMessagesView>> GetMyConversationList(Guid userId);
+        Task<IEnumerable<ChatMessagesView>> CheckUserConversationId(NewChatMessageModel newChatMessage);
     }
 }

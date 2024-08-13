@@ -21,5 +21,12 @@
             client.BaseAddress = new Uri(_configuration.GetSection("AppSetting:WebAPIUrl").Value);
             return client;
         }
+
+        public HttpClient ChatUrl()
+        {
+            var client = new HttpClient();
+            client.BaseAddress = new Uri(_configuration.GetSection("AppSetting:WebChatUrl").Value);
+            return client;
+        }
     }
 }

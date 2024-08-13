@@ -12,9 +12,9 @@ namespace EMPManegment.EntityModels.ViewModels.Chat
 
         public Guid UserId { get; set; }
 
-        public string? UserName { get; set; } 
+        public string? UserName { get; set; }
 
-        public string? MessageText { get; set; } 
+        public string? MessageText { get; set; }
 
         public DateTime? SentDateTime { get; set; }
 
@@ -24,5 +24,13 @@ namespace EMPManegment.EntityModels.ViewModels.Chat
 
         public Guid? ConversationId { get; set; }
         public string? UserImage { get; set; }
+        public string? UserIdentity { get; set; }
+    }
+
+    public class NewChatMessageModel
+    {
+        public Guid MyUserId { get; set; }
+        public Guid SelectedUserId { get; set; }
+        public string? MyUserIdentity { get; set; }
     }
 }

@@ -208,6 +208,7 @@
                         }
                     }
                 </ul>
+
             </div>
         </div>
     </div>
@@ -236,19 +237,63 @@
     </div>
 </div>
 
-<script type="text/javascript">
-    var conversationId = '@conversationId';
-    var secondUserId = '@secondUserId';
-    var secondMessageId = '@secondMessageId';
+<script>
+    var connection = new signalR.HubConnectionBuilder()
+        .withUrl("http://192.168.0.126/chat")
+        .build();
 
-    setInterval(function () {
-        updateChatConversation();
-    }, 10000);
+    connection.start().catch(function (err) {
+        return console.error(err.toString());
+    });
 
-    function updateChatConversation() {
-        GetConversation(conversationId);
-    }
-    $('#chat-conversation-details').scrollTop($('#chat-conversation-details')[0].scrollHeight);
+    document.getElementById("sendmessage").addEventListener("click", function (event) {
+        debugger
+        event.preventDefault();
 
+        var userId = document.getElementById("txtChatUserId").value;
+        var userName = document.getElementById("txtChatUserName").value;
+        var message = document.getElementById("txtChatMessage").value;
+        var conversationId = document.getElementById("txtChatConversationId").value;
+        debugger
+        if (message.trim() === "") {
+            return;
+        }
+
+        connection.invoke("SendMessageToUser", userId, userName, message, conversationId).catch(function (err) {
+            return console.error(err.toString());
+        });
+
+        document.getElementById("txtChatMessage").value = "";
+    });
+    
+    connection.on("ReceiveMessage", function (userName, message, conversationId) {
+        var conversationList = document.getElementById("users-conversation");
+
+        var li = document.createElement("li");
+        li.className = "chat-list right";
+        li.innerHTML = `
+        <div class="conversation-list">
+            <div class="chat-avatar">
+        <div class="avatar-title bg-success-subtle text-success rounded-circle fs-13" style="height:30px;width:30px;">
+        ${userName.charAt(0).toUpperCase()}
+        </div>
+        </div>
+        <div class="user-chat-content">
+        <div class="ctext-wrap">
+        <div class="ctext-wrap-content">
+        <p class="mb-0 ctext-content">${message}</p>
+        </div>
+        </div>
+        <div class="conversation-name">
+        <small class="text-muted time">${new Date().toLocaleTimeString()}</small>
+        </div>
+        </div>
+        </div>`;
+
+
+        conversationList.appendChild(li);
+        conversationList.scrollTop = conversationList.scrollHeight;
+    });
 </script>
+
 
