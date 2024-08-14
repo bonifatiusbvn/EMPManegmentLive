@@ -136,7 +136,6 @@
                                                 }
                                             }
                                             <b>@formattedDate</b>
-
                                         </p>
 
                                     </div>
@@ -289,10 +288,10 @@
                                 <th class="border" rowspan="2">Taxable<br /> Value</th>
                                 <th class="border" colspan="2">Central Tax</th>
                                 <th class="border" colspan="2">State Tax</th>
-                               @if (firstItem.InvoiceDetails.Any(a => a.Igst > 0))
+                                @if (firstItem.InvoiceDetails.Any(a => a.Igst > 0))
                                 {
                                     <th class="border" colspan="2">Integrated Tax</th>
-                                } 
+                                }
                                 <th class="border" rowspan="2">Total<br /> Tax Amount</th>
                             </tr>
                             <tr class="table-active" style="border: 1px solid lightgray;">
