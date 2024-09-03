@@ -1,5 +1,6 @@
 ﻿
 GetChateMembes();
+GetAllNotifications();
 function GetChateMembes() {
     $.ajax({
         url: '/Home/GetChateMembes',
@@ -215,5 +216,30 @@ function GetUserForChat(selectedUserId) {
             var conversationId = $('#txtChatConversationId').val();
             GetConversation(conversationId);
         }
+    });
+}
+
+function GetNewMessageNotifications() {
+    $.ajax({
+        url: '/Home/GetUserNewMessagesNotification',
+        type: 'GET',
+        datatype: 'html',
+        success: function (result) {
+            $("#userNewMessageNotificationId").html(result);
+        }
+    });
+}
+
+function GetAllNotifications() {
+    $.ajax({
+        url: '/Home/GetUserAllNotifications',
+        type: 'GET', 
+        dataType: 'html',  
+        complete: function (Result) {
+            $('#userAllNotificationId').html(Result.responseText);    
+            var totalcount = $('#totalNotificationCount').val();
+            $('#CountAllNotification').text(totalcount);
+            $('#CountAllNewNotification').text(totalcount);
+        },
     });
 }

@@ -1,0 +1,107 @@
+﻿@model EMPManegment.EntityModels.ViewModels.Chat.AllNotificationModel
+@inject EMPManegment.Web.Helper.Common CommonHelper
+@using EMPManegment.Web.Models;
+@inject IHttpContextAccessor Accessor;
+@inject UserSession _userSession
+
+<div>
+    <input value="@ViewBag.TotalCount" id="totalNotificationCount" hidden></input>
+    @if (Model.Messages.Any())
+    {
+        @foreach (var message in Model.Messages)
+        {
+            var imageUrl = !string.IsNullOrEmpty(message.UserImage) ? Url.Content($"~/{message.UserImage}") : null;
+            var initials = !string.IsNullOrEmpty(message.UserName) ? string.Concat(message.UserName.Split(' ').Select(name => name[0])).ToUpper() : null;
+            <div class="text-reset notification-item d-block dropdown-item">
+                <div class="d-flex">
+                    @if (!string.IsNullOrEmpty(imageUrl))
+                    {
+                        <img src="@imageUrl" class="me-3 rounded-circle avatar-xs" alt="user-pic">
+                    }
+                    else
+                    {
+                        <div class="flex-shrink-0 avatar-xs me-2">
+                            <div class="avatar-title bg-success-subtle text-success rounded-circle fs-13" style="height:40px;width:40px;">@initials</div>
+                        </div>
+                    }
+
+                    <div class="flex-grow-1">
+                        <a href="#!" class="stretched-link">
+                            <h6 class="mt-0 mb-1 fs-13 fw-semibold">@message.UserName</h6>
+                        </a>
+                        <div class="fs-13 text-muted">
+                            <p class="mb-1">@message.MessageText</p>
+                        </div>
+                        <p class="mb-0 fs-11 fw-medium text-uppercase text-muted">
+                            <span><i class="mdi mdi-clock-outline"></i> @message.SentDateTime</span>
+                        </p>
+                    </div>
+                    <div class="px-2 fs-15">
+                        <div class="form-check notification-check">
+                            <input class="form-check-input" type="checkbox" value="" id="messages-notification-check01">
+                            <label class="form-check-label" for="messages-notification-check01"></label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+    @if (Model.Messages.Any())
+    {
+        @foreach (var task in Model.Tasks)
+        {
+            var imageUrl = !string.IsNullOrEmpty(task.UserProfile) ? Url.Content($"~/{task.UserProfile}") : null;
+            var initials = (!string.IsNullOrEmpty(task.FirstName) && !string.IsNullOrEmpty(task.LastName)) ? $"{task.FirstName[0]}{task.LastName[0]}".ToUpper() : null;
+            <div class="text-reset notification-item d-block dropdown-item">
+                <div class="acitivity-item d-flex">
+                    <div class="flex-shrink-0">
+                        @if (!string.IsNullOrEmpty(imageUrl))
+                        {
+                            <img class="direct-chat-img" src="@imageUrl" alt="user image">
+                        }
+                        else
+                        {
+                            <div class="flex-shrink-0 avatar-xs me-2">
+                                <div class="avatar-title bg-success-subtle text-success rounded-circle fs-13" style="height:40px;width:40px;">@initials</div>
+                            </div>
+                        }
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                        <h6 class="mt-0 mb-1 lh-base text-info">
+                            @task.TaskTitle
+                            @if (task.TaskStatus == "Working")
+                            {
+                                <a class="badge bg-warning text-uppercase">@task.TaskStatus</a>
+                            }
+                            else if (task.TaskStatus == "Completed")
+                            {
+                                <a class="badge bg-success text-uppercase">@task.TaskStatus</a>
+                            }
+                            else if (task.TaskStatus == "Pending")
+                            {
+                                <a class="badge  bg-primary  text-uppercase">@task.TaskStatus</a>
+                            }
+                            else if (task.TaskStatus == "InReview")
+                            {
+                                <a class="badge  bg-secondary text-uppercase">@task.TaskStatus</a>
+                            }
+                            else
+                            {
+                                <a class="badge  bg-secondary text-uppercase">@task.TaskStatus</a>
+                            }
+                        </h6>
+                        <div class="fs-13 text-muted">
+                            <p class="text-muted mb-2">@task.TaskDetails</p>
+                        </div>
+                    </div>
+                    <div class="px-2 fs-15">
+                        <div class="form-check notification-check">
+                            <input class="form-check-input" type="checkbox" value="" id="all-notification-check01">
+                            <label class="form-check-label" for="all-notification-check01"></label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+</div>

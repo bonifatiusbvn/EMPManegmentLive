@@ -48,5 +48,13 @@ namespace EMPManegment.Services.Home
         {
             return UserHome.CheckUserConversationId(newChatMessage);
         }
+        public Task<IEnumerable<ChatMessagesView>> GetUsersNewMessageList(Guid userId)
+        {
+            return UserHome.GetUsersNewMessageList(userId);
+        }
+        public Task<AllNotificationModel> GetUsersAllNotificationList(Guid userId)
+        {
+            return UserHome.GetUsersAllNotificationList(userId);
+        }
     }
 }
