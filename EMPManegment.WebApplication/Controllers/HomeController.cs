@@ -24,6 +24,7 @@ using System.Net.Http.Headers;
 using Microsoft.CodeAnalysis;
 using EMPManegment.EntityModels.ViewModels.Weather;
 using EMPManegment.EntityModels.ViewModels.Chat;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 #nullable disable
 namespace EMPManegment.Web.Controllers
 {
@@ -450,7 +451,7 @@ namespace EMPManegment.Web.Controllers
                     SelectedUserId = selectedUserId,
                     MyUserIdentity = _userSession.UserName,
                 };
-                ApiResponseModel response = await APIServices.PostAsync(chatconversation,"UserHome/CheckUserConversationId");
+                ApiResponseModel response = await APIServices.PostAsync(chatconversation, "UserHome/CheckUserConversationId");
                 if (response.code == 200)
                 {
                     userChat = JsonConvert.DeserializeObject<List<ChatMessagesView>>(response.data.ToString());
@@ -461,6 +462,51 @@ namespace EMPManegment.Web.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, "Internal server error.");
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetUserNewMessagesNotification()
+        {
+            try
+            {
+                Guid UserId = _userSession.UserId;
+                List<ChatMessagesView> messages = new List<ChatMessagesView>();
+                ApiResponseModel postuser = await APIServices.GetAsync("", "UserHome/GetUsersNewMessageList?userId=" + UserId);
+                if (postuser.data != null)
+                {
+                    messages = JsonConvert.DeserializeObject<List<ChatMessagesView>>(postuser.data.ToString());
+
+                }
+                return PartialView("~/Views/Home/_UserNewMessageNotificationPartial.cshtml", messages);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetUserAllNotifications()
+        {
+            try
+            {
+                Guid userId = _userSession.UserId;
+                AllNotificationModel allNotifications = new AllNotificationModel();
+                ApiResponseModel Response = await APIServices.GetAsync("", $"UserHome/GetUsersAllNotificationList?userId={userId}");
+                if (Response.code == 200)
+                {
+                    allNotifications = JsonConvert.DeserializeObject<AllNotificationModel>(Response.data.ToString());
+                }
+                int totalMessageCount = allNotifications.Messages?.Count ?? 0;
+                int totalTaskCount = allNotifications.Tasks?.Count ?? 0;
+                int totalCount = totalMessageCount + totalTaskCount;
+                ViewBag.TotalCount = totalCount;
+                return PartialView("~/Views/Home/_UserAllNotificationPartial.cshtml", allNotifications);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
     }

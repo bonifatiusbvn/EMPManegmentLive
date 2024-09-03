@@ -282,7 +282,6 @@ function ApproveUnapprovePR() {
                     }
                 }
             });
-
         } else if (result.dismiss === Swal.DismissReason.cancel) {
             Swal.fire(
                 'Cancelled',
