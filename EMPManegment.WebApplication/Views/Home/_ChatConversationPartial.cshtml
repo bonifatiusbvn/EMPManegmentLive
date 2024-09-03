@@ -135,7 +135,7 @@
 <div class="chat-conversation p-3 p-lg-4" id="chat-conversation" data-simplebar>
     <div>
         <div id="users-chat">
-            <div class="chat-conversation-details p-3" id="chat-conversation-details" data-simplebar>
+            <div class="chat-conversation-details p-3" id="chat-conversation-details-id" data-simplebar>
                 <ul class="list-unstyled chat-conversation-list chat-sm" id="users-conversation">
                     @foreach (var group in groupedMessages)
                     {
@@ -189,7 +189,7 @@
                                                     <a class="dropdown-item" href="#"><i class="ri-reply-line me-2 text-muted align-bottom"></i>Reply</a>
                                                     <a class="dropdown-item" href="#"><i class="ri-file-copy-line me-2 text-muted align-bottom"></i>Copy</a>
                                                     <a class="dropdown-item delete-item" href="#"><i class="ri-delete-bin-5-line me-2 text-muted align-bottom"></i>Delete</a>
-                                                </div>
+                                        </div>
                                             </div>
                                         </div>
                                         <div class="conversation-name">
@@ -237,63 +237,48 @@
     </div>
 </div>
 
-<script>
-    var connection = new signalR.HubConnectionBuilder()
-        .withUrl("http://192.168.0.126/chat")
-        .build();
+<script type="text/javascript">
 
-    connection.start().catch(function (err) {
-        return console.error(err.toString());
-    });
+    $('#chat-conversation-details-id').scrollTop($('#chat-conversation-details-id')[0].scrollHeight);
 
-    document.getElementById("sendmessage").addEventListener("click", function (event) {
-        debugger
-        event.preventDefault();
+    window.onload = function () {debugger
+        var connection = new signalR.HubConnectionBuilder()
+            .withUrl("http://192.168.0.126/chat")
+            .build();
 
-        var userId = document.getElementById("txtChatUserId").value;
-        var userName = document.getElementById("txtChatUserName").value;
-        var message = document.getElementById("txtChatMessage").value;
-        var conversationId = document.getElementById("txtChatConversationId").value;
-        debugger
-        if (message.trim() === "") {
-            return;
-        }
-
-        connection.invoke("SendMessageToUser", userId, userName, message, conversationId).catch(function (err) {
+        connection.start().catch(function (err) {
             return console.error(err.toString());
         });
+        debugger
+        connection.on("ReceiveMessage", function (userName, message, conversationId) {
+            var conversationList = document.getElementById("users-conversation");
 
-        document.getElementById("txtChatMessage").value = "";
-    });
-    
-    connection.on("ReceiveMessage", function (userName, message, conversationId) {
-        var conversationList = document.getElementById("users-conversation");
+            var li = document.createElement("li");
+            li.className = "chat-list right";
+            li.innerHTML = `
+                <div class="conversation-list">
+                    <div class="chat-avatar">
+                <div class="avatar-title bg-success-subtle text-success rounded-circle fs-13" style="height:30px;width:30px;">
+                ${userName.charAt(0).toUpperCase()}
+                </div>
+                </div>
+                <div class="user-chat-content">
+                <div class="ctext-wrap">
+                <div class="ctext-wrap-content">
+                <p class="mb-0 ctext-content">${message}</p>
+                </div>
+                </div>
+                <div class="conversation-name">
+                <small class="text-muted time">${new Date().toLocaleTimeString()}</small>
+                </div>
+                </div>
+                </div>`;
 
-        var li = document.createElement("li");
-        li.className = "chat-list right";
-        li.innerHTML = `
-        <div class="conversation-list">
-            <div class="chat-avatar">
-        <div class="avatar-title bg-success-subtle text-success rounded-circle fs-13" style="height:30px;width:30px;">
-        ${userName.charAt(0).toUpperCase()}
-        </div>
-        </div>
-        <div class="user-chat-content">
-        <div class="ctext-wrap">
-        <div class="ctext-wrap-content">
-        <p class="mb-0 ctext-content">${message}</p>
-        </div>
-        </div>
-        <div class="conversation-name">
-        <small class="text-muted time">${new Date().toLocaleTimeString()}</small>
-        </div>
-        </div>
-        </div>`;
-
-
-        conversationList.appendChild(li);
-        conversationList.scrollTop = conversationList.scrollHeight;
-    });
+            conversationList.appendChild(li);
+            conversationList.scrollTop = conversationList.scrollHeight;
+        });
+    };
+   
 </script>
 
 

@@ -25,15 +25,9 @@ function GetConversation(conversationId) {
     });
 }
 
-function fn_SendMessage() {
+function fn_SendMessage(ChatData) {
     event.preventDefault();
     var ConversationId = $('#txtChatConversationId').val();
-    var ChatData = {
-        UserId: $('#txtChatUserId').val(),
-        UserName: $('#txtChatUserName').val(),
-        MessageText: $('#txtChatMessage').val(),
-        ConversationId: $('#txtChatConversationId').val(),
-    }
 
     $.ajax({
         url: '/Home/SendMessage',
