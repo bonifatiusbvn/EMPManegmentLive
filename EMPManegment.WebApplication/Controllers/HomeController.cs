@@ -502,6 +502,8 @@ namespace EMPManegment.Web.Controllers
                 int totalTaskCount = allNotifications.Tasks?.Count ?? 0;
                 int totalCount = totalMessageCount + totalTaskCount;
                 ViewBag.TotalCount = totalCount;
+                ViewBag.TotalUnreadMessages = totalMessageCount;
+                ViewBag.TotalTasks = totalTaskCount;
                 return PartialView("~/Views/Home/_UserAllNotificationPartial.cshtml", allNotifications);
             }
             catch (Exception ex)

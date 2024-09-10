@@ -6,6 +6,8 @@
 
 <div>
     <input value="@ViewBag.TotalCount" id="totalNotificationCount" hidden></input>
+    <input value="@ViewBag.TotalUnreadMessages" id="TotalUnreadMessages" hidden></input>
+    <input value="@ViewBag.TotalTasks" id="totalTotalTasks" hidden></input>
     @if (Model.Messages.Any())
     {
         @foreach (var message in Model.Messages)
@@ -14,34 +16,36 @@
             var initials = !string.IsNullOrEmpty(message.UserName) ? string.Concat(message.UserName.Split(' ').Select(name => name[0])).ToUpper() : null;
             <div class="text-reset notification-item d-block dropdown-item">
                 <div class="d-flex">
-                    @if (!string.IsNullOrEmpty(imageUrl))
-                    {
-                        <img src="@imageUrl" class="me-3 rounded-circle avatar-xs" alt="user-pic">
-                    }
-                    else
-                    {
-                        <div class="flex-shrink-0 avatar-xs me-2">
-                            <div class="avatar-title bg-success-subtle text-success rounded-circle fs-13" style="height:40px;width:40px;">@initials</div>
-                        </div>
-                    }
+                    <a href="javascript:void(0);" class="d-flex align-items-center chat-link" data-user-id="@message.UserId" onclick="openchatfromNotification('@message.UserId');">
+                        @if (!string.IsNullOrEmpty(imageUrl))
+                        {
+                            <img src="@imageUrl" class="me-3 rounded-circle avatar-xs" alt="user-pic">
+                        }
+                        else
+                        {
+                            <div class="flex-shrink-0 avatar-xs me-2">
+                                <div class="avatar-title bg-success-subtle text-success rounded-circle fs-13" style="height:40px;width:40px;">@initials</div>
+                            </div>
+                        }
 
-                    <div class="flex-grow-1">
-                        <a href="#!" class="stretched-link">
-                            <h6 class="mt-0 mb-1 fs-13 fw-semibold">@message.UserName</h6>
-                        </a>
-                        <div class="fs-13 text-muted">
-                            <p class="mb-1">@message.MessageText</p>
+                        <div class="flex-grow-1">
+                            <a href="#!" class="stretched-link">
+                                <h6 class="mt-0 mb-1 fs-13 fw-semibold">@message.UserName</h6>
+                            </a>
+                            <div class="fs-13 text-muted">
+                                <p class="mb-1">@message.MessageText</p>
+                            </div>
+                            <p class="mb-0 fs-11 fw-medium text-uppercase text-muted">
+                                <span><i class="mdi mdi-clock-outline"></i> @message.SentDateTime</span>
+                            </p>
                         </div>
-                        <p class="mb-0 fs-11 fw-medium text-uppercase text-muted">
-                            <span><i class="mdi mdi-clock-outline"></i> @message.SentDateTime</span>
-                        </p>
-                    </div>
-                    <div class="px-2 fs-15">
-                        <div class="form-check notification-check">
-                            <input class="form-check-input" type="checkbox" value="" id="messages-notification-check01">
-                            <label class="form-check-label" for="messages-notification-check01"></label>
+                        <div class="px-2 fs-15">
+                            <div class="form-check notification-check">
+                                <input class="form-check-input" type="checkbox" value="" id="messages-notification-check01">
+                                <label class="form-check-label" for="messages-notification-check01"></label>
+                            </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
             </div>
         }

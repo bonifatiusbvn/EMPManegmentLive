@@ -141,13 +141,6 @@ function clearUsernameSearchInput() {
 }
 
 function UserTaskNotification() {
-    const taskCount = document.querySelectorAll('.acitivity-item').length;
-
-    const taskTab = document.querySelector('.nav-link[href="#alerts-tab"]');
-    if (taskTab) {
-        taskTab.innerHTML = `Task (${taskCount})`;
-    }
-
     $.ajax({
         url: '/Home/GetUserTaskNotification',
         type: 'Get',
@@ -196,6 +189,7 @@ function searchChatMessages() {
         separator.style.display = isVisible ? '' : 'none';
     });
 }
+
 function GetUserForChat(selectedUserId) {
     var userId = $("#textchatsessionUserId").val();
     $.ajax({
@@ -204,7 +198,6 @@ function GetUserForChat(selectedUserId) {
         data: { userId: userId, selectedUserId: selectedUserId },
         datatype: 'html',
         success: function (result) {
-            debugger
             $("#userconversation").html(result);
             $('#ChatConversationBtn').removeClass('d-none');
             var conversationId = $('#txtChatConversationId').val();
@@ -234,6 +227,37 @@ function GetAllNotifications() {
             var totalcount = $('#totalNotificationCount').val();
             $('#CountAllNotification').text(totalcount);
             $('#CountAllNewNotification').text(totalcount);
+            var UnreadMessages = $('#TotalUnreadMessages').val();
+            $("#CountUnreadMessage").text(UnreadMessages); 
+            var totalTasks = $('#totalTotalTasks').val();
+            $("#CountTotalTask").text(totalTasks);
         },
     });
 }
+
+function openchatfromNotification(SelectedUserId) {
+    var selectedUserId = SelectedUserId;
+    var userId = $("#textchatsessionUserId").val();
+
+    $.ajax({
+        url: '/Home/CheckUserConversationId',
+        type: 'GET',
+        data: { userId: userId, selectedUserId: selectedUserId },
+        datatype: 'html',
+        success: function (result) {
+            var parsedHtml = $('<div>').html(result);
+            var conversationId = parsedHtml.find('#txtChatConversationId').val();
+            localStorage.setItem('conversationId', conversationId);
+            window.location.href = '/Home/ChatMessages';
+        }
+    });
+}
+
+
+$(document).ready(function () {
+    var conversationId = localStorage.getItem('conversationId');
+    if (conversationId) {
+        GetConversation(conversationId);
+        localStorage.removeItem('conversationId'); 
+    }
+});
