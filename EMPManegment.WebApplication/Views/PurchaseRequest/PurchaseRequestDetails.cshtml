@@ -91,15 +91,15 @@
                                 <tbody>
                                     <tr>
                                         <td class="border">Sub Total :</td>
-                                        <td class="border" id="subtotal">₹@subtotal?.ToString("F2")</td>
+                                        <td class="border" id="subtotal">₹@(subtotal?.ToString("N2") ?? "0.00")</td>
                                     </tr>
                                     <tr>
                                         <td class="border">GST :</td>
-                                        <td class="border" id="totalGst">₹@totalGst?.ToString("F2")</td>
+                                        <td class="border" id="totalGst">₹@(totalGst?.ToString("N2") ?? "0.00")</td>
                                     </tr>
                                     <tr class="border-top border-top-dashed">
                                         <th class="border">Total :</th>
-                                        <th class="border" id="total">₹@totalAmount?.ToString("F2")</th>
+                                        <th class="border">₹@(totalAmount?.ToString("N2") ?? "0.00")</th>
                                     </tr>
                                 </tbody>
                             </table>
@@ -155,5 +155,5 @@
             .catch(error => console.error('Error fetching the purchase request details:', error));
     });
 </script>
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script src="~/moduls/purchaserequestscript.js"></script>
+@* <script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/moduls/purchaserequestscript.js"></script> *@
