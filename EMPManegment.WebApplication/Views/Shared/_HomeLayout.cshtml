@@ -165,7 +165,7 @@
                                         <h6 class="m-0 fs-16 fw-semibold text-white"> Notifications </h6>
                                     </div>
                                     <div class="col-auto dropdown-tabs">
-                                        <span class="badge bg-light-subtle text-body fs-13"> 4 New</span>
+                                        <span class="badge bg-light-subtle text-body fs-13"><span id="CountAllNewNotification"></span> New</span>
                                     </div>
                                 </div>
                             </div>
@@ -179,12 +179,12 @@
                                     </li>
                                     <li class="nav-item waves-effect waves-light">
                                         <a class="nav-link" data-bs-toggle="tab" href="#messages-tab" role="tab" aria-selected="false" onclick="GetNewMessageNotifications()">
-                                            Messages
+                                            Messages (<span id="CountUnreadMessage"></span>)
                                         </a>
                                     </li>
                                     <li class="nav-item waves-effect waves-light">
                                         <a class="nav-link" data-bs-toggle="tab" href="#alerts-tab" role="tab" aria-selected="false" onclick="UserTaskNotification()">
-                                            Task
+                                            Task (<span id="CountTotalTask"></span>)
                                         </a>
                                     </li>
                                 </ul>
@@ -213,7 +213,7 @@
                                     <div id="userNewMessageNotificationId"></div>
 
                                     <div class="my-3 text-center view-all">
-                                        <button type="button" class="btn btn-soft-info waves-effect waves-light">
+                                        <button type="button" class="btn btn-soft-info waves-effect waves-light" onclick="viewAllMessages()">
                                             View
                                             All Messages <i class="ri-arrow-right-line align-middle"></i>
                                         </button>
@@ -790,6 +790,10 @@
 
     function viewAllTaskbtn() {
         window.location.href = '/Task/UserTasks';
+    }
+
+    function viewAllMessages() {
+        window.location.href = '/Home/ChatMessages';
     }
 </script>
 
