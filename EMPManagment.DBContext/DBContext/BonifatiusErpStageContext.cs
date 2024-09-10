@@ -93,7 +93,10 @@ public partial class BonifatiusErpStageContext : DbContext
 
     public virtual DbSet<TblVendorType> TblVendorTypes { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }  
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseSqlServer("Data Source=BONI002;Initial Catalog=BonifatiusERP_Stage;User ID=BoniEmp;Password=Admin123;Encrypt=False");
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<TblAttendance>(entity =>
@@ -124,6 +127,11 @@ public partial class BonifatiusErpStageContext : DbContext
             entity.HasIndex(e => e.StateId, "IX_tblCity_StateId");
 
             entity.Property(e => e.City).HasMaxLength(50);
+
+            entity.HasOne(d => d.State).WithMany(p => p.TblCities)
+                .HasForeignKey(d => d.StateId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_tblCity_tblState");
         });
 
         modelBuilder.Entity<TblCompanyMaster>(entity =>
@@ -364,6 +372,7 @@ public partial class BonifatiusErpStageContext : DbContext
             entity.ToTable("tblManualInvoiceDetails");
 
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.Description).HasMaxLength(500);
             entity.Property(e => e.Discount).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.DiscountPercent).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.Gst).HasColumnType("numeric(18, 2)");
@@ -436,7 +445,7 @@ public partial class BonifatiusErpStageContext : DbContext
         {
             entity.ToTable("tblProductTypeMaster");
 
-            entity.Property(e => e.Type).HasMaxLength(20);
+            entity.Property(e => e.Type).HasMaxLength(50);
         });
 
         modelBuilder.Entity<TblProjectDocument>(entity =>
@@ -525,14 +534,12 @@ public partial class BonifatiusErpStageContext : DbContext
             entity.HasOne(d => d.Poref).WithMany(p => p.TblPurchaseOrderDetails)
                 .HasForeignKey(d => d.PorefId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_tblPurchaseOrderDetails_tblPurchaseOrderMaster1");
+                .HasConstraintName("FK_tblPurchaseOrderDetails_tblPurchaseOrderMaster2");
 
             entity.HasOne(d => d.Product).WithMany(p => p.TblPurchaseOrderDetails)
                 .HasForeignKey(d => d.ProductId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_tblPurchaseOrderDetails_tblPurchaseOrderMaster");
-
-            
+                .HasConstraintName("FK_tblPurchaseOrderDetails_tblProductDetailsMaster1");
         });
 
         modelBuilder.Entity<TblPurchaseOrderMaster>(entity =>
@@ -580,8 +587,6 @@ public partial class BonifatiusErpStageContext : DbContext
             entity.HasOne(d => d.Product).WithMany(p => p.TblPurchaseRequests)
                 .HasForeignKey(d => d.ProductId)
                 .HasConstraintName("FK_tblPurchaseRequest_tblProductDetailsMaster");
-
-            
 
             entity.HasOne(d => d.Project).WithMany(p => p.TblPurchaseRequests)
                 .HasForeignKey(d => d.ProjectId)
@@ -646,6 +651,11 @@ public partial class BonifatiusErpStageContext : DbContext
             entity.HasIndex(e => e.CountryId, "IX_tblState_CountryId");
 
             entity.Property(e => e.State).HasMaxLength(50);
+
+            entity.HasOne(d => d.Country).WithMany(p => p.TblStates)
+                .HasForeignKey(d => d.CountryId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_tblState_tblCountry");
         });
 
         modelBuilder.Entity<TblTaskDetail>(entity =>
@@ -711,6 +721,14 @@ public partial class BonifatiusErpStageContext : DbContext
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
             entity.Property(e => e.UserName).HasMaxLength(20);
 
+            entity.HasOne(d => d.City).WithMany(p => p.TblUsers)
+                .HasForeignKey(d => d.CityId)
+                .HasConstraintName("FK_tblUsers_tblCity");
+
+            entity.HasOne(d => d.Country).WithMany(p => p.TblUsers)
+                .HasForeignKey(d => d.CountryId)
+                .HasConstraintName("FK_tblUsers_tblCountry");
+
             entity.HasOne(d => d.Department).WithMany(p => p.TblUsers)
                 .HasForeignKey(d => d.DepartmentId)
                 .HasConstraintName("FK_tbl_BoniUsers_tbl_Departmen");
@@ -718,6 +736,14 @@ public partial class BonifatiusErpStageContext : DbContext
             entity.HasOne(d => d.Question).WithMany(p => p.TblUsers)
                 .HasForeignKey(d => d.QuestionId)
                 .HasConstraintName("FK_tblUsers_tblQuestion");
+
+            entity.HasOne(d => d.Role).WithMany(p => p.TblUsers)
+                .HasForeignKey(d => d.RoleId)
+                .HasConstraintName("FK_tblUsers_tblRoleMaster");
+
+            entity.HasOne(d => d.State).WithMany(p => p.TblUsers)
+                .HasForeignKey(d => d.StateId)
+                .HasConstraintName("FK_tblUsers_tblState");
         });
 
         modelBuilder.Entity<TblUserDocument>(entity =>
