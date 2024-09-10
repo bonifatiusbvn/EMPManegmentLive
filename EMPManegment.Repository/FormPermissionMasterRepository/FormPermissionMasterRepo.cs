@@ -138,7 +138,6 @@ namespace EMPManegment.Repository.FormPermissionMasterRepository
                     }
                     else
                     {
-
                         var GetRoledata = Context.TblRoleMasters.Where(a => a.Role == roleDetails.Role).FirstOrDefault();
                         GetRoledata.IsDelete = false;
                         Context.TblRoleMasters.Update(GetRoledata);
@@ -260,7 +259,6 @@ namespace EMPManegment.Repository.FormPermissionMasterRepository
 
             return response;
         }
-
 
         [HttpPost]
         public async Task<ApiResponseModel> CreateUserForm(Guid UserId)
