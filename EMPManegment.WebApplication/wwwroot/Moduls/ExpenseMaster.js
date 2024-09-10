@@ -580,8 +580,9 @@ function GetPayUserExpenseCreditList(userId, selectedMonth) {
                 "data": "totalAmount",
                 "name": "TotalAmount",
                 "render": function (data, type, full, meta) {
-                    var color = full.account.toLowerCase() === "debit" ? "green" : "red";
-                    return '<span style="color: ' + color + ';">' + '₹' + data + '</span>';
+                    var color = full.account && full.account.toLowerCase() === "debit" ? "green" : "red";
+                    var formattedData = parseFloat(data).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                    return '<span style="color: ' + color + ';">' + '₹' + formattedData + '</span>';
                 }
             },
         ],
@@ -608,16 +609,15 @@ function GetPayUserExpenseCreditList(userId, selectedMonth) {
                     typeof i === 'number' ?
                         i : 0;
             };
-            total = api
+            var total = api
                 .column(4)
                 .data()
                 .reduce(function (a, b) {
                     return intVal(a) + intVal(b);
                 }, 0);
-
-
+            var formattedTotal = total.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
             $(api.column(4).footer()).html(
-                '<span style="color: black;">Total: ' + '₹' + total.toFixed(2) + '</span>'
+                '<span style="color: black;">Total: ' + '₹' + formattedTotal + '</span>'
             );
         }
     });
@@ -691,8 +691,9 @@ function GetPayUserExpenseDebitList(userId, selectedMonth, selectedText, selecte
                 "data": "totalAmount",
                 "name": "TotalAmount",
                 "render": function (data, type, full, meta) {
-                    var color = full.account.toLowerCase() === "credit" ? "red" : "green";
-                    return '<span style="color: ' + color + ';">' + '₹' + data + '</span>';
+                    var color = full.account && full.account.toLowerCase() === "debit" ? "green" : "red";
+                    var formattedData = parseFloat(data).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                    return '<span style="color: ' + color + ';">' + '₹' + formattedData + '</span>';
                 }
             }
         ],
@@ -719,6 +720,17 @@ function GetPayUserExpenseDebitList(userId, selectedMonth, selectedText, selecte
                         i : 0;
             };
 
+            function intVal(i) {
+                return typeof i === 'string' ?
+                    i.replace(/[\$,]/g, '') * 1 :
+                    typeof i === 'number' ?
+                        i : 0;
+            }
+
+            function formatNumber(number) {
+                return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+            }
+
             var total = api
                 .column(4)
                 .data()
@@ -740,7 +752,7 @@ function GetPayUserExpenseDebitList(userId, selectedMonth, selectedText, selecte
                         $('#monthlyPendingExpenseFooter').show();
 
                         $cumulativePendingFooterCell.html(
-                            '<span style="color: black;">Last Month Pending:  ₹' + monthlyData.cumulativePending.toFixed(2) + '</span>'
+                            '<span style="color: black;">Last Month Pending: ₹' + formatNumber(monthlyData.cumulativePending.toFixed(2)) + '</span>'
                         );
                     }
                 });
@@ -754,7 +766,7 @@ function GetPayUserExpenseDebitList(userId, selectedMonth, selectedText, selecte
             var $totalFooterCell = $totalFooterRow.find('th').last();
 
             $totalFooterCell.html(
-                '<span style="color: black;">Total: ₹' + total.toFixed(2) + '</span>'
+                '<span style="color: black;">Total: ₹' + formatNumber(total.toFixed(2)) + '</span>'
             );
         }
     });
@@ -807,9 +819,32 @@ function UserExpensesDetails() {
                     return getCommonDateformat(data);
                 }
             },
-            { "data": "unapprovedPendingAmount", "name": "UnapprovedPendingAmount" },
-            { "data": "totalPendingAmount", "name": "TotalPendingAmount" },
-            { "data": "totalAmount", "name": "TotalAmount" },
+
+            {
+                "data": "unapprovedPendingAmount", "name": "UnapprovedPendingAmount", "render": function (data, type, full, meta) {
+                    function formatNumberWithCommas(number) {
+                        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    }
+                    return '₹' + formatNumberWithCommas(data);
+                }
+            },
+            {
+                "data": "totalPendingAmount", "name": "TotalPendingAmount", "render": function (data, type, full, meta) {
+                    function formatNumberWithCommas(number) {
+                        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    }
+                    return '₹' + formatNumberWithCommas(data);
+                }
+            },
+            {
+                "data": "totalAmount", "name": "TotalAmount", "render": function (data, type, full, meta) {
+                    function formatNumberWithCommas(number) {
+                        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    }
+                    return '₹' + formatNumberWithCommas(data);
+                }
+            }
+
         ],
         columnDefs: [{
             "defaultContent": "",
@@ -917,8 +952,9 @@ function DisplayUserBetweenDateExpenseList(startDate, endDate) {
                 "data": "totalAmount",
                 "name": "TotalAmount",
                 "render": function (data, type, full, meta) {
-                    var color = full.account && full.account.toLowerCase() === "credit" ? "green" : "red";
-                    return '<span style="color: ' + color + ';">' + '₹' + data + '</span>';
+                    var color = full.account && full.account.toLowerCase() === "debit" ? "green" : "red";
+                    var formattedData = parseFloat(data).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                    return '<span style="color: ' + color + ';">' + '₹' + formattedData + '</span>';
                 }
             },
 
@@ -1033,10 +1069,18 @@ function DisplayAllUserExpenseList() {
                 "data": "totalAmount",
                 "name": "TotalAmount",
                 "render": function (data, type, full, meta) {
+                    function formatNumberWithCommas(number) {
+                        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    }
+
                     var color = full.account && full.account.toLowerCase() === "credit" ? "green" : "red";
-                    return '<span style="color: ' + color + ';">' + '₹' + data + '</span>';
+
+                    var formattedAmount = '₹ ' + formatNumberWithCommas(data);
+
+                    return '<span style="color: ' + color + ';">' + formattedAmount + '</span>';
                 }
             },
+
 
         ],
         scrollY: 400,
@@ -1113,8 +1157,15 @@ function DisplayUnApprovedExpenseList() {
                 "data": "totalAmount",
                 "name": "TotalAmount",
                 "render": function (data, type, full, meta) {
+                    function formatNumberWithCommas(number) {
+                        if (typeof number === 'number') {
+                            return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                        }
+                        return number;
+                    }
                     var color = full.account && full.account.toLowerCase() === "credit" ? "green" : "red";
-                    return '<span style="color: ' + color + ';">' + '₹' + data + '</span>';
+                    var formattedAmount = '₹ ' + formatNumberWithCommas(parseFloat(data));
+                    return '<span style="color: ' + color + ';">' + formattedAmount + '</span>';
                 }
             },
             { "data": "account", "name": "Account", "visible": false },
@@ -1191,8 +1242,15 @@ function DisplayAllApprovedExpenseList() {
                 "data": "totalAmount",
                 "name": "TotalAmount",
                 "render": function (data, type, full, meta) {
+                    function formatNumberWithCommas(number) {
+                        if (typeof number === 'number') {
+                            return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                        }
+                        return number;
+                    }
                     var color = full.account && full.account.toLowerCase() === "credit" ? "green" : "red";
-                    return '<span style="color: ' + color + ';">' + '₹' + data + '</span>';
+                    var formattedAmount = '₹ ' + formatNumberWithCommas(parseFloat(data));
+                    return '<span style="color: ' + color + ';">' + formattedAmount + '</span>';
                 }
             },
             { "data": "account", "name": "Account", "visible": false },
@@ -1318,10 +1376,16 @@ function DisplayAllExpenseList(tableId) {
                 }
             },
             {
-                data: "totalAmount", name: "TotalAmount", className: "text-center",
+                data: "totalAmount",
+                name: "TotalAmount",
+                className: "text-center",
                 render: function (data, type, full) {
+                    function formatNumberWithCommas(number) {
+                        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    }
+                    var formattedData = formatNumberWithCommas(parseFloat(data));
                     var color = full.account && full.account.toLowerCase() === "credit" ? "green" : "red";
-                    return `<span style="color: ${color};">₹${data}</span>`;
+                    return `<span style="color: ${color};">₹ ${formattedData}</span>`;
                 }
             },
             { data: "account", name: "Account", className: "text-center" },
@@ -1399,10 +1463,16 @@ function DisplayAllUnApproveExpenseDetails(tableId) {
                 }
             },
             {
-                data: "totalAmount", name: "TotalAmount", className: "text-center",
+                data: "totalAmount",
+                name: "TotalAmount",
+                className: "text-center",
                 render: function (data, type, full) {
+                    function formatNumberWithCommas(number) {
+                        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    }
+                    var formattedData = formatNumberWithCommas(parseFloat(data));
                     var color = full.account && full.account.toLowerCase() === "credit" ? "green" : "red";
-                    return `<span style="color: ${color};">₹${data}</span>`;
+                    return `<span style="color: ${color};">₹ ${formattedData}</span>`;
                 }
             },
             { data: "account", name: "Account", className: "text-center" },
@@ -1479,10 +1549,16 @@ function DisplayAllTodayExpenseDetails(tableId) {
                 }
             },
             {
-                data: "totalAmount", name: "TotalAmount", className: "text-center",
+                data: "totalAmount",
+                name: "TotalAmount",
+                className: "text-center",
                 render: function (data, type, full) {
+                    function formatNumberWithCommas(number) {
+                        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    }
+                    var formattedData = formatNumberWithCommas(parseFloat(data));
                     var color = full.account && full.account.toLowerCase() === "credit" ? "green" : "red";
-                    return `<span style="color: ${color};">₹${data}</span>`;
+                    return `<span style="color: ${color};">₹ ${formattedData}</span>`;
                 }
             },
             { data: "account", name: "Account", className: "text-center" },
@@ -1510,17 +1586,21 @@ function DisplayAllTodayExpenseDetails(tableId) {
                     typeof i === 'number' ?
                         i : 0;
             };
-
-            total = api
+            function formatNumberWithCommas(number) {
+                return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            }
+            var total = api
                 .column(5)
                 .data()
                 .reduce(function (a, b) {
                     return intVal(a) + intVal(b);
                 }, 0);
+            var formattedTotal = '₹' + formatNumberWithCommas(total.toFixed(2));
 
             $(api.column(5).footer()).html(
-                '<span style="color: black;">Total: ' + '₹' + total.toFixed(2) + '</span>'
+                '<span style="color: black;">Total: ' + formattedTotal + '</span>'
             );
+
         }
     });
 }
@@ -1555,13 +1635,15 @@ function GetExpenseTotalAmount() {
                 }
             });
 
-            $("#txttotalcreditamount").text('₹' + creditamount.toFixed(2));
-            $("#txtTotalAmount").text('₹' + debitamount.toFixed(2));
-
+            var formattedCreditAmount = creditamount.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            var formattedDebitAmount = debitamount.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
             var pendingAmount = debitamount - creditamount;
-            $("#pendingamount").text('₹' + pendingAmount.toFixed(2));
-            $("#txttotaldebitedamount").text('₹' + pendingAmount.toFixed(2));
+            var formattedPendingAmount = pendingAmount.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
+            $("#txttotalcreditamount").text('₹' + formattedCreditAmount);
+            $("#txtTotalAmount").text('₹' + formattedDebitAmount);
+            $("#pendingamount").text('₹' + formattedPendingAmount);
+            $("#txttotaldebitedamount").text('₹' + formattedPendingAmount);
             $('#txtcreditamount').on('input', function () {
                 var enteredAmount = parseFloat($(this).val());
                 if (!isNaN(enteredAmount)) {
@@ -1726,7 +1808,17 @@ function ApprovedExpenseList() {
                     return getCommonDateformat(data);
                 }
             },
-            { "data": "totalAmount", "name": "TotalAmount" },
+            {
+                "data": "totalAmount",
+                "name": "TotalAmount",
+                "render": function (data, type, full) {
+                    function formatNumberWithCommas(number) {
+                        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    }
+                    var formattedAmount = formatNumberWithCommas(parseFloat(data).toFixed(2));
+                    return formattedAmount;
+                }
+            },
             { "data": "account", "name": "Account" },
         ],
         columnDefs: [{
@@ -1822,7 +1914,17 @@ function UserDebitExpenseList(UserId) {
                     return getCommonDateformat(data);
                 }
             },
-            { "data": "totalAmount", "name": "TotalAmount" },
+            {
+                "data": "totalAmount",
+                "name": "TotalAmount",
+                "render": function (data, type, full) {
+                    function formatNumberWithCommas(number) {
+                        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    }
+                    var formattedAmount = formatNumberWithCommas(parseFloat(data).toFixed(2));
+                    return formattedAmount;
+                }
+            },
             { "data": "account", "name": "Account" },
         ],
         scrollY: 400,
@@ -1866,7 +1968,17 @@ function UserCreditExpenseList(UserId) {
                     return getCommonDateformat(data);
                 }
             },
-            { "data": "totalAmount", "name": "TotalAmount" },
+            {
+                "data": "totalAmount",
+                "name": "TotalAmount",
+                "render": function (data, type, full) {
+                    function formatNumberWithCommas(number) {
+                        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    }
+                    var formattedAmount = formatNumberWithCommas(parseFloat(data).toFixed(2));
+                    return formattedAmount;
+                }
+            },
             { "data": "account", "name": "Account" },
         ],
         scrollY: 400,
@@ -1975,8 +2087,12 @@ $(document).ready(function () {
                 "data": "totalAmount",
                 "name": "TotalAmount",
                 "render": function (data, type, full, meta) {
+                    function formatNumberWithCommas(number) {
+                        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    }
+                    var formattedAmount = '₹ ' + formatNumberWithCommas(parseFloat(data).toFixed(2));
                     var color = full.account && full.account.toLowerCase() === "credit" ? "green" : "red";
-                    return '<span style="color: ' + color + ';">' + '₹' + data + '</span>';
+                    return '<span style="color: ' + color + ';">' + formattedAmount + '</span>';
                 }
             },
         ];
@@ -2112,10 +2228,12 @@ function GetUserAllExpenseDetails() {
                 name: "TotalAmount",
                 render: function (data, type, full, meta) {
                     var color = full.account.toLowerCase() === "credit" ? "green" : "red";
-                    return '<span style="color: ' + color + ';">' + '₹' + data + '</span>';
+                    var formattedData = parseFloat(data).toLocaleString('en-IN');
+                    return '<span style="color: ' + color + ';">' + '₹' + formattedData + '</span>';
                 },
                 width: "20%"
-            },
+            }
+
 
         ],
         scrollY: 400,
@@ -2141,16 +2259,17 @@ function GetUserAllExpenseDetails() {
                         i : 0;
             };
 
-            total = api
+            var total = api
                 .column(4)
                 .data()
                 .reduce(function (a, b) {
                     return intVal(a) + intVal(b);
                 }, 0);
-
+            var formattedTotal = total.toLocaleString('en-IN', { style: 'currency', currency: 'INR' });
             $(api.column(4).footer()).html(
-                '<span style="color: black;">Total: ' + '₹' + total.toFixed(2) + '</span>'
+                '<span style="color: black;">Total: ' + formattedTotal + '</span>'
             );
+
         }
     });
 }
@@ -2216,7 +2335,8 @@ function GetAllUserApproveExpenseList() {
                 "name": "TotalAmount",
                 "render": function (data, type, full, meta) {
                     var color = full.account && full.account.toLowerCase() === "credit" ? "green" : "red";
-                    return '<span style="color: ' + color + ';">' + '₹' + data + '</span>';
+                    var formattedData = parseFloat(data).toLocaleString('en-IN');
+                    return '<span style="color: ' + color + ';">' + '₹' + formattedData + '</span>';
                 }
             },
         ],
@@ -2243,15 +2363,15 @@ function GetAllUserApproveExpenseList() {
                         i : 0;
             };
 
-            total = api
+            var total = api
                 .column(4)
                 .data()
                 .reduce(function (a, b) {
                     return intVal(a) + intVal(b);
                 }, 0);
-
+            var formattedTotal = total.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
             $(api.column(4).footer()).html(
-                '<span style="color: black;">Total: ' + '₹' + total.toFixed(2) + '</span>'
+                '<span style="color: black;">Total: ' + '₹' + formattedTotal + '</span>'
             );
         }
     });
@@ -2316,9 +2436,9 @@ function GetAllUserCreditExpenseList() {
                 "data": "totalAmount",
                 "name": "TotalAmount",
                 "render": function (data, type, full, meta) {
-
-                    var color = full.account.toLowerCase() === "credit" ? "green" : "red";
-                    return '<span style="color: ' + color + ';">' + '₹' + data + '</span>';
+                    var color = full.account && full.account.toLowerCase() === "credit" ? "green" : "red";
+                    var formattedData = parseFloat(data).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                    return '<span style="color: ' + color + ';">' + '₹' + formattedData + '</span>';
                 }
             },
         ],
@@ -2345,15 +2465,15 @@ function GetAllUserCreditExpenseList() {
                         i : 0;
             };
 
-            total = api
+            var total = api
                 .column(4)
                 .data()
                 .reduce(function (a, b) {
                     return intVal(a) + intVal(b);
                 }, 0);
-
+            var formattedTotal = total.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
             $(api.column(4).footer()).html(
-                '<span style="color: black;">Total: ' + '₹' + total.toFixed(2) + '</span>'
+                '<span style="color: black;">Total: ' + '₹' + formattedTotal + '</span>'
             );
         }
     });
@@ -2418,7 +2538,8 @@ function GetUserLastMonthExpenseList() {
                 "name": "TotalAmount",
                 "render": function (data, type, full, meta) {
                     var color = full.account && full.account.toLowerCase() === "credit" ? "green" : "red";
-                    return '<span style="color: ' + color + ';">' + '₹' + data + '</span>';
+                    var formattedData = parseFloat(data).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                    return '<span style="color: ' + color + ';">' + '₹' + formattedData + '</span>';
                 }
             },
         ],
@@ -2445,15 +2566,15 @@ function GetUserLastMonthExpenseList() {
                         i : 0;
             };
 
-            total = api
+            var total = api
                 .column(4)
                 .data()
                 .reduce(function (a, b) {
                     return intVal(a) + intVal(b);
                 }, 0);
-
+            var formattedTotal = total.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
             $(api.column(4).footer()).html(
-                '<span style="color: black;">Total: ' + '₹' + total.toFixed(2) + '</span>'
+                '<span style="color: black;">Total: ' + '₹' + formattedTotal + '</span>'
             );
         }
     });
@@ -2517,8 +2638,9 @@ function GetUserCurrentMonthExpenseList() {
                 "data": "totalAmount",
                 "name": "TotalAmount",
                 "render": function (data, type, full, meta) {
-                    var color = full.account.toLowerCase() === "debit" ? "green" : "red";
-                    return '<span style="color: ' + color + ';">' + '₹' + data + '</span>';
+                    var color = full.account && full.account.toLowerCase() === "credit" ? "green" : "red";
+                    var formattedData = parseFloat(data).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                    return '<span style="color: ' + color + ';">' + '₹' + formattedData + '</span>';
                 }
             },
         ],
@@ -2545,15 +2667,15 @@ function GetUserCurrentMonthExpenseList() {
                         i : 0;
             };
 
-            total = api
+            var total = api
                 .column(4)
                 .data()
                 .reduce(function (a, b) {
                     return intVal(a) + intVal(b);
                 }, 0);
-
+            var formattedTotal = total.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
             $(api.column(4).footer()).html(
-                '<span style="color: black;">Total: ' + '₹' + total.toFixed(2) + '</span>'
+                '<span style="color: black;">Total: ' + '₹' + formattedTotal + '</span>'
             );
         }
     });
@@ -2633,7 +2755,8 @@ function GetUserBetweenMonthsExpenseList(StartDate, EndDate, UserId) {
                 "name": "TotalAmount",
                 "render": function (data, type, full, meta) {
                     var color = full.account && full.account.toLowerCase() === "credit" ? "green" : "red";
-                    return '<span style="color: ' + color + ';">' + '₹' + data + '</span>';
+                    var formattedData = parseFloat(data).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                    return '<span style="color: ' + color + ';">' + '₹' + formattedData + '</span>';
                 }
             },
         ],
@@ -2660,15 +2783,15 @@ function GetUserBetweenMonthsExpenseList(StartDate, EndDate, UserId) {
                         i : 0;
             };
 
-            total = api
+            var total = api
                 .column(4)
                 .data()
                 .reduce(function (a, b) {
                     return intVal(a) + intVal(b);
                 }, 0);
-
+            var formattedTotal = total.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
             $(api.column(4).footer()).html(
-                '<span style="color: black;">Total: ' + '₹' + total.toFixed(2) + '</span>'
+                '<span style="color: black;">Total: ' + '₹' + formattedTotal + '</span>'
             );
         }
     });

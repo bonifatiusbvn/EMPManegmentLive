@@ -312,7 +312,17 @@ $(document).ready(function () {
             },
             { "data": "vendorName", "name": "VendorName", "className": "text-center" },
             { "data": "projectName", "name": "ProjectName", "className": "text-center" },
-            { "data": "totalAmount", "name": "TotalAmount", "className": "text-center" }
+            {
+                "data": "totalAmount",
+                "name": "TotalAmount",
+                "className": "text-center",
+                "render": function (data, type, full) {
+                    function formatNumberWithCommas(number) {
+                        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    }
+                    return '₹' + formatNumberWithCommas(data);
+                }
+            }
         ];
 
         if (canEdit || canDelete) {
@@ -902,3 +912,28 @@ function fn_PrintInvoicePage() {
     document.body.innerHTML = originalContents;
     window.print();
 }
+
+
+$(document).ready(function () {
+    function formatWithCommas(value) {
+        return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+    function updateInvoiceTotals() {
+        const totalProductPrice = document.getElementById("TotalProductPrice").textContent;
+        const totalProductGST = document.getElementById("TotalProductGST").textContent;
+        const totalProductAmount = document.getElementById("TotalProductAmount").textContent;
+        const cartSubtotal = document.getElementById("cart-subtotal").value;
+        const totalGst = document.getElementById("totalgst").value;
+        const cartTotal = document.getElementById("cart-total").value;
+
+        document.getElementById("TotalProductPrice").textContent = formatWithCommas(totalProductPrice);
+        document.getElementById("TotalProductGST").textContent = formatWithCommas(totalProductGST);
+        document.getElementById("TotalProductAmount").textContent = formatWithCommas(totalProductAmount);
+        document.getElementById("cart-subtotal").value = formatWithCommas(cartSubtotal);
+        document.getElementById("totalgst").value = formatWithCommas(totalGst);
+        document.getElementById("cart-total").value = formatWithCommas(cartTotal);
+    }
+
+    updateInvoiceTotals();
+});
