@@ -85,10 +85,10 @@
                                         </div>
                                     </div>
                                 </td>
-                                <td class="border">@ProductAmount?.ToString("F2")</td>
+                                <td class="border">@(ProductAmount?.ToString("N2") ?? "0.00")</td>
                                 <td class="border">@item.Quantity</td>
-                                <td class="border">@ProductGst?.ToString("F2")</td>
-                                <td class="border">@ProductTotalAmount?.ToString("F2")</td>
+                                <td class="border">@(ProductGst?.ToString("N2") ?? "0.00")</td>
+                                <td class="border">@(ProductTotalAmount?.ToString("N2") ?? "0.00")</td>
                             </tr>
                             subtotal += ProductAmount;
                             totalGst += ProductGst;
@@ -101,15 +101,15 @@
                                     <tbody>
                                         <tr>
                                             <td class="border">Sub Total :</td>
-                                            <td class="border" id="subtotal">₹@subtotal?.ToString("F2")</td>
+                                            <td class="border" id="subtotal">₹@(subtotal?.ToString("N2") ?? "0.00")</td>
                                         </tr>
                                         <tr>
                                             <td class="border">GST :</td>
-                                            <td class="border" id="totalGst">₹@totalGst?.ToString("F2")</td>
+                                            <td class="border" id="totalGst">₹@(totalGst?.ToString("N2") ?? "0.00")</td>
                                         </tr>
                                         <tr class="border-top border-top-dashed">
                                             <th class="border">Total :</th>
-                                            <th class="border" id="total">₹@totalAmount?.ToString("F2")</th>
+                                            <th class="border" id="total">₹@(totalAmount?.ToString("N2") ?? "0.00")</th>
                                         </tr>
                                     </tbody>
                                 </table>

@@ -176,7 +176,8 @@ function fn_updatePRProductAmount() {
         var Amount = subtotal * totalquantity;
         var TotalAmount = totalGstamount + Amount;
 
-        row.find("#dsptotalAmount").text('₹' + TotalAmount.toFixed(2));
+         var formattedTotalAmount = TotalAmount.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        row.find("#dsptotalAmount").text('₹' + formattedTotalAmount);
 
     });
     fn_updatePRTotals();

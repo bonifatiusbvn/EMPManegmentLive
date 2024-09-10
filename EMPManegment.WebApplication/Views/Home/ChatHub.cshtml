@@ -38,14 +38,12 @@
     <script>
 
         var connection = new signalR.HubConnectionBuilder().withUrl("http://192.168.0.126/chat").build();
-        debugger
         connection.start().catch(function (err) {
             return console.error(err.toString())
 
         });
 
         document.getElementById("sendmessage").addEventListener("click", function (event) {
-            debugger
             var user = document.getElementById("displayname").value;
             var message = document.getElementById("message").value;
 
@@ -57,7 +55,6 @@
         });
 
         connection.on("ReceiveMessage", function (user, message) {
-            debugger
             var encodeMsg = user + " says: " + message;
             var li = document.createElement("li");
             li.textContent = encodeMsg;
