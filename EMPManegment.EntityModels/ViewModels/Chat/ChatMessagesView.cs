@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EMPManegment.EntityModels.ViewModels.TaskModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -32,5 +33,11 @@ namespace EMPManegment.EntityModels.ViewModels.Chat
         public Guid MyUserId { get; set; }
         public Guid SelectedUserId { get; set; }
         public string? MyUserIdentity { get; set; }
+    }
+
+    public class AllNotificationModel
+    {
+        public List<ChatMessagesView>? Messages { get; set; }
+        public List<TaskDetailsView>? Tasks { get; set; }
     }
 }

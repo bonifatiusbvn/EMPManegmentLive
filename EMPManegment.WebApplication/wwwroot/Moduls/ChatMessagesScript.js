@@ -1,5 +1,6 @@
 ﻿
 GetChateMembes();
+GetAllNotifications();
 function GetChateMembes() {
     $.ajax({
         url: '/Home/GetChateMembes',
@@ -25,15 +26,9 @@ function GetConversation(conversationId) {
     });
 }
 
-function fn_SendMessage() {
+function fn_SendMessage(ChatData) {
     event.preventDefault();
     var ConversationId = $('#txtChatConversationId').val();
-    var ChatData = {
-        UserId: $('#txtChatUserId').val(),
-        UserName: $('#txtChatUserName').val(),
-        MessageText: $('#txtChatMessage').val(),
-        ConversationId: $('#txtChatConversationId').val(),
-    }
 
     $.ajax({
         url: '/Home/SendMessage',
@@ -215,5 +210,30 @@ function GetUserForChat(selectedUserId) {
             var conversationId = $('#txtChatConversationId').val();
             GetConversation(conversationId);
         }
+    });
+}
+
+function GetNewMessageNotifications() {
+    $.ajax({
+        url: '/Home/GetUserNewMessagesNotification',
+        type: 'GET',
+        datatype: 'html',
+        success: function (result) {
+            $("#userNewMessageNotificationId").html(result);
+        }
+    });
+}
+
+function GetAllNotifications() {
+    $.ajax({
+        url: '/Home/GetUserAllNotifications',
+        type: 'GET', 
+        dataType: 'html',  
+        complete: function (Result) {
+            $('#userAllNotificationId').html(Result.responseText);    
+            var totalcount = $('#totalNotificationCount').val();
+            $('#CountAllNotification').text(totalcount);
+            $('#CountAllNewNotification').text(totalcount);
+        },
     });
 }

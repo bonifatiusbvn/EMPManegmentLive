@@ -170,8 +170,10 @@
                                     </form>
                                 </div>
                             </div>
-                        </div>
+                            <!-- end chat-conversation -->
 
+
+                        </div>
                     </div>
                 </div>
             </div>
@@ -190,5 +192,38 @@
     </div>
     <!--end offcanvas-body-->
 </div>
+<script type="text/javascript">
+    window.onload = function () {
+        var connection = new signalR.HubConnectionBuilder()
+            .withUrl("http://192.168.0.126/chat")
+            .build();
+
+        document.getElementById("sendmessage").addEventListener("click", function (event) {
+            event.preventDefault();
+
+            var userId = document.getElementById("txtChatUserId").value;
+            var userName = document.getElementById("txtChatUserName").value;
+            var message = document.getElementById("txtChatMessage").value;
+            var conversationId = document.getElementById("txtChatConversationId").value;
+
+            if (message.trim() === "") {
+                return;
+            }
+
+            connection.invoke("SendMessageToUser", userId, userName, message, conversationId).catch(function (err) {
+                return err;
+            });
+
+            var ChatData = {
+                UserId: userId,
+                UserName: userName,
+                MessageText: message,
+                ConversationId: conversationId,
+            }
+
+            fn_SendMessage(ChatData);
+        });
+    };
+</script>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/moduls/chatmessagesscript.js"></script>

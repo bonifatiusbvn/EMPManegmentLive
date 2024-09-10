@@ -466,5 +466,21 @@ namespace EMPManagment.API.Controllers
             IEnumerable<ChatMessagesView> conversation = await HomeServices.CheckUserConversationId(newChatMessage);
             return Ok(new { code = (int)HttpStatusCode.OK, data = conversation.ToList() });
         }
+
+        [HttpGet]
+        [Route("GetUsersNewMessageList")]
+        public async Task<IActionResult> GetUsersNewMessageList(Guid userId)
+        {
+            IEnumerable<ChatMessagesView> messages = await HomeServices.GetUsersNewMessageList(userId);
+            return Ok(new { code = (int)HttpStatusCode.OK, data = messages.ToList() });
+        }
+
+        [HttpGet]
+        [Route("GetUsersAllNotificationList")]
+        public async Task<IActionResult> GetUsersAllNotificationList(Guid userId)
+        {
+            var allNotification = await HomeServices.GetUsersAllNotificationList(userId);
+            return Ok(new { code = 200, data = allNotification });
+        }
     }
 }

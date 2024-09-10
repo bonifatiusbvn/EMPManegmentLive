@@ -8,6 +8,7 @@ using Azure;
 using EMPManagment.API;
 using EMPManegment.EntityModels.ViewModels.Chat;
 using EMPManegment.EntityModels.ViewModels.Models;
+using EMPManegment.EntityModels.ViewModels.TaskModels;
 using EMPManegment.Inretface.Interface.Home;
 using Microsoft.EntityFrameworkCore;
 
@@ -212,6 +213,95 @@ namespace EMPManegment.Repository.Home
                 }
             }
             return messages;
+        }
+
+        public async Task<IEnumerable<ChatMessagesView>> GetUsersNewMessageList(Guid userId)
+        {
+            var result = await(from cm in Context.TblChatMessages
+                               join user in Context.TblUsers on cm.UserId equals user.Id
+                               where Context.TblChatMessages
+                                   .Where(innerCm => innerCm.UserId == userId && innerCm.IsRead == false)
+                                   .Select(innerCm => innerCm.ConversationId)
+                                   .Distinct()
+                                   .Contains(cm.ConversationId)
+                                 && cm.UserId != userId
+                               group new { cm, user } by new { cm.UserId, user.FirstName, user.LastName, user.Image, cm.ConversationId } into g
+                               select new ChatMessagesView
+                               {
+                                   UserId = g.Key.UserId,
+                                   ConversationId = g.Key.ConversationId,
+                                   UserImage = g.Key.Image,
+                                   UserName = g.Key.FirstName + " " + g.Key.LastName,
+                                   SentDateTime = g.Max(x => x.cm.SentDateTime),
+                                   MessageText = g.OrderByDescending(x => x.cm.SentDateTime).FirstOrDefault().cm.MessageText
+                               })
+                            .OrderByDescending(x => x.SentDateTime)
+                            .ToListAsync();
+
+            return result;
+        }
+
+        public async Task<AllNotificationModel> GetUsersAllNotificationList(Guid userId)
+        {
+            var allnotifications = new AllNotificationModel();
+
+            try
+            {
+                var chatMessagesQuery = from a in Context.TblChatMessages
+                                        join user in Context.TblUsers on a.UserId equals user.Id
+                                        where Context.TblChatMessages
+                                            .Where(innerCm => innerCm.UserId == userId && innerCm.IsRead != true)
+                                            .Select(innerCm => innerCm.ConversationId)
+                                            .Distinct()
+                                            .Contains(a.ConversationId)
+                                          && a.UserId != userId
+                                        group new { a, user } by new { a.UserId, user.FirstName, user.LastName, user.Image, a.ConversationId } into g
+                                        select new ChatMessagesView
+                                        {
+                                            UserId = g.Key.UserId,
+                                            ConversationId = g.Key.ConversationId,
+                                            UserImage = g.Key.Image,
+                                            UserName = $"{g.Key.FirstName} {g.Key.LastName}",
+                                            SentDateTime = g.Max(x => x.a.SentDateTime),
+                                            MessageText = g.OrderByDescending(x => x.a.SentDateTime).FirstOrDefault().a.MessageText
+                                        };
+
+                allnotifications.Messages = await chatMessagesQuery
+                                              .OrderByDescending(x => x.SentDateTime)
+                                              .ToListAsync();
+
+                var tasksQuery = from a in Context.TblTaskDetails
+                                 join b in Context.TblUsers on a.UserId equals b.Id
+                                 join c in Context.TblTaskMasters on a.TaskType equals c.Id
+                                 where a.UserId == userId
+                                 orderby a.UpdatedOn
+                                 select new TaskDetailsView
+                                 {
+                                     Id = a.Id,
+                                     UserId = b.Id,
+                                     TaskType = a.TaskType,
+                                     TaskStatus = a.TaskStatus,
+                                     TaskDate = a.TaskDate,
+                                     TaskDetails = a.TaskDetails,
+                                     TaskEndDate = a.TaskEndDate,
+                                     TaskTitle = a.TaskTitle,
+                                     UserProfile = b.Image,
+                                     UserName = b.UserName,
+                                     FirstName = b.FirstName,
+                                     LastName = b.LastName,
+                                     TaskTypeName = c.TaskType,
+                                     CreatedBy = a.CreatedBy,
+                                     UpdatedOn = a.UpdatedOn
+                                 };
+
+                allnotifications.Tasks = await tasksQuery.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            return allnotifications;
         }
     }
 }
