@@ -728,8 +728,7 @@ function fn_InsertPurchaseOrderDetails() {
             }
         }
     }
-    else
-    {
+    else {
         toastr.warning("Kindly fill all data fields");
     }
 }
@@ -774,4 +773,29 @@ $("#pendingactive").click(function () {
 $("#returnsactive").click(function () {
     $("#status-returns").show();
     $("#dvdeliveredstatus").hide();
+});
+
+
+$(document).ready(function () {
+    function formatWithCommas(value) {
+        return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+    function updateTotals() {
+        const totalProductPrice = document.getElementById("TotalProductPrice").textContent;
+        const totalProductGST = document.getElementById("TotalProductGST").textContent;
+        const totalProductAmount = document.getElementById("TotalProductAmount").textContent;
+        const cartSubtotal = document.getElementById("cart-subtotal").value;
+        const totalGst = document.getElementById("totalgst").value;
+        const cartTotal = document.getElementById("cart-total").value;
+
+        document.getElementById("TotalProductPrice").textContent = formatWithCommas(totalProductPrice);
+        document.getElementById("TotalProductGST").textContent = formatWithCommas(totalProductGST);
+        document.getElementById("TotalProductAmount").textContent = formatWithCommas(totalProductAmount);
+        document.getElementById("cart-subtotal").value = formatWithCommas(cartSubtotal);
+        document.getElementById("totalgst").value = formatWithCommas(totalGst);
+        document.getElementById("cart-total").value = formatWithCommas(cartTotal);
+    }
+
+    updateTotals();
 });

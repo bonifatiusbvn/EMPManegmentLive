@@ -273,7 +273,7 @@
                                 <td class="border">@totalqty</td>
                                 <td class="border"></td>
                                 <td class="border"></td>
-                                <td class="border"><b>₹@firstItem.TotalAmount</b></td>
+                                <td class="border"><b>₹@(firstItem.TotalAmount?.ToString("N2") ?? "0.00")</b></td>
                             </tr>
                         </tbody>
                     </table><!--end table-->
@@ -325,31 +325,31 @@
                             }
                             @foreach (var item in Model.InvoiceDetails)
                             {
-                                subTotal = (item.Quantity * item.PerUnitPrice);
+                                subTotal = Math.Round(item.Quantity * (item.PerUnitPrice ?? 0), 2);
                                 TotalofSubtotal += subTotal;
                                 StateTaxPer = (item.GstPer / 2);
-                                StateTax = (item.PerUnitPrice * StateTaxPer / 100);
+                                StateTax = Math.Round((item.PerUnitPrice ?? 0) * (StateTaxPer ?? 0) / 100, 2);
                                 CenteralTaxPer = (item.GstPer / 2);
-                                CenteralTax = (item.PerUnitPrice * CenteralTaxPer / 100);
+                                CenteralTax = Math.Round((item.PerUnitPrice ?? 0) * (CenteralTaxPer ?? 0) / 100, 2);
                                 IntegratedTaxPer = (item.Igst);
-                                IntegratedTax = (item.PerUnitPrice * item.Igst / 100);
+                                IntegratedTax = Math.Round((item.PerUnitPrice ?? 0) * (item.Igst ?? 0) / 100, 2);
                                 TotalCenteralTax += CenteralTax;
                                 TotalStateTax += StateTax;
                                 TotalIntegratedTax += IntegratedTax;
                                 TotalGSTAmount = TotalCenteralTax + TotalStateTax + TotalIntegratedTax;
                                 <tr>
                                     <td class="border">@item.Hsn</td>
-                                    <td class="border">₹@subTotal</td>
+                                    <td class="border">₹@(subTotal.HasValue ? subTotal.Value.ToString("N2") : "0.00")</td>
                                     <td class="border">@CenteralTaxPer%</td>
-                                    <td class="border">@CenteralTax</td>
+                                    <td class="border">₹@(CenteralTax.HasValue ? CenteralTax.Value.ToString("N2") : "0.00")</td>
                                     <td class="border">@StateTaxPer%</td>
-                                    <td class="border">@StateTax</td>
+                                    <td class="border">₹@(StateTax.HasValue ? StateTax.Value.ToString("N2") : "0.00")</td>
                                     @if (Model.InvoiceDetails.Count > 1 && Model.InvoiceDetails.Any(a => a.Igst > 0))
                                     {
-                                        @if (item.Igst != 0)
+                                        @if (item.Igst.HasValue && item.Igst.Value != 0)
                                         {
                                             <td class="border">@IntegratedTaxPer%</td>
-                                            <td class="border">@IntegratedTax</td>
+                                            <td class="border">₹@(IntegratedTax.HasValue ? IntegratedTax.Value.ToString("N2") : "0.00")</td>
                                         }
                                         else
                                         {
@@ -359,30 +359,31 @@
                                     }
                                     else
                                     {
-                                        @if (item.Igst != 0)
+                                        @if (item.Igst.HasValue && item.Igst.Value != 0)
                                         {
                                             <td class="border">@IntegratedTaxPer%</td>
-                                            <td class="border">@IntegratedTax</td>
+                                            <td class="border">₹@(IntegratedTax.HasValue ? IntegratedTax.Value.ToString("N2") : "0.00")</td>
                                         }
                                     }
-                                    <td class="border"><b>₹@item.GstAmount?.ToString("0.00")</b></td>
+                                    <td class="border"><b>₹@(item.GstAmount.HasValue ? item.GstAmount.Value.ToString("N2") : "0.00")</b></td>
                                 </tr>
                                 Index++;
                             }
                             <tr>
                                 <td class="text-end border">Total</td>
-                                <td class="border"><b>₹@TotalofSubtotal</b></td>
+                                <td class="border"><b>₹@(TotalofSubtotal?.ToString("N2") ?? "0.00")</b></td>
                                 <td class="border"></td>
-                                <td class="border"><b>@TotalCenteralTax</b></td>
+                                <td class="border"><b>@(TotalCenteralTax?.ToString("N2") ?? "0.00")</b></td>
                                 <td class="border"></td>
-                                <td class="border"><b>@TotalStateTax</b></td>
+                                <td class="border"><b>@(TotalStateTax?.ToString("N2") ?? "0.00")</b></td>
                                 @if (firstItem.InvoiceDetails.Any(a => a.Igst > 0))
                                 {
                                     <td class="border"></td>
-                                    <td class="border"><b>@TotalIntegratedTax</b></td>
+                                    <td class="border"><b>@(TotalIntegratedTax?.ToString("N2") ?? "0.00")</b></td>
                                 }
-                                <td class="border"><b>₹@TotalGSTAmount</b></td>
+                                <td class="border"><b>₹@(TotalGSTAmount?.ToString("N2") ?? "0.00")</b></td>
                             </tr>
+
                         </tbody>
                     </table><!--end table-->
                     <div class="flex-grow-1 col-12" style="border: 1px solid lightgray;">

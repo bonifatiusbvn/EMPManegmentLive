@@ -8,38 +8,37 @@
 @foreach (var item in Model)
 {
     var imageUrl = !string.IsNullOrEmpty(item.UserImage) ? Url.Content($"~/{item.UserImage}") : null;
-    var initials = !string.IsNullOrEmpty(item.UserName) ? string.Concat(item.UserName.Split(' ').Select(name => name[0])).ToUpper(): null;
+    var initials = !string.IsNullOrEmpty(item.UserName) ? string.Concat(item.UserName.Split(' ').Select(name => name[0])).ToUpper() : null;
     <div class="text-reset notification-item d-block dropdown-item">
+        <input type="text" id="textchatsessionUserId" value="@_userSession.UserId" hidden />
         <div class="d-flex">
-            @if (!string.IsNullOrEmpty(imageUrl))
-            {
-                <img src="@imageUrl" class="me-3 rounded-circle avatar-xs" alt="user-pic">
-            }
-            else
-            {
-                <div class="flex-shrink-0 avatar-xs me-2">
-                    <div class="avatar-title bg-success-subtle text-success rounded-circle fs-13" style="height:40px;width:40px;">@initials</div>
-                </div>
-            }
-         
-            <div class="flex-grow-1">
-                <a href="#!" class="stretched-link">
+            <a href="javascript:void(0);" class="d-flex align-items-center chat-link" data-user-id="@item.UserId" onclick="openchatfromNotification('@item.UserId');">
+                @if (!string.IsNullOrEmpty(imageUrl))
+                {
+                    <img src="@imageUrl" class="me-3 rounded-circle avatar-xs" alt="user-pic" />
+                }
+                else
+                {
+                    <div class="flex-shrink-0 avatar-xs me-2">
+                        <div class="avatar-title bg-success-subtle text-success rounded-circle fs-13" style="height:40px;width:40px;">@initials</div>
+                    </div>
+                }
+                <div class="flex-grow-1">
                     <h6 class="mt-0 mb-1 fs-13 fw-semibold">@item.UserName</h6>
-                </a>
-                <div class="fs-13 text-muted">
-                    <p class="mb-1">@item.MessageText</p>
+                    <div class="fs-13 text-muted">
+                        <p class="mb-1">@item.MessageText</p>
+                    </div>
+                    <p class="mb-0 fs-11 fw-medium text-uppercase text-muted">
+                        <span><i class="mdi mdi-clock-outline"></i> @item.SentDateTime</span>
+                    </p>
                 </div>
-                <p class="mb-0 fs-11 fw-medium text-uppercase text-muted">
-                    <span><i class="mdi mdi-clock-outline"></i> @item.SentDateTime</span>
-                </p>
-            </div>
-            <div class="px-2 fs-15">
-                <div class="form-check notification-check">
-                    <input class="form-check-input" type="checkbox" value="" id="messages-notification-check01">
-                    <label class="form-check-label" for="messages-notification-check01"></label>
+                <div class="px-2 fs-15">
+                    <div class="form-check notification-check">
+                        <input class="form-check-input" type="checkbox" value="" id="messages-notification-check01" />
+                        <label class="form-check-label" for="messages-notification-check01"></label>
+                    </div>
                 </div>
-            </div>
+            </a>
         </div>
     </div>
 }
-
