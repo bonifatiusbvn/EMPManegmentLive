@@ -9,7 +9,7 @@
 <div class="card-body">
     <div class="table-responsive table-card mb-1">
         <table class="table table-bordered dt-responsive nowrap table-striped align-middle dataTable no-footer dtr-inline">
-            <thead class="text-muted table-info">
+            <thead class="btn-info text-center">
                 <tr>
                     <th>
                         Product
@@ -73,19 +73,19 @@
         page,
         searchText = ViewBag.SearchText
     }),
-                new PagedListRenderOptions
-            {
-                LiElementClasses = new[] { "page-item" },
-                PageClasses = new[] { "page-link" }
-            })
+                                            new PagedListRenderOptions
+                                        {
+                                            LiElementClasses = new[] { "page-item" },
+                                            PageClasses = new[] { "page-link" }
+                                        })
 
 <script>
     $(document).ready(function () {
     @if (TempData["EmptyProductList"] != null)
     {
         <text>
-                toastr.warning("@TempData["EmptyProductList"]");
+                    toastr.warning("@TempData["EmptyProductList"]");
         </text>
     }
-                            });
+                                                        });
 </script>

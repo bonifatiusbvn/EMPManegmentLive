@@ -256,7 +256,6 @@ namespace EMPManegment.Web.Controllers
         {
             try
             {
-
                 List<ProductDetailsView> ProductList = new List<ProductDetailsView>();
                 ApiResponseModel response = await APIServices.PostAsync("", "ProductMaster/GetProductDetailsByVendorId?VendorId=" + GetVendorId);
                 if (response.code == 200)
