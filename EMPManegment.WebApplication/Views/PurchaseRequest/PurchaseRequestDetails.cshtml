@@ -39,7 +39,7 @@
     <div class="card-body">
         <div class="table-responsive table-card">
             <table class="table table-nowrap align-middle table-borderless mb-0">
-                <thead class="table-info text-muted border">
+                <thead class="btn-info text-center border">
                     <tr>
                         <th class="border">Product Details</th>
                         <th class="border">Item Price</th>
@@ -138,7 +138,7 @@
     var totalGst = parseFloat(document.getElementById('totalGst').textContent.replace('₹', ''));
     var total = subtotal + totalGst;
     document.getElementById('total').textContent = '₹' + total.toFixed(2);
-    var userPermissions = '@Html.Raw(Json.Serialize(UserSession.FormPermisionData))';    
+    var userPermissions = '@Html.Raw(Json.Serialize(UserSession.FormPermisionData))';
 </script>
 <script>
     document.getElementById('PrintPRPage').addEventListener('click', function () {

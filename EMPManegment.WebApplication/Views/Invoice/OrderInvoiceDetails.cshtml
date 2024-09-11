@@ -17,7 +17,7 @@
 @foreach (var item in Model)
 {
     totalAmount = item.TotalAmount;
-   @*  totalGst += item.PerUnitWithGstprice; *@
+    @*  totalGst += item.PerUnitWithGstprice; *@
 }
 
 <div class="row" style="margin-top:80px;">
@@ -130,7 +130,7 @@
                     <div class="card-body p-4">
                         <div class="table-responsive">
                             <table class="table table-borderless text-center table-nowrap align-middle mb-0">
-                                <thead class="table-info">
+                                <thead class="btn-info text-center">
                                     <tr class="table-active">
                                         <th>Product Details</th>
                                         <th>Rate</th>
@@ -144,13 +144,13 @@
                                     {
                                         <tr class="product">
                                             @* <td class="text-start">
-                                                <span class="fw-medium" id="txtproductname">@item.ProductName</span>
-                                                <span class="fw-medium" id="txtproductid" hidden>@item.ProductId</span>
-                                                <p class="text-muted mb-0" id="txtdescription">@item.ProductShortDescription</p>
-                                            </td>
-                                            <td id="txtperunitprice">@item.PerUnitPrice</td>
-                                            <td id="txtquantity">@item.Quantity</td>
-                                            <td id="txtperunitwithgstprice">@item.GstPerUnit</td> *@
+                                        <span class="fw-medium" id="txtproductname">@item.ProductName</span>
+                                        <span class="fw-medium" id="txtproductid" hidden>@item.ProductId</span>
+                                        <p class="text-muted mb-0" id="txtdescription">@item.ProductShortDescription</p>
+                                        </td>
+                                        <td id="txtperunitprice">@item.PerUnitPrice</td>
+                                        <td id="txtquantity">@item.Quantity</td>
+                                        <td id="txtperunitwithgstprice">@item.GstPerUnit</td> *@
                                             <td class="text-end" id="txttotal">@item.SubTotal</td>
                                         </tr>
                                     }
