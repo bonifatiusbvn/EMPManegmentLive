@@ -75,10 +75,17 @@
                                                 <span class="text-danger">@TempData["ErrorMessage"]</span>
                                             </div>
                                         </div>
-                                        <input type="checkbox" role="switch" id="flexSwitchCheckRemember" asp-for=RememberMe checked="@ViewBag.checkRememberMe">
-                                        <label for="remember">
-                                            Remember Me
-                                        </label>
+                                        <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                                            <div style="display: flex; align-items: center;">
+                                                <input type="checkbox" role="switch" id="flexSwitchCheckRemember" asp-for="RememberMe" checked="@ViewBag.checkRememberMe" style="margin-right: 8px;">
+                                                <label for="flexSwitchCheckRemember">
+                                                    Remember Me
+                                                </label>
+                                            </div>
+                                            <a asp-action="ForgetPassword" asp-controller="Authentication" class="link-primary">
+                                                Forgot Password ?
+                                            </a>
+                                        </div>
                                         <div class="mt-4">
                                             <button class="btn btn-success w-100" type="submit" id="LoginSubmit">Sign In</button>
                                         </div>
@@ -165,7 +172,7 @@
             const loginForm = document.querySelector('form');
             loginForm.addEventListener('keypress', function (event) {
                 if (event.key === 'Enter') {
-                    event.preventDefault(); 
+                    event.preventDefault();
                     document.getElementById('LoginSubmit').click();
                 }
             });

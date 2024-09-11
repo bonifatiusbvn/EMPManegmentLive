@@ -19,6 +19,7 @@ using EMPManegment.Web.Helper;
 #nullable disable
 namespace EMPManegment.Web.Controllers
 {
+    [AllowAnonymous]
     public class AuthenticationController : Controller
     {
         public AuthenticationController(WebAPI webAPI, APIServices aPIServices, IWebHostEnvironment environment)
@@ -74,6 +75,13 @@ namespace EMPManegment.Web.Controllers
             {
                 throw ex;
             }
+        }
+
+        [HttpGet]
+       
+        public async Task<IActionResult> ResetPasswordEmailView()
+        {
+            return View();
         }
 
         [HttpPost]

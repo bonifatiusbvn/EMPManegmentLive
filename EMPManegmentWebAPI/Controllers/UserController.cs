@@ -111,7 +111,7 @@ namespace EMPManagment.API.Controllers
                     htmlString = htmlString.Replace("{{UserName}}", forgetPassword.Data.UserName);
                     htmlString = htmlString.Replace("{{FirstName}}", forgetPassword.Data.FirstName);
                     htmlString = htmlString.Replace("{{LastName}}", forgetPassword.Data.LastName);
-                    htmlString = htmlString.Replace("{{url}}", "https://localhost:7204/UserProfile/ResetUserPassword");
+                    htmlString = htmlString.Replace("{{url}}", "http://192.168.0.126/Authentication/ResetPasswordEmailView");
                     bool status = await UserLogin.EmailSendAsync(ForgetPassword.Email, "Click Here to Reset Your Password ", htmlString);
                     responseModel.code = (int)HttpStatusCode.OK;
                     responseModel.message = forgetPassword.Message;
