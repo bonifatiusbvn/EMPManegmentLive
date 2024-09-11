@@ -348,6 +348,7 @@ function InsertManualInvoiceDetails() {
                 var objData = {
                     row: orderRow.find("#rowno").text(),
                     Product: orderRow.find("#textProductName").val(),
+                    Description: orderRow.find("#txtManualInvoiceProductDes").val(),
                     Quantity: orderRow.find("#txtproductquantity").val(),
                     Price: orderRow.find("#txtproductamount").val(),
                     Hsn: orderRow.find("#txtHSNcode").val(),
@@ -612,6 +613,7 @@ function UpdateManualInvoiceDetails() {
                     RefId: orderRow.find("#textRefId").val(),
                     row: orderRow.find("#rowno").text(),
                     Product: orderRow.find("#textProductName").val(),
+                    Description: orderRow.find("#txtManualInvoiceProductDes").val(),
                     Quantity: orderRow.find("#txtproductquantity").val(),
                     Price: orderRow.find("#txtproductamount").val(),
                     Hsn: orderRow.find("#txtHSNcode").val(),
@@ -781,4 +783,18 @@ function toggleShippingAddress() {
     } else {
         shippingAddressFields.style.display = "block";
     }
+}
+
+function fn_AddManualInvoiceProductDescription(element) {
+    var itemId = $(element).data('item-id');
+
+    var $productDesBtn = $(`div[data-item-id='${itemId}']#ProductDesBtn`);
+    var $productDesText = $(`div[data-item-id='${itemId}']#ProductDesText`);
+
+    if ($productDesText.is(':visible')) {
+        $productDesText.find('input').val('');
+    }
+
+    $productDesBtn.toggle();
+    $productDesText.toggle();
 }

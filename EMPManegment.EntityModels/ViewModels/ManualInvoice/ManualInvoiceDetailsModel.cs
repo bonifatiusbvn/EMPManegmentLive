@@ -13,6 +13,7 @@ namespace EMPManegment.EntityModels.ViewModels.ManualInvoice
         public Guid RefId { get; set; }
 
         public string Product { get; set; } = null!;
+        public string? Description { get; set; }
 
         public int? Hsn { get; set; }
 

@@ -80,6 +80,7 @@ namespace EMPManegment.Repository.ManualInvoiceRepository
                     {
                         RefId = invoice.Id,
                         Product = item.Product,
+                        Description = item.Description,
                         Quantity = item.Quantity,
                         ProductType = item.ProductType,
                         Price = item.Price,
@@ -277,6 +278,7 @@ namespace EMPManegment.Repository.ManualInvoiceRepository
                             Product = row["Product"]?.ToString(),
                             ProductType = row["ProductType"] != DBNull.Value ? (int)row["ProductType"] : 0,
                             ProductTypeName = row["ProductTypeName"]?.ToString(),
+                            Description = row["Description"]?.ToString(),
                             Quantity = row["Quantity"] != DBNull.Value ? (decimal)row["Quantity"] : 0,
                             Price = row["Price"] != DBNull.Value ? (decimal)row["Price"] : 0m,
                             Gst = row["Gst"] != DBNull.Value ? (decimal)row["Gst"] : 0m,
@@ -393,6 +395,7 @@ namespace EMPManegment.Repository.ManualInvoiceRepository
                     {
                         existingInvoice.RefId = ManualInvoice.Id;
                         existingInvoice.Product = item.Product;
+                        existingInvoice.Description = item.Description;
                         existingInvoice.ProductType = item.ProductType;
                         existingInvoice.Quantity = item.Quantity;
                         existingInvoice.Price = item.Price;
@@ -417,6 +420,7 @@ namespace EMPManegment.Repository.ManualInvoiceRepository
                         {
                             RefId = ManualInvoice.Id,
                             Product = item.Product,
+                            Description = item.Description,
                             ProductType = item.ProductType,
                             Quantity = item.Quantity,
                             Price = item.Price,

@@ -10,6 +10,44 @@
         <td scope="row" class="product-id" id="rowno" name="rowno">@Convert.ToInt64(item.RowNumber + 1)</td>
         <td class="text-start">
             <input id="textProductName" class="product-quantity form-control" value="@item.Product" />
+            @if (item.Description == null || item.Description == "")
+            {
+            <div class="row align-items-center" data-item-id="@item.Id" id="ProductDesBtn" onclick="fn_AddManualInvoiceProductDescription(this)">
+                <div class="col-sm-1" style="margin-top : -5px;">
+                    <i class="lni lni-plus text-success" style="font-size: 10px; text-shadow: 1px 1px 1px #000;"></i>
+                </div>
+                <div class="col-sm-10" style="margin-left:-15px;">
+                    <p class="text-primary mb-0"><b style="font-size: 15px;"><i class="ri-add-fill me-1 align-bottom"></i>Description</b></p>
+                </div>
+            </div>
+            <div class="row align-items-center" id="ProductDesText" data-item-id="@item.Id" style="display:none;">
+                <div class="col-sm-10" style=" margin-right:-7px;">
+                        <input type="text" class="form-control" placeholder="Description" id="txtManualInvoiceProductDes" />
+                </div>
+                <div class="col-sm-1">
+                    <div class="text-danger" style="cursor: pointer; font-size:20px;" data-item-id="@item.Id" onclick="fn_AddManualInvoiceProductDescription(this)">x</div>
+                </div>
+            </div>
+            }
+            else
+            {
+                <div class="row align-items-center" data-item-id="@item.Id" id="ProductDesBtn" style="display:none;" onclick="fn_AddManualInvoiceProductDescription(this)">
+                    <div class="col-sm-1" style="margin-top : -5px;">
+                        <i class="lni lni-plus text-success" style="font-size: 10px; text-shadow: 1px 1px 1px #000;"></i>
+                    </div>
+                    <div class="col-sm-10" style="margin-left:-5px;">
+                        <p class="text-primary mb-0"><b>Item Description</b></p>
+                    </div>
+                </div>
+                <div class="row align-items-center" id="ProductDesText" data-item-id="@item.Id" style="display:flex" )">
+                    <div class="col-sm-10" style=" margin-right:-7px;">
+                        <input type="text" class="form-control" placeholder="Description" id="txtManualInvoiceProductDes" value="@item.Description" />
+                    </div>
+                    <div class="col-sm-1">
+                        <div class="text-danger" data-item-id="@item.Id" style="cursor: pointer; font-size:20px;" onclick="fn_AddManualInvoiceProductDescription(this)">x</div>
+                    </div>
+                </div>
+            }
             <input id="textRefId" type="hidden" value="@item.RefId" />
         </td>
         <td class="text-start">
