@@ -334,7 +334,7 @@ $(document).ready(function () {
                     var buttons = '<ul class="list-inline hstack gap-2 mb-0">';
 
                     if (canEdit) {
-                        buttons += '<a href="/Invoice/CreateInvoice?Id=' + full.id + '" class="btn text-primary btndeletedoc">' +
+                        buttons += '<a href="/Invoice/CreateInvoice?Id=' + full.id + '" class="btn text-info btndeletedoc">' +
                             '<i class="fa-regular fa-pen-to-square"></i></a>';
                     }
 
