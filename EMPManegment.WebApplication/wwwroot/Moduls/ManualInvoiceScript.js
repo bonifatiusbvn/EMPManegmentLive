@@ -342,13 +342,22 @@ function InsertManualInvoiceDetails() {
         if ($('#addnewproductlink tr').length >= 1) {
             var ProductDetails = [];
             var isValidProduct = true;
-            $(".product").each(function () {
 
+            $(".product").each(function () {
                 var orderRow = $(this);
+
+                var descriptions = [];
+                orderRow.find(".txtManualInvoiceProductDes").each(function () { 
+                    var descriptionVal = $(this).val().trim();
+                    if (descriptionVal) {
+                        descriptions.push(descriptionVal); 
+                    }
+                });
+                
                 var objData = {
                     row: orderRow.find("#rowno").text(),
                     Product: orderRow.find("#textProductName").val(),
-                    Description: orderRow.find("#txtManualInvoiceProductDes").val(),
+                    Description: descriptions.join("<br>"),
                     Quantity: orderRow.find("#txtproductquantity").val(),
                     Price: orderRow.find("#txtproductamount").val(),
                     Hsn: orderRow.find("#txtHSNcode").val(),
@@ -360,18 +369,8 @@ function InsertManualInvoiceDetails() {
                     ProductTotal: orderRow.find("#txtproducttotalamount").val(),
                     ProductType: orderRow.find('[id^="txtPOProductType_"]').val(),
                 };
-                orderRow.find("#textProductName").on('input', function () {
-                    $(this).css("border", "1px solid #ced4da");
-                });
-                orderRow.find("#txtproductamount").on('input', function () {
-                    $(this).css("border", "1px solid #ced4da");
-                });
-                orderRow.find('[id^="txtPOProductType_"]').on('input', function () {
-                    $(this).css("border", "1px solid #ced4da");
-                });
 
                 if ($("#ddlinvoicetype").val() == 3) {
-
                     if (!objData.Product.trim() || objData.ProductType == 0) {
                         isValidProduct = false;
                         if (!objData.Product.trim()) {
@@ -383,8 +382,7 @@ function InsertManualInvoiceDetails() {
                     } else {
                         ProductDetails.push(objData);
                     }
-                }
-                else {
+                } else {
                     if (!objData.Product.trim() || objData.Price == 0 || objData.ProductType == 0) {
                         isValidProduct = false;
                         if (!objData.Product.trim()) {
@@ -400,8 +398,8 @@ function InsertManualInvoiceDetails() {
                         ProductDetails.push(objData);
                     }
                 }
-                
             });
+
             var dateInput = $("#textBuysOrderDate").val();
             if (dateInput === "") {
                 dateInput = null;
@@ -609,11 +607,19 @@ function UpdateManualInvoiceDetails() {
             var isValidProduct = true;
             $(".product").each(function () {
                 var orderRow = $(this);
+                var descriptions = [];
+                orderRow.find(".txtManualInvoiceProductDes").each(function () {
+                    var descriptionVal = $(this).val().trim();
+                    if (descriptionVal) {
+                        descriptions.push(descriptionVal);
+                    }
+                });
+
                 var objData = {
                     RefId: orderRow.find("#textRefId").val(),
                     row: orderRow.find("#rowno").text(),
                     Product: orderRow.find("#textProductName").val(),
-                    Description: orderRow.find("#txtManualInvoiceProductDes").val(),
+                    Description: descriptions.join("<br>"),
                     Quantity: orderRow.find("#txtproductquantity").val(),
                     Price: orderRow.find("#txtproductamount").val(),
                     Hsn: orderRow.find("#txtHSNcode").val(),
@@ -667,7 +673,7 @@ function UpdateManualInvoiceDetails() {
                 }
             });
             var dateInput = $("#textBuysOrderDate1").val();
-            if (dateInput ===  "0001-01-01") {
+            if (dateInput === "0001-01-01") {
                 dateInput = null;
             }
             if (isValidProduct) {
@@ -787,14 +793,32 @@ function toggleShippingAddress() {
 
 function fn_AddManualInvoiceProductDescription(element) {
     var itemId = $(element).data('item-id');
+    var $container = $(`#ProductDescriptionContainer[data-item-id='${itemId}']`);
 
-    var $productDesBtn = $(`div[data-item-id='${itemId}']#ProductDesBtn`);
-    var $productDesText = $(`div[data-item-id='${itemId}']#ProductDesText`);
+    var lastInput = $container.find('input').last();
 
-    if ($productDesText.is(':visible')) {
-        $productDesText.find('input').val('');
+    if (lastInput.length > 0 && lastInput.val().trim() === '') {
+        $('#error-message').show();
+        return;
+    } else {
+        $('#error-message').hide();
     }
 
-    $productDesBtn.toggle();
-    $productDesText.toggle();
+    var newDescriptionRow = `
+       <div class="row align-items-center" data-item-id="${itemId}" style="margin-top: 10px;">
+    <div class="col-sm-10" style="margin-right:-7px;">
+        <input type="text" class="txtManualInvoiceProductDes form-control" placeholder="Description" />
+    </div>
+    <div class="col-sm-1">
+        <div class="text-danger" style="cursor: pointer; font-size:20px;" onclick="removeDescriptionRow(this)">x</div>
+    </div>
+</div>
+`;
+
+    $container.append(newDescriptionRow);
+}
+
+function removeDescriptionRow(element) {
+    $(element).closest('.row').remove();
+    $('#error-message').hide();
 }
