@@ -341,22 +341,47 @@ namespace EMPManegment.Repository.UserListRepository
             UserResponceModel response = new UserResponceModel();
             try
             {
-                var userdata = Context.TblUsers.FirstOrDefault(x => x.Id == ResetPassword.UserId);
-                if (userdata != null)
+                if (ResetPassword.UserId != null)
                 {
-                    userdata.UpdatedBy = ResetPassword.UpdatedBy;
-                    userdata.UpdatedOn = DateTime.Now;
-                    userdata.PasswordHash = ResetPassword.PasswordHash;
-                    userdata.PasswordSalt = ResetPassword.PasswordSalt;
+                    var userdata = Context.TblUsers.FirstOrDefault(x => x.Id == ResetPassword.UserId);
+                    if (userdata != null)
+                    {
+                        userdata.UpdatedBy = ResetPassword.UpdatedBy;
+                        userdata.UpdatedOn = DateTime.Now;
+                        userdata.PasswordHash = ResetPassword.PasswordHash;
+                        userdata.PasswordSalt = ResetPassword.PasswordSalt;
 
-                    Context.TblUsers.Update(userdata);
-                    Context.SaveChanges();
-                    response.Message = "Password updated!";
+                        Context.TblUsers.Update(userdata);
+                        Context.SaveChanges();
+                        response.Message = "Password updated!";
+                    }
+                    else
+                    {
+                        response.Code = (int)HttpStatusCode.NotFound;
+                        response.Message = "Can't found User";
+                    }
                 }
                 else
                 {
-                    response.Code = (int)HttpStatusCode.NotFound;
-                    response.Message = "Can't found User";
+                    if (ResetPassword.UserName != null)
+                    {
+                        var userdata = Context.TblUsers.FirstOrDefault(x => x.UserName == ResetPassword.UserName);
+                        if (userdata != null)
+                        {
+                            userdata.UpdatedOn = DateTime.Now;
+                            userdata.PasswordHash = ResetPassword.PasswordHash;
+                            userdata.PasswordSalt = ResetPassword.PasswordSalt;
+
+                            Context.TblUsers.Update(userdata);
+                            Context.SaveChanges();
+                            response.Message = "Password updated!";
+                        }
+                        else
+                        {
+                            response.Code = (int)HttpStatusCode.NotFound;
+                            response.Message = "Can't found User";
+                        }
+                    }
                 }
 
             }
