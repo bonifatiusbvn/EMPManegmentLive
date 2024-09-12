@@ -24,7 +24,7 @@
                     });
                 }
                 else {
-                    toastr.error(Result.message);
+                    $("#invalidmessage").text(Result.message).show();
                 }
             },
         })
