@@ -87,7 +87,7 @@ $(document).ready(function () {
                     var buttons = '<ul class="list-inline hstack gap-2 mb-0">';
 
                     if (canEdit) {
-                        buttons += '<a class="btn text-primary" href="/PurchaseRequest/CreatePurchaseRequest?id=' + full.prNo + '">' +
+                        buttons += '<a class="btn text-info" href="/PurchaseRequest/CreatePurchaseRequest?id=' + full.prNo + '">' +
                             '<i class="fa-regular fa-pen-to-square"></i></a>';
                     }
 

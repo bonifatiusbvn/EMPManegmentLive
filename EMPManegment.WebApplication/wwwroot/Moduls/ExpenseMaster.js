@@ -1392,7 +1392,7 @@ function DisplayAllExpenseList(tableId) {
             {
                 data: null, orderable: false, searchable: false,
                 render: function (data, type, full) {
-                    return `<a class="btn text-primary" onclick="EditAllUserExpenseDetails('${full.id}')"><i class="fa-regular fa-pen-to-square"></i></a><a class="btn text-danger" onclick="deleteExpense('${full.id}')"><i class="fas fa-trash"></i></a>`;
+                    return `<a class="btn text-info" onclick="EditAllUserExpenseDetails('${full.id}')"><i class="fa-regular fa-pen-to-square"></i></a><a class="btn text-danger" onclick="deleteExpense('${full.id}')"><i class="fas fa-trash"></i></a>`;
                 }
             }
         ],
@@ -1479,7 +1479,7 @@ function DisplayAllUnApproveExpenseDetails(tableId) {
             {
                 data: null, orderable: false, searchable: false,
                 render: function (data, type, full) {
-                    return `<a class="btn text-primary" onclick="EditAllUserExpenseDetails('${full.id}')"><i class="fa-regular fa-pen-to-square"></i></a><a class="btn text-danger" onclick="deleteExpense('${full.id}')"><i class="fas fa-trash"></i></a>`;
+                    return `<a class="btn text-info" onclick="EditAllUserExpenseDetails('${full.id}')"><i class="fa-regular fa-pen-to-square"></i></a><a class="btn text-danger" onclick="deleteExpense('${full.id}')"><i class="fas fa-trash"></i></a>`;
                 }
             }
         ],
@@ -2104,7 +2104,7 @@ $(document).ready(function () {
 
                     if (canEdit) {
                         buttons +=
-                            '<a class="btn text-primary" onclick="EditExpenseDetails(\'' + full.id + '\')">' +
+                            '<a class="btn text-info" onclick="EditExpenseDetails(\'' + full.id + '\')">' +
                             '<i class="fa-regular fa-pen-to-square"></i></a>';
                     }
 

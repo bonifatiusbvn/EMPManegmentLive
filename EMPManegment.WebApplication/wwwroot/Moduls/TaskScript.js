@@ -633,11 +633,11 @@ $(document).ready(function () {
                         var buttons = '<ul class="list-inline hstack gap-2 mb-0">';
 
                         buttons += '<li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="View">' +
-                            '<a class="text-primary" onclick="btnTaskDetails(\'' + full.id + '\')"><i class="ri-eye-fill fs-16"></i></a></li>';
+                            '<a class="text-info" onclick="btnTaskDetails(\'' + full.id + '\')"><i class="ri-eye-fill fs-16"></i></a></li>';
 
                         if (canEdit) {
                             buttons += '<li class="btn list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">' +
-                                '<a class="text-primary" onclick="EditTaskDetails(\'' + full.id + '\')">' +
+                                '<a class="text-info" onclick="EditTaskDetails(\'' + full.id + '\')">' +
                                 '<i class="fa-regular fa-pen-to-square"></i></a></li>';
                         }
 
