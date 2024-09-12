@@ -227,6 +227,7 @@ function GetAllNotifications() {
             var totalcount = $('#totalNotificationCount').val();
             $('#CountAllNotification').text(totalcount);
             $('#CountAllNewNotification').text(totalcount);
+            $('#CountunreadNotification').text(totalcount);
             var UnreadMessages = $('#TotalUnreadMessages').val();
             $("#CountUnreadMessage").text(UnreadMessages); 
             var totalTasks = $('#totalTotalTasks').val();
