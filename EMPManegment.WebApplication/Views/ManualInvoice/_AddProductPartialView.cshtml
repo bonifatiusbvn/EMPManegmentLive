@@ -10,9 +10,7 @@
         <td scope="row" class="product-id" id="rowno" name="rowno">@Convert.ToInt64(item.RowNumber + 1)</td>
         <td class="text-start">
             <input id="textProductName" class="product-quantity form-control" value="@item.Product" />
-            @{
-                var descriptionLines = item.Description.Split(new[] { "<br>" }, StringSplitOptions.None);
-            }
+           
             @if (item.Description == null || item.Description == "")
             {
                 <div id="ProductDescriptionContainer" data-item-id="@item.Id"></div>
@@ -28,6 +26,7 @@
             }
             else
             {
+                var descriptionLines = item.Description.Split(new[] { "<br>" }, StringSplitOptions.None);
                 <div class="row align-items-center" data-item-id="@item.Id" id="ProductDesBtn" style="display:none;" onclick="fn_AddManualInvoiceProductDescription(this)">
                     <div class="col-sm-1" style="margin-top : -5px;">
                         <i class="lni lni-plus text-success" style="font-size: 10px; text-shadow: 1px 1px 1px #000;"></i>
