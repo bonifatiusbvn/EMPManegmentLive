@@ -19,6 +19,7 @@ using EMPManegment.Web.Helper;
 #nullable disable
 namespace EMPManegment.Web.Controllers
 {
+    [AllowAnonymous]
     public class AuthenticationController : Controller
     {
         public AuthenticationController(WebAPI webAPI, APIServices aPIServices, IWebHostEnvironment environment)
@@ -64,6 +65,44 @@ namespace EMPManegment.Web.Controllers
                 if (postuser.code == 200)
                 {
                     return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
+                }
+                else
+                {
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpGet]
+
+        public async Task<IActionResult> ResetPasswordEmailView()
+        {
+            return View();
+        }
+
+        [HttpPost]
+
+        public async Task<IActionResult> ResetPasswordByEmail(PasswordResetResponseModel ResetPassword)
+        {
+            try
+            {
+                Crypto.Hash(ResetPassword.Password,
+                   out byte[] passwordHash,
+                   out byte[] passwordSalt);
+                var resetPass = new PasswordResetView
+                {
+                    UserName = ResetPassword.UserName,
+                    PasswordHash = passwordHash,
+                    PasswordSalt = passwordSalt,
+                };
+                ApiResponseModel postuser = await APIServices.PostAsync(resetPass, "UserProfile/ResetUserPassword");
+                if (postuser.code == 200)
+                {
+                    return Ok(new { Message = postuser.message, Code = postuser.code });
                 }
                 else
                 {

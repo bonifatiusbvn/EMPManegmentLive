@@ -92,9 +92,9 @@
                                 <div class="tab-content text-muted">
                                     <div class="tab-pane fade show active" id="project-overview" role="tabpanel">
                                         <div class="tab-pane" id="status-all" role="tabpanel">
-                                            <div class="table-responsive table-card mb-1">
+                                            <div class="table-responsive table-card mb-1 text-center">
                                                 <table class="table table-bordered dt-responsive nowrap table-striped align-middle dataTable no-footer dtr-inline" id="orderTable">
-                                                    <thead class="text-muted table-info">
+                                                    <thead class="btn-info text-center">
                                                         <tr class="text-uppercase">
 
                                                             <th>Order ID</th>
@@ -129,7 +129,7 @@
                                                                             @if (UserSession.FormPermisionData.Any(a => a.FormName == "Create Purchase Order" && (a.Edit == true)))
                                                                             {
                                                                                 <li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">
-                                                                                    <a href="/PurchaseOrderMaster/CreatePurchaseOrder?id=@item.Id" class="btn text-primary d-inline-block edit-item-btn">
+                                                                                    <a href="/PurchaseOrderMaster/CreatePurchaseOrder?id=@item.Id" class="btn text-info d-inline-block edit-item-btn">
                                                                                         <i class="fa-regular fa-pen-to-square"></i>
                                                                                     </a>
                                                                                 </li>
@@ -186,9 +186,9 @@
                                 <div class="tab-content text-muted">
                                     <div class="tab-pane" id="status-delivered" role="tabpanel">
                                         <div class="tab-pane" id="status-all" role="tabpanel">
-                                            <div class="table-responsive table-card mb-1">
+                                            <div class="table-responsive table-card mb-1 text-center">
                                                 <table class="table table-bordered dt-responsive nowrap table-striped align-middle dataTable no-footer dtr-inline" id="orderTable">
-                                                    <thead class="text-muted table-info">
+                                                    <thead class="btn-info text-center">
                                                         <tr class="text-uppercase">
 
                                                             <th>Order ID</th>
@@ -218,7 +218,7 @@
                                                                     <td>
                                                                         <ul class="list-inline hstack gap-2 mb-0">
                                                                             <li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">
-                                                                                <a href="#showModal" data-bs-toggle="modal" class="btn text-primary d-inline-block edit-item-btn">
+                                                                                <a href="#showModal" data-bs-toggle="modal" class="btn text-info d-inline-block edit-item-btn">
                                                                                     <i class="fa-regular fa-pen-to-square"></i>
                                                                                 </a>
                                                                             </li>
@@ -268,9 +268,9 @@
                                 <div class="tab-content text-muted">
                                     <div class="tab-pane" id="status-pickups" role="tabpanel">
                                         <div class="tab-pane" id="status-all" role="tabpanel">
-                                            <div class="table-responsive table-card mb-1">
+                                            <div class="table-responsive table-card mb-1 text-center">
                                                 <table class="table table-bordered dt-responsive nowrap table-striped align-middle dataTable no-footer dtr-inline" id="orderTable">
-                                                    <thead class="text-muted table-info">
+                                                    <thead class="btn-info text-center">
                                                         <tr class="text-uppercase">
 
                                                             <th>Order ID</th>
@@ -301,7 +301,7 @@
                                                                         <ul class="list-inline hstack gap-2 mb-0">
 
                                                                             <li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">
-                                                                                <a href="#showModal" data-bs-toggle="modal" class="btn text-primary d-inline-block edit-item-btn">
+                                                                                <a href="#showModal" data-bs-toggle="modal" class="btn text-info d-inline-block edit-item-btn">
                                                                                     <i class="fa-regular fa-pen-to-square"></i>
                                                                                 </a>
                                                                             </li>
@@ -351,9 +351,9 @@
                                 <div class="tab-content text-muted">
                                     <div class="tab-pane" id="status-returns" role="tabpanel">
                                         <div class="tab-pane" id="status-all" role="tabpanel">
-                                            <div class="table-responsive table-card mb-1">
+                                            <div class="table-responsive table-card mb-1 text-center">
                                                 <table class="table table-bordered dt-responsive nowrap table-striped align-middle dataTable no-footer dtr-inline" id="orderTable">
-                                                    <thead class="text-muted table-info">
+                                                    <thead class="btn-info text-center">
                                                         <tr class="text-uppercase">
 
                                                             <th>Order ID</th>
@@ -384,7 +384,7 @@
                                                                         <ul class="list-inline hstack gap-2 mb-0">
 
                                                                             <li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">
-                                                                                <a href="#showModal" data-bs-toggle="modal" class="btn text-primary d-inline-block edit-item-btn">
+                                                                                <a href="#showModal" data-bs-toggle="modal" class="btn text-info d-inline-block edit-item-btn">
                                                                                     <i class="fa-regular fa-pen-to-square"></i>
                                                                                 </a>
                                                                             </li>
@@ -434,9 +434,9 @@
                                 <div class="tab-content text-muted">
                                     <div class="tab-pane" id="status-cancelled" role="tabpanel">
                                         <div class="tab-pane" id="status-all" role="tabpanel">
-                                            <div class="table-responsive table-card mb-1">
+                                            <div class="table-responsive table-card mb-1 text-center">
                                                 <table class="table table-bordered dt-responsive nowrap table-striped align-middle dataTable no-footer dtr-inline" id="orderTable">
-                                                    <thead class="text-muted table-info">
+                                                    <thead class="btn-info text-center">
                                                         <tr class="text-uppercase">
 
                                                             <th>Order ID</th>
@@ -467,7 +467,7 @@
                                                                         <ul class="list-inline hstack gap-2 mb-0">
 
                                                                             <li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">
-                                                                                <a href="#showModal" data-bs-toggle="modal" class="btn text-primary d-inline-block edit-item-btn">
+                                                                                <a href="#showModal" data-bs-toggle="modal" class="btn text-info d-inline-block edit-item-btn">
                                                                                     <i class="fa-regular fa-pen-to-square"></i>
                                                                                 </a>
                                                                             </li>
@@ -517,9 +517,9 @@
                                 <div class="tab-content text-muted">
                                     <div class="tab-pane" id="status-pending" role="tabpanel">
                                         <div class="tab-pane" id="status-all" role="tabpanel">
-                                            <div class="table-responsive table-card mb-1">
+                                            <div class="table-responsive table-card mb-1 text-center">
                                                 <table class="table table-bordered dt-responsive nowrap table-striped align-middle dataTable no-footer dtr-inline" id="orderTable">
-                                                    <thead class="text-muted table-info">
+                                                    <thead class="btn-info text-center">
                                                         <tr class="text-uppercase">
 
                                                             <th>Order ID</th>
@@ -550,7 +550,7 @@
                                                                         <ul class="list-inline hstack gap-2 mb-0">
 
                                                                             <li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">
-                                                                                <a href="#showModal" data-bs-toggle="modal" class="btn text-primary d-inline-block edit-item-btn">
+                                                                                <a href="#showModal" data-bs-toggle="modal" class="btn text-info d-inline-block edit-item-btn">
                                                                                     <i class="fa-regular fa-pen-to-square"></i>
                                                                                 </a>
                                                                             </li>
@@ -600,9 +600,9 @@
                                 <div class="tab-content text-muted">
                                     <div class="tab-pane" id="status-inprogress" role="tabpanel">
                                         <div class="tab-pane" id="status-all" role="tabpanel">
-                                            <div class="table-responsive table-card mb-1">
+                                            <div class="table-responsive table-card mb-1 text-center">
                                                 <table class="table table-bordered dt-responsive nowrap table-striped align-middle dataTable no-footer dtr-inline" id="orderTable">
-                                                    <thead class="text-muted table-info">
+                                                    <thead class="btn-info text-center">
                                                         <tr class="text-uppercase">
 
                                                             <th>Order ID</th>
@@ -633,7 +633,7 @@
                                                                         <ul class="list-inline hstack gap-2 mb-0">
 
                                                                             <li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">
-                                                                                <a href="#showModal" data-bs-toggle="modal" class="btn text-primary d-inline-block edit-item-btn">
+                                                                                <a href="#showModal" data-bs-toggle="modal" class="btn text-info d-inline-block edit-item-btn">
                                                                                     <i class="fa-regular fa-pen-to-square"></i>
                                                                                 </a>
                                                                             </li>

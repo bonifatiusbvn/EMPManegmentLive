@@ -8,6 +8,7 @@
     <input value="@ViewBag.TotalCount" id="totalNotificationCount" hidden></input>
     <input value="@ViewBag.TotalUnreadMessages" id="TotalUnreadMessages" hidden></input>
     <input value="@ViewBag.TotalTasks" id="totalTotalTasks" hidden></input>
+    <input type="text" id="textchatsessionUserId" value="@_userSession.UserId" hidden />
     @if (Model.Messages.Any())
     {
         @foreach (var message in Model.Messages)
@@ -19,23 +20,23 @@
                     <a href="javascript:void(0);" class="d-flex align-items-center chat-link" data-user-id="@message.UserId" onclick="openchatfromNotification('@message.UserId');">
                         @if (!string.IsNullOrEmpty(imageUrl))
                         {
-                            <img src="@imageUrl" class="me-3 rounded-circle avatar-xs" alt="user-pic">
+                            <img src="@imageUrl" class="me-3 rounded-circle avatar-xs" alt="user-pic" onclick="openchatfromNotification('@message.UserId');">
                         }
                         else
                         {
                             <div class="flex-shrink-0 avatar-xs me-2">
-                                <div class="avatar-title bg-success-subtle text-success rounded-circle fs-13" style="height:40px;width:40px;">@initials</div>
+                                <div class="avatar-title bg-success-subtle text-success rounded-circle fs-13" style="height:40px;width:40px;" onclick="openchatfromNotification('@message.UserId');">@initials</div>
                             </div>
                         }
 
                         <div class="flex-grow-1">
-                            <a href="#!" class="stretched-link">
+                            <a href="#!" class="stretched-link" onclick="openchatfromNotification('@message.UserId');">
                                 <h6 class="mt-0 mb-1 fs-13 fw-semibold">@message.UserName</h6>
                             </a>
                             <div class="fs-13 text-muted">
-                                <p class="mb-1">@message.MessageText</p>
+                                <p class="mb-1" onclick="openchatfromNotification('@message.UserId');">@message.MessageText</p>
                             </div>
-                            <p class="mb-0 fs-11 fw-medium text-uppercase text-muted">
+                            <p class="mb-0 fs-11 fw-medium text-uppercase text-muted" onclick="openchatfromNotification('@message.UserId');">
                                 <span><i class="mdi mdi-clock-outline"></i> @message.SentDateTime</span>
                             </p>
                         </div>
@@ -57,6 +58,7 @@
             var imageUrl = !string.IsNullOrEmpty(task.UserProfile) ? Url.Content($"~/{task.UserProfile}") : null;
             var initials = (!string.IsNullOrEmpty(task.FirstName) && !string.IsNullOrEmpty(task.LastName)) ? $"{task.FirstName[0]}{task.LastName[0]}".ToUpper() : null;
             <div class="text-reset notification-item d-block dropdown-item">
+                <a href="/Task/UserTasks" class="d-flex text-decoration-none">
                 <div class="acitivity-item d-flex">
                     <div class="flex-shrink-0">
                         @if (!string.IsNullOrEmpty(imageUrl))
@@ -105,6 +107,7 @@
                         </div>
                     </div>
                 </div>
+                </a>
             </div>
         }
     }

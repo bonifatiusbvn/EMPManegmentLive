@@ -396,7 +396,7 @@ function ResetPassword() {
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'OK'
                     }).then(function () {
-                        window.location = '/UserProfile/ResetPassword';
+                        logoutAfterPasswordReset();
                     });
                 }
                 else {
@@ -409,6 +409,30 @@ function ResetPassword() {
         form.reportValidity();
     }
 }
+
+function logoutAfterPasswordReset() {
+    sessionStorage.removeItem('SelectedProjectId');
+    sessionStorage.removeItem('SelectedUserProjectId');
+    sessionStorage.removeItem('SelectedCityName');
+    fetch('/Authentication/Logout', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'RequestVerificationToken': '@Token.Get(Request.HttpContext)'
+
+        },
+        body: ''
+    })
+        .then(response => {
+
+            window.location.href = '/Authentication/Login';
+        })
+        .catch(error => {
+            toastr.error('Error:', error);
+
+        });
+}
+
 function GetUserAttendanceInTime() {
 
     $.ajax({
@@ -735,8 +759,7 @@ function GetAllDepartmentList() {
     });
 }
 
-function UADBackbtn()
-{
+function UADBackbtn() {
     clearsearchtextbox();
     $("#backBtn").hide();
     $("#usernamebox").hide();
@@ -805,7 +828,7 @@ function EdituserDetails() {
     //    element.disabled = false;
     //});
 
-        populateGenderOptions();
+    populateGenderOptions();
     $("#btnEdit").hide();
     $("#btnUpdateDetails").show();
 }

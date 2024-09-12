@@ -1,6 +1,5 @@
 ﻿function ForgetPassword()
 {
-
     if ($('#emailsentform').valid()) {
         var formData = new FormData();
         formData.append("Email", $("#txtemail").val());
@@ -13,7 +12,7 @@
             processData: false,
             contentType: false,
             success: function (Result) {
-  
+            debugger
                 if (Result.code == 200) {
                     Swal.fire({
                         title: Result.message,
@@ -25,7 +24,7 @@
                     });
                 }
                 else {
-                    toastr.error(Result.message);
+                    $("#invalidmessage").text(Result.message).show();
                 }
             },
         })

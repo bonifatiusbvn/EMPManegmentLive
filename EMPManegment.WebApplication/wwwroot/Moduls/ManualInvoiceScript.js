@@ -518,7 +518,7 @@ $(document).ready(function () {
                     buttons += '<ul class="list-inline mb-0">';
 
                     if (canEdit) {
-                        buttons += '<a href="/ManualInvoice/CreateInvoiceManual?InvoiceId=' + full.id + '" class="btn text-primary list-inline-item">' +
+                        buttons += '<a href="/ManualInvoice/CreateInvoiceManual?InvoiceId=' + full.id + '" class="btn text-info list-inline-item">' +
                             '<i class="fa-regular fa-pen-to-square"></i></a>';
                     }
 

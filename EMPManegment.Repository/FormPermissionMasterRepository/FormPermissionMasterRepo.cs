@@ -276,7 +276,6 @@ namespace EMPManegment.Repository.FormPermissionMasterRepository
 
                 else
                 {
-
                     var forms = Context.TblForms.ToList();
                     var userFormPermissions = new List<TblUserFormPermission>();
 

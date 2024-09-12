@@ -408,7 +408,7 @@ namespace EMPManegment.Repository.UserLoginRepository
                 else
                 {
                     responceModel.Code = (int)HttpStatusCode.NotFound;
-                    responceModel.Message = "Invalid email id!";
+                    responceModel.Message = "Enter registered email id";
                 }
             }
             catch (Exception ex)

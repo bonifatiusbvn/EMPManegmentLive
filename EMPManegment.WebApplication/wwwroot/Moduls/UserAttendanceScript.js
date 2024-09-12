@@ -136,7 +136,7 @@ $(document).ready(function () {
                 "orderable": false,
                 "searchable": false,
                 "render": function (data, type, full) {
-                    return '<a onclick="EditUserAttendance(\'' + full.attendanceId + '\')" class="btn text-primary">' +
+                    return '<a onclick="EditUserAttendance(\'' + full.attendanceId + '\')" class="btn text-info">' +
                         '<i class="fa-regular fa-pen-to-square"></i></a>';
                 }
             });
@@ -372,7 +372,7 @@ function GetUserSearchAttendanceList(FilterData, UserPermissionData) {
             "orderable": false,
             "searchable": false,
             "render": function (data, type, full) {
-                return '<a onclick="editUserAttendanceSrc(\'' + full.attendanceId + '\')" class="btn text-primary">' +
+                return '<a onclick="editUserAttendanceSrc(\'' + full.attendanceId + '\')" class="btn text-info">' +
                     '<i class="fa-regular fa-pen-to-square"></i></a>';
             }
         });
@@ -469,7 +469,7 @@ $(document).ready(function () {
                 "orderable": false,
                 "searchable": false,
                 "render": function (data, type, full) {
-                    return '<a onclick="editMyAttendance(\'' + full.attendanceId + '\')" class="btn text-primary">' +
+                    return '<a onclick="editMyAttendance(\'' + full.attendanceId + '\')" class="btn text-info">' +
                         '<i class="fa-regular fa-pen-to-square"></i></a>';
                 }
             });
@@ -594,7 +594,7 @@ function MySearchAttendanceList(UserPermissionData, FilterData) {
             "orderable": false,
             "searchable": false,
             "render": function (data, type, full) {
-                return '<a onclick="editMyAttendance(\'' + full.attendanceId + '\')" class="btn text-primary">' +
+                return '<a onclick="editMyAttendance(\'' + full.attendanceId + '\')" class="btn text-info">' +
                     '<i class="fa-regular fa-pen-to-square"></i></a>';
             }
         });

@@ -17,6 +17,7 @@ namespace EMPManegment.EntityModels.ViewModels
         public Guid? UpdatedBy { get; set; }
         public DateTime? UpdatedOn { get; set; }
         public Guid? UserId { get; set; }
+        public string? UserName { get; set; }
     }
     public class PasswordResetResponseModel
     {
@@ -25,5 +26,6 @@ namespace EMPManegment.EntityModels.ViewModels
         public Guid? UpdatedBy { get; set; }
         public DateTime? UpdatedOn { get; set; }
         public Guid? UserId { get; set; }
+        public string? UserName { get; set; }
     }
  }
