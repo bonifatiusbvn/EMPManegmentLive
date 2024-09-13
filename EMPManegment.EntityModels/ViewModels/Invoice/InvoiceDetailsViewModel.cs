@@ -14,7 +14,8 @@ namespace EMPManegment.EntityModels.ViewModels.Invoice
 
         public Guid ProductId { get; set; }
 
-        public string? Product { get; set; } 
+        public string? Product { get; set; }
+        public string? Description { get; set; }
 
         public int ProductType { get; set; }
 

@@ -21,7 +21,7 @@ namespace EMPManegment.EntityModels.ViewModels.ProductMaster
 
         public string? ProductShortDescription { get; set; }
 
-        public string ProductImage { get; set; }
+        public string? ProductImage { get; set; }
 
         public decimal PerUnitPrice { get; set; }
 
@@ -45,7 +45,7 @@ namespace EMPManegment.EntityModels.ViewModels.ProductMaster
         public Guid? UpdatedBy { get; set; }
         public Guid? ProductId { get; set; }
 
-        public int RowNumber { get; set; }
+        public int? RowNumber { get; set; }
         public decimal? TotalAmount { get; set; }
     }
     public class ProductRequestModel

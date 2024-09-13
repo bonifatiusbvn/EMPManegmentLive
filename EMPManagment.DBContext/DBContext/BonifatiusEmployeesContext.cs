@@ -95,8 +95,8 @@ public partial class BonifatiusEmployeesContext : DbContext
 
     public virtual DbSet<TblVendorType> TblVendorTypes { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
-
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    { }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<TblAttendance>(entity =>
@@ -131,10 +131,10 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.Property(e => e.SentDateTime).HasColumnType("datetime");
             entity.Property(e => e.UserName).HasMaxLength(100);
 
-            //entity.HasOne(d => d.User).WithMany(p => p.TblChatMessages)
-            //    .HasForeignKey(d => d.UserId)
-            //    .OnDelete(DeleteBehavior.ClientSetNull)
-            //    .HasConstraintName("FK_tblChatMessages_tblUsers");
+            entity.HasOne(d => d.User).WithMany(p => p.TblChatMessages)
+                .HasForeignKey(d => d.UserId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_tblChatMessages_tblUsers");
         });
 
         modelBuilder.Entity<TblCity>(entity =>
@@ -145,10 +145,10 @@ public partial class BonifatiusEmployeesContext : DbContext
 
             entity.Property(e => e.City).HasMaxLength(50);
 
-            //entity.HasOne(d => d.State).WithMany(p => p.TblCities)
-            //    .HasForeignKey(d => d.StateId)
-            //    .OnDelete(DeleteBehavior.ClientSetNull)
-            //    .HasConstraintName("FK_tblCity_tblState");
+            entity.HasOne(d => d.State).WithMany(p => p.TblCities)
+                .HasForeignKey(d => d.StateId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_tblCity_tblState");
         });
 
         modelBuilder.Entity<TblCompanyMaster>(entity =>
@@ -670,10 +670,10 @@ public partial class BonifatiusEmployeesContext : DbContext
 
             entity.Property(e => e.State).HasMaxLength(50);
 
-            //entity.HasOne(d => d.Country).WithMany(p => p.TblStates)
-            //    .HasForeignKey(d => d.CountryId)
-            //    .OnDelete(DeleteBehavior.ClientSetNull)
-            //    .HasConstraintName("FK_tblState_tblCountry");
+            entity.HasOne(d => d.Country).WithMany(p => p.TblStates)
+                .HasForeignKey(d => d.CountryId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_tblState_tblCountry");
         });
 
         modelBuilder.Entity<TblTaskDetail>(entity =>

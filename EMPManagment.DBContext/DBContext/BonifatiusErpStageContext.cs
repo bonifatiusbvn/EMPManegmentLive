@@ -17,6 +17,8 @@ public partial class BonifatiusErpStageContext : DbContext
 
     public virtual DbSet<TblAttendance> TblAttendances { get; set; }
 
+    public virtual DbSet<TblChatMessage> TblChatMessages { get; set; }
+
     public virtual DbSet<TblCity> TblCities { get; set; }
 
     public virtual DbSet<TblCompanyMaster> TblCompanyMasters { get; set; }
@@ -93,10 +95,7 @@ public partial class BonifatiusErpStageContext : DbContext
 
     public virtual DbSet<TblVendorType> TblVendorTypes { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Data Source=BONI002;Initial Catalog=BonifatiusERP_Stage;User ID=BoniEmp;Password=Admin123;Encrypt=False");
-
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<TblAttendance>(entity =>
@@ -118,6 +117,23 @@ public partial class BonifatiusErpStageContext : DbContext
                 .HasForeignKey(d => d.UserId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_tblAttendance_tblUsers");
+        });
+
+        modelBuilder.Entity<TblChatMessage>(entity =>
+        {
+            entity.HasKey(e => e.MessageId).HasName("PK__tblChatM__C87C0C9CF36694FF");
+
+            entity.ToTable("tblChatMessages");
+
+            entity.Property(e => e.IsDeleted).HasDefaultValueSql("((0))");
+            entity.Property(e => e.IsRead).HasDefaultValueSql("((0))");
+            entity.Property(e => e.SentDateTime).HasColumnType("datetime");
+            entity.Property(e => e.UserName).HasMaxLength(100);
+
+            entity.HasOne(d => d.User).WithMany(p => p.TblChatMessages)
+                .HasForeignKey(d => d.UserId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_tblChatMessages_tblUsers");
         });
 
         modelBuilder.Entity<TblCity>(entity =>
@@ -372,7 +388,6 @@ public partial class BonifatiusErpStageContext : DbContext
             entity.ToTable("tblManualInvoiceDetails");
 
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
-            entity.Property(e => e.Description).HasMaxLength(500);
             entity.Property(e => e.Discount).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.DiscountPercent).HasColumnType("numeric(18, 2)");
             entity.Property(e => e.Gst).HasColumnType("numeric(18, 2)");

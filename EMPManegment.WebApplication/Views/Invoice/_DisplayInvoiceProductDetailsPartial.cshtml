@@ -6,6 +6,54 @@
         <td scope="row" class="product-id">@Convert.ToInt64(item.RowNumber + 1)</td>
         <td class="text-start" style="width:230px">
             <label id="textProductName">@item.Product</label>
+            @if (item.Description == null || item.Description == "")
+            {
+                <div id="ProductDescriptionContainer" data-item-id="@item.Id"></div>
+                <div id="error-message" class="text-danger" style="display: none;">Kindly add description before adding a new one.</div>
+                <div class="row align-items-center" data-item-id="@item.Id" id="InvoiceProductDesBtn" onclick="fn_AddInvoiceProductDescription(this)">
+                    <div class="col-sm-1" style="margin-top : -5px;">
+                        <i class="lni lni-plus text-success" style="font-size: 10px; text-shadow: 1px 1px 1px #000;"></i>
+                    </div>
+                    <div class="col-sm-10" style="margin-left:-15px;">
+                        <p class="text-primary mb-0"><b style="font-size: 15px;"><i class="ri-add-fill me-1 align-bottom"></i>Description</b></p>
+                    </div>
+                </div>
+            }
+            else
+            {
+                var descriptionLines = item.Description.Split(new[] { "<br>" }, StringSplitOptions.None);
+                <div class="row align-items-center" data-item-id="@item.Id" id="InvoiceProductDesBtn" style="display:none;" onclick="fn_AddInvoiceProductDescription(this)">
+                    <div class="col-sm-1" style="margin-top : -5px;">
+                        <i class="lni lni-plus text-success" style="font-size: 10px; text-shadow: 1px 1px 1px #000;"></i>
+                    </div>
+                    <div class="col-sm-10" style="margin-left:-5px;">
+                        <p class="text-primary mb-0"><b>Item Description</b></p>
+                    </div>
+                </div>
+
+                <div id="ProductDescriptionContainer" data-item-id="@item.Id">
+                    @foreach (var line in descriptionLines)
+                    {
+                        <div class="row align-items-center" style="margin-top: 10px;">
+                            <div class="col-sm-10" style="margin-right:-7px;">
+                                <input type="text" class="txtInvoiceProductDes form-control" placeholder="Description" value="@line" />
+                            </div>
+                            <div class="col-sm-1">
+                                <div class="text-danger" style="cursor: pointer; font-size:20px;" onclick="removeInvoiceDescriptionRow(this)">x</div>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <div id="error-message" class="text-danger" style="display: none;">Kindly add description before adding a new one.</div>
+                <div class="row align-items-center" data-item-id="@item.Id" id="ProductDesBtn" onclick="fn_AddInvoiceProductDescription(this)">
+                    <div class="col-sm-1" style="margin-top : -5px;">
+                        <i class="lni lni-plus text-success" style="font-size: 10px; text-shadow: 1px 1px 1px #000;"></i>
+                    </div>
+                    <div class="col-sm-10" style="margin-left:-15px;">
+                        <p class="text-primary mb-0"><b style="font-size: 15px;"><i class="ri-add-fill me-1 align-bottom"></i>Description</b></p>
+                    </div>
+                </div>
+            }
             <input type="hidden" class="form-control bg-light border-0" id="textProductId" readonly value="@item.ProductId" />
             <input type="hidden" class="form-control bg-light border-0" id="textProductType" readonly value="@item.ProductType" />
         </td>

@@ -10,7 +10,7 @@
         <td scope="row" class="product-id" id="rowno" name="rowno">@Convert.ToInt64(item.RowNumber + 1)</td>
         <td class="text-start">
             <input id="textProductName" class="product-quantity form-control" value="@item.Product" />
-           
+
             @if (item.Description == null || item.Description == "")
             {
                 <div id="ProductDescriptionContainer" data-item-id="@item.Id"></div>
@@ -35,7 +35,7 @@
                         <p class="text-primary mb-0"><b>Item Description</b></p>
                     </div>
                 </div>
-                
+
                 <div id="ProductDescriptionContainer" data-item-id="@item.Id">
                     @foreach (var line in descriptionLines)
                     {
