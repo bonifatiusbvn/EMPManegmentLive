@@ -792,33 +792,39 @@ function toggleShippingAddress() {
 }
 
 function fn_AddManualInvoiceProductDescription(element) {
-    var itemId = $(element).data('item-id');
-    var $container = $(`#ProductDescriptionContainer[data-item-id='${itemId}']`);
+
+    var $row = $(element).closest('tr');
+    var itemId = $row.find('#ProductDesBtn').data('item-id');
+
+    var $container = $row.find(`#ProductDescriptionContainer[data-item-id='${itemId}']`);
+    var $errorMessage = $row.find('#error-message');
 
     var lastInput = $container.find('input').last();
 
     if (lastInput.length > 0 && lastInput.val().trim() === '') {
-        $('#error-message').show();
+        $errorMessage.show();
         return;
     } else {
-        $('#error-message').hide();
+        $errorMessage.hide();
     }
 
     var newDescriptionRow = `
        <div class="row align-items-center" data-item-id="${itemId}" style="margin-top: 10px;">
-    <div class="col-sm-10" style="margin-right:-7px;">
-        <input type="text" class="txtManualInvoiceProductDes form-control" placeholder="Description" />
-    </div>
-    <div class="col-sm-1">
-        <div class="text-danger" style="cursor: pointer; font-size:20px;" onclick="removeDescriptionRow(this)">x</div>
-    </div>
-</div>
-`;
+           <div class="col-sm-10" style="margin-right:-7px;">
+               <input type="text" class="txtManualInvoiceProductDes form-control" placeholder="Description" />
+           </div>
+           <div class="col-sm-1">
+               <div class="text-danger" style="cursor: pointer; font-size:20px;" onclick="removeDescriptionRow(this)">x</div>
+           </div>
+       </div>
+    `;
 
     $container.append(newDescriptionRow);
 }
 
+
 function removeDescriptionRow(element) {
+    var $row = $(element).closest('tr');
     $(element).closest('.row').remove();
-    $('#error-message').hide();
+    $row.find('#error-message').hide();
 }
