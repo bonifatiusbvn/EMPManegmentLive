@@ -9,7 +9,7 @@ public partial class TblCountry
 
     public string? CountryCode { get; set; }
 
-    public string Country { get; set; } = null!;
+    public string? Country { get; set; }
 
     public virtual ICollection<TblState> TblStates { get; set; } = new List<TblState>();
 

@@ -13,6 +13,8 @@ public partial class TblInvoiceDetail
 
     public string Product { get; set; } = null!;
 
+    public string? Description { get; set; }
+
     public int? Hsn { get; set; }
 
     public int ProductType { get; set; }
