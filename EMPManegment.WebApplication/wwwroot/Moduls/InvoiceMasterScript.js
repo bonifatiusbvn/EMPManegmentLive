@@ -41,10 +41,19 @@ function fn_InsertInvoiceDetails() {
             var ProductDetails = [];
             $(".product").each(function () {
                 var orderRow = $(this);
+                var descriptions = [];
+                orderRow.find(".txtInvoiceProductDes").each(function () {
+                    var descriptionVal = $(this).val().trim();
+                    if (descriptionVal) {
+                        descriptions.push(descriptionVal);
+                    }
+                });
+
                 var productName = orderRow.find("#textProductName").text().trim();
                 var productId = orderRow.find("#textProductId").val().trim();
                 var objData = {
                     Product: productName,
+                    Description: descriptions.join("<br>"),
                     ProductId: productId,
                     ProductType: orderRow.find("#txtPOProductType_" + orderRow.find("#textProductId").val()).val(),
                     Quantity: orderRow.find("#txtproductquantity").val(),
@@ -139,10 +148,19 @@ function fn_UpdateInvoiceDetails() {
             var ProductDetails = [];
             $(".product").each(function () {
                 var orderRow = $(this);
+                var descriptions = [];
+                orderRow.find(".txtInvoiceProductDes").each(function () {
+                    var descriptionVal = $(this).val().trim();
+                    if (descriptionVal) {
+                        descriptions.push(descriptionVal);
+                    }
+                });
+
                 var productName = orderRow.find("#textProductName").text().trim();
                 var productId = orderRow.find("#textProductId").val().trim();
                 var objData = {
                     Product: productName,
+                    Description: descriptions.join("<br>"),
                     ProductId: productId,
                     ProductType: orderRow.find("#txtPOProductType_" + orderRow.find("#textProductId").val()).val(),
                     Quantity: orderRow.find("#txtproductquantity").val(),
@@ -937,3 +955,41 @@ $(document).ready(function () {
 
     updateInvoiceTotals();
 });
+
+function fn_AddInvoiceProductDescription(element) {
+
+    var $row = $(element).closest('tr');
+    var itemId = $row.find('#InvoiceProductDesBtn').data('item-id');
+
+    var $container = $row.find(`#ProductDescriptionContainer[data-item-id='${itemId}']`);
+    var $errorMessage = $row.find('#error-message');
+
+    var lastInput = $container.find('input').last();
+
+    if (lastInput.length > 0 && lastInput.val().trim() === '') {
+        $errorMessage.show();
+        return;
+    } else {
+        $errorMessage.hide();
+    }
+
+    var newDescriptionRow = `
+       <div class="row align-items-center" data-item-id="${itemId}" style="margin-top: 10px;">
+           <div class="col-sm-10" style="margin-right:-7px;">
+               <input type="text" class="txtInvoiceProductDes form-control" placeholder="Description" />
+           </div>
+           <div class="col-sm-1">
+               <div class="text-danger" style="cursor: pointer; font-size:20px;" onclick="removeInvoiceDescriptionRow(this)">x</div>
+           </div>
+       </div>
+    `;
+
+    $container.append(newDescriptionRow);
+}
+
+
+function removeInvoiceDescriptionRow(element) {
+    var $row = $(element).closest('tr');
+    $(element).closest('.row').remove();
+    $row.find('#error-message').hide();
+}

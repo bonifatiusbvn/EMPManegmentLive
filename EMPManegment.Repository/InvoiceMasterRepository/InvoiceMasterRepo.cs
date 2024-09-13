@@ -450,6 +450,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                         InvoiceRefId = invoice.Id,
                         ProductId = item.ProductId,
                         Product = item.Product,
+                        Description = item.Description,
                         ProductType = item.ProductType,
                         Quantity = item.Quantity,
                         Price = item.Price,
@@ -711,6 +712,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                         existingInvoice.InvoiceRefId = invoice.Id;
                         existingInvoice.ProductId = item.ProductId;
                         existingInvoice.Product = item.Product;
+                        existingInvoice.Description = item.Description;
                         existingInvoice.ProductType = item.ProductType;
                         existingInvoice.Quantity = item.Quantity;
                         existingInvoice.Price = item.Price;
@@ -735,6 +737,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                             InvoiceRefId = invoice.Id,
                             ProductId = item.ProductId,
                             Product = item.Product,
+                            Description = item.Description,
                             ProductType = item.ProductType,
                             Quantity = item.Quantity,
                             Price = item.Price,
@@ -1046,6 +1049,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                         {
                             ProductId = row["ProductId"] != DBNull.Value ? (Guid)row["ProductId"] : Guid.Empty,
                             Product = row["Product"]?.ToString(),
+                            Description = row["Description"]?.ToString(),
                             Hsn = row["HSN"] != DBNull.Value ? (int)row["HSN"] : 0,
                             Quantity = row["Quantity"] != DBNull.Value ? (decimal)row["Quantity"] : 0,
                             ProductType = row["ProductType"] != DBNull.Value ? (int)row["ProductType"] : 0,
