@@ -11,6 +11,7 @@ using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.TaskModels;
 using EMPManegment.Inretface.Interface.Home;
 using Microsoft.EntityFrameworkCore;
+#nullable disable
 
 namespace EMPManegment.Repository.Home
 {
@@ -56,13 +57,22 @@ namespace EMPManegment.Repository.Home
             try
             {
                 var messages = Context.TblChatMessages
-                    .Where(m => m.UserId != chatMessage.UserId &&
-                                m.ConversationId == chatMessage.ConversationId &&
-                                (!m.IsRead.HasValue || !m.IsRead.Value));
+                    .Where(m => m.UserId == chatMessage.UserId
+                                && m.ConversationId == chatMessage.ConversationId
+                                && m.IsRead == false)
+                    .ToList();
+
+                if (!messages.Any())
+                {
+                    response.Code = (int)HttpStatusCode.NotFound;
+                    response.Message = "No unread messages found for the specified user and conversation.";
+                    return response;
+                }
 
                 foreach (var message in messages)
                 {
                     message.IsRead = true;
+                    Context.TblChatMessages.Update(message);
                 }
 
                 await Context.SaveChangesAsync();
@@ -140,105 +150,144 @@ namespace EMPManegment.Repository.Home
 
         public async Task<IEnumerable<ChatMessagesView>> CheckUserConversationId(NewChatMessageModel newChatMessage)
         {
-            var conversationIds = await Context.TblChatMessages
-                .Where(cm => cm.UserId == newChatMessage.MyUserId)
-                .Select(cm => cm.ConversationId)
-                .Distinct()
-                .ToListAsync();
-
-            var messages = await (from cm in Context.TblChatMessages
-                                  join user in Context.TblUsers on cm.UserId equals user.Id
-                                  where conversationIds.Contains(cm.ConversationId) && cm.UserId == newChatMessage.SelectedUserId
-                                  select new ChatMessagesView
-                                  {
-                                      MessageId = cm.MessageId,
-                                      UserId = cm.UserId,
-                                      UserName = user.FirstName + " " + user.LastName,
-                                      MessageText = cm.MessageText,
-                                      SentDateTime = cm.SentDateTime,
-                                      IsRead = cm.IsRead,
-                                      IsDeleted = cm.IsDeleted,
-                                      ConversationId = cm.ConversationId,
-                                      UserImage = user.Image
-                                  })
-                                  .OrderByDescending(cm => cm.SentDateTime)
-                                  .ToListAsync();
-
-            if (!messages.Any())
+            try
             {
-                var userInfo = await (from user in Context.TblUsers
-                                      where user.Id == newChatMessage.SelectedUserId
+                var conversationIds = await Context.TblChatMessages
+                    .Where(cm => cm.UserId == newChatMessage.MyUserId)
+                    .Select(cm => cm.ConversationId)
+                    .Distinct()
+                    .ToListAsync();
+
+                var messages = await (from cm in Context.TblChatMessages
+                                      join user in Context.TblUsers on cm.UserId equals user.Id
+                                      where conversationIds.Contains(cm.ConversationId) && cm.UserId == newChatMessage.SelectedUserId
                                       select new ChatMessagesView
                                       {
-                                          UserId = user.Id,
+                                          MessageId = cm.MessageId,
+                                          UserId = cm.UserId,
                                           UserName = user.FirstName + " " + user.LastName,
-                                          ConversationId = Guid.NewGuid(),
-                                          UserImage = user.Image,
-                                          UserIdentity = user.UserName
+                                          MessageText = cm.MessageText,
+                                          SentDateTime = cm.SentDateTime,
+                                          IsRead = cm.IsRead,
+                                          IsDeleted = cm.IsDeleted,
+                                          ConversationId = cm.ConversationId,
+                                          UserImage = user.Image
                                       })
-                                      .SingleOrDefaultAsync();
+                                      .OrderByDescending(cm => cm.SentDateTime)
+                                      .ToListAsync();
 
-                var selectedUserChatMessage = new TblChatMessage
+                if (!messages.Any())
                 {
-                    UserId = newChatMessage.SelectedUserId,
-                    UserName = userInfo.UserIdentity,
-                    MessageText = "Hello!",
-                    SentDateTime = DateTime.Now,
-                    IsRead = false,
-                    IsDeleted = false,
-                    ConversationId = userInfo.ConversationId
-                };
+                    var userInfo = await (from user in Context.TblUsers
+                                          where user.Id == newChatMessage.SelectedUserId
+                                          select new ChatMessagesView
+                                          {
+                                              UserId = user.Id,
+                                              UserName = user.FirstName + " " + user.LastName,
+                                              ConversationId = Guid.NewGuid(),
+                                              UserImage = user.Image,
+                                              UserIdentity = user.UserName
+                                          })
+                                          .SingleOrDefaultAsync();
 
-                Context.TblChatMessages.Add(selectedUserChatMessage);
-                await Context.SaveChangesAsync();
+                    var selectedUserChatMessage = new TblChatMessage
+                    {
+                        UserId = newChatMessage.SelectedUserId,
+                        UserName = userInfo.UserIdentity,
+                        MessageText = "Hello!",
+                        SentDateTime = DateTime.Now,
+                        IsRead = false,
+                        IsDeleted = false,
+                        ConversationId = userInfo.ConversationId
+                    };
 
-                var myChatMessage = new TblChatMessage
-                {
-                    UserId = newChatMessage.MyUserId,
-                    UserName = newChatMessage.MyUserIdentity,
-                    MessageText = "Hello!",
-                    SentDateTime = DateTime.Now,
-                    IsRead = false,
-                    IsDeleted = false,
-                    ConversationId = userInfo.ConversationId
-                };
+                    Context.TblChatMessages.Add(selectedUserChatMessage);
+                    await Context.SaveChangesAsync();
 
-                Context.TblChatMessages.Add(myChatMessage);
-                await Context.SaveChangesAsync();
+                    var myChatMessage = new TblChatMessage
+                    {
+                        UserId = newChatMessage.MyUserId,
+                        UserName = newChatMessage.MyUserIdentity,
+                        MessageText = "Hello!",
+                        SentDateTime = DateTime.Now,
+                        IsRead = false,
+                        IsDeleted = false,
+                        ConversationId = userInfo.ConversationId
+                    };
+
+                    Context.TblChatMessages.Add(myChatMessage);
+                    await Context.SaveChangesAsync();
 
 
-                if (userInfo != null)
-                {
-                    return new List<ChatMessagesView> { userInfo };
+                    if (userInfo != null)
+                    {
+                        return new List<ChatMessagesView> { userInfo };
+                    }
                 }
+                return messages;
             }
-            return messages;
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         public async Task<IEnumerable<ChatMessagesView>> GetUsersNewMessageList(Guid userId)
         {
-            var result = await(from cm in Context.TblChatMessages
-                               join user in Context.TblUsers on cm.UserId equals user.Id
-                               where Context.TblChatMessages
-                                   .Where(innerCm => innerCm.UserId == userId && innerCm.IsRead == false)
-                                   .Select(innerCm => innerCm.ConversationId)
-                                   .Distinct()
-                                   .Contains(cm.ConversationId)
-                                 && cm.UserId != userId
-                               group new { cm, user } by new { cm.UserId, user.FirstName, user.LastName, user.Image, cm.ConversationId } into g
-                               select new ChatMessagesView
-                               {
-                                   UserId = g.Key.UserId,
-                                   ConversationId = g.Key.ConversationId,
-                                   UserImage = g.Key.Image,
-                                   UserName = g.Key.FirstName + " " + g.Key.LastName,
-                                   SentDateTime = g.Max(x => x.cm.SentDateTime),
-                                   MessageText = g.OrderByDescending(x => x.cm.SentDateTime).FirstOrDefault().cm.MessageText
-                               })
-                            .OrderByDescending(x => x.SentDateTime)
-                            .ToListAsync();
+            try
+            {
+                // Step 1: Get all unique conversation IDs 
+                var conversationIds = await Context.TblChatMessages
+                    .Where(cm => cm.UserId == userId)
+                    .Select(cm => cm.ConversationId)
+                    .Distinct()
+                    .ToListAsync();
 
-            return result;
+                // Step 2: Get messages based on the conversation IDs, excluding specified user and including only unread messages
+                var messages = await (from cm in Context.TblChatMessages
+                                      join user in Context.TblUsers on cm.UserId equals user.Id
+                                      where conversationIds.Contains(cm.ConversationId)
+                                            && cm.UserId != userId
+                                            && cm.IsRead == false
+                                      select new
+                                      {
+                                          cm.UserId,
+                                          user.FirstName,
+                                          user.LastName,
+                                          user.Image,
+                                          cm.ConversationId,
+                                          cm.SentDateTime,
+                                          cm.MessageText
+                                      })
+                                      .ToListAsync();
+
+                // Step 3: Group and select results
+                var result = messages
+                    .GroupBy(x => new
+                    {
+                        x.UserId,
+                        x.FirstName,
+                        x.LastName,
+                        x.Image,
+                        x.ConversationId
+                    })
+                    .Select(g => new ChatMessagesView
+                    {
+                        UserId = g.Key.UserId,
+                        ConversationId = g.Key.ConversationId,
+                        UserImage = g.Key.Image,
+                        UserName = $"{g.Key.FirstName} {g.Key.LastName}",
+                        SentDateTime = g.Max(x => x.SentDateTime),
+                        MessageText = g.FirstOrDefault(x => x.SentDateTime == g.Max(m => m.SentDateTime))?.MessageText ?? string.Empty
+                    })
+                    .OrderByDescending(x => x.SentDateTime)
+                    .ToList();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         public async Task<AllNotificationModel> GetUsersAllNotificationList(Guid userId)
@@ -247,28 +296,55 @@ namespace EMPManegment.Repository.Home
 
             try
             {
-                var chatMessagesQuery = from a in Context.TblChatMessages
-                                        join user in Context.TblUsers on a.UserId equals user.Id
-                                        where Context.TblChatMessages
-                                            .Where(innerCm => innerCm.UserId == userId && innerCm.IsRead != true)
-                                            .Select(innerCm => innerCm.ConversationId)
-                                            .Distinct()
-                                            .Contains(a.ConversationId)
-                                          && a.UserId != userId
-                                        group new { a, user } by new { a.UserId, user.FirstName, user.LastName, user.Image, a.ConversationId } into g
-                                        select new ChatMessagesView
-                                        {
-                                            UserId = g.Key.UserId,
-                                            ConversationId = g.Key.ConversationId,
-                                            UserImage = g.Key.Image,
-                                            UserName = $"{g.Key.FirstName} {g.Key.LastName}",
-                                            SentDateTime = g.Max(x => x.a.SentDateTime),
-                                            MessageText = g.OrderByDescending(x => x.a.SentDateTime).FirstOrDefault().a.MessageText
-                                        };
+                // Step 1: Get all unique conversation IDs 
+                var conversationIds = await Context.TblChatMessages
+                    .Where(cm => cm.UserId == userId)
+                    .Select(cm => cm.ConversationId)
+                    .Distinct()
+                    .ToListAsync();
 
-                allnotifications.Messages = await chatMessagesQuery
-                                              .OrderByDescending(x => x.SentDateTime)
-                                              .ToListAsync();
+                // Step 2: Get messages based on the conversation IDs, excluding specified user and including only unread messages
+                var messages = await (from cm in Context.TblChatMessages
+                                      join user in Context.TblUsers on cm.UserId equals user.Id
+                                      where conversationIds.Contains(cm.ConversationId)
+                                            && cm.UserId != userId
+                                            && cm.IsRead == false
+                                      select new
+                                      {
+                                          cm.UserId,
+                                          user.FirstName,
+                                          user.LastName,
+                                          user.Image,
+                                          cm.ConversationId,
+                                          cm.SentDateTime,
+                                          cm.MessageText
+                                      })
+                                      .ToListAsync();
+
+                // Step 3: Group and select results
+                var chatMessagesQuery = messages
+                    .GroupBy(x => new
+                    {
+                        x.UserId,
+                        x.FirstName,
+                        x.LastName,
+                        x.Image,
+                        x.ConversationId
+                    })
+                    .Select(g => new ChatMessagesView
+                    {
+                        UserId = g.Key.UserId,
+                        ConversationId = g.Key.ConversationId,
+                        UserImage = g.Key.Image,
+                        UserName = $"{g.Key.FirstName} {g.Key.LastName}",
+                        SentDateTime = g.Max(x => x.SentDateTime),
+                        MessageText = g.FirstOrDefault(x => x.SentDateTime == g.Max(m => m.SentDateTime))?.MessageText ?? string.Empty
+                    })
+                    .OrderByDescending(x => x.SentDateTime)
+                    .ToList();
+
+                allnotifications.Messages = chatMessagesQuery;
+
 
                 var tasksQuery = from a in Context.TblTaskDetails
                                  join b in Context.TblUsers on a.UserId equals b.Id

@@ -21,6 +21,8 @@ function GetConversation(conversationId) {
         success: function (result) {
             $("#userconversation").html(result);
             $('#ChatConversationBtn').removeClass('d-none');
+            var SecondUserId = $('#txtSecondUserId').val();
+            fn_ReadMessage(conversationId, SecondUserId)
         },
 
     });
@@ -58,7 +60,6 @@ function fn_GetChatUserInformation(UserId) {
 }
 
 function fn_ReadMessage(conversationId, secondUserId) {
-
     var chatData = {
         UserId: secondUserId,
         ConversationId: conversationId
@@ -70,6 +71,7 @@ function fn_ReadMessage(conversationId, secondUserId) {
         data: chatData,
         dataType: 'json',
         success: function (result) {
+            debugger
             if (result.code == 200) {
 
             } else {

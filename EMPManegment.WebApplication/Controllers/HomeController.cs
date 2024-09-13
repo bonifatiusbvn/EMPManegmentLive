@@ -355,7 +355,7 @@ namespace EMPManegment.Web.Controllers
             ApiResponseModel postuser = await APIServices.PostAsync(ChatMessage, "UserHome/ReadMessageAsync");
             if (postuser.code == 200)
             {
-                return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
+                return Ok(new { Code = postuser.code });
             }
             else
             {
