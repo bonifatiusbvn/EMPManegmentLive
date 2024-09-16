@@ -12,7 +12,6 @@
             processData: false,
             contentType: false,
             success: function (Result) {
-            debugger
                 if (Result.code == 200) {
                     Swal.fire({
                         title: Result.message,
