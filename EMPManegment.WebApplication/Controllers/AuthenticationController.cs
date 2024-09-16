@@ -127,23 +127,13 @@ namespace EMPManegment.Web.Controllers
 
                     if (responsemodel.code != (int)HttpStatusCode.OK)
                     {
-                        if (responsemodel.code == (int)HttpStatusCode.Forbidden)
-                        {
-                            TempData["ErrorMessage"] = responsemodel.message;
-                        }
-                        else
-                        {
-                            TempData["ErrorMessage"] = responsemodel.message;
-
-                        }
+                        TempData["ErrorMessage"] = responsemodel.message;
                     }
-
                     else
                     {
                         var data = JsonConvert.SerializeObject(responsemodel.data);
                         userlogin.Data = JsonConvert.DeserializeObject<LoginView>(data);
                         var defaultProfileImage = "~/content/image/image-b2.jpg";
-
 
                         var claims = new List<Claim>()
                         {
@@ -157,13 +147,22 @@ namespace EMPManegment.Web.Controllers
                             new Claim("AccessToken", userlogin.Data.Token),
                         };
 
+                        if (userlogin.Data.ProjectData != null && userlogin.Data.ProjectData.Count == 1)
+                        {
+                            var singleProject = userlogin.Data.ProjectData.First();
+                            UserSession.ProjectId = singleProject.ProjectId.ToString();
+                            UserSession.ProjectName = $"{singleProject.ProjectTitle} ({singleProject.ShortName})";
+
+                            claims.Add(new Claim("ProjectId", singleProject.ProjectId.ToString()));
+                            claims.Add(new Claim("ProjectName", $"{singleProject.ProjectTitle} ({singleProject.ShortName})"));
+                        }
+
                         var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                         var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
 
                         if (login.RememberMe)
                         {
-                            CookieOptions cookie = new CookieOptions();
-                            cookie.Expires = DateTime.UtcNow.AddDays(7);
+                            CookieOptions cookie = new CookieOptions { Expires = DateTime.UtcNow.AddDays(7) };
                             Response.Cookies.Append("UserName", userlogin.Data.UserName, cookie);
                             Response.Cookies.Append("Password", login.Password, cookie);
                             ViewBag.checkRememberMe = true;
@@ -176,12 +175,13 @@ namespace EMPManegment.Web.Controllers
 
                         UserSession.ProfilePhoto = string.IsNullOrEmpty(userlogin.Data.ProfileImage) ? defaultProfileImage : userlogin.Data.ProfileImage;
                         UserSession.FormPermisionData = userlogin.Data.FromPermissionData;
-                        UserSession.ProjectData=userlogin.Data.ProjectData;
+                        UserSession.ProjectData = userlogin.Data.ProjectData;
 
                         await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
                         return RedirectToAction("UserHome", "Home");
                     }
                 }
+
                 ViewBag.UserName = login.UserName;
                 return View();
             }
@@ -190,6 +190,7 @@ namespace EMPManegment.Web.Controllers
                 return BadRequest(new { Message = "InternalServer" });
             }
         }
+
 
         [HttpPost]
         public async Task<IActionResult> Logout()

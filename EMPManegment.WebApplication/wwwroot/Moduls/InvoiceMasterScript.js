@@ -389,7 +389,7 @@ $(document).ready(function () {
 function createInvoice() {
     if ($("#txtInvoice").val() == "") {
         Swal.fire({
-            title: "Kindly select project on dashboard.",
+            title: "Kindly select project!",
             icon: 'warning',
             confirmButtonColor: '#3085d6',
             confirmButtonText: 'OK',

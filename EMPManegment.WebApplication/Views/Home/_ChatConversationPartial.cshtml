@@ -242,7 +242,7 @@
 
     $('#chat-conversation-details-id').scrollTop($('#chat-conversation-details-id')[0].scrollHeight);
 
-    window.onload = function () {debugger
+    window.onload = function () {
         var connection = new signalR.HubConnectionBuilder()
             .withUrl("http://192.168.0.126/chat")
             .build();
@@ -250,7 +250,6 @@
         connection.start().catch(function (err) {
             return console.error(err.toString());
         });
-        debugger
         connection.on("ReceiveMessage", function (userName, message, conversationId) {
             var conversationList = document.getElementById("users-conversation");
 
