@@ -21,6 +21,8 @@ function GetConversation(conversationId) {
         success: function (result) {
             $("#userconversation").html(result);
             $('#ChatConversationBtn').removeClass('d-none');
+            var SecondUserId = $('#txtSecondUserId').val();
+            fn_ReadMessage(conversationId, SecondUserId)
         },
 
     });
@@ -58,7 +60,6 @@ function fn_GetChatUserInformation(UserId) {
 }
 
 function fn_ReadMessage(conversationId, secondUserId) {
-
     var chatData = {
         UserId: secondUserId,
         ConversationId: conversationId
@@ -70,6 +71,7 @@ function fn_ReadMessage(conversationId, secondUserId) {
         data: chatData,
         dataType: 'json',
         success: function (result) {
+            debugger
             if (result.code == 200) {
 
             } else {
@@ -227,7 +229,11 @@ function GetAllNotifications() {
             var totalcount = $('#totalNotificationCount').val();
             $('#CountAllNotification').text(totalcount);
             $('#CountAllNewNotification').text(totalcount);
-            $('#CountunreadNotification').text(totalcount);
+            if (totalcount == null || totalcount == 0) {
+                $('#CountunreadNotification').text(0); 
+            } else {
+                $('#CountunreadNotification').text(totalcount);
+            }
             var UnreadMessages = $('#TotalUnreadMessages').val();
             $("#CountUnreadMessage").text(UnreadMessages); 
             var totalTasks = $('#totalTotalTasks').val();

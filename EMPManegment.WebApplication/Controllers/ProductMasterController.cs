@@ -61,6 +61,7 @@ namespace EMPManegment.Web.Controllers
                     GstPercentage = AddProduct.GstPercentage,
                     GstAmount = AddProduct.GstAmount,
                     Hsn = AddProduct.Hsn,
+                    CreatedOn= DateTime.Now,
                 };
                 if (AddProduct.ProductImage != null)
                 {
@@ -74,6 +75,7 @@ namespace EMPManegment.Web.Controllers
                 {
                     ProductDetails.ProductImage = null;
                 }
+
                 ApiResponseModel postuser = await APIServices.PostAsync(ProductDetails, "ProductMaster/AddProductDetails");
                 UserResponceModel responseModel = new UserResponceModel();
                 if (postuser.code == 200)
@@ -82,7 +84,6 @@ namespace EMPManegment.Web.Controllers
                 }
                 else
                 {
-
                     return Ok(new { postuser.message, postuser.code });
                 }
             }

@@ -385,7 +385,6 @@ $(document).ready(function () {
             txtProductName: "required",
             txtProductDescription: "required",
             txtshortdescription: "required",
-            txtproductImage: "required",
             txtPerUnitPrice: "required",
             txtGST: "required",
             txtGstPerUnit: "required",
@@ -396,7 +395,6 @@ $(document).ready(function () {
             txtProductDescription: "Please Enter Product Description",
             txtshortdescription: "Please Enter Product Short Description",
             txtPerUnitPrice: "Please Enter Per Unit Price of the Product",
-            txtproductImage: "Please Enter Product Image",
             txtGST: "Please Enter GST",
             txtGstPerUnit: "Please Enter Gst %",
             txtProducts: "Please Select Product Type"
