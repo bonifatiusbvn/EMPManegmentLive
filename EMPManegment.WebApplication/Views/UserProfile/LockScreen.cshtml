@@ -137,3 +137,16 @@
     var UserId = '@Accessor.HttpContext.Session.GetString("UserID")';
     var UserName = '@Accessor.HttpContext.Session.GetString("UserName")';
 </script>
+<script>
+    document.getElementById("open").addEventListener("click", function () {
+        document.getElementById("password").type = "text";
+        document.getElementById("open").style.display = "none";
+        document.getElementById("closed").style.display = "inline";
+    });
+
+    document.getElementById("closed").addEventListener("click", function () {
+        document.getElementById("password").type = "password";
+        document.getElementById("open").style.display = "inline";
+        document.getElementById("closed").style.display = "none";
+    });
+</script>
