@@ -385,7 +385,10 @@
                 var img = document.getElementById('user-profile-image');
                 img.src = e.target.result;
                 img.style.display = 'block';
-                document.getElementById('default-avatar');
+                var defaultAvatar = document.getElementById('default-avatar');
+                if (defaultAvatar) {
+                    defaultAvatar.style.display = 'none';
+                }
             };
             reader.readAsDataURL(input.files[0]);
         }
