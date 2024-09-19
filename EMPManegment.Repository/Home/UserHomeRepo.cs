@@ -105,7 +105,7 @@ namespace EMPManegment.Repository.Home
         {
             var messages = await (from cm in Context.TblChatMessages
                                   join user in Context.TblUsers on cm.UserId equals user.Id
-                                  where cm.ConversationId == conversationId
+                                  where cm.ConversationId == conversationId && cm.IsDeleted == false
                                   select new ChatMessagesView
                                   {
                                       MessageId = cm.MessageId,
@@ -126,7 +126,7 @@ namespace EMPManegment.Repository.Home
             var result = await (from cm in Context.TblChatMessages
                                 join user in Context.TblUsers on cm.UserId equals user.Id
                                 where Context.TblChatMessages
-                                    .Where(innerCm => innerCm.UserId == userId)
+                                    .Where(innerCm => innerCm.UserId == userId && cm.IsDeleted == false)
                                     .Select(innerCm => innerCm.ConversationId)
                                     .Distinct()
                                     .Contains(cm.ConversationId)
@@ -145,7 +145,6 @@ namespace EMPManegment.Repository.Home
                             .ToListAsync();
 
             return result;
-
         }
 
         public async Task<IEnumerable<ChatMessagesView>> CheckUserConversationId(NewChatMessageModel newChatMessage)
@@ -160,7 +159,7 @@ namespace EMPManegment.Repository.Home
 
                 var messages = await (from cm in Context.TblChatMessages
                                       join user in Context.TblUsers on cm.UserId equals user.Id
-                                      where conversationIds.Contains(cm.ConversationId) && cm.UserId == newChatMessage.SelectedUserId
+                                      where conversationIds.Contains(cm.ConversationId) && cm.UserId == newChatMessage.SelectedUserId && cm.IsDeleted == false
                                       select new ChatMessagesView
                                       {
                                           MessageId = cm.MessageId,
@@ -249,6 +248,7 @@ namespace EMPManegment.Repository.Home
                                       where conversationIds.Contains(cm.ConversationId)
                                             && cm.UserId != userId
                                             && cm.IsRead == false
+                                            && cm.IsDeleted == false
                                       select new
                                       {
                                           cm.UserId,
@@ -309,6 +309,7 @@ namespace EMPManegment.Repository.Home
                                       where conversationIds.Contains(cm.ConversationId)
                                             && cm.UserId != userId
                                             && cm.IsRead == false
+                                            && cm.IsDeleted == false
                                       select new
                                       {
                                           cm.UserId,
@@ -378,6 +379,37 @@ namespace EMPManegment.Repository.Home
             }
 
             return allnotifications;
+        }
+
+        public async Task<UserResponceModel> DeleteChatMessage(int MessageId)
+        {
+            UserResponceModel response = new UserResponceModel();
+            try
+            {
+                var chatDetails = Context.TblChatMessages.Where(a => a.MessageId == MessageId).FirstOrDefault();
+
+                if (chatDetails != null)
+                {
+
+                    chatDetails.IsDeleted = true;
+                    Context.TblChatMessages.Update(chatDetails);
+                    Context.SaveChanges();
+                    response.Message = "Message is successfully deleted.";
+                    response.Data = chatDetails.ConversationId;
+                }
+                else
+                {
+                    response.Code = (int)HttpStatusCode.NotFound;
+                    response.Message = "Message does not found";
+                }
+            }
+            catch
+            {
+                response.Code = (int)HttpStatusCode.InternalServerError;
+                response.Message = "Error in deleting message.";
+            }
+
+            return response;
         }
     }
 }

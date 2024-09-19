@@ -511,5 +511,27 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteChatMessage(int MessageId)
+        {
+            try
+            {
+                ApiResponseModel postuser = await APIServices.PostAsync("", "UserHome/DeleteChatMessage?MessageId=" + MessageId);
+                if (postuser.code == 200)
+                {
+
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code, Data = postuser.data});
+                }
+                else
+                {
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

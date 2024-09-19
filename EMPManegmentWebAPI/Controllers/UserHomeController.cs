@@ -482,5 +482,33 @@ namespace EMPManagment.API.Controllers
             var allNotification = await HomeServices.GetUsersAllNotificationList(userId);
             return Ok(new { code = 200, data = allNotification });
         }
+
+        [HttpPost]
+        [Route("DeleteChatMessage")]
+        public async Task<IActionResult> DeleteChatMessage(int MessageId)
+        {
+            UserResponceModel responseModel = new UserResponceModel();
+            try
+            {
+                var MessageDetails = HomeServices.DeleteChatMessage(MessageId);
+                if (MessageDetails != null)
+                {
+                    responseModel.Code = (int)HttpStatusCode.OK;
+                    responseModel.Message = MessageDetails.Result.Message;
+                    responseModel.Data = MessageDetails.Result.Data;
+                }
+                else
+                {
+                    responseModel.Message = MessageDetails.Result.Message;
+                    responseModel.Code = MessageDetails.Result.Code;
+                }
+            }
+            catch (Exception)
+            {
+                responseModel.Code = (int)HttpStatusCode.InternalServerError;
+            }
+
+            return StatusCode(responseModel.Code, responseModel);
+        }
     }
 }

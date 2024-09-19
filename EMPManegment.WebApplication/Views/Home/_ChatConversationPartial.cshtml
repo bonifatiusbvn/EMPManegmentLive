@@ -160,52 +160,94 @@
                         <br />
                         @foreach (var item in group)
                         {
-                            var imageUrl = !string.IsNullOrEmpty(@item.UserImage) ? Url.Content($"~/{@item.UserImage}") : null;
-                            var initials = (!string.IsNullOrEmpty(@item.UserName)) ? $"{@item.UserName[0]}".ToUpper() : null;
-                            <li class="chat-list @(item.UserId == _userSession.UserId ? "right" : "left")">
-                                <div class="conversation-list">
-                                    <div class="chat-avatar">
-                                        @if (!string.IsNullOrEmpty(imageUrl))
-                                        {
-                                            <img src="~/@item.UserImage" alt="">
-                                        }
-                                        else
-                                        {
-                                            <div class="flex-shrink-0 avatar-xs me-2">
-                                                <div class="avatar-title bg-success-subtle text-success rounded-circle fs-13" style="height:30px;width:30px;">@initials</div>
-                                            </div>
-                                        }
-                                    </div>
-                                    <div class="user-chat-content">
-                                        <div class="ctext-wrap">
-                                            <div class="ctext-wrap-content">
-                                                <p class="mb-0 ctext-content">@item.MessageText</p>
-                                            </div>
-                                            <div class="dropdown align-self-start message-box-drop">
-                                                <a class="dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                    <i class="ri-more-2-fill"></i>
-                                                </a>
-                                                <div class="dropdown-menu">
-                                                    <a class="dropdown-item" href="#"><i class="ri-reply-line me-2 text-muted align-bottom"></i>Reply</a>
-                                                    <a class="dropdown-item" href="#"><i class="ri-file-copy-line me-2 text-muted align-bottom"></i>Copy</a>
-                                                    <a class="dropdown-item delete-item" href="#"><i class="ri-delete-bin-5-line me-2 text-muted align-bottom"></i>Delete</a>
-                                        </div>
-                                            </div>
-                                        </div>
-                                        <div class="conversation-name">
-                                            <small class="text-muted time">@(item.SentDateTime.HasValue ? item.SentDateTime.Value.ToString("hh:mm tt") : "")</small>
-                                            @if (item.IsRead == true)
+                            if (@item.UserId == _userSession.UserId)
+                            {
+                                var imageUrl = !string.IsNullOrEmpty(@item.UserImage) ? Url.Content($"~/{@item.UserImage}") : null;
+                                var initials = (!string.IsNullOrEmpty(@item.UserName)) ? $"{@item.UserName[0]}".ToUpper() : null;
+                                <li class="chat-list @(item.UserId == _userSession.UserId ? "right" : "left")">
+                                    <div class="conversation-list">
+                                        <div class="chat-avatar">
+                                            @if (!string.IsNullOrEmpty(imageUrl))
                                             {
-                                                <span class="text-success check-message-icon">
-                                                    <i class="ri-check-double-line align-bottom"></i>
-                                                </span>
+                                                <img src="~/@item.UserImage" alt="">
+                                            }
+                                            else
+                                            {
+                                                <div class="flex-shrink-0 avatar-xs me-2">
+                                                    <div class="avatar-title bg-success-subtle text-success rounded-circle fs-13" style="height:30px;width:30px;">@initials</div>
+                                                </div>
                                             }
                                         </div>
+                                        <div class="user-chat-content">
+                                            <div class="ctext-wrap">
+                                                <div class="ctext-wrap-content">
+                                                    <p class="mb-0 ctext-content">@item.MessageText</p>
+                                                </div>
+                                                <div class="dropdown align-self-start message-box-drop">
+                                                    <a class="dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                        <i class="ri-more-2-fill"></i>
+                                                    </a>
+                                                    <div class="dropdown-menu">
+                                                        <a class="dropdown-item" href="#"><i class="ri-reply-line me-2 text-muted align-bottom"></i>Reply</a>
+                                                        <a class="dropdown-item" href="#"><i class="ri-file-copy-line me-2 text-muted align-bottom"></i>Copy</a>
+                                                        <a class="dropdown-item delete-item" onclick="deleteChatMessage('@item.MessageId')"><i class="ri-delete-bin-5-line me-2 text-muted align-bottom"></i>Delete</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="conversation-name">
+                                                <small class="text-muted time">@(item.SentDateTime.HasValue ? item.SentDateTime.Value.ToString("hh:mm tt") : "")</small>
+                                                @if (item.IsRead == true)
+                                                {
+                                                    <span class="text-success check-message-icon">
+                                                        <i class="ri-check-double-line align-bottom"></i>
+                                                    </span>
+                                                }
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                                <input type="hidden" id="txtChatConversationId" value="@item.ConversationId" hidden />
-                                <input type="hidden" id="txtSecondUserId" value="@secondUserId" hidden />
-                            </li>
+                                    <input type="hidden" id="txtChatConversationId" value="@item.ConversationId" hidden />
+                                    <input type="hidden" id="txtSecondUserId" value="@secondUserId" hidden />
+                                </li>
+                            }
+                            else
+                            {
+                                var imageUrl = !string.IsNullOrEmpty(@item.UserImage) ? Url.Content($"~/{@item.UserImage}") : null;
+                                var initials = (!string.IsNullOrEmpty(@item.UserName)) ? $"{@item.UserName[0]}".ToUpper() : null;
+                                <li class="chat-list @(item.UserId == _userSession.UserId ? "right" : "left")">
+                                    <div class="conversation-list">
+                                        <div class="chat-avatar">
+                                            @if (!string.IsNullOrEmpty(imageUrl))
+                                            {
+                                                <img src="~/@item.UserImage" alt="">
+                                            }
+                                            else
+                                            {
+                                                <div class="flex-shrink-0 avatar-xs me-2">
+                                                    <div class="avatar-title bg-success-subtle text-success rounded-circle fs-13" style="height:30px;width:30px;">@initials</div>
+                                                </div>
+                                            }
+                                        </div>
+                                        <div class="user-chat-content">
+                                            <div class="ctext-wrap">
+                                                <div class="ctext-wrap-content">
+                                                    <p class="mb-0 ctext-content">@item.MessageText</p>
+                                                </div>
+                                            </div>
+                                            <div class="conversation-name">
+                                                <small class="text-muted time">@(item.SentDateTime.HasValue ? item.SentDateTime.Value.ToString("hh:mm tt") : "")</small>
+                                                @if (item.IsRead == true)
+                                                {
+                                                    <span class="text-success check-message-icon">
+                                                        <i class="ri-check-double-line align-bottom"></i>
+                                                    </span>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" id="txtChatConversationId" value="@item.ConversationId" hidden />
+                                    <input type="hidden" id="txtSecondUserId" value="@secondUserId" hidden />
+                                </li>
+                            }
                         }
                     }
                 </ul>
@@ -256,29 +298,99 @@
             var li = document.createElement("li");
             li.className = "chat-list right";
             li.innerHTML = `
-                <div class="conversation-list">
-                    <div class="chat-avatar">
-                <div class="avatar-title bg-success-subtle text-success rounded-circle fs-13" style="height:30px;width:30px;">
-                ${userName.charAt(0).toUpperCase()}
-                </div>
-                </div>
-                <div class="user-chat-content">
-                <div class="ctext-wrap">
-                <div class="ctext-wrap-content">
-                <p class="mb-0 ctext-content">${message}</p>
-                </div>
-                </div>
-                <div class="conversation-name">
-                <small class="text-muted time">${new Date().toLocaleTimeString()}</small>
-                </div>
-                </div>
-                </div>`;
+                    <div class="conversation-list">
+                        <div class="chat-avatar">
+                    <div class="avatar-title bg-success-subtle text-success rounded-circle fs-13" style="height:30px;width:30px;">
+                    ${userName.charAt(0).toUpperCase()}
+                    </div>
+                    </div>
+                    <div class="user-chat-content">
+                    <div class="ctext-wrap">
+                    <div class="ctext-wrap-content">
+                    <p class="mb-0 ctext-content">${message}</p>
+                    </div>
+                    </div>
+                    <div class="conversation-name">
+                    <small class="text-muted time">${new Date().toLocaleTimeString()}</small>
+                    </div>
+                    </div>
+                    </div>`;
 
             conversationList.appendChild(li);
             conversationList.scrollTop = conversationList.scrollHeight;
         });
     };
-   
+
+    function deleteChatMessage(MessageId) {
+        Swal.fire({
+            title: "Are you sure want to Delete This?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes, Delete it!",
+            cancelButtonText: "No, cancel!",
+            confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
+            cancelButtonClass: "btn btn-danger w-xs mt-2",
+            buttonsStyling: false,
+            showCloseButton: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: '/Home/DeleteChatMessage?MessageId=' + MessageId,
+                    type: 'POST',
+                    dataType: 'json',
+                    success: function (Result) {
+                        debugger
+                        if (Result.code) {
+                            Swal.fire({
+                                title: Result.message,
+                                icon: 'success',
+                                confirmButtonColor: '#3085d6',
+                                confirmButtonText: 'OK'
+                            }).then(function () {
+                                GetConversation(Result.data);
+                            })
+                        }
+                        else {
+                            toastr.error(Result.message);
+                        }
+                    },
+                    error: function () {
+                        Swal.fire({
+                            title: "Can't delete message!",
+                            icon: 'warning',
+                            confirmButtonColor: '#3085d6',
+                            confirmButtonText: 'OK',
+                        })
+                    }
+                })
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+
+                Swal.fire(
+                    'Cancelled',
+                    'Chat have no changes.!!😊',
+                    'error'
+                );
+            }
+        });
+    }
+
+    function GetConversation(conversationId) {
+        $.ajax({
+            url: '/Home/GetChatConversation',
+            type: 'GET',
+            data: { Id: conversationId },
+            datatype: 'html',
+            success: function (result) {
+                $("#userconversation").html(result);
+                $('#ChatConversationBtn').removeClass('d-none');
+                var SecondUserId = $('#txtSecondUserId').val();
+                fn_ReadMessage(conversationId, SecondUserId)
+            },
+
+        });
+    }
+
 </script>
 
 

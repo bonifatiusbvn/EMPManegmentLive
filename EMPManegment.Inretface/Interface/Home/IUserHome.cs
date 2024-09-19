@@ -20,5 +20,6 @@ namespace EMPManegment.Inretface.Interface.Home
         Task<IEnumerable<ChatMessagesView>> CheckUserConversationId(NewChatMessageModel newChatMessage);
         Task<IEnumerable<ChatMessagesView>> GetUsersNewMessageList(Guid userId);
         Task<AllNotificationModel> GetUsersAllNotificationList(Guid userId);
+        Task<UserResponceModel> DeleteChatMessage(int MessageId);
     }
 }

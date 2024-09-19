@@ -56,5 +56,9 @@ namespace EMPManegment.Services.Home
         {
             return UserHome.GetUsersAllNotificationList(userId);
         }
+        public Task<UserResponceModel> DeleteChatMessage(int MessageId)
+        {
+            return UserHome.DeleteChatMessage(MessageId);
+        }
     }
 }
