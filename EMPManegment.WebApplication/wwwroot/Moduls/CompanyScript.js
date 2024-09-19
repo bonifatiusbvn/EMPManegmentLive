@@ -66,7 +66,6 @@ $(document).ready(function () {
             serverSide: true,
             filter: true,
             destroy: true,
-            pageLength: 30,
             ajax: {
                 type: "Post",
                 url: '/Company/GetDatatableCompanyList',
