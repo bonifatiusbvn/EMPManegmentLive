@@ -17,7 +17,15 @@ public partial class TblCompanyMaster
 
     public int? Country { get; set; }
 
+    public string? PinCode { get; set; }
+
     public string? Gst { get; set; }
+
+    public string? Email { get; set; }
+
+    public string? ContactNumber { get; set; }
+
+    public string? CompanyLogo { get; set; }
 
     public DateTime? CreatedOn { get; set; }
 
@@ -26,12 +34,6 @@ public partial class TblCompanyMaster
     public Guid? UpdatedBy { get; set; }
 
     public DateTime? UpdatedOn { get; set; }
-
-    public string? Email { get; set; }
-
-    public string? ContactNumber { get; set; }
-
-    public string? CompanyLogo { get; set; }
 
     public virtual ICollection<TblInvoice> TblInvoices { get; set; } = new List<TblInvoice>();
 }

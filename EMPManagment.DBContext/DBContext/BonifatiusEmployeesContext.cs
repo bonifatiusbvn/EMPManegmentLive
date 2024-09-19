@@ -15,6 +15,8 @@ public partial class BonifatiusEmployeesContext : DbContext
     {
     }
 
+    public virtual DbSet<TblAdress> TblAdresses { get; set; }
+
     public virtual DbSet<TblAttendance> TblAttendances { get; set; }
 
     public virtual DbSet<TblChatMessage> TblChatMessages { get; set; }
@@ -96,8 +98,16 @@ public partial class BonifatiusEmployeesContext : DbContext
     public virtual DbSet<TblVendorType> TblVendorTypes { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<TblAdress>(entity =>
+        {
+            entity.ToTable("tblAdresses");
+
+            entity.Property(e => e.Address).HasMaxLength(500);
+        });
+
         modelBuilder.Entity<TblAttendance>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK_tbl_BoniAttendance");
@@ -163,6 +173,7 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.Property(e => e.Gst)
                 .HasMaxLength(20)
                 .HasColumnName("GST");
+            entity.Property(e => e.PinCode).HasMaxLength(10);
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
         });
 
