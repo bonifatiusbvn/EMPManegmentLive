@@ -6,7 +6,7 @@
 @{
     ViewData["Title"] = "CreateCompany";
     Layout = "~/Views/Shared/_HomeLayout.cshtml";
-     var imageUrl = Model != null && !string.IsNullOrEmpty(Model.CompanyLogo) ? Url.Content($"~/{Model.CompanyLogo}") : null;
+    var imageUrl = Model != null && !string.IsNullOrEmpty(Model.CompanyLogo) ? Url.Content($"~/{Model.CompanyLogo}") : null;
     var Companyinitials = Model != null && !string.IsNullOrEmpty(Model.CompnyName)
                    ? $"{Model.CompnyName[0]}".ToUpper()
                    : string.Empty;
@@ -74,7 +74,7 @@
                             </div>
                         </div>
                         <!--end col-->
-                        <div class="col-lg-4">
+                        <div class="col-lg-3">
                             <div class="mb-3">
                                 <label for="ddlCountry" class="form-label">Country <span class="text-danger">*</span></label>
                                 @if (Model.CountryName != null)
@@ -94,7 +94,7 @@
                             </div>
                         </div>
                         <!--end col-->
-                        <div class="col-lg-4">
+                        <div class="col-lg-3">
                             <div class="mb-3">
                                 <label for="ddlState" class="form-label">State <span class="text-danger">*</span></label>
                                 @if (Model.StateName != null)
@@ -113,7 +113,7 @@
                             </div>
                         </div>
                         <!--end col-->
-                        <div class="col-lg-4">
+                        <div class="col-lg-3">
                             <div class="mb-3">
                                 <label for="ddlCity" class="form-label">City <span class="text-danger">*</span></label>
                                 @if (Model.City != null)
@@ -129,6 +129,13 @@
                                     </select>
                                 }
                                 <input type="hidden" id="txtCompanycity" name="txtcity" value="" />
+                            </div>
+                        </div>
+                        <!--end col-->
+                        <div class="col-lg-3">
+                            <div class="mb-3">
+                                <label for="txtPincode" class="form-label">PinCode <span class="text-danger">*</span></label>
+                                <input type="number" class="form-control" autocomplete="off" value="@Model.PinCode" id="txtPincode" name="txtPincode" placeholder="Enter your Pincode">
                             </div>
                         </div>
                         <!--end col-->

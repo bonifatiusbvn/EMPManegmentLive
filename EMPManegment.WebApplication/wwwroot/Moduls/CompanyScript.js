@@ -37,6 +37,7 @@ $(document).ready(function () {
             },
             { "data": "contactNumber", "name": "ContactNumber" },
             { "data": "email", "name": "Email" },
+            { "data": "address", "name": "Address" },
         ];
 
         if (canEdit || canDelete) {
@@ -100,6 +101,7 @@ function AddCompanyDetails() {
         formData.append("Country", $("#CompanyCountry").val());
         formData.append("State", $("#CompanyState").val());
         formData.append("City", $("#CompanyCity").val());
+        formData.append("PinCode", $("#txtPincode").val());
         formData.append("Address", $("#txtCompanyAddress").val());
         formData.append("Gst", $("#txtcompanygst").val());
         formData.append("CompanyLogo", $("#companylogo")[0].files[0]);
@@ -215,6 +217,7 @@ function UpdateCompanyDetails() {
         formData.append("Country", $("#CompanyCountry").val());
         formData.append("State", $("#CompanyState").val());
         formData.append("City", $("#CompanyCity").val());
+        formData.append("PinCode", $("#txtPincode").val());
         formData.append("Address", $("#txtCompanyAddress").val());
         formData.append("CompanyLogo", $("#companylogo")[0].files[0]);
         formData.append("UpdatedBy", $("#txtCompanyUpdatedby").val());
@@ -270,6 +273,7 @@ $(document).ready(function () {
             CompanyCountry: "required",
             CompanyState: "required",
             CompanyCity: "required",
+            txtPincode: "required",
             txtCompanyAddress: "required",
         },
         messages: {
@@ -287,6 +291,7 @@ $(document).ready(function () {
             CompanyCity: "Please Enter City",
             CompanyState: "Please Enter State",
             CompanyCountry: "Please Enter Country",
+            txtPincode: "Please Enter Pincode",
             txtCompanyAddress: "Please Enter Address",
         }
     })

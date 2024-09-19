@@ -20,6 +20,7 @@ namespace EMPManegment.EntityModels.ViewModels.Company
         public int? State { get; set; }
 
         public int? Country { get; set; }
+        public string? PinCode { get; set; }
 
         public string? Gst { get; set; }
 
@@ -59,6 +60,7 @@ namespace EMPManegment.EntityModels.ViewModels.Company
         public int? State { get; set; }
 
         public int? Country { get; set; }
+        public string? PinCode { get; set; }
 
         public string? Gst { get; set; }
 

@@ -68,6 +68,7 @@ namespace EMPManegment.Repository.CompanyRepository
                                StateName = c.State,
                                CountryName = d.Country,
                                Country = a.Country,
+                               PinCode = a.PinCode,
                                CreatedBy = a.CreatedBy,
                                Email = a.Email,
                                CompanyLogo = a.CompanyLogo,
@@ -95,6 +96,7 @@ namespace EMPManegment.Repository.CompanyRepository
                     City = AddCompany.City,
                     State = AddCompany.State,
                     Country = AddCompany.Country,
+                    PinCode=AddCompany.PinCode,
                     Gst = AddCompany.Gst,
                     Email = AddCompany.Email,
                     ContactNumber = AddCompany.ContactNumber,
@@ -127,6 +129,7 @@ namespace EMPManegment.Repository.CompanyRepository
                     getCompanyDetails.Country = updateCompany.Country;
                     getCompanyDetails.State = updateCompany.State;
                     getCompanyDetails.City = updateCompany.City;
+                    getCompanyDetails.PinCode = updateCompany.PinCode;
                     getCompanyDetails.CompanyLogo = updateCompany.CompanyLogo;
                     getCompanyDetails.Email = updateCompany.Email;
                     getCompanyDetails.Gst = updateCompany.Gst;
