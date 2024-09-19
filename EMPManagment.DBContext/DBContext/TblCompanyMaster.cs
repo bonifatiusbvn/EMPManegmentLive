@@ -27,5 +27,11 @@ public partial class TblCompanyMaster
 
     public DateTime? UpdatedOn { get; set; }
 
+    public string? Email { get; set; }
+
+    public string? ContactNumber { get; set; }
+
+    public string? CompanyLogo { get; set; }
+
     public virtual ICollection<TblInvoice> TblInvoices { get; set; } = new List<TblInvoice>();
 }

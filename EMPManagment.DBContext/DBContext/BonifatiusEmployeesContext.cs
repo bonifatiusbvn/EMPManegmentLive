@@ -95,8 +95,7 @@ public partial class BonifatiusEmployeesContext : DbContext
 
     public virtual DbSet<TblVendorType> TblVendorTypes { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    { }
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<TblAttendance>(entity =>
@@ -158,7 +157,9 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.Address).HasMaxLength(500);
             entity.Property(e => e.CompnyName).HasMaxLength(50);
+            entity.Property(e => e.ContactNumber).HasMaxLength(15);
             entity.Property(e => e.CreatedOn).HasColumnType("date");
+            entity.Property(e => e.Email).HasMaxLength(50);
             entity.Property(e => e.Gst)
                 .HasMaxLength(20)
                 .HasColumnName("GST");

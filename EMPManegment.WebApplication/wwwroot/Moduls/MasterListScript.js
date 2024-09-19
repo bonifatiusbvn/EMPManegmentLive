@@ -50,6 +50,15 @@ $(document).ready(function () {
         var txtVendorcity = $(this).val();
         $("#txtVendorCity").val(txtVendorcity);
     });
+
+    $('#dropCompanyState').change(function () {
+        var txtCompanyid = $(this).val();
+        $("#txtCompanystate").val(txtCompanyid);
+    });
+    $('#tCompanyCity').change(function () {
+        var txtCompanycity = $(this).val();
+        $("#txttCompanyCity").val(txttCompanycity);
+    });
     $('#dropProjectState').change(function () {
 
         var txtProjectid = $(this).val();
@@ -120,6 +129,9 @@ function GetCountry() {
                 $('#VendorCountry').append('<option value="' + data.id + '">' + data.countryName + '</option>');
             });
             $.each(result, function (i, data) {
+                $('#CompanyCountry').append('<option value="' + data.id + '">' + data.countryName + '</option>');
+            });
+            $.each(result, function (i, data) {
                 $('#projectCountry').append('<option value=' + data.id + '>' + data.countryName + '</option>')
             });
 
@@ -132,6 +144,48 @@ function GetCountry() {
         }
     });
 }
+function fn_getCompanyState(drpCompanystate, countryId, that) {
+    var cid = countryId;
+    if (cid == undefined || cid == null) {
+        var cid = $(that).val();
+    }
+
+
+    $('#' + drpCompanystate).empty();
+    $('#' + drpCompanystate).append('<Option >--Select State--</Option>');
+    $.ajax({
+        url: '/Authentication/GetState?StateId=' + cid,
+        success: function (result) {
+
+            $.each(result, function (i, data) {
+                $('#' + drpCompanystate).append('<Option value=' + data.id + '>' + data.stateName + '</Option>')
+            });
+        }
+    });
+}
+
+function fn_getCompanycitiesbystateId(drpCompanycity, stateid, that) {
+
+    var sid = stateid;
+    if (sid == undefined || sid == null) {
+        var sid = $(that).val();
+    }
+
+
+    $('#' + drpCompanycity).empty();
+    $('#' + drpCompanycity).append('<Option >--Select City--</Option>');
+    $.ajax({
+        url: '/Authentication/GetCity?CityId=' + sid,
+        success: function (result) {
+
+            $.each(result, function (i, data) {
+                $('#' + drpCompanycity).append('<Option value=' + data.id + '>' + data.cityName + '</Option>');
+
+            });
+        }
+    });
+}
+
 function fn_getVendorState(drpVendorstate, countryId, that) {
     var cid = countryId;
     if (cid == undefined || cid == null) {

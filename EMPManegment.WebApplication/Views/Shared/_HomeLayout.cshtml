@@ -502,6 +502,32 @@
                                     </ul>
                                 </li>
                             }
+                            else if (group == "Company" && hasViewPermission)
+                            {
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="fa-solid fa-building icon"></i>
+                                        <p class="text">
+                                            Company
+                                            <i class="right fas fa-angle-left"></i>
+                                        </p>
+                                    </a>
+                                    <ul class="nav nav-treeview" style="display: none;">
+                                        @foreach (var item in groupData)
+                                        {
+                                            @if (item.View)
+                                            {
+                                                <li class="nav-item">
+                                                    <a asp-action="@item.Action" asp-controller="@item.Controller" class="nav-link">
+                                                        <i class="far fa-circle nav-icon"></i>
+                                                        <p>@item.FormName</p>
+                                                    </a>
+                                                </li>
+                                            }
+                                        }
+                                    </ul>
+                                </li>
+                            }
                             else if (group == "Payment Transaction" && hasViewPermission)
                             {
                                 <li class="nav-item">

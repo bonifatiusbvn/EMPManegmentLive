@@ -1,0 +1,234 @@
+﻿@model EMPManegment.EntityModels.ViewModels.Company.CompanyModel
+@using EMPManegment.Web.Models
+@inject IHttpContextAccessor Accessor;
+@inject UserSession _userSession
+
+@{
+    ViewData["Title"] = "CreateCompany";
+    Layout = "~/Views/Shared/_HomeLayout.cshtml";
+     var imageUrl = Model != null && !string.IsNullOrEmpty(Model.CompanyLogo) ? Url.Content($"~/{Model.CompanyLogo}") : null;
+    var Companyinitials = Model != null && !string.IsNullOrEmpty(Model.CompnyName)
+                   ? $"{Model.CompnyName[0]}".ToUpper()
+                   : string.Empty;
+}
+
+<!-- start page title -->
+<div class="row" style="margin-top:80px;">
+    <div class="col-12">
+        <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+            <h4 class="mb-sm-0">Create Company</h4>
+
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Company</a></li>
+                    <li class="breadcrumb-item active">Create Company</li>
+                </ol>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- end page title -->
+<form id="createCompanyform" autocomplete="off">
+    <div class="row">
+        <input type="hidden" class="form-control" id="textViewMode" value="@ViewBag.ViewMode.ToString()" readonly />
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header">
+                    <ul class="nav nav-tabs-custom card-header-tabs border-bottom-0" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link" role="tab">
+                                Business Details
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="mb-3">
+                                <label class="form-label" for="companynameInput">Company Name <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" autocomplete="off" id="txtcompanyname" name="txtcompanyname" value="@Model.CompnyName" placeholder="Enter your company name">
+                                <input type="hidden" class="form-control" autocomplete="off" id="txtcompanyId" value="@Model.Id">
+                                <input type="hidden" id="txtCompanyUpdatedby" value="@_userSession.UserId" />
+                            </div>
+                        </div>
+                        <!--end col-->
+                        <div class="col-lg-6">
+                            <div class="mb-3">
+                                <label for="emailidInput" class="form-label">Email <span class="text-danger">*</span></label>
+                                <input type="email" class="form-control" autocomplete="off" id="txtcompanyemail" value="@Model.Email" name="txtcompanyemail" placeholder="Enter your email">
+                            </div>
+                        </div>
+                        <!--end col-->
+                        <div class="col-lg-6">
+                            <div class="mb-3">
+                                <label for="contactnumberInput" class="form-label">Contact Number <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" autocomplete="off" value="@Model.ContactNumber" id="txtcompanycontactnumber" name="txtcompanycontactnumber" placeholder="Enter your number">
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="mb-3">
+                                <label for="contactnumberInput" class="form-label">Gst<span class="text-danger"></span></label>
+                                <input type="text" class="form-control" autocomplete="off" value="@Model.ContactNumber" id="txtcompanygst" name="txtcompanygst" placeholder="Enter gst number">
+                            </div>
+                        </div>
+                        <!--end col-->
+                        <div class="col-lg-4">
+                            <div class="mb-3">
+                                <label for="ddlCountry" class="form-label">Country <span class="text-danger">*</span></label>
+                                @if (Model.CountryName != null)
+                                {
+                                    <select id="CompanyCountry" name="CompanyCountry" class="form-control form-select valid" onchange="fn_getCompanyState('CompanyState',null,this)">
+                                        <option value="@Model.Country">@Model.CountryName</option>
+                                    </select>
+                                    <input type="hidden" id="txtCompanycountryId" value="@Model.Country" />
+                                }
+                                else
+                                {
+                                    <select id="CompanyCountry" name="CompanyCountry" class="form-control form-select valid" onchange="fn_getCompanyState('CompanyState',null,this)">
+                                        <option selected value="">--Select Country--</option>
+                                    </select>
+                                }
+                                <input type="hidden" id="txtCompanycountry" name="txtcountry" value="" />
+                            </div>
+                        </div>
+                        <!--end col-->
+                        <div class="col-lg-4">
+                            <div class="mb-3">
+                                <label for="ddlState" class="form-label">State <span class="text-danger">*</span></label>
+                                @if (Model.StateName != null)
+                                {
+                                    <select id="CompanyState" name="CompanyState" class="form-control form-select valid" onchange="fn_getCompanycitiesbystateId('CompanyCity', null, this)">
+                                        <option value="@Model.State">@Model.StateName</option>
+                                    </select>
+                                }
+                                else
+                                {
+                                    <select id="CompanyState" name="CompanyState" class="form-control form-select valid" onchange="fn_getCompanycitiesbystateId('CompanyCity', null, this)">
+                                        <option value="">--Select State--</option>
+                                    </select>
+                                }
+                                <input type="hidden" id="txtCompanystate" name="txtstate" value="" />
+                            </div>
+                        </div>
+                        <!--end col-->
+                        <div class="col-lg-4">
+                            <div class="mb-3">
+                                <label for="ddlCity" class="form-label">City <span class="text-danger">*</span></label>
+                                @if (Model.City != null)
+                                {
+                                    <select id="CompanyCity" name="CompanyCity" class="form-control form-select valid">
+                                        <option value="@Model.City">@Model.CityName</option>
+                                    </select>
+                                }
+                                else
+                                {
+                                    <select id="CompanyCity" name="CompanyCity" class="form-control form-select valid">
+                                        <option selected value="">--Select City--</option>
+                                    </select>
+                                }
+                                <input type="hidden" id="txtCompanycity" name="txtcity" value="" />
+                            </div>
+                        </div>
+                        <!--end col-->
+                        <div class="col-lg-12">
+                            <div class="mb-3">
+                                <label for="AddressidInput" class="form-label">Address <span class="text-danger">*</span></label>
+                                @if (Model.Address != null)
+                                {
+                                    <textarea type="text" class="form-control" id="txtCompanyAddress" name="txtCompanyAddress" rows="3" placeholder="Enter your Address">@Model.Address</textarea>
+                                }
+                                else
+                                {
+                                    <textarea type="text" class="form-control" id="txtCompanyAddress" name="txtCompanyAddress" rows="3" placeholder="Enter your Address"></textarea>
+                                }
+                            </div>
+                        </div>
+                        <!--end col-->
+                        <div class="col-lg-12">
+                            <div class="row mb-3">
+                                <div class="col-lg-6">
+                                    <label for="companylogo" class="form-label">Logo</label>
+                                    <input type="file" class="form-control" autocomplete="off" id="companylogo" name="companylogo">
+                                </div>
+                                <div class="col-lg-6 d-flex flex-column justify-content-center">
+                                    @if (!string.IsNullOrEmpty(Model.CompanyLogo))
+                                    {
+                                        <div id="CompanyImageContainer" style="align-self:center;">
+                                            <div id="currentCompanyImageName" style="margin-bottom: 10px;" hidden>
+                                                @System.IO.Path.GetFileName(Model.CompanyLogo)
+                                            </div>
+                                            <div style="position: relative; display: inline-block; gap:10px;">
+                                                @if (!string.IsNullOrEmpty(Model.CompanyLogo))
+                                                {
+                                                    <img src="~/Content/Image/@Model.CompanyLogo" class="form-control" id="CompanyImagePreview" style="height: 200px;width: 200px;border:2px solid grey;margin-left:-319px;">
+                                                }
+                                                <div style="position: absolute; top: 2px; right: 125px;">
+                                                    <button type="button" id="deleteCompanyImageButton" style="background-color: transparent; border: none; font-size: 16px; cursor: pointer; color:red;">&times;</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="col-lg-6 d-flex flex-column justify-content-center">
+                                            <div id="CompanyImageContainer" style="align-self:center; position: relative;">
+                                                <div id="DisplayCompanyInitials" class="avatar-title bg-success-subtle text-success fs-20 border" style="height: 200px; width: 200px; border: 2px solid grey; display: flex; align-items: center; justify-content: center;">
+                                                    <h1>@Companyinitials</h1>
+                                                </div>
+                                                <img id="companyImagePreview" src="#" style="height: 200px; width: 200px; border: 2px solid grey; display: none;" alt="companyImagePreview" />
+                                                <div style="position: absolute; top: 2px; right: 5px;">
+                                                    <button type="button" id="deleteCompanyImageButton" style="background-color: transparent; border: none; font-size: 16px; cursor: pointer; color: red;">&times;</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        <!--end col-->
+                    </div>
+                </div>
+            </div>
+            <!-- end card -->
+            <div class="text-end mb-3">
+                @if (Model.Id == null || Model.Id == Guid.Empty)
+                {
+                    <button type="button" class="btn btn-success btn-lg" onclick="AddCompanyDetails()" id="SubmitCompanyDetails" style="width: 230px;height: 50px;">Submit</button>
+                }
+                else
+                {
+                    @if (UserSession.FormPermisionData.Any(a => a.FormName == "Company List" && (a.Edit == true)))
+                    {
+                        <button type="button" class="btn btn-primary btn-lg" onclick="UpdateCompanyDetails('@Model.Id')" id="updateCompanybtn" style="width: 230px;height: 50px;">Update</button>
+                        <button type="button" class="btn btn-primary btn-lg" onclick="EditCompany()" id="editCompanybtn" style="display: none;width: 230px;height: 50px;">Edit</button>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</form>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+<script type="text/javascript">
+    var userPermissions = '@Html.Raw(Json.Serialize(UserSession.FormPermisionData))';
+    $(document).ready(function () {
+
+        if ($("#textViewMode").val() === "True") {
+            document.querySelectorAll('#createCompanyform input, #createCompanyform select, #createCompanyform textarea').forEach(function (element) {
+                element.disabled = true;
+            });
+            $("#createCompanyform button").hide();
+            $("#editCompanybtn").show();
+        }
+        else {
+            document.querySelectorAll('#createCompanyform input, #createCompanyform select, #createCompanyform textarea').forEach(function (element) {
+                element.disabled = false;
+            });
+        }
+    });
+</script>
+
+<script src="~/moduls/companyscript.js" asp-append-version="true"></script>

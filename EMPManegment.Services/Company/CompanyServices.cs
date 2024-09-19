@@ -1,5 +1,7 @@
 ﻿using EMPManagment.Web.Models.API;
 using EMPManegment.EntityModels.ViewModels.Company;
+using EMPManegment.EntityModels.ViewModels.DataTableParameters;
+using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.Inretface.Interface.CompanyMaster;
 using EMPManegment.Inretface.Services.CompanyServices;
 using System;
@@ -32,6 +34,19 @@ namespace EMPManegment.Services.Company
         public async Task<ApiResponseModel> AddCompany(CompanyModel AddCompany)
         {
             return await Company.AddCompany(AddCompany);
+        }
+
+        public async Task<UserResponceModel> UpdateCompanyDetails(CompanyModel updateCompany)
+        {
+            return await Company.UpdateCompanyDetails(updateCompany);
+        }
+        public async Task<UserResponceModel> DeleteCompanyDetails(Guid CompanyId)
+        {
+            return await Company.DeleteCompanyDetails(CompanyId);
+        }
+        public async Task<jsonData> GetDatatableCompanyList(DataTableRequstModel CompanydataTable)
+        {
+            return await Company.GetDatatableCompanyList(CompanydataTable);
         }
     }
 }

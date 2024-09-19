@@ -1,7 +1,10 @@
 ﻿using EMPManagment.Web.Models.API;
 using EMPManegment.EntityModels.ViewModels.Company;
+using EMPManegment.EntityModels.ViewModels.DataTableParameters;
+using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.Inretface.Services.CompanyServices;
 using EMPManegment.Services.Company;
+using EMPManegment.Services.VendorDetails;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -76,6 +79,69 @@ namespace EMPManagment.API.Controllers
                 response.message = "An error occurred while processing the request.";
             }
             return StatusCode(response.code, response);
+        }
+
+
+        [HttpPost]
+        [Route("UpdateCompanyDetails")]
+        public async Task<IActionResult> UpdateCompanyDetails(CompanyModel updateCompany)
+        {
+            UserResponceModel response = new UserResponceModel();
+            try
+            {
+                var result = await Company.UpdateCompanyDetails(updateCompany);
+                if (result.Code != (int)HttpStatusCode.InternalServerError)
+                {
+                    response.Code = (int)HttpStatusCode.OK;
+                    response.Message = result.Message;
+                }
+                else
+                {
+                    response.Message = result.Message;
+                    response.Code = (int)HttpStatusCode.NotFound;
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Code = (int)HttpStatusCode.InternalServerError;
+                response.Message = "An error occurred while processing the request.";
+            }
+            return StatusCode(response.Code, response);
+        }
+
+        [HttpPost]
+        [Route("DeleteCompanyDetails")]
+        public async Task<IActionResult> DeleteCompanyDetails(Guid CompanyId)
+        {
+            UserResponceModel response = new UserResponceModel();
+            try
+            {
+                var result = await Company.DeleteCompanyDetails(CompanyId);
+                if (result.Code != (int)HttpStatusCode.InternalServerError)
+                {
+                    response.Code = (int)HttpStatusCode.OK;
+                    response.Message = result.Message;
+                }
+                else
+                {
+                    response.Message = result.Message;
+                    response.Code = (int)HttpStatusCode.NotFound;
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Code = (int)HttpStatusCode.InternalServerError;
+                response.Message = "An error occurred while processing the request.";
+            }
+            return StatusCode(response.Code, response);
+        }
+
+        [HttpPost]
+        [Route("GetDatatableCompanyList")]
+        public async Task<IActionResult> GetDatatableCompanyList(DataTableRequstModel CompanydataTable)
+        {
+            var GetCompanyList = await Company.GetDatatableCompanyList(CompanydataTable);
+            return Ok(new { code = (int)HttpStatusCode.OK, data = GetCompanyList });
         }
     }
 }
