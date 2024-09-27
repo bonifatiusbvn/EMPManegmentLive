@@ -1265,5 +1265,35 @@ namespace EMPManegment.Web.Controllers
             }
 
         }
+        [HttpPost]
+        public async Task<IActionResult> AddUserAttendance(UserAttendanceModel AddUser)
+        {
+            try
+            {
+                var UserDetails = new UserAttendanceModel
+                {
+                    UserId = AddUser.UserId,
+                    Date = AddUser.Date,
+                    Intime = AddUser.Intime,
+                    OutTime = AddUser.OutTime,
+                    TotalHours = AddUser.TotalHours,
+                    CreatedBy = _userSession.UserId.ToString(),
+                    CreatedOn = DateTime.Now,                 
+                };
+                ApiResponseModel postuser = await APIServices.PostAsync(UserDetails, "UserProfile/AddUserAttendance");
+                if (postuser.code == 200)
+                {
+                    return Ok(new { Message = "User add  Successfully!", Code = postuser.code });
+                }
+                else
+                {
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

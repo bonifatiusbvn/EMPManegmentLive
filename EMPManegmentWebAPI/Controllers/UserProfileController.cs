@@ -20,6 +20,8 @@ using System.Net;
 using Microsoft.EntityFrameworkCore.Metadata;
 using EMPManegment.EntityModels.ViewModels.ProjectModels;
 using EMPManegment.Inretface.Interface.ProjectDetails;
+using EMPManegment.EntityModels.ViewModels.TaskModels;
+using EMPManegment.Inretface.Services.TaskServices;
 #nullable disable
 
 namespace EMPManagment.API.Controllers
@@ -343,6 +345,33 @@ namespace EMPManagment.API.Controllers
         {
             IEnumerable<UserAttendanceModel> getAttendanceList = await UserAttendance.GetMySearchAttendanceList(GetSearchAttendanceList);
             return Ok(new { code = (int)HttpStatusCode.OK, data = getAttendanceList.ToList() }); ;
+        }
+
+        [HttpPost]
+        [Route("AddUserAttendance")]
+        public async Task<IActionResult> AddUserAttendance(UserAttendanceModel AddUser)
+        {
+            UserResponceModel userresponsemodel = new UserResponceModel();
+            try
+            {
+                var Adduser = UserAttendance.AddUserAttendance(AddUser);
+                if (Adduser.Result.Code != (int)HttpStatusCode.InternalServerError)
+                {
+                    userresponsemodel.Code = (int)HttpStatusCode.OK;
+                    userresponsemodel.Message = Adduser.Result.Message;
+                }
+                else
+                {
+                    userresponsemodel.Message = Adduser.Result.Message;
+                    userresponsemodel.Code = Adduser.Result.Code;
+                }
+            }
+            catch (Exception ex)
+            {
+                userresponsemodel.Code = (int)HttpStatusCode.InternalServerError;
+                userresponsemodel.Message = "An error occurred while processing the request.";
+            }
+            return StatusCode(userresponsemodel.Code, userresponsemodel);
         }
     }
 }
