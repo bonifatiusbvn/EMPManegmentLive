@@ -157,7 +157,7 @@
                                                     <label class="form-label">GST NO</label>
                                                     @if (Model.CompanyGstNo == "24AAKCB0366M1ZJ")
                                                     {
-                                                        <input type="text" id="textCompanyGstNo" class="form-control" placeholder="GST No" value="@Model.CompanyGstNo" readonly/>
+                                                        <input type="text" id="textCompanyGstNo" class="form-control" placeholder="GST No" value="@Model.CompanyGstNo" readonly />
                                                     }
                                                     else
                                                     {
@@ -193,7 +193,15 @@
                                                 <th>HSN</th>
                                                 <th>Quantity</th>
                                                 <th>Qty Type</th>
-                                                <th>Price</th>
+                                                <th>
+                                                    Price
+                                                    <select class="form-selectborder-0 bg-light" data-choices="" data-choices-search-false="" id="choices-payment-currency" onchange="otherPayment()">
+                                                        <option value="$">($)</option>
+                                                        <option value="£">(£)</option>
+                                                        <option value="₹">(₹)</option>
+                                                        <option value="€">(€)</option>
+                                                    </select>
+                                                </th>
                                                 <th>
                                                     <div class="row">
                                                         <div class="col-sm-6">
