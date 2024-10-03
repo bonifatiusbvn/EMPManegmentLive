@@ -79,6 +79,7 @@ namespace EMPManegment.EntityModels.ViewModels.ManualInvoice
 
         public string? PaymentMethodName { get; set; }
         public string? InvoicesType { get; set; }
+        public decimal? DollarPrice { get; set; }
 
         public List<ManualInvoiceDetailsModel>? ManualInvoiceDetails { get; set; }
     }

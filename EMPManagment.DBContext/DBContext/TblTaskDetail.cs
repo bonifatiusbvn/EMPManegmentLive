@@ -27,6 +27,8 @@ public partial class TblTaskDetail
 
     public string? IsCompleted { get; set; }
 
+    public bool? IsRead { get; set; }
+
     public Guid? CompletedBy { get; set; }
 
     public DateTime? CreatedOn { get; set; }
