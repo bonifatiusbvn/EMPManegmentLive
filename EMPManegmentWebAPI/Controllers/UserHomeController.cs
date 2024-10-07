@@ -510,5 +510,33 @@ namespace EMPManagment.API.Controllers
 
             return StatusCode(responseModel.Code, responseModel);
         }
+
+        [HttpPost]
+        [Route("RemoveAllNotifications")]
+        public async Task<IActionResult> RemoveAllNotifications(AllNotificationModel AllNotification)
+        {
+            UserResponceModel responseModel = new UserResponceModel();
+            try
+            {
+                var MessageDetails = HomeServices.RemoveAllNotifications(AllNotification);
+                if (MessageDetails != null)
+                {
+                    responseModel.Code = (int)HttpStatusCode.OK;
+                    responseModel.Message = MessageDetails.Result.Message;
+                    responseModel.Data = MessageDetails.Result.Data;
+                }
+                else
+                {
+                    responseModel.Message = MessageDetails.Result.Message;
+                    responseModel.Code = MessageDetails.Result.Code;
+                }
+            }
+            catch (Exception)
+            {
+                responseModel.Code = (int)HttpStatusCode.InternalServerError;
+            }
+
+            return StatusCode(responseModel.Code, responseModel);
+        }
     }
 }

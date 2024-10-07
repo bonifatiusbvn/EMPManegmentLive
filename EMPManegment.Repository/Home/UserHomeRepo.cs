@@ -350,7 +350,7 @@ namespace EMPManegment.Repository.Home
                 var tasksQuery = from a in Context.TblTaskDetails
                                  join b in Context.TblUsers on a.UserId equals b.Id
                                  join c in Context.TblTaskMasters on a.TaskType equals c.Id
-                                 where a.UserId == userId
+                                 where a.UserId == userId && a.IsRead != true
                                  orderby a.UpdatedOn
                                  select new TaskDetailsView
                                  {
@@ -407,6 +407,66 @@ namespace EMPManegment.Repository.Home
             {
                 response.Code = (int)HttpStatusCode.InternalServerError;
                 response.Message = "Error in deleting message.";
+            }
+
+            return response;
+        }
+        public async Task<UserResponceModel> RemoveAllNotifications(AllNotificationModel AllNotification)
+        {
+            var response = new UserResponceModel();
+            try
+            {
+                if (AllNotification.Messages.Count> 0 || AllNotification.Tasks.Count > 0)
+                {
+                    if (AllNotification.Messages != null && AllNotification.Messages.Count > 0)
+                    {
+                        var conversationIds = AllNotification.Messages
+                            .Select(m => m.ConversationId)
+                            .Where(c => c.HasValue)
+                            .Distinct()
+                            .ToList();
+
+                        var messagesToUpdate = await Context.TblChatMessages
+                            .Where(m => conversationIds.Contains(m.ConversationId) && m.UserId != AllNotification.UserId)
+                            .ToListAsync();
+
+                        foreach (var message in messagesToUpdate)
+                        {
+                            message.IsRead = true;
+                        }
+                        await Context.SaveChangesAsync();
+                    }
+                    if (AllNotification.Tasks != null && AllNotification.Tasks.Count > 0)
+                    {
+
+                        var taskIdList = await Context.TblTaskDetails.Where(a => a.UserId == AllNotification.UserId).Select(a => a.Id).ToListAsync();
+
+                        foreach (var task in AllNotification.Tasks)
+                        {
+                            if (taskIdList.Contains(task.Id))
+                            {
+                                var taskToUpdate = await Context.TblTaskDetails.FindAsync(task.Id);
+                                if (taskToUpdate != null)
+                                {
+                                    taskToUpdate.IsRead = true; 
+                                }
+                            }
+                            await Context.SaveChangesAsync();
+                        }
+                    }
+                    response.Code = (int)HttpStatusCode.OK;
+                    response.Message = "Messages marked as read successfully!";
+                }
+                else
+                {
+                    response.Code = (int)HttpStatusCode.BadRequest;
+                    response.Message = "No messages to process.";
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Code = (int)HttpStatusCode.InternalServerError;
+                response.Message = "Error marking messages as read: " + ex.Message;
             }
 
             return response;

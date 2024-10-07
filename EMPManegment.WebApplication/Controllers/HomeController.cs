@@ -25,6 +25,7 @@ using Microsoft.CodeAnalysis;
 using EMPManegment.EntityModels.ViewModels.Weather;
 using EMPManegment.EntityModels.ViewModels.Chat;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using EMPManegment.EntityModels.ViewModels.PurchaseOrderModels;
 #nullable disable
 namespace EMPManegment.Web.Controllers
 {
@@ -521,7 +522,7 @@ namespace EMPManegment.Web.Controllers
                 if (postuser.code == 200)
                 {
 
-                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code, Data = postuser.data});
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code, Data = postuser.data });
                 }
                 else
                 {
@@ -529,6 +530,31 @@ namespace EMPManegment.Web.Controllers
                 }
             }
             catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RemoveAllNotifications()
+        {
+            try
+            {
+                var NotificationsDetails = HttpContext.Request.Form["AllNotificationDetails"];
+                var AllNotificationsDetails = JsonConvert.DeserializeObject<AllNotificationModel>(NotificationsDetails.ToString());
+
+                ApiResponseModel postuser = await APIServices.PostAsync(AllNotificationsDetails, "UserHome/RemoveAllNotifications");
+                if (postuser.code == 200)
+                {
+
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code, Data = postuser.data });
+                }
+                else
+                {
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
+                }
+            }
+            catch (Exception ex) 
             {
                 throw ex;
             }

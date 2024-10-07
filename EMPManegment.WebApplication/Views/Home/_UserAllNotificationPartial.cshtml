@@ -41,9 +41,9 @@
                             </p>
                         </div>
                         <div class="px-2 fs-15">
-                            <div class="form-check notification-check">
-                                <input class="form-check-input" type="checkbox" value="" id="messages-notification-check01">
-                                <label class="form-check-label" for="messages-notification-check01"></label>
+                            <div class="form-check allmsgnotificationcheck">
+                                <input class="form-check-input" type="checkbox" value="@message.ConversationId" id="allmsgnotification" onchange="toggleConversationId(this, 'conversation')">
+                                <label class="form-check-label" for="allmsgnotification"></label>
                             </div>
                         </div>
                     </a>
@@ -59,54 +59,54 @@
             var initials = (!string.IsNullOrEmpty(task.FirstName) && !string.IsNullOrEmpty(task.LastName)) ? $"{task.FirstName[0]}{task.LastName[0]}".ToUpper() : null;
             <div class="text-reset notification-item d-block dropdown-item">
                 <a href="/Task/UserTasks" class="d-flex text-decoration-none">
-                <div class="acitivity-item d-flex">
-                    <div class="flex-shrink-0">
-                        @if (!string.IsNullOrEmpty(imageUrl))
-                        {
-                            <img class="direct-chat-img" src="@imageUrl" alt="user image">
-                        }
-                        else
-                        {
-                            <div class="flex-shrink-0 avatar-xs me-2">
-                                <div class="avatar-title bg-success-subtle text-success rounded-circle fs-13" style="height:40px;width:40px;">@initials</div>
-                            </div>
-                        }
-                    </div>
-                    <div class="flex-grow-1 ms-3">
-                        <h6 class="mt-0 mb-1 lh-base text-info">
-                            @task.TaskTitle
-                            @if (task.TaskStatus == "Working")
+                    <div class="acitivity-item d-flex">
+                        <div class="flex-shrink-0">
+                            @if (!string.IsNullOrEmpty(imageUrl))
                             {
-                                <a class="badge bg-warning text-uppercase">@task.TaskStatus</a>
-                            }
-                            else if (task.TaskStatus == "Completed")
-                            {
-                                <a class="badge bg-success text-uppercase">@task.TaskStatus</a>
-                            }
-                            else if (task.TaskStatus == "Pending")
-                            {
-                                <a class="badge  bg-primary  text-uppercase">@task.TaskStatus</a>
-                            }
-                            else if (task.TaskStatus == "InReview")
-                            {
-                                <a class="badge  bg-secondary text-uppercase">@task.TaskStatus</a>
+                                <img class="direct-chat-img" src="@imageUrl" alt="user image">
                             }
                             else
                             {
-                                <a class="badge  bg-secondary text-uppercase">@task.TaskStatus</a>
+                                <div class="flex-shrink-0 avatar-xs me-2">
+                                    <div class="avatar-title bg-success-subtle text-success rounded-circle fs-13" style="height:40px;width:40px;">@initials</div>
+                                </div>
                             }
-                        </h6>
-                        <div class="fs-13 text-muted">
-                            <p class="text-muted mb-2">@task.TaskDetails</p>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h6 class="mt-0 mb-1 lh-base text-info">
+                                @task.TaskTitle
+                                @if (task.TaskStatus == "Working")
+                                {
+                                    <a class="badge bg-warning text-uppercase">@task.TaskStatus</a>
+                                }
+                                else if (task.TaskStatus == "Completed")
+                                {
+                                    <a class="badge bg-success text-uppercase">@task.TaskStatus</a>
+                                }
+                                else if (task.TaskStatus == "Pending")
+                                {
+                                    <a class="badge  bg-primary  text-uppercase">@task.TaskStatus</a>
+                                }
+                                else if (task.TaskStatus == "InReview")
+                                {
+                                    <a class="badge  bg-secondary text-uppercase">@task.TaskStatus</a>
+                                }
+                                else
+                                {
+                                    <a class="badge  bg-secondary text-uppercase">@task.TaskStatus</a>
+                                }
+                            </h6>
+                            <div class="fs-13 text-muted">
+                                <p class="text-muted mb-2">@task.TaskDetails</p>
+                            </div>
+                        </div>
+                        <div class="px-2 fs-15">
+                            <div class="form-check alltasknotificationcheck">
+                                <input class="form-check-input" type="checkbox" value="@task.Id" id="alltasknotification" onchange="toggleConversationId(this, 'task')">
+                                <label class="form-check-label" for="alltasknotification"></label>
+                            </div>
                         </div>
                     </div>
-                    <div class="px-2 fs-15">
-                        <div class="form-check notification-check">
-                            <input class="form-check-input" type="checkbox" value="" id="all-notification-check01">
-                            <label class="form-check-label" for="all-notification-check01"></label>
-                        </div>
-                    </div>
-                </div>
                 </a>
             </div>
         }
