@@ -52,7 +52,6 @@ namespace EMPManegment.Web.Controllers
                 if (response.code == 200)
                 {
                     TaskList = JsonConvert.DeserializeObject<List<TaskDetailsView>>(response.data.ToString());
-
                 }
                 return View(TaskList);
             }
@@ -76,7 +75,6 @@ namespace EMPManegment.Web.Controllers
                     getTask = JsonConvert.DeserializeObject<List<TaskTypeView>>(res.data.ToString());
                 }
                 return new JsonResult(getTask);
-
             }
             catch (Exception ex)
             {
@@ -166,7 +164,6 @@ namespace EMPManegment.Web.Controllers
                 if (postuser.data != null)
                 {
                     TaskList = JsonConvert.DeserializeObject<List<TaskDetailsView>>(postuser.data.ToString());
-
                 }
                 else
                 {
@@ -349,7 +346,6 @@ namespace EMPManegment.Web.Controllers
                 if (postuser.data != null)
                 {
                     activity = JsonConvert.DeserializeObject<List<TaskDetailsView>>(postuser.data.ToString());
-
                 }
                 else
                 {
@@ -375,7 +371,6 @@ namespace EMPManegment.Web.Controllers
                 if (postuser.data != null)
                 {
                     activity = JsonConvert.DeserializeObject<List<TaskDetailsView>>(postuser.data.ToString());
-
                 }
                 else
                 {

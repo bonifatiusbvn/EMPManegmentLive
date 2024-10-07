@@ -51,7 +51,6 @@ namespace EMPManegment.Web.Controllers
                     if (response.code == 200)
                     {
                         vendorDetails = JsonConvert.DeserializeObject<VendorDetailsView>(response.data.ToString());
-
                     }
                 }
                 ViewBag.ViewMode = viewMode;
@@ -68,7 +67,6 @@ namespace EMPManegment.Web.Controllers
         {
             try
             {
-
                 return RedirectToAction("CreateVendor", new { Vid = VId });
             }
             catch (Exception ex)
@@ -288,10 +286,7 @@ namespace EMPManegment.Web.Controllers
                 ApiResponseModel postuser = await APIServices.PostAsync(updateVendor, "Vendor/UpdateVendorDetails");
                 if (postuser.code == 200)
                 {
-
                     return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
-
-
                 }
                 else
                 {

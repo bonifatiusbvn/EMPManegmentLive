@@ -75,9 +75,7 @@ namespace EMPManegment.Web.Controllers
                 {
                     ViewBag.EmpId = AddUserResponse.data;
                 }
-
                 return View();
-
             }
             catch (Exception ex)
             {
@@ -303,7 +301,6 @@ namespace EMPManegment.Web.Controllers
         {
             try
             {
-
                 ApiResponseModel postuser = await APIServices.PostAsync("", "UserProfile/ActiveDeactiveUsers?UserId=" + UserId + "&UpdatedBy" + UpdatedBy);
                 if (postuser.code == 200)
                 {
@@ -368,7 +365,6 @@ namespace EMPManegment.Web.Controllers
         {
             try
             {
-
                 Guid userid = _userSession.UserId;
                 List<DocumentInfoView> documentList = new List<DocumentInfoView>();
                 ApiResponseModel res = await APIServices.GetAsync("", "UserProfile/GetDocumentList?Userid=" + userid);
@@ -487,9 +483,7 @@ namespace EMPManegment.Web.Controllers
                 {
                     TempData["ErrorMessage"] = response.message;
                 }
-
                 return View();
-
             }
 
             catch (Exception ex)
@@ -808,7 +802,6 @@ namespace EMPManegment.Web.Controllers
             }
             catch (Exception ex)
             {
-
                 return StatusCode(500, "Internal server error: " + ex.Message);
             }
         }
@@ -1257,7 +1250,6 @@ namespace EMPManegment.Web.Controllers
                     }
                 }
                 return BadRequest();
-
             }
             catch (Exception ex)
             {
@@ -1278,7 +1270,7 @@ namespace EMPManegment.Web.Controllers
                     OutTime = AddUser.OutTime,
                     TotalHours = AddUser.TotalHours,
                     CreatedBy = _userSession.UserId.ToString(),
-                    CreatedOn = DateTime.Now,                 
+                    CreatedOn = DateTime.Now,
                 };
                 ApiResponseModel postuser = await APIServices.PostAsync(UserDetails, "UserProfile/AddUserAttendance");
                 if (postuser.code == 200)

@@ -420,7 +420,6 @@ namespace EMPManegment.Web.Controllers
                 if (postuser.data != null)
                 {
                     activity = JsonConvert.DeserializeObject<List<TaskDetailsView>>(postuser.data.ToString());
-
                 }
                 else
                 {
@@ -472,7 +471,6 @@ namespace EMPManegment.Web.Controllers
                 if (postuser.data != null)
                 {
                     messages = JsonConvert.DeserializeObject<List<ChatMessagesView>>(postuser.data.ToString());
-
                 }
                 return PartialView("~/Views/Home/_UserNewMessageNotificationPartial.cshtml", messages);
             }
@@ -516,7 +514,6 @@ namespace EMPManegment.Web.Controllers
                 ApiResponseModel postuser = await APIServices.PostAsync("", "UserHome/DeleteChatMessage?MessageId=" + MessageId);
                 if (postuser.code == 200)
                 {
-
                     return Ok(new { Message = string.Format(postuser.message), Code = postuser.code, Data = postuser.data });
                 }
                 else
@@ -541,7 +538,6 @@ namespace EMPManegment.Web.Controllers
                 ApiResponseModel postuser = await APIServices.PostAsync(AllNotificationsDetails, "UserHome/RemoveAllNotifications");
                 if (postuser.code == 200)
                 {
-
                     return Ok(new { Message = string.Format(postuser.message), Code = postuser.code, Data = postuser.data });
                 }
                 else

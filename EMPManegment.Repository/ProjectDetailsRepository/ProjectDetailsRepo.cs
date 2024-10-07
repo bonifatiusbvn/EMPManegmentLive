@@ -433,7 +433,6 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
                     {
                         var ProjectDocument = new ProjectDocumentView
                         {
-
                             Id = row["Id"] != DBNull.Value ? (Guid)row["Id"] : Guid.Empty,
                             ProjectId = row["ProjectId"] != DBNull.Value ? (Guid)row["ProjectId"] : Guid.Empty,
                             DocumentName = row["DocumentName"]?.ToString(),
@@ -543,6 +542,7 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
                 throw ex;
             }
         }
+
         public async Task<UserResponceModel> MemberIsDeleted(ProjectMemberUpdate projectMember)
         {
             UserResponceModel response = new UserResponceModel();
@@ -570,7 +570,6 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
             }
             return response;
         }
-
 
         public async Task<UserResponceModel> DeleteProjectDocument(Guid DocumentId)
         {

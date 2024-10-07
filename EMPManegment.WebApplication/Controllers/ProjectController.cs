@@ -315,7 +315,6 @@ namespace EMPManegment.Web.Controllers
                 if (postuser.data != null)
                 {
                     MembersList = JsonConvert.DeserializeObject<List<EmpDetailsView>>(postuser.data.ToString());
-
                 }
                 else
                 {
@@ -528,9 +527,7 @@ namespace EMPManegment.Web.Controllers
                 ApiResponseModel postuser = await APIServices.PostAsync(projectMember, "ProjectDetails/IsDeletedMember");
                 if (postuser.code == 200)
                 {
-
                     return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
-
                 }
                 else
                 {
@@ -554,7 +551,6 @@ namespace EMPManegment.Web.Controllers
                 if (postuser.data != null)
                 {
                     activity = JsonConvert.DeserializeObject<List<InvoiceViewModel>>(postuser.data.ToString());
-
                 }
                 else
                 {
@@ -673,7 +669,6 @@ namespace EMPManegment.Web.Controllers
                 ApiResponseModel postuser = await APIServices.PostAsync(ProjectDetails, "ProjectDetails/UpdateProjectDetails");
                 if (postuser.code == 200)
                 {
-
                     return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
                 }
                 else

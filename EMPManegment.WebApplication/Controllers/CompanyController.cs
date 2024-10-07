@@ -98,7 +98,6 @@ namespace EMPManegment.Web.Controllers
         {
             try
             {
-
                 return RedirectToAction("CreateCompany", new { CompanyId = CompanyId });
             }
             catch (Exception ex)

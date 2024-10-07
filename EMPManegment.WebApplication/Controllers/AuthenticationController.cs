@@ -199,7 +199,6 @@ namespace EMPManegment.Web.Controllers
             {
                 HttpContext.Session.Clear();
                 await HttpContext.SignOutAsync();
-
             }
             catch (Exception ex)
             {
@@ -220,7 +219,6 @@ namespace EMPManegment.Web.Controllers
                     getDepartment = JsonConvert.DeserializeObject<List<Department>>(response.data.ToString());
                 }
                 return new JsonResult(getDepartment);
-
             }
             catch (Exception ex)
             {
@@ -240,7 +238,6 @@ namespace EMPManegment.Web.Controllers
                     countries = JsonConvert.DeserializeObject<List<CountryView>>(response.data.ToString());
                 }
                 return new JsonResult(countries);
-
             }
             catch (Exception ex)
             {
@@ -259,7 +256,6 @@ namespace EMPManegment.Web.Controllers
                     states = JsonConvert.DeserializeObject<List<StateView>>(response.data.ToString());
                 }
                 return new JsonResult(states);
-
             }
             catch (Exception ex)
             {
@@ -278,7 +274,6 @@ namespace EMPManegment.Web.Controllers
                     cities = JsonConvert.DeserializeObject<List<CityView>>(response.data.ToString());
                 }
                 return new JsonResult(cities);
-
             }
             catch (Exception ex)
             {

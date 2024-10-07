@@ -69,7 +69,7 @@ namespace EMPManegment.Web.Controllers
                 };
                 List<ExpenseDetailsView> expensedetails = new List<ExpenseDetailsView>();
                 var data = new jsonData();
-                ApiResponseModel postuser = await APIServices.PostAsync(dataTable, "ExpenseMaster/GetExpenseDetailList?unapprove="+ unapprove + "&TodayDate=" + TodayDate?.ToString("yyyy-MM-dd"));
+                ApiResponseModel postuser = await APIServices.PostAsync(dataTable, "ExpenseMaster/GetExpenseDetailList?unapprove=" + unapprove + "&TodayDate=" + TodayDate?.ToString("yyyy-MM-dd"));
                 if (postuser.data != null)
                 {
                     data = JsonConvert.DeserializeObject<jsonData>(postuser.data.ToString());
@@ -278,7 +278,6 @@ namespace EMPManegment.Web.Controllers
                 }
                 else
                 {
-
                     return Ok(new { postuser.message, postuser.code });
                 }
             }
@@ -490,7 +489,7 @@ namespace EMPManegment.Web.Controllers
                 List<ExpenseDetailsView> expense = new List<ExpenseDetailsView>();
                 List<UserMonthlyPendingExpense> userPendingExpenseAmount = new List<UserMonthlyPendingExpense>();
                 var data = new jsonData();
-                ApiResponseModel postuser = await APIServices.PostAsync(dataTable, "ExpenseMaster/GetUserExpenseDetail?UserId=" + UserId + "&filterType=" + filterType + "&unapprove=" + unapprove + "&approve=" + approve + "&startDate=" + startDate?.ToString("yyyy-MM-dd") + "&endDate=" + endDate?.ToString("yyyy-MM-dd") + "&account="+ account + "&selectMonthlyExpense="+ selectMonthlyExpense);
+                ApiResponseModel postuser = await APIServices.PostAsync(dataTable, "ExpenseMaster/GetUserExpenseDetail?UserId=" + UserId + "&filterType=" + filterType + "&unapprove=" + unapprove + "&approve=" + approve + "&startDate=" + startDate?.ToString("yyyy-MM-dd") + "&endDate=" + endDate?.ToString("yyyy-MM-dd") + "&account=" + account + "&selectMonthlyExpense=" + selectMonthlyExpense);
                 if (postuser.data != null)
                 {
                     data = JsonConvert.DeserializeObject<jsonData>(postuser.data.ToString());
@@ -566,7 +565,6 @@ namespace EMPManegment.Web.Controllers
                 }
                 else
                 {
-
                     return Ok(new { postuser.code, postuser.message });
                 }
             }
