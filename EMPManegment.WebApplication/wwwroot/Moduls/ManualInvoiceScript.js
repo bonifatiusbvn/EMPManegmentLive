@@ -433,6 +433,7 @@ function InsertManualInvoiceDetails() {
                     RoundOff: $("#cart-roundOff").val(),
                     ShippingAddress: $('#hideShippingAddress').is(':checked') ? $('#textVendorAddress').val() : $('#textShippingAddress').val(),
                     ManualInvoiceDetails: ProductDetails,
+                    DollarPrice: $('#DollarAmount').val(),
                 };
                 var form_data = new FormData();
                 form_data.append("ManualInvoiceDetails", JSON.stringify(Invoicedetails));
@@ -712,6 +713,7 @@ function UpdateManualInvoiceDetails() {
                     CreatedOn: Createdon,
                     ShippingAddress: $('#hideShippingAddress').is(':checked') ? $('#textVendorAddress').val() : $('#textShippingAddress').val(),
                     ManualInvoiceDetails: ProductDetails,
+                    DollarPrice: $('#DollarAmount').val(),
                 };
                 var form_data = new FormData();
                 form_data.append("UpdateManualInvoice", JSON.stringify(Invoicedetails));
@@ -827,4 +829,39 @@ function removeDescriptionRow(element) {
     var $row = $(element).closest('tr');
     $(element).closest('.row').remove();
     $row.find('#error-message').hide();
+}
+
+let dollarModal;
+
+function checkCurrencySelection() {
+    const currencySelect = document.getElementById('currency-select');
+
+    if (!dollarModal) {
+        dollarModal = new bootstrap.Modal(document.getElementById('DollarModal'));
+    }
+
+    if (currencySelect.value === "$") {
+        dollarModal.show();
+    }
+}
+
+function CloseDollarModel() {
+
+    if (dollarModal) {
+        dollarModal.hide();
+    }
+}
+
+
+function SaveDollarAmount() {
+
+    const dollarAmount = document.getElementById('txtDollarAmount').value;
+    
+    if (dollarAmount == "") {
+        toastr.warning("Emter DollarAmount!");
+    }
+    else {
+        document.getElementById('DollarAmount').value = dollarAmount;
+        CloseDollarModel();
+    }
 }

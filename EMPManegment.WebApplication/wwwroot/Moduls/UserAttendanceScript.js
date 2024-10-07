@@ -1029,3 +1029,51 @@ function ExportToPDF() {
     });
 }
 
+function DisplayAddUserModel() {
+    GetUsernameList();
+    $('#AddUserAttendanceModel').modal('show');
+}
+
+function btnSaveUserAttendance() {
+    siteloadershow();
+
+    if ($('#frmadduserdetails').valid()) {
+        var formData = new FormData();
+        formData.append("UserId", $("#ddlusername").val());
+        formData.append("Date", $("#txtDate").val());
+        formData.append("Intime", $("#txtIntime").val());
+        formData.append("OutTime", $("#txtOutTime").val());
+        $.ajax({
+            url: '/UserProfile/AddUserAttendance',
+            type: 'POST',
+            data: formData,
+            dataType: 'json',
+            contentType: false,
+            processData: false,
+            success: function (Result) {
+                siteloaderhide();
+                if (Result.code === 200) {
+                    Swal.fire({
+                        title: Result.message,
+                        icon: 'success',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK',
+                    }).then(function () {
+                        window.location = '/UserProfile/UsersAttendance';
+                    });
+                } else {
+                    toastr.error(Result.message);
+                }
+            },
+            error: function (xhr, status, error) {
+                siteloaderhide();
+                toastr.error('An error occurred while processing your request.');
+            }
+        });
+    } else {
+        siteloaderhide();
+        toastr.warning("Kindly fill all data fields");
+    }
+}
+
+

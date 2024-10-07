@@ -119,7 +119,7 @@ namespace EMPManegment.Repository.UserAttendanceRepository
                     string today = DateTime.Now.ToString("dd/MM/yyyy");
                     string intimeDate = userAttendance.Intime.ToString("dd/MM/yyyy");
                     string outTimeDate = userAttendance.OutTime?.ToString("dd/MM/yyyy");
-                    if(outTimeDate == intimeDate || intimeDate==today)
+                    if (outTimeDate == intimeDate || intimeDate == today)
                     {
                         if (userAttendance.OutTime == null || userAttendance.Intime <= userAttendance.OutTime)
                         {
@@ -384,6 +384,33 @@ namespace EMPManegment.Repository.UserAttendanceRepository
             {
                 throw ex;
             }
+        }
+
+        public async Task<UserResponceModel> AddUserAttendance(UserAttendanceModel AddUser)
+        {
+            UserResponceModel response = new UserResponceModel();
+            try
+            {
+                var usermodel = new TblAttendance()
+                {
+                    UserId = AddUser.UserId,
+                    Date = AddUser.Date,
+                    Intime = AddUser.Intime,
+                    OutTime = AddUser.OutTime,
+                    TotalHours = AddUser.TotalHours,
+                    CreatedBy = AddUser.CreatedBy,
+                    CreatedOn = DateTime.Now,
+                };
+                response.Message = "User add successfully!";
+                Context.TblAttendances.Add(usermodel);
+                Context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                response.Code = (int)HttpStatusCode.InternalServerError;
+                response.Message = "Error in creating user.";
+            }
+            return response;
         }
     }
 }

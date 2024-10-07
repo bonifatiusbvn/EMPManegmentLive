@@ -59,7 +59,7 @@ namespace EMPManegment.Repository.ManualInvoiceRepository
                     BuyesOrderDate = InvoiceDetails.BuyesOrderDate,
                     DispatchThrough = InvoiceDetails.DispatchThrough,
                     DispatchDocNo = InvoiceDetails.DispatchDocNo,
-                    Destination= InvoiceDetails.Destination,
+                    Destination = InvoiceDetails.Destination,
                     MotorVehicleNo = InvoiceDetails.MotorVehicleNo,
                     ShippingAddress = InvoiceDetails.ShippingAddress,
                     TotalGst = InvoiceDetails.TotalGst,
@@ -71,6 +71,7 @@ namespace EMPManegment.Repository.ManualInvoiceRepository
                     RoundOff = InvoiceDetails.RoundOff,
                     CreatedBy = InvoiceDetails.CreatedBy,
                     CreatedOn = DateTime.Now,
+                    DollarPrice = InvoiceDetails.DollarPrice,
                 };
                 Context.TblManualInvoices.Add(invoice);
 
@@ -242,7 +243,7 @@ namespace EMPManegment.Repository.ManualInvoiceRepository
                         masterInvoiceDetails.Id = DS.Tables[1].Rows[0]["Id"] != DBNull.Value ? (Guid)DS.Tables[1].Rows[0]["Id"] : Guid.Empty;
                         masterInvoiceDetails.InvoiceNo = DS.Tables[1].Rows[0]["InvoiceNo"]?.ToString();
                         masterInvoiceDetails.InvoicesType = DS.Tables[1].Rows[0]["InvoicesType"]?.ToString();
-                        masterInvoiceDetails.InvoiceType = DS.Tables[1].Rows[0]["InvoiceType"]!= DBNull.Value ? (Int32)DS.Tables[1].Rows[0]["InvoiceType"] : 0; ;
+                        masterInvoiceDetails.InvoiceType = DS.Tables[1].Rows[0]["InvoiceType"] != DBNull.Value ? (Int32)DS.Tables[1].Rows[0]["InvoiceType"] : 0; ;
                         masterInvoiceDetails.VendorName = DS.Tables[1].Rows[0]["VendorName"]?.ToString();
                         masterInvoiceDetails.VendorAddress = DS.Tables[1].Rows[0]["VendorAddress"]?.ToString();
                         masterInvoiceDetails.VendorGstNo = DS.Tables[1].Rows[0]["VendorGstNo"]?.ToString();
@@ -266,6 +267,8 @@ namespace EMPManegment.Repository.ManualInvoiceRepository
                         masterInvoiceDetails.PaymentMethodName = DS.Tables[1].Rows[0]["PaymentMethodName"]?.ToString();
                         masterInvoiceDetails.PaymentStatusName = DS.Tables[1].Rows[0]["PaymentStatusName"]?.ToString();
                         masterInvoiceDetails.RoundOff = DS.Tables[1].Rows[0]["RoundOff"] != DBNull.Value ? (decimal)DS.Tables[1].Rows[0]["RoundOff"] : 0m;
+                        masterInvoiceDetails.DollarPrice = DS.Tables[1].Rows[0]["DollarPrice"] != DBNull.Value? Convert.ToDecimal(DS.Tables[1].Rows[0]["DollarPrice"]) : (decimal?)null;
+
                     }
 
                     masterInvoiceDetails.ManualInvoiceDetails = new List<ManualInvoiceDetailsModel>();
@@ -370,7 +373,7 @@ namespace EMPManegment.Repository.ManualInvoiceRepository
                     DispatchThrough = UpdateInvoice.DispatchThrough,
                     ShippingAddress = UpdateInvoice.ShippingAddress,
                     DispatchDocNo = UpdateInvoice.DispatchDocNo,
-                    Destination= UpdateInvoice.Destination,
+                    Destination = UpdateInvoice.Destination,
                     MotorVehicleNo = UpdateInvoice.MotorVehicleNo,
                     TotalGst = UpdateInvoice.TotalGst,
                     TotalAmount = UpdateInvoice.TotalAmount,
@@ -383,7 +386,7 @@ namespace EMPManegment.Repository.ManualInvoiceRepository
                     CreatedBy = UpdateInvoice.CreatedBy,
                     CreatedOn = UpdateInvoice.CreatedOn,
                     RoundOff = UpdateInvoice.RoundOff,
-
+                    DollarPrice = UpdateInvoice.DollarPrice,
                 };
                 Context.TblManualInvoices.Update(ManualInvoice);
 

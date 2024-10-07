@@ -247,7 +247,6 @@ namespace EMPManegment.Web.Controllers
                 {
                     return Ok(new { Message = string.Format(response.message), Code = response.code });
                 }
-
             }
             catch (Exception ex)
             {

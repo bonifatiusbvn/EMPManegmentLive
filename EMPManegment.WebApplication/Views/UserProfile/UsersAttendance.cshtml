@@ -34,7 +34,7 @@
                         <div class="row g-2 text-align">
                             <div class="col-lg-auto">
                                 <div class="btn-group">
-                                    <button class="btn btn-primary btn-md form-select" type="button" id="ddlatendanceser" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width: 205px;">
+                                    <button class="btn btn-primary btn-md form-select" type="button" id="ddlatendanceser" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width: 205px; margin-right:40px;">
                                         Search By
                                     </button>
                                     <div class="dropdown-menu">
@@ -79,7 +79,9 @@
                             </div>
                         </div>
                     </form>
-
+                    <div style="margin-left: auto;">
+                        <button class="btn btn-primary fixed-button" onclick="DisplayAddUserModel()"><i class="fa-solid fa-circle-plus"></i> </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -134,6 +136,56 @@
                         </div>
                     </div>
                 </div>
+                <!-- Modal -->
+                <div class="modal fade" id="AddUserAttendanceModel" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header bg-light p-3">
+                                <h5 class="modal-title" id="exampleModalLabel">Add User Attendance</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="frmadduserdetails">
+                                    <div class="mb-3">
+                                        <label for="customername-field" class="form-label" hidden>AttandanceId</label>
+                                        <input id="txtattandanceId" class="form-control" hidden />
+                                        <input id="txtuserId" class="form-control" hidden />
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="customername-field" class="form-label">UserName<span class="text-danger">*</span></label>
+                                        <select class="form-control" id="ddlusername" name="ddlusername">
+                                            <option selected disabled value=""></option>
+                                        </select>
+                                        <input type="hidden" id="txtuserName" class="form-control" />
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="email-field" class="form-label">Date<span class="text-danger">*</span></label>
+                                        <input type="date" id="txtDate" name="txtDate" class="form-control material_blue"   />
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="phone-field" class="form-label">Intime<span class="text-danger">*</span></label>
+                                        <input type="datetime-local" id="txtIntime" name="txtIntime" class="form-control material_blue" />
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="date-field" class="form-label">OutTime</label>
+                                        <input type="datetime-local" id="txtOutTime" class="form-control material_blue" />
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <div class="hstack gap-2 justify-content-end">
+                                    <button type="button" class="btn btn-danger btn-default m-1" data-bs-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-success" onclick="btnSaveUserAttendance();" id="userDetails" value="Validate">Create</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--end modal-->
                 <table id="attendanceTableData" class="table table-bordered dt-responsive table-striped align-middle dataTable no-footer dtr-inline">
                     <thead class="btn-info text-center">
                         <tr class="text-uppercase">
@@ -191,6 +243,12 @@
 
 
     var userPermissions = '@Html.Raw(Json.Serialize(UserSession.FormPermisionData))';
+
+    window.onload = function () {
+        var today = new Date().toISOString().split('T')[0];
+        document.getElementById('txtDate').value = today;
+    };
+
 </script>
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>

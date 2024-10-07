@@ -41,6 +41,8 @@ public partial class TblManualInvoice
 
     public string? MotorVehicleNo { get; set; }
 
+    public decimal? DollarPrice { get; set; }
+
     public decimal? TotalGst { get; set; }
 
     public decimal? RoundOff { get; set; }
