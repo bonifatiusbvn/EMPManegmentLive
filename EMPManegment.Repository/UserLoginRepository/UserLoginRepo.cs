@@ -147,7 +147,7 @@ namespace EMPManegment.Repository.UserLoginRepository
                                      join b in Context.TblRoleMasters on a.RoleId equals b.RoleId into roles
                                      from role in roles.DefaultIfEmpty()
                                      select new
-                                     { 
+                                     {
                                          User = a,
                                          Role = role,
                                      }).FirstOrDefaultAsync();
@@ -189,8 +189,6 @@ namespace EMPManegment.Repository.UserLoginRepository
                             };
 
                             response.Data = userModel;
-
-
 
                             bool userformPermission = await Context.TblUserFormPermissions.AnyAsync(e => e.UserId == userModel.Id);
 
@@ -240,7 +238,7 @@ namespace EMPManegment.Repository.UserLoginRepository
                                 userModel.FromPermissionData = FromPermissionData;
                             }
 
-                            if(userModel.Role == "Admin")
+                            if (userModel.Role == "Admin")
                             {
                                 List<TblProjectMaster> userProjects = await (from a in Context.TblProjectMasters
                                                                              select new TblProjectMaster
@@ -264,10 +262,6 @@ namespace EMPManegment.Repository.UserLoginRepository
                                                                              }).ToListAsync();
                                 userModel.ProjectData = userProjects;
                             }
-                            
-
-                            
-
 
                             tblUser.User.LastLoginDate = DateTime.Now;
                             Context.TblUsers.Update(tblUser.User);

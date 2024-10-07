@@ -158,7 +158,6 @@ namespace EMPManegment.Web.Controllers
         {
             try
             {
-
                 var UserId = _userSession.UserId;
                 List<TaskDetailsView> TaskList = new List<TaskDetailsView>();
                 ApiResponseModel postuser = await APIServices.GetAsync("", "UserHome/GetUserTotalTask?UserId=" + UserId);
@@ -214,18 +213,15 @@ namespace EMPManegment.Web.Controllers
         {
             try
             {
-
                 UserSession.ProjectId = ProjectId.ToString();
                 UserSession.ProjectName = ProjectId == null ? "All Project" : ProjectName.ToString();
 
                 Guid? projectId = string.IsNullOrEmpty(UserSession.ProjectId) ? null : new Guid(UserSession.ProjectId);
                 string projectName = string.IsNullOrEmpty(UserSession.ProjectName) ? null : new(UserSession.ProjectName);
                 return Ok();
-
             }
             catch (Exception ex)
             {
-
                 return BadRequest(new { Message = $"An error occurred: {ex.Message}" });
             }
         }
@@ -240,7 +236,6 @@ namespace EMPManegment.Web.Controllers
                 ApiResponseModel response = await APIServices.GetAsync("", "UserHome/GetWeatherinfo?city=" + city);
                 if (response.code == 200)
                 {
-
                     if (response != null)
                     {
                         var data = JsonConvert.SerializeObject(response.data);
@@ -554,7 +549,7 @@ namespace EMPManegment.Web.Controllers
                     return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
                 }
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 throw ex;
             }
