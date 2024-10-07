@@ -40,6 +40,7 @@ namespace EMPManegment.EntityModels.ViewModels.TaskModels
         public string? Role { get; set; }
         public Guid? UpdatedBy { get; set; }
         public DateTime? UpdatedOn { get; set; }
+        public bool? IsRead { get; set; }
 
     }
     public class TaskImageDetailsModel
@@ -57,7 +58,8 @@ namespace EMPManegment.EntityModels.ViewModels.TaskModels
         public DateTime? TaskDate { get; set; }
         public Guid? CreatedBy { get; set; }
         public string? TaskStatus { get; set; }
-        public DateTime? TaskEndDate { get; set; }   
+        public DateTime? TaskEndDate { get; set; }
+        public bool? IsRead { get; set; }
     }
         
 }

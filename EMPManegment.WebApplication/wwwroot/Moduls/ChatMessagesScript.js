@@ -186,7 +186,7 @@ function searchChatMessages() {
             }
         }
     });
-    
+
     groupVisibility.forEach((isVisible, separator) => {
         separator.style.display = isVisible ? '' : 'none';
     });
@@ -222,20 +222,20 @@ function GetNewMessageNotifications() {
 function GetAllNotifications() {
     $.ajax({
         url: '/Home/GetUserAllNotifications',
-        type: 'GET', 
-        dataType: 'html',  
+        type: 'GET',
+        dataType: 'html',
         complete: function (Result) {
-            $('#userAllNotificationId').html(Result.responseText);    
+            $('#userAllNotificationId').html(Result.responseText);
             var totalcount = $('#totalNotificationCount').val();
             $('#CountAllNotification').text(totalcount);
             $('#CountAllNewNotification').text(totalcount);
             if (totalcount == null || totalcount == 0) {
-                $('#CountunreadNotification').text(0); 
+                $('#CountunreadNotification').text(0);
             } else {
                 $('#CountunreadNotification').text(totalcount);
             }
             var UnreadMessages = $('#TotalUnreadMessages').val();
-            $("#CountUnreadMessage").text(UnreadMessages); 
+            $("#CountUnreadMessage").text(UnreadMessages);
             var totalTasks = $('#totalTotalTasks').val();
             $("#CountTotalTask").text(totalTasks);
         },
@@ -265,6 +265,95 @@ $(document).ready(function () {
     var conversationId = localStorage.getItem('conversationId');
     if (conversationId) {
         GetConversation(conversationId);
-        localStorage.removeItem('conversationId'); 
+        localStorage.removeItem('conversationId');
     }
 });
+
+
+
+
+
+let listOfConversationIds = [];
+let listOfTaskIds = [];
+
+function toggleConversationId(checkbox, type) {
+    const id = checkbox.value;
+
+    if (type === 'conversation') {
+        if (checkbox.checked) {
+            var idlist = {
+                ConversationId: id,
+            }
+            listOfConversationIds.push(idlist);
+        } else {
+            const index = listOfConversationIds.indexOf(id);
+            if (index > -1) {
+                listOfConversationIds.splice(index, 1);
+            }
+        }
+        console.log('Conversation IDs:', listOfConversationIds);
+    } else if (type === 'task') {
+        if (checkbox.checked) {
+            var taskidlist = {
+                Id: id,
+            }
+            listOfTaskIds.push(taskidlist);
+        } else {
+            const index = listOfTaskIds.indexOf(id);
+            if (index > -1) {
+                listOfTaskIds.splice(index, 1);
+            }
+        }
+        console.log('Task IDs:', listOfTaskIds);
+    }
+
+    if (listOfConversationIds == "" && listOfTaskIds == "" ) {
+        $("#notification-actions").hide();
+    }
+    else {
+        $("#notification-actions").show();
+    }
+
+    $("#CountAllCheckNotification").text(listOfConversationIds.length + listOfTaskIds.length);
+}
+
+function RemoveAllNotifications()
+{
+    debugger
+    var NotificationDetails =
+    {
+        Messages: listOfConversationIds ,
+        Tasks: listOfTaskIds,
+        UserId: $("#textchatsessionUserId").val(),
+    }
+    debugger
+    var form_data = new FormData();
+    form_data.append("AllNotificationDetails", JSON.stringify(NotificationDetails));
+
+    $.ajax({
+        url: '/Home/RemoveAllNotifications',
+        type: 'POST',
+        data: form_data,
+        dataType: 'json',
+        contentType: false,
+        processData: false,
+        success: function (Result) {
+            siteloaderhide();
+            if (Result.code == 200) {
+                siteloaderhide();
+                toastr.success(Result.message);
+                setTimeout(function () {
+                    window.location = '/Home/UserHome';
+                }, 2000);
+            }
+            else {
+                siteloaderhide();
+                toastr.error("There Is Some Problem in Your Request!");
+            }
+        },
+        error: function (xhr, status, error) {
+            siteloaderhide();
+            toastr.error('An error occurred while processing your request.');
+        }
+    });
+}

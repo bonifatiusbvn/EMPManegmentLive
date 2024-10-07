@@ -25,6 +25,7 @@ using Microsoft.CodeAnalysis;
 using EMPManegment.EntityModels.ViewModels.Weather;
 using EMPManegment.EntityModels.ViewModels.Chat;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using EMPManegment.EntityModels.ViewModels.PurchaseOrderModels;
 #nullable disable
 namespace EMPManegment.Web.Controllers
 {
@@ -157,7 +158,6 @@ namespace EMPManegment.Web.Controllers
         {
             try
             {
-
                 var UserId = _userSession.UserId;
                 List<TaskDetailsView> TaskList = new List<TaskDetailsView>();
                 ApiResponseModel postuser = await APIServices.GetAsync("", "UserHome/GetUserTotalTask?UserId=" + UserId);
@@ -213,18 +213,15 @@ namespace EMPManegment.Web.Controllers
         {
             try
             {
-
                 UserSession.ProjectId = ProjectId.ToString();
                 UserSession.ProjectName = ProjectId == null ? "All Project" : ProjectName.ToString();
 
                 Guid? projectId = string.IsNullOrEmpty(UserSession.ProjectId) ? null : new Guid(UserSession.ProjectId);
                 string projectName = string.IsNullOrEmpty(UserSession.ProjectName) ? null : new(UserSession.ProjectName);
                 return Ok();
-
             }
             catch (Exception ex)
             {
-
                 return BadRequest(new { Message = $"An error occurred: {ex.Message}" });
             }
         }
@@ -239,7 +236,6 @@ namespace EMPManegment.Web.Controllers
                 ApiResponseModel response = await APIServices.GetAsync("", "UserHome/GetWeatherinfo?city=" + city);
                 if (response.code == 200)
                 {
-
                     if (response != null)
                     {
                         var data = JsonConvert.SerializeObject(response.data);
@@ -521,7 +517,32 @@ namespace EMPManegment.Web.Controllers
                 if (postuser.code == 200)
                 {
 
-                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code, Data = postuser.data});
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code, Data = postuser.data });
+                }
+                else
+                {
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RemoveAllNotifications()
+        {
+            try
+            {
+                var NotificationsDetails = HttpContext.Request.Form["AllNotificationDetails"];
+                var AllNotificationsDetails = JsonConvert.DeserializeObject<AllNotificationModel>(NotificationsDetails.ToString());
+
+                ApiResponseModel postuser = await APIServices.PostAsync(AllNotificationsDetails, "UserHome/RemoveAllNotifications");
+                if (postuser.code == 200)
+                {
+
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code, Data = postuser.data });
                 }
                 else
                 {

@@ -39,5 +39,6 @@ namespace EMPManegment.EntityModels.ViewModels.Chat
     {
         public List<ChatMessagesView>? Messages { get; set; }
         public List<TaskDetailsView>? Tasks { get; set; }
+        public Guid? UserId { get; set; }    
     }
 }

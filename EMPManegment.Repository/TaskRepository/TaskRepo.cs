@@ -78,6 +78,7 @@ namespace EMPManegment.Repository.TaskRepository
                     TaskEndDate = addtask.TaskEndDate,
                     ProjectId = addtask.ProjectId,
                     Document = addtask.Document,
+                    IsRead = false,
                 };
                 response.Message = "Task add successfully!";
                 Context.TblTaskDetails.Add(taskmodel);
@@ -108,6 +109,7 @@ namespace EMPManegment.Repository.TaskRepository
                             if (taskstatusupdate != null)
                             {
                                 taskstatusupdate.TaskStatus = updatetask.TaskStatus;
+                                taskstatusupdate.IsRead = true;
                                 taskstatusupdate.IsCompleted = updatetask.TaskStatus;
                                 taskstatusupdate.CompletedBy = updatetask.UserId;
                                 taskstatusupdate.UpdatedOn = DateTime.Now;
@@ -144,6 +146,7 @@ namespace EMPManegment.Repository.TaskRepository
                         gettask.TaskStatus = updatetask.TaskStatus;
                         gettask.CompletedBy = updatetask.UserId;
                         gettask.UpdatedOn = DateTime.Now;
+                        gettask.IsRead = true;
                         gettask.UpdatedBy = updatetask.UpdatedBy;
                     }
                     Context.TblTaskDetails.Update(gettask);
@@ -290,7 +293,7 @@ namespace EMPManegment.Repository.TaskRepository
                 var activity = (from a in Context.TblTaskDetails
                                 join b in Context.TblUsers on a.User.Id equals b.Id
                                 join c in Context.TblTaskMasters on a.TaskType equals c.Id
-                                where a.UserId == UserId
+                                where a.UserId == UserId && a.IsRead != true
                                 orderby a.UpdatedOn ascending
                                 select new TaskDetailsView
                                 {

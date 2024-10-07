@@ -58,7 +58,7 @@
         }
 
         .custom-select {
-            width: 330px;
+            width: 430px;
             background-color: white; /* Warning color */
             color: black; /* Text color */
             border: 1px solid mediumaquamarine;
@@ -92,7 +92,7 @@
                 <form id="frmdrpdashbord">
                     @if (_userSession.UserRoll != "Admin")
                     {
-                        <select class="custom-select" style="width:330px;" id="drpProjectName" name="drpProjectName">
+                        <select class="custom-select" style="width:430px;" id="drpProjectName" name="drpProjectName">
                             @if (UserProjects != null)
                             {
                                 foreach (var Project in UserProjects)
@@ -117,7 +117,7 @@
                     }
                     else
                     {
-                        <select class="custom-select" style="width:330px;" id="drpProjectName" name="drpProjectName">
+                        <select class="custom-select" style="width:430px;" id="drpProjectName" name="drpProjectName">
                             <option value="">All Project</option>
                             @if (UserProjects != null)
                             {
@@ -231,10 +231,10 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="notification-actions" id="notification-actions" style="display: none;">
+                        <div class="notification-actions" id="notification-actions" style="display:none;">
                             <div class="d-flex text-muted justify-content-center">
-                                Select <div id="select-content" class="text-body fw-semibold px-1">0</div> Result
-                                <button type="button" class="btn btn-link link-danger p-0 ms-3" data-bs-toggle="modal" data-bs-target="#removeNotificationModal">Remove</button>
+                                Select <div id="CountAllCheckNotification" class="text-body fw-semibold px-1"></div> Result
+                                <button type="button" class="btn btn-link link-danger p-0 ms-3" data-bs-toggle="modal" data-bs-target="#removeNotificationModal" onclick="RemoveAllNotifications()">Remove</button>
                             </div>
                         </div>
                     </div>
@@ -793,25 +793,6 @@
             }
         });
     }
-    const checkboxes = document.querySelectorAll('.form-check-input');
-    const notificationActions = document.getElementById('notification-actions');
-    const selectContent = document.getElementById('select-content');
-
-    function updateNotificationActions() {
-        let checkedCount = 0;
-        checkboxes.forEach(checkbox => {
-            if (checkbox.checked) {
-                checkedCount++;
-            }
-        });
-        selectContent.textContent = checkedCount;
-        notificationActions.style.display = checkedCount > 0 ? 'block' : 'none';
-    }
-
-    checkboxes.forEach(checkbox => {
-        checkbox.addEventListener('change', updateNotificationActions);
-    });
-
     function viewAllTaskbtn() {
         window.location.href = '/Task/UserTasks';
     }
