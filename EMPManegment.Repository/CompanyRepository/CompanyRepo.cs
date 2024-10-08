@@ -46,7 +46,6 @@ namespace EMPManegment.Repository.CompanyRepository
                 throw ex;
             }
         }
-
         public async Task<CompanyModel> GetCompanyDetailsById(Guid CompanyId)
         {
             CompanyModel company = new CompanyModel();
@@ -96,7 +95,7 @@ namespace EMPManegment.Repository.CompanyRepository
                     City = AddCompany.City,
                     State = AddCompany.State,
                     Country = AddCompany.Country,
-                    PinCode=AddCompany.PinCode,
+                    PinCode = AddCompany.PinCode,
                     Gst = AddCompany.Gst,
                     Email = AddCompany.Email,
                     ContactNumber = AddCompany.ContactNumber,
@@ -212,7 +211,6 @@ namespace EMPManegment.Repository.CompanyRepository
                 throw ex;
             }
         }
-
         private List<TblCompanyMaster> SortCompanyList(List<TblCompanyMaster> companylist, string sortColumn, string sortColumnDir)
         {
             Func<TblCompanyMaster, object> sortExpression = null;
@@ -227,7 +225,7 @@ namespace EMPManegment.Repository.CompanyRepository
                     break;
                 case "Email":
                     sortExpression = v => v.Email;
-                    break; 
+                    break;
                 default:
                     sortExpression = v => v.CompnyName;
                     break;
