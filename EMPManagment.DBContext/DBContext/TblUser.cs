@@ -7,17 +7,17 @@ public partial class TblUser
 {
     public Guid Id { get; set; }
 
-    public string? UserName { get; set; }
+    public string UserName { get; set; } = null!;
 
-    public string? FirstName { get; set; }
+    public string FirstName { get; set; } = null!;
 
-    public string? LastName { get; set; }
+    public string LastName { get; set; } = null!;
 
-    public string? Gender { get; set; }
+    public string Gender { get; set; } = null!;
 
-    public DateTime? DateOfBirth { get; set; }
+    public DateTime DateOfBirth { get; set; }
 
-    public string? Email { get; set; }
+    public string Email { get; set; } = null!;
 
     public bool? EmailConfirmed { get; set; }
 
@@ -29,11 +29,11 @@ public partial class TblUser
 
     public string? Pincode { get; set; }
 
-    public byte[]? PasswordHash { get; set; }
+    public byte[] PasswordHash { get; set; } = null!;
 
-    public byte[]? PasswordSalt { get; set; }
+    public byte[] PasswordSalt { get; set; } = null!;
 
-    public string? PhoneNumber { get; set; }
+    public string PhoneNumber { get; set; } = null!;
 
     public bool? PhoneNumberConfirmed { get; set; }
 
@@ -70,6 +70,12 @@ public partial class TblUser
     public virtual TblState? State { get; set; }
 
     public virtual ICollection<TblAttendance> TblAttendances { get; set; } = new List<TblAttendance>();
+
+    public virtual ICollection<TblPageMaster> TblPageMasters { get; set; } = new List<TblPageMaster>();
+
+    public virtual ICollection<TblProjectMaster> TblProjectMasters { get; set; } = new List<TblProjectMaster>();
+
+    public virtual ICollection<TblTaskDetail> TblTaskDetails { get; set; } = new List<TblTaskDetail>();
 
     public virtual ICollection<TblUserDocument> TblUserDocuments { get; set; } = new List<TblUserDocument>();
 }

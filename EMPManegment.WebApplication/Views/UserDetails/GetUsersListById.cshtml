@@ -1,0 +1,89 @@
+﻿
+@{
+    ViewData["Title"] = "GetUsersListById";
+    Layout = "~/Views/Shared/_HomeLayout.cshtml";
+}
+<link href="~/css/loader.css" rel="stylesheet" asp-append-version="true" />
+<div class="card">
+    <div class="card-body">
+        <div class="listjs-table">
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped align-middle" id="AttendanceTableData">
+                    <thead class="table-light">
+                         <tr class="text-center">
+                            <th>UserName</th>
+                            <th>Date</th>
+                            <th>Intime</th>
+                            <th>OutTime</th>
+                            <th>TotalHours</th>
+                            <th>Action</th>
+                         </tr>
+                    </thead>
+                     <tbody> </tbody>
+                </table>
+    <!-- end table -->
+            </div>
+            <div class="modal fade" id="EditTimeModel" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                         <div class="modal-header bg-light p-3">
+                            <h5 class="modal-title" id="exampleModalLabel"></h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"></button>
+                         </div>
+
+                         <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="customername-field" class="form-label">AttandanceId</label>
+                                <input id="AttandanceId" class="form-control" disabled />
+                                <input id="UserId" class="form-control" hidden />
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="customername-field" class="form-label">UserName</label>
+                                <input id="UserName" class="form-control" disabled />
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="email-field" class="form-label">Date</label>
+                                <input id="Date" class="form-control" disabled />
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="phone-field" class="form-label">Intime</label>
+                                <input id="Intime" class="form-control" disabled />
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="date-field" class="form-label">OutTime</label>
+                                <input type="datetime-local" id="OutTime" class="form-control" />
+                                @*<span style="color: #cc0000;" id="outtime">Please Enter User OutTime</span>*@
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <div class="hstack gap-2 justify-content-end">
+                                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-success" onclick="UpdateUserAttendance();" id="SubmitButton">Update Time</button>
+                                <!-- <button type="button" class="btn btn-success" id="edit-btn">Update</button> -->
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/moduls/userattendancescript.js"></script>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/js/loader.js"></script>
+
+
+
+<!-----Calander----->
+<script>
+    var today = new Date().toISOString().split('T')[0];
+    document.getElementById("OutTime").setAttribute("max", today);
+</script>
+

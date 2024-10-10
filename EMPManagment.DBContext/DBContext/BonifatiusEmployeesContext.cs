@@ -25,20 +25,29 @@ public partial class BonifatiusEmployeesContext : DbContext
 
     public virtual DbSet<TblDocumentMaster> TblDocumentMasters { get; set; }
 
+    public virtual DbSet<TblPageMaster> TblPageMasters { get; set; }
+
+    public virtual DbSet<TblProjectMaster> TblProjectMasters { get; set; }
+
     public virtual DbSet<TblQuestion> TblQuestions { get; set; }
 
     public virtual DbSet<TblSalarySlip> TblSalarySlips { get; set; }
 
     public virtual DbSet<TblState> TblStates { get; set; }
 
+    public virtual DbSet<TblTaskDetail> TblTaskDetails { get; set; }
+
+    public virtual DbSet<TblTaskMaster> TblTaskMasters { get; set; }
+
     public virtual DbSet<TblUser> TblUsers { get; set; }
 
     public virtual DbSet<TblUserDocument> TblUserDocuments { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
+    public virtual DbSet<TblVendorMaster> TblVendorMasters { get; set; }
 
-    }
+    public virtual DbSet<TblVendorType> TblVendorTypes { get; set; }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -55,7 +64,6 @@ public partial class BonifatiusEmployeesContext : DbContext
                 .HasColumnType("datetime")
                 .HasColumnName("INTime");
             entity.Property(e => e.OutTime).HasColumnType("datetime");
-            entity.Property(e => e.TotalHours).HasColumnType("decimal(18, 2)");
 
             entity.HasOne(d => d.User).WithMany(p => p.TblAttendances)
                 .HasForeignKey(d => d.UserId)
@@ -97,9 +105,45 @@ public partial class BonifatiusEmployeesContext : DbContext
 
         modelBuilder.Entity<TblDocumentMaster>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("tblDocumentMaster");
+            entity.ToTable("tblDocumentMaster");
+
+            entity.Property(e => e.DocumentType).HasMaxLength(20);
+        });
+
+        modelBuilder.Entity<TblPageMaster>(entity =>
+        {
+            entity.ToTable("tblPageMaster");
+
+            entity.Property(e => e.PageName).HasMaxLength(50);
+
+            entity.HasOne(d => d.User).WithMany(p => p.TblPageMasters)
+                .HasForeignKey(d => d.UserId)
+                .HasConstraintName("FK_tblPageMaster_tblUsers");
+        });
+
+        modelBuilder.Entity<TblProjectMaster>(entity =>
+        {
+            entity.HasKey(e => e.ProjectId);
+
+            entity.ToTable("tblProjectMaster");
+
+            entity.Property(e => e.ProjectId).ValueGeneratedNever();
+            entity.Property(e => e.CreatedBy).HasMaxLength(50);
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.ProjectDeadline).HasColumnType("date");
+            entity.Property(e => e.ProjectEndDate).HasColumnType("date");
+            entity.Property(e => e.ProjectHead).HasMaxLength(50);
+            entity.Property(e => e.ProjectLocation).HasMaxLength(50);
+            entity.Property(e => e.ProjectPriority).HasMaxLength(10);
+            entity.Property(e => e.ProjectStartDate).HasColumnType("date");
+            entity.Property(e => e.ProjectStatus).HasMaxLength(10);
+            entity.Property(e => e.ProjectTitle).HasMaxLength(50);
+            entity.Property(e => e.ProjectType).HasMaxLength(20);
+
+            entity.HasOne(d => d.User).WithMany(p => p.TblProjectMasters)
+                .HasForeignKey(d => d.UserId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_tblProjectMaster_tblUsers");
         });
 
         modelBuilder.Entity<TblQuestion>(entity =>
@@ -134,6 +178,35 @@ public partial class BonifatiusEmployeesContext : DbContext
                 .HasForeignKey(d => d.CountryId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_tblState_tblCountry1");
+        });
+
+        modelBuilder.Entity<TblTaskDetail>(entity =>
+        {
+            entity.ToTable("tblTaskDetails");
+
+            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.CreatedBy).HasMaxLength(50);
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.TaskDate).HasColumnType("datetime");
+            entity.Property(e => e.TaskDetails).HasMaxLength(150);
+            entity.Property(e => e.TaskEndDate).HasColumnType("datetime");
+            entity.Property(e => e.TaskStatus).HasMaxLength(50);
+            entity.Property(e => e.TaskTitle).HasMaxLength(50);
+
+            entity.HasOne(d => d.TaskTypeNavigation).WithMany(p => p.TblTaskDetails)
+                .HasForeignKey(d => d.TaskType)
+                .HasConstraintName("FK_tblTaskDetails_tblTaskMaster");
+
+            entity.HasOne(d => d.User).WithMany(p => p.TblTaskDetails)
+                .HasForeignKey(d => d.UserId)
+                .HasConstraintName("FK_tblTaskDetails_tblUsers");
+        });
+
+        modelBuilder.Entity<TblTaskMaster>(entity =>
+        {
+            entity.ToTable("tblTaskMaster");
+
+            entity.Property(e => e.TaskType).HasMaxLength(20);
         });
 
         modelBuilder.Entity<TblUser>(entity =>
@@ -191,9 +264,78 @@ public partial class BonifatiusEmployeesContext : DbContext
         {
             entity.ToTable("tblUserDocuments");
 
+            entity.Property(e => e.CreatedBy).HasMaxLength(20);
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+
+            entity.HasOne(d => d.DocumentType).WithMany(p => p.TblUserDocuments)
+                .HasForeignKey(d => d.DocumentTypeId)
+                .HasConstraintName("FK_tblUserDocuments_tblDocumentMaster");
+
             entity.HasOne(d => d.User).WithMany(p => p.TblUserDocuments)
                 .HasForeignKey(d => d.UserId)
                 .HasConstraintName("FK_tblUserDocuments_tblUsers");
+        });
+
+        modelBuilder.Entity<TblVendorMaster>(entity =>
+        {
+            entity.HasKey(e => e.Vid).HasName("PK_tblVendor_Master_1");
+
+            entity.ToTable("tblVendor_Master");
+
+            entity.Property(e => e.Vid)
+                .ValueGeneratedNever()
+                .HasColumnName("VId");
+            entity.Property(e => e.CreatedBy).HasMaxLength(10);
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.VendorAccountHolderName).HasMaxLength(20);
+            entity.Property(e => e.VendorAddress).HasMaxLength(100);
+            entity.Property(e => e.VendorBankAccountNo).HasMaxLength(50);
+            entity.Property(e => e.VendorBankBranch).HasMaxLength(50);
+            entity.Property(e => e.VendorBankIfsc)
+                .HasMaxLength(50)
+                .HasColumnName("VendorBankIFSC");
+            entity.Property(e => e.VendorBankName).HasMaxLength(50);
+            entity.Property(e => e.VendorCompany).HasMaxLength(50);
+            entity.Property(e => e.VendorCompanyEmail).HasMaxLength(50);
+            entity.Property(e => e.VendorCompanyLogo).HasMaxLength(15);
+            entity.Property(e => e.VendorCompanyNumber).HasMaxLength(15);
+            entity.Property(e => e.VendorCompanyType).HasMaxLength(20);
+            entity.Property(e => e.VendorContact).HasMaxLength(12);
+            entity.Property(e => e.VendorEmail).HasMaxLength(50);
+            entity.Property(e => e.VendorFirstName).HasMaxLength(20);
+            entity.Property(e => e.VendorGstnumber)
+                .HasMaxLength(50)
+                .HasColumnName("VendorGSTNumber");
+            entity.Property(e => e.VendorLastName).HasMaxLength(20);
+            entity.Property(e => e.VendorPhone).HasMaxLength(15);
+            entity.Property(e => e.VendorPinCode).HasMaxLength(10);
+
+            entity.HasOne(d => d.VendorCityNavigation).WithMany(p => p.TblVendorMasters)
+                .HasForeignKey(d => d.VendorCity)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_tblVendor_Master_tblCity");
+
+            entity.HasOne(d => d.VendorCountryNavigation).WithMany(p => p.TblVendorMasters)
+                .HasForeignKey(d => d.VendorCountry)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_tblVendor_Master_tblCountry");
+
+            entity.HasOne(d => d.VendorStateNavigation).WithMany(p => p.TblVendorMasters)
+                .HasForeignKey(d => d.VendorState)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_tblVendor_Master_tblState");
+
+            entity.HasOne(d => d.VendorType).WithMany(p => p.TblVendorMasters)
+                .HasForeignKey(d => d.VendorTypeId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_tblVendor_Master_tblVendorType");
+        });
+
+        modelBuilder.Entity<TblVendorType>(entity =>
+        {
+            entity.ToTable("tblVendorType");
+
+            entity.Property(e => e.VendorType).HasMaxLength(50);
         });
 
         OnModelCreatingPartial(modelBuilder);

@@ -21,34 +21,34 @@ namespace EMPManagment.API.Controllers
         [Route("GetCountries")]
         public async Task<IActionResult> GetCountries()
         {
-            IEnumerable<CountryView> dept = await CSC.GetCountries();
-            return Ok(new { code = 200, data = dept.ToList() });
+            IEnumerable<CountryView> getCountries = await CSC.GetCountries();
+            return Ok(new { code = 200, data = getCountries.ToList() });
         }
 
 
 
         [HttpGet]
         [Route("GetState")]
-        public async Task<IActionResult> GetState(int id)
+        public async Task<IActionResult> GetState(int StateId)
         {
-            IEnumerable<StateView> States = await CSC.GetStates(id);
-            return Ok(new { code = 200, data = States.ToList() });
+            IEnumerable<StateView> getStates = await CSC.GetStates(StateId);
+            return Ok(new { code = 200, data = getStates.ToList() });
         }
 
         [HttpGet]
         [Route("GetCities")]
-        public async Task<IActionResult> GetCities(int id)
+        public async Task<IActionResult> GetCities(int CityId)
         {
-            IEnumerable<CityView> Cities = await CSC.GetCities(id);
-            return Ok(new { code = 200, data = Cities.ToList() });
+            IEnumerable<CityView> getCities = await CSC.GetCities(CityId);
+            return Ok(new { code = 200, data = getCities.ToList() });
         }
 
         [HttpGet]
         [Route("GetQuestion")]
         public async Task<IActionResult> GetQuestion()
         {
-            IEnumerable<QuestionView> Cities = await CSC.GetQuestion();
-            return Ok(new { code = 200, data = Cities.ToList() });
+            IEnumerable<QuestionView> getQuestion = await CSC.GetQuestion();
+            return Ok(new { code = 200, data = getQuestion.ToList() });
         }
 
     }

@@ -19,9 +19,9 @@ namespace EMPManegment.Services.UserLogin
 
         public IUserLogin UserLogin { get; }
 
-        public async Task<LoginResponseModel> LoginUser(LoginRequest request)
+        public async Task<LoginResponseModel> LoginUser(LoginRequest LoginUser)
         {
-            return await UserLogin.LoginUser(request);
+            return await UserLogin.LoginUser(LoginUser);
         }
     }
 }
