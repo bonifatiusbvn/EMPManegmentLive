@@ -232,37 +232,44 @@
                         </div>
                     </div>
                 </div>
-                <li class="nav-item dropdown user-menu">
-                    <a href="#" class="nav-link dropdown-toggle show" data-bs-toggle="dropdown" aria-expanded="true">
-                        @if (!string.IsNullOrEmpty(profilePhoto) && !profilePhoto.Equals(defaultImagePath, StringComparison.OrdinalIgnoreCase))
-                        {
-                            <img src="~/@profilePhoto" class="rounded-circle shadow" alt="User Image">
-                        }
-                        else
-                        {
-                            <div class="flex-shrink-0 avatar-xs me-2">
-                                <div class="rounded-circle shadow" alt="User Image">@initials</div>
-                            </div>
-                        }
-                        <span class="d-none d-md-inline">@_userSession.FullName</span><br />
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end show" data-bs-popper="static">
-
-                        <li class="user-header text-bg-primary">
+                <li class="nav-item dropdown user-menu d-xl-inline-block">
+                    <a href="#" class="nav-link dropdown-toggle " data-bs-toggle="dropdown" aria-expanded="true">
+                        <div class="d-flex align-items-end">
                             @if (!string.IsNullOrEmpty(profilePhoto) && !profilePhoto.Equals(defaultImagePath, StringComparison.OrdinalIgnoreCase))
                             {
-                                <img src="~/@profilePhoto" class="rounded-circle shadow" alt="User Image">
+                                <div class="flex-shrink-0 avatar-xs me-2 d-flex justify-content-center align-items-center" style="height: 36px; width: 36px;">
+                                    <img src="~/@profilePhoto" class="rounded-circle shadow d-flex justify-content-center align-items-center" alt="User Image" style="height: 36px; width: 36px;margin-top: 12px;">
+                                </div>
                             }
                             else
                             {
-                                <div class="flex-shrink-0 avatar-xs me-2">
-                                    <div class="rounded-circle shadow" alt="User Image">@initials</div>
+                                <div class="flex-shrink-0 avatar-xs me-2 d-flex justify-content-center align-items-center" style="height: 36px; width: 36px;">
+                                    <div class="rounded-circle shadow d-flex justify-content-center align-items-center" style="height: 36px; width: 36px;margin-top: 12px;background-color: #17a2b8;color:white;">
+                                        <span>@initials</span>
+                                    </div>
                                 </div>
                             }
+                            <span class="d-none d-md-inline">@_userSession.FullName</span><br />
+                        </div>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end" data-bs-popper="static">
 
-                            <p>
+                        <li class="user-header d-flex flex-column align-items-center" style="background-color: #17a2b8;color:white;">
+                            @if (!string.IsNullOrEmpty(profilePhoto) && !profilePhoto.Equals(defaultImagePath, StringComparison.OrdinalIgnoreCase))
+                            {
+                                <img src="~/@profilePhoto" class="rounded-circle shadow mb-2" alt="User Image" style="height: 90px; width: 90px;">
+                            }
+                            else
+                            {
+                                <div class="flex-shrink-0 avatar-xs me-2 d-flex justify-content-center align-items-center" style="height: 90px; width: 90px;">
+                                    <div class="rounded-circle shadow d-flex justify-content-center align-items-center" style="height: 90px; width: 90px;background-color: lightblue;">
+                                        <span style="font-size: 60px;">@initials</span>
+                                    </div>
+                                </div>
+                            }
+                            <p class="text-center">
                                 @_userSession.FullName
-                                <small>@_userSession.UserName</small>
+                                <small class="d-block">@_userSession.UserName</small>
                             </p>
                         </li>
                         <li class="user-body">
