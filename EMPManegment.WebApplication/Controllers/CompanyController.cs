@@ -132,7 +132,6 @@ namespace EMPManegment.Web.Controllers
                     var filepath = "Content/Image/" + CompanyImg;
                     var fullpath = Path.Combine(path, filepath);
                     UploadFile(AddCompany.CompanyLogo, fullpath);
-
                     addCompany.CompanyLogo = CompanyImg;
                 }
                 else
