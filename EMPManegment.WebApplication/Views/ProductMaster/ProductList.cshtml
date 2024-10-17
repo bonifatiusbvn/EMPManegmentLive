@@ -84,21 +84,16 @@
                             <div class="col-xl-3">
                                 <div class="deleteicon search-box">
                                     <span class="deleteicon">
-                                        <input type="text" class="form-control" autocomplete="off" id="txtsearch" placeholder="Search for Products..." style="width:368px;"><i class="ri-search-line search-icon"></i>
+                                        <input type="text" class="form-control" autocomplete="off" id="txtsearch" placeholder="Search for Products..."><i class="ri-search-line search-icon"></i>
 
                                         <span onclick="clearSearchInput()" style="margin-top:0px;margin-left:-24px;position:relative;cursor:pointer;">x</span>
                                     </span>
-
+                                    <button class="btn btn-success" type="button" onclick="SearchProductName()" id="searchproductname" value="Validate" style="margin-right:-10px;">Search</button>
                                     <input type="hidden" class="form-control" id="txtProductListId">
                                 </div>
                             </div>
-                            <div class="col-lg-auto">
-                                <div class="hstack gap-2">
-                                    <button class="btn btn-success" type="button" onclick="SearchProductName()" id="searchproductname" value="Validate" style="margin-right:130px;">Search</button>
-                                </div>
-                            </div>
                             <div class="col-lg-3">
-                                <select class="form-select" id="ddlSortBy" onchange="sortProductTable()" style="margin-left:23px; width:-10px;">
+                                <select class="form-select" id="ddlSortBy" onchange="sortProductTable()" style="margin-left:255px;">
                                     <option value="" selected disabled>--Select SortBy--</option>
                                     <option value="AscendingProductName">ProductName(a-z)</option>
                                     <option value="DescendingProductName">ProductName(z-a)</option>

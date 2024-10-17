@@ -249,7 +249,7 @@
                                     </div>
                                 </div>
                             }
-                            <span class="d-none d-md-inline">@_userSession.FullName</span><br />
+                            <span class="d-none d-md-inline user-header text-bg">@_userSession.FullName</span>
                         </div>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end" data-bs-popper="static">
@@ -268,7 +268,7 @@
                                 </div>
                             }
                             <p class="text-center">
-                                @_userSession.FullName
+                                <h5>@_userSession.FullName</h5>
                                 <small class="d-block">@_userSession.UserName</small>
                             </p>
                         </li>
@@ -288,7 +288,7 @@
                                 </a>
                             </div>
                         </li>
-                        <li class="user-footer">  <a href="#" onclick="UserLogout()" class="btn btn-default btn-flat float-end">Sign out</a> </li>
+                        <li class="user-footer"><a href="#" onclick="UserLogout()" class="btn btn-default btn-flat float-end text-bg-danger">Sign out</a></li>
                     </ul>
                 </li>
             </ul>
