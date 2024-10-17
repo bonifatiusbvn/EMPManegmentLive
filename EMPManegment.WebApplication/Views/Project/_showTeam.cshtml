@@ -75,7 +75,6 @@
                                     <a class="btn text-danger btndeletedoc" data-user-id="@item.UserId"><i class="fas fa-trash"></i></a>
                                 </td>
                             }
-
                         </tr>
                     }
                 </tbody>
@@ -100,8 +99,8 @@
     {
         page = page,
     }),
-                                                                                                            new X.PagedList.Web.Common.PagedListRenderOptions
-                                                                                                        {
-                                                                                                            LiElementClasses = new string[] { "page-item" },
-                                                                                                            PageClasses = new string[] { "page-link" }
-                                                                                                        })
+new X.PagedList.Web.Common.PagedListRenderOptions
+{
+  LiElementClasses = new string[] { "page-item" },
+  PageClasses = new string[] { "page-link" }
+})
