@@ -57,8 +57,6 @@
             overflow-x: hidden;
         }
 
-
-
         .btn-soft-info {
             background-color: #cff4fc;
             color: #055160;
@@ -232,8 +230,10 @@
                         </div>
                     </div>
                 </div>
-                <li class="nav-item dropdown user-menu d-xl-inline-block">
-                    <a href="#" class="nav-link dropdown-toggle " data-bs-toggle="dropdown" aria-expanded="true">
+
+                <li class=" nav-item dropdown user-menu d-xl-inline-block btn btn-ghost-secondary">
+                    
+                    <a href="#" class=" nav-link dropdown-toggle " data-bs-toggle="dropdown" aria-expanded="true" data-bs-auto-close="outside" aria-haspopup="true" >
                         <div class="d-flex align-items-end">
                             @if (!string.IsNullOrEmpty(profilePhoto) && !profilePhoto.Equals(defaultImagePath, StringComparison.OrdinalIgnoreCase))
                             {
@@ -274,18 +274,26 @@
                         </li>
                         <li class="user-body">
                             <div class="row">
-                                <a asp-action="UserProfile" asp-controller="UserProfile" class="dropdown-item">
-                                    <i class="fas fa-user-circle"></i> Profile
-                                </a>
-                                <a asp-action="ChatMessages" asp-controller="Home" class="dropdown-item">
-                                    <i class="mdi mdi-message-text-outline text-muted fs-16 align-middle me-1"></i> Messages
-                                </a>
-                                <a asp-action="UserTasks" asp-controller="Task" class="dropdown-item">
-                                    <i class="fa-solid fa-list-check"></i> Taskboard
-                                </a>
-                                <a asp-action="LockScreen" asp-controller="UserProfile" class="dropdown-item">
-                                    <i class="fa-solid fa-user-lock"></i> Lock screen
-                                </a>
+                                <div class="dropdown-item">
+                                    <a asp-action="UserProfile" asp-controller="UserProfile" class="d-block">
+                                        <i class="fas fa-user-circle"></i> Profile
+                                    </a>
+                                </div>
+                                <div class="dropdown-item">
+                                    <a asp-action="ChatMessages" asp-controller="Home" class="d-block">
+                                        <i class="mdi mdi-message-text-outline fs-16 align-middle me-1"></i> Messages
+                                    </a>
+                                </div>
+                                <div class="dropdown-item">
+                                    <a asp-action="UserTasks" asp-controller="Task" class="d-block">
+                                        <i class="fa-solid fa-list-check"></i> Taskboard
+                                    </a>
+                                </div>
+                                <div class="dropdown-item">
+                                    <a asp-action="LockScreen" asp-controller="UserProfile" class="d-block">
+                                        <i class="fa-solid fa-user-lock"></i> Lock screen
+                                    </a>
+                                </div>
                             </div>
                         </li>
                         <li class="user-footer"><a href="#" onclick="UserLogout()" class="btn btn-default btn-flat float-end text-bg-danger">Sign out</a></li>
