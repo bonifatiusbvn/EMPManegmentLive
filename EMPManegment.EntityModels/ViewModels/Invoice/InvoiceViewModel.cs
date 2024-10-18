@@ -78,6 +78,7 @@ namespace EMPManegment.EntityModels.ViewModels.Invoice
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
         public string? Status { get; set; }
+        public decimal? DollarPrice { get; set; }
     }
     public class InvoicePayVendorModel
     {

@@ -266,6 +266,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                         CreatedOn = row["CreatedOn"] == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(row["CreatedOn"]),
                         CreatedBy = Guid.Parse(row["CreatedBy"]?.ToString() ?? Guid.Empty.ToString()),
                         Date = row["Date"] == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(row["Date"]),
+                        DollarPrice = row["DollarPrice"] == DBNull.Value ? 0 : Convert.ToDecimal(row["DollarPrice"]),
                     };
                     invoiceList.Add(invoice);
                 }
@@ -440,6 +441,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                     CreatedBy = InsertInvoice.CreatedBy,
                     CreatedOn = DateTime.Now,
                     Date = DateTime.Now,
+                    DollarPrice=InsertInvoice.DollarPrice,
                 };
                 Context.TblInvoices.Add(invoice);
 
@@ -700,6 +702,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                     CreatedBy = UpdateInvoice.CreatedBy,
                     Date = DateTime.Now,
                     IsDeleted = false,
+                    DollarPrice = UpdateInvoice.DollarPrice,
                 };
                 Context.TblInvoices.Update(invoice);
 
@@ -1039,6 +1042,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                         InvoiceDetails.RoundOff = DS.Tables[0].Rows[0]["RoundOff"] != DBNull.Value ? (decimal)DS.Tables[0].Rows[0]["RoundOff"] : 0m;
                         InvoiceDetails.CompanyStateCode = DS.Tables[0].Rows[0]["CompanyStateCode"] != DBNull.Value ? (Int32)DS.Tables[0].Rows[0]["CompanyStateCode"] : 0;
                         InvoiceDetails.VendorStateCode = DS.Tables[0].Rows[0]["VendorStateCode"] != DBNull.Value ? (Int32)DS.Tables[0].Rows[0]["VendorStateCode"] : 0;
+                        InvoiceDetails.DollarPrice = DS.Tables[0].Rows[0]["DollarPrice"] != DBNull.Value ? (decimal)DS.Tables[0].Rows[0]["DollarPrice"] : 0m;
                     }
 
                     InvoiceDetails.InvoiceDetails = new List<InvoiceDetailsViewModel>();

@@ -173,10 +173,21 @@ namespace EMPManegment.Web.Controllers
                 if (response.code == 200)
                 {
                     invoice = JsonConvert.DeserializeObject<ManualInvoiceMasterModel>(response.data.ToString());
-                    var number = invoice.TotalAmount;
+                    decimal? number, gstamt;
+
+                    if (invoice.DollarPrice != null)
+                    {
+                        number = invoice.TotalAmount * invoice.DollarPrice.Value;
+                        gstamt = invoice.TotalGst * invoice.DollarPrice.Value;
+                    }
+                    else
+                    {
+                        number = invoice.TotalAmount;
+                        gstamt = invoice.TotalGst;
+                    }
                     var totalAmountInWords = NumberToWords((decimal)number);
                     ViewData["TotalAmountInWords"] = totalAmountInWords + " " + "Only";
-                    var gstamt = invoice.TotalGst;
+
                     var totalGstInWords = NumberToWords((decimal)gstamt);
                     ViewData["TotalGstInWords"] = totalGstInWords + " " + "Only";
                 }

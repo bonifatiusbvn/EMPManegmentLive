@@ -66,7 +66,17 @@
                             </div>
                             <div class="flex-grow-1 p-2">
                                 <p class="text-muted mb-2 text-uppercase fw-semibold">Total Amount</p>
-                                <h5 class="fs-14 mb-0">₹<span id="total-amount">@Model.TotalAmount.ToString("N0")</span></h5>
+                                @if (Model.DollarPrice != 0)
+                                {
+                                    <h5 class="fs-14 mb-0">
+                                        $<span id="total-amount">@Model.TotalAmount.ToString("0.00")</span>,<br />
+                                        <span class="text-muted">₹@((Model.TotalAmount * Model.DollarPrice.Value).ToString("0.00"))</span>
+                                    </h5>
+                                }
+                                else
+                                {
+                                    <h5 class="fs-14 mb-0">₹<span id="total-amount">@Model.TotalAmount.ToString("0.00")</span></h5>
+                                }
                             </div>
                         </div>
                     </div>
@@ -124,21 +134,39 @@
                                     @{
                                         int index = 1;
                                     }
-
                                     @foreach (var item in Model.ProductList)
                                     {
                                         <tr>
                                             <th class="border" scope="row">@index</th>
                                             <td class="text-start border">@item.Product</td>
                                             <td class="border">@item.Quantity</td>
-                                            <td class="border">@(item.Price.ToString("N0") ?? "0.00")</td>
-                                            <td class="border">@(item.Gstamount.ToString("N0") ?? "0.00")</td>
+                                            @if (Model.DollarPrice != 0)
+                                            {
+                                                <td class="border">
+                                                    $@(item.Price.ToString("0.00") ?? "0.00"), <br />
+                                                    <span class="text-muted">₹@((item.Price * Model.DollarPrice.Value).ToString("0.00"))</span>
+                                                </td>
+                                            }
+                                            else
+                                            {
+                                                <td class="border">₹@(item.Price.ToString("0.00") ?? "0.00")</td>
+                                            }
+                                            <td class="border">@(item.Gstamount.ToString("0.00") ?? "0.00")</td>
                                             <td class="border">@item.Gstper</td>
-                                            <td class="text-end border">@(item.ProductTotal.ToString("N0") ?? "0.00")</td>
+                                            @if (Model.DollarPrice != 0)
+                                            {
+                                                <td class="text-end border">
+                                                    $@(item.ProductTotal.ToString("0.00") ?? "0.00"),<br />
+                                                    <span class="text-muted">₹@((item.ProductTotal * Model.DollarPrice.Value).ToString("0.00"))</span>
+                                                </td>
+                                            }
+                                            else
+                                            {
+                                                <td class="text-end border">₹@(item.ProductTotal.ToString("0.00") ?? "0.00")</td>
+                                            }
                                         </tr>
                                         index++;
                                     }
-
                                 </tbody>
                             </table><!--end table-->
                         </div>
@@ -147,15 +175,45 @@
                                 <tbody>
                                     <tr>
                                         <td class="border">Sub Total</td>
-                                        <td class="text-end border">₹@(Model.SubTotal.HasValue ? Model.SubTotal.Value.ToString("N0") : "0.00")</td>
+                                        @if (Model.DollarPrice != 0)
+                                        {
+                                            <td class="text-end border">
+                                                $@(Model.SubTotal.HasValue ? Model.SubTotal.Value.ToString("0.00") : "0.00"),<br />
+                                                <span class="text-muted">₹@((Model.SubTotal * Model.DollarPrice.Value)?.ToString("0.00"))</span>
+                                            </td>
+                                        }
+                                        else
+                                        {
+                                            <td class="text-end border">₹@(Model.SubTotal.HasValue ? Model.SubTotal.Value.ToString("0.00") : "0.00")</td>
+                                        }
                                     </tr>
                                     <tr>
                                         <td class="border">Total GST</td>
-                                        <td class="text-end border">₹@(Model.TotalGst.HasValue ? Model.TotalGst.Value.ToString("N0") : "0.00")</td>
+                                        @if (Model.DollarPrice != 0)
+                                        {
+                                            <td class="text-end border">
+                                                $@(Model.TotalGst.HasValue ? Model.TotalGst.Value.ToString("0.00") : "0.00"),<br />
+                                                <span class="text-muted">₹@((Model.TotalGst * Model.DollarPrice.Value)?.ToString("0.00"))</span>
+                                            </td>
+                                        }
+                                        else
+                                        {
+                                            <td class="text-end border">₹@(Model.TotalGst.HasValue ? Model.TotalGst.Value.ToString("0.00") : "0.00")</td>
+                                        }
                                     </tr>
                                     <tr class="border-top">
                                         <td class="border">Total Amount</td>
-                                        <td class="text-end border">₹@(Model.TotalAmount.ToString("N0") ?? "0.00")</td>
+                                        @if (Model.DollarPrice != 0)
+                                        {
+                                            <td class="text-end border">
+                                                $@(Model.TotalAmount.ToString("0.00") ?? "0.00"),<br />
+                                                <span class="text-muted">₹@((Model.TotalAmount * Model.DollarPrice.Value).ToString("0.00"))</span>
+                                            </td>
+                                        }
+                                        else
+                                        {
+                                            <td class="text-end border">₹@(Model.TotalAmount.ToString("0.00") ?? "0.00")</td>
+                                        }
                                     </tr>
                                 </tbody>
                             </table>
@@ -176,7 +234,17 @@
                             <h6 class="text-muted text-uppercase fw-semibold mb-3">Payment Details:</h6>
                             <p class="text-muted mb-1">Payment Method: <span class="fw-medium" id="payment-method">@Model.PaymentMethodName</span></p>
                             <p class="text-muted mb-1">User Name: <span class="fw-medium" id="card-holder-name">@Model.VendorAccountHolderName</span></p>
-                            <p class="text-muted">Total Amount: <span class="fw-medium" id="">₹ </span><span id="card-total-amount">@Model.TotalAmount</span></p>
+                            @if (Model.DollarPrice != 0)
+                            {
+                                <p class="text-muted">
+                                    Total Amount: <span class="fw-medium" id="">$ </span><span id="card-total-amount">@Model.TotalAmount.ToString("0.00")</span>,<br />
+                                    <span class="text-muted">₹@((Model.TotalAmount * Model.DollarPrice.Value).ToString("0.00"))</span>
+                                </p>
+                            }
+                            else
+                            {
+                                <p class="text-muted">Total Amount: <span class="fw-medium" id="">₹ </span><span id="card-total-amount">@Model.TotalAmount</span></p>
+                            }
                         </div>
                         <div class="hstack gap-2 justify-content-end d-print-none mt-4">
                             <a href="javascript:window.print()" class="btn btn-primary btn-ecomm" style="margin-left: 950px;width: 185px;"><i class="fadeIn animated bx bx-printer"></i>Print</a>

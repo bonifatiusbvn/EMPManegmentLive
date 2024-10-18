@@ -71,6 +71,6 @@ namespace EMPManegment.EntityModels.ViewModels.PurchaseOrderModels
         public string? VendorGstnumber { get; set; }
         public string? VendorAddress { get; set; }
         public List<PurchaseOrderDetailsModel>? ProductList { get; set; }
-
+        public decimal? DollarPrice { get; set; }
     }
 }

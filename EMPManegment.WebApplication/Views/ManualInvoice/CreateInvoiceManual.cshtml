@@ -197,13 +197,13 @@
                                                     <select class="form-selectborder-0 bg-light" id="currency-select" onchange="checkCurrencySelection()">
                                                         @if (Model.DollarPrice != null)
                                                         {
-                                                            <option value="$" selected>($)</option>
                                                             <option value="₹">(₹)</option>
+                                                            <option value="$" selected onclick="checkCurrencySelection()">($)</option>
                                                         }
                                                         else
                                                         {
-                                                            <option value="$">($)</option>
                                                             <option value="₹" selected>(₹)</option>
+                                                            <option value="$">($)</option>
                                                         }
 
                                                     </select>

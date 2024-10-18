@@ -218,9 +218,29 @@
                                     </td>
                                     <td class="border" id="txtper">@item.Hsn</td>
                                     <td class="border" id="txtquantity">@item.Quantity @ProductType</td>
-                                    <td class="border" id="txtHSN">@item.PerUnitPrice</td>
+                                    @if (Model.DollarPrice != 0)
+                                    {
+                                        <td class="border" id="txtHSN">
+                                            $@item.PerUnitPrice,<br />
+                                            <span class="text-muted">₹@((item.PerUnitPrice * Model.DollarPrice.Value)?.ToString("0.00"))</span>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td class="border" id="txtHSN">₹@item.PerUnitPrice</td>
+                                    }
                                     <td class="border" id="txtper">@ProductType</td>
-                                    <td class="border" id="txttotal">₹@SubTotal</td>
+                                    @if (Model.DollarPrice != 0)
+                                    {
+                                        <td class="border" id="txttotal">
+                                            $@SubTotal,<br />
+                                            <span class="text-muted">₹@((subtotal * Model.DollarPrice.Value)?.ToString("0.00"))</span>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td class="border" id="txttotal">₹@SubTotal</td>
+                                    }
                                 </tr>
                                 index++;
                             }
@@ -231,7 +251,17 @@
                                 <td class="border"></td>
                                 <td class="border" style="text-align: end;">@sgstper</td>
                                 <td class="border" style="text-align: start;">%</td>
-                                <td class="border"><b>₹@sgst</b></td>
+                                @if (Model.DollarPrice != 0)
+                                {
+                                    <td class="border">
+                                        <b>$@sgst</b>,<br />
+                                        <span class="text-muted">₹@((sgst * Model.DollarPrice.Value)?.ToString("0.00"))</span>
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td class="border"><b>₹@sgst</b></td>
+                                }
                             </tr>
                             <tr>
                                 <td class="border"></td>
@@ -240,7 +270,17 @@
                                 <td class="border"></td>
                                 <td class="border" style="text-align: end;">@cgstper</td>
                                 <td class="border" style="text-align: start;">%</td>
-                                <td class="border"><b>₹@cgst</b></td>
+                                @if (Model.DollarPrice != 0)
+                                {
+                                    <td class="border">
+                                        <b>$@cgst</b>,<br />
+                                        <span class="text-muted">₹@((cgst * Model.DollarPrice.Value)?.ToString("0.00"))</span>
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td class="border"><b>₹@cgst</b></td>
+                                }
                             </tr>
                             <tr>
                                 <td class="border"></td>
@@ -274,7 +314,17 @@
                                 <td class="border">@totalqty</td>
                                 <td class="border"></td>
                                 <td class="border"></td>
-                                <td class="border"><b>₹@(firstItem.TotalAmount?.ToString("N2") ?? "0.00")</b></td>
+                                @if (Model.DollarPrice != 0)
+                                {
+                                    <td class="border">
+                                        <b>$@(firstItem.TotalAmount?.ToString("N2") ?? "0.00")</b>,<br />
+                                        <span class="text-muted">₹@((firstItem.TotalAmount * Model.DollarPrice.Value)?.ToString("0.00"))</span>
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td class="border"><b>₹@(firstItem.TotalAmount?.ToString("N2") ?? "0.00")</b></td>
+                                }
                             </tr>
                         </tbody>
                     </table><!--end table-->
@@ -340,17 +390,61 @@
                                 TotalGSTAmount = TotalCenteralTax + TotalStateTax + TotalIntegratedTax;
                                 <tr>
                                     <td class="border">@item.Hsn</td>
-                                    <td class="border">₹@(subTotal.HasValue ? subTotal.Value.ToString("N2") : "0.00")</td>
+                                    @if (Model.DollarPrice != 0)
+                                    {
+                                        <td class="border">
+                                            $@(subTotal.HasValue ? subTotal.Value.ToString("N2") : "0.00"),<br />
+                                            <span class="text-muted">₹@((subtotal * Model.DollarPrice.Value)?.ToString("0.00"))</span>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td class="border">₹@(subTotal.HasValue ? subTotal.Value.ToString("N2") : "0.00")</td>
+                                    }
+                                    
                                     <td class="border">@CenteralTaxPer%</td>
-                                    <td class="border">₹@(CenteralTax.HasValue ? CenteralTax.Value.ToString("N2") : "0.00")</td>
+                                    @if (Model.DollarPrice != 0)
+                                    {
+                                        <td class="border">
+                                            $@(CenteralTax.HasValue ? CenteralTax.Value.ToString("N2") : "0.00"),<br />
+                                            <span class="text-muted">₹@((CenteralTax * Model.DollarPrice.Value)?.ToString("0.00"))</span>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td class="border">₹@(CenteralTax.HasValue ? CenteralTax.Value.ToString("N2") : "0.00")</td>
+                                    }
+                                    
                                     <td class="border">@StateTaxPer%</td>
-                                    <td class="border">₹@(StateTax.HasValue ? StateTax.Value.ToString("N2") : "0.00")</td>
+                                    @if (Model.DollarPrice != 0)
+                                    {
+                                        <td class="border">
+                                            $@(StateTax.HasValue ? StateTax.Value.ToString("N2") : "0.00"),<br />
+                                            <span class="text-muted">₹@((StateTax * Model.DollarPrice.Value)?.ToString("0.00"))</span>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td class="border">₹@(StateTax.HasValue ? StateTax.Value.ToString("N2") : "0.00")</td>
+                                    }
+                                    
                                     @if (Model.InvoiceDetails.Count > 1 && Model.InvoiceDetails.Any(a => a.Igst > 0))
                                     {
                                         @if (item.Igst.HasValue && item.Igst.Value != 0)
                                         {
                                             <td class="border">@IntegratedTaxPer%</td>
-                                            <td class="border">₹@(IntegratedTax.HasValue ? IntegratedTax.Value.ToString("N2") : "0.00")</td>
+                                            @if (Model.DollarPrice != 0)
+                                            {
+                                                <td class="border">
+                                                    $@(IntegratedTax.HasValue ? IntegratedTax.Value.ToString("N2") : "0.00"),<br />
+                                                    <span class="text-muted">₹@((IntegratedTax * Model.DollarPrice.Value)?.ToString("0.00"))</span>
+                                                </td>
+                                            }
+                                            else
+                                            {
+                                                <td class="border">₹@(IntegratedTax.HasValue ? IntegratedTax.Value.ToString("N2") : "0.00")</td>
+                                            }
+                                            
                                         }
                                         else
                                         {
@@ -363,28 +457,89 @@
                                         @if (item.Igst.HasValue && item.Igst.Value != 0)
                                         {
                                             <td class="border">@IntegratedTaxPer%</td>
-                                            <td class="border">₹@(IntegratedTax.HasValue ? IntegratedTax.Value.ToString("N2") : "0.00")</td>
+                                            @if (Model.DollarPrice != 0)
+                                            {
+                                                <td class="border">
+                                                    $@(IntegratedTax.HasValue ? IntegratedTax.Value.ToString("N2") : "0.00"),<br />
+                                                    <span class="text-muted">₹@((IntegratedTax * Model.DollarPrice.Value)?.ToString("0.00"))</span>
+                                                </td>
+                                            }
+                                            else
+                                            {
+                                                <td class="border">₹@(IntegratedTax.HasValue ? IntegratedTax.Value.ToString("N2") : "0.00")</td>
+                                            }
+                                            
                                         }
                                     }
-                                    <td class="border"><b>₹@(item.GstAmount.HasValue ? item.GstAmount.Value.ToString("N2") : "0.00")</b></td>
+                                    @if (Model.DollarPrice != 0)
+                                    {
+                                        <td class="border">
+                                            <b>$@(item.GstAmount.HasValue ? item.GstAmount.Value.ToString("N2") : "0.00")</b>,<br />
+                                            <span class="text-muted">₹@((item.GstAmount * Model.DollarPrice.Value)?.ToString("0.00"))</span>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td class="border"><b>₹@(item.GstAmount.HasValue ? item.GstAmount.Value.ToString("N2") : "0.00")</b></td>
+                                    }
                                 </tr>
                                 Index++;
                             }
                             <tr>
                                 <td class="text-end border">Total</td>
-                                <td class="border"><b>₹@(TotalofSubtotal?.ToString("N2") ?? "0.00")</b></td>
+                                @if (Model.DollarPrice != 0)
+                                {
+                                    <td class="border">
+                                        <b>$@(TotalofSubtotal?.ToString("N2") ?? "0.00")</b>,<br />
+                                        <span class="text-muted">₹@((TotalofSubtotal * Model.DollarPrice.Value)?.ToString("0.00"))</span>
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td class="border"><b>₹@(TotalofSubtotal?.ToString("N2") ?? "0.00")</b></td>
+                                }
                                 <td class="border"></td>
-                                <td class="border"><b>@(TotalCenteralTax?.ToString("N2") ?? "0.00")</b></td>
+                                @if (Model.DollarPrice != 0)
+                                {
+                                    <td class="border">
+                                        <b>$@(TotalCenteralTax?.ToString("N2") ?? "0.00")</b>,<br />
+                                        <span class="text-muted">₹@((TotalCenteralTax * Model.DollarPrice.Value)?.ToString("0.00"))</span>
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td class="border"><b>₹@(TotalCenteralTax?.ToString("N2") ?? "0.00")</b></td>
+                                }
                                 <td class="border"></td>
-                                <td class="border"><b>@(TotalStateTax?.ToString("N2") ?? "0.00")</b></td>
+                                @if (Model.DollarPrice != 0)
+                                {
+                                    <td class="border">
+                                        <b>$@(TotalStateTax?.ToString("N2") ?? "0.00")</b>,<br />
+                                        <span class="text-muted">₹@((TotalStateTax * Model.DollarPrice.Value)?.ToString("0.00"))</span>
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td class="border"><b>₹@(TotalStateTax?.ToString("N2") ?? "0.00")</b></td>
+                                }
+                                
                                 @if (firstItem.InvoiceDetails.Any(a => a.Igst > 0))
                                 {
                                     <td class="border"></td>
                                     <td class="border"><b>@(TotalIntegratedTax?.ToString("N2") ?? "0.00")</b></td>
                                 }
-                                <td class="border"><b>₹@(TotalGSTAmount?.ToString("N2") ?? "0.00")</b></td>
+                                @if (Model.DollarPrice != 0)
+                                {
+                                    <td class="border">
+                                        <b>$@(TotalGSTAmount?.ToString("N2") ?? "0.00")</b>,<br />
+                                        <span class="text-muted">₹@((TotalGSTAmount * Model.DollarPrice.Value)?.ToString("0.00"))</span>
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td class="border"><b>₹@(TotalGSTAmount?.ToString("N2") ?? "0.00")</b></td>
+                                }
                             </tr>
-
                         </tbody>
                     </table><!--end table-->
                     <div class="flex-grow-1 col-12" style="border: 1px solid lightgray;">

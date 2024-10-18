@@ -80,6 +80,7 @@
                                                             <input type="text" id="textCreatedByVal" class="form-control" hidden value="@Model.CreatedBy" />
                                                             <input type="text" id="txtID" class="form-control" hidden value="@Model.Id" />
                                                             <input type="text" id="txtPOProjectId" class="form-control" hidden value="@Model.ProjectId" />
+                                                            <input type="hidden" id="PODollarAmount" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -162,7 +163,47 @@
                                                         <th>HSN Code</th>
                                                         <th>Quantity</th>
                                                         <th>Qty Type</th>
-                                                        <th>Price</th>
+                                                        <th>
+                                                            Price
+                                                            <select class="form-selectborder-0 bg-light" id="POcurrency-select" onchange="checkPOCurrencySelection()">
+                                                                @if (Model.DollarPrice != null)
+                                                                {
+                                                                    <option value="₹">(₹)</option>
+                                                                    <option value="$" selected onclick="checkPOCurrencySelection()">($)</option>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <option value="₹" selected>(₹)</option>
+                                                                    <option value="$">($)</option>
+                                                                }
+
+                                                            </select>
+                                                            <div id="PODollarModal" class="modal fade" tabindex="-1" role="dialog">
+                                                                <div class="modal-dialog" role="document">
+                                                                    <div class="modal-content">
+                                                                        <form id="AddPODollarAmountForm">
+                                                                            <div class="modal-header bg-primary-subtle p-3">
+                                                                                <h5 class="modal-title">$Price</h5>
+                                                                                <button type="button" class="btn-close" onclick="ClosePODollarModel()"></button>
+                                                                            </div>
+                                                                            <div class="modal-body">
+                                                                                <div class="hstack gap-3 align-items-start">
+                                                                                    <div class="flex-grow-1">
+                                                                                        <label class="form-label">1$ = <span class="text-danger">*</span></label>
+                                                                                        <input type="text" id="txtPODollarAmount" value="@Model.DollarPrice" placeholder="(₹)" />
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="modal-footer">
+                                                                                <button type="button" class="btn btn-light" onclick="ClosePODollarModel()">Close</button>
+                                                                                <button type="button" class="btn btn-success" onclick="SavePODollarAmount()">Save</button>
+                                                                            </div>
+                                                                        </form>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                        </th>
                                                         <th>GST (%)</th>
                                                         <th>GST Amt (₹)</th>
                                                         <th>Amount (₹)</th>

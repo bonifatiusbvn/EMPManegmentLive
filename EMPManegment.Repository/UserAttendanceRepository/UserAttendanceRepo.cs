@@ -397,7 +397,7 @@ namespace EMPManegment.Repository.UserAttendanceRepository
                     Date = AddUser.Date,
                     Intime = AddUser.Intime,
                     OutTime = AddUser.OutTime,
-                    TotalHours = AddUser.TotalHours,
+                    TotalHours = AddUser.OutTime.HasValue ? AddUser.OutTime.Value - AddUser.Intime : (TimeSpan?)null,
                     CreatedBy = AddUser.CreatedBy,
                     CreatedOn = DateTime.Now,
                 };

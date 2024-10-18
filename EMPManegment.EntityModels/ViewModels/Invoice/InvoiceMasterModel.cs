@@ -91,7 +91,7 @@ namespace EMPManegment.EntityModels.ViewModels.Invoice
         public int? CompanyStateCode { get; set; }
         public Guid? UpdatedBy { get; set; }
         public DateTime? Date { get; set; }
-
+        public decimal? DollarPrice { get; set; }
         public List<InvoiceDetailsViewModel>? InvoiceDetails { get; set; }
     }
 }

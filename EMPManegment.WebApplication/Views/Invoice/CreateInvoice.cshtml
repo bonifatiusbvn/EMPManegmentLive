@@ -77,6 +77,7 @@
                                                             <input type="text" id="textProjectId" class="form-control" hidden value="@UserSession.ProjectId" />
                                                             <input type="text" id="textCreatedById" class="form-control" hidden value="@_userSession.UserId" />
                                                             <input type="text" id="textInvoiceId" class="form-control" hidden value="@Model.Id" />
+                                                            <input type="text" id="InvoiceDollarAmount" hidden />
                                                             @{
                                                                 DateTime? CreatedOn = Model.CreatedOn;
                                                                 string formattedCreatedOn = CreatedOn.HasValue ? CreatedOn.Value.ToString("yyyy-MM-dd") : "";
@@ -168,7 +169,45 @@
                                                         <th>HSN Code</th>
                                                         <th>Quantity</th>
                                                         <th>Qty Type</th>
-                                                        <th>Price</th>
+                                                        <th>
+                                                            Price
+                                                            <select class="form-selectborder-0 bg-light" id="Invoicecurrency-select" onchange="checkInvoiceCurrencySelection()">
+                                                                @if (Model.DollarPrice != 0)
+                                                                {
+                                                                    <option value="₹">(₹)</option>
+                                                                    <option value="$" selected onclick="checkInvoiceCurrencySelection()">($)</option>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <option value="₹" selected>(₹)</option>
+                                                                    <option value="$">($)</option>
+                                                                }
+                                                            </select>
+                                                            <div id="InvoiceDollarModal" class="modal fade" tabindex="-1" role="dialog">
+                                                                <div class="modal-dialog" role="document">
+                                                                    <div class="modal-content">
+                                                                        <form id="AddPODollarAmountForm">
+                                                                            <div class="modal-header bg-primary-subtle p-3">
+                                                                                <h5 class="modal-title">$Price</h5>
+                                                                                <button type="button" class="btn-close" onclick="CloseInvoiceDollarModel()"></button>
+                                                                            </div>
+                                                                            <div class="modal-body">
+                                                                                <div class="hstack gap-3 align-items-start">
+                                                                                    <div class="flex-grow-1">
+                                                                                        <label class="form-label">1$ = <span class="text-danger">*</span></label>
+                                                                                        <input type="text" id="txtInvoiceDollarAmount" value="@Model.DollarPrice" placeholder="(₹)" />
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="modal-footer">
+                                                                                <button type="button" class="btn btn-light" onclick="CloseInvoiceDollarModel()">Close</button>
+                                                                                <button type="button" class="btn btn-success" onclick="SaveInvoiceDollarAmount()">Save</button>
+                                                                            </div>
+                                                                        </form>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </th>
                                                         <th>Discount</th>
                                                         <th>Discount(%)</th>
                                                         <th>GST (%)</th>

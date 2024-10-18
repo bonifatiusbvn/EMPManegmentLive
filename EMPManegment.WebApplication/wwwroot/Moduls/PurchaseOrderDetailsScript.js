@@ -481,6 +481,7 @@ function fn_UpdatePurchaseOrderDetails() {
                 UpdatedBy: $("#textCreatedById").val(),
                 Address: $('#hideShippingAddress').is(':checked') ? $('#textCompanyBillingAddress').val() : $('#textShippingAddress').val(),
                 ProductList: ProductDetails,
+                DollarPrice: $('#PODollarAmount').val(),
             }
 
             var form_data = new FormData();
@@ -690,6 +691,7 @@ function fn_InsertPurchaseOrderDetails() {
                 CreatedBy: $("#textCreatedById").val(),
                 Address: $('#hideShippingAddress').is(':checked') ? $('#textCompanyBillingAddress').val() : $('#textShippingAddress').val(),
                 ProductList: ProductDetails,
+                DollarPrice: $('#PODollarAmount').val(),
             }
 
             var form_data = new FormData();
@@ -799,3 +801,38 @@ $(document).ready(function () {
 
     updateTotals();
 });
+
+let POdollarModal;
+
+function checkPOCurrencySelection() {
+    const currencySelect = document.getElementById('POcurrency-select');
+
+    if (!POdollarModal) {
+        POdollarModal = new bootstrap.Modal(document.getElementById('PODollarModal'));
+    }
+
+    if (currencySelect.value === "$") {
+        POdollarModal.show();
+    }
+}
+
+function ClosePODollarModel() {
+
+    if (POdollarModal) {
+        POdollarModal.hide();
+    }
+}
+
+
+function SavePODollarAmount() {
+
+    const POdollarModal = document.getElementById('txtPODollarAmount').value;
+
+    if (POdollarModal == "") {
+        toastr.warning("Emter DollarAmount!");
+    }
+    else {
+        document.getElementById('PODollarAmount').value = POdollarModal;
+        ClosePODollarModel();
+    }
+}
