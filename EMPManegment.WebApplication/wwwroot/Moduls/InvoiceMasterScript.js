@@ -98,6 +98,7 @@ function fn_InsertInvoiceDetails() {
                 TotalDiscount: $('#cart-discount').val(),
                 ShippingAddress: $('#hideShippingAddress').is(':checked') ? $('#textVendorAddress').val() : $('#textShippingAddress').val(),
                 InvoiceDetails: ProductDetails,
+                DollarPrice: $("#InvoiceDollarAmount").val(),
             }
             var form_data = new FormData();
             form_data.append("INVOICEDETAILS", JSON.stringify(Invoicedetails));
@@ -205,6 +206,7 @@ function fn_UpdateInvoiceDetails() {
                 UpdatedBy: $("#textCreatedById").val(),
                 ShippingAddress: $('#hideShippingAddress').is(':checked') ? $('#textVendorAddress').val() : $('#textShippingAddress').val(),
                 InvoiceDetails: ProductDetails,
+                DollarPrice: $("#InvoiceDollarAmount").val(),
             }
 
             var form_data = new FormData();
@@ -338,7 +340,13 @@ $(document).ready(function () {
                     function formatNumberWithCommas(number) {
                         return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                     }
-                    return '₹' + formatNumberWithCommas(data);
+                    if (full.dollarPrice != 0) {
+                        return '$' + formatNumberWithCommas(data);
+                    }
+                    else {
+                        return '₹' + formatNumberWithCommas(data);
+                    }
+                    
                 }
             }
         ];
@@ -992,4 +1000,39 @@ function removeInvoiceDescriptionRow(element) {
     var $row = $(element).closest('tr');
     $(element).closest('.row').remove();
     $row.find('#error-message').hide();
+}
+
+let InvoicedollarModal;
+
+function checkInvoiceCurrencySelection() {
+    const currencySelect = document.getElementById('Invoicecurrency-select');
+
+    if (!InvoicedollarModal) {
+        InvoicedollarModal = new bootstrap.Modal(document.getElementById('InvoiceDollarModal'));
+    }
+
+    if (currencySelect.value === "$") {
+        InvoicedollarModal.show();
+    }
+}
+
+function CloseInvoiceDollarModel() {
+
+    if (InvoicedollarModal) {
+        InvoicedollarModal.hide();
+    }
+}
+
+
+function SaveInvoiceDollarAmount() {
+
+    const InvoicedollarModal = document.getElementById('txtInvoiceDollarAmount').value;
+
+    if (InvoicedollarModal == "") {
+        toastr.warning("Emter DollarAmount!");
+    }
+    else {
+        document.getElementById('InvoiceDollarAmount').value = InvoicedollarModal;
+        CloseInvoiceDollarModel();
+    }
 }

@@ -176,6 +176,7 @@ namespace EMPManegment.Repository.OrderRepository
                     PaymentMethod = InsertPurchaseOrder.PaymentMethod,
                     PaymentStatus = InsertPurchaseOrder.PaymentStatus,
                     DeliveryStatus = InsertPurchaseOrder.DeliveryStatus,
+                    DollarPrice = InsertPurchaseOrder.DollarPrice,
                     IsDeleted = false,
                     CreatedBy = InsertPurchaseOrder.CreatedBy,
                     CreatedOn = DateTime.Now,
@@ -263,6 +264,7 @@ namespace EMPManegment.Repository.OrderRepository
                         PODetails.PaymentStatusName = row["PaymentStatusName"]?.ToString();
                         PODetails.DeliveryStatus = row["DeliveryStatus"]?.ToString();
                         PODetails.Address = row["Address"]?.ToString();
+                        PODetails.DollarPrice = row["DollarPrice"] != DBNull.Value ? (decimal)row["DollarPrice"] : 0m;
                     }
                     PODetails.ProductList = new List<PurchaseOrderDetailsModel>();
 
@@ -345,6 +347,7 @@ namespace EMPManegment.Repository.OrderRepository
                               VendorAddress = d.VendorAddress,
                               CreatedOn = a.CreatedOn,
                               CreatedBy = (Guid)a.CreatedBy,
+                              DollarPrice= a.DollarPrice,
                           }).FirstOrDefault();
                 List<PurchaseOrderDetailsModel> Productlist = (from a in Context.TblPurchaseOrderDetails.Where(a => a.PorefId == POList.Id)
                                                                join b in Context.TblProductTypeMasters on a.ProductType equals b.Id
@@ -488,6 +491,7 @@ namespace EMPManegment.Repository.OrderRepository
                     PurchaseOrder.CreatedOn = UpdatePurchaseorder.CreatedOn;
                     PurchaseOrder.UpdatedOn = DateTime.Now;
                     PurchaseOrder.UpdatedBy = UpdatePurchaseorder.UpdatedBy;
+                    PurchaseOrder.DollarPrice = UpdatePurchaseorder.DollarPrice;
                 };
                 Context.TblPurchaseOrderMasters.Update(PurchaseOrder);
 

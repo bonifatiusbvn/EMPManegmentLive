@@ -15,6 +15,8 @@ public partial class TblPurchaseOrderMaster
 
     public Guid? CompanyId { get; set; }
 
+    public decimal? DollarPrice { get; set; }
+
     public decimal? TotalGst { get; set; }
 
     public decimal? SubTotal { get; set; }
