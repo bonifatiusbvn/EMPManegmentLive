@@ -62,11 +62,6 @@
             color: #055160;
         }
 
-        #notificationDropdown {
-            border: 2px solid #17a2b8;
-            border-radius: 8px;
-        }
-
     </style>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed accent-info">
@@ -149,7 +144,7 @@
             <!-- Right navbar links -->
             <ul class="navbar-nav ml-auto">
                 <div class="dropdown notifications-menu" id="notificationDropdown">
-                    <button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle" id="page-header-notifications-dropdown" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-haspopup="true" aria-expanded="false">
+                    <button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle" id="page-header-notifications-dropdown" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-haspopup="true" aria-expanded="false" style="margin-right:15px; margin-top:9px;">
                         <i class='bx bx-bell fs-22'></i>
                         <span class="position-absolute topbar-badge fs-10 translate-middle badge rounded-pill bg-danger" id="CountunreadNotification"><span class="visually-hidden">unread messages</span></span>
                     </button>
@@ -243,11 +238,11 @@
                             }
                             else
                             {
-                                <div class="user-image" alt="User Image" style="background-color: #17a2b8;color:white;">
+                                <div class="user-image text-center" alt="User Image" style="background-color: #17a2b8;color:white;justify-content: center; align-items: center;display: flex;">
                                     <span>@initials</span>
                                 </div>
                             }
-                            <span class="d-none d-md-inline user-header text-bg">@_userSession.FullName</span>
+                            <span class="d-none d-md-inline user-header text-bg" style="margin-bottom:5px;">@_userSession.FullName</span>
                         </div>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end" data-bs-popper="static">
@@ -255,19 +250,24 @@
                             @if (!string.IsNullOrEmpty(profilePhoto) && !profilePhoto.Equals(defaultImagePath, StringComparison.OrdinalIgnoreCase))
                             {
                                 <img src="~/@profilePhoto" class="rounded-circle shadow mb-2" alt="User Image">
+                                <p class="text-center">
+                                    <h5 style="margin-top:-10px;">@_userSession.FullName</h5>
+                                    <small class="d-block">@_userSession.UserName</small>
+                                </p>
                             }
                             else
                             {
                                 <div class="flex-shrink-0 avatar-xs me-2 d-flex justify-content-center align-items-center">
-                                    <div class="rounded-circle shadow d-flex justify-content-center align-items-center" style="background-color: lightblue;">
-                                        <span style="font-size: 60px;">@initials</span>
+                                    <div class="rounded-circle shadow d-flex justify-content-center align-items-center" style="background-color: lightblue; height:72px;; width:72px; margin-top:55px;">
+                                        <span style="font-size:50px; width:75px;">@initials</span>
                                     </div>
                                 </div>
+                                <p class="text-center">
+                                    <h5 style="margin-top:46px;">@_userSession.FullName</h5>
+                                    <small class="d-block">@_userSession.UserName</small>
+                                </p>
                             }
-                            <p class="text-center">
-                                <h5>@_userSession.FullName</h5>
-                                <small class="d-block">@_userSession.UserName</small>
-                            </p>
+                           
                         </li>
                         <li class="user-body">
                             <div class="row">

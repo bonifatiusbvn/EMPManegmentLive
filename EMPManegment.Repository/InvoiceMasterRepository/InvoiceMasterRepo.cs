@@ -280,6 +280,48 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                         e.TotalAmount.ToString().Contains(dataTable.searchValue)).ToList();
                 }
 
+                if (!string.IsNullOrEmpty(dataTable.sortColumn) && !string.IsNullOrEmpty(dataTable.sortColumnDir))
+                {
+                    switch (dataTable.sortColumn.ToLower())
+                    {
+                        case "createdon":
+                            invoiceList = (dataTable.sortColumnDir == "asc"
+                                ? invoiceList.OrderBy(e => e.CreatedOn)
+                                : invoiceList.OrderByDescending(e => e.CreatedOn)).ToList();
+                            break;
+
+                        case "vendorname":
+                            invoiceList = (dataTable.sortColumnDir == "asc"
+                                ? invoiceList.OrderBy(e => e.VendorName)
+                                : invoiceList.OrderByDescending(e => e.VendorName)).ToList();
+                            break;
+
+                        case "invoiceno":
+                            invoiceList = (dataTable.sortColumnDir == "asc"
+                                ? invoiceList.OrderBy(e => e.InvoiceNo)
+                                : invoiceList.OrderByDescending(e => e.InvoiceNo)).ToList();
+                            break;
+
+                        case "totalamount":
+                            invoiceList = (dataTable.sortColumnDir == "asc"
+                                ? invoiceList.OrderBy(e => e.TotalAmount)
+                                : invoiceList.OrderByDescending(e => e.TotalAmount)).ToList();
+                            break;
+                        case "projectname":
+                            invoiceList = (dataTable.sortColumnDir == "asc"
+                                ? invoiceList.OrderBy(e => e.ProjectName)
+                                : invoiceList.OrderByDescending(e => e.ProjectName)).ToList();
+                            break;
+
+                        default:
+                            break;
+                    }
+                }
+                else
+                {
+                    invoiceList = invoiceList.OrderByDescending(e => e.CreatedOn).ToList(); 
+                }
+
                 var totalRecord = invoiceList.Count;
                 var filteredData = invoiceList.Skip(dataTable.skip).Take(dataTable.pageSize).ToList();
 

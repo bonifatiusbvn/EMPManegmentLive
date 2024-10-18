@@ -325,7 +325,7 @@ $(document).ready(function () {
         var columns = [
             {
                 "data": "invoiceNo",
-                "name": "InvoiceNo",
+                "name": "InvoiceNo", "className": "text-center",
                 "render": function (data, type, full) {
                     return '<h5 class="fs-15"><a href="/Invoice/InvoiceDetails?InvoiceId=' + full.id + '" class="fw-medium link-primary">' + full.invoiceNo + '</a></h5>';
                 }
@@ -356,6 +356,7 @@ $(document).ready(function () {
                 "data": null,
                 "orderable": false,
                 "searchable": false,
+                "className": "text-center",
                 "render": function (data, type, full) {
                     var buttons = '<ul class="list-inline hstack gap-2 mb-0">';
 

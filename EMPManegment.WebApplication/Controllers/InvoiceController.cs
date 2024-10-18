@@ -301,8 +301,8 @@ namespace EMPManegment.Web.Controllers
                 var draw = Request.Form["draw"].FirstOrDefault();
                 var start = Request.Form["start"].FirstOrDefault();
                 var length = Request.Form["length"].FirstOrDefault();
-                //var sortColumn = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
-                //var sortColumnDir = Request.Form["order[0][dir]"].FirstOrDefault();
+                var sortColumn = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
+                var sortColumnDir = Request.Form["order[0][dir]"].FirstOrDefault();
                 var searchValue = Request.Form["search[value]"].FirstOrDefault();
                 int pageSize = length != null ? Convert.ToInt32(length) : 0;
                 int skip = start != null ? Convert.ToInt32(start) : 0;
@@ -315,8 +315,8 @@ namespace EMPManegment.Web.Controllers
                     skip = skip,
                     lenght = length,
                     searchValue = searchValue,
-                    //sortColumn = sortColumn,
-                    //sortColumnDir = sortColumnDir
+                    sortColumn = sortColumn,
+                    sortColumnDir = sortColumnDir
                 };
                 List<InvoiceViewModel> InvoiceList = new List<InvoiceViewModel>();
                 var data = new jsonData();
