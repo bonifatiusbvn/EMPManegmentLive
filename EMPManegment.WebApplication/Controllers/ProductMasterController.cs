@@ -61,7 +61,7 @@ namespace EMPManegment.Web.Controllers
                     GstPercentage = AddProduct.GstPercentage,
                     GstAmount = AddProduct.GstAmount,
                     Hsn = AddProduct.Hsn,
-                    CreatedOn= DateTime.Now,
+                    CreatedOn = DateTime.Now,
                 };
                 if (AddProduct.ProductImage != null)
                 {
@@ -225,9 +225,6 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
-
-
-
         [HttpGet]
         public async Task<IActionResult> GetProductDetailsByVendorId(Guid VendorId)
         {
@@ -289,7 +286,6 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
-
 
         [FormPermissionAttribute("Product Details-View")]
         public async Task<IActionResult> ProductDetails(Guid? ProductId)

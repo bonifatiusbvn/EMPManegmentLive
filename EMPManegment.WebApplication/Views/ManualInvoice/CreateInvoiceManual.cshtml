@@ -91,7 +91,6 @@
                                         </div>
                                     </div>
                                 </div>
-
                                 <div class="col-6 col-lg-6">
                                     <div class="card">
                                         <div class="card-header">
@@ -196,7 +195,7 @@
                                                 <th>
                                                     Price
                                                     <select class="form-selectborder-0 bg-light" id="currency-select" onchange="checkCurrencySelection()">
-                                                        @if(Model.DollarPrice != null)
+                                                        @if (Model.DollarPrice != null)
                                                         {
                                                             <option value="$" selected>($)</option>
                                                             <option value="₹">(₹)</option>
@@ -206,7 +205,7 @@
                                                             <option value="$">($)</option>
                                                             <option value="₹" selected>(₹)</option>
                                                         }
-                                                        
+
                                                     </select>
                                                     <div id="DollarModal" class="modal fade" tabindex="-1" role="dialog">
                                                         <div class="modal-dialog" role="document">
@@ -403,7 +402,6 @@
                                                 </div>
                                             </div>
                                         </div>
-
                                         <div class="col-lg-6 col-sm-12 ac-invoice-total">
                                             <div class="table">
                                                 <table class="table table-borderless table-sm table-nowrap align-middle mb-0">
@@ -443,7 +441,6 @@
                                                     </tbody>
                                                 </table>
                                             </div>
-
                                         </div>
                                     </div>
                                 </div>
@@ -523,9 +520,6 @@
             gstNo.readOnly = false;
         }
     }
-
-
-
 </script>
 <!--Invoice create init js-->
 <script src="~/lib/jquery/dist/jquery.min.js"></script>

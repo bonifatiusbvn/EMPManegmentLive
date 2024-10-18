@@ -153,6 +153,7 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
+
         public void UploadFile(IFormFile ImageFile, string ImagePath)
         {
             FileStream stream = new FileStream(ImagePath, FileMode.Create);

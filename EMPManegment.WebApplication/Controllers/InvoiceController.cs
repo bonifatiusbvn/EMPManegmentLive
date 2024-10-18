@@ -588,7 +588,6 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
-
         [FormPermissionAttribute("All Transaction-View")]
         [HttpGet]
         public IActionResult AllTransaction()
@@ -662,7 +661,6 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
-
         [FormPermissionAttribute("InvoiceListView-Delete")]
         [HttpPost]
         public async Task<IActionResult> IsDeletedInvoice(Guid InvoiceId)
@@ -684,7 +682,6 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
-
         public async Task<IActionResult> ShowInvoiceDetailsByOrderId(string OrderId)
         {
             try
@@ -725,7 +722,6 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
-
         public async Task<IActionResult> InvoicePrintDetails(Guid InvoiceId)
         {
             try
@@ -768,7 +764,6 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
-
         private async Task<string> RenderViewToStringAsync(string viewName, object model, ViewDataDictionary viewData)
         {
             var viewEngine = HttpContext.RequestServices.GetService(typeof(ICompositeViewEngine)) as ICompositeViewEngine;

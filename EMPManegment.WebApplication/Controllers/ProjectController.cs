@@ -545,7 +545,6 @@ namespace EMPManegment.Web.Controllers
         {
             try
             {
-
                 List<InvoiceViewModel> activity = new List<InvoiceViewModel>();
                 ApiResponseModel postuser = await APIServices.GetAsync("", "Invoice/InvoiceActivity?ProjectId=" + ProId);
                 if (postuser.data != null)
@@ -596,7 +595,6 @@ namespace EMPManegment.Web.Controllers
                     projectList = JsonConvert.DeserializeObject<List<ProjectDetailView>>(postuser.data.ToString());
                 }
                 return new JsonResult(projectList);
-
             }
             catch (Exception ex)
             {
