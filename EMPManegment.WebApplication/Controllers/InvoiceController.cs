@@ -113,6 +113,7 @@ namespace EMPManegment.Web.Controllers
         {
             return Json(data);
         }
+
         [HttpGet]
         public async Task<IActionResult> GenerateInvoicePDF()
         {
@@ -171,7 +172,7 @@ namespace EMPManegment.Web.Controllers
 
                     var totalAmountInWords = NumberToWords((decimal)number);
                     ViewData["TotalAmountInWords"] = totalAmountInWords + " " + "Only";
-                    
+
                     var totalGstInWords = NumberToWords((decimal)gstamt);
                     ViewData["TotalGstInWords"] = totalGstInWords + " " + "Only";
                 }

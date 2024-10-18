@@ -32,14 +32,12 @@
     <div class="col-12">
         <div class="page-title-box d-sm-flex align-items-center justify-content-between">
             <h4 class="mb-sm-0">INVOICE DETAILS</h4>
-
             <div class="page-title-right">
                 <ol class="breadcrumb m-0">
                     <li class="breadcrumb-item"><a href="javascript: void(0);">Invoices</a></li>
                     <li class="breadcrumb-item active">Invoices Details</li>
                 </ol>
             </div>
-
         </div>
     </div>
 </div>
@@ -137,7 +135,6 @@
                                             }
                                             <b>@formattedDate</b>
                                         </p>
-
                                     </div>
                                     <div style="border: 0px solid lightgray;border-width:0.5px;margin:-8px;width:-1%;"></div>
                                     <div class="flex-shrink-0 mt-sm-0 mt-3 ">
@@ -158,7 +155,6 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="d-flex Address-Details">
                         <div class="flex-grow-1 col-6">
                             <p class="text-muted"><b>Buyer (Bill to)</b></p>
@@ -401,7 +397,6 @@
                                     {
                                         <td class="border">₹@(subTotal.HasValue ? subTotal.Value.ToString("N2") : "0.00")</td>
                                     }
-                                    
                                     <td class="border">@CenteralTaxPer%</td>
                                     @if (Model.DollarPrice != 0)
                                     {
@@ -414,7 +409,6 @@
                                     {
                                         <td class="border">₹@(CenteralTax.HasValue ? CenteralTax.Value.ToString("N2") : "0.00")</td>
                                     }
-                                    
                                     <td class="border">@StateTaxPer%</td>
                                     @if (Model.DollarPrice != 0)
                                     {
@@ -427,7 +421,6 @@
                                     {
                                         <td class="border">₹@(StateTax.HasValue ? StateTax.Value.ToString("N2") : "0.00")</td>
                                     }
-                                    
                                     @if (Model.InvoiceDetails.Count > 1 && Model.InvoiceDetails.Any(a => a.Igst > 0))
                                     {
                                         @if (item.Igst.HasValue && item.Igst.Value != 0)
@@ -444,7 +437,7 @@
                                             {
                                                 <td class="border">₹@(IntegratedTax.HasValue ? IntegratedTax.Value.ToString("N2") : "0.00")</td>
                                             }
-                                            
+
                                         }
                                         else
                                         {
@@ -468,7 +461,6 @@
                                             {
                                                 <td class="border">₹@(IntegratedTax.HasValue ? IntegratedTax.Value.ToString("N2") : "0.00")</td>
                                             }
-                                            
                                         }
                                     }
                                     @if (Model.DollarPrice != 0)
@@ -522,7 +514,6 @@
                                 {
                                     <td class="border"><b>₹@(TotalStateTax?.ToString("N2") ?? "0.00")</b></td>
                                 }
-                                
                                 @if (firstItem.InvoiceDetails.Any(a => a.Igst > 0))
                                 {
                                     <td class="border"></td>
@@ -574,7 +565,6 @@
         </div>
     </div>
 </div>
-
 
 @section Scripts {
     <!--Invoice create init js-->
