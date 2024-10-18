@@ -30,7 +30,6 @@
     }
     var CompanyInitials = Titleinitial.ToUpper();
 }
-
 <div class="row" style="margin-top:80px;">
     <div class="col-12">
         <div class="page-title-box d-sm-flex align-items-center justify-content-between">
@@ -92,7 +91,6 @@
                                     </div>
                                 </div>
                             </div>
-
                         </div>
                         <div class="card-header p-2">
                             <ul class="nav nav-pills">
@@ -123,7 +121,6 @@
                     <!-- end card body -->
                     <!-- end modal -->
                     <!---Partial View 2--->
-
                 </div>
             </div>
             <!-- end card -->
@@ -140,9 +137,7 @@
                             <div class="card">
                                 <div class="card-header align-items-center d-flex">
                                     <h4 class="card-title mb-0 flex-grow-1">Activity</h4>
-
                                 </div><!-- end card header -->
-
                                 <div class="card-body">
                                     <div data-simplebar style="height: 300px;" class="px-3 mx-n3 mb-2">
                                         <div class="card">
@@ -165,14 +160,12 @@
                                     <div class="flex-shrink-0">
                                         <h3 class="card-title" id="showProjectMembers" onclick="showProjectMembers('@Model.ProjectId')">Project Members</h3>
                                     </div>
-
                                     @if (UserSession.FormPermisionData.Any(a => a.FormName == "GetProjectDetails" && (a.Add == true)))
                                     {
                                         <div class="flex-shrink-0">
                                             <button type="button" class="btn btn-block btn-primary" style="margin-left:40px;" onclick="openmemberpop()"><i class="ri-share-line me-1 align-bottom"></i>Invite Member</button>
                                         </div>
                                     }
-
                                 </div>
                                 <div class="card-body">
                                     <table class="table table-striped">

@@ -64,7 +64,6 @@
                 }
             </tbody>
         </table>
-
     </div>
 </div>
 
@@ -73,11 +72,11 @@
         page,
         searchText = ViewBag.SearchText
     }),
-                                            new PagedListRenderOptions
-                                        {
-                                            LiElementClasses = new[] { "page-item" },
-                                            PageClasses = new[] { "page-link" }
-                                        })
+                new PagedListRenderOptions
+            {
+                LiElementClasses = new[] { "page-item" },
+                PageClasses = new[] { "page-link" }
+            })
 
 <script>
     $(document).ready(function () {
@@ -87,5 +86,5 @@
                     toastr.warning("@TempData["EmptyProductList"]");
         </text>
     }
-                                                        });
+                    });
 </script>

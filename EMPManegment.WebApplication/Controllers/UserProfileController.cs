@@ -1227,7 +1227,6 @@ namespace EMPManegment.Web.Controllers
             {
                 if (Profile.Image != null)
                 {
-
                     var UserImg = Guid.NewGuid() + "_" + Profile.Image.FileName;
                     var path = Environment.WebRootPath;
                     var filepath = "Content/Image/" + UserImg;
@@ -1237,7 +1236,6 @@ namespace EMPManegment.Web.Controllers
                     {
                         Id = _userSession.UserId,
                         Image = filepath,
-
                     };
                     ApiResponseModel postUser = await APIServices.PostAsync(UploadImage, "UserProfile/UserProfilePhoto");
                     if (postUser.code == 200)
