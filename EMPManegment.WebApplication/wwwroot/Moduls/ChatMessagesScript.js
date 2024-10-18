@@ -47,6 +47,7 @@ function fn_SendMessage(ChatData) {
         },
     });
 }
+
 function fn_GetChatUserInformation(UserId) {
     $.ajax({
         url: '/Home/GetChatUserInformation?UserId=' + UserId,
@@ -71,7 +72,7 @@ function fn_ReadMessage(conversationId, secondUserId) {
         data: chatData,
         dataType: 'json',
         success: function (result) {
-            debugger
+
             if (result.code == 200) {
 
             } else {
@@ -83,8 +84,6 @@ function fn_ReadMessage(conversationId, secondUserId) {
         }
     });
 }
-
-
 
 function DisplayUserListForChat() {
     $.ajax({
@@ -100,6 +99,8 @@ function DisplayUserListForChat() {
 }
 
 var activenavlink = null;
+let listOfConversationIds = [];
+let listOfTaskIds = [];
 function SearchChatUserName() {
     var searchUserName = $("#searchUserNameforchat").val();
     var activeTabLink = $('.userlistnav-link .nav-link.active');
@@ -260,7 +261,6 @@ function openchatfromNotification(SelectedUserId) {
     });
 }
 
-
 $(document).ready(function () {
     var conversationId = localStorage.getItem('conversationId');
     if (conversationId) {
@@ -268,13 +268,6 @@ $(document).ready(function () {
         localStorage.removeItem('conversationId');
     }
 });
-
-
-
-
-
-let listOfConversationIds = [];
-let listOfTaskIds = [];
 
 function toggleConversationId(checkbox, type) {
     const id = checkbox.value;
@@ -307,7 +300,7 @@ function toggleConversationId(checkbox, type) {
         console.log('Task IDs:', listOfTaskIds);
     }
 
-    if (listOfConversationIds == "" && listOfTaskIds == "" ) {
+    if (listOfConversationIds == "" && listOfTaskIds == "") {
         $("#notification-actions").hide();
     }
     else {
@@ -317,16 +310,15 @@ function toggleConversationId(checkbox, type) {
     $("#CountAllCheckNotification").text(listOfConversationIds.length + listOfTaskIds.length);
 }
 
-function RemoveAllNotifications()
-{
-    debugger
+function RemoveAllNotifications() {
+
     var NotificationDetails =
     {
-        Messages: listOfConversationIds ,
+        Messages: listOfConversationIds,
         Tasks: listOfTaskIds,
         UserId: $("#textchatsessionUserId").val(),
     }
-    debugger
+
     var form_data = new FormData();
     form_data.append("AllNotificationDetails", JSON.stringify(NotificationDetails));
 

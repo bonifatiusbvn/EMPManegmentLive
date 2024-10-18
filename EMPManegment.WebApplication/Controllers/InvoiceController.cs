@@ -113,6 +113,7 @@ namespace EMPManegment.Web.Controllers
         {
             return Json(data);
         }
+
         [HttpGet]
         public async Task<IActionResult> GenerateInvoicePDF()
         {
@@ -171,7 +172,7 @@ namespace EMPManegment.Web.Controllers
 
                     var totalAmountInWords = NumberToWords((decimal)number);
                     ViewData["TotalAmountInWords"] = totalAmountInWords + " " + "Only";
-                    
+
                     var totalGstInWords = NumberToWords((decimal)gstamt);
                     ViewData["TotalGstInWords"] = totalGstInWords + " " + "Only";
                 }
@@ -601,7 +602,6 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
-
         [FormPermissionAttribute("All Transaction-View")]
         [HttpGet]
         public IActionResult AllTransaction()
@@ -675,7 +675,6 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
-
         [FormPermissionAttribute("InvoiceListView-Delete")]
         [HttpPost]
         public async Task<IActionResult> IsDeletedInvoice(Guid InvoiceId)
@@ -697,7 +696,6 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
-
         public async Task<IActionResult> ShowInvoiceDetailsByOrderId(string OrderId)
         {
             try
@@ -738,7 +736,6 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
-
         public async Task<IActionResult> InvoicePrintDetails(Guid InvoiceId)
         {
             try
@@ -781,7 +778,6 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
-
         private async Task<string> RenderViewToStringAsync(string viewName, object model, ViewDataDictionary viewData)
         {
             var viewEngine = HttpContext.RequestServices.GetService(typeof(ICompositeViewEngine)) as ICompositeViewEngine;

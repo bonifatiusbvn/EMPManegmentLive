@@ -59,9 +59,7 @@ namespace EMPManegment.Web.Controllers
                 UserResponceModel result = new UserResponceModel();
                 if (postuser.code == 200)
                 {
-
                     return Ok(new { Message = string.Format(postuser.message), Icone = string.Format(postuser.Icone), Code = postuser.code });
-
                 }
                 else
                 {
@@ -83,9 +81,7 @@ namespace EMPManegment.Web.Controllers
                 ApiResponseModel postuser = await APIServices.PostAsync(userAttendance, "UserHome/InsertOutTime");
                 if (postuser.code == 200)
                 {
-
                     return Ok(new { Message = string.Format(postuser.message), Icone = string.Format(postuser.Icone), Code = postuser.code });
-
                 }
                 else
                 {
