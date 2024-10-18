@@ -62,6 +62,11 @@
             color: #055160;
         }
 
+        #notificationDropdown {
+            border: 2px solid #17a2b8;
+            border-radius: 8px;
+        }
+
     </style>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed accent-info">
@@ -143,7 +148,7 @@
             }
             <!-- Right navbar links -->
             <ul class="navbar-nav ml-auto">
-                <div class="dropdown topbar-head-dropdown ms-1 header-item" id="notificationDropdown">
+                <div class="dropdown notifications-menu" id="notificationDropdown">
                     <button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle" id="page-header-notifications-dropdown" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-haspopup="true" aria-expanded="false">
                         <i class='bx bx-bell fs-22'></i>
                         <span class="position-absolute topbar-badge fs-10 translate-middle badge rounded-pill bg-danger" id="CountunreadNotification"><span class="visually-hidden">unread messages</span></span>
@@ -160,7 +165,6 @@
                                     </div>
                                 </div>
                             </div>
-
                             <div class="px-2 pt-2">
                                 <ul class="nav nav-tabs dropdown-tabs nav-tabs-custom" data-dropdown-tabs="true" id="notificationItemsTab" role="tablist">
                                     <li class="nav-item waves-effect waves-light">
@@ -180,7 +184,6 @@
                                     </li>
                                 </ul>
                             </div>
-
                         </div>
 
                         <div class="tab-content position-relative" id="notificationItemsTabContent" style="height: 300px; overflow: hidden scroll;">
@@ -231,38 +234,32 @@
                     </div>
                 </div>
 
-                <li class=" nav-item dropdown user-menu d-xl-inline-block btn btn-ghost-secondary">
-                    
-                    <a href="#" class=" nav-link dropdown-toggle " data-bs-toggle="dropdown" aria-expanded="true" data-bs-auto-close="outside" aria-haspopup="true" >
+                <div class="nav-item dropdown user-menu d-xl-inline-block btn btn-ghost-secondary border" id="usersDropdown">
+                    <a href="#" class=" nav-link dropdown-toggle " data-bs-toggle="dropdown" aria-expanded="true" data-bs-auto-close="outside" aria-haspopup="true">
                         <div class="d-flex align-items-end">
                             @if (!string.IsNullOrEmpty(profilePhoto) && !profilePhoto.Equals(defaultImagePath, StringComparison.OrdinalIgnoreCase))
                             {
-                                <div class="flex-shrink-0 avatar-xs me-2 d-flex justify-content-center align-items-center" style="height: 36px; width: 36px;">
-                                    <img src="~/@profilePhoto" class="rounded-circle shadow d-flex justify-content-center align-items-center" alt="User Image" style="height: 36px; width: 36px;margin-top: 12px;">
-                                </div>
+                                <img src="~/@profilePhoto" class="user-image" alt="User Image">
                             }
                             else
                             {
-                                <div class="flex-shrink-0 avatar-xs me-2 d-flex justify-content-center align-items-center" style="height: 36px; width: 36px;">
-                                    <div class="rounded-circle shadow d-flex justify-content-center align-items-center" style="height: 36px; width: 36px;margin-top: 12px;background-color: #17a2b8;color:white;">
-                                        <span>@initials</span>
-                                    </div>
+                                <div class="user-image" alt="User Image" style="background-color: #17a2b8;color:white;">
+                                    <span>@initials</span>
                                 </div>
                             }
                             <span class="d-none d-md-inline user-header text-bg">@_userSession.FullName</span>
                         </div>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end" data-bs-popper="static">
-
                         <li class="user-header d-flex flex-column align-items-center" style="background-color: #17a2b8;color:white;">
                             @if (!string.IsNullOrEmpty(profilePhoto) && !profilePhoto.Equals(defaultImagePath, StringComparison.OrdinalIgnoreCase))
                             {
-                                <img src="~/@profilePhoto" class="rounded-circle shadow mb-2" alt="User Image" style="height: 90px; width: 90px;">
+                                <img src="~/@profilePhoto" class="rounded-circle shadow mb-2" alt="User Image">
                             }
                             else
                             {
-                                <div class="flex-shrink-0 avatar-xs me-2 d-flex justify-content-center align-items-center" style="height: 90px; width: 90px;">
-                                    <div class="rounded-circle shadow d-flex justify-content-center align-items-center" style="height: 90px; width: 90px;background-color: lightblue;">
+                                <div class="flex-shrink-0 avatar-xs me-2 d-flex justify-content-center align-items-center">
+                                    <div class="rounded-circle shadow d-flex justify-content-center align-items-center" style="background-color: lightblue;">
                                         <span style="font-size: 60px;">@initials</span>
                                     </div>
                                 </div>
@@ -298,7 +295,7 @@
                         </li>
                         <li class="user-footer"><a href="#" onclick="UserLogout()" class="btn btn-default btn-flat float-end text-bg-danger">Sign out</a></li>
                     </ul>
-                </li>
+                </div>
             </ul>
         </nav>
 
@@ -772,43 +769,43 @@
         var ProjectId = "@UserSession.ProjectId";
         var ProjectName = "@UserSession.ProjectName";
 
-        $('#drpProjectName').change(function () {
+                                                                                                                    $('#drpProjectName').change(function () {
 
-            var ProjectText = $(this).find('option:selected').text();
+                                                                                                                        var ProjectText = $(this).find('option:selected').text();
             var selectedProjectId = $(this).val();
 
-            $('#drpProjectName').text(ProjectText);
+                                                                                                                        $('#drpProjectName').text(ProjectText);
             fn_ChangeProject(selectedProjectId, ProjectText);
 
+                                                                                                                    });
         });
-    });
 
-    function fn_ChangeProject(selectedProjectId, ProjectText) {
+                                                                                                                function fn_ChangeProject(selectedProjectId, ProjectText) {
 
-        $.ajax({
+                                                                                                                    $.ajax({
             url: '/Home/ProjectList',
             type: 'GET',
             data: {
                 ProjectId: selectedProjectId,
                 ProjectName: ProjectText
-            },
+                },
             success: function (result) {
                 siteloaderhide();
                 $('#drpProjectName').text(ProjectText);
                 sessionStorage.setItem('SelectedProjectId', selectedProjectId);
                 location.reload();
-            },
+                },
             error: function (xhr, status, error) {
                 console.error("Error fetching purchase request list:", error);
-            }
-        });
-    }
+                }
+            });
+        }
     function viewAllTaskbtn() {
         window.location.href = '/Task/UserTasks';
-    }
+        }
 
-    function viewAllMessages() {
+                                                                                                                function viewAllMessages() {
         window.location.href = '/Home/ChatMessages';
-    }
+        }
 </script>
 
