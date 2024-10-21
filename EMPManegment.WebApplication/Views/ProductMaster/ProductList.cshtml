@@ -7,6 +7,13 @@
     Layout = "~/Views/Shared/_HomeLayout.cshtml";
 }
 <style>
+
+    .card {
+        width: 100%; 
+        max-width: none;
+        margin: 0; 
+    }
+
     span.deleteicon {
         position: relative;
         display: inline-flex;
@@ -32,6 +39,167 @@
             padding-right: 18px;
             box-sizing: border-box;
         }
+
+    .form-select {
+        margin-left: 255px;
+    }
+
+    .searchproductname {
+        margin-right: -10px;
+    }
+
+    .clearsearch {
+        margin-top: 0px;
+        margin-left: -24px;
+        position: relative;
+        cursor: pointer;
+    }
+
+    @@media (max-width: 600px) {
+
+        .form-select {
+            margin-left: 0;
+            width: 100%;
+        }
+
+        .search-box {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .searchproductname {
+            margin-right: 0;
+            margin-top: 10px;
+        }
+
+        .deleteicon {
+            width: 100%;
+        }
+
+        .clearsearch {
+            margin-left: 0;
+            margin-top: 5px;
+        }
+
+        .hstack {
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .card-body {
+            padding: 10px;
+        }
+    }
+
+   @@media (min-width: 601px) and (max-width: 767px)
+    {
+        .form-select {
+            margin-left: 0px;
+        }
+
+        .search-box {
+            flex-direction: row;
+            align-items: center;
+        }
+
+        .searchproductname {
+            margin-right: 10px;
+        }
+
+        .deleteicon {
+            width: auto; 
+            margin-right: 10px;
+        }
+
+        .clearsearch {
+            margin-left: 5px;
+            margin-top: 0;
+        }
+
+        .hstack {
+            flex-direction: row;
+            gap: 15px;
+        }
+
+        .card-body {
+            padding: 15px;
+        }
+    } 
+
+    @@media (min-width: 768px) and (max-width: 991px) {
+        .form-select {
+            margin-left: 0px;
+        }
+
+        .search-box {
+            flex-direction: row;
+            align-items: center;
+        }
+
+        .searchproductname {
+            margin-right: 10px;
+        }
+
+        .deleteicon {
+            width: auto;
+            margin-right: 10px;
+        }
+
+        .clearsearch {
+            margin-left: 5px;
+            margin-top: 0;
+        }
+
+        .filterrow{
+            flex-direction: row;
+        }
+
+        .hstack {
+            flex-direction: row;
+            gap: 15px;
+        }
+
+        .card-body {
+            padding: 15px;
+        }
+    }
+
+    @@media (min-width: 992px) and (max-width: 1870px) {
+        .card {
+            width: calc(100% - 20px);
+            padding: 0 10px;
+        }
+        .row.g-2 {
+            display: flex; 
+            flex-wrap: nowrap; 
+            align-items: center; 
+        }
+
+        .box1,
+        .box2,
+        .box3,
+        .box4 {
+            flex: 1;
+            min-width: 0; 
+        }
+
+        .box1 {
+            margin-right: 10px; 
+        }
+
+        .box3 {
+            margin-right: 10px; 
+        }
+
+        .form-select {
+            margin-left: 0; 
+        }
+
+        .search-box{
+            display:flex;
+            flex-direction: row;
+        }
+    }
 </style>
 
 <!-- start page title -->
@@ -53,7 +221,7 @@
 <!-- end card -->
 
 <div class="row">
-    <div class="col-xl-12 col-lg-8">
+    <div class="col-xl-12">
         <div>
             <div class="card">
                 <div class="card-header border-0">
@@ -76,18 +244,18 @@
                 <div class="card-body border border-dashed border-end-0 border-start-0">
                     <div class="card-header border-0 rounded">
                         <div class="row g-2">
-                            <div class="col-xl-3">
+                            <div class="col-xl-3 box1">
                                 <div class="deleteicon search-box">
                                     <span class="deleteicon">
                                         <input type="text" class="form-control" autocomplete="off" id="txtsearch" placeholder="Search for Products..."><i class="ri-search-line search-icon"></i>
-                                        <span onclick="clearSearchInput()" style="margin-top:0px;margin-left:-24px;position:relative;cursor:pointer;">x</span>
+                                        <span onclick="clearSearchInput()" class="clearsearch">x</span>
                                     </span>
-                                    <button class="btn btn-success" type="button" onclick="SearchProductName()" id="searchproductname" value="Validate" style="margin-right:-10px;">Search</button>
+                                    <button class="btn btn-success searchproductname" type="button" onclick="SearchProductName()" id="searchproductname" value="Validate">Search</button>
                                     <input type="hidden" class="form-control" id="txtProductListId">
                                 </div>
                             </div>
-                            <div class="col-lg-3">
-                                <select class="form-select" id="ddlSortBy" onchange="sortProductTable()" style="margin-left:255px;">
+                            <div class="col-lg-3 box2">
+                                <select class="form-select" id="ddlSortBy" onchange="sortProductTable()">
                                     <option value="" selected disabled>--Select SortBy--</option>
                                     <option value="AscendingProductName">ProductName(a-z)</option>
                                     <option value="DescendingProductName">ProductName(z-a)</option>
@@ -96,13 +264,13 @@
                                 </select>
                             </div>
                             <!--end col-->
-                            <div class="col-xxl-3 ms-auto">
+                            <div class="col-xxl-3 ms-auto box3">
                                 <div>
                                     <input type="text" id="txtProductList" name="txtProductList" class="form-control" placeholder="All Products">
                                     <input type="hidden" id="txtProductTypeHidden" name="txtProductTypeHidden">
                                 </div>
                             </div>
-                            <div class="col-lg-auto">
+                            <div class="col-lg-auto box4">
                                 <div class="hstack gap-2">
                                     <button type="button" class="btn btn-info"><i class="ri-equalizer-fill me-1 align-bottom"></i>Type Filters</button>
                                 </div>
