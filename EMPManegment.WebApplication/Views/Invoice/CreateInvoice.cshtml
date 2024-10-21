@@ -130,7 +130,7 @@
                                                         <div class="row mt-3">
                                                             <div class="col-6 col-lg-6">
                                                                 <label for="textCompanyBillingAddress" class="form-label ">Address</label>
-                                                                <input type="text" id="textCompanyBillingAddress" name="textCompanyBillingAddress" class="form-control" placeholder="Billing Address" value="@Model.ShippingAddress" readonly />
+                                                                <input type="text" id="textCompanyBillingAddress" name="textCompanyBillingAddress" class="form-control" placeholder="Billing Address" value="@Model.CompanyAddress" readonly />
                                                             </div>
                                                             <div class="col-6 col-lg-6">
                                                                 <label class="form-label ">GST NO</label>
@@ -455,13 +455,26 @@
                                             <h5 class="card-header">
                                                 Shipping Addresses
                                             </h5>
-                                            <div class="card-body">
-                                                <input type="checkbox" id="hideShippingAddress" name="hideShippingAddress" onchange="tn_toggleInvoiceShippingAddress()" checked>
-                                                <label for="hideShippingAddress"><b>Is Your Billing Address is same as Shipping Address?</b></label>
-                                                <div id="shippingAddressFields" style="display:none;">
-                                                    <textarea type="text" id="textShippingAddress" name="textShippingAddress" class="form-control" placeholder="Shipping Address"></textarea>
+                                            @if(Model.ShippingAddress == Model.VendorAddress)
+                                            {
+                                                <div class="card-body">
+                                                    <input type="checkbox" id="hideShippingAddress" name="hideShippingAddress" onchange="tn_toggleInvoiceShippingAddress()" checked>
+                                                    <label for="hideShippingAddress"><b>Is Your Billing Address is same as Shipping Address?</b></label>
+                                                    <div id="shippingAddressFields" style="display:none;">
+                                                        <textarea type="text" id="textShippingAddress" name="textShippingAddress" class="form-control" placeholder="Shipping Address"></textarea>
+                                                    </div>
                                                 </div>
-                                            </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="card-body">
+                                                    <input type="checkbox" id="hideShippingAddress" name="hideShippingAddress" onchange="tn_toggleInvoiceShippingAddress()">
+                                                    <label for="hideShippingAddress"><b>Is Your Billing Address is same as Shipping Address?</b></label>
+                                                    <div id="shippingAddressFields">
+                                                        <textarea type="text" id="textShippingAddress" name="textShippingAddress" class="form-control" placeholder="Shipping Address">@Model.ShippingAddress</textarea>
+                                                    </div>
+                                                </div>
+                                            }
                                         </div>
                                     </div>
                                 </div>

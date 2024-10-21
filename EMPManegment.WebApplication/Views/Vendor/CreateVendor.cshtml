@@ -24,6 +24,45 @@
         margin-top: -50px;
         margin-left: -70px;
     }
+
+    .Bank_Details {
+        height: 455px;
+    }
+
+    @@media only screen and (max-width: 768px) {
+        .auth-bg-cover {
+            width: 330px;
+            margin-left: 46px;
+            background: none;
+        }
+
+        .Bank_Details {
+            height: 600px;
+        }
+
+    }
+
+    @@media only screen and (min-width: 768px) and (max-width: 1024px) {
+        .auth-bg-cover {
+            width: 700px;
+            margin-left: 46px;
+            background: none;
+        }
+
+        .Bank_Details {
+            height: 600px;
+        }
+    }
+
+    @@media only screen and (min-width: 1024px) and (max-width: 1370px) {
+        .auth-bg-cover {
+            width: 670px;
+            margin-left: 55px;
+            background: none;
+            margin-top: -145px;
+        }
+    }
+
 </style>
 <!-- start page title -->
 <div class="row" style="margin-top:80px;">
@@ -260,21 +299,7 @@
                             </div>
                         </div>
                     </div>
-                    <!-- end card -->
-                    <div class="text-end mb-3">
-                        @if (Model.Vid == null || Model.Vid == Guid.Empty)
-                        {
-                            <button type="button" class="btn btn-success btn-lg" onclick="AddVendorDetails()" id="SubmitVendorDetails" style="width: 230px;height: 50px;">Submit</button>
-                        }
-                        else
-                        {
-                            @if (UserSession.FormPermisionData.Any(a => a.FormName == "Vendor List" && (a.Edit == true)))
-                            {
-                                <button type="button" class="btn btn-primary btn-lg" onclick="UpdateVendorDetails('@Model.Vid')" id="updateVendorbtn" style="width: 230px;height: 50px;">Update</button>
-                                <button type="button" class="btn btn-primary btn-lg" onclick="EditVendor()" id="editVendorbtn" style="display: none;width: 230px;height: 50px;">Edit</button>
-                            }
-                        }
-                    </div>
+
                 </div>
                 <div class="col-lg-4">
                     <div class="card">
@@ -323,7 +348,7 @@
                         <!-- end card body -->
                     </div>
                     <!-- end card -->
-                    <div class="card" style="height: 455px;">
+                    <div class="card Bank_Details">
                         <div class="card-header">
                             <ul class="nav nav-tabs-custom card-header-tabs border-bottom-0" role="tablist">
                                 <li class="nav-item">
@@ -359,7 +384,7 @@
                                 <!--end col-->
                                 <div class="col-lg-6">
                                     <div class="mb-3">
-                                        <label for="accountnumberInput" class="form-label">Account Number <span class="text-danger">*</span></label>
+                                        <label for="accountnumberInput" class="form-label">Account No<span class="text-danger">*</span></label>
                                         <input type="number" class="form-control" value="@Model.VendorBankAccountNo" autocomplete="off" id="accountnumberInput" name="accountnumberInput" placeholder="Enter account number">
                                     </div>
                                 </div>
@@ -373,7 +398,7 @@
                                 <!--end col-->
                                 <div class="col-lg-6">
                                     <div class="mb-3">
-                                        <label for="GSTInput" class="form-label">GSTNumber <span class="text-danger">*</span></label>
+                                        <label for="GSTInput" class="form-label">GST No<span class="text-danger">*</span></label>
                                         <input type="text" class="form-control" value="@Model.VendorGstnumber" autocomplete="off" id="GSTNumberInput" name="GSTNumberInput" placeholder="GST-Number">
                                     </div>
                                 </div>
@@ -386,8 +411,23 @@
                     <!-- end card -->
                 </div>
                 <!-- end col -->
+                <div class="text-end  mb-3">
+                    @if (Model.Vid == null || Model.Vid == Guid.Empty)
+                    {
+                        <button type="button" class="btn btn-success btn-lg Submit_Button" onclick="AddVendorDetails()" id="SubmitVendorDetails" style="width: 230px;height: 50px;margin-right:20px;">Submit</button>
+                    }
+                    else
+                    {
+                        @if (UserSession.FormPermisionData.Any(a => a.FormName == "Vendor List" && (a.Edit == true)))
+                        {
+                            <button type="button" class="btn btn-primary btn-lg " onclick="UpdateVendorDetails('@Model.Vid')" id="updateVendorbtn" style="width: 230px;height: 50px;">Update</button>
+                            <button type="button" class="btn btn-primary btn-lg" onclick="EditVendor()" id="editVendorbtn" style="display: none;width: 230px;height: 50px;">Edit</button>
+                        }
+                    }
+                </div>
             </div>
             <!-- end col -->
+            <!-- end card -->
         </form>
     </div>
 </div>
