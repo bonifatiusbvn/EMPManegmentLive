@@ -11,15 +11,9 @@
         <table class="table table-bordered dt-responsive nowrap table-striped align-middle dataTable no-footer dtr-inline">
             <thead class="btn-info">
                 <tr>
-                    <th>
-                        Product
-                    </th>
-                    <th>
-                        Price
-                    </th>
-                    <th>
-                        Action
-                    </th>
+                    <th>Product</th>
+                    <th>Price</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -72,11 +66,11 @@
         page,
         searchText = ViewBag.SearchText
     }),
-                new PagedListRenderOptions
-            {
-                LiElementClasses = new[] { "page-item" },
-                PageClasses = new[] { "page-link" }
-            })
+                                    new PagedListRenderOptions
+                                {
+                                    LiElementClasses = new[] { "page-item" },
+                                    PageClasses = new[] { "page-link" }
+                                })
 
 <script>
     $(document).ready(function () {
@@ -86,5 +80,5 @@
                     toastr.warning("@TempData["EmptyProductList"]");
         </text>
     }
-                    });
+                                        });
 </script>
