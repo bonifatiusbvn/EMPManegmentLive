@@ -44,7 +44,7 @@
                             else
                             {
                                 <input type="date" class="form-control" id="txtUpdatePrDate" style="width:200px;" value="@formattedDate" />
-                            }                  
+                            }
                             <a class="btn btn-warning" onclick="fn_OpenAddproductmodal()"><i class="ri-add-line align-bottom me-1"></i> Add Product</a>
                             <input type="text" class="form-control" id="prNo" value="@ViewData["PrNo"].ToString()" hidden />
                         </div>
@@ -89,7 +89,7 @@
                 </div>
             </div>
             <div class="card-body">
-                <table class="table table-borderless mb-0">
+                <table class="table table-borderless mb-0 dt-responsive nowrap">
                     <tbody>
                         <tr>
                             <td>Sub Total :</td>
@@ -124,7 +124,7 @@
             </div>
             <div class="modal-header">
                 <label class="form-label">Search Product</label>
-                <input class="form-control" id="mdProductSearch" onkeyup="fn_filterallProducts()"  />
+                <input class="form-control" id="mdProductSearch" onkeyup="fn_filterallProducts()" />
             </div>
             <div class="modal-body" id="mdlistofItem" style="overflow-x: hidden">
             </div>

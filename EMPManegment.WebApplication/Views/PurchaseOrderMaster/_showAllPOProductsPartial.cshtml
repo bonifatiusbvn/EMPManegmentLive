@@ -7,7 +7,7 @@
 
 <div class="card-body">
     <div class="table-responsive table-card">
-        <table class="table table-borderless align-middle mb-0" id="productTable">
+        <table class="table table-borderless align-middle mb-0 dt-responsive nowrap" id="productTable">
             <thead class="table-light text-muted">
                 <tr>
                     <th style="width: 90px;" scope="col">Product</th>
@@ -45,8 +45,8 @@
         page = page,
         searchfor = @Context.Request.Query["searchfor"]
     }),
-                new X.PagedList.Web.Common.PagedListRenderOptions
-            {
-                LiElementClasses = new string[] { "page-item" },
-                PageClasses = new string[] { "page-link" }
-            })
+                        new X.PagedList.Web.Common.PagedListRenderOptions
+                    {
+                        LiElementClasses = new string[] { "page-item" },
+                        PageClasses = new string[] { "page-link" }
+                    })

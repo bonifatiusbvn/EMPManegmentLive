@@ -7,7 +7,7 @@
 
 <div class="card-body">
     <div class="table-responsive table-card mb-1">
-        <table role="grid" class="gridjs-table" style="height: auto;">
+        <table role="grid" class="gridjs-table dt-responsive nowrap" style="height: auto;">
             <thead class="gridjs-thead btn-info text-center">
                 <tr class="gridjs-tr">
 
@@ -90,8 +90,8 @@
         searchfor = @Context.Request.Query["searchfor"],
         searchby = @Context.Request.Query["searchby"]
     }),
-   new X.PagedList.Web.Common.PagedListRenderOptions
-{
-   LiElementClasses = new string[] { "page-item" },
-   PageClasses = new string[] { "page-link" }
-})
+                               new X.PagedList.Web.Common.PagedListRenderOptions
+                           {
+                               LiElementClasses = new string[] { "page-item" },
+                               PageClasses = new string[] { "page-link" }
+                           })

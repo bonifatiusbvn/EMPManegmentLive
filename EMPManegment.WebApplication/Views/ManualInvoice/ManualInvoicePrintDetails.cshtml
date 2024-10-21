@@ -205,7 +205,7 @@
                                 <p class="text-muted"></p>
                             </div>
                         </div>
-                        <table class="table text-center align-middle manual_invoice-table" style="border: 1px solid lightgray;">
+                        <table class="table text-center align-middle manual_invoice-table dt-responsive nowrap" style="border: 1px solid lightgray;">
                             <thead class="btn-info text-center">
                                 <tr class="table-active">
                                     <th>SI<br />No.</th>
@@ -266,7 +266,7 @@
                                         else
                                         {
                                             <td id="txttotal">₹@SubTotal</td>
-                                        }                      
+                                        }
                                     </tr>
                                     index++;
                                 }
@@ -303,7 +303,7 @@
                                     {
                                         <td><b>₹@TotalStateTax?.ToString("F2")</b></td>
                                     }
-                                    
+
                                 </tr>
                                 <tr>
                                     <td></td>
@@ -320,7 +320,7 @@
                                     {
                                         <td><b>₹@TotalCenteralTax?.ToString("F2")</b></td>
                                     }
-                                    
+
                                 </tr>
                                 @if (Model.ManualInvoiceDetails.Any(a => a.IGst > 0))
                                 {
@@ -339,7 +339,7 @@
                                         {
                                             <td><b>₹@TotalIntegratedTax?.ToString("F2")</b></td>
                                         }
-                                        
+
                                     </tr>
                                 }
                                 <tr>
@@ -475,7 +475,7 @@
                                     {
                                         <td><b>₹@Model.TotalAmount?.ToString("F2")</b></td>
                                     }
-                                    
+
                                 </tr>
                             </tbody>
                         </table><!--end table-->
@@ -483,7 +483,7 @@
                             <span class="text-muted">Amount Chargeable (in words)<i style="margin-left: 740px" ;>E. &amp; O.E</i></span><br />
                             <p class="text-muted text-capitalize"><b>INR @ViewData["TotalAmountInWords"]</b></p>
                         </div>
-                        <table class="table text-center align-middle manual_invoice-table" style="border: 1px solid lightgray;">
+                        <table class="table text-center align-middle manual_invoice-table dt-responsive nowrap" style="border: 1px solid lightgray;">
                             <thead class="btn-info text-center">
                                 <tr class="table-active">
                                     <th rowspan="2">HSN/SAC</th>
@@ -543,7 +543,7 @@
                                         {
                                             <td>₹@groupSubTotal?.ToString("F2")</td>
                                         }
-                                        
+
                                         <td>@(group.Key / 2) %</td>
                                         @if (Model.DollarPrice != null)
                                         {
@@ -553,7 +553,7 @@
                                         {
                                             <td>₹@groupCenteralTax?.ToString("F2")</td>
                                         }
-                                        
+
                                         <td>@(group.Key / 2) %</td>
                                         @if (Model.DollarPrice != null)
                                         {
@@ -563,7 +563,7 @@
                                         {
                                             <td>₹@groupStateTax?.ToString("F2")</td>
                                         }
-                                       
+
                                         @if (group.Any(a => a.IGst > 0))
                                         {
                                             <td>@group.First().IGst %</td>
@@ -575,7 +575,7 @@
                                             {
                                                 <td>₹@groupIntegratedTax?.ToString("F2")</td>
                                             }
-                                            
+
                                         }
                                         @if (Model.DollarPrice != null)
                                         {
@@ -585,7 +585,7 @@
                                         {
                                             <td><b>₹@((groupCenteralTax + groupStateTax + groupIntegratedTax)?.ToString("F2"))</b></td>
                                         }
-                                        
+
                                     </tr>
                                 }
                                 <tr>
@@ -612,7 +612,7 @@
                                     {
                                         <td><b>₹@TotalofSubtotal?.ToString("F2")</b></td>
                                     }
-                                    
+
                                     <td></td>
                                     @if (Model.DollarPrice != null)
                                     {
@@ -622,7 +622,7 @@
                                     {
                                         <td><b>₹@groupTotalCenteralTax?.ToString("F2")</b></td>
                                     }
-                                    
+
                                     <td></td>
                                     @if (Model.DollarPrice != null)
                                     {
@@ -632,7 +632,7 @@
                                     {
                                         <td><b>₹@groupTotalStateTax?.ToString("F2")</b></td>
                                     }
-                                    
+
                                     @if (Model.ManualInvoiceDetails.Any(a => a.IGst > 0))
                                     {
                                         <td></td>
@@ -644,7 +644,7 @@
                                         {
                                             <td><b>₹@groupTotalIntegratedTax?.ToString("F2")</b></td>
                                         }
-                                        
+
                                     }
                                     @if (Model.DollarPrice != null)
                                     {
@@ -654,7 +654,7 @@
                                     {
                                         <td><b>₹@((groupTotalCenteralTax + groupTotalStateTax + groupTotalIntegratedTax)?.ToString("F2"))</b></td>
                                     }
-                                    
+
                                 </tr>
                             </tbody>
                         </table><!--end table-->
