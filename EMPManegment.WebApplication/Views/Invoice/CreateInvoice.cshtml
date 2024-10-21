@@ -51,12 +51,12 @@
                                                                 @if (Model.VendorCompanyName != null)
                                                                 {
                                                                     <input type="text" id="textVendorName" name="textVendorName" class="form-control" placeholder="Vendor Name" value="@Model.VendorCompanyName" />
-                                                                    <input type="hidden" id="textVendorNameHidden" name="textVendorNameHidden" value="@Model.VandorId"/>
+                                                                    <input type="hidden" id="textVendorNameHidden" name="textVendorNameHidden" value="@Model.VandorId" />
                                                                 }
                                                                 else
                                                                 {
                                                                     <input type="text" id="textVendorName" name="textVendorName" class="form-control" placeholder="Vendor Name" />
-                                                                    <input type="hidden" id="textVendorNameHidden" name="textVendorNameHidden"/>
+                                                                    <input type="hidden" id="textVendorNameHidden" name="textVendorNameHidden" />
                                                                 }
 
                                                             </div>
@@ -104,12 +104,12 @@
                                                                     @if (Model.CompanyId != null)
                                                                     {
                                                                         <input type="text" id="textCompanyName" name="textCompanyName" class="form-control" placeholder="Company Name" value="@Model.CompnyName" />
-                                                                        <input type="hidden" id="textCompanyNameHidden" name="textCompanyNameHidden" value="@Model.CompanyId"/>
+                                                                        <input type="hidden" id="textCompanyNameHidden" name="textCompanyNameHidden" value="@Model.CompanyId" />
                                                                     }
                                                                     else
                                                                     {
                                                                         <input type="text" id="textCompanyName" name="textCompanyName" class="form-control" placeholder="Company Name" />
-                                                                        <input type="hidden" id="textCompanyNameHidden" name="textCompanyNameHidden"/>
+                                                                        <input type="hidden" id="textCompanyNameHidden" name="textCompanyNameHidden" />
                                                                     }
 
                                                                 </div>
@@ -161,7 +161,7 @@
                                     </div>
                                     <div class="card-body pt-0">
                                         <div class="table-responsive table-container">
-                                            <table class="table align-middle mb-0">
+                                            <table class="table align-middle dt-responsive nowrap mb-0">
                                                 <thead class="table-light table-secondary">
                                                     <tr class="text-uppercase">
                                                         <th>#</th>
@@ -243,7 +243,7 @@
                                             </div>
                                         </div>
                                         <div class="card-footer">
-                                            <table class="table align-middle mb-0">
+                                            <table class="table align-middle mb-0 dt-responsive nowrap">
                                                 <thead class="table align-middle mb-0">
                                                     <tr>
                                                         <th>#</th>
@@ -387,7 +387,7 @@
 
                                                 <div class="col-lg-6 col-sm-12 ac-invoice-total">
                                                     <div class="table">
-                                                        <table class="table table-borderless table-sm table-nowrap align-middle mb-0">
+                                                        <table class="table table-borderless table-sm dt-responsive nowrap align-middle mb-0">
                                                             <tbody>
                                                                 <tr>
                                                                     <th>Sub Total</th>
@@ -455,7 +455,7 @@
                                             <h5 class="card-header">
                                                 Shipping Addresses
                                             </h5>
-                                            @if(Model.ShippingAddress == Model.VendorAddress)
+                                            @if (Model.ShippingAddress == Model.VendorAddress)
                                             {
                                                 <div class="card-body">
                                                     <input type="checkbox" id="hideShippingAddress" name="hideShippingAddress" onchange="tn_toggleInvoiceShippingAddress()" checked>
