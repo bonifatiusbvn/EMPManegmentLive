@@ -30,11 +30,16 @@
             <h5 class="card-title mb-0 flex-grow-1">Users Attendance</h5>
             <div class="flex-shrink-0">
                 <div class="d-flex gap-2 flex-wrap">
+                    <div style="margin-left: auto; margin-right: -5px;">
+                        <button class="btn btn-primary fixed-button" onclick="DisplayAddUserModel()"><i class="fa-solid fa-circle-plus"></i></button>
+                    </div>
                     <form id="attendanceform">
                         <div class="row g-2 text-align">
+
                             <div class="col-lg-auto">
                                 <div class="btn-group">
-                                    <button class="btn btn-primary btn-md form-select" type="button" id="ddlatendanceser" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width: 205px; margin-right:40px;">
+
+                                    <button class="btn btn-primary btn-md form-select" type="button" id="ddlatendanceser" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width: 205px; margin-right:-10px;">
                                         Search By
                                     </button>
                                     <div class="dropdown-menu">
@@ -54,7 +59,7 @@
                                     <input type="hidden" class="form-control" id="txtguserid">
                                 </div>
                             </div>
-                            <div class="col-sm" id="datesbox" style="display: none;">
+                            <div class="col-sm" id="datesbox" style="display: none;margin-left: -12px;">
                                 <div class="search-box">
                                     <input type="date" id="txtdate" name="txtdate" class="form-control search" placeholder="Search By date">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16" style="margin-top: -60px;margin-left: 10px;">
@@ -75,13 +80,10 @@
                                 </div>
                             </div>
                             <div class="col-lg-auto" id="searchUserAttendancebtn" style="display: none;">
-                                <a class="btn btn-success" onclick="GetSearchAttendanceList()" id="searchattendanceform" value="Validate"><i class="ri-search-line"></i></a>
+                                <a class="btn btn-success" onclick="GetSearchAttendanceList()" id="searchattendanceform" value="Validate" style="margin-left: -12px;height: 37px;"><i class="ri-search-line"></i></a>
                             </div>
                         </div>
                     </form>
-                    <div style="margin-left: auto;">
-                        <button class="btn btn-primary fixed-button" onclick="DisplayAddUserModel()"><i class="fa-solid fa-circle-plus"></i> </button>
-                    </div>
                 </div>
             </div>
         </div>
