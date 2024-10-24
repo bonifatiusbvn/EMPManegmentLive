@@ -34,6 +34,7 @@ using EMPManegment.EntityModels.ViewModels.ManualInvoice;
 using EMPManegment.EntityModels.ViewModels.PurchaseOrderModels;
 using EMPManegment.EntityModels.ViewModels.UserModels;
 using X.PagedList;
+using System.Collections;
 #nullable disable
 
 namespace EMPManegment.Repository.InvoiceMasterRepository
@@ -956,6 +957,33 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                         e.CreditDebitAmount.ToString().Contains(dataTable.searchValue.ToLower(), StringComparison.OrdinalIgnoreCase) ||
                         e.TotalAmount.ToString().Contains(dataTable.searchValue.ToLower(), StringComparison.OrdinalIgnoreCase) ||
                         e.Date.ToString().Contains(dataTable.searchValue)).ToList();
+                }
+
+                if (!string.IsNullOrEmpty(dataTable.sortColumn) && !string.IsNullOrEmpty(dataTable.sortColumnDir))
+                {
+                    switch (dataTable.sortColumn)
+                    {
+                        case "VendorName":
+                            tranactionList = dataTable.sortColumnDir == "asc" ? tranactionList.OrderBy(e => e.VendorName).ToList() : tranactionList.OrderByDescending(e => e.VendorName).ToList();
+                            break;
+                        case "Date":
+                            tranactionList = dataTable.sortColumnDir == "asc" ? tranactionList.OrderBy(e => e.Date).ToList() : tranactionList.OrderByDescending(e => e.Date).ToList();
+                            break;
+                        case "PaymentMethodName":
+                            tranactionList = dataTable.sortColumnDir == "asc" ? tranactionList.OrderBy(e => e.PaymentMethodName).ToList() : tranactionList.OrderByDescending(e => e.PaymentMethodName).ToList();
+                            break;
+                        case "PaymentTypeName":
+                            tranactionList = dataTable.sortColumnDir == "asc" ? tranactionList.OrderBy(e => e.PaymentTypeName).ToList() : tranactionList.OrderByDescending(e => e.PaymentTypeName).ToList();
+                            break;
+                        case "CreditDebitAmount":
+                            tranactionList = dataTable.sortColumnDir == "asc" ? tranactionList.OrderBy(e => e.CreditDebitAmount).ToList() : tranactionList.OrderByDescending(e => e.CreditDebitAmount).ToList();
+                            break;
+                        case "PendingAmount":
+                            tranactionList = dataTable.sortColumnDir == "asc" ? tranactionList.OrderBy(e => e.PendingAmount).ToList() : tranactionList.OrderByDescending(e => e.PendingAmount).ToList();
+                            break;
+                        default:
+                            break;
+                    }
                 }
 
                 var totalRecord = tranactionList.Count;
