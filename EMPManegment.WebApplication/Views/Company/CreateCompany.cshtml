@@ -16,6 +16,7 @@
     .Create_Company {
         height: 755px;
     }
+
     @@media only screen and (max-width: 912px) {
 
         .Create_Company {
@@ -43,7 +44,7 @@
     <div class="row">
         <div class="auth-page-wrapper auth-bg-cover py-5 d-flex justify-content-center align-items-center min-vh-50">
             <input type="hidden" class="form-control" id="textViewMode" value="@ViewBag.ViewMode.ToString()" readonly />
-            <div class="col-lg-11">
+            <div class="col-lg-12">
                 <div class="card Create_Company">
                     <div class="card-header">
                         <ul class="nav nav-tabs-custom card-header-tabs border-bottom-0" role="tablist">
@@ -150,7 +151,7 @@
                                 </div>
                             </div>
                             <!--end col-->
-                            <div class="col-lg-12">
+                            <div class="col-lg-8">
                                 <div class="mb-3">
                                     <label for="AddressidInput" class="form-label">Address <span class="text-danger">*</span></label>
                                     @if (Model.Address != null)
@@ -164,46 +165,54 @@
                                 </div>
                             </div>
                             <!--end col-->
-                            <div class="col-lg-12">
-                                <div class="row mb-3">
-                                    <div class="col-lg-6">
+                            <div class="col-lg-8">
+                                <div class="card">
+                                    <div class="card-header">
                                         <label for="companylogo" class="form-label">Logo</label>
-                                        <input type="file" class="form-control" autocomplete="off" id="companylogo" name="companylogo">
-                                    </div>
-                                    <div class="col-lg-6 d-flex flex-column justify-content-center">
-                                        @if (!string.IsNullOrEmpty(Model.CompanyLogo))
-                                        {
-                                            <div id="CompanyImageContainer" style="align-self:center;">
-                                                <div id="currentCompanyImageName" style="margin-bottom: 10px;" hidden>
-                                                    @System.IO.Path.GetFileName(Model.CompanyLogo)
-                                                </div>
-                                                <div style="position: relative; display: inline-block; gap:10px;">
-                                                    @if (!string.IsNullOrEmpty(Model.CompanyLogo))
-                                                    {
-                                                        <img src="~/Content/Image/@Model.CompanyLogo" class="form-control" id="CompanyImagePreview" style="height: 200px;width: 200px;border:2px solid grey;margin-left:-319px;">
-                                                    }
-                                                    <div style="position: absolute; top: 2px; right: 125px;">
-                                                        <button type="button" id="deleteCompanyImageButton" style="background-color: transparent; border: none; font-size: 16px; cursor: pointer; color:red;">&times;</button>
-                                                    </div>
-                                                </div>
+                                    </div><!-- end card header -->
+
+                                    <div class="card-body">
+                                        <div class="dropzone" style="height:25px">
+                                            <div class="fallback">
+                                                <input name="file" type="file" multiple="multiple">
                                             </div>
-                                        }
-                                        else
-                                        {
-                                            <div class="col-lg-6 d-flex flex-column justify-content-center">
-                                                <div id="CompanyImageContainer" style="align-self:center; position: relative;">
-                                                    <div id="DisplayCompanyInitials" class="avatar-title bg-success-subtle text-success fs-20 border" style="height: 200px; width: 200px; border: 2px solid grey; display: flex; align-items: center; justify-content: center;">
-                                                        <h1>@Companyinitials</h1>
-                                                    </div>
-                                                    <img id="companyImagePreview" src="#" style="height: 200px; width: 200px; border: 2px solid grey; display: none;" alt="companyImagePreview" />
-                                                    <div style="position: absolute; top: 2px; right: 5px;">
-                                                        <button type="button" id="deleteCompanyImageButton" style="background-color: transparent; border: none; font-size: 16px; cursor: pointer; color: red;">&times;</button>
+                                            <div class="dz-message needsclick" style="margin-top:-12px">
+                                                <div class="mb-3">
+                                                    <i class="display-4 text-muted ri-upload-cloud-2-fill"></i>
+                                                </div>
+                                                <h4>Drop files here or click to upload.</h4>
+                                            </div>
+                                        </div>
+
+                                        <ul class="list-unstyled mb-0" id="dropzone-preview">
+                                            <li class="mt-2" id="dropzone-preview-list">
+                                                <!-- This is used as the file preview template -->
+                                                <div class="border rounded">
+                                                    <div class="d-flex p-2">
+                                                        <div class="flex-shrink-0 me-3">
+                                                            <div class="avatar-sm bg-light rounded">
+                                                                <img data-dz-thumbnail class="img-fluid rounded d-block" src="assets/images/new-document.png" alt="Dropzone-Image" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="flex-grow-1">
+                                                            <div class="pt-1">
+                                                                <h5 class="fs-14 mb-1" data-dz-name>&nbsp;</h5>
+                                                                <p class="fs-13 text-muted mb-0" data-dz-size></p>
+                                                                <strong class="error text-danger" data-dz-errormessage></strong>
+                                                            </div>
+                                                        </div>
+                                                        <div class="flex-shrink-0 ms-3">
+                                                            <button data-dz-remove class="btn btn-sm btn-primary">Delete</button>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        }
+                                            </li>
+                                        </ul>
+                                        <!-- end dropzon-preview -->
                                     </div>
+                                    <!-- end card body -->
                                 </div>
+                                <!-- end card -->
                             </div>
                             <!--end col-->
                         </div>
