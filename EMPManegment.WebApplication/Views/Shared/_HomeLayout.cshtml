@@ -235,73 +235,50 @@
                     </div>
                 </div>
 
-                <div class="nav-item dropdown user-menu d-xl-inline-block btn btn-ghost-secondary border" id="usersDropdown">
-                    <a href="#" class=" nav-link dropdown-toggle " data-bs-toggle="dropdown" aria-expanded="true" data-bs-auto-close="outside" aria-haspopup="true">
-                        <div class="d-flex align-items-end">
-                            @if (!string.IsNullOrEmpty(profilePhoto) && !profilePhoto.Equals(defaultImagePath, StringComparison.OrdinalIgnoreCase))
-                            {
-                                <img src="~/@profilePhoto" class="user-image" alt="User Image">
-                            }
-                            else
-                            {
-                                <div class="user-image text-center" alt="User Image" style="background-color: #17a2b8;color:white;justify-content: center; align-items: center;display: flex;">
-                                    <span>@initials</span>
-                                </div>
-                            }
-                            <span class="d-none d-md-inline user-header text-bg" style="margin-bottom:5px;">@_userSession.FullName</span>
-                        </div>
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end" data-bs-popper="static">
-                        <li class="user-header d-flex flex-column align-items-center" style="background-color: #17a2b8;color:white;">
-                            @if (!string.IsNullOrEmpty(profilePhoto) && !profilePhoto.Equals(defaultImagePath, StringComparison.OrdinalIgnoreCase))
-                            {
-                                <img src="~/@profilePhoto" class="rounded-circle shadow mb-2" alt="User Image">
-                                <p class="text-center">
-                                    <h5 style="margin-top:-10px;">@_userSession.FullName</h5>
-                                    <small class="d-block">@_userSession.UserName</small>
-                                </p>
-                            }
-                            else
-                            {
-                                <div class="flex-shrink-0 avatar-xs me-2 d-flex justify-content-center align-items-center">
-                                    <div class="rounded-circle shadow d-flex justify-content-center align-items-center" style="background-color: lightblue; height:72px;; width:72px; margin-top:55px;">
-                                        <span style="font-size:50px; width:75px;">@initials</span>
+                <li class="nav-item dropdown">
+                    <div class="dropdown ms-sm-3 header-item topbar-user" style="height:60px;">
+                        <button type="button" class="btn" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="d-flex align-items-center ">
+                                @if (!string.IsNullOrEmpty(profilePhoto) && !profilePhoto.Equals(defaultImagePath, StringComparison.OrdinalIgnoreCase))
+                                {
+                                    <img src="~/@profilePhoto" style="height:40px;width:40px;" alt="message user image" class="img-circle img-bordered-sm">
+                                }
+                                else
+                                {
+                                    <div class="flex-shrink-0 avatar-xs me-2">
+                                        <div class="avatar-title bg-success-subtle text-success rounded-circle fs-13" style="height:40px;width:40px;">@initials</div>
                                     </div>
-                                </div>
-                                <p class="text-center">
-                                    <h5 style="margin-top:46px;">@_userSession.FullName</h5>
-                                    <small class="d-block">@_userSession.UserName</small>
-                                </p>
-                            }
+                                }
+                                <span class="text-start ms-xl-2">
+                                    <span class="d-none d-xl-inline-block ms-1 fw-medium d-block">@_userSession.FullName</span>
+                                    <span class="d-none d-xl-block ms-1 fs-12 d-block">@_userSession.UserName</span>
 
-                        </li>
-                        <li class="user-body">
-                            <div class="row">
-                                <div class="dropdown-item">
-                                    <a asp-action="UserProfile" asp-controller="UserProfile" class="d-block">
-                                        <i class="fas fa-user-circle"></i> Profile
-                                    </a>
-                                </div>
-                                <div class="dropdown-item">
-                                    <a asp-action="ChatMessages" asp-controller="Home" class="d-block">
-                                        <i class="mdi mdi-message-text-outline fs-16 align-middle me-1"></i> Messages
-                                    </a>
-                                </div>
-                                <div class="dropdown-item">
-                                    <a asp-action="UserTasks" asp-controller="Task" class="d-block">
-                                        <i class="fa-solid fa-list-check"></i> Taskboard
-                                    </a>
-                                </div>
-                                <div class="dropdown-item">
-                                    <a asp-action="LockScreen" asp-controller="UserProfile" class="d-block">
-                                        <i class="fa-solid fa-user-lock"></i> Lock screen
-                                    </a>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="user-footer"><a href="#" onclick="UserLogout()" class="btn btn-default btn-flat float-end text-bg-danger">Sign out</a></li>
-                    </ul>
-                </div>
+                                </span>
+                            </span>
+                        </button>
+                        <input type="hidden" value="@_userSession.UserId" />
+                        <div class="dropdown-menu dropdown-menu-end" style="position: absolute; inset: 0px 0px auto auto; margin: 0px; transform: translate(0px, 66px);">
+                            <!-- item-->
+                            <h6 class="dropdown-header">Welcome @_userSession.FirstName!</h6>
+                            <a asp-action="UserProfile" asp-controller="UserProfile" class="dropdown-item">
+                                <i class="fas fa-user-circle"></i> Profile
+                            </a>
+                            <a asp-action="ChatMessages" asp-controller="Home" class="dropdown-item">
+                                <i class="mdi mdi-message-text-outline text-muted fs-16 align-middle me-1"></i> Messages
+                            </a>
+                            <a asp-action="UserTasks" asp-controller="Task" class="dropdown-item">
+                                <i class="fa-solid fa-list-check"></i> Taskboard
+                            </a>
+
+                            <a asp-action="LockScreen" asp-controller="UserProfile" class="dropdown-item">
+                                <i class="fa-solid fa-user-lock"></i> Lock screen
+                            </a>
+                            <button onclick="UserLogout()" class="dropdown-item">
+                                <i class="fa-solid fa-right-from-bracket"></i> Logout
+                            </button>
+                        </div>
+                    </div>
+                </li>
             </ul>
         </nav>
 
