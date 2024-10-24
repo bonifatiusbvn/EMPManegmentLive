@@ -25,6 +25,12 @@
     <link href="~/assets/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/base/jquery-ui.css">
     <!-- Toastr -->
+    <!-- dropzone css -->
+    <link rel="stylesheet" href="~/assets/libs/dropzone/dropzone.css" type="text/css" />
+
+    <!-- Filepond css -->
+    <link rel="stylesheet" href="~/assets/libs/filepond/filepond.min.css" type="text/css" />
+    <link rel="stylesheet" href="~/assets/libs/filepond-plugin-image-preview/filepond-plugin-image-preview.min.css">
     <!-- Ekko Lightbox -->
     <link rel="stylesheet" href="~/lteassets/plugins/ekko-lightbox/ekko-lightbox.css">
     <link rel="stylesheet" href="~/lteassets/plugins/toastr/toastr.min.css">
@@ -731,6 +737,16 @@
     <script src="~/assets/libs/fg-emoji-picker/fgEmojiPicker.js"></script>
 
     <!-- chat init js -->
+    <!-- dropzone min -->
+    <script src="~/assets/libs/dropzone/dropzone-min.js"></script>
+    <!-- filepond js -->
+    <script src="~/assets/libs/filepond/filepond.min.js"></script>
+    <script src="~/assets/libs/filepond-plugin-image-preview/filepond-plugin-image-preview.min.js"></script>
+    <script src="~/assets/libs/filepond-plugin-file-validate-size/filepond-plugin-file-validate-size.min.js"></script>
+    <script src="~/assets/libs/filepond-plugin-image-exif-orientation/filepond-plugin-image-exif-orientation.min.js"></script>
+    <script src="~/assets/libs/filepond-plugin-file-encode/filepond-plugin-file-encode.min.js"></script>
+
+    <script src="~/assets/js/pages/form-file-upload.init.js"></script>
     <!-- SweetAlert2 -->
     <script src="~/assets/libs/sweetalert2/sweetalert2.min.js"></script>
     <script src="https://cdn.lordicon.com/lusqsztk.js"></script>
@@ -752,43 +768,43 @@
         var ProjectId = "@UserSession.ProjectId";
         var ProjectName = "@UserSession.ProjectName";
 
-                            $('#drpProjectName').change(function () {
+        $('#drpProjectName').change(function () {
 
-                                var ProjectText = $(this).find('option:selected').text();
+            var ProjectText = $(this).find('option:selected').text();
             var selectedProjectId = $(this).val();
 
-                                $('#drpProjectName').text(ProjectText);
+            $('#drpProjectName').text(ProjectText);
             fn_ChangeProject(selectedProjectId, ProjectText);
 
-                            });
         });
+    });
 
-                        function fn_ChangeProject(selectedProjectId, ProjectText) {
+    function fn_ChangeProject(selectedProjectId, ProjectText) {
 
-                            $.ajax({
+        $.ajax({
             url: '/Home/ProjectList',
             type: 'GET',
             data: {
                 ProjectId: selectedProjectId,
                 ProjectName: ProjectText
-                },
+            },
             success: function (result) {
                 siteloaderhide();
                 $('#drpProjectName').text(ProjectText);
                 sessionStorage.setItem('SelectedProjectId', selectedProjectId);
                 location.reload();
-                },
+            },
             error: function (xhr, status, error) {
                 console.error("Error fetching purchase request list:", error);
-                }
-            });
-        }
+            }
+        });
+    }
     function viewAllTaskbtn() {
         window.location.href = '/Task/UserTasks';
-        }
+    }
 
-                        function viewAllMessages() {
+    function viewAllMessages() {
         window.location.href = '/Home/ChatMessages';
-        }
+    }
 </script>
 
