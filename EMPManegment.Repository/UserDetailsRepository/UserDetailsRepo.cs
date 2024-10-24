@@ -77,8 +77,11 @@ namespace EMPManegment.Repository.UserListRepository
                         case "UserName":
                             queryableUserDetails = dataTable.sortColumnDir == "asc" ? queryableUserDetails.OrderBy(e => e.UserName) : queryableUserDetails.OrderByDescending(e => e.UserName);
                             break;
-                        case "FullName":
-                            queryableUserDetails = dataTable.sortColumnDir == "asc" ? queryableUserDetails.OrderBy(e => e.FullName) : queryableUserDetails.OrderByDescending(e => e.FullName);
+                        case "DepartmentName":
+                            queryableUserDetails = dataTable.sortColumnDir == "asc" ? queryableUserDetails.OrderBy(e => e.DepartmentName) : queryableUserDetails.OrderByDescending(e => e.DepartmentName);
+                            break;
+                        case "RoleName":
+                            queryableUserDetails = dataTable.sortColumnDir == "asc" ? queryableUserDetails.OrderBy(e => e.RoleName) : queryableUserDetails.OrderByDescending(e => e.RoleName);
                             break;
                         case "Address":
                             queryableUserDetails = dataTable.sortColumnDir == "asc" ? queryableUserDetails.OrderBy(e => e.Address) : queryableUserDetails.OrderByDescending(e => e.Address);
@@ -89,11 +92,14 @@ namespace EMPManegment.Repository.UserListRepository
                         case "DateOfBirth":
                             queryableUserDetails = dataTable.sortColumnDir == "asc" ? queryableUserDetails.OrderBy(e => e.DateOfBirth) : queryableUserDetails.OrderByDescending(e => e.DateOfBirth);
                             break;
-                        case "CityName":
-                            queryableUserDetails = dataTable.sortColumnDir == "asc" ? queryableUserDetails.OrderBy(e => e.CityName) : queryableUserDetails.OrderByDescending(e => e.CityName);
+                        case "FirstName":
+                            queryableUserDetails = dataTable.sortColumnDir == "asc" ? queryableUserDetails.OrderBy(e => e.FirstName) : queryableUserDetails.OrderByDescending(e => e.FirstName);
                             break;
-                        case "StateName":
-                            queryableUserDetails = dataTable.sortColumnDir == "asc" ? queryableUserDetails.OrderBy(e => e.StateName) : queryableUserDetails.OrderByDescending(e => e.StateName);
+                        case "Gender":
+                            queryableUserDetails = dataTable.sortColumnDir == "asc" ? queryableUserDetails.OrderBy(e => e.Gender) : queryableUserDetails.OrderByDescending(e => e.Gender);
+                            break;
+                        case "Email":
+                            queryableUserDetails = dataTable.sortColumnDir == "asc" ? queryableUserDetails.OrderBy(e => e.Email) : queryableUserDetails.OrderByDescending(e => e.Email);
                             break;
                         default:
                             break;

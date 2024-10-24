@@ -2,7 +2,110 @@
     ViewData["Title"] = "CreateProduct";
     Layout = "~/Views/Shared/_HomeLayout.cshtml";
 }
+<style>
+    .Create_Product{
+        width:1583px;
+    }
 
+    #productImagePreview {
+        height: 160px;
+        width: 160px;
+        border: 2px solid grey;
+        margin-left: 163px;
+        margin-top: -40px;
+    }
+
+    #deleteProductImageButton{
+        position: absolute;
+        top: -40px;
+        right: 2px;
+        background-color: transparent;
+        border: none;
+        font-size: 24px;
+        cursor: pointer;
+        color: red;
+    }
+
+    @@media only screen and (max-width: 768px) {
+        .auth-bg-cover {
+            background: none;
+        }
+
+        #productImagePreview{
+            height: 145px;
+            width: 145px;
+            border: 2px solid grey;
+            margin-left: 0px;
+            margin-top: 20px;
+        }
+
+        #deleteProductImageButton {
+            position: absolute;
+            top: 15px;
+            right: 2px;
+            background-color: transparent;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: red;
+        }
+    }
+
+    @@media only screen and (min-width: 768px) and (max-width: 1024px) {
+        .auth-bg-cover {
+            background: none;
+        }
+
+        #txtproductimage{
+            width:400px;
+        }
+
+        #productImagePreview {
+            height: 145px;
+            width: 145px;
+            border: 2px solid grey;
+            margin-left: 512px;
+            margin-top: -38px;
+        }
+
+        #deleteProductImageButton {
+            position: absolute;
+            top: -40px;
+            right: 2px;
+            background-color: transparent;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: red;
+        }
+    }
+
+    @@media only screen and (min-width: 1024px) and (max-width: 1370px) {
+        .auth-bg-cover {
+            background: none;
+        }
+
+        #productImagePreview {
+            height: 165px;
+            width: 165px;
+            border: 2px solid grey;
+            margin-left: -216px;
+            margin-top: 75px;
+        }
+
+        #deleteProductImageButton {
+            position: absolute;
+            top: 77px;
+            right: 56px;
+            background-color: transparent;
+            border: none;
+            font-size: 25px;
+            cursor: pointer;
+            color: red;
+        }
+    }
+
+</style>
 
 <!-- start page title -->
 <div class="row" style="margin-top:80px;">
@@ -21,9 +124,9 @@
 <!-- end page title -->
 <form id="createproductform" autocomplete="off">
     <div class="auth-page-wrapper auth-bg-cover py-3 d-flex justify-content-center align-items-center min-vh-50">
-        <div class="card">
+        <div class="card Create_Product">
             <div class="row">
-                <div class="col-lg-8" style="height: 179px;width: 585px;">
+                <div class="col-lg-8" @* style="height: 179px;width: 585px;" *@>
                     <div class="card">
                         <div class="card-header">
                             <ul class="nav nav-tabs-custom card-header-tabs border-bottom-0" role="tablist">
@@ -63,8 +166,8 @@
                                         <div class="col-lg-6 d-flex flex-column justify-content-center">
                                             <div id="ProductImageContainer" style="display: none;">
                                                 <div style="position: relative; display: inline-block;">
-                                                    <img src="#" id="productImagePreview" style="height: 160px; width: 160px; border: 2px solid grey;margin-left: 163px;margin-top: -40px;" />
-                                                    <button type="button" id="deleteProductImageButton" style="position: absolute; top: -40px;right: 2px; background-color: transparent; border: none; font-size: 24px; cursor: pointer; color: red;">
+                                                    <img src="#" id="productImagePreview" />
+                                                    <button type="button" id="deleteProductImageButton">
                                                         &times;
                                                     </button>
                                                 </div>
@@ -75,10 +178,7 @@
                             </div>
                         </div>
                     </div>
-                    <!-- Create button -->
-                    <div class="text-end mt-3">
-                        <button type="button" class="btn btn-success btn-lg" onclick="SaveProductDetails()" id="saveproductdetails" value="Validation" style="height:50px;width:160px;">Create</button>
-                    </div>
+
                 </div>
                 <div class="col-lg-4">
                     <div class="card">
@@ -158,6 +258,10 @@
                             </div>
                         </div>
                     </div>
+                </div>
+                <!-- Create button -->
+                <div class="text-end mt-3">
+                    <button type="button" class="btn btn-success btn-lg" onclick="SaveProductDetails()" id="saveproductdetails" value="Validation" style="height:50px;width:160px;margin-bottom:10px; margin-right:10px;">Create</button>
                 </div>
             </div>
         </div>

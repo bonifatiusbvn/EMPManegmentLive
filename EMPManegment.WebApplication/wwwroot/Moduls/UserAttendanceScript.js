@@ -898,14 +898,7 @@ function updateMyAttendance() {
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'OK'
                     }).then(function () {
-                        $('#editMyAttendanceTime').modal('hide');
-                        var FilterData = {
-                            Cmonth: selectedMonth,
-                            StartDate: selectedStartDate,
-                            EndDate: selectedEndDate
-                        };
-                        MySearchAttendanceList(UserPermissionData, FilterData);
-
+                        window.location = '/UserProfile/MyAttendance';
                     });
                 }
             },

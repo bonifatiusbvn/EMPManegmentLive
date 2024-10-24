@@ -12,6 +12,18 @@
                    : string.Empty;
 }
 
+<style>
+    .Create_Company {
+        height: 755px;
+    }
+    @@media only screen and (max-width: 912px) {
+
+        .Create_Company {
+            height: 1092px;
+        }
+    }
+</style>
+
 <!-- start page title -->
 <div class="row" style="margin-top:80px;">
     <div class="col-12">
@@ -32,7 +44,7 @@
         <div class="auth-page-wrapper auth-bg-cover py-5 d-flex justify-content-center align-items-center min-vh-50">
             <input type="hidden" class="form-control" id="textViewMode" value="@ViewBag.ViewMode.ToString()" readonly />
             <div class="col-lg-11">
-                <div class="card" style="height:755px;">
+                <div class="card Create_Company">
                     <div class="card-header">
                         <ul class="nav nav-tabs-custom card-header-tabs border-bottom-0" role="tablist">
                             <li class="nav-item">

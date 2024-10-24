@@ -18,6 +18,53 @@
         width: 1600px;
         margin-left: -80px;
     }
+
+    .Add_Members {
+        margin-left: 200px;
+    }
+
+    @@media only screen and (max-width: 768px) {
+        .auth-bg-cover {
+            width: 330px;
+            margin-left: 55px;
+            background: none;
+        }
+
+        .Add_Members {
+            margin-left: 150px;
+        }
+
+        .Projectform-container {
+            background: rgba(255, 255, 255, 0.9);
+            width: 1600px;
+            margin-left: -80px;
+        }
+    }
+
+    @@media only screen and (min-width: 768px) and (max-width: 1024px) {
+        .auth-bg-cover {
+            width: 700px;
+            margin-left: 46px;
+            background: none;
+        }
+
+        .Add_Members {
+            margin-left: 435px;
+        }
+    }
+
+    @@media only screen and (min-width: 1024px) and (max-width: 1370px) {
+        .auth-bg-cover {
+            width: 670px;
+            margin-left: 55px;
+            background: none;
+            margin-top: -210px;
+        }
+
+        .Add_Members {
+            margin-left: 35px;
+        }
+    }
 </style>
 
 <div class="row" style="margin-top:80px;">
@@ -249,16 +296,7 @@
                         </div>
                     </div>
                     <!-- end card -->
-                    <div class="text-end mb-3">
-                        @if (Model.ProjectId != null)
-                        {
-                            <button type="button" class="btn btn-success btn-lg" onclick="fn_UpdateProjectDetail()" id="updateProjectDetails" style="width: 160px;height: 50px;">Update</button>
-                        }
-                        else
-                        {
-                            <button type="button" class="btn btn-success btn-lg" onclick="btnCreateProjectDetail()" id="projectDetails" value="Validate" style="width: 160px;height: 50px;">Create</button>
-                        }
-                    </div>
+
                 </form>
             </div>
             <!-- end col -->
@@ -315,7 +353,7 @@
                     <div class="card">
                         <div class="card-header align-items-center d-flex border-bottom-dashed">
                             <h5 class="card-title mb-0">Members</h5>
-                            <button type="button" class="btn btn-block btn-warning" style="margin-left:200px;" data-bs-toggle="modal" data-bs-target="#ProjectHeadModal" onclick="ProjectHeadMemberList()"><i class="ri-share-line me-1 align-bottom"></i> Select Head</button>
+                            <button type="button" class="btn btn-block btn-warning Add_Members" data-bs-toggle="modal" data-bs-target="#ProjectHeadModal" onclick="ProjectHeadMemberList()"><i class="ri-share-line me-1 align-bottom"></i> Select Head</button>
                         </div>
                         <div class="card-body">
                             <div class="mb-3">
@@ -354,6 +392,16 @@
                 <!-- end modal -->
             </div>
             <!-- end col -->
+            <div class="text-end mb-3">
+                @if (Model.ProjectId != null)
+                {
+                    <button type="button" class="btn btn-success btn-lg" onclick="fn_UpdateProjectDetail()" id="updateProjectDetails" style="width: 160px;height: 50px;">Update</button>
+                }
+                else
+                {
+                    <button type="button" class="btn btn-success btn-lg" onclick="btnCreateProjectDetail()" id="projectDetails" value="Validate" style="width: 160px;height: 50px;">Create</button>
+                }
+            </div>
         </div>
     </div>
 </div>
