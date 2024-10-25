@@ -29,6 +29,27 @@
         height: 455px;
     }
 
+    #vendorImagePreview {
+        height: 160px;
+        width: 160px;
+        border: 2px solid grey;
+        margin-top: -65px;
+        margin-right: -157px;
+    }
+
+    #deleteVendorImageButton{
+        background-color: transparent;
+        border: none;
+        font-size: 16px;
+        cursor: pointer;
+        color: red;
+    }
+
+    .Cross_Button{
+        position: absolute;
+        top: -66px;
+        right: -157px;
+    }
     @@media only screen and (max-width: 768px) {
         .auth-bg-cover {
             width: 330px;
@@ -40,6 +61,29 @@
             height: 600px;
         }
 
+        #vendorImagePreview {
+            height: 160px;
+            width: 160px;
+            border: 2px solid grey;
+            margin-top: 35px;
+            margin-right: 100px;
+        }
+
+        #deleteVendorImageButton {
+            background-color: transparent;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            color: red;
+            margin-top: 103px;
+            margin-right: 100px;
+        }
+
+        .Cross_Button {
+            position: absolute;
+            top: -66px;
+            right: 7px;
+        }
     }
 
     @@media only screen and (min-width: 768px) and (max-width: 1024px) {
@@ -52,6 +96,24 @@
         .Bank_Details {
             height: 600px;
         }
+
+        #vendorImagePreview {
+            height: 160px;
+            width: 160px;
+            border: 2px solid grey;
+            margin-top: 35px;
+            margin-right: 100px;
+        }
+
+        #deleteVendorImageButton {
+            background-color: transparent;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            color: red;
+            margin-top: 103px;
+            margin-right: 100px;
+        }
     }
 
     @@media only screen and (min-width: 1024px) and (max-width: 1370px) {
@@ -60,6 +122,20 @@
             margin-left: 55px;
             background: none;
             margin-top: -145px;
+        }
+
+        #vendorImagePreview {
+            height: 160px;
+            width: 160px;
+            border: 2px solid grey;
+            margin-top: 35px;
+            margin-right: -157px;
+        }
+
+        .Cross_Button {
+            position: absolute;
+            top: -66px;
+            right: -251px;
         }
     }
 
@@ -270,10 +346,10 @@
                                                     <div style="position: relative; display: inline-block; gap:10px;">
                                                         @if (!string.IsNullOrEmpty(Model.VendorCompanyLogo))
                                                         {
-                                                            <img src="~/Content/Image/@Model.VendorCompanyLogo" id="vendorImagePreview" style="height: 160px;width: 160px;border:2px solid grey; margin-top: -65px; margin-right:100px;">
+                                                            <img src="~/Content/Image/@Model.VendorCompanyLogo" id="vendorImagePreview">
                                                         }
                                                         <div style="position: absolute; top: -65px; right: 5px;">
-                                                            <button type="button" id="deleteVendorImageButton" style="background-color: transparent; border: none; font-size: 16px; cursor: pointer; color:red; margin-right:100px;">&times;</button>
+                                                            <button type="button" id="deleteVendorImageButton" >&times;</button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -285,9 +361,9 @@
                                                         <div id="DisplayVendorInitials" class="avatar-title bg-success-subtle text-success fs-20 border" style="height: 160px; width: 160px; border: 2px solid grey; margin-top: -65px; display: flex; align-items: center; justify-content: center; margin-left:93px;">
                                                             <h1>@Vendorinitials</h1>
                                                         </div>
-                                                        <img id="vendorImagePreview" src="#" style="height: 160px; width: 160px; border: 2px solid grey; margin-top: -65px; display: none;" alt="vendorImagePreview" />
-                                                        <div style="position: absolute; top: -65px; right: 5px;">
-                                                            <button type="button" id="deleteVendorImageButton" style="background-color: transparent; border: none; font-size: 16px; cursor: pointer; color: red;">&times;</button>
+                                                        <img id="vendorImagePreview" src="#"  alt="vendorImagePreview" />
+                                                        <div class="Cross_Button" >
+                                                            <button type="button" id="deleteVendorImageButton">&times;</button>
                                                         </div>
                                                     </div>
                                                 </div>
