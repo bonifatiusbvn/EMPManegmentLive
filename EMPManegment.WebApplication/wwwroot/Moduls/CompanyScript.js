@@ -103,7 +103,13 @@ function AddCompanyDetails() {
         formData.append("PinCode", $("#txtPincode").val());
         formData.append("Address", $("#txtCompanyAddress").val());
         formData.append("Gst", $("#txtcompanygst").val());
-        formData.append("CompanyLogo", $("#companylogo")[0].files[0]);
+        const imgElement = document.getElementById('companylogo');
+        const altText = imgElement.alt;
+        var file = $("#companylogo").attr("src");
+        if (file && file !== "assets/images/new-document.png") {
+            var blob = dataURLToBlob(file); 
+            formData.append("CompanyLogo", blob, altText); 
+        }
 
         $.ajax({
             url: '/Company/AddCompany',
@@ -134,74 +140,22 @@ function AddCompanyDetails() {
     }
 }
 
-$(document).ready(function () {
-    var CompanyId = $('#txtcompanyId').val();
-    if (CompanyId == "00000000-0000-0000-0000-000000000000") {
-        function toggleImagePreview(show) {
-            if (show) {
-                $('#companyImagePreview').show();
-                $('#DisplayCompanyInitials').hide();
-                $("#CompanyImageContainer").show();
-            } else {
-                $('#companyImagePreview').hide();
-                $('#DisplayCompanyInitials').show();
-                $("#CompanyImageContainer").hide();
-            }
-        }
+function dataURLToBlob(dataURL) {
+    var byteString = atob(dataURL.split(',')[1]);
+    var mimeString = dataURL.split(',')[0].split(':')[1].split(';')[0];
+    var ab = new ArrayBuffer(byteString.length);
+    var ia = new Uint8Array(ab);
+    for (var i = 0; i < byteString.length; i++) {
+        ia[i] = byteString.charCodeAt(i);
     }
-    else {
-        function toggleImagePreview(show) {
-            if (show) {
-                $('#companyImagePreview').show();
-                $('#DisplayCompanyInitials').hide();
-                $("#CompanyImageContainer").show();
-            } else {
-                $('#companyImagePreview').hide();
-                $('#DisplayCompanyInitials').show();
-            }
-        }
-    }
-
-
-    $('#deleteCompanyImageButton').click(function () {
-        $('#companyImagePreview').attr('src', '#').hide();
-        $('#companylogo').val('');
-        $("#currentCompanyImageName").text('');
-        $("#CompanyImageContainer").hide();
-        toggleImagePreview(false);
-    });
-
-    $('#companylogo').change(function () {
-        var input = this;
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
-            reader.onload = function (e) {
-                $('#companyImagePreview').attr('src', e.target.result).show();
-                toggleImagePreview(true);
-            }
-            reader.readAsDataURL(input.files[0]);
-        } else {
-            toggleImagePreview(false);
-        }
-    });
-
-    if ($('#companyImagePreview').attr('src') === '' || $('#companyImagePreview').attr('src') === '#') {
-        toggleImagePreview(false);
-    } else {
-        toggleImagePreview(true);
-    }
-});
+    return new Blob([ab], { type: mimeString });
+}
 
 function EditCompany() {
     document.querySelectorAll('#createCompanyform input, #createCompanyform select, #createCompanyform textarea').forEach(function (element) {
         element.disabled = false;
     });
-    document.querySelector('#companylogo').disabled = false;
-    var deleteButton = document.querySelector('#deleteCompanyImageButton');
-    if (deleteButton) {
-        deleteButton.style.display = 'block';
-        deleteButton.disabled = false;
-    }
+
     $("#editCompanybtn").hide();
     $("#updateCompanybtn").show();
 }
@@ -218,15 +172,23 @@ function UpdateCompanyDetails() {
         formData.append("City", $("#CompanyCity").val());
         formData.append("PinCode", $("#txtPincode").val());
         formData.append("Address", $("#txtCompanyAddress").val());
-        formData.append("CompanyLogo", $("#companylogo")[0].files[0]);
         formData.append("UpdatedBy", $("#txtCompanyUpdatedby").val());
         formData.append("Gst", $("#txtcompanygst").val());
         var imageName = $("#currentCompanyImageName").text().trim();
-        var imageFile = $("#companylogo")[0].files[0];
-        if (imageName && !imageFile) {
+        const imageFile = document.getElementById('companylogo');
+        if (imageName && (imageFile == null)) {
             formData.append("CompanyImageName", imageName);
-        } else if (imageFile) {
-            formData.append("CompanyLogo", imageFile);
+        }
+        else
+        { 
+            if (imageFile != null) {
+                const altImgText = imageFile.alt;
+                var file = $("#companylogo").attr("src");
+                if (file && file !== "assets/images/new-document.png") {
+                    var blob = dataURLToBlob(file);
+                    formData.append("CompanyLogo", blob, altImgText);
+                }
+            }
         }
         $.ajax({
             url: '/Company/UpdateCompanyDetails',
@@ -350,3 +312,76 @@ function deleteCompany(Id) {
         }
     });
 }
+
+$(document).ready(function () {
+    const previewContainer = $('#CompanyImage-preview');
+
+    // Show the container if there's already an image loaded from the database
+    if (previewContainer.children().length > 0) {
+        previewContainer.show();
+    } else {
+        previewContainer.hide();
+    }
+
+    $('#fileUpload').on('change', function (event) {
+        const files = event.target.files;
+
+        // Clear previous previews
+        previewContainer.empty();
+
+        if (files.length === 0) {
+            // Hide preview container if no files are selected
+            previewContainer.hide();
+            return;
+        }
+
+        // Show the preview container since files are selected
+        previewContainer.show();
+
+        Array.from(files).forEach((file) => {
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+                const imageSrc = e.target.result;
+                const fileName = file.name;
+                const fileSize = (file.size / 1024).toFixed(2) + ' KB';
+
+                const previewTemplate = `
+                    <li class="mt-2">
+                        <div class="border rounded">
+                            <div class="d-flex p-2">
+                                <div class="flex-shrink-0 me-3">
+                                    <div class="avatar-sm bg-light rounded">
+                                        <img src="${imageSrc}" alt="${fileName}" class="img-fluid rounded d-block" id="companylogo"/>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <div class="pt-1">
+                                        <h5 class="fs-14 mb-1">${fileName}</h5>
+                                        <p class="fs-13 text-muted mb-0">${fileSize}</p>
+                                    </div>
+                                </div>
+                                <div class="flex-shrink-0 ms-3">
+                                    <button class="btn btn-sm btn-primary remove-preview">Delete</button>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                `;
+
+                previewContainer.append(previewTemplate);
+            };
+
+            reader.readAsDataURL(file);
+        });
+    });
+
+    previewContainer.on('click', '.remove-preview', function () {
+        $(this).closest('li').remove();
+        $("#currentCompanyImageName").text('');
+
+        if (previewContainer.children().length === 0) {
+            previewContainer.hide();
+        }
+    });
+});

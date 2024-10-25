@@ -36,6 +36,41 @@
                 line-height: 1em;
                 cursor: pointer;
             }
+
+@@media (max-width: 992px) {
+  .chat-wrapper {
+      max-width: 100% !important;
+      padding: 0 10px !important;
+      flex-direction: column !important;
+  }
+
+  .chat-leftsidebar {
+    width: 100% !important;
+    margin-bottom: 1rem !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    height: auto !important;
+  }
+
+  .user-chat {
+      position: relative !important;
+      left: 0 !important; 
+      top: 0 !important; 
+      height: auto !important;
+      visibility: visible !important;
+      transform: translateX(0%) !important;
+      z-index: 0 !important;
+      padding-top: 0 !important;
+      width: 100% !important;
+      margin-left: auto !important;
+      margin-right: auto !important;
+    }
+
+    .mx-n4 {
+        margin-right: 0 !important;
+        margin-left: 0 !important;
+    }
+}
 </style>
 
 <div class="row" style="margin-top:80px;">
