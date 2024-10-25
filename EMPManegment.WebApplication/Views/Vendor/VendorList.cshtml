@@ -7,6 +7,18 @@
     Layout = "~/Views/Shared/_HomeLayout.cshtml";
 }
 
+<style>
+
+    .CreateVendorButton {
+        margin-left: 665px;
+    }
+
+    @@media (max-width: 912px) {
+        .CreateVendorButton {
+            margin-left: 65px;
+        }
+    }
+</style>
 <!-- start page title -->
 <div class="row" style="margin-top:80px;">
     <div class="col-12">
@@ -34,7 +46,7 @@
                     {
                         <div class="flex-shrink-0">
                             <div class="d-flex flex-wrap gap-2">
-                                <a class="btn btn-block btn-info btn-md" style="margin-left: 665px;" href="/Vendor/CreateVendor"><i class="ri-add-fill me-1 align-bottom"></i>Vendor</a>
+                                <a class="btn btn-block btn-info btn-md CreateVendorButton" href="/Vendor/CreateVendor"><i class="ri-add-fill me-1 align-bottom"></i>Vendor</a>
                             </div>
                         </div>
                     }

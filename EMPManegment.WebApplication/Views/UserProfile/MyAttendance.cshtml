@@ -7,6 +7,39 @@
     Layout = "~/Views/Shared/_HomeLayout.cshtml";
 }
 
+<style>
+    @@media (max-width: 600px) {
+    .card-header .d-flex {
+        flex-direction: column; 
+    }
+    
+    .btn-group {
+        width: 100%;
+    }
+
+    #monthbox, #datebox, #datebox1, #myattendanceseachbtn {
+        display: block; 
+        width: 100%; 
+        margin-top: 10px; 
+    }
+
+    .search-box {
+        width: 100%; 
+    }
+
+    #attendancepdfexcel {
+        display: flex; 
+        flex-direction: column; 
+        width: 100%; 
+        margin-top: 10px; 
+    }
+
+    #attendancepdfexcel a {
+        width: 100%; 
+        margin-top: 5px; 
+    }
+}
+</style>
 
 <!-- start page title -->
 <div class="row" style="margin-top:80px;">

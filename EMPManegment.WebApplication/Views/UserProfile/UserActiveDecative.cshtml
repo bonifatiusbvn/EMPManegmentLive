@@ -9,6 +9,27 @@
     Layout = "~/Views/Shared/_HomeLayout.cshtml";
 }
 
+<style>
+    @@media (max-width: 600px) {
+    .card-header .d-flex {
+        flex-direction: column; 
+    }
+    
+    .card-header .btn-group {
+        width: 100%; 
+        margin-bottom: 10px; 
+    }
+
+    .card-header .col {
+        width: 100%;
+    }
+
+    #UADSearchbtn {
+        display: block; 
+        width: 100%; 
+    }
+}
+</style>
 <!-- start page title -->
 <div class="row" style="margin-top:80px;">
     <div class="col-12">

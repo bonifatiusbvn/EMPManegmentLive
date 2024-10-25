@@ -107,7 +107,6 @@ namespace EMPManegment.Repository.ManualInvoiceRepository
                 response.Code = (int)HttpStatusCode.InternalServerError;
                 response.Message = "Error in inserting Invoice.";
             }
-
             return response;
         }
 
@@ -190,7 +189,6 @@ namespace EMPManegment.Repository.ManualInvoiceRepository
                     {
                         Id = Guid.Parse(row["Id"].ToString()),
                         InvoiceNo = row["InvoiceNo"]?.ToString(),
-
                         VendorName = row["VendorName"]?.ToString(),
                         VendorAddress = row["VendorAddress"]?.ToString(),
                         VendorGstNo = row["VendorGstNo"]?.ToString(),
@@ -270,8 +268,7 @@ namespace EMPManegment.Repository.ManualInvoiceRepository
                         masterInvoiceDetails.PaymentMethodName = DS.Tables[1].Rows[0]["PaymentMethodName"]?.ToString();
                         masterInvoiceDetails.PaymentStatusName = DS.Tables[1].Rows[0]["PaymentStatusName"]?.ToString();
                         masterInvoiceDetails.RoundOff = DS.Tables[1].Rows[0]["RoundOff"] != DBNull.Value ? (decimal)DS.Tables[1].Rows[0]["RoundOff"] : 0m;
-                        masterInvoiceDetails.DollarPrice = DS.Tables[1].Rows[0]["DollarPrice"] != DBNull.Value? Convert.ToDecimal(DS.Tables[1].Rows[0]["DollarPrice"]) : (decimal?)null;
-
+                        masterInvoiceDetails.DollarPrice = DS.Tables[1].Rows[0]["DollarPrice"] != DBNull.Value ? Convert.ToDecimal(DS.Tables[1].Rows[0]["DollarPrice"]) : (decimal?)null;
                     }
 
                     masterInvoiceDetails.ManualInvoiceDetails = new List<ManualInvoiceDetailsModel>();
@@ -313,7 +310,6 @@ namespace EMPManegment.Repository.ManualInvoiceRepository
             UserResponceModel response = new UserResponceModel();
             try
             {
-
                 var GetInvoiceData = Context.TblManualInvoices.Where(a => a.Id == InvoiceId).FirstOrDefault();
                 var InvoiceDetails = Context.TblManualInvoiceDetails.Where(a => a.RefId == InvoiceId).ToList();
 

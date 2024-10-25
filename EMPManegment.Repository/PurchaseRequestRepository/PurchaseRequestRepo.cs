@@ -48,7 +48,6 @@ namespace EMPManegment.Repository.PurchaseRequestRepository
 
                 foreach (var item in AddPurchaseRequest.PRList)
                 {
-
                     var PRDetailS = new TblPurchaseRequest()
                     {
                         PrId = Guid.NewGuid(),
@@ -172,10 +171,9 @@ namespace EMPManegment.Repository.PurchaseRequestRepository
                                       };
                 return purchaseRequest;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                throw ex;
             }
         }
 

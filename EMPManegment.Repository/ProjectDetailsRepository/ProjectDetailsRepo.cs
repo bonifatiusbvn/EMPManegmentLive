@@ -319,7 +319,6 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
 
                                 Context.TblProjectMembers.Add(projectmodel);
                                 await Context.SaveChangesAsync();
-
                                 response.Message = "Project member is added successfully!";
                             }
                         }
@@ -552,7 +551,6 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
 
                 if (GetUserdata != null)
                 {
-
                     GetUserdata.IsDeleted = true;
                     GetUserdata.UpdatedOn = DateTime.Now;
                     GetUserdata.UpdatedBy = projectMember.UpdatedBy;
