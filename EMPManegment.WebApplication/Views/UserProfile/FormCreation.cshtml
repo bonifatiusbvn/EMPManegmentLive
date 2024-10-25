@@ -3,6 +3,21 @@
     Layout = "~/Views/Shared/_HomeLayout.cshtml";
 }
 
+<style>
+    @@media (max-width: 1790px) {
+    .card-body .row {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch; 
+    }
+    .card-body .col-2,
+    .card-body .col-10 {
+        width: 100%; 
+        margin-bottom: 10px; 
+    }
+}
+</style>
+
 <div class="row" style="margin-top:80px;">
     <div class="col-12">
         <div class="page-title-box d-sm-flex align-items-center justify-content-between">

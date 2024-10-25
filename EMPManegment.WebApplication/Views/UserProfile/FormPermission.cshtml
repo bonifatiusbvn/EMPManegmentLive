@@ -6,6 +6,16 @@
     Layout = "~/Views/Shared/_HomeLayout.cshtml";
 }
 
+<style>
+    @@media (max-width: 600px) {
+    .d-flex {
+        flex-direction: column; 
+    }
+    .flex-shrink-0 {
+        margin-top: 10px; 
+    }
+}
+</style>
 <div class="row" style="margin-top:80px;">
     <div class="col-12">
         <div class="page-title-box d-sm-flex align-items-center justify-content-between">
