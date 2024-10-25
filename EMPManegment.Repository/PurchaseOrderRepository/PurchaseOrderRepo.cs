@@ -347,7 +347,7 @@ namespace EMPManegment.Repository.OrderRepository
                               VendorAddress = d.VendorAddress,
                               CreatedOn = a.CreatedOn,
                               CreatedBy = (Guid)a.CreatedBy,
-                              DollarPrice= a.DollarPrice,
+                              DollarPrice = a.DollarPrice,
                           }).FirstOrDefault();
                 List<PurchaseOrderDetailsModel> Productlist = (from a in Context.TblPurchaseOrderDetails.Where(a => a.PorefId == POList.Id)
                                                                join b in Context.TblProductTypeMasters on a.ProductType equals b.Id
@@ -380,7 +380,6 @@ namespace EMPManegment.Repository.OrderRepository
             UserResponceModel response = new UserResponceModel();
             try
             {
-
                 var GetOrderdata = Context.TblPurchaseOrderMasters.Where(a => a.Id == Id).FirstOrDefault();
                 var PODetails = Context.TblPurchaseOrderDetails.Where(a => a.PorefId == Id).ToList();
                 var POAddress = Context.TblPodeliveryAddresses.Where(a => a.Poid == Id).FirstOrDefault();
@@ -399,7 +398,6 @@ namespace EMPManegment.Repository.OrderRepository
 
                         POAddress.IsDeleted = true;
                         Context.TblPodeliveryAddresses.Update(POAddress);
-
                         Context.SaveChanges();
 
                         response.Code = (int)HttpStatusCode.OK;
@@ -457,7 +455,6 @@ namespace EMPManegment.Repository.OrderRepository
                         ProductDetailsList.Add(ProductDetails);
                     }
                 }
-
                 return ProductDetailsList;
             }
             catch (Exception ex)

@@ -281,7 +281,6 @@ namespace EMPManegment.Repository.ProductMaster
                     getProduct.Id = UpdateProduct.Id;
                     getProduct.UpdatedBy = UpdateProduct.UpdatedBy;
                     getProduct.UpdatedOn = DateTime.Now;
-
                 }
                 Context.TblProductDetailsMasters.Update(getProduct);
                 Context.SaveChanges();
@@ -308,7 +307,6 @@ namespace EMPManegment.Repository.ProductMaster
                         productDetails.Add(new ProductDetailsView()
                         {
                             Id = item.Id,
-
                             ProductImage = item.ProductImage,
                             ProductName = item.ProductName,
                             PerUnitPrice = item.PerUnitPrice,
@@ -336,7 +334,6 @@ namespace EMPManegment.Repository.ProductMaster
                         productDetails.Add(new ProductDetailsView()
                         {
                             Id = item.Id,
-
                             ProductImage = item.ProductImage,
                             ProductName = item.ProductName,
                             PerUnitPrice = item.PerUnitPrice,
@@ -488,7 +485,6 @@ namespace EMPManegment.Repository.ProductMaster
 
                 if (Product != null)
                 {
-
                     Product.IsDeleted = true;
                     Context.TblProductDetailsMasters.Update(Product);
                     Context.SaveChanges();
@@ -507,7 +503,6 @@ namespace EMPManegment.Repository.ProductMaster
             }
 
             return response;
-
         }
     }
 }

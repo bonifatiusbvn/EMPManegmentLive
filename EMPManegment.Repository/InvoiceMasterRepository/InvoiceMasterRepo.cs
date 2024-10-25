@@ -226,7 +226,6 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                             });
                         }
                         response.Data = orderDetails;
-
                         response.Message = "Invoice is generated successfully";
                     }
 
@@ -320,7 +319,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                 }
                 else
                 {
-                    invoiceList = invoiceList.OrderByDescending(e => e.CreatedOn).ToList(); 
+                    invoiceList = invoiceList.OrderByDescending(e => e.CreatedOn).ToList();
                 }
 
                 var totalRecord = invoiceList.Count;
@@ -391,7 +390,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                 {
                     new SqlParameter("@VendorId", Vid),
                 };
-                var dataSet = DbHelper.GetDataSet("[spGetLastTransactionByVendor]", System.Data.CommandType.StoredProcedure, sqlPar , dbConnectionStr);
+                var dataSet = DbHelper.GetDataSet("[spGetLastTransactionByVendor]", System.Data.CommandType.StoredProcedure, sqlPar, dbConnectionStr);
 
                 var VendorTransaction = new List<CreditDebitView>();
 
@@ -406,7 +405,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                         Date = Convert.ToDateTime(row["Date"]),
                         TotalAmount = Convert.ToDecimal(row["TotalAmount"]),
                         PendingAmount = Convert.ToDecimal(row["PendingAmount"]),
-                        CreditDebitAmount = Convert.ToDecimal(row["CreditDebitAmount"]),        
+                        CreditDebitAmount = Convert.ToDecimal(row["CreditDebitAmount"]),
                     };
                     VendorTransaction.Add(LastTransactions);
                 }
@@ -468,9 +467,9 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                     BuyesOrderNo = InsertInvoice.BuyesOrderNo,
                     BuyesOrderDate = InsertInvoice.BuyesOrderDate,
                     DispatchThrough = InsertInvoice.DispatchThrough,
-                    DispatchDocNo= InsertInvoice.DispatchDocNo,
-                    Destination= InsertInvoice.Destination,
-                    MotorVehicleNo= InsertInvoice.MotorVehicleNo,
+                    DispatchDocNo = InsertInvoice.DispatchDocNo,
+                    Destination = InsertInvoice.Destination,
+                    MotorVehicleNo = InsertInvoice.MotorVehicleNo,
                     ShippingAddress = InsertInvoice.ShippingAddress,
                     TotalDiscount = InsertInvoice.TotalDiscount,
                     TotalGst = InsertInvoice.TotalGst,
@@ -484,7 +483,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                     CreatedBy = InsertInvoice.CreatedBy,
                     CreatedOn = DateTime.Now,
                     Date = DateTime.Now,
-                    DollarPrice=InsertInvoice.DollarPrice,
+                    DollarPrice = InsertInvoice.DollarPrice,
                 };
                 Context.TblInvoices.Add(invoice);
 
@@ -663,10 +662,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                         invoice.IsDeleted = true;
                         Context.TblInvoiceDetails.Update(invoice);
                     }
-
                     Context.SaveChanges();
-
-
                     response.Message = "Invoice details are successfully deleted.";
                 }
                 else
@@ -728,7 +724,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                     BuyesOrderDate = UpdateInvoice.BuyesOrderDate,
                     DispatchThrough = UpdateInvoice.DispatchThrough,
                     DispatchDocNo = UpdateInvoice.DispatchDocNo,
-                    Destination=UpdateInvoice.Destination,
+                    Destination = UpdateInvoice.Destination,
                     MotorVehicleNo = UpdateInvoice.MotorVehicleNo,
                     ShippingAddress = UpdateInvoice.ShippingAddress,
                     TotalDiscount = UpdateInvoice.TotalDiscount,
@@ -827,7 +823,6 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                 bool isInvoiceAlredyExists = Context.TblInvoices.Any(x => x.OrderId == OrderId);
                 if (isInvoiceAlredyExists == false)
                 {
-
                     response.Message = "This invoice is not generated";
                     response.Code = (int)HttpStatusCode.NotFound;
                 }
@@ -877,7 +872,6 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                             });
                         }
                         response.Data = orderDetails;
-
                     }
                 }
             }
@@ -908,7 +902,6 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                     {
                         var ActivityDetails = new InvoiceViewModel
                         {
-
                             Id = row["Id"] != DBNull.Value ? (Guid)row["Id"] : Guid.Empty,
                             InvoiceNo = row["InvoiceNo"]?.ToString(),
                             VendorName = row["VendorCompany"]?.ToString(),
@@ -1010,7 +1003,6 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
             var userDetails = new List<CreditDebitView>();
             try
             {
-
                 foreach (DataRow row in dataSet.Tables[0].Rows)
                 {
                     var userData = new CreditDebitView
@@ -1031,7 +1023,6 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
             {
                 throw ex;
             }
-
             return userDetails;
         }
 
@@ -1065,7 +1056,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                 string dbConnectionStr = Configuration.GetConnectionString("EMPDbconn");
                 var sqlPar = new SqlParameter[]
                 {
-            new SqlParameter("@InvoiceId", Id),
+                  new SqlParameter("@InvoiceId", Id),
                 };
                 var DS = DbHelper.GetDataSet("[GetInvoiceDetailsById]", System.Data.CommandType.StoredProcedure, sqlPar, dbConnectionStr);
 
@@ -1136,13 +1127,12 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                             DiscountPer = row["DiscountPer"] != DBNull.Value ? (decimal)row["DiscountPer"] : 0m,
                             DiscountAmount = row["DiscountAmount"] != DBNull.Value ? (decimal)row["DiscountAmount"] : 0m,
                         };
-
                         InvoiceDetails.InvoiceDetails.Add(invoiceDetail);
                     }
                 }
                 return InvoiceDetails;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw ex;
             }
