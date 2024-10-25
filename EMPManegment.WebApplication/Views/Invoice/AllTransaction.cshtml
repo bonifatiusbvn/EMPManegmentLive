@@ -68,7 +68,7 @@
             <div class="card-body p-0">
                 <div class="card-body">
                     <div class="table-responsive table-card text-center">
-                        <table class="table align-middle dt-responsive nowrap" id="AllVendorCreditDebitList">
+                        <table class="table table-bordered dt-responsive nowrap table-striped align-middle" id="AllVendorCreditDebitList">
                             <thead class="btn-info text-center">
                                 <tr>
                                     <th></th>
@@ -99,8 +99,6 @@
     </div>
     <!--end col-->
 </div>
-
-
 
 <script type="text/javascript">
     var userPermissions = '@Html.Raw(Json.Serialize(UserSession.FormPermisionData))';

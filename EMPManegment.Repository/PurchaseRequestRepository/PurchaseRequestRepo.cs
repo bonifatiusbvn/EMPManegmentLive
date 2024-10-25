@@ -334,6 +334,30 @@ namespace EMPManegment.Repository.PurchaseRequestRepository
                     e.FullName.Contains(PRdataTable.searchValue)).ToList();
             }
 
+            if (!string.IsNullOrEmpty(PRdataTable.sortColumn) && !string.IsNullOrEmpty(PRdataTable.sortColumnDir))
+            {
+                switch (PRdataTable.sortColumn)
+                {
+                    case "PrNo":
+                        PRList = PRdataTable.sortColumnDir == "asc" ? PRList.OrderBy(e => e.PrNo).ToList() : PRList.OrderByDescending(e => e.PrNo).ToList();
+                        break;
+                    case "FullName":
+                        PRList = PRdataTable.sortColumnDir == "asc" ? PRList.OrderBy(e => e.FullName).ToList() : PRList.OrderByDescending(e => e.FullName).ToList();
+                        break;
+                    case "ProjectName":
+                        PRList = PRdataTable.sortColumnDir == "asc" ? PRList.OrderBy(e => e.ProjectName).ToList() : PRList.OrderByDescending(e => e.ProjectName).ToList();
+                        break;
+                    case "ProductName":
+                        PRList = PRdataTable.sortColumnDir == "asc" ? PRList.OrderBy(e => e.ProductName).ToList() : PRList.OrderByDescending(e => e.ProductName).ToList();
+                        break;
+                    case "Quantity":
+                        PRList = PRdataTable.sortColumnDir == "asc" ? PRList.OrderBy(e => e.Quantity).ToList() : PRList.OrderByDescending(e => e.Quantity).ToList();
+                        break;
+                    default:
+                        break;
+                }
+            }
+
             var totalRecord = PRList.Count;
             var filteredData = PRList.Skip(PRdataTable.skip).Take(PRdataTable.pageSize).ToList();
 

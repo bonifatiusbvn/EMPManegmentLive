@@ -49,7 +49,7 @@ $(document).ready(function () {
 
         var columns = [
             {
-                "data": "prNo",
+                "data": "prNo","name": "PrNo",
                 "render": function (data, type, full) {
                     return '<h5 class="fs-15"><a href="/PurchaseRequest/PurchaseRequestDetails?prNo=' + full.prNo + '" class="fw-medium link-primary">' + full.prNo + '</a></h5>';
                 }
