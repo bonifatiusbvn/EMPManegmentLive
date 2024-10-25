@@ -6,6 +6,20 @@
     ViewData["Title"] = "CompanyList";
     Layout = "~/Views/Shared/_HomeLayout.cshtml";
 }
+<style>
+
+    .CreateCompanyButton
+    {
+        margin-left: 665px;
+    }
+
+    @@media (max-width: 912px)
+    {
+        .CreateCompanyButton {
+            margin-left: 65px;
+        }
+    }
+</style>
 <!-- start page title -->
 <div class="row" style="margin-top:80px;">
     <div class="col-12">
@@ -31,7 +45,7 @@
                     {
                         <div class="flex-shrink-0">
                             <div class="d-flex flex-wrap gap-2">
-                                <a class="btn btn-block btn-info btn-md" style="margin-left: 665px;" href="/Company/CreateCompany"><i class="ri-add-fill me-1 align-bottom"></i>Company</a>
+                                <a class="btn btn-block btn-info btn-md CreateCompanyButton" href="/Company/CreateCompany"><i class="ri-add-fill me-1 align-bottom"></i>Company</a>
                             </div>
                         </div>
                     }
