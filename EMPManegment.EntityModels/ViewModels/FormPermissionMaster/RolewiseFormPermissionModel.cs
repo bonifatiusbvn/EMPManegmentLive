@@ -38,5 +38,6 @@ namespace EMPManegment.EntityModels.ViewModels.FormPermissionMaster
         public string? FormName { get; set; }
 
         public int RowNumber { get; set; }
+        public bool? IsActive { get; set; }
     }
 }

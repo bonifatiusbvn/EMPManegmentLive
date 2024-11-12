@@ -1285,5 +1285,100 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
+        [FormPermissionAttribute("Role-View")]
+        [HttpGet]
+        public IActionResult UserRolePermission()
+        {
+            return View();
+        }
+        public async Task<IActionResult> GetRolewiseFormPermissionList()
+        {
+            try
+            {
+                ApiResponseModel res = await APIServices.GetAsync("", "UserProfile/GetRolewiseFormPermissionList");
+
+                if (res.code == 200)
+                {
+                    List<UserRoleModel> GetUserRoleList = JsonConvert.DeserializeObject<List<UserRoleModel>>(res.data.ToString());
+                    return PartialView("~/Views/UserProfile/_UserRolewisePermissionPartial.cshtml", GetUserRoleList);
+                }
+                else
+                {
+                    return BadRequest(new { Message = "Failed to retrieve user role list." });
+                }
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(new { Message = $"An error occurred: {ex.Message}" });
+            }
+        }
+        public async Task<IActionResult> GetUserRolewiseFormListById(Guid RoleId)
+        {
+            try
+            {
+                List<RolewiseFormPermissionModel> RolewiseFormList = new List<RolewiseFormPermissionModel>();
+                ApiResponseModel response = await APIServices.PostAsync("", "UserProfile/GetUserRolewiseFormListById?RoleId=" + RoleId);
+                if (response.code == 200)
+                {
+                    RolewiseFormList = JsonConvert.DeserializeObject<List<RolewiseFormPermissionModel>>(response.data.ToString());
+                    return PartialView("~/Views/UserProfile/_editUserRolewiseFormPartial.cshtml", RolewiseFormList);
+                }
+                else
+                {
+                    return BadRequest(new { response.code });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        [FormPermissionAttribute("Role-Edit")]
+        [HttpPost]
+        public async Task<IActionResult> UpdateUserMultipleRolewiseFormPermission()
+        {
+            try
+            {
+                var rolewisePermissionDetails = HttpContext.Request.Form["RolewisePermissionDetails"];
+                var UpdateDetails = JsonConvert.DeserializeObject<List<RolewiseFormPermissionModel>>(rolewisePermissionDetails.ToString());
+
+                ApiResponseModel postuser = await APIServices.PostAsync(UpdateDetails, "UserProfile/UpdateUserMultipleRolewiseFormPermission");
+                if (postuser.code == 200)
+                {
+                    return Ok(new { postuser.message, postuser.code });
+                }
+                else
+                {
+                    return Ok(new { postuser.message, postuser.code });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [FormPermissionAttribute("Role-Edit")]
+        [HttpPost]
+        public async Task<IActionResult> RoleActiveDecative(Guid roleId)
+        {
+            try
+            {
+                ApiResponseModel postuser = await APIServices.PostAsync("", "UserProfile/ActiveDeactiveRole?roleId=" + roleId);
+                if (postuser.code == 200)
+                {
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
+                }
+                else
+                {
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

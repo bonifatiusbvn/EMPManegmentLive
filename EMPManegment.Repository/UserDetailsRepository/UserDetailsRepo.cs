@@ -30,6 +30,8 @@ using System.Security.Cryptography;
 using EMPManegment.EntityModels.ViewModels.TaskModels;
 using EMPManegment.EntityModels.ViewModels.ExpenseMaster;
 using EMPManegment.EntityModels.ViewModels.ProjectModels;
+using EMPManegment.EntityModels.ViewModels.FormPermissionMaster;
+using EMPManagment.Web.Models.API;
 #nullable disable
 
 namespace EMPManegment.Repository.UserListRepository
@@ -895,6 +897,135 @@ namespace EMPManegment.Repository.UserListRepository
             {
                 response.Code = (int)HttpStatusCode.InternalServerError;
                 response.Message = "Error in upadting user deatils.";
+            }
+            return response;
+        }
+
+        public async Task<IEnumerable<RolewiseFormPermissionModel>> GetRolewiseFormPermissionList()
+        {
+            try
+            {
+                IEnumerable<RolewiseFormPermissionModel> FormPermissionList = from a in Context.TblRoleMasters
+                                                                              select new RolewiseFormPermissionModel
+                                                                              {
+                                                                                  RoleId = a.RoleId,
+                                                                                  Role = a.Role,
+                                                                                  IsActive = a.IsActive,
+                                                                              };
+                return FormPermissionList;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        public async Task<List<RolewiseFormPermissionModel>> GetUserRolewiseFormListById(Guid RoleId)
+        {
+            var UserData = new List<RolewiseFormPermissionModel>();
+            var data = await (from e in Context.TblRolewiseFormPermissions.Where(x => x.RoleId == RoleId)
+                              join r in Context.TblRoleMasters on e.RoleId equals r.RoleId
+                              join f in Context.TblForms on e.FormId equals f.FormId
+                              where f.IsActive == true && f.FormName != "Dashboard"
+                              orderby f.OrderId ascending
+                              select new RolewiseFormPermissionModel
+                              {
+                                  Id = e.Id,
+                                  Role = r.Role,
+                                  RoleId = e.RoleId,
+                                  FormId = e.FormId,
+                                  FormName = f.FormName,
+                                  IsViewAllow = e.IsViewAllow,
+                                  IsEditAllow = e.IsEditAllow,
+                                  IsDeleteAllow = e.IsDeleteAllow,
+                                  IsAddAllow = e.IsAddAllow,
+                                  CreatedBy = e.CreatedBy,
+                                  CreatedOn = e.CreatedOn,
+                              }).ToListAsync();
+
+
+            if (data.Count != 0)
+            {
+                UserData.AddRange(data);
+            }
+            return UserData;
+        }
+
+        public async Task<ApiResponseModel> UpdateUserMultipleRolewiseFormPermission(List<RolewiseFormPermissionModel> UpdatedRolewiseFormPermissions)
+        {
+            ApiResponseModel response = new ApiResponseModel();
+            try
+            {
+                foreach (var updatedPermission in UpdatedRolewiseFormPermissions)
+                {
+                    var existingPermissions = await Context.TblRolewiseFormPermissions
+                        .Where(rp => rp.RoleId == updatedPermission.RoleId && rp.FormId == updatedPermission.FormId)
+                        .ToListAsync();
+
+                    if (existingPermissions.Any())
+                    {
+                        foreach (var Item in existingPermissions)
+                        {
+                            Item.IsAddAllow = updatedPermission.IsAddAllow;
+                            Item.IsViewAllow = updatedPermission.IsViewAllow;
+                            Item.IsEditAllow = updatedPermission.IsEditAllow;
+                            Item.IsDeleteAllow = updatedPermission.IsDeleteAllow;
+                            Item.UpdatedBy = updatedPermission.CreatedBy;
+                            Item.UpdatedOn = DateTime.Now;
+                            Context.Entry(Item).State = EntityState.Modified;
+                        }
+                    }
+                    else
+                    {
+                        response.code = 404;
+                        response.message = $"Permissions with roleid {updatedPermission.RoleId} and formid {updatedPermission.FormId} not found.";
+                        return response;
+                    }
+                }
+
+                await Context.SaveChangesAsync();
+                response.code = 200;
+                response.message = "Rolewise permissions successfully updated.";
+            }
+            catch (Exception ex)
+            {
+                response.code = 400;
+                response.message = "Error updating rolewise Permissions";
+            }
+            return response;
+        }
+
+        public async Task<UserResponceModel> ActiveDeactiveRole(Guid roleId)
+        {
+            UserResponceModel response = new UserResponceModel();
+            try
+            {
+                var GetRoleData = Context.TblRoleMasters.Where(a => a.RoleId == roleId).FirstOrDefault();
+
+                if (GetRoleData.IsActive == true)
+                {
+                    GetRoleData.IsActive = false;
+                    Context.TblRoleMasters.Update(GetRoleData);
+                    await Context.SaveChangesAsync();
+                    response.Code = 200;
+                    response.Data = GetRoleData;
+                    response.Message = GetRoleData.Role + " " + "is deactive succesfully";
+                }
+                else
+                {
+                    GetRoleData.IsActive = true;
+                    Context.TblRoleMasters.Update(GetRoleData);
+                    await Context.SaveChangesAsync();
+                    response.Code = 200;
+                    response.Data = GetRoleData;
+                    response.Message = GetRoleData.Role + " " + "is active succesfully";
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Code = (int)HttpStatusCode.InternalServerError;
+                response.Message = "An error occurred while active-deactive the role";
             }
             return response;
         }

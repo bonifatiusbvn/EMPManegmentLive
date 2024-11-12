@@ -1,0 +1,36 @@
+﻿@model IEnumerable<EMPManegment.EntityModels.ViewModels.UserModels.UserRoleModel>
+@using EMPManegment.Web.Models;
+@inject IHttpContextAccessor Accessor;
+@inject UserSession _userSession;
+
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+@foreach (var item in Model)
+{
+    <tr>
+        <td>@item.Role</td>
+        <td>
+            <input type="checkbox" id="flexSwitchCheckChecked_@item.RoleId"
+                @(item.IsActive ?? false ? "checked" : "")
+                   onclick="RoleActiveDecative('@item.RoleId')" />
+        </td>
+        @if (UserSession.FormPermisionData.Any(a => a.FormName == "Role" && (a.Edit || a.Delete)))
+        {
+            <td>
+                @if (UserSession.FormPermisionData.Any(a => a.FormName == "Role" && a.Edit))
+                {
+                    <a class="btn text-primary" id="siteCard" onclick="EditRoleWiseFormDetails('@item.RoleId')" title="Edit" aria-label="Edit">
+                        <i class="fa-regular fa-pen-to-square"></i>
+                    </a>
+                }
+            </td>
+        }
+    </tr>
+}
+
+@section Scripts {
+
+    <script src="~/moduls/userdetailsscript.js" asp-append-version="true"></script>
+}

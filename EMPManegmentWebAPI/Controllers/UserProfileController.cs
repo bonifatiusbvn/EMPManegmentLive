@@ -22,6 +22,8 @@ using EMPManegment.EntityModels.ViewModels.ProjectModels;
 using EMPManegment.Inretface.Interface.ProjectDetails;
 using EMPManegment.EntityModels.ViewModels.TaskModels;
 using EMPManegment.Inretface.Services.TaskServices;
+using EMPManegment.EntityModels.ViewModels.FormMaster;
+using EMPManegment.EntityModels.ViewModels.FormPermissionMaster;
 #nullable disable
 
 namespace EMPManagment.API.Controllers
@@ -372,6 +374,85 @@ namespace EMPManagment.API.Controllers
                 userresponsemodel.Message = "An error occurred while processing the request.";
             }
             return StatusCode(userresponsemodel.Code, userresponsemodel);
+        }
+        [HttpGet]
+        [Route("GetRolewiseFormPermissionList")]
+
+        public async Task<IActionResult> GetRolewiseFormPermissionList()
+        {
+            IEnumerable<RolewiseFormPermissionModel> rolewiseFormPermissionList = await UserListServices.GetRolewiseFormPermissionList();
+            return Ok(new { code = 200, data = rolewiseFormPermissionList.ToList() });
+        }
+        [HttpPost]
+        [Route("GetUserRolewiseFormListById")]
+
+        public async Task<IActionResult> GetUserRolewiseFormListById(Guid RoleId)
+        {
+            ApiResponseModel response = new ApiResponseModel();
+            List<RolewiseFormPermissionModel> RolewiseFormList = await UserListServices.GetUserRolewiseFormListById(RoleId);
+
+            if (RolewiseFormList.Count == 0)
+            {
+                response.code = 400;
+            }
+            else
+            {
+                response.code = 200;
+                response.data = RolewiseFormList.ToList();
+            }
+            return StatusCode(response.code, response);
+        }
+        [HttpPost]
+        [Route("UpdateUserMultipleRolewiseFormPermission")]
+
+        public async Task<IActionResult> UpdateUserMultipleRolewiseFormPermission(List<RolewiseFormPermissionModel> RolewiseFormPermission)
+        {
+            ApiResponseModel response = new ApiResponseModel();
+            try
+            {
+                var rolewiseFormPermission = UserListServices.UpdateUserMultipleRolewiseFormPermission(RolewiseFormPermission);
+                if (rolewiseFormPermission.Result.code == 200)
+                {
+                    response.code = (int)HttpStatusCode.OK;
+                    response.message = rolewiseFormPermission.Result.message;
+                }
+                else
+                {
+                    response.message = rolewiseFormPermission.Result.message;
+                    response.code = (int)HttpStatusCode.NotFound;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return StatusCode(response.code, response);
+        }
+        [HttpPost]
+        [Route("ActiveDeactiveRole")]
+        public async Task<IActionResult> ActiveDeactiveRole(Guid roleId)
+        {
+            UserResponceModel responseModel = new UserResponceModel();
+
+            var roleData = await UserListServices.ActiveDeactiveRole(roleId);
+            try
+            {
+                if (roleData.Code == 200)
+                {
+                    responseModel.Code = roleData.Code;
+                    responseModel.Message = roleData.Message;
+                }
+                else
+                {
+                    responseModel.Message = roleData.Message;
+                    responseModel.Code = roleData.Code;
+                }
+            }
+            catch (Exception ex)
+            {
+                responseModel.Code = (int)HttpStatusCode.InternalServerError;
+            }
+            return StatusCode(responseModel.Code, responseModel);
         }
     }
 }
