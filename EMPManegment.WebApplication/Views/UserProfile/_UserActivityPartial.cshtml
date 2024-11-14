@@ -26,7 +26,7 @@
         <div class="flex-grow-1 ms-3">
             <h6 class="mb-1">@item.UserName</h6>
             <p class="text-muted mb-2">Create Invoice @item.InvoiceNo</p>
-            <small class="mb-0 text-muted">@item.CreatedOn</small>
+            <small class="mb-0 text-muted">@CommonHelper.GetCommonDateFormat(item?.CreatedOn ?? DateTime.MinValue)</small>
         </div>
     </div>
     <div class="acitivity-item py-3 d-flex">

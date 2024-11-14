@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using EMPManagment.Web.Models.API;
 using EMPManegment.EntityModels.View_Model;
 using EMPManegment.EntityModels.ViewModels;
 using EMPManegment.EntityModels.ViewModels.DataTableParameters;
+using EMPManegment.EntityModels.ViewModels.FormPermissionMaster;
 using EMPManegment.EntityModels.ViewModels.Models;
 
 namespace EMPManegment.Inretface.Interface.UserList
@@ -31,5 +33,9 @@ namespace EMPManegment.Inretface.Interface.UserList
         Task<IEnumerable<EmpDetailsView>> GetSearchEmpList(EmpDetailsModel GetSearchEmpList);
         Task<UserResponceModel> UpdateUserExeperience(EmpDetailsView UpdateDate);
         Task<UserResponceModel> UserProfilePhoto(EmpDetailsView Profile);
+        Task<IEnumerable<RolewiseFormPermissionModel>> GetRolewiseFormPermissionList();
+        Task<List<RolewiseFormPermissionModel>> GetUserRolewiseFormListById(Guid RoleId);
+        Task<ApiResponseModel> UpdateUserMultipleRolewiseFormPermission(List<RolewiseFormPermissionModel> UpdatedRolewiseFormPermissions);
+        Task<UserResponceModel> ActiveDeactiveRole(Guid roleId);
     }
 }

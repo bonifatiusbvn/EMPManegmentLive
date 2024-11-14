@@ -505,6 +505,13 @@ $(document).ready(function () {
                 }
             },
             { "data": "vendorName", "name": "VendorName", "className": "text-center" },
+            {
+                "data": "invoiceDate",
+                "name": "InvoiceDate",
+                "render": function (data, type, full, meta) {
+                    return getCommonDateformat(data);
+                }
+            },
             { "data": "companyName", "name": "CompanyName", "className": "text-center" },
             { "data": "totalAmount", "name": "TotalAmount", "className": "text-center" }
         ];

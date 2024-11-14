@@ -1,0 +1,41 @@
+﻿@model IEnumerable<EMPManegment.EntityModels.ViewModels.FormPermissionMaster.RolewiseFormPermissionModel>
+
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@foreach (var item in Model)
+{
+
+    <tr id="templateRow_@Convert.ToInt64(item.RowNumber + 1)" class="forms" data-product-id="@item.FormId">
+        <td>
+            <h6 class="pt-1" id="userformName" data-product-id="@item.FormId">@item.FormName</h6>
+            <input type="text" id="txtUserRoleId" value="@item.RoleId" hidden />
+            <input type="text" id="txtuserformId" value="@item.FormId" hidden />
+        </td>
+        <td>
+            <div class="form-check form-switch form-switch-success">
+                <input class="form-check-input alluser-checkbox" type="checkbox" id="isUserAdd_@item.FormId" name="isUserAdd" @(item.IsAddAllow ? "checked" : "") onchange="updateUserSelectAll('@item.FormId')">
+            </div>
+        </td>
+        <td>
+            <div class="form-check form-switch form-switch-success">
+                <input class="form-check-input alluser-checkbox" type="checkbox" id="isUserView_@item.FormId" name="isUserView" @(item.IsViewAllow ? "checked" : "") onchange="updateUserSelectAll('@item.FormId')">
+            </div>
+        </td>
+        <td>
+            <div class="form-check form-switch form-switch-success">
+                <input class="form-check-input alluser-checkbox" type="checkbox" id="isUserEdit_@item.FormId" name="isUserEdit" @(item.IsEditAllow ? "checked" : "") onchange="updateUserSelectAll('@item.FormId')">
+            </div>
+        </td>
+        <td>
+            <div class="form-check form-switch form-switch-success">
+                <input class="form-check-input alluser-checkbox" type="checkbox" id="isUserDelete_@item.FormId" name="isUserDelete" @(item.IsDeleteAllow ? "checked" : "") onchange="updateUserSelectAll('@item.FormId')">
+            </div>
+        </td>
+        <td>
+            <div class="form-check">
+                <input class="form-check-input form-check-input-all" type="checkbox" id="usercheckboxAll_@item.FormId" name="chk_child" data-Id="@item.RoleId" onclick="toggleUserCheckboxes('@item.FormId')" @(item.IsAddAllow && item.IsViewAllow && item.IsEditAllow && item.IsDeleteAllow ? "checked" : "")>
+            </div>
+        </td>
+    </tr>
+}

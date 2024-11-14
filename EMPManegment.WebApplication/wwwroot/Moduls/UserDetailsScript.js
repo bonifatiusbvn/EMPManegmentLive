@@ -1062,3 +1062,175 @@ function fn_UpdateUserPassword() {
         form.reportValidity();
     }
 }
+AllRolewiseFormUserTable();
+function AllRolewiseFormUserTable() {
+
+    $.get("/UserProfile/GetRolewiseFormPermissionList")
+        .done(function (result) {
+
+            $("#UserRoletbody").html(result);
+        })
+        .fail(function (error) {
+            siteloaderhide();
+
+        });
+}
+function ClearUserTextBox() {
+    var offcanvasElement = document.getElementById("createFormGroup");
+    var offcanvas = new bootstrap.Offcanvas(offcanvasElement);
+    offcanvas.show();
+}
+
+function EditRoleWiseFormDetails(RoleId) {
+    siteloadershow();
+
+    $.ajax({
+        url: '/UserProfile/GetUserRolewiseFormListById?RoleId=' + RoleId,
+        type: 'post',
+        dataType: 'json',
+        processData: false,
+        contentType: false,
+        complete: function (Result) {
+            siteloaderhide();
+            $('#dveditRolePermissionForm').html(Result.responseText);
+            $('#rolePermissionTable').show();
+            if (Result.responseText.trim() !== "") {
+                $('#userupdatebtn').show();
+            } else {
+                $('#userupdatebtn').hide();
+            }
+        },
+        Error: function () {
+            siteloaderhide();
+            toastr.error("Can't get data!");
+        }
+    });
+}
+
+function UpdateRolewiseFormPermission() {
+    var formPermissions = [];
+    $(".forms").each(function () {
+
+        var rolewiseformRow = $(this);
+        var objData = {
+            RoleId: rolewiseformRow.find('#txtUserRoleId').val(),
+            CreatedBy: $("#txtuserId").val(),
+            FormId: rolewiseformRow.find('#txtuserformId').val(),
+            IsAddAllow: rolewiseformRow.find('#isUserAdd_' + rolewiseformRow.data('product-id')).prop('checked'),
+            IsViewAllow: rolewiseformRow.find('#isUserView_' + rolewiseformRow.data('product-id')).prop('checked'),
+            IsEditAllow: rolewiseformRow.find('#isUserEdit_' + rolewiseformRow.data('product-id')).prop('checked'),
+            IsDeleteAllow: rolewiseformRow.find('#isUserDelete_' + rolewiseformRow.data('product-id')).prop('checked'),
+        };
+        formPermissions.push(objData);
+    });
+
+    var form_data = new FormData();
+    form_data.append("RolewisePermissionDetails", JSON.stringify(formPermissions));
+
+    $.ajax({
+        url: '/UserProfile/UpdateUserMultipleRolewiseFormPermission',
+        type: 'post',
+        data: form_data,
+        processData: false,
+        contentType: false,
+        dataType: 'json',
+        success: function (Result) {
+
+            if (Result.code == 200) {
+                Swal.fire({
+                    title: Result.message,
+                    icon: 'success',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'OK'
+                })
+            } else {
+                toastr.error(Result.message);
+            }
+        },
+        error: function (xhr, status, error) {
+            toastr.error(error);
+        }
+    });
+}
+function toggleUserCheckboxes(formId) {
+    var isChecked = document.getElementById("usercheckboxAll_" + formId).checked;
+    document.getElementById("isUserAdd_" + formId).checked = isChecked;
+    document.getElementById("isUserView_" + formId).checked = isChecked;
+    document.getElementById("isUserEdit_" + formId).checked = isChecked;
+    document.getElementById("isUserDelete_" + formId).checked = isChecked;
+}
+function updateUserSelectAll(formId) {
+    const isUserAdd = document.getElementById(`isUserAdd_${formId}`);
+    const isUserView = document.getElementById(`isUserView_${formId}`);
+    const isUserEdit = document.getElementById(`isUserEdit_${formId}`);
+    const isUserDelete = document.getElementById(`isUserDelete_${formId}`);
+    const usercheckboxAll = document.getElementById(`usercheckboxAll_${formId}`);
+
+    const allChecked = isUserAdd.checked && isUserView.checked && isUserEdit.checked && isUserDelete.checked;
+
+    usercheckboxAll.checked = allChecked;
+}
+function userRoleAllCheckboxes(masterCheckbox) {
+    var checkboxes = document.querySelectorAll('.form-check-input-all, .alluser-checkbox');
+    checkboxes.forEach(function (checkbox) {
+        checkbox.checked = masterCheckbox.checked;
+    });
+}
+function RoleActiveDecative(roleId) {
+
+    var isChecked = $('#flexSwitchCheckChecked_' + roleId).is(':checked');
+    var confirmationMessage = isChecked ? "Are you sure want to active this role?" : "Are you sure want to deactive this role?";
+
+    Swal.fire({
+        title: confirmationMessage,
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, enter it!",
+        cancelButtonText: "No, cancel!",
+        confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
+        cancelButtonClass: "btn btn-danger w-xs mt-2",
+        buttonsStyling: false,
+        showCloseButton: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            var formData = new FormData();
+            formData.append("RoleId", roleId);
+
+            $.ajax({
+                url: '/UserProfile/RoleActiveDecative?RoleId=' + roleId,
+                type: 'Post',
+                contentType: 'application/json;charset=utf-8;',
+                dataType: 'json',
+                success: function (Result) {
+                    siteloaderhide();
+                    if (Result.code == 200) {
+                        siteloaderhide();
+                        Swal.fire({
+                            title: isChecked ? "Active!" : "Deactive!",
+                            text: Result.message,
+                            icon: "success",
+                            confirmButtonClass: "btn btn-primary w-xs mt-2",
+                            buttonsStyling: false
+                        }).then(function () {
+                            window.location = '/UserProfile/UserRolePermission';
+                        });
+                    } else {
+                        siteloaderhide();
+                        toastr.error(Result.message);
+                    }
+
+                }
+            });
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+
+            Swal.fire(
+                'Cancelled',
+                'Role have no changes.!!😊',
+                'error'
+            ).then(function () {
+                window.location = '/UserProfile/UserRolePermission';
+            });;
+        }
+    });
+}

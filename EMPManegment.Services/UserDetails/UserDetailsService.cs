@@ -1,6 +1,8 @@
-﻿using EMPManegment.EntityModels.View_Model;
+﻿using EMPManagment.Web.Models.API;
+using EMPManegment.EntityModels.View_Model;
 using EMPManegment.EntityModels.ViewModels;
 using EMPManegment.EntityModels.ViewModels.DataTableParameters;
+using EMPManegment.EntityModels.ViewModels.FormPermissionMaster;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.Inretface.Interface.UserList;
 using EMPManegment.Inretface.Services.UserListServices;
@@ -112,6 +114,26 @@ namespace EMPManegment.Services.UserList
         public async Task<UserResponceModel> UserProfilePhoto(EmpDetailsView Profile)
         {
             return await UserList.UserProfilePhoto(Profile);
+        }
+
+        public async Task<IEnumerable<RolewiseFormPermissionModel>> GetRolewiseFormPermissionList()
+        {
+            return await UserList.GetRolewiseFormPermissionList();
+        }
+
+        public async Task<List<RolewiseFormPermissionModel>> GetUserRolewiseFormListById(Guid RoleId)
+        {
+            return await UserList.GetUserRolewiseFormListById(RoleId);
+        }
+
+        public async Task<ApiResponseModel> UpdateUserMultipleRolewiseFormPermission(List<RolewiseFormPermissionModel> UpdatedRolewiseFormPermissions)
+        {
+            return await UserList.UpdateUserMultipleRolewiseFormPermission(UpdatedRolewiseFormPermissions);
+        }
+
+        public async Task<UserResponceModel> ActiveDeactiveRole(Guid roleId)
+        {
+            return await UserList.ActiveDeactiveRole(roleId);
         }
     }
 }

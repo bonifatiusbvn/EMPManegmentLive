@@ -144,6 +144,9 @@ namespace EMPManegment.Repository.ManualInvoiceRepository
                         case "vendorname":
                             queryablemInvoiceDetails = dataTable.sortColumnDir == "asc" ? queryablemInvoiceDetails.OrderBy(e => e.VendorName) : queryablemInvoiceDetails.OrderByDescending(e => e.VendorName);
                             break;
+                        case "invoiceDate":
+                            queryablemInvoiceDetails = dataTable.sortColumnDir == "asc" ? queryablemInvoiceDetails.OrderBy(e => e.InvoiceDate) : queryablemInvoiceDetails.OrderByDescending(e => e.InvoiceDate);
+                            break;
                         case "invoiceno":
                             queryablemInvoiceDetails = dataTable.sortColumnDir == "asc" ? queryablemInvoiceDetails.OrderBy(e => e.InvoiceNo) : queryablemInvoiceDetails.OrderByDescending(e => e.InvoiceNo);
                             break;
