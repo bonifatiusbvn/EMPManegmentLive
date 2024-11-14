@@ -216,7 +216,7 @@
                                 totalqty += item.Quantity;
                                 StateTax = (item.GstAmount / 2);
                                 CenteralTax = (item.GstAmount / 2);
-                                IntegratedTax = (item.Price * item.IGst / 100);
+                                IntegratedTax = (item.Price * item.IGst  * item.Quantity / 100);
                                 TotalStateTax += StateTax;
                                 TotalCenteralTax += CenteralTax;
                                 TotalIntegratedTax += IntegratedTax;
@@ -257,46 +257,93 @@
                                 </tr>
                                 index++;
                             }
-                            <tr>
-                                <td class="border"></td>
-                                <td class="border" style="text-align: end;">SGST</td>
-                                <td class="border"></td>
-                                <td class="border"></td>
-                                <td class="border" style="text-align: end;"></td>
-                                <td class="border" style="text-align: start;"></td>
-                                @if (Model.DollarPrice != null)
-                                {
-                                    <td class="border">
-                                        <b>$@TotalStateTax?.ToString("F2") ,</b>
-                                        <br />
-                                        <span class="text-muted">>₹@((TotalStateTax * Model.DollarPrice.Value)?.ToString("0.00"))</span>
-                                    </td>
-                                }
-                                else
-                                {
-                                    <td class="border"><b>₹@TotalStateTax?.ToString("F2")</b></td>
-                                }
-                            </tr>
-                            <tr>
-                                <td class="border"></td>
-                                <td class="border" style="text-align: end;">CGST</td>
-                                <td class="border"></td>
-                                <td class="border"></td>
-                                <td class="border" style="text-align: end;"></td>
-                                <td class="border" style="text-align: start;"></td>
-                                @if (Model.DollarPrice != null)
-                                {
-                                    <td class="border">
-                                        <b>$@TotalCenteralTax?.ToString("F2") ,</b>
-                                        <br />
-                                        <span class="text-muted">₹@((TotalCenteralTax * Model.DollarPrice.Value)?.ToString("0.00"))</span>
-                                    </td>
-                                }
-                                else
-                                {
-                                    <td class="border"><b>₹@TotalCenteralTax?.ToString("F2")</b></td>
-                                }
-                            </tr>
+                            @if(TotalIntegratedTax == 0)
+                            {
+                                <tr>
+                                    <td class="border"></td>
+                                    <td class="border" style="text-align: end;">SGST</td>
+                                    <td class="border"></td>
+                                    <td class="border"></td>
+                                    <td class="border" style="text-align: end;"></td>
+                                    <td class="border" style="text-align: start;"></td>
+                                    @if (Model.DollarPrice != null)
+                                    {
+                                        <td class="border">
+                                            <b>$@TotalStateTax?.ToString("F2") ,</b>
+                                            <br />
+                                            <span class="text-muted">₹@((TotalStateTax * Model.DollarPrice.Value)?.ToString("0.00"))</span>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td class="border"><b>₹@TotalStateTax?.ToString("F2")</b></td>
+                                    }
+                                </tr>
+                                <tr>
+                                    <td class="border"></td>
+                                    <td class="border" style="text-align: end;">CGST</td>
+                                    <td class="border"></td>
+                                    <td class="border"></td>
+                                    <td class="border" style="text-align: end;"></td>
+                                    <td class="border" style="text-align: start;"></td>
+                                    @if (Model.DollarPrice != null)
+                                    {
+                                        <td class="border">
+                                            <b>$@TotalCenteralTax?.ToString("F2") ,</b>
+                                            <br />
+                                            <span class="text-muted">₹@((TotalCenteralTax * Model.DollarPrice.Value)?.ToString("0.00"))</span>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td class="border"><b>₹@TotalCenteralTax?.ToString("F2")</b></td>
+                                    }
+                                </tr>
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td class="border"></td>
+                                    <td class="border" style="text-align: end;">SGST</td>
+                                    <td class="border"></td>
+                                    <td class="border"></td>
+                                    <td class="border" style="text-align: end;"></td>
+                                    <td class="border" style="text-align: start;"></td>
+                                    @if (Model.DollarPrice != null)
+                                    {
+                                        <td class="border">
+                                            <b>$0.00 ,</b>
+                                            <br />
+                                            <span class="text-muted">₹0.00</span>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td class="border"><b>₹0.00</b></td>
+                                    }
+                                </tr>
+                                <tr>
+                                    <td class="border"></td>
+                                    <td class="border" style="text-align: end;">CGST</td>
+                                    <td class="border"></td>
+                                    <td class="border"></td>
+                                    <td class="border" style="text-align: end;"></td>
+                                    <td class="border" style="text-align: start;"></td>
+                                    @if (Model.DollarPrice != null)
+                                    {
+                                        <td class="border">
+                                            <b>$0.00 ,</b>
+                                            <br />
+                                            <span class="text-muted">₹0.00 </span>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td class="border"><b>₹0.00</b></td>
+                                    }
+                                </tr>
+                            }
+
                             @if (Model.ManualInvoiceDetails.Any(a => a.IGst > 0))
                             {
                                 <tr>
@@ -400,13 +447,13 @@
                                     groupSubTotal += subTotal;
                                     groupCenteralTax += GrpCgst;
                                     groupStateTax += GrpSgst;
-                                    groupTotalIntegratedTax += IntegratedTax;
+                                    groupIntegratedTax += IntegratedTax;
                                 }
 
                                 TotalofSubtotal += groupSubTotal;
                                 groupTotalCenteralTax += groupCenteralTax;
                                 groupTotalStateTax += groupStateTax;
-                                TotalIntegratedTax += groupIntegratedTax;
+                                
 
                                 <tr>
                                     <td class="border">@group.First().Hsn</td>
@@ -424,32 +471,66 @@
                                     }
 
                                     <td class="border">@(group.Key / 2) %</td>
-                                    @if (Model.DollarPrice != null)
+
+                                    @if(TotalIntegratedTax == 0)
                                     {
-                                        <td class="border">
-                                            $@groupCenteralTax?.ToString("F2") ,
-                                            <br />
-                                            <span class="text-muted">₹@((groupCenteralTax * Model.DollarPrice.Value)?.ToString("0.00"))</span>
-                                        </td>
+                                        @if (Model.DollarPrice != null)
+                                        {
+                                            <td class="border">
+                                                $@groupCenteralTax?.ToString("F2") ,
+                                                <br />
+                                                <span class="text-muted">₹@((groupCenteralTax * Model.DollarPrice.Value)?.ToString("0.00"))</span>
+                                            </td>
+                                        }
+                                        else
+                                        {
+                                            <td class="border">₹@groupCenteralTax?.ToString("F2")</td>
+                                        }
+
+                                        <td class="border">@(group.Key / 2) %</td>
+                                        @if (Model.DollarPrice != null)
+                                        {
+                                            <td class="border">
+                                                $@groupStateTax?.ToString("F2") ,
+                                                <br />
+                                                <span class="text-muted">₹@((groupStateTax * Model.DollarPrice.Value)?.ToString("0.00"))</span>
+                                            </td>
+                                        }
+                                        else
+                                        {
+                                            <td class="border">₹@groupStateTax?.ToString("F2")</td>
+                                        }
                                     }
                                     else
                                     {
-                                        <td class="border">₹@groupCenteralTax?.ToString("F2")</td>
+                                        @if (Model.DollarPrice != null)
+                                        {
+                                            <td class="border">
+                                                $0.00,
+                                                <br />
+                                                <span class="text-muted">₹0.00</span>
+                                            </td>
+                                        }
+                                        else
+                                        {
+                                            <td class="border">₹0.00</td>
+                                        }
+
+                                        <td class="border">@(group.Key / 2) %</td>
+                                        @if (Model.DollarPrice != null)
+                                        {
+                                            <td class="border">
+                                                $0.00 ,
+                                                <br />
+                                                <span class="text-muted">₹0.00</span>
+                                            </td>
+                                        }
+                                        else
+                                        {
+                                            <td class="border">₹0.00</td>
+                                        }
                                     }
 
-                                    <td class="border">@(group.Key / 2) %</td>
-                                    @if (Model.DollarPrice != null)
-                                    {
-                                        <td class="border">
-                                            $@groupStateTax?.ToString("F2") ,
-                                            <br />
-                                            <span class="text-muted">₹@((groupStateTax * Model.DollarPrice.Value)?.ToString("0.00"))</span>
-                                        </td>
-                                    }
-                                    else
-                                    {
-                                        <td class="border">₹@groupStateTax?.ToString("F2")</td>
-                                    }
 
                                     @if (group.Any(a => a.IGst > 0))
                                     {
@@ -457,28 +538,46 @@
                                         @if (Model.DollarPrice != null)
                                         {
                                             <td class="border">
-                                                $@groupIntegratedTax?.ToString("F2") ,
+                                                $@TotalIntegratedTax?.ToString("F2") ,
                                                 <br />
-                                                <span class="text-muted">₹@((groupIntegratedTax * Model.DollarPrice.Value)?.ToString("0.00"))</span>
+                                                <span class="text-muted">₹@((TotalIntegratedTax * Model.DollarPrice.Value)?.ToString("0.00"))</span>
                                             </td>
                                         }
                                         else
                                         {
-                                            <td class="border">₹@groupIntegratedTax?.ToString("F2")</td>
+                                            <td class="border">₹@TotalIntegratedTax?.ToString("F2")</td>
                                         }
 
                                     }
-                                    @if (Model.DollarPrice != null)
+                                    @if(TotalIntegratedTax == 0)
                                     {
-                                        <td class="border">
-                                            <b>$@((groupCenteralTax + groupStateTax + groupIntegratedTax)?.ToString("F2")) ,</b>
-                                            <br />
-                                            <span class="text-muted">₹@(((groupCenteralTax + groupStateTax + groupIntegratedTax) * Model.DollarPrice.Value)?.ToString("0.00"))</span>
-                                        </td>
+                                        @if (Model.DollarPrice != null)
+                                        {
+                                            <td class="border">
+                                                <b>$@((groupCenteralTax + groupStateTax + groupIntegratedTax)?.ToString("F2")) ,</b>
+                                                <br />
+                                                <span class="text-muted">₹@(((groupCenteralTax + groupStateTax + groupIntegratedTax) * Model.DollarPrice.Value)?.ToString("0.00"))</span>
+                                            </td>
+                                        }
+                                        else
+                                        {
+                                            <td class="border"><b>₹@((groupCenteralTax + groupStateTax + groupIntegratedTax)?.ToString("F2"))</b></td>
+                                        }
                                     }
                                     else
                                     {
-                                        <td class="border"><b>₹@((groupCenteralTax + groupStateTax + groupIntegratedTax)?.ToString("F2"))</b></td>
+                                        @if (Model.DollarPrice != null)
+                                        {
+                                            <td class="border">
+                                                <b>$@((TotalIntegratedTax)?.ToString("F2")) ,</b>
+                                                <br />
+                                                <span class="text-muted">₹@((( TotalIntegratedTax) * Model.DollarPrice.Value)?.ToString("0.00"))</span>
+                                            </td>
+                                        }
+                                        else
+                                        {
+                                            <td class="border"><b>₹@((TotalIntegratedTax)?.ToString("F2"))</b></td>
+                                        }
                                     }
 
                                 </tr>
@@ -500,31 +599,65 @@
                                 }
 
                                 <td class="border"></td>
-                                @if (Model.DollarPrice != null)
-                                {
-                                    <td class="border">
-                                        <b>$@groupTotalCenteralTax?.ToString("F2") ,</b>
-                                        <br />
-                                        <span class="text-muted">₹@((groupTotalCenteralTax * Model.DollarPrice.Value)?.ToString("0.00"))</span>
-                                    </td>
-                                }
-                                else
-                                {
-                                    <td class="border"><b>₹@groupTotalCenteralTax?.ToString("F2")</b></td>
-                                }
 
-                                <td class="border"></td>
-                                @if (Model.DollarPrice != null)
+                                @if(TotalIntegratedTax == 0)
                                 {
-                                    <td class="border">
-                                        <b>$@groupTotalStateTax?.ToString("F2") ,</b>
-                                        <br />
-                                        <span class="text-muted">₹@((groupTotalStateTax * Model.DollarPrice.Value)?.ToString("0.00"))</span>
-                                    </td>
+                                    @if (Model.DollarPrice != null)
+                                    {
+                                        <td class="border">
+                                            <b>$@groupTotalCenteralTax?.ToString("F2") ,</b>
+                                            <br />
+                                            <span class="text-muted">₹@((groupTotalCenteralTax * Model.DollarPrice.Value)?.ToString("0.00"))</span>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td class="border"><b>₹@groupTotalCenteralTax?.ToString("F2")</b></td>
+                                    }
+
+                                    <td class="border"></td>
+                                    @if (Model.DollarPrice != null)
+                                    {
+                                        <td class="border">
+                                            <b>$@groupTotalStateTax?.ToString("F2") ,</b>
+                                            <br />
+                                            <span class="text-muted">₹@((groupTotalStateTax * Model.DollarPrice.Value)?.ToString("0.00"))</span>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td class="border"><b>₹@groupTotalStateTax?.ToString("F2")</b></td>
+                                    }
                                 }
                                 else
                                 {
-                                    <td class="border"><b>₹@groupTotalStateTax?.ToString("F2")</b></td>
+                                    @if (Model.DollarPrice != null)
+                                    {
+                                        <td class="border">
+                                            <b>$0.00 ,</b>
+                                            <br />
+                                            <span class="text-muted">₹0.00</span>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td class="border"><b>₹0.00</b></td>
+                                    }
+
+                                    <td class="border"></td>
+                                    @if (Model.DollarPrice != null)
+                                    {
+                                        <td class="border">
+                                            <b>$0.00,</b>
+                                            <br />
+                                            <span class="text-muted">₹0.00</span>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td class="border"><b>₹0.00</b></td>
+                                    }
+
                                 }
 
                                 @if (firstItem.ManualInvoiceDetails.Any(a => a.IGst > 0))
@@ -533,28 +666,47 @@
                                     @if (Model.DollarPrice != null)
                                     {
                                         <td class="border">
-                                            <b>$@groupTotalIntegratedTax?.ToString("F2") ,</b>
+                                            <b>$@TotalIntegratedTax?.ToString("F2") ,</b>
                                             <br />
-                                            <span class="text-muted">₹@((groupTotalIntegratedTax * Model.DollarPrice.Value)?.ToString("0.00"))</span>
+                                            <span class="text-muted">₹@((TotalIntegratedTax * Model.DollarPrice.Value)?.ToString("0.00"))</span>
                                         </td>
                                     }
                                     else
                                     {
-                                        <td class="border"><b>₹@groupTotalIntegratedTax?.ToString("F2")</b></td>
+                                        <td class="border"><b>₹@TotalIntegratedTax?.ToString("F2")</b></td>
                                     }
 
                                 }
-                                @if (Model.DollarPrice != null)
+
+                                @if(TotalIntegratedTax == 0)
                                 {
-                                    <td class="border">
-                                        <b>$@((groupTotalCenteralTax + groupTotalStateTax + groupTotalIntegratedTax)?.ToString("F2")) ,</b>
-                                        <br />
-                                        <span class="text-muted">₹@(((groupTotalCenteralTax + groupTotalStateTax + groupTotalIntegratedTax) * Model.DollarPrice.Value)?.ToString("0.00"))</span>
-                                    </td>
+                                    @if (Model.DollarPrice != null)
+                                    {
+                                        <td class="border">
+                                            <b>$@((groupTotalCenteralTax + groupTotalStateTax + groupTotalIntegratedTax)?.ToString("F2")) ,</b>
+                                            <br />
+                                            <span class="text-muted">₹@(((groupTotalCenteralTax + groupTotalStateTax + groupTotalIntegratedTax) * Model.DollarPrice.Value)?.ToString("0.00"))</span>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td class="border"><b>₹@((groupTotalCenteralTax + groupTotalStateTax + groupTotalIntegratedTax)?.ToString("F2"))</b></td>
+                                    }
                                 }
                                 else
                                 {
-                                    <td class="border"><b>₹@((groupTotalCenteralTax + groupTotalStateTax + groupTotalIntegratedTax)?.ToString("F2"))</b></td>
+                                    @if (Model.DollarPrice != null)
+                                    {
+                                        <td class="border">
+                                            <b>$@(( TotalIntegratedTax)?.ToString("F2")) ,</b>
+                                            <br />
+                                            <span class="text-muted">₹@((( TotalIntegratedTax) * Model.DollarPrice.Value)?.ToString("0.00"))</span>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td class="border"><b>₹@((TotalIntegratedTax)?.ToString("F2"))</b></td>
+                                    }
                                 }
 
                             </tr>
