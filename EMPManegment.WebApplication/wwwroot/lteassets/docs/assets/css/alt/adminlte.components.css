@@ -2818,7 +2818,7 @@ body.text-sm .input-group-text {
 }
 
 .custom-control-input-teal:focus:not(:checked) ~ .custom-control-label::before {
-  border-color: #7eeaca;
+  border-color: #16989a !important;
 }
 
 .custom-control-input-teal:not(:disabled):active ~ .custom-control-label::before {
@@ -5399,7 +5399,7 @@ body.text-sm .input-group-text {
 }
 
 .dark-mode .custom-control-input-teal:focus:not(:checked) ~ .custom-control-label::before {
-  border-color: #7eeaca;
+  border-color: #16989a !important;
 }
 
 .dark-mode .custom-control-input-teal:not(:disabled):active ~ .custom-control-label::before {

@@ -1849,11 +1849,11 @@ select.form-control-sm ~ .select2-container--default .select2-selection--multipl
 }
 
 .select2-teal + .select2-container--default.select2-container--open .select2-selection--single {
-  border-color: #7eeaca;
+  border-color: #16989a !important;
 }
 
 .select2-teal + .select2-container--default.select2-container--focus .select2-selection--single {
-  border-color: #7eeaca;
+  border-color: #16989a !important;
 }
 
 .select2-container--default .select2-teal.select2-dropdown .select2-search__field:focus,
@@ -1862,7 +1862,7 @@ select.form-control-sm ~ .select2-container--default .select2-selection--multipl
 .select2-teal .select2-container--default.select2-dropdown .select2-search__field:focus,
 .select2-teal .select2-container--default .select2-dropdown .select2-search__field:focus,
 .select2-teal .select2-container--default .select2-search--inline .select2-search__field:focus {
-  border: 1px solid #7eeaca;
+  border: 1px solid #16989a !important;
 }
 
 .select2-container--default .select2-teal .select2-results__option--highlighted,
@@ -1874,13 +1874,13 @@ select.form-control-sm ~ .select2-container--default .select2-selection--multipl
 .select2-container--default .select2-teal .select2-results__option--highlighted[aria-selected], .select2-container--default .select2-teal .select2-results__option--highlighted[aria-selected]:hover,
 .select2-teal .select2-container--default .select2-results__option--highlighted[aria-selected],
 .select2-teal .select2-container--default .select2-results__option--highlighted[aria-selected]:hover {
-  background-color: #1ebc8d;
+  background-color: #16989a !important;
   color: #fff;
 }
 
 .select2-container--default .select2-teal .select2-selection--multiple:focus,
 .select2-teal .select2-container--default .select2-selection--multiple:focus {
-  border-color: #7eeaca;
+  border-color: #16989a !important;
 }
 
 .select2-container--default .select2-teal .select2-selection--multiple .select2-selection__choice,
@@ -1902,7 +1902,7 @@ select.form-control-sm ~ .select2-container--default .select2-selection--multipl
 
 .select2-container--default .select2-teal.select2-container--focus .select2-selection--multiple,
 .select2-teal .select2-container--default.select2-container--focus .select2-selection--multiple {
-  border-color: #7eeaca;
+  border-color: #16989a !important;
 }
 
 .select2-cyan + .select2-container--default.select2-container--open .select2-selection--single {
@@ -3433,11 +3433,11 @@ select.form-control-sm ~ .select2-container--default .select2-selection--multipl
 }
 
 .dark-mode .select2-teal + .select2-container--default.select2-container--open .select2-selection--single {
-  border-color: #7eeaca;
+  border-color: #16989a !important;
 }
 
 .dark-mode .select2-teal + .select2-container--default.select2-container--focus .select2-selection--single {
-  border-color: #7eeaca;
+  border-color: #16989a !important;
 }
 
 .select2-container--default .dark-mode .select2-teal.select2-dropdown .select2-search__field:focus,
@@ -3446,7 +3446,7 @@ select.form-control-sm ~ .select2-container--default .select2-selection--multipl
 .dark-mode .select2-teal .select2-container--default.select2-dropdown .select2-search__field:focus,
 .dark-mode .select2-teal .select2-container--default .select2-dropdown .select2-search__field:focus,
 .dark-mode .select2-teal .select2-container--default .select2-search--inline .select2-search__field:focus {
-  border: 1px solid #7eeaca;
+  border: 1px solid #16989a !important;
 }
 
 .select2-container--default .dark-mode .select2-teal .select2-results__option--highlighted,
@@ -3458,13 +3458,13 @@ select.form-control-sm ~ .select2-container--default .select2-selection--multipl
 .select2-container--default .dark-mode .select2-teal .select2-results__option--highlighted[aria-selected], .select2-container--default .dark-mode .select2-teal .select2-results__option--highlighted[aria-selected]:hover,
 .dark-mode .select2-teal .select2-container--default .select2-results__option--highlighted[aria-selected],
 .dark-mode .select2-teal .select2-container--default .select2-results__option--highlighted[aria-selected]:hover {
-  background-color: #1ebc8d;
+  background-color: #16989a !important;
   color: #fff;
 }
 
 .select2-container--default .dark-mode .select2-teal .select2-selection--multiple:focus,
 .dark-mode .select2-teal .select2-container--default .select2-selection--multiple:focus {
-  border-color: #7eeaca;
+  border-color: #16989a !important;
 }
 
 .select2-container--default .dark-mode .select2-teal .select2-selection--multiple .select2-selection__choice,
@@ -3486,7 +3486,7 @@ select.form-control-sm ~ .select2-container--default .select2-selection--multipl
 
 .select2-container--default .dark-mode .select2-teal.select2-container--focus .select2-selection--multiple,
 .dark-mode .select2-teal .select2-container--default.select2-container--focus .select2-selection--multiple {
-  border-color: #7eeaca;
+  border-color: #16989a !important;
 }
 
 .dark-mode .select2-cyan + .select2-container--default.select2-container--open .select2-selection--single {

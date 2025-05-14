@@ -1,15 +1,9 @@
 ﻿
+
+GetFormList();
+
 $(document).ready(function () {
-    GetFormList();
-    $('#dropdownButton').click(function () {
-        var dropdown = $('#customDropdown');
-        if (dropdown.is(':visible')) {
-            dropdown.hide();
-        } else {
-            dropdown.show();
-            GetUserRoleList();
-        }
-    });
+    // User dropdown functionality
     $('#userdropdownButton').click(function () {
         var dropdown = $('#usercustomDropdown');
         if (dropdown.is(':visible')) {
@@ -18,13 +12,7 @@ $(document).ready(function () {
             dropdown.show();
         }
     });
-    $(document).on('click', '.Role-dropdown-item-custom', function () {
-        var selectedText = $(this).text();
-        var selectedValue = $(this).data('value');
-        $('#dropdownButton').text(selectedText).attr('data-selected-value', selectedValue);
-        $('#customDropdown').hide();
-        EditRoleWiseFormDetails(selectedValue);
-    });
+
     $(document).on('click', '.User-dropdown-item-custom', function () {
         var selectedText = $(this).text();
         var selectedValue = $(this).data('value');
@@ -32,28 +20,37 @@ $(document).ready(function () {
         $('#usercustomDropdown').hide();
         EditUserFormDetails(selectedValue);
     });
+
     $(document).click(function (event) {
-        if (!$(event.target).closest('#dropdownButton').length && !$(event.target).closest('#customDropdown').length) {
-            $('#customDropdown').hide();
-        }
-    });
-    $(document).click(function (event) {
-        if (!$(event.target).closest('#userdropdownButton').length && !$(event.target).closest('#usercustomDropdown').length) {
+        if (!$(event.target).closest('#userdropdownButton').length &&
+            !$(event.target).closest('#usercustomDropdown').length) {
             $('#usercustomDropdown').hide();
         }
     });
-    function GetUserRoleList() {
-        $.ajax({
+
+    $('#ddlRoleWiseFormPermission').select2({
+        placeholder: 'Select Role',
+        height: '100px',
+        allowClear: true,
+        ajax: {
             url: '/UserProfile/RolewisePermissionListAction',
-            success: function (result) {
-                var dropdown = $('#customDropdown');
-                dropdown.empty();
-                $.each(result, function (i, data) {
-                    dropdown.append('<div class="Role-dropdown-item-custom dropdown-item" data-value="' + data.roleId + '">' + data.role + '</div>');
-                });
-            }
-        });
-    }
+            dataType: 'json',
+            delay: 250,
+            processResults: function (data) {
+                return {
+                    results: data.map(item => ({
+                        id: item.roleId,
+                        text: item.role
+                    }))
+                };
+            },
+        }
+    });
+
+    $('#ddlRoleWiseFormPermission').on('select2:select', function (e) {
+        var selectedValue = e.params.data.id;
+        EditRoleWiseFormDetails(selectedValue);
+    });
 
     function EditRoleWiseFormDetails(roleId) {
         var RoleId = roleId
@@ -73,8 +70,12 @@ $(document).ready(function () {
             },
         });
     }
-
 });
+
+
+
+
+
 function EditUserFormDetails(userId) {
     var UserId = userId
     $.ajax({

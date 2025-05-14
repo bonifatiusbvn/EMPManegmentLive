@@ -26371,7 +26371,7 @@ a.text-muted:hover {
 .accent-teal .custom-select:focus,
 .accent-teal .custom-control-input:focus:not(:checked) ~ .custom-control-label::before,
 .accent-teal .custom-file-input:focus ~ .custom-file-label {
-  border-color: #7eeaca;
+  border-color: #16989a !important;
 }
 
 .accent-teal .page-item .page-link {
@@ -29660,7 +29660,7 @@ a.text-muted:hover {
 .dark-mode .accent-teal .custom-select:focus,
 .dark-mode .accent-teal .custom-control-input:focus:not(:checked) ~ .custom-control-label::before,
 .dark-mode .accent-teal .custom-file-input:focus ~ .custom-file-label {
-  border-color: #7eeaca;
+  border-color: #16989a !important;
 }
 
 .dark-mode .accent-teal .page-item .page-link {

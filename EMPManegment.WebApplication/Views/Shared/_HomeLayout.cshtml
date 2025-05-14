@@ -35,8 +35,11 @@
     <!-- Ekko Lightbox -->
     <link rel="stylesheet" href="~/lteassets/plugins/ekko-lightbox/ekko-lightbox.css">
     <link rel="stylesheet" href="~/lteassets/plugins/toastr/toastr.min.css">
-    <link href="~/lteassets/plugins/select2/css/select2.min.css" rel="stylesheet" />
-    <link href="~/lteassets/plugins/select2-bootstrap4-theme/select2-bootstrap4.css" rel="stylesheet" />
+
+<link href="~/assets/plugins/select2/css/select2.min.css" rel="stylesheet" />
+<link href="~/assets/plugins/select2/css/select2.css" rel="stylesheet" />
+<link href="~/assets/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css" rel="stylesheet" />
+<link href="~/assets/plugins/select2-bootstrap4-theme/select2-bootstrap4.css" rel="stylesheet" />
     <!-- DataTables -->
     <!--datatable css-->
     <link rel="stylesheet" href="~/cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" />
@@ -687,7 +690,7 @@
     <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
     <!-- Bootstrap -->
     <script src="~/lteassets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="~/lteassets/plugins/select2/js/select2.min.js"></script>
+
     <script src="~/lteassets/plugins/moment/moment.min.js"></script>
     <script src="https://code.jquery.com/ui/1.13.3/jquery-ui.js"></script>
     <!-- overlayScrollbars -->
@@ -754,7 +757,10 @@
     <!-- App js -->
     <script src="~/js/loader.js" asp-append-version="true"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/5.0.9/signalr.min.js"></script>
-
+<script src="~/assets/plugins/select2/js/select2.full.min.js"></script>
+<script src="~/assets/plugins/select2/js/select2.full.js"></script>
+<script src="~/assets/plugins/select2/js/select2.min.js"></script>
+<script src="~/assets/plugins/select2/js/select2.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

@@ -19,8 +19,8 @@
 </style>
 <div class="row" style="margin-top:80px;">
     <div class="col-12">
-        <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-            <h4 class="mb-sm-0">Rolewise Form Permission</h4>
+        <div class="page-title-box d-sm-flex align-items-center justify-content-between content-header">
+            <h4 class="fm-header mb-sm-0">Rolewise Form Permission</h4>
 
             <div class="page-title-right">
                 <ol class="breadcrumb m-0">
@@ -35,9 +35,9 @@
 <!-- end page title -->
 <div id="createRoleModal" class="modal fade flip" tabindex="-1" role="dialog" aria-labelledby="createRoleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
-        <div class="modal-content">
+        <div class="modal-content fm-form">
             <form id="addUserRole">
-                <div class="modal-header bg-primary-subtle p-3">
+                <div class="modal-header bg-teal p-3">
                     <h5 class="modal-title" id="createRoleModalLabel">Create Role</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
@@ -53,7 +53,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-success" onclick="validateAndCreateRole()">Create</button>
+                    <button type="button" class="btn button-bg-teal" onclick="validateAndCreateRole()">Create</button>
                 </div>
             </form>
         </div>
@@ -63,37 +63,37 @@
 <div class="col-lg-12">
     <div class="card">
         <div class="card-header">
-            <div class="d-flex align-items-center">
-                <div class="card-title mb-0 flex-grow-1 text-info">
-                    <button id="dropdownButton" class="btn btn-primary form-select" type="button" aria-haspopup="true" aria-expanded="false" style="width: 180px;">
-                        Select-Role
-                    </button>
-                    <div id="customDropdown" class="dropdown-menu" style="display: none;width: 180px;">
+            <div class="row align-items-center">
+                <div class="col-12 col-md-6 col-lg-2 mb-2 mb-md-0">
+                    <select class="form-control select2 select2-maroon"
+                            data-dropdown-css-class="select2-maroon"
+                            id="ddlRoleWiseFormPermission"
+                            name="ddlRoleWiseFormPermission">
+                    </select>
+                </div>
+
+                @if (UserSession.FormPermisionData.Any(a => a.FormName == "Form Permission" && a.Add))
+                {
+                    <div class="col-12 col-md-6 col-lg-10 text-md-end mt-2 mt-md-0">
+                        <button type="button" class="btn button-bg-teal" data-bs-toggle="modal" data-bs-target="#createRoleModal" onclick="clearTextRoleName()"><i class="ri-add-line align-bottom me-1"></i>New Role</button>
                     </div>
-                </div>
-                <div class="flex-shrink-0">
-                    <form class="position-relative">
-                        @if (UserSession.FormPermisionData.Any(a => a.FormName == "Form Permission" && (a.Add == true)))
-                        {
-                            <button type="button" class="btn btn-block btn-info" data-bs-toggle="modal" data-bs-target="#createRoleModal" onclick="clearTextRoleName()"><i class="ri-add-line align-bottom me-1"></i>New Role</button>
-                        }
-                    </form>
-                </div>
+                }
             </div>
         </div>
         <div class="card-body">
-            <div class="table-responsive" style="position: relative; height: 600px; overflow: auto;">
-                <table class="table table-bordered dt-responsive nowrap table-striped align-middle dataTable no-footer dtr-inline">
-                    <thead class="btn-light text-muted" style="position: sticky; top: 0; z-index: 1;">
-                        <tr class="btn-info">
+            <div class="table-responsive" style="position: relative; height: 550px; overflow: auto;">
+                <table class="table table-dt table-bordered table-striped align-middle dtr-inline">
+                    <thead>
+                        <tr>
                             <th>Form Name</th>
                             <th>Add</th>
                             <th>View</th>
                             <th>Edit</th>
                             <th>Delete</th>
                             <th>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="checkboxAll" onclick="toggleAllCheckboxes(this)">
+                                <div class="custom-control custom-switch">
+                                    <input class="custom-control-input" type="checkbox" id="checkboxAll" onclick="toggleAllCheckboxes(this)">
+                                    <label class="custom-control-label" for="checkboxAll"></label>
                                 </div>
                             </th>
                         </tr>
@@ -101,9 +101,11 @@
                     <tbody id="dveditRolePermissionForm">
                     </tbody>
                 </table>
-                <div class="text-end" id="updatebtn" style="display:none;">
-                    <button type="button" class="btn btn-lg btn-primary" onclick="UpdateRolewiseFormPermission()" id="btnUserRolewiseForm" style="width: 160px;height: 50px;">Update</button>
-                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="text-end" id="updatebtn" style="display:none;">
+                <button type="button" class=" btn button-bg-teal" onclick="UpdateRolewiseFormPermission()" id="btnUserRolewiseForm" style="width: 160px;height: 50px;">Update</button>
             </div>
         </div>
     </div>

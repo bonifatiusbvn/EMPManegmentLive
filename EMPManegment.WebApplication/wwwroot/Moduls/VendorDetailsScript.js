@@ -38,7 +38,7 @@ $(document).ready(function () {
                         profileImageHtml = '<div class="flex-shrink-0 avatar-xs me-2">' +
                             '<div class="avatar-title ' + randomColor.bgClass + ' ' + randomColor.textClass + ' rounded-circle" style="height: 40px; width: 40px; border-radius: 50%;">' + initials.toUpperCase() + '</div></div>';
                     }
-                    return '<a href="/Vendor/CreateVendor?Vid=' + params.data.vid + '&viewMode=true" class="link-primary" style="display: flex; align-items: center;">' + profileImageHtml + '<span style="margin-left: 5px;">' + params.data.vendorCompany + '</span></a>';
+                    return '<a href="/Vendor/CreateVendor?Vid=' + params.data.vid + '&viewMode=true" class="link-primary" style="display: flex; align-items: center;">' + profileImageHtml + '<span style="margin-left: 10px;color: #16989A !important;">' + params.data.vendorCompany + '</span></a>';
                 }
             },
             {

@@ -8,8 +8,8 @@
 
 <div class="row" style="margin-top:80px;">
     <div class="col-12">
-        <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-            <h4 class="mb-sm-0">User Form Permission</h4>
+        <div class="page-title-box d-sm-flex align-items-center justify-content-between content-header">
+            <h4 class="fm-header mb-sm-0">User Form Permission</h4>
 
             <div class="page-title-right">
                 <ol class="breadcrumb m-0">
@@ -53,6 +53,24 @@
 <div class="col-lg-12">
     <div class="card">
         <div class="card-header">
+            <div class="row align-items-center">
+                <div class="col-12 col-md-6 col-lg-4 mb-2 mb-md-0">
+                    <select class="form-control select2 select2-teal"
+                            data-dropdown-css-class="select2-teal"
+                            id="ddlUserRole"
+                            name="ddlUserRole">
+                    </select>
+                </div>
+
+                @if (UserSession.FormPermisionData.Any(a => a.FormName == "Company List" && a.Add))
+                {
+                    <div class="col-12 col-md-6 col-lg-8 text-md-end mt-2 mt-md-0">
+                        <button type="button" class="btn button-bg-teal btn-md" data-bs-toggle="modal" data-bs-target="#createUserModal" onclick="clearTextUserName()" style="margin-top:0px;"><i class="ri-add-line align-bottom me-1"></i>UserPermission</button>
+                    </div>
+                }
+            </div>
+        </div>
+        @* <div class="card-header">
             <div class="d-flex align-items-center">
                 <div class="card-title mb-0 flex-grow-1 text-info">
                     <button id="userdropdownButton" class="btn btn-primary form-select" type="button" aria-haspopup="true" aria-expanded="false" style="width: 220px;">
@@ -71,7 +89,7 @@
                     </form>
                 </div>
             </div>
-        </div>
+        </div> *@
         <div class="card-body">
             <div class="table-responsive" style="position: relative; height: 600px; overflow: auto;">
                 <table class="table table-bordered dt-responsive nowrap table-striped align-middle dataTable no-footer dtr-inline">
