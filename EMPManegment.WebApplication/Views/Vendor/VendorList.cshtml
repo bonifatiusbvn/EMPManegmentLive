@@ -18,6 +18,11 @@
             margin-left: 65px;
         }
     }
+
+    .ag-theme-teal .ag-header {
+        background-color: #16989A;
+        color: white;
+    }
 </style>
 <!-- start page title -->
 <div class="row" style="margin-top:80px;">
@@ -40,59 +45,36 @@
     <div class="col-lg-12">
         <div class="card">
             <div class="card-header">
-                <div class="d-flex align-items-center">
-                    <h5 class="card-title mb-0 flex-grow-1">Vendor List</h5>
-                    @if (UserSession.FormPermisionData.Any(a => a.FormName == "Vendor List" && (a.Add == true)))
+                <div class="row align-items-center">
+                    <div class="col-12 col-md-6 col-lg-4 mb-2 mb-md-0">
+                        <input type="text"
+                               class="form-control"
+                               id="txtVendorSearch"
+                               placeholder="Search..."
+                               aria-label="Search Vendor" />
+                    </div>
+
+                    @if (UserSession.FormPermisionData.Any(a => a.FormName == "Vendor List" && a.Add))
                     {
-                        <div class="flex-shrink-0">
-                            <div class="d-flex flex-wrap gap-2">
-                                <a class="btn btn-block btn-info btn-md CreateVendorButton" href="/Vendor/CreateVendor"><i class="ri-add-fill me-1 align-bottom"></i>Vendor</a>
-                            </div>
+                        <div class="col-12 col-md-6 col-lg-8 text-md-end mt-2 mt-md-0">
+                            <a href="/Vendor/CreateVendor"
+                               class="btn btn-info btn-md CreateVendorButton">
+                                <i class="ri-add-fill me-1 align-bottom"></i> Add Vendor
+                            </a>
                         </div>
                     }
                 </div>
             </div>
-            <div class="card-body">
-                <div class="listjs-table">
-                    <div class="table-responsive">
-                        <table id="VendorTableData" class="table table-bordered dt-responsive nowrap table-striped align-middle dataTable no-footer dtr-inline">
-                            <thead class="btn-info">
-                                <tr>
-                                    <th>CompanyName</th>
-                                    <th>VendorName</th>
-                                    <th>CompanyContact</th>
-                                    <th>CompanyEmail</th>
-                                    @if (UserSession.FormPermisionData.Any(a => a.FormName == "Vendor List" && (a.Edit == true)))
-                                    {
-                                        <th>Actions</th>
-                                    }
-                                </tr>
-                            </thead>
-                            <tbody>
-                            </tbody>
-                        </table>
 
-                        <div class="noresult" style="display: none">
-                            <div class="text-center">
-                                <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#25a0e2,secondary:#00bd9d" style="width:75px;height:75px">
-                                </lord-icon>
-                                <h5 class="mt-2">Sorry! No Result Found</h5>
-                                <p class="text-muted mb-0">
-                                    We've searched more than 150+ contacts We did not find any
-                                    contacts for you search.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div class="card-body">
+                <div id="VendorTable" class="ag-theme-teal" style="height: 600px; width: 100%;"></div>
             </div>
         </div>
     </div>
 </div>
 
-
 <script type="text/javascript">
-    var userPermissions = '@Html.Raw(Json.Serialize(UserSession.FormPermisionData))';
+    window.userFormPermissions = @Html.Raw(Json.Serialize(UserSession.FormPermisionData));
 </script>
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>

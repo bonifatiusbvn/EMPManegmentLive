@@ -2,86 +2,150 @@
     $('#VendorDetailsModel').modal('hide');
 });
 
-var datas = userPermissions
-$(document).ready(function () {
-    function data(datas) {
-        var userPermission = datas;
-        GetAllVendorData(userPermission);
-    }
-    function GetAllVendorData(userPermission) {
-        var userPermissionArray = JSON.parse(userPermission);
-        var canEdit = userPermissionArray.some(permission => permission.formName === "Vendor List" && permission.edit);
-        var colorClasses = [
-            { bgClass: 'bg-primary-subtle', textClass: 'text-primary' },
-            { bgClass: 'bg-secondary-subtle', textClass: 'text-secondary' },
-            { bgClass: 'bg-success-subtle', textClass: 'text-success' },
-            { bgClass: 'bg-info-subtle', textClass: 'text-info' },
-            { bgClass: 'bg-warning-subtle', textClass: 'text-warning' },
-            { bgClass: 'bg-danger-subtle', textClass: 'text-danger' },
-            { bgClass: 'bg-dark-subtle', textClass: 'text-dark' }
-        ];
+var Formdata = window.userFormPermissions || 0;
 
-        var columns = [
+let VendorGridOptions = [];
+$(document).ready(function () {
+
+    VendorGridOptions = {
+        rowHeight: 50,
+        columnDefs: [
             {
-                "data": "vendorCompany", "name": "VendorCompany",
-                "render": function (data, type, full) {
+                headerName: "Company Name",
+                field: "vendorCompany",
+                sortable: true,
+                filter: true,
+                cellRenderer: function (params) {
+                    if (!params.data || !params.data.vid) {
+                        return '';
+                    }
+                    var colorClasses = [
+                        { bgClass: 'bg-primary-subtle', textClass: 'text-primary' },
+                        { bgClass: 'bg-secondary-subtle', textClass: 'text-secondary' },
+                        { bgClass: 'bg-success-subtle', textClass: 'text-success' },
+                        { bgClass: 'bg-info-subtle', textClass: 'text-info' },
+                        { bgClass: 'bg-warning-subtle', textClass: 'text-warning' },
+                        { bgClass: 'bg-danger-subtle', textClass: 'text-danger' },
+                        { bgClass: 'bg-dark-subtle', textClass: 'text-dark' }
+                    ];
                     var profileImageHtml;
-                    if (full.vendorCompanyLogo && full.vendorCompanyLogo.trim() !== '') {
-                        profileImageHtml = '<img src="/Content/Image/' + full.vendorCompanyLogo + '" style="height: 40px; width: 40px; border-radius: 50%;" ' +
+                    if (params.data.vendorCompanyLogo && params.data.vendorCompanyLogo.trim() !== '') {
+                        profileImageHtml = '<img src="/Content/Image/' + params.data.vendorCompanyLogo + '" style="height: 40px; width: 40px; border-radius: 50%;" ' +
                             'onmouseover="showIcons(event, this.parentElement)" onmouseout="hideIcons(event, this.parentElement)">';
                     } else {
-                        var initials = (full.vendorCompany ? full.vendorCompany[0] : '');
+                        var initials = (params.data.vendorCompany ? params.data.vendorCompany[0] : '');
                         var randomColor = colorClasses[Math.floor(Math.random() * colorClasses.length)];
                         profileImageHtml = '<div class="flex-shrink-0 avatar-xs me-2">' +
                             '<div class="avatar-title ' + randomColor.bgClass + ' ' + randomColor.textClass + ' rounded-circle" style="height: 40px; width: 40px; border-radius: 50%;">' + initials.toUpperCase() + '</div></div>';
                     }
-                    return '<a href="/Vendor/CreateVendor?Vid=' + full.vid + '&viewMode=true" class="link-primary" style="display: flex; align-items: center;">' + profileImageHtml + '<span style="margin-left: 5px;">' + full.vendorCompany + '</span></a>';
+                    return '<a href="/Vendor/CreateVendor?Vid=' + params.data.vid + '&viewMode=true" class="link-primary" style="display: flex; align-items: center;">' + profileImageHtml + '<span style="margin-left: 5px;">' + params.data.vendorCompany + '</span></a>';
                 }
             },
-            { "data": "vendorFirstName", "name": "VendorFirstName" },
-            { "data": "vendorCompanyNumber", "name": "VendorCompanyNumber" },
-            { "data": "vendorCompanyEmail", "name": "VendorCompanyEmail" },
-        ];
-
-        if (canEdit) {
-            columns.push({
-                "data": null,
-                "orderable": false,
-                "searchable": false,
-                "render": function (data, type, full) {
-                    return '<li class="list-inline-item"><a class="text-info" href="EditVendorDetails?VId=' + full.vid + '"><i class="fa-regular fa-pen-to-square"></i></a></li>';
+            {
+                headerName: "Vendor Name", field: "vendorFirstName", sortable: true, filter: true,
+                cellRenderer: function (params) {
+                    if (!params.data || !params.data.vid) {
+                        return '';
+                    }
+                    return params.data.vendorFirstName + ' ' + params.data.vendorLastName;
                 }
-            });
-        }
-
-        $('#VendorTableData').DataTable({
-            processing: false,
-            serverSide: true,
+            },
+            { headerName: "Contact No", field: "vendorCompanyNumber", sortable: true, filter: true },
+            { headerName: "Email", field: "vendorCompanyEmail", sortable: true, filter: true },
+        ],
+        defaultColDef: {
+            sortable: true,
             filter: true,
-            destroy: true,
-            ajax: {
-                type: "Post",
-                url: '/Vendor/GetVendorList',
-                dataType: 'json'
-            },
-            columns: columns,
-            scrollY: 400,
-            scrollX: true,
-            scrollCollapse: true,
-            fixedHeader: {
-                header: true,
-                footer: true
-            },
-            autoWidth: false,
-            columnDefs: [
-                {
-                    targets: '_all', width: 'auto'
+            cellClass: 'ag-cell-default-style',
+            width: 175,
+        },
+
+        rowSelection: 'single',
+        rowClassRules: {
+            'selected-row': params => params.node.isSelected()
+        },
+        onGridReady: function (params) {
+            VendorGridOptions.api = params.api;
+            VendorGridOptions.columnApi = params.columnApi;
+            VendorGridOptions.api.sizeColumnsToFit();
+        },
+
+        rowModelType: 'infinite',
+        cacheBlockSize: 10,
+        datasource: {
+            getRows: function (params) {
+                const request = {
+                    StartRow: params.startRow,
+                    PageSize: VendorGridOptions.cacheBlockSize || 10,
+                    SearchType: "",
+                    SearchValue: "",
+                    SortModel: params.sortModel || [],
+                    SortColumn: (params.sortModel && params.sortModel.length > 0) ? params.sortModel[0].colId : "",
+                    SortDirection: (params.sortModel && params.sortModel.length > 0) ? params.sortModel[0].sort : "",
+                    filters: Object.entries(params.filterModel || {}).map(([key, value]) => ({
+                        colId: key,
+                        filterValue: value.filter
+                    })),
+                    searchValue: $('#txtVendorSearch').val(),
+                };
+
+                $.ajax({
+                    url: '/Vendor/GetVendorList',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(request),
+                    success: function (response) {
+                        params.successCallback(response.rowsThisPage, response.totalRowCount);
+                    },
+                    error: function () {
+                        params.failCallback();
+                    }
+                });
+            }
+        }
+    };
+
+    const userPermissionArray = Formdata;
+    let canEdit = false;
+
+    for (let i = 0; i < userPermissionArray.length; i++) {
+        const permission = userPermissionArray[i];
+        if (permission.formName === "Vendor List") {
+            canEdit = permission.edit;
+            break;
+        }
+    }
+
+    if (canEdit || canDelete) {
+        VendorGridOptions.columnDefs.push({
+            headerName: "Actions",
+            field: "actions",
+            sortable: false,
+            filter: false,
+            cellRenderer: function (params) {
+
+                if (!params.data || !params.data.vid) {
+                    return '';
                 }
-            ]
+
+                let buttons = '';
+                if (canEdit) {
+                    buttons += `
+                    <li class="list-inline-item"><a class="text-info" href="EditVendorDetails?VId=${params.data.vid}"><i class="fa-regular fa-pen-to-square"></i></a></li>`;
+                }
+                return buttons;
+            }
         });
     }
-    data(datas);
+
+    const myGridElement = document.querySelector('#VendorTable');
+    agGrid.createGrid(myGridElement, VendorGridOptions);
+
+    $('#txtVendorSearch').on('change keyup', function () {
+        VendorGridOptions.api.onFilterChanged();
+    });
 });
+
 
 function VendorDetails(Id) {
     $.ajax({
@@ -435,7 +499,7 @@ $(document).ready(function () {
             }
         }
     }
-    
+
 
     $('#deleteVendorImageButton').click(function () {
         $('#vendorImagePreview').attr('src', '#').hide();

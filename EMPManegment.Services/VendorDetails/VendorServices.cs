@@ -1,4 +1,5 @@
-﻿using EMPManegment.EntityModels.ViewModels.DataTableParameters;
+﻿using EMPManegment.EntityModels.ViewModels.AGGridModels;
+using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.VendorModels;
 using EMPManegment.Inretface.Interface.VendorDetails;
@@ -28,10 +29,10 @@ namespace EMPManegment.Services.VendorDetails
             return await details.GetVendorById(VendorId);
         }
 
-        public async Task<jsonData> GetVendorsList(DataTableRequstModel GetVenderList)
-        {
-            return await details.GetVendorsList(GetVenderList);
-        }
+        //public async Task<jsonData> GetVendorsList(DataTableRequstModel GetVenderList)
+        //{
+        //    return await details.GetVendorsList(GetVenderList);
+        //}
 
         public async Task<IEnumerable<VendorTypeView>> GetVendorType()
         {
@@ -44,6 +45,11 @@ namespace EMPManegment.Services.VendorDetails
         public async Task<UserResponceModel> UpdateVendorDetails(VendorDetailsView updateVendor)
         {
             return await details.UpdateVendorDetails(updateVendor);
+        }
+
+        public async Task<AGGridResponseModel<VendorDetailsView>> GetVendorsList(AGGridRequestModel VendorRequest)
+        {
+            return await details.GetVendorsList(VendorRequest);
         }
     }
 }

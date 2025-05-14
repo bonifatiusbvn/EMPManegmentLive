@@ -16,6 +16,8 @@ using Microsoft.AspNetCore.Authorization;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.Web.Models;
 using EMPManegment.Web.Helper;
+using EMPManegment.EntityModels.ViewModels.AGGridModels;
+using EMPManegment.EntityModels.ViewModels.Company;
 #nullable disable
 namespace EMPManegment.Web.Controllers
 {
@@ -171,52 +173,74 @@ namespace EMPManegment.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> GetVendorList()
+        public async Task<IActionResult> GetVendorList([FromBody] AGGridRequestModel VendorRequest)
         {
             try
             {
-                var draw = Request.Form["draw"].FirstOrDefault();
-                var start = Request.Form["start"].FirstOrDefault();
-                var length = Request.Form["length"].FirstOrDefault();
-                var sortColumn = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
-                var sortColumnDir = Request.Form["order[0][dir]"].FirstOrDefault();
-                var searchValue = Request.Form["search[value]"].FirstOrDefault();
-                int pageSize = length != null ? Convert.ToInt32(length) : 0;
-                int skip = start != null ? Convert.ToInt32(start) : 0;
+                VendorRequest.filters ??= new List<FilterModel>();
 
-                var dataTable = new DataTableRequstModel
+                var VendorDetails = await APIServices.AGPostAsync<VendorDetailsView>(VendorRequest, "Vendor/GetVendorList");
+
+                return new JsonResult(new
                 {
-                    draw = draw,
-                    start = start,
-                    pageSize = pageSize,
-                    skip = skip,
-                    lenght = length,
-                    searchValue = searchValue,
-                    sortColumn = sortColumn,
-                    sortColumnDir = sortColumnDir
-                };
-                List<VendorDetailsView> vendorList = new List<VendorDetailsView>();
-                var data = new jsonData();
-                ApiResponseModel res = await APIServices.PostAsync(dataTable, "Vendor/GetVendorList");
-                if (res.code == 200)
-                {
-                    data = JsonConvert.DeserializeObject<jsonData>(res.data.ToString());
-                    vendorList = JsonConvert.DeserializeObject<List<VendorDetailsView>>(data.data.ToString());
-                }
-                var jsonData = new
-                {
-                    draw = data.draw,
-                    recordsFiltered = data.recordsFiltered,
-                    recordsTotal = data.recordsTotal,
-                    data = vendorList,
-                };
-                return new JsonResult(jsonData);
+                    rowsThisPage = VendorDetails.Data,
+                    totalRowCount = VendorDetails.RecordsTotal
+                });
             }
             catch (Exception ex)
             {
-                throw ex;
+                return StatusCode(500, new { message = "Error fetching data", error = ex.Message });
             }
         }
+
+        //[HttpPost]
+        //public async Task<IActionResult> GetVendorList()
+        //{
+        //    try
+        //    {
+        //        var draw = Request.Form["draw"].FirstOrDefault();
+        //        var start = Request.Form["start"].FirstOrDefault();
+        //        var length = Request.Form["length"].FirstOrDefault();
+        //        var sortColumn = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
+        //        var sortColumnDir = Request.Form["order[0][dir]"].FirstOrDefault();
+        //        var searchValue = Request.Form["search[value]"].FirstOrDefault();
+        //        int pageSize = length != null ? Convert.ToInt32(length) : 0;
+        //        int skip = start != null ? Convert.ToInt32(start) : 0;
+
+        //        var dataTable = new DataTableRequstModel
+        //        {
+        //            draw = draw,
+        //            start = start,
+        //            pageSize = pageSize,
+        //            skip = skip,
+        //            lenght = length,
+        //            searchValue = searchValue,
+        //            sortColumn = sortColumn,
+        //            sortColumnDir = sortColumnDir
+        //        };
+        //        List<VendorDetailsView> vendorList = new List<VendorDetailsView>();
+        //        var data = new jsonData();
+        //        ApiResponseModel res = await APIServices.PostAsync(dataTable, "Vendor/GetVendorList");
+        //        if (res.code == 200)
+        //        {
+        //            data = JsonConvert.DeserializeObject<jsonData>(res.data.ToString());
+        //            vendorList = JsonConvert.DeserializeObject<List<VendorDetailsView>>(data.data.ToString());
+        //        }
+        //        var jsonData = new
+        //        {
+        //            draw = data.draw,
+        //            recordsFiltered = data.recordsFiltered,
+        //            recordsTotal = data.recordsTotal,
+        //            data = vendorList,
+        //        };
+        //        return new JsonResult(jsonData);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw ex;
+        //    }
+        //}
+
         [HttpGet]
         public async Task<JsonResult> GetVendorDetailsById(Guid VendorId)
         {

@@ -1,94 +1,138 @@
-﻿var datas = userPermissions
-$(document).ready(function () {
-    function data(datas) {
-        var userPermission = datas;
-        GetAllCompanyData(userPermission);
-    }
-    function GetAllCompanyData(userPermission) {
-        var userPermissionArray = JSON.parse(userPermission);
-        var canEdit = userPermissionArray.some(permission => permission.formName === "Company List" && permission.edit);
-        var canDelete = userPermissionArray.some(permission => permission.formName === "Company List" && permission.delete);
-        var colorClasses = [
-            { bgClass: 'bg-primary-subtle', textClass: 'text-primary' },
-            { bgClass: 'bg-secondary-subtle', textClass: 'text-secondary' },
-            { bgClass: 'bg-success-subtle', textClass: 'text-success' },
-            { bgClass: 'bg-info-subtle', textClass: 'text-info' },
-            { bgClass: 'bg-warning-subtle', textClass: 'text-warning' },
-            { bgClass: 'bg-danger-subtle', textClass: 'text-danger' },
-            { bgClass: 'bg-dark-subtle', textClass: 'text-dark' }
-        ];
+﻿var Formdata = window.userFormPermissions || 0;
 
-        var columns = [
+let CompanyGridOptions = [];
+$(document).ready(function () {
+
+    CompanyGridOptions = {
+        rowHeight: 50,
+        columnDefs: [
             {
-                "data": "compnyName", "name": "CompanyName",
-                "render": function (data, type, full) {
+                headerName: "Company Name",
+                field: "compnyName",
+                sortable: true,
+                filter: true,
+                cellRenderer: function (params) {
+                    if (!params.data || !params.data.id) {
+                        return '';
+                    }
                     var profileImageHtml;
-                    if (full.companyLogo && full.companyLogo.trim() !== '') {
-                        profileImageHtml = '<img src="/Content/Image/' + full.companyLogo + '" style="height: 40px; width: 40px; border-radius: 50%;" ' +
+                    if (params.data.companyLogo && params.data.companyLogo.trim() !== '') {
+                        profileImageHtml = '<img src="/Content/Image/' + params.data.companyLogo + '" style="height: 40px; width: 40px; border-radius: 50%;" ' +
                             'onmouseover="showIcons(event, this.parentElement)" onmouseout="hideIcons(event, this.parentElement)">';
                     } else {
-                        var initials = (full.compnyName ? full.compnyName[0] : '');
+                        var initials = (params.data.compnyName ? params.data.compnyName[0] : '');
                         var randomColor = colorClasses[Math.floor(Math.random() * colorClasses.length)];
                         profileImageHtml = '<div class="flex-shrink-0 avatar-xs me-2">' +
                             '<div class="avatar-title ' + randomColor.bgClass + ' ' + randomColor.textClass + ' rounded-circle" style="height: 40px; width: 40px; border-radius: 50%;">' + initials.toUpperCase() + '</div></div>';
                     }
-                    return '<a href="/Company/CreateCompany?CompanyId=' + full.id + '&viewMode=true" class="link-primary" style="display: flex; align-items: center;">' + profileImageHtml + '<span style="margin-left: 5px;">' + full.compnyName + '</span></a>';
+                    return '<a href="/Company/CreateCompany?CompanyId=' + params.data.id + '&viewMode=true" class="link-primary" style="display: flex; align-items: center;">' + profileImageHtml + '<span style="margin-left: 5px;">' + params.data.compnyName + '</span></a>';
                 }
             },
-            { "data": "contactNumber", "name": "ContactNumber" },
-            { "data": "email", "name": "Email" },
-            { "data": "address", "name": "Address" },
-        ];
-
-        if (canEdit || canDelete) {
-            columns.push({
-                "data": null,
-                "render": function (data, type, full) {
-                    var buttons = '';
-
-                    if (canEdit) {
-                        buttons +=
-                           '<li class="list-inline-item"><a class="text-info" href="EditCompanyDetails?CompanyId=' + full.id + '"><i class="fa-regular fa-pen-to-square"></i></a></li>';
-                    }
-
-                    if (canDelete) {
-                        buttons += '<a class="btn text-danger btndeletedoc" onclick="deleteCompany(\'' + full.id + '\')">' +
-                            '<i class="fas fa-trash"></i></a>';
-                    }
-
-                    return buttons;
-                }
-            });
-        }
-
-        $('#CompanyTableData').DataTable({
-            processing: false,
-            serverSide: true,
+            { headerName: "Contact No", field: "contactNumber", sortable: true, filter: true },
+            { headerName: "Email", field: "email", sortable: true, filter: true },
+            { headerName: "Address", field: "address", sortable: true, filter: true },
+        ],
+        defaultColDef: {
+            sortable: true,
             filter: true,
-            destroy: true,
-            ajax: {
-                type: "Post",
-                url: '/Company/GetDatatableCompanyList',
-                dataType: 'json'
-            },
-            columns: columns,
-            scrollY: 400,
-            scrollX: true,
-            scrollCollapse: true,
-            fixedHeader: {
-                header: true,
-                footer: true
-            },
-            autoWidth: false,
-            columnDefs: [
-                {
-                    targets: '_all', width: 'auto'
+            cellClass: 'ag-cell-default-style',
+            width: 175,
+        },
+
+        rowSelection: 'single',
+        rowClassRules: {
+            'selected-row': params => params.node.isSelected()
+        },
+        onGridReady: function (params) {
+            CompanyGridOptions.api = params.api;
+            CompanyGridOptions.columnApi = params.columnApi;
+            CompanyGridOptions.api.sizeColumnsToFit();
+        },
+
+        rowModelType: 'infinite',
+        cacheBlockSize: 10,
+        datasource: {
+            getRows: function (params) {
+                const request = {
+                    StartRow: params.startRow,
+                    PageSize: CompanyGridOptions.cacheBlockSize || 10,
+                    SearchType: "",
+                    SearchValue: "",
+                    SortModel: params.sortModel || [],
+                    SortColumn: (params.sortModel && params.sortModel.length > 0) ? params.sortModel[0].colId : "",
+                    SortDirection: (params.sortModel && params.sortModel.length > 0) ? params.sortModel[0].sort : "",
+                    filters: Object.entries(params.filterModel || {}).map(([key, value]) => ({
+                        colId: key,
+                        filterValue: value.filter
+                    })),
+                    searchValue: $('#txtCompanySearch').val(),
+                };
+
+                $.ajax({
+                    url: '/Company/GetCompanyList',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(request),
+                    success: function (response) {
+                        params.successCallback(response.rowsThisPage, response.totalRowCount);
+                    },
+                    error: function () {
+                        params.failCallback();
+                    }
+                });
+            }
+        }
+    };
+
+    const userPermissionArray = Formdata;
+    let canEdit = false;
+    let canDelete = false;
+
+    for (let i = 0; i < userPermissionArray.length; i++) {
+        const permission = userPermissionArray[i];
+        if (permission.formName === "Company List") {
+            canEdit = permission.edit;
+            canDelete = permission.delete;
+            break;
+        }
+    }
+
+    if (canEdit || canDelete) {
+        CompanyGridOptions.columnDefs.push({
+            headerName: "Actions",
+            field: "actions",
+            sortable: false,
+            filter: false,
+            cellRenderer: function (params) {
+
+                if (!params.data || !params.data.id) {
+                    return '';
                 }
-            ]
+
+                let buttons = '';
+                if (canEdit) {
+                    buttons += `
+                         <li class="list-inline-item"><a class="text-info" href="EditCompanyDetails?CompanyId=${params.data.id}"><i class="fa-regular fa-pen-to-square"></i></a></li>`;
+                }
+
+                if (canDelete) {
+                    buttons += `
+                    <a class="btn text-danger btndeletedoc" onclick="deleteCompany('${params.data.id}')"><i class="fas fa-trash"></i></a>`;
+                }
+                return buttons;
+            }
         });
     }
-    data(datas);
+
+    const myGridElement = document.querySelector('#CompanyTable');
+    agGrid.createGrid(myGridElement, CompanyGridOptions);
+
+    $('#txtCompanySearch').on('change keyup', function () {
+        CompanyGridOptions.api.onFilterChanged();
+    });
 });
+
+
 
 function AddCompanyDetails() {
     if ($("#createCompanyform").valid()) {
@@ -107,8 +151,8 @@ function AddCompanyDetails() {
         const altText = imgElement.alt;
         var file = $("#companylogo").attr("src");
         if (file && file !== "assets/images/new-document.png") {
-            var blob = dataURLToBlob(file); 
-            formData.append("CompanyLogo", blob, altText); 
+            var blob = dataURLToBlob(file);
+            formData.append("CompanyLogo", blob, altText);
         }
 
         $.ajax({
@@ -179,8 +223,7 @@ function UpdateCompanyDetails() {
         if (imageName && (imageFile == null)) {
             formData.append("CompanyImageName", imageName);
         }
-        else
-        { 
+        else {
             if (imageFile != null) {
                 const altImgText = imageFile.alt;
                 var file = $("#companylogo").attr("src");
@@ -384,4 +427,4 @@ $(document).ready(function () {
             previewContainer.hide();
         }
     });
-});
+});                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            

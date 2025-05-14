@@ -1,4 +1,5 @@
 ﻿using EMPManagment.Web.Models.API;
+using EMPManegment.EntityModels.ViewModels.AGGridModels;
 using EMPManegment.EntityModels.ViewModels.Company;
 using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 using EMPManegment.EntityModels.ViewModels.Models;
@@ -44,9 +45,19 @@ namespace EMPManegment.Services.Company
         {
             return await Company.DeleteCompanyDetails(CompanyId);
         }
-        public async Task<jsonData> GetDatatableCompanyList(DataTableRequstModel CompanydataTable)
+        //public async Task<jsonData> GetDatatableCompanyList(DataTableRequstModel CompanydataTable)
+        //{
+        //    return await Company.GetDatatableCompanyList(CompanydataTable);
+        //}
+
+        public async Task<AGGridResponseModel<CompanyModel>> GetDatatableCompanyList(AGGridRequestModel CompanyRequest)
         {
-            return await Company.GetDatatableCompanyList(CompanydataTable);
+            return await Company.GetCompanyList(CompanyRequest);
+        }
+
+        public async Task<AGGridResponseModel<CompanyModel>> GetCompanyList(AGGridRequestModel CompanyRequest)
+        {
+            return await Company.GetCompanyList(CompanyRequest);
         }
     }
 }

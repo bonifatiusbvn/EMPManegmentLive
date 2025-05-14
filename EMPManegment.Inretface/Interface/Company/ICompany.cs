@@ -1,4 +1,5 @@
 ﻿using EMPManagment.Web.Models.API;
+using EMPManegment.EntityModels.ViewModels.AGGridModels;
 using EMPManegment.EntityModels.ViewModels.Company;
 using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 using EMPManegment.EntityModels.ViewModels.Models;
@@ -18,6 +19,7 @@ namespace EMPManegment.Inretface.Interface.CompanyMaster
         Task<ApiResponseModel> AddCompany(CompanyModel AddCompany);
         Task<UserResponceModel> UpdateCompanyDetails(CompanyModel updateCompany);
         Task<UserResponceModel> DeleteCompanyDetails(Guid CompanyId);
-        Task<jsonData> GetDatatableCompanyList(DataTableRequstModel CompanydataTable);
+        //Task<jsonData> GetDatatableCompanyList(DataTableRequstModel CompanydataTable);
+        Task<AGGridResponseModel<CompanyModel>> GetCompanyList(AGGridRequestModel CompanyRequest);
     }
 }

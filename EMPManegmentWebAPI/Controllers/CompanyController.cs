@@ -1,4 +1,5 @@
 ﻿using EMPManagment.Web.Models.API;
+using EMPManegment.EntityModels.ViewModels.AGGridModels;
 using EMPManegment.EntityModels.ViewModels.Company;
 using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 using EMPManegment.EntityModels.ViewModels.Models;
@@ -9,6 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 #nullable disable
 namespace EMPManagment.API.Controllers
 {
@@ -137,11 +139,15 @@ namespace EMPManagment.API.Controllers
         }
 
         [HttpPost]
-        [Route("GetDatatableCompanyList")]
-        public async Task<IActionResult> GetDatatableCompanyList(DataTableRequstModel CompanydataTable)
+        [Route("GetCompanyList")]
+        public async Task<AGGridResponseModel<CompanyModel>> GetCompanyList(AGGridRequestModel CompanyRequest)
         {
-            var GetCompanyList = await Company.GetDatatableCompanyList(CompanydataTable);
-            return Ok(new { code = (int)HttpStatusCode.OK, data = GetCompanyList });
+            var GetCompanyList = await Company.GetCompanyList(CompanyRequest);
+            return new AGGridResponseModel<CompanyModel>
+            {
+                Data = GetCompanyList.Data,
+                RecordsTotal = GetCompanyList.RecordsTotal,
+            };
         }
     }
 }

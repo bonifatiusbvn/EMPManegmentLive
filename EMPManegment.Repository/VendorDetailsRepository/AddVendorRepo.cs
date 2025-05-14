@@ -3,6 +3,8 @@ using EMPManagment.API;
 using EMPManegment.EntityModels.Common;
 using EMPManegment.EntityModels.View_Model;
 using EMPManegment.EntityModels.ViewModels;
+using EMPManegment.EntityModels.ViewModels.AGGridModels;
+using EMPManegment.EntityModels.ViewModels.Company;
 using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.ProductMaster;
@@ -91,72 +93,132 @@ namespace EMPManegment.Repository.VendorDetailsRepository
             }
             return response;
         }
-        public async Task<jsonData> GetVendorsList(DataTableRequstModel dataTable)
+
+        public async Task<AGGridResponseModel<VendorDetailsView>> GetVendorsList(AGGridRequestModel VendorRequest)
         {
-            var vendorlist = await Context.TblVendorMasters.FromSqlRaw("EXEC spGetAllVendorList").ToListAsync();
-
-            if (!string.IsNullOrEmpty(dataTable.searchValue))
+            try
             {
-                vendorlist = vendorlist.Where(e => e.VendorFirstName.Contains(dataTable.searchValue) || e.VendorPhone.Contains(dataTable.searchValue) || e.VendorEmail.Contains(dataTable.searchValue) || e.VendorCompany.Contains(dataTable.searchValue)).ToList();
+                var filterConditions = string.Join(" AND ", VendorRequest.filters.Select(f =>
+                                    $"{f.ColId} LIKE '%{f.FilterValue}%'"));
+                string sortColumn = VendorRequest.SortModel?.FirstOrDefault()?.ColId ?? "VendorCompany";
+                string sortDirection = VendorRequest.SortModel?.FirstOrDefault()?.Sort ?? "asc";
+
+                var parameters = new List<SqlParameter>
+                {
+                new SqlParameter("@SearchValue", (object)VendorRequest.SearchValue ?? DBNull.Value),
+                new SqlParameter("@SortColumn", sortColumn),
+                new SqlParameter("@SortDirection", sortDirection),
+                new SqlParameter("@PageSize", VendorRequest.PageSize),
+                new SqlParameter("@Skip", VendorRequest.StartRow),
+                new SqlParameter("@FilterConditions", (object)filterConditions ?? DBNull.Value),
+                new SqlParameter("@TotalRecords", SqlDbType.Int) { Direction = ParameterDirection.Output }
+                };
+
+                var dataSet = DbHelper.GetDataSet("spGetAllVendorList", CommandType.StoredProcedure, parameters.ToArray(), _configuration.GetConnectionString("EMPDbconn"));
+
+                var VendorList = dataSet.Tables[0].AsEnumerable().Select(row => new VendorDetailsView
+                {
+                    Vid = row["VId"] != DBNull.Value ? Guid.Parse(row["VId"].ToString()) : Guid.Empty,
+                    VendorTypeId = row["VendorTypeId"] != DBNull.Value ? Convert.ToInt32(row["VendorTypeId"]) : 0,
+                    VendorFirstName = row["VendorFirstName"]?.ToString(),
+                    VendorLastName = row["VendorLastName"]?.ToString(),
+                    VendorEmail = row["VendorEmail"]?.ToString(),
+                    VendorPhone = row["VendorPhone"]?.ToString(),
+                    VendorContectNo = row["VendorContact"]?.ToString(),
+                    VendorAddress = row["VendorAddress"]?.ToString(),
+                    VendorCompanyType = row["VendorCompanyType"]?.ToString(),
+                    VendorCompany = row["VendorCompany"]?.ToString(),
+                    VendorCompanyEmail = row["VendorCompanyEmail"]?.ToString(),
+                    VendorCompanyNumber = row["VendorCompanyNumber"]?.ToString(),
+                    VendorCompanyLogo = row["VendorCompanyLogo"]?.ToString(),
+                    VendorBankName = row["VendorBankName"]?.ToString(),
+                    VendorBankBranch = row["VendorBankBranch"]?.ToString(),
+                    VendorAccountHolderName = row["VendorAccountHolderName"]?.ToString(),
+                    VendorBankAccountNo = row["VendorBankAccountNo"]?.ToString(),
+                    VendorBankIfsc = row["VendorBankIFSC"]?.ToString(),
+                    VendorGstnumber = row["VendorGSTNumber"]?.ToString(),
+
+                }).ToList();
+
+                int totalRecords = (int)parameters.First(p => p.ParameterName == "@TotalRecords").Value;
+
+                return new AGGridResponseModel<VendorDetailsView>
+                {
+                    Data = VendorList,
+                    RecordsTotal = totalRecords
+                };
             }
-
-            int totalRecord = vendorlist.Count;
-
-            if (!string.IsNullOrEmpty(dataTable.sortColumn) && !string.IsNullOrEmpty(dataTable.sortColumnDir))
+            catch (Exception ex)
             {
-                vendorlist = SortVendorList(vendorlist, dataTable.sortColumn, dataTable.sortColumnDir);
+                throw new Exception("An error occurred while retrieving the inword list.", ex);
             }
-
-            var cData = vendorlist.Skip(dataTable.skip).Take(dataTable.pageSize).ToList();
-
-            jsonData jsonData = new jsonData
-            {
-                draw = dataTable.draw,
-                recordsFiltered = totalRecord,
-                recordsTotal = totalRecord,
-                data = cData
-            };
-
-            return jsonData;
         }
+        //public async Task<jsonData> GetVendorsList(DataTableRequstModel dataTable)
+        //{
+        //    var vendorlist = await Context.TblVendorMasters.FromSqlRaw("EXEC spGetAllVendorList").ToListAsync();
 
-        private List<TblVendorMaster> SortVendorList(List<TblVendorMaster> vendorlist, string sortColumn, string sortColumnDir)
-        {
-            Func<TblVendorMaster, object> sortExpression = null;
+        //    if (!string.IsNullOrEmpty(dataTable.searchValue))
+        //    {
+        //        vendorlist = vendorlist.Where(e => e.VendorFirstName.Contains(dataTable.searchValue) || e.VendorPhone.Contains(dataTable.searchValue) || e.VendorEmail.Contains(dataTable.searchValue) || e.VendorCompany.Contains(dataTable.searchValue)).ToList();
+        //    }
 
-            switch (sortColumn)
-            {
-                case "VendorFirstName":
-                    sortExpression = v => v.VendorFirstName;
-                    break;
-                case "VendorLastName":
-                    sortExpression = v => v.VendorLastName;
-                    break;
-                case "VendorEmail":
-                    sortExpression = v => v.VendorEmail;
-                    break;
-                case "VendorPhone":
-                    sortExpression = v => v.VendorPhone;
-                    break;
-                case "VendorCompany":
-                    sortExpression = v => v.VendorCompany;
-                    break;
-                default:
-                    sortExpression = v => v.VendorFirstName;
-                    break;
-            }
+        //    int totalRecord = vendorlist.Count;
 
-            if (sortColumnDir == "asc")
-            {
-                vendorlist = vendorlist.OrderBy(sortExpression).ToList();
-            }
-            else
-            {
-                vendorlist = vendorlist.OrderByDescending(sortExpression).ToList();
-            }
+        //    if (!string.IsNullOrEmpty(dataTable.sortColumn) && !string.IsNullOrEmpty(dataTable.sortColumnDir))
+        //    {
+        //        vendorlist = SortVendorList(vendorlist, dataTable.sortColumn, dataTable.sortColumnDir);
+        //    }
 
-            return vendorlist;
-        }
+        //    var cData = vendorlist.Skip(dataTable.skip).Take(dataTable.pageSize).ToList();
+
+        //    jsonData jsonData = new jsonData
+        //    {
+        //        draw = dataTable.draw,
+        //        recordsFiltered = totalRecord,
+        //        recordsTotal = totalRecord,
+        //        data = cData
+        //    };
+
+        //    return jsonData;
+        //}
+
+        //private List<TblVendorMaster> SortVendorList(List<TblVendorMaster> vendorlist, string sortColumn, string sortColumnDir)
+        //{
+        //    Func<TblVendorMaster, object> sortExpression = null;
+
+        //    switch (sortColumn)
+        //    {
+        //        case "VendorFirstName":
+        //            sortExpression = v => v.VendorFirstName;
+        //            break;
+        //        case "VendorLastName":
+        //            sortExpression = v => v.VendorLastName;
+        //            break;
+        //        case "VendorEmail":
+        //            sortExpression = v => v.VendorEmail;
+        //            break;
+        //        case "VendorPhone":
+        //            sortExpression = v => v.VendorPhone;
+        //            break;
+        //        case "VendorCompany":
+        //            sortExpression = v => v.VendorCompany;
+        //            break;
+        //        default:
+        //            sortExpression = v => v.VendorFirstName;
+        //            break;
+        //    }
+
+        //    if (sortColumnDir == "asc")
+        //    {
+        //        vendorlist = vendorlist.OrderBy(sortExpression).ToList();
+        //    }
+        //    else
+        //    {
+        //        vendorlist = vendorlist.OrderByDescending(sortExpression).ToList();
+        //    }
+
+        //    return vendorlist;
+        //}
 
 
 

@@ -1,14 +1,19 @@
 ﻿using EMPManagment.API;
 using EMPManagment.Web.Models.API;
+using EMPManegment.EntityModels.Common;
+using EMPManegment.EntityModels.ViewModels.AGGridModels;
 using EMPManegment.EntityModels.ViewModels.Company;
 using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.Inretface.Interface.CompanyMaster;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,12 +23,14 @@ namespace EMPManegment.Repository.CompanyRepository
 {
     public class CompanyRepo : ICompany
     {
-        public CompanyRepo(BonifatiusEmployeesContext Context)
+        public CompanyRepo(BonifatiusEmployeesContext Context, IConfiguration configuration)
         {
             this.Context = Context;
+            _configuration = configuration;
         }
 
         public BonifatiusEmployeesContext Context { get; }
+        public IConfiguration _configuration { get; }
 
         public async Task<IEnumerable<CompanyModel>> GetCompanyNameList()
         {
@@ -241,6 +248,54 @@ namespace EMPManegment.Repository.CompanyRepository
             }
 
             return companylist;
+        }
+
+        public async Task<AGGridResponseModel<CompanyModel>> GetCompanyList(AGGridRequestModel CompanyRequest)
+        {
+            try
+            {
+                var filterConditions = string.Join(" AND ", CompanyRequest.filters.Select(f =>
+                                    $"{f.ColId} LIKE '%{f.FilterValue}%'"));
+                string sortColumn = CompanyRequest.SortModel?.FirstOrDefault()?.ColId ?? "CompnyName";
+                string sortDirection = CompanyRequest.SortModel?.FirstOrDefault()?.Sort ?? "asc";
+
+                var parameters = new List<SqlParameter>
+                {
+                new SqlParameter("@SearchValue", (object)CompanyRequest.SearchValue ?? DBNull.Value),
+                new SqlParameter("@SortColumn", sortColumn),
+                new SqlParameter("@SortDirection", sortDirection),
+                new SqlParameter("@PageSize", CompanyRequest.PageSize),
+                new SqlParameter("@Skip", CompanyRequest.StartRow),
+                new SqlParameter("@FilterConditions", (object)filterConditions ?? DBNull.Value),
+                new SqlParameter("@TotalRecords", SqlDbType.Int) { Direction = ParameterDirection.Output }
+                };
+
+                var dataSet = DbHelper.GetDataSet("GetAllCompanyList", CommandType.StoredProcedure, parameters.ToArray(), _configuration.GetConnectionString("EMPDbconn"));
+
+                var CompanyList = dataSet.Tables[0].AsEnumerable().Select(row => new CompanyModel
+                {
+                    Id = row["Id"] != DBNull.Value ? Guid.Parse(row["Id"].ToString()) : Guid.Empty,
+                    CompnyName = row["CompnyName"]?.ToString(),
+                    Gst = row["Gst"]?.ToString(),
+                    Address = row["Address"]?.ToString(),
+                    Email = row["Email"]?.ToString(),
+                    CompanyLogo = row["CompanyLogo"]?.ToString(),
+                    ContactNumber = row["ContactNumber"]?.ToString(),
+
+                }).ToList();
+
+                int totalRecords = (int)parameters.First(p => p.ParameterName == "@TotalRecords").Value;
+
+                return new AGGridResponseModel<CompanyModel>
+                {
+                    Data = CompanyList,
+                    RecordsTotal = totalRecords
+                };
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("An error occurred while retrieving the inword list.", ex);
+            }
         }
     }
 }

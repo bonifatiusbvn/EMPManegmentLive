@@ -744,18 +744,34 @@ namespace EMPManegment.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> DownloadDocument(string documentName)
         {
-            var filepath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Content/UserDocuments", documentName);
+            if (string.IsNullOrWhiteSpace(documentName))
+                return BadRequest("Invalid file name.");
 
-            if (!System.IO.File.Exists(filepath))
+            var fileName = Path.GetFileName(documentName);
+
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Content", "UserDocuments", fileName);
+
+            if (!System.IO.File.Exists(filePath))
+                return NotFound("File not found.");
+
+            try
             {
-                return NotFound();
+                byte[] bytes = await System.IO.File.ReadAllBytesAsync(filePath);
+                string base64String = Convert.ToBase64String(bytes);
+
+                return Json(new
+                {
+                    memory = base64String,
+                    contentType = "application/pdf",
+                    fileName = fileName
+                });
             }
-
-            byte[] bytes = await System.IO.File.ReadAllBytesAsync(filepath);
-            string base64String = Convert.ToBase64String(bytes);
-
-            return Json(new { memory = base64String, contentType = "application/pdf", fileName = documentName });
+            catch (Exception ex)
+            {
+                return StatusCode(500, "An error occurred while processing the file.");
+            }
         }
+
 
         [HttpPost]
         public async Task<IActionResult> ExportToPdf(SearchAttendanceModel searchAttendanceData)

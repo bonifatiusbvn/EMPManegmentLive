@@ -1,4 +1,5 @@
 ﻿using EMPManagment.Web.Models.API;
+using EMPManegment.EntityModels.ViewModels.AGGridModels;
 using EMPManegment.Web.Models;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
@@ -142,6 +143,48 @@ namespace EMPManagment.Web.Helper
                 throw ex;
             }
         }
+        public async Task<AGGridResponseModel<T>> AGPostAsync<T>(dynamic input, string endpoint)
+        {
+            var model = new AGGridResponseModel<T>();
+
+            try
+            {
+                string json = input != null ? JsonConvert.SerializeObject(input) : string.Empty;
+                var data = new StringContent(json, Encoding.UTF8, "application/json");
+
+                using var httpClientHandler = new HttpClientHandler
+                {
+                    ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+                };
+
+                using var client = new HttpClient(httpClientHandler)
+                {
+                    BaseAddress = WebAPI.APIUrl().BaseAddress,
+                    Timeout = TimeSpan.FromMinutes(2)
+                };
+
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+
+                var fullUrl = $"{client.BaseAddress?.ToString().TrimEnd('/')}/{endpoint.TrimStart('/')}";
+
+                var response = await client.PostAsync(fullUrl, data);
+                var responseContent = await response.Content.ReadAsStringAsync();
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new Exception($"API call failed: {response.StatusCode} - {responseContent}");
+                }
+
+                model = JsonConvert.DeserializeObject<AGGridResponseModel<T>>(responseContent) ?? new AGGridResponseModel<T>();
+
+                return model;
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException($"Error calling API at '{endpoint}': {ex.Message}", ex);
+            }
+        }
+
 
     }
 }

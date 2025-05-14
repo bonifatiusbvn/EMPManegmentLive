@@ -103,6 +103,9 @@ namespace EMPManegment.Repository.UserListRepository
                         case "Email":
                             queryableUserDetails = dataTable.sortColumnDir == "asc" ? queryableUserDetails.OrderBy(e => e.Email) : queryableUserDetails.OrderByDescending(e => e.Email);
                             break;
+                        case "IsActive":
+                            queryableUserDetails = dataTable.sortColumnDir == "asc" ? queryableUserDetails.OrderBy(e => e.IsActive) : queryableUserDetails.OrderByDescending(e => e.IsActive);
+                            break;
                         default:
                             break;
                     }
