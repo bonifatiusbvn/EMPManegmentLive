@@ -18,16 +18,13 @@
         }
     }
 
-    .ag-theme-teal .ag-header {
-        background-color: #16989A;
-        color: white;
-    }
+
 </style>
 <!-- start page title -->
 <div class="row" style="margin-top:80px;">
     <div class="col-12">
-        <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-            <h4 class="mb-sm-0">Company List</h4>
+        <div class="page-title-box d-sm-flex align-items-center justify-content-between content-header">
+            <h4 class="fm-header mb-sm-0">Company List</h4>
             <div class="page-title-right">
                 <ol class="breadcrumb m-0">
                     <li class="breadcrumb-item"><a href="javascript: void(0);">Company</a></li>
@@ -54,7 +51,7 @@
                     @if (UserSession.FormPermisionData.Any(a => a.FormName == "Company List" && a.Add))
                     {
                         <div class="col-12 col-md-6 col-lg-8 text-md-end mt-2 mt-md-0">
-                            <a class="btn btn-info btn-md CreateCompanyButton" href="/Company/CreateCompany"><i class="ri-add-fill me-1 align-bottom"></i>Company</a>
+                            <a class="btn button-bg-teal btn-md" href="/Company/CreateCompany"><i class="ri-add-fill me-1 align-bottom"></i>Company</a>
                         </div>
                     }
                 </div>

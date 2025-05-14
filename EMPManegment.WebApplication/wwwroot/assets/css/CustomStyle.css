@@ -37,7 +37,7 @@
 
 /* Hover effect for rows */
 .table tbody tr:hover {
-    background-color: rgba(22, 152, 154, 0.1); /* Light theme color tint on hover */
+    background-color: #20dcdf; /* Light theme color tint on hover */
 }
 
 /* Make sure the responsive table maintains styling */
@@ -75,7 +75,7 @@
     }
 
     .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
-        background: rgba(22, 152, 154, 0.1);
+        background: #20dcdf;
         border: 1px solid #16989A;
         border-radius: 4px;
     }
@@ -106,4 +106,371 @@
 
 .table tbody tr:last-child td:last-child {
     border-bottom-right-radius: 6px;
+}
+
+
+
+/* Button Styles */
+.button-bg-teal {
+    background-color: #16989A !important;
+    color: #fff !important;
+}
+
+    .button-bg-teal:hover {
+        background-color: #138486 !important;
+        color: #fff !important;
+    }
+
+/* Custom Control Styles */
+.custom-control-input-teal:checked ~ .custom-control-label::before {
+    border-color:  #20dcdf;
+    background-color:  #20dcdf;
+}
+
+.custom-control-input-teal.custom-control-input-outline:checked[type="checkbox"] ~ .custom-control-label::after {
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3E%3Cpath fill='%23dc3545' d='M6.564.75l-3.59 3.612-1.538-1.55L0 4.26 2.974 7.25 8 2.193z'/%3E%3C/svg%3E") !important;
+}
+
+.custom-control-input-teal.custom-control-input-outline:checked[type="radio"] ~ .custom-control-label::after {
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3E%3Ccircle r='3' fill='%23dc3545'/%3E%3C/svg%3E") !important;
+}
+
+.custom-control-input-teal:focus ~ .custom-control-label::before {
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+}
+
+.custom-control-input-teal:focus:not(:checked) ~ .custom-control-label::before {
+    border-color: #efa2a9;
+}
+
+.custom-control-input-teal:not(:disabled):active ~ .custom-control-label::before {
+    background-color:  #20dcdf;
+    border-color:  #20dcdf;
+}
+
+
+/* Header Styles */
+.content-header h1.fm-header {
+    font-weight: 600;
+    color: #16989A !important !important;
+    font-family: sans-serif;
+}
+
+.card-header .fm-fmheader {
+    font-weight: 600;
+    font-family: sans-serif;
+    font-size: 21px;
+    color: #16989A !important !important;
+}
+
+/* Table Text Styles */
+.table.table-dt thead th {
+    font-size: 15px;
+    font-weight: 600;
+    font-family: sans-serif;
+}
+
+.fm-form label.form-label {
+    color: #000000 !important;
+    font-size: 14px;
+    font-family: sans-serif;
+}
+
+.table-dt tbody tr .form-control {
+    height: 28px;
+    font-size: 13px;
+    width: 100%;
+    font-weight: 600;
+}
+
+/* Card Styles */
+.card-teal:not(.card-outline) > .card-header {
+    background-color: #16989A !important;
+}
+
+    .card-teal:not(.card-outline) > .card-header,
+    .card-teal:not(.card-outline) > .card-header a {
+        color: #fff;
+    }
+
+        .card-teal:not(.card-outline) > .card-header a.active {
+            color: #1f2d3d;
+        }
+
+.card-teal.card-outline {
+    border-top: 3px solid #16989A !important;
+}
+
+.card-teal.card-outline-tabs > .card-header a:hover {
+    border-top: 3px solid #b61651;
+}
+
+.card-teal.card-outline-tabs > .card-header a.active,
+.card-teal.card-outline-tabs > .card-header a.active:hover {
+    border-top: 3px solid #b61651;
+}
+
+/* Tool Button Styles */
+.bg-teal > .card-header .btn-tool,
+.bg-gradient-teal > .card-header .btn-tool,
+.card-teal:not(.card-outline) > .card-header .btn-tool {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+    .bg-teal > .card-header .btn-tool:hover,
+    .bg-gradient-teal > .card-header .btn-tool:hover,
+    .card-teal:not(.card-outline) > .card-header .btn-tool:hover {
+        color: #fff;
+    }
+
+/* Date Picker Styles */
+.card.bg-teal .bootstrap-datetimepicker-widget .table td,
+.card.bg-teal .bootstrap-datetimepicker-widget .table th,
+.card.bg-gradient-teal .bootstrap-datetimepicker-widget .table td,
+.card.bg-gradient-teal .bootstrap-datetimepicker-widget .table th {
+    border: none;
+}
+
+.card.bg-teal .bootstrap-datetimepicker-widget table thead tr:first-child th:hover,
+.card.bg-teal .bootstrap-datetimepicker-widget table td.day:hover,
+.card.bg-teal .bootstrap-datetimepicker-widget table td.hour:hover,
+.card.bg-teal .bootstrap-datetimepicker-widget table td.minute:hover,
+.card.bg-teal .bootstrap-datetimepicker-widget table td.second:hover,
+.card.bg-gradient-teal .bootstrap-datetimepicker-widget table thead tr:first-child th:hover,
+.card.bg-gradient-teal .bootstrap-datetimepicker-widget table td.day:hover,
+.card.bg-gradient-teal .bootstrap-datetimepicker-widget table td.hour:hover,
+.card.bg-gradient-teal .bootstrap-datetimepicker-widget table td.minute:hover,
+.card.bg-gradient-teal .bootstrap-datetimepicker-widget table td.second:hover {
+    background-color: #b61651;
+    color: #fff;
+}
+
+.card.bg-teal .bootstrap-datetimepicker-widget table td.today::before,
+.card.bg-gradient-teal .bootstrap-datetimepicker-widget table td.today::before {
+    border-bottom-color: #fff;
+}
+
+.card.bg-teal .bootstrap-datetimepicker-widget table td.active,
+.card.bg-teal .bootstrap-datetimepicker-widget table td.active:hover,
+.card.bg-gradient-teal .bootstrap-datetimepicker-widget table td.active,
+.card.bg-gradient-teal .bootstrap-datetimepicker-widget table td.active:hover {
+    background-color: #b61651;
+    color: #fff;
+}
+
+
+.date-filter-container {
+    position: absolute;
+    z-index: 1000;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(128, 0, 0, 0.3);
+    border-radius: 5px;
+    width: 200px;
+}
+
+
+.ag-theme-teal {
+    --ag-header-background-color: #16989A;
+    --ag-header-foreground-color: #fff;
+    --ag-header-cell-hover-background-color: #138486;
+    --ag-header-cell-moving-background-color: #138486;
+    --ag-odd-row-background-color: #e9fbfc;
+    --ag-row-hover-color: #e9fbfc;
+    --ag-selected-row-background-color: #e9fbfc;
+    --ag-font-size: 14px;
+    --ag-font-family: 'Segoe UI', sans-serif;
+    --ag-border-radius: 8px;
+    --ag-grid-border: 1px solid #e0e0e0;
+    --ag-border-color: #e0e0e0;
+    --ag-row-height: 40px;
+    --ag-header-height: 45px;
+    --ag-cell-horizontal-padding: 15px;
+    --ag-cell-horizontal-border: 1px solid #f5f5f5;
+}
+
+    /* Root container */
+    .ag-theme-teal .ag-root-wrapper {
+        border-radius: 10px;
+        border: 1px solid var(--ag-border-color);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Header styling */
+    .ag-theme-teal .ag-header {
+        font-weight: 600;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+    }
+
+    .ag-theme-teal .ag-header-cell {
+        padding-top: 0 !important;
+    }
+
+    .ag-theme-teal .ag-header-cell-label {
+        padding: 12px 0;
+    }
+
+    .ag-theme-teal .ag-header-cell-text {
+        font-weight: 600;
+        color: var(--ag-header-foreground-color);
+    }
+
+    /* Hide filters */
+    .ag-theme-teal .ag-floating-filter-body,
+    .ag-theme-teal .ag-floating-filter-button,
+    .ag-theme-teal .ag-filter-toolpanel-header,
+    .ag-theme-teal .ag-filter-toolpanel-search {
+        display: none !important;
+    }
+
+    /* Cell styling */
+    .ag-theme-teal .ag-cell {
+        display: flex;
+        align-items: center;
+        color: #333;
+        border-right: var(--ag-cell-horizontal-border);
+        border-bottom: var(--ag-cell-horizontal-border);
+    }
+
+    .ag-theme-teal .ag-cell-text {
+        font-weight: 600;
+        color: #333;
+    }
+
+    /* Selected row */
+    .ag-theme-teal .ag-row.ag-row-selected {
+        background-color: var(--ag-selected-row-background-color);
+    }
+
+    /* Hover row */
+    .ag-theme-teal .ag-row:hover {
+        background-color: var(--ag-row-hover-color);
+    }
+
+    /* No data overlay */
+    .ag-theme-teal .ag-overlay-no-rows-wrapper {
+        font-size: 16px;
+        padding: 20px;
+        color: #666;
+    }
+
+    /* Status bar */
+    .ag-theme-teal .ag-status-bar {
+        background-color: #f8f9fa;
+        border-bottom-left-radius: 10px;
+        border-bottom-right-radius: 10px;
+        padding: 8px 15px;
+        font-size: 13px;
+        color: #555;
+    }
+
+    /* Sort icon colors */
+    .ag-theme-teal .ag-header-cell-sorted-asc .ag-icon.ag-icon-asc,
+    .ag-theme-teal .ag-header-cell-sorted-desc .ag-icon.ag-icon-desc {
+        color: #fff;
+        opacity: 0.8;
+    }
+
+    /* Action Buttons */
+    .ag-theme-teal .ag-cell-value .action-buttons-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+    }
+
+    .ag-theme-teal .ag-cell-value .editbtn,
+    .ag-theme-teal .ag-cell-value .deletebtn,
+    .ag-theme-teal .ag-cell-value .printbtn,
+    .ag-theme-teal .ag-cell-value .pdfbtn,
+    .ag-theme-teal .ag-cell-value .whatsappbtn,
+    .ag-theme-teal .ag-cell-value .telegrambtn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 24px;
+        height: 24px;
+        font-size: 16px;
+        transition: all 0.2s ease;
+        color: inherit;
+        text-decoration: none;
+    }
+
+    /* Specific Button Colors */
+    .ag-theme-teal .ag-cell-value .editbtn,
+    .ag-theme-teal .ag-cell-value .deletebtn,
+    .ag-theme-teal .ag-cell-value .pdfbtn {
+        color: #16989A !important;
+    }
+
+        .ag-theme-teal .ag-cell-value .editbtn:hover,
+        .ag-theme-teal .ag-cell-value .deletebtn:hover,
+        .ag-theme-teal .ag-cell-value .pdfbtn:hover {
+            color: #b61651;
+            transform: scale(1.1);
+        }
+
+    .ag-theme-teal .ag-cell-value .printbtn {
+        color: #555;
+    }
+
+        .ag-theme-teal .ag-cell-value .printbtn:hover {
+            color: #333;
+            transform: scale(1.1);
+        }
+
+    .ag-theme-teal .ag-cell-value .whatsappbtn {
+        color: #25D366;
+    }
+
+        .ag-theme-teal .ag-cell-value .whatsappbtn:hover {
+            color: #128C7E;
+            transform: scale(1.1);
+        }
+
+    .ag-theme-teal .ag-cell-value .telegrambtn {
+        color: #0088cc;
+    }
+
+        .ag-theme-teal .ag-cell-value .telegrambtn:hover {
+            color: #005f8c;
+            transform: scale(1.1);
+        }
+
+    /* Text link style */
+    .ag-theme-teal .ag-cell-value .text-teal {
+        color: #16989A !important;
+        text-decoration: none;
+        transition: all 0.2s ease;
+    }
+
+        .ag-theme-teal .ag-cell-value .text-teal:hover {
+            color: #b61651;
+            text-decoration: underline;
+        }
+
+    .ag-theme-teal .ag-cell-default-style {
+        font-weight: 600;
+        text-align: center;
+        color: #404040;
+        font-family: sans-serif;
+    }
+
+.deletebtn, .editbtn, .printbtn, .pdfbtn, .whatsappbtn, .telegrambtn {
+    font-size: 1.2em;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.content-header h4.fm-header {
+    font-weight: 600;
+    color: #16989A !important;
+    font-family: sans-serif;
+}
+
+.card-header .fm-fmheader {
+    font-weight: 600;
+    font-family: sans-serif;
+    font-size: 21px;
+    color: #16989A !important;
 }
