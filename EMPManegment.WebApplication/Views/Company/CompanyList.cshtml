@@ -8,13 +8,11 @@
 }
 <style>
 
-    .CreateCompanyButton
-    {
+    .CreateCompanyButton {
         margin-left: 665px;
     }
 
-    @@media (max-width: 912px)
-    {
+    @@media (max-width: 912px) {
         .CreateCompanyButton {
             margin-left: 65px;
         }
@@ -68,10 +66,10 @@
                         <table id="CompanyTableData" class="table table-bordered dt-responsive nowrap table-striped align-middle">
                             <thead class="btn-info">
                                 <tr>
-                                    <th>CompanyName</th>
-                                    <th>CompanyContact</th>
-                                    <th>CompanyEmail</th>
-                                    <th>CompanyAddress</th>
+                                    <th>Company Name</th>
+                                    <th>Company Contact</th>
+                                    <th>Company Email</th>
+                                    <th>Company Address</th>
                                     @if (UserSession.FormPermisionData.Any(a => a.FormName == "Company List" && (a.Edit == true && a.Delete == true)))
                                     {
                                         <th>Actions</th>

@@ -1,0 +1,109 @@
+﻿/* Main table header styling */
+.table thead th {
+    background-color: #16989A;
+    color: white;
+    border-color: #16989A;
+    font-weight: 600;
+    vertical-align: middle;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+}
+
+/* Table border styling */
+.table-bordered {
+    border-color: #16989A;
+    border-radius: 8px;
+    overflow: hidden; /* This ensures the rounded corners are visible */
+}
+
+    .table-bordered th,
+    .table-bordered td {
+        border-color: #e0e0e0; /* Light gray border for cells */
+    }
+
+/* First and last cells in header for perfect rounded corners */
+.table thead th:first-child {
+    border-top-left-radius: 6px;
+}
+
+.table thead th:last-child {
+    border-top-right-radius: 6px;
+}
+
+/* Striped rows - odd rows */
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: rgba(22, 152, 154, 0.05); /* Very light theme color tint */
+}
+
+/* Hover effect for rows */
+.table tbody tr:hover {
+    background-color: rgba(22, 152, 154, 0.1); /* Light theme color tint on hover */
+}
+
+/* Make sure the responsive table maintains styling */
+.dt-responsive {
+    color: #333; /* Dark gray text for better readability */
+}
+
+/* Sorting icons in header */
+.table thead th.sorting:after,
+.table thead th.sorting_asc:after,
+.table thead th.sorting_desc:after {
+    color: rgba(255, 255, 255, 0.7); /* White sorting icons with slight transparency */
+}
+
+/* Active sorting header */
+.table thead th.sorting_asc,
+.table thead th.sorting_desc {
+    background-color: #127d7f; /* Slightly darker shade for active sorting */
+}
+
+/* Pagination styling */
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+    color: #16989A !important;
+    border: 1px solid #16989A;
+    border-radius: 4px;
+    margin: 0 2px;
+}
+
+    .dataTables_wrapper .dataTables_paginate .paginate_button.current,
+    .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+        background: #16989A;
+        color: white !important;
+        border: 1px solid #16989A;
+        border-radius: 4px;
+    }
+
+    .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+        background: rgba(22, 152, 154, 0.1);
+        border: 1px solid #16989A;
+        border-radius: 4px;
+    }
+
+/* Search box and length menu styling */
+.dataTables_wrapper .dataTables_filter input {
+    border: 1px solid #16989A;
+    border-radius: 6px;
+    padding: 6px 12px;
+}
+
+.dataTables_wrapper .dataTables_length select {
+    border: 1px solid #16989A;
+    border-radius: 6px;
+    color: #16989A;
+    padding: 6px;
+}
+
+/* Info text */
+.dataTables_info {
+    color: #16989A;
+}
+
+/* Bottom corners of the table */
+.table tbody tr:last-child td:first-child {
+    border-bottom-left-radius: 6px;
+}
+
+.table tbody tr:last-child td:last-child {
+    border-bottom-right-radius: 6px;
+}

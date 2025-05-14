@@ -8,13 +8,14 @@
 
 <style>
     @@media (max-width: 600px) {
-    .d-flex {
-        flex-direction: column; 
+        .d-flex {
+            flex-direction: column;
+        }
+
+        .flex-shrink-0 {
+            margin-top: 10px;
+        }
     }
-    .flex-shrink-0 {
-        margin-top: 10px; 
-    }
-}
 </style>
 <div class="row" style="margin-top:80px;">
     <div class="col-12">
@@ -86,10 +87,10 @@
                     <thead class="btn-light text-muted" style="position: sticky; top: 0; z-index: 1;">
                         <tr class="btn-info">
                             <th>Form Name</th>
-                            <th>IsAddAllow</th>
-                            <th>IsViewAllow</th>
-                            <th>IsEditAllow</th>
-                            <th>IsDeleteAllow</th>
+                            <th>Add</th>
+                            <th>View</th>
+                            <th>Edit</th>
+                            <th>Delete</th>
                             <th>
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" id="checkboxAll" onclick="toggleAllCheckboxes(this)">
