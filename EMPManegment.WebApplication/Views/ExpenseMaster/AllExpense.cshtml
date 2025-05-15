@@ -45,7 +45,7 @@
                         </button>
                         @if (UserSession.FormPermisionData.Any(a => a.FormName == "All Expenses List" && (a.Add == true)))
                         {
-                            <a class="btn btn-info" onclick="DisplayAddExpenseModel()">
+                            <a class="btn button-teal" onclick="DisplayAddExpenseModel()">
                                 <i class="ri-add-line align-bottom me-1"></i>Expense
                             </a>
                         }
@@ -244,7 +244,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-danger btn-default m-1" id="close-modal" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-success" onclick="AddAllUserExpenseDetails();">Save</button>
+                            <button type="submit" class="btn button-teal" onclick="AddAllUserExpenseDetails();">Save</button>
                         </div>
                     </div>
                 </div>
@@ -283,7 +283,7 @@
                     </div>
                     <div class="table-responsive" id="allExpenseUnApproved" style="display: none;">
                         <table class="table table-bordered dt-responsive nowrap table-striped align-middle dataTable no-footer dtr-inline" id="ExpenseTable">
-                            <thead class="btn-info text-center">
+                            <thead class="button-teal text-center">
                                 <tr>
                                     <th>User Name</th>
                                     <th>
@@ -313,7 +313,7 @@
 
                     <div class="table-responsive" id="allExpenseApproved" style="display: none;">
                         <table class="table table-bordered dt-responsive nowrap table-striped align-middle dataTable no-footer dtr-inline" id="ExpenseTable">
-                            <thead class="btn-info text-center">
+                            <thead class="button-teal text-center">
                                 <tr>
                                     <th>User Name</th>
                                     <th>Description</th>
