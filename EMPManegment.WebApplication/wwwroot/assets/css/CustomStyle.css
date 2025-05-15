@@ -55,6 +55,34 @@
     background-color: #d2f8f9 !important; /* Slightly darker teal tint */
 }
 
+.fixed-header-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+    .fixed-header-table thead,
+    .fixed-header-table tbody {
+        display: block;
+        width: 100%;
+    }
+
+    .fixed-header-table tbody {
+        max-height: 480px; /* Set your desired scroll height */
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
+    .fixed-header-table thead tr {
+        display: table;
+        width: 100%;
+        table-layout: fixed;
+    }
+
+    .fixed-header-table tbody tr {
+        display: table;
+        width: 100%;
+        table-layout: fixed;
+    }
 
 /* Make sure the responsive table maintains styling */
 .dt-responsive {
