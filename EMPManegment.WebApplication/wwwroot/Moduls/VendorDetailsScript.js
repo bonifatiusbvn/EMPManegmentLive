@@ -116,7 +116,7 @@ $(document).ready(function () {
         }
     }
 
-    if (canEdit || canDelete) {
+    if (canEdit) {
         VendorGridOptions.columnDefs.push({
             headerName: "Actions",
             field: "actions",
@@ -131,7 +131,7 @@ $(document).ready(function () {
                 let buttons = '';
                 if (canEdit) {
                     buttons += `
-                    <li class="list-inline-item"><a class="text-info" href="EditVendorDetails?VId=${params.data.vid}"><i class="fa-regular fa-pen-to-square"></i></a></li>`;
+                    <li class="list-inline-item"><a href="EditVendorDetails?VId=${params.data.vid}"><i class="fa-regular fa-pen-to-square"></i></a></li>`;
                 }
                 return buttons;
             }
@@ -531,3 +531,13 @@ $(document).ready(function () {
 });
 
 
+$(document).ready(function () {
+
+    $('#CompanyType').select2({
+        placeholder: 'Select Company Type',
+        width: '100%',
+        minimumResultsForSearch: Infinity,
+    }).on('select2:open', function () {
+        document.querySelector('.select2-container--open .select2-dropdown').style.marginTop = '5px';
+    });
+});

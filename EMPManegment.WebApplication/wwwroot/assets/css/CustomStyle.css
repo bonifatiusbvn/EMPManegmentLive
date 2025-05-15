@@ -580,15 +580,15 @@
 .fm-card {
     border-radius: 10px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-    border: none;
+    border: none !important;
     overflow: hidden;
 }
 
 .fm-card-header {
-    background-color: #16989A;
-    color: white;
+    background-color: #16989A !important;
+    color: white !important;
     padding: 15px 20px;
-    font-weight: 600;
+    font-weight: 600 !important;
     border-bottom: none;
 }
 

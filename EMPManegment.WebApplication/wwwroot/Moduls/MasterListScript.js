@@ -126,21 +126,11 @@ function GetCountry() {
                 $('#ddlCountry').append('<Option value=' + data.id + '>' + data.countryName + '</Option>')
             });
             $.each(result, function (i, data) {
-                $('#VendorCountry').append('<option value="' + data.id + '">' + data.countryName + '</option>');
-            });
-            $.each(result, function (i, data) {
                 $('#CompanyCountry').append('<option value="' + data.id + '">' + data.countryName + '</option>');
             });
             $.each(result, function (i, data) {
                 $('#projectCountry').append('<option value=' + data.id + '>' + data.countryName + '</option>')
             });
-
-            //var $countryDropdown = $("#drpCuCountry");
-            //$countryDropdown.empty();
-            //$countryDropdown.append('<option selected value="">--Select Country--</option>');
-            //$.each(result, function (i, data) {
-            //    $countryDropdown.append('<option value="' + data.id + '">' + data.countryName + '</option>');
-            //});
         }
     });
 }
@@ -182,48 +172,6 @@ function fn_getCompanycitiesbystateId(drpCompanycity, stateid, that) {
 
             $.each(result, function (i, data) {
                 $('#' + drpCompanycity).append('<Option value=' + data.id + '>' + data.cityName + '</Option>');
-
-            });
-        }
-    });
-}
-
-function fn_getVendorState(drpVendorstate, countryId, that) {
-    var cid = countryId;
-    if (cid == undefined || cid == null) {
-        var cid = $(that).val();
-    }
-
-
-    $('#' + drpVendorstate).empty();
-    $('#' + drpVendorstate).append('<Option >--Select State--</Option>');
-    $.ajax({
-        url: '/Authentication/GetState?StateId=' + cid,
-        success: function (result) {
-
-            $.each(result, function (i, data) {
-                $('#' + drpVendorstate).append('<Option value=' + data.id + '>' + data.stateName + '</Option>')
-            });
-        }
-    });
-}
-
-function fn_getVendorcitiesbystateId(drpVendorcity, stateid, that) {
-
-    var sid = stateid;
-    if (sid == undefined || sid == null) {
-        var sid = $(that).val();
-    }
-
-
-    $('#' + drpVendorcity).empty();
-    $('#' + drpVendorcity).append('<Option >--Select City--</Option>');
-    $.ajax({
-        url: '/Authentication/GetCity?CityId=' + sid,
-        success: function (result) {
-
-            $.each(result, function (i, data) {
-                $('#' + drpVendorcity).append('<Option value=' + data.id + '>' + data.cityName + '</Option>');
 
             });
         }
@@ -272,7 +220,7 @@ function fn_getProjectcitiesbystateId(drpProjectcity, stateid, that) {
 }
 
 $(document).ready(function () {
-    $('#drpCuCountry').select2({
+    $('#drpCuCountry,#VendorCountry').select2({
         placeholder: 'Select Contry',
         width: '100%',
         dropdownAutoWidth: true,
@@ -292,16 +240,36 @@ $(document).ready(function () {
         }
     });
 
-    $('#drpCuState').select2({
+    $('#drpCuState,#VendorState').select2({
         placeholder: 'Select State',
         width: '100%',
         allowClear: true
     });
 
-    $('#drpCuCity').select2({
+    $('#drpCuCity,#VendorCity').select2({
         placeholder: 'Select City',
         width: '100%',
         allowClear: true
+    });
+
+    $('#ddlVendorType').select2({
+        placeholder: 'Select Vendor Type',
+        width: '100%',
+        dropdownAutoWidth: true,
+        allowClear: true,
+        ajax: {
+            url: '/Vendor/GetVendorType',
+            dataType: 'json',
+            delay: 250,
+            processResults: function (data) {
+                return {
+                    results: data.map(item => ({
+                        id: item.id,
+                        text: item.vendorType
+                    }))
+                };
+            }
+        }
     });
 })
 function fn_getUserState(drpUserstate, countryId, that) {
@@ -317,7 +285,6 @@ function fn_getUserState(drpUserstate, countryId, that) {
                 $stateDropdown.append('<option value="' + data.id + '">' + data.stateName + '</option>');
             });
 
-            // Refresh Select2 after data load
             $stateDropdown.trigger('change');
         }
     });
@@ -336,12 +303,46 @@ function fn_getUsercitiesbystateId(drpUsercity, stateid, that) {
                 $cityDropdown.append('<option value="' + data.id + '">' + data.cityName + '</option>');
             });
 
-            // Refresh Select2 after data load
             $cityDropdown.trigger('change');
         }
     });
 }
+function fn_getVendorState(drpVendorstate, countryId, that) {
+    var cid = countryId ?? $(that).val();
 
+    let $stateDropdown = $('#' + drpVendorstate);
+    $stateDropdown.empty().append('<option value="">--Select State--</option>');
+
+    $.ajax({
+        url: '/Authentication/GetState?StateId=' + cid,
+        success: function (result) {
+            $.each(result, function (i, data) {
+                $stateDropdown.append('<option value="' + data.id + '">' + data.stateName + '</option>');
+            });
+
+            $stateDropdown.trigger('change');
+        }
+    });
+}
+
+function fn_getVendorcitiesbystateId(drpVendorcity, stateid, that) {
+
+    var sid = stateid ?? $(that).val();
+
+    let $cityDropdown = $('#' + drpVendorcity);
+    $cityDropdown.empty().append('<option value="">--Select City--</option>');
+
+    $.ajax({
+        url: '/Authentication/GetCity?CityId=' + sid,
+        success: function (result) {
+            $.each(result, function (i, data) {
+                $cityDropdown.append('<option value="' + data.id + '">' + data.cityName + '</option>');
+            });
+
+            $cityDropdown.trigger('change');
+        }
+    });
+}
 function Citytext(sel) {
     $("#txtcity").val((sel.options[sel.selectedIndex].text));
 }
@@ -368,13 +369,6 @@ function GetDepartment() {
             $.each(result, function (i, data) {
                 $('#ddlDepartment').append('<option value=' + data.id + '>' + data.departments + '</option>');
             });
-
-            //var $departmentDropdown = $("#drpCuDepartment");
-            //$departmentDropdown.empty();
-            //$departmentDropdown.append('<option selected value="">--Select Department--</option>');
-            //$.each(result, function (i, data) {
-            //    $departmentDropdown.append('<Option value=' + data.id + '>' + data.departments + '</Option>')
-            //});
         }
     });
 }
@@ -433,9 +427,6 @@ function GetVendorTypes() {
         success: function (result) {
             $.each(result, function (i, data) {
                 $('#textVendorType').append('<Option value=' + data.id + '>' + data.vendorType + '</Option>')
-            });
-            $.each(result, function (i, data) {
-                $('#ddlVendorType').append('<Option value=' + data.id + '>' + data.vendorType + '</Option>')
             });
         }
     });
