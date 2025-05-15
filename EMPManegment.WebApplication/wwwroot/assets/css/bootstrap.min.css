@@ -4461,7 +4461,7 @@ textarea.form-control-lg {
 
         .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
             color: var(--vz-nav-pills-link-active-color);
-            background-color: var(--vz-nav-pills-link-active-bg)
+            background-color: #16989A
         }
 
 .nav-underline {
