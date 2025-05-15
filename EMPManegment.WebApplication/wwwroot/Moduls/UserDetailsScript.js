@@ -820,6 +820,38 @@ function GetAllDepartmentList() {
         }
     });
 }
+$(document).ready(function () {
+    $('#drpCuDepartment').select2({
+        placeholder: 'Select Department',
+        width: '100%',
+        dropdownAutoWidth: true,
+        allowClear: true,
+        minimumResultsForSearch: Infinity,
+        ajax: {
+            url: '/Authentication/GetDepartment',
+            dataType: 'json',
+            delay: 250,
+            processResults: function (data) {
+                return {
+                    results: data.map(item => ({
+                        id: item.id,
+                        text: item.departments
+                    }))
+                };
+            }
+        }
+    }).on('select2:open', function () {
+        document.querySelector('.select2-container--open .select2-dropdown').style.marginTop = '5px';
+    });
+
+    $('#drpCuGender').select2({
+        placeholder: 'Select Gender',
+        width: '100%',
+        minimumResultsForSearch: Infinity,
+    }).on('select2:open', function () {
+        document.querySelector('.select2-container--open .select2-dropdown').style.marginTop = '5px';
+    });
+});
 
 function UADBackbtn() {
     clearsearchtextbox();

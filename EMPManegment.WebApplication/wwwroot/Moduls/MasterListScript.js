@@ -135,15 +135,17 @@ function GetCountry() {
                 $('#projectCountry').append('<option value=' + data.id + '>' + data.countryName + '</option>')
             });
 
-            var $countryDropdown = $("#drpCuCountry");
-            $countryDropdown.empty();
-            $countryDropdown.append('<option selected value="">--Select Country--</option>');
-            $.each(result, function (i, data) {
-                $countryDropdown.append('<option value="' + data.id + '">' + data.countryName + '</option>');
-            });
+            //var $countryDropdown = $("#drpCuCountry");
+            //$countryDropdown.empty();
+            //$countryDropdown.append('<option selected value="">--Select Country--</option>');
+            //$.each(result, function (i, data) {
+            //    $countryDropdown.append('<option value="' + data.id + '">' + data.countryName + '</option>');
+            //});
         }
     });
 }
+
+
 function fn_getCompanyState(drpCompanystate, countryId, that) {
     var cid = countryId;
     if (cid == undefined || cid == null) {
@@ -268,45 +270,78 @@ function fn_getProjectcitiesbystateId(drpProjectcity, stateid, that) {
         }
     });
 }
-function fn_getUserState(drpUserstate, countryId, that) {
-    var cid = countryId;
-    if (cid == undefined || cid == null) {
-        var cid = $(that).val();
-    }
 
-    $('#' + drpUserstate).empty();
-    $('#' + drpUserstate).append('<Option >--Select State--</Option>');
+$(document).ready(function () {
+    $('#drpCuCountry').select2({
+        placeholder: 'Select Contry',
+        width: '100%',
+        dropdownAutoWidth: true,
+        allowClear: true,
+        ajax: {
+            url: '/Authentication/GetCountrys',
+            dataType: 'json',
+            delay: 250,
+            processResults: function (data) {
+                return {
+                    results: data.map(item => ({
+                        id: item.id,
+                        text: item.countryName
+                    }))
+                };
+            }
+        }
+    });
+
+    $('#drpCuState').select2({
+        placeholder: 'Select State',
+        width: '100%',
+        allowClear: true
+    });
+
+    $('#drpCuCity').select2({
+        placeholder: 'Select City',
+        width: '100%',
+        allowClear: true
+    });
+})
+function fn_getUserState(drpUserstate, countryId, that) {
+    var cid = countryId ?? $(that).val();
+
+    let $stateDropdown = $('#' + drpUserstate);
+    $stateDropdown.empty().append('<option value="">--Select State--</option>');
+
     $.ajax({
         url: '/Authentication/GetState?StateId=' + cid,
         success: function (result) {
-
             $.each(result, function (i, data) {
-                $('#' + drpUserstate).append('<Option value=' + data.id + '>' + data.stateName + '</Option>')
+                $stateDropdown.append('<option value="' + data.id + '">' + data.stateName + '</option>');
             });
+
+            // Refresh Select2 after data load
+            $stateDropdown.trigger('change');
         }
     });
 }
 
 function fn_getUsercitiesbystateId(drpUsercity, stateid, that) {
+    var sid = stateid ?? $(that).val();
 
-    var sid = stateid;
-    if (sid == undefined || sid == null) {
-        var sid = $(that).val();
-    }
+    let $cityDropdown = $('#' + drpUsercity);
+    $cityDropdown.empty().append('<option value="">--Select City--</option>');
 
-    $('#' + drpUsercity).empty();
-    $('#' + drpUsercity).append('<Option >--Select City--</Option>');
     $.ajax({
         url: '/Authentication/GetCity?CityId=' + sid,
         success: function (result) {
-
             $.each(result, function (i, data) {
-                $('#' + drpUsercity).append('<Option value=' + data.id + '>' + data.cityName + '</Option>');
-
+                $cityDropdown.append('<option value="' + data.id + '">' + data.cityName + '</option>');
             });
+
+            // Refresh Select2 after data load
+            $cityDropdown.trigger('change');
         }
     });
 }
+
 function Citytext(sel) {
     $("#txtcity").val((sel.options[sel.selectedIndex].text));
 }
@@ -334,12 +369,12 @@ function GetDepartment() {
                 $('#ddlDepartment').append('<option value=' + data.id + '>' + data.departments + '</option>');
             });
 
-            var $departmentDropdown = $("#drpCuDepartment");
-            $departmentDropdown.empty();
-            $departmentDropdown.append('<option selected value="">--Select Department--</option>');
-            $.each(result, function (i, data) {
-                $departmentDropdown.append('<Option value=' + data.id + '>' + data.departments + '</Option>')
-            });
+            //var $departmentDropdown = $("#drpCuDepartment");
+            //$departmentDropdown.empty();
+            //$departmentDropdown.append('<option selected value="">--Select Department--</option>');
+            //$.each(result, function (i, data) {
+            //    $departmentDropdown.append('<Option value=' + data.id + '>' + data.departments + '</Option>')
+            //});
         }
     });
 }
