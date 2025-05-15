@@ -75,10 +75,6 @@ $(document).ready(function () {
     }
 });
 
-
-
-
-
 function EditUserFormDetails(userId) {
     var UserId = userId
     $.ajax({
