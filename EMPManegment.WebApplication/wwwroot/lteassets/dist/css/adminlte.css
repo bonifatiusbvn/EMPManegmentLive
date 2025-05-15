@@ -7125,7 +7125,7 @@ button.bg-success:focus {
 a.bg-info:hover, a.bg-info:focus,
 button.bg-info:hover,
 button.bg-info:focus {
-    background-color: #117a8b !important;
+    background-color: #16989A !important;
 }
 
 .bg-warning {
@@ -27998,7 +27998,7 @@ body.text-sm .input-group-text {
 .card.bg-gradient-info .bootstrap-datetimepicker-widget table td.hour:hover,
 .card.bg-gradient-info .bootstrap-datetimepicker-widget table td.minute:hover,
 .card.bg-gradient-info .bootstrap-datetimepicker-widget table td.second:hover {
-    background-color: #128294;
+    background-color: #16989A;
     color: #fff;
 }
 
@@ -28011,7 +28011,7 @@ body.text-sm .input-group-text {
 .card.bg-info .bootstrap-datetimepicker-widget table td.active:hover,
 .card.bg-gradient-info .bootstrap-datetimepicker-widget table td.active,
 .card.bg-gradient-info .bootstrap-datetimepicker-widget table td.active:hover {
-    background-color: #1fc8e3;
+    background-color: #16989A;
     color: #fff;
 }
 
