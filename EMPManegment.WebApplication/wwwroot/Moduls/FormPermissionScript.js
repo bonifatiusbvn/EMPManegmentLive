@@ -30,7 +30,8 @@ $(document).ready(function () {
 
     $('#ddlRoleWiseFormPermission').select2({
         placeholder: 'Select Role',
-        height: '100px',
+        width: '100%',
+        dropdownAutoWidth: true,
         allowClear: true,
         ajax: {
             url: '/UserProfile/RolewisePermissionListAction',
@@ -43,8 +44,10 @@ $(document).ready(function () {
                         text: item.role
                     }))
                 };
-            },
+            }
         }
+    }).on('select2:open', function () {
+        document.querySelector('.select2-container--open .select2-dropdown').style.marginTop = '5px';
     });
 
     $('#ddlRoleWiseFormPermission').on('select2:select', function (e) {
