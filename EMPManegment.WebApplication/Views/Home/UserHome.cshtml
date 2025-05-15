@@ -6,6 +6,27 @@
     Layout = "~/Views/Shared/_HomeLayout.cshtml";
 }
 
+<style>
+    .btn-success {
+        background-color: green;
+        border-color: green;
+    }
+
+        .btn-success:hover {
+            color: white !important;
+            background-color: darkgreen;
+            border-color: darkgreen;
+        }
+
+        .btn-secondary:hover {
+            color: white !important;
+        }
+
+    .btn-warning:hover {
+        color: black !important;
+    }
+</style>
+
 <div class="row" style="margin-top:80px;">
     <div class="col-12">
         <div class="page-title-box d-sm-flex align-items-center justify-content-between">
@@ -54,7 +75,10 @@
                         <h4 class="fs-22 fw-semibold ff-secondary mb-4">
                             <span class="counter-value" id="todayintime"></span>
                         </h4>
-                        <button type="button" class="btn btn-success btn-label" onclick="EnterInTime()"><i class="ri-check-double-line label-icon align-middle fs-16 me-2"></i>Enter IN-TIME</button>
+                        <button type="button" class="btn btn-success btn-label" onclick="EnterInTime()">
+                            <i class="ri-check-double-line label-icon align-middle fs-16 me-2"></i>
+                            <span style=" margin-left: 26px;">Enter IN-TIME</span>
+                        </button>
                     </div>
                     <div class="avatar-sm flex-shrink-0">
                         <span class="avatar-title bg-primary-subtle rounded fs-3">
@@ -83,16 +107,10 @@
                         <h4 class="fs-22 fw-semibold ff-secondary mb-4">
                             <span class="counter-value" id="todayouttime"></span>
                         </h4>
-                        <a href="javascript:void(0);" class="btn btn-secondary btn-label" onclick="EnterOutTime()">
-                            <div class="d-flex">
-                                <div class="flex-shrink-0">
-                                    <i class="ri-user-smile-line label-icon align-middle fs-16 me-2"></i>
-                                </div>
-                                <div class="flex-grow-1">
-                                    Enter OUT-TIME
-                                </div>
-                            </div>
-                        </a>
+                        <button type="button" class="btn  btn-secondary btn-label" onclick="EnterOutTime()">
+                            <i class="ri-user-smile-line label-icon align-middle fs-16 me-2"></i>
+                            <span style=" margin-left: 26px;">Enter OUT-TIME</span>
+                        </button>
                     </div>
                     <div class="avatar-sm flex-shrink-0">
                         <span class="avatar-title bg-primary-subtle rounded fs-3">
@@ -122,14 +140,8 @@
                             <span class="counter-value" id="txttotalhours"></span>
                         </h4>
                         <a asp-action="MyAttendance" asp-controller="UserProfile" class="btn btn-warning btn-label">
-                            <div class="d-flex">
-                                <div class="flex-shrink-0">
-                                    <i class="ri-calendar-2-line label-icon align-middle fs-16 me-2"></i>
-                                </div>
-                                <div class="flex-grow-1">
-                                    View Summary
-                                </div>
-                            </div>
+                            <i class="ri-calendar-2-line label-icon align-middle fs-16 me-2"></i>
+                            <span style=" margin-left: 26px;">View Summary</span>
                         </a>
                     </div>
                     <div class="avatar-sm flex-shrink-0">
