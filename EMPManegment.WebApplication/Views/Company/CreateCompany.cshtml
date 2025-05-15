@@ -12,51 +12,92 @@
                    : string.Empty;
 }
 <style>
-    .Create_Company {
-        height: auto;
+    .create-company-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
     }
 
-    .companybutton {
-        width: 230px;
-        height: 50px;
-        margin-top: -40px;
-        margin-right: 20px;
+    .company-card {
+        border-radius: 10px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        border: none;
+        overflow: hidden;
     }
 
-    @@media (max-width: 450px) {
+    .company-card-header {
+        background-color: #16989A;
+        color: white;
+        padding: 15px 20px;
+        font-weight: 600;
+        border-bottom: none;
+    }
 
-        .Create_Company {
-            box-sizing: border-box;
-            padding: 0 10px;
-            height: auto;
-            width: 100% !important;
+    .form-label {
+        font-weight: 500;
+        color: #495057;
+        margin-bottom: 8px;
+    }
+
+    .form-control {
+        border-radius: 6px;
+        padding: 10px 15px;
+        border: 1px solid #ced4da;
+        transition: all 0.3s;
+    }
+
+        .form-control:focus {
+            border-color: #16989A;
+            box-shadow: 0 0 0 0.2rem rgba(22, 152, 154, 0.25);
         }
 
-        .companybutton {
+    .company-button {
+        background-color: #16989A;
+        border: none;
+        padding: 12px 25px;
+        font-weight: 500;
+        border-radius: 6px;
+        transition: all 0.3s;
+    }
+
+        .company-button:hover {
+            background-color: #138486;
+            transform: translateY(-2px);
+        }
+
+    .dropzone-area {
+        border: 2px dashed #16989A;
+        border-radius: 8px;
+        padding: 20px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s;
+        background-color: rgba(22, 152, 154, 0.05);
+    }
+
+        .dropzone-area:hover {
+            background-color: rgba(22, 152, 154, 0.1);
+        }
+
+    .logo-preview {
+        max-width: 100px;
+        max-height: 100px;
+        border-radius: 4px;
+    }
+
+    .required-field::after {
+        content: " *";
+        color: #dc3545;
+    }
+
+    @@media (max-width: 768px) {
+        .create-company-container {
+            padding: 15px;
+        }
+
+        .company-button {
             width: 100%;
-            height: 100%;
-            margin-top: 0;
-            margin-right: auto;
-        }
-
-        .descriptionphoto {
-            font-size: 16px;
-        }
-    }
-
-    @@media (min-width: 451px) and (max-width: 912px) {
-
-        .Create_Company {
-            padding: 0 10px;
-            height: auto;
-            width: 100% !important;
-        }
-
-        .companybutton {
-            width: 230px;
-            height: 50px;
-            margin-top: 0;
-            margin-right: 55px;
+            margin-top: 15px;
         }
     }
 </style>
@@ -65,7 +106,6 @@
 <div class="row" style="margin-top:80px;">
     <div class="col-12">
         <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-            <h4 class="mb-sm-0">Create Company</h4>
             <div class="page-title-right">
                 <ol class="breadcrumb m-0">
                     <li class="breadcrumb-item"><a href="javascript: void(0);">Company</a></li>
@@ -76,234 +116,164 @@
     </div>
 </div>
 <!-- end page title -->
-<form id="createCompanyform" autocomplete="off">
-    <div class="row">
-        <div class="auth-page-wrapper py-5 d-flex justify-content-center align-items-center min-vh-50">
-            <input type="hidden" class="form-control" id="textViewMode" value="@ViewBag.ViewMode.ToString()" readonly />
-            <div class="col-lg-12">
-                <div class="card Create_Company">
-                    <div class="card-header">
-                        <ul class="nav nav-tabs-custom card-header-tabs border-bottom-0" role="tablist">
-                            <li class="nav-item">
-                                <a class="nav-link" role="tab">
-                                    Business Details
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <div class="mb-3">
-                                    <label class="form-label" for="companynameInput">Company Name <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" autocomplete="off" id="txtcompanyname" name="txtcompanyname" value="@Model.CompnyName" placeholder="Enter your company name">
-                                    <input type="hidden" class="form-control" autocomplete="off" id="txtcompanyId" value="@Model.Id">
-                                    <input type="hidden" id="txtCompanyUpdatedby" value="@_userSession.UserId" />
-                                </div>
-                            </div>
-                            <!--end col-->
-                            <div class="col-lg-6">
-                                <div class="mb-3">
-                                    <label for="emailidInput" class="form-label">Email <span class="text-danger">*</span></label>
-                                    <input type="email" class="form-control" autocomplete="off" id="txtcompanyemail" value="@Model.Email" name="txtcompanyemail" placeholder="Enter your email">
-                                </div>
-                            </div>
-                            <!--end col-->
-                            <div class="col-lg-6">
-                                <div class="mb-3">
-                                    <label for="contactnumberInput" class="form-label">Contact Number <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" autocomplete="off" value="@Model.ContactNumber" id="txtcompanycontactnumber" name="txtcompanycontactnumber" placeholder="Enter your number">
-                                </div>
-                            </div>
-                            <!--end col-->
-                            <div class="col-lg-6">
-                                <div class="mb-3">
-                                    <label for="contactnumberInput" class="form-label">Gst<span class="text-danger"></span></label>
-                                    <input type="text" class="form-control" autocomplete="off" value="@Model.ContactNumber" id="txtcompanygst" name="txtcompanygst" placeholder="Enter gst number">
-                                </div>
-                            </div>
-                            <!--end col-->
-                            <div class="col-lg-3">
-                                <div class="mb-3">
-                                    <label for="ddlCountry" class="form-label">Country <span class="text-danger">*</span></label>
-                                    @if (Model.CountryName != null)
-                                    {
-                                        <select id="CompanyCountry" name="CompanyCountry" class="form-control form-select valid" onchange="fn_getCompanyState('CompanyState',null,this)">
-                                            <option value="@Model.Country">@Model.CountryName</option>
-                                        </select>
-                                        <input type="hidden" id="txtCompanycountryId" value="@Model.Country" />
-                                    }
-                                    else
-                                    {
-                                        <select id="CompanyCountry" name="CompanyCountry" class="form-control form-select valid" onchange="fn_getCompanyState('CompanyState',null,this)">
-                                            <option selected value="">--Select Country--</option>
-                                        </select>
-                                    }
-                                    <input type="hidden" id="txtCompanycountry" name="txtcountry" value="" />
-                                </div>
-                            </div>
-                            <!--end col-->
-                            <div class="col-lg-3">
-                                <div class="mb-3">
-                                    <label for="ddlState" class="form-label">State <span class="text-danger">*</span></label>
-                                    @if (Model.StateName != null)
-                                    {
-                                        <select id="CompanyState" name="CompanyState" class="form-control form-select valid" onchange="fn_getCompanycitiesbystateId('CompanyCity', null, this)">
-                                            <option value="@Model.State">@Model.StateName</option>
-                                        </select>
-                                    }
-                                    else
-                                    {
-                                        <select id="CompanyState" name="CompanyState" class="form-control form-select valid" onchange="fn_getCompanycitiesbystateId('CompanyCity', null, this)">
-                                            <option value="">--Select State--</option>
-                                        </select>
-                                    }
-                                    <input type="hidden" id="txtCompanystate" name="txtstate" value="" />
-                                </div>
-                            </div>
-                            <!--end col-->
-                            <div class="col-lg-3">
-                                <div class="mb-3">
-                                    <label for="ddlCity" class="form-label">City <span class="text-danger">*</span></label>
-                                    @if (Model.City != null)
-                                    {
-                                        <select id="CompanyCity" name="CompanyCity" class="form-control form-select valid">
-                                            <option value="@Model.City">@Model.CityName</option>
-                                        </select>
-                                    }
-                                    else
-                                    {
-                                        <select id="CompanyCity" name="CompanyCity" class="form-control form-select valid">
-                                            <option selected value="">--Select City--</option>
-                                        </select>
-                                    }
-                                    <input type="hidden" id="txtCompanycity" name="txtcity" value="" />
-                                </div>
-                            </div>
-                            <!--end col-->
-                            <div class="col-lg-3">
-                                <div class="mb-3">
-                                    <label for="txtPincode" class="form-label">PinCode <span class="text-danger">*</span></label>
-                                    <input type="number" class="form-control" autocomplete="off" value="@Model.PinCode" id="txtPincode" name="txtPincode" placeholder="Enter your Pincode">
-                                </div>
-                            </div>
-                            <!--end col-->
-                            <div class="col-lg-8">
-                                <div class="mb-3">
-                                    <label for="AddressidInput" class="form-label">Address <span class="text-danger">*</span></label>
-                                    @if (Model.Address != null)
-                                    {
-                                        <textarea type="text" class="form-control" id="txtCompanyAddress" name="txtCompanyAddress" rows="3" placeholder="Enter your Address">@Model.Address</textarea>
-                                    }
-                                    else
-                                    {
-                                        <textarea type="text" class="form-control" id="txtCompanyAddress" name="txtCompanyAddress" rows="3" placeholder="Enter your Address"></textarea>
-                                    }
-                                </div>
-                            </div>
-                            <!--end col-->
-                            <div class="col-lg-8">
-                                <div class="mb-3">
-                                    <label for="companylogo" class="form-label">Logo</label>
-                                    <div class="card-body">
-                                        <div class="dropzone" style="height: 25px; cursor: pointer;" id="dropzone">
-                                            <div class="fallback" style="display: none;">
-                                                <input id="fileUpload" name="file" type="file" multiple="multiple">
-                                            </div>
-                                            <div class="dz-message needsclick" style="margin-top: -12px;">
-                                                <div class="mb-3">
-                                                    <i class="display-4 text-muted ri-upload-cloud-2-fill"></i>
-                                                </div>
-                                                <h4 class="descriptionphoto">Drop files here or click to upload.</h4>
-                                            </div>
-                                        </div>
-                                        <div id="currentCompanyImageName" style="margin-bottom: 10px;" hidden>
-                                            @System.IO.Path.GetFileName(Model.CompanyLogo)
-                                        </div>
-                                        @if (!string.IsNullOrEmpty(Model.CompanyLogo))
-                                        {
-                                            <ul class="list-unstyled mb-0" id="CompanyImage-preview">
-                                                <li class="mt-2">
-                                                    <!-- This is used as the file preview template -->
-                                                    <div class="border rounded">
-                                                        <div class="d-flex p-2">
-                                                            <div class="flex-shrink-0 me-3">
-                                                                <div class="avatar-sm bg-light rounded">
-                                                                    <img data-dz-thumbnail class="img-fluid rounded d-block" src="~/Content/Image/@Model.CompanyLogo" alt="Dropzone-Image" id="CompanyOldImage" />
-                                                                </div>
-                                                            </div>
-                                                            <div class="flex-grow-1">
-                                                                <div class="pt-1">
-                                                                    <h5 class="fs-14 mb-1" data-dz-name>&nbsp;</h5>
-                                                                    <p class="fs-13 text-muted mb-0" data-dz-size></p>
-                                                                    <strong class="error text-danger" data-dz-errormessage></strong>
-                                                                </div>
-                                                            </div>
-                                                            <div class="flex-shrink-0 ms-3">
-                                                                <button class="btn btn-sm btn-primary remove-preview">Delete</button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                            </ul>
-                                        }
-                                        else
-                                        {
-                                            <ul class="list-unstyled mb-0" id="dropzone-preview">
-                                                <li class="mt-2" id="dropzone-preview-list">
-                                                    <!-- This is used as the file preview template -->
-                                                    <div class="border rounded">
-                                                        <div class="d-flex p-2">
-                                                            <div class="flex-shrink-0 me-3">
-                                                                <div class="avatar-sm bg-light rounded">
-                                                                    <img data-dz-thumbnail class="img-fluid rounded d-block" src="assets/images/new-document.png" alt="Dropzone-Image" id="companylogo" />
-                                                                </div>
-                                                            </div>
-                                                            <div class="flex-grow-1">
-                                                                <div class="pt-1">
-                                                                    <h5 class="fs-14 mb-1" data-dz-name>&nbsp;</h5>
-                                                                    <p class="fs-13 text-muted mb-0" data-dz-size></p>
-                                                                    <strong class="error text-danger" data-dz-errormessage></strong>
-                                                                </div>
-                                                            </div>
-                                                            <div class="flex-shrink-0 ms-3">
-                                                                <button data-dz-remove class="btn btn-sm btn-primary">Delete</button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                            </ul>
-                                        }
+<div class="create-company-container">
+    <!-- Page Header -->
+    <div class="page-header mb-4">
+        <h4 class="mb-0 text-teal">Create Company</h4>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#">Company</a></li>
+                <li class="breadcrumb-item active">Create Company</li>
+            </ol>
+        </nav>
+    </div>
 
-                                        <!-- end dropzon-preview -->
-                                    </div>
-                                    <!-- end card body -->
-                                    <!-- end card -->
-                                </div>
-                                <!--end col-->
+    <!-- Company Form -->
+    <form id="createCompanyform" autocomplete="off">
+        <input type="hidden" id="txtcompanyId" value="@Model.Id">
+        <input type="hidden" id="txtCompanyUpdatedby" value="@_userSession.UserId">
+
+        <div class="card company-card">
+            <div class="card-header company-card-header">
+                Business Details
+            </div>
+
+            <div class="card-body">
+                <div class="row">
+                    <!-- Company Name -->
+                    <div class="col-md-6 mb-3">
+                        <label for="txtcompanyname" class="form-label required-field">Company Name</label>
+                        <input type="text" class="form-control" id="txtcompanyname"
+                               value="@Model.CompnyName" placeholder="Enter company name" required>
+                    </div>
+
+                    <!-- Email -->
+                    <div class="col-md-6 mb-3">
+                        <label for="txtcompanyemail" class="form-label required-field">Email</label>
+                        <input type="email" class="form-control" id="txtcompanyemail"
+                               value="@Model.Email" placeholder="Enter company email" required>
+                    </div>
+
+                    <!-- Contact Number -->
+                    <div class="col-md-6 mb-3">
+                        <label for="txtcompanycontactnumber" class="form-label required-field">Contact Number</label>
+                        <input type="text" class="form-control" id="txtcompanycontactnumber"
+                               value="@Model.ContactNumber" placeholder="Enter contact number" required>
+                    </div>
+
+                    <!-- GST -->
+                    <div class="col-md-6 mb-3">
+                        <label for="txtcompanygst" class="form-label">GST Number</label>
+                        <input type="text" class="form-control" id="txtcompanygst"
+                               value="@Model.Gst" placeholder="Enter GST number">
+                    </div>
+
+                    <!-- Country -->
+                    <div class="col-md-3 mb-3">
+                        <label for="CompanyCountry" class="form-label required-field">Country</label>
+                        <select id="CompanyCountry" class="form-control form-select"
+                                onchange="fn_getCompanyState('CompanyState',null,this)" required>
+                            @if (Model.CountryName != null)
+                            {
+                                <option value="@Model.Country">@Model.CountryName</option>
+                            }
+                            else
+                            {
+                                <option value="">--Select Country--</option>
+                            }
+                        </select>
+                    </div>
+
+                    <!-- State -->
+                    <div class="col-md-3 mb-3">
+                        <label for="CompanyState" class="form-label required-field">State</label>
+                        <select id="CompanyState" class="form-control form-select"
+                                onchange="fn_getCompanycitiesbystateId('CompanyCity', null, this)" required>
+                            @if (Model.StateName != null)
+                            {
+                                <option value="@Model.State">@Model.StateName</option>
+                            }
+                            else
+                            {
+                                <option value="">--Select State--</option>
+                            }
+                        </select>
+                    </div>
+
+                    <!-- City -->
+                    <div class="col-md-3 mb-3">
+                        <label for="CompanyCity" class="form-label required-field">City</label>
+                        <select id="CompanyCity" class="form-control form-select" required>
+                            @if (Model.CityName != null)
+                            {
+                                <option value="@Model.City">@Model.CityName</option>
+                            }
+                            else
+                            {
+                                <option value="">--Select City--</option>
+                            }
+                        </select>
+                    </div>
+
+                    <!-- Pincode -->
+                    <div class="col-md-3 mb-3">
+                        <label for="txtPincode" class="form-label required-field">PinCode</label>
+                        <input type="number" class="form-control" id="txtPincode"
+                               value="@Model.PinCode" placeholder="Enter pincode" required>
+                    </div>
+
+                    <!-- Address -->
+                    <div class="col-12 mb-3">
+                        <label for="txtCompanyAddress" class="form-label required-field">Address</label>
+                        <textarea class="form-control" id="txtCompanyAddress" rows="3"
+                                  placeholder="Enter company address" required>@Model.Address</textarea>
+                    </div>
+
+                    <!-- Logo Upload -->
+                    <div class="col-12 mb-3">
+                        <label class="form-label">Company Logo</label>
+                        <div class="dropzone-area" id="dropzone">
+                            <div class="dz-message">
+                                <i class="ri-upload-cloud-2-fill display-4 text-teal"></i>
+                                <h5 class="mt-3">Drop files here or click to upload</h5>
+                                <p class="text-muted">(Only image files are accepted)</p>
                             </div>
                         </div>
-                    </div>
-                    <div class="text-end mb-3">
-                        @if (Model.Id == null || Model.Id == Guid.Empty)
-                        {
-                            <button type="button" class="btn btn-success btn-lg companybutton" onclick="AddCompanyDetails()" id="SubmitCompanyDetails">Submit</button>
-                        }
-                        else
-                        {
-                            @if (UserSession.FormPermisionData.Any(a => a.FormName == "Company List" && (a.Edit == true)))
+
+                        <!-- Logo Preview -->
+                        <div class="mt-3" id="logo-preview-container">
+                            @if (!string.IsNullOrEmpty(Model.CompanyLogo))
                             {
-                                <button type="button" class="btn btn-primary btn-lg companybutton" onclick="UpdateCompanyDetails('@Model.Id')" id="updateCompanybtn">Update</button>
-                                <button type="button" class="btn btn-primary btn-lg companybutton" onclick="EditCompany()" id="editCompanybtn" style="display: none;">Edit</button>
+                                <div class="d-flex align-items-center">
+                                    <img src="~/Content/Image/@Model.CompanyLogo" class="logo-preview me-3">
+                                    <button class="btn btn-sm btn-danger remove-logo">Remove Logo</button>
+                                </div>
                             }
-                        }
+                        </div>
                     </div>
                 </div>
-                <!-- end card -->
+
+                <!-- Form Actions -->
+                <div class="text-end mt-4">
+                    @if (Model.Id == null || Model.Id == Guid.Empty)
+                    {
+                        <button type="button" class="btn company-button text-white"
+                                onclick="AddCompanyDetails()" id="SubmitCompanyDetails">
+                            <i class="ri-save-line me-1"></i> Submit
+                        </button>
+                    }
+                    else
+                    {
+                        <button type="button" class="btn company-button text-white"
+                                onclick="UpdateCompanyDetails('@Model.Id')" id="updateCompanybtn">
+                            <i class="ri-edit-line me-1"></i> Update
+                        </button>
+                    }
+                </div>
             </div>
         </div>
-    </div>
-</form>
+    </form>
+</div>
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 
