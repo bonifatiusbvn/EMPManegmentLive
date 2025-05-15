@@ -1,6 +1,37 @@
 ﻿@model EMPManegment.EntityModels.ViewModels.LoginRequest
 
 <!doctype html>
+<style>
+    input[type="checkbox"] {
+        background-color: #16989A !important;
+        cursor: pointer;
+        appearance: auto;
+        box-sizing: border-box;
+        margin: 3px 3px 3px 4px;
+        padding: initial;
+        border: initial;
+    }
+
+    /* Style for the switch/checkbox container */
+    .remember-me-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        gap: 1rem; /* Adds consistent spacing between elements */
+    }
+
+    /* Style for the checkbox and label */
+    .checkbox-container {
+        display: flex;
+        align-items: center;
+    }
+
+    /* Style for the forgot password link */
+    .forgot-password-link {
+        white-space: nowrap; /* Prevents text from wrapping */
+    }
+</style>
 <html lang="en" data-layout="vertical" data-topbar="light" data-sidebar="light" data-sidebar-size="lg" data-sidebar-image="none" data-preloader="disable">
 
 <head>
@@ -75,15 +106,18 @@
                                                 <span class="text-danger">@TempData["ErrorMessage"]</span>
                                             </div>
                                         </div>
-                                        <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
-                                            <div style="display: flex; align-items: center;">
-                                                <input type="checkbox" role="switch" id="flexSwitchCheckRemember" asp-for="RememberMe" checked="@ViewBag.checkRememberMe" style="margin-right: 8px;">
+                                        <div class="remember-me-container">
+                                            <div class="checkbox-container">
+                                                <input type="checkbox" role="switch" id="flexSwitchCheckRemember"
+                                                       asp-for="RememberMe" checked="@ViewBag.checkRememberMe"
+                                                       style="margin-right: 8px;">
                                                 <label for="flexSwitchCheckRemember">
                                                     Remember Me
                                                 </label>
                                             </div>
-                                            <a asp-action="ForgetPassword" asp-controller="Authentication" class="link-primary">
-                                                Forgot Password ?
+                                            <a asp-action="ForgetPassword" asp-controller="Authentication"
+                                               class="link-primary forgot-password-link">
+                                                Forgot Password?
                                             </a>
                                         </div>
                                         <div class="mt-4">
