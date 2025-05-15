@@ -1,50 +1,51 @@
 ﻿
+using Aspose.Pdf;
+using Aspose.Pdf.Operators;
+using Aspose.Pdf.Text;
+using ClosedXML.Excel;
+using DocumentFormat.OpenXml.Drawing.Charts;
+using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
+using DocumentFormat.OpenXml.Spreadsheet;
 using EMPManagment.Web.Helper;
 using EMPManagment.Web.Models.API;
+using EMPManegment.EntityModels.Crypto;
 using EMPManegment.EntityModels.View_Model;
 using EMPManegment.EntityModels.ViewModels;
-using Microsoft.AspNetCore.Authentication.Cookies;
+using EMPManegment.EntityModels.ViewModels.AGGridModels;
+using EMPManegment.EntityModels.ViewModels.DataTableParameters;
+using EMPManegment.EntityModels.ViewModels.FormMaster;
+using EMPManegment.EntityModels.ViewModels.FormPermissionMaster;
+using EMPManegment.EntityModels.ViewModels.Invoice;
+using EMPManegment.EntityModels.ViewModels.Models;
+using EMPManegment.EntityModels.ViewModels.ProjectModels;
+using EMPManegment.EntityModels.ViewModels.TaskModels;
+using EMPManegment.EntityModels.ViewModels.UserModels;
+using EMPManegment.EntityModels.ViewModels.VendorModels;
+using EMPManegment.Web.Helper;
+using EMPManegment.Web.Models;
+using iTextSharp.text.pdf;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Build.ObjectModelRemoting;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Newtonsoft.Json;
-using System.Security.Claims;
+using Newtonsoft.Json.Linq;
 using NuGet.Protocol.Plugins;
+using System.Data;
+using System.IO;
 using System.Net;
-using EMPManegment.EntityModels.ViewModels.Models;
+using System.Reflection;
 using System.Security.Claims;
-using Microsoft.AspNetCore.Identity;
-using static System.Net.Mime.MediaTypeNames;
+using System.Security.Claims;
 using System.Security.Claims;
 using System.Text.Json;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using EMPManegment.EntityModels.ViewModels.DataTableParameters;
-using EMPManegment.EntityModels.ViewModels.UserModels;
-using EMPManegment.EntityModels.ViewModels.TaskModels;
 using X.PagedList;
 using X.PagedList.Mvc;
-using EMPManegment.EntityModels.Crypto;
-using Microsoft.Build.ObjectModelRemoting;
-using EMPManegment.Web.Models;
-using Newtonsoft.Json.Linq;
-using ClosedXML.Excel;
-using System.Data;
-using System.Reflection;
-using DocumentFormat.OpenXml.Spreadsheet;
-using DocumentFormat.OpenXml.Drawing.Charts;
-using Aspose.Pdf;
-using Aspose.Pdf.Text;
-using System.IO;
-using EMPManegment.EntityModels.ViewModels.ProjectModels;
-using EMPManegment.EntityModels.ViewModels.FormPermissionMaster;
-using Microsoft.AspNetCore.Authorization;
-using EMPManegment.Web.Helper;
-using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
-using EMPManegment.EntityModels.ViewModels.VendorModels;
-using EMPManegment.EntityModels.ViewModels.FormMaster;
-using iTextSharp.text.pdf;
-using EMPManegment.EntityModels.ViewModels.Invoice;
-using Aspose.Pdf.Operators;
+using static System.Net.Mime.MediaTypeNames;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 #nullable disable
 namespace EMPManegment.Web.Controllers
 {
@@ -151,50 +152,23 @@ namespace EMPManegment.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> GetUserList()
+        public async Task<IActionResult> GetUserList([FromBody] AGGridRequestModel UserRequest)
         {
             try
             {
-                var draw = Request.Form["draw"].FirstOrDefault();
-                var start = Request.Form["start"].FirstOrDefault();
-                var length = Request.Form["length"].FirstOrDefault();
-                var sortColumn = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
-                var sortColumnDir = Request.Form["order[0][dir]"].FirstOrDefault();
-                var searchValue = Request.Form["search[value]"].FirstOrDefault();
-                int pageSize = length != null ? Convert.ToInt32(length) : 0;
-                int skip = start != null ? Convert.ToInt32(start) : 0;
+                UserRequest.filters ??= new List<FilterModel>();
 
-                var dataTable = new DataTableRequstModel
+                var UserDetails = await APIServices.AGPostAsync<EmpDetailsView>(UserRequest, "UserProfile/GetAllUserList");
+
+                return new JsonResult(new
                 {
-                    draw = draw,
-                    start = start,
-                    pageSize = pageSize,
-                    skip = skip,
-                    lenght = length,
-                    searchValue = searchValue,
-                    sortColumn = sortColumn,
-                    sortColumnDir = sortColumnDir
-                };
-                List<UserDataTblModel> GetUserList = new List<UserDataTblModel>();
-                var data = new jsonData();
-                ApiResponseModel res = await APIServices.PostAsync(dataTable, "UserProfile/GetAllUserList");
-                if (res.code == 200)
-                {
-                    data = JsonConvert.DeserializeObject<jsonData>(res.data.ToString());
-                    GetUserList = JsonConvert.DeserializeObject<List<UserDataTblModel>>(data.data.ToString());
-                }
-                var jsonData = new
-                {
-                    draw = data.draw,
-                    recordsFiltered = data.recordsFiltered,
-                    recordsTotal = data.recordsTotal,
-                    data = GetUserList,
-                };
-                return new JsonResult(jsonData);
+                    rowsThisPage = UserDetails.Data,
+                    totalRowCount = UserDetails.RecordsTotal
+                });
             }
             catch (Exception ex)
             {
-                throw ex;
+                return StatusCode(500, new { message = "Error fetching data", error = ex.Message });
             }
         }
 

@@ -1,20 +1,22 @@
-﻿using System;
+﻿using EMPManagment.Web.Models.API;
+using EMPManegment.EntityModels.View_Model;
+using EMPManegment.EntityModels.ViewModels;
+using EMPManegment.EntityModels.ViewModels.AGGridModels;
+using EMPManegment.EntityModels.ViewModels.DataTableParameters;
+using EMPManegment.EntityModels.ViewModels.FormPermissionMaster;
+using EMPManegment.EntityModels.ViewModels.Models;
+using EMPManegment.EntityModels.ViewModels.VendorModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using EMPManagment.Web.Models.API;
-using EMPManegment.EntityModels.View_Model;
-using EMPManegment.EntityModels.ViewModels;
-using EMPManegment.EntityModels.ViewModels.DataTableParameters;
-using EMPManegment.EntityModels.ViewModels.FormPermissionMaster;
-using EMPManegment.EntityModels.ViewModels.Models;
 
 namespace EMPManegment.Inretface.Interface.UserList
 {
     public interface IUserDetails
     {
-        Task<jsonData> GetUsersList(DataTableRequstModel GetUsersList);
+        Task<AGGridResponseModel<EmpDetailsView>> GetUsersList(AGGridRequestModel UserRequest);
         Task<IEnumerable<EmpDetailsView>> GetUsersNameList();
         Task<UserResponceModel> ActiveDeactiveUsers(Guid UserId, Guid UpdatedBy);
         Task<UserResponceModel> EnterInTime(UserAttendanceModel UserInTime);

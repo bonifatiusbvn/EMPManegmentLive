@@ -3,27 +3,28 @@ using Azure.Core;
 using EMPManagment.Web.Models.API;
 using EMPManegment.EntityModels.View_Model;
 using EMPManegment.EntityModels.ViewModels;
-using EMPManegment.EntityModels.ViewModels.DataTableParameters;
-using EMPManegment.EntityModels.ViewModels.Models;
-using EMPManegment.Inretface.Interface.UserAttendance;
 using EMPManegment.EntityModels.ViewModels;
+using EMPManegment.EntityModels.ViewModels.AGGridModels;
+using EMPManegment.EntityModels.ViewModels.DataTableParameters;
+using EMPManegment.EntityModels.ViewModels.FormMaster;
+using EMPManegment.EntityModels.ViewModels.FormPermissionMaster;
+using EMPManegment.EntityModels.ViewModels.Models;
+using EMPManegment.EntityModels.ViewModels.ProjectModels;
+using EMPManegment.EntityModels.ViewModels.TaskModels;
+using EMPManegment.Inretface.Interface.ProjectDetails;
+using EMPManegment.Inretface.Interface.UserAttendance;
 using EMPManegment.Inretface.Interface.UserList;
 using EMPManegment.Inretface.Interface.UsersLogin;
+using EMPManegment.Inretface.Services.TaskServices;
 using EMPManegment.Inretface.Services.UserAttendanceServices;
 using EMPManegment.Inretface.Services.UserListServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata;
 using System.Data;
 using System.Net;
-using Microsoft.EntityFrameworkCore.Metadata;
-using EMPManegment.EntityModels.ViewModels.ProjectModels;
-using EMPManegment.Inretface.Interface.ProjectDetails;
-using EMPManegment.EntityModels.ViewModels.TaskModels;
-using EMPManegment.Inretface.Services.TaskServices;
-using EMPManegment.EntityModels.ViewModels.FormMaster;
-using EMPManegment.EntityModels.ViewModels.FormPermissionMaster;
 #nullable disable
 
 namespace EMPManagment.API.Controllers
@@ -63,10 +64,14 @@ namespace EMPManagment.API.Controllers
 
         [HttpPost]
         [Route("GetAllUserList")]
-        public async Task<IActionResult> GetAllUserList(DataTableRequstModel dataTable)
+        public async Task<AGGridResponseModel<EmpDetailsView>> GetAllUserList(AGGridRequestModel UserRequest)
         {
-            var userList = await UserListServices.GetUsersList(dataTable);
-            return Ok(new { code = (int)HttpStatusCode.OK, data = userList });
+            var UserList = await UserListServices.GetUsersList(UserRequest);
+            return new AGGridResponseModel<EmpDetailsView>
+            {
+                Data = UserList.Data,
+                RecordsTotal = UserList.RecordsTotal,
+            };
         }
 
         [HttpGet]
