@@ -359,7 +359,7 @@ function deleteCompany(Id) {
 $(document).ready(function () {
     const previewContainer = $('#CompanyImage-preview');
 
-    // Show the container if there's already an image loaded from the database
+
     if (previewContainer.children().length > 0) {
         previewContainer.show();
     } else {
@@ -369,16 +369,14 @@ $(document).ready(function () {
     $('#fileUpload').on('change', function (event) {
         const files = event.target.files;
 
-        // Clear previous previews
         previewContainer.empty();
 
         if (files.length === 0) {
-            // Hide preview container if no files are selected
+
             previewContainer.hide();
             return;
         }
 
-        // Show the preview container since files are selected
         previewContainer.show();
 
         Array.from(files).forEach((file) => {
@@ -409,8 +407,7 @@ $(document).ready(function () {
                                 </div>
                             </div>
                         </div>
-                    </li>
-                `;
+                    </li>`;
 
                 previewContainer.append(previewTemplate);
             };
