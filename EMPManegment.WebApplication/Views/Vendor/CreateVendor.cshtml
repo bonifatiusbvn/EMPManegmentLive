@@ -497,8 +497,8 @@
                     {
                         @if (UserSession.FormPermisionData.Any(a => a.FormName == "Vendor List" && (a.Edit == true)))
                         {
-                            <button type="button" class="btn btn-primary btn-lg " onclick="UpdateVendorDetails('@Model.Vid')" id="updateVendorbtn" style="width: 230px;height: 50px;">Update</button>
-                            <button type="button" class="btn btn-primary btn-lg" onclick="EditVendor()" id="editVendorbtn" style="display: none;width: 230px;height: 50px;">Edit</button>
+                            <button type="button" class="btn button-teal btn-lg " onclick="UpdateVendorDetails('@Model.Vid')" id="updateVendorbtn" style="width: 230px;height: 50px;">Update</button>
+                            <button type="button" class="btn button-teal btn-lg" onclick="EditVendor()" id="editVendorbtn" style="display: none;width: 230px;height: 50px;">Edit</button>
                         }
                     }
                 </div>

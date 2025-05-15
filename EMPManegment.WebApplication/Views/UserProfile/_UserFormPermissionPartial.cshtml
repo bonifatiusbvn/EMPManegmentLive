@@ -5,7 +5,7 @@
 
 @foreach (var item in Model)
 {
-    <tr id="templateRow_@Convert.ToInt64(item.RowNumber + 1)" class="forms" data-product-id="@item.FormId">
+    <tr id="templateRow_@Convert.ToInt64(item.RowNumber + 1)" data-product-id="@item.FormId">
         <td>
             <h6 class="pt-1" id="formName" data-product-id="@item.FormId">@item.FormName</h6>
             <input type="text" id="textUserId" value="@item.UserId" hidden />
