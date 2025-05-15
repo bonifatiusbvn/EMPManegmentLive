@@ -40,7 +40,7 @@
                 <div class="d-flex align-items-center justify-content-between">
                     <h5 class="card-title mb-0">All-Expense History</h5>
                     <div class="d-flex gap-2">
-                        <button type="button" class="btn btn-primary" id="Approve-actions" onclick="AllUserApproveExpense()" style="display:none;">
+                        <button type="button" class="btn button-teal" id="Approve-actions" onclick="AllUserApproveExpense()" style="display:none;">
                             <i class="ri-filter-3-line align-bottom me-1"></i>Approve All
                         </button>
                         @if (UserSession.FormPermisionData.Any(a => a.FormName == "All Expenses List" && (a.Add == true)))
@@ -158,7 +158,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-danger btn-default m-1" id="close-modal" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary m-1" onclick="UpdateExpenseListDetails()" id="updatedetailbtn">Update</button>
+                            <button type="button" class="btn button-teal m-1" onclick="UpdateExpenseListDetails()" id="updatedetailbtn">Update</button>
                         </div>
                     </div>
                 </div>
@@ -363,7 +363,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" onclick="AddExpenseType()">Save</button>
+                    <button type="button" class="btn button-teal" onclick="AddExpenseType()">Save</button>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->

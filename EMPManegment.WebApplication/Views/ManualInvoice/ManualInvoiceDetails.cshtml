@@ -216,7 +216,7 @@
                                 totalqty += item.Quantity;
                                 StateTax = (item.GstAmount / 2);
                                 CenteralTax = (item.GstAmount / 2);
-                                IntegratedTax = (item.Price * item.IGst  * item.Quantity / 100);
+                                IntegratedTax = (item.Price * item.IGst * item.Quantity / 100);
                                 TotalStateTax += StateTax;
                                 TotalCenteralTax += CenteralTax;
                                 TotalIntegratedTax += IntegratedTax;
@@ -257,7 +257,7 @@
                                 </tr>
                                 index++;
                             }
-                            @if(TotalIntegratedTax == 0)
+                            @if (TotalIntegratedTax == 0)
                             {
                                 <tr>
                                     <td class="border"></td>
@@ -453,7 +453,7 @@
                                 TotalofSubtotal += groupSubTotal;
                                 groupTotalCenteralTax += groupCenteralTax;
                                 groupTotalStateTax += groupStateTax;
-                                
+
 
                                 <tr>
                                     <td class="border">@group.First().Hsn</td>
@@ -472,7 +472,7 @@
 
                                     <td class="border">@(group.Key / 2) %</td>
 
-                                    @if(TotalIntegratedTax == 0)
+                                    @if (TotalIntegratedTax == 0)
                                     {
                                         @if (Model.DollarPrice != null)
                                         {
@@ -549,7 +549,7 @@
                                         }
 
                                     }
-                                    @if(TotalIntegratedTax == 0)
+                                    @if (TotalIntegratedTax == 0)
                                     {
                                         @if (Model.DollarPrice != null)
                                         {
@@ -571,7 +571,7 @@
                                             <td class="border">
                                                 <b>$@((TotalIntegratedTax)?.ToString("F2")) ,</b>
                                                 <br />
-                                                <span class="text-muted">₹@((( TotalIntegratedTax) * Model.DollarPrice.Value)?.ToString("0.00"))</span>
+                                                <span class="text-muted">₹@(((TotalIntegratedTax) * Model.DollarPrice.Value)?.ToString("0.00"))</span>
                                             </td>
                                         }
                                         else
@@ -600,7 +600,7 @@
 
                                 <td class="border"></td>
 
-                                @if(TotalIntegratedTax == 0)
+                                @if (TotalIntegratedTax == 0)
                                 {
                                     @if (Model.DollarPrice != null)
                                     {
@@ -678,7 +678,7 @@
 
                                 }
 
-                                @if(TotalIntegratedTax == 0)
+                                @if (TotalIntegratedTax == 0)
                                 {
                                     @if (Model.DollarPrice != null)
                                     {
@@ -698,9 +698,9 @@
                                     @if (Model.DollarPrice != null)
                                     {
                                         <td class="border">
-                                            <b>$@(( TotalIntegratedTax)?.ToString("F2")) ,</b>
+                                            <b>$@((TotalIntegratedTax)?.ToString("F2")) ,</b>
                                             <br />
-                                            <span class="text-muted">₹@((( TotalIntegratedTax) * Model.DollarPrice.Value)?.ToString("0.00"))</span>
+                                            <span class="text-muted">₹@(((TotalIntegratedTax) * Model.DollarPrice.Value)?.ToString("0.00"))</span>
                                         </td>
                                     }
                                     else
@@ -745,7 +745,7 @@
         <div class="card d-print-none">
             <div class="card-body">
                 <div class="d-lg-flex align-items-center gap-3">
-                    <a id="PrintManualInvoicePage" class="btn btn-primary btn-ecomm" style="margin-left: 950px;width: 185px;"><i class="fadeIn animated bx bx-printer"></i>Print</a>
+                    <a id="PrintManualInvoicePage" class="btn button-teal btn-ecomm" style="margin-left: 950px;width: 185px;"><i class="fadeIn animated bx bx-printer"></i>Print</a>
                 </div>
             </div>
         </div>

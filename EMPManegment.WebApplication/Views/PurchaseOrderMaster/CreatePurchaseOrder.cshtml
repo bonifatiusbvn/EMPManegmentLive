@@ -392,7 +392,7 @@
                                         <div class="hstack gap-2 justify-content-end d-print-none mt-4">
                                             @if (Model.Id != Guid.Empty)
                                             {
-                                                <button type="button" class="btn btn-lg btn-primary" id="UpdatePOButton" onclick="fn_UpdatePurchaseOrderDetails()" style="width: 160px;height: 50px;"><i class="ri-printer-line align-bottom me-1"></i>Update</button>
+                                                <button type="button" class="btn btn-lg button-teal" id="UpdatePOButton" onclick="fn_UpdatePurchaseOrderDetails()" style="width: 160px;height: 50px;"><i class="ri-printer-line align-bottom me-1"></i>Update</button>
                                             }
                                             else
                                             {
@@ -445,9 +445,9 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary add-address" id="AddShippingBtn" onclick="AddShippingAddress()">Add</button>
+                <button type="button" class="btn button-teal add-address" id="AddShippingBtn" onclick="AddShippingAddress()">Add</button>
                 <span id="spnaddressbutton" style="color:red;"></span>
-                @* <button type="button" class="btn btn-primary" onclick="fn_mdAddAddress()">Add</button> *@
+                @* <button type="button" class="btn button-teal" onclick="fn_mdAddAddress()">Add</button> *@
             </div>
         </div>
     </div>

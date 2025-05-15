@@ -70,30 +70,11 @@
                 }
             </div>
         </div>
-        @* <div class="card-header">
-            <div class="d-flex align-items-center">
-                <div class="card-title mb-0 flex-grow-1 text-info">
-                    <button id="userdropdownButton" class="btn btn-primary form-select" type="button" aria-haspopup="true" aria-expanded="false" style="width: 220px;">
-                        Select-User
-                    </button>
-                    <div id="usercustomDropdown" class="dropdown-menu" style="display: none;width: 180px;">
-                    </div>
 
-                </div>
-                <div class="flex-shrink-0">
-                    <form class="position-relative">
-                        @if (UserSession.FormPermisionData.Any(a => a.FormName == "User Form Permission" && (a.Add == true)))
-                        {
-                            <button type="button" class="btn btn-block btn-info btn-md" data-bs-toggle="modal" data-bs-target="#createUserModal" onclick="clearTextUserName()" style="margin-top:0px;"><i class="ri-add-line align-bottom me-1"></i>UserPermission</button>
-                        }
-                    </form>
-                </div>
-            </div>
-        </div> *@
         <div class="card-body">
             <div class="table-responsive" style="position: relative; height: 600px; overflow: auto;">
-                <table class="table table-bordered dt-responsive nowrap table-striped align-middle dataTable no-footer dtr-inline">
-                    <thead class="btn-info" style="position: sticky; top: 0; z-index: 1;">
+                <table class="table fixed-header-table table-bordered table-striped">
+                    <thead>
                         <tr>
                             <th>Form Name</th>
                             <th>Add</th>
@@ -111,7 +92,7 @@
                     </tbody>
                 </table>
                 <div class="text-end" id="userupdatebtn" style="display:none;">
-                    <button type="button" class="btn btn-lg btn-primary" onclick="UpdateUserFormPermission()" style="width: 160px;height: 50px;">Update</button>
+                    <button type="button" class="btn button-teal" onclick="UpdateUserFormPermission()" style="width: 160px;height: 50px;">Update</button>
                 </div>
             </div>
         </div>
