@@ -1,7 +1,6 @@
 ﻿$(document).ready(function () {
     GetUserAttendanceInTime();
     UserBirsthDayWish();
-    GetAllUserData();
     clearSelectedBox();
     GetUserRoleList();
 });
@@ -22,7 +21,7 @@ $(document).ready(function () {
                     if (!params.data || !params.data.id) {
                         return '';
                     }
-                    return '<h5 class="fs-15"><a href="/UserProfile/UserInfo/?Id=' + params.data.id + '" class="fw-medium link-primary">' + params.data.userName + '</a></h5>';
+                    return '<div><a href="/UserProfile/UserInfo/?Id=' + params.data.id + '" class="fw-medium" style="color: #16989A !important;"><strong>' + params.data.userName + '</strong></a></div>';
                 }
             },
             {
@@ -58,8 +57,7 @@ $(document).ready(function () {
                     ];
                     var profileImageHtml;
                     if (params.data.image && params.data.image.trim() !== '') {
-                        profileImageHtml = '<img src="/' + params.data.image + '" style="height: 40px; width: 40px; border-radius: 50%;" ' +
-                            'onmouseover="showIcons(event, this.parentElement)" onmouseout="hideIcons(event, this.parentElement)">';
+                        profileImageHtml = '<img src="/' + params.data.image + '" style="height: 40px; width: 40px; border-radius: 50%;">';
                     } else {
                         var initials = (params.data.firstName ? params.data.firstName[0] : '') + (params.data.lastName ? params.data.lastName[0] : '');
                         var randomColor = colorClasses[Math.floor(Math.random() * colorClasses.length)];
@@ -69,7 +67,7 @@ $(document).ready(function () {
 
                     return '<div class="d-flex align-items-center">' +
                         profileImageHtml +
-                        '<div class="flex-grow-1 tasks_name ml-2">' + params.data.firstName + ' ' + params.data.lastName + '</div>' +
+                        '<div class="flex-grow-1 tasks_name ml-2" style="color: #16989A !important;margin-left: 10px">' + params.data.firstName + ' ' + params.data.lastName + '</div>' +
                         '</div>';
                 }
             },
@@ -133,7 +131,7 @@ $(document).ready(function () {
                         colId: key,
                         filterValue: value.filter
                     })),
-                    searchValue: $('#txUserSearch').val(),
+                    SearchValue: $('#txtUserSearch').val(),
                 };
 
                 $.ajax({
